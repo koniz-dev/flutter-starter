@@ -19,10 +19,14 @@ class LoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     if (kDebugMode) {
       debugPrint(
-        'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
+        'RESPONSE[${response.statusCode}] => '
+        'PATH: ${response.requestOptions.path}',
       );
       debugPrint('Data: ${response.data}');
     }
@@ -33,7 +37,8 @@ class LoggingInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (kDebugMode) {
       debugPrint(
-        'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
+        'ERROR[${err.response?.statusCode}] => '
+        'PATH: ${err.requestOptions.path}',
       );
       debugPrint('Message: ${err.message}');
       if (err.response?.data != null) {
@@ -43,4 +48,3 @@ class LoggingInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 }
-

@@ -83,4 +83,3 @@ extension ContextExtensions on BuildContext {
     Navigator.of(this).pop(result);
   }
 }
-

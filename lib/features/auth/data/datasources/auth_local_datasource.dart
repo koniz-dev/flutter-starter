@@ -1,21 +1,29 @@
-import '../../../../core/storage/storage_service.dart';
-import '../../../../core/errors/exceptions.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../models/user_model.dart';
 import 'dart:convert';
+
+import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 
 /// Local data source for authentication
 abstract class AuthLocalDataSource {
+  /// Caches a [user] to local storage
   Future<void> cacheUser(UserModel user);
+
+  /// Retrieves cached user from local storage
   Future<UserModel?> getCachedUser();
+
+  /// Clears all cached authentication data
   Future<void> clearCache();
 }
 
 /// Implementation of local data source
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
-  final StorageService storageService;
-
+  /// Creates an [AuthLocalDataSourceImpl] with the given [storageService]
   AuthLocalDataSourceImpl(this.storageService);
+
+  /// Storage service for persisting data
+  final StorageService storageService;
 
   @override
   Future<void> cacheUser(UserModel user) async {
@@ -23,7 +31,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final userJson = jsonEncode(user.toJson());
       await storageService.setString(AppConstants.userDataKey, userJson);
     } catch (e) {
-      throw CacheException('Failed to cache user: ${e.toString()}');
+      throw CacheException('Failed to cache user: $e');
     }
   }
 
@@ -36,7 +44,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       final userMap = jsonDecode(userJson) as Map<String, dynamic>;
       return UserModel.fromJson(userMap);
     } catch (e) {
-      throw CacheException('Failed to get cached user: ${e.toString()}');
+      throw CacheException('Failed to get cached user: $e');
     }
   }
 
@@ -47,8 +55,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       await storageService.remove(AppConstants.tokenKey);
       await storageService.remove(AppConstants.refreshTokenKey);
     } catch (e) {
-      throw CacheException('Failed to clear cache: ${e.toString()}');
+      throw CacheException('Failed to clear cache: $e');
     }
   }
 }
-

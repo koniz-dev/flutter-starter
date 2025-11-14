@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
-import '../../constants/app_constants.dart';
-import '../../storage/storage_service.dart';
+import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/storage/storage_service.dart';
 
 /// Interceptor for adding authentication tokens to requests
 class AuthInterceptor extends Interceptor {
   final StorageService _storageService = StorageService();
 
   @override
-  void onRequest(
+  Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
@@ -22,7 +22,10 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     // Handle 401 Unauthorized - refresh token or logout
     if (err.response?.statusCode == 401) {
       // Implement token refresh logic here
@@ -32,4 +35,3 @@ class AuthInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 }
-

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'shared/theme/app_theme.dart';
-import 'core/storage/storage_service.dart';
-import 'core/config/env_config.dart';
+import 'package:flutter_starter/core/config/env_config.dart';
+import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/shared/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +21,9 @@ void main() async {
   );
 }
 
+/// Root application widget
 class MyApp extends StatelessWidget {
+  /// Creates a [MyApp] widget
   const MyApp({super.key});
 
   @override
@@ -30,13 +32,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Starter',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
       home: const HomeScreen(),
     );
   }
 }
 
+/// Home screen widget
 class HomeScreen extends StatelessWidget {
+  /// Creates a [HomeScreen] widget
   const HomeScreen({super.key});
 
   @override

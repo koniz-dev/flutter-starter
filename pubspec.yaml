@@ -1,63 +1,94 @@
 name: flutter_starter
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+description: A production-ready Flutter starter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.0-290.4.beta
+  sdk: '>=3.0.0 <4.0.0'
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
+  # UI Components - Image loading and caching
+  cached_network_image: ^3.4.1
+  # UI Components - iOS style icons
+  cupertino_icons: ^1.0.8
+
+  # Network Layer - HTTP client with interceptors support
+  dio: ^5.9.0
+
+  # Utilities - Value equality comparison for objects
+  equatable: ^2.0.7
+
+  # Flutter SDK - Core Flutter framework
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-
-  # State Management
+  # State Management - Riverpod reactive state management framework
   flutter_riverpod: ^3.0.3
 
-  # Network
-  dio: ^5.9.0
+  # UI Components - Responsive screen size adaptation utilities
+  flutter_screenutil: ^5.9.3
 
-  # Storage
-  shared_preferences: ^2.5.3
+  # Storage - Secure key-value storage for sensitive data (tokens, passwords)
+  flutter_secure_storage: ^9.2.4
 
-  # Utilities
-  equatable: ^2.0.7
+  # Code Generation - Runtime annotations for Freezed immutable classes
+  freezed_annotation: ^3.1.0
+
+  # Routing - Declarative routing with type-safe navigation and deep linking
+  go_router: ^17.0.0
+
+  # Storage - Fast NoSQL database for local data persistence
+  hive: ^2.2.3
+  # Storage - Flutter bindings for Hive database
+  hive_flutter: ^1.1.0
+
+  # Utilities - Internationalization and localization support
   intl: ^0.20.2
 
+  # Code Generation - Runtime annotations for JSON serialization
+  json_annotation: ^4.9.0
+
+  # Utilities - Beautiful and extensible logging library
+  logger: ^2.6.2
+
+  # Network Layer - Type-safe HTTP client generator (works with Dio)
+  retrofit: ^4.9.0
+
+  # State Management - Runtime annotations for Riverpod code generation
+  riverpod_annotation: ^3.0.3
+
+  # Storage - Simple key-value storage for non-sensitive data
+  shared_preferences: ^2.5.3
+
+  # UI Components - Loading placeholder shimmer effect
+  shimmer: ^3.0.0
+
 dev_dependencies:
+  # Code Generation - Build system for generating code from annotations
+  build_runner: ^2.10.3
+
+  # Testing - Flutter testing framework and utilities
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^6.0.0
+  # Code Generation - Generates immutable classes, unions, and more
+  freezed: ^3.2.3
+  # Code Generation - Generates type-safe routing code for go_router
+  go_router_builder: ^4.1.1
+  # Code Generation - Generates JSON serialization/deserialization code
+  json_serializable: ^6.11.1
+
+  # Testing - Mocking library for unit tests (no code generation required)
+  mocktail: ^1.0.4
+
+  # Code Generation - Generates type-safe HTTP client code from Retrofit annotations
+  retrofit_generator: ^10.1.4
+  # Code Generation - Generates Riverpod providers from annotations
+  riverpod_generator: ^3.0.3
+
+  # Linting - Comprehensive lint rules for Flutter/Dart (Very Good Ventures)
+  very_good_analysis: ^10.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

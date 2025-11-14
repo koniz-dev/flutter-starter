@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../providers/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 
-/// Login screen
+/// Login screen for user authentication
 class LoginScreen extends ConsumerStatefulWidget {
+  /// Creates a [LoginScreen] widget
   const LoginScreen({super.key});
 
   @override
@@ -40,7 +41,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         title: const Text('Login'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
@@ -95,4 +96,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
-

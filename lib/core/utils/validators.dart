@@ -26,7 +26,7 @@ class Validators {
     try {
       final uri = Uri.parse(url);
       return uri.hasScheme && uri.hasAuthority;
-    } catch (e) {
+    } on FormatException {
       return false;
     }
   }
@@ -36,4 +36,3 @@ class Validators {
     return value == null || value.trim().isEmpty;
   }
 }
-

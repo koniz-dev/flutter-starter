@@ -1,7 +1,9 @@
-import '../../domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 
 /// User model (data layer) - extends entity
 class UserModel extends User {
+  /// Creates a [UserModel] with the given [id], [email], optional [name], and
+  /// optional [avatarUrl]
   const UserModel({
     required super.id,
     required super.email,
@@ -39,4 +41,3 @@ class UserModel extends User {
     );
   }
 }
-

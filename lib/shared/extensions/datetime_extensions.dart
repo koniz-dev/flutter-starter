@@ -51,4 +51,3 @@ extension DateTimeExtensions on DateTime {
     return '${toDateString()} ${toTimeString()}';
   }
 }
-

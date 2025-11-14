@@ -1,21 +1,28 @@
 /// Result class for handling success and failure states
 sealed class Result<T> {
+  /// Creates a [Result] instance
   const Result();
 }
 
-/// Success result
+/// Success result containing data of type [T]
 final class Success<T> extends Result<T> {
-  final T data;
-
+  /// Creates a [Success] result with the given [data]
   const Success(this.data);
+
+  /// The successful data value
+  final T data;
 }
 
-/// Failure result
+/// Failure result containing error information
 final class ResultFailure<T> extends Result<T> {
-  final String message;
-  final String? code;
-
+  /// Creates a [ResultFailure] with the given [message] and optional [code]
   const ResultFailure(this.message, {this.code});
+
+  /// Error message describing what went wrong
+  final String message;
+
+  /// Optional error code for programmatic error handling
+  final String? code;
 }
 
 /// Extension methods for Result
@@ -69,4 +76,3 @@ extension ResultExtensions<T> on Result<T> {
     };
   }
 }
-

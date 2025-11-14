@@ -49,4 +49,3 @@ extension NullableStringExtensions on String? {
     return this ?? '';
   }
 }
-

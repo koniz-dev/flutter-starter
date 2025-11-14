@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'app_colors.dart';
-import 'app_text_styles.dart';
+import 'package:flutter_starter/shared/theme/app_colors.dart';
+import 'package:flutter_starter/shared/theme/app_text_styles.dart';
 
 /// Application theme configuration
 class AppTheme {
@@ -10,29 +10,36 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.light(
-        primary: AppColors.primary,
+      colorScheme: const ColorScheme.light(
         primaryContainer: AppColors.primaryVariant,
-        secondary: AppColors.secondary,
         secondaryContainer: AppColors.secondaryVariant,
-        surface: AppColors.surface,
-        error: AppColors.error,
-        onPrimary: AppColors.textOnPrimary,
         onSecondary: AppColors.textPrimary,
         onSurface: AppColors.textPrimary,
-        onError: AppColors.textOnPrimary,
       ),
       scaffoldBackgroundColor: AppColors.background,
       textTheme: TextTheme(
-        displayLarge: AppTextStyles.h1.copyWith(color: AppColors.textPrimary),
-        displayMedium: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
-        displaySmall: AppTextStyles.h3.copyWith(color: AppColors.textPrimary),
-        headlineMedium: AppTextStyles.h4.copyWith(color: AppColors.textPrimary),
-        bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
-        bodyMedium: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
-        bodySmall: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
-        labelLarge: AppTextStyles.button.copyWith(color: AppColors.textOnPrimary),
-        labelSmall: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+        displayLarge:
+            AppTextStyles.h1.copyWith(color: AppColors.textPrimary),
+        displayMedium:
+            AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+        displaySmall:
+            AppTextStyles.h3.copyWith(color: AppColors.textPrimary),
+        headlineMedium:
+            AppTextStyles.h4.copyWith(color: AppColors.textPrimary),
+        bodyLarge:
+            AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
+        bodyMedium: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textSecondary,
+        ),
+        bodySmall: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.textSecondary,
+        ),
+        labelLarge: AppTextStyles.button.copyWith(
+          color: AppColors.textOnPrimary,
+        ),
+        labelSmall: AppTextStyles.caption.copyWith(
+          color: AppColors.textSecondary,
+        ),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primary,
@@ -74,17 +81,13 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         primaryContainer: AppColors.primaryVariant,
-        secondary: AppColors.secondary,
         secondaryContainer: AppColors.secondaryVariant,
-        surface: const Color(0xFF1E1E1E),
+        surface: Color(0xFF1E1E1E),
         error: AppColors.errorLight,
         onPrimary: AppColors.textOnPrimary,
-        onSecondary: AppColors.textPrimary,
-        onSurface: Colors.white,
-        onError: AppColors.textOnPrimary,
       ),
       scaffoldBackgroundColor: const Color(0xFF121212),
       textTheme: TextTheme(
@@ -93,10 +96,15 @@ class AppTheme {
         displaySmall: AppTextStyles.h3.copyWith(color: Colors.white),
         headlineMedium: AppTextStyles.h4.copyWith(color: Colors.white),
         bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
-        bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
-        bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
-        labelLarge: AppTextStyles.button.copyWith(color: AppColors.textOnPrimary),
-        labelSmall: AppTextStyles.caption.copyWith(color: Colors.white70),
+        bodyMedium:
+            AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
+        bodySmall:
+            AppTextStyles.bodySmall.copyWith(color: Colors.white70),
+        labelLarge: AppTextStyles.button.copyWith(
+          color: AppColors.textOnPrimary,
+        ),
+        labelSmall:
+            AppTextStyles.caption.copyWith(color: Colors.white70),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF1E1E1E),
@@ -134,4 +142,3 @@ class AppTheme {
     );
   }
 }
-

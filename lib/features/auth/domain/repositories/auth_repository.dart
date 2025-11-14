@@ -1,5 +1,5 @@
-import '../entities/user.dart';
-import '../../../../core/utils/result.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 
 /// Authentication repository interface (domain layer)
 abstract class AuthRepository {
@@ -18,4 +18,3 @@ abstract class AuthRepository {
   /// Check if user is authenticated
   Future<Result<bool>> isAuthenticated();
 }
-

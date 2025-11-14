@@ -27,7 +27,7 @@ class DateFormatter {
   static DateTime? parseDate(String dateString) {
     try {
       return _dateFormat.parse(dateString);
-    } catch (e) {
+    } on FormatException {
       return null;
     }
   }
@@ -36,9 +36,8 @@ class DateFormatter {
   static DateTime? parseDateTime(String dateTimeString) {
     try {
       return _dateTimeFormat.parse(dateTimeString);
-    } catch (e) {
+    } on FormatException {
       return null;
     }
   }
 }
-

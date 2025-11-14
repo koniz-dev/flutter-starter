@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 
 /// Reusable authentication button widget
 class AuthButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-
+  /// Creates an [AuthButton] with the given [text], [onPressed] callback, and
+  /// [isLoading] state
   const AuthButton({
-    super.key,
     required this.text,
+    super.key,
     this.onPressed,
     this.isLoading = false,
   });
+
+  /// Button text label
+  final String text;
+
+  /// Callback function called when button is pressed
+  final VoidCallback? onPressed;
+
+  /// Whether the button is in loading state
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -30,4 +37,3 @@ class AuthButton extends StatelessWidget {
     );
   }
 }
-

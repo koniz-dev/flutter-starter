@@ -1,19 +1,24 @@
-import '../../domain/repositories/auth_repository.dart';
-import '../../domain/entities/user.dart';
-import '../../../../core/utils/result.dart';
-import '../../../../core/errors/exceptions.dart';
-import '../datasources/auth_remote_datasource.dart';
-import '../datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 
 /// Implementation of authentication repository
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
-  final AuthLocalDataSource localDataSource;
-
+  /// Creates an [AuthRepositoryImpl] with the given [remoteDataSource] and
+  /// [localDataSource]
   AuthRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
   });
+
+  /// Remote data source for API calls
+  final AuthRemoteDataSource remoteDataSource;
+
+  /// Local data source for caching
+  final AuthLocalDataSource localDataSource;
 
   @override
   Future<Result<User>> login(String email, String password) async {
@@ -31,8 +36,8 @@ class AuthRepositoryImpl implements AuthRepository {
         e.message,
         code: e.code,
       );
-    } catch (e) {
-      return ResultFailure('Unexpected error: ${e.toString()}');
+    } on Exception catch (e) {
+      return ResultFailure('Unexpected error: $e');
     }
   }
 
@@ -56,8 +61,8 @@ class AuthRepositoryImpl implements AuthRepository {
         e.message,
         code: e.code,
       );
-    } catch (e) {
-      return ResultFailure('Unexpected error: ${e.toString()}');
+    } on Exception catch (e) {
+      return ResultFailure('Unexpected error: $e');
     }
   }
 
@@ -72,8 +77,8 @@ class AuthRepositoryImpl implements AuthRepository {
         e.message,
         code: e.code,
       );
-    } catch (e) {
-      return ResultFailure('Unexpected error: ${e.toString()}');
+    } on Exception catch (e) {
+      return ResultFailure('Unexpected error: $e');
     }
   }
 
@@ -87,8 +92,8 @@ class AuthRepositoryImpl implements AuthRepository {
         e.message,
         code: e.code,
       );
-    } catch (e) {
-      return ResultFailure('Unexpected error: ${e.toString()}');
+    } on Exception catch (e) {
+      return ResultFailure('Unexpected error: $e');
     }
   }
 
@@ -102,9 +107,8 @@ class AuthRepositoryImpl implements AuthRepository {
         e.message,
         code: e.code,
       );
-    } catch (e) {
-      return ResultFailure('Unexpected error: ${e.toString()}');
+    } on Exception catch (e) {
+      return ResultFailure('Unexpected error: $e');
     }
   }
 }
-

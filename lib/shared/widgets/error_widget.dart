@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 
 /// Reusable error widget
 class AppErrorWidget extends StatelessWidget {
-  final String message;
-  final VoidCallback? onRetry;
-
+  /// Creates an [AppErrorWidget] with the given [message] and optional
+  /// [onRetry] callback
   const AppErrorWidget({
-    super.key,
     required this.message,
+    super.key,
     this.onRetry,
   });
+
+  /// Error message to display
+  final String message;
+
+  /// Optional callback function called when retry button is pressed
+  final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -44,4 +49,3 @@ class AppErrorWidget extends StatelessWidget {
     );
   }
 }
-

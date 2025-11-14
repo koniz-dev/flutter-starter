@@ -1,15 +1,16 @@
 import 'package:dio/dio.dart';
-import '../config/app_config.dart';
-import '../constants/api_endpoints.dart';
-import 'interceptors/auth_interceptor.dart';
-import 'interceptors/logging_interceptor.dart';
+import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
 
 /// API client for making HTTP requests
 class ApiClient {
-  late final Dio _dio;
+  /// Creates an instance of [ApiClient] with configured Dio instance
+  ApiClient() : _dio = _createDio();
 
-  ApiClient() {
-    _dio = Dio(
+  static Dio _createDio() {
+    final dio = Dio(
       BaseOptions(
         baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
         connectTimeout: const Duration(seconds: 30),
@@ -22,16 +23,26 @@ class ApiClient {
     );
 
     // Add interceptors
-    _dio.interceptors.addAll([
+    dio.interceptors.addAll([
       AuthInterceptor(),
       if (AppConfig.enableLogging) LoggingInterceptor(),
     ]);
+
+    return dio;
   }
 
+  final Dio _dio;
+
+  /// Getter for the underlying Dio instance
   Dio get dio => _dio;
 
-  // GET request
-  Future<Response> get(
+  /// GET request
+  /// 
+  /// [path] - The endpoint path
+  /// [queryParameters] - Optional query parameters
+  /// [options] - Optional request options
+  /// Returns a [Future] that completes with a [Response]
+  Future<Response<dynamic>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
@@ -47,8 +58,14 @@ class ApiClient {
     }
   }
 
-  // POST request
-  Future<Response> post(
+  /// POST request
+  /// 
+  /// [path] - The endpoint path
+  /// [data] - Optional request body data
+  /// [queryParameters] - Optional query parameters
+  /// [options] - Optional request options
+  /// Returns a [Future] that completes with a [Response]
+  Future<Response<dynamic>> post(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -66,8 +83,14 @@ class ApiClient {
     }
   }
 
-  // PUT request
-  Future<Response> put(
+  /// PUT request
+  /// 
+  /// [path] - The endpoint path
+  /// [data] - Optional request body data
+  /// [queryParameters] - Optional query parameters
+  /// [options] - Optional request options
+  /// Returns a [Future] that completes with a [Response]
+  Future<Response<dynamic>> put(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -85,8 +108,14 @@ class ApiClient {
     }
   }
 
-  // DELETE request
-  Future<Response> delete(
+  /// DELETE request
+  /// 
+  /// [path] - The endpoint path
+  /// [data] - Optional request body data
+  /// [queryParameters] - Optional query parameters
+  /// [options] - Optional request options
+  /// Returns a [Future] that completes with a [Response]
+  Future<Response<dynamic>> delete(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -104,4 +133,3 @@ class ApiClient {
     }
   }
 }
-
