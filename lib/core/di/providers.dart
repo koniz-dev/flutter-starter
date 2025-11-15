@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -13,26 +14,54 @@ import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart
 /// throughout the application for making HTTP requests.
 final apiClientProvider = Provider<ApiClient>((ref) {
   final storageService = ref.watch(storageServiceProvider);
-  return ApiClient(storageService: storageService);
+  final secureStorageService = ref.watch(secureStorageServiceProvider);
+  return ApiClient(
+    storageService: storageService,
+    secureStorageService: secureStorageService,
+  );
 });
 
 /// Provider for [StorageService] instance
 ///
 /// This provider creates a singleton instance of [StorageService] that can be
-/// used throughout the application for local storage operations.
+/// used throughout the application for non-sensitive local storage operations
+/// (e.g., user preferences, cached data).
 ///
-/// **Note**: The storage service must be initialized before use by calling
-/// `StorageService.init()` in the main function.
+/// For sensitive data (tokens, passwords), use [secureStorageServiceProvider].
 final storageServiceProvider = Provider<StorageService>((ref) {
   return StorageService();
+});
+
+/// Provider for [SecureStorageService] instance
+///
+/// This provider creates a singleton instance of [SecureStorageService] that
+/// uses encrypted storage for sensitive data such as authentication tokens.
+///
+/// Platform-specific:
+/// - Android: EncryptedSharedPreferences
+/// - iOS: Keychain
+final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+  return SecureStorageService();
 });
 
 /// Provider for [IStorageService] interface
 ///
 /// This provider provides the storage service as an interface, allowing for
 /// easier testing and potential future implementations.
+///
+/// **Note**: This defaults to [StorageService] for backward compatibility.
+/// For secure storage, use [secureStorageServiceProvider] directly.
 final iStorageServiceProvider = Provider<IStorageService>((ref) {
   return ref.watch(storageServiceProvider);
+});
+
+/// Startup initialization provider
+///
+/// This provider initializes storage services before the app starts.
+/// It should be awaited in the main function to ensure storage is ready.
+final storageInitializationProvider = FutureProvider<void>((ref) async {
+  final storageService = ref.read(storageServiceProvider);
+  await storageService.init();
 });
 
 // ============================================================================
@@ -52,9 +81,17 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
 ///
 /// This provider creates a singleton instance of [AuthLocalDataSourceImpl]
 /// that handles local authentication data caching.
+///
+/// Uses:
+/// - [SecureStorageService] for tokens (secure)
+/// - [StorageService] for user data (non-sensitive)
 final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
   final storageService = ref.watch(storageServiceProvider);
-  return AuthLocalDataSourceImpl(storageService);
+  final secureStorageService = ref.watch(secureStorageServiceProvider);
+  return AuthLocalDataSourceImpl(
+    storageService: storageService,
+    secureStorageService: secureStorageService,
+  );
 });
 
 /// Provider for [AuthRepository] instance

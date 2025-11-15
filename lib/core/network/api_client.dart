@@ -5,17 +5,24 @@ import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 
 /// API client for making HTTP requests
 class ApiClient {
   /// Creates an instance of [ApiClient] with configured Dio instance
   ///
-  /// [storageService] - Storage service for authentication interceptor
-  ApiClient({required StorageService storageService})
-      : _dio = _createDio(storageService);
+  /// [storageService] - Storage service for non-sensitive data
+  /// [secureStorageService] - Secure storage service for authentication tokens
+  ApiClient({
+    required StorageService storageService,
+    required SecureStorageService secureStorageService,
+  }) : _dio = _createDio(storageService, secureStorageService);
 
-  static Dio _createDio(StorageService storageService) {
+  static Dio _createDio(
+    StorageService storageService,
+    SecureStorageService secureStorageService,
+  ) {
     final dio = Dio(
       BaseOptions(
         baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
@@ -31,7 +38,7 @@ class ApiClient {
     // Add interceptors - ErrorInterceptor must be first
     dio.interceptors.addAll([
       ErrorInterceptor(),
-      AuthInterceptor(storageService),
+      AuthInterceptor(secureStorageService),
       if (AppConfig.enableLogging) LoggingInterceptor(),
     ]);
 

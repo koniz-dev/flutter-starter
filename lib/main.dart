@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
-import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 
 void main() async {
@@ -18,13 +18,16 @@ void main() async {
     AppConfig.printConfig();
   }
 
-  // Initialize storage service
-  final storageService = StorageService();
-  await storageService.init();
+  // Create ProviderContainer for initialization
+  final container = ProviderContainer();
+
+  // Initialize storage service via provider before app starts
+  await container.read(storageInitializationProvider.future);
 
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    UncontrolledProviderScope(
+      container: container,
+      child: const MyApp(),
     ),
   );
 }

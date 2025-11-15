@@ -1,23 +1,23 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
-import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 
 /// Interceptor for adding authentication tokens to requests
 class AuthInterceptor extends Interceptor {
-  /// Creates an [AuthInterceptor] with the given [storageService]
-  AuthInterceptor(StorageService storageService)
-      : _storageService = storageService;
+  /// Creates an [AuthInterceptor] with the given [secureStorageService]
+  AuthInterceptor(SecureStorageService secureStorageService)
+      : _secureStorageService = secureStorageService;
 
-  /// Storage service for retrieving authentication tokens
-  final StorageService _storageService;
+  /// Secure storage service for retrieving authentication tokens
+  final SecureStorageService _secureStorageService;
 
   @override
   Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Get token from storage
-    final token = await _storageService.getString(AppConstants.tokenKey);
+    // Get token from secure storage
+    final token = await _secureStorageService.getString(AppConstants.tokenKey);
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
