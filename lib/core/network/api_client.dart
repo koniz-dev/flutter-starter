@@ -8,7 +8,7 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 /// API client for making HTTP requests
 class ApiClient {
   /// Creates an instance of [ApiClient] with configured Dio instance
-  /// 
+  ///
   /// [storageService] - Storage service for authentication interceptor
   ApiClient({required StorageService storageService})
       : _dio = _createDio(storageService);
@@ -41,7 +41,7 @@ class ApiClient {
   Dio get dio => _dio;
 
   /// GET request
-  /// 
+  ///
   /// [path] - The endpoint path
   /// [queryParameters] - Optional query parameters
   /// [options] - Optional request options
@@ -63,7 +63,7 @@ class ApiClient {
   }
 
   /// POST request
-  /// 
+  ///
   /// [path] - The endpoint path
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
@@ -88,7 +88,7 @@ class ApiClient {
   }
 
   /// PUT request
-  /// 
+  ///
   /// [path] - The endpoint path
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
@@ -113,7 +113,7 @@ class ApiClient {
   }
 
   /// DELETE request
-  /// 
+  ///
   /// [path] - The endpoint path
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters

@@ -195,8 +195,9 @@ class JsonHelper {
     if (map == null || map.isEmpty) return '';
     return map.entries
         .where((entry) => entry.value != null)
-        .map((entry) => '${Uri.encodeComponent(entry.key)}='
-            '${Uri.encodeComponent(entry.value.toString())}',
+        .map(
+          (entry) => '${Uri.encodeComponent(entry.key)}='
+              '${Uri.encodeComponent(entry.value.toString())}',
         )
         .join('&');
   }

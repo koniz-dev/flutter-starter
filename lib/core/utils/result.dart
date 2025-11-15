@@ -50,7 +50,7 @@ extension ResultExtensions<T> on Result<T> {
     return switch (this) {
       Success<T>(:final data) => Success(mapper(data)),
       ResultFailure<T>(:final message, :final code) =>
-          ResultFailure<R>(message, code: code),
+        ResultFailure<R>(message, code: code),
     };
   }
 

@@ -3,7 +3,7 @@ class EnvConfig {
   EnvConfig._();
 
   /// Load environment variables
-  /// 
+  ///
   /// This can be extended to load from .env files using packages like
   /// flutter_dotenv
   static Future<void> load() async {

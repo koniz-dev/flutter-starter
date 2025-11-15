@@ -5,7 +5,7 @@ class AppConfig {
   AppConfig._();
 
   /// Current environment name (development, staging, production)
-  /// 
+  ///
   /// Can be set via compile-time environment variable:
   /// `--dart-define=ENVIRONMENT=production`
   static const String environment = String.fromEnvironment(
@@ -29,7 +29,7 @@ class AppConfig {
   static bool get isReleaseMode => kReleaseMode;
 
   /// Base URL for API requests
-  /// 
+  ///
   /// Can be set via compile-time environment variable:
   /// `--dart-define=BASE_URL=https://api.example.com`
   static String get baseUrl => const String.fromEnvironment(
@@ -38,12 +38,12 @@ class AppConfig {
       );
 
   /// Returns true if logging should be enabled
-  /// 
+  ///
   /// Enabled in development and staging environments
   static bool get enableLogging => isDevelopment || isStaging;
 
   /// Returns true if analytics should be enabled
-  /// 
+  ///
   /// Enabled in production and staging environments
   static bool get enableAnalytics => isProduction || isStaging;
 }

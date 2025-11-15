@@ -132,8 +132,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return const ResultFailure('No refresh token available');
       }
 
-      final authResponse =
-          await remoteDataSource.refreshToken(refreshToken);
+      final authResponse = await remoteDataSource.refreshToken(refreshToken);
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {
         await localDataSource.cacheRefreshToken(

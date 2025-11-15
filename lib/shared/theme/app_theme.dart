@@ -18,14 +18,10 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.background,
       textTheme: TextTheme(
-        displayLarge:
-            AppTextStyles.h1.copyWith(color: AppColors.textPrimary),
-        displayMedium:
-            AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
-        displaySmall:
-            AppTextStyles.h3.copyWith(color: AppColors.textPrimary),
-        headlineMedium:
-            AppTextStyles.h4.copyWith(color: AppColors.textPrimary),
+        displayLarge: AppTextStyles.h1.copyWith(color: AppColors.textPrimary),
+        displayMedium: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+        displaySmall: AppTextStyles.h3.copyWith(color: AppColors.textPrimary),
+        headlineMedium: AppTextStyles.h4.copyWith(color: AppColors.textPrimary),
         bodyLarge:
             AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
         bodyMedium: AppTextStyles.bodyMedium.copyWith(
@@ -96,15 +92,12 @@ class AppTheme {
         displaySmall: AppTextStyles.h3.copyWith(color: Colors.white),
         headlineMedium: AppTextStyles.h4.copyWith(color: Colors.white),
         bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
-        bodyMedium:
-            AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
-        bodySmall:
-            AppTextStyles.bodySmall.copyWith(color: Colors.white70),
+        bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
+        bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
         labelLarge: AppTextStyles.button.copyWith(
           color: AppColors.textOnPrimary,
         ),
-        labelSmall:
-            AppTextStyles.caption.copyWith(color: Colors.white70),
+        labelSmall: AppTextStyles.caption.copyWith(color: Colors.white70),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF1E1E1E),

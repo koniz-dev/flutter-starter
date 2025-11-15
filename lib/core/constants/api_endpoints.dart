@@ -3,7 +3,7 @@ class ApiEndpoints {
   ApiEndpoints._();
 
   /// Base URL for API requests
-  /// 
+  ///
   /// Can be set via compile-time environment variable:
   /// `--dart-define=BASE_URL=https://api.example.com`
   static const String baseUrl = String.fromEnvironment(
