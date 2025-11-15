@@ -1,18 +1,15 @@
+import 'package:flutter_starter/core/config/app_config.dart';
+
 /// Application-wide constants
+///
+/// Contains only application constants that are not configuration.
+/// For configuration values (timeouts, URLs, etc.), use [AppConfig].
+/// For app version, use [AppConfig.appVersion].
 class AppConstants {
   AppConstants._();
 
   /// Application name displayed to users
   static const String appName = 'Flutter Starter';
-
-  /// Current application version
-  static const String appVersion = '1.0.0';
-
-  /// Network connection timeout duration
-  static const Duration connectionTimeout = Duration(seconds: 30);
-
-  /// Network receive timeout duration
-  static const Duration receiveTimeout = Duration(seconds: 30);
 
   /// Default number of items per page for pagination
   static const int defaultPageSize = 20;

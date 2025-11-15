@@ -1,15 +1,11 @@
+import 'package:flutter_starter/core/config/app_config.dart';
+
 /// API endpoints constants
+///
+/// Contains only endpoint path constants.
+/// For base URL configuration, use [AppConfig.baseUrl].
 class ApiEndpoints {
   ApiEndpoints._();
-
-  /// Base URL for API requests
-  ///
-  /// Can be set via compile-time environment variable:
-  /// `--dart-define=BASE_URL=https://api.example.com`
-  static const String baseUrl = String.fromEnvironment(
-    'BASE_URL',
-    defaultValue: 'https://api.example.com',
-  );
 
   /// API version prefix for all endpoints
   static const String apiVersion = '/v1';
