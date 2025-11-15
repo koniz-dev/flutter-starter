@@ -1,6 +1,50 @@
 import 'package:equatable/equatable.dart';
 
 /// Base class for all failures
+///
+/// [Failure] represents typed error information in the domain layer.
+/// It is used within ResultFailure (from `result.dart`) to provide
+/// type-safe error handling.
+///
+/// **Relationship with ResultFailure:**
+///
+/// - **Failure**: The domain-level error representation. Contains error
+///   message and optional code. Has typed subclasses (e.g., [ServerFailure],
+///   [NetworkFailure], [AuthFailure]).
+///
+/// - **ResultFailure**: A wrapper in the Result type system that contains
+///   a [Failure] instance. It represents a failed operation.
+///
+/// **Usage Pattern:**
+///
+/// ```dart
+/// // Create a typed failure
+/// final failure = ServerFailure('Server error', code: '500');
+///
+/// // Wrap it in a ResultFailure
+/// final result = ResultFailure<User>(failure);
+///
+/// // Use pattern matching
+/// result.when(
+///   success: (user) => print('User: $user'),
+///   failureCallback: (failure) {
+///     // failure is the ServerFailure instance
+///     if (failure is ServerFailure) {
+///       print('Server error: ${failure.message}');
+///     }
+///   },
+/// );
+/// ```
+///
+/// **Failure Subtypes:**
+///
+/// - [ServerFailure]: API/server errors
+/// - [NetworkFailure]: Network connectivity issues
+/// - [CacheFailure]: Local storage errors
+/// - [AuthFailure]: Authentication/authorization errors
+/// - [ValidationFailure]: Input validation errors
+/// - [PermissionFailure]: Permission denied errors
+/// - [UnknownFailure]: Unclassified errors
 abstract class Failure extends Equatable {
   /// Creates a [Failure] with the given [message] and optional [code]
   const Failure(this.message, {this.code});

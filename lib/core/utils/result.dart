@@ -1,6 +1,22 @@
 import 'package:flutter_starter/core/errors/failures.dart';
 
 /// Result class for handling success and failure states
+///
+/// This is a sealed class that represents either a successful operation
+/// ([Success]) or a failed operation ([ResultFailure]).
+///
+/// Uses Dart 3.0 pattern matching for type-safe handling of success/failure
+/// states. The [when] method provides a convenient way to handle both cases
+/// using switch expressions.
+///
+/// Example:
+/// ```dart
+/// final result = await someOperation();
+/// result.when(
+///   success: (data) => print('Success: $data'),
+///   failureCallback: (failure) => print('Error: ${failure.message}'),
+/// );
+/// ```
 sealed class Result<T> {
   /// Creates a [Result] instance
   const Result();
@@ -16,11 +32,37 @@ final class Success<T> extends Result<T> {
 }
 
 /// Failure result containing typed failure information
+///
+/// [ResultFailure] is a wrapper around a [Failure] object that represents
+/// a failed operation. The relationship is:
+///
+/// - **ResultFailure**: A variant of [Result] that represents failure.
+///   It wraps a [Failure] object which contains the actual error information.
+///
+/// - **Failure**: The base class for all typed failures (e.g., [ServerFailure],
+///   [NetworkFailure], [AuthFailure]). It contains the error message and
+///   optional error code.
+///
+/// This separation allows:
+/// - Type-safe error handling at the Result level
+/// - Typed failure information at the Failure level
+/// - Pattern matching on both Result and Failure types
+///
+/// Example:
+/// ```dart
+/// final result = ResultFailure<User>(ServerFailure('Server error'));
+/// // result.failure is a ServerFailure instance
+/// // result.message is 'Server error'
+/// ```
 final class ResultFailure<T> extends Result<T> {
   /// Creates a [ResultFailure] with the given [failure]
   const ResultFailure(this.failure);
 
   /// The typed failure containing error information
+  ///
+  /// This is a [Failure] instance (or one of its subtypes like
+  /// [ServerFailure], [NetworkFailure], etc.) that contains the actual
+  /// error details.
   final Failure failure;
 
   /// Error message from the failure (convenience getter)
@@ -74,7 +116,45 @@ extension ResultExtensions<T> on Result<T> {
     };
   }
 
-  /// Pattern matching helper
+  /// Pattern matching helper using Dart 3.0 switch expressions
+  ///
+  /// This method uses Dart 3.0 pattern matching to safely handle both
+  /// success and failure cases. It provides type-safe access to the data
+  /// or failure information.
+  ///
+  /// The method uses a switch expression internally, which ensures:
+  /// - Exhaustive pattern matching (all cases must be handled)
+  /// - Type safety (data is of type T, failure is of type Failure)
+  /// - No null safety issues
+  ///
+  /// Parameters:
+  /// - [success]: Callback invoked when the result is a [Success].
+  ///   Receives the data of type [T].
+  /// - [failureCallback]: Callback invoked when the result is a
+  ///   [ResultFailure]. Receives the [Failure] object (which may be a
+  ///   subtype like [ServerFailure], [NetworkFailure], etc.).
+  ///
+  /// Returns:
+  /// The result of the callback that matches the result type.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await loginUseCase(email, password);
+  /// result.when(
+  ///   success: (user) {
+  ///     // user is of type User
+  ///     print('Logged in: ${user.email}');
+  ///   },
+  ///   failureCallback: (failure) {
+  ///     // failure is of type Failure (may be AuthFailure, etc.)
+  ///     print('Error: ${failure.message}');
+  ///     if (failure is AuthFailure) {
+  ///       // Can pattern match on Failure subtypes too
+  ///       print('Auth error code: ${failure.code}');
+  ///     }
+  ///   },
+  /// );
+  /// ```
   R when<R>({
     required R Function(T data) success,
     required R Function(Failure failure) failureCallback,
