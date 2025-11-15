@@ -4,7 +4,12 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 
 /// Interceptor for adding authentication tokens to requests
 class AuthInterceptor extends Interceptor {
-  final StorageService _storageService = StorageService();
+  /// Creates an [AuthInterceptor] with the given [storageService]
+  AuthInterceptor(StorageService storageService)
+      : _storageService = storageService;
+
+  /// Storage service for retrieving authentication tokens
+  final StorageService _storageService;
 
   @override
   Future<void> onRequest(

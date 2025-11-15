@@ -3,13 +3,17 @@ import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
+import 'package:flutter_starter/core/storage/storage_service.dart';
 
 /// API client for making HTTP requests
 class ApiClient {
   /// Creates an instance of [ApiClient] with configured Dio instance
-  ApiClient() : _dio = _createDio();
+  /// 
+  /// [storageService] - Storage service for authentication interceptor
+  ApiClient({required StorageService storageService})
+      : _dio = _createDio(storageService);
 
-  static Dio _createDio() {
+  static Dio _createDio(StorageService storageService) {
     final dio = Dio(
       BaseOptions(
         baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
@@ -24,7 +28,7 @@ class ApiClient {
 
     // Add interceptors
     dio.interceptors.addAll([
-      AuthInterceptor(),
+      AuthInterceptor(storageService),
       if (AppConfig.enableLogging) LoggingInterceptor(),
     ]);
 

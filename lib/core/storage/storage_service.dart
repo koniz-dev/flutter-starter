@@ -44,75 +44,94 @@ abstract class IStorageService {
 
 /// Implementation of storage service using SharedPreferences
 class StorageService implements IStorageService {
-  late final SharedPreferences _prefs;
+  SharedPreferences? _prefs;
 
-  /// Initialize storage service
+  /// Get SharedPreferences instance (lazy initialization)
+  Future<SharedPreferences> get _preferences async {
+    _prefs ??= await SharedPreferences.getInstance();
+    return _prefs!;
+  }
+
+  /// Initialize storage service (optional, for explicit initialization)
   Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
+    _prefs ??= await SharedPreferences.getInstance();
   }
 
   @override
   Future<String?> getString(String key) async {
-    return _prefs.getString(key);
+    final prefs = await _preferences;
+    return prefs.getString(key);
   }
 
   @override
   Future<bool> setString(String key, String value) async {
-    return _prefs.setString(key, value);
+    final prefs = await _preferences;
+    return prefs.setString(key, value);
   }
 
   @override
   Future<int?> getInt(String key) async {
-    return _prefs.getInt(key);
+    final prefs = await _preferences;
+    return prefs.getInt(key);
   }
 
   @override
   Future<bool> setInt(String key, int value) async {
-    return _prefs.setInt(key, value);
+    final prefs = await _preferences;
+    return prefs.setInt(key, value);
   }
 
   @override
   Future<bool?> getBool(String key) async {
-    return _prefs.getBool(key);
+    final prefs = await _preferences;
+    return prefs.getBool(key);
   }
 
   @override
   Future<bool> setBool(String key, {required bool value}) async {
-    return _prefs.setBool(key, value);
+    final prefs = await _preferences;
+    return prefs.setBool(key, value);
   }
 
   @override
   Future<double?> getDouble(String key) async {
-    return _prefs.getDouble(key);
+    final prefs = await _preferences;
+    return prefs.getDouble(key);
   }
 
   @override
   Future<bool> setDouble(String key, double value) async {
-    return _prefs.setDouble(key, value);
+    final prefs = await _preferences;
+    return prefs.setDouble(key, value);
   }
 
   @override
   Future<List<String>?> getStringList(String key) async {
-    return _prefs.getStringList(key);
+    final prefs = await _preferences;
+    return prefs.getStringList(key);
   }
 
   @override
   Future<bool> setStringList(String key, List<String> value) async {
-    return _prefs.setStringList(key, value);
+    final prefs = await _preferences;
+    return prefs.setStringList(key, value);
   }
 
   @override
   Future<bool> remove(String key) async {
-    return _prefs.remove(key);
+    final prefs = await _preferences;
+    return prefs.remove(key);
   }
 
   @override
   Future<bool> clear() async {
-    return _prefs.clear();
+    final prefs = await _preferences;
+    return prefs.clear();
   }
 
   @override
   Future<bool> containsKey(String key) async {
-    return _prefs.containsKey(key);
+    final prefs = await _preferences;
+    return prefs.containsKey(key);
   }
 }

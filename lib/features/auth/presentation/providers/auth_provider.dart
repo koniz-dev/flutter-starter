@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
-import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 
 /// Authentication state
 class AuthState {
@@ -34,13 +34,6 @@ class AuthState {
     );
   }
 }
-
-/// Provider for LoginUseCase (to be provided via dependency injection)
-final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
-  // This should be provided via dependency injection
-  // For now, throw an error to indicate it needs to be set up
-  throw UnimplementedError('LoginUseCase must be provided');
-});
 
 /// Authentication provider (Riverpod 3.0 - using Notifier)
 class AuthNotifier extends Notifier<AuthState> {
