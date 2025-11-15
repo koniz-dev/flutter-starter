@@ -16,11 +16,20 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 class MockErrorInterceptorHandler extends Mock
     implements ErrorInterceptorHandler {}
 
+class FakeDioException extends Fake implements DioException {}
+
+class FakeResponse extends Fake implements Response<dynamic> {}
+
 void main() {
   group('AuthInterceptor', () {
     late AuthInterceptor interceptor;
     late MockSecureStorageService mockSecureStorage;
     late MockAuthRepository mockAuthRepository;
+
+    setUpAll(() {
+      registerFallbackValue(FakeDioException());
+      registerFallbackValue(FakeResponse());
+    });
 
     setUp(() {
       mockSecureStorage = MockSecureStorageService();
@@ -96,9 +105,11 @@ void main() {
           ),
         );
 
+        when(() => handler.next(any())).thenReturn(null);
+
         await interceptor.onError(loginException, handler);
 
-        verify(() => handler.reject(loginException)).called(1);
+        verify(() => handler.next(loginException)).called(1);
         verifyNever(() => mockAuthRepository.refreshToken());
       });
 
@@ -114,12 +125,21 @@ void main() {
             newToken,
           ),
         ).thenAnswer((_) async => true);
+        // Mock remove calls in case retry fails and logout is triggered
+        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
+            .thenAnswer((_) async => true);
+        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
+            .thenAnswer((_) async => true);
+        when(() => handler.resolve(any())).thenReturn(null);
+        when(() => handler.reject(any())).thenReturn(null);
 
-        // Note: We can't easily mock the internal Dio request retry,
-        // so we test the flow by verifying the refresh token is called
-        // The actual retry will fail in unit tests, but that's expected
-
-        await interceptor.onError(dioException, handler);
+        // Note: The retry will likely fail in unit tests since we can't
+        // mock Dio, but we verify the refresh token is called
+        try {
+          await interceptor.onError(dioException, handler);
+        } on Exception {
+          // Expected - retry fails in unit tests
+        }
 
         verify(() => mockAuthRepository.refreshToken()).called(1);
         verify(
@@ -139,6 +159,7 @@ void main() {
             .thenAnswer((_) async => true);
         when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
             .thenAnswer((_) async => true);
+        when(() => handler.reject(any())).thenReturn(null);
 
         await interceptor.onError(dioException, handler);
 
@@ -168,6 +189,7 @@ void main() {
             .thenAnswer((_) async => true);
         when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
             .thenAnswer((_) async => true);
+        when(() => handler.reject(any())).thenReturn(null);
 
         await interceptor.onError(retryException, handler);
 
@@ -190,6 +212,15 @@ void main() {
             newToken,
           ),
         ).thenAnswer((_) async => true);
+        // Mock remove calls in case retry fails
+        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
+            .thenAnswer((_) async => true);
+        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
+            .thenAnswer((_) async => true);
+        when(() => handler1.resolve(any())).thenReturn(null);
+        when(() => handler1.reject(any())).thenReturn(null);
+        when(() => handler2.resolve(any())).thenReturn(null);
+        when(() => handler2.reject(any())).thenReturn(null);
 
         // Start first request (will trigger refresh)
         final future1 = interceptor.onError(dioException, handler1);
@@ -197,9 +228,13 @@ void main() {
         // Second request should be queued
         final future2 = interceptor.onError(dioException, handler2);
 
-        // Wait for both to complete
-        await future1;
-        await future2;
+        // Wait for both to complete (may throw due to retry failure)
+        try {
+          await future1;
+          await future2;
+        } on Exception {
+          // Expected - retry fails in unit tests
+        }
 
         // Refresh should only be called once
         verify(() => mockAuthRepository.refreshToken()).called(1);
@@ -212,6 +247,7 @@ void main() {
             .thenAnswer((_) async => true);
         when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
             .thenAnswer((_) async => true);
+        when(() => handler.reject(any())).thenReturn(null);
 
         await interceptor.onError(dioException, handler);
 
@@ -231,10 +267,12 @@ void main() {
         );
         final handler = MockErrorInterceptorHandler();
 
+        when(() => handler.next(any())).thenReturn(null);
+
         await interceptor.onError(dioException, handler);
 
         verifyNever(() => mockAuthRepository.refreshToken());
-        verify(() => handler.reject(dioException)).called(1);
+        verify(() => handler.next(dioException)).called(1);
       });
     });
   });

@@ -14,11 +14,17 @@ class MockAuthRemoteDataSource extends Mock
 
 class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
+class FakeUserModel extends Fake implements UserModel {}
+
 void main() {
   group('AuthRepositoryImpl', () {
     late AuthRepositoryImpl repository;
     late MockAuthRemoteDataSource mockRemoteDataSource;
     late MockAuthLocalDataSource mockLocalDataSource;
+
+    setUpAll(() {
+      registerFallbackValue(FakeUserModel());
+    });
 
     setUp(() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
@@ -100,6 +106,10 @@ void main() {
           // Arrange
           when(() => mockRemoteDataSource.login(any(), any()))
               .thenThrow(const NetworkException('Network error'));
+          when(() => mockLocalDataSource.cacheUser(any()))
+              .thenAnswer((_) async => {});
+          when(() => mockLocalDataSource.cacheToken(any()))
+              .thenAnswer((_) async => {});
 
           // Act
           final result = await repository.login('test@example.com', 'password');
@@ -182,6 +192,10 @@ void main() {
         // Arrange
         when(() => mockRemoteDataSource.register(any(), any(), any()))
             .thenThrow(const ServerException('Registration failed'));
+        when(() => mockLocalDataSource.cacheUser(any()))
+            .thenAnswer((_) async => {});
+        when(() => mockLocalDataSource.cacheToken(any()))
+            .thenAnswer((_) async => {});
 
         // Act
         final result = await repository.register(
@@ -217,6 +231,8 @@ void main() {
         // Arrange
         when(() => mockRemoteDataSource.logout())
             .thenThrow(const NetworkException('Network error'));
+        when(() => mockLocalDataSource.clearCache())
+            .thenAnswer((_) async => {});
 
         // Act
         final result = await repository.logout();
@@ -346,7 +362,7 @@ void main() {
         () async {
           // Arrange
           when(() => mockLocalDataSource.getRefreshToken())
-              .thenAnswer((_) => Future<String?>.value());
+              .thenAnswer((_) async => null);
 
           // Act
           final result = await repository.refreshToken();
@@ -365,6 +381,10 @@ void main() {
             .thenAnswer((_) async => 'refresh_token');
         when(() => mockRemoteDataSource.refreshToken(any()))
             .thenThrow(const AuthException('Token expired'));
+        when(() => mockLocalDataSource.cacheToken(any()))
+            .thenAnswer((_) async => {});
+        when(() => mockLocalDataSource.cacheRefreshToken(any()))
+            .thenAnswer((_) async => {});
 
         // Act
         final result = await repository.refreshToken();

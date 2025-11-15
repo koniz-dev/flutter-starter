@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
@@ -6,12 +7,70 @@ import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('AuthLocalDataSourceImpl', () {
     late StorageService storageService;
     late SecureStorageService secureStorageService;
     late AuthLocalDataSourceImpl dataSource;
+    final secureStorage = <String, String>{};
 
     setUp(() async {
+      secureStorage.clear();
+      
+      // Setup method channel for FlutterSecureStorage
+      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
+        final arguments = methodCall.arguments as Map<Object?, Object?>?;
+        switch (methodCall.method) {
+          case 'read':
+            final key = arguments?['key'] as String? ?? '';
+            return secureStorage[key];
+          case 'write':
+            final key = arguments?['key'] as String? ?? '';
+            final value = arguments?['value'] as String? ?? '';
+            secureStorage[key] = value;
+            return null;
+          case 'delete':
+            final key = arguments?['key'] as String? ?? '';
+            secureStorage.remove(key);
+            return null;
+          case 'deleteAll':
+            secureStorage.clear();
+            return null;
+          default:
+            return null;
+        }
+      });
+      
+      // Setup method channel for SharedPreferences
+      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      final sharedPrefs = <String, dynamic>{};
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
+        switch (methodCall.method) {
+          case 'getAll':
+            return sharedPrefs;
+          case 'setString':
+            final arguments = methodCall.arguments as Map<Object?, Object?>?;
+            final key = arguments?['key'] as String? ?? '';
+            final value = arguments?['value'] as String? ?? '';
+            sharedPrefs[key] = value;
+            return true;
+          case 'remove':
+            final arguments = methodCall.arguments as Map<Object?, Object?>?;
+            final key = arguments?['key'] as String? ?? '';
+            sharedPrefs.remove(key);
+            return true;
+          case 'clear':
+            sharedPrefs.clear();
+            return true;
+          default:
+            return null;
+        }
+      });
+      
       storageService = StorageService();
       secureStorageService = SecureStorageService();
       await storageService.init();
@@ -22,9 +81,16 @@ void main() {
     });
 
     tearDown(() async {
+      secureStorage.clear();
       await dataSource.clearCache();
       await storageService.clear();
       await secureStorageService.clear();
+      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(secureStorageChannel, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(sharedPrefsChannel, null);
     });
 
     group('Token Storage', () {

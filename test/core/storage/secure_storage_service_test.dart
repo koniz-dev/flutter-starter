@@ -1,18 +1,52 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('SecureStorageService', () {
     late SecureStorageService secureStorageService;
+    final storage = <String, String>{};
 
     setUp(() {
+      storage.clear();
+      const methodChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(methodChannel, (methodCall) async {
+        final arguments = methodCall.arguments as Map<Object?, Object?>?;
+        switch (methodCall.method) {
+          case 'read':
+            final key = arguments?['key'] as String? ?? '';
+            return storage[key];
+          case 'write':
+            final key = arguments?['key'] as String? ?? '';
+            final value = arguments?['value'] as String? ?? '';
+            storage[key] = value;
+            return null;
+          case 'delete':
+            final key = arguments?['key'] as String? ?? '';
+            storage.remove(key);
+            return null;
+          case 'deleteAll':
+            storage.clear();
+            return null;
+          default:
+            return null;
+        }
+      });
+      
       secureStorageService = SecureStorageService();
     });
 
     tearDown(() async {
-      // Clean up after each test
-      await secureStorageService.clear();
+      storage.clear();
+      const methodChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(methodChannel, null);
     });
+
 
     group('String Operations', () {
       test('should store and retrieve string value', () async {

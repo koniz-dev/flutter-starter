@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
@@ -10,10 +11,66 @@ import 'package:flutter_test/flutter_test.dart';
 /// Note: This is a simplified integration test. For full integration tests,
 /// you would need to set up a test server or use a mock API.
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Auth Flow Integration', () {
     late ProviderContainer container;
 
     setUp(() async {
+      // Setup method channel for SharedPreferences
+      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      final sharedPrefs = <String, dynamic>{};
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
+        switch (methodCall.method) {
+          case 'getAll':
+            return sharedPrefs;
+          case 'setString':
+            final arguments = methodCall.arguments as Map<Object?, Object?>?;
+            final key = arguments?['key'] as String? ?? '';
+            final value = arguments?['value'] as String? ?? '';
+            sharedPrefs[key] = value;
+            return true;
+          case 'remove':
+            final arguments = methodCall.arguments as Map<Object?, Object?>?;
+            final key = arguments?['key'] as String? ?? '';
+            sharedPrefs.remove(key);
+            return true;
+          case 'clear':
+            sharedPrefs.clear();
+            return true;
+          default:
+            return null;
+        }
+      });
+
+      // Setup method channel for FlutterSecureStorage
+      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      final secureStorage = <String, String>{};
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
+        final arguments = methodCall.arguments as Map<Object?, Object?>?;
+        switch (methodCall.method) {
+          case 'read':
+            final key = arguments?['key'] as String? ?? '';
+            return secureStorage[key];
+          case 'write':
+            final key = arguments?['key'] as String? ?? '';
+            final value = arguments?['value'] as String? ?? '';
+            secureStorage[key] = value;
+            return null;
+          case 'delete':
+            final key = arguments?['key'] as String? ?? '';
+            secureStorage.remove(key);
+            return null;
+          case 'deleteAll':
+            secureStorage.clear();
+            return null;
+          default:
+            return null;
+        }
+      });
+
       container = ProviderContainer();
       // Initialize storage
       final storageService = container.read(storageServiceProvider);
@@ -22,6 +79,12 @@ void main() {
 
     tearDown(() {
       container.dispose();
+      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(sharedPrefsChannel, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(secureStorageChannel, null);
     });
 
     test('should complete login flow through use case', () async {

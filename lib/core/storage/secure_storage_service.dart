@@ -116,6 +116,8 @@ class SecureStorageService implements IStorageService {
       final value = await _storage.read(key: key);
       if (value == null) return null;
       // Store as comma-separated values
+      // Handle empty string case (empty list stored as empty string)
+      if (value.isEmpty) return <String>[];
       return value.split(',');
     } on Exception {
       return null;

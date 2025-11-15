@@ -91,17 +91,7 @@ class DioExceptionMapper {
     // Try to extract message from response data
     if (data != null) {
       if (data is Map<String, dynamic>) {
-        // Try common error message fields
-        final message = data['message'] as String? ??
-            data['error'] as String? ??
-            data['error_message'] as String? ??
-            data['msg'] as String?;
-
-        if (message != null && message.isNotEmpty) {
-          return message;
-        }
-
-        // Try nested error object
+        // Try nested error object first (before trying error as string)
         final error = data['error'];
         if (error is Map<String, dynamic>) {
           final nestedMessage = error['message'] as String? ??
@@ -109,6 +99,16 @@ class DioExceptionMapper {
           if (nestedMessage != null && nestedMessage.isNotEmpty) {
             return nestedMessage;
           }
+        }
+
+        // Try common error message fields
+        final message = data['message'] as String? ??
+            (error is String ? error : null) ??
+            data['error_message'] as String? ??
+            data['msg'] as String?;
+
+        if (message != null && message.isNotEmpty) {
+          return message;
         }
       } else if (data is String && data.isNotEmpty) {
         return data;
