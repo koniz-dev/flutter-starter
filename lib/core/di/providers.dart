@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
@@ -7,19 +8,6 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datas
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
-
-/// Provider for [ApiClient] instance
-///
-/// This provider creates a singleton instance of [ApiClient] that can be used
-/// throughout the application for making HTTP requests.
-final apiClientProvider = Provider<ApiClient>((ref) {
-  final storageService = ref.watch(storageServiceProvider);
-  final secureStorageService = ref.watch(secureStorageServiceProvider);
-  return ApiClient(
-    storageService: storageService,
-    secureStorageService: secureStorageService,
-  );
-});
 
 /// Provider for [StorageService] instance
 ///
@@ -68,15 +56,6 @@ final storageInitializationProvider = FutureProvider<void>((ref) async {
 // Auth Feature Providers
 // ============================================================================
 
-/// Provider for [AuthRemoteDataSource] instance
-///
-/// This provider creates a singleton instance of [AuthRemoteDataSourceImpl]
-/// that handles remote authentication operations.
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  final apiClient = ref.watch(apiClientProvider);
-  return AuthRemoteDataSourceImpl(apiClient);
-});
-
 /// Provider for [AuthLocalDataSource] instance
 ///
 /// This provider creates a singleton instance of [AuthLocalDataSourceImpl]
@@ -94,16 +73,62 @@ final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
   );
 });
 
+/// Provider for [AuthRemoteDataSource] instance
+///
+/// This provider creates a singleton instance of [AuthRemoteDataSourceImpl]
+/// that handles remote authentication operations.
+/// Uses ref.read to break circular dependency with apiClientProvider.
+final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
+    Provider<AuthRemoteDataSource>((ref) {
+  final apiClient = ref.read<ApiClient>(apiClientProvider);
+  return AuthRemoteDataSourceImpl(apiClient);
+});
+
 /// Provider for [AuthRepository] instance
 ///
 /// This provider creates a singleton instance of [AuthRepositoryImpl]
 /// that coordinates between remote and local data sources.
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
+final Provider<AuthRepository> authRepositoryProvider =
+    Provider<AuthRepository>((ref) {
+  final remoteDataSource = ref.read<AuthRemoteDataSource>(
+    authRemoteDataSourceProvider,
+  );
   final localDataSource = ref.watch(authLocalDataSourceProvider);
   return AuthRepositoryImpl(
     remoteDataSource: remoteDataSource,
     localDataSource: localDataSource,
+  );
+});
+
+/// Provider for [AuthInterceptor] instance
+///
+/// This provider creates a singleton instance of [AuthInterceptor] that handles
+/// authentication token injection and automatic token refresh on 401 errors.
+/// Uses ref.read to break circular dependency with apiClientProvider.
+final Provider<AuthInterceptor> authInterceptorProvider =
+    Provider<AuthInterceptor>((ref) {
+  final secureStorageService = ref.watch(secureStorageServiceProvider);
+  // Use ref.read to break circular dependency with authRepositoryProvider
+  final authRepository = ref.read<AuthRepository>(authRepositoryProvider);
+  return AuthInterceptor(
+    secureStorageService: secureStorageService,
+    authRepository: authRepository,
+  );
+});
+
+/// Provider for [ApiClient] instance
+///
+/// This provider creates a singleton instance of [ApiClient] that can be used
+/// throughout the application for making HTTP requests.
+final Provider<ApiClient> apiClientProvider = Provider<ApiClient>((ref) {
+  final storageService = ref.watch(storageServiceProvider);
+  final secureStorageService = ref.watch(secureStorageServiceProvider);
+  // Use ref.read to break circular dependency
+  final authInterceptor = ref.read<AuthInterceptor>(authInterceptorProvider);
+  return ApiClient(
+    storageService: storageService,
+    secureStorageService: secureStorageService,
+    authInterceptor: authInterceptor,
   );
 });
 
@@ -112,6 +137,6 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 /// This provider creates a singleton instance of [LoginUseCase]
 /// that handles user login business logic.
 final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
+  final repository = ref.watch<AuthRepository>(authRepositoryProvider);
   return LoginUseCase(repository);
 });

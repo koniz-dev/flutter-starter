@@ -14,14 +14,21 @@ class ApiClient {
   ///
   /// [storageService] - Storage service for non-sensitive data
   /// [secureStorageService] - Secure storage service for authentication tokens
+  /// [authInterceptor] - Auth interceptor for token management and refresh
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
-  }) : _dio = _createDio(storageService, secureStorageService);
+    required AuthInterceptor authInterceptor,
+  }) : _dio = _createDio(
+          storageService,
+          secureStorageService,
+          authInterceptor,
+        );
 
   static Dio _createDio(
     StorageService storageService,
     SecureStorageService secureStorageService,
+    AuthInterceptor authInterceptor,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -38,12 +45,13 @@ class ApiClient {
     // Add interceptors - ErrorInterceptor must be first
     dio.interceptors.addAll([
       ErrorInterceptor(),
-      AuthInterceptor(secureStorageService),
+      authInterceptor,
       if (AppConfig.enableLogging) LoggingInterceptor(),
     ]);
 
     return dio;
   }
+
 
   final Dio _dio;
 
