@@ -26,6 +26,9 @@ class AuthRepositoryImpl implements AuthRepository {
       final authResponse = await remoteDataSource.login(email, password);
       await localDataSource.cacheUser(authResponse.user);
       await localDataSource.cacheToken(authResponse.token);
+      if (authResponse.refreshToken != null) {
+        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
+      }
       return Success(authResponse.user.toEntity());
     } on ServerException catch (e) {
       return ResultFailure(
@@ -56,6 +59,9 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       await localDataSource.cacheUser(authResponse.user);
       await localDataSource.cacheToken(authResponse.token);
+      if (authResponse.refreshToken != null) {
+        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
+      }
       return Success(authResponse.user.toEntity());
     } on ServerException catch (e) {
       return ResultFailure(
@@ -109,6 +115,38 @@ class AuthRepositoryImpl implements AuthRepository {
       final cachedUser = await localDataSource.getCachedUser();
       return Success(cachedUser != null);
     } on CacheException catch (e) {
+      return ResultFailure(
+        e.message,
+        code: e.code,
+      );
+    } on Exception catch (e) {
+      return ResultFailure('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future<Result<String>> refreshToken() async {
+    try {
+      final refreshToken = await localDataSource.getRefreshToken();
+      if (refreshToken == null) {
+        return const ResultFailure('No refresh token available');
+      }
+
+      final authResponse =
+          await remoteDataSource.refreshToken(refreshToken);
+      await localDataSource.cacheToken(authResponse.token);
+      if (authResponse.refreshToken != null) {
+        await localDataSource.cacheRefreshToken(
+          authResponse.refreshToken!,
+        );
+      }
+      return Success(authResponse.token);
+    } on ServerException catch (e) {
+      return ResultFailure(
+        e.message,
+        code: e.code,
+      );
+    } on NetworkException catch (e) {
       return ResultFailure(
         e.message,
         code: e.code,

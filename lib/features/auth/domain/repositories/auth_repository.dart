@@ -17,4 +17,7 @@ abstract class AuthRepository {
 
   /// Check if user is authenticated
   Future<Result<bool>> isAuthenticated();
+
+  /// Refresh authentication token
+  Future<Result<String>> refreshToken();
 }

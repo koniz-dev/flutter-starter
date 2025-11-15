@@ -18,6 +18,12 @@ abstract class AuthLocalDataSource {
   /// Retrieves cached authentication token from local storage
   Future<String?> getToken();
 
+  /// Caches a refresh [token] to local storage
+  Future<void> cacheRefreshToken(String token);
+
+  /// Retrieves cached refresh token from local storage
+  Future<String?> getRefreshToken();
+
   /// Clears all cached authentication data
   Future<void> clearCache();
 }
@@ -74,6 +80,24 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       return await storageService.getString(AppConstants.tokenKey);
     } on Exception catch (e) {
       throw CacheException('Failed to get token: $e');
+    }
+  }
+
+  @override
+  Future<void> cacheRefreshToken(String token) async {
+    try {
+      await storageService.setString(AppConstants.refreshTokenKey, token);
+    } on Exception catch (e) {
+      throw CacheException('Failed to cache refresh token: $e');
+    }
+  }
+
+  @override
+  Future<String?> getRefreshToken() async {
+    try {
+      return await storageService.getString(AppConstants.refreshTokenKey);
+    } on Exception catch (e) {
+      throw CacheException('Failed to get refresh token: $e');
     }
   }
 

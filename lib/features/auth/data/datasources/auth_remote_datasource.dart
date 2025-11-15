@@ -17,6 +17,9 @@ abstract class AuthRemoteDataSource {
 
   /// Logs out the current user
   Future<void> logout();
+
+  /// Refreshes the authentication token using [refreshToken]
+  Future<AuthResponseModel> refreshToken(String refreshToken);
 }
 
 /// Implementation of remote data source
@@ -92,6 +95,32 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await apiClient.post(ApiEndpoints.logout);
     } catch (e) {
       throw ServerException('Failed to logout: $e');
+    }
+  }
+
+  @override
+  Future<AuthResponseModel> refreshToken(String refreshToken) async {
+    try {
+      final response = await apiClient.post(
+        ApiEndpoints.refreshToken,
+        data: {
+          'refresh_token': refreshToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data as Map<String, dynamic>;
+        return AuthResponseModel.fromJson(data);
+      } else {
+        final data = response.data as Map<String, dynamic>;
+        throw ServerException(
+          (data['message'] as String?) ?? 'Token refresh failed',
+          statusCode: response.statusCode,
+        );
+      }
+    } catch (e) {
+      if (e is ServerException) rethrow;
+      throw ServerException('Failed to refresh token: $e');
     }
   }
 }
