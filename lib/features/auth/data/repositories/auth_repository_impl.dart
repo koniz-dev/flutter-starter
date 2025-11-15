@@ -23,9 +23,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Result<User>> login(String email, String password) async {
     try {
-      final userModel = await remoteDataSource.login(email, password);
-      await localDataSource.cacheUser(userModel);
-      return Success(userModel.toEntity());
+      final authResponse = await remoteDataSource.login(email, password);
+      await localDataSource.cacheUser(authResponse.user);
+      await localDataSource.cacheToken(authResponse.token);
+      return Success(authResponse.user.toEntity());
     } on ServerException catch (e) {
       return ResultFailure(
         e.message,
@@ -48,9 +49,14 @@ class AuthRepositoryImpl implements AuthRepository {
     String name,
   ) async {
     try {
-      final userModel = await remoteDataSource.register(email, password, name);
-      await localDataSource.cacheUser(userModel);
-      return Success(userModel.toEntity());
+      final authResponse = await remoteDataSource.register(
+        email,
+        password,
+        name,
+      );
+      await localDataSource.cacheUser(authResponse.user);
+      await localDataSource.cacheToken(authResponse.token);
+      return Success(authResponse.user.toEntity());
     } on ServerException catch (e) {
       return ResultFailure(
         e.message,

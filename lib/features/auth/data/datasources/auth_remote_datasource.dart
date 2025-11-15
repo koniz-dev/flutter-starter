@@ -1,15 +1,19 @@
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
-import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 
 /// Remote data source for authentication
 abstract class AuthRemoteDataSource {
   /// Authenticates user with [email] and [password]
-  Future<UserModel> login(String email, String password);
+  Future<AuthResponseModel> login(String email, String password);
 
   /// Registers a new user with [email], [password], and [name]
-  Future<UserModel> register(String email, String password, String name);
+  Future<AuthResponseModel> register(
+    String email,
+    String password,
+    String name,
+  );
 
   /// Logs out the current user
   Future<void> logout();
@@ -24,7 +28,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiClient apiClient;
 
   @override
-  Future<UserModel> login(String email, String password) async {
+  Future<AuthResponseModel> login(String email, String password) async {
     try {
       final response = await apiClient.post(
         ApiEndpoints.login,
@@ -36,9 +40,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
-        return UserModel.fromJson(
-          data['user'] as Map<String, dynamic>,
-        );
+        return AuthResponseModel.fromJson(data);
       } else {
         final data = response.data as Map<String, dynamic>;
         throw ServerException(
@@ -53,7 +55,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> register(
+  Future<AuthResponseModel> register(
     String email,
     String password,
     String name,
@@ -70,9 +72,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data as Map<String, dynamic>;
-        return UserModel.fromJson(
-          data['user'] as Map<String, dynamic>,
-        );
+        return AuthResponseModel.fromJson(data);
       } else {
         final data = response.data as Map<String, dynamic>;
         throw ServerException(
