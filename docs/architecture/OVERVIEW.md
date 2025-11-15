@@ -13,6 +13,7 @@ This document explains the architectural principles and patterns used in this Fl
 - [Adding New Features](#adding-new-features)
 - [Configuration](#configuration)
 - [Best Practices](#best-practices)
+- [Error Handling](#error-handling)
 - [Testing Strategy](#testing-strategy)
 
 ## 🏗️ Architecture Layers
@@ -186,6 +187,25 @@ await storageService.init();
 - **Domain**: Unit tests for entities, use cases, and repository interfaces
 - **Data**: Unit tests for data sources and repository implementations (with mocks)
 - **Presentation**: Widget tests for UI components, unit tests for providers
+
+## ⚠️ Error Handling
+
+The project uses a comprehensive error handling strategy with typed failures and exception-to-failure mapping. For detailed information, see [Error Handling Strategy](error-handling.md).
+
+### Quick Overview
+
+1. **Network errors** (`DioException`) are automatically mapped to domain exceptions by `ErrorInterceptor`
+2. **Domain exceptions** (`AppException`) are mapped to typed failures in repositories
+3. **Typed failures** (`Failure`) are displayed to users via state management
+4. **Error codes** are preserved for programmatic handling
+5. **Error messages** are user-friendly and contextual
+
+### Key Components
+
+- `DioExceptionMapper` - Maps DioException to AppException
+- `ExceptionToFailureMapper` - Maps AppException to Failure
+- `ErrorInterceptor` - Automatically handles network errors
+- `Result<T>` - Type-safe success/failure handling
 
 ---
 
