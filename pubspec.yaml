@@ -23,6 +23,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Configuration - Environment variable loader from .env files
+  flutter_dotenv: ^6.0.0
+
   # State Management - Riverpod reactive state management framework
   flutter_riverpod: ^3.0.3
 
@@ -105,6 +108,13 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
+  # Environment configuration files
+  # Note: Only .env.example is included (it's committed to git)
+  # Users should copy .env.example to .env for local development
+  # The .env file is optional - the app works with --dart-define flags too
+  assets:
+    - .env.example
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
@@ -8,7 +9,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize environment configuration
+  // This loads .env file if present, otherwise falls back to --dart-define
+  // or defaults
   await EnvConfig.load();
+
+  // Print configuration in debug mode (optional, useful for development)
+  if (AppConfig.isDebugMode) {
+    AppConfig.printConfig();
+  }
 
   // Initialize storage service
   final storageService = StorageService();

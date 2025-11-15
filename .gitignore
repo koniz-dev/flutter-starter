@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Environment configuration files
+# .env.example should be committed as a template
+.env
+.env.local
+.env.*.local
