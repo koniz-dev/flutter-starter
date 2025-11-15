@@ -302,5 +302,88 @@ void main() {
         expect(() => dataSource.cacheUser(user), returnsNormally);
       });
     });
+
+    group('Edge Cases', () {
+      test('should handle empty token', () async {
+        const emptyToken = '';
+        await dataSource.cacheToken(emptyToken);
+        final retrieved = await dataSource.getToken();
+        expect(retrieved, emptyToken);
+      });
+
+      test('should handle empty refresh token', () async {
+        const emptyRefreshToken = '';
+        await dataSource.cacheRefreshToken(emptyRefreshToken);
+        final retrieved = await dataSource.getRefreshToken();
+        expect(retrieved, emptyRefreshToken);
+      });
+
+      test('should handle very long token', () async {
+        final longToken = 'A' * 1000;
+        await dataSource.cacheToken(longToken);
+        final retrieved = await dataSource.getToken();
+        expect(retrieved, longToken);
+      });
+
+      test('should handle user with all optional fields', () async {
+        const user = UserModel(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+          avatarUrl: 'https://example.com/avatar.jpg',
+        );
+
+        await dataSource.cacheUser(user);
+        final retrieved = await dataSource.getCachedUser();
+        expect(retrieved?.avatarUrl, user.avatarUrl);
+      });
+
+      test('should handle user with minimal fields', () async {
+        const user = UserModel(
+          id: '1',
+          email: 'test@example.com',
+        );
+
+        await dataSource.cacheUser(user);
+        final retrieved = await dataSource.getCachedUser();
+        expect(retrieved?.name, isNull);
+        expect(retrieved?.avatarUrl, isNull);
+      });
+
+      test('should handle multiple cache operations', () async {
+        const token1 = 'token1';
+        const token2 = 'token2';
+
+        await dataSource.cacheToken(token1);
+        expect(await dataSource.getToken(), token1);
+
+        await dataSource.cacheToken(token2);
+        expect(await dataSource.getToken(), token2);
+      });
+
+      test('should handle clearCache when no data exists', () async {
+        // Should not throw when clearing empty cache
+        await dataSource.clearCache();
+        expect(await dataSource.getToken(), isNull);
+        expect(await dataSource.getRefreshToken(), isNull);
+        expect(await dataSource.getCachedUser(), isNull);
+      });
+
+      test('should handle getToken when token does not exist', () async {
+        final token = await dataSource.getToken();
+        expect(token, isNull);
+      });
+
+      test('should handle getRefreshToken when refresh token does not exist',
+          () async {
+        final refreshToken = await dataSource.getRefreshToken();
+        expect(refreshToken, isNull);
+      });
+
+      test('should handle getCachedUser when user does not exist', () async {
+        final user = await dataSource.getCachedUser();
+        expect(user, isNull);
+      });
+    });
   });
 }

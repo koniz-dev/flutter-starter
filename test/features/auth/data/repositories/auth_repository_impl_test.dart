@@ -393,6 +393,146 @@ void main() {
         expect(result.isFailure, isTrue);
         expect(result.failureOrNull, isA<AuthFailure>());
       });
+
+      test('should cache refresh token only if provided', () async {
+        // Arrange
+        const userModel = UserModel(
+          id: '1',
+          email: 'test@example.com',
+        );
+        const authResponse = AuthResponseModel(
+          user: userModel,
+          token: 'new_access_token',
+          // refreshToken is null
+        );
+        when(() => mockLocalDataSource.getRefreshToken())
+            .thenAnswer((_) async => 'old_refresh_token');
+        when(() => mockRemoteDataSource.refreshToken(any()))
+            .thenAnswer((_) async => authResponse);
+        when(() => mockLocalDataSource.cacheToken(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        await repository.refreshToken();
+
+        // Assert
+        verifyNever(() => mockLocalDataSource.cacheRefreshToken(any()));
+      });
+    });
+
+    group('Edge Cases', () {
+      test('register should cache refresh token when provided', () async {
+        // Arrange
+        const userModel = UserModel(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        const authResponse = AuthResponseModel(
+          user: userModel,
+          token: 'access_token',
+          refreshToken: 'refresh_token',
+        );
+        when(() => mockRemoteDataSource.register(any(), any(), any()))
+            .thenAnswer((_) async => authResponse);
+        when(() => mockLocalDataSource.cacheUser(any()))
+            .thenAnswer((_) async => {});
+        when(() => mockLocalDataSource.cacheToken(any()))
+            .thenAnswer((_) async => {});
+        when(() => mockLocalDataSource.cacheRefreshToken(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        await repository.register('test@example.com', 'password', 'Test User');
+
+        // Assert
+        verify(() => mockLocalDataSource.cacheRefreshToken('refresh_token'))
+            .called(1);
+      });
+
+      test('login should handle generic Exception', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.login(any(), any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.login('test@example.com', 'password');
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('register should handle generic Exception', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.register(any(), any(), any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.register(
+          'test@example.com',
+          'password',
+          'Test User',
+        );
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('logout should handle generic Exception', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.logout())
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.logout();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('getCurrentUser should handle generic Exception', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getCachedUser())
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.getCurrentUser();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('isAuthenticated should handle generic Exception', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getCachedUser())
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.isAuthenticated();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('refreshToken should handle generic Exception', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getRefreshToken())
+            .thenAnswer((_) async => 'refresh_token');
+        when(() => mockRemoteDataSource.refreshToken(any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.refreshToken();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
     });
   });
 }

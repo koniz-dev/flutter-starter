@@ -42,7 +42,8 @@ class JsonHelper {
   static String? encode(dynamic object) {
     try {
       return jsonEncode(object);
-    } on Exception {
+    } on Object catch (_) {
+      // Catch all exceptions and errors (FormatException, TypeError, etc.)
       return null;
     }
   }

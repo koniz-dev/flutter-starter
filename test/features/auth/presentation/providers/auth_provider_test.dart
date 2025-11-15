@@ -374,5 +374,136 @@ void main() {
         expect(result, isFalse);
       });
     });
+
+    group('Edge Cases', () {
+      test('should handle initial state correctly', () {
+        final state = container.read(authNotifierProvider);
+        expect(state.user, isNull);
+        expect(state.isLoading, isFalse);
+        expect(state.error, isNull);
+      });
+
+      test('should clear error on successful login after failure', () async {
+        // Arrange
+        const failure = AuthFailure('Login failed');
+        const user = User(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const ResultFailure(failure));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // First login fails
+        await notifier.login('test@example.com', 'wrongpassword');
+        var state = container.read(authNotifierProvider);
+        expect(state.error, 'Login failed');
+
+        // Set up mock for second call to succeed
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const Success(user));
+
+        // Second login succeeds
+        await notifier.login('test@example.com', 'correctpassword');
+        state = container.read(authNotifierProvider);
+        expect(state.error, isNull);
+        expect(state.user, user);
+      });
+
+      test('should handle multiple rapid login attempts', () async {
+        const user = User(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const Success(user));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // Rapid login attempts
+        await notifier.login('test@example.com', 'password1');
+        await notifier.login('test@example.com', 'password2');
+        await notifier.login('test@example.com', 'password3');
+
+        final state = container.read(authNotifierProvider);
+        expect(state.user, user);
+        verify(() => mockLoginUseCase(any(), any())).called(3);
+      });
+
+      test('should handle empty email in login', () async {
+        const failure = ValidationFailure('Email is required');
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const ResultFailure(failure));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+        await notifier.login('', 'password');
+
+        final state = container.read(authNotifierProvider);
+        expect(state.error, 'Email is required');
+      });
+
+      test('should handle empty password in login', () async {
+        const failure = ValidationFailure('Password is required');
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const ResultFailure(failure));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+        await notifier.login('test@example.com', '');
+
+        final state = container.read(authNotifierProvider);
+        expect(state.error, 'Password is required');
+      });
+
+      test('should handle empty name in register', () async {
+        const failure = ValidationFailure('Name is required');
+        when(() => mockRegisterUseCase(any(), any(), any()))
+            .thenAnswer((_) async => const ResultFailure(failure));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+        await notifier.register('test@example.com', 'password', '');
+
+        final state = container.read(authNotifierProvider);
+        expect(state.error, 'Name is required');
+      });
+
+      test('should preserve user on refresh token success', () async {
+        const user = User(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const Success(user));
+        when(() => mockRefreshTokenUseCase())
+            .thenAnswer((_) async => const Success('new_token'));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+        await notifier.login('test@example.com', 'password');
+
+        final stateBefore = container.read(authNotifierProvider);
+        expect(stateBefore.user, user);
+
+        await notifier.refreshToken();
+
+        final stateAfter = container.read(authNotifierProvider);
+        expect(stateAfter.user, user);
+      });
+
+      test('should handle getCurrentUser failure', () async {
+        const failure = CacheFailure('Cache error');
+        when(() => mockGetCurrentUserUseCase())
+            .thenAnswer((_) async => const ResultFailure(failure));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+        await notifier.getCurrentUser();
+
+        final state = container.read(authNotifierProvider);
+        expect(state.isLoading, isFalse);
+        expect(state.user, isNull);
+      });
+    });
   });
 }

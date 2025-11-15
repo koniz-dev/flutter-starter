@@ -226,7 +226,21 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    // Note: Navigation test removed as it requires full app setup
-    // For widget tests, focus on UI validation and form behavior
+    testWidgets(
+      'should navigate to RegisterScreen when register button is tapped',
+      (tester) async {
+        // Arrange
+        await tester.pumpWidget(createTestWidget());
+
+        // Act
+        await tester.tap(find.text("Don't have an account? Register"));
+        await tester.pumpAndSettle();
+
+        // Assert
+        // Verify RegisterScreen is displayed
+        expect(find.text('Register'), findsWidgets);
+        expect(find.text('Name'), findsOneWidget);
+      },
+    );
   });
 }

@@ -1,0 +1,110 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# Cancel in-progress runs for the same workflow and branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends lcov bc
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Check coverage threshold
+        run: |
+          # Extract coverage percentage from lcov summary
+          # lcov --summary outputs: "  lines......: XX.X% (XXX of XXX lines)"
+          COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep -E '^\s*lines\.*:' | awk '{print $2}' | sed 's/%//')
+          
+          # Validate coverage was extracted
+          if [ -z "$COVERAGE" ]; then
+            echo "::error::Failed to extract coverage percentage from lcov.info"
+            echo "lcov summary output:"
+            lcov --summary coverage/lcov.info 2>&1 || true
+            exit 1
+          fi
+          
+          echo "Coverage: $COVERAGE%"
+          
+          # Compare coverage (bc returns 1 for true, 0 for false)
+          THRESHOLD=80
+          if [ "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" -eq 1 ]; then
+            echo "::error::Coverage is below ${THRESHOLD}% threshold (current: ${COVERAGE}%)"
+            exit 1
+          fi
+          
+          echo "✅ Coverage threshold met: ${COVERAGE}%"
+
+      - name: Generate coverage report
+        run: genhtml coverage/lcov.info -o coverage/html
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        continue-on-error: true
+        with:
+          file: coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+      - name: Coverage comment
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        continue-on-error: true
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: coverage/lcov.info
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/html
+          retention-days: 30
+

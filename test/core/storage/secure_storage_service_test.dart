@@ -272,5 +272,66 @@ void main() {
         expect(retrievedValue, isNull);
       });
     });
+
+    group('Edge Cases', () {
+      test('should handle empty string values', () async {
+        const key = 'empty_string_key';
+        const value = '';
+
+        await secureStorageService.setString(key, value);
+        final result = await secureStorageService.getString(key);
+        expect(result, value);
+      });
+
+      test('should handle zero integer', () async {
+        const key = 'zero_int_key';
+        const value = 0;
+
+        await secureStorageService.setInt(key, value);
+        final result = await secureStorageService.getInt(key);
+        expect(result, value);
+      });
+
+      test('should handle zero double', () async {
+        const key = 'zero_double_key';
+        const value = 0.0;
+
+        await secureStorageService.setDouble(key, value);
+        final result = await secureStorageService.getDouble(key);
+        expect(result, value);
+      });
+
+      test('should handle large integers', () async {
+        const key = 'large_int_key';
+        const value = 999999999;
+
+        await secureStorageService.setInt(key, value);
+        final result = await secureStorageService.getInt(key);
+        expect(result, value);
+      });
+
+      test('should handle large doubles', () async {
+        const key = 'large_double_key';
+        const value = 999999.999999;
+
+        await secureStorageService.setDouble(key, value);
+        final result = await secureStorageService.getDouble(key);
+        expect(result, closeTo(value, 0.000001));
+      });
+
+      test('should handle case-insensitive boolean parsing', () async {
+        const key = 'bool_case_key';
+        await secureStorageService.setString(key, 'TRUE');
+        final result = await secureStorageService.getBool(key);
+        expect(result, isTrue);
+      });
+
+      test('should handle false boolean string', () async {
+        const key = 'bool_false_string_key';
+        await secureStorageService.setString(key, 'false');
+        final result = await secureStorageService.getBool(key);
+        expect(result, isFalse);
+      });
+    });
   });
 }

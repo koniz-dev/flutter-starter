@@ -274,6 +274,125 @@ void main() {
         verifyNever(() => mockAuthRepository.refreshToken());
         verify(() => handler.next(dioException)).called(1);
       });
+
+      test('should pass through 400 errors', () async {
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: '/test'),
+          response: Response(
+            requestOptions: RequestOptions(path: '/test'),
+            statusCode: 400,
+          ),
+        );
+        final handler = MockErrorInterceptorHandler();
+
+        when(() => handler.next(any())).thenReturn(null);
+
+        await interceptor.onError(dioException, handler);
+
+        verifyNever(() => mockAuthRepository.refreshToken());
+        verify(() => handler.next(dioException)).called(1);
+      });
+
+      test('should pass through 403 errors', () async {
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: '/test'),
+          response: Response(
+            requestOptions: RequestOptions(path: '/test'),
+            statusCode: 403,
+          ),
+        );
+        final handler = MockErrorInterceptorHandler();
+
+        when(() => handler.next(any())).thenReturn(null);
+
+        await interceptor.onError(dioException, handler);
+
+        verifyNever(() => mockAuthRepository.refreshToken());
+        verify(() => handler.next(dioException)).called(1);
+      });
+
+      test('should pass through errors without response', () async {
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: '/test'),
+          type: DioExceptionType.connectionTimeout,
+        );
+        final handler = MockErrorInterceptorHandler();
+
+        when(() => handler.next(any())).thenReturn(null);
+
+        await interceptor.onError(dioException, handler);
+
+        verifyNever(() => mockAuthRepository.refreshToken());
+        verify(() => handler.next(dioException)).called(1);
+      });
+    });
+
+    group('Edge Cases', () {
+      test('should handle multiple excluded endpoints', () async {
+        final excludedPaths = [
+          ApiEndpoints.login,
+          ApiEndpoints.register,
+          ApiEndpoints.refreshToken,
+          ApiEndpoints.logout,
+        ];
+
+        for (final path in excludedPaths) {
+          final dioException = DioException(
+            requestOptions: RequestOptions(path: path),
+            response: Response(
+              requestOptions: RequestOptions(path: path),
+              statusCode: 401,
+            ),
+          );
+          final handler = MockErrorInterceptorHandler();
+
+          when(() => handler.next(any())).thenReturn(null);
+
+          await interceptor.onError(dioException, handler);
+
+          verifyNever(() => mockAuthRepository.refreshToken());
+        }
+      });
+
+      test('should handle token with special characters', () async {
+        const token = r'token-with-special-chars-!@#$%^&*()';
+        final options = RequestOptions(path: '/test');
+        final handler = RequestInterceptorHandler();
+
+        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
+            .thenAnswer((_) async => token);
+
+        await interceptor.onRequest(options, handler);
+
+        expect(options.headers['Authorization'], 'Bearer $token');
+      });
+
+      test('should handle very long token', () async {
+        final longToken = 'A' * 1000;
+        final options = RequestOptions(path: '/test');
+        final handler = RequestInterceptorHandler();
+
+        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
+            .thenAnswer((_) async => longToken);
+
+        await interceptor.onRequest(options, handler);
+
+        expect(options.headers['Authorization'], 'Bearer $longToken');
+      });
+
+      test('should handle whitespace-only token', () async {
+        const token = '   ';
+        final options = RequestOptions(path: '/test');
+        final handler = RequestInterceptorHandler();
+
+        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
+            .thenAnswer((_) async => token);
+
+        await interceptor.onRequest(options, handler);
+
+        // Token with only whitespace should still be added
+        expect(options.headers['Authorization'], 'Bearer $token');
+      });
     });
   });
 }

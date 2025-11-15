@@ -264,6 +264,141 @@ void main() {
       });
     });
 
+    group('when() - Pattern Matching', () {
+      test('should call success callback for Success', () {
+        const result = Success<String>('test');
+        String? capturedData;
+
+        result.when(
+          success: (data) {
+            capturedData = data;
+          },
+          failureCallback: (failure) {
+            fail('Should not call failure callback');
+          },
+        );
+
+        expect(capturedData, 'test');
+      });
+
+      test('should call failureCallback with message and code', () {
+        const failure = ServerFailure('Server error', code: '500');
+        const result = ResultFailure<String>(failure);
+        String? capturedMessage;
+        String? capturedCode;
+
+        result.when(
+          success: (data) {
+            fail('Should not call success callback');
+          },
+          failureCallback: (f) {
+            capturedMessage = f.message;
+            capturedCode = f.code;
+          },
+        );
+
+        expect(capturedMessage, 'Server error');
+        expect(capturedCode, '500');
+      });
+
+      test('should handle null code in failureCallback', () {
+        const failure = NetworkFailure('Network error');
+        const result = ResultFailure<String>(failure);
+        String? capturedCode;
+
+        result.when(
+          success: (data) {
+            fail('Should not call success callback');
+          },
+          failureCallback: (f) {
+            capturedCode = f.code;
+          },
+        );
+
+        expect(capturedCode, isNull);
+      });
+    });
+
+    group('mapError() - Comprehensive Failure Type Coverage', () {
+      test('should map ServerFailure message', () {
+        const failure = ServerFailure('Original error', code: '500');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        expect(mapped, isA<ResultFailure<String>>());
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Original error');
+        expect(mappedFailure, isA<ServerFailure>());
+        expect(mappedFailure.code, '500');
+      });
+
+      test('should map NetworkFailure message', () {
+        const failure = NetworkFailure('Network error', code: 'NET_ERR');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Network error');
+        expect(mappedFailure, isA<NetworkFailure>());
+        expect(mappedFailure.code, 'NET_ERR');
+      });
+
+      test('should map CacheFailure message', () {
+        const failure = CacheFailure('Cache error', code: 'CACHE_ERR');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Cache error');
+        expect(mappedFailure, isA<CacheFailure>());
+        expect(mappedFailure.code, 'CACHE_ERR');
+      });
+
+      test('should map AuthFailure message', () {
+        const failure = AuthFailure('Auth error', code: '401');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Auth error');
+        expect(mappedFailure, isA<AuthFailure>());
+        expect(mappedFailure.code, '401');
+      });
+
+      test('should map ValidationFailure message', () {
+        const failure = ValidationFailure('Validation error', code: 'VALID');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Validation error');
+        expect(mappedFailure, isA<ValidationFailure>());
+        expect(mappedFailure.code, 'VALID');
+      });
+
+      test('should map PermissionFailure message', () {
+        const failure = PermissionFailure('Permission error', code: 'PERM');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Permission error');
+        expect(mappedFailure, isA<PermissionFailure>());
+        expect(mappedFailure.code, 'PERM');
+      });
+
+      test('should map UnknownFailure message', () {
+        const failure = UnknownFailure('Unknown error', code: 'UNKNOWN');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Unknown error');
+        expect(mappedFailure, isA<UnknownFailure>());
+        expect(mappedFailure.code, 'UNKNOWN');
+      });
+    });
+
     group('Integration with when()', () {
       test('should chain map and when', () {
         const result = Success<int>(42);
@@ -287,6 +422,65 @@ void main() {
             );
 
         expect(value, '2, 4, 6');
+      });
+
+      test('should chain mapError and when', () {
+        const failure = ServerFailure('Original error');
+        const result = ResultFailure<String>(failure);
+        final value = result
+            .mapError((message) => 'Mapped: $message')
+            .when(
+              success: (data) => 'Success',
+              failureCallback: (f) => f.message,
+            );
+
+        expect(value, 'Mapped: Original error');
+      });
+    });
+
+    group('Edge Cases - Additional Coverage', () {
+      test('should handle mapError with empty message', () {
+        const failure = ServerFailure('');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'New: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'New: ');
+      });
+
+      test('should handle mapError with null code', () {
+        const failure = ServerFailure('Error');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.code, isNull);
+      });
+
+      test('should preserve code when mapping error', () {
+        const failure = ServerFailure('Error', code: 'CODE123');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'New: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.code, 'CODE123');
+      });
+
+      test('should handle map on ResultFailure', () {
+        const failure = ServerFailure('Error');
+        const result = ResultFailure<int>(failure);
+        final mapped = result.map((data) => data * 2);
+
+        expect(mapped, isA<ResultFailure<int>>());
+        expect((mapped as ResultFailure<int>).failure, failure);
+      });
+
+      test('should handle mapError on Success', () {
+        const result = Success<String>('data');
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        expect(mapped, isA<Success<String>>());
+        expect((mapped as Success<String>).data, 'data');
       });
     });
   });

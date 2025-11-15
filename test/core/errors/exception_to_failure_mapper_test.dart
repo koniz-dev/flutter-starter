@@ -183,6 +183,74 @@ void main() {
         expect(result.message, 'Network error without code');
         expect(result.code, isNull);
       });
+
+      test('should handle CacheException with null code', () {
+        const exception = CacheException('Cache error without code');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<CacheFailure>());
+        expect(result.message, 'Cache error without code');
+        expect(result.code, isNull);
+      });
+
+      test('should handle AuthException with null code', () {
+        const exception = AuthException('Auth error without code');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<AuthFailure>());
+        expect(result.message, 'Auth error without code');
+        expect(result.code, isNull);
+      });
+
+      test('should handle ValidationException with null code', () {
+        const exception = ValidationException('Validation error without code');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<ValidationFailure>());
+        expect(result.message, 'Validation error without code');
+        expect(result.code, isNull);
+      });
+    });
+
+    group('Edge Cases', () {
+      test('should handle empty message', () {
+        const exception = ServerException('');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<ServerFailure>());
+        expect(result.message, isEmpty);
+      });
+
+      test('should handle long messages', () {
+        final longMessage = 'A' * 1000;
+        final exception = ServerException(longMessage);
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<ServerFailure>());
+        expect(result.message.length, 1000);
+      });
+
+      test('should handle all exception types', () {
+        final exceptions = [
+          const ServerException('Server error'),
+          const NetworkException('Network error'),
+          const CacheException('Cache error'),
+          const AuthException('Auth error'),
+          const ValidationException('Validation error'),
+          Exception('Generic error'),
+        ];
+
+        for (final exception in exceptions) {
+          final result = ExceptionToFailureMapper.map(exception);
+          expect(result, isA<Failure>());
+          expect(result.message, isNotEmpty);
+        }
+      });
     });
   });
 }
