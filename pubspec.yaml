@@ -8,8 +8,6 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  # UI Components - Image loading and caching
-  cached_network_image: ^3.4.1
   # UI Components - iOS style icons
   cupertino_icons: ^1.0.8
 
@@ -29,43 +27,33 @@ dependencies:
   # State Management - Riverpod reactive state management framework
   flutter_riverpod: ^3.0.3
 
-  # UI Components - Responsive screen size adaptation utilities
-  flutter_screenutil: ^5.9.3
-
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
   flutter_secure_storage: ^9.2.4
 
   # Code Generation - Runtime annotations for Freezed immutable classes
   freezed_annotation: ^3.1.0
 
-  # Routing - Declarative routing with type-safe navigation and deep linking
-  go_router: ^17.0.0
-
-  # Storage - Fast NoSQL database for local data persistence
-  hive: ^2.2.3
-  # Storage - Flutter bindings for Hive database
-  hive_flutter: ^1.1.0
-
   # Utilities - Internationalization and localization support
+  # Used in date_formatter.dart for date formatting
   intl: ^0.20.2
 
   # Code Generation - Runtime annotations for JSON serialization
+  # Used for @JsonSerializable annotations (Group 7 implementation)
   json_annotation: ^4.9.0
-
-  # Utilities - Beautiful and extensible logging library
-  logger: ^2.6.2
-
-  # Network Layer - Type-safe HTTP client generator (works with Dio)
-  retrofit: ^4.9.0
-
-  # State Management - Runtime annotations for Riverpod code generation
-  riverpod_annotation: ^3.0.3
 
   # Storage - Simple key-value storage for non-sensitive data
   shared_preferences: ^2.5.3
 
-  # UI Components - Loading placeholder shimmer effect
-  shimmer: ^3.0.0
+  # REMOVED UNUSED DEPENDENCIES:
+  # cached_network_image: ^3.4.1 - Not used, can add back when needed for image loading
+  # flutter_screenutil: ^5.9.3 - Not used, can add back when needed for responsive design
+  # go_router: ^17.0.0 - Not used, can add back when implementing routing
+  # hive: ^2.2.3 - Not used, can add back when needed for local database
+  # hive_flutter: ^1.1.0 - Not used, can add back when needed for local database
+  # logger: ^2.6.2 - Not used, can add back when implementing logging
+  # retrofit: ^4.9.0 - Not used, can add back when implementing type-safe HTTP client
+  # riverpod_annotation: ^3.0.3 - Not used (using manual providers), can add back when using code generation
+  # shimmer: ^3.0.0 - Not used, can add back when implementing loading placeholders
 
 dev_dependencies:
   # Code Generation - Build system for generating code from annotations
@@ -76,22 +64,23 @@ dev_dependencies:
     sdk: flutter
 
   # Code Generation - Generates immutable classes, unions, and more
+  # Used for @freezed code generation (Group 7 implementation)
   freezed: ^3.2.3
-  # Code Generation - Generates type-safe routing code for go_router
-  go_router_builder: ^4.1.1
+
   # Code Generation - Generates JSON serialization/deserialization code
+  # Used for @JsonSerializable code generation (Group 7 implementation)
   json_serializable: ^6.11.1
 
   # Testing - Mocking library for unit tests (no code generation required)
   mocktail: ^1.0.4
 
-  # Code Generation - Generates type-safe HTTP client code from Retrofit annotations
-  retrofit_generator: ^10.1.4
-  # Code Generation - Generates Riverpod providers from annotations
-  riverpod_generator: ^3.0.3
-
   # Linting - Comprehensive lint rules for Flutter/Dart (Very Good Ventures)
   very_good_analysis: ^10.0.0
+
+  # REMOVED UNUSED DEV DEPENDENCIES:
+  # go_router_builder: ^4.1.1 - Not used (go_router removed), can add back when implementing routing
+  # retrofit_generator: ^10.1.4 - Not used (retrofit removed), can add back when implementing type-safe HTTP client
+  # riverpod_generator: ^3.0.3 - Not used (using manual providers), can add back when using code generation
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
