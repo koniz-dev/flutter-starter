@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 
@@ -26,8 +28,9 @@ class ApiClient {
       ),
     );
 
-    // Add interceptors
+    // Add interceptors - ErrorInterceptor must be first
     dio.interceptors.addAll([
+      ErrorInterceptor(),
       AuthInterceptor(storageService),
       if (AppConfig.enableLogging) LoggingInterceptor(),
     ]);
@@ -46,6 +49,7 @@ class ApiClient {
   /// [queryParameters] - Optional query parameters
   /// [options] - Optional request options
   /// Returns a [Future] that completes with a [Response]
+  /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<Response<dynamic>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -57,7 +61,14 @@ class ApiClient {
         queryParameters: queryParameters,
         options: options,
       );
-    } catch (e) {
+    } on DioException catch (e) {
+      // Extract domain exception from error interceptor if present
+      final error = e.error;
+      if (error is AppException) {
+        throw error;
+      }
+      // If not converted by interceptor, rethrow as DioException
+      // (should not happen if ErrorInterceptor is properly configured)
       rethrow;
     }
   }
@@ -69,6 +80,7 @@ class ApiClient {
   /// [queryParameters] - Optional query parameters
   /// [options] - Optional request options
   /// Returns a [Future] that completes with a [Response]
+  /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<Response<dynamic>> post(
     String path, {
     dynamic data,
@@ -82,7 +94,14 @@ class ApiClient {
         queryParameters: queryParameters,
         options: options,
       );
-    } catch (e) {
+    } on DioException catch (e) {
+      // Extract domain exception from error interceptor if present
+      final error = e.error;
+      if (error is AppException) {
+        throw error;
+      }
+      // If not converted by interceptor, rethrow as DioException
+      // (should not happen if ErrorInterceptor is properly configured)
       rethrow;
     }
   }
@@ -94,6 +113,7 @@ class ApiClient {
   /// [queryParameters] - Optional query parameters
   /// [options] - Optional request options
   /// Returns a [Future] that completes with a [Response]
+  /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<Response<dynamic>> put(
     String path, {
     dynamic data,
@@ -107,7 +127,14 @@ class ApiClient {
         queryParameters: queryParameters,
         options: options,
       );
-    } catch (e) {
+    } on DioException catch (e) {
+      // Extract domain exception from error interceptor if present
+      final error = e.error;
+      if (error is AppException) {
+        throw error;
+      }
+      // If not converted by interceptor, rethrow as DioException
+      // (should not happen if ErrorInterceptor is properly configured)
       rethrow;
     }
   }
@@ -119,6 +146,7 @@ class ApiClient {
   /// [queryParameters] - Optional query parameters
   /// [options] - Optional request options
   /// Returns a [Future] that completes with a [Response]
+  /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<Response<dynamic>> delete(
     String path, {
     dynamic data,
@@ -132,7 +160,14 @@ class ApiClient {
         queryParameters: queryParameters,
         options: options,
       );
-    } catch (e) {
+    } on DioException catch (e) {
+      // Extract domain exception from error interceptor if present
+      final error = e.error;
+      if (error is AppException) {
+        throw error;
+      }
+      // If not converted by interceptor, rethrow as DioException
+      // (should not happen if ErrorInterceptor is properly configured)
       rethrow;
     }
   }

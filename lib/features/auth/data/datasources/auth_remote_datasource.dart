@@ -1,5 +1,4 @@
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
-import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 
@@ -32,29 +31,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AuthResponseModel> login(String email, String password) async {
-    try {
-      final response = await apiClient.post(
-        ApiEndpoints.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
+    // Error interceptor handles DioException conversion automatically
+    // Dio throws for non-2xx status codes, so we don't need status code checks
+    final response = await apiClient.post(
+      ApiEndpoints.login,
+      data: {
+        'email': email,
+        'password': password,
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
-        return AuthResponseModel.fromJson(data);
-      } else {
-        final data = response.data as Map<String, dynamic>;
-        throw ServerException(
-          (data['message'] as String?) ?? 'Login failed',
-          statusCode: response.statusCode,
-        );
-      }
-    } catch (e) {
-      if (e is ServerException) rethrow;
-      throw ServerException('Failed to login: $e');
-    }
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
   }
 
   @override
@@ -63,64 +51,39 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String password,
     String name,
   ) async {
-    try {
-      final response = await apiClient.post(
-        ApiEndpoints.register,
-        data: {
-          'email': email,
-          'password': password,
-          'name': name,
-        },
-      );
+    // Error interceptor handles DioException conversion automatically
+    // Dio throws for non-2xx status codes, so we don't need status code checks
+    final response = await apiClient.post(
+      ApiEndpoints.register,
+      data: {
+        'email': email,
+        'password': password,
+        'name': name,
+      },
+    );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = response.data as Map<String, dynamic>;
-        return AuthResponseModel.fromJson(data);
-      } else {
-        final data = response.data as Map<String, dynamic>;
-        throw ServerException(
-          (data['message'] as String?) ?? 'Registration failed',
-          statusCode: response.statusCode,
-        );
-      }
-    } catch (e) {
-      if (e is ServerException) rethrow;
-      throw ServerException('Failed to register: $e');
-    }
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
   }
 
   @override
   Future<void> logout() async {
-    try {
-      await apiClient.post(ApiEndpoints.logout);
-    } catch (e) {
-      throw ServerException('Failed to logout: $e');
-    }
+    // Error interceptor handles DioException conversion automatically
+    await apiClient.post(ApiEndpoints.logout);
   }
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async {
-    try {
-      final response = await apiClient.post(
-        ApiEndpoints.refreshToken,
-        data: {
-          'refresh_token': refreshToken,
-        },
-      );
+    // Error interceptor handles DioException conversion automatically
+    // Dio throws for non-2xx status codes, so we don't need status code checks
+    final response = await apiClient.post(
+      ApiEndpoints.refreshToken,
+      data: {
+        'refresh_token': refreshToken,
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
-        return AuthResponseModel.fromJson(data);
-      } else {
-        final data = response.data as Map<String, dynamic>;
-        throw ServerException(
-          (data['message'] as String?) ?? 'Token refresh failed',
-          statusCode: response.statusCode,
-        );
-      }
-    } catch (e) {
-      if (e is ServerException) rethrow;
-      throw ServerException('Failed to refresh token: $e');
-    }
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
   }
 }

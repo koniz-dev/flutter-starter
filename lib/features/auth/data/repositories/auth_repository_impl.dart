@@ -1,4 +1,6 @@
+import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -30,18 +32,10 @@ class AuthRepositoryImpl implements AuthRepository {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
       return Success(authResponse.user.toEntity());
-    } on ServerException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
-    } on NetworkException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure('Unexpected error: $e');
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     }
   }
 
@@ -63,18 +57,10 @@ class AuthRepositoryImpl implements AuthRepository {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
       return Success(authResponse.user.toEntity());
-    } on ServerException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
-    } on NetworkException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure('Unexpected error: $e');
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     }
   }
 
@@ -84,13 +70,10 @@ class AuthRepositoryImpl implements AuthRepository {
       await remoteDataSource.logout();
       await localDataSource.clearCache();
       return const Success(null);
-    } on ServerException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure('Unexpected error: $e');
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     }
   }
 
@@ -99,13 +82,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final cachedUser = await localDataSource.getCachedUser();
       return Success(cachedUser?.toEntity());
-    } on CacheException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure('Unexpected error: $e');
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     }
   }
 
@@ -114,13 +94,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final cachedUser = await localDataSource.getCachedUser();
       return Success(cachedUser != null);
-    } on CacheException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure('Unexpected error: $e');
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     }
   }
 
@@ -129,7 +106,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final refreshToken = await localDataSource.getRefreshToken();
       if (refreshToken == null) {
-        return const ResultFailure('No refresh token available');
+        return const ResultFailure(
+          UnknownFailure('No refresh token available'),
+        );
       }
 
       final authResponse = await remoteDataSource.refreshToken(refreshToken);
@@ -140,18 +119,10 @@ class AuthRepositoryImpl implements AuthRepository {
         );
       }
       return Success(authResponse.token);
-    } on ServerException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
-    } on NetworkException catch (e) {
-      return ResultFailure(
-        e.message,
-        code: e.code,
-      );
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure('Unexpected error: $e');
+      return ResultFailure(ExceptionToFailureMapper.map(e));
     }
   }
 }

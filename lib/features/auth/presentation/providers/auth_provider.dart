@@ -56,10 +56,10 @@ class AuthNotifier extends Notifier<AuthState> {
           isLoading: false,
         );
       },
-      failure: (message, code) {
+      failureCallback: (failure) {
         state = state.copyWith(
           isLoading: false,
-          error: message,
+          error: failure.message,
         );
       },
     );
