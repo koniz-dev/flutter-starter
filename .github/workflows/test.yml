@@ -107,4 +107,3 @@ jobs:
           name: coverage-report
           path: coverage/html
           retention-days: 30
-
