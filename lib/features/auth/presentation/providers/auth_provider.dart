@@ -2,38 +2,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'auth_provider.freezed.dart';
 
 /// Authentication state
-class AuthState {
+@freezed
+abstract class AuthState with _$AuthState {
   /// Creates an [AuthState] with the given [user], [isLoading], and [error]
-  const AuthState({
-    this.user,
-    this.isLoading = false,
-    this.error,
-  });
-
-  /// Currently authenticated user, null if not logged in
-  final User? user;
-
-  /// Whether an authentication operation is in progress
-  final bool isLoading;
-
-  /// Error message if authentication failed, null otherwise
-  final String? error;
-
-  /// Creates a copy of this state with updated values
-  AuthState copyWith({
+  const factory AuthState({
+    /// Currently authenticated user, null if not logged in
     User? user,
-    bool? isLoading,
+
+    /// Whether an authentication operation is in progress
+    @Default(false) bool isLoading,
+
+    /// Error message if authentication failed, null otherwise
     String? error,
-    bool clearError = false,
-  }) {
-    return AuthState(
-      user: user ?? this.user,
-      isLoading: isLoading ?? this.isLoading,
-      error: clearError ? null : (error ?? this.error),
-    );
-  }
+  }) = _AuthState;
 }
 
 /// Authentication provider (Riverpod 3.0 - using Notifier)
@@ -45,7 +31,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// Attempts to login with the given [email] and [password]
   Future<void> login(String email, String password) async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    state = state.copyWith(isLoading: true, error: null);
 
     final loginUseCase = ref.read(loginUseCaseProvider);
     final result = await loginUseCase(email, password);
@@ -55,7 +41,7 @@ class AuthNotifier extends Notifier<AuthState> {
         state = state.copyWith(
           user: user,
           isLoading: false,
-          clearError: true,
+          error: null,
         );
       },
       failureCallback: (failure) {
@@ -73,7 +59,7 @@ class AuthNotifier extends Notifier<AuthState> {
     String password,
     String name,
   ) async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    state = state.copyWith(isLoading: true, error: null);
 
     final registerUseCase = ref.read(registerUseCaseProvider);
     final result = await registerUseCase(email, password, name);
@@ -83,7 +69,7 @@ class AuthNotifier extends Notifier<AuthState> {
         state = state.copyWith(
           user: user,
           isLoading: false,
-          clearError: true,
+          error: null,
         );
       },
       failureCallback: (failure) {
@@ -97,7 +83,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// Logs out the current user
   Future<void> logout() async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    state = state.copyWith(isLoading: true, error: null);
 
     final logoutUseCase = ref.read(logoutUseCaseProvider);
     final result = await logoutUseCase();
@@ -141,7 +127,7 @@ class AuthNotifier extends Notifier<AuthState> {
 
   /// Gets the current authenticated user
   Future<void> getCurrentUser() async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    state = state.copyWith(isLoading: true, error: null);
 
     final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
     final result = await getCurrentUserUseCase();
@@ -151,7 +137,7 @@ class AuthNotifier extends Notifier<AuthState> {
         state = state.copyWith(
           user: user,
           isLoading: false,
-          clearError: true,
+          error: null,
         );
       },
       failureCallback: (failure) {

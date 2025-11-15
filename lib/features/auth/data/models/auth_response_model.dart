@@ -1,6 +1,10 @@
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'auth_response_model.g.dart';
 
 /// Authentication response model containing user and token
+@JsonSerializable()
 class AuthResponseModel {
   /// Creates an [AuthResponseModel] with [user], [token], and optional
   /// [refreshToken]
@@ -11,13 +15,11 @@ class AuthResponseModel {
   });
 
   /// Create AuthResponseModel from JSON
-  factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
-    return AuthResponseModel(
-      user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
-      token: json['token'] as String,
-      refreshToken: json['refresh_token'] as String?,
-    );
-  }
+  factory AuthResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthResponseModelFromJson(json);
+
+  /// Convert AuthResponseModel to JSON
+  Map<String, dynamic> toJson() => _$AuthResponseModelToJson(this);
 
   /// User model from the response
   final UserModel user;

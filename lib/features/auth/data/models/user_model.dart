@@ -1,6 +1,11 @@
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 
 /// User model (data layer) - extends entity
+/// 
+/// Note: Manual JSON serialization is used instead of @JsonSerializable
+/// because UserModel extends User entity, and json_serializable doesn't
+/// work well with inheritance. AuthResponseModel uses @JsonSerializable
+/// since it doesn't have this limitation.
 class UserModel extends User {
   /// Creates a [UserModel] with the given [id], [email], optional [name], and
   /// optional [avatarUrl]
