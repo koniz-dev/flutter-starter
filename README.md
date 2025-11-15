@@ -230,3 +230,11 @@ if (AppConfig.isDebugMode) {
 ```
 
 This will print all configuration values to the console, helping you verify what values are being used.
+
+## 📚 Documentation
+
+### Architecture
+
+- **[Architecture Overview](docs/architecture/OVERVIEW.md)** - Principles, patterns, best practices
+
+- **[Project Structure](docs/architecture/STRUCTURE.md)** - File organization reference

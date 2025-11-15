@@ -1,4 +1,18 @@
-# Project Structure Quick Reference
+# Project Structure - Quick Reference
+
+**Last Updated:** November 15, 2025
+
+This is a quick reference guide for file locations and structure.
+
+> **Note**: For architectural principles, see [Architecture Overview](OVERVIEW.md)
+
+## Contents
+
+- [Complete File Structure](#complete-file-structure)
+- [Layer Responsibilities](#layer-responsibilities)
+- [Adding New Features](#adding-new-features)
+- [Key Files](#key-files)
+- [Finding Files](#finding-files)
 
 ## Complete File Structure
 
@@ -69,20 +83,19 @@ lib/
 
 ## Layer Responsibilities
 
-### Core Layer
-- **Purpose**: Infrastructure and shared utilities
-- **Dependencies**: None (independent)
-- **Contains**: Constants, config, errors, network, storage, utils
+**Core Layer** - Infrastructure & shared utilities (network, storage, config)  
+**Features Layer** - Feature modules with data/domain/presentation structure  
+**Shared Layer** - Reusable UI components & extensions
 
-### Features Layer
-- **Purpose**: Feature-specific code organized by feature
-- **Structure**: Each feature has `data/`, `domain/`, `presentation/`
-- **Dependencies**: Features depend on Core and Shared
+> See [Architecture Overview](OVERVIEW.md#-architecture-layers) for detailed layer explanations.
 
-### Shared Layer
-- **Purpose**: Reusable components across features
-- **Contains**: Widgets, theme, extensions
-- **Dependencies**: Core (for utilities)
+## Adding New Features
+
+See [Adding New Features](OVERVIEW.md#-adding-new-features) in Architecture Overview for detailed instructions.
+
+**Quick Reference**:
+- Create `lib/features/{feature_name}/`
+- Follow `auth` feature structure as template
 
 ## Key Files
 
@@ -104,22 +117,51 @@ lib/
 - `shared/theme/app_theme.dart` - App theming
 - `shared/widgets/loading_indicator.dart` - Reusable widgets
 
-## Adding New Features
+## Finding Files
 
-1. Create feature folder: `lib/features/your_feature/`
-2. Add three subfolders: `data/`, `domain/`, `presentation/`
-3. Follow the same structure as `auth` feature
-4. Implement domain layer first (entities, repositories, use cases)
-5. Then data layer (models, data sources, repository implementation)
-6. Finally presentation layer (providers, screens, widgets)
+### By Type
 
-## Dependencies
+**Constants & Configuration**
+- `core/constants/` - App-wide constants
+- `core/config/` - Environment configuration
 
-- `flutter_riverpod` - State management
-- `dio` - HTTP client
-- `shared_preferences` - Local storage
-- `equatable` - Value equality
-- `intl` - Internationalization
+**Network & API**
+- `core/network/api_client.dart` - HTTP client
+- `core/network/interceptors/` - Request interceptors
+- `features/{feature}/data/datasources/` - API data sources
 
-See `ARCHITECTURE.md` for detailed documentation.
+**Storage**
+- `core/storage/storage_service.dart` - Storage abstraction
+- `features/{feature}/data/datasources/*_local_datasource.dart` - Local cache
+
+**Business Logic**
+- `features/{feature}/domain/entities/` - Domain entities
+- `features/{feature}/domain/usecases/` - Business logic
+- `features/{feature}/domain/repositories/` - Repository interfaces
+
+**Data Models**
+- `features/{feature}/data/models/` - Data models
+- `features/{feature}/data/repositories/` - Repository implementations
+
+**UI Components**
+- `features/{feature}/presentation/screens/` - Full screens
+- `features/{feature}/presentation/widgets/` - Feature widgets
+- `shared/widgets/` - Reusable widgets
+
+**State Management**
+- `features/{feature}/presentation/providers/` - Riverpod providers
+
+**Theme & Styling**
+- `shared/theme/` - App theme, colors, text styles
+
+**Utilities**
+- `core/utils/` - Helper functions
+- `shared/extensions/` - Dart extensions
+
+### By Feature
+
+Navigate to `lib/features/{feature_name}/` and look for:
+- `data/` - Data sources, models, repository implementations
+- `domain/` - Entities, use cases, repository interfaces
+- `presentation/` - Providers, screens, widgets
 

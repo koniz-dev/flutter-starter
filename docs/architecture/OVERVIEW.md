@@ -1,71 +1,19 @@
-# Clean Architecture - Flutter Project Structure
+# Architecture Overview
 
-This Flutter project follows **Clean Architecture** principles with a **feature-first** organization. The architecture is designed to be scalable, maintainable, and testable.
+**Last Updated:** November 15, 2025
 
-## 📁 Project Structure
+This document explains the architectural principles and patterns used in this Flutter starter.
 
-```
-lib/
-├── core/                    # Core layer - shared across all features
-│   ├── constants/          # App-wide constants
-│   │   ├── api_endpoints.dart
-│   │   └── app_constants.dart
-│   ├── config/             # Environment configuration
-│   │   ├── app_config.dart
-│   │   └── env_config.dart
-│   ├── errors/             # Custom exceptions and failures
-│   │   ├── exceptions.dart
-│   │   └── failures.dart
-│   ├── network/            # Network layer
-│   │   ├── api_client.dart
-│   │   └── interceptors/
-│   │       ├── auth_interceptor.dart
-│   │       └── logging_interceptor.dart
-│   ├── storage/            # Local storage abstractions
-│   │   └── storage_service.dart
-│   └── utils/              # Helper functions and utilities
-│       ├── result.dart
-│       ├── date_formatter.dart
-│       └── validators.dart
-│
-├── features/               # Features layer - organized by feature
-│   └── auth/               # Example: Authentication feature
-│       ├── data/           # Data layer
-│       │   ├── datasources/
-│       │   │   ├── auth_remote_datasource.dart
-│       │   │   └── auth_local_datasource.dart
-│       │   ├── models/
-│       │   │   └── user_model.dart
-│       │   └── repositories/
-│       │       └── auth_repository_impl.dart
-│       ├── domain/         # Domain layer (business logic)
-│       │   ├── entities/
-│       │   │   └── user.dart
-│       │   ├── repositories/
-│       │   │   └── auth_repository.dart
-│       │   └── usecases/
-│       │       └── login_usecase.dart
-│       └── presentation/   # Presentation layer (UI)
-│           ├── providers/
-│           │   └── auth_provider.dart
-│           ├── screens/
-│           │   └── login_screen.dart
-│           └── widgets/
-│               └── auth_button.dart
-│
-└── shared/                 # Shared layer - reusable across features
-    ├── widgets/            # Reusable UI components
-    │   ├── loading_indicator.dart
-    │   └── error_widget.dart
-    ├── theme/              # App theme configuration
-    │   ├── app_colors.dart
-    │   ├── app_text_styles.dart
-    │   └── app_theme.dart
-    └── extensions/         # Dart extensions
-        ├── string_extensions.dart
-        ├── datetime_extensions.dart
-        └── context_extensions.dart
-```
+> **Note**: For complete file structure and reference, see [Project Structure](STRUCTURE.md)
+
+## Contents
+
+- [Dependency Flow](#dependency-flow)
+- [Key Principles](#key-principles)
+- [Adding New Features](#adding-new-features)
+- [Configuration](#configuration)
+- [Best Practices](#best-practices)
+- [Testing Strategy](#testing-strategy)
 
 ## 🏗️ Architecture Layers
 
@@ -189,7 +137,7 @@ Presentation → Domain ← Data
 - Use cases are pure functions
 - Data sources can be mocked for testing
 
-## 🚀 Adding a New Feature
+## 🚀 Adding New Features
 
 To add a new feature, follow this structure:
 
@@ -208,14 +156,6 @@ lib/features/your_feature/
     ├── screens/
     └── widgets/
 ```
-
-## 📦 Dependencies
-
-- **flutter_riverpod**: State management
-- **dio**: HTTP client
-- **shared_preferences**: Local storage
-- **equatable**: Value equality
-- **intl**: Internationalization and date formatting
 
 ## 🔧 Configuration
 
@@ -246,15 +186,6 @@ await storageService.init();
 - **Domain**: Unit tests for entities, use cases, and repository interfaces
 - **Data**: Unit tests for data sources and repository implementations (with mocks)
 - **Presentation**: Widget tests for UI components, unit tests for providers
-
-## 📖 Example Usage
-
-See the `auth` feature for a complete example of:
-- Domain entities and use cases
-- Data sources (remote and local)
-- Repository implementation
-- State management with Riverpod
-- UI screens and widgets
 
 ---
 
