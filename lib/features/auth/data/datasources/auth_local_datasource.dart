@@ -13,6 +13,12 @@ abstract class AuthLocalDataSource {
   /// Retrieves cached user from local storage
   Future<UserModel?> getCachedUser();
 
+  /// Caches an authentication [token] to local storage
+  Future<void> cacheToken(String token);
+
+  /// Retrieves cached authentication token from local storage
+  Future<String?> getToken();
+
   /// Clears all cached authentication data
   Future<void> clearCache();
 }
@@ -45,6 +51,24 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       return UserModel.fromJson(userMap);
     } catch (e) {
       throw CacheException('Failed to get cached user: $e');
+    }
+  }
+
+  @override
+  Future<void> cacheToken(String token) async {
+    try {
+      await storageService.setString(AppConstants.tokenKey, token);
+    } catch (e) {
+      throw CacheException('Failed to cache token: $e');
+    }
+  }
+
+  @override
+  Future<String?> getToken() async {
+    try {
+      return await storageService.getString(AppConstants.tokenKey);
+    } catch (e) {
+      throw CacheException('Failed to get token: $e');
     }
   }
 
