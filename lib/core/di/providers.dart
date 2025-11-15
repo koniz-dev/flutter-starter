@@ -7,7 +7,12 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_local_dataso
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/is_authenticated_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/refresh_token_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
 
 /// Provider for [StorageService] instance
 ///
@@ -139,4 +144,49 @@ final Provider<ApiClient> apiClientProvider = Provider<ApiClient>((ref) {
 final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
   final repository = ref.watch<AuthRepository>(authRepositoryProvider);
   return LoginUseCase(repository);
+});
+
+/// Provider for [RegisterUseCase] instance
+///
+/// This provider creates a singleton instance of [RegisterUseCase]
+/// that handles user registration business logic.
+final registerUseCaseProvider = Provider<RegisterUseCase>((ref) {
+  final repository = ref.watch<AuthRepository>(authRepositoryProvider);
+  return RegisterUseCase(repository);
+});
+
+/// Provider for [LogoutUseCase] instance
+///
+/// This provider creates a singleton instance of [LogoutUseCase]
+/// that handles user logout business logic.
+final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
+  final repository = ref.watch<AuthRepository>(authRepositoryProvider);
+  return LogoutUseCase(repository);
+});
+
+/// Provider for [RefreshTokenUseCase] instance
+///
+/// This provider creates a singleton instance of [RefreshTokenUseCase]
+/// that handles token refresh business logic.
+final refreshTokenUseCaseProvider = Provider<RefreshTokenUseCase>((ref) {
+  final repository = ref.watch<AuthRepository>(authRepositoryProvider);
+  return RefreshTokenUseCase(repository);
+});
+
+/// Provider for [GetCurrentUserUseCase] instance
+///
+/// This provider creates a singleton instance of [GetCurrentUserUseCase]
+/// that handles getting the current authenticated user.
+final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
+  final repository = ref.watch<AuthRepository>(authRepositoryProvider);
+  return GetCurrentUserUseCase(repository);
+});
+
+/// Provider for [IsAuthenticatedUseCase] instance
+///
+/// This provider creates a singleton instance of [IsAuthenticatedUseCase]
+/// that handles checking if the user is authenticated.
+final isAuthenticatedUseCaseProvider = Provider<IsAuthenticatedUseCase>((ref) {
+  final repository = ref.watch<AuthRepository>(authRepositoryProvider);
+  return IsAuthenticatedUseCase(repository);
 });
