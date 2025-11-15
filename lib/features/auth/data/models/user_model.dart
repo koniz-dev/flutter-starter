@@ -1,11 +1,14 @@
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user_model.g.dart';
 
 /// User model (data layer) - extends entity
 /// 
-/// Note: Manual JSON serialization is used instead of @JsonSerializable
-/// because UserModel extends User entity, and json_serializable doesn't
-/// work well with inheritance. AuthResponseModel uses @JsonSerializable
-/// since it doesn't have this limitation.
+/// Uses @JsonSerializable for code generation. Since UserModel extends User
+/// entity, we use @JsonKey annotations on getters to handle field name mapping
+/// (avatarUrl -> avatar_url) while maintaining the inheritance structure.
+@JsonSerializable()
 class UserModel extends User {
   /// Creates a [UserModel] with the given [id], [email], optional [name], and
   /// optional [avatarUrl]
@@ -17,32 +20,14 @@ class UserModel extends User {
   });
 
   /// Create UserModel from JSON
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'] as String,
-      email: json['email'] as String,
-      name: json['name'] as String?,
-      avatarUrl: json['avatar_url'] as String?,
-    );
-  }
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
+  /// JSON key mapping for avatarUrl field
+  @JsonKey(name: 'avatar_url')
+  @override
+  String? get avatarUrl => super.avatarUrl;
 
   /// Convert UserModel to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'name': name,
-      'avatar_url': avatarUrl,
-    };
-  }
-
-  /// Convert UserModel to User entity
-  User toEntity() {
-    return User(
-      id: id,
-      email: email,
-      name: name,
-      avatarUrl: avatarUrl,
-    );
-  }
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

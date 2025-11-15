@@ -31,7 +31,7 @@ class AuthRepositoryImpl implements AuthRepository {
       if (authResponse.refreshToken != null) {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
-      return Success(authResponse.user.toEntity());
+      return Success(authResponse.user);
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
@@ -56,7 +56,7 @@ class AuthRepositoryImpl implements AuthRepository {
       if (authResponse.refreshToken != null) {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
-      return Success(authResponse.user.toEntity());
+      return Success(authResponse.user);
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
@@ -81,7 +81,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<User?>> getCurrentUser() async {
     try {
       final cachedUser = await localDataSource.getCachedUser();
-      return Success(cachedUser?.toEntity());
+      return Success(cachedUser);
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
