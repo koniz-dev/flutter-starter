@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
 
 /// BuildContext extension methods
+///
+/// This extension provides convenient methods for common BuildContext
+/// operations including navigation, theming, and UI feedback.
+///
+/// **Navigation Approach:**
+/// Currently uses Flutter's built-in `Navigator` with `MaterialPageRoute`.
+/// This is a simple and effective approach for most apps. If you need
+/// more advanced routing features (deep linking, type-safe routes, etc.),
+/// consider implementing `go_router` and updating these methods accordingly.
+///
+/// **Usage:**
+/// ```dart
+/// context.navigateTo(RegisterScreen());
+/// context.showSnackBar('Operation successful');
+/// ```
 extension ContextExtensions on BuildContext {
   /// Get theme
   ThemeData get theme => Theme.of(this);

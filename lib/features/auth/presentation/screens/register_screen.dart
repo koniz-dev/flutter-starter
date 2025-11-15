@@ -3,34 +3,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
-import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 
-/// Login screen for user authentication
-class LoginScreen extends ConsumerStatefulWidget {
-  /// Creates a [LoginScreen] widget
-  const LoginScreen({super.key});
+/// Registration screen for new user signup
+class RegisterScreen extends ConsumerStatefulWidget {
+  /// Creates a [RegisterScreen] widget
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
-      await ref.read(authNotifierProvider.notifier).login(
+      await ref.read(authNotifierProvider.notifier).register(
             _emailController.text.trim(),
             _passwordController.text,
+            _nameController.text.trim(),
           );
     }
   }
@@ -41,7 +43,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -50,6 +52,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                ),
+                textCapitalization: TextCapitalization.words,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  if (value.trim().length < 2) {
+                    return 'Name must be at least 2 characters';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -97,29 +117,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: authState.isLoading ? null : _handleLogin,
+                onPressed: authState.isLoading ? null : _handleRegister,
                 child: authState.isLoading
                     ? const SizedBox(
                         height: 20,
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Login'),
+                    : const Text('Register'),
               ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: authState.isLoading
                     ? null
-                    : () async {
-                        await Navigator.of(context).push<void>(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const RegisterScreen(),
-                          ),
-                        );
+                    : () {
+                        Navigator.of(context).pop();
                       },
-                child: const Text("Don't have an account? Register"),
+                child: const Text('Already have an account? Login'),
               ),
             ],
           ),

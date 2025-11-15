@@ -113,7 +113,10 @@ class AppConfig {
   // Feature Flags
   // ==========================================================================
 
-  /// Enable logging
+  /// Enable general application logging
+  ///
+  /// This flag controls general application logging (e.g., debug messages,
+  /// info logs, error logs). Use this for application-level logging.
   ///
   /// Default behavior:
   /// - Development: `true`
@@ -121,6 +124,8 @@ class AppConfig {
   /// - Production: `false`
   ///
   /// Can be overridden via .env: `ENABLE_LOGGING=false`
+  ///
+  /// See also: [enableHttpLogging] for HTTP request/response logging
   static bool get enableLogging {
     if (EnvConfig.has('ENABLE_LOGGING')) {
       return EnvConfig.getBool('ENABLE_LOGGING');
@@ -207,7 +212,16 @@ class AppConfig {
 
   /// Enable HTTP request/response logging
   ///
+  /// This flag controls HTTP request/response logging specifically for
+  /// network operations (e.g., API calls, request/response bodies, headers).
+  /// Use this for debugging network issues.
+  ///
   /// Default: `true` in development, `false` otherwise
+  ///
+  /// Can be overridden via .env: `ENABLE_HTTP_LOGGING=false`
+  ///
+  /// Note: This is separate from [enableLogging]. You can enable HTTP
+  /// logging without enabling general application logging, or vice versa.
   static bool get enableHttpLogging {
     if (EnvConfig.has('ENABLE_HTTP_LOGGING')) {
       return EnvConfig.getBool('ENABLE_HTTP_LOGGING');
