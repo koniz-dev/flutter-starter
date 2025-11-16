@@ -37,6 +37,17 @@ For accessibility implementation, review these guides:
 3. **[Accessibility Testing Procedures](accessibility/testing-procedures.md)** - Testing procedures
 4. **[Accessibility Quick Reference](accessibility/quick-reference.md)** - Quick reference for common patterns
 
+## Migration Guides
+
+For migrating from other architectures or upgrading this starter:
+
+1. **[Migration Guides Overview](migration/README.md)** - Overview of all migration guides
+2. **[From MVC to Clean Architecture](migration/from-mvc-to-clean-architecture.md)** - Migrate from MVC architecture
+3. **[From BLoC to Riverpod](migration/from-bloc-to-riverpod.md)** - Migrate from BLoC state management
+4. **[From GetX to This Setup](migration/from-getx-to-this-setup.md)** - Migrate from GetX framework
+5. **[Upgrading This Starter](migration/upgrading-this-starter.md)** - Version upgrades and breaking changes
+6. **[Customization Guide](migration/customization-guide.md)** - Remove unused features and add custom features
+
 ## Guide Structure
 
 ### Getting Started
@@ -79,6 +90,12 @@ For accessibility implementation, review these guides:
 - Keyboard navigation
 - Touch target sizes and contrast ratios
 - Testing procedures and best practices
+
+### Migration
+- Migrating from MVC, BLoC, or GetX
+- Upgrading to newer versions
+- Handling breaking changes
+- Customizing the starter
 
 ## Related Documentation
 
