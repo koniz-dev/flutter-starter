@@ -1,0 +1,182 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK (Development)
+        run: |
+          flutter build apk \
+            --flavor development \
+            --dart-define=ENVIRONMENT=development \
+            --dart-define=BASE_URL=http://localhost:3000
+
+      - name: Build APK (Staging)
+        run: |
+          flutter build apk \
+            --flavor staging \
+            --dart-define=ENVIRONMENT=staging \
+            --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
+
+      - name: Build APK (Production)
+        run: |
+          flutter build apk \
+            --flavor production \
+            --release \
+            --dart-define=ENVIRONMENT=production \
+            --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apks
+          path: build/app/outputs/flutter-apk/*.apk
+
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: Build iOS (Development)
+        run: |
+          flutter build ios \
+            --flavor development \
+            --no-codesign \
+            --dart-define=ENVIRONMENT=development \
+            --dart-define=BASE_URL=http://localhost:3000
+
+      - name: Build iOS (Staging)
+        run: |
+          flutter build ios \
+            --flavor staging \
+            --release \
+            --no-codesign \
+            --dart-define=ENVIRONMENT=staging \
+            --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
+
+      - name: Build iOS (Production)
+        run: |
+          flutter build ios \
+            --flavor production \
+            --release \
+            --no-codesign \
+            --dart-define=ENVIRONMENT=production \
+            --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
+
+  build-web:
+    name: Build Web
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Web (Development)
+        run: |
+          flutter build web \
+            --dart-define=ENVIRONMENT=development \
+            --dart-define=BASE_URL=http://localhost:3000
+
+      - name: Build Web (Staging)
+        run: |
+          flutter build web \
+            --release \
+            --dart-define=ENVIRONMENT=staging \
+            --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
+
+      - name: Build Web (Production)
+        run: |
+          flutter build web \
+            --release \
+            --web-renderer canvaskit \
+            --dart-define=ENVIRONMENT=production \
+            --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-build
+          path: build/web
+

@@ -1,0 +1,183 @@
+name: Deploy Web
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+      platform:
+        description: 'Hosting platform'
+        required: true
+        default: 'firebase'
+        type: choice
+        options:
+          - firebase
+          - netlify
+          - vercel
+
+jobs:
+  deploy-firebase:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    if: github.event.inputs.platform == 'firebase' || (github.event.inputs.platform == '' && github.event_name == 'push')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          else
+            echo "environment=production" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build Web
+        env:
+          BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          if [ "$ENV" == "staging" ]; then
+            BASE_URL="${{ secrets.BASE_URL_STAGING }}"
+          else
+            BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
+          fi
+          
+          flutter build web \
+            --release \
+            --web-renderer canvaskit \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      - name: Setup Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}'
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          channelId: live
+          target: ${{ steps.env.outputs.environment }}
+
+  deploy-netlify:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    if: github.event.inputs.platform == 'netlify'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Determine environment
+        id: env
+        run: |
+          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+
+      - name: Build Web
+        env:
+          BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          if [ "$ENV" == "staging" ]; then
+            BASE_URL="${{ secrets.BASE_URL_STAGING }}"
+          else
+            BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
+          fi
+          
+          flutter build web \
+            --release \
+            --web-renderer canvaskit \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: './build/web'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+  deploy-vercel:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    if: github.event.inputs.platform == 'vercel'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Determine environment
+        id: env
+        run: |
+          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+
+      - name: Build Web
+        env:
+          BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+        run: |
+          ENV="${{ steps.env.outputs.environment }}"
+          if [ "$ENV" == "staging" ]; then
+            BASE_URL="${{ secrets.BASE_URL_STAGING }}"
+          else
+            BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
+          fi
+          
+          flutter build web \
+            --release \
+            --web-renderer canvaskit \
+            --dart-define=ENVIRONMENT="$ENV" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./
+
