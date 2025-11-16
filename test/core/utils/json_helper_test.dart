@@ -226,8 +226,8 @@ void main() {
         final object = Object();
         // This might cause an exception in some cases
         final result = JsonHelper.encodePretty(object);
-        // Should return null if exception occurs
-        expect(result, anyOf(isNull, isNotNull));
+        // Should return null if exception occurs (Object() cannot be encoded)
+        expect(result, isNull);
       });
     });
 

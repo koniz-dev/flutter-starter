@@ -21,7 +21,7 @@ void main() {
     });
 
     test('lightTheme should have appBarTheme', () {
-      expect(AppTheme.lightTheme.appBarTheme, isA<AppBarTheme>());
+      expect(AppTheme.lightTheme.appBarTheme, isA<AppBarThemeData>());
     });
 
     test('lightTheme should have elevatedButtonTheme', () {
@@ -34,7 +34,7 @@ void main() {
     test('lightTheme should have inputDecorationTheme', () {
       expect(
         AppTheme.lightTheme.inputDecorationTheme,
-        isA<InputDecorationTheme>(),
+        isA<InputDecorationThemeData>(),
       );
     });
 
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('darkTheme should have appBarTheme', () {
-      expect(AppTheme.darkTheme.appBarTheme, isA<AppBarTheme>());
+      expect(AppTheme.darkTheme.appBarTheme, isA<AppBarThemeData>());
     });
 
     test('darkTheme should have elevatedButtonTheme', () {
@@ -68,7 +68,7 @@ void main() {
     test('darkTheme should have inputDecorationTheme', () {
       expect(
         AppTheme.darkTheme.inputDecorationTheme,
-        isA<InputDecorationTheme>(),
+        isA<InputDecorationThemeData>(),
       );
     });
 

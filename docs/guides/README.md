@@ -20,6 +20,13 @@ For production deployment, review these security guides:
 2. **[Security Implementation Guide](security-implementation.md)** - Step-by-step implementation instructions
 3. **[Security Checklist](security-checklist.md)** - Quick reference checklist for security hardening
 
+## Performance
+
+For performance optimization, review these guides:
+
+1. **[Performance Summary](performance/summary.md)** - Quick reference guide with all optimizations
+2. **[Performance Optimization Guide](performance/optimization-guide.md)** - Comprehensive guide with best practices
+
 ## Guide Structure
 
 ### Getting Started

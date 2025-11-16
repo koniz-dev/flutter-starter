@@ -12,9 +12,7 @@ void main() {
 
     testWidgets('should build MaterialApp with correct title', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: MyApp(),
-        ),
+        const MyApp(),
       );
 
       expect(find.text('Flutter Starter'), findsWidgets);
@@ -22,9 +20,7 @@ void main() {
 
     testWidgets('should use light theme by default', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: MyApp(),
-        ),
+        const MyApp(),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
@@ -33,9 +29,7 @@ void main() {
 
     testWidgets('should have dark theme configured', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: MyApp(),
-        ),
+        const MyApp(),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));

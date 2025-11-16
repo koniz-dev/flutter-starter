@@ -25,7 +25,10 @@ class Validators {
   static bool isValidUrl(String url) {
     try {
       final uri = Uri.parse(url);
-      return uri.hasScheme && uri.hasAuthority;
+      // Check that URL has both scheme and non-empty authority
+      return uri.hasScheme &&
+          uri.hasAuthority &&
+          uri.host.isNotEmpty;
     } on FormatException {
       return false;
     }

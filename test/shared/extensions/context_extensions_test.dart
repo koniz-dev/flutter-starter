@@ -116,17 +116,19 @@ void main() {
 
     testWidgets('should detect mobile screen', (tester) async {
       // Arrange
-      await tester.binding.setSurfaceSize(const Size(400, 800));
       await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              // Act & Assert
-              expect(context.isMobile, isTrue);
-              expect(context.isTablet, isFalse);
-              expect(context.isDesktop, isFalse);
-              return const SizedBox();
-            },
+        MediaQuery(
+          data: const MediaQueryData(size: Size(400, 800)),
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) {
+                // Act & Assert
+                expect(context.isMobile, isTrue);
+                expect(context.isTablet, isFalse);
+                expect(context.isDesktop, isFalse);
+                return const SizedBox();
+              },
+            ),
           ),
         ),
       );
@@ -134,17 +136,19 @@ void main() {
 
     testWidgets('should detect tablet screen', (tester) async {
       // Arrange
-      await tester.binding.setSurfaceSize(const Size(800, 1200));
       await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              // Act & Assert
-              expect(context.isMobile, isFalse);
-              expect(context.isTablet, isTrue);
-              expect(context.isDesktop, isFalse);
-              return const SizedBox();
-            },
+        MediaQuery(
+          data: const MediaQueryData(size: Size(800, 1200)),
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) {
+                // Act & Assert
+                expect(context.isMobile, isFalse);
+                expect(context.isTablet, isTrue);
+                expect(context.isDesktop, isFalse);
+                return const SizedBox();
+              },
+            ),
           ),
         ),
       );
@@ -152,17 +156,19 @@ void main() {
 
     testWidgets('should detect desktop screen', (tester) async {
       // Arrange
-      await tester.binding.setSurfaceSize(const Size(1200, 800));
       await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              // Act & Assert
-              expect(context.isMobile, isFalse);
-              expect(context.isTablet, isFalse);
-              expect(context.isDesktop, isTrue);
-              return const SizedBox();
-            },
+        MediaQuery(
+          data: const MediaQueryData(size: Size(1200, 800)),
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) {
+                // Act & Assert
+                expect(context.isMobile, isFalse);
+                expect(context.isTablet, isFalse);
+                expect(context.isDesktop, isTrue);
+                return const SizedBox();
+              },
+            ),
           ),
         ),
       );

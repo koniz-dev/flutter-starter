@@ -152,6 +152,7 @@ void main() {
         final json = model.toJson();
 
         // Assert
+        expect(json['user'], isA<Map<String, dynamic>>());
         final userJson = json['user'] as Map<String, dynamic>;
         expect(userJson['id'], 'user-123');
         expect(userJson['email'], 'test@example.com');

@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'auth_response_model.g.dart';
 
 /// Authentication response model containing user and token
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AuthResponseModel {
   /// Creates an [AuthResponseModel] with [user], [token], and optional
   /// [refreshToken]

@@ -37,9 +37,13 @@ class EnvConfig {
     try {
       await dotenv.load(fileName: fileName);
       _isInitialized = true;
-    } on Exception {
+    } on Exception catch (_) {
       // .env file is optional - fallback to --dart-define or defaults
       // This is expected in CI/CD environments where .env files aren't used
+      _isInitialized = false;
+    } on Object catch (_) {
+      // Catch all other errors (FileNotFoundError, etc.)
+      // .env file is optional - fallback to --dart-define or defaults
       _isInitialized = false;
     }
   }

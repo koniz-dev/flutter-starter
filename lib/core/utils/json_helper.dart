@@ -54,7 +54,10 @@ class JsonHelper {
     try {
       const encoder = JsonEncoder.withIndent('  ');
       return encoder.convert(object);
-    } on Exception {
+    } on Exception catch (_) {
+      return null;
+    } on Object catch (_) {
+      // Catch all other errors (TypeError, etc.)
       return null;
     }
   }

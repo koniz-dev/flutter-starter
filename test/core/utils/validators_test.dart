@@ -113,6 +113,7 @@ void main() {
 
       test('should reject URLs without authority', () {
         expect(Validators.isValidUrl('https://'), isFalse);
+        // file:///path has an empty host, so it should be rejected
         expect(Validators.isValidUrl('file:///path'), isFalse);
       });
     });
