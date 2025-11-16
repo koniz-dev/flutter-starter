@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_starter/main.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -40,13 +41,15 @@ void main() {
   group('HomeScreen', () {
     testWidgets('should create HomeScreen widget', (tester) async {
       const homeScreen = HomeScreen();
-      expect(homeScreen, isA<StatelessWidget>());
+      expect(homeScreen, isA<ConsumerWidget>());
     });
 
     testWidgets('should display welcome message', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: HomeScreen(),
+        const ProviderScope(
+          child: MaterialApp(
+            home: HomeScreen(),
+          ),
         ),
       );
 
@@ -58,8 +61,10 @@ void main() {
 
     testWidgets('should have app bar with title', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: HomeScreen(),
+        const ProviderScope(
+          child: MaterialApp(
+            home: HomeScreen(),
+          ),
         ),
       );
 
