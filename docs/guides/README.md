@@ -12,6 +12,14 @@ New to the project? Start here:
 4. **[Development Workflow](development-workflow.md)** - Git workflow, commits, and PRs
 5. **[Troubleshooting](troubleshooting.md)** - Common issues and solutions
 
+## Security
+
+For production deployment, review these security guides:
+
+1. **[Security Audit Report](security-audit.md)** - Comprehensive security assessment and recommendations
+2. **[Security Implementation Guide](security-implementation.md)** - Step-by-step implementation instructions
+3. **[Security Checklist](security-checklist.md)** - Quick reference checklist for security hardening
+
 ## Guide Structure
 
 ### Getting Started
@@ -42,6 +50,11 @@ New to the project? Start here:
 - Common issues and solutions
 - FAQ
 - Where to get help
+
+### Security
+- Security audit and assessment
+- Implementation guides for security hardening
+- Security checklist for production deployment
 
 ## Related Documentation
 
