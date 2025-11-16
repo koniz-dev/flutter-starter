@@ -200,6 +200,6 @@ Before deploying to production, ensure:
 
 ---
 
-**Last Updated:** $(date)  
+**Last Updated:** November 16, 2025  
 **Next Review:** Quarterly or after major releases
 

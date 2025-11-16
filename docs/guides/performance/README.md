@@ -67,5 +67,5 @@ New to performance optimization? Start here:
 
 ---
 
-**Last Updated:** 2024
+**Last Updated:** November 16, 2025
 

@@ -56,6 +56,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Starter',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      // Enable performance optimizations
+      builder: (context, child) {
+        // Wrap in RepaintBoundary for better performance
+        return RepaintBoundary(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
       home: const HomeScreen(),
     );
   }
@@ -72,8 +79,10 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Flutter Starter'),
       ),
-      body: const Center(
-        child: Text('Welcome to Flutter Starter with Clean Architecture!'),
+      body: const RepaintBoundary(
+        child: Center(
+          child: Text('Welcome to Flutter Starter with Clean Architecture!'),
+        ),
       ),
     );
   }

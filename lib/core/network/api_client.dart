@@ -3,6 +3,7 @@ import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
@@ -42,9 +43,16 @@ class ApiClient {
       ),
     );
 
-    // Add interceptors - ErrorInterceptor must be first
+    // Add interceptors - Order matters!
+    // ErrorInterceptor must be first to catch all errors
+    // CacheInterceptor should be early to intercept requests before network
+    // AuthInterceptor handles token injection
+    // LoggingInterceptor should be last to log final request/response
     dio.interceptors.addAll([
       ErrorInterceptor(),
+      CacheInterceptor(
+        storageService: storageService,
+      ),
       authInterceptor,
       if (AppConfig.enableLogging) LoggingInterceptor(),
     ]);
