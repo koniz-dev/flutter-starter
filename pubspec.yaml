@@ -17,6 +17,10 @@ dependencies:
   # Utilities - Value equality comparison for objects
   equatable: ^2.0.7
 
+  # Firebase - Remote Config for feature flags
+  firebase_core: ^4.2.1
+  firebase_remote_config: ^6.1.1
+
   # Flutter SDK - Core Flutter framework
   flutter:
     sdk: flutter

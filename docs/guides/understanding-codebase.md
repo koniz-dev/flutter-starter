@@ -13,20 +13,20 @@ This project follows **Clean Architecture** principles with clear separation of 
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
-│        Domain Layer                  │
-│  - Entities, Use Cases, Repositories │
-│  - Business Logic (Framework-free)   │
+│         Domain Layer                │
+│ - Entities, Use Cases, Repositories │
+│ - Business Logic (Framework-free)   │
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
-│         Data Layer                   │
-│  - Models, Data Sources, Repository  │
-│  - Implementations                   │
+│         Data Layer                  │
+│ - Models, Data Sources, Repository  │
+│ - Implementations                   │
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
-│         Core Layer                   │
-│  - Network, Storage, Config, Utils   │
+│         Core Layer                  │
+│  - Network, Storage, Config, Utils  │
 └─────────────────────────────────────┘
 ```
 

@@ -103,3 +103,10 @@ class UnknownFailure extends Failure {
   /// [code]
   const UnknownFailure(super.message, {super.code});
 }
+
+/// Not found failure thrown when a requested resource is not found
+class NotFoundFailure extends Failure {
+  /// Creates a [NotFoundFailure] with the given [message] and optional
+  /// [code]
+  const NotFoundFailure(super.message, {super.code});
+}

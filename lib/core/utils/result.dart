@@ -195,6 +195,8 @@ Failure _createFailureWithMessage(Failure original, String newMessage) {
     return PermissionFailure(newMessage, code: original.code);
   } else if (original is UnknownFailure) {
     return UnknownFailure(newMessage, code: original.code);
+  } else if (original is NotFoundFailure) {
+    return NotFoundFailure(newMessage, code: original.code);
   } else {
     // Fallback for any other failure types
     return UnknownFailure(newMessage, code: original.code);

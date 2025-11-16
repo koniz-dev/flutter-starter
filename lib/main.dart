@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
+import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 
 void main() async {
@@ -28,6 +30,12 @@ void main() async {
   // Initialize storage service via provider before app starts
   // This is done after env config to ensure storage is ready
   await container.read(storageInitializationProvider.future);
+
+  // Initialize feature flags system
+  // Note: Firebase Remote Config will be initialized here if Firebase is set
+  // up. The system will gracefully fall back to local flags if Firebase is not
+  // available
+  await container.read(featureFlagsInitializationProvider.future);
 
   runApp(
     UncontrolledProviderScope(
@@ -69,19 +77,50 @@ class MyApp extends StatelessWidget {
 }
 
 /// Home screen widget
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   /// Creates a [HomeScreen] widget
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter Starter'),
+        actions: [
+          // Show debug menu button if debug features are enabled
+          if (AppConfig.enableDebugFeatures)
+            IconButton(
+              icon: const Icon(Icons.bug_report),
+              onPressed: () async {
+                await Navigator.push<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) => const FeatureFlagsDebugScreen(),
+                  ),
+                );
+              },
+              tooltip: 'Feature Flags Debug',
+            ),
+        ],
       ),
       body: const RepaintBoundary(
         child: Center(
-          child: Text('Welcome to Flutter Starter with Clean Architecture!'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Welcome to Flutter Starter with Clean Architecture!'),
+              SizedBox(height: 24),
+              Text(
+                'Feature Flags System is ready!',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Check the examples in feature_flags_example_screen.dart',
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
         ),
       ),
     );
