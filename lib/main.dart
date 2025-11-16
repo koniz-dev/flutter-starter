@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
+import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized first (required for all Flutter APIs)
@@ -37,6 +42,11 @@ void main() async {
   // available
   await container.read(featureFlagsInitializationProvider.future);
 
+  // Initialize locale from storage
+  final localizationService = container.read(localizationServiceProvider);
+  final savedLocale = await localizationService.getCurrentLocale();
+  container.read(localeStateProvider.notifier).locale = savedLocale;
+
   runApp(
     UncontrolledProviderScope(
       container: container,
@@ -60,18 +70,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Starter',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      // Enable performance optimizations
-      builder: (context, child) {
-        // Wrap in RepaintBoundary for better performance
-        return RepaintBoundary(
-          child: child ?? const SizedBox.shrink(),
+    return Consumer(
+      builder: (context, ref, _) {
+        final locale = ref.watch<Locale>(localeStateProvider);
+        final textDirection = ref.watch<TextDirection>(textDirectionProvider);
+
+        return MaterialApp(
+          title: 'Flutter Starter',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          // Localization configuration
+          locale: locale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: LocalizationService.supportedLocales,
+          // RTL support
+          builder: (context, child) {
+            return Directionality(
+              textDirection: textDirection,
+              child: RepaintBoundary(
+                child: child ?? const SizedBox.shrink(),
+              ),
+            );
+          },
+          home: const HomeScreen(),
         );
       },
-      home: const HomeScreen(),
     );
   }
 }
@@ -83,10 +111,14 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Starter'),
+        title: Text(l10n.appTitle),
         actions: [
+          // Language switcher
+          const LanguageSwitcher(),
           // Show debug menu button if debug features are enabled
           if (AppConfig.enableDebugFeatures)
             IconButton(
@@ -99,25 +131,28 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 );
               },
-              tooltip: 'Feature Flags Debug',
+              tooltip: l10n.featureFlagsDebug,
             ),
         ],
       ),
-      body: const RepaintBoundary(
+      body: RepaintBoundary(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Welcome to Flutter Starter with Clean Architecture!'),
-              SizedBox(height: 24),
+              Text(l10n.welcome),
+              const SizedBox(height: 24),
               Text(
-                'Feature Flags System is ready!',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                l10n.featureFlagsReady,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'Check the examples in feature_flags_example_screen.dart',
-                style: TextStyle(fontSize: 14),
+                l10n.checkExamples,
+                style: const TextStyle(fontSize: 14),
               ),
             ],
           ),

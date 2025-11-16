@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Login screen for user authentication
 class LoginScreen extends ConsumerStatefulWidget {
@@ -38,10 +39,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authNotifierProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text(l10n.login),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -52,17 +54,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.email,
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return l10n.emailRequired;
                   }
                   if (!Validators.isValidEmail(value)) {
-                    return 'Please enter a valid email address';
+                    return l10n.emailInvalid;
                   }
                   return null;
                 },
@@ -70,17 +72,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.password,
+                  border: const OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return l10n.passwordRequired;
                   }
                   if (!Validators.isValidPassword(value)) {
-                    return 'Password must be at least 8 characters';
+                    return l10n.passwordMinLength(8);
                   }
                   return null;
                 },
@@ -106,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Login'),
+                    : Text(l10n.login),
               ),
               const SizedBox(height: 16),
               TextButton(
@@ -119,7 +121,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         );
                       },
-                child: const Text("Don't have an account? Register"),
+                child: Text(l10n.dontHaveAccount),
               ),
             ],
           ),

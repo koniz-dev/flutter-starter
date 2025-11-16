@@ -1,0 +1,74 @@
+{
+  "@@locale": "ar",
+  "appTitle": "Flutter Starter",
+  "welcome": "مرحباً بك في Flutter Starter مع Clean Architecture!",
+  "featureFlagsReady": "نظام Feature Flags جاهز!",
+  "checkExamples": "تحقق من الأمثلة في feature_flags_example_screen.dart",
+  "login": "تسجيل الدخول",
+  "register": "التسجيل",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "name": "الاسم",
+  "emailRequired": "يرجى إدخال بريدك الإلكتروني",
+  "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+  "passwordRequired": "يرجى إدخال كلمة المرور",
+  "passwordMinLength": "يجب أن تكون كلمة المرور على الأقل {minLength} أحرف",
+  "@passwordMinLength": {
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "nameRequired": "يرجى إدخال اسمك",
+  "nameMinLength": "يجب أن يكون الاسم على الأقل {minLength} أحرف",
+  "@nameMinLength": {
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "dontHaveAccount": "ليس لديك حساب؟ سجل",
+  "alreadyHaveAccount": "هل لديك حساب بالفعل؟ سجل الدخول",
+  "retry": "إعادة المحاولة",
+  "error": "خطأ",
+  "loading": "جاري التحميل...",
+  "language": "اللغة",
+  "selectLanguage": "اختر اللغة",
+  "english": "الإنجليزية",
+  "spanish": "الإسبانية",
+  "arabic": "العربية",
+  "featureFlagsDebug": "تصحيح Feature Flags",
+  "unexpectedError": "حدث خطأ غير متوقع",
+  "badRequest": "طلب غير صحيح. يرجى التحقق من المدخلات.",
+  "unauthorized": "غير مصرح. يرجى تسجيل الدخول مرة أخرى.",
+  "forbidden": "ممنوع. ليس لديك إذن.",
+  "notFound": "المورد غير موجود.",
+  "conflict": "تعارض. المورد موجود بالفعل.",
+  "validationError": "خطأ في التحقق. يرجى التحقق من المدخلات.",
+  "tooManyRequests": "طلبات كثيرة جداً. يرجى المحاولة لاحقاً.",
+  "internalServerError": "خطأ داخلي في الخادم. يرجى المحاولة لاحقاً.",
+  "badGateway": "بوابة غير صحيحة. يرجى المحاولة لاحقاً.",
+  "serviceUnavailable": "الخدمة غير متاحة. يرجى المحاولة لاحقاً.",
+  "gatewayTimeout": "انتهت مهلة البوابة. يرجى المحاولة لاحقاً.",
+  "clientError": "حدث خطأ في العميل.",
+  "serverError": "حدث خطأ في الخادم. يرجى المحاولة لاحقاً.",
+  "itemCount": "{count, plural, =0{لا توجد عناصر} =1{عنصر واحد} other{{count} عناصر}}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count, plural, =0{الآن} =1{منذ دقيقة واحدة} other{منذ {count} دقائق}}",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

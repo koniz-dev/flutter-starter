@@ -1,0 +1,74 @@
+{
+  "@@locale": "es",
+  "appTitle": "Flutter Starter",
+  "welcome": "¡Bienvenido a Flutter Starter con Arquitectura Limpia!",
+  "featureFlagsReady": "¡El Sistema de Feature Flags está listo!",
+  "checkExamples": "Consulta los ejemplos en feature_flags_example_screen.dart",
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "name": "Nombre",
+  "emailRequired": "Por favor ingresa tu correo electrónico",
+  "emailInvalid": "Por favor ingresa un correo electrónico válido",
+  "passwordRequired": "Por favor ingresa tu contraseña",
+  "passwordMinLength": "La contraseña debe tener al menos {minLength} caracteres",
+  "@passwordMinLength": {
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "nameRequired": "Por favor ingresa tu nombre",
+  "nameMinLength": "El nombre debe tener al menos {minLength} caracteres",
+  "@nameMinLength": {
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "dontHaveAccount": "¿No tienes una cuenta? Regístrate",
+  "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
+  "retry": "Reintentar",
+  "error": "Error",
+  "loading": "Cargando...",
+  "language": "Idioma",
+  "selectLanguage": "Seleccionar idioma",
+  "english": "Inglés",
+  "spanish": "Español",
+  "arabic": "Árabe",
+  "featureFlagsDebug": "Depuración de Feature Flags",
+  "unexpectedError": "Ocurrió un error inesperado",
+  "badRequest": "Solicitud incorrecta. Por favor verifica tu entrada.",
+  "unauthorized": "No autorizado. Por favor inicia sesión nuevamente.",
+  "forbidden": "Prohibido. No tienes permiso.",
+  "notFound": "Recurso no encontrado.",
+  "conflict": "Conflicto. El recurso ya existe.",
+  "validationError": "Error de validación. Por favor verifica tu entrada.",
+  "tooManyRequests": "Demasiadas solicitudes. Por favor intenta más tarde.",
+  "internalServerError": "Error interno del servidor. Por favor intenta más tarde.",
+  "badGateway": "Puerta de enlace incorrecta. Por favor intenta más tarde.",
+  "serviceUnavailable": "Servicio no disponible. Por favor intenta más tarde.",
+  "gatewayTimeout": "Tiempo de espera de puerta de enlace agotado. Por favor intenta más tarde.",
+  "clientError": "Ocurrió un error del cliente.",
+  "serverError": "Ocurrió un error del servidor. Por favor intenta más tarde.",
+  "itemCount": "{count, plural, =0{Sin elementos} =1{1 elemento} other{{count} elementos}}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count, plural, =0{Ahora mismo} =1{Hace 1 minuto} other{Hace {count} minutos}}",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+

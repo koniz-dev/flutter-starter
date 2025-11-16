@@ -28,6 +28,10 @@ dependencies:
   # Configuration - Environment variable loader from .env files
   flutter_dotenv: ^6.0.0
 
+  # Localization - Flutter localization support
+  flutter_localizations:
+    sdk: flutter
+
   # State Management - Riverpod reactive state management framework
   flutter_riverpod: ^3.0.3
 
@@ -96,6 +100,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Generate localization files from ARB files
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
