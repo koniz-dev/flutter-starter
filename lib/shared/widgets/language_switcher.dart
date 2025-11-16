@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 
 /// Language switcher widget
 ///
@@ -28,10 +29,12 @@ class LanguageSwitcher extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final currentLocale = ref.watch<Locale>(localeStateProvider);
 
-    return IconButton(
-      icon: Icon(icon),
-      tooltip: tooltip ?? l10n.selectLanguage,
+    return AccessibleIconButton(
+      icon: icon,
       onPressed: () => _showLanguageDialog(context, ref, currentLocale),
+      semanticLabel: tooltip ?? l10n.selectLanguage,
+      tooltip: tooltip ?? l10n.selectLanguage,
+      semanticHint: 'Opens language selection dialog',
     );
   }
 

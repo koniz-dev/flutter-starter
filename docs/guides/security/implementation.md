@@ -1,6 +1,6 @@
 # Security Implementation Guide
 
-This guide provides step-by-step instructions and code examples for implementing the security recommendations from the [Security Audit Report](security-audit.md).
+This guide provides step-by-step instructions and code examples for implementing the security recommendations from the [Security Audit Report](./audit.md).
 
 ---
 

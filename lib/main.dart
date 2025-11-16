@@ -121,17 +121,22 @@ class HomeScreen extends ConsumerWidget {
           const LanguageSwitcher(),
           // Show debug menu button if debug features are enabled
           if (AppConfig.enableDebugFeatures)
-            IconButton(
-              icon: const Icon(Icons.bug_report),
-              onPressed: () async {
-                await Navigator.push<void>(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (_) => const FeatureFlagsDebugScreen(),
-                  ),
-                );
-              },
-              tooltip: l10n.featureFlagsDebug,
+            Semantics(
+              label: l10n.featureFlagsDebug,
+              hint: 'Opens feature flags debug screen',
+              button: true,
+              child: IconButton(
+                icon: const Icon(Icons.bug_report),
+                onPressed: () async {
+                  await Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) => const FeatureFlagsDebugScreen(),
+                    ),
+                  );
+                },
+                tooltip: l10n.featureFlagsDebug,
+              ),
             ),
         ],
       ),
@@ -140,13 +145,22 @@ class HomeScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(l10n.welcome),
+              Semantics(
+                header: true,
+                child: Text(
+                  l10n.welcome,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
               const SizedBox(height: 24),
-              Text(
-                l10n.featureFlagsReady,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              Semantics(
+                header: true,
+                child: Text(
+                  l10n.featureFlagsReady,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 8),

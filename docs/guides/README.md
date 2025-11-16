@@ -16,9 +16,10 @@ New to the project? Start here:
 
 For production deployment, review these security guides:
 
-1. **[Security Audit Report](security-audit.md)** - Comprehensive security assessment and recommendations
-2. **[Security Implementation Guide](security-implementation.md)** - Step-by-step implementation instructions
-3. **[Security Checklist](security-checklist.md)** - Quick reference checklist for security hardening
+1. **[Security Guide](security/README.md)** - Overview and quick start
+2. **[Security Audit Report](security/audit.md)** - Comprehensive security assessment and recommendations
+3. **[Security Implementation Guide](security/implementation.md)** - Step-by-step implementation instructions
+4. **[Security Checklist](security/checklist.md)** - Quick reference checklist for security hardening
 
 ## Performance
 
@@ -26,6 +27,15 @@ For performance optimization, review these guides:
 
 1. **[Performance Summary](performance/summary.md)** - Quick reference guide with all optimizations
 2. **[Performance Optimization Guide](performance/optimization-guide.md)** - Comprehensive guide with best practices
+
+## Accessibility
+
+For accessibility implementation, review these guides:
+
+1. **[Accessibility Guide](accessibility/README.md)** - Overview and quick start
+2. **[Accessibility Implementation Guide](accessibility/guide.md)** - Comprehensive implementation guide
+3. **[Accessibility Testing Procedures](accessibility/testing-procedures.md)** - Testing procedures
+4. **[Accessibility Quick Reference](accessibility/quick-reference.md)** - Quick reference for common patterns
 
 ## Guide Structure
 
@@ -62,6 +72,13 @@ For performance optimization, review these guides:
 - Security audit and assessment
 - Implementation guides for security hardening
 - Security checklist for production deployment
+
+### Accessibility
+- WCAG 2.1 Level AA compliance
+- Screen reader support (TalkBack/VoiceOver)
+- Keyboard navigation
+- Touch target sizes and contrast ratios
+- Testing procedures and best practices
 
 ## Related Documentation
 

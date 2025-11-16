@@ -44,7 +44,7 @@ This audit covers:
 
 **Risk:** Authorization tokens could be exposed in logs, console output, or crash reports.
 
-**Recommendation:** See [Security Implementation Guide](security-implementation.md#3-log-sanitization) for detailed implementation.
+**Recommendation:** See [Security Implementation Guide](./implementation.md#3-log-sanitization) for detailed implementation.
 
 #### 🟡 MEDIUM: Token Expiration Handling
 
@@ -56,7 +56,7 @@ This audit covers:
 
 **Issue:** No automatic session timeout after inactivity.
 
-**Recommendation:** Implement session timeout mechanism. See [Security Implementation Guide](security-implementation.md#8-session-management).
+**Recommendation:** Implement session timeout mechanism. See [Security Implementation Guide](./implementation.md#8-session-management).
 
 ## 2. Data Protection
 
@@ -80,13 +80,13 @@ This audit covers:
 
 **Risk:** Attackers could intercept and modify network traffic using fake certificates.
 
-**Recommendation:** Implement SSL pinning. See [Security Implementation Guide](security-implementation.md#1-ssl-certificate-pinning).
+**Recommendation:** Implement SSL pinning. See [Security Implementation Guide](./implementation.md#1-ssl-certificate-pinning).
 
 #### 🟡 MEDIUM: Sensitive Data in Logs
 
 **Issue:** User data and API responses logged without sanitization.
 
-**Recommendation:** Sanitize all logged data. See [Security Implementation Guide](security-implementation.md#3-log-sanitization).
+**Recommendation:** Sanitize all logged data. See [Security Implementation Guide](./implementation.md#3-log-sanitization).
 
 ## 3. Code Security
 
@@ -109,7 +109,7 @@ This audit covers:
 
 **Risk:** Attackers can extract API endpoints, understand business logic, find security vulnerabilities, and extract hardcoded secrets.
 
-**Recommendation:** Enable code obfuscation. See [Security Implementation Guide](security-implementation.md#2-code-obfuscation).
+**Recommendation:** Enable code obfuscation. See [Security Implementation Guide](./implementation.md#2-code-obfuscation).
 
 #### 🔴 CRITICAL: Debug Signing in Release
 
@@ -119,13 +119,13 @@ This audit covers:
 
 **Risk:** Anyone can install debug builds, and release builds aren't properly signed.
 
-**Recommendation:** Configure proper release signing. See [Security Implementation Guide](security-implementation.md#4-android-release-signing).
+**Recommendation:** Configure proper release signing. See [Security Implementation Guide](./implementation.md#4-android-release-signing).
 
 #### 🟡 MEDIUM: No Root/Jailbreak Detection
 
 **Issue:** No detection of rooted/jailbroken devices.
 
-**Recommendation:** Add root/jailbreak detection. See [Security Implementation Guide](security-implementation.md#7-rootjailbreak-detection).
+**Recommendation:** Add root/jailbreak detection. See [Security Implementation Guide](./implementation.md#7-rootjailbreak-detection).
 
 ## 4. Platform Security
 
@@ -137,7 +137,7 @@ This audit covers:
 
 **Issue:** No security-related manifest configurations.
 
-**Recommendation:** Add security configurations. See [Security Implementation Guide](security-implementation.md#6-network-security-config).
+**Recommendation:** Add security configurations. See [Security Implementation Guide](./implementation.md#6-network-security-config).
 
 ### iOS Security
 
@@ -157,7 +157,7 @@ This audit covers:
 
 **Risk:** Vulnerable to XSS, clickjacking, and other web attacks.
 
-**Recommendation:** Add security headers. See [Security Implementation Guide](security-implementation.md#5-security-headers).
+**Recommendation:** Add security headers. See [Security Implementation Guide](./implementation.md#5-security-headers).
 
 ## 5. Compliance (GDPR & Privacy)
 
@@ -167,7 +167,7 @@ This audit covers:
 
 **Issue:** No visible privacy policy or consent management.
 
-**Recommendation:** Implement GDPR-compliant consent management. See [Security Implementation Guide](security-implementation.md#9-gdpr-consent-management).
+**Recommendation:** Implement GDPR-compliant consent management. See [Security Implementation Guide](./implementation.md#9-gdpr-consent-management).
 
 #### 🟡 MEDIUM: No Data Deletion Mechanism
 
@@ -183,7 +183,7 @@ This audit covers:
 
 ## Security Checklist
 
-See [Security Checklist](security-checklist.md) for a comprehensive checklist of all security tasks.
+See [Security Checklist](./checklist.md) for a comprehensive checklist of all security tasks.
 
 ## Implementation Priority Guide
 
@@ -258,6 +258,6 @@ Your Flutter app has a **solid security foundation** with secure storage, proper
 
 ## Related Documentation
 
-- [Security Implementation Guide](security-implementation.md) - Step-by-step implementation instructions
-- [Security Checklist](security-checklist.md) - Quick reference checklist
+- [Security Implementation Guide](./implementation.md) - Step-by-step implementation instructions
+- [Security Checklist](./checklist.md) - Quick reference checklist
 
