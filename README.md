@@ -5,6 +5,8 @@ A production-ready Flutter starter project with **Clean Architecture**, enterpri
 [![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?logo=dart)](https://dart.dev)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-66%20files-success)](test/)
+[![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-blue)](docs/architecture/)
 
 ## ✨ Features
 
@@ -30,18 +32,34 @@ A production-ready Flutter starter project with **Clean Architecture**, enterpri
 ### 🔐 Security & Storage
 - ✅ **Secure Storage** - Flutter Secure Storage for sensitive data
 - ✅ **Shared Preferences** - Simple key-value storage for non-sensitive data
+- ✅ **Storage Migration** - Version-based storage migration system
 - ✅ **Error Handling** - Comprehensive error handling with custom exceptions
 
 ### 🌐 Network Layer
 - ✅ **HTTP Client** - Dio with interceptors support
 - ✅ **Configurable Timeouts** - Environment-based timeout configuration
 - ✅ **Request/Response Logging** - Debug-friendly HTTP logging
+- ✅ **Error Interceptors** - Automatic error handling and conversion
+- ✅ **Auth Interceptors** - Automatic token injection and refresh
 
 ### 🎨 UI & UX
 - ✅ **Material Design** - Material 3 theme support
 - ✅ **Dark Mode** - Built-in dark theme support
 - ✅ **Accessibility** - Semantic labels and accessibility support
 - ✅ **Responsive Design** - Adaptive layouts for different screen sizes
+
+### 🧭 Routing & Navigation
+- ✅ **Type-Safe Routing** - GoRouter with type-safe route definitions
+- ✅ **Deep Linking** - Support for deep links and URL navigation
+- ✅ **Auth-Based Routing** - Protected routes with authentication redirects
+- ✅ **Navigation Logging** - Automatic route tracking and logging
+
+### 📊 Logging & Monitoring
+- ✅ **Comprehensive Logging** - Multi-level logging with file and console output
+- ✅ **Log Rotation** - Automatic log file rotation
+- ✅ **Structured Logging** - JSON formatting for production
+- ✅ **Performance Monitoring** - Firebase Performance integration
+- ✅ **Screen Tracking** - Automatic screen load time tracking
 
 ### 🚀 Deployment & CI/CD
 - ✅ **Multi-Platform** - Android, iOS, Web, Linux, macOS, Windows support
@@ -51,8 +69,17 @@ A production-ready Flutter starter project with **Clean Architecture**, enterpri
 
 ### 📚 Documentation
 - ✅ **Comprehensive Docs** - Architecture, guides, API documentation
-- ✅ **Migration Guides** - From MVC, GetX, and other architectures
+- ✅ **Migration Guides** - From MVC, GetX, Bloc, and other architectures
 - ✅ **Best Practices** - Code examples and patterns
+- ✅ **API Documentation** - Complete API reference
+- ✅ **Example Features** - 3 complete example features (Auth, Feature Flags, Tasks)
+
+### 🧪 Testing
+- ✅ **66 Test Files** - Comprehensive test coverage
+- ✅ **Unit Tests** - Domain and data layer testing
+- ✅ **Widget Tests** - UI component testing
+- ✅ **Integration Tests** - End-to-end flow testing
+- ✅ **Test Helpers** - Reusable test utilities and fixtures
 
 ## 🛠️ Tech Stack
 
@@ -66,6 +93,7 @@ A production-ready Flutter starter project with **Clean Architecture**, enterpri
 ### Firebase
 - **Firebase Core** - Firebase initialization
 - **Firebase Remote Config** - Remote feature flags
+- **Firebase Performance** - Performance monitoring and tracking
 
 ### Storage
 - **flutter_secure_storage** - Secure storage for sensitive data
@@ -74,6 +102,13 @@ A production-ready Flutter starter project with **Clean Architecture**, enterpri
 ### Localization
 - **flutter_localizations** - Flutter localization support
 - **intl** - Internationalization utilities
+
+### Routing & Navigation
+- **go_router** - Declarative routing with deep linking
+
+### Logging & Monitoring
+- **logger** - Comprehensive logging solution
+- **path_provider** - File system access for log files
 
 ### Development Tools
 - **build_runner** - Code generation runner
@@ -91,8 +126,11 @@ lib/
 │   ├── errors/             # Error handling
 │   ├── feature_flags/      # Feature flags infrastructure
 │   ├── localization/       # Localization service
+│   ├── logging/            # Logging service
 │   ├── network/            # Network layer (Dio setup)
-│   ├── storage/            # Storage services
+│   ├── performance/        # Performance monitoring
+│   ├── routing/            # Routing system (go_router)
+│   ├── storage/            # Storage services (with migration)
 │   └── utils/              # Utility functions
 │
 ├── features/                # Feature modules (Clean Architecture)
@@ -100,8 +138,12 @@ lib/
 │   │   ├── data/          # Data layer (models, data sources, repositories)
 │   │   ├── domain/        # Domain layer (entities, use cases, repository interfaces)
 │   │   └── presentation/  # Presentation layer (screens, widgets, providers)
-│   └── feature_flags/      # Feature flags feature
-│       └── presentation/   # Feature flags UI
+│   ├── feature_flags/      # Feature flags feature
+│   │   └── presentation/   # Feature flags UI
+│   └── tasks/              # Tasks feature (CRUD example)
+│       ├── data/          # Data layer
+│       ├── domain/        # Domain layer
+│       └── presentation/  # Presentation layer
 │
 ├── shared/                  # Shared resources
 │   ├── accessibility/      # Accessibility utilities
@@ -124,7 +166,16 @@ lib/
 
 ### Installation
 
-1. **Clone the repository**
+1. **Create repository from template** (if using GitHub template)
+   - Click "Use this template" button on GitHub
+   - Create a new repository from this template
+   - Clone your new repository:
+   ```bash
+   git clone <your-repository-url>
+   cd <your-project-name>
+   ```
+
+   **OR clone directly** (if not using template):
    ```bash
    git clone <repository-url>
    cd flutter_starter
@@ -149,18 +200,34 @@ lib/
    # See Configuration System section below
    ```
 
-5. **Run the app**
+5. **Set up Git hooks** (optional but recommended)
+   ```bash
+   ./scripts/setup-git-hooks.sh
+   ```
+   This will install Git hooks for:
+   - Code formatting checks (pre-commit)
+   - Commit message validation (commit-msg)
+   - Test execution (pre-push)
+
+6. **Run the app**
    ```bash
    flutter run
    ```
 
 ### First Steps
 
-1. **Configure your environment** - See [Configuration System](#-configuration-system) below
-2. **Set up Firebase** (optional) - For remote feature flags
-3. **Customize the theme** - Edit `lib/shared/theme/app_theme.dart`
-4. **Add your first feature** - Follow the pattern in `lib/features/auth/`
-5. **Read the documentation** - Check out `docs/` folder for detailed guides
+1. **Rename the project** (if needed) - Update package name from `flutter_starter` to your project name
+2. **Configure your environment** - See [Configuration System](#-configuration-system) below
+3. **Set up Firebase** (optional) - For remote feature flags and performance monitoring
+   - Add `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+   - Initialize Firebase in your app
+4. **Customize the theme** - Edit `lib/shared/theme/app_theme.dart`
+5. **Explore example features** - Check out `lib/features/` for examples:
+   - **Auth** - Authentication flow example
+   - **Feature Flags** - Feature flags UI example
+   - **Tasks** - Complete CRUD example with local storage
+6. **Add your first feature** - Follow the pattern in example features
+7. **Read the documentation** - Check out `docs/` folder for detailed guides
 
 ## ⚙️ Configuration System
 
@@ -396,9 +463,20 @@ flutter test test/features/auth/domain/usecases/login_test.dart
 ### Test Structure
 
 Tests follow the same structure as the source code:
+- **66 test files** with comprehensive coverage
 - Unit tests for use cases and utilities
 - Widget tests for UI components
 - Integration tests for end-to-end flows
+- Test helpers and fixtures for reusable test utilities
+
+### Test Coverage
+
+The project includes:
+- ✅ Domain layer tests (use cases, entities)
+- ✅ Data layer tests (repositories, data sources, models)
+- ✅ Presentation layer tests (screens, widgets, providers)
+- ✅ Core infrastructure tests (config, network, storage, logging, performance)
+- ✅ Integration tests for complete flows
 
 ## 🏗️ Building
 
@@ -449,6 +527,7 @@ flutter build web --release
 - **[Understanding the Codebase](docs/guides/understanding-codebase.md)** - Architecture and patterns
 - **[Common Tasks](docs/guides/common-tasks.md)** - Frequently performed tasks
 - **[Routing Guide](docs/guides/routing.md)** - GoRouter navigation and deep linking
+- **[Git Hooks Setup](docs/guides/git-hooks-setup.md)** - Setup Git hooks for code quality (similar to Husky)
 - **[Adding Features](docs/api/examples/adding-features.md)** - How to add new features
 
 ### Migration Guides
@@ -460,7 +539,11 @@ flutter build web --release
 ### Features
 
 - **[Feature Flags](docs/features/feature-flags.md)** - Feature flags system documentation
-- **[Localization](docs/guides/accessibility/README.md)** - i18n setup and usage
+- **[Tasks Feature](docs/features/tasks.md)** - CRUD example feature documentation
+- **[Localization](docs/guides/internationalization-guide.md)** - i18n setup and usage
+- **[Logging](docs/guides/README.md)** - Logging system documentation
+- **[Performance](docs/guides/performance/README.md)** - Performance monitoring guides
+- **[Routing](docs/guides/routing.md)** - Routing and navigation guide
 
 ### Deployment
 
@@ -479,18 +562,26 @@ flutter build web --release
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- How to report bugs
+- How to suggest enhancements
+- Development setup and workflow
+- Coding standards and guidelines
+- Testing requirements
+- Commit message conventions
+
+### Quick Start
+
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes following our [coding standards](CONTRIBUTING.md#coding-standards)
+4. Write or update tests
+5. Commit your changes using [conventional commits](CONTRIBUTING.md#commit-message-guidelines)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-### Code Style
-
-- Follow the existing code style
-- Run `flutter analyze` before committing
-- Ensure all tests pass
-- Update documentation as needed
+For detailed guidelines, please read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 📝 License
 
