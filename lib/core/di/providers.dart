@@ -16,6 +16,15 @@ import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart
 import 'package:flutter_starter/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
+import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
+import 'package:flutter_starter/features/tasks/data/repositories/tasks_repository_impl.dart';
+import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/delete_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 
 /// Provider for [StorageService] instance
 ///
@@ -209,4 +218,82 @@ final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
 final isAuthenticatedUseCaseProvider = Provider<IsAuthenticatedUseCase>((ref) {
   final repository = ref.watch<AuthRepository>(authRepositoryProvider);
   return IsAuthenticatedUseCase(repository);
+});
+
+// ============================================================================
+// Tasks Feature Providers
+// ============================================================================
+
+/// Provider for [TasksLocalDataSource] instance
+///
+/// This provider creates a singleton instance of [TasksLocalDataSourceImpl]
+/// that handles local task data persistence.
+final tasksLocalDataSourceProvider =
+    Provider<TasksLocalDataSource>((ref) {
+  final storageService = ref.watch(storageServiceProvider);
+  return TasksLocalDataSourceImpl(storageService: storageService);
+});
+
+/// Provider for [TasksRepository] instance
+///
+/// This provider creates a singleton instance of [TasksRepositoryImpl]
+/// that coordinates task data operations.
+final tasksRepositoryProvider = Provider<TasksRepository>((ref) {
+  final localDataSource = ref.watch(tasksLocalDataSourceProvider);
+  return TasksRepositoryImpl(localDataSource: localDataSource);
+});
+
+/// Provider for [GetAllTasksUseCase] instance
+///
+/// This provider creates a singleton instance of [GetAllTasksUseCase]
+/// that handles getting all tasks business logic.
+final getAllTasksUseCaseProvider = Provider<GetAllTasksUseCase>((ref) {
+  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+  return GetAllTasksUseCase(repository);
+});
+
+/// Provider for [GetTaskByIdUseCase] instance
+///
+/// This provider creates a singleton instance of [GetTaskByIdUseCase]
+/// that handles getting a task by id business logic.
+final getTaskByIdUseCaseProvider = Provider<GetTaskByIdUseCase>((ref) {
+  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+  return GetTaskByIdUseCase(repository);
+});
+
+/// Provider for [CreateTaskUseCase] instance
+///
+/// This provider creates a singleton instance of [CreateTaskUseCase]
+/// that handles creating a task business logic.
+final createTaskUseCaseProvider = Provider<CreateTaskUseCase>((ref) {
+  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+  return CreateTaskUseCase(repository);
+});
+
+/// Provider for [UpdateTaskUseCase] instance
+///
+/// This provider creates a singleton instance of [UpdateTaskUseCase]
+/// that handles updating a task business logic.
+final updateTaskUseCaseProvider = Provider<UpdateTaskUseCase>((ref) {
+  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+  return UpdateTaskUseCase(repository);
+});
+
+/// Provider for [DeleteTaskUseCase] instance
+///
+/// This provider creates a singleton instance of [DeleteTaskUseCase]
+/// that handles deleting a task business logic.
+final deleteTaskUseCaseProvider = Provider<DeleteTaskUseCase>((ref) {
+  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+  return DeleteTaskUseCase(repository);
+});
+
+/// Provider for [ToggleTaskCompletionUseCase] instance
+///
+/// This provider creates a singleton instance of [ToggleTaskCompletionUseCase]
+/// that handles toggling task completion status business logic.
+final toggleTaskCompletionUseCaseProvider =
+    Provider<ToggleTaskCompletionUseCase>((ref) {
+  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+  return ToggleTaskCompletionUseCase(repository);
 });

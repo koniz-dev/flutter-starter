@@ -35,6 +35,13 @@ extension NavigationExtensions on BuildContext {
   /// Navigate to feature flags debug screen (nested route)
   void goToFeatureFlagsDebug() => go(AppRoutes.featureFlagsDebug);
 
+  /// Navigate to tasks list screen
+  void goToTasks() => go(AppRoutes.tasks);
+
+  /// Navigate to task detail screen
+  void goToTaskDetail(String taskId) =>
+      go('${AppRoutes.tasks}/$taskId');
+
   /// Push a new route (adds to navigation stack)
   void pushRoute(String location, {Object? extra}) {
     unawaited(push(location, extra: extra));

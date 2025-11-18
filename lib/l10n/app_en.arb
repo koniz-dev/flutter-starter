@@ -187,6 +187,107 @@
         "type": "int"
       }
     }
+  },
+  "tasks": "Tasks",
+  "@tasks": {
+    "description": "Tasks screen title"
+  },
+  "addTask": "Add Task",
+  "@addTask": {
+    "description": "Add task button and dialog title"
+  },
+  "editTask": "Edit Task",
+  "@editTask": {
+    "description": "Edit task screen title"
+  },
+  "taskTitle": "Title",
+  "@taskTitle": {
+    "description": "Task title field label"
+  },
+  "taskDescription": "Description",
+  "@taskDescription": {
+    "description": "Task description field label"
+  },
+  "taskTitleRequired": "Please enter a task title",
+  "@taskTitleRequired": {
+    "description": "Task title validation error"
+  },
+  "noTasks": "No tasks yet",
+  "@noTasks": {
+    "description": "Empty tasks list message"
+  },
+  "addYourFirstTask": "Tap the + button to add your first task",
+  "@addYourFirstTask": {
+    "description": "Hint to add first task"
+  },
+  "incompleteTasks": "Incomplete",
+  "@incompleteTasks": {
+    "description": "Incomplete tasks section header"
+  },
+  "completedTasks": "Completed",
+  "@completedTasks": {
+    "description": "Completed tasks section header"
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Task status: completed"
+  },
+  "incomplete": "Incomplete",
+  "@incomplete": {
+    "description": "Task status: incomplete"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button label"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button label"
+  },
+  "deleteTask": "Delete Task",
+  "@deleteTask": {
+    "description": "Delete task dialog title"
+  },
+  "deleteTaskConfirmation": "Are you sure you want to delete \"{taskTitle}\"?",
+  "@deleteTaskConfirmation": {
+    "description": "Delete task confirmation message",
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button label"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button label"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Add button label"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button label"
+  },
+  "taskDetails": "Task Details",
+  "@taskDetails": {
+    "description": "Task details section title"
+  },
+  "taskStatus": "Status",
+  "@taskStatus": {
+    "description": "Task status label"
+  },
+  "createdAt": "Created",
+  "@createdAt": {
+    "description": "Created at label"
+  },
+  "updatedAt": "Updated",
+  "@updatedAt": {
+    "description": "Updated at label"
   }
 }
 

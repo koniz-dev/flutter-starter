@@ -19,6 +19,12 @@ class AppRoutes {
   /// Feature flags debug route path (nested route)
   static const String featureFlagsDebug = '/feature-flags-debug';
 
+  /// Tasks list route path
+  static const String tasks = '/tasks';
+
+  /// Task detail route path (with parameter)
+  static const String taskDetail = '/tasks/:taskId';
+
   // Route names (for named navigation)
   /// Home route name
   static const String homeName = 'home';
@@ -32,6 +38,12 @@ class AppRoutes {
   /// Feature flags debug route name
   static const String featureFlagsDebugName = 'feature-flags-debug';
 
+  /// Tasks list route name
+  static const String tasksName = 'tasks';
+
+  /// Task detail route name
+  static const String taskDetailName = 'task-detail';
+
   // Example routes with parameters (for future use)
   // static const String profile = '/profile/:userId';
   // static const String profileName = 'profile';
@@ -44,6 +56,9 @@ class AppRoutes {
 /// Use these constants when extracting parameters from route state
 class RouteParams {
   RouteParams._(); // Private constructor to prevent instantiation
+
+  /// Task ID parameter key
+  static const String taskId = 'taskId';
 
   // Example parameter keys (for future use)
   // static const String userId = 'userId';

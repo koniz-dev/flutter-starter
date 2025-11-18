@@ -69,6 +69,37 @@
         "type": "int"
       }
     }
-  }
+  },
+  "tasks": "المهام",
+  "addTask": "إضافة مهمة",
+  "editTask": "تعديل المهمة",
+  "taskTitle": "العنوان",
+  "taskDescription": "الوصف",
+  "taskTitleRequired": "يرجى إدخال عنوان للمهمة",
+  "noTasks": "لا توجد مهام بعد",
+  "addYourFirstTask": "اضغط على زر + لإضافة مهمتك الأولى",
+  "incompleteTasks": "غير مكتملة",
+  "completedTasks": "مكتملة",
+  "completed": "مكتملة",
+  "incomplete": "غير مكتملة",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "deleteTask": "حذف المهمة",
+  "deleteTaskConfirmation": "هل أنت متأكد من أنك تريد حذف \"{taskTitle}\"؟",
+  "@deleteTaskConfirmation": {
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "add": "إضافة",
+  "refresh": "تحديث",
+  "taskDetails": "تفاصيل المهمة",
+  "taskStatus": "الحالة",
+  "createdAt": "تم الإنشاء",
+  "updatedAt": "تم التحديث"
 }
 

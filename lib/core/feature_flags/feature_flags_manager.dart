@@ -181,6 +181,14 @@ class FeatureFlags {
     category: 'Notifications',
   );
 
+  /// Enable tasks feature
+  static const FeatureFlagKey tasks = FeatureFlagKey(
+    value: 'enable_tasks',
+    defaultValue: true,
+    description: 'Enable tasks management feature',
+    category: 'Features',
+  );
+
   /// Get all defined feature flags
   static List<FeatureFlagKey> get all => [
         newFeature,
@@ -190,6 +198,7 @@ class FeatureFlags {
         abTesting,
         debugMenu,
         pushNotifications,
+        tasks,
       ];
 
   /// Get feature flags by category

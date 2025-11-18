@@ -7,6 +7,8 @@ import 'package:flutter_starter/features/auth/presentation/providers/auth_provid
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
+import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_screen.dart';
+import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
 import 'package:flutter_starter/shared/screens/home_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,6 +64,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: 'feature-flags-debug',
             name: AppRoutes.featureFlagsDebugName,
             builder: (context, state) => const FeatureFlagsDebugScreen(),
+          ),
+        ],
+      ),
+      // Tasks routes
+      GoRoute(
+        path: AppRoutes.tasks,
+        name: AppRoutes.tasksName,
+        builder: (context, state) => const TasksListScreen(),
+        routes: [
+          GoRoute(
+            path: ':taskId',
+            name: AppRoutes.taskDetailName,
+            builder: (context, state) {
+              final taskId = state.pathParameters['taskId'];
+              return TaskDetailScreen(taskId: taskId);
+            },
           ),
         ],
       ),

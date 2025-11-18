@@ -351,6 +351,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{Just now} =1{1 minute ago} other{{count} minutes ago}}'**
   String minutesAgo(int count);
+
+  /// Tasks screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get tasks;
+
+  /// Add task button and dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Add Task'**
+  String get addTask;
+
+  /// Edit task screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Task'**
+  String get editTask;
+
+  /// Task title field label
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get taskTitle;
+
+  /// Task description field label
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get taskDescription;
+
+  /// Task title validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a task title'**
+  String get taskTitleRequired;
+
+  /// Empty tasks list message
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks yet'**
+  String get noTasks;
+
+  /// Hint to add first task
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to add your first task'**
+  String get addYourFirstTask;
+
+  /// Incomplete tasks section header
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get incompleteTasks;
+
+  /// Completed tasks section header
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedTasks;
+
+  /// Task status: completed
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// Task status: incomplete
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get incomplete;
+
+  /// Edit button label
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// Delete button label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// Delete task dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Task'**
+  String get deleteTask;
+
+  /// Delete task confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{taskTitle}\"?'**
+  String deleteTaskConfirmation(String taskTitle);
+
+  /// Save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// Cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Add button label
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// Refresh button label
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// Task details section title
+  ///
+  /// In en, this message translates to:
+  /// **'Task Details'**
+  String get taskDetails;
+
+  /// Task status label
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get taskStatus;
+
+  /// Created at label
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get createdAt;
+
+  /// Updated at label
+  ///
+  /// In en, this message translates to:
+  /// **'Updated'**
+  String get updatedAt;
 }
 
 class _AppLocalizationsDelegate

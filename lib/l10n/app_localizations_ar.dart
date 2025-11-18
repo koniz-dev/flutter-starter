@@ -157,4 +157,78 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tasks => 'المهام';
+
+  @override
+  String get addTask => 'إضافة مهمة';
+
+  @override
+  String get editTask => 'تعديل المهمة';
+
+  @override
+  String get taskTitle => 'العنوان';
+
+  @override
+  String get taskDescription => 'الوصف';
+
+  @override
+  String get taskTitleRequired => 'يرجى إدخال عنوان للمهمة';
+
+  @override
+  String get noTasks => 'لا توجد مهام بعد';
+
+  @override
+  String get addYourFirstTask => 'اضغط على زر + لإضافة مهمتك الأولى';
+
+  @override
+  String get incompleteTasks => 'غير مكتملة';
+
+  @override
+  String get completedTasks => 'مكتملة';
+
+  @override
+  String get completed => 'مكتملة';
+
+  @override
+  String get incomplete => 'غير مكتملة';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get deleteTask => 'حذف المهمة';
+
+  @override
+  String deleteTaskConfirmation(String taskTitle) {
+    return 'هل أنت متأكد من أنك تريد حذف \"$taskTitle\"؟';
+  }
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get add => 'إضافة';
+
+  @override
+  String get refresh => 'تحديث';
+
+  @override
+  String get taskDetails => 'تفاصيل المهمة';
+
+  @override
+  String get taskStatus => 'الحالة';
+
+  @override
+  String get createdAt => 'تم الإنشاء';
+
+  @override
+  String get updatedAt => 'تم التحديث';
 }

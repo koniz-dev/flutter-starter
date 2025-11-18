@@ -69,6 +69,37 @@
         "type": "int"
       }
     }
-  }
+  },
+  "tasks": "Tareas",
+  "addTask": "Agregar Tarea",
+  "editTask": "Editar Tarea",
+  "taskTitle": "Título",
+  "taskDescription": "Descripción",
+  "taskTitleRequired": "Por favor ingresa un título para la tarea",
+  "noTasks": "Aún no hay tareas",
+  "addYourFirstTask": "Toca el botón + para agregar tu primera tarea",
+  "incompleteTasks": "Incompletas",
+  "completedTasks": "Completadas",
+  "completed": "Completada",
+  "incomplete": "Incompleta",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "deleteTask": "Eliminar Tarea",
+  "deleteTaskConfirmation": "¿Estás seguro de que deseas eliminar \"{taskTitle}\"?",
+  "@deleteTaskConfirmation": {
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "add": "Agregar",
+  "refresh": "Actualizar",
+  "taskDetails": "Detalles de la Tarea",
+  "taskStatus": "Estado",
+  "createdAt": "Creada",
+  "updatedAt": "Actualizada"
 }
 

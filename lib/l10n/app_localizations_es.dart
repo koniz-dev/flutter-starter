@@ -166,4 +166,79 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tasks => 'Tareas';
+
+  @override
+  String get addTask => 'Agregar Tarea';
+
+  @override
+  String get editTask => 'Editar Tarea';
+
+  @override
+  String get taskTitle => 'Título';
+
+  @override
+  String get taskDescription => 'Descripción';
+
+  @override
+  String get taskTitleRequired => 'Por favor ingresa un título para la tarea';
+
+  @override
+  String get noTasks => 'Aún no hay tareas';
+
+  @override
+  String get addYourFirstTask =>
+      'Toca el botón + para agregar tu primera tarea';
+
+  @override
+  String get incompleteTasks => 'Incompletas';
+
+  @override
+  String get completedTasks => 'Completadas';
+
+  @override
+  String get completed => 'Completada';
+
+  @override
+  String get incomplete => 'Incompleta';
+
+  @override
+  String get edit => 'Editar';
+
+  @override
+  String get delete => 'Eliminar';
+
+  @override
+  String get deleteTask => 'Eliminar Tarea';
+
+  @override
+  String deleteTaskConfirmation(String taskTitle) {
+    return '¿Estás seguro de que deseas eliminar \"$taskTitle\"?';
+  }
+
+  @override
+  String get save => 'Guardar';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get add => 'Agregar';
+
+  @override
+  String get refresh => 'Actualizar';
+
+  @override
+  String get taskDetails => 'Detalles de la Tarea';
+
+  @override
+  String get taskStatus => 'Estado';
+
+  @override
+  String get createdAt => 'Creada';
+
+  @override
+  String get updatedAt => 'Actualizada';
 }
