@@ -8,6 +8,8 @@ import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart'
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
+import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 
@@ -21,16 +23,20 @@ class ApiClient {
   /// [authInterceptor] - Auth interceptor for token management and refresh
   /// [loggingService] - Optional logging service for API logging (if not
   /// provided, uses legacy LoggingInterceptor)
+  /// [performanceService] - Optional performance service for automatic HTTP
+  /// request tracking
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
     required AuthInterceptor authInterceptor,
     LoggingService? loggingService,
+    PerformanceService? performanceService,
   }) : _dio = _createDio(
           storageService,
           secureStorageService,
           authInterceptor,
           loggingService,
+          performanceService,
         );
 
   static Dio _createDio(
@@ -38,6 +44,7 @@ class ApiClient {
     SecureStorageService secureStorageService,
     AuthInterceptor authInterceptor,
     LoggingService? loggingService,
+    PerformanceService? performanceService,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -53,6 +60,7 @@ class ApiClient {
 
     // Add interceptors - Order matters!
     // ErrorInterceptor must be first to catch all errors
+    // PerformanceInterceptor should be early to track all requests
     // CacheInterceptor should be early to intercept requests before network
     // AuthInterceptor handles token injection
     // ApiLoggingInterceptor should be last to log final request/response
@@ -60,6 +68,8 @@ class ApiClient {
     // provided)
     dio.interceptors.addAll([
       ErrorInterceptor(),
+      if (performanceService != null)
+        PerformanceInterceptor(performanceService: performanceService),
       CacheInterceptor(
         storageService: storageService,
       ),

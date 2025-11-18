@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/performance/performance_providers.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
@@ -132,11 +133,13 @@ final Provider<ApiClient> apiClientProvider = Provider<ApiClient>((ref) {
   // Use ref.read to break circular dependency
   final authInterceptor = ref.read<AuthInterceptor>(authInterceptorProvider);
   final loggingService = ref.read(loggingServiceProvider);
+  final performanceService = ref.read(performanceServiceProvider);
   return ApiClient(
     storageService: storageService,
     secureStorageService: secureStorageService,
     authInterceptor: authInterceptor,
     loggingService: loggingService,
+    performanceService: performanceService,
   );
 });
 
