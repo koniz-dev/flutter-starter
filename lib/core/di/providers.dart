@@ -4,6 +4,7 @@ import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/performance/performance_providers.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+import 'package:flutter_starter/core/storage/storage_migration_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -52,11 +53,24 @@ final iStorageServiceProvider = Provider<IStorageService>((ref) {
 
 /// Startup initialization provider
 ///
-/// This provider initializes storage services before the app starts.
-/// It should be awaited in the main function to ensure storage is ready.
+/// This provider initializes storage services and runs migrations before
+/// the app starts. It should be awaited in the main function to ensure
+/// storage is ready and migrated.
 final storageInitializationProvider = FutureProvider<void>((ref) async {
   final storageService = ref.read(storageServiceProvider);
+  final secureStorageService = ref.read(secureStorageServiceProvider);
+  final loggingService = ref.read(loggingServiceProvider);
+
+  // Initialize storage services
   await storageService.init();
+
+  // Run migrations
+  final migrationService = StorageMigrationService(
+    storageService: storageService,
+    secureStorageService: secureStorageService,
+    loggingService: loggingService,
+  );
+  await migrationService.migrateAll();
 });
 
 // ============================================================================
