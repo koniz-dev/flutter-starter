@@ -447,6 +447,7 @@ flutter build web --release
 - **[Getting Started](docs/guides/getting-started.md)** - Step-by-step setup guide
 - **[Understanding the Codebase](docs/guides/understanding-codebase.md)** - Architecture and patterns
 - **[Common Tasks](docs/guides/common-tasks.md)** - Frequently performed tasks
+- **[Routing Guide](docs/guides/routing.md)** - GoRouter navigation and deep linking
 - **[Adding Features](docs/api/examples/adding-features.md)** - How to add new features
 
 ### Migration Guides

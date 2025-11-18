@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    # branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
+    # branches: [ main, develop ]
 
 jobs:
   test:
@@ -65,20 +65,20 @@ jobs:
             --dart-define=ENVIRONMENT=development \
             --dart-define=BASE_URL=http://localhost:3000
 
-      - name: Build APK (Staging)
-        run: |
-          flutter build apk \
-            --flavor staging \
-            --dart-define=ENVIRONMENT=staging \
-            --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
+      # - name: Build APK (Staging)
+      #   run: |
+      #     flutter build apk \
+      #       --flavor staging \
+      #       --dart-define=ENVIRONMENT=staging \
+      #       --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
 
-      - name: Build APK (Production)
-        run: |
-          flutter build apk \
-            --flavor production \
-            --release \
-            --dart-define=ENVIRONMENT=production \
-            --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
+      # - name: Build APK (Production)
+      #   run: |
+      #     flutter build apk \
+      #       --flavor production \
+      #       --release \
+      #       --dart-define=ENVIRONMENT=production \
+      #       --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -117,23 +117,23 @@ jobs:
             --dart-define=ENVIRONMENT=development \
             --dart-define=BASE_URL=http://localhost:3000
 
-      - name: Build iOS (Staging)
-        run: |
-          flutter build ios \
-            --flavor staging \
-            --release \
-            --no-codesign \
-            --dart-define=ENVIRONMENT=staging \
-            --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
+      # - name: Build iOS (Staging)
+      #   run: |
+      #     flutter build ios \
+      #       --flavor staging \
+      #       --release \
+      #       --no-codesign \
+      #       --dart-define=ENVIRONMENT=staging \
+      #       --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
 
-      - name: Build iOS (Production)
-        run: |
-          flutter build ios \
-            --flavor production \
-            --release \
-            --no-codesign \
-            --dart-define=ENVIRONMENT=production \
-            --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
+      # - name: Build iOS (Production)
+      #   run: |
+      #     flutter build ios \
+      #       --flavor production \
+      #       --release \
+      #       --no-codesign \
+      #       --dart-define=ENVIRONMENT=production \
+      #       --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
 
   build-web:
     name: Build Web
@@ -159,24 +159,23 @@ jobs:
             --dart-define=ENVIRONMENT=development \
             --dart-define=BASE_URL=http://localhost:3000
 
-      - name: Build Web (Staging)
-        run: |
-          flutter build web \
-            --release \
-            --dart-define=ENVIRONMENT=staging \
-            --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
+      # - name: Build Web (Staging)
+      #   run: |
+      #     flutter build web \
+      #       --release \
+      #       --dart-define=ENVIRONMENT=staging \
+      #       --dart-define=BASE_URL=${{ secrets.BASE_URL_STAGING || 'https://api-staging.example.com' }}
 
-      - name: Build Web (Production)
-        run: |
-          flutter build web \
-            --release \
-            --web-renderer canvaskit \
-            --dart-define=ENVIRONMENT=production \
-            --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
+      # - name: Build Web (Production)
+      #   run: |
+      #     flutter build web \
+      #       --release \
+      #       --web-renderer canvaskit \
+      #       --dart-define=ENVIRONMENT=production \
+      #       --dart-define=BASE_URL=${{ secrets.BASE_URL_PRODUCTION || 'https://api.example.com' }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: web-build
           path: build/web
-

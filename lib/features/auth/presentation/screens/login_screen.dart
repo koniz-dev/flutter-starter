@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
-import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Login screen for user authentication
@@ -114,13 +114,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               TextButton(
                 onPressed: authState.isLoading
                     ? null
-                    : () async {
-                        await Navigator.of(context).push<void>(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const RegisterScreen(),
-                          ),
-                        );
-                      },
+                    : () => context.goToRegister(),
                 child: Text(l10n.dontHaveAccount),
               ),
             ],

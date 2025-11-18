@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
@@ -133,9 +134,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               TextButton(
                 onPressed: authState.isLoading
                     ? null
-                    : () {
-                        Navigator.of(context).pop();
-                      },
+                    : () => context.popRoute<void>(),
                 child: Text(l10n.alreadyHaveAccount),
               ),
             ],

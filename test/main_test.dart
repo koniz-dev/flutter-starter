@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/main.dart';
+import 'package:flutter_starter/shared/screens/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

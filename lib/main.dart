@@ -6,11 +6,10 @@ import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
-import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
-import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized first (required for all Flutter APIs)
@@ -64,114 +63,40 @@ Future<void> _initializeImageCache() async {
 }
 
 /// Root application widget
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   /// Creates a [MyApp] widget
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, _) {
-        final locale = ref.watch<Locale>(localeStateProvider);
-        final textDirection = ref.watch<TextDirection>(textDirectionProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch<Locale>(localeStateProvider);
+    final textDirection = ref.watch<TextDirection>(textDirectionProvider);
+    final router = ref.watch(goRouterProvider);
 
-        return MaterialApp(
-          title: 'Flutter Starter',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          // Localization configuration
-          locale: locale,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: LocalizationService.supportedLocales,
-          // RTL support
-          builder: (context, child) {
-            return Directionality(
-              textDirection: textDirection,
-              child: RepaintBoundary(
-                child: child ?? const SizedBox.shrink(),
-              ),
-            );
-          },
-          home: const HomeScreen(),
+    return MaterialApp.router(
+      title: 'Flutter Starter',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      // Router configuration
+      routerConfig: router,
+      // Localization configuration
+      locale: locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: LocalizationService.supportedLocales,
+      // RTL support
+      builder: (context, child) {
+        return Directionality(
+          textDirection: textDirection,
+          child: RepaintBoundary(
+            child: child ?? const SizedBox.shrink(),
+          ),
         );
       },
-    );
-  }
-}
-
-/// Home screen widget
-class HomeScreen extends ConsumerWidget {
-  /// Creates a [HomeScreen] widget
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.appTitle),
-        actions: [
-          // Language switcher
-          const LanguageSwitcher(),
-          // Show debug menu button if debug features are enabled
-          if (AppConfig.enableDebugFeatures)
-            Semantics(
-              label: l10n.featureFlagsDebug,
-              hint: 'Opens feature flags debug screen',
-              button: true,
-              child: IconButton(
-                icon: const Icon(Icons.bug_report),
-                onPressed: () async {
-                  await Navigator.push<void>(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (_) => const FeatureFlagsDebugScreen(),
-                    ),
-                  );
-                },
-                tooltip: l10n.featureFlagsDebug,
-              ),
-            ),
-        ],
-      ),
-      body: RepaintBoundary(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Semantics(
-                header: true,
-                child: Text(
-                  l10n.welcome,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Semantics(
-                header: true,
-                child: Text(
-                  l10n.featureFlagsReady,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.checkExamples,
-                style: const TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

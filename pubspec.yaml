@@ -41,6 +41,9 @@ dependencies:
   # Code Generation - Runtime annotations for Freezed immutable classes
   freezed_annotation: ^3.1.0
 
+  # Routing - Declarative routing for Flutter with deep linking support
+  go_router: ^17.0.0
+
   # Utilities - Internationalization and localization support
   # Used in date_formatter.dart for date formatting
   intl: ^0.20.2
@@ -55,7 +58,6 @@ dependencies:
   # REMOVED UNUSED DEPENDENCIES:
   # cached_network_image: ^3.4.1 - Not used, can add back when needed for image loading
   # flutter_screenutil: ^5.9.3 - Not used, can add back when needed for responsive design
-  # go_router: ^17.0.0 - Not used, can add back when implementing routing
   # hive: ^2.2.3 - Not used, can add back when needed for local database
   # hive_flutter: ^1.1.0 - Not used, can add back when needed for local database
   # logger: ^2.6.2 - Not used, can add back when implementing logging

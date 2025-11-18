@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 /// operations including navigation, theming, and UI feedback.
 ///
 /// **Navigation Approach:**
-/// Currently uses Flutter's built-in `Navigator` with `MaterialPageRoute`.
-/// This is a simple and effective approach for most apps. If you need
-/// more advanced routing features (deep linking, type-safe routes, etc.),
-/// consider implementing `go_router` and updating these methods accordingly.
+/// This extension provides basic navigation methods. For advanced routing
+/// features (deep linking, type-safe routes, etc.), use the navigation
+/// extensions from `core/routing/navigation_extensions.dart` which use GoRouter.
 ///
 /// **Usage:**
 /// ```dart

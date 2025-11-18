@@ -9,8 +9,9 @@ New to the project? Start here:
 1. **[Getting Started](getting-started.md)** - Prerequisites, setup, and running the app
 2. **[Understanding the Codebase](understanding-codebase.md)** - Architecture and code organization
 3. **[Common Tasks](common-tasks.md)** - How to add features, screens, and APIs
-4. **[Development Workflow](development-workflow.md)** - Git workflow, commits, and PRs
-5. **[Troubleshooting](troubleshooting.md)** - Common issues and solutions
+4. **[Routing Guide](routing.md)** - GoRouter navigation, deep linking, and auth-based routing
+5. **[Development Workflow](development-workflow.md)** - Git workflow, commits, and PRs
+6. **[Troubleshooting](troubleshooting.md)** - Common issues and solutions
 
 ## Security
 
@@ -67,6 +68,7 @@ For migrating from other architectures or upgrading this starter:
 - Adding API endpoints
 - Adding new screens
 - State management patterns
+- Navigation and routing
 
 ### Development Workflow
 - Git workflow

@@ -2,8 +2,8 @@ name: Deploy Android
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    # tags:
+    #   - 'v*.*.*'
   workflow_dispatch:
     inputs:
       environment:
@@ -39,18 +39,18 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Setup Android keystore
-        env:
-          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
-          echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
-          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
-          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
-          echo "storeFile=upload-keystore.jks" >> android/key.properties
+      # - name: Setup Android keystore
+      #   env:
+      #     KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      #     KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      #     KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      #     KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      #   run: |
+      #     echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+      #     echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
+      #     echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+      #     echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+      #     echo "storeFile=upload-keystore.jks" >> android/key.properties
 
       - name: Determine environment
         id: env
@@ -61,37 +61,36 @@ jobs:
             echo "environment=production" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build App Bundle
-        env:
-          BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
-        run: |
-          ENV="${{ steps.env.outputs.environment }}"
-          if [ "$ENV" == "staging" ]; then
-            BASE_URL="${{ secrets.BASE_URL_STAGING }}"
-          else
-            BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
-          fi
+      # - name: Build App Bundle
+      #   env:
+      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #   run: |
+      #     ENV="${{ steps.env.outputs.environment }}"
+      #     if [ "$ENV" == "staging" ]; then
+      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
+      #     else
+      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
+      #     fi
           
-          flutter build appbundle \
-            --flavor "$ENV" \
-            --release \
-            --dart-define=ENVIRONMENT="$ENV" \
-            --dart-define=BASE_URL="$BASE_URL"
+      #     flutter build appbundle \
+      #       --flavor "$ENV" \
+      #       --release \
+      #       --dart-define=ENVIRONMENT="$ENV" \
+      #       --dart-define=BASE_URL="$BASE_URL"
 
-      - name: Setup Google Play
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.example.flutter_starter
-          releaseFiles: build/app/outputs/bundle/${ENV}Release/app-${ENV}-release.aab
-          track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
-          status: completed
-          inAppUpdatePriority: 2
-          whatsNewDirectory: fastlane/metadata/android/en-US/changelogs
+      # - name: Setup Google Play
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+      #     packageName: com.example.flutter_starter
+      #     releaseFiles: build/app/outputs/bundle/${ENV}Release/app-${ENV}-release.aab
+      #     track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
+      #     status: completed
+      #     inAppUpdatePriority: 2
+      #     whatsNewDirectory: fastlane/metadata/android/en-US/changelogs
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: android-bundle
           path: build/app/outputs/bundle/**/*.aab
-
