@@ -1,50 +1,103 @@
 name: flutter_starter
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+description: A production-ready Flutter starter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.0-290.4.beta
+  sdk: '>=3.0.0 <4.0.0'
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
+  # UI Components - iOS style icons
+  cupertino_icons: ^1.0.8
+
+  # Network Layer - HTTP client with interceptors support
+  dio: ^5.9.0
+
+  # Utilities - Value equality comparison for objects
+  equatable: ^2.0.7
+
+  # Firebase - Remote Config for feature flags
+  firebase_core: ^4.2.1
+  firebase_performance: ^0.11.1+2
+  firebase_remote_config: ^6.1.1
+
+  # Flutter SDK - Core Flutter framework
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+  # Configuration - Environment variable loader from .env files
+  flutter_dotenv: ^6.0.0
+
+  # Localization - Flutter localization support
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management - Riverpod reactive state management framework
+  flutter_riverpod: ^3.0.3
+
+  # Storage - Secure key-value storage for sensitive data (tokens, passwords)
+  flutter_secure_storage: ^9.2.4
+
+  # Code Generation - Runtime annotations for Freezed immutable classes
+  freezed_annotation: ^3.1.0
+
+  # Routing - Declarative routing for Flutter with deep linking support
+  go_router: ^17.0.0
+
+  # Utilities - Internationalization and localization support
+  # Used in date_formatter.dart for date formatting
+  intl: ^0.20.2
+
+  # Code Generation - Runtime annotations for JSON serialization
+  # Used for @JsonSerializable annotations (Group 7 implementation)
+  json_annotation: ^4.9.0
+
+  # Logging - Comprehensive logging solution with multiple outputs
+  logger: ^2.6.2
+
+  # File System - Path provider for file-based logging
+  path: ^1.9.1
+  path_provider: ^2.1.5
+
+  # Storage - Simple key-value storage for non-sensitive data
+  shared_preferences: ^2.5.3
+
+  # REMOVED UNUSED DEPENDENCIES:
+  # cached_network_image: ^3.4.1 - Not used, can add back when needed for image loading
+  # flutter_screenutil: ^5.9.3 - Not used, can add back when needed for responsive design
+  # hive: ^2.2.3 - Not used, can add back when needed for local database
+  # hive_flutter: ^1.1.0 - Not used, can add back when needed for local database
+  # retrofit: ^4.9.0 - Not used, can add back when implementing type-safe HTTP client
+  # riverpod_annotation: ^3.0.3 - Not used (using manual providers), can add back when using code generation
+  # shimmer: ^3.0.0 - Not used, can add back when implementing loading placeholders
 
 dev_dependencies:
+  # Code Generation - Build system for generating code from annotations
+  build_runner: ^2.10.3
+
+  # Testing - Flutter testing framework and utilities
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^6.0.0
+  # Code Generation - Generates immutable classes, unions, and more
+  # Used for @freezed code generation (Group 7 implementation)
+  freezed: ^3.2.3
+
+  # Code Generation - Generates JSON serialization/deserialization code
+  # Used for @JsonSerializable code generation (Group 7 implementation)
+  json_serializable: ^6.11.1
+
+  # Testing - Mocking library for unit tests (no code generation required)
+  mocktail: ^1.0.4
+
+  # Linting - Comprehensive lint rules for Flutter/Dart (Very Good Ventures)
+  very_good_analysis: ^10.0.0
+
+  # REMOVED UNUSED DEV DEPENDENCIES:
+  # go_router_builder: ^4.1.1 - Not used (go_router removed), can add back when implementing routing
+  # retrofit_generator: ^10.1.4 - Not used (retrofit removed), can add back when implementing type-safe HTTP client
+  # riverpod_generator: ^3.0.3 - Not used (using manual providers), can add back when using code generation
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -57,10 +110,20 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Generate localization files from ARB files
+  generate: true
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
+  # Environment configuration files
+  # Note: Only .env.example is included (it's committed to git)
+  # Users should copy .env.example to .env for local development
+  # The .env file is optional - the app works with --dart-define flags too
+  assets:
+    - .env.example
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

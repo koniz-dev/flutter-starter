@@ -1,0 +1,116 @@
+name: Deploy Android
+
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so triggers are commented out by default.
+# Uncomment and configure according to your deployment strategy:
+#
+# Option 1: Deploy on version tags
+#   push:
+#     tags:
+#       - 'v*.*.*'  # Deploy when version tag is pushed (e.g., v1.0.0)
+#
+# Option 2: Deploy on branch push
+#   push:
+#     branches: [ main ]  # Deploy when pushing to main branch
+#
+# Option 3: Manual trigger only (workflow_dispatch)
+#   - Keep push triggers commented
+#   - Use GitHub Actions UI to trigger manually
+# ========================================================================
+on:
+  # push:
+  #   tags:
+  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+  #   branches: [ main ]  # Uncomment to deploy on branch push
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    name: Deploy to Play Store
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      # - name: Setup Android keystore
+      #   env:
+      #     KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      #     KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      #     KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      #     KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      #   run: |
+      #     echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+      #     echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
+      #     echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+      #     echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+      #     echo "storeFile=upload-keystore.jks" >> android/key.properties
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+          else
+            echo "environment=production" >> $GITHUB_OUTPUT
+          fi
+
+      # - name: Build App Bundle
+      #   env:
+      #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #   run: |
+      #     ENV="${{ steps.env.outputs.environment }}"
+      #     if [ "$ENV" == "staging" ]; then
+      #       BASE_URL="${{ secrets.BASE_URL_STAGING }}"
+      #     else
+      #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
+      #     fi
+          
+      #     flutter build appbundle \
+      #       --flavor "$ENV" \
+      #       --release \
+      #       --dart-define=ENVIRONMENT="$ENV" \
+      #       --dart-define=BASE_URL="$BASE_URL"
+
+      # - name: Setup Google Play
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+      #     packageName: com.example.flutter_starter
+      #     releaseFiles: build/app/outputs/bundle/${ENV}Release/app-${ENV}-release.aab
+      #     track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
+      #     status: completed
+      #     inAppUpdatePriority: 2
+      #     whatsNewDirectory: fastlane/metadata/android/en-US/changelogs
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-bundle
+          path: build/app/outputs/bundle/**/*.aab

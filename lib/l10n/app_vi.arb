@@ -1,0 +1,297 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Flutter Starter",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "welcome": "Chào mừng đến với Flutter Starter với Clean Architecture!",
+  "@welcome": {
+    "description": "Welcome message on home screen"
+  },
+  "featureFlagsReady": "Hệ thống Feature Flags đã sẵn sàng!",
+  "@featureFlagsReady": {
+    "description": "Message indicating feature flags are ready"
+  },
+  "checkExamples": "Xem các ví dụ trong feature_flags_example_screen.dart",
+  "@checkExamples": {
+    "description": "Hint to check examples"
+  },
+  "login": "Đăng nhập",
+  "@login": {
+    "description": "Login button and screen title"
+  },
+  "register": "Đăng ký",
+  "@register": {
+    "description": "Register button and screen title"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Mật khẩu",
+  "@password": {
+    "description": "Password field label"
+  },
+  "name": "Tên",
+  "@name": {
+    "description": "Name field label"
+  },
+  "emailRequired": "Vui lòng nhập email của bạn",
+  "@emailRequired": {
+    "description": "Email validation error message"
+  },
+  "emailInvalid": "Vui lòng nhập địa chỉ email hợp lệ",
+  "@emailInvalid": {
+    "description": "Invalid email validation error"
+  },
+  "passwordRequired": "Vui lòng nhập mật khẩu",
+  "@passwordRequired": {
+    "description": "Password validation error message"
+  },
+  "passwordMinLength": "Mật khẩu phải có ít nhất {minLength} ký tự",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation error",
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "nameRequired": "Vui lòng nhập tên của bạn",
+  "@nameRequired": {
+    "description": "Name validation error message"
+  },
+  "nameMinLength": "Tên phải có ít nhất {minLength} ký tự",
+  "@nameMinLength": {
+    "description": "Name minimum length validation error",
+    "placeholders": {
+      "minLength": {
+        "type": "int"
+      }
+    }
+  },
+  "dontHaveAccount": "Chưa có tài khoản? Đăng ký",
+  "@dontHaveAccount": {
+    "description": "Link to registration screen"
+  },
+  "alreadyHaveAccount": "Đã có tài khoản? Đăng nhập",
+  "@alreadyHaveAccount": {
+    "description": "Link to login screen"
+  },
+  "retry": "Thử lại",
+  "@retry": {
+    "description": "Retry button label"
+  },
+  "error": "Lỗi",
+  "@error": {
+    "description": "Error title"
+  },
+  "loading": "Đang tải...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "language": "Ngôn ngữ",
+  "@language": {
+    "description": "Language selection label"
+  },
+  "selectLanguage": "Chọn ngôn ngữ",
+  "@selectLanguage": {
+    "description": "Language selection dialog title"
+  },
+  "english": "Tiếng Anh",
+  "@english": {
+    "description": "English language name"
+  },
+  "spanish": "Tiếng Tây Ban Nha",
+  "@spanish": {
+    "description": "Spanish language name"
+  },
+  "arabic": "Tiếng Ả Rập",
+  "@arabic": {
+    "description": "Arabic language name"
+  },
+  "vietnamese": "Tiếng Việt",
+  "@vietnamese": {
+    "description": "Vietnamese language name"
+  },
+  "featureFlagsDebug": "Gỡ lỗi Feature Flags",
+  "@featureFlagsDebug": {
+    "description": "Feature flags debug tooltip"
+  },
+  "unexpectedError": "Đã xảy ra lỗi không mong muốn",
+  "@unexpectedError": {
+    "description": "Generic error message"
+  },
+  "badRequest": "Yêu cầu không hợp lệ. Vui lòng kiểm tra thông tin nhập vào.",
+  "@badRequest": {
+    "description": "HTTP 400 error message"
+  },
+  "unauthorized": "Không được phép. Vui lòng đăng nhập lại.",
+  "@unauthorized": {
+    "description": "HTTP 401 error message"
+  },
+  "forbidden": "Bị cấm. Bạn không có quyền truy cập.",
+  "@forbidden": {
+    "description": "HTTP 403 error message"
+  },
+  "notFound": "Không tìm thấy tài nguyên.",
+  "@notFound": {
+    "description": "HTTP 404 error message"
+  },
+  "conflict": "Xung đột. Tài nguyên đã tồn tại.",
+  "@conflict": {
+    "description": "HTTP 409 error message"
+  },
+  "validationError": "Lỗi xác thực. Vui lòng kiểm tra thông tin nhập vào.",
+  "@validationError": {
+    "description": "HTTP 422 error message"
+  },
+  "tooManyRequests": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+  "@tooManyRequests": {
+    "description": "HTTP 429 error message"
+  },
+  "internalServerError": "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.",
+  "@internalServerError": {
+    "description": "HTTP 500 error message"
+  },
+  "badGateway": "Cổng kết nối không hợp lệ. Vui lòng thử lại sau.",
+  "@badGateway": {
+    "description": "HTTP 502 error message"
+  },
+  "serviceUnavailable": "Dịch vụ không khả dụng. Vui lòng thử lại sau.",
+  "@serviceUnavailable": {
+    "description": "HTTP 503 error message"
+  },
+  "gatewayTimeout": "Hết thời gian chờ cổng kết nối. Vui lòng thử lại sau.",
+  "@gatewayTimeout": {
+    "description": "HTTP 504 error message"
+  },
+  "clientError": "Đã xảy ra lỗi phía máy khách.",
+  "@clientError": {
+    "description": "Generic 4xx error message"
+  },
+  "serverError": "Đã xảy ra lỗi máy chủ. Vui lòng thử lại sau.",
+  "@serverError": {
+    "description": "Generic 5xx error message"
+  },
+  "itemCount": "{count, plural, =0{Không có mục nào} =1{1 mục} other{{count} mục}}",
+  "@itemCount": {
+    "description": "Pluralized item count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count, plural, =0{Vừa xong} =1{1 phút trước} other{{count} phút trước}}",
+  "@minutesAgo": {
+    "description": "Pluralized minutes ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tasks": "Nhiệm vụ",
+  "@tasks": {
+    "description": "Tasks screen title"
+  },
+  "addTask": "Thêm nhiệm vụ",
+  "@addTask": {
+    "description": "Add task button and dialog title"
+  },
+  "editTask": "Chỉnh sửa nhiệm vụ",
+  "@editTask": {
+    "description": "Edit task screen title"
+  },
+  "taskTitle": "Tiêu đề",
+  "@taskTitle": {
+    "description": "Task title field label"
+  },
+  "taskDescription": "Mô tả",
+  "@taskDescription": {
+    "description": "Task description field label"
+  },
+  "taskTitleRequired": "Vui lòng nhập tiêu đề nhiệm vụ",
+  "@taskTitleRequired": {
+    "description": "Task title validation error"
+  },
+  "noTasks": "Chưa có nhiệm vụ nào",
+  "@noTasks": {
+    "description": "Empty tasks list message"
+  },
+  "addYourFirstTask": "Nhấn nút + để thêm nhiệm vụ đầu tiên của bạn",
+  "@addYourFirstTask": {
+    "description": "Hint to add first task"
+  },
+  "incompleteTasks": "Chưa hoàn thành",
+  "@incompleteTasks": {
+    "description": "Incomplete tasks section header"
+  },
+  "completedTasks": "Đã hoàn thành",
+  "@completedTasks": {
+    "description": "Completed tasks section header"
+  },
+  "completed": "Đã hoàn thành",
+  "@completed": {
+    "description": "Task status: completed"
+  },
+  "incomplete": "Chưa hoàn thành",
+  "@incomplete": {
+    "description": "Task status: incomplete"
+  },
+  "edit": "Chỉnh sửa",
+  "@edit": {
+    "description": "Edit button label"
+  },
+  "delete": "Xóa",
+  "@delete": {
+    "description": "Delete button label"
+  },
+  "deleteTask": "Xóa nhiệm vụ",
+  "@deleteTask": {
+    "description": "Delete task dialog title"
+  },
+  "deleteTaskConfirmation": "Bạn có chắc chắn muốn xóa \"{taskTitle}\"?",
+  "@deleteTaskConfirmation": {
+    "description": "Delete task confirmation message",
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "save": "Lưu",
+  "@save": {
+    "description": "Save button label"
+  },
+  "cancel": "Hủy",
+  "@cancel": {
+    "description": "Cancel button label"
+  },
+  "add": "Thêm",
+  "@add": {
+    "description": "Add button label"
+  },
+  "refresh": "Làm mới",
+  "@refresh": {
+    "description": "Refresh button label"
+  },
+  "taskDetails": "Chi tiết nhiệm vụ",
+  "@taskDetails": {
+    "description": "Task details section title"
+  },
+  "taskStatus": "Trạng thái",
+  "@taskStatus": {
+    "description": "Task status label"
+  },
+  "createdAt": "Đã tạo",
+  "@createdAt": {
+    "description": "Created at label"
+  },
+  "updatedAt": "Đã cập nhật",
+  "@updatedAt": {
+    "description": "Updated at label"
+  }
+}
+

@@ -1,0 +1,141 @@
+name: Tests
+
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so branches are commented out by default.
+# Uncomment and configure the branches according to your project needs:
+#
+# For example:
+#   push:
+#     branches: [ main, develop ]
+#   pull_request:
+#     branches: [ main, develop ]
+#
+# Or for a single branch:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+# ========================================================================
+on:
+  # push:
+  #   branches: [ main, develop ]  # Uncomment and configure for your project
+  # pull_request:
+  #   branches: [ main, develop ]  # Uncomment and configure for your project
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+      
+      - name: Install dependencies
+        run: flutter pub get
+      
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+      
+      - name: Analyze code
+        run: flutter analyze
+      
+      - name: Run tests
+        run: flutter test --coverage
+      
+      - name: Generate coverage report
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov
+          genhtml coverage/lcov.info -o coverage/html --no-function-coverage
+      
+      - name: Calculate coverage
+        id: coverage
+        run: |
+          # Extract coverage percentage
+          COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1 | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//' || echo "0")
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "Coverage: ${COVERAGE}%"
+      
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=${{ steps.coverage.outputs.coverage }}
+          MIN_COVERAGE=80
+          if (( $(echo "$COVERAGE < $MIN_COVERAGE" | bc -l) )); then
+            echo "❌ Coverage ${COVERAGE}% is below minimum threshold of ${MIN_COVERAGE}%"
+            exit 1
+          else
+            echo "✅ Coverage ${COVERAGE}% meets minimum threshold of ${MIN_COVERAGE}%"
+          fi
+      
+      # ========================================================================
+      # Codecov Upload Configuration
+      # ========================================================================
+      # Choose ONE option based on your repository visibility:
+      #
+      # OPTION 1: PRIVATE REPOSITORY (requires CODECOV_TOKEN)
+      # - Uncomment the block below
+      # - Add CODECOV_TOKEN to GitHub Secrets (Settings > Secrets > Actions)
+      # - Get token from: https://codecov.io
+      #
+      # OPTION 2: PUBLIC REPOSITORY (no token needed)
+      # - Comment out the block below
+      # - Uncomment the public repository block
+      # ========================================================================
+      
+      # PRIVATE REPOSITORY: Upload coverage to Codecov (requires token)
+      # Comment out the block below if your repository is PUBLIC
+      # - name: Upload coverage to Codecov (Private)
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     file: ./coverage/lcov.info
+      #     flags: unittests
+      #     name: codecov-umbrella
+      #     fail_ci_if_error: false
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      
+      # PUBLIC REPOSITORY: Upload coverage to Codecov (no token needed)
+      - name: Upload coverage to Codecov (Public)
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+          # No token needed for public repositories
+      
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/html
+          retention-days: 30
+      
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          message: |
+            ## 📊 Test Coverage Report
+            
+            **Coverage:** ${{ steps.coverage.outputs.coverage }}%
+            **Status:** ${{ steps.coverage.outputs.coverage >= 80 && '✅ Passing' || '❌ Failing' }}
+            
+            Coverage report is available in the [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            
+            ### Coverage by Layer
+            - Domain Layer: Target 100%
+            - Data Layer: Target 90%+
+            - Presentation Layer: Target 80%+
+            - Core Layer: Target 90%+

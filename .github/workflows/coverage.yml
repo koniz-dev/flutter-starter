@@ -1,0 +1,164 @@
+name: Coverage Analysis
+
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so branches are commented out by default.
+# Uncomment and configure the branches according to your project needs:
+#
+# For example:
+#   push:
+#     branches: [ main, develop ]
+#   pull_request:
+#     branches: [ main, develop ]
+#
+# Or for a single branch:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+#
+# workflow_dispatch allows manual triggering from GitHub Actions UI
+# ========================================================================
+on:
+  # push:
+  #   branches: [ main ]  # Uncomment and configure for your project
+  # pull_request:
+  #   branches: [ main ]  # Uncomment and configure for your project
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  coverage-analysis:
+    name: Coverage Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for coverage comparison
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+      
+      - name: Install dependencies
+        run: flutter pub get
+      
+      - name: Run tests with coverage
+        run: flutter test --coverage
+      
+      - name: Install lcov
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov bc
+      
+      - name: Generate coverage report
+        run: |
+          genhtml coverage/lcov.info -o coverage/html --no-function-coverage
+      
+      - name: Calculate coverage metrics
+        id: metrics
+        run: |
+          # Overall coverage
+          OVERALL=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1 | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//' || echo "0")
+          
+          # Coverage by layer (simplified)
+          DOMAIN_TOTAL=$(grep "^SF:.*lib/features/.*/domain" coverage/lcov.info | wc -l || echo "0")
+          DATA_TOTAL=$(grep "^SF:.*lib/features/.*/data" coverage/lcov.info | wc -l || echo "0")
+          PRESENTATION_TOTAL=$(grep "^SF:.*lib/features/.*/presentation" coverage/lcov.info | wc -l || echo "0")
+          CORE_TOTAL=$(grep "^SF:.*lib/core" coverage/lcov.info | wc -l || echo "0")
+          
+          echo "overall=$OVERALL" >> $GITHUB_OUTPUT
+          echo "domain_files=$DOMAIN_TOTAL" >> $GITHUB_OUTPUT
+          echo "data_files=$DATA_TOTAL" >> $GITHUB_OUTPUT
+          echo "presentation_files=$PRESENTATION_TOTAL" >> $GITHUB_OUTPUT
+          echo "core_files=$CORE_TOTAL" >> $GITHUB_OUTPUT
+          
+          echo "📊 Coverage Metrics:"
+          echo "  Overall: ${OVERALL}%"
+          echo "  Domain files: ${DOMAIN_TOTAL}"
+          echo "  Data files: ${DATA_TOTAL}"
+          echo "  Presentation files: ${PRESENTATION_TOTAL}"
+          echo "  Core files: ${CORE_TOTAL}"
+      
+      # ========================================================================
+      # Codecov Upload Configuration
+      # ========================================================================
+      # Choose ONE option based on your repository visibility:
+      #
+      # OPTION 1: PRIVATE REPOSITORY (requires CODECOV_TOKEN)
+      # - Uncomment the block below
+      # - Add CODECOV_TOKEN to GitHub Secrets (Settings > Secrets > Actions)
+      # - Get token from: https://codecov.io
+      #
+      # OPTION 2: PUBLIC REPOSITORY (no token needed)
+      # - Comment out the block below
+      # - Uncomment the public repository block
+      # ========================================================================
+      
+      # PRIVATE REPOSITORY: Upload to Codecov (requires token)
+      # Comment out the block below if your repository is PUBLIC
+      # - name: Upload to Codecov (Private)
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     file: ./coverage/lcov.info
+      #     flags: unittests
+      #     name: codecov-umbrella
+      #     fail_ci_if_error: false
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      
+      # PUBLIC REPOSITORY: Upload to Codecov (no token needed)
+      - name: Upload to Codecov (Public)
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+          # No token needed for public repositories
+      
+      - name: Generate coverage badge
+        run: |
+          COVERAGE=${{ steps.metrics.outputs.overall }}
+          COLOR="red"
+          if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
+            COLOR="brightgreen"
+          elif (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+            COLOR="green"
+          elif (( $(echo "$COVERAGE >= 70" | bc -l) )); then
+            COLOR="yellowgreen"
+          elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
+            COLOR="yellow"
+          fi
+          
+          echo "color=$COLOR" >> $GITHUB_OUTPUT
+      
+      - name: Comment coverage summary
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          message: |
+            ## 📊 Coverage Analysis
+            
+            ### Overall Coverage
+            **${{ steps.metrics.outputs.overall }}%** ${{ steps.metrics.outputs.overall >= 80 && '✅' || '⚠️' }}
+            
+            ### Coverage by Layer
+            | Layer | Files | Target |
+            |-------|-------|--------|
+            | Domain | ${{ steps.metrics.outputs.domain_files }} | 100% |
+            | Data | ${{ steps.metrics.outputs.data_files }} | 90%+ |
+            | Presentation | ${{ steps.metrics.outputs.presentation_files }} | 80%+ |
+            | Core | ${{ steps.metrics.outputs.core_files }} | 90%+ |
+            
+            📈 View detailed report: [Codecov](https://codecov.io/gh/${{ github.repository }})
+            
+            > **Note:** Codecov link only works if repository is public or Codecov token is configured.
+            
+            📥 Download HTML report from workflow artifacts.
+
