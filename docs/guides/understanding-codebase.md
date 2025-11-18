@@ -37,7 +37,9 @@ This project follows **Clean Architecture** principles with clear separation of 
 - **Maintainability**: Clear boundaries make changes easier
 
 For detailed architecture documentation, see:
-- [Architecture Overview](../architecture/OVERVIEW.md) (if available)
+- [Architecture Documentation](../architecture/README.md) - Complete architecture documentation
+- [Architecture Overview](../architecture/overview.md) - Why Clean Architecture, benefits, trade-offs
+- [Design Decisions](../architecture/design-decisions.md) - Technical decisions and rationale
 - [API Documentation](../api/README.md)
 
 ## Code Organization

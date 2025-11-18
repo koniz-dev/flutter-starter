@@ -99,6 +99,14 @@ For migrating from other architectures or upgrading this starter:
 - Handling breaking changes
 - Customizing the starter
 
+## Architecture & Design
+
+For understanding architectural decisions and design rationale:
+
+1. **[Architecture Documentation](../architecture/README.md)** - Complete architecture documentation index
+2. **[Architecture Overview](../architecture/overview.md)** - Why Clean Architecture, benefits, trade-offs, when to use, and learning resources
+3. **[Design Decisions](../architecture/design-decisions.md)** - Detailed rationale for routing, state management, error handling, logging, storage, and HTTP client choices
+
 ## Related Documentation
 
 - **[API Documentation](../api/README.md)** - Complete API reference

@@ -148,8 +148,9 @@ Reusable components used across features.
 
 ## Related Documentation
 
-- [Architecture Overview](../architecture/OVERVIEW.md) - Architectural principles and patterns
-- [Project Structure](../architecture/STRUCTURE.md) - File organization
+- [Architecture Documentation](../architecture/README.md) - Complete architecture documentation
+- [Architecture Overview](../architecture/overview.md) - Architectural principles and patterns
+- [Design Decisions](../architecture/design-decisions.md) - Technical decisions and rationale
 - [README.md](../../README.md) - Project setup and configuration
 
 ## Contributing

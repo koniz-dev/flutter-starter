@@ -210,7 +210,7 @@ Before deploying, ensure:
 ## 🔗 Related Documentation
 
 - [Main README](../../README.md)
-- [Architecture Documentation](../architecture/OVERVIEW.md)
+- [Architecture Documentation](../architecture/README.md)
 - [Configuration System](../../README.md#configuration-system)
 
 ## 📝 Notes

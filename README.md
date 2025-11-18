@@ -439,8 +439,9 @@ flutter build web --release
 
 ### Architecture
 
-- **[Architecture Overview](docs/architecture/OVERVIEW.md)** - Principles, patterns, best practices
-- **[Project Structure](docs/architecture/STRUCTURE.md)** - File organization reference
+- **[Architecture Documentation](docs/architecture/README.md)** - Complete architecture documentation index
+- **[Architecture Overview](docs/architecture/overview.md)** - Why Clean Architecture, benefits, trade-offs, and learning resources
+- **[Design Decisions](docs/architecture/design-decisions.md)** - Detailed rationale for routing, state management, error handling, logging, storage, and HTTP client choices
 
 ### Guides
 
