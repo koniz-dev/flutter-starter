@@ -3,6 +3,8 @@ import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/tasks/data/models/task_model.dart';
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 
 /// Test fixtures for creating test data
 ///
@@ -359,4 +361,91 @@ DateTime createTestDateTime({Duration? offset}) {
 String createTestDateString({DateTime? date}) {
   final dateTime = date ?? DateTime.now();
   return dateTime.toIso8601String();
+}
+
+// ============================================================================
+// Task Fixtures
+// ============================================================================
+
+/// Creates a test Task entity
+///
+/// Default values:
+/// - id: 'test-task-id'
+/// - title: 'Test Task'
+/// - description: null
+/// - isCompleted: false
+/// - createdAt: current time
+/// - updatedAt: current time
+Task createTask({
+  String? id,
+  String title = 'Test Task',
+  String? description,
+  bool isCompleted = false,
+  DateTime? createdAt,
+  DateTime? updatedAt,
+}) {
+  final now = DateTime.now();
+  return Task(
+    id: id ?? now.millisecondsSinceEpoch.toString(),
+    title: title,
+    description: description,
+    isCompleted: isCompleted,
+    createdAt: createdAt ?? now,
+    updatedAt: updatedAt ?? now,
+  );
+}
+
+/// Creates a test TaskModel
+///
+/// Default values match createTask() for consistency.
+TaskModel createTaskModel({
+  String? id,
+  String title = 'Test Task',
+  String? description,
+  bool isCompleted = false,
+  DateTime? createdAt,
+  DateTime? updatedAt,
+}) {
+  final now = DateTime.now();
+  return TaskModel(
+    id: id ?? now.millisecondsSinceEpoch.toString(),
+    title: title,
+    description: description,
+    isCompleted: isCompleted,
+    createdAt: createdAt ?? now,
+    updatedAt: updatedAt ?? now,
+  );
+}
+
+/// Creates a list of test tasks
+List<Task> createTaskList({int count = 3, bool includeCompleted = false}) {
+  return List.generate(
+    count,
+    (index) => createTask(
+      id: 'task-$index',
+      title: 'Task $index',
+      description: 'Description for task $index',
+      isCompleted: includeCompleted && index.isEven,
+    ),
+  );
+}
+
+/// Creates a test task JSON map
+Map<String, dynamic> createTaskJson({
+  String? id,
+  String title = 'Test Task',
+  String? description,
+  bool isCompleted = false,
+  DateTime? createdAt,
+  DateTime? updatedAt,
+}) {
+  final now = DateTime.now();
+  return {
+    'id': id ?? now.millisecondsSinceEpoch.toString(),
+    'title': title,
+    if (description != null) 'description': description,
+    'is_completed': isCompleted,
+    'created_at': (createdAt ?? now).toIso8601String(),
+    'updated_at': (updatedAt ?? now).toIso8601String(),
+  };
 }

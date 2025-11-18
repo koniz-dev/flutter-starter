@@ -10,6 +10,14 @@ import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart
 import 'package:flutter_starter/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
+import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
+import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/delete_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:mocktail/mocktail.dart';
 
 /// Mock classes for testing
@@ -49,6 +57,27 @@ class MockGetCurrentUserUseCase extends Mock implements GetCurrentUserUseCase {}
 
 class MockIsAuthenticatedUseCase extends Mock
     implements IsAuthenticatedUseCase {}
+
+// ============================================================================
+// Tasks Feature Mocks
+// ============================================================================
+
+class MockTasksRepository extends Mock implements TasksRepository {}
+
+class MockTasksLocalDataSource extends Mock implements TasksLocalDataSource {}
+
+class MockGetAllTasksUseCase extends Mock implements GetAllTasksUseCase {}
+
+class MockGetTaskByIdUseCase extends Mock implements GetTaskByIdUseCase {}
+
+class MockCreateTaskUseCase extends Mock implements CreateTaskUseCase {}
+
+class MockUpdateTaskUseCase extends Mock implements UpdateTaskUseCase {}
+
+class MockDeleteTaskUseCase extends Mock implements DeleteTaskUseCase {}
+
+class MockToggleTaskCompletionUseCase extends Mock
+    implements ToggleTaskCompletionUseCase {}
 
 // ============================================================================
 // Mock Factories
@@ -138,4 +167,61 @@ MockGetCurrentUserUseCase createMockGetCurrentUserUseCase() {
 /// tests.
 MockIsAuthenticatedUseCase createMockIsAuthenticatedUseCase() {
   return MockIsAuthenticatedUseCase();
+}
+
+/// Creates a configured mock TasksRepository
+///
+/// Returns a MockTasksRepository instance that can be configured in tests.
+MockTasksRepository createMockTasksRepository() {
+  return MockTasksRepository();
+}
+
+/// Creates a configured mock TasksLocalDataSource
+///
+/// Returns a MockTasksLocalDataSource instance that can be configured in tests.
+MockTasksLocalDataSource createMockTasksLocalDataSource() {
+  return MockTasksLocalDataSource();
+}
+
+/// Creates a configured mock GetAllTasksUseCase
+///
+/// Returns a MockGetAllTasksUseCase instance that can be configured in tests.
+MockGetAllTasksUseCase createMockGetAllTasksUseCase() {
+  return MockGetAllTasksUseCase();
+}
+
+/// Creates a configured mock GetTaskByIdUseCase
+///
+/// Returns a MockGetTaskByIdUseCase instance that can be configured in tests.
+MockGetTaskByIdUseCase createMockGetTaskByIdUseCase() {
+  return MockGetTaskByIdUseCase();
+}
+
+/// Creates a configured mock CreateTaskUseCase
+///
+/// Returns a MockCreateTaskUseCase instance that can be configured in tests.
+MockCreateTaskUseCase createMockCreateTaskUseCase() {
+  return MockCreateTaskUseCase();
+}
+
+/// Creates a configured mock UpdateTaskUseCase
+///
+/// Returns a MockUpdateTaskUseCase instance that can be configured in tests.
+MockUpdateTaskUseCase createMockUpdateTaskUseCase() {
+  return MockUpdateTaskUseCase();
+}
+
+/// Creates a configured mock DeleteTaskUseCase
+///
+/// Returns a MockDeleteTaskUseCase instance that can be configured in tests.
+MockDeleteTaskUseCase createMockDeleteTaskUseCase() {
+  return MockDeleteTaskUseCase();
+}
+
+/// Creates a configured mock ToggleTaskCompletionUseCase
+///
+/// Returns a MockToggleTaskCompletionUseCase instance that can be configured
+/// in tests.
+MockToggleTaskCompletionUseCase createMockToggleTaskCompletionUseCase() {
+  return MockToggleTaskCompletionUseCase();
 }
