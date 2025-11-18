@@ -20,10 +20,10 @@ name: Deploy Web
 #   - Use GitHub Actions UI to trigger manually
 # ========================================================================
 on:
-  push:
-    # branches: [ main ]  # Uncomment to deploy on branch push
-    # tags:
-    #   - 'v*.*.*'  # Uncomment to deploy on version tags
+  # push:
+  #   branches: [ main ]  # Uncomment to deploy on branch push
+  #   tags:
+  #     - 'v*.*.*'  # Uncomment to deploy on version tags
   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
     inputs:
       environment:

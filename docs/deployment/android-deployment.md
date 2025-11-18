@@ -244,7 +244,7 @@ bundletool install-apks --apks=app.apks
 
 ### Automated Upload (CI/CD)
 
-See [GitHub Actions Workflows](../deployment.md#github-actions-workflows) for automated upload using `fastlane` or `gradle-play-publisher`.
+See [CI/CD Pipeline](../deployment.md#cicd-pipeline) for automated upload using GitHub Actions workflows.
 
 ## Step 7: Testing Tracks
 

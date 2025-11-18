@@ -30,9 +30,13 @@ docs/deployment/
 GitHub Actions workflows are located in `.github/workflows/`:
 
 - **ci.yml**: Continuous integration (tests, builds)
+- **test.yml**: Dedicated test workflow with coverage
+- **coverage.yml**: Coverage analysis and reporting
 - **deploy-android.yml**: Android deployment to Play Store
 - **deploy-ios.yml**: iOS deployment to App Store
 - **deploy-web.yml**: Web deployment to hosting platforms
+
+For workflow configuration, see the [Deployment Guide](./deployment.md#cicd-pipeline) section.
 
 ## Helper Scripts
 

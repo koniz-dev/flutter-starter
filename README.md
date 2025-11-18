@@ -63,7 +63,7 @@ A production-ready Flutter starter project with **Clean Architecture**, enterpri
 
 ### 🚀 Deployment & CI/CD
 - ✅ **Multi-Platform** - Android, iOS, Web, Linux, macOS, Windows support
-- ✅ **CI/CD Ready** - GitHub Actions workflows included
+- ✅ **CI/CD Ready** - GitHub Actions workflows included (disabled by default, uncomment triggers to enable)
 - ✅ **Version Management** - Automated version bumping scripts
 - ✅ **Fastlane Integration** - iOS and Android deployment automation
 

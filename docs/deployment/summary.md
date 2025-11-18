@@ -69,7 +69,8 @@ Complete deployment documentation has been created for Flutter Starter. This doc
 Located in `.github/workflows/`:
 
 1. **ci.yml** - Continuous Integration:
-   - Runs tests on every push/PR
+   - **Disabled by default** (triggers commented out)
+   - Uncomment triggers to enable on push/PR
    - Builds for Android, iOS, and Web
    - Uploads build artifacts
    - Code coverage reporting

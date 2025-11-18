@@ -249,46 +249,65 @@ flutter build web --release --dart-define=ENVIRONMENT=production --dart-define=B
 
 ## CI/CD Pipeline
 
-### GitHub Actions Setup
-
 The project includes automated CI/CD workflows for:
 - **Continuous Integration**: Run tests on every push/PR
 - **Automated Builds**: Build artifacts for all platforms
 - **Automated Deployment**: Deploy to stores/hosting
 
-### Required Secrets
+### GitHub Actions Workflows
 
-Configure the following secrets in GitHub Settings → Secrets and variables → Actions:
+All workflows are located in `.github/workflows/` and are **disabled by default** (all triggers commented out) to prevent automatic execution in template repositories.
 
-#### Android
-- `ANDROID_KEYSTORE_BASE64`: Base64-encoded keystore file
-- `ANDROID_KEYSTORE_PASSWORD`: Keystore password
-- `ANDROID_KEY_ALIAS`: Key alias
-- `ANDROID_KEY_PASSWORD`: Key password
-- `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`: Service account JSON for Play Store upload
+**Available Workflows:**
+- `ci.yml` - Continuous Integration (format, analyze, test, build)
+- `test.yml` - Dedicated test workflow with coverage
+- `coverage.yml` - Coverage analysis and reporting
+- `deploy-android.yml` - Android deployment to Play Store
+- `deploy-ios.yml` - iOS deployment to App Store
+- `deploy-web.yml` - Web deployment to hosting platforms
 
-#### iOS
-- `APPLE_ID`: Apple Developer account email
-- `APPLE_APP_SPECIFIC_PASSWORD`: App-specific password
-- `APPLE_CERTIFICATE_BASE64`: Base64-encoded certificate (.p12)
-- `APPLE_CERTIFICATE_PASSWORD`: Certificate password
-- `APPLE_TEAM_ID`: Apple Developer Team ID
-- `APP_STORE_CONNECT_API_KEY_ID`: App Store Connect API Key ID
-- `APP_STORE_CONNECT_ISSUER_ID`: App Store Connect Issuer ID
-- `APP_STORE_CONNECT_API_KEY_BASE64`: Base64-encoded API key (.p8)
+**Configuration:**
 
-#### Web
-- `FIREBASE_PROJECT_ID`: Firebase project ID (if using Firebase Hosting)
-- `FIREBASE_SERVICE_ACCOUNT_KEY`: Firebase service account JSON
+1. **Enable workflows** - Uncomment trigger configuration in workflow files:
+   ```yaml
+   on:
+     # Uncomment the triggers you want to enable:
+     push:
+       branches: [ main, develop ]  # Uncomment and configure
+     pull_request:
+       branches: [ main, develop ]  # Uncomment and configure
+     # workflow_dispatch is enabled by default for manual triggers
+   ```
+   
+   **Note:** All `push` and `pull_request` triggers are commented out by default. Workflows will only run via `workflow_dispatch` (manual trigger) until you uncomment the triggers.
 
-#### General
-- `ENVIRONMENT`: Default environment (development/staging/production)
-- `BASE_URL_STAGING`: Staging API URL
-- `BASE_URL_PRODUCTION`: Production API URL
+2. **Configure secrets** - Add required secrets in GitHub Settings → Secrets and variables → Actions:
 
-### Workflow Files
+   **For Testing:**
+   - `CODECOV_TOKEN` (for private repos)
 
-See [GitHub Actions Workflows](#github-actions-workflows) section for complete workflow configurations.
+   **For Android Deployment:**
+   - `ANDROID_KEYSTORE_BASE64`
+   - `ANDROID_KEYSTORE_PASSWORD`
+   - `ANDROID_KEY_ALIAS`
+   - `ANDROID_KEY_PASSWORD`
+   - `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`
+
+   **For iOS Deployment:**
+   - `APPLE_TEAM_ID`
+   - `APP_STORE_CONNECT_API_KEY_ID`
+   - `APP_STORE_CONNECT_ISSUER_ID`
+   - `APP_STORE_CONNECT_API_KEY_BASE64`
+
+   **For Web Deployment:**
+   - `FIREBASE_PROJECT_ID`
+   - `FIREBASE_SERVICE_ACCOUNT_KEY`
+
+3. **Codecov Setup** (for private repos):
+   - Sign up at https://codecov.io
+   - Add repository and get token
+   - Add `CODECOV_TOKEN` to GitHub Secrets
+   - Workflows are pre-configured for private repos
 
 ---
 
@@ -531,14 +550,16 @@ See [web-deployment.md](./web-deployment.md) for detailed Web-specific deploymen
 - Ensure certificates haven't expired
 
 **CI/CD Failures**:
-- Verify all secrets are set in GitHub
+- Verify all secrets are set in GitHub (see Required Secrets section above)
 - Check workflow logs for specific errors
 - Ensure runner has required tools installed
+- **Workflows are disabled by default** - Uncomment `push` and `pull_request` triggers in workflow files to enable automatic runs
+- Verify GitHub Actions is enabled in repository settings
 
 ### Getting Help
 
 - Check [Troubleshooting Guide](../guides/troubleshooting.md)
-- Review workflow logs in GitHub Actions
+- Review workflow logs in GitHub Actions tab
 - Check platform-specific deployment guides
 
 ---
@@ -546,7 +567,7 @@ See [web-deployment.md](./web-deployment.md) for detailed Web-specific deploymen
 ## Next Steps
 
 1. Set up code signing for Android and iOS
-2. Configure GitHub Actions secrets
+2. Configure GitHub Actions secrets (see Required Secrets section above)
 3. Set up Firebase projects for each environment
 4. Test build process locally
 5. Create first release

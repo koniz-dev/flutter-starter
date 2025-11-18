@@ -20,10 +20,10 @@ name: Deploy Android
 #   - Use GitHub Actions UI to trigger manually
 # ========================================================================
 on:
-  push:
-    # tags:
-    #   - 'v*.*.*'  # Uncomment to deploy on version tags
-    # branches: [ main ]  # Uncomment to deploy on branch push
+  # push:
+  #   tags:
+  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+  #   branches: [ main ]  # Uncomment to deploy on branch push
   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
     inputs:
       environment:
