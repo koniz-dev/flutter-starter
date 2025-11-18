@@ -1,11 +1,30 @@
 name: Deploy Web
 
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so triggers are commented out by default.
+# Uncomment and configure according to your deployment strategy:
+#
+# Option 1: Deploy on version tags
+#   push:
+#     tags:
+#       - 'v*.*.*'  # Deploy when version tag is pushed (e.g., v1.0.0)
+#
+# Option 2: Deploy on branch push
+#   push:
+#     branches: [ main ]  # Deploy when pushing to main branch
+#
+# Option 3: Manual trigger only (workflow_dispatch)
+#   - Keep push triggers commented
+#   - Use GitHub Actions UI to trigger manually
+# ========================================================================
 on:
   push:
-    # branches: [ main ]
+    # branches: [ main ]  # Uncomment to deploy on branch push
     # tags:
-    #   - 'v*.*.*'
-  workflow_dispatch:
+    #   - 'v*.*.*'  # Uncomment to deploy on version tags
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
     inputs:
       environment:
         description: 'Environment to deploy'

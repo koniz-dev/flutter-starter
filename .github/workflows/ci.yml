@@ -1,10 +1,28 @@
 name: CI
 
+# ========================================================================
+# Workflow Triggers Configuration
+# ========================================================================
+# This is a starter template, so branches are commented out by default.
+# Uncomment and configure the branches according to your project needs:
+#
+# For example:
+#   push:
+#     branches: [ main, develop ]
+#   pull_request:
+#     branches: [ main, develop ]
+#
+# Or for a single branch:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+# ========================================================================
 on:
   push:
-    # branches: [ main, develop ]
+    # branches: [ main, develop ]  # Uncomment and configure for your project
   pull_request:
-    # branches: [ main, develop ]
+    # branches: [ main, develop ]  # Uncomment and configure for your project
 
 jobs:
   test:

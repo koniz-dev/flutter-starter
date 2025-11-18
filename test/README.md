@@ -2,13 +2,18 @@
 
 This directory contains the comprehensive test suite for the Flutter Starter project.
 
+> 📖 **For comprehensive testing guidelines, see [Testing Guide](../../docs/guides/testing.md)**
+
 ## Structure
 
 ```
 test/
 ├── helpers/          # Test utilities and helpers
 ├── core/            # Core layer tests
+│   └── performance/ # Performance monitoring tests
 ├── features/        # Feature layer tests
+│   ├── auth/        # Authentication tests
+│   └── feature_flags/ # Feature flags tests
 ├── shared/          # Shared components tests
 └── integration/     # Integration tests
 ```
@@ -23,6 +28,18 @@ flutter test
 ### With Coverage
 ```bash
 flutter test --coverage
+```
+
+### Using Coverage Scripts
+```bash
+# Generate HTML report and check coverage
+./scripts/test_coverage.sh --html
+
+# Analyze coverage by layer
+./scripts/analyze_coverage.sh
+
+# Open HTML report automatically
+./scripts/test_coverage.sh --html --open
 ```
 
 ### Specific Test File

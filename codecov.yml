@@ -1,0 +1,52 @@
+codecov:
+  require_ci_to_pass: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  
+  # Status settings
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+        base: auto
+        branches:
+          - main
+          - develop
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
+        base: auto
+
+# Ignore patterns
+ignore:
+  - "**/*.g.dart"
+  - "**/*.freezed.dart"
+  - "**/*.config.dart"
+  - "**/generated/**"
+  - "**/l10n/**"
+  - "**/main.dart"
+  - "test/**"
+  - "**/*_test.dart"
+  - "**/test_helpers.dart"
+  - "**/test_fixtures.dart"
+
+# Flags for different test types
+flags:
+  unittests:
+    paths:
+      - lib/
+    carryforward: true
+
+# Comment settings for PRs
+comment:
+  layout: "reach,diff,flags,tree,reach"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+
