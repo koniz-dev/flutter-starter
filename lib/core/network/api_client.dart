@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
@@ -14,22 +16,28 @@ class ApiClient {
   /// Creates an instance of [ApiClient] with configured Dio instance
   ///
   /// [storageService] - Storage service for non-sensitive data
-  /// [secureStorageService] - Secure storage service for authentication tokens
+  /// [secureStorageService] - Secure storage service for authentication
+  /// tokens
   /// [authInterceptor] - Auth interceptor for token management and refresh
+  /// [loggingService] - Optional logging service for API logging (if not
+  /// provided, uses legacy LoggingInterceptor)
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
     required AuthInterceptor authInterceptor,
+    LoggingService? loggingService,
   }) : _dio = _createDio(
           storageService,
           secureStorageService,
           authInterceptor,
+          loggingService,
         );
 
   static Dio _createDio(
     StorageService storageService,
     SecureStorageService secureStorageService,
     AuthInterceptor authInterceptor,
+    LoggingService? loggingService,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -47,14 +55,19 @@ class ApiClient {
     // ErrorInterceptor must be first to catch all errors
     // CacheInterceptor should be early to intercept requests before network
     // AuthInterceptor handles token injection
-    // LoggingInterceptor should be last to log final request/response
+    // ApiLoggingInterceptor should be last to log final request/response
+    // (falls back to legacy LoggingInterceptor if loggingService is not
+    // provided)
     dio.interceptors.addAll([
       ErrorInterceptor(),
       CacheInterceptor(
         storageService: storageService,
       ),
       authInterceptor,
-      if (AppConfig.enableLogging) LoggingInterceptor(),
+      if (loggingService != null)
+        ApiLoggingInterceptor(loggingService: loggingService)
+      else if (AppConfig.enableLogging)
+        LoggingInterceptor(), // Legacy interceptor for backward compatibility
     ]);
 
     return dio;

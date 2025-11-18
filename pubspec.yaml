@@ -52,6 +52,13 @@ dependencies:
   # Used for @JsonSerializable annotations (Group 7 implementation)
   json_annotation: ^4.9.0
 
+  # Logging - Comprehensive logging solution with multiple outputs
+  logger: ^2.6.2
+
+  # File System - Path provider for file-based logging
+  path: ^1.9.1
+  path_provider: ^2.1.5
+
   # Storage - Simple key-value storage for non-sensitive data
   shared_preferences: ^2.5.3
 
@@ -60,7 +67,6 @@ dependencies:
   # flutter_screenutil: ^5.9.3 - Not used, can add back when needed for responsive design
   # hive: ^2.2.3 - Not used, can add back when needed for local database
   # hive_flutter: ^1.1.0 - Not used, can add back when needed for local database
-  # logger: ^2.6.2 - Not used, can add back when implementing logging
   # retrofit: ^4.9.0 - Not used, can add back when implementing type-safe HTTP client
   # riverpod_annotation: ^3.0.3 - Not used (using manual providers), can add back when using code generation
   # shimmer: ^3.0.0 - Not used, can add back when implementing loading placeholders

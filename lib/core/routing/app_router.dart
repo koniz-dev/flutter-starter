@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
+import 'package:flutter_starter/core/routing/navigation_logging.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
@@ -26,10 +28,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   // Create the listenable that will notify router of auth state changes
   final authStateNotifier = _AuthStateNotifier(ref);
 
+  // Get logging service for navigation logging
+  final loggingService = ref.read(loggingServiceProvider);
+
   // Create router configuration
   return GoRouter(
     initialLocation: AppRoutes.home,
     debugLogDiagnostics: true, // Enable debug logging in development
+    observers: [
+      NavigationLoggingObserver(loggingService: loggingService),
+    ],
     routes: [
       // Public routes (accessible without authentication)
       GoRoute(
