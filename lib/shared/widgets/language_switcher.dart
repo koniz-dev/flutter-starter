@@ -219,6 +219,8 @@ class LanguageSelectionScreen extends ConsumerWidget {
         return 'Español (España)';
       case 'ar':
         return 'العربية (السعودية)';
+      case 'vi':
+        return 'Tiếng Việt (Việt Nam)';
       default:
         return '';
     }

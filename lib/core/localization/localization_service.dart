@@ -11,7 +11,10 @@ enum SupportedLocale {
   es(Locale('es', 'ES'), 'Español'),
 
   /// Arabic (Saudi Arabia)
-  ar(Locale('ar', 'SA'), 'العربية');
+  ar(Locale('ar', 'SA'), 'العربية'),
+
+  /// Vietnamese (Vietnam)
+  vi(Locale('vi', 'VN'), 'Tiếng Việt');
 
   /// Creates a [SupportedLocale] with the given [locale] and [displayName]
   const SupportedLocale(this.locale, this.displayName);
@@ -62,6 +65,7 @@ class LocalizationService {
         SupportedLocale.en.locale,
         SupportedLocale.es.locale,
         SupportedLocale.ar.locale,
+        SupportedLocale.vi.locale,
       ];
 
   /// Get current locale from storage or return default

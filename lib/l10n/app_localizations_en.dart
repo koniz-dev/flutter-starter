@@ -89,6 +89,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arabic => 'Arabic';
 
   @override
+  String get vietnamese => 'Vietnamese';
+
+  @override
   String get featureFlagsDebug => 'Feature Flags Debug';
 
   @override

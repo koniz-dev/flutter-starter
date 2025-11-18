@@ -39,6 +39,7 @@
   "english": "الإنجليزية",
   "spanish": "الإسبانية",
   "arabic": "العربية",
+  "vietnamese": "الفيتنامية",
   "featureFlagsDebug": "تصحيح Feature Flags",
   "unexpectedError": "حدث خطأ غير متوقع",
   "badRequest": "طلب غير صحيح. يرجى التحقق من المدخلات.",

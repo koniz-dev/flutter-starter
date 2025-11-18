@@ -90,6 +90,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get arabic => 'Árabe';
 
   @override
+  String get vietnamese => 'Vietnamita';
+
+  @override
   String get featureFlagsDebug => 'Depuración de Feature Flags';
 
   @override

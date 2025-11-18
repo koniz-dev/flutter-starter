@@ -39,6 +39,7 @@
   "english": "Inglés",
   "spanish": "Español",
   "arabic": "Árabe",
+  "vietnamese": "Vietnamita",
   "featureFlagsDebug": "Depuración de Feature Flags",
   "unexpectedError": "Ocurrió un error inesperado",
   "badRequest": "Solicitud incorrecta. Por favor verifica tu entrada.",
