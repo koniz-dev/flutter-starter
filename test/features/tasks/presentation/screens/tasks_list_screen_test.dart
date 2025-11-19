@@ -360,7 +360,11 @@ void main() {
       expect(popupMenuButton, findsOneWidget);
       await tester.tap(popupMenuButton);
       await tester.pumpAndSettle();
+
+      // Tap the Delete menu item
       await tester.tap(find.text('Delete'));
+      // Pump to allow dialog to show
+      await tester.pump();
       await tester.pumpAndSettle();
 
       // Assert
