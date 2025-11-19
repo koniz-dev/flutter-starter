@@ -39,9 +39,8 @@ void main() {
       expect(canMigrate, isFalse);
     });
 
-    test(
-      'canMigrate returns true for initial version when no version set',
-      () async {
+    test('canMigrate returns true for initial version when no version set',
+        () async {
       // No version set (first install)
       final migration = MigrationV1ToV2();
       final canMigrate = await migration.canMigrate(storage);

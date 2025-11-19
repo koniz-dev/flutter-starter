@@ -7,7 +7,6 @@ import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/logging/log_output.dart';
 import 'package:logger/logger.dart';
 
-
 /// Comprehensive logging service for the application
 ///
 /// This service provides:
@@ -93,9 +92,7 @@ class LoggingService {
     }
 
     // Use MultiOutput if multiple outputs are configured
-    final output = outputs.length == 1
-        ? outputs.first
-        : MultiOutput(outputs);
+    final output = outputs.length == 1 ? outputs.first : MultiOutput(outputs);
 
     // Choose printer based on environment
     final printer = AppConfig.isProduction

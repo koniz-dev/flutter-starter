@@ -52,9 +52,7 @@ class LocalizedFormatters {
     if (format != null) {
       return DateFormat(format, locale.toString()).format(dateTime);
     }
-    return DateFormat.yMd(locale.toString())
-        .add_jm()
-        .format(dateTime);
+    return DateFormat.yMd(locale.toString()).add_jm().format(dateTime);
   }
 
   /// Format number to localized string

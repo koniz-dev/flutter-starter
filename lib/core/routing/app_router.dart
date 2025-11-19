@@ -135,7 +135,7 @@ class _AuthStateNotifier extends ChangeNotifier {
         // This prevents unnecessary redirect evaluations
         final wasAuthenticated = previous?.user != null;
         final isAuthenticated = next.user != null;
-        
+
         if (wasAuthenticated != isAuthenticated) {
           // Notify router of state change to trigger redirect
           notifyListeners();

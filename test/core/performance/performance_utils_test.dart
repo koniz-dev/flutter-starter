@@ -15,11 +15,13 @@ void main() {
 
     group('measureApiCall', () {
       test('should call measureOperation with correct parameters', () async {
-        when(() => mockService.measureOperation<String>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => 'success');
+        when(
+          () => mockService.measureOperation<String>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => 'success');
 
         final result = await PerformanceUtils.measureApiCall<String>(
           service: mockService,
@@ -42,11 +44,13 @@ void main() {
       });
 
       test('should include additional attributes', () async {
-        when(() => mockService.measureOperation<String>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => 'success');
+        when(
+          () => mockService.measureOperation<String>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => 'success');
 
         await PerformanceUtils.measureApiCall<String>(
           service: mockService,
@@ -70,11 +74,13 @@ void main() {
       });
 
       test('should sanitize path with IDs', () async {
-        when(() => mockService.measureOperation<String>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => 'success');
+        when(
+          () => mockService.measureOperation<String>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => 'success');
 
         await PerformanceUtils.measureApiCall<String>(
           service: mockService,
@@ -85,7 +91,7 @@ void main() {
 
         verify(
           () => mockService.measureOperation<String>(
-            name: 'api_get_/:id',
+            name: 'api_get_/users/:id',
             operation: any(named: 'operation'),
             attributes: any(named: 'attributes'),
           ),
@@ -95,14 +101,16 @@ void main() {
 
     group('measureDatabaseQuery', () {
       test('should call measureOperation with correct parameters', () async {
-        when(() => mockService.measureOperation<List<String>>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => ['user1', 'user2']);
+        when(
+          () => mockService.measureOperation<List<String>>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => ['user1', 'user2']);
 
-        final result = await PerformanceUtils.measureDatabaseQuery<
-            List<String>>(
+        final result =
+            await PerformanceUtils.measureDatabaseQuery<List<String>>(
           service: mockService,
           queryName: 'get_users',
           query: () async => ['user1', 'user2'],
@@ -121,11 +129,13 @@ void main() {
       });
 
       test('should include additional attributes', () async {
-        when(() => mockService.measureOperation<List<String>>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => []);
+        when(
+          () => mockService.measureOperation<List<String>>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => []);
 
         await PerformanceUtils.measureDatabaseQuery<List<String>>(
           service: mockService,
@@ -149,11 +159,13 @@ void main() {
 
     group('measureComputation', () {
       test('should call measureOperation with correct parameters', () async {
-        when(() => mockService.measureOperation<int>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => 42);
+        when(
+          () => mockService.measureOperation<int>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => 42);
 
         final result = await PerformanceUtils.measureComputation<int>(
           service: mockService,
@@ -171,11 +183,13 @@ void main() {
       });
 
       test('should include attributes', () async {
-        when(() => mockService.measureOperation<int>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenAnswer((_) async => 42);
+        when(
+          () => mockService.measureOperation<int>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((_) async => 42);
 
         await PerformanceUtils.measureComputation<int>(
           service: mockService,
@@ -196,11 +210,13 @@ void main() {
 
     group('measureSyncComputation', () {
       test('should call measureSyncOperation with correct parameters', () {
-        when(() => mockService.measureSyncOperation<int>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenReturn(42);
+        when(
+          () => mockService.measureSyncOperation<int>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenReturn(42);
 
         final result = PerformanceUtils.measureSyncComputation<int>(
           service: mockService,
@@ -218,11 +234,13 @@ void main() {
       });
 
       test('should include attributes', () {
-        when(() => mockService.measureSyncOperation<String>(
-              name: any(named: 'name'),
-              operation: any(named: 'operation'),
-              attributes: any(named: 'attributes'),
-            ),).thenReturn('parsed');
+        when(
+          () => mockService.measureSyncOperation<String>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenReturn('parsed');
 
         final result = PerformanceUtils.measureSyncComputation<String>(
           service: mockService,
@@ -251,11 +269,13 @@ void main() {
     });
 
     test('measureApiCall should delegate to PerformanceUtils', () async {
-      when(() => mockService.measureOperation<String>(
-            name: any(named: 'name'),
-            operation: any(named: 'operation'),
-            attributes: any(named: 'attributes'),
-          ),).thenAnswer((_) async => 'success');
+      when(
+        () => mockService.measureOperation<String>(
+          name: any(named: 'name'),
+          operation: any(named: 'operation'),
+          attributes: any(named: 'attributes'),
+        ),
+      ).thenAnswer((_) async => 'success');
 
       final result = await mockService.measureApiCall<String>(
         method: 'GET',
@@ -277,11 +297,13 @@ void main() {
     });
 
     test('measureDatabaseQuery should delegate to PerformanceUtils', () async {
-      when(() => mockService.measureOperation<List<String>>(
-            name: any(named: 'name'),
-            operation: any(named: 'operation'),
-            attributes: any(named: 'attributes'),
-          ),).thenAnswer((_) async => []);
+      when(
+        () => mockService.measureOperation<List<String>>(
+          name: any(named: 'name'),
+          operation: any(named: 'operation'),
+          attributes: any(named: 'attributes'),
+        ),
+      ).thenAnswer((_) async => []);
 
       final result = await mockService.measureDatabaseQuery<List<String>>(
         queryName: 'get_users',
@@ -301,11 +323,13 @@ void main() {
     });
 
     test('measureComputation should delegate to PerformanceUtils', () async {
-      when(() => mockService.measureOperation<int>(
-            name: any(named: 'name'),
-            operation: any(named: 'operation'),
-            attributes: any(named: 'attributes'),
-          ),).thenAnswer((_) async => 42);
+      when(
+        () => mockService.measureOperation<int>(
+          name: any(named: 'name'),
+          operation: any(named: 'operation'),
+          attributes: any(named: 'attributes'),
+        ),
+      ).thenAnswer((_) async => 42);
 
       final result = await mockService.measureComputation<int>(
         operationName: 'test',
@@ -313,12 +337,12 @@ void main() {
       );
 
       expect(result, 42);
-        verify(
-          () => mockService.measureOperation<int>(
-            name: 'computation_test',
-            operation: any(named: 'operation'),
-          ),
-        ).called(1);
+      verify(
+        () => mockService.measureOperation<int>(
+          name: 'computation_test',
+          operation: any(named: 'operation'),
+        ),
+      ).called(1);
     });
   });
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 /// Registration screen for new user signup
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -134,7 +134,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               TextButton(
                 onPressed: authState.isLoading
                     ? null
-                    : () => context.popRoute<void>(),
+                    : () {
+                        if (context.canPop()) {
+                          context.popRoute<void>();
+                        }
+                      },
                 child: Text(l10n.alreadyHaveAccount),
               ),
             ],

@@ -6,7 +6,7 @@ class StorageVersion {
   /// Current storage schema version
   ///
   /// Increment this when making breaking changes to storage schema
-  static const int current = 1;
+  static const int current = 2;
 
   /// Key used to store the version in storage
   static const String versionKey = '_storage_version';

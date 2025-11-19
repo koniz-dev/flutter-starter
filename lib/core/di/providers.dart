@@ -228,8 +228,7 @@ final isAuthenticatedUseCaseProvider = Provider<IsAuthenticatedUseCase>((ref) {
 ///
 /// This provider creates a singleton instance of [TasksLocalDataSourceImpl]
 /// that handles local task data persistence.
-final tasksLocalDataSourceProvider =
-    Provider<TasksLocalDataSource>((ref) {
+final tasksLocalDataSourceProvider = Provider<TasksLocalDataSource>((ref) {
   final storageService = ref.watch(storageServiceProvider);
   return TasksLocalDataSourceImpl(storageService: storageService);
 });

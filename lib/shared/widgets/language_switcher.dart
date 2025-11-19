@@ -192,9 +192,8 @@ class LanguageSelectionScreen extends ConsumerWidget {
         },
         child: ListView(
           children: SupportedLocale.values.map((supportedLocale) {
-            final isSelected =
-                currentLocale.languageCode ==
-                    supportedLocale.locale.languageCode;
+            final isSelected = currentLocale.languageCode ==
+                supportedLocale.locale.languageCode;
             return RadioListTile<Locale>(
               title: Text(supportedLocale.displayName),
               subtitle: Text(

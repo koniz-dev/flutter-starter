@@ -9,8 +9,7 @@ import 'package:flutter_starter/features/auth/data/repositories/auth_repository_
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAuthRemoteDataSource extends Mock
-    implements AuthRemoteDataSource {}
+class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
@@ -213,8 +212,7 @@ void main() {
     group('logout', () {
       test('should return success when logout succeeds', () async {
         // Arrange
-        when(() => mockRemoteDataSource.logout())
-            .thenAnswer((_) async => {});
+        when(() => mockRemoteDataSource.logout()).thenAnswer((_) async => {});
         when(() => mockLocalDataSource.clearCache())
             .thenAnswer((_) async => {});
 

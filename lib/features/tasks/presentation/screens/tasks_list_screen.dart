@@ -34,9 +34,7 @@ class TasksListScreen extends ConsumerWidget {
             ),
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: tasksState.isLoading
-                ? null
-                : tasksNotifier.refresh,
+            onPressed: tasksState.isLoading ? null : tasksNotifier.refresh,
             tooltip: l10n.refresh,
           ),
         ],
@@ -95,10 +93,8 @@ class TasksListScreen extends ConsumerWidget {
             Icon(
               Icons.task_alt,
               size: 64,
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary
-                  .withValues(alpha: 0.5),
+              color:
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
@@ -245,74 +241,13 @@ class TasksListScreen extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations l10n,
   ) async {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
     await showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.addTask),
-        content: Form(
-          key: formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: titleController,
-                  decoration: InputDecoration(
-                    labelText: l10n.taskTitle,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.taskTitleRequired;
-                    }
-                    return null;
-                  },
-                  autofocus: true,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(
-                    labelText: l10n.taskDescription,
-                    border: const OutlineInputBorder(),
-                  ),
-                  maxLines: 3,
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                unawaited(
-                  ref.read(tasksNotifierProvider.notifier).createTask(
-                        title: titleController.text.trim(),
-                        description: descriptionController.text.trim().isEmpty
-                            ? null
-                            : descriptionController.text.trim(),
-                      ),
-                );
-                Navigator.of(context).pop();
-              }
-            },
-            child: Text(l10n.add),
-          ),
-        ],
+      builder: (dialogContext) => _AddTaskDialogContent(
+        ref: ref,
+        l10n: l10n,
       ),
     );
-
-    titleController.dispose();
-    descriptionController.dispose();
   }
 
   Future<void> _showDeleteConfirmation(
@@ -345,5 +280,104 @@ class TasksListScreen extends ConsumerWidget {
     if (confirmed ?? false) {
       await notifier.deleteTask(task.id);
     }
+  }
+}
+
+/// Dialog content widget that manages TextEditingController lifecycle
+class _AddTaskDialogContent extends StatefulWidget {
+  const _AddTaskDialogContent({
+    required this.ref,
+    required this.l10n,
+  });
+
+  final WidgetRef ref;
+  final AppLocalizations l10n;
+
+  @override
+  State<_AddTaskDialogContent> createState() => _AddTaskDialogContentState();
+}
+
+class _AddTaskDialogContentState extends State<_AddTaskDialogContent> {
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.l10n.addTask),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: widget.l10n.taskTitle,
+                  border: const OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return widget.l10n.taskTitleRequired;
+                  }
+                  return null;
+                },
+                autofocus: true,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: widget.l10n.taskDescription,
+                  border: const OutlineInputBorder(),
+                ),
+                maxLines: 3,
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(widget.l10n.cancel),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              final title = _titleController.text.trim();
+              final description = _descriptionController.text.trim().isEmpty
+                  ? null
+                  : _descriptionController.text.trim();
+              Navigator.of(context).pop();
+              // Create task after dialog is closed to avoid controller issues
+              unawaited(
+                widget.ref.read(tasksNotifierProvider.notifier).createTask(
+                      title: title,
+                      description: description,
+                    ),
+              );
+            }
+          },
+          child: Text(widget.l10n.add),
+        ),
+      ],
+    );
   }
 }

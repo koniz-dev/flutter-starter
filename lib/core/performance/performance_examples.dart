@@ -29,7 +29,7 @@ import 'package:flutter_starter/core/utils/result.dart';
 Future<Map<String, dynamic>> exampleApiCallTracing(
   PerformanceService performanceService,
 ) async {
-    return performanceService.measureApiCall<Map<String, dynamic>>(
+  return performanceService.measureApiCall<Map<String, dynamic>>(
     method: 'GET',
     path: '/users',
     call: () async {
@@ -54,7 +54,7 @@ Future<Map<String, dynamic>> exampleApiCallTracing(
 Future<List<Map<String, dynamic>>> exampleDatabaseQueryTracing(
   PerformanceService performanceService,
 ) async {
-    return performanceService.measureDatabaseQuery<List<Map<String, dynamic>>>(
+  return performanceService.measureDatabaseQuery<List<Map<String, dynamic>>>(
     queryName: 'get_users',
     query: () async {
       // Simulate database query
@@ -81,7 +81,7 @@ Future<List<Map<String, dynamic>>> exampleDatabaseQueryTracing(
 Future<String> exampleHeavyComputationTracing(
   PerformanceService performanceService,
 ) async {
-    return performanceService.measureComputation<String>(
+  return performanceService.measureComputation<String>(
     operationName: 'image_processing',
     computation: () async {
       // Simulate heavy computation
@@ -222,7 +222,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
     // class ExampleRepositoryImpl with PerformanceRepositoryMixin
     //   implements ExampleRepository
     // Then call: return measureDataFetch<List<String>>(...)
-    
+
     // For this example, we'll use the service directly
     return performanceService.measureOperation<Result<List<String>>>(
       name: 'repository_get_items',
@@ -291,7 +291,7 @@ class GetItemsUseCase {
   Future<Result<List<String>>> call() {
     // In real usage with the mixin, you would call:
     // return measureUseCaseOperation<List<String>>(...)
-    
+
     // For this example, we'll use the service directly
     if (performanceService == null || !performanceService!.isEnabled) {
       return repository.getItems();

@@ -37,8 +37,7 @@ final featureFlagsRemoteDataSourceProvider =
 // ============================================================================
 
 /// Provider for [FeatureFlagsRepository] instance
-final featureFlagsRepositoryProvider =
-    Provider<FeatureFlagsRepository>((ref) {
+final featureFlagsRepositoryProvider = Provider<FeatureFlagsRepository>((ref) {
   final remoteDataSource = ref.watch(featureFlagsRemoteDataSourceProvider);
   final localDataSource = ref.watch(featureFlagsLocalDataSourceProvider);
   return FeatureFlagsRepositoryImpl(
@@ -99,8 +98,7 @@ final isFeatureEnabledProvider = FutureProvider.family<bool, FeatureFlagKey>(
 /// );
 /// ```
 // ignore: specify_nonobvious_property_types
-final featureFlagProvider =
-    FutureProvider.family<FeatureFlag?, FeatureFlagKey>(
+final featureFlagProvider = FutureProvider.family<FeatureFlag?, FeatureFlagKey>(
   (ref, FeatureFlagKey key) async {
     final manager = ref.watch(featureFlagsManagerProvider);
     return manager.getFlag(key);

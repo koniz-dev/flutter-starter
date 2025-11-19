@@ -13,6 +13,10 @@ import '../../../../helpers/test_helpers.dart';
 class MockTasksLocalDataSource extends Mock implements TasksLocalDataSource {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(createTaskModel());
+  });
+
   group('TasksRepositoryImpl', () {
     late TasksRepositoryImpl repository;
     late MockTasksLocalDataSource mockLocalDataSource;
@@ -234,7 +238,6 @@ void main() {
           failureCallback: (_) => fail('Expected success'),
         );
         verify(() => mockLocalDataSource.getAllTasks()).called(1);
-        verify(() => mockLocalDataSource.saveTasks(any())).called(1);
         final savedTasks = verify(
           () => mockLocalDataSource.saveTasks(captureAny()),
         ).captured.first as List<TaskModel>;

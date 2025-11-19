@@ -94,8 +94,8 @@ class DioExceptionMapper {
         // Try nested error object first (before trying error as string)
         final error = data['error'];
         if (error is Map<String, dynamic>) {
-          final nestedMessage = error['message'] as String? ??
-              error['error'] as String?;
+          final nestedMessage =
+              error['message'] as String? ?? error['error'] as String?;
           if (nestedMessage != null && nestedMessage.isNotEmpty) {
             return nestedMessage;
           }

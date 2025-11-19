@@ -78,8 +78,12 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
         final result = await getFlag(key);
         result.when(
           success: (FeatureFlag flag) => flags[flag.key] = flag,
-          failureCallback: (Failure _) {
-            // Skip flags that don't exist
+          failureCallback: (Failure failure) {
+            // Skip flags that don't exist (NotFoundFailure)
+            // But fail on other exceptions
+            if (failure is! NotFoundFailure) {
+              throw Exception('Failed to get flag $key: ${failure.message}');
+            }
           },
         );
       }
@@ -124,8 +128,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       }
 
       // Get local flags
-      final localFlags =
-          LocalFeatureFlagsService.instance.getAllLocalFlags();
+      final localFlags = LocalFeatureFlagsService.instance.getAllLocalFlags();
       for (final entry in localFlags.entries) {
         // Only add if not already in flags (higher priority sources take
         // precedence)

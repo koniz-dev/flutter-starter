@@ -47,7 +47,8 @@ class FeatureFlagBuilder extends ConsumerWidget {
           return disabledBuilder?.call(context) ?? const SizedBox.shrink();
         }
       },
-      loading: () => loadingBuilder?.call(context) ??
+      loading: () =>
+          loadingBuilder?.call(context) ??
           const Center(child: CircularProgressIndicator()),
       error: (error, stack) {
         // On error, default to disabled state

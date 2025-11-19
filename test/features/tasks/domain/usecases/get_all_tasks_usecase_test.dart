@@ -35,9 +35,9 @@ void main() {
       verify(() => mockRepository.getAllTasks()).called(1);
     });
 
-      test(
-        'should return empty list when repository returns empty list',
-        () async {
+    test(
+      'should return empty list when repository returns empty list',
+      () async {
         // Arrange
         when(() => mockRepository.getAllTasks())
             .thenAnswer((_) async => const Success<List<Task>>([]));
@@ -48,8 +48,8 @@ void main() {
         // Assert
         expectResultSuccess(result, <Task>[]);
         verify(() => mockRepository.getAllTasks()).called(1);
-        },
-      );
+      },
+    );
 
     test('should return failure when repository fails', () async {
       // Arrange

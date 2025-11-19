@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('StorageMigrationService', () {
     late StorageService storageService;
     late SecureStorageService secureStorageService;
@@ -39,9 +40,8 @@ void main() {
       expect(results['secure'], isNotNull);
     });
 
-    test(
-      'migrateRegular executes migrations for regular storage only',
-      () async {
+    test('migrateRegular executes migrations for regular storage only',
+        () async {
       final migrationService = StorageMigrationService(
         storageService: storageService,
         secureStorageService: secureStorageService,
@@ -54,9 +54,7 @@ void main() {
       expect(result, greaterThanOrEqualTo(1));
     });
 
-    test(
-      'migrateSecure executes migrations for secure storage only',
-      () async {
+    test('migrateSecure executes migrations for secure storage only', () async {
       final migrationService = StorageMigrationService(
         storageService: storageService,
         secureStorageService: secureStorageService,

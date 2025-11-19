@@ -19,8 +19,7 @@ final performanceServiceProvider = Provider<PerformanceService>((ref) {
 /// automatically tracks HTTP request performance.
 ///
 /// The interceptor should be added to the Dio instance in ApiClient.
-final performanceInterceptorProvider =
-    Provider<PerformanceInterceptor>((ref) {
+final performanceInterceptorProvider = Provider<PerformanceInterceptor>((ref) {
   final performanceService = ref.watch(performanceServiceProvider);
   return PerformanceInterceptor(performanceService: performanceService);
 });

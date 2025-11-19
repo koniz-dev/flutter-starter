@@ -17,9 +17,10 @@ void main() {
 
     setUp(() async {
       secureStorage.clear();
-      
+
       // Setup method channel for FlutterSecureStorage
-      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const secureStorageChannel =
+          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
         final arguments = methodCall.arguments as Map<Object?, Object?>?;
@@ -43,9 +44,10 @@ void main() {
             return null;
         }
       });
-      
+
       // Setup method channel for SharedPreferences
-      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      const sharedPrefsChannel =
+          MethodChannel('plugins.flutter.io/shared_preferences');
       final sharedPrefs = <String, dynamic>{};
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
@@ -70,7 +72,7 @@ void main() {
             return null;
         }
       });
-      
+
       storageService = StorageService();
       secureStorageService = SecureStorageService();
       await storageService.init();
@@ -85,8 +87,10 @@ void main() {
       await dataSource.clearCache();
       await storageService.clear();
       await secureStorageService.clear();
-      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
-      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      const secureStorageChannel =
+          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const sharedPrefsChannel =
+          MethodChannel('plugins.flutter.io/shared_preferences');
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(secureStorageChannel, null);
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -211,49 +215,49 @@ void main() {
         'should store tokens in secure storage and user data in regular '
         'storage',
         () async {
-        const token = 'test_token';
-        const refreshToken = 'test_refresh_token';
-        const user = UserModel(
-          id: '1',
-          email: 'test@example.com',
-          name: 'Test User',
-        );
+          const token = 'test_token';
+          const refreshToken = 'test_refresh_token';
+          const user = UserModel(
+            id: '1',
+            email: 'test@example.com',
+            name: 'Test User',
+          );
 
-        await dataSource.cacheToken(token);
-        await dataSource.cacheRefreshToken(refreshToken);
-        await dataSource.cacheUser(user);
+          await dataSource.cacheToken(token);
+          await dataSource.cacheRefreshToken(refreshToken);
+          await dataSource.cacheUser(user);
 
-        // Verify tokens are in secure storage
-        expect(
-          await secureStorageService.getString(AppConstants.tokenKey),
-          token,
-        );
-        expect(
-          await secureStorageService.getString(AppConstants.refreshTokenKey),
-          refreshToken,
-        );
+          // Verify tokens are in secure storage
+          expect(
+            await secureStorageService.getString(AppConstants.tokenKey),
+            token,
+          );
+          expect(
+            await secureStorageService.getString(AppConstants.refreshTokenKey),
+            refreshToken,
+          );
 
-        // Verify tokens are NOT in regular storage
-        expect(
-          await storageService.getString(AppConstants.tokenKey),
-          isNull,
-        );
-        expect(
-          await storageService.getString(AppConstants.refreshTokenKey),
-          isNull,
-        );
+          // Verify tokens are NOT in regular storage
+          expect(
+            await storageService.getString(AppConstants.tokenKey),
+            isNull,
+          );
+          expect(
+            await storageService.getString(AppConstants.refreshTokenKey),
+            isNull,
+          );
 
-        // Verify user data is in regular storage
-        expect(
-          await storageService.getString(AppConstants.userDataKey),
-          isNotNull,
-        );
+          // Verify user data is in regular storage
+          expect(
+            await storageService.getString(AppConstants.userDataKey),
+            isNotNull,
+          );
 
-        // Verify user data is NOT in secure storage
-        expect(
-          await secureStorageService.getString(AppConstants.userDataKey),
-          isNull,
-        );
+          // Verify user data is NOT in secure storage
+          expect(
+            await secureStorageService.getString(AppConstants.userDataKey),
+            isNull,
+          );
         },
       );
     });

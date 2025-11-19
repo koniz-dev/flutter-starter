@@ -136,8 +136,7 @@ void main() {
       expect(convertedJson['is_completed'], originalJson['is_completed']);
     });
 
-    test('should handle round-trip conversion (Entity -> Model -> Entity)',
-        () {
+    test('should handle round-trip conversion (Entity -> Model -> Entity)', () {
       // Arrange
       final originalTask = createTask(
         id: 'task-1',

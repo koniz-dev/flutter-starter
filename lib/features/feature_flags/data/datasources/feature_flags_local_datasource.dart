@@ -21,8 +21,7 @@ abstract class FeatureFlagsLocalDataSource {
 }
 
 /// Implementation of [FeatureFlagsLocalDataSource]
-class FeatureFlagsLocalDataSourceImpl
-    implements FeatureFlagsLocalDataSource {
+class FeatureFlagsLocalDataSourceImpl implements FeatureFlagsLocalDataSource {
   /// Creates a [FeatureFlagsLocalDataSourceImpl] with the given
   /// [storageService]
   FeatureFlagsLocalDataSourceImpl({

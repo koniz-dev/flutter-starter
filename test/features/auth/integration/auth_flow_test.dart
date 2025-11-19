@@ -18,7 +18,8 @@ void main() {
 
     setUp(() async {
       // Setup method channel for SharedPreferences
-      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
+      const sharedPrefsChannel =
+          MethodChannel('plugins.flutter.io/shared_preferences');
       final sharedPrefs = <String, dynamic>{};
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
@@ -45,7 +46,8 @@ void main() {
       });
 
       // Setup method channel for FlutterSecureStorage
-      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const secureStorageChannel =
+          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
       final secureStorage = <String, String>{};
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
@@ -79,8 +81,10 @@ void main() {
 
     tearDown(() {
       container.dispose();
-      const sharedPrefsChannel = MethodChannel('plugins.flutter.io/shared_preferences');
-      const secureStorageChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const sharedPrefsChannel =
+          MethodChannel('plugins.flutter.io/shared_preferences');
+      const secureStorageChannel =
+          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(sharedPrefsChannel, null);
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

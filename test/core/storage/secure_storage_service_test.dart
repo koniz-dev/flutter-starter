@@ -11,8 +11,9 @@ void main() {
 
     setUp(() {
       storage.clear();
-      const methodChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
-      
+      const methodChannel =
+          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(methodChannel, (methodCall) async {
         final arguments = methodCall.arguments as Map<Object?, Object?>?;
@@ -36,17 +37,17 @@ void main() {
             return null;
         }
       });
-      
+
       secureStorageService = SecureStorageService();
     });
 
     tearDown(() async {
       storage.clear();
-      const methodChannel = MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const methodChannel =
+          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(methodChannel, null);
     });
-
 
     group('String Operations', () {
       test('should store and retrieve string value', () async {

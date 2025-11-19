@@ -254,7 +254,9 @@ void main() {
 
     group('getList', () {
       test('should get list value', () {
-        final map = {'items': [1, 2, 3]};
+        final map = {
+          'items': [1, 2, 3],
+        };
         final result = JsonHelper.getList(map, 'items');
         expect(result, isNotNull);
         expect(result, [1, 2, 3]);
@@ -268,7 +270,9 @@ void main() {
 
     group('getListOf', () {
       test('should get list of strings', () {
-        final map = {'items': ['a', 'b', 'c']};
+        final map = {
+          'items': ['a', 'b', 'c'],
+        };
         final result = JsonHelper.getListOf<String>(
           map,
           'items',
@@ -279,7 +283,9 @@ void main() {
       });
 
       test('should convert list items', () {
-        final map = {'numbers': [1, 2, 3]};
+        final map = {
+          'numbers': [1, 2, 3],
+        };
         final result = JsonHelper.getListOf<String>(
           map,
           'numbers',
@@ -299,7 +305,9 @@ void main() {
       });
 
       test('should return null when conversion fails', () {
-        final map = {'items': ['a', 'b', 'c']};
+        final map = {
+          'items': ['a', 'b', 'c'],
+        };
         final result = JsonHelper.getListOf<int>(
           map,
           'items',
@@ -487,13 +495,17 @@ void main() {
 
       test('should handle deepMerge with nested non-map values', () {
         final map1 = {'key': 'old'};
-        final map2 = {'key': {'nested': 'value'}};
+        final map2 = {
+          'key': {'nested': 'value'},
+        };
         final result = JsonHelper.deepMerge(map1, map2);
         expect(result['key'], isA<Map<String, dynamic>>());
       });
 
       test('should handle deepMerge with map1 having nested map', () {
-        final map1 = {'key': {'nested': 'old'}};
+        final map1 = {
+          'key': {'nested': 'old'},
+        };
         final map2 = {'key': 'new'};
         final result = JsonHelper.deepMerge(map1, map2);
         expect(result['key'], 'new');
