@@ -448,6 +448,340 @@ void main() {
         // test ends
         await Future<void>.delayed(const Duration(milliseconds: 100));
       });
+
+      test('should handle createTask with description', () async {
+        // Arrange
+        final newTask = createTask(id: 'task-new', title: 'New Task');
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer((_) => Future.value(Success(newTask)));
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act
+        await notifier.createTask(
+          title: 'New Task',
+          description: 'Task description',
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert
+        verify(
+          () => mockCreateTaskUseCase(
+            title: 'New Task',
+            description: 'Task description',
+          ),
+        ).called(1);
+      });
+
+      test('should handle createTask with null description', () async {
+        // Arrange
+        final newTask = createTask(id: 'task-new', title: 'New Task');
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer((_) => Future.value(Success(newTask)));
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act
+        await notifier.createTask(title: 'New Task');
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert
+        verify(
+          () => mockCreateTaskUseCase(
+            title: 'New Task',
+          ),
+        ).called(1);
+      });
+
+      test('should handle updateTask with null description', () async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+          title: 'Updated Task',
+        );
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) => Future.value(Success(task)));
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act
+        await notifier.updateTask(task);
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert
+        verify(() => mockUpdateTaskUseCase(task)).called(1);
+      });
+
+      test('should handle multiple rapid operations', () async {
+        // Arrange
+        final tasks = createTaskList(count: 2);
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(Success(tasks)));
+        when(() => mockToggleTaskCompletionUseCase(any()))
+            .thenAnswer((_) => Future.value(Success(tasks.first)));
+        when(() => mockDeleteTaskUseCase(any()))
+            .thenAnswer((_) => Future.value(const Success(null)));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act - Perform multiple operations rapidly
+        await notifier.toggleTaskCompletion('task-1');
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        await notifier.deleteTask('task-2');
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert
+        verify(() => mockToggleTaskCompletionUseCase('task-1')).called(1);
+        verify(() => mockDeleteTaskUseCase('task-2')).called(1);
+      });
+
+      test('should handle updateTask loading state', () async {
+        // Arrange
+        final task = createTask(id: 'task-1');
+        final updateCompleter = Completer<Result<Task>>();
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) => updateCompleter.future);
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act
+        final future = notifier.updateTask(task);
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        // Assert - check loading state
+        final loadingState = container.read(tasksNotifierProvider);
+        expect(loadingState.isLoading, isTrue);
+
+        // Complete the update
+        updateCompleter.complete(Success(task));
+        await future;
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        final finalState = container.read(tasksNotifierProvider);
+        expect(finalState.isLoading, isFalse);
+      });
+
+      test('should handle deleteTask loading state', () async {
+        // Arrange
+        const taskId = 'task-1';
+        final deleteCompleter = Completer<Result<void>>();
+        when(() => mockDeleteTaskUseCase(any()))
+            .thenAnswer((_) => deleteCompleter.future);
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act
+        final future = notifier.deleteTask(taskId);
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        // Assert - check loading state
+        final loadingState = container.read(tasksNotifierProvider);
+        expect(loadingState.isLoading, isTrue);
+
+        // Complete the delete
+        deleteCompleter.complete(const Success(null));
+        await future;
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        final finalState = container.read(tasksNotifierProvider);
+        expect(finalState.isLoading, isFalse);
+      });
+
+      test('should handle toggleTaskCompletion loading state', () async {
+        // Arrange
+        const taskId = 'task-1';
+        final task = createTask(id: taskId);
+        final toggleCompleter = Completer<Result<Task>>();
+        when(() => mockToggleTaskCompletionUseCase(any()))
+            .thenAnswer((_) => toggleCompleter.future);
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+
+        final notifier = container.read(tasksNotifierProvider.notifier);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Act
+        final future = notifier.toggleTaskCompletion(taskId);
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        // Assert - check loading state
+        final loadingState = container.read(tasksNotifierProvider);
+        expect(loadingState.isLoading, isTrue);
+
+        // Complete the toggle
+        toggleCompleter.complete(Success(task));
+        await future;
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        final finalState = container.read(tasksNotifierProvider);
+        expect(finalState.isLoading, isFalse);
+      });
+
+      test('should handle large tasks list', () async {
+        // Arrange
+        final tasks = createTaskList(count: 100);
+        final testMockGetAllTasksUseCase = MockGetAllTasksUseCase();
+        when(testMockGetAllTasksUseCase.call)
+            .thenAnswer((_) => Future.value(Success(tasks)));
+
+        // Create a new container with the mock set up before creation
+        final testContainer = ProviderContainer(
+          overrides: [
+            getAllTasksUseCaseProvider
+                .overrideWithValue(testMockGetAllTasksUseCase),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+            toggleTaskCompletionUseCaseProvider
+                .overrideWithValue(mockToggleTaskCompletionUseCase),
+          ],
+        );
+
+        // Act - Read the provider to trigger initialization
+        // Wait for microtask and async operations to complete
+        var attempts = 0;
+        while (attempts < 50) {
+          await Future<void>.delayed(const Duration(milliseconds: 50));
+          final currentState = testContainer.read(tasksNotifierProvider);
+          if (currentState.tasks.length == 100 && !currentState.isLoading) {
+            break;
+          }
+          attempts++;
+        }
+
+        // Assert
+        final state = testContainer.read(tasksNotifierProvider);
+        expect(state.tasks.length, 100);
+        expect(state.isLoading, isFalse);
+
+        // Cleanup
+        testContainer.dispose();
+      });
+    });
+
+    group('TasksState', () {
+      test('should create state with default values', () {
+        // Act
+        const state = TasksState();
+
+        // Assert
+        expect(state.tasks, isEmpty);
+        expect(state.isLoading, isFalse);
+        expect(state.error, isNull);
+      });
+
+      test('should create state with custom values', () {
+        // Arrange
+        final tasks = createTaskList(count: 2);
+
+        // Act
+        final state = TasksState(
+          tasks: tasks,
+          isLoading: true,
+          error: 'Test error',
+        );
+
+        // Assert
+        expect(state.tasks, tasks);
+        expect(state.isLoading, isTrue);
+        expect(state.error, 'Test error');
+      });
+
+      test('should copy state with new values', () {
+        // Arrange
+        final originalTasks = createTaskList(count: 2);
+        final state = TasksState(
+          tasks: originalTasks,
+          error: 'Original error',
+        );
+
+        // Act
+        final newTasks = createTaskList();
+        final copied = state.copyWith(
+          tasks: newTasks,
+          isLoading: true,
+          error: 'New error',
+        );
+
+        // Assert
+        expect(copied.tasks, newTasks);
+        expect(copied.isLoading, isTrue);
+        expect(copied.error, 'New error');
+      });
+
+      test('should copy state with partial values', () {
+        // Arrange
+        final originalTasks = createTaskList(count: 2);
+        final state = TasksState(
+          tasks: originalTasks,
+          error: 'Original error',
+        );
+
+        // Act
+        final copied = state.copyWith(isLoading: true);
+
+        // Assert
+        expect(copied.tasks, originalTasks);
+        expect(copied.isLoading, isTrue);
+        expect(copied.error, 'Original error');
+      });
+
+      test('should clear error when clearError is true', () {
+        // Arrange
+        const state = TasksState(error: 'Original error');
+
+        // Act
+        final copied = state.copyWith(clearError: true);
+
+        // Assert
+        expect(copied.error, isNull);
+      });
+
+      test('should preserve error when clearError is false', () {
+        // Arrange
+        const state = TasksState(error: 'Original error');
+
+        // Act
+        final copied = state.copyWith();
+
+        // Assert
+        expect(copied.error, 'Original error');
+      });
+
+      test('should override error when new error is provided', () {
+        // Arrange
+        const state = TasksState(error: 'Original error');
+
+        // Act
+        final copied = state.copyWith(error: 'New error');
+
+        // Assert
+        expect(copied.error, 'New error');
+      });
     });
   });
 }

@@ -66,5 +66,50 @@ void main() {
       expect(ApiEndpoints.userProfile, contains('/user/'));
       expect(ApiEndpoints.updateProfile, contains('/user/'));
     });
+
+    test('should have all endpoints as non-empty strings', () {
+      expect(ApiEndpoints.apiVersion, isNotEmpty);
+      expect(ApiEndpoints.login, isNotEmpty);
+      expect(ApiEndpoints.register, isNotEmpty);
+      expect(ApiEndpoints.logout, isNotEmpty);
+      expect(ApiEndpoints.refreshToken, isNotEmpty);
+      expect(ApiEndpoints.userProfile, isNotEmpty);
+      expect(ApiEndpoints.updateProfile, isNotEmpty);
+    });
+
+    test('should have consistent endpoint structure', () {
+      // All endpoints should start with /
+      final endpoints = [
+        ApiEndpoints.apiVersion,
+        ApiEndpoints.login,
+        ApiEndpoints.register,
+        ApiEndpoints.logout,
+        ApiEndpoints.refreshToken,
+        ApiEndpoints.userProfile,
+        ApiEndpoints.updateProfile,
+      ];
+      for (final endpoint in endpoints) {
+        expect(endpoint, startsWith('/'));
+      }
+    });
+
+    test('should have apiVersion as prefix for endpoints', () {
+      expect(ApiEndpoints.apiVersion, '/v1');
+    });
+
+    test('should have unique endpoint paths', () {
+      final endpoints = [
+        ApiEndpoints.login,
+        ApiEndpoints.register,
+        ApiEndpoints.logout,
+        ApiEndpoints.refreshToken,
+        ApiEndpoints.userProfile,
+        ApiEndpoints.updateProfile,
+      ];
+      // userProfile and updateProfile can be the same (both are PUT/PATCH)
+      // But others should be unique
+      final uniqueEndpoints = endpoints.toSet();
+      expect(uniqueEndpoints.length, greaterThanOrEqualTo(5));
+    });
   });
 }

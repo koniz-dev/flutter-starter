@@ -152,8 +152,9 @@ void main() {
       await tester.enterText(emailField, 'test@example.com');
       await tester.enterText(passwordField, 'password123');
       await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
-      // Use timeout to prevent hanging
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pump();
+      // Wait for async operations to complete
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
       // Assert
       verify(

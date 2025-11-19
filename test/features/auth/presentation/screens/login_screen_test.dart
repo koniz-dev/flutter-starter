@@ -251,7 +251,8 @@ void main() {
 
       // Complete the login to clean up
       completer.complete(const Success(user));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 10));
     });
 
     testWidgets(

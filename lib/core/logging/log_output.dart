@@ -15,14 +15,14 @@ abstract class CustomLogOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
     for (final line in event.lines) {
-      _outputLine(line, event.level);
+      outputLine(line, event.level);
     }
   }
 
   /// Outputs a single log line
   ///
   /// Override this method to implement custom output behavior
-  void _outputLine(String line, Level level);
+  void outputLine(String line, Level level);
 }
 
 /// File-based log output with rotation support

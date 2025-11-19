@@ -81,5 +81,127 @@ void main() {
       verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
       verifyNever(() => mockRepository.toggleTaskCompletion('other-id'));
     });
+
+    test('should handle empty task id', () async {
+      // Arrange
+      const taskId = '';
+      const failure = CacheFailure('Task ID cannot be empty');
+      when(() => mockRepository.toggleTaskCompletion(any()))
+          .thenAnswer((_) async => const ResultFailure(failure));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expectResultFailure(result, failure);
+      verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
+    });
+
+    test('should handle invalid task id', () async {
+      // Arrange
+      const taskId = 'invalid-id-12345';
+      const failure = CacheFailure('Task not found');
+      when(() => mockRepository.toggleTaskCompletion(any()))
+          .thenAnswer((_) async => const ResultFailure(failure));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expectResultFailure(result, failure);
+      verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
+    });
+
+    test('should handle different failure types', () async {
+      // Arrange
+      const taskId = 'task-1';
+      final failures = [
+        const CacheFailure('Cache error'),
+        const NetworkFailure('Network error'),
+        const ServerFailure('Server error'),
+      ];
+
+      for (final failure in failures) {
+        when(() => mockRepository.toggleTaskCompletion(any()))
+            .thenAnswer((_) async => ResultFailure(failure));
+
+        // Act
+        final result = await useCase(taskId);
+
+        // Assert
+        expectResultFailure(result, failure);
+        verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
+        clearInteractions(mockRepository);
+      }
+    });
+
+    test('should handle task with special characters in id', () async {
+      // Arrange
+      const taskId = 'task-123_abc-xyz';
+      final task = createTask(id: taskId);
+      when(() => mockRepository.toggleTaskCompletion(any()))
+          .thenAnswer((_) async => Success(task.copyWith(isCompleted: true)));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      expect(result.dataOrNull?.id, taskId);
+      verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
+    });
+
+    test('should toggle task multiple times', () async {
+      // Arrange
+      const taskId = 'task-1';
+      var isCompleted = false;
+
+      for (var i = 0; i < 3; i++) {
+        final task = createTask(id: taskId, isCompleted: isCompleted);
+        isCompleted = !isCompleted;
+        when(() => mockRepository.toggleTaskCompletion(any()))
+            .thenAnswer(
+              (_) async => Success(
+                task.copyWith(isCompleted: isCompleted),
+              ),
+            );
+
+        // Act
+        final result = await useCase(taskId);
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        expect(result.dataOrNull?.isCompleted, isCompleted);
+        verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
+        clearInteractions(mockRepository);
+      }
+    });
+
+    test('should preserve task properties when toggling', () async {
+      // Arrange
+      const taskId = 'task-1';
+      final originalTask = createTask(
+        id: taskId,
+        description: 'Test Description',
+      );
+      when(() => mockRepository.toggleTaskCompletion(any()))
+          .thenAnswer(
+            (_) async => Success(
+              originalTask.copyWith(isCompleted: true),
+            ),
+          );
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      final task = result.dataOrNull!;
+      expect(task.id, originalTask.id);
+      expect(task.title, originalTask.title);
+      expect(task.description, originalTask.description);
+      expect(task.isCompleted, isTrue);
+      verify(() => mockRepository.toggleTaskCompletion(taskId)).called(1);
+    });
   });
 }

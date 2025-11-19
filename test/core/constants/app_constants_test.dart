@@ -65,5 +65,35 @@ void main() {
       expect(AppConstants.defaultPageSize, greaterThan(0));
       expect(AppConstants.maxPageSize, greaterThan(0));
     });
+
+    test('should have unique storage keys', () {
+      final keys = [
+        AppConstants.tokenKey,
+        AppConstants.refreshTokenKey,
+        AppConstants.userDataKey,
+        AppConstants.themeKey,
+        AppConstants.languageKey,
+      ];
+      // All keys should be unique
+      expect(keys.toSet().length, keys.length);
+    });
+
+    test('should have non-empty storage keys', () {
+      expect(AppConstants.tokenKey.length, greaterThan(0));
+      expect(AppConstants.refreshTokenKey.length, greaterThan(0));
+      expect(AppConstants.userDataKey.length, greaterThan(0));
+      expect(AppConstants.themeKey.length, greaterThan(0));
+      expect(AppConstants.languageKey.length, greaterThan(0));
+    });
+
+    test('should have valid page size relationship', () {
+      expect(AppConstants.defaultPageSize, lessThan(AppConstants.maxPageSize));
+      expect(AppConstants.maxPageSize % AppConstants.defaultPageSize, 0);
+    });
+
+    test('should have appName as non-empty string', () {
+      expect(AppConstants.appName, isNotEmpty);
+      expect(AppConstants.appName.length, greaterThan(0));
+    });
   });
 }

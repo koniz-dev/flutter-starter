@@ -224,5 +224,103 @@ void main() {
         expect(httpLogging, isA<bool>());
       });
     });
+
+    group('Edge Cases', () {
+      test('baseUrl should handle different environment values', () {
+        final url = AppConfig.baseUrl;
+        expect(url, isA<String>());
+        expect(url, isNotEmpty);
+        // Should be a valid URL format
+        expect(url, anyOf(
+          startsWith('http://'),
+          startsWith('https://'),
+        ),);
+      });
+
+      test('apiTimeout should have reasonable default', () {
+        final timeout = AppConfig.apiTimeout;
+        expect(timeout, greaterThan(0));
+        expect(timeout, lessThan(300)); // Should be less than 5 minutes
+      });
+
+      test('apiConnectTimeout should be less than or equal to apiTimeout', () {
+        final connectTimeout = AppConfig.apiConnectTimeout;
+        final timeout = AppConfig.apiTimeout;
+        expect(connectTimeout, lessThanOrEqualTo(timeout));
+      });
+
+      test('environment should be lowercase', () {
+        final env = AppConfig.environment;
+        expect(env, equals(env.toLowerCase()));
+      });
+
+      test(
+        'isDevelopment, isStaging, isProduction should be mutually exclusive',
+        () {
+        final isDev = AppConfig.isDevelopment;
+        final isStaging = AppConfig.isStaging;
+        final isProd = AppConfig.isProduction;
+
+        // Only one should be true at a time (or all false if unknown env)
+        final trueCount = [isDev, isStaging, isProd].where((v) => v).length;
+        expect(trueCount, lessThanOrEqualTo(1));
+      });
+
+      test('isDebugMode and isReleaseMode should be opposite', () {
+        final isDebug = AppConfig.isDebugMode;
+        final isRelease = AppConfig.isReleaseMode;
+        expect(isDebug, isNot(isRelease));
+      });
+
+      test('getDebugInfo should return consistent values', () {
+        final debugInfo1 = AppConfig.getDebugInfo();
+        final debugInfo2 = AppConfig.getDebugInfo();
+
+        // Should return same values on multiple calls
+        expect(debugInfo1['environment'], debugInfo2['environment']);
+        expect(debugInfo1['baseUrl'], debugInfo2['baseUrl']);
+        expect(debugInfo1['enableLogging'], debugInfo2['enableLogging']);
+      });
+
+      test('getDebugInfo should have correct types', () {
+        final debugInfo = AppConfig.getDebugInfo();
+        expect(debugInfo['environment'], isA<String>());
+        expect(debugInfo['isDevelopment'], isA<bool>());
+        expect(debugInfo['isStaging'], isA<bool>());
+        expect(debugInfo['isProduction'], isA<bool>());
+        expect(debugInfo['isDebugMode'], isA<bool>());
+        expect(debugInfo['isReleaseMode'], isA<bool>());
+        expect(debugInfo['baseUrl'], isA<String>());
+        expect(debugInfo['apiTimeout'], isA<int>());
+        expect(debugInfo['enableLogging'], isA<bool>());
+        expect(debugInfo['appVersion'], isA<String>());
+        expect(debugInfo['appBuildNumber'], isA<String>());
+        expect(debugInfo['envConfigInitialized'], isA<bool>());
+      });
+
+      test('appVersion should have valid format', () {
+        final version = AppConfig.appVersion;
+        expect(version, isNotEmpty);
+        // Should be in semantic version format (x.y.z or similar)
+        expect(version, matches(RegExp(r'[\d.]+')));
+      });
+
+      test('appBuildNumber should be numeric string', () {
+        final buildNumber = AppConfig.appBuildNumber;
+        expect(buildNumber, isNotEmpty);
+        expect(int.tryParse(buildNumber), isNotNull);
+      });
+
+      test('all timeout values should be positive', () {
+        expect(AppConfig.apiTimeout, greaterThan(0));
+        expect(AppConfig.apiConnectTimeout, greaterThan(0));
+        expect(AppConfig.apiReceiveTimeout, greaterThan(0));
+        expect(AppConfig.apiSendTimeout, greaterThan(0));
+      });
+
+      test('printConfig should not throw in debug mode', () {
+        expect(AppConfig.printConfig, returnsNormally);
+      });
+    });
   });
 }

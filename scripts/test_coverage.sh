@@ -66,9 +66,9 @@ done
 
 # Run tests with coverage (unless skipped)
 if [ "$SKIP_TEST" = false ]; then
-  echo -e "${BLUE}Running tests with coverage...${NC}"
-  echo ""
-  flutter test --coverage
+echo -e "${BLUE}Running tests with coverage...${NC}"
+echo ""
+flutter test --coverage
 else
   echo -e "${YELLOW}Skipping tests (using existing coverage data)${NC}"
   echo ""
@@ -183,7 +183,7 @@ else
   echo -e "${BLUE}Coverage: ${COVERAGE_PERCENT}%${NC}"
   echo ""
 fi
-
+  
 # Analyze coverage by layer if requested (run before threshold check)
 if [ "$ANALYZE_COVERAGE" = true ]; then
   echo ""
@@ -284,11 +284,11 @@ if [ "$ANALYZE_COVERAGE" = true ]; then
 fi
 
 # Check against minimum threshold (after analysis if requested)
-if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
-  echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
+  if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
+    echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
   EXIT_CODE=1
-else
-  echo -e "${GREEN}✓ Coverage ${COVERAGE_PERCENT}% meets minimum threshold of ${MIN_COVERAGE}%${NC}"
+  else
+    echo -e "${GREEN}✓ Coverage ${COVERAGE_PERCENT}% meets minimum threshold of ${MIN_COVERAGE}%${NC}"
   EXIT_CODE=0
 fi
 

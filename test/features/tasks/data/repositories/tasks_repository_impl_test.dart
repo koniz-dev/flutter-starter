@@ -327,6 +327,288 @@ void main() {
         // Assert
         expectResultFailureType(result, CacheFailure);
       });
+
+      test('should toggle from completed to incomplete', () async {
+        // Arrange
+        const taskId = 'task-1';
+        final taskModel = createTaskModel(id: taskId, isCompleted: true);
+        when(() => mockLocalDataSource.getTaskById(any()))
+            .thenAnswer((_) async => taskModel);
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.toggleTaskCompletion(taskId);
+
+        // Assert
+        result.when(
+          success: (Task task) => expect(task.isCompleted, isFalse),
+          failureCallback: (Failure _) => fail('Expected success'),
+        );
+      });
+
+      test('should update updatedAt when toggling', () async {
+        // Arrange
+        const taskId = 'task-1';
+        final originalTime = DateTime(2023);
+        final taskModel = TaskModel(
+          id: taskId,
+          title: 'Test Task',
+          createdAt: originalTime,
+          updatedAt: originalTime,
+        );
+        when(() => mockLocalDataSource.getTaskById(any()))
+            .thenAnswer((_) async => taskModel);
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.toggleTaskCompletion(taskId);
+
+        // Assert
+        result.when(
+          success: (Task task) {
+            expect(task.updatedAt, isNot(originalTime));
+            expect(task.updatedAt.isAfter(originalTime), isTrue);
+          },
+          failureCallback: (Failure _) => fail('Expected success'),
+        );
+      });
+    });
+
+    group('Error handling', () {
+      test('should handle generic Exception in getAllTasks', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getAllTasks())
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.getAllTasks();
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+
+      test('should handle generic Exception in getTaskById', () async {
+        // Arrange
+        const taskId = 'task-1';
+        when(() => mockLocalDataSource.getTaskById(any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.getTaskById(taskId);
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+
+      test('should handle generic Exception in createTask', () async {
+        // Arrange
+        final task = createTask(id: 'task-1');
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.createTask(task);
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+
+      test('should handle generic Exception in updateTask', () async {
+        // Arrange
+        final task = createTask(id: 'task-1');
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.updateTask(task);
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+
+      test('should handle generic Exception in deleteTask', () async {
+        // Arrange
+        const taskId = 'task-1';
+        when(() => mockLocalDataSource.deleteTask(any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.deleteTask(taskId);
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+
+      test('should handle generic Exception in deleteCompletedTasks', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getAllTasks())
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.deleteCompletedTasks();
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+
+      test('should handle generic Exception in toggleTaskCompletion', () async {
+        // Arrange
+        const taskId = 'task-1';
+        when(() => mockLocalDataSource.getTaskById(any()))
+            .thenThrow(Exception('Generic error'));
+
+        // Act
+        final result = await repository.toggleTaskCompletion(taskId);
+
+        // Assert
+        expectResultFailureType(result, UnknownFailure);
+      });
+    });
+
+    group('Edge cases', () {
+      test('should handle getAllTasks with large list', () async {
+        // Arrange
+        final taskModels = List.generate(
+          100,
+          (index) => createTaskModel(id: 'task-$index'),
+        );
+        when(() => mockLocalDataSource.getAllTasks())
+            .thenAnswer((_) async => taskModels);
+
+        // Act
+        final result = await repository.getAllTasks();
+
+        // Assert
+        expectResultSuccess(
+          result,
+          taskModels.map((m) => m.toEntity()).toList(),
+        );
+        expect(
+          result.when(
+            success: (tasks) => tasks.length,
+            failureCallback: (_) => 0,
+          ),
+          100,
+        );
+      });
+
+      test('should handle createTask with task having all fields', () async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+          description: 'Test Description',
+          isCompleted: true,
+        );
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.createTask(task);
+
+        // Assert
+        expectResultSuccess(result, task);
+        verify(() => mockLocalDataSource.saveTask(any())).called(1);
+      });
+
+      test(
+        'should handle updateTask with task having null description',
+        () async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+        );
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.updateTask(task);
+
+        // Assert
+        expectResultSuccess(result, task);
+      });
+
+      test(
+        'should handle deleteCompletedTasks when all tasks are completed',
+        () async {
+        // Arrange
+        final allTasks = [
+          createTaskModel(id: 'task-1', isCompleted: true),
+          createTaskModel(id: 'task-2', isCompleted: true),
+        ];
+        when(() => mockLocalDataSource.getAllTasks())
+            .thenAnswer((_) async => allTasks);
+        when(() => mockLocalDataSource.saveTasks(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.deleteCompletedTasks();
+
+        // Assert
+        result.when(
+          success: (_) => expect(true, isTrue),
+          failureCallback: (_) => fail('Expected success'),
+        );
+        final savedTasks = verify(
+          () => mockLocalDataSource.saveTasks(captureAny()),
+        ).captured.first as List<TaskModel>;
+        expect(savedTasks, isEmpty);
+      });
+
+      test(
+        'should handle deleteCompletedTasks when no tasks are completed',
+        () async {
+        // Arrange
+        final allTasks = [
+          createTaskModel(id: 'task-1'),
+          createTaskModel(id: 'task-2'),
+        ];
+        when(() => mockLocalDataSource.getAllTasks())
+            .thenAnswer((_) async => allTasks);
+        when(() => mockLocalDataSource.saveTasks(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.deleteCompletedTasks();
+
+        // Assert
+        result.when(
+          success: (_) => expect(true, isTrue),
+          failureCallback: (_) => fail('Expected success'),
+        );
+        final savedTasks = verify(
+          () => mockLocalDataSource.saveTasks(captureAny()),
+        ).captured.first as List<TaskModel>;
+        expect(savedTasks.length, 2);
+      });
+
+      test('should handle deleteTask with empty string ID', () async {
+        // Arrange
+        when(() => mockLocalDataSource.deleteTask(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.deleteTask('');
+
+        // Assert
+        result.when(
+          success: (_) => expect(true, isTrue),
+          failureCallback: (_) => fail('Expected success'),
+        );
+      });
+
+      test('should handle getTaskById with empty string ID', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getTaskById(any()))
+            .thenAnswer((_) async => null);
+
+        // Act
+        final result = await repository.getTaskById('');
+
+        // Assert
+        expectResultSuccess(result, null);
+      });
     });
   });
 }

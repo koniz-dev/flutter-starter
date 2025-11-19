@@ -191,8 +191,9 @@ class LoggingService {
     try {
       final contextJson = jsonEncode(context);
       return '$message | Context: $contextJson';
-    } on Exception {
-      // If JSON encoding fails, fall back to string representation
+    } on Object {
+      // If JSON encoding fails (e.g., circular reference),
+      // fall back to string representation
       return '$message | Context: $context';
     }
   }
