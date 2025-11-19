@@ -216,12 +216,21 @@ void main() {
           ),
         );
 
-        final button = find.byType(ElevatedButton);
-        await tester.tap(button);
-        await tester.pump();
-
-        expect(pressed, isFalse);
+        // Verify loading indicator is shown
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // Verify button is disabled (onPressed is null when loading)
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        expect(button.onPressed, isNull);
+
+        // Verify onPressed was never called
+        expect(pressed, isFalse);
+
+        // Note: We don't tap the disabled button because:
+        // 1. Tapping disabled buttons can cause gesture recognizer to hang
+        // 2. The state verification above is sufficient to test the behavior
       });
     });
   });
