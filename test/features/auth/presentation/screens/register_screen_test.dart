@@ -256,7 +256,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Navigate to register first (to establish navigation stack)
-      router.go(AppRoutes.register);
+      // Use context.push to add to navigation stack so we can pop
+      await tester.element(find.byType(LoginScreen)).push(AppRoutes.register);
       await tester.pumpAndSettle();
 
       // Act

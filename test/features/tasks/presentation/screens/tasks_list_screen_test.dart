@@ -353,7 +353,12 @@ void main() {
       await tester.pumpAndSettle();
 
       // Act
-      await tester.tap(find.byIcon(Icons.more_vert));
+      // Find and tap the PopupMenuButton
+      // We use find.widgetWithIcon to find the IconButton with more_vert icon
+      // that PopupMenuButton creates internally
+      final popupMenuButton = find.widgetWithIcon(IconButton, Icons.more_vert);
+      expect(popupMenuButton, findsOneWidget);
+      await tester.tap(popupMenuButton);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Delete'));
       await tester.pumpAndSettle();

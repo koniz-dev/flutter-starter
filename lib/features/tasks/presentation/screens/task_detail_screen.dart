@@ -108,7 +108,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       );
     }
 
-    if (mounted) {
+    if (mounted && context.canPop()) {
       context.pop();
     }
   }
@@ -156,7 +156,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 onPressed: () {
                   if (widget.taskId != null) {
                     unawaited(_loadTask());
-                  } else {
+                  } else if (context.canPop()) {
                     context.pop();
                   }
                 },
