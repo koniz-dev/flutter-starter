@@ -249,73 +249,72 @@ void main() {
       expect(find.text('Success'), findsOneWidget);
     });
 
-    // COMMENTED OUT: Test has risk of hanging due to navigation
-    // with pumpAndSettle()
-    // testWidgets('should navigate to route', (tester) async {
-    //   // Arrange
-    //   const targetWidget = Scaffold(
-    //     body: Text('Target Screen'),
-    //   );
+    testWidgets('should navigate to route', (tester) async {
+      // Arrange
+      const targetWidget = Scaffold(
+        body: Text('Target Screen'),
+      );
 
-    //   await tester.pumpWidget(
-    //     MaterialApp(
-    //       home: Scaffold(
-    //         body: Builder(
-    //           builder: (context) {
-    //             return ElevatedButton(
-    //               onPressed: () => context.navigateTo<void>(targetWidget),
-    //               child: const Text('Navigate'),
-    //             );
-    //           },
-    //         ),
-    //       ),
-    //     ),
-    //   );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) {
+                return ElevatedButton(
+                  onPressed: () => context.navigateTo<void>(targetWidget),
+                  child: const Text('Navigate'),
+                );
+              },
+            ),
+          ),
+        ),
+      );
 
-    //   // Act
-    //   await tester.tap(find.text('Navigate'));
-    //   await tester.pumpAndSettle();
+      // Act
+      await tester.tap(find.text('Navigate'));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Assert
-    //   expect(find.text('Target Screen'), findsOneWidget);
-    // });
+      // Assert
+      expect(find.text('Target Screen'), findsOneWidget);
+    });
 
-    // COMMENTED OUT: Test has risk of hanging due to navigation
-    // with pumpAndSettle()
-    // testWidgets('should pop route', (tester) async {
-    //   // Arrange
-    //   await tester.pumpWidget(
-    //     MaterialApp(
-    //       initialRoute: '/',
-    //       routes: {
-    //         '/': (context) => Scaffold(
-    //               body: ElevatedButton(
-    //                 onPressed: () => Navigator.pushNamed(context, '/second'),
-    //                 child: const Text('Go to Second'),
-    //               ),
-    //             ),
-    //         '/second': (context) => Scaffold(
-    //               body: Builder(
-    //                 builder: (context) {
-    //                   return ElevatedButton(
-    //                     onPressed: () => context.pop<void>(),
-    //                     child: const Text('Pop'),
-    //                   );
-    //                 },
-    //               ),
-    //             ),
-    //       },
-    //     ),
-    //   );
+    testWidgets('should pop route', (tester) async {
+      // Arrange
+      await tester.pumpWidget(
+        MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/': (context) => Scaffold(
+                  body: ElevatedButton(
+                    onPressed: () => Navigator.pushNamed(context, '/second'),
+                    child: const Text('Go to Second'),
+                  ),
+                ),
+            '/second': (context) => Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      return ElevatedButton(
+                        onPressed: () => context.pop<void>(),
+                        child: const Text('Pop'),
+                      );
+                    },
+                  ),
+                ),
+          },
+        ),
+      );
 
-    //   // Act
-    //   await tester.tap(find.text('Go to Second'));
-    //   await tester.pumpAndSettle();
-    //   await tester.tap(find.text('Pop'));
-    //   await tester.pumpAndSettle();
+      // Act
+      await tester.tap(find.text('Go to Second'));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.tap(find.text('Pop'));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Assert
-    //   expect(find.text('Go to Second'), findsOneWidget);
-    // });
+      // Assert
+      expect(find.text('Go to Second'), findsOneWidget);
+    });
   });
 }

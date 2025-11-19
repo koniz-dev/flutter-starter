@@ -15,27 +15,26 @@ void main() {
       expect(myApp, isA<ConsumerWidget>());
     });
 
-    // COMMENTED OUT: Test has risk of hanging due to router initialization
-    // with pumpAndSettle()
-    // testWidgets('should build MaterialApp with correct title',
-    //     (tester) async {
-    //   final container = ProviderContainer();
-    //   await tester.pumpWidget(
-    //     UncontrolledProviderScope(
-    //       container: container,
-    //       child: const MyApp(),
-    //     ),
-    //   );
+    testWidgets('should build MaterialApp with correct title',
+        (tester) async {
+      final container = ProviderContainer();
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MyApp(),
+        ),
+      );
 
-    //   // Wait for router to initialize and navigation to complete
-    //   await tester.pumpAndSettle();
+      // Wait for router to initialize and navigation to complete
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Check that MaterialApp is built (title is a property, not displayed
-    //   // text)
-    //   final materialApp =
-    //       tester.widget<MaterialApp>(find.byType(MaterialApp));
-    //   expect(materialApp.title, 'Flutter Starter');
-    // });
+      // Check that MaterialApp is built (title is a property, not displayed
+      // text)
+      final materialApp =
+          tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(materialApp.title, 'Flutter Starter');
+    });
 
     testWidgets('should use light theme by default', (tester) async {
       final container = ProviderContainer();

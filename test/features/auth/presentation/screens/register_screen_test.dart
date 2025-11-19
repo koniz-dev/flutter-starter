@@ -1,10 +1,23 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/routing/app_routes.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/mock_factories.dart';
 import '../../../../helpers/pump_app.dart';
+import '../../../../helpers/test_fixtures.dart';
 
 void main() {
   group('RegisterScreen', () {
@@ -119,154 +132,173 @@ void main() {
       );
     });
 
-    // COMMENTED OUT: Test has risk of hanging due to form submission
-    // with pumpAndSettle()
-    // testWidgets('should call register use case with correct parameters',
-    //     (tester) async {
-    //   // Arrange
-    //   final user = createUser();
-    //   when(() => mockRegisterUseCase(any(), any(), any()))
-    //       .thenAnswer((_) async => Success(user));
-    //   await pumpApp(
-    //     tester,
-    //     const RegisterScreen(),
-    //     overrides: getOverrides(),
-    //   );
+    testWidgets('should call register use case with correct parameters',
+        (tester) async {
+      // Arrange
+      final user = createUser();
+      when(() => mockRegisterUseCase(any(), any(), any()))
+          .thenAnswer((_) async => Success(user));
+      await pumpApp(
+        tester,
+        const RegisterScreen(),
+        overrides: getOverrides(),
+      );
 
-    //   // Act
-    //   final nameField = find.byType(TextFormField).first;
-    //   final emailField = find.byType(TextFormField).at(1);
-    //   final passwordField = find.byType(TextFormField).at(2);
-    //   await tester.enterText(nameField, 'Test User');
-    //   await tester.enterText(emailField, 'test@example.com');
-    //   await tester.enterText(passwordField, 'password123');
-    //   await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
-    //   await tester.pumpAndSettle();
+      // Act
+      final nameField = find.byType(TextFormField).first;
+      final emailField = find.byType(TextFormField).at(1);
+      final passwordField = find.byType(TextFormField).at(2);
+      await tester.enterText(nameField, 'Test User');
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.enterText(passwordField, 'password123');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Assert
-    //   verify(
-    //     () => mockRegisterUseCase(
-    //       'test@example.com',
-    //       'password123',
-    //       'Test User',
-    //     ),
-    //   ).called(1);
-    // });
+      // Assert
+      verify(
+        () => mockRegisterUseCase(
+          'test@example.com',
+          'password123',
+          'Test User',
+        ),
+      ).called(1);
+    });
 
-    // COMMENTED OUT: Test has risk of hanging due to async operation
-    // with pumpAndSettle()
-    // testWidgets('should show loading indicator during registration',
-    //     (tester) async {
-    //   // Arrange
-    //   final user = createUser();
-    //   when(() => mockRegisterUseCase(any(), any(), any()))
-    //       .thenAnswer((_) async {
-    //     await Future<void>.delayed(const Duration(milliseconds: 100));
-    //     return Success(user);
-    //   });
-    //   await pumpApp(
-    //     tester,
-    //     const RegisterScreen(),
-    //     overrides: getOverrides(),
-    //   );
+    testWidgets('should show loading indicator during registration',
+        (tester) async {
+      // Arrange
+      final user = createUser();
+      final completer = Completer<Result<User>>();
+      when(() => mockRegisterUseCase(any(), any(), any()))
+          .thenAnswer((_) => completer.future);
+      await pumpApp(
+        tester,
+        const RegisterScreen(),
+        overrides: getOverrides(),
+      );
 
-    //   // Act
-    //   final nameField = find.byType(TextFormField).first;
-    //   final emailField = find.byType(TextFormField).at(1);
-    //   final passwordField = find.byType(TextFormField).at(2);
-    //   await tester.enterText(nameField, 'Test User');
-    //   await tester.enterText(emailField, 'test@example.com');
-    //   await tester.enterText(passwordField, 'password123');
-    //   await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
-    //   // Pump to start the async operation
-    //   await tester.pump();
-    //   // Assert loading indicator is shown
-    //   expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    //   // Wait for the async operation to complete
-    //   await tester.pumpAndSettle();
-    // });
+      // Act
+      final nameField = find.byType(TextFormField).first;
+      final emailField = find.byType(TextFormField).at(1);
+      final passwordField = find.byType(TextFormField).at(2);
+      await tester.enterText(nameField, 'Test User');
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.enterText(passwordField, 'password123');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
+      // Pump to start the async operation
+      await tester.pump();
+      // Assert loading indicator is shown
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // Complete the async operation
+      completer.complete(Success(user));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+    });
 
-    // COMMENTED OUT: Test has risk of hanging due to error handling
-    // with pumpAndSettle()
-    // testWidgets('should show error message when registration fails',
-    //     (tester) async {
-    //   // Arrange
-    //   final failure = createAuthFailure(message: 'Registration failed');
-    //   when(() => mockRegisterUseCase(any(), any(), any()))
-    //       .thenAnswer((_) async => ResultFailure(failure));
-    //   await pumpApp(
-    //     tester,
-    //     const RegisterScreen(),
-    //     overrides: getOverrides(),
-    //   );
+    testWidgets('should show error message when registration fails',
+        (tester) async {
+      // Arrange
+      final failure = createAuthFailure(message: 'Registration failed');
+      when(() => mockRegisterUseCase(any(), any(), any()))
+          .thenAnswer((_) async => ResultFailure(failure));
+      await pumpApp(
+        tester,
+        const RegisterScreen(),
+        overrides: getOverrides(),
+      );
 
-    //   // Act
-    //   final nameField = find.byType(TextFormField).first;
-    //   final emailField = find.byType(TextFormField).at(1);
-    //   final passwordField = find.byType(TextFormField).at(2);
-    //   await tester.enterText(nameField, 'Test User');
-    //   await tester.enterText(emailField, 'test@example.com');
-    //   await tester.enterText(passwordField, 'password123');
-    //   await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
-    //   await tester.pumpAndSettle();
+      // Act
+      final nameField = find.byType(TextFormField).first;
+      final emailField = find.byType(TextFormField).at(1);
+      final passwordField = find.byType(TextFormField).at(2);
+      await tester.enterText(nameField, 'Test User');
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.enterText(passwordField, 'password123');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Assert
-    //   expect(find.text('Registration failed'), findsOneWidget);
-    // });
+      // Assert
+      expect(find.text('Registration failed'), findsOneWidget);
+    });
 
-    // COMMENTED OUT: Test has risk of hanging due to navigation
-    // with pumpAndSettle()
-    // testWidgets('should navigate back to login when back button is tapped',
-    //     (tester) async {
-    //   // Arrange
-    //   final router = GoRouter(
-    //     initialLocation: AppRoutes.login,
-    //     routes: [
-    //       GoRoute(
-    //         path: AppRoutes.login,
-    //         builder: (context, state) => const LoginScreen(),
-    //       ),
-    //       GoRoute(
-    //         path: AppRoutes.register,
-    //         builder: (context, state) => const RegisterScreen(),
-    //       ),
-    //     ],
-    //   );
+    testWidgets('should navigate back to login when back button is tapped',
+        (tester) async {
+      // Arrange
+      final router = GoRouter(
+        initialLocation: AppRoutes.login,
+        routes: [
+          GoRoute(
+            path: AppRoutes.login,
+            builder: (context, state) => const LoginScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.register,
+            builder: (context, state) => const RegisterScreen(),
+          ),
+        ],
+      );
 
-    //   await tester.pumpWidget(
-    //     ProviderScope(
-    //       // Override type is not exported from riverpod package.
-    //       // ignore: argument_type_not_assignable
-    //       overrides: getOverrides(),
-    //       child: MaterialApp.router(
-    //         routerConfig: router,
-    //         localizationsDelegates: const [
-    //           AppLocalizations.delegate,
-    //           GlobalMaterialLocalizations.delegate,
-    //           GlobalWidgetsLocalizations.delegate,
-    //           GlobalCupertinoLocalizations.delegate,
-    //         ],
-    //         supportedLocales: LocalizationService.supportedLocales,
-    //       ),
-    //     ),
-    //   );
+      await tester.pumpWidget(
+        ProviderScope(
+          // Override type is not exported from riverpod package.
+          // ignore: argument_type_not_assignable
+          overrides: getOverrides(),
+          child: MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocalizationService.supportedLocales,
+          ),
+        ),
+      );
 
-    //   await tester.pumpAndSettle();
+      // Wait for initial render
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
-    //   // Navigate to register first (to establish navigation stack)
-    //   // Use context.push to add to navigation stack so we can pop
-    //   await tester.element(find.byType(LoginScreen))
-    //       .push(AppRoutes.register);
-    //   await tester.pumpAndSettle();
+      // Navigate to register first (to establish navigation stack)
+      // Use GoRouter.push to add to navigation stack so we can pop
+      final loginContext = tester.element(find.byType(LoginScreen));
+      // Use unawaited to avoid hanging while still satisfying linter
+      unawaited(GoRouter.of(loginContext).push(AppRoutes.register));
+      // Wait for navigation animation to complete
+      await tester.pumpAndSettle(const Duration(seconds: 2));
 
-    //   // Act
-    //   await tester.tap(find.text('Already have an account? Login'));
-    //   await tester.pumpAndSettle();
+      // Verify we're on register screen
+      expect(find.text('Register'), findsWidgets);
+      expect(find.byType(RegisterScreen), findsOneWidget);
 
-    //   // Assert
-    //   // Verify LoginScreen is displayed (popRoute navigates back)
-    //   expect(find.text('Login'), findsWidgets);
-    //   expect(find.text('Email'), findsOneWidget);
-    // });
+      // Act - tap the back button
+      await tester.tap(find.text('Already have an account? Login'));
+      // Wait for navigation animation to complete
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Assert
+      // Verify LoginScreen is displayed (popRoute navigates back)
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(find.byType(RegisterScreen), findsNothing);
+      expect(find.text('Login'), findsWidgets);
+      // Verify we're back on LoginScreen by checking for unique elements
+      // Name only exists in RegisterScreen - this confirms RegisterScreen
+      // is gone
+      expect(find.text('Name'), findsNothing);
+      // Verify "Don't have an account? Register" text exists
+      // (unique to LoginScreen)
+      expect(find.text("Don't have an account? Register"), findsOneWidget);
+      // Verify router location is back to login
+      final currentLoginContext =
+          tester.element(find.byType(LoginScreen).first);
+      final currentRouter = GoRouter.of(currentLoginContext);
+      expect(
+        currentRouter.routeInformationProvider.value.uri.path,
+        AppRoutes.login,
+      );
+    });
   });
 }

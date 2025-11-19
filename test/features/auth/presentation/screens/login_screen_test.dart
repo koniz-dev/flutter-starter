@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -164,30 +165,29 @@ void main() {
           .called(1);
     });
 
-    // COMMENTED OUT: Test has risk of hanging due to error handling
-    // with pumpAndSettle()
-    // testWidgets(
-    //   'should display error message on login failure',
-    //   (tester) async {
-    //     // Arrange
-    //     const failure = AuthFailure('Invalid credentials');
-    //     when(() => mockLoginUseCase(any(), any()))
-    //         .thenAnswer((_) async => const ResultFailure(failure));
+    testWidgets(
+      'should display error message on login failure',
+      (tester) async {
+        // Arrange
+        const failure = AuthFailure('Invalid credentials');
+        when(() => mockLoginUseCase(any(), any()))
+            .thenAnswer((_) async => const ResultFailure(failure));
 
-    //     await tester.pumpWidget(createTestWidget());
-    //     final emailField = find.byType(TextFormField).first;
-    //     final passwordField = find.byType(TextFormField).last;
+        await tester.pumpWidget(createTestWidget());
+        final emailField = find.byType(TextFormField).first;
+        final passwordField = find.byType(TextFormField).last;
 
-    //     // Act
-    //     await tester.enterText(emailField, 'test@example.com');
-    //     await tester.enterText(passwordField, 'password123');
-    //     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
-    //     await tester.pumpAndSettle();
+        // Act
+        await tester.enterText(emailField, 'test@example.com');
+        await tester.enterText(passwordField, 'password123');
+        await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+        // Use timeout to prevent hanging
+        await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //     // Assert
-    //     expect(find.text('Invalid credentials'), findsOneWidget);
-    //   },
-    // );
+        // Assert
+        expect(find.text('Invalid credentials'), findsOneWidget);
+      },
+    );
 
     testWidgets('should show loading indicator during login', (tester) async {
       // Arrange
@@ -254,23 +254,22 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    // COMMENTED OUT: Test has risk of hanging due to navigation
-    // with pumpAndSettle()
-    // testWidgets(
-    //   'should navigate to RegisterScreen when register button is tapped',
-    //   (tester) async {
-    //     // Arrange
-    //     await tester.pumpWidget(createTestWidget());
+    testWidgets(
+      'should navigate to RegisterScreen when register button is tapped',
+      (tester) async {
+        // Arrange
+        await tester.pumpWidget(createTestWidget());
 
-    //     // Act
-    //     await tester.tap(find.text("Don't have an account? Register"));
-    //     await tester.pumpAndSettle();
+        // Act
+        await tester.tap(find.text("Don't have an account? Register"));
+        // Use timeout to prevent hanging
+        await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //     // Assert
-    //     // Verify RegisterScreen is displayed
-    //     expect(find.text('Register'), findsWidgets);
-    //     expect(find.text('Name'), findsOneWidget);
-    //   },
-    // );
+        // Assert
+        // Verify RegisterScreen is displayed
+        expect(find.text('Register'), findsWidgets);
+        expect(find.text('Name'), findsOneWidget);
+      },
+    );
   });
 }
