@@ -33,16 +33,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AuthResponseModel> login(String email, String password) async {
     // Error interceptor handles DioException conversion automatically
     // Dio throws for non-2xx status codes, so we don't need status code checks
-      final response = await apiClient.post(
-        ApiEndpoints.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
-      );
+    final response = await apiClient.post(
+      ApiEndpoints.login,
+      data: {
+        'email': email,
+        'password': password,
+      },
+    );
 
-        final data = response.data as Map<String, dynamic>;
-        return AuthResponseModel.fromJson(data);
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
   }
 
   @override
@@ -53,37 +53,37 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   ) async {
     // Error interceptor handles DioException conversion automatically
     // Dio throws for non-2xx status codes, so we don't need status code checks
-      final response = await apiClient.post(
-        ApiEndpoints.register,
-        data: {
-          'email': email,
-          'password': password,
-          'name': name,
-        },
-      );
+    final response = await apiClient.post(
+      ApiEndpoints.register,
+      data: {
+        'email': email,
+        'password': password,
+        'name': name,
+      },
+    );
 
-        final data = response.data as Map<String, dynamic>;
-        return AuthResponseModel.fromJson(data);
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
   }
 
   @override
   Future<void> logout() async {
     // Error interceptor handles DioException conversion automatically
-      await apiClient.post(ApiEndpoints.logout);
+    await apiClient.post(ApiEndpoints.logout);
   }
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async {
     // Error interceptor handles DioException conversion automatically
     // Dio throws for non-2xx status codes, so we don't need status code checks
-      final response = await apiClient.post(
-        ApiEndpoints.refreshToken,
-        data: {
-          'refresh_token': refreshToken,
-        },
-      );
+    final response = await apiClient.post(
+      ApiEndpoints.refreshToken,
+      data: {
+        'refresh_token': refreshToken,
+      },
+    );
 
-        final data = response.data as Map<String, dynamic>;
-        return AuthResponseModel.fromJson(data);
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
   }
 }

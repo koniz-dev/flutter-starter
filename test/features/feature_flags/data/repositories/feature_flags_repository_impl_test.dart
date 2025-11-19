@@ -9,6 +9,7 @@ import 'package:mocktail/mocktail.dart';
 
 class MockFeatureFlagsRemoteDataSource extends Mock
     implements FeatureFlagsRemoteDataSource {}
+
 class MockFeatureFlagsLocalDataSource extends Mock
     implements FeatureFlagsLocalDataSource {}
 
@@ -68,8 +69,7 @@ void main() {
         expect(flag?.source, FeatureFlagSource.remoteConfig);
         verify(() => mockLocalDataSource.getLocalOverride('test_flag'))
             .called(1);
-        verify(() => mockRemoteDataSource.getRemoteFlag('test_flag'))
-            .called(1);
+        verify(() => mockRemoteDataSource.getRemoteFlag('test_flag')).called(1);
       });
 
       test('should return local flag when remote and override not available',
@@ -180,11 +180,12 @@ void main() {
         // Arrange
         when(() => mockLocalDataSource.getAllLocalOverrides())
             .thenAnswer((_) async => {'override_flag': true});
-        when(() => mockRemoteDataSource.getAllRemoteFlags())
-            .thenAnswer((_) async => {
-                  'remote_flag': false,
-                  'override_flag': false, // Should be overridden by local
-                },);
+        when(() => mockRemoteDataSource.getAllRemoteFlags()).thenAnswer(
+          (_) async => {
+            'remote_flag': false,
+            'override_flag': false, // Should be overridden by local
+          },
+        );
 
         // Act
         final result = await repository.getAllFlags();
@@ -245,10 +246,12 @@ void main() {
     group('setLocalOverride', () {
       test('should set local override', () async {
         // Arrange
-        when(() => mockLocalDataSource.setLocalOverride(
-              'test_flag',
-              value: true,
-            ),).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.setLocalOverride(
+            'test_flag',
+            value: true,
+          ),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.setLocalOverride(
@@ -258,10 +261,12 @@ void main() {
 
         // Assert
         expect(result.isSuccess, isTrue);
-        verify(() => mockLocalDataSource.setLocalOverride(
-              'test_flag',
-              value: true,
-            ),).called(1);
+        verify(
+          () => mockLocalDataSource.setLocalOverride(
+            'test_flag',
+            value: true,
+          ),
+        ).called(1);
       });
 
       test('should handle exceptions', () async {

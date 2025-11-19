@@ -19,8 +19,7 @@ import 'package:flutter_starter/core/utils/memory_helper.dart';
 ///   // Resources are automatically disposed
 /// }
 /// ```
-mixin ProviderDisposal<T extends ConsumerStatefulWidget>
-    on ConsumerState<T> {
+mixin ProviderDisposal<T extends ConsumerStatefulWidget> on ConsumerState<T> {
   /// List of disposables to clean up
   final List<Disposable> _disposables = [];
 
@@ -34,7 +33,7 @@ mixin ProviderDisposal<T extends ConsumerStatefulWidget>
   /// Register a provider subscription for automatic disposal
   ///
   /// This ensures the provider subscription is properly cancelled
-  /// 
+  ///
   /// Note: In Riverpod 3.0, provider subscriptions are automatically
   /// disposed when the widget is disposed, so manual disposal is not needed.
   void registerProviderSubscription<TValue>(

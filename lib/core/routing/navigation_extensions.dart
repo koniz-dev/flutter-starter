@@ -39,8 +39,7 @@ extension NavigationExtensions on BuildContext {
   void goToTasks() => go(AppRoutes.tasks);
 
   /// Navigate to task detail screen
-  void goToTaskDetail(String taskId) =>
-      go('${AppRoutes.tasks}/$taskId');
+  void goToTaskDetail(String taskId) => go('${AppRoutes.tasks}/$taskId');
 
   /// Push a new route (adds to navigation stack)
   void pushRoute(String location, {Object? extra}) {

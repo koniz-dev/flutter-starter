@@ -402,9 +402,7 @@ void main() {
     group('Integration with when()', () {
       test('should chain map and when', () {
         const result = Success<int>(42);
-        final value = result
-            .map((data) => data * 2)
-            .when(
+        final value = result.map((data) => data * 2).when(
               success: (data) => 'Result: $data',
               failureCallback: (failure) => 'Error',
             );
@@ -414,12 +412,11 @@ void main() {
 
       test('should handle complex type transformations', () {
         const result = Success<List<int>>([1, 2, 3]);
-        final value = result
-            .map((data) => data.map((e) => e * 2).toList())
-            .when(
-              success: (data) => data.join(', '),
-              failureCallback: (failure) => 'Error',
-            );
+        final value =
+            result.map((data) => data.map((e) => e * 2).toList()).when(
+                  success: (data) => data.join(', '),
+                  failureCallback: (failure) => 'Error',
+                );
 
         expect(value, '2, 4, 6');
       });
@@ -427,9 +424,7 @@ void main() {
       test('should chain mapError and when', () {
         const failure = ServerFailure('Original error');
         const result = ResultFailure<String>(failure);
-        final value = result
-            .mapError((message) => 'Mapped: $message')
-            .when(
+        final value = result.mapError((message) => 'Mapped: $message').when(
               success: (data) => 'Success',
               failureCallback: (f) => f.message,
             );

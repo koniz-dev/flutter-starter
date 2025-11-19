@@ -22,8 +22,7 @@ abstract class FeatureFlagsRemoteDataSource {
 
 /// Implementation of [FeatureFlagsRemoteDataSource] using Firebase Remote
 /// Config
-class FeatureFlagsRemoteDataSourceImpl
-    implements FeatureFlagsRemoteDataSource {
+class FeatureFlagsRemoteDataSourceImpl implements FeatureFlagsRemoteDataSource {
   /// Creates a [FeatureFlagsRemoteDataSourceImpl] with optional
   /// [defaultValues]
   FeatureFlagsRemoteDataSourceImpl({

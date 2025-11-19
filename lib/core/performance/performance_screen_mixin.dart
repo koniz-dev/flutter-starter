@@ -158,16 +158,14 @@ class PerformanceScreenWrapper extends StatefulWidget {
       _PerformanceScreenWrapperState();
 }
 
-class _PerformanceScreenWrapperState
-    extends State<PerformanceScreenWrapper> {
+class _PerformanceScreenWrapperState extends State<PerformanceScreenWrapper> {
   PerformanceTrace? _screenTrace;
   late PerformanceService _performanceService;
 
   @override
   void initState() {
     super.initState();
-    _performanceService =
-        widget.performanceService ?? PerformanceService();
+    _performanceService = widget.performanceService ?? PerformanceService();
     _startScreenTrace();
   }
 

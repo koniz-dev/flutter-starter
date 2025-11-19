@@ -73,8 +73,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('should disable button when isLoading is true',
-        (tester) async {
+    testWidgets('should disable button when isLoading is true', (tester) async {
       // Arrange
       var pressed = false;
       const buttonText = 'Login';

@@ -43,13 +43,15 @@ void main() {
         // Assert
         expect(result, isA<AuthResponseModel>());
         expect(result.user.email, 'test@example.com');
-        verify(() => mockApiClient.post(
-              '/auth/login',
-              data: {
-                'email': 'test@example.com',
-                'password': 'password123',
-              },
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/login',
+            data: {
+              'email': 'test@example.com',
+              'password': 'password123',
+            },
+          ),
+        ).called(1);
       });
 
       test('should throw ServerException on 4xx error', () async {
@@ -153,14 +155,16 @@ void main() {
 
         // Assert
         expect(result, isA<AuthResponseModel>());
-        verify(() => mockApiClient.post(
-              '/auth/register',
-              data: {
-                'email': 'test@example.com',
-                'password': 'password123',
-                'name': 'Test User',
-              },
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/register',
+            data: {
+              'email': 'test@example.com',
+              'password': 'password123',
+              'name': 'Test User',
+            },
+          ),
+        ).called(1);
       });
     });
 
@@ -211,10 +215,12 @@ void main() {
           // Assert
           expect(result, isA<AuthResponseModel>());
           expect(result.token, 'new-access-token');
-          verify(() => mockApiClient.post(
-                '/auth/refresh',
-                data: {'refresh_token': 'refresh-token'},
-              ),).called(1);
+          verify(
+            () => mockApiClient.post(
+              '/auth/refresh',
+              data: {'refresh_token': 'refresh-token'},
+            ),
+          ).called(1);
         },
       );
     });
@@ -235,10 +241,12 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.login('', 'password');
-        verify(() => mockApiClient.post(
-              '/auth/login',
-              data: {'email': '', 'password': 'password'},
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/login',
+            data: {'email': '', 'password': 'password'},
+          ),
+        ).called(1);
       });
 
       test('should handle empty password', () async {
@@ -256,10 +264,12 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.login('test@example.com', '');
-        verify(() => mockApiClient.post(
-              '/auth/login',
-              data: {'email': 'test@example.com', 'password': ''},
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/login',
+            data: {'email': 'test@example.com', 'password': ''},
+          ),
+        ).called(1);
       });
 
       test('should handle empty name in register', () async {
@@ -277,14 +287,16 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.register('test@example.com', 'password', '');
-        verify(() => mockApiClient.post(
-              '/auth/register',
-              data: {
-                'email': 'test@example.com',
-                'password': 'password',
-                'name': '',
-              },
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/register',
+            data: {
+              'email': 'test@example.com',
+              'password': 'password',
+              'name': '',
+            },
+          ),
+        ).called(1);
       });
 
       test('should handle long email', () async {
@@ -303,10 +315,12 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.login(longEmail, 'password');
-        verify(() => mockApiClient.post(
-              '/auth/login',
-              data: {'email': longEmail, 'password': 'password'},
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/login',
+            data: {'email': longEmail, 'password': 'password'},
+          ),
+        ).called(1);
       });
 
       test('should handle long password', () async {
@@ -325,10 +339,12 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.login('test@example.com', longPassword);
-        verify(() => mockApiClient.post(
-              '/auth/login',
-              data: {'email': 'test@example.com', 'password': longPassword},
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/login',
+            data: {'email': 'test@example.com', 'password': longPassword},
+          ),
+        ).called(1);
       });
 
       test('should handle empty refresh token', () async {
@@ -346,10 +362,12 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.refreshToken('');
-        verify(() => mockApiClient.post(
-              '/auth/refresh',
-              data: {'refresh_token': ''},
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/refresh',
+            data: {'refresh_token': ''},
+          ),
+        ).called(1);
       });
 
       test('should handle long refresh token', () async {
@@ -368,10 +386,12 @@ void main() {
         ).thenAnswer((_) async => response);
 
         await dataSource.refreshToken(longToken);
-        verify(() => mockApiClient.post(
-              '/auth/refresh',
-              data: {'refresh_token': longToken},
-            ),).called(1);
+        verify(
+          () => mockApiClient.post(
+            '/auth/refresh',
+            data: {'refresh_token': longToken},
+          ),
+        ).called(1);
       });
     });
   });

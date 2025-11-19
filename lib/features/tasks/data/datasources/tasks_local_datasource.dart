@@ -77,8 +77,7 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
   Future<void> saveTask(TaskModel task) async {
     try {
       final tasks = await getAllTasks();
-      final existingIndex =
-          tasks.indexWhere((t) => t.id == task.id);
+      final existingIndex = tasks.indexWhere((t) => t.id == task.id);
 
       if (existingIndex >= 0) {
         // Update existing task

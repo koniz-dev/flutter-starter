@@ -18,18 +18,18 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Feature Flags Examples'),
         actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () async {
-                await Navigator.push<void>(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (_) => const FeatureFlagsDebugScreen(),
-                  ),
-                );
-              },
-              tooltip: 'Open Debug Menu',
-            ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () async {
+              await Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const FeatureFlagsDebugScreen(),
+                ),
+              );
+            },
+            tooltip: 'Open Debug Menu',
+          ),
         ],
       ),
       body: ListView(
@@ -186,9 +186,7 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
               data: (enabled) => SwitchListTile(
                 title: const Text('Dark Mode'),
                 subtitle: Text(
-                  enabled
-                      ? 'Dark mode is enabled'
-                      : 'Dark mode is disabled',
+                  enabled ? 'Dark mode is enabled' : 'Dark mode is disabled',
                 ),
                 value: enabled,
                 onChanged: (value) {

@@ -20,10 +20,10 @@ void main() {
       useCase = ToggleTaskCompletionUseCase(mockRepository);
     });
 
-      test('should toggle task completion successfully', () async {
-        // Arrange
-        const taskId = 'task-1';
-        final task = createTask(id: taskId);
+    test('should toggle task completion successfully', () async {
+      // Arrange
+      const taskId = 'task-1';
+      final task = createTask(id: taskId);
       when(() => mockRepository.toggleTaskCompletion(any()))
           .thenAnswer((_) async => Success(task.copyWith(isCompleted: true)));
 

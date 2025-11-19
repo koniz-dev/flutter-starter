@@ -124,8 +124,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       }
 
       // Get local flags
-      final localFlags =
-          LocalFeatureFlagsService.instance.getAllLocalFlags();
+      final localFlags = LocalFeatureFlagsService.instance.getAllLocalFlags();
       for (final entry in localFlags.entries) {
         // Only add if not already in flags (higher priority sources take
         // precedence)

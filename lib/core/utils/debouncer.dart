@@ -82,8 +82,7 @@ class Throttler {
   /// If called before the duration expires, the callback is ignored.
   void run(VoidCallback callback) {
     final now = DateTime.now();
-    if (_lastRun == null ||
-        now.difference(_lastRun!) >= _duration) {
+    if (_lastRun == null || now.difference(_lastRun!) >= _duration) {
       _lastRun = now;
       callback();
     }

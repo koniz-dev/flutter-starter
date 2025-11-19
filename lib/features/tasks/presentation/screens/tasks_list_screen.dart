@@ -34,9 +34,7 @@ class TasksListScreen extends ConsumerWidget {
             ),
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: tasksState.isLoading
-                ? null
-                : tasksNotifier.refresh,
+            onPressed: tasksState.isLoading ? null : tasksNotifier.refresh,
             tooltip: l10n.refresh,
           ),
         ],
@@ -95,10 +93,8 @@ class TasksListScreen extends ConsumerWidget {
             Icon(
               Icons.task_alt,
               size: 64,
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary
-                  .withValues(alpha: 0.5),
+              color:
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(

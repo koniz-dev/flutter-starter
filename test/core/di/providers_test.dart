@@ -46,7 +46,7 @@ void main() {
           try {
             final storageService = container.read(storageServiceProvider);
             await storageService.init();
-            
+
             final future = container.read(storageInitializationProvider.future);
             await future;
             expect(future, completes);
@@ -86,10 +86,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(authRemoteDataSourceProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
     });
@@ -104,10 +107,13 @@ void main() {
               ..read(authInterceptorProvider)
               ..read(authRepositoryProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
     });
@@ -122,10 +128,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(authInterceptorProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
     });
@@ -137,10 +146,13 @@ void main() {
           () {
             container.read(apiClientProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
     });
@@ -155,10 +167,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(loginUseCaseProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -171,10 +186,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(registerUseCaseProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -187,10 +205,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(logoutUseCaseProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -204,10 +225,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(refreshTokenUseCaseProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -221,10 +245,13 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(getCurrentUserUseCaseProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -239,10 +266,13 @@ void main() {
                 ..read(authRepositoryProvider)
                 ..read(isAuthenticatedUseCaseProvider);
             },
-            throwsA(predicate(
-              (e) => e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),),
+            throwsA(
+              predicate(
+                (e) =>
+                    e.toString().contains('uninitialized provider') ||
+                    e.toString().contains('circular dependency'),
+              ),
+            ),
           );
         },
       );
@@ -266,15 +296,17 @@ void main() {
               ..read(authRepositoryProvider)
               ..read(authRemoteDataSourceProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
-      test('authRepositoryProvider should depend on data source providers',
-          () {
+      test('authRepositoryProvider should depend on data source providers', () {
         // Circular dependency is expected in unit tests
         expect(
           () {
@@ -283,10 +315,13 @@ void main() {
               ..read(authInterceptorProvider)
               ..read(authRepositoryProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -300,10 +335,13 @@ void main() {
               ..read(loginUseCaseProvider)
               ..read(registerUseCaseProvider);
           },
-          throwsA(predicate(
-            (e) => e.toString().contains('uninitialized provider') ||
-                e.toString().contains('circular dependency'),
-          ),),
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
+            ),
+          ),
         );
       });
 
@@ -315,10 +353,13 @@ void main() {
             () {
               container.read(apiClientProvider);
             },
-            throwsA(predicate(
-              (e) => e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),),
+            throwsA(
+              predicate(
+                (e) =>
+                    e.toString().contains('uninitialized provider') ||
+                    e.toString().contains('circular dependency'),
+              ),
+            ),
           );
         },
       );
@@ -335,10 +376,13 @@ void main() {
                 ..read(authRepositoryProvider)
                 ..read(authInterceptorProvider);
             },
-            throwsA(predicate(
-              (e) => e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),),
+            throwsA(
+              predicate(
+                (e) =>
+                    e.toString().contains('uninitialized provider') ||
+                    e.toString().contains('circular dependency'),
+              ),
+            ),
           );
         },
       );

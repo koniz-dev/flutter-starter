@@ -112,9 +112,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: authState.isLoading
-                    ? null
-                    : () => context.goToRegister(),
+                onPressed:
+                    authState.isLoading ? null : () => context.goToRegister(),
                 child: Text(l10n.dontHaveAccount),
               ),
             ],

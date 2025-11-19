@@ -70,33 +70,34 @@ void main() {
       );
     }
 
-      testWidgets(
-        'should display loading indicator when loading',
-        (tester) async {
+    testWidgets(
+      'should display loading indicator when loading',
+      (tester) async {
         // Arrange
         final completer = Completer<Result<List<Task>>>();
         when(() => mockGetAllTasksUseCase())
             .thenAnswer((_) => completer.future);
 
-      await tester.pumpWidget(
-        createWidgetWithOverrides([
-          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
-          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
-        ]),
-      );
+        await tester.pumpWidget(
+          createWidgetWithOverrides([
+            getAllTasksUseCaseProvider
+                .overrideWithValue(mockGetAllTasksUseCase),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+            toggleTaskCompletionUseCaseProvider
+                .overrideWithValue(mockToggleTaskCompletionUseCase),
+          ]),
+        );
 
-      // Act
-      await tester.pump();
+        // Act
+        await tester.pump();
 
-      // Assert
-      expect(find.byType(CircularProgressIndicator), findsWidgets);
+        // Assert
+        expect(find.byType(CircularProgressIndicator), findsWidgets);
         completer.complete(const Success<List<Task>>([]));
-      await tester.pumpAndSettle();
-        },
-      );
+        await tester.pumpAndSettle();
+      },
+    );
 
     testWidgets('should display empty state when no tasks', (tester) async {
       // Arrange
@@ -177,35 +178,36 @@ void main() {
     testWidgets(
       'should show add task dialog when FAB is tapped',
       (tester) async {
-      // Arrange
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
-      when(
-        () => mockCreateTaskUseCase(
-          title: any(named: 'title'),
-          description: any(named: 'description'),
-        ),
-      ).thenAnswer((_) async => Success(createTask()));
+        // Arrange
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) async => const Success<List<Task>>([]));
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer((_) async => Success(createTask()));
 
-      await tester.pumpWidget(
-        createWidgetWithOverrides([
-          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
-          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
-        ]),
-      );
+        await tester.pumpWidget(
+          createWidgetWithOverrides([
+            getAllTasksUseCaseProvider
+                .overrideWithValue(mockGetAllTasksUseCase),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+            toggleTaskCompletionUseCaseProvider
+                .overrideWithValue(mockToggleTaskCompletionUseCase),
+          ]),
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Act
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
+        // Act
+        await tester.tap(find.byType(FloatingActionButton));
+        await tester.pumpAndSettle();
 
-      // Assert
-      expect(find.text('Add Task'), findsOneWidget);
-      expect(find.text('Task Title'), findsOneWidget);
+        // Assert
+        expect(find.text('Add Task'), findsOneWidget);
+        expect(find.text('Task Title'), findsOneWidget);
       },
     );
 
@@ -223,7 +225,7 @@ void main() {
         return Success(createTask(title: title));
       });
       when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) async => const Success<List<Task>>([]));
+          .thenAnswer((_) async => const Success<List<Task>>([]));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([

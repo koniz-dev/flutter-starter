@@ -294,5 +294,4 @@ class AppConfig {
       'envConfigInitialized': EnvConfig.isInitialized,
     };
   }
-
 }

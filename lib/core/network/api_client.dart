@@ -83,7 +83,6 @@ class ApiClient {
     return dio;
   }
 
-
   final Dio _dio;
 
   /// Getter for the underlying Dio instance

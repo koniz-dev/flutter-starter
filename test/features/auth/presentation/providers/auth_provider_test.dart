@@ -21,8 +21,7 @@ class MockLogoutUseCase extends Mock implements LogoutUseCase {}
 
 class MockRefreshTokenUseCase extends Mock implements RefreshTokenUseCase {}
 
-class MockGetCurrentUserUseCase extends Mock
-    implements GetCurrentUserUseCase {}
+class MockGetCurrentUserUseCase extends Mock implements GetCurrentUserUseCase {}
 
 class MockIsAuthenticatedUseCase extends Mock
     implements IsAuthenticatedUseCase {}

@@ -127,9 +127,8 @@ void main() {
       expect(executionOrder, equals([1]));
     });
 
-    test(
-      'execute throws MigrationExecutionException on migration failure',
-      () async {
+    test('execute throws MigrationExecutionException on migration failure',
+        () async {
       await storage.setString(StorageVersion.versionKey, '1');
 
       final failingMigration = _FailingMigration();

@@ -4,7 +4,6 @@ import 'package:flutter_starter/shared/accessibility/accessibility_constants.dar
 import 'package:flutter_starter/shared/accessibility/accessibility_helpers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 /// Accessibility testing helpers
 ///
 /// Provides utilities for testing accessibility features in Flutter widgets.

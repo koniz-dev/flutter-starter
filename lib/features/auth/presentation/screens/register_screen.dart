@@ -132,9 +132,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: authState.isLoading
-                    ? null
-                    : () => context.popRoute<void>(),
+                onPressed:
+                    authState.isLoading ? null : () => context.popRoute<void>(),
                 child: Text(l10n.alreadyHaveAccount),
               ),
             ],

@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_model.g.dart';
 
 /// User model (data layer) - extends entity
-/// 
+///
 /// Uses @JsonSerializable for code generation. Since UserModel extends User
 /// entity, we use @JsonKey annotations on getters to handle field name mapping
 /// (avatarUrl -> avatar_url) while maintaining the inheritance structure.
