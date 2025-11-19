@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/localization/localization_service.dart';
-import 'package:flutter_starter/core/routing/app_routes.dart';
-import 'package:flutter_starter/core/utils/result.dart';
-import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
-import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/mock_factories.dart';
 import '../../../../helpers/pump_app.dart';
-import '../../../../helpers/test_fixtures.dart';
 
 void main() {
   group('RegisterScreen', () {
@@ -129,7 +119,8 @@ void main() {
       );
     });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do form submission với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to form submission
+    // with pumpAndSettle()
     // testWidgets('should call register use case with correct parameters',
     //     (tester) async {
     //   // Arrange
@@ -162,7 +153,8 @@ void main() {
     //   ).called(1);
     // });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do async operation với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to async operation
+    // with pumpAndSettle()
     // testWidgets('should show loading indicator during registration',
     //     (tester) async {
     //   // Arrange
@@ -194,7 +186,8 @@ void main() {
     //   await tester.pumpAndSettle();
     // });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do error handling với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to error handling
+    // with pumpAndSettle()
     // testWidgets('should show error message when registration fails',
     //     (tester) async {
     //   // Arrange
@@ -221,7 +214,8 @@ void main() {
     //   expect(find.text('Registration failed'), findsOneWidget);
     // });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do navigation với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to navigation
+    // with pumpAndSettle()
     // testWidgets('should navigate back to login when back button is tapped',
     //     (tester) async {
     //   // Arrange
@@ -261,7 +255,8 @@ void main() {
 
     //   // Navigate to register first (to establish navigation stack)
     //   // Use context.push to add to navigation stack so we can pop
-    //   await tester.element(find.byType(LoginScreen)).push(AppRoutes.register);
+    //   await tester.element(find.byType(LoginScreen))
+    //       .push(AppRoutes.register);
     //   await tester.pumpAndSettle();
 
     //   // Act

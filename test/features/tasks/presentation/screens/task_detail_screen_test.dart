@@ -131,7 +131,7 @@ void main() {
         expect(find.text('Description'), findsOneWidget);
       });
 
-      // COMMENTED OUT: Test có nguy cơ bị hang do navigation/save với pumpAndSettle()
+      // COMMENTED OUT: Test has risk of hanging due to navigation/save with pumpAndSettle()
       // testWidgets('should create task when save is tapped', (tester) async {
       //   // Arrange
       //   when(
@@ -339,7 +339,8 @@ void main() {
         expect(find.text('Retry'), findsOneWidget);
       });
 
-      // COMMENTED OUT: Test có nguy cơ bị hang do retry flow với pumpAndSettle()
+      // COMMENTED OUT: Test has risk of hanging due to retry flow
+      // with pumpAndSettle()
       // testWidgets('should retry loading when retry button is tapped',
       //     (tester) async {
       //   // Arrange

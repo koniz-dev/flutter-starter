@@ -181,7 +181,8 @@ void main() {
       expect(find.text('Retry'), findsOneWidget);
     });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do dialog interaction với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to dialog interaction
+    // with pumpAndSettle()
     // testWidgets(
     //   'should show add task dialog when FAB is tapped',
     //   (tester) async {
@@ -199,8 +200,10 @@ void main() {
     //       createWidgetWithOverrides([
     //         getAllTasksUseCaseProvider
     //             .overrideWithValue(mockGetAllTasksUseCase),
-    //         createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-    //         deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+    //         createTaskUseCaseProvider
+    //             .overrideWithValue(mockCreateTaskUseCase),
+    //         deleteTaskUseCaseProvider
+    //             .overrideWithValue(mockDeleteTaskUseCase),
     //         toggleTaskCompletionUseCaseProvider
     //             .overrideWithValue(mockToggleTaskCompletionUseCase),
     //       ]),
@@ -218,7 +221,8 @@ void main() {
     //   },
     // );
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do dialog interaction với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to dialog interaction
+    // with pumpAndSettle()
     // testWidgets('should create task when form is submitted', (tester) async {
     //   // Arrange
     //   when(() => mockGetAllTasksUseCase())
@@ -238,7 +242,8 @@ void main() {
 
     //   await tester.pumpWidget(
     //     createWidgetWithOverrides([
-    //       getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+    //       getAllTasksUseCaseProvider
+    //           .overrideWithValue(mockGetAllTasksUseCase),
     //       createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
     //       deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
     //       toggleTaskCompletionUseCaseProvider

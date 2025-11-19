@@ -249,7 +249,8 @@ void main() {
       expect(find.text('Success'), findsOneWidget);
     });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do navigation với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to navigation
+    // with pumpAndSettle()
     // testWidgets('should navigate to route', (tester) async {
     //   // Arrange
     //   const targetWidget = Scaffold(
@@ -279,7 +280,8 @@ void main() {
     //   expect(find.text('Target Screen'), findsOneWidget);
     // });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do navigation với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to navigation
+    // with pumpAndSettle()
     // testWidgets('should pop route', (tester) async {
     //   // Arrange
     //   await tester.pumpWidget(

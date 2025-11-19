@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -165,7 +164,8 @@ void main() {
           .called(1);
     });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do error handling với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to error handling
+    // with pumpAndSettle()
     // testWidgets(
     //   'should display error message on login failure',
     //   (tester) async {
@@ -254,7 +254,8 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    // COMMENTED OUT: Test có nguy cơ bị hang do navigation với pumpAndSettle()
+    // COMMENTED OUT: Test has risk of hanging due to navigation
+    // with pumpAndSettle()
     // testWidgets(
     //   'should navigate to RegisterScreen when register button is tapped',
     //   (tester) async {
