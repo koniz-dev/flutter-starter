@@ -48,12 +48,15 @@ jobs:
       
       - name: Verify formatting
         run: dart format --set-exit-if-changed .
+        continue-on-error: false
       
       - name: Analyze code
         run: flutter analyze
+        continue-on-error: false
       
       - name: Run tests
         run: flutter test --coverage
+        continue-on-error: false
       
       - name: Generate coverage report
         run: |

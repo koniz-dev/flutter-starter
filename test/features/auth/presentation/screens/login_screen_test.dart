@@ -6,12 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockLoginUseCase extends Mock implements LoginUseCase {}
@@ -25,11 +28,26 @@ void main() {
     });
 
     Widget createTestWidget() {
+      final router = GoRouter(
+        initialLocation: AppRoutes.login,
+        routes: [
+          GoRoute(
+            path: AppRoutes.login,
+            builder: (context, state) => const LoginScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.register,
+            builder: (context, state) => const RegisterScreen(),
+          ),
+        ],
+      );
+
       return ProviderScope(
         overrides: [
           loginUseCaseProvider.overrideWithValue(mockLoginUseCase),
         ],
-        child: MaterialApp(
+        child: MaterialApp.router(
+          routerConfig: router,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -37,7 +55,6 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: LocalizationService.supportedLocales,
-          home: const LoginScreen(),
         ),
       );
     }

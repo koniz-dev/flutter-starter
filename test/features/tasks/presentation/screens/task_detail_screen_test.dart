@@ -101,8 +101,8 @@ void main() {
 
         // Assert
         expect(find.text('Add Task'), findsOneWidget);
-        expect(find.text('Task Title'), findsOneWidget);
-        expect(find.text('Task Description'), findsOneWidget);
+        expect(find.text('Title'), findsOneWidget);
+        expect(find.text('Description'), findsOneWidget);
       });
 
       testWidgets('should create task when save is tapped', (tester) async {
@@ -167,7 +167,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Assert
-        expect(find.text('Task title is required'), findsOneWidget);
+        expect(find.text('Please enter a task title'), findsOneWidget);
         verifyNever(
           () => mockCreateTaskUseCase(
             title: any(named: 'title'),

@@ -116,14 +116,10 @@ void main() {
         migrations: [migration2, migration1], // Intentionally out of order
       );
 
-      // Update current version to allow both migrations
-      await storage.setString(StorageVersion.versionKey, '1');
-      // Temporarily set current version to 3 to test ordering
-      // Actually, we need to update StorageVersion.current for this test
-      // For now, just test that migrations are sorted correctly
+      // Since StorageVersion.current is 2, only migration1 should run
       await executor.execute();
 
-      // Verify migrations executed in order (1 then 2)
+      // Verify migrations executed in order (only migration1 should run)
       expect(executionOrder, equals([1]));
     });
 

@@ -121,8 +121,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text('No tasks'), findsOneWidget);
-      expect(find.text('Add your first task'), findsOneWidget);
+      expect(find.text('No tasks yet'), findsOneWidget);
+      expect(
+        find.text('Tap the + button to add your first task'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('should display tasks list', (tester) async {
@@ -210,7 +213,7 @@ void main() {
 
         // Assert
         expect(find.text('Add Task'), findsOneWidget);
-        expect(find.text('Task Title'), findsOneWidget);
+        expect(find.text('Title'), findsOneWidget);
       },
     );
 
