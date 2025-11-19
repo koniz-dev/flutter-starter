@@ -199,41 +199,44 @@ void main() {
         expect(tapCount, 3);
       });
 
-      testWidgets('should not call onPressed when disabled and loading',
-          (tester) async {
-        var pressed = false;
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: AuthButton(
-                text: 'Login',
-                isLoading: true,
-                onPressed: () {
-                  pressed = true;
-                },
+      testWidgets(
+        'should not call onPressed when disabled and loading',
+        (tester) async {
+          var pressed = false;
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: AuthButton(
+                  text: 'Login',
+                  isLoading: true,
+                  onPressed: () {
+                    pressed = true;
+                  },
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        // Pump once to allow widget to build
-        // Don't use pumpAndSettle() because CircularProgressIndicator
-        // has infinite animation
-        await tester.pump();
+          // Pump once to allow widget to build
+          // Don't use pumpAndSettle() because CircularProgressIndicator
+          // has infinite animation
+          await tester.pump();
 
-        // Verify onPressed was never called (main assertion)
-        expect(pressed, isFalse);
+          // Verify onPressed was never called (main assertion)
+          expect(pressed, isFalse);
 
-        // Verify loading indicator exists (quick check)
-        // Using find.descendant to limit search scope for better performance
-        expect(
-          find.descendant(
-            of: find.byType(AuthButton),
-            matching: find.byType(CircularProgressIndicator),
-          ),
-          findsOneWidget,
-        );
-      }, timeout: const Timeout(Duration(minutes: 5)),);
+          // Verify loading indicator exists (quick check)
+          // Using find.descendant to limit search scope for better performance
+          expect(
+            find.descendant(
+              of: find.byType(AuthButton),
+              matching: find.byType(CircularProgressIndicator),
+            ),
+            findsOneWidget,
+          );
+        },
+        timeout: const Timeout(Duration(minutes: 5)),
+      );
     });
   });
 }
