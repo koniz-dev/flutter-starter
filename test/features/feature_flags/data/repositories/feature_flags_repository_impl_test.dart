@@ -271,8 +271,12 @@ void main() {
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockLocalDataSource.setLocalOverride(any(), value: any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.setLocalOverride(
+            any(),
+            value: any(named: 'value'),
+          ),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.setLocalOverride(

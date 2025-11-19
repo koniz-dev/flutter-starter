@@ -249,8 +249,15 @@ void main() {
       // Act
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
+
+      // Enter text and wait for it to be processed
       await tester.enterText(find.byType(TextFormField).first, 'New Task');
+      await tester.pump();
+
+      // Tap the Add button
       await tester.tap(find.text('Add'));
+      // Wait for dialog closing animation to complete
+      await tester.pump();
       await tester.pumpAndSettle();
 
       // Assert
