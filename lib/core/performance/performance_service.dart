@@ -19,9 +19,18 @@ import 'package:flutter_starter/core/config/app_config.dart';
 /// ```
 class PerformanceService {
   /// Creates a [PerformanceService] instance
-  PerformanceService() : _performance = FirebasePerformance.instance;
+  PerformanceService() : _performance = _getPerformanceInstance();
 
-  final FirebasePerformance _performance;
+  final FirebasePerformance? _performance;
+
+  static FirebasePerformance? _getPerformanceInstance() {
+    try {
+      return FirebasePerformance.instance;
+    } on Exception {
+      // Return null if Firebase is not initialized
+      return null;
+    }
+  }
 
   /// Returns true if performance monitoring is enabled
   bool get isEnabled => AppConfig.enablePerformanceMonitoring;
@@ -33,9 +42,9 @@ class PerformanceService {
   /// [name] - The name of the trace (max 100 characters)
   /// Returns a [PerformanceTrace] that can be used to record metrics and stop
   PerformanceTrace? startTrace(String name) {
-    if (!isEnabled) return null;
+    if (!isEnabled || _performance == null) return null;
     try {
-      final trace = _performance.newTrace(name);
+      final trace = _performance!.newTrace(name);
       return PerformanceTrace(trace);
     } on Exception {
       // If Firebase Performance is not initialized, return null

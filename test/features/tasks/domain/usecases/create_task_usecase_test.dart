@@ -6,11 +6,16 @@ import 'package:flutter_starter/features/tasks/domain/usecases/create_task_useca
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../helpers/test_fixtures.dart';
 import '../../../../helpers/test_helpers.dart';
 
 class MockTasksRepository extends Mock implements TasksRepository {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(createTask());
+  });
+
   group('CreateTaskUseCase', () {
     late CreateTaskUseCase useCase;
     late MockTasksRepository mockRepository;

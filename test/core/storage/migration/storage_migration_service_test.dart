@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('StorageMigrationService', () {
     late StorageService storageService;
     late SecureStorageService secureStorageService;

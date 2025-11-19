@@ -91,7 +91,7 @@ void main() {
 
         verify(
           () => mockService.measureOperation<String>(
-            name: 'api_get_/:id',
+            name: 'api_get_/users/:id',
             operation: any(named: 'operation'),
             attributes: any(named: 'attributes'),
           ),

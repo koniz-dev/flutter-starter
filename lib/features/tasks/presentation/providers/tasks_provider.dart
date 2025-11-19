@@ -43,19 +43,24 @@ class TasksNotifier extends Notifier<TasksState> {
   @override
   TasksState build() {
     // Load tasks when provider is initialized
-    unawaited(_loadTasks());
+    // Use Future.microtask to ensure state is available before accessing it
+    unawaited(Future.microtask(_loadTasks));
     return const TasksState();
   }
 
   /// Loads all tasks
   Future<void> _loadTasks() async {
+    if (!ref.mounted) return;
     state = state.copyWith(isLoading: true, clearError: true);
 
     final getAllTasksUseCase = ref.read(getAllTasksUseCaseProvider);
     final result = await getAllTasksUseCase();
 
+    if (!ref.mounted) return;
+    
     result.when(
       success: (tasks) {
+        if (!ref.mounted) return;
         state = state.copyWith(
           tasks: tasks,
           isLoading: false,
@@ -63,6 +68,7 @@ class TasksNotifier extends Notifier<TasksState> {
         );
       },
       failureCallback: (failure) {
+        if (!ref.mounted) return;
         state = state.copyWith(
           isLoading: false,
           error: failure.message,

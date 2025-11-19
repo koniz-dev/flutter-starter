@@ -176,9 +176,9 @@ void main() {
         await dataSource.saveTask(updatedTask);
 
         // Assert
-        verify(() => mockStorageService.setString(any(), any())).called(1);
+        verify(() => mockStorageService.getString('tasks_data')).called(1);
         final savedData = verify(
-          () => mockStorageService.setString(any(), captureAny()),
+          () => mockStorageService.setString('tasks_data', captureAny()),
         ).captured.first as String;
         final decoded = JsonHelper.decodeList(savedData);
         expect(decoded, isNotNull);
@@ -252,9 +252,9 @@ void main() {
         await dataSource.deleteTask(taskId);
 
         // Assert
-        verify(() => mockStorageService.setString(any(), any())).called(1);
+        verify(() => mockStorageService.getString('tasks_data')).called(1);
         final savedData = verify(
-          () => mockStorageService.setString(any(), captureAny()),
+          () => mockStorageService.setString('tasks_data', captureAny()),
         ).captured.first as String;
         final decoded = JsonHelper.decodeList(savedData);
         expect(decoded, isNotNull);

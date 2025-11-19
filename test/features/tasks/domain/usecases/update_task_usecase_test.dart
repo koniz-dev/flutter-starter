@@ -12,6 +12,10 @@ import '../../../../helpers/test_helpers.dart';
 class MockTasksRepository extends Mock implements TasksRepository {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(createTask());
+  });
+
   group('UpdateTaskUseCase', () {
     late UpdateTaskUseCase useCase;
     late MockTasksRepository mockRepository;

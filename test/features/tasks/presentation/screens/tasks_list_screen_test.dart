@@ -30,12 +30,15 @@ class MockToggleTaskCompletionUseCase extends Mock
 
 Widget createTestWidget({
   required Widget child,
-  List<dynamic>? overrides,
+  dynamic overrides,
 }) {
   return ProviderScope(
-    // Riverpod's Override type is not compatible with dynamic list
+    // Override type is not exported from riverpod package.
+    // When overrides is provided, it's already List<Override> from
+    // provider.overrideWithValue(). When null, we pass an empty list.
+    // Runtime type is correct.
     // ignore: argument_type_not_assignable
-    overrides: overrides ?? [],
+    overrides: overrides ?? <Never>[],
     child: MaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -63,7 +66,7 @@ void main() {
       mockToggleTaskCompletionUseCase = MockToggleTaskCompletionUseCase();
     });
 
-    Widget createWidgetWithOverrides(List<dynamic> overrides) {
+    Widget createWidgetWithOverrides(dynamic overrides) {
       return createTestWidget(
         child: const TasksListScreen(),
         overrides: overrides,
