@@ -29,7 +29,7 @@ void main() {
       'Welcome to Flutter Starter with Clean Architecture!',
     );
     final loginText = find.text('Login'); // Login screen might be shown
-    
+
     // At least one of these should be found
     expect(
       tester.any(welcomeText) || tester.any(loginText),

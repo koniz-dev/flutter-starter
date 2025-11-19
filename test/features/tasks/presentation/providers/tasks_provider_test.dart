@@ -54,14 +54,10 @@ void main() {
 
       container = ProviderContainer(
         overrides: [
-          getAllTasksUseCaseProvider
-              .overrideWithValue(mockGetAllTasksUseCase),
-          createTaskUseCaseProvider
-              .overrideWithValue(mockCreateTaskUseCase),
-          updateTaskUseCaseProvider
-              .overrideWithValue(mockUpdateTaskUseCase),
-          deleteTaskUseCaseProvider
-              .overrideWithValue(mockDeleteTaskUseCase),
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
           toggleTaskCompletionUseCaseProvider
               .overrideWithValue(mockToggleTaskCompletionUseCase),
         ],
@@ -85,12 +81,9 @@ void main() {
           overrides: [
             getAllTasksUseCaseProvider
                 .overrideWithValue(testMockGetAllTasksUseCase),
-            createTaskUseCaseProvider
-                .overrideWithValue(mockCreateTaskUseCase),
-            updateTaskUseCaseProvider
-                .overrideWithValue(mockUpdateTaskUseCase),
-            deleteTaskUseCaseProvider
-                .overrideWithValue(mockDeleteTaskUseCase),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
             toggleTaskCompletionUseCaseProvider
                 .overrideWithValue(mockToggleTaskCompletionUseCase),
           ],
@@ -116,7 +109,7 @@ void main() {
         expect(state.isLoading, isFalse);
         expect(state.error, isNull);
         verify(testMockGetAllTasksUseCase.call).called(1);
-        
+
         testContainer.dispose();
       });
     });
@@ -361,12 +354,11 @@ void main() {
         const taskId = 'task-1';
         final task = createTask(id: taskId);
         final allTasks = createTaskList(count: 2);
-        when(() => mockToggleTaskCompletionUseCase(any()))
-            .thenAnswer(
-              (_) => Future.value(
-                Success(task.copyWith(isCompleted: true)),
-              ),
-            );
+        when(() => mockToggleTaskCompletionUseCase(any())).thenAnswer(
+          (_) => Future.value(
+            Success(task.copyWith(isCompleted: true)),
+          ),
+        );
         when(() => mockGetAllTasksUseCase())
             .thenAnswer((_) => Future.value(Success(allTasks)));
 
@@ -451,7 +443,7 @@ void main() {
         expect(state.tasks, isEmpty);
         expect(state.isLoading, isFalse);
         expect(state.error, isNull);
-        
+
         // Wait a bit more to ensure all async operations complete before
         // test ends
         await Future<void>.delayed(const Duration(milliseconds: 100));

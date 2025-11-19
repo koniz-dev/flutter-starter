@@ -57,7 +57,7 @@ class TasksNotifier extends Notifier<TasksState> {
     final result = await getAllTasksUseCase();
 
     if (!ref.mounted) return;
-    
+
     result.when(
       success: (tasks) {
         if (!ref.mounted) return;
