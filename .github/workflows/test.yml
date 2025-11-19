@@ -19,10 +19,10 @@ name: Tests
 #     branches: [ main ]
 # ========================================================================
 on:
-  # push:
-  #   branches: [ main, develop ]  # Uncomment and configure for your project
-  # pull_request:
-  #   branches: [ main, develop ]  # Uncomment and configure for your project
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
 
 jobs:
