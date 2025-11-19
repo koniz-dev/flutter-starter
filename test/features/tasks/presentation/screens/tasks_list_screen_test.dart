@@ -354,9 +354,8 @@ void main() {
 
       // Act
       // Find and tap the PopupMenuButton
-      // We use find.widgetWithIcon to find the IconButton with more_vert icon
-      // that PopupMenuButton creates internally
-      final popupMenuButton = find.widgetWithIcon(IconButton, Icons.more_vert);
+      // Find the PopupMenuButton directly by type (without generic)
+      final popupMenuButton = find.byType(PopupMenuButton);
       expect(popupMenuButton, findsOneWidget);
       await tester.tap(popupMenuButton);
       await tester.pumpAndSettle();
