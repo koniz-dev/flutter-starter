@@ -551,7 +551,7 @@ The app now tracks:
 - [Performance Summary](./summary.md) - Quick reference with metrics
 - [API Documentation - Network](../api/core/network.md) - Network utilities
 - [API Documentation - Utils](../api/core/utils.md) - Performance utilities
-- [Common Tasks](../common-tasks.md) - Common development tasks
+- [Common Tasks](../features/common-tasks.md) - Common development tasks
 
 ---
 

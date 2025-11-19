@@ -20,8 +20,8 @@ This section covers:
 
 ### Related Documentation
 
-- **[Understanding the Codebase](../guides/understanding-codebase.md)** - Architecture and code organization
-- **[Common Tasks](../guides/common-tasks.md)** - How to add features following Clean Architecture
+- **[Understanding the Codebase](../guides/onboarding/understanding-codebase.md)** - Architecture and code organization
+- **[Common Tasks](../guides/features/common-tasks.md)** - How to add features following Clean Architecture
 - **[Adding Features](../api/examples/adding-features.md)** - Step-by-step guide to adding new features
 - **[API Documentation](../api/README.md)** - Complete API reference
 
@@ -31,8 +31,8 @@ New to the architecture? Start here:
 
 1. Read [Architecture Overview](overview.md) to understand why Clean Architecture
 2. Review [Design Decisions](design-decisions.md) to understand technical choices
-3. Check [Understanding the Codebase](../guides/understanding-codebase.md) for code organization
-4. Follow [Common Tasks](../guides/common-tasks.md) to add your first feature
+3. Check [Understanding the Codebase](../guides/onboarding/understanding-codebase.md) for code organization
+4. Follow [Common Tasks](../guides/features/common-tasks.md) to add your first feature
 
 ## Architecture Layers
 

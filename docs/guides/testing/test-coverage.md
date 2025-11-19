@@ -160,7 +160,7 @@ To increase the minimum threshold:
    ```
 
 2. **Write tests:**
-   - Follow [Testing Guide](testing.md)
+   - Follow [Testing Guide](guide.md)
    - Use AAA pattern (Arrange, Act, Assert)
    - Mock dependencies
    - Test edge cases
@@ -354,5 +354,5 @@ Cloud coverage tracking:
 - [Flutter Testing](https://docs.flutter.dev/testing)
 - [Codecov Documentation](https://docs.codecov.com)
 - [LCOV Documentation](https://github.com/linux-test-project/lcov)
-- [Testing Guide](testing.md)
+- [Testing Guide](guide.md)
 

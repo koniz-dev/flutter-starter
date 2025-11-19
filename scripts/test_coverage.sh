@@ -184,15 +184,7 @@ else
   echo ""
 fi
 
-# Check against minimum threshold
-if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
-  echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
-  exit 1
-else
-  echo -e "${GREEN}✓ Coverage ${COVERAGE_PERCENT}% meets minimum threshold of ${MIN_COVERAGE}%${NC}"
-fi
-
-# Analyze coverage by layer if requested
+# Analyze coverage by layer if requested (run before threshold check)
 if [ "$ANALYZE_COVERAGE" = true ]; then
   echo ""
   echo -e "${BLUE}=== Coverage Analysis by Layer ===${NC}"
@@ -291,6 +283,17 @@ if [ "$ANALYZE_COVERAGE" = true ]; then
   echo ""
 fi
 
+# Check against minimum threshold (after analysis if requested)
+if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
+  echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
+  EXIT_CODE=1
+else
+  echo -e "${GREEN}✓ Coverage ${COVERAGE_PERCENT}% meets minimum threshold of ${MIN_COVERAGE}%${NC}"
+  EXIT_CODE=0
+fi
+
 echo ""
 echo -e "${GREEN}Coverage report complete!${NC}"
+
+exit $EXIT_CODE
 

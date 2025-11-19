@@ -335,7 +335,7 @@ See [Auth Provider Example](../api/features/auth/providers.md) for a complete ex
 
 ## Next Steps
 
-- ✅ Review [Development Workflow](development-workflow.md) for Git and PR process
-- ✅ Check [Common Patterns](../api/examples/common-patterns.md) for more examples
-- ✅ See [Troubleshooting](troubleshooting.md) if you encounter issues
+- ✅ Review [Development Workflow](../development/development-workflow.md) for Git and PR process
+- ✅ Check [Common Patterns](../../api/examples/common-patterns.md) for more examples
+- ✅ See [Troubleshooting](../support/troubleshooting.md) if you encounter issues
 

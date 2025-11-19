@@ -172,7 +172,7 @@ See [Errors API](../api/core/errors.md) for all error types.
 
 ## Next Steps
 
-- ✅ Learn how to [add features and screens](common-tasks.md)
+- ✅ Learn how to [add features and screens](../features/common-tasks.md)
 - ✅ Review [Common Patterns](../api/examples/common-patterns.md)
 - ✅ Explore existing features (e.g., `lib/features/auth/`)
 

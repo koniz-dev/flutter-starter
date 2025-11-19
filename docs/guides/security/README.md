@@ -135,7 +135,7 @@ This security documentation covers five critical security domains:
 
 ## Related Documentation
 
-- [Common Tasks](../common-tasks.md) - Common development tasks
+- [Common Tasks](../features/common-tasks.md) - Common development tasks
 - [Performance](../performance/README.md) - Performance optimization
 - [Accessibility](../accessibility/README.md) - Accessibility implementation
 - [API Documentation](../../api/README.md) - Complete API reference

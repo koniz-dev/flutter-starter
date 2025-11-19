@@ -479,7 +479,7 @@ lib/
 
 ### This Template's Documentation
 
-1. **Understanding the Codebase** (`docs/guides/understanding-codebase.md`)
+1. **Understanding the Codebase** (`docs/guides/onboarding/understanding-codebase.md`)
    - Explains this template's structure
    - Code organization
    - Key patterns
@@ -536,8 +536,8 @@ Start here, learn the patterns, and adapt as needed for your specific use case.
 ## Related Documentation
 
 - **[Design Decisions](design-decisions.md)** - Detailed rationale for routing, state management, error handling, and other technical decisions
-- **[Understanding the Codebase](../guides/understanding-codebase.md)** - Architecture and code organization
-- **[Common Tasks](../guides/common-tasks.md)** - How to add features following Clean Architecture
+- **[Understanding the Codebase](../guides/onboarding/understanding-codebase.md)** - Architecture and code organization
+- **[Common Tasks](../guides/features/common-tasks.md)** - How to add features following Clean Architecture
 - **[Adding Features](../api/examples/adding-features.md)** - Step-by-step guide to adding new features
 - **[API Documentation](../api/README.md)** - Complete API reference
 

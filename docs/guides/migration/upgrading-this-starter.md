@@ -395,7 +395,7 @@ If you encounter issues during upgrade:
 ## Related Documentation
 
 - [CHANGELOG.md](../../../CHANGELOG.md) - Complete change history
-- [Getting Started](../getting-started.md) - Initial setup
-- [Understanding the Codebase](../understanding-codebase.md) - Architecture overview
-- [Common Tasks](../common-tasks.md) - Common development tasks
+- [Getting Started](../onboarding/getting-started.md) - Initial setup
+- [Understanding the Codebase](../onboarding/understanding-codebase.md) - Architecture overview
+- [Common Tasks](../features/common-tasks.md) - Common development tasks
 

@@ -6,12 +6,12 @@ Welcome to the Flutter Starter project! These guides will help you get up and ru
 
 New to the project? Start here:
 
-1. **[Getting Started](getting-started.md)** - Prerequisites, setup, and running the app
-2. **[Understanding the Codebase](understanding-codebase.md)** - Architecture and code organization
-3. **[Common Tasks](common-tasks.md)** - How to add features, screens, and APIs
-4. **[Routing Guide](routing.md)** - GoRouter navigation, deep linking, and auth-based routing
-5. **[Development Workflow](development-workflow.md)** - Git workflow, commits, and PRs
-6. **[Troubleshooting](troubleshooting.md)** - Common issues and solutions
+1. **[Getting Started](onboarding/getting-started.md)** - Prerequisites, setup, and running the app
+2. **[Understanding the Codebase](onboarding/understanding-codebase.md)** - Architecture and code organization
+3. **[Common Tasks](features/common-tasks.md)** - How to add features, screens, and APIs
+4. **[Routing Guide](features/routing-guide.md)** - GoRouter navigation, deep linking, and auth-based routing
+5. **[Development Workflow](development/development-workflow.md)** - Git workflow, commits, and PRs
+6. **[Troubleshooting](support/troubleshooting.md)** - Common issues and solutions
 
 ## Security
 
@@ -37,6 +37,36 @@ For accessibility implementation, review these guides:
 2. **[Accessibility Implementation Guide](accessibility/guide.md)** - Comprehensive implementation guide
 3. **[Accessibility Testing Procedures](accessibility/testing-procedures.md)** - Testing procedures
 4. **[Accessibility Quick Reference](accessibility/quick-reference.md)** - Quick reference for common patterns
+
+## Testing
+
+For testing practices and coverage:
+
+1. **[Testing Guide](testing/guide.md)** - Comprehensive testing guide with patterns and best practices
+2. **[Test Coverage Guide](testing/test-coverage.md)** - How coverage is measured and enforced
+3. **[Testing Summary](testing/testing-summary.md)** - Quick reference for testing
+
+## Features & Technical Guides
+
+For implementing specific features and technical aspects:
+
+1. **[Common Tasks](features/common-tasks.md)** - How to add features, screens, and APIs
+2. **[Routing Guide](features/routing-guide.md)** - GoRouter navigation, deep linking, and auth-based routing
+3. **[Internationalization Guide](features/internationalization-guide.md)** - i18n implementation and best practices
+4. **[Storage Migration Guide](features/storage-migration-guide.md)** - How to migrate storage schemas
+
+## Development
+
+For development workflow and tooling:
+
+1. **[Development Workflow](development/development-workflow.md)** - Git workflow, commits, and PRs
+2. **[Git Hooks Setup](development/git-hooks-setup.md)** - Setting up pre-commit hooks and automation
+
+## Support
+
+For troubleshooting and getting help:
+
+1. **[Troubleshooting](support/troubleshooting.md)** - Common issues and solutions
 
 ## Migration Guides
 
@@ -115,7 +145,7 @@ For understanding architectural decisions and design rationale:
 
 ## Need Help?
 
-- Check the [Troubleshooting Guide](troubleshooting.md)
+- Check the [Troubleshooting Guide](support/troubleshooting.md)
 - Review [Common Patterns](../api/examples/common-patterns.md)
 - Ask in team chat or create an issue
 

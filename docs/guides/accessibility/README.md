@@ -147,8 +147,8 @@ Before releasing:
 
 ## Related Documentation
 
-- [Common Tasks](../common-tasks.md) - Common development tasks
-- [Internationalization Guide](../internationalization-guide.md) - i18n implementation
+- [Common Tasks](../features/common-tasks.md) - Common development tasks
+- [Internationalization Guide](../features/internationalization-guide.md) - i18n implementation
 - [API Documentation](../../api/README.md) - Complete API reference
 
 ---

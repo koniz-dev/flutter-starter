@@ -50,7 +50,7 @@ Scripts are located in `scripts/`:
 ## Getting Help
 
 - Check platform-specific guides for detailed instructions
-- Review [Troubleshooting Guide](../guides/troubleshooting.md)
+- Review [Troubleshooting Guide](../guides/support/troubleshooting.md)
 - Check GitHub Actions logs for CI/CD issues
 
 ## Next Steps

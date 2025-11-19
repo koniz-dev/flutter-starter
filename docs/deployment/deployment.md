@@ -558,7 +558,7 @@ See [web-deployment.md](./web-deployment.md) for detailed Web-specific deploymen
 
 ### Getting Help
 
-- Check [Troubleshooting Guide](../guides/troubleshooting.md)
+- Check [Troubleshooting Guide](../guides/support/troubleshooting.md)
 - Review workflow logs in GitHub Actions tab
 - Check platform-specific deployment guides
 
