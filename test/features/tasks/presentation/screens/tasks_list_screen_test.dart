@@ -230,6 +230,7 @@ void main() {
         final title = invocation.namedArguments[#title] as String;
         return Success(createTask(title: title));
       });
+      // Mock reload after create (called by tasksNotifierProvider)
       when(() => mockGetAllTasksUseCase())
           .thenAnswer((_) async => const Success<List<Task>>([]));
 
@@ -269,6 +270,7 @@ void main() {
           .thenAnswer((_) async => Success(tasks));
       when(() => mockToggleTaskCompletionUseCase(any()))
           .thenAnswer((_) async => Success(tasks.first));
+      // Mock reload after toggle (called by tasksNotifierProvider)
       when(() => mockGetAllTasksUseCase())
           .thenAnswer((_) async => Success(tasks));
 
@@ -296,6 +298,7 @@ void main() {
     testWidgets('should refresh when refresh button is tapped', (tester) async {
       // Arrange
       final tasks = createTaskList(count: 2);
+      // Mock initial load and refresh calls
       when(() => mockGetAllTasksUseCase())
           .thenAnswer((_) async => Success(tasks));
 
@@ -326,6 +329,7 @@ void main() {
           .thenAnswer((_) async => Success(tasks));
       when(() => mockDeleteTaskUseCase(any()))
           .thenAnswer((_) async => const Success(null));
+      // Mock reload after delete (called by tasksNotifierProvider)
       when(() => mockGetAllTasksUseCase())
           .thenAnswer((_) async => const Success<List<Task>>([]));
 

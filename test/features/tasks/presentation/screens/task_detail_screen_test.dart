@@ -7,6 +7,7 @@ import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_screen.dart';
@@ -21,6 +22,8 @@ class MockGetTaskByIdUseCase extends Mock implements GetTaskByIdUseCase {}
 class MockCreateTaskUseCase extends Mock implements CreateTaskUseCase {}
 
 class MockUpdateTaskUseCase extends Mock implements UpdateTaskUseCase {}
+
+class MockGetAllTasksUseCase extends Mock implements GetAllTasksUseCase {}
 
 Widget createTestWidget({
   required Widget child,
@@ -55,11 +58,16 @@ void main() {
     late MockGetTaskByIdUseCase mockGetTaskByIdUseCase;
     late MockCreateTaskUseCase mockCreateTaskUseCase;
     late MockUpdateTaskUseCase mockUpdateTaskUseCase;
+    late MockGetAllTasksUseCase mockGetAllTasksUseCase;
 
     setUp(() {
       mockGetTaskByIdUseCase = MockGetTaskByIdUseCase();
       mockCreateTaskUseCase = MockCreateTaskUseCase();
       mockUpdateTaskUseCase = MockUpdateTaskUseCase();
+      mockGetAllTasksUseCase = MockGetAllTasksUseCase();
+      // Default mock for getAllTasksUseCase (needed by tasksNotifierProvider)
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
     });
 
     Widget createWidgetWithOverrides(
@@ -92,6 +100,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -124,6 +134,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -156,6 +168,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -195,6 +209,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -228,6 +244,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -259,6 +277,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -292,6 +312,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -320,6 +342,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );
@@ -350,6 +374,8 @@ void main() {
                   .overrideWithValue(mockCreateTaskUseCase),
               updateTaskUseCaseProvider
                   .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
             ],
           ),
         );

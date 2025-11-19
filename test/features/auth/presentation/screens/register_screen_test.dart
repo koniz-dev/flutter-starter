@@ -222,7 +222,7 @@ void main() {
         (tester) async {
       // Arrange
       final router = GoRouter(
-        initialLocation: AppRoutes.register,
+        initialLocation: AppRoutes.login,
         routes: [
           GoRoute(
             path: AppRoutes.login,
@@ -255,12 +255,16 @@ void main() {
 
       await tester.pumpAndSettle();
 
+      // Navigate to register first (to establish navigation stack)
+      router.go(AppRoutes.register);
+      await tester.pumpAndSettle();
+
       // Act
       await tester.tap(find.text('Already have an account? Login'));
       await tester.pumpAndSettle();
 
       // Assert
-      // Verify LoginScreen is displayed
+      // Verify LoginScreen is displayed (popRoute navigates back)
       expect(find.text('Login'), findsWidgets);
       expect(find.text('Email'), findsOneWidget);
     });
