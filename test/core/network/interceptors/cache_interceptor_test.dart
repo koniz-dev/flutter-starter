@@ -86,9 +86,8 @@ void main() {
         verifyNever(() => mockStorageService.getString(any()));
       });
 
-      test(
-        'should bypass cache when cache-control header is no-cache',
-        () async {
+      test('should bypass cache when cache-control header is no-cache',
+          () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final optionsWithNoCache = RequestOptions(
@@ -105,9 +104,8 @@ void main() {
         verifyNever(() => mockStorageService.getString(any()));
       });
 
-      test(
-        'should bypass cache when cache-control header is no-store',
-        () async {
+      test('should bypass cache when cache-control header is no-store',
+          () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final optionsWithNoStore = RequestOptions(
@@ -124,9 +122,8 @@ void main() {
         verifyNever(() => mockStorageService.getString(any()));
       });
 
-      test(
-        'should bypass cache when authorization header is present',
-        () async {
+      test('should bypass cache when authorization header is present',
+          () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         final optionsWithAuth = RequestOptions(
@@ -263,14 +260,18 @@ void main() {
         await interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockStorageService.setString(
-              cacheKey,
-              any(that: contains('key')),
-            ),).called(1);
-        verify(() => mockStorageService.setString(
-              timestampKey,
-              any(that: isA<String>()),
-            ),).called(1);
+        verify(
+          () => mockStorageService.setString(
+            cacheKey,
+            any(that: contains('key')),
+          ),
+        ).called(1);
+        verify(
+          () => mockStorageService.setString(
+            timestampKey,
+            any(that: isA<String>()),
+          ),
+        ).called(1);
       });
 
       test('should not cache non-GET responses', () async {
@@ -371,10 +372,12 @@ void main() {
         // Assert
         // Cache saves data and timestamp, so setString is called twice
         // Both should contain the query parameters in the key
-        verify(() => mockStorageService.setString(
-              any(that: contains('page')),
-              any(),
-            ),).called(2);
+        verify(
+          () => mockStorageService.setString(
+            any(that: contains('page')),
+            any(),
+          ),
+        ).called(2);
       });
     });
 

@@ -407,8 +407,7 @@ void main() {
     testWidgets('should disable refresh button when loading', (tester) async {
       // Arrange
       final completer = Completer<Result<List<Task>>>();
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) => completer.future);
+      when(() => mockGetAllTasksUseCase()).thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(
         createWidgetWithOverrides([

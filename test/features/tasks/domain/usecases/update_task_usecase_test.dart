@@ -272,9 +272,8 @@ void main() {
       expect(task.updatedAt.isAfter(updatedTask.updatedAt), isTrue);
     });
 
-    test(
-      'should update task multiple times with increasing timestamps',
-      () async {
+    test('should update task multiple times with increasing timestamps',
+        () async {
       // Arrange
       final baseDate = DateTime(2024);
       var previousUpdatedAt = baseDate;

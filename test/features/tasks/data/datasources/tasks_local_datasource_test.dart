@@ -417,9 +417,8 @@ void main() {
         verify(() => mockStorageService.setString(any(), any())).called(1);
       });
 
-      test(
-        'should handle saveTask when getAllTasks returns empty string',
-        () async {
+      test('should handle saveTask when getAllTasks returns empty string',
+          () async {
         // Arrange
         final newTask = createTaskModel(id: 'task-new');
         when(() => mockStorageService.getString(any()))
@@ -434,9 +433,8 @@ void main() {
         verify(() => mockStorageService.setString(any(), any())).called(1);
       });
 
-      test(
-        'should handle saveTasks when JsonHelper.encode returns null',
-        () async {
+      test('should handle saveTasks when JsonHelper.encode returns null',
+          () async {
         // Arrange
         final tasks = [createTaskModel(id: 'task-1')];
         // Mock to make JsonHelper.encode return null
@@ -451,9 +449,8 @@ void main() {
         );
       });
 
-      test(
-        'should handle getTaskById when multiple tasks have same ID',
-        () async {
+      test('should handle getTaskById when multiple tasks have same ID',
+          () async {
         // Arrange
         // This shouldn't happen in practice, but we test the behavior
         final task1 = createTaskModel(id: 'task-1', title: 'First');

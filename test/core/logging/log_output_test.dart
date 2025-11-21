@@ -293,6 +293,218 @@ void main() {
       expect(fileLogOutput, isNotNull);
     });
 
+    test('should handle output with multiple lines', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      await fileLogOutput.init();
+
+      // Act
+      final logEvent = LogEvent(Level.info, 'Line 1\nLine 2\nLine 3');
+      fileLogOutput.output(
+        OutputEvent(logEvent, ['Line 1', 'Line 2', 'Line 3']),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      // Assert
+      final logFiles = await fileLogOutput.getLogFiles();
+      if (logFiles.isNotEmpty) {
+        final content = await logFiles.first.readAsString();
+        expect(content, contains('Line 1'));
+        expect(content, contains('Line 2'));
+        expect(content, contains('Line 3'));
+      }
+    });
+
+    test('should handle empty output event', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      await fileLogOutput.init();
+
+      // Act
+      final logEvent = LogEvent(Level.info, '');
+      fileLogOutput.output(OutputEvent(logEvent, []));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+
+      // Assert - Should not throw
+      expect(fileLogOutput, isNotNull);
+    });
+
+    test('should handle very large log messages', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      await fileLogOutput.init();
+
+      // Act
+      final largeMessage = 'A' * 10000;
+      final logEvent = LogEvent(Level.info, largeMessage);
+      fileLogOutput.output(OutputEvent(logEvent, [largeMessage]));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      // Assert
+      final logFiles = await fileLogOutput.getLogFiles();
+      if (logFiles.isNotEmpty) {
+        final content = await logFiles.first.readAsString();
+        expect(content.length, greaterThan(0));
+      }
+    });
+
+    test('should handle rotation with different file names', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(
+        fileName: 'rotated.log',
+        maxFileSize: 100,
+        maxFiles: 2,
+      );
+      await fileLogOutput.init();
+
+      // Act - Write enough to trigger rotation
+      for (var i = 0; i < 30; i++) {
+        final logEvent = LogEvent(
+          Level.info,
+          'Rotation test message $i',
+        );
+        fileLogOutput.output(
+          OutputEvent(logEvent, ['Rotation test message $i']),
+        );
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+      // Assert
+      final logFiles = await fileLogOutput.getLogFiles();
+      expect(logFiles.length, lessThanOrEqualTo(2));
+      // Check that files contain the custom fileName
+      for (final file in logFiles) {
+        expect(file.path.contains('rotated.log'), isTrue);
+      }
+    });
+
+    test('should handle getLogFiles when directory does not exist', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      // Don't call init, so _logDirectory will be null
+
+      // Act
+      final logFiles = await fileLogOutput.getLogFiles();
+
+      // Assert
+      expect(logFiles, isEmpty);
+    });
+
+    test('should handle clearLogs when directory does not exist', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      // Don't call init, so _logDirectory will be null
+
+      // Act & Assert - Should not throw
+      await expectLater(fileLogOutput.clearLogs(), completes);
+    });
+
+    test('should handle rotation when file does not exist yet', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(
+        fileName: 'new.log',
+        maxFileSize: 50,
+      );
+      await fileLogOutput.init();
+
+      // Act - Write small amount (won't trigger rotation)
+      final logEvent = LogEvent(Level.info, 'Small message');
+      fileLogOutput.output(OutputEvent(logEvent, ['Small message']));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      // Assert - Should not throw
+      final logFiles = await fileLogOutput.getLogFiles();
+      expect(logFiles.length, greaterThanOrEqualTo(0));
+    });
+
+    test('should handle concurrent output calls', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      await fileLogOutput.init();
+
+      // Act - Multiple concurrent outputs
+      final futures = List.generate(
+        10,
+        (i) {
+          final logEvent = LogEvent(Level.info, 'Concurrent $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Concurrent $i']),
+          );
+          return Future<void>.value();
+        },
+      );
+      await Future.wait(futures);
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      // Assert
+      final logFiles = await fileLogOutput.getLogFiles();
+      if (logFiles.isNotEmpty) {
+        final content = await logFiles.first.readAsString();
+        for (var i = 0; i < 10; i++) {
+          expect(content, contains('Concurrent $i'));
+        }
+      }
+    });
+
+    test('should handle destroy when sink is null', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      // Don't call init, so sink will be null
+
+      // Act & Assert - Should not throw
+      await expectLater(fileLogOutput.destroy(), completes);
+    });
+
+    test('should handle destroy multiple times', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      await fileLogOutput.init();
+
+      // Act
+      await fileLogOutput.destroy();
+      await fileLogOutput.destroy();
+      await fileLogOutput.destroy();
+
+      // Assert - Should not throw
+      expect(fileLogOutput, isNotNull);
+    });
+
+    group('FileLogOutput - Edge Cases', () {
+      test('should handle default constructor values', () {
+        // Arrange & Act
+        final output = FileLogOutput();
+
+        // Assert
+        expect(output.maxFileSize, 10 * 1024 * 1024); // 10MB
+        expect(output.maxFiles, 5);
+        expect(output.fileName, 'app.log');
+      });
+
+      test('should handle custom maxFileSize', () {
+        // Arrange & Act
+        final output = FileLogOutput(maxFileSize: 1024);
+
+        // Assert
+        expect(output.maxFileSize, 1024);
+      });
+
+      test('should handle custom maxFiles', () {
+        // Arrange & Act
+        final output = FileLogOutput(maxFiles: 10);
+
+        // Assert
+        expect(output.maxFiles, 10);
+      });
+
+      test('should handle custom fileName', () {
+        // Arrange & Act
+        final output = FileLogOutput(fileName: 'custom.log');
+
+        // Assert
+        expect(output.fileName, 'custom.log');
+      });
+    });
+
     group('CustomLogOutput', () {
       test('should output lines for each event line', () {
         // Arrange

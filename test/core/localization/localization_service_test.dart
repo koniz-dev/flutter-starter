@@ -133,9 +133,8 @@ void main() {
         verify(() => mockStorageService.getString(any())).called(1);
       });
 
-      test(
-        'should return default locale when stored locale is invalid',
-        () async {
+      test('should return default locale when stored locale is invalid',
+          () async {
         when(() => mockStorageService.getString(any()))
             .thenAnswer((_) async => 'fr');
 
@@ -144,9 +143,8 @@ void main() {
         expect(locale, LocalizationService.defaultLocale);
       });
 
-      test(
-        'should return default locale when storage throws exception',
-        () async {
+      test('should return default locale when storage throws exception',
+          () async {
         when(() => mockStorageService.getString(any()))
             .thenThrow(Exception('Storage error'));
 

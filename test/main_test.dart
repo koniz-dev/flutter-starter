@@ -15,8 +15,7 @@ void main() {
       expect(myApp, isA<ConsumerWidget>());
     });
 
-    testWidgets('should build MaterialApp with correct title',
-        (tester) async {
+    testWidgets('should build MaterialApp with correct title', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
         UncontrolledProviderScope(
@@ -31,8 +30,7 @@ void main() {
 
       // Check that MaterialApp is built (title is a property, not displayed
       // text)
-      final materialApp =
-          tester.widget<MaterialApp>(find.byType(MaterialApp));
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.title, 'Flutter Starter');
     });
 

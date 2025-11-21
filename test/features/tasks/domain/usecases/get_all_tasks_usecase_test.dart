@@ -104,12 +104,10 @@ void main() {
 
       // Assert
       expectResultSuccess(result, tasks);
-      final completedCount = result.dataOrNull!
-          .where((t) => t.isCompleted)
-          .length;
-      final incompleteCount = result.dataOrNull!
-          .where((t) => !t.isCompleted)
-          .length;
+      final completedCount =
+          result.dataOrNull!.where((t) => t.isCompleted).length;
+      final incompleteCount =
+          result.dataOrNull!.where((t) => !t.isCompleted).length;
       expect(completedCount, greaterThan(0));
       expect(incompleteCount, greaterThan(0));
       verify(() => mockRepository.getAllTasks()).called(1);

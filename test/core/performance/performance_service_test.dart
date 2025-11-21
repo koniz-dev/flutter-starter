@@ -243,8 +243,8 @@ void main() {
       });
 
       test('should handle operation with complex return type', () async {
-        final result = await performanceService
-            .measureOperation<Map<String, dynamic>>(
+        final result =
+            await performanceService.measureOperation<Map<String, dynamic>>(
           name: 'complex_operation',
           operation: () async => {'key': 'value', 'number': 42},
         );
@@ -302,12 +302,16 @@ void main() {
       });
 
       test('should handle computation with complex return type', () {
-        final result = performanceService
-            .measureSyncComputation<Map<String, List<int>>>(
+        final result =
+            performanceService.measureSyncComputation<Map<String, List<int>>>(
           operationName: 'complex_computation',
-          computation: () => {'numbers': [1, 2, 3]},
+          computation: () => {
+            'numbers': [1, 2, 3],
+          },
         );
-        expect(result, {'numbers': [1, 2, 3]});
+        expect(result, {
+          'numbers': [1, 2, 3],
+        });
       });
     });
 

@@ -231,10 +231,13 @@ void main() {
         expect(url, isA<String>());
         expect(url, isNotEmpty);
         // Should be a valid URL format
-        expect(url, anyOf(
-          startsWith('http://'),
-          startsWith('https://'),
-        ),);
+        expect(
+          url,
+          anyOf(
+            startsWith('http://'),
+            startsWith('https://'),
+          ),
+        );
       });
 
       test('apiTimeout should have reasonable default', () {
@@ -255,8 +258,8 @@ void main() {
       });
 
       test(
-        'isDevelopment, isStaging, isProduction should be mutually exclusive',
-        () {
+          'isDevelopment, isStaging, isProduction should be mutually exclusive',
+          () {
         final isDev = AppConfig.isDevelopment;
         final isStaging = AppConfig.isStaging;
         final isProd = AppConfig.isProduction;

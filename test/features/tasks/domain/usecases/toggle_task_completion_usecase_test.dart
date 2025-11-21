@@ -159,12 +159,11 @@ void main() {
       for (var i = 0; i < 3; i++) {
         final task = createTask(id: taskId, isCompleted: isCompleted);
         isCompleted = !isCompleted;
-        when(() => mockRepository.toggleTaskCompletion(any()))
-            .thenAnswer(
-              (_) async => Success(
-                task.copyWith(isCompleted: isCompleted),
-              ),
-            );
+        when(() => mockRepository.toggleTaskCompletion(any())).thenAnswer(
+          (_) async => Success(
+            task.copyWith(isCompleted: isCompleted),
+          ),
+        );
 
         // Act
         final result = await useCase(taskId);
@@ -184,12 +183,11 @@ void main() {
         id: taskId,
         description: 'Test Description',
       );
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer(
-            (_) async => Success(
-              originalTask.copyWith(isCompleted: true),
-            ),
-          );
+      when(() => mockRepository.toggleTaskCompletion(any())).thenAnswer(
+        (_) async => Success(
+          originalTask.copyWith(isCompleted: true),
+        ),
+      );
 
       // Act
       final result = await useCase(taskId);

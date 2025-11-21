@@ -4,6 +4,14 @@ import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
+import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/delete_task_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -405,6 +413,118 @@ void main() {
         final iService = container.read(iStorageServiceProvider);
         final storageService = container.read(storageServiceProvider);
         expect(iService, same(storageService));
+      });
+    });
+
+    group('Tasks Providers', () {
+      test('tasksLocalDataSourceProvider should provide TasksLocalDataSource',
+          () {
+        final dataSource = container.read(tasksLocalDataSourceProvider);
+        expect(dataSource, isNotNull);
+        expect(dataSource, isA<TasksLocalDataSource>());
+      });
+
+      test('tasksRepositoryProvider should provide TasksRepository', () {
+        final repository = container.read(tasksRepositoryProvider);
+        expect(repository, isNotNull);
+        expect(repository, isA<TasksRepository>());
+      });
+
+      test('getAllTasksUseCaseProvider should provide GetAllTasksUseCase', () {
+        final useCase = container.read(getAllTasksUseCaseProvider);
+        expect(useCase, isNotNull);
+        expect(useCase, isA<GetAllTasksUseCase>());
+      });
+
+      test('getTaskByIdUseCaseProvider should provide GetTaskByIdUseCase', () {
+        final useCase = container.read(getTaskByIdUseCaseProvider);
+        expect(useCase, isNotNull);
+        expect(useCase, isA<GetTaskByIdUseCase>());
+      });
+
+      test('createTaskUseCaseProvider should provide CreateTaskUseCase', () {
+        final useCase = container.read(createTaskUseCaseProvider);
+        expect(useCase, isNotNull);
+        expect(useCase, isA<CreateTaskUseCase>());
+      });
+
+      test('updateTaskUseCaseProvider should provide UpdateTaskUseCase', () {
+        final useCase = container.read(updateTaskUseCaseProvider);
+        expect(useCase, isNotNull);
+        expect(useCase, isA<UpdateTaskUseCase>());
+      });
+
+      test('deleteTaskUseCaseProvider should provide DeleteTaskUseCase', () {
+        final useCase = container.read(deleteTaskUseCaseProvider);
+        expect(useCase, isNotNull);
+        expect(useCase, isA<DeleteTaskUseCase>());
+      });
+
+      test(
+        'toggleTaskCompletionUseCaseProvider should provide '
+        'ToggleTaskCompletionUseCase',
+        () {
+          final useCase = container.read(toggleTaskCompletionUseCaseProvider);
+          expect(useCase, isNotNull);
+          expect(useCase, isA<ToggleTaskCompletionUseCase>());
+        },
+      );
+    });
+
+    group('Tasks Provider Dependencies', () {
+      test(
+        'tasksLocalDataSourceProvider should depend on storageServiceProvider',
+        () {
+          final dataSource = container.read(tasksLocalDataSourceProvider);
+          expect(dataSource, isNotNull);
+        },
+      );
+
+      test(
+        'tasksRepositoryProvider should depend on '
+        'tasksLocalDataSourceProvider',
+        () {
+          final repository = container.read(tasksRepositoryProvider);
+          expect(repository, isNotNull);
+        },
+      );
+
+      test(
+        'tasks use case providers should depend on tasksRepositoryProvider',
+        () {
+          final getAllUseCase = container.read(getAllTasksUseCaseProvider);
+          final getByIdUseCase = container.read(getTaskByIdUseCaseProvider);
+          final createUseCase = container.read(createTaskUseCaseProvider);
+          final updateUseCase = container.read(updateTaskUseCaseProvider);
+          final deleteUseCase = container.read(deleteTaskUseCaseProvider);
+          final toggleUseCase =
+              container.read(toggleTaskCompletionUseCaseProvider);
+
+          expect(getAllUseCase, isNotNull);
+          expect(getByIdUseCase, isNotNull);
+          expect(createUseCase, isNotNull);
+          expect(updateUseCase, isNotNull);
+          expect(deleteUseCase, isNotNull);
+          expect(toggleUseCase, isNotNull);
+        },
+      );
+    });
+
+    group('Provider Instance Types', () {
+      test('all storage providers should return correct types', () {
+        final storageService = container.read(storageServiceProvider);
+        final secureStorageService =
+            container.read(secureStorageServiceProvider);
+        final iStorageService = container.read(iStorageServiceProvider);
+
+        expect(storageService, isA<StorageService>());
+        expect(secureStorageService, isA<SecureStorageService>());
+        expect(iStorageService, isA<IStorageService>());
+      });
+
+      test('authLocalDataSourceProvider should return correct type', () {
+        final dataSource = container.read(authLocalDataSourceProvider);
+        expect(dataSource, isA<AuthLocalDataSource>());
       });
     });
   });

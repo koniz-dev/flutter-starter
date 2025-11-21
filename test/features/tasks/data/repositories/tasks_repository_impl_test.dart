@@ -512,9 +512,8 @@ void main() {
         verify(() => mockLocalDataSource.saveTask(any())).called(1);
       });
 
-      test(
-        'should handle updateTask with task having null description',
-        () async {
+      test('should handle updateTask with task having null description',
+          () async {
         // Arrange
         final task = createTask(
           id: 'task-1',
@@ -529,9 +528,8 @@ void main() {
         expectResultSuccess(result, task);
       });
 
-      test(
-        'should handle deleteCompletedTasks when all tasks are completed',
-        () async {
+      test('should handle deleteCompletedTasks when all tasks are completed',
+          () async {
         // Arrange
         final allTasks = [
           createTaskModel(id: 'task-1', isCompleted: true),
@@ -556,9 +554,8 @@ void main() {
         expect(savedTasks, isEmpty);
       });
 
-      test(
-        'should handle deleteCompletedTasks when no tasks are completed',
-        () async {
+      test('should handle deleteCompletedTasks when no tasks are completed',
+          () async {
         // Arrange
         final allTasks = [
           createTaskModel(id: 'task-1'),

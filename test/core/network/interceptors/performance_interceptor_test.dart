@@ -72,14 +72,18 @@ void main() {
         // Assert
         verify(() => mockPerformanceService.startHttpTrace('GET', '/api/test'))
             .called(1);
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpMethod,
-              'GET',
-            ),).called(1);
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpPath,
-              '/api/test',
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpMethod,
+            'GET',
+          ),
+        ).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpPath,
+            '/api/test',
+          ),
+        ).called(1);
         verify(() => mockTrace.startSync()).called(1);
         expect(requestOptions.extra['performance_trace'], mockTrace);
       });
@@ -134,12 +138,15 @@ void main() {
           interceptor.onRequest(options, handler);
 
           // Assert
-          verify(() => mockPerformanceService.startHttpTrace(method, '/api/test'))
-              .called(1);
-          verify(() => mockTrace.putAttribute(
-                PerformanceAttributes.httpMethod,
-                method,
-              ),).called(1);
+          verify(
+            () => mockPerformanceService.startHttpTrace(method, '/api/test'),
+          ).called(1);
+          verify(
+            () => mockTrace.putAttribute(
+              PerformanceAttributes.httpMethod,
+              method,
+            ),
+          ).called(1);
           clearInteractions(mockPerformanceService);
           clearInteractions(mockTrace);
         }
@@ -164,10 +171,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpStatusCode,
-              '200',
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpStatusCode,
+            '200',
+          ),
+        ).called(1);
         verify(() => mockTrace.putMetric(PerformanceMetrics.success, 1))
             .called(1);
         verify(() => mockTrace.stopSync()).called(1);
@@ -189,10 +198,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpStatusCode,
-              '404',
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpStatusCode,
+            '404',
+          ),
+        ).called(1);
         verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
             .called(1);
         verify(() => mockTrace.stopSync()).called(1);
@@ -215,10 +226,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              any(),
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            any(),
+          ),
+        ).called(1);
       });
 
       test('should handle response with null status code', () {
@@ -236,10 +249,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpStatusCode,
-              '0',
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpStatusCode,
+            '0',
+          ),
+        ).called(1);
         verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
             .called(1);
       });
@@ -261,10 +276,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              any(),
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            any(),
+          ),
+        ).called(1);
       });
 
       test('should handle response with list data', () {
@@ -284,10 +301,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              any(),
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            any(),
+          ),
+        ).called(1);
       });
 
       test('should handle response with map data', () {
@@ -307,10 +326,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              any(),
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            any(),
+          ),
+        ).called(1);
       });
 
       test('should handle response with null data', () {
@@ -329,10 +350,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verifyNever(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              any(),
-            ),);
+        verifyNever(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            any(),
+          ),
+        );
         verify(() => mockTrace.stopSync()).called(1);
       });
 
@@ -396,10 +419,12 @@ void main() {
         // Assert
         verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
             .called(1);
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.errorType,
-              any(that: contains('connectionTimeout')),
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.errorType,
+            any(that: contains('connectionTimeout')),
+          ),
+        ).called(1);
         verify(() => mockTrace.stopSync()).called(1);
       });
 
@@ -424,10 +449,12 @@ void main() {
         interceptor.onError(dioException, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpStatusCode,
-              '500',
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpStatusCode,
+            '500',
+          ),
+        ).called(1);
       });
 
       test('should handle error without response', () {
@@ -446,10 +473,12 @@ void main() {
         interceptor.onError(dioException, handler);
 
         // Assert
-        verifyNever(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpStatusCode,
-              any(),
-            ),);
+        verifyNever(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpStatusCode,
+            any(),
+          ),
+        );
         verify(() => mockTrace.stopSync()).called(1);
       });
 
@@ -556,10 +585,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              '8', // 'test'.length * 2 = 4 * 2 = 8
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            '8', // 'test'.length * 2 = 4 * 2 = 8
+          ),
+        ).called(1);
       });
 
       test('should estimate size for list data', () {
@@ -579,10 +610,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              '300', // 3 * 100
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            '300', // 3 * 100
+          ),
+        ).called(1);
       });
 
       test('should estimate size for map data', () {
@@ -602,10 +635,12 @@ void main() {
         interceptor.onResponse(response, handler);
 
         // Assert
-        verify(() => mockTrace.putAttribute(
-              PerformanceAttributes.httpResponseSize,
-              '400', // 2 * 200
-            ),).called(1);
+        verify(
+          () => mockTrace.putAttribute(
+            PerformanceAttributes.httpResponseSize,
+            '400', // 2 * 200
+          ),
+        ).called(1);
       });
     });
   });
