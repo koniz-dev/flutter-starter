@@ -445,8 +445,7 @@ void main() {
         expect(task1.hashCode, isNot(task2.hashCode));
       });
 
-      test('should have different hashCode when one has null description',
-          () {
+      test('should have different hashCode when one has null description', () {
         // Arrange
         final task1 = Task(
           id: '1',

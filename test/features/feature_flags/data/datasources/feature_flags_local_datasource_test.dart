@@ -207,10 +207,12 @@ void main() {
         await dataSource.clearLocalOverride('key1');
 
         // Assert
-        verify(() => mockStorageService.setStringList(
-              'feature_flag_override_keys',
-              ['key2'],
-            ),).called(1);
+        verify(
+          () => mockStorageService.setStringList(
+            'feature_flag_override_keys',
+            ['key2'],
+          ),
+        ).called(1);
       });
 
       test('should remove keys list when last key is removed', () async {

@@ -349,7 +349,8 @@ void main() {
       final controller = ScrollController();
       final listView = ListView(
         controller: controller,
-        children: List.generate(20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
+        children: List.generate(
+            20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
       );
 
       await tester.pumpWidget(
@@ -377,7 +378,8 @@ void main() {
       final controller = ScrollController();
       final listView = ListView(
         controller: controller,
-        children: List.generate(20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
+        children: List.generate(
+            20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
       );
 
       await tester.pumpWidget(
@@ -404,7 +406,8 @@ void main() {
       final controller = ScrollController();
       final listView = ListView(
         controller: controller,
-        children: List.generate(20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
+        children: List.generate(
+            20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
       );
 
       await tester.pumpWidget(
@@ -433,4 +436,3 @@ void main() {
     });
   });
 }
-

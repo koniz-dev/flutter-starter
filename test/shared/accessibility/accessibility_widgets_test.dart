@@ -707,8 +707,7 @@ void main() {
       expect(find.text('Test'), findsOneWidget);
     });
 
-    testWidgets('should call onFocusChange when focus changes',
-        (tester) async {
+    testWidgets('should call onFocusChange when focus changes', (tester) async {
       // Arrange
       await tester.pumpWidget(
         MaterialApp(
@@ -728,7 +727,7 @@ void main() {
       await tester.pump();
       // Note: Focus changes may require user interaction or specific setup
       // This test verifies the widget structure is correct
-      
+
       // Assert
       expect(find.text('Test'), findsOneWidget);
       expect(find.byType(Focus), findsWidgets);

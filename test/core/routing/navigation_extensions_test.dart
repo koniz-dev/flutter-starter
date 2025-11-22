@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 void main() {
   group('NavigationExtensions', () {
-
     Widget createTestWidget(Widget child) {
       return MaterialApp.router(
         routerConfig: GoRouter(
@@ -179,8 +178,7 @@ void main() {
       expect(find.text('Tasks'), findsOneWidget);
     });
 
-    testWidgets('pushNamedRoute should handle path parameters',
-        (tester) async {
+    testWidgets('pushNamedRoute should handle path parameters', (tester) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -309,8 +307,7 @@ void main() {
       // Should pop until home route
     });
 
-    testWidgets('canPopRoute should return true when can pop',
-        (tester) async {
+    testWidgets('canPopRoute should return true when can pop', (tester) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -332,8 +329,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Act
-      final canPop =
-          tester.element(find.byType(Scaffold)).canPopRoute();
+      final canPop = tester.element(find.byType(Scaffold)).canPopRoute();
 
       // Assert
       expect(canPop, isFalse);

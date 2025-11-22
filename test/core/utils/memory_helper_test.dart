@@ -184,5 +184,3 @@ class _TestWidgetEmptyState extends State<_TestWidgetEmpty>
     return const SizedBox();
   }
 }
-
-

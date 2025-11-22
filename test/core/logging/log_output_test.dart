@@ -802,8 +802,7 @@ void main() {
         await fileLogOutput.destroy();
       });
 
-      test('should handle clearLogs when directory does not exist',
-          () async {
+      test('should handle clearLogs when directory does not exist', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
         // Don't init, so directory might not exist

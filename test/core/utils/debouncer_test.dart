@@ -95,8 +95,7 @@ void main() {
 
     test('should handle very long duration', () async {
       var executed = false;
-      final debouncer =
-          Debouncer(duration: const Duration(seconds: 1));
+      final debouncer = Debouncer(duration: const Duration(seconds: 1));
 
       debouncer.run(() {
         executed = true;
@@ -212,5 +211,3 @@ void main() {
     });
   });
 }
-
-

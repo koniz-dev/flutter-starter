@@ -35,8 +35,7 @@ void main() {
           any(),
           value: any(named: 'value'),
         ),
-      )
-          .thenAnswer((_) async => {});
+      ).thenAnswer((_) async => {});
       when(() => mockManager.clearLocalOverride(any()))
           .thenAnswer((_) async => {});
     });
@@ -78,21 +77,18 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
     });
 
-    testWidgets(
-      'should display loading indicator when loading',
-      (tester) async {
+    testWidgets('should display loading indicator when loading',
+        (tester) async {
       // Arrange
-      const flagsValue =
-          AsyncValue<Map<String, FeatureFlag?>>.loading();
+      const flagsValue = AsyncValue<Map<String, FeatureFlag?>>.loading();
       await tester.pumpWidget(createTestWidget(flagsValue: flagsValue));
 
       // Assert
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets(
-      'should display error message when error occurs',
-      (tester) async {
+    testWidgets('should display error message when error occurs',
+        (tester) async {
       // Arrange
       final flagsValue = AsyncValue<Map<String, FeatureFlag?>>.error(
         Exception('Test error'),

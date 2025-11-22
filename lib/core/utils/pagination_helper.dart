@@ -160,9 +160,11 @@ class PaginationHelper<T> {
       final (items, hasMore) = await loadPage(_state.currentPage);
       _state = _state.appendPage(items, hasMore: hasMore);
     } on Object catch (e) {
-      _state = _state.setError(
-        e.toString(),
-      ).setLoading(loading: false);
+      _state = _state
+          .setError(
+            e.toString(),
+          )
+          .setLoading(loading: false);
       if (kDebugMode) {
         debugPrint('Pagination error: $e');
       }
