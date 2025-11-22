@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/utils/pagination_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -221,9 +223,9 @@ void main() {
           return ([1, 2, 3], true);
         },
       );
-
-      helper.loadNextPage();
-      helper.loadNextPage();
+      // Intentionally not awaiting to test concurrent behavior
+      unawaited(helper.loadNextPage());
+      unawaited(helper.loadNextPage());
       await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(loadCount, 1);
@@ -274,9 +276,7 @@ void main() {
     test('should check if should prefetch', () {
       final helper = PaginationHelper<int>(
         loadPage: (page) async => ([1, 2, 3], true),
-        config: const PaginationConfig(
-          prefetchThreshold: 0.8,
-        ),
+        config: const PaginationConfig(),
       );
 
       expect(helper.shouldPrefetch(0.9), isTrue);
@@ -299,8 +299,8 @@ void main() {
           return ([1, 2, 3], true);
         },
       );
-
-      helper.loadNextPage();
+      // Intentionally not awaiting to test loading state
+      unawaited(helper.loadNextPage());
       expect(helper.shouldPrefetch(0.9), isFalse);
     });
 
@@ -329,8 +329,8 @@ void main() {
           return ([1, 2, 3], true);
         },
       );
-
-      helper.loadNextPage();
+      // Intentionally not awaiting to test loading state
+      unawaited(helper.loadNextPage());
       expect(helper.shouldLoadNextPage(1), isFalse);
     });
 
@@ -350,7 +350,9 @@ void main() {
       final listView = ListView(
         controller: controller,
         children: List.generate(
-            20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
+          20,
+          (i) => SizedBox(height: 100, child: Text('Item $i')),
+        ),
       );
 
       await tester.pumpWidget(
@@ -379,7 +381,9 @@ void main() {
       final listView = ListView(
         controller: controller,
         children: List.generate(
-            20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
+          20,
+          (i) => SizedBox(height: 100, child: Text('Item $i')),
+        ),
       );
 
       await tester.pumpWidget(
@@ -407,7 +411,9 @@ void main() {
       final listView = ListView(
         controller: controller,
         children: List.generate(
-            20, (i) => SizedBox(height: 100, child: Text('Item $i'))),
+          20,
+          (i) => SizedBox(height: 100, child: Text('Item $i')),
+        ),
       );
 
       await tester.pumpWidget(

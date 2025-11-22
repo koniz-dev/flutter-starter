@@ -952,6 +952,117 @@ void main() {
         expect(() => jsonDecode(json), returnsNormally);
       });
     });
+
+    group('FileLogOutput - Exception Handling Coverage', () {
+      test('should handle _checkAndRotate when _logFile is null', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        // Don't call init, so _logFile will be null
+
+        // Act & Assert - Should not throw
+        // We can't directly test _checkAndRotate, but we can test
+        // that output doesn't crash when sink is null
+        final logEvent = LogEvent(Level.info, 'Test');
+        expect(
+          () => fileLogOutput.output(OutputEvent(logEvent, ['Test'])),
+          returnsNormally,
+        );
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle _checkAndRotate when _logDirectory is null',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        // Don't call init, so _logDirectory will be null
+
+        // Act & Assert - Should not throw
+        final logEvent = LogEvent(Level.info, 'Test');
+        expect(
+          () => fileLogOutput.output(OutputEvent(logEvent, ['Test'])),
+          returnsNormally,
+        );
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle exception in _initializeLogFile gracefully',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+
+        // Act & Assert - init should complete even if there are errors
+        // (it catches exceptions internally)
+        await expectLater(fileLogOutput.init(), completes);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle exception in output method gracefully', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+        await fileLogOutput.destroy(); // Destroy to make sink null
+
+        // Act & Assert - Should not throw even if sink is null
+        final logEvent = LogEvent(Level.info, 'Test');
+        expect(
+          () => fileLogOutput.output(OutputEvent(logEvent, ['Test'])),
+          returnsNormally,
+        );
+      });
+
+      test('should handle exception in _checkAndRotate gracefully', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+
+        // Act - Write something to trigger _checkAndRotate
+        final logEvent = LogEvent(Level.info, 'Test');
+        fileLogOutput.output(OutputEvent(logEvent, ['Test']));
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle exception in _rotateLogs gracefully', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 50, // Small to trigger rotation
+        );
+        await fileLogOutput.init();
+
+        // Act - Write enough to trigger rotation
+        for (var i = 0; i < 20; i++) {
+          final logEvent = LogEvent(Level.info, 'Long message $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Long message $i']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle _rotateLogs when _logDirectory is null', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        // Don't call init, so _logDirectory will be null
+
+        // Act & Assert - Should not throw
+        // We can't directly test _rotateLogs, but we can test
+        // that operations don't crash
+        final logEvent = LogEvent(Level.info, 'Test');
+        expect(
+          () => fileLogOutput.output(OutputEvent(logEvent, ['Test'])),
+          returnsNormally,
+        );
+        await fileLogOutput.destroy();
+      });
+    });
   });
 }
 

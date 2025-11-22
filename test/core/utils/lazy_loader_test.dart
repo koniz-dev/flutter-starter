@@ -103,9 +103,7 @@ void main() {
           loadCount++;
           return key.length;
         },
-      );
-
-      loader.preload('test');
+      )..preload('test');
       await Future<void>.delayed(const Duration(milliseconds: 10));
       expect(loadCount, 1);
       expect(loader.isCached('test'), isTrue);
@@ -113,14 +111,14 @@ void main() {
 
     test('should preload multiple resources', () async {
       var loadCount = 0;
+      // Variable is used via cascade operators, but linter doesn't recognize it
+      // ignore: unused_local_variable
       final loader = LazyLoader<String, int>(
         loader: (key) async {
           loadCount++;
           return key.length;
         },
-      );
-
-      loader.preloadMultiple(['test1', 'test2', 'test3']);
+      )..preloadMultiple(['test1', 'test2', 'test3']);
       await Future<void>.delayed(const Duration(milliseconds: 10));
       expect(loadCount, 3);
     });
