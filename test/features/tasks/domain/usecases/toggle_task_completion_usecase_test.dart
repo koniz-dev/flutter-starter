@@ -20,6 +20,21 @@ void main() {
       useCase = ToggleTaskCompletionUseCase(mockRepository);
     });
 
+    test('should create instance with repository', () {
+      // Arrange & Act
+      final useCase = ToggleTaskCompletionUseCase(mockRepository);
+
+      // Assert
+      expect(useCase, isNotNull);
+      expect(useCase.repository, equals(mockRepository));
+    });
+
+    test('should have repository property', () {
+      // Assert
+      expect(useCase.repository, isA<TasksRepository>());
+      expect(useCase.repository, equals(mockRepository));
+    });
+
     test('should toggle task completion successfully', () async {
       // Arrange
       const taskId = 'task-1';

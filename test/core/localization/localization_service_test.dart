@@ -80,6 +80,10 @@ void main() {
           SupportedLocale.en,
         );
       });
+
+      test('should handle locale string with only underscore', () {
+        expect(SupportedLocale.fromLocaleString('_'), isNull);
+      });
     });
   });
 
@@ -307,6 +311,26 @@ void main() {
         await localizationService.setCurrentLocale(const Locale('ar', 'SA'));
 
         verify(() => mockStorageService.setString(any(), any())).called(3);
+      });
+
+      test('should handle getCurrentLocale with whitespace language code',
+          () async {
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => '  ');
+
+        final locale = await localizationService.getCurrentLocale();
+
+        expect(locale, LocalizationService.defaultLocale);
+      });
+
+      test('should handle getCurrentLocale with numeric language code',
+          () async {
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => '123');
+
+        final locale = await localizationService.getCurrentLocale();
+
+        expect(locale, LocalizationService.defaultLocale);
       });
     });
   });

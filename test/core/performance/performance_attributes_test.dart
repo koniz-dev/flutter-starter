@@ -244,5 +244,56 @@ void main() {
         }
       }
     });
+
+    test('should have consistent naming convention for attributes', () {
+      // All attributes should use snake_case
+      final attributes = [
+        PerformanceAttributes.httpMethod,
+        PerformanceAttributes.httpPath,
+        PerformanceAttributes.httpStatusCode,
+        PerformanceAttributes.httpResponseSize,
+        PerformanceAttributes.screenName,
+        PerformanceAttributes.screenRoute,
+        PerformanceAttributes.queryName,
+        PerformanceAttributes.queryType,
+        PerformanceAttributes.recordCount,
+        PerformanceAttributes.operationName,
+        PerformanceAttributes.operationType,
+        PerformanceAttributes.itemCount,
+        PerformanceAttributes.errorType,
+        PerformanceAttributes.errorMessage,
+        PerformanceAttributes.userId,
+        PerformanceAttributes.userType,
+        PerformanceAttributes.featureName,
+        PerformanceAttributes.featureVersion,
+      ];
+
+      for (final attribute in attributes) {
+        // Should use snake_case (lowercase with underscores)
+        expect(attribute, matches(RegExp(r'^[a-z]+(_[a-z]+)*$')));
+      }
+    });
+
+    test('should have all attributes starting with appropriate prefix', () {
+      // HTTP attributes should start with 'http_'
+      expect(PerformanceAttributes.httpMethod, startsWith('http_'));
+      expect(PerformanceAttributes.httpPath, startsWith('http_'));
+      expect(PerformanceAttributes.httpStatusCode, startsWith('http_'));
+      expect(PerformanceAttributes.httpResponseSize, startsWith('http_'));
+
+      // Screen attributes should start with 'screen_'
+      expect(PerformanceAttributes.screenName, startsWith('screen_'));
+      expect(PerformanceAttributes.screenRoute, startsWith('screen_'));
+
+      // Query attributes should start with 'query_' or contain 'query'
+      expect(
+        PerformanceAttributes.queryName,
+        anyOf(contains('query'), startsWith('query_')),
+      );
+      expect(
+        PerformanceAttributes.queryType,
+        anyOf(contains('query'), startsWith('query_')),
+      );
+    });
   });
 }

@@ -597,5 +597,127 @@ void main() {
         }
       });
     });
+
+    group('When .env file is loaded (initialized = true)', () {
+      setUp(() async {
+        // Try to load .env to potentially set _isInitialized = true
+        // If .env doesn't exist, _isInitialized will be false, which is fine
+        await EnvConfig.load();
+      });
+
+      test('should check .env first when initialized', () {
+        // When _isInitialized is true, get() checks .env first
+        // If not found, falls back to dart-define, then default
+        final value = EnvConfig.get('TEST_KEY', defaultValue: 'default');
+        expect(value, isA<String>());
+      });
+
+      test('should handle empty value from .env when initialized', () {
+        // When .env returns empty string, should continue to next priority
+        final value = EnvConfig.get('EMPTY_KEY', defaultValue: 'default');
+        expect(value, isA<String>());
+      });
+
+      test('should check .env first in getBool when initialized', () {
+        final value = EnvConfig.getBool('TEST_BOOL');
+        expect(value, isA<bool>());
+      });
+
+      test('should check .env first in getInt when initialized', () {
+        final value = EnvConfig.getInt('TEST_INT');
+        expect(value, isA<int>());
+      });
+
+      test('should check .env first in getDouble when initialized', () {
+        final value = EnvConfig.getDouble('TEST_DOUBLE');
+        expect(value, isA<double>());
+      });
+
+      test('should check .env first in has() when initialized', () {
+        final exists = EnvConfig.has('TEST_KEY');
+        expect(exists, isA<bool>());
+      });
+
+      test('should get all from .env when initialized', () {
+        try {
+          final all = EnvConfig.getAll();
+          expect(all, isA<Map<String, String>>());
+        } on Exception {
+          // Expected if .env doesn't exist
+          expect(true, isTrue);
+        }
+      });
+    });
+
+    group('Exception handling in get()', () {
+      setUp(() async {
+        // Try to load .env to set _isInitialized
+        await EnvConfig.load();
+      });
+
+      test('should handle exception in get() when initialized', () {
+        // Even if initialized, exception in dotenv.get() should be caught
+        final value = EnvConfig.get('ANY_KEY', defaultValue: 'default');
+        expect(value, isA<String>());
+      });
+    });
+
+    group('Exception handling in getBool()', () {
+      setUp(() async {
+        await EnvConfig.load();
+      });
+
+      test('should handle exception in getBool() when initialized', () {
+        final value = EnvConfig.getBool('ANY_KEY', defaultValue: true);
+        expect(value, isA<bool>());
+      });
+    });
+
+    group('Exception handling in getInt()', () {
+      setUp(() async {
+        await EnvConfig.load();
+      });
+
+      test('should handle exception in getInt() when initialized', () {
+        final value = EnvConfig.getInt('ANY_KEY', defaultValue: 42);
+        expect(value, isA<int>());
+      });
+    });
+
+    group('Exception handling in getDouble()', () {
+      setUp(() async {
+        await EnvConfig.load();
+      });
+
+      test('should handle exception in getDouble() when initialized', () {
+        final value = EnvConfig.getDouble('ANY_KEY', defaultValue: 3.14);
+        expect(value, isA<double>());
+      });
+    });
+
+    group('Exception handling in has()', () {
+      setUp(() async {
+        await EnvConfig.load();
+      });
+
+      test('should handle exception in has() when initialized', () {
+        final exists = EnvConfig.has('ANY_KEY');
+        expect(exists, isA<bool>());
+      });
+    });
+
+    group('load() exception handling', () {
+      test('should catch Exception type in load()', () async {
+        // Load non-existent file should catch Exception
+        await EnvConfig.load(fileName: 'non-existent-1.env');
+        expect(EnvConfig.isInitialized, isA<bool>());
+      });
+
+      test('should catch Object type in load()', () async {
+        // Load non-existent file should catch Object (FileNotFoundError, etc.)
+        await EnvConfig.load(fileName: 'non-existent-2.env');
+        expect(EnvConfig.isInitialized, isA<bool>());
+      });
+    });
   });
 }

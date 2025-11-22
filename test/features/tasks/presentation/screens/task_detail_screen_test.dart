@@ -652,6 +652,228 @@ void main() {
         // - if back button navigates immediately,
         // update might not be called
       });
+
+      testWidgets('should display task details card with all fields',
+          (tester) async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+          description: 'Test Description',
+          isCompleted: true,
+          createdAt: DateTime(2024, 1, 15, 10, 30),
+          updatedAt: DateTime(2024, 1, 16, 14, 45),
+        );
+        when(() => mockGetTaskByIdUseCase(any<String>()))
+            .thenAnswer((_) async => Success(task));
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) async => Success(task));
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(
+            const TaskDetailScreen(taskId: 'task-1'),
+            [
+              getTaskByIdUseCaseProvider
+                  .overrideWithValue(mockGetTaskByIdUseCase),
+              createTaskUseCaseProvider
+                  .overrideWithValue(mockCreateTaskUseCase),
+              updateTaskUseCaseProvider
+                  .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
+            ],
+          ),
+        );
+
+        // Act
+        await tester.pumpAndSettle();
+
+        // Assert - Check that task details card is displayed
+        expect(find.byType(Card), findsOneWidget);
+        // Check for detail rows (status, createdAt, updatedAt)
+        expect(find.byIcon(Icons.check_circle), findsWidgets);
+        expect(find.byIcon(Icons.calendar_today), findsWidgets);
+        expect(find.byIcon(Icons.update), findsWidgets);
+      });
+
+      testWidgets('should display incomplete status for incomplete task',
+          (tester) async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+        );
+        when(() => mockGetTaskByIdUseCase(any<String>()))
+            .thenAnswer((_) async => Success(task));
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) async => Success(task));
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(
+            const TaskDetailScreen(taskId: 'task-1'),
+            [
+              getTaskByIdUseCaseProvider
+                  .overrideWithValue(mockGetTaskByIdUseCase),
+              createTaskUseCaseProvider
+                  .overrideWithValue(mockCreateTaskUseCase),
+              updateTaskUseCaseProvider
+                  .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
+            ],
+          ),
+        );
+
+        // Act
+        await tester.pumpAndSettle();
+
+        // Assert - Should show incomplete status
+        expect(find.byType(Card), findsOneWidget);
+        expect(find.byIcon(Icons.check_circle), findsWidgets);
+      });
+
+      testWidgets('should handle empty description when saving',
+          (tester) async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+          description: 'Original Description',
+        );
+        when(() => mockGetTaskByIdUseCase(any<String>()))
+            .thenAnswer((_) async => Success(task));
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) async => Success(task));
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(
+            const TaskDetailScreen(taskId: 'task-1'),
+            [
+              getTaskByIdUseCaseProvider
+                  .overrideWithValue(mockGetTaskByIdUseCase),
+              createTaskUseCaseProvider
+                  .overrideWithValue(mockCreateTaskUseCase),
+              updateTaskUseCaseProvider
+                  .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
+            ],
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Act - Clear description and save
+        final textFields = find.byType(TextFormField);
+        if (textFields.evaluate().length > 1) {
+          await tester.enterText(textFields.at(1), '');
+          await tester.pump();
+        }
+        await tester.tap(find.byIcon(Icons.save));
+        await tester.pumpAndSettle(const Duration(seconds: 5));
+
+        // Assert - Should call updateTask with null description
+        verify(() => mockUpdateTaskUseCase(any())).called(1);
+      });
+
+      testWidgets('should show loading indicator in AppBar when saving',
+          (tester) async {
+        // Arrange
+        final task = createTask(id: 'task-1');
+        final completer = Completer<Result<Task>>();
+        when(() => mockGetTaskByIdUseCase(any<String>()))
+            .thenAnswer((_) async => Success(task));
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) => completer.future);
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(
+            const TaskDetailScreen(taskId: 'task-1'),
+            [
+              getTaskByIdUseCaseProvider
+                  .overrideWithValue(mockGetTaskByIdUseCase),
+              createTaskUseCaseProvider
+                  .overrideWithValue(mockCreateTaskUseCase),
+              updateTaskUseCaseProvider
+                  .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
+            ],
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Act - Tap save button
+        await tester.tap(find.byIcon(Icons.save));
+        await tester.pump(); // Don't settle, keep it loading
+
+        // Assert - Should show loading indicator in AppBar
+        expect(find.byType(CircularProgressIndicator), findsWidgets);
+
+        // Complete the operation
+        completer.complete(Success(task));
+        await tester.pumpAndSettle();
+      });
+
+      testWidgets('should handle retry when taskId is null', (tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          createWidgetWithOverrides(
+            const TaskDetailScreen(),
+            [
+              getTaskByIdUseCaseProvider
+                  .overrideWithValue(mockGetTaskByIdUseCase),
+              createTaskUseCaseProvider
+                  .overrideWithValue(mockCreateTaskUseCase),
+              updateTaskUseCaseProvider
+                  .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
+            ],
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Act - Should not show retry button for new task
+        // (retry is only shown when there's an error loading existing task)
+        expect(find.text('Retry'), findsNothing);
+      });
+
+      testWidgets('should format date time correctly', (tester) async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+          createdAt: DateTime(2024, 3, 15, 9, 5),
+          updatedAt: DateTime(2024, 3, 16, 14, 30),
+        );
+        when(() => mockGetTaskByIdUseCase(any<String>()))
+            .thenAnswer((_) async => Success(task));
+        when(() => mockUpdateTaskUseCase(any()))
+            .thenAnswer((_) async => Success(task));
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(
+            const TaskDetailScreen(taskId: 'task-1'),
+            [
+              getTaskByIdUseCaseProvider
+                  .overrideWithValue(mockGetTaskByIdUseCase),
+              createTaskUseCaseProvider
+                  .overrideWithValue(mockCreateTaskUseCase),
+              updateTaskUseCaseProvider
+                  .overrideWithValue(mockUpdateTaskUseCase),
+              getAllTasksUseCaseProvider
+                  .overrideWithValue(mockGetAllTasksUseCase),
+            ],
+          ),
+        );
+
+        // Act
+        await tester.pumpAndSettle();
+
+        // Assert - Check that formatted dates are displayed
+        // Format: YYYY-MM-DD HH:mm
+        expect(find.textContaining('2024-03-15'), findsWidgets);
+        expect(find.textContaining('2024-03-16'), findsWidgets);
+      });
     });
   });
 }

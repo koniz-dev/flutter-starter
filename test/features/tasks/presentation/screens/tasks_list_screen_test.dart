@@ -536,5 +536,185 @@ void main() {
         ),
       );
     });
+
+    testWidgets('should display task with description', (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(
+          id: 'task-1',
+          title: 'Task with Description',
+          description: 'This is a task description',
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Task with Description'), findsOneWidget);
+      expect(find.text('This is a task description'), findsOneWidget);
+    });
+
+    testWidgets('should display task without description', (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(
+          id: 'task-1',
+          title: 'Task without Description',
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Task without Description'), findsOneWidget);
+    });
+
+    testWidgets('should display completed task with strikethrough',
+        (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(
+          id: 'task-1',
+          title: 'Completed Task',
+          isCompleted: true,
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Completed Task'), findsOneWidget);
+      // Check that checkbox is checked
+      final checkbox = tester.widget<Checkbox>(
+        find.byType(Checkbox).first,
+      );
+      expect(checkbox.value, isTrue);
+    });
+
+    testWidgets('should create task with description in dialog',
+        (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).thenAnswer((_) async => Success(createTask()));
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.first, 'New Task');
+      await tester.pump();
+      if (textFields.evaluate().length > 1) {
+        await tester.enterText(textFields.at(1), 'Task Description');
+        await tester.pump();
+      }
+      await tester.tap(find.text('Add'));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Assert
+      verify(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).called(1);
+    });
+
+    testWidgets('should validate title in add task dialog', (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Try to submit without entering title
+      await tester.tap(find.text('Add'));
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(
+        find.text('Please enter a task title'),
+        findsOneWidget,
+      );
+      verifyNever(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      );
+    });
   });
 }

@@ -95,5 +95,76 @@ void main() {
       expect(AppConstants.appName, isNotEmpty);
       expect(AppConstants.appName.length, greaterThan(0));
     });
+
+    test('should have all constants accessible as static members', () {
+      // Verify all constants can be accessed
+      expect(() => AppConstants.appName, returnsNormally);
+      expect(() => AppConstants.defaultPageSize, returnsNormally);
+      expect(() => AppConstants.maxPageSize, returnsNormally);
+      expect(() => AppConstants.tokenKey, returnsNormally);
+      expect(() => AppConstants.refreshTokenKey, returnsNormally);
+      expect(() => AppConstants.userDataKey, returnsNormally);
+      expect(() => AppConstants.themeKey, returnsNormally);
+      expect(() => AppConstants.languageKey, returnsNormally);
+    });
+
+    test('should have storage keys with valid format', () {
+      // Storage keys should be valid identifiers (lowercase with underscores)
+      final keys = [
+        AppConstants.tokenKey,
+        AppConstants.refreshTokenKey,
+        AppConstants.userDataKey,
+        AppConstants.themeKey,
+        AppConstants.languageKey,
+      ];
+      for (final key in keys) {
+        expect(key, matches(r'^[a-z_]+$'));
+      }
+    });
+
+    test('should have page sizes as positive integers', () {
+      expect(AppConstants.defaultPageSize, greaterThan(0));
+      expect(AppConstants.maxPageSize, greaterThan(0));
+      expect(AppConstants.defaultPageSize, isA<int>());
+      expect(AppConstants.maxPageSize, isA<int>());
+    });
+
+    test('should have appName with reasonable length', () {
+      expect(AppConstants.appName.length, greaterThan(0));
+      expect(AppConstants.appName.length, lessThan(100));
+    });
+
+    test('should have storage keys with reasonable length', () {
+      final keys = [
+        AppConstants.tokenKey,
+        AppConstants.refreshTokenKey,
+        AppConstants.userDataKey,
+        AppConstants.themeKey,
+        AppConstants.languageKey,
+      ];
+      for (final key in keys) {
+        expect(key.length, greaterThan(0));
+        expect(key.length, lessThan(50));
+      }
+    });
+
+    test('should have maxPageSize as multiple of defaultPageSize', () {
+      // maxPageSize should be a reasonable multiple of defaultPageSize
+      const ratio = AppConstants.maxPageSize / AppConstants.defaultPageSize;
+      expect(ratio, greaterThanOrEqualTo(1.0));
+      expect(ratio, lessThanOrEqualTo(10.0));
+    });
+
+    test('should have consistent constant types', () {
+      // Verify type consistency
+      expect(AppConstants.appName, isA<String>());
+      expect(AppConstants.defaultPageSize, isA<int>());
+      expect(AppConstants.maxPageSize, isA<int>());
+      expect(AppConstants.tokenKey, isA<String>());
+      expect(AppConstants.refreshTokenKey, isA<String>());
+      expect(AppConstants.userDataKey, isA<String>());
+      expect(AppConstants.themeKey, isA<String>());
+      expect(AppConstants.languageKey, isA<String>());
+    });
   });
 }

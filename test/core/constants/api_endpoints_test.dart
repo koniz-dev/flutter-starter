@@ -111,5 +111,66 @@ void main() {
       final uniqueEndpoints = endpoints.toSet();
       expect(uniqueEndpoints.length, greaterThanOrEqualTo(5));
     });
+
+    test('should have endpoints with valid URL structure', () {
+      // All endpoints should be valid URL paths
+      expect(ApiEndpoints.apiVersion, matches('^/[^/]+'));
+      expect(ApiEndpoints.login, matches(r'^/[^/]+(/[^/]+)*$'));
+      expect(ApiEndpoints.register, matches(r'^/[^/]+(/[^/]+)*$'));
+      expect(ApiEndpoints.logout, matches(r'^/[^/]+(/[^/]+)*$'));
+      expect(ApiEndpoints.refreshToken, matches(r'^/[^/]+(/[^/]+)*$'));
+      expect(ApiEndpoints.userProfile, matches(r'^/[^/]+(/[^/]+)*$'));
+      expect(ApiEndpoints.updateProfile, matches(r'^/[^/]+(/[^/]+)*$'));
+    });
+
+    test('should have endpoints without trailing slashes', () {
+      // Endpoints should not end with / (except root)
+      final endpoints = [
+        ApiEndpoints.login,
+        ApiEndpoints.register,
+        ApiEndpoints.logout,
+        ApiEndpoints.refreshToken,
+        ApiEndpoints.userProfile,
+        ApiEndpoints.updateProfile,
+      ];
+      for (final endpoint in endpoints) {
+        expect(endpoint, isNot(endsWith('/')));
+      }
+    });
+
+    test('should have apiVersion that can be used as prefix', () {
+      // apiVersion should be usable as a prefix for other endpoints
+      expect(ApiEndpoints.apiVersion, '/v1');
+      expect(ApiEndpoints.login, isNot(startsWith(ApiEndpoints.apiVersion)));
+      // Note: In real usage, endpoints might be prefixed with apiVersion
+    });
+
+    test('should have all endpoints accessible as static members', () {
+      // Verify all endpoints can be accessed
+      expect(() => ApiEndpoints.apiVersion, returnsNormally);
+      expect(() => ApiEndpoints.login, returnsNormally);
+      expect(() => ApiEndpoints.register, returnsNormally);
+      expect(() => ApiEndpoints.logout, returnsNormally);
+      expect(() => ApiEndpoints.refreshToken, returnsNormally);
+      expect(() => ApiEndpoints.userProfile, returnsNormally);
+      expect(() => ApiEndpoints.updateProfile, returnsNormally);
+    });
+
+    test('should have endpoints with reasonable length', () {
+      // Endpoints should not be too long
+      final endpoints = [
+        ApiEndpoints.apiVersion,
+        ApiEndpoints.login,
+        ApiEndpoints.register,
+        ApiEndpoints.logout,
+        ApiEndpoints.refreshToken,
+        ApiEndpoints.userProfile,
+        ApiEndpoints.updateProfile,
+      ];
+      for (final endpoint in endpoints) {
+        expect(endpoint.length, lessThan(100));
+        expect(endpoint.length, greaterThan(0));
+      }
+    });
   });
 }

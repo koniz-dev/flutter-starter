@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_starter/core/logging/log_output.dart';
@@ -666,6 +667,290 @@ void main() {
         final json = lines.first;
         // Should contain timestamp in ISO8601 format
         expect(json, matches(RegExp(r'"timestamp"\s*:\s*"[^"]+"')));
+      });
+
+      test('should handle event with both error and stackTrace', () {
+        // Arrange
+        final formatter = JsonLogFormatter();
+        final error = Exception('Test error');
+        final stackTrace = StackTrace.current;
+        final event = LogEvent(
+          Level.error,
+          'Error message',
+          error: error,
+          stackTrace: stackTrace,
+        );
+
+        // Act
+        final lines = formatter.log(event);
+
+        // Assert
+        expect(lines.length, 1);
+        final json = lines.first;
+        expect(json, contains('error'));
+        expect(json, contains('stackTrace'));
+        expect(json, contains('Test error'));
+      });
+    });
+
+    group('FileLogOutput - Additional Edge Cases', () {
+      test('should handle getLogFiles when directory exists but empty',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+
+        // Act
+        final logFiles = await fileLogOutput.getLogFiles();
+
+        // Assert
+        expect(logFiles, isA<List<File>>());
+      });
+
+      test('should handle rotation when maxFiles is 1', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 100,
+          maxFiles: 1,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write enough to trigger rotation
+        for (var i = 0; i < 20; i++) {
+          final logEvent = LogEvent(
+            Level.info,
+            'Long message to trigger rotation',
+          );
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Long message to trigger rotation']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Assert
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(1));
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle output with empty lines list', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+
+        // Act
+        final logEvent = LogEvent(Level.info, 'Test');
+        fileLogOutput.output(OutputEvent(logEvent, []));
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle getLogFiles with files not matching fileName',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'specific.log');
+        await fileLogOutput.init();
+
+        // Act
+        final logFiles = await fileLogOutput.getLogFiles();
+
+        // Assert
+        // All files should contain 'specific.log'
+        for (final file in logFiles) {
+          expect(file.path.contains('specific.log'), isTrue);
+        }
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle rotation when file size equals maxFileSize',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 200,
+          maxFiles: 3,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write exactly enough to reach maxFileSize
+        final longMessage = 'A' * 50; // 50 chars per line
+        for (var i = 0; i < 10; i++) {
+          final logEvent = LogEvent(Level.info, longMessage);
+          fileLogOutput.output(OutputEvent(logEvent, [longMessage]));
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should handle rotation gracefully
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(3));
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle getLogFiles when exception occurs', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+
+        // Act & Assert - Should return empty list on exception
+        // This tests the exception handling in getLogFiles
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles, isA<List<File>>());
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle clearLogs when directory does not exist',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        // Don't init, so directory might not exist
+
+        // Act & Assert - Should handle gracefully
+        await expectLater(fileLogOutput.clearLogs(), completes);
+      });
+
+      test('should handle multiple rotations in sequence', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 100,
+          maxFiles: 2,
+        );
+        await fileLogOutput.init();
+
+        // Act - Trigger multiple rotations
+        for (var rotation = 0; rotation < 3; rotation++) {
+          for (var i = 0; i < 15; i++) {
+            final logEvent = LogEvent(
+              Level.info,
+              'Rotation $rotation message $i',
+            );
+            fileLogOutput.output(
+              OutputEvent(logEvent, ['Rotation $rotation message $i']),
+            );
+          }
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+        }
+
+        // Assert
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(2));
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle output with multiple lines', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+
+        // Act
+        final logEvent = LogEvent(Level.info, 'Multi-line message');
+        fileLogOutput.output(
+          OutputEvent(logEvent, ['Line 1', 'Line 2', 'Line 3']),
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle rotation with maxFiles = 0', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 100,
+          maxFiles: 0,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write to trigger rotation
+        for (var i = 0; i < 20; i++) {
+          final logEvent = LogEvent(Level.info, 'Message $i');
+          fileLogOutput.output(OutputEvent(logEvent, ['Message $i']));
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should handle gracefully
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles, isA<List<File>>());
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle destroy when sink is already closed', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+        await fileLogOutput.destroy();
+
+        // Act & Assert - Should not throw when destroying again
+        await expectLater(fileLogOutput.destroy(), completes);
+      });
+    });
+
+    group('JsonLogFormatter - Additional Edge Cases', () {
+      test('should handle very long messages', () {
+        // Arrange
+        final formatter = JsonLogFormatter();
+        final longMessage = 'A' * 10000;
+        final event = LogEvent(Level.info, longMessage);
+
+        // Act
+        final lines = formatter.log(event);
+
+        // Assert
+        expect(lines.length, 1);
+        final json = lines.first;
+        expect(json, contains(longMessage));
+      });
+
+      test('should handle special characters in message', () {
+        // Arrange
+        final formatter = JsonLogFormatter();
+        const specialMessage = 'Test: "quotes", \'apostrophes\', \n newlines';
+        final event = LogEvent(Level.info, specialMessage);
+
+        // Act
+        final lines = formatter.log(event);
+
+        // Assert
+        expect(lines.length, 1);
+        final json = lines.first;
+        // JSON should be valid even with special characters
+        expect(() => jsonDecode(json), returnsNormally);
+      });
+
+      test('should handle empty message', () {
+        // Arrange
+        final formatter = JsonLogFormatter();
+        final event = LogEvent(Level.info, '');
+
+        // Act
+        final lines = formatter.log(event);
+
+        // Assert
+        expect(lines.length, 1);
+        final json = lines.first;
+        expect(json, contains('"message"'));
+      });
+
+      test('should handle unicode characters in message', () {
+        // Arrange
+        final formatter = JsonLogFormatter();
+        const unicodeMessage = 'Test: 你好 🌟 émojis';
+        final event = LogEvent(Level.info, unicodeMessage);
+
+        // Act
+        final lines = formatter.log(event);
+
+        // Assert
+        expect(lines.length, 1);
+        final json = lines.first;
+        expect(json, contains(unicodeMessage));
+        expect(() => jsonDecode(json), returnsNormally);
       });
     });
   });

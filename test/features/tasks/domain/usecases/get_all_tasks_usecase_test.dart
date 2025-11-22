@@ -21,6 +21,21 @@ void main() {
       useCase = GetAllTasksUseCase(mockRepository);
     });
 
+    test('should create instance with repository', () {
+      // Arrange & Act
+      final useCase = GetAllTasksUseCase(mockRepository);
+
+      // Assert
+      expect(useCase, isNotNull);
+      expect(useCase.repository, equals(mockRepository));
+    });
+
+    test('should have repository property', () {
+      // Assert
+      expect(useCase.repository, isA<TasksRepository>());
+      expect(useCase.repository, equals(mockRepository));
+    });
+
     test('should return list of tasks when repository succeeds', () async {
       // Arrange
       final tasks = createTaskList();

@@ -162,7 +162,7 @@ class PaginationHelper<T> {
     } on Object catch (e) {
       _state = _state.setError(
         e.toString(),
-      );
+      ).setLoading(loading: false);
       if (kDebugMode) {
         debugPrint('Pagination error: $e');
       }

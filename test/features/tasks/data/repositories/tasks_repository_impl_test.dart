@@ -26,6 +26,23 @@ void main() {
       repository = TasksRepositoryImpl(localDataSource: mockLocalDataSource);
     });
 
+    test('should create instance with localDataSource', () {
+      // Arrange & Act
+      final repository = TasksRepositoryImpl(
+        localDataSource: mockLocalDataSource,
+      );
+
+      // Assert
+      expect(repository, isNotNull);
+      expect(repository.localDataSource, equals(mockLocalDataSource));
+    });
+
+    test('should have localDataSource property', () {
+      // Assert
+      expect(repository.localDataSource, isA<TasksLocalDataSource>());
+      expect(repository.localDataSource, equals(mockLocalDataSource));
+    });
+
     group('getAllTasks', () {
       test('should return list of tasks when data source succeeds', () async {
         // Arrange
@@ -605,6 +622,50 @@ void main() {
 
         // Assert
         expectResultSuccess(result, null);
+      });
+
+      test('should handle deleteCompletedTasks with empty tasks list',
+          () async {
+        // Arrange
+        when(() => mockLocalDataSource.getAllTasks())
+            .thenAnswer((_) async => []);
+        when(() => mockLocalDataSource.saveTasks(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.deleteCompletedTasks();
+
+        // Assert
+        result.when(
+          success: (_) => expect(true, isTrue),
+          failureCallback: (_) => fail('Expected success'),
+        );
+        final savedTasks = verify(
+          () => mockLocalDataSource.saveTasks(captureAny()),
+        ).captured.first as List<TaskModel>;
+        expect(savedTasks, isEmpty);
+      });
+
+      test('should handle toggleTaskCompletion with task already completed',
+          () async {
+        // Arrange
+        const taskId = 'task-1';
+        final taskModel = createTaskModel(id: taskId, isCompleted: true);
+        when(() => mockLocalDataSource.getTaskById(any()))
+            .thenAnswer((_) async => taskModel);
+        when(() => mockLocalDataSource.saveTask(any()))
+            .thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.toggleTaskCompletion(taskId);
+
+        // Assert
+        result.when(
+          success: (Task task) => expect(task.isCompleted, isFalse),
+          failureCallback: (Failure _) => fail('Expected success'),
+        );
+        verify(() => mockLocalDataSource.getTaskById(taskId)).called(1);
+        verify(() => mockLocalDataSource.saveTask(any())).called(1);
       });
     });
   });

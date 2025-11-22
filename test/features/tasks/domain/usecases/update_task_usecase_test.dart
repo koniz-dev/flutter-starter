@@ -25,6 +25,21 @@ void main() {
       useCase = UpdateTaskUseCase(mockRepository);
     });
 
+    test('should create instance with repository', () {
+      // Arrange & Act
+      final useCase = UpdateTaskUseCase(mockRepository);
+
+      // Assert
+      expect(useCase, isNotNull);
+      expect(useCase.repository, equals(mockRepository));
+    });
+
+    test('should have repository property', () {
+      // Assert
+      expect(useCase.repository, isA<TasksRepository>());
+      expect(useCase.repository, equals(mockRepository));
+    });
+
     test('should update task with new updatedAt timestamp', () async {
       // Arrange
       final testDate = DateTime(2024);

@@ -1,4 +1,5 @@
 import 'package:flutter_starter/features/tasks/data/models/task_model.dart';
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/test_fixtures.dart';
@@ -334,6 +335,95 @@ void main() {
         // Assert
         expect(converted.createdAt, createdAt);
         expect(converted.updatedAt, updatedAt);
+      });
+
+      test('should handle fromEntity with all fields', () {
+        // Arrange
+        final task = Task(
+          id: 'task-1',
+          title: 'Test Task',
+          description: 'Test Description',
+          isCompleted: true,
+          createdAt: DateTime(2023),
+          updatedAt: DateTime(2023, 1, 2),
+        );
+
+        // Act
+        final taskModel = TaskModel.fromEntity(task);
+
+        // Assert
+        expect(taskModel.id, task.id);
+        expect(taskModel.title, task.title);
+        expect(taskModel.description, task.description);
+        expect(taskModel.isCompleted, task.isCompleted);
+        expect(taskModel.createdAt, task.createdAt);
+        expect(taskModel.updatedAt, task.updatedAt);
+      });
+
+      test('should handle fromEntity with null description', () {
+        // Arrange
+        final task = Task(
+          id: 'task-1',
+          title: 'Test Task',
+          createdAt: DateTime(2023),
+          updatedAt: DateTime(2023, 1, 2),
+        );
+
+        // Act
+        final taskModel = TaskModel.fromEntity(task);
+
+        // Assert
+        expect(taskModel.description, isNull);
+      });
+
+      test('should handle toEntity returns same instance', () {
+        // Arrange
+        final taskModel = TaskModel(
+          id: 'task-1',
+          title: 'Test Task',
+          createdAt: DateTime(2023),
+          updatedAt: DateTime(2023, 1, 2),
+        );
+
+        // Act
+        final entity = taskModel.toEntity();
+
+        // Assert
+        expect(entity, same(taskModel));
+        expect(entity, isA<Task>());
+      });
+
+      test('should handle JSON with false is_completed explicitly', () {
+        // Arrange
+        final json = {
+          'id': 'task-1',
+          'title': 'Test Task',
+          'is_completed': false,
+          'created_at': DateTime.now().toIso8601String(),
+          'updated_at': DateTime.now().toIso8601String(),
+        };
+
+        // Act
+        final taskModel = TaskModel.fromJson(json);
+
+        // Assert
+        expect(taskModel.isCompleted, isFalse);
+      });
+
+      test('should handle toJson with null description', () {
+        // Arrange
+        final taskModel = TaskModel(
+          id: 'task-1',
+          title: 'Test Task',
+          createdAt: DateTime(2023),
+          updatedAt: DateTime(2023, 1, 2),
+        );
+
+        // Act
+        final json = taskModel.toJson();
+
+        // Assert
+        expect(json['description'], isNull);
       });
     });
   });
