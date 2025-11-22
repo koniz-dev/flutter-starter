@@ -1062,6 +1062,75 @@ void main() {
         );
         await fileLogOutput.destroy();
       });
+
+      test('should handle rotation when file size exactly equals maxFileSize',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 100, // Small size to trigger rotation
+        );
+        await fileLogOutput.init();
+
+        // Act - Write exactly enough to reach maxFileSize
+        // This tests the edge case where fileSize >= maxFileSize
+        final logEvent = LogEvent(Level.info, 'A' * 50);
+        for (var i = 0; i < 3; i++) {
+          fileLogOutput.output(OutputEvent(logEvent, ['A' * 50]));
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle rotation with maxFiles = 1', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 50,
+          maxFiles: 1, // Edge case: only 1 file
+        );
+        await fileLogOutput.init();
+
+        // Act - Write enough to trigger rotation
+        for (var i = 0; i < 10; i++) {
+          final logEvent = LogEvent(Level.info, 'Long message $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Long message $i']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle rotation when old files do not exist', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 50,
+          maxFiles: 3,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write enough to trigger rotation
+        // This tests the case where oldFile.existsSync() is false
+        for (var i = 0; i < 10; i++) {
+          final logEvent = LogEvent(Level.info, 'Long message $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Long message $i']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should not throw
+        expect(fileLogOutput, isNotNull);
+        await fileLogOutput.destroy();
+      });
     });
   });
 }

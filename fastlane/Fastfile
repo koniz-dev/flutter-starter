@@ -1,0 +1,268 @@
+# Fastfile - Android Deployment Automation
+# This file contains all the lanes (tasks) for Android deployment
+# See: https://docs.fastlane.tools/actions/
+
+# Default platform
+default_platform(:android)
+
+platform :android do
+  # ========================================================================
+  # Configuration
+  # ========================================================================
+  
+  # App configuration
+  PACKAGE_NAME = "com.example.flutter_starter" # TODO: Update to match your package name
+  APP_NAME = "Flutter Starter" # TODO: Update to match your app name
+  
+  # ========================================================================
+  # Helper Lanes
+  # ========================================================================
+  
+  # Get version from pubspec.yaml
+  desc "Get version from pubspec.yaml"
+  lane :get_version do
+    pubspec = File.read("../pubspec.yaml")
+    version_match = pubspec.match(/version:\s*([\d.]+)\+(\d+)/)
+    if version_match
+      version_name = version_match[1]
+      version_code = version_match[2]
+      UI.message("Version: #{version_name}, Version Code: #{version_code}")
+      return { version: version_name, version_code: version_code }
+    else
+      UI.user_error!("Could not parse version from pubspec.yaml")
+    end
+  end
+  
+  # ========================================================================
+  # Build Lanes
+  # ========================================================================
+  
+  desc "Build App Bundle for Play Store"
+  lane :build_bundle do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    
+    UI.message("Building App Bundle - Flavor: #{flavor}, Environment: #{environment}")
+    
+    # Get version info
+    version_info = get_version
+    
+    # Build App Bundle using Flutter
+    sh("cd .. && flutter build appbundle " \
+       "--flavor #{flavor} " \
+       "--release " \
+       "--dart-define=ENVIRONMENT=#{environment} " \
+       "--dart-define=BASE_URL=#{base_url}")
+    
+    # App Bundle path
+    bundle_path = "../build/app/outputs/bundle/#{flavor}Release/app-#{flavor}-release.aab"
+    
+    if File.exist?(bundle_path)
+      UI.success("App Bundle built successfully: #{bundle_path}")
+      return bundle_path
+    else
+      UI.user_error!("App Bundle not found at #{bundle_path}")
+    end
+  end
+  
+  desc "Build APK for testing"
+  lane :build_apk do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    
+    UI.message("Building APK - Flavor: #{flavor}, Environment: #{environment}")
+    
+    # Build APK using Flutter
+    sh("cd .. && flutter build apk " \
+       "--flavor #{flavor} " \
+       "--release " \
+       "--dart-define=ENVIRONMENT=#{environment} " \
+       "--dart-define=BASE_URL=#{base_url}")
+    
+    # APK path
+    apk_path = "../build/app/outputs/flutter-apk/app-#{flavor}-release.apk"
+    
+    if File.exist?(apk_path)
+      UI.success("APK built successfully: #{apk_path}")
+      return apk_path
+    else
+      UI.user_error!("APK not found at #{apk_path}")
+    end
+  end
+  
+  # ========================================================================
+  # Deployment Lanes
+  # ========================================================================
+  
+  desc "Upload to Google Play Store (Internal track)"
+  lane :upload_internal do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "staging"
+    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    track = options[:track] || "internal"
+    
+    # Build App Bundle
+    bundle_path = build_bundle(flavor: flavor, environment: environment, base_url: base_url)
+    
+    # Upload to Google Play Store
+    upload_to_play_store(
+      aab: bundle_path,
+      track: track,
+      package_name: PACKAGE_NAME,
+      skip_upload_apk: true,
+      skip_upload_aab: false,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      # json_key: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"], # Uncomment if using JSON string
+      # json_key_file: "path/to/service-account.json", # Uncomment if using JSON file
+      # service_account_json_file: "path/to/service-account.json" # Alternative
+    )
+    
+    UI.success("Successfully uploaded to Google Play Store (#{track} track)!")
+  end
+  
+  desc "Upload to Google Play Store (Alpha track)"
+  lane :upload_alpha do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "staging"
+    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    
+    # Build and upload to alpha
+    bundle_path = build_bundle(flavor: flavor, environment: environment, base_url: base_url)
+    
+    upload_to_play_store(
+      aab: bundle_path,
+      track: "alpha",
+      package_name: PACKAGE_NAME,
+      skip_upload_apk: true,
+      skip_upload_aab: false,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+    
+    UI.success("Successfully uploaded to Google Play Store (alpha track)!")
+  end
+  
+  desc "Upload to Google Play Store (Beta track)"
+  lane :upload_beta do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "staging"
+    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    
+    # Build and upload to beta
+    bundle_path = build_bundle(flavor: flavor, environment: environment, base_url: base_url)
+    
+    upload_to_play_store(
+      aab: bundle_path,
+      track: "beta",
+      package_name: PACKAGE_NAME,
+      skip_upload_apk: true,
+      skip_upload_aab: false,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+    
+    UI.success("Successfully uploaded to Google Play Store (beta track)!")
+  end
+  
+  desc "Upload to Google Play Store (Production track)"
+  lane :upload_production do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    
+    # Build and upload to production
+    bundle_path = build_bundle(flavor: flavor, environment: environment, base_url: base_url)
+    
+    upload_to_play_store(
+      aab: bundle_path,
+      track: "production",
+      package_name: PACKAGE_NAME,
+      skip_upload_apk: true,
+      skip_upload_aab: false,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "completed" # or "draft" for manual release
+    )
+    
+    UI.success("Successfully uploaded to Google Play Store (production track)!")
+  end
+  
+  desc "Upload to Google Play Store with automatic track selection"
+  lane :upload do |options|
+    flavor = options[:flavor] || "production"
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    track = options[:track] || (environment == "production" ? "production" : "internal")
+    
+    # Build App Bundle
+    bundle_path = build_bundle(flavor: flavor, environment: environment, base_url: base_url)
+    
+    # Upload to Google Play Store
+    upload_to_play_store(
+      aab: bundle_path,
+      track: track,
+      package_name: PACKAGE_NAME,
+      skip_upload_apk: true,
+      skip_upload_aab: false,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      whatsnew_directory: "fastlane/metadata/android/en-US/changelogs"
+    )
+    
+    UI.success("Successfully uploaded to Google Play Store (#{track} track)!")
+  end
+  
+  # ========================================================================
+  # Utility Lanes
+  # ========================================================================
+  
+  desc "Increment build number"
+  lane :increment_build do
+    # This would require a script to update pubspec.yaml
+    # For now, use the bump_version.sh script
+    UI.message("Use ./scripts/bump_version.sh build to increment build number")
+  end
+  
+  desc "Update changelog"
+  lane :update_changelog do |options|
+    version = options[:version] || get_version[:version]
+    changelog_path = "fastlane/metadata/android/en-US/changelogs/default.txt"
+    
+    if File.exist?(changelog_path)
+      UI.message("Changelog exists at: #{changelog_path}")
+      UI.message("Update it manually or use generate_changelog.sh script")
+    else
+      UI.message("Changelog not found. Create it at: #{changelog_path}")
+    end
+  end
+  
+  desc "Show current version"
+  lane :version do
+    version_info = get_version
+    UI.message("Current Version: #{version_info[:version]}")
+    UI.message("Current Version Code: #{version_info[:version_code]}")
+  end
+  
+  # ========================================================================
+  # Testing Lanes (Optional)
+  # ========================================================================
+  
+  desc "Run tests"
+  lane :test do
+    sh("cd .. && flutter test")
+  end
+  
+  desc "Run Flutter analyze"
+  lane :analyze do
+    sh("cd .. && flutter analyze")
+  end
+end
+

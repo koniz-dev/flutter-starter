@@ -1,0 +1,213 @@
+# Fastfile - iOS Deployment Automation
+# This file contains all the lanes (tasks) for iOS deployment
+# See: https://docs.fastlane.tools/actions/
+
+# Default platform
+default_platform(:ios)
+
+platform :ios do
+  # ========================================================================
+  # Configuration
+  # ========================================================================
+  
+  # App configuration
+  APP_IDENTIFIER = "com.example.flutterStarter" # TODO: Update to match your bundle ID
+  APP_NAME = "Flutter Starter" # TODO: Update to match your app name
+  
+  # ========================================================================
+  # Helper Lanes
+  # ========================================================================
+  
+  # Get version from pubspec.yaml
+  desc "Get version from pubspec.yaml"
+  lane :get_version do
+    pubspec = File.read("../pubspec.yaml")
+    version_match = pubspec.match(/version:\s*([\d.]+)\+(\d+)/)
+    if version_match
+      version_name = version_match[1]
+      build_number = version_match[2]
+      UI.message("Version: #{version_name}, Build: #{build_number}")
+      return { version: version_name, build: build_number }
+    else
+      UI.user_error!("Could not parse version from pubspec.yaml")
+    end
+  end
+  
+  # ========================================================================
+  # Build Lanes
+  # ========================================================================
+  
+  desc "Build IPA for App Store"
+  lane :build_appstore do |options|
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    
+    UI.message("Building for App Store - Environment: #{environment}")
+    
+    # Get version info
+    version_info = get_version
+    
+    # Build IPA using Flutter
+    sh("cd .. && flutter build ipa " \
+       "--release " \
+       "--dart-define=ENVIRONMENT=#{environment} " \
+       "--dart-define=BASE_URL=#{base_url}")
+    
+    # IPA path
+    ipa_path = "../build/ios/ipa/Runner.ipa"
+    
+    if File.exist?(ipa_path)
+      UI.success("IPA built successfully: #{ipa_path}")
+      return ipa_path
+    else
+      UI.user_error!("IPA not found at #{ipa_path}")
+    end
+  end
+  
+  desc "Build IPA for Ad Hoc distribution"
+  lane :build_adhoc do |options|
+    environment = options[:environment] || "staging"
+    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    
+    UI.message("Building for Ad Hoc - Environment: #{environment}")
+    
+    # Build IPA using Flutter
+    sh("cd .. && flutter build ipa " \
+       "--release " \
+       "--dart-define=ENVIRONMENT=#{environment} " \
+       "--dart-define=BASE_URL=#{base_url}")
+    
+    ipa_path = "../build/ios/ipa/Runner.ipa"
+    
+    if File.exist?(ipa_path)
+      UI.success("IPA built successfully: #{ipa_path}")
+      return ipa_path
+    else
+      UI.user_error!("IPA not found at #{ipa_path}")
+    end
+  end
+  
+  # ========================================================================
+  # Deployment Lanes
+  # ========================================================================
+  
+  desc "Upload to App Store Connect"
+  lane :upload_appstore do |options|
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    skip_screenshots = options[:skip_screenshots] || true
+    skip_metadata = options[:skip_metadata] || true
+    
+    # Build IPA
+    ipa_path = build_appstore(environment: environment, base_url: base_url)
+    
+    # Upload to App Store Connect
+    deliver(
+      ipa: ipa_path,
+      skip_screenshots: skip_screenshots,
+      skip_metadata: skip_metadata,
+      force: true,
+      submit_for_review: false, # Set to true to auto-submit for review
+      automatic_release: false, # Set to true for automatic release after approval
+      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"], # Uncomment if using API key file
+      # api_key_id: ENV["APP_STORE_CONNECT_KEY_ID"], # Uncomment if using API key
+      # api_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"] # Uncomment if using API key
+    )
+    
+    UI.success("Successfully uploaded to App Store Connect!")
+  end
+  
+  desc "Upload to TestFlight"
+  lane :upload_testflight do |options|
+    environment = options[:environment] || "staging"
+    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    groups = options[:groups] || ["Internal Testers"] # TestFlight groups
+    
+    # Build IPA
+    ipa_path = build_appstore(environment: environment, base_url: base_url)
+    
+    # Upload to TestFlight
+    pilot(
+      ipa: ipa_path,
+      skip_waiting_for_build_processing: false,
+      skip_submission: true, # Don't submit for review automatically
+      distribute_external: false, # Set to true for external testing
+      groups: groups,
+      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"], # Uncomment if using API key file
+      # api_key_id: ENV["APP_STORE_CONNECT_KEY_ID"], # Uncomment if using API key
+      # api_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"] # Uncomment if using API key
+    )
+    
+    UI.success("Successfully uploaded to TestFlight!")
+  end
+  
+  desc "Upload to App Store Connect and submit for review"
+  lane :release do |options|
+    environment = options[:environment] || "production"
+    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    
+    # Build and upload
+    ipa_path = build_appstore(environment: environment, base_url: base_url)
+    
+    # Upload and submit
+    deliver(
+      ipa: ipa_path,
+      skip_screenshots: true,
+      skip_metadata: true,
+      force: true,
+      submit_for_review: true,
+      automatic_release: false,
+      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
+      # api_key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      # api_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"]
+    )
+    
+    UI.success("Successfully submitted to App Store for review!")
+  end
+  
+  # ========================================================================
+  # Utility Lanes
+  # ========================================================================
+  
+  desc "Increment build number"
+  lane :increment_build do
+    # This would require a script to update pubspec.yaml
+    # For now, use the bump_version.sh script
+    UI.message("Use ./scripts/bump_version.sh build to increment build number")
+  end
+  
+  desc "Update changelog"
+  lane :update_changelog do |options|
+    version = options[:version] || get_version[:version]
+    changelog_path = "../fastlane/metadata/android/en-US/changelogs/default.txt"
+    
+    if File.exist?(changelog_path)
+      UI.message("Changelog exists at: #{changelog_path}")
+      UI.message("Update it manually or use generate_changelog.sh script")
+    else
+      UI.message("Changelog not found. Create it at: #{changelog_path}")
+    end
+  end
+  
+  desc "Show current version"
+  lane :version do
+    version_info = get_version
+    UI.message("Current Version: #{version_info[:version]}")
+    UI.message("Current Build: #{version_info[:build]}")
+  end
+  
+  # ========================================================================
+  # Testing Lanes (Optional)
+  # ========================================================================
+  
+  desc "Run tests"
+  lane :test do
+    sh("cd .. && flutter test")
+  end
+  
+  desc "Run Flutter analyze"
+  lane :analyze do
+    sh("cd .. && flutter analyze")
+  end
+end
+

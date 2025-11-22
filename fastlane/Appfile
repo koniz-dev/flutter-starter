@@ -1,0 +1,17 @@
+# Appfile - Android Configuration
+# This file contains configuration for your Android app
+# See: https://docs.fastlane.tools/advanced/#appfile
+
+# Package name (Application ID)
+# This should match your app's applicationId in build.gradle.kts
+package_name("com.example.flutter_starter") # TODO: Update to match your app's package name
+
+# Google Play Service Account JSON (for CI/CD)
+# json_key_file("path/to/service-account.json") # TODO: Uncomment and set path to service account JSON
+
+# Google Play Service Account JSON as string (alternative for CI/CD)
+# json_key_data("{\"type\":\"service_account\",...}") # TODO: Uncomment and set service account JSON string
+
+# Track to deploy to (default: production)
+# default_track("internal") # TODO: Uncomment and set default track (internal, alpha, beta, production)
+

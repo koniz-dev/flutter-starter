@@ -1,0 +1,25 @@
+# Appfile - iOS Configuration
+# This file contains configuration for your iOS app
+# See: https://docs.fastlane.tools/advanced/#appfile
+
+# Your Apple Developer Team ID
+# Find it at: https://developer.apple.com/account
+# Or run: xcodebuild -showBuildSettings | grep DEVELOPMENT_TEAM
+team_id("YOUR_TEAM_ID") # TODO: Replace with your Apple Team ID
+
+# Your App Store Connect API Key ID (optional, for CI/CD)
+# api_key_id("YOUR_API_KEY_ID") # TODO: Uncomment and set if using API key authentication
+
+# Your App Store Connect Issuer ID (optional, for CI/CD)
+# api_issuer_id("YOUR_ISSUER_ID") # TODO: Uncomment and set if using API key authentication
+
+# App Identifier (Bundle ID)
+# This should match your Xcode project's Bundle Identifier
+app_identifier("com.example.flutterStarter") # TODO: Update to match your app's bundle ID
+
+# Apple ID for App Store Connect
+# apple_id("your.email@example.com") # TODO: Uncomment and set your Apple ID
+
+# Itunes Connect Team ID (if different from team_id)
+# itc_team_id("YOUR_ITC_TEAM_ID") # TODO: Uncomment if different from team_id
+

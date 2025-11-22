@@ -128,7 +128,16 @@ Located in `scripts/`:
 
 2. **ios/ExportOptions.plist** - iOS export options for IPA creation
 
-3. **fastlane/metadata/android/en-US/changelogs/default.txt** - Default Play Store changelog
+3. **fastlane/** - Fastlane configuration for Android:
+   - **Fastfile** - Android deployment lanes (build, upload to Play Store)
+   - **Appfile** - Android app configuration (package name, service account)
+   - **metadata/** - Play Store metadata (changelogs, descriptions, screenshots)
+
+4. **ios/fastlane/** - Fastlane configuration for iOS:
+   - **Fastfile** - iOS deployment lanes (build IPA, upload to App Store/TestFlight)
+   - **Appfile** - iOS app configuration (bundle ID, team ID, API keys)
+
+5. **fastlane/metadata/android/en-US/changelogs/default.txt** - Default Play Store changelog
 
 ## 🎯 Key Features
 
@@ -145,6 +154,7 @@ Located in `scripts/`:
 - ✅ Automated deployment
 - ✅ Multi-platform support
 - ✅ Environment-specific deployments
+- ✅ Fastlane integration (Android & iOS)
 
 ### Release Process
 - ✅ Semantic versioning
@@ -193,6 +203,16 @@ scripts/
 ├── generate_changelog.sh     # Changelog generation
 ├── release.sh                # Release automation
 └── build_all.sh              # Build all platforms
+
+fastlane/
+├── Fastfile                  # Android deployment lanes
+├── Appfile                   # Android app configuration
+├── README.md                 # Fastlane documentation
+└── metadata/                 # Play Store metadata
+
+ios/fastlane/
+├── Fastfile                  # iOS deployment lanes
+└── Appfile                   # iOS app configuration
 ```
 
 ## ✅ Checklist
