@@ -20,7 +20,9 @@ class ImageCacheHelper {
       final imageProvider = NetworkImage(url);
       await precacheImage(imageProvider, _getImageContext());
       return true;
-    } on Exception catch (e) {
+    } on Object catch (e) {
+      // Catch all errors (Exception and Error) since the dummy context
+      // may throw NoSuchMethodError which is an Error, not Exception
       debugPrint('Failed to preload image: $url, error: $e');
       return false;
     }
