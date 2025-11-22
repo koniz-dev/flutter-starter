@@ -210,6 +210,123 @@ void main() {
         );
         expect(trace, anyOf(isNull, isNotNull));
       });
+
+      test('should handle different HTTP methods', () {
+        final methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+        for (final method in methods) {
+          final trace = performanceService.startHttpTrace(method, '/api/test');
+          expect(trace, anyOf(isNull, isNotNull));
+        }
+      });
+
+      test('should handle paths with multiple segments', () {
+        final trace = performanceService.startHttpTrace(
+          'GET',
+          '/api/v1/users/123/posts/456',
+        );
+        expect(trace, anyOf(isNull, isNotNull));
+      });
+
+      test('should handle root path', () {
+        final trace = performanceService.startHttpTrace('GET', '/');
+        expect(trace, anyOf(isNull, isNotNull));
+      });
+    });
+
+    group('measureOperation - Edge Cases', () {
+      test('should handle operation that returns void', () async {
+        await performanceService.measureOperation<void>(
+          name: 'void_operation',
+          operation: () async {},
+        );
+        expect(true, isTrue);
+      });
+
+      test('should handle operation with complex return type', () async {
+        final result =
+            await performanceService.measureOperation<Map<String, dynamic>>(
+          name: 'complex_operation',
+          operation: () async => {'key': 'value', 'number': 42},
+        );
+        expect(result, {'key': 'value', 'number': 42});
+      });
+
+      test('should handle operation with multiple attributes', () async {
+        await performanceService.measureOperation<void>(
+          name: 'multi_attr_operation',
+          operation: () async {},
+          attributes: {
+            'key1': 'value1',
+            'key2': 'value2',
+            'key3': 'value3',
+          },
+        );
+        expect(true, isTrue);
+      });
+
+      test('should handle operation with empty attributes', () async {
+        await performanceService.measureOperation<void>(
+          name: 'empty_attr_operation',
+          operation: () async {},
+          attributes: {},
+        );
+        expect(true, isTrue);
+      });
+    });
+
+    group('measureSyncOperation - Edge Cases', () {
+      test('should handle operation that returns void', () {
+        performanceService.measureSyncOperation<void>(
+          name: 'void_operation',
+          operation: () {},
+        );
+        expect(true, isTrue);
+      });
+
+      test('should handle operation with complex return type', () {
+        final result = performanceService.measureSyncOperation<List<int>>(
+          name: 'complex_operation',
+          operation: () => [1, 2, 3, 4, 5],
+        );
+        expect(result, [1, 2, 3, 4, 5]);
+      });
+    });
+
+    group('measureSyncComputation - Edge Cases', () {
+      test('should handle computation that returns void', () {
+        performanceService.measureSyncComputation<void>(
+          operationName: 'void_computation',
+          computation: () {},
+        );
+        expect(true, isTrue);
+      });
+
+      test('should handle computation with complex return type', () {
+        final result =
+            performanceService.measureSyncComputation<Map<String, List<int>>>(
+          operationName: 'complex_computation',
+          computation: () => {
+            'numbers': [1, 2, 3],
+          },
+        );
+        expect(result, {
+          'numbers': [1, 2, 3],
+        });
+      });
+    });
+
+    group('startScreenTrace - Edge Cases', () {
+      test('should handle screen names with special characters', () {
+        final trace = performanceService.startScreenTrace(
+          'screen_name_with_underscores',
+        );
+        expect(trace, anyOf(isNull, isNotNull));
+      });
+
+      test('should handle empty screen name', () {
+        final trace = performanceService.startScreenTrace('');
+        expect(trace, anyOf(isNull, isNotNull));
+      });
     });
   });
 

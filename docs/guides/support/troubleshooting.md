@@ -168,7 +168,7 @@ A: Add to `EnvConfig` for loading, then add typed getter in `AppConfig`. Update 
 
 ## Next Steps
 
-- ✅ Review [Getting Started](getting-started.md) if setup issues persist
-- ✅ Check [Common Tasks](common-tasks.md) for development patterns
-- ✅ Review [Development Workflow](development-workflow.md) for Git and PR process
+- ✅ Review [Getting Started](../onboarding/getting-started.md) if setup issues persist
+- ✅ Check [Common Tasks](../features/common-tasks.md) for development patterns
+- ✅ Review [Development Workflow](../development/development-workflow.md) for Git and PR process
 

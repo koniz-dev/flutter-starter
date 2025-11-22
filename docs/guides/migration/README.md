@@ -217,10 +217,10 @@ result.when(
 
 ## Related Documentation
 
-- [Understanding the Codebase](../understanding-codebase.md) - Architecture overview
+- [Understanding the Codebase](../onboarding/understanding-codebase.md) - Architecture overview
 - [Common Patterns](../../api/examples/common-patterns.md) - Common patterns
 - [Adding Features](../../api/examples/adding-features.md) - Adding new features
-- [Getting Started](../getting-started.md) - Initial setup
+- [Getting Started](../onboarding/getting-started.md) - Initial setup
 
 ## Getting Help
 

@@ -503,6 +503,115 @@ void main() {
         expect(state.isLoading, isFalse);
         expect(state.user, isNull);
       });
+
+      test('should handle refreshToken with refresh in message', () async {
+        // Arrange
+        const failure = AuthFailure('Refresh token invalid');
+        when(() => mockRefreshTokenUseCase())
+            .thenAnswer((_) async => const ResultFailure(failure));
+        when(() => mockLogoutUseCase())
+            .thenAnswer((_) async => const Success(null));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // Act
+        await notifier.refreshToken();
+
+        // Assert
+        verify(() => mockRefreshTokenUseCase()).called(1);
+        verify(() => mockLogoutUseCase()).called(1);
+      });
+
+      test('should handle refreshToken with non-refresh failure', () async {
+        // Arrange
+        const failure = AuthFailure('Network error');
+        when(() => mockRefreshTokenUseCase())
+            .thenAnswer((_) async => const ResultFailure(failure));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // Act
+        await notifier.refreshToken();
+
+        // Assert
+        verify(() => mockRefreshTokenUseCase()).called(1);
+        verifyNever(() => mockLogoutUseCase());
+      });
+
+      test('should set loading state during register', () async {
+        // Arrange
+        const user = User(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        when(
+          () => mockRegisterUseCase(any(), any(), any()),
+        ).thenAnswer((_) async => const Success(user));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // Act
+        final future = notifier.register(
+          'test@example.com',
+          'password123',
+          'Test User',
+        );
+
+        // Assert - check loading state before completion
+        final loadingState = container.read(authNotifierProvider);
+        expect(loadingState.isLoading, isTrue);
+
+        await future;
+
+        final finalState = container.read(authNotifierProvider);
+        expect(finalState.isLoading, isFalse);
+      });
+
+      test('should set loading state during logout', () async {
+        // Arrange
+        when(() => mockLogoutUseCase())
+            .thenAnswer((_) async => const Success(null));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // Act
+        final future = notifier.logout();
+
+        // Assert - check loading state before completion
+        final loadingState = container.read(authNotifierProvider);
+        expect(loadingState.isLoading, isTrue);
+
+        await future;
+
+        final finalState = container.read(authNotifierProvider);
+        expect(finalState.isLoading, isFalse);
+      });
+
+      test('should set loading state during getCurrentUser', () async {
+        // Arrange
+        const user = User(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        when(() => mockGetCurrentUserUseCase())
+            .thenAnswer((_) async => const Success(user));
+
+        final notifier = container.read(authNotifierProvider.notifier);
+
+        // Act
+        final future = notifier.getCurrentUser();
+
+        // Assert - check loading state before completion
+        final loadingState = container.read(authNotifierProvider);
+        expect(loadingState.isLoading, isTrue);
+
+        await future;
+
+        final finalState = container.read(authNotifierProvider);
+        expect(finalState.isLoading, isFalse);
+      });
     });
   });
 }

@@ -197,6 +197,6 @@ For more details, see the [Configuration System](../../README.md#configuration-s
 ## Next Steps
 
 - ✅ Continue to [Understanding the Codebase](understanding-codebase.md)
-- ✅ Review [Common Tasks](common-tasks.md) for development patterns
-- ✅ Check [Troubleshooting](troubleshooting.md) if you encounter issues
+- ✅ Review [Common Tasks](../features/common-tasks.md) for development patterns
+- ✅ Check [Troubleshooting](../support/troubleshooting.md) if you encounter issues
 

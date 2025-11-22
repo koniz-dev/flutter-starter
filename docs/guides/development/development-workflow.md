@@ -173,6 +173,6 @@ Brief description of changes
 
 ## Next Steps
 
-- ✅ Review [Common Tasks](common-tasks.md) for development patterns
-- ✅ Check [Troubleshooting](troubleshooting.md) if you encounter issues
+- ✅ Review [Common Tasks](../features/common-tasks.md) for development patterns
+- ✅ Check [Troubleshooting](../support/troubleshooting.md) if you encounter issues
 

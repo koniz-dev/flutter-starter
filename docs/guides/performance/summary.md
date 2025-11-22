@@ -359,7 +359,7 @@ For detailed information, see:
 - [Performance Optimization Guide](./optimization-guide.md) - Comprehensive optimization guide
 - [API Documentation - Network](../../api/core/network.md) - Network utilities
 - [API Documentation - Utils](../../api/core/utils.md) - Performance utilities
-- [Common Tasks](../common-tasks.md) - Common development tasks
+- [Common Tasks](../features/common-tasks.md) - Common development tasks
 
 ---
 

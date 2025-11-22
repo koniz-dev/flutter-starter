@@ -302,5 +302,173 @@ void main() {
         );
       });
     });
+
+    group('Edge cases', () {
+      test('should handle large number of tasks', () async {
+        // Arrange
+        final tasks = List.generate(
+          1000,
+          (index) => createTaskModel(id: 'task-$index'),
+        );
+        final tasksJson = tasks.map((t) => t.toJson()).toList();
+        final encoded = JsonHelper.encode(tasksJson);
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => encoded);
+
+        // Act
+        final result = await dataSource.getAllTasks();
+
+        // Assert
+        expect(result.length, 1000);
+      });
+
+      test('should handle saveTask with duplicate IDs correctly', () async {
+        // Arrange
+        final task1 = createTaskModel(id: 'task-1', title: 'Original');
+        final task2 = createTaskModel(id: 'task-1', title: 'Updated');
+        final tasksJson = [task1.toJson()];
+        final encoded = JsonHelper.encode(tasksJson);
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => encoded);
+        when(() => mockStorageService.setString(any(), any()))
+            .thenAnswer((_) async => true);
+
+        // Act
+        await dataSource.saveTask(task2);
+
+        // Assert
+        final savedData = verify(
+          () => mockStorageService.setString('tasks_data', captureAny()),
+        ).captured.first as String;
+        final decoded = JsonHelper.decodeList(savedData);
+        expect(decoded, isNotNull);
+        final savedTasks = decoded!
+            .map((json) => TaskModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+        expect(savedTasks.length, 1);
+        expect(savedTasks.first.title, 'Updated');
+      });
+
+      test('should handle deleteTask with non-existent ID', () async {
+        // Arrange
+        final tasks = [createTaskModel(id: 'task-1')];
+        final tasksJson = tasks.map((t) => t.toJson()).toList();
+        final encoded = JsonHelper.encode(tasksJson);
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => encoded);
+        when(() => mockStorageService.setString(any(), any()))
+            .thenAnswer((_) async => true);
+
+        // Act
+        await dataSource.deleteTask('non-existent');
+
+        // Assert
+        final savedData = verify(
+          () => mockStorageService.setString('tasks_data', captureAny()),
+        ).captured.first as String;
+        final decoded = JsonHelper.decodeList(savedData);
+        expect(decoded, isNotNull);
+        expect(decoded!.length, 1); // Task should still be there
+      });
+
+      test('should handle saveTasks with empty list', () async {
+        // Arrange
+        when(() => mockStorageService.setString(any(), any()))
+            .thenAnswer((_) async => true);
+
+        // Act
+        await dataSource.saveTasks([]);
+
+        // Assert
+        final savedData = verify(
+          () => mockStorageService.setString('tasks_data', captureAny()),
+        ).captured.first as String;
+        final decoded = JsonHelper.decodeList(savedData);
+        expect(decoded, isEmpty);
+      });
+
+      test('should handle getTaskById with empty string ID', () async {
+        // Arrange
+        final tasks = [createTaskModel(id: 'task-1')];
+        final tasksJson = tasks.map((t) => t.toJson()).toList();
+        final encoded = JsonHelper.encode(tasksJson);
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => encoded);
+
+        // Act
+        final result = await dataSource.getTaskById('');
+
+        // Assert
+        expect(result, isNull);
+      });
+
+      test('should handle saveTask when getAllTasks returns null', () async {
+        // Arrange
+        final newTask = createTaskModel(id: 'task-new');
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => null);
+        when(() => mockStorageService.setString(any(), any()))
+            .thenAnswer((_) async => true);
+
+        // Act
+        await dataSource.saveTask(newTask);
+
+        // Assert
+        verify(() => mockStorageService.setString(any(), any())).called(1);
+      });
+
+      test('should handle saveTask when getAllTasks returns empty string',
+          () async {
+        // Arrange
+        final newTask = createTaskModel(id: 'task-new');
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => '');
+        when(() => mockStorageService.setString(any(), any()))
+            .thenAnswer((_) async => true);
+
+        // Act
+        await dataSource.saveTask(newTask);
+
+        // Assert
+        verify(() => mockStorageService.setString(any(), any())).called(1);
+      });
+
+      test('should handle saveTasks when JsonHelper.encode returns null',
+          () async {
+        // Arrange
+        final tasks = [createTaskModel(id: 'task-1')];
+        // Mock to make JsonHelper.encode return null
+        // (this is hard to do, but we test the error path)
+        when(() => mockStorageService.setString(any(), any()))
+            .thenThrow(Exception('Encoding failed'));
+
+        // Act & Assert
+        expect(
+          () => dataSource.saveTasks(tasks),
+          throwsA(isA<CacheException>()),
+        );
+      });
+
+      test('should handle getTaskById when multiple tasks have same ID',
+          () async {
+        // Arrange
+        // This shouldn't happen in practice, but we test the behavior
+        final task1 = createTaskModel(id: 'task-1', title: 'First');
+        final task2 = createTaskModel(id: 'task-1', title: 'Second');
+        final tasksJson = [task1.toJson(), task2.toJson()];
+        final encoded = JsonHelper.encode(tasksJson);
+        when(() => mockStorageService.getString(any()))
+            .thenAnswer((_) async => encoded);
+
+        // Act
+        final result = await dataSource.getTaskById('task-1');
+
+        // Assert
+        // Should return the first match
+        expect(result, isNotNull);
+        expect(result!.id, 'task-1');
+        expect(result.title, 'First');
+      });
+    });
   });
 }

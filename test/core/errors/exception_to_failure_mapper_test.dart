@@ -251,6 +251,105 @@ void main() {
           expect(result.message, isNotEmpty);
         }
       });
+
+      test('should handle exceptions with special characters in message', () {
+        const exception = ServerException(
+          r'Error: "Special chars: @#\$%^&*()',
+          code: 'SPECIAL',
+        );
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<ServerFailure>());
+        expect(result.message, contains('Special chars'));
+      });
+
+      test('should handle exceptions with unicode characters', () {
+        const exception = NetworkException(
+          '网络错误: 连接超时',
+          code: 'UNICODE',
+        );
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<NetworkFailure>());
+        expect(result.message, contains('网络'));
+      });
+
+      test('should handle exceptions with newlines in message', () {
+        const exception = CacheException(
+          'Error line 1\nError line 2\nError line 3',
+          code: 'MULTILINE',
+        );
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<CacheFailure>());
+        expect(result.message, contains('\n'));
+      });
+
+      test('should handle exceptions with whitespace-only message', () {
+        const exception = AuthException('   ', code: 'WHITESPACE');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<AuthFailure>());
+        expect(result.message, '   ');
+      });
+
+      test('should handle exceptions with very long code', () {
+        const exception = ValidationException(
+          'Validation error',
+          code: 'VERY_LONG_CODE',
+        );
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<ValidationFailure>());
+        expect(result.code, 'VERY_LONG_CODE');
+      });
+    });
+
+    group('Switch Expression Coverage', () {
+      test('should use pattern matching for all exception types', () {
+        // Test that all exception types are handled by the switch expression
+        const serverException = ServerException('test');
+        final serverResult = ExceptionToFailureMapper.map(serverException);
+        expect(serverResult, isA<ServerFailure>());
+
+        const networkException = NetworkException('test');
+        final networkResult = ExceptionToFailureMapper.map(networkException);
+        expect(networkResult, isA<NetworkFailure>());
+
+        const cacheException = CacheException('test');
+        final cacheResult = ExceptionToFailureMapper.map(cacheException);
+        expect(cacheResult, isA<CacheFailure>());
+
+        const authException = AuthException('test');
+        final authResult = ExceptionToFailureMapper.map(authException);
+        expect(authResult, isA<AuthFailure>());
+
+        const validationException = ValidationException('test');
+        final validationResult =
+            ExceptionToFailureMapper.map(validationException);
+        expect(validationResult, isA<ValidationFailure>());
+
+        final unknownException = Exception('test');
+        final unknownResult = ExceptionToFailureMapper.map(unknownException);
+        expect(unknownResult, isA<UnknownFailure>());
+      });
+
+      test('should extract message and code from pattern matching', () {
+        const exception = ServerException(
+          'Test message',
+          code: 'TEST_CODE',
+        );
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result.message, 'Test message');
+        expect(result.code, 'TEST_CODE');
+      });
     });
   });
 }

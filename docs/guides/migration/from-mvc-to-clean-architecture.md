@@ -623,7 +623,7 @@ result.when(
 
 ## Next Steps
 
-- Review [Understanding the Codebase](../understanding-codebase.md)
+- Review [Understanding the Codebase](../onboarding/understanding-codebase.md)
 - Check [Common Patterns](../../api/examples/common-patterns.md)
 - See [Adding Features](../../api/examples/adding-features.md)
 

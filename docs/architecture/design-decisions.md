@@ -1196,9 +1196,9 @@ Use this template as a starting point, understand the decisions, and adapt as ne
 ## Related Documentation
 
 - **[Architecture Overview](overview.md)** - Why Clean Architecture, benefits, trade-offs, and learning resources
-- **[Understanding the Codebase](../guides/understanding-codebase.md)** - Architecture and code organization
+- **[Understanding the Codebase](../guides/onboarding/understanding-codebase.md)** - Architecture and code organization
 - **[Common Patterns](../api/examples/common-patterns.md)** - Common usage patterns and best practices
-- **[Routing Guide](../guides/routing.md)** - GoRouter navigation and deep linking
+- **[Routing Guide](../guides/features/routing-guide.md)** - GoRouter navigation and deep linking
 - **[Migration Guides](../guides/migration/)** - Guides for migrating from other architectures
 - **[API Documentation](../api/README.md)** - Complete API reference
 

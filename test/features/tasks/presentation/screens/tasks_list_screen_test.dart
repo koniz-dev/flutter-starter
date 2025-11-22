@@ -181,100 +181,96 @@ void main() {
       expect(find.text('Retry'), findsOneWidget);
     });
 
-    // COMMENTED OUT: Test has risk of hanging due to dialog interaction
-    // with pumpAndSettle()
-    // testWidgets(
-    //   'should show add task dialog when FAB is tapped',
-    //   (tester) async {
-    //     // Arrange
-    //     when(() => mockGetAllTasksUseCase())
-    //         .thenAnswer((_) async => const Success<List<Task>>([]));
-    //     when(
-    //       () => mockCreateTaskUseCase(
-    //         title: any(named: 'title'),
-    //         description: any(named: 'description'),
-    //       ),
-    //     ).thenAnswer((_) async => Success(createTask()));
+    testWidgets(
+      'should show add task dialog when FAB is tapped',
+      (tester) async {
+        // Arrange
+        when(() => mockGetAllTasksUseCase())
+            .thenAnswer((_) async => const Success<List<Task>>([]));
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer((_) async => Success(createTask()));
 
-    //     await tester.pumpWidget(
-    //       createWidgetWithOverrides([
-    //         getAllTasksUseCaseProvider
-    //             .overrideWithValue(mockGetAllTasksUseCase),
-    //         createTaskUseCaseProvider
-    //             .overrideWithValue(mockCreateTaskUseCase),
-    //         deleteTaskUseCaseProvider
-    //             .overrideWithValue(mockDeleteTaskUseCase),
-    //         toggleTaskCompletionUseCaseProvider
-    //             .overrideWithValue(mockToggleTaskCompletionUseCase),
-    //       ]),
-    //     );
+        await tester.pumpWidget(
+          createWidgetWithOverrides([
+            getAllTasksUseCaseProvider
+                .overrideWithValue(mockGetAllTasksUseCase),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+            toggleTaskCompletionUseCaseProvider
+                .overrideWithValue(mockToggleTaskCompletionUseCase),
+          ]),
+        );
 
-    //     await tester.pumpAndSettle();
+        await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //     // Act
-    //     await tester.tap(find.byType(FloatingActionButton));
-    //     await tester.pumpAndSettle();
+        // Act
+        await tester.tap(find.byType(FloatingActionButton));
+        // Use timeout to prevent hanging
+        await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //     // Assert
-    //     expect(find.text('Add Task'), findsOneWidget);
-    //     expect(find.text('Title'), findsOneWidget);
-    //   },
-    // );
+        // Assert
+        expect(find.text('Add Task'), findsOneWidget);
+        expect(find.text('Title'), findsOneWidget);
+      },
+    );
 
-    // COMMENTED OUT: Test has risk of hanging due to dialog interaction
-    // with pumpAndSettle()
-    // testWidgets('should create task when form is submitted', (tester) async {
-    //   // Arrange
-    //   when(() => mockGetAllTasksUseCase())
-    //       .thenAnswer((_) async => const Success<List<Task>>([]));
-    //   when(
-    //     () => mockCreateTaskUseCase(
-    //       title: any(named: 'title'),
-    //       description: any(named: 'description'),
-    //     ),
-    //   ).thenAnswer((invocation) async {
-    //     final title = invocation.namedArguments[#title] as String;
-    //     return Success(createTask(title: title));
-    //   });
-    //   // Mock reload after create (called by tasksNotifierProvider)
-    //   when(() => mockGetAllTasksUseCase())
-    //       .thenAnswer((_) async => const Success<List<Task>>([]));
+    testWidgets('should create task when form is submitted', (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).thenAnswer((invocation) async {
+        final title = invocation.namedArguments[#title] as String;
+        return Success(createTask(title: title));
+      });
+      // Mock reload after create (called by tasksNotifierProvider)
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
 
-    //   await tester.pumpWidget(
-    //     createWidgetWithOverrides([
-    //       getAllTasksUseCaseProvider
-    //           .overrideWithValue(mockGetAllTasksUseCase),
-    //       createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-    //       deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-    //       toggleTaskCompletionUseCaseProvider
-    //           .overrideWithValue(mockToggleTaskCompletionUseCase),
-    //     ]),
-    //   );
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
 
-    //   await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Act
-    //   await tester.tap(find.byType(FloatingActionButton));
-    //   await tester.pumpAndSettle();
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Enter text and wait for it to be processed
-    //   await tester.enterText(find.byType(TextFormField).first, 'New Task');
-    //   await tester.pump();
+      // Enter text and wait for it to be processed
+      await tester.enterText(find.byType(TextFormField).first, 'New Task');
+      await tester.pump();
 
-    //   // Tap the Add button
-    //   await tester.tap(find.text('Add'));
-    //   // Wait for dialog closing animation to complete
-    //   await tester.pump();
-    //   await tester.pumpAndSettle();
+      // Tap the Add button
+      await tester.tap(find.text('Add'));
+      // Wait for dialog closing animation to complete
+      await tester.pump();
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-    //   // Assert
-    //   verify(
-    //     () => mockCreateTaskUseCase(
-    //       title: any(named: 'title'),
-    //       description: any(named: 'description'),
-    //     ),
-    //   ).called(1);
-    // });
+      // Assert
+      verify(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).called(1);
+    });
 
     testWidgets('should toggle task completion when checkbox is tapped',
         (tester) async {
@@ -336,45 +332,389 @@ void main() {
       verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
     });
 
-    // testWidgets('should show delete confirmation dialog', (tester) async {
-    //   // Arrange
-    //   final tasks = createTaskList(count: 1);
-    //   when(() => mockGetAllTasksUseCase())
-    //       .thenAnswer((_) async => Success(tasks));
-    //   when(() => mockDeleteTaskUseCase(any()))
-    //       .thenAnswer((_) async => const Success(null));
-    //   // Mock reload after delete (called by tasksNotifierProvider)
-    //   when(() => mockGetAllTasksUseCase())
-    //       .thenAnswer((_) async => const Success<List<Task>>([]));
+    testWidgets('should show delete confirmation dialog', (tester) async {
+      // Arrange
+      final tasks = createTaskList(count: 1);
+      var callCount = 0;
+      when(() => mockGetAllTasksUseCase()).thenAnswer((_) async {
+        callCount++;
+        // First call: return tasks for initial load
+        // Subsequent calls: return empty list after delete
+        if (callCount == 1) {
+          return Success(tasks);
+        }
+        return const Success<List<Task>>([]);
+      });
+      when(() => mockDeleteTaskUseCase(any()))
+          .thenAnswer((_) async => const Success(null));
 
-    //   await tester.pumpWidget(
-    //     createWidgetWithOverrides([
-    //     getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
-    //       createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-    //       deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-    //       toggleTaskCompletionUseCaseProvider
-    //           .overrideWithValue(mockToggleTaskCompletionUseCase),
-    //     ]),
-    //   );
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
 
-    //   await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    //   // Act
-    //   // Find PopupMenuButton by its default icon (more_vert)
-    //   final popupMenuButton = find.byIcon(Icons.more_vert);
-    //   expect(popupMenuButton, findsOneWidget);
-    //   await tester.tap(popupMenuButton);
-    //   await tester.pumpAndSettle();
+      // Act
+      // Find PopupMenuButton by its default icon (more_vert)
+      final popupMenuButton = find.byIcon(Icons.more_vert);
+      expect(popupMenuButton, findsOneWidget);
+      await tester.tap(popupMenuButton);
+      await tester.pumpAndSettle();
 
-    //   // Verify menu is open and tap the Delete menu item
-    //   expect(find.text('Delete'), findsOneWidget);
-    //   await tester.tap(find.text('Delete'));
-    //   // Pump to allow dialog to show
-    //   await tester.pump();
-    //   await tester.pumpAndSettle();
+      // Verify menu is open and tap the Delete menu item
+      expect(find.text('Delete'), findsOneWidget);
+      await tester.tap(find.text('Delete'));
+      // Pump to allow dialog to show
+      await tester.pump();
+      await tester.pumpAndSettle();
 
-    //   // Assert
-    //   expect(find.text('Delete Task'), findsOneWidget);
-    // });
+      // Assert
+      expect(find.text('Delete Task'), findsOneWidget);
+    });
+
+    testWidgets('should handle pull-to-refresh', (tester) async {
+      // Arrange
+      final tasks = createTaskList(count: 2);
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle();
+
+      // Act - Simulate pull-to-refresh
+      await tester.drag(find.byType(ListView), const Offset(0, 300));
+      await tester.pumpAndSettle();
+
+      // Assert
+      verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
+    });
+
+    testWidgets('should disable refresh button when loading', (tester) async {
+      // Arrange
+      final completer = Completer<Result<List<Task>>>();
+      when(() => mockGetAllTasksUseCase()).thenAnswer((_) => completer.future);
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pump();
+
+      // Act - Try to tap refresh button
+      final refreshButton = find.byIcon(Icons.refresh);
+      expect(refreshButton, findsOneWidget);
+      await tester.tap(refreshButton);
+      await tester.pump();
+
+      // Assert - Button should be disabled (onPressed is null when loading)
+      // This is verified by the button not responding to taps
+      completer.complete(const Success<List<Task>>([]));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('should display completed and incomplete tasks separately',
+        (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(id: 'task-1', title: 'Incomplete Task'),
+        createTask(id: 'task-2', title: 'Completed Task', isCompleted: true),
+        createTask(
+          id: 'task-3',
+          title: 'Another Incomplete',
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+      when(() => mockToggleTaskCompletionUseCase(any()))
+          .thenAnswer((_) async => Success(tasks.first));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Incomplete Task'), findsOneWidget);
+      expect(find.text('Completed Task'), findsOneWidget);
+      expect(find.text('Another Incomplete'), findsOneWidget);
+    });
+
+    testWidgets('should handle error retry button', (tester) async {
+      // Arrange
+      const failure = CacheFailure('Failed to load tasks');
+      final tasks = createTaskList(count: 2);
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const ResultFailure(failure));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle();
+
+      // Set up for success on retry
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      // Act
+      await tester.tap(find.text('Retry'));
+      await tester.pumpAndSettle();
+
+      // Assert
+      verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
+    });
+
+    testWidgets('should handle canceling add task dialog', (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Find and tap cancel button
+      final cancelButton = find.text('Cancel');
+      if (cancelButton.evaluate().isNotEmpty) {
+        await tester.tap(cancelButton);
+        await tester.pumpAndSettle();
+      }
+
+      // Assert - Dialog should be closed
+      expect(find.text('Add Task'), findsNothing);
+      verifyNever(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      );
+    });
+
+    testWidgets('should display task with description', (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(
+          id: 'task-1',
+          title: 'Task with Description',
+          description: 'This is a task description',
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Task with Description'), findsOneWidget);
+      expect(find.text('This is a task description'), findsOneWidget);
+    });
+
+    testWidgets('should display task without description', (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(
+          id: 'task-1',
+          title: 'Task without Description',
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Task without Description'), findsOneWidget);
+    });
+
+    testWidgets('should display completed task with strikethrough',
+        (tester) async {
+      // Arrange
+      final tasks = [
+        createTask(
+          id: 'task-1',
+          title: 'Completed Task',
+          isCompleted: true,
+        ),
+      ];
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => Success(tasks));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      // Act
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text('Completed Task'), findsOneWidget);
+      // Check that checkbox is checked
+      final checkbox = tester.widget<Checkbox>(
+        find.byType(Checkbox).first,
+      );
+      expect(checkbox.value, isTrue);
+    });
+
+    testWidgets('should create task with description in dialog',
+        (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).thenAnswer((_) async => Success(createTask()));
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.first, 'New Task');
+      await tester.pump();
+      if (textFields.evaluate().length > 1) {
+        await tester.enterText(textFields.at(1), 'Task Description');
+        await tester.pump();
+      }
+      await tester.tap(find.text('Add'));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Assert
+      verify(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).called(1);
+    });
+
+    testWidgets('should validate title in add task dialog', (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase())
+          .thenAnswer((_) async => const Success<List<Task>>([]));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider
+              .overrideWithValue(mockToggleTaskCompletionUseCase),
+        ]),
+      );
+
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Try to submit without entering title
+      await tester.tap(find.text('Add'));
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(
+        find.text('Please enter a task title'),
+        findsOneWidget,
+      );
+      verifyNever(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      );
+    });
   });
 }

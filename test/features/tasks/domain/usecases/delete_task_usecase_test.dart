@@ -19,6 +19,21 @@ void main() {
       useCase = DeleteTaskUseCase(mockRepository);
     });
 
+    test('should create instance with repository', () {
+      // Arrange & Act
+      final useCase = DeleteTaskUseCase(mockRepository);
+
+      // Assert
+      expect(useCase, isNotNull);
+      expect(useCase.repository, equals(mockRepository));
+    });
+
+    test('should have repository property', () {
+      // Assert
+      expect(useCase.repository, isA<TasksRepository>());
+      expect(useCase.repository, equals(mockRepository));
+    });
+
     test('should delete task successfully', () async {
       // Arrange
       const taskId = 'task-1';
@@ -60,6 +75,117 @@ void main() {
       // Assert
       verify(() => mockRepository.deleteTask(taskId)).called(1);
       verifyNever(() => mockRepository.deleteTask('other-id'));
+    });
+
+    test('should handle deleting non-existent task', () async {
+      // Arrange
+      const taskId = 'non-existent-task';
+      when(() => mockRepository.deleteTask(any()))
+          .thenAnswer((_) async => const Success(null));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      verify(() => mockRepository.deleteTask(taskId)).called(1);
+    });
+
+    test('should handle empty task id', () async {
+      // Arrange
+      const taskId = '';
+      const failure = CacheFailure('Task ID cannot be empty');
+      when(() => mockRepository.deleteTask(any()))
+          .thenAnswer((_) async => const ResultFailure(failure));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expectResultFailure(result, failure);
+      verify(() => mockRepository.deleteTask(taskId)).called(1);
+    });
+
+    test('should handle task id with special characters', () async {
+      // Arrange
+      const taskId = 'task-123_abc-xyz@test';
+      when(() => mockRepository.deleteTask(any()))
+          .thenAnswer((_) async => const Success(null));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      verify(() => mockRepository.deleteTask(taskId)).called(1);
+    });
+
+    test('should handle different failure types', () async {
+      // Arrange
+      const taskId = 'task-1';
+      final failures = [
+        const CacheFailure('Cache error'),
+        const NetworkFailure('Network error'),
+        const ServerFailure('Server error'),
+      ];
+
+      for (final failure in failures) {
+        when(() => mockRepository.deleteTask(any()))
+            .thenAnswer((_) async => ResultFailure(failure));
+
+        // Act
+        final result = await useCase(taskId);
+
+        // Assert
+        expectResultFailure(result, failure);
+        verify(() => mockRepository.deleteTask(taskId)).called(1);
+        clearInteractions(mockRepository);
+      }
+    });
+
+    test('should handle very long task id', () async {
+      // Arrange
+      final taskId = 'task-${'a' * 1000}';
+      when(() => mockRepository.deleteTask(any()))
+          .thenAnswer((_) async => const Success(null));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      verify(() => mockRepository.deleteTask(taskId)).called(1);
+    });
+
+    test('should handle numeric task id', () async {
+      // Arrange
+      const taskId = '12345';
+      when(() => mockRepository.deleteTask(any()))
+          .thenAnswer((_) async => const Success(null));
+
+      // Act
+      final result = await useCase(taskId);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      verify(() => mockRepository.deleteTask(taskId)).called(1);
+    });
+
+    test('should delete multiple tasks sequentially', () async {
+      // Arrange
+      final taskIds = ['task-1', 'task-2', 'task-3'];
+      when(() => mockRepository.deleteTask(any()))
+          .thenAnswer((_) async => const Success(null));
+
+      for (final taskId in taskIds) {
+        // Act
+        final result = await useCase(taskId);
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        verify(() => mockRepository.deleteTask(taskId)).called(1);
+        clearInteractions(mockRepository);
+      }
     });
   });
 }

@@ -332,7 +332,7 @@ Potential improvements:
 ## See Also
 
 - [Clean Architecture Guide](../architecture/overview.md)
-- [Routing Guide](../guides/routing.md)
+- [Routing Guide](../guides/features/routing-guide.md)
 - [Feature Flags Guide](../features/feature-flags.md)
-- [Internationalization Guide](../guides/internationalization-guide.md)
+- [Internationalization Guide](../guides/features/internationalization-guide.md)
 

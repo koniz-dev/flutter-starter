@@ -56,7 +56,7 @@ test/
 
 ## Documentation
 
-- 📖 [Testing Guide](testing.md) - Comprehensive testing guide
+- 📖 [Testing Guide](guide.md) - Comprehensive testing guide
 - 📊 [Coverage Guide](test-coverage.md) - Coverage measurement and improvement
 - 📝 [Test README](../../test/README.md) - Test directory documentation
 
