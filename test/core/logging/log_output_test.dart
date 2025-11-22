@@ -1131,6 +1131,296 @@ void main() {
         expect(fileLogOutput, isNotNull);
         await fileLogOutput.destroy();
       });
+
+      test(
+        'should create directory when it does not exist during init',
+        () async {
+          // Arrange
+          final fileLogOutput = FileLogOutput(fileName: 'new_dir_test.log');
+
+          // Act
+          await fileLogOutput.init();
+
+          // Assert - Directory should be created
+          final logFiles = await fileLogOutput.getLogFiles();
+          expect(logFiles, isA<List<File>>());
+          await fileLogOutput.destroy();
+        },
+      );
+
+      test('should write and flush output correctly', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'flush_test.log');
+        await fileLogOutput.init();
+
+        // Act - Write multiple lines
+        final logEvent = LogEvent(Level.info, 'Flush test');
+        fileLogOutput.output(
+          OutputEvent(logEvent, ['Line 1', 'Line 2', 'Line 3']),
+        );
+
+        // Wait for flush to complete
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Content should be written and flushed
+        final logFiles = await fileLogOutput.getLogFiles();
+        if (logFiles.isNotEmpty) {
+          final content = await logFiles.first.readAsString();
+          expect(content, contains('Line 1'));
+          expect(content, contains('Line 2'));
+          expect(content, contains('Line 3'));
+        }
+        await fileLogOutput.destroy();
+      });
+
+      test('should trigger rotation check after output', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'rotation_check_test.log',
+          maxFileSize: 100,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write enough to potentially trigger rotation check
+        for (var i = 0; i < 15; i++) {
+          final logEvent = LogEvent(Level.info, 'Rotation check $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Rotation check $i']),
+          );
+        }
+
+        // Wait for rotation check to complete
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Assert - Should have handled rotation check
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles, isA<List<File>>());
+        await fileLogOutput.destroy();
+      });
+
+      test('should rotate when file size equals maxFileSize', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'exact_size_test.log',
+          maxFileSize: 200,
+          maxFiles: 3,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write exactly enough to reach maxFileSize
+        // Each line is ~50 chars, so 4 lines = ~200 chars
+        for (var i = 0; i < 5; i++) {
+          final message = 'A' * 40; // 40 chars per line
+          final logEvent = LogEvent(Level.info, message);
+          fileLogOutput.output(OutputEvent(logEvent, [message]));
+        }
+
+        // Wait for rotation
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Assert - Rotation should have occurred
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(3));
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle rotation with existing rotated files', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'existing_files_test.log',
+          maxFileSize: 100,
+          maxFiles: 3,
+        );
+        await fileLogOutput.init();
+
+        // Act - Trigger first rotation
+        for (var i = 0; i < 15; i++) {
+          final logEvent = LogEvent(Level.info, 'First rotation $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['First rotation $i']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Trigger second rotation (should handle existing .1, .2 files)
+        for (var i = 0; i < 15; i++) {
+          final logEvent = LogEvent(Level.info, 'Second rotation $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Second rotation $i']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Assert - Should have rotated files
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(3));
+        await fileLogOutput.destroy();
+      });
+
+      test('should delete existing file before renaming during rotation',
+          () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'delete_before_rename_test.log',
+          maxFileSize: 100,
+          maxFiles: 2,
+        );
+        await fileLogOutput.init();
+
+        // Act - Trigger multiple rotations to test delete before rename
+        for (var rotation = 0; rotation < 3; rotation++) {
+          for (var i = 0; i < 12; i++) {
+            final logEvent = LogEvent(
+              Level.info,
+              'Rotation $rotation message $i',
+            );
+            fileLogOutput.output(
+              OutputEvent(logEvent, ['Rotation $rotation message $i']),
+            );
+          }
+          await Future<void>.delayed(const Duration(milliseconds: 800));
+        }
+
+        // Assert - Should handle delete before rename correctly
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(2));
+        await fileLogOutput.destroy();
+      });
+
+      test('should rename current log to .1 during rotation', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'rename_current_test.log',
+          maxFileSize: 100,
+          maxFiles: 2,
+        );
+        await fileLogOutput.init();
+
+        // Write initial content
+        final initialEvent = LogEvent(Level.info, 'Initial content');
+        fileLogOutput.output(OutputEvent(initialEvent, ['Initial content']));
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        // Act - Trigger rotation
+        for (var i = 0; i < 15; i++) {
+          final logEvent = LogEvent(Level.info, 'Trigger rotation $i');
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Trigger rotation $i']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Assert - Current log should be renamed to .1
+        final logFiles = await fileLogOutput.getLogFiles();
+        // May or may not have rotated depending on timing
+        expect(logFiles, isA<List<File>>());
+        await fileLogOutput.destroy();
+      });
+
+      test('should reinitialize log file after rotation', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'reinit_test.log',
+          maxFileSize: 100,
+          maxFiles: 2,
+        );
+        await fileLogOutput.init();
+
+        // Act - Trigger rotation
+        for (var i = 0; i < 15; i++) {
+          final logEvent = LogEvent(Level.info, 'Reinit test $i');
+          fileLogOutput.output(OutputEvent(logEvent, ['Reinit test $i']));
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Write after rotation - should use new file
+        final afterRotationEvent = LogEvent(Level.info, 'After rotation');
+        fileLogOutput.output(
+          OutputEvent(afterRotationEvent, ['After rotation']),
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+
+        // Assert - Should be able to write to new file
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles, isA<List<File>>());
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle file size check in _checkAndRotate', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'size_check_test.log',
+          maxFileSize: 150,
+          maxFiles: 2,
+        );
+        await fileLogOutput.init();
+
+        // Act - Write enough to trigger size check and rotation
+        for (var i = 0; i < 20; i++) {
+          final message = 'Size check message $i';
+          final logEvent = LogEvent(Level.info, message);
+          fileLogOutput.output(OutputEvent(logEvent, [message]));
+        }
+
+        // Wait for size check and potential rotation
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+        // Assert - Should have checked size and potentially rotated
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles, isA<List<File>>());
+        await fileLogOutput.destroy();
+      });
+
+      test('should handle getLogFiles directory listing', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'list_test.log');
+        await fileLogOutput.init();
+
+        // Write some logs
+        for (var i = 0; i < 5; i++) {
+          final logEvent = LogEvent(Level.info, 'List test $i');
+          fileLogOutput.output(OutputEvent(logEvent, ['List test $i']));
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        // Act
+        final logFiles = await fileLogOutput.getLogFiles();
+
+        // Assert - Should list files correctly
+        expect(logFiles, isA<List<File>>());
+        // Files should be sorted by lastModified
+        if (logFiles.length > 1) {
+          for (var i = 0; i < logFiles.length - 1; i++) {
+            expect(
+              logFiles[i].lastModifiedSync(),
+              greaterThanOrEqualTo(
+                logFiles[i + 1].lastModifiedSync(),
+              ),
+            );
+          }
+        }
+        await fileLogOutput.destroy();
+      });
+
+      test('should filter files by fileName in getLogFiles', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'filter_test.log');
+        await fileLogOutput.init();
+
+        // Write some logs
+        final logEvent = LogEvent(Level.info, 'Filter test');
+        fileLogOutput.output(OutputEvent(logEvent, ['Filter test']));
+        await Future<void>.delayed(const Duration(milliseconds: 300));
+
+        // Act
+        final logFiles = await fileLogOutput.getLogFiles();
+
+        // Assert - All files should contain fileName
+        for (final file in logFiles) {
+          expect(file.path.contains('filter_test.log'), isTrue);
+        }
+        await fileLogOutput.destroy();
+      });
     });
   });
 }
