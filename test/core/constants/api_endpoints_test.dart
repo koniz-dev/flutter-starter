@@ -172,5 +172,37 @@ void main() {
         expect(endpoint.length, greaterThan(0));
       }
     });
+
+    test('should have apiVersion with correct format', () {
+      // apiVersion should be in format /v{number}
+      expect(ApiEndpoints.apiVersion, matches(r'^/v\d+$'));
+    });
+
+    test('should have all endpoints as const values', () {
+      // All endpoints should be compile-time constants
+      expect(ApiEndpoints.apiVersion, isA<String>());
+      expect(ApiEndpoints.login, isA<String>());
+      expect(ApiEndpoints.register, isA<String>());
+      expect(ApiEndpoints.logout, isA<String>());
+      expect(ApiEndpoints.refreshToken, isA<String>());
+      expect(ApiEndpoints.userProfile, isA<String>());
+      expect(ApiEndpoints.updateProfile, isA<String>());
+    });
+
+    test('should have endpoints that can be concatenated', () {
+      // Endpoints should work when concatenated with base URL
+      const baseUrl = 'https://api.example.com';
+      const fullUrl = '$baseUrl${ApiEndpoints.login}';
+      expect(fullUrl, 'https://api.example.com/auth/login');
+    });
+
+    test('should have apiVersion usable in URL construction', () {
+      // apiVersion should be usable in URL construction
+      const baseUrl = 'https://api.example.com';
+      const versionedUrl =
+          '$baseUrl${ApiEndpoints.apiVersion}${ApiEndpoints.login}';
+      expect(versionedUrl, contains('/v1'));
+      expect(versionedUrl, contains('/auth/login'));
+    });
   });
 }

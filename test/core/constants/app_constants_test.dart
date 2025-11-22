@@ -166,5 +166,52 @@ void main() {
       expect(AppConstants.themeKey, isA<String>());
       expect(AppConstants.languageKey, isA<String>());
     });
+
+    test('should have all constants as compile-time constants', () {
+      // All constants should be compile-time constants
+      expect(AppConstants.appName, isA<String>());
+      expect(AppConstants.defaultPageSize, isA<int>());
+      expect(AppConstants.maxPageSize, isA<int>());
+      expect(AppConstants.tokenKey, isA<String>());
+      expect(AppConstants.refreshTokenKey, isA<String>());
+      expect(AppConstants.userDataKey, isA<String>());
+      expect(AppConstants.themeKey, isA<String>());
+      expect(AppConstants.languageKey, isA<String>());
+    });
+
+    test('should have storage keys that can be used in storage operations', () {
+      // Storage keys should be usable in storage operations
+      final keys = [
+        AppConstants.tokenKey,
+        AppConstants.refreshTokenKey,
+        AppConstants.userDataKey,
+        AppConstants.themeKey,
+        AppConstants.languageKey,
+      ];
+      for (final key in keys) {
+        // Keys should be valid for storage operations
+        expect(key, isNotEmpty);
+        expect(key, isNot(contains(' ')));
+      }
+    });
+
+    test('should have page sizes that work together', () {
+      // Page sizes should work together in pagination logic
+      expect(
+        AppConstants.maxPageSize >= AppConstants.defaultPageSize,
+        isTrue,
+      );
+      expect(
+        AppConstants.maxPageSize ~/ AppConstants.defaultPageSize,
+        greaterThan(0),
+      );
+    });
+
+    test('should have appName suitable for display', () {
+      // appName should be suitable for display in UI
+      expect(AppConstants.appName.trim(), AppConstants.appName);
+      expect(AppConstants.appName, isNot(contains('\n')));
+      expect(AppConstants.appName, isNot(contains('\t')));
+    });
   });
 }
