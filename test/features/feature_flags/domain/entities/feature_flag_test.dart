@@ -296,8 +296,7 @@ void main() {
 
       test(
           'should ignore description, defaultValue, and lastUpdated in '
-          'equality',
-          () {
+          'equality', () {
         // Arrange
         final flag1 = FeatureFlag(
           key: 'test_flag',
