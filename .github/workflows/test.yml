@@ -3,27 +3,12 @@ name: Tests
 # ========================================================================
 # Workflow Triggers Configuration
 # ========================================================================
-# This is a starter template, so branches are commented out by default.
-# Uncomment and configure the branches according to your project needs:
-#
-# For example:
-#   push:
-#     branches: [ main, develop ]
-#   pull_request:
-#     branches: [ main, develop ]
-#
-# Or for a single branch:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-# ========================================================================
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+  workflow_dispatch:
 
 jobs:
   test:
@@ -42,9 +27,6 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          # Not pinning flutter-version to automatically use the latest stable version
-          # This ensures compatibility with the latest Dart SDK and dependencies
-          # while maintaining stability through the stable channel
           channel: 'stable'
           cache: true
       
@@ -64,66 +46,100 @@ jobs:
         run: flutter test --coverage --timeout=5m
         continue-on-error: false
       
-      - name: Generate coverage report
+      # ========================================================================
+      # Coverage Processing - Critical Step
+      # ========================================================================
+      - name: Install lcov
         run: |
           sudo apt-get update
           sudo apt-get install -y lcov
+      
+      - name: Remove generated files from coverage
+        run: |
+          # Remove generated and non-testable files to match codecov.yml
+          lcov --remove coverage/lcov.info \
+            '**/*.g.dart' \
+            '**/*.freezed.dart' \
+            '**/*.config.dart' \
+            '**/generated/**' \
+            '**/l10n/**' \
+            '**/main.dart' \
+            'test/**' \
+            '**/*_test.dart' \
+            '**/test_helpers.dart' \
+            '**/test_fixtures.dart' \
+            -o coverage/lcov.info
+          echo "✅ Removed generated files from coverage report"
+      
+      - name: Generate coverage report
+        run: |
           genhtml coverage/lcov.info -o coverage/html --no-function-coverage
       
       - name: Calculate coverage
         id: coverage
         run: |
-          # Extract coverage percentage
           COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1 | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//' || echo "0")
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
           echo "Coverage: ${COVERAGE}%"
       
+      - name: Calculate coverage by layer
+        id: layer_coverage
+        run: |
+          chmod +x scripts/calculate_layer_coverage.sh
+          ./scripts/calculate_layer_coverage.sh coverage/lcov.info > /tmp/layer_coverage.txt
+          
+          # Read key=value pairs and write to GITHUB_OUTPUT
+          while IFS='=' read -r key value; do
+            echo "${key}=${value}" >> $GITHUB_OUTPUT
+          done < /tmp/layer_coverage.txt
+          
+          cat /tmp/layer_coverage.txt
+      
       - name: Check coverage threshold
         run: |
           COVERAGE=${{ steps.coverage.outputs.coverage }}
-          MIN_COVERAGE=80
-          if (( $(echo "$COVERAGE < $MIN_COVERAGE" | bc -l) )); then
-            echo "❌ Coverage ${COVERAGE}% is below minimum threshold of ${MIN_COVERAGE}%"
+          DOMAIN_COV=${{ steps.layer_coverage.outputs.domain }}
+          DATA_COV=${{ steps.layer_coverage.outputs.data }}
+          PRESENTATION_COV=${{ steps.layer_coverage.outputs.presentation }}
+          CORE_COV=${{ steps.layer_coverage.outputs.core }}
+          
+          echo "Checking thresholds..."
+          FAILED=0
+
+          # Function to check threshold
+          check_threshold() {
+            local name=$1
+            local current=$2
+            local target=$3
+            if (( $(echo "$current < $target" | bc -l) )); then
+              echo "❌ $name: ${current}% < ${target}%"
+              return 1
+            else
+              echo "✅ $name: ${current}% >= ${target}%"
+              return 0
+            fi
+          }
+
+          check_threshold "Total Coverage" "$COVERAGE" 80 || exit 1
+          
+          check_threshold "Domain Layer" "$DOMAIN_COV" 100 || FAILED=1
+          check_threshold "Data Layer" "$DATA_COV" 90 || FAILED=1
+          check_threshold "Presentation Layer" "$PRESENTATION_COV" 80 || FAILED=1
+          check_threshold "Core Layer" "$CORE_COV" 90 || FAILED=1
+          
+          if [ $FAILED -eq 1 ]; then
+            echo "⚠️ One or more architectural layers did not meet coverage targets."
             exit 1
-          else
-            echo "✅ Coverage ${COVERAGE}% meets minimum threshold of ${MIN_COVERAGE}%"
           fi
-      
-      # ========================================================================
-      # Codecov Upload Configuration
-      # ========================================================================
-      # Choose ONE option based on your repository visibility:
-      #
-      # OPTION 1: PRIVATE REPOSITORY (requires CODECOV_TOKEN)
-      # - Uncomment the block below
-      # - Add CODECOV_TOKEN to GitHub Secrets (Settings > Secrets > Actions)
-      # - Get token from: https://codecov.io
-      #
-      # OPTION 2: PUBLIC REPOSITORY (no token needed)
-      # - Comment out the block below
-      # - Uncomment the public repository block
-      # ========================================================================
-      
-      # PRIVATE REPOSITORY: Upload coverage to Codecov (requires token)
-      # Comment out the block below if your repository is PUBLIC
-      # - name: Upload coverage to Codecov (Private)
-      #   uses: codecov/codecov-action@v4
-      #   with:
-      #     file: ./coverage/lcov.info
-      #     flags: unittests
-      #     name: codecov-umbrella
-      #     fail_ci_if_error: false
-      #     token: ${{ secrets.CODECOV_TOKEN }}
-      
-      # PUBLIC REPOSITORY: Upload coverage to Codecov (no token needed)
-      - name: Upload coverage to Codecov (Public)
-        uses: codecov/codecov-action@v4
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          file: ./coverage/lcov.info
+          files: ./coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
-          # No token needed for public repositories
+          token: ${{ secrets.CODECOV_TOKEN }}
       
       - name: Upload coverage HTML report
         uses: actions/upload-artifact@v4
@@ -146,7 +162,9 @@ jobs:
             Coverage report is available in the [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
             
             ### Coverage by Layer
-            - Domain Layer: Target 100%
-            - Data Layer: Target 90%+
-            - Presentation Layer: Target 80%+
-            - Core Layer: Target 90%+
+            | Layer | Coverage | Target | Status |
+            |-------|----------|--------|--------|
+            | **Domain** | ${{ steps.layer_coverage.outputs.domain_display }} | 100% | ${{ steps.layer_coverage.outputs.domain >= 100 && '✅' || '❌' }} |
+            | **Data** | ${{ steps.layer_coverage.outputs.data_display }} | 90% | ${{ steps.layer_coverage.outputs.data >= 90 && '✅' || '❌' }} |
+            | **Presentation** | ${{ steps.layer_coverage.outputs.presentation_display }} | 80% | ${{ steps.layer_coverage.outputs.presentation >= 80 && '✅' || '❌' }} |
+            | **Core** | ${{ steps.layer_coverage.outputs.core_display }} | 90% | ${{ steps.layer_coverage.outputs.core >= 90 && '✅' || '❌' }} |
