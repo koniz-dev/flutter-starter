@@ -479,16 +479,16 @@ void main() {
       });
     });
 
-    group('whenLegacy() - Deprecated Pattern Matching', () {
+    group('when() - Legacy Pattern Matching (migrated)', () {
       test('should call success callback for Success', () {
         const result = Success<String>('test');
         String? capturedData;
 
-        result.whenLegacy(
+        result.when(
           success: (data) {
             capturedData = data;
           },
-          failureCallback: (message, code) {
+          failureCallback: (failure) {
             fail('Should not call failure callback');
           },
         );
@@ -496,20 +496,21 @@ void main() {
         expect(capturedData, 'test');
       });
 
-      test('should call failureCallback with message and code for ResultFailure',
-          () {
+      test(
+          'should call failureCallback with message and code for '
+          'ResultFailure', () {
         const failure = ServerFailure('Server error', code: '500');
         const result = ResultFailure<String>(failure);
         String? capturedMessage;
         String? capturedCode;
 
-        result.whenLegacy(
+        result.when(
           success: (data) {
             fail('Should not call success callback');
           },
-          failureCallback: (message, code) {
-            capturedMessage = message;
-            capturedCode = code;
+          failureCallback: (failure) {
+            capturedMessage = failure.message;
+            capturedCode = failure.code;
           },
         );
 
@@ -522,12 +523,12 @@ void main() {
         const result = ResultFailure<String>(failure);
         String? capturedCode;
 
-        result.whenLegacy(
+        result.when(
           success: (data) {
             fail('Should not call success callback');
           },
-          failureCallback: (message, code) {
-            capturedCode = code;
+          failureCallback: (failure) {
+            capturedCode = failure.code;
           },
         );
 
@@ -536,9 +537,9 @@ void main() {
 
       test('should return value from success callback', () {
         const result = Success<int>(42);
-        final value = result.whenLegacy(
+        final value = result.when(
           success: (data) => data * 2,
-          failureCallback: (message, code) => 0,
+          failureCallback: (failure) => 0,
         );
 
         expect(value, 84);
@@ -547,9 +548,9 @@ void main() {
       test('should return value from failureCallback', () {
         const failure = NetworkFailure('Network error');
         const result = ResultFailure<int>(failure);
-        final value = result.whenLegacy(
+        final value = result.when(
           success: (data) => data * 2,
-          failureCallback: (message, code) => -1,
+          failureCallback: (failure) => -1,
         );
 
         expect(value, -1);

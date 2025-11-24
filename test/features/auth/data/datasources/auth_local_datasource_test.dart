@@ -409,7 +409,7 @@ void main() {
         // Arrange - Mock storage to throw exception on remove
         const sharedPrefsChannel =
             MethodChannel('plugins.flutter.io/shared_preferences');
-        
+
         // Save original handler from setUp to restore later
         final sharedPrefs = <String, dynamic>{};
         Future<dynamic> originalHandler(MethodCall methodCall) async {
@@ -434,7 +434,7 @@ void main() {
               return null;
           }
         }
-        
+
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
           if (methodCall.method == 'remove') {

@@ -93,8 +93,7 @@ void main() {
 
       test(
           'should return local flag from LocalFeatureFlagsService '
-          'when available',
-          () async {
+          'when available', () async {
         // Arrange
         when(() => mockLocalDataSource.getLocalOverride('existing_local_flag'))
             .thenAnswer((_) async => null);
@@ -465,12 +464,10 @@ void main() {
         expect(result.isFailure, isTrue);
       });
 
-      test(
-          'should handle non-Exception errors during initialization',
+      test('should handle non-Exception errors during initialization',
           () async {
         // Arrange - Throw a non-Exception object to test Object catch block
-        when(() => mockRemoteDataSource.initialize())
-            .thenThrow('String error');
+        when(() => mockRemoteDataSource.initialize()).thenThrow('String error');
 
         // Act
         final result = await repository.initialize();

@@ -191,9 +191,12 @@ void main() {
         // Assert
         expect(apiClientWithPerformance.dio, isNotNull);
         expect(apiClientWithPerformance.dio.interceptors, isNotEmpty);
-        // PerformanceInterceptor should be added when performanceService is provided
-        expect(apiClientWithPerformance.dio.interceptors.length,
-            greaterThanOrEqualTo(apiClient.dio.interceptors.length));
+        // PerformanceInterceptor should be added when
+        // performanceService is provided
+        expect(
+          apiClientWithPerformance.dio.interceptors.length,
+          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
+        );
       });
 
       test('should create ApiClient with loggingService', () {
@@ -212,12 +215,15 @@ void main() {
         expect(apiClientWithLogging.dio, isNotNull);
         expect(apiClientWithLogging.dio.interceptors, isNotEmpty);
         // ApiLoggingInterceptor should be added when loggingService is provided
-        expect(apiClientWithLogging.dio.interceptors.length,
-            greaterThanOrEqualTo(apiClient.dio.interceptors.length));
+        expect(
+          apiClientWithLogging.dio.interceptors.length,
+          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
+        );
       });
 
-      test('should create ApiClient with both performanceService and loggingService',
-          () {
+      test(
+          'should create ApiClient with both performanceService and '
+          'loggingService', () {
         // Arrange
         final performanceService = MockPerformanceService();
         final loggingService = MockLoggingService();
@@ -235,8 +241,10 @@ void main() {
         expect(apiClientWithBoth.dio, isNotNull);
         expect(apiClientWithBoth.dio.interceptors, isNotEmpty);
         // Both interceptors should be added
-        expect(apiClientWithBoth.dio.interceptors.length,
-            greaterThanOrEqualTo(apiClient.dio.interceptors.length));
+        expect(
+          apiClientWithBoth.dio.interceptors.length,
+          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
+        );
       });
     });
   });

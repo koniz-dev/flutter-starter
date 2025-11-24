@@ -69,8 +69,9 @@ void main() {
       final container = ProviderContainer();
       expect(
         () {
-          container.read(performanceServiceProvider);
-          container.read(performanceInterceptorProvider);
+          container
+            ..read(performanceServiceProvider)
+            ..read(performanceInterceptorProvider);
         },
         returnsNormally,
       );
@@ -87,4 +88,3 @@ void main() {
     });
   });
 }
-
