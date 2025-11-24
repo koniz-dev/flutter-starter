@@ -478,5 +478,95 @@ void main() {
         expect((mapped as Success<String>).data, 'data');
       });
     });
+
+    group('whenLegacy() - Deprecated Pattern Matching', () {
+      test('should call success callback for Success', () {
+        const result = Success<String>('test');
+        String? capturedData;
+
+        result.whenLegacy(
+          success: (data) {
+            capturedData = data;
+          },
+          failureCallback: (message, code) {
+            fail('Should not call failure callback');
+          },
+        );
+
+        expect(capturedData, 'test');
+      });
+
+      test('should call failureCallback with message and code for ResultFailure',
+          () {
+        const failure = ServerFailure('Server error', code: '500');
+        const result = ResultFailure<String>(failure);
+        String? capturedMessage;
+        String? capturedCode;
+
+        result.whenLegacy(
+          success: (data) {
+            fail('Should not call success callback');
+          },
+          failureCallback: (message, code) {
+            capturedMessage = message;
+            capturedCode = code;
+          },
+        );
+
+        expect(capturedMessage, 'Server error');
+        expect(capturedCode, '500');
+      });
+
+      test('should handle null code in failureCallback', () {
+        const failure = NetworkFailure('Network error');
+        const result = ResultFailure<String>(failure);
+        String? capturedCode;
+
+        result.whenLegacy(
+          success: (data) {
+            fail('Should not call success callback');
+          },
+          failureCallback: (message, code) {
+            capturedCode = code;
+          },
+        );
+
+        expect(capturedCode, isNull);
+      });
+
+      test('should return value from success callback', () {
+        const result = Success<int>(42);
+        final value = result.whenLegacy(
+          success: (data) => data * 2,
+          failureCallback: (message, code) => 0,
+        );
+
+        expect(value, 84);
+      });
+
+      test('should return value from failureCallback', () {
+        const failure = NetworkFailure('Network error');
+        const result = ResultFailure<int>(failure);
+        final value = result.whenLegacy(
+          success: (data) => data * 2,
+          failureCallback: (message, code) => -1,
+        );
+
+        expect(value, -1);
+      });
+    });
+
+    group('mapError() - NotFoundFailure Coverage', () {
+      test('should map NotFoundFailure message', () {
+        const failure = NotFoundFailure('Not found', code: '404');
+        const result = ResultFailure<String>(failure);
+        final mapped = result.mapError((message) => 'Mapped: $message');
+
+        final mappedFailure = (mapped as ResultFailure<String>).failure;
+        expect(mappedFailure.message, 'Mapped: Not found');
+        expect(mappedFailure, isA<NotFoundFailure>());
+        expect(mappedFailure.code, '404');
+      });
+    });
   });
 }
