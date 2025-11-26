@@ -57,7 +57,7 @@ jobs:
       - name: Remove generated files from coverage
         run: |
           # Remove generated and non-testable files to match codecov.yml
-          lcov --remove coverage/lcov.info \
+          lcov --remove coverage/lcov.info --ignore-errors unused \
             '**/*.g.dart' \
             '**/*.freezed.dart' \
             '**/*.config.dart' \
