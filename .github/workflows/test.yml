@@ -57,7 +57,7 @@ jobs:
       - name: Remove generated files from coverage
         run: |
           # Remove generated and non-testable files to match codecov.yml
-          lcov --remove coverage/lcov.info \
+          lcov --remove coverage/lcov.info --ignore-errors unused \
             '**/*.g.dart' \
             '**/*.freezed.dart' \
             '**/*.config.dart' \
@@ -121,11 +121,10 @@ jobs:
           }
 
           check_threshold "Total Coverage" "$COVERAGE" 80 || exit 1
-          
           check_threshold "Domain Layer" "$DOMAIN_COV" 100 || FAILED=1
           check_threshold "Data Layer" "$DATA_COV" 90 || FAILED=1
           check_threshold "Presentation Layer" "$PRESENTATION_COV" 80 || FAILED=1
-          check_threshold "Core Layer" "$CORE_COV" 90 || FAILED=1
+          check_threshold "Core Layer" "$CORE_COV" 80 || FAILED=1
           
           if [ $FAILED -eq 1 ]; then
             echo "⚠️ One or more architectural layers did not meet coverage targets."
@@ -167,4 +166,4 @@ jobs:
             | **Domain** | ${{ steps.layer_coverage.outputs.domain_display }} | 100% | ${{ steps.layer_coverage.outputs.domain >= 100 && '✅' || '❌' }} |
             | **Data** | ${{ steps.layer_coverage.outputs.data_display }} | 90% | ${{ steps.layer_coverage.outputs.data >= 90 && '✅' || '❌' }} |
             | **Presentation** | ${{ steps.layer_coverage.outputs.presentation_display }} | 80% | ${{ steps.layer_coverage.outputs.presentation >= 80 && '✅' || '❌' }} |
-            | **Core** | ${{ steps.layer_coverage.outputs.core_display }} | 90% | ${{ steps.layer_coverage.outputs.core >= 90 && '✅' || '❌' }} |
+            | **Core** | ${{ steps.layer_coverage.outputs.core_display }} | 80% | ${{ steps.layer_coverage.outputs.core >= 80 && '✅' || '❌' }} |

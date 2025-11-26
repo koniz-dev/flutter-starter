@@ -206,6 +206,18 @@ void main() {
       final exception = ServerException(longMessage);
       expect(exception.message.length, 1000);
     });
+
+    test('ValidationException should be accessible', () {
+      const exception = ValidationException('Test');
+      expect(exception, isA<ValidationException>());
+      expect(exception, isA<AppException>());
+    });
+
+    test('AuthException should be accessible', () {
+      const exception = AuthException('Test');
+      expect(exception, isA<AuthException>());
+      expect(exception, isA<AppException>());
+    });
   });
 }
 

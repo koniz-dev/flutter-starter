@@ -71,19 +71,22 @@ PRESENTATION_COV=$(calculate_layer_coverage "/features/.*/presentation/")
 CORE_COV=$(calculate_layer_coverage "/core/")
 
 # Output values with % suffix for display
+echo "Output values with % suffix for display"
 echo "domain_display=$DOMAIN_COV%"
 echo "data_display=$DATA_COV%"
 echo "presentation_display=$PRESENTATION_COV%"
 echo "core_display=$CORE_COV%"
 
 # Output numeric values for comparison
+echo "Output numeric values for comparison"
 echo "domain=$DOMAIN_COV"
 echo "data=$DATA_COV"
 echo "presentation=$PRESENTATION_COV"
 echo "core=$CORE_COV"
 
 # Print to console for visibility
-echo "Domain Layer: ${DOMAIN_COV}%" >&2
-echo "Data Layer: ${DATA_COV}%" >&2
-echo "Presentation Layer: ${PRESENTATION_COV}%" >&2
-echo "Core Layer: ${CORE_COV}%" >&2
+echo "Summary of coverage by layer"
+echo "Domain Layer: ${DOMAIN_COV}%"
+echo "Data Layer: ${DATA_COV}%"
+echo "Presentation Layer: ${PRESENTATION_COV}%"
+echo "Core Layer: ${CORE_COV}%"

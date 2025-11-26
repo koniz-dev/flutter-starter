@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
@@ -287,23 +288,193 @@ void main() {
 
     group('Error Handling', () {
       test('should throw CacheException when token caching fails', () async {
-        // This test verifies error handling structure
-        // Actual failure would require mocking secure storage
+        // Arrange - Mock secure storage to throw exception
+        const secureStorageChannel =
+            MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
+          if (methodCall.method == 'write') {
+            throw Exception('Storage write failed');
+          }
+          return null;
+        });
+
         const token = 'test_token';
 
-        // Should not throw for normal operation
-        expect(() => dataSource.cacheToken(token), returnsNormally);
+        // Act & Assert
+        expect(
+          () => dataSource.cacheToken(token),
+          throwsA(isA<CacheException>()),
+        );
+      });
+
+      test('should throw CacheException when secure storage write fails',
+          () async {
+        // Arrange - Mock secure storage to throw exception on write
+        const secureStorageChannel =
+            MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
+          if (methodCall.method == 'write') {
+            throw PlatformException(
+              code: 'STORAGE_ERROR',
+              message: 'Storage write failed',
+            );
+          }
+          return null;
+        });
+
+        const token = 'test_token';
+
+        // Act & Assert
+        expect(
+          () => dataSource.cacheToken(token),
+          throwsA(isA<CacheException>()),
+        );
       });
 
       test('should throw CacheException when user caching fails', () async {
+        // Arrange - Mock storage to throw exception
+        const sharedPrefsChannel =
+            MethodChannel('plugins.flutter.io/shared_preferences');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
+          if (methodCall.method == 'setString') {
+            throw PlatformException(
+              code: 'STORAGE_ERROR',
+              message: 'Storage write failed',
+            );
+          }
+          return true;
+        });
+
+        final testDataSource = AuthLocalDataSourceImpl(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+        );
+
         const user = UserModel(
           id: '1',
           email: 'test@example.com',
           name: 'Test User',
         );
 
-        // Should not throw for normal operation
-        expect(() => dataSource.cacheUser(user), returnsNormally);
+        // Act & Assert
+        expect(
+          () => testDataSource.cacheUser(user),
+          throwsA(isA<CacheException>()),
+        );
+      });
+
+      test('should throw CacheException when getCachedUser fails', () async {
+        // Arrange - Store invalid JSON to trigger decode exception
+        await storageService.setString(
+          AppConstants.userDataKey,
+          'invalid json data',
+        );
+
+        // Act & Assert - Should throw CacheException when decoding fails
+        await expectLater(
+          dataSource.getCachedUser(),
+          throwsA(isA<CacheException>()),
+        );
+      });
+
+      // Note: getToken() and getRefreshToken() cannot throw CacheException
+      // because SecureStorageService catches exceptions and returns null
+
+      test('should throw CacheException when cacheRefreshToken fails',
+          () async {
+        // Arrange - Mock secure storage to throw exception
+        const secureStorageChannel =
+            MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
+          if (methodCall.method == 'write') {
+            throw Exception('Storage write failed');
+          }
+          return null;
+        });
+
+        const refreshToken = 'test_refresh_token';
+
+        // Act & Assert
+        expect(
+          () => dataSource.cacheRefreshToken(refreshToken),
+          throwsA(isA<CacheException>()),
+        );
+      });
+
+      test('should throw CacheException when clearCache fails', () async {
+        // Arrange - Mock storage to throw exception on remove
+        const sharedPrefsChannel =
+            MethodChannel('plugins.flutter.io/shared_preferences');
+
+        // Save original handler from setUp to restore later
+        final sharedPrefs = <String, dynamic>{};
+        Future<dynamic> originalHandler(MethodCall methodCall) async {
+          switch (methodCall.method) {
+            case 'getAll':
+              return sharedPrefs;
+            case 'setString':
+              final arguments = methodCall.arguments as Map<Object?, Object?>?;
+              final key = arguments?['key'] as String? ?? '';
+              final value = arguments?['value'] as String? ?? '';
+              sharedPrefs[key] = value;
+              return true;
+            case 'remove':
+              final arguments = methodCall.arguments as Map<Object?, Object?>?;
+              final key = arguments?['key'] as String? ?? '';
+              sharedPrefs.remove(key);
+              return true;
+            case 'clear':
+              sharedPrefs.clear();
+              return true;
+            default:
+              return null;
+          }
+        }
+
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
+          if (methodCall.method == 'remove') {
+            throw PlatformException(
+              code: 'STORAGE_ERROR',
+              message: 'Storage remove failed',
+            );
+          }
+          // Handle other methods normally
+          switch (methodCall.method) {
+            case 'getAll':
+              return <String, dynamic>{};
+            case 'setString':
+              return true;
+            case 'clear':
+              return true;
+            default:
+              return null;
+          }
+        });
+
+        // Create new storage service to avoid cached instance
+        final testStorageService = StorageService();
+        await testStorageService.init();
+        final testDataSource = AuthLocalDataSourceImpl(
+          storageService: testStorageService,
+          secureStorageService: secureStorageService,
+        );
+
+        // Act & Assert - Use try-catch to verify exception is thrown
+        try {
+          await testDataSource.clearCache();
+          fail('Expected CacheException to be thrown');
+        } on CacheException catch (e) {
+          expect(e, isA<CacheException>());
+        } finally {
+          // Restore original handler to prevent tearDown from failing
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(sharedPrefsChannel, originalHandler);
+        }
       });
     });
 

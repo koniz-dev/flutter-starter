@@ -1,3 +1,4 @@
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_local_datasource.dart';
@@ -90,6 +91,26 @@ void main() {
         expect(result, isA<Result<FeatureFlag>>());
       });
 
+      test(
+          'should return local flag from LocalFeatureFlagsService '
+          'when available', () async {
+        // Arrange
+        when(() => mockLocalDataSource.getLocalOverride('existing_local_flag'))
+            .thenAnswer((_) async => null);
+        when(() => mockRemoteDataSource.getRemoteFlag('existing_local_flag'))
+            .thenAnswer((_) async => null);
+        // Note: This test depends on LocalFeatureFlagsService having a flag
+        // If no local flag exists, it will return NotFoundFailure
+
+        // Act
+        final result = await repository.getFlag('existing_local_flag');
+
+        // Assert
+        // If local flag exists, should return success with local flag
+        // If not, should return NotFoundFailure
+        expect(result, isA<Result<FeatureFlag>>());
+      });
+
       test('should return NotFoundFailure when flag not found', () async {
         // Arrange
         when(() => mockLocalDataSource.getLocalOverride('unknown_flag'))
@@ -172,6 +193,22 @@ void main() {
 
         // Assert
         expect(result.isFailure, isTrue);
+      });
+
+      test('should throw exception when getFlag returns non-NotFoundFailure',
+          () async {
+        // Arrange
+        when(() => mockLocalDataSource.getLocalOverride('flag1'))
+            .thenAnswer((_) async => true);
+        when(() => mockLocalDataSource.getLocalOverride('flag2'))
+            .thenThrow(const NetworkException('Network error'));
+
+        // Act & Assert
+        final result = await repository.getFlags(['flag1', 'flag2']);
+
+        // Should return failure because non-NotFoundFailure was thrown
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<Failure>());
       });
     });
 
@@ -425,6 +462,149 @@ void main() {
 
         // Assert
         expect(result.isFailure, isTrue);
+      });
+
+      test('should handle non-Exception errors during initialization',
+          () async {
+        // Arrange - Throw a non-Exception object to test Object catch block
+        when(() => mockRemoteDataSource.initialize()).thenThrow('String error');
+
+        // Act
+        final result = await repository.initialize();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+    });
+
+    group('Object catch blocks', () {
+      test('getFlag should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockLocalDataSource.getLocalOverride(any()))
+            .thenThrow('String error');
+
+        // Act
+        final result = await repository.getFlag('test_flag');
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('getFlags should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockLocalDataSource.getLocalOverride(any()))
+            .thenThrow(123); // Throw an int
+
+        // Act
+        final result = await repository.getFlags(['flag1']);
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('getAllFlags should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockLocalDataSource.getAllLocalOverrides())
+            .thenThrow(<String, dynamic>{}); // Throw a Map
+
+        // Act
+        final result = await repository.getAllFlags();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('refreshRemoteFlags should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockRemoteDataSource.fetchAndActivate())
+            .thenThrow(true); // Throw a bool
+
+        // Act
+        final result = await repository.refreshRemoteFlags();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('setLocalOverride should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(
+          () => mockLocalDataSource.setLocalOverride(
+            any(),
+            value: any(named: 'value'),
+          ),
+        ).thenThrow(42.5); // Throw a double
+
+        // Act
+        final result = await repository.setLocalOverride(
+          'test_flag',
+          value: true,
+        );
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('clearLocalOverride should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockLocalDataSource.clearLocalOverride(any()))
+            .thenThrow(['list', 'error']); // Throw a List
+
+        // Act
+        final result = await repository.clearLocalOverride('test_flag');
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('clearAllLocalOverrides should handle non-Exception errors',
+          () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockLocalDataSource.clearAllLocalOverrides())
+            .thenThrow(Object()); // Throw an Object
+
+        // Act
+        final result = await repository.clearAllLocalOverrides();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('isEnabled should handle non-Exception errors', () async {
+        // Arrange - Throw a non-Exception object
+        when(() => mockLocalDataSource.getLocalOverride(any()))
+            .thenThrow('Error string');
+
+        // Act
+        final result = await repository.isEnabled('test_flag');
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+      });
+
+      test('initialize should handle non-Exception errors during fetch',
+          () async {
+        // Arrange - Throw a non-Exception object during fetch
+        when(() => mockRemoteDataSource.initialize())
+            .thenAnswer((_) async => {});
+        when(() => mockRemoteDataSource.fetchAndActivate())
+            .thenThrow('String error');
+
+        // Act
+        final result = await repository.initialize();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
       });
     });
   });

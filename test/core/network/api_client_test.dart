@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,6 +13,10 @@ class MockStorageService extends Mock implements StorageService {}
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 class MockAuthInterceptor extends Mock implements AuthInterceptor {}
+
+class MockLoggingService extends Mock implements LoggingService {}
+
+class MockPerformanceService extends Mock implements PerformanceService {}
 
 void main() {
   group('ApiClient', () {
@@ -166,6 +172,79 @@ void main() {
       test('should expose dio getter', () {
         expect(apiClient.dio, isA<Dio>());
         expect(apiClient.dio, isNotNull);
+      });
+    });
+
+    group('Constructor with optional services', () {
+      test('should create ApiClient with performanceService', () {
+        // Arrange
+        final performanceService = MockPerformanceService();
+
+        // Act
+        final apiClientWithPerformance = ApiClient(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+          authInterceptor: authInterceptor,
+          performanceService: performanceService,
+        );
+
+        // Assert
+        expect(apiClientWithPerformance.dio, isNotNull);
+        expect(apiClientWithPerformance.dio.interceptors, isNotEmpty);
+        // PerformanceInterceptor should be added when
+        // performanceService is provided
+        expect(
+          apiClientWithPerformance.dio.interceptors.length,
+          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
+        );
+      });
+
+      test('should create ApiClient with loggingService', () {
+        // Arrange
+        final loggingService = MockLoggingService();
+
+        // Act
+        final apiClientWithLogging = ApiClient(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+          authInterceptor: authInterceptor,
+          loggingService: loggingService,
+        );
+
+        // Assert
+        expect(apiClientWithLogging.dio, isNotNull);
+        expect(apiClientWithLogging.dio.interceptors, isNotEmpty);
+        // ApiLoggingInterceptor should be added when loggingService is provided
+        expect(
+          apiClientWithLogging.dio.interceptors.length,
+          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
+        );
+      });
+
+      test(
+          'should create ApiClient with both performanceService and '
+          'loggingService', () {
+        // Arrange
+        final performanceService = MockPerformanceService();
+        final loggingService = MockLoggingService();
+
+        // Act
+        final apiClientWithBoth = ApiClient(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+          authInterceptor: authInterceptor,
+          performanceService: performanceService,
+          loggingService: loggingService,
+        );
+
+        // Assert
+        expect(apiClientWithBoth.dio, isNotNull);
+        expect(apiClientWithBoth.dio.interceptors, isNotEmpty);
+        // Both interceptors should be added
+        expect(
+          apiClientWithBoth.dio.interceptors.length,
+          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
+        );
       });
     });
   });
