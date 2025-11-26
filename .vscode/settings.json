@@ -1,0 +1,17 @@
+{
+    "github-actions.workflows.pinned.workflows": [],
+    "github-actions.workflows.pinned.refresh.enabled": false,
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}"
+    },
+    "yaml.schemaStore.enable": false,
+    "yaml.customTags": [
+        "!Ref",
+        "!Sub sequence",
+        "!GetAtt"
+    ],
+    "[yaml]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    }
+}
