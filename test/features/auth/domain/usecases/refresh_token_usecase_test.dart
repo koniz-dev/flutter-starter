@@ -19,8 +19,9 @@ void main() {
     test('should return new token when refresh succeeds', () async {
       // Arrange
       const newToken = 'new-access-token';
-      when(() => mockRepository.refreshToken())
-          .thenAnswer((_) async => const Success(newToken));
+      when(
+        () => mockRepository.refreshToken(),
+      ).thenAnswer((_) async => const Success(newToken));
 
       // Act
       final result = await refreshTokenUseCase();
@@ -34,8 +35,9 @@ void main() {
     test('should return Failure when refresh fails', () async {
       // Arrange
       final failure = createAuthFailure(message: 'Refresh token expired');
-      when(() => mockRepository.refreshToken())
-          .thenAnswer((_) async => ResultFailure(failure));
+      when(
+        () => mockRepository.refreshToken(),
+      ).thenAnswer((_) async => ResultFailure(failure));
 
       // Act
       final result = await refreshTokenUseCase();
@@ -49,8 +51,9 @@ void main() {
     test('should delegate to repository', () async {
       // Arrange
       const newToken = 'new-access-token';
-      when(() => mockRepository.refreshToken())
-          .thenAnswer((_) async => const Success(newToken));
+      when(
+        () => mockRepository.refreshToken(),
+      ).thenAnswer((_) async => const Success(newToken));
 
       // Act
       await refreshTokenUseCase();

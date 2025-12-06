@@ -294,8 +294,7 @@ void main() {
         expect(flag, isNot(<String, dynamic>{}));
       });
 
-      test(
-          'should ignore description, defaultValue, and lastUpdated in '
+      test('should ignore description, defaultValue, and lastUpdated in '
           'equality', () {
         // Arrange
         final flag1 = FeatureFlag(

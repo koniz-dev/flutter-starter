@@ -82,21 +82,21 @@ extension ResultExtensions<T> on Result<T> {
 
   /// Get data if success, null otherwise
   T? get dataOrNull => switch (this) {
-        Success<T>(:final data) => data,
-        ResultFailure<T>() => null,
-      };
+    Success<T>(:final data) => data,
+    ResultFailure<T>() => null,
+  };
 
   /// Get error message if failure, null otherwise
   String? get errorOrNull => switch (this) {
-        Success<T>() => null,
-        ResultFailure<T>(:final failure) => failure.message,
-      };
+    Success<T>() => null,
+    ResultFailure<T>(:final failure) => failure.message,
+  };
 
   /// Get typed failure if failure, null otherwise
   Failure? get failureOrNull => switch (this) {
-        Success<T>() => null,
-        ResultFailure<T>(:final failure) => failure,
-      };
+    Success<T>() => null,
+    ResultFailure<T>(:final failure) => failure,
+  };
 
   /// Map the data if success
   Result<R> map<R>(R Function(T data) mapper) {
@@ -111,8 +111,8 @@ extension ResultExtensions<T> on Result<T> {
     return switch (this) {
       Success<T>() => this,
       ResultFailure<T>(:final failure) => ResultFailure<T>(
-          _createFailureWithMessage(failure, mapper(failure.message)),
-        ),
+        _createFailureWithMessage(failure, mapper(failure.message)),
+      ),
     };
   }
 
@@ -173,8 +173,10 @@ extension ResultExtensions<T> on Result<T> {
   }) {
     return switch (this) {
       Success<T>(:final data) => success(data),
-      ResultFailure<T>(:final failure) =>
-        failureCallback(failure.message, failure.code),
+      ResultFailure<T>(:final failure) => failureCallback(
+        failure.message,
+        failure.code,
+      ),
     };
   }
 }

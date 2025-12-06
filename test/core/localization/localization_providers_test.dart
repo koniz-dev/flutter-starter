@@ -54,8 +54,9 @@ void main() {
     group('currentLocaleProvider', () {
       test('should return Locale from LocalizationService', () async {
         // Arrange
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => 'en');
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => 'en');
 
         final container = ProviderContainer(
           overrides: [
@@ -78,8 +79,9 @@ void main() {
 
       test('should handle errors gracefully', () async {
         // Arrange
-        when(() => mockStorageService.getString(any()))
-            .thenThrow(Exception('Storage error'));
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenThrow(Exception('Storage error'));
 
         final container = ProviderContainer(
           overrides: [
@@ -189,8 +191,9 @@ void main() {
 
       test('should listen to currentLocaleProvider changes', () async {
         // Arrange
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => 'ar');
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => 'ar');
 
         final container = ProviderContainer(
           overrides: [
@@ -318,8 +321,9 @@ void main() {
         container.read(localeStateProvider.notifier).state = const Locale('en');
 
         // Act - Change to RTL locale
-        container.read(localeStateProvider.notifier).locale =
-            const Locale('ar');
+        container.read(localeStateProvider.notifier).locale = const Locale(
+          'ar',
+        );
         final textDirection = container.read(textDirectionProvider);
 
         // Assert
@@ -388,8 +392,9 @@ void main() {
         container.read(localeStateProvider.notifier).state = const Locale('en');
 
         // Act - Change to RTL locale
-        container.read(localeStateProvider.notifier).locale =
-            const Locale('ar');
+        container.read(localeStateProvider.notifier).locale = const Locale(
+          'ar',
+        );
         final isRTL = container.read(isRTLProvider);
 
         // Assert

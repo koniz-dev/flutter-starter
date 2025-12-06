@@ -258,16 +258,17 @@ void main() {
       });
 
       test(
-          'isDevelopment, isStaging, isProduction should be mutually exclusive',
-          () {
-        final isDev = AppConfig.isDevelopment;
-        final isStaging = AppConfig.isStaging;
-        final isProd = AppConfig.isProduction;
+        'isDevelopment, isStaging, isProduction should be mutually exclusive',
+        () {
+          final isDev = AppConfig.isDevelopment;
+          final isStaging = AppConfig.isStaging;
+          final isProd = AppConfig.isProduction;
 
-        // Only one should be true at a time (or all false if unknown env)
-        final trueCount = [isDev, isStaging, isProd].where((v) => v).length;
-        expect(trueCount, lessThanOrEqualTo(1));
-      });
+          // Only one should be true at a time (or all false if unknown env)
+          final trueCount = [isDev, isStaging, isProd].where((v) => v).length;
+          expect(trueCount, lessThanOrEqualTo(1));
+        },
+      );
 
       test('isDebugMode and isReleaseMode should be opposite', () {
         final isDebug = AppConfig.isDebugMode;

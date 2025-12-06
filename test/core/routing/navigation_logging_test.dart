@@ -322,9 +322,9 @@ class _MockRoute extends Mock implements Route<dynamic> {
 
   @override
   RouteSettings get settings => _MockRouteSettings(
-        name: name,
-        arguments: arguments,
-      );
+    name: name,
+    arguments: arguments,
+  );
 
   @override
   String toString() => 'Route<dynamic>';

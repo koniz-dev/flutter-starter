@@ -54,8 +54,9 @@ void main() {
       });
 
       test('should return null when no defaults provided', () {
-        final flag =
-            LocalFeatureFlagsService.instance.getLocalFlag('test_flag');
+        final flag = LocalFeatureFlagsService.instance.getLocalFlag(
+          'test_flag',
+        );
 
         expect(flag, isNull);
       });

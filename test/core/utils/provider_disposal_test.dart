@@ -126,7 +126,8 @@ class _TestWidgetWithLowMemory extends ConsumerStatefulWidget {
 }
 
 class _TestWidgetWithLowMemoryState
-    extends ConsumerState<_TestWidgetWithLowMemory> with ProviderDisposal {
+    extends ConsumerState<_TestWidgetWithLowMemory>
+    with ProviderDisposal {
   @override
   void dispose() {
     // Simulate low memory condition

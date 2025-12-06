@@ -166,12 +166,15 @@ class FileLogOutput extends LogOutput {
       final directory = Directory(_logDirectory!);
       if (!directory.existsSync()) return [];
 
-      final files = directory
-          .listSync()
-          .whereType<File>()
-          .where((file) => file.path.contains(fileName))
-          .toList()
-        ..sort((a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()));
+      final files =
+          directory
+              .listSync()
+              .whereType<File>()
+              .where((file) => file.path.contains(fileName))
+              .toList()
+            ..sort(
+              (a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()),
+            );
 
       return files;
     } on Exception {

@@ -39,17 +39,19 @@ void main() {
       expect(canMigrate, isFalse);
     });
 
-    test('canMigrate returns true for initial version when no version set',
-        () async {
-      // No version set (first install)
-      final migration = MigrationV1ToV2();
-      final canMigrate = await migration.canMigrate(storage);
+    test(
+      'canMigrate returns true for initial version when no version set',
+      () async {
+        // No version set (first install)
+        final migration = MigrationV1ToV2();
+        final canMigrate = await migration.canMigrate(storage);
 
-      // Should return false because initial version is 1, but migration
-      // expects fromVersion 1. Actually, if no version is set, it defaults
-      // to initial (1), so this should work
-      expect(canMigrate, isTrue);
-    });
+        // Should return false because initial version is 1, but migration
+        // expects fromVersion 1. Actually, if no version is set, it defaults
+        // to initial (1), so this should work
+        expect(canMigrate, isTrue);
+      },
+    );
 
     test('execute updates version after successful migration', () async {
       await storage.setString(StorageVersion.versionKey, '1');

@@ -102,7 +102,8 @@ class DioExceptionMapper {
         }
 
         // Try common error message fields
-        final message = data['message'] as String? ??
+        final message =
+            data['message'] as String? ??
             (error is String ? error : null) ??
             data['error_message'] as String? ??
             data['msg'] as String?;

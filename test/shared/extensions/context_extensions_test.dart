@@ -286,21 +286,21 @@ void main() {
           initialRoute: '/',
           routes: {
             '/': (context) => Scaffold(
-                  body: ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/second'),
-                    child: const Text('Go to Second'),
-                  ),
-                ),
+              body: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/second'),
+                child: const Text('Go to Second'),
+              ),
+            ),
             '/second': (context) => Scaffold(
-                  body: Builder(
-                    builder: (context) {
-                      return ElevatedButton(
-                        onPressed: () => context.pop<void>(),
-                        child: const Text('Pop'),
-                      );
-                    },
-                  ),
-                ),
+              body: Builder(
+                builder: (context) {
+                  return ElevatedButton(
+                    onPressed: () => context.pop<void>(),
+                    child: const Text('Pop'),
+                  );
+                },
+              ),
+            ),
           },
         ),
       );

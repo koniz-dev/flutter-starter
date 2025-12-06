@@ -44,8 +44,9 @@ class LanguageSwitcher extends ConsumerWidget {
     Locale currentLocale,
   ) async {
     final l10n = AppLocalizations.of(context)!;
-    final localizationService =
-        ref.read<LocalizationService>(localizationServiceProvider);
+    final localizationService = ref.read<LocalizationService>(
+      localizationServiceProvider,
+    );
 
     await showDialog<void>(
       context: context,
@@ -122,8 +123,9 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
     Locale currentLocale,
   ) async {
     final l10n = AppLocalizations.of(context)!;
-    final localizationService =
-        ref.read<LocalizationService>(localizationServiceProvider);
+    final localizationService = ref.read<LocalizationService>(
+      localizationServiceProvider,
+    );
 
     await showDialog<void>(
       context: context,
@@ -172,8 +174,9 @@ class LanguageSelectionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final currentLocale = ref.watch<Locale>(localeStateProvider);
-    final localizationService =
-        ref.read<LocalizationService>(localizationServiceProvider);
+    final localizationService = ref.read<LocalizationService>(
+      localizationServiceProvider,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -192,7 +195,8 @@ class LanguageSelectionScreen extends ConsumerWidget {
         },
         child: ListView(
           children: SupportedLocale.values.map((supportedLocale) {
-            final isSelected = currentLocale.languageCode ==
+            final isSelected =
+                currentLocale.languageCode ==
                 supportedLocale.locale.languageCode;
             return RadioListTile<Locale>(
               title: Text(supportedLocale.displayName),

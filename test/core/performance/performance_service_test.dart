@@ -243,11 +243,11 @@ void main() {
       });
 
       test('should handle operation with complex return type', () async {
-        final result =
-            await performanceService.measureOperation<Map<String, dynamic>>(
-          name: 'complex_operation',
-          operation: () async => {'key': 'value', 'number': 42},
-        );
+        final result = await performanceService
+            .measureOperation<Map<String, dynamic>>(
+              name: 'complex_operation',
+              operation: () async => {'key': 'value', 'number': 42},
+            );
         expect(result, {'key': 'value', 'number': 42});
       });
 
@@ -302,13 +302,13 @@ void main() {
       });
 
       test('should handle computation with complex return type', () {
-        final result =
-            performanceService.measureSyncComputation<Map<String, List<int>>>(
-          operationName: 'complex_computation',
-          computation: () => {
-            'numbers': [1, 2, 3],
-          },
-        );
+        final result = performanceService
+            .measureSyncComputation<Map<String, List<int>>>(
+              operationName: 'complex_computation',
+              computation: () => {
+                'numbers': [1, 2, 3],
+              },
+            );
         expect(result, {
           'numbers': [1, 2, 3],
         });
@@ -407,8 +407,9 @@ void main() {
       });
 
       test('should handle exceptions gracefully', () {
-        when(() => mockTrace.incrementMetric(any(), any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.incrementMetric(any(), any()),
+        ).thenThrow(Exception('Test error'));
         performanceTrace.putMetric('success', 1);
         // Should not throw
         expect(true, isTrue);
@@ -423,8 +424,9 @@ void main() {
       });
 
       test('should handle exceptions gracefully', () {
-        when(() => mockTrace.putAttribute(any(), any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.putAttribute(any(), any()),
+        ).thenThrow(Exception('Test error'));
         performanceTrace.putAttribute('key', 'value');
         // Should not throw
         expect(true, isTrue);
@@ -448,8 +450,9 @@ void main() {
       });
 
       test('should return null on exception', () {
-        when(() => mockTrace.getAttribute(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.getAttribute(any()),
+        ).thenThrow(Exception('Test error'));
         final result = performanceTrace.getAttribute('key');
         expect(result, isNull);
       });
@@ -463,8 +466,9 @@ void main() {
       });
 
       test('should return null on exception', () {
-        when(() => mockTrace.getMetric(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.getMetric(any()),
+        ).thenThrow(Exception('Test error'));
         final result = performanceTrace.getMetric('success');
         expect(result, isNull);
       });

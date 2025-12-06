@@ -191,15 +191,15 @@ class FeatureFlags {
 
   /// Get all defined feature flags
   static List<FeatureFlagKey> get all => [
-        newFeature,
-        premiumFeatures,
-        darkMode,
-        analytics,
-        abTesting,
-        debugMenu,
-        pushNotifications,
-        tasks,
-      ];
+    newFeature,
+    premiumFeatures,
+    darkMode,
+    analytics,
+    abTesting,
+    debugMenu,
+    pushNotifications,
+    tasks,
+  ];
 
   /// Get feature flags by category
   static List<FeatureFlagKey> getByCategory(String category) {

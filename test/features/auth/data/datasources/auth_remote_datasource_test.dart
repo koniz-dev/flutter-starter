@@ -175,8 +175,9 @@ void main() {
           requestOptions: RequestOptions(path: '/auth/logout'),
           statusCode: 200,
         );
-        when(() => mockApiClient.post(any<String>()))
-            .thenAnswer((_) async => response);
+        when(
+          () => mockApiClient.post(any<String>()),
+        ).thenAnswer((_) async => response);
 
         // Act
         await dataSource.logout();

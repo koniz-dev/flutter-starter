@@ -200,7 +200,8 @@ class JsonHelper {
     return map.entries
         .where((entry) => entry.value != null)
         .map(
-          (entry) => '${Uri.encodeComponent(entry.key)}='
+          (entry) =>
+              '${Uri.encodeComponent(entry.key)}='
               '${Uri.encodeComponent(entry.value.toString())}',
         )
         .join('&');

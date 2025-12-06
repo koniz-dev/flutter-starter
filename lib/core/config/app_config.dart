@@ -30,9 +30,9 @@ class AppConfig {
   /// - --dart-define: `--dart-define=ENVIRONMENT=production`
   /// - Default: `development`
   static String get environment => EnvConfig.get(
-        'ENVIRONMENT',
-        defaultValue: 'development',
-      ).toLowerCase();
+    'ENVIRONMENT',
+    defaultValue: 'development',
+  ).toLowerCase();
 
   /// Returns true if the current environment is development
   static bool get isDevelopment => environment == 'development';
@@ -198,17 +198,17 @@ class AppConfig {
   ///
   /// Can be set via .env: `APP_VERSION=1.0.0`
   static String get appVersion => EnvConfig.get(
-        'APP_VERSION',
-        defaultValue: '1.0.0',
-      );
+    'APP_VERSION',
+    defaultValue: '1.0.0',
+  );
 
   /// App build number
   ///
   /// Can be set via .env: `APP_BUILD_NUMBER=1`
   static String get appBuildNumber => EnvConfig.get(
-        'APP_BUILD_NUMBER',
-        defaultValue: '1',
-      );
+    'APP_BUILD_NUMBER',
+    defaultValue: '1',
+  );
 
   /// Enable HTTP request/response logging
   ///

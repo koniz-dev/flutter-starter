@@ -11,40 +11,42 @@ void main() {
 
     setUp(() {
       storage.clear();
-      const methodChannel =
-          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const methodChannel = MethodChannel(
+        'plugins.it_nomads.com/flutter_secure_storage',
+      );
 
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(methodChannel, (methodCall) async {
-        final arguments = methodCall.arguments as Map<Object?, Object?>?;
-        switch (methodCall.method) {
-          case 'read':
-            final key = arguments?['key'] as String? ?? '';
-            return storage[key];
-          case 'write':
-            final key = arguments?['key'] as String? ?? '';
-            final value = arguments?['value'] as String? ?? '';
-            storage[key] = value;
-            return null;
-          case 'delete':
-            final key = arguments?['key'] as String? ?? '';
-            storage.remove(key);
-            return null;
-          case 'deleteAll':
-            storage.clear();
-            return null;
-          default:
-            return null;
-        }
-      });
+            final arguments = methodCall.arguments as Map<Object?, Object?>?;
+            switch (methodCall.method) {
+              case 'read':
+                final key = arguments?['key'] as String? ?? '';
+                return storage[key];
+              case 'write':
+                final key = arguments?['key'] as String? ?? '';
+                final value = arguments?['value'] as String? ?? '';
+                storage[key] = value;
+                return null;
+              case 'delete':
+                final key = arguments?['key'] as String? ?? '';
+                storage.remove(key);
+                return null;
+              case 'deleteAll':
+                storage.clear();
+                return null;
+              default:
+                return null;
+            }
+          });
 
       secureStorageService = SecureStorageService();
     });
 
     tearDown(() async {
       storage.clear();
-      const methodChannel =
-          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const methodChannel = MethodChannel(
+        'plugins.it_nomads.com/flutter_secure_storage',
+      );
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(methodChannel, null);
     });

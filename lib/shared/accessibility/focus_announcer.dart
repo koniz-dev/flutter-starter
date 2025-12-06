@@ -24,8 +24,9 @@ class FocusAnnouncer {
         view,
         message,
         TextDirection.ltr,
-        assertiveness:
-            assertiveness ? Assertiveness.assertive : Assertiveness.polite,
+        assertiveness: assertiveness
+            ? Assertiveness.assertive
+            : Assertiveness.polite,
       ),
     );
   }

@@ -64,8 +64,9 @@ void main() {
       expect(find.text('Test Button'), findsOneWidget);
     });
 
-    testWidgets('should show loading indicator when isLoading is true',
-        (tester) async {
+    testWidgets('should show loading indicator when isLoading is true', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
@@ -84,8 +85,9 @@ void main() {
       expect(find.text('Test Button'), findsNothing);
     });
 
-    testWidgets('should disable button when isEnabled is false',
-        (tester) async {
+    testWidgets('should disable button when isEnabled is false', (
+      tester,
+    ) async {
       // Arrange
       var pressed = false;
       await tester.pumpWidget(
@@ -108,8 +110,9 @@ void main() {
       expect(pressed, isFalse);
     });
 
-    testWidgets('should use custom semantic label when provided',
-        (tester) async {
+    testWidgets('should use custom semantic label when provided', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
@@ -231,28 +234,31 @@ void main() {
       expect(iconButton.tooltip, 'Add item');
     });
 
-    testWidgets('should use semanticLabel as tooltip when tooltip not provided',
-        (tester) async {
-      // Arrange & Act
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: app_widgets.AccessibleIconButton(
-              icon: Icons.add,
-              semanticLabel: 'Add',
-              onPressed: null,
+    testWidgets(
+      'should use semanticLabel as tooltip when tooltip not provided',
+      (tester) async {
+        // Arrange & Act
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: app_widgets.AccessibleIconButton(
+                icon: Icons.add,
+                semanticLabel: 'Add',
+                onPressed: null,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      // Assert
-      final iconButton = tester.widget<IconButton>(find.byType(IconButton));
-      expect(iconButton.tooltip, 'Add');
-    });
+        // Assert
+        final iconButton = tester.widget<IconButton>(find.byType(IconButton));
+        expect(iconButton.tooltip, 'Add');
+      },
+    );
 
-    testWidgets('should disable button when isEnabled is false',
-        (tester) async {
+    testWidgets('should disable button when isEnabled is false', (
+      tester,
+    ) async {
       // Arrange
       var pressed = false;
       await tester.pumpWidget(
@@ -374,8 +380,9 @@ void main() {
       expect(text.style?.color, Colors.red);
     });
 
-    testWidgets('should use custom semantic label when provided',
-        (tester) async {
+    testWidgets('should use custom semantic label when provided', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
@@ -394,8 +401,9 @@ void main() {
       // but the widget is properly configured
     });
 
-    testWidgets('should exclude semantics when excludeSemantics is true',
-        (tester) async {
+    testWidgets('should exclude semantics when excludeSemantics is true', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
@@ -490,8 +498,9 @@ void main() {
       // but the widget is properly configured
     });
 
-    testWidgets('should exclude semantics when isDecorative is true',
-        (tester) async {
+    testWidgets('should exclude semantics when isDecorative is true', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
@@ -592,8 +601,9 @@ void main() {
       expect(indicator.value, 0.5);
     });
 
-    testWidgets('should use custom semantic label when provided',
-        (tester) async {
+    testWidgets('should use custom semantic label when provided', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
@@ -611,8 +621,9 @@ void main() {
       // but the widget is properly configured
     });
 
-    testWidgets('should use custom semantic value when provided',
-        (tester) async {
+    testWidgets('should use custom semantic value when provided', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(

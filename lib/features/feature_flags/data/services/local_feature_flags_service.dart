@@ -114,7 +114,8 @@ class LocalFeatureFlagsService {
     const LocalFlagDefinition(
       key: 'enable_experimental_features',
       compileTimeDefault: false,
-      description: 'Enable experimental features '
+      description:
+          'Enable experimental features '
           '(set via FEATURE_ENABLE_EXPERIMENTAL_FEATURES)',
     ),
   ];

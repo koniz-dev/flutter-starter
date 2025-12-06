@@ -19,8 +19,9 @@ void main() {
     test('should return User when user is cached', () async {
       // Arrange
       final user = createUser();
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => Success(user));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => Success(user));
 
       // Act
       final result = await getCurrentUserUseCase();
@@ -33,8 +34,9 @@ void main() {
 
     test('should return null User when no user is cached', () async {
       // Arrange
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await getCurrentUserUseCase();
@@ -48,8 +50,9 @@ void main() {
     test('should return Failure when getCurrentUser fails', () async {
       // Arrange
       final failure = createCacheFailure(message: 'Failed to get cached user');
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => ResultFailure(failure));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => ResultFailure(failure));
 
       // Act
       final result = await getCurrentUserUseCase();
@@ -63,8 +66,9 @@ void main() {
     test('should delegate to repository', () async {
       // Arrange
       final user = createUser();
-      when(() => mockRepository.getCurrentUser())
-          .thenAnswer((_) async => Success(user));
+      when(
+        () => mockRepository.getCurrentUser(),
+      ).thenAnswer((_) async => Success(user));
 
       // Act
       await getCurrentUserUseCase();

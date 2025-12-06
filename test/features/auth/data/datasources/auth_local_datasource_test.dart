@@ -20,59 +20,63 @@ void main() {
       secureStorage.clear();
 
       // Setup method channel for FlutterSecureStorage
-      const secureStorageChannel =
-          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      const secureStorageChannel = MethodChannel(
+        'plugins.it_nomads.com/flutter_secure_storage',
+      );
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
-        final arguments = methodCall.arguments as Map<Object?, Object?>?;
-        switch (methodCall.method) {
-          case 'read':
-            final key = arguments?['key'] as String? ?? '';
-            return secureStorage[key];
-          case 'write':
-            final key = arguments?['key'] as String? ?? '';
-            final value = arguments?['value'] as String? ?? '';
-            secureStorage[key] = value;
-            return null;
-          case 'delete':
-            final key = arguments?['key'] as String? ?? '';
-            secureStorage.remove(key);
-            return null;
-          case 'deleteAll':
-            secureStorage.clear();
-            return null;
-          default:
-            return null;
-        }
-      });
+            final arguments = methodCall.arguments as Map<Object?, Object?>?;
+            switch (methodCall.method) {
+              case 'read':
+                final key = arguments?['key'] as String? ?? '';
+                return secureStorage[key];
+              case 'write':
+                final key = arguments?['key'] as String? ?? '';
+                final value = arguments?['value'] as String? ?? '';
+                secureStorage[key] = value;
+                return null;
+              case 'delete':
+                final key = arguments?['key'] as String? ?? '';
+                secureStorage.remove(key);
+                return null;
+              case 'deleteAll':
+                secureStorage.clear();
+                return null;
+              default:
+                return null;
+            }
+          });
 
       // Setup method channel for SharedPreferences
-      const sharedPrefsChannel =
-          MethodChannel('plugins.flutter.io/shared_preferences');
+      const sharedPrefsChannel = MethodChannel(
+        'plugins.flutter.io/shared_preferences',
+      );
       final sharedPrefs = <String, dynamic>{};
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
-        switch (methodCall.method) {
-          case 'getAll':
-            return sharedPrefs;
-          case 'setString':
-            final arguments = methodCall.arguments as Map<Object?, Object?>?;
-            final key = arguments?['key'] as String? ?? '';
-            final value = arguments?['value'] as String? ?? '';
-            sharedPrefs[key] = value;
-            return true;
-          case 'remove':
-            final arguments = methodCall.arguments as Map<Object?, Object?>?;
-            final key = arguments?['key'] as String? ?? '';
-            sharedPrefs.remove(key);
-            return true;
-          case 'clear':
-            sharedPrefs.clear();
-            return true;
-          default:
-            return null;
-        }
-      });
+            switch (methodCall.method) {
+              case 'getAll':
+                return sharedPrefs;
+              case 'setString':
+                final arguments =
+                    methodCall.arguments as Map<Object?, Object?>?;
+                final key = arguments?['key'] as String? ?? '';
+                final value = arguments?['value'] as String? ?? '';
+                sharedPrefs[key] = value;
+                return true;
+              case 'remove':
+                final arguments =
+                    methodCall.arguments as Map<Object?, Object?>?;
+                final key = arguments?['key'] as String? ?? '';
+                sharedPrefs.remove(key);
+                return true;
+              case 'clear':
+                sharedPrefs.clear();
+                return true;
+              default:
+                return null;
+            }
+          });
 
       storageService = StorageService();
       secureStorageService = SecureStorageService();
@@ -88,10 +92,12 @@ void main() {
       await dataSource.clearCache();
       await storageService.clear();
       await secureStorageService.clear();
-      const secureStorageChannel =
-          MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
-      const sharedPrefsChannel =
-          MethodChannel('plugins.flutter.io/shared_preferences');
+      const secureStorageChannel = MethodChannel(
+        'plugins.it_nomads.com/flutter_secure_storage',
+      );
+      const sharedPrefsChannel = MethodChannel(
+        'plugins.flutter.io/shared_preferences',
+      );
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(secureStorageChannel, null);
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -289,15 +295,16 @@ void main() {
     group('Error Handling', () {
       test('should throw CacheException when token caching fails', () async {
         // Arrange - Mock secure storage to throw exception
-        const secureStorageChannel =
-            MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+        const secureStorageChannel = MethodChannel(
+          'plugins.it_nomads.com/flutter_secure_storage',
+        );
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
-          if (methodCall.method == 'write') {
-            throw Exception('Storage write failed');
-          }
-          return null;
-        });
+              if (methodCall.method == 'write') {
+                throw Exception('Storage write failed');
+              }
+              return null;
+            });
 
         const token = 'test_token';
 
@@ -308,45 +315,51 @@ void main() {
         );
       });
 
-      test('should throw CacheException when secure storage write fails',
-          () async {
-        // Arrange - Mock secure storage to throw exception on write
-        const secureStorageChannel =
-            MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
-          if (methodCall.method == 'write') {
-            throw PlatformException(
-              code: 'STORAGE_ERROR',
-              message: 'Storage write failed',
-            );
-          }
-          return null;
-        });
+      test(
+        'should throw CacheException when secure storage write fails',
+        () async {
+          // Arrange - Mock secure storage to throw exception on write
+          const secureStorageChannel = MethodChannel(
+            'plugins.it_nomads.com/flutter_secure_storage',
+          );
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(secureStorageChannel, (
+                methodCall,
+              ) async {
+                if (methodCall.method == 'write') {
+                  throw PlatformException(
+                    code: 'STORAGE_ERROR',
+                    message: 'Storage write failed',
+                  );
+                }
+                return null;
+              });
 
-        const token = 'test_token';
+          const token = 'test_token';
 
-        // Act & Assert
-        expect(
-          () => dataSource.cacheToken(token),
-          throwsA(isA<CacheException>()),
-        );
-      });
+          // Act & Assert
+          expect(
+            () => dataSource.cacheToken(token),
+            throwsA(isA<CacheException>()),
+          );
+        },
+      );
 
       test('should throw CacheException when user caching fails', () async {
         // Arrange - Mock storage to throw exception
-        const sharedPrefsChannel =
-            MethodChannel('plugins.flutter.io/shared_preferences');
+        const sharedPrefsChannel = MethodChannel(
+          'plugins.flutter.io/shared_preferences',
+        );
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
-          if (methodCall.method == 'setString') {
-            throw PlatformException(
-              code: 'STORAGE_ERROR',
-              message: 'Storage write failed',
-            );
-          }
-          return true;
-        });
+              if (methodCall.method == 'setString') {
+                throw PlatformException(
+                  code: 'STORAGE_ERROR',
+                  message: 'Storage write failed',
+                );
+              }
+              return true;
+            });
 
         final testDataSource = AuthLocalDataSourceImpl(
           storageService: storageService,
@@ -383,32 +396,38 @@ void main() {
       // Note: getToken() and getRefreshToken() cannot throw CacheException
       // because SecureStorageService catches exceptions and returns null
 
-      test('should throw CacheException when cacheRefreshToken fails',
-          () async {
-        // Arrange - Mock secure storage to throw exception
-        const secureStorageChannel =
-            MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(secureStorageChannel, (methodCall) async {
-          if (methodCall.method == 'write') {
-            throw Exception('Storage write failed');
-          }
-          return null;
-        });
+      test(
+        'should throw CacheException when cacheRefreshToken fails',
+        () async {
+          // Arrange - Mock secure storage to throw exception
+          const secureStorageChannel = MethodChannel(
+            'plugins.it_nomads.com/flutter_secure_storage',
+          );
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(secureStorageChannel, (
+                methodCall,
+              ) async {
+                if (methodCall.method == 'write') {
+                  throw Exception('Storage write failed');
+                }
+                return null;
+              });
 
-        const refreshToken = 'test_refresh_token';
+          const refreshToken = 'test_refresh_token';
 
-        // Act & Assert
-        expect(
-          () => dataSource.cacheRefreshToken(refreshToken),
-          throwsA(isA<CacheException>()),
-        );
-      });
+          // Act & Assert
+          expect(
+            () => dataSource.cacheRefreshToken(refreshToken),
+            throwsA(isA<CacheException>()),
+          );
+        },
+      );
 
       test('should throw CacheException when clearCache fails', () async {
         // Arrange - Mock storage to throw exception on remove
-        const sharedPrefsChannel =
-            MethodChannel('plugins.flutter.io/shared_preferences');
+        const sharedPrefsChannel = MethodChannel(
+          'plugins.flutter.io/shared_preferences',
+        );
 
         // Save original handler from setUp to restore later
         final sharedPrefs = <String, dynamic>{};
@@ -437,24 +456,24 @@ void main() {
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(sharedPrefsChannel, (methodCall) async {
-          if (methodCall.method == 'remove') {
-            throw PlatformException(
-              code: 'STORAGE_ERROR',
-              message: 'Storage remove failed',
-            );
-          }
-          // Handle other methods normally
-          switch (methodCall.method) {
-            case 'getAll':
-              return <String, dynamic>{};
-            case 'setString':
-              return true;
-            case 'clear':
-              return true;
-            default:
-              return null;
-          }
-        });
+              if (methodCall.method == 'remove') {
+                throw PlatformException(
+                  code: 'STORAGE_ERROR',
+                  message: 'Storage remove failed',
+                );
+              }
+              // Handle other methods normally
+              switch (methodCall.method) {
+                case 'getAll':
+                  return <String, dynamic>{};
+                case 'setString':
+                  return true;
+                case 'clear':
+                  return true;
+                default:
+                  return null;
+              }
+            });
 
         // Create new storage service to avoid cached instance
         final testStorageService = StorageService();
@@ -549,11 +568,13 @@ void main() {
         expect(token, isNull);
       });
 
-      test('should handle getRefreshToken when refresh token does not exist',
-          () async {
-        final refreshToken = await dataSource.getRefreshToken();
-        expect(refreshToken, isNull);
-      });
+      test(
+        'should handle getRefreshToken when refresh token does not exist',
+        () async {
+          final refreshToken = await dataSource.getRefreshToken();
+          expect(refreshToken, isNull);
+        },
+      );
 
       test('should handle getCachedUser when user does not exist', () async {
         final user = await dataSource.getCachedUser();

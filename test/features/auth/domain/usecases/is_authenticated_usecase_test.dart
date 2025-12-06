@@ -18,8 +18,9 @@ void main() {
 
     test('should return true when user is authenticated', () async {
       // Arrange
-      when(() => mockRepository.isAuthenticated())
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockRepository.isAuthenticated(),
+      ).thenAnswer((_) async => const Success(true));
 
       // Act
       final result = await isAuthenticatedUseCase();
@@ -32,8 +33,9 @@ void main() {
 
     test('should return false when user is not authenticated', () async {
       // Arrange
-      when(() => mockRepository.isAuthenticated())
-          .thenAnswer((_) async => const Success(false));
+      when(
+        () => mockRepository.isAuthenticated(),
+      ).thenAnswer((_) async => const Success(false));
 
       // Act
       final result = await isAuthenticatedUseCase();
@@ -49,8 +51,9 @@ void main() {
       final failure = createCacheFailure(
         message: 'Failed to check authentication',
       );
-      when(() => mockRepository.isAuthenticated())
-          .thenAnswer((_) async => ResultFailure(failure));
+      when(
+        () => mockRepository.isAuthenticated(),
+      ).thenAnswer((_) async => ResultFailure(failure));
 
       // Act
       final result = await isAuthenticatedUseCase();
@@ -63,8 +66,9 @@ void main() {
 
     test('should delegate to repository', () async {
       // Arrange
-      when(() => mockRepository.isAuthenticated())
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockRepository.isAuthenticated(),
+      ).thenAnswer((_) async => const Success(true));
 
       // Act
       await isAuthenticatedUseCase();

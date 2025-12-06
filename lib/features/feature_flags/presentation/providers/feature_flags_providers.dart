@@ -16,21 +16,21 @@ import 'package:flutter_starter/features/feature_flags/domain/repositories/featu
 /// Provider for [FeatureFlagsLocalDataSource] instance
 final featureFlagsLocalDataSourceProvider =
     Provider<FeatureFlagsLocalDataSource>((ref) {
-  final storageService = ref.watch(storageServiceProvider);
-  return FeatureFlagsLocalDataSourceImpl(storageService: storageService);
-});
+      final storageService = ref.watch(storageServiceProvider);
+      return FeatureFlagsLocalDataSourceImpl(storageService: storageService);
+    });
 
 /// Provider for [FeatureFlagsRemoteDataSource] instance
 final featureFlagsRemoteDataSourceProvider =
     Provider<FeatureFlagsRemoteDataSource>((ref) {
-  // Default values for remote config
-  // These will be used if Firebase Remote Config is not available
-  final defaultValues = <String, dynamic>{
-    // Add your default feature flag values here
-    // Example: 'enable_new_feature': false,
-  };
-  return FeatureFlagsRemoteDataSourceImpl(defaultValues: defaultValues);
-});
+      // Default values for remote config
+      // These will be used if Firebase Remote Config is not available
+      final defaultValues = <String, dynamic>{
+        // Add your default feature flag values here
+        // Example: 'enable_new_feature': false,
+      };
+      return FeatureFlagsRemoteDataSourceImpl(defaultValues: defaultValues);
+    });
 
 // ============================================================================
 // Feature Flags Repository Provider
@@ -106,8 +106,9 @@ final featureFlagProvider = FutureProvider.family<FeatureFlag?, FeatureFlagKey>(
 );
 
 /// Provider for getting all feature flags
-final allFeatureFlagsProvider =
-    FutureProvider<Map<String, FeatureFlag?>>((ref) async {
+final allFeatureFlagsProvider = FutureProvider<Map<String, FeatureFlag?>>((
+  ref,
+) async {
   final repository = ref.watch(featureFlagsRepositoryProvider);
 
   final result = await repository.getAllFlags();

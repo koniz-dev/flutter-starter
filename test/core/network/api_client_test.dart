@@ -221,8 +221,7 @@ void main() {
         );
       });
 
-      test(
-          'should create ApiClient with both performanceService and '
+      test('should create ApiClient with both performanceService and '
           'loggingService', () {
         // Arrange
         final performanceService = MockPerformanceService();

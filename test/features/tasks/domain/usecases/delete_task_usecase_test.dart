@@ -37,8 +37,9 @@ void main() {
     test('should delete task successfully', () async {
       // Arrange
       const taskId = 'task-1';
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -52,8 +53,9 @@ void main() {
       // Arrange
       const taskId = 'task-1';
       const failure = CacheFailure('Failed to delete task');
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(taskId);
@@ -66,8 +68,9 @@ void main() {
     test('should delegate to repository with correct id', () async {
       // Arrange
       const taskId = 'task-123';
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       await useCase(taskId);
@@ -80,8 +83,9 @@ void main() {
     test('should handle deleting non-existent task', () async {
       // Arrange
       const taskId = 'non-existent-task';
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -95,8 +99,9 @@ void main() {
       // Arrange
       const taskId = '';
       const failure = CacheFailure('Task ID cannot be empty');
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(taskId);
@@ -109,8 +114,9 @@ void main() {
     test('should handle task id with special characters', () async {
       // Arrange
       const taskId = 'task-123_abc-xyz@test';
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -130,8 +136,9 @@ void main() {
       ];
 
       for (final failure in failures) {
-        when(() => mockRepository.deleteTask(any()))
-            .thenAnswer((_) async => ResultFailure(failure));
+        when(
+          () => mockRepository.deleteTask(any()),
+        ).thenAnswer((_) async => ResultFailure(failure));
 
         // Act
         final result = await useCase(taskId);
@@ -146,8 +153,9 @@ void main() {
     test('should handle very long task id', () async {
       // Arrange
       final taskId = 'task-${'a' * 1000}';
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -160,8 +168,9 @@ void main() {
     test('should handle numeric task id', () async {
       // Arrange
       const taskId = '12345';
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -174,8 +183,9 @@ void main() {
     test('should delete multiple tasks sequentially', () async {
       // Arrange
       final taskIds = ['task-1', 'task-2', 'task-3'];
-      when(() => mockRepository.deleteTask(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.deleteTask(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       for (final taskId in taskIds) {
         // Act

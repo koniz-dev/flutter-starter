@@ -118,8 +118,9 @@ void main() {
       expect(materialApp.locale, isNotNull);
     });
 
-    testWidgets('should configure text direction from provider',
-        (tester) async {
+    testWidgets('should configure text direction from provider', (
+      tester,
+    ) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
         UncontrolledProviderScope(

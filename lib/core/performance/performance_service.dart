@@ -44,7 +44,7 @@ class PerformanceService {
   PerformanceTrace? startTrace(String name) {
     if (!isEnabled || _performance == null) return null;
     try {
-      final trace = _performance!.newTrace(name);
+      final trace = _performance.newTrace(name);
       return PerformanceTrace(trace);
     } on Exception {
       // If Firebase Performance is not initialized, return null

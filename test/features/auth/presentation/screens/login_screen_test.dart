@@ -147,8 +147,9 @@ void main() {
         email: 'test@example.com',
         name: 'Test User',
       );
-      when(() => mockLoginUseCase(any(), any()))
-          .thenAnswer((_) async => const Success(user));
+      when(
+        () => mockLoginUseCase(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
 
       await tester.pumpWidget(createTestWidget());
       final emailField = find.byType(TextFormField).first;
@@ -161,8 +162,9 @@ void main() {
       await tester.pump();
 
       // Assert
-      verify(() => mockLoginUseCase('test@example.com', 'password123'))
-          .called(1);
+      verify(
+        () => mockLoginUseCase('test@example.com', 'password123'),
+      ).called(1);
     });
 
     testWidgets(
@@ -170,8 +172,9 @@ void main() {
       (tester) async {
         // Arrange
         const failure = AuthFailure('Invalid credentials');
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         await tester.pumpWidget(createTestWidget());
         final emailField = find.byType(TextFormField).first;
@@ -196,8 +199,9 @@ void main() {
         email: 'test@example.com',
       );
       final completer = Completer<Result<User>>();
-      when(() => mockLoginUseCase(any(), any()))
-          .thenAnswer((_) => completer.future);
+      when(
+        () => mockLoginUseCase(any(), any()),
+      ).thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(createTestWidget());
       final emailField = find.byType(TextFormField).first;
@@ -227,8 +231,9 @@ void main() {
         email: 'test@example.com',
       );
       final completer = Completer<Result<User>>();
-      when(() => mockLoginUseCase(any(), any()))
-          .thenAnswer((_) => completer.future);
+      when(
+        () => mockLoginUseCase(any(), any()),
+      ).thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(createTestWidget());
       final emailField = find.byType(TextFormField).first;

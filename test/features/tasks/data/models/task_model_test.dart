@@ -257,7 +257,8 @@ void main() {
 
       test('should handle special characters in title and description', () {
         // Arrange
-        const specialTitle = 'Task with special chars: '
+        const specialTitle =
+            'Task with special chars: '
             r'!@#$%^&*()_+-=[]{}|;:,.<>?';
         const specialDescription = 'Description with unicode: 你好世界 🌍';
         final taskModel = TaskModel(

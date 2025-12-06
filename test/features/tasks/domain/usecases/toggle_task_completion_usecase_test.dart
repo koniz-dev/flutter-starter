@@ -39,8 +39,9 @@ void main() {
       // Arrange
       const taskId = 'task-1';
       final task = createTask(id: taskId);
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => Success(task.copyWith(isCompleted: true)));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => Success(task.copyWith(isCompleted: true)));
 
       // Act
       final result = await useCase(taskId);
@@ -55,8 +56,9 @@ void main() {
       // Arrange
       const taskId = 'task-1';
       final task = createTask(id: taskId, isCompleted: true);
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => Success(task.copyWith(isCompleted: false)));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => Success(task.copyWith(isCompleted: false)));
 
       // Act
       final result = await useCase(taskId);
@@ -71,8 +73,9 @@ void main() {
       // Arrange
       const taskId = 'task-1';
       const failure = CacheFailure('Failed to toggle task');
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(taskId);
@@ -86,8 +89,9 @@ void main() {
       // Arrange
       const taskId = 'task-123';
       final task = createTask(id: taskId);
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       await useCase(taskId);
@@ -101,8 +105,9 @@ void main() {
       // Arrange
       const taskId = '';
       const failure = CacheFailure('Task ID cannot be empty');
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(taskId);
@@ -116,8 +121,9 @@ void main() {
       // Arrange
       const taskId = 'invalid-id-12345';
       const failure = CacheFailure('Task not found');
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(taskId);
@@ -137,8 +143,9 @@ void main() {
       ];
 
       for (final failure in failures) {
-        when(() => mockRepository.toggleTaskCompletion(any()))
-            .thenAnswer((_) async => ResultFailure(failure));
+        when(
+          () => mockRepository.toggleTaskCompletion(any()),
+        ).thenAnswer((_) async => ResultFailure(failure));
 
         // Act
         final result = await useCase(taskId);
@@ -154,8 +161,9 @@ void main() {
       // Arrange
       const taskId = 'task-123_abc-xyz';
       final task = createTask(id: taskId);
-      when(() => mockRepository.toggleTaskCompletion(any()))
-          .thenAnswer((_) async => Success(task.copyWith(isCompleted: true)));
+      when(
+        () => mockRepository.toggleTaskCompletion(any()),
+      ).thenAnswer((_) async => Success(task.copyWith(isCompleted: true)));
 
       // Act
       final result = await useCase(taskId);

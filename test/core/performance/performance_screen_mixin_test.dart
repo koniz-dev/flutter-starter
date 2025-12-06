@@ -19,8 +19,9 @@ void main() {
       mockTrace = MockPerformanceTrace();
 
       when(() => mockPerformanceService.isEnabled).thenReturn(true);
-      when(() => mockPerformanceService.startScreenTrace(any()))
-          .thenReturn(mockTrace);
+      when(
+        () => mockPerformanceService.startScreenTrace(any()),
+      ).thenReturn(mockTrace);
       when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
       when(() => mockTrace.putMetric(any(), any())).thenReturn(null);
       when(() => mockTrace.startSync()).thenReturn(null);
@@ -80,8 +81,9 @@ void main() {
           )
           .markScreenLoaded();
 
-      verify(() => mockTrace.putMetric(PerformanceMetrics.screenLoadTime, 1))
-          .called(1);
+      verify(
+        () => mockTrace.putMetric(PerformanceMetrics.screenLoadTime, 1),
+      ).called(1);
     });
 
     testWidgets('should record custom metric', (tester) async {
@@ -120,8 +122,9 @@ void main() {
       verify(() => mockTrace.putAttribute('custom_attr', 'value')).called(1);
     });
 
-    testWidgets('should not start trace when service is disabled',
-        (tester) async {
+    testWidgets('should not start trace when service is disabled', (
+      tester,
+    ) async {
       when(() => mockPerformanceService.isEnabled).thenReturn(false);
 
       await tester.pumpWidget(
@@ -144,8 +147,9 @@ void main() {
         ),
       );
 
-      verify(() => mockPerformanceService.startScreenTrace('custom_screen'))
-          .called(1);
+      verify(
+        () => mockPerformanceService.startScreenTrace('custom_screen'),
+      ).called(1);
     });
   });
 
@@ -158,8 +162,9 @@ void main() {
       mockTrace = MockPerformanceTrace();
 
       when(() => mockPerformanceService.isEnabled).thenReturn(true);
-      when(() => mockPerformanceService.startScreenTrace(any()))
-          .thenReturn(mockTrace);
+      when(
+        () => mockPerformanceService.startScreenTrace(any()),
+      ).thenReturn(mockTrace);
       when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
       when(() => mockTrace.putMetric(any(), any())).thenReturn(null);
       when(() => mockTrace.startSync()).thenReturn(null);
@@ -178,8 +183,9 @@ void main() {
       );
 
       expect(find.text('Test Content'), findsOneWidget);
-      verify(() => mockPerformanceService.startScreenTrace('test_screen'))
-          .called(1);
+      verify(
+        () => mockPerformanceService.startScreenTrace('test_screen'),
+      ).called(1);
     });
 
     testWidgets('should stop trace on dispose', (tester) async {
@@ -201,8 +207,9 @@ void main() {
       verify(() => mockTrace.stopSync()).called(1);
     });
 
-    testWidgets('should not start trace when service is disabled',
-        (tester) async {
+    testWidgets('should not start trace when service is disabled', (
+      tester,
+    ) async {
       when(() => mockPerformanceService.isEnabled).thenReturn(false);
 
       await tester.pumpWidget(

@@ -453,12 +453,14 @@ void main() {
         },
       );
 
-      test('should check dart-define for getDouble when .env not initialized',
-          () {
-        // When _isInitialized is false, should check dart-define
-        final value = EnvConfig.getDouble('TEST_DOUBLE', defaultValue: 3.14);
-        expect(value, 3.14);
-      });
+      test(
+        'should check dart-define for getDouble when .env not initialized',
+        () {
+          // When _isInitialized is false, should check dart-define
+          final value = EnvConfig.getDouble('TEST_DOUBLE', defaultValue: 3.14);
+          expect(value, 3.14);
+        },
+      );
     });
 
     group('getBool - Dart Define Parsing', () {

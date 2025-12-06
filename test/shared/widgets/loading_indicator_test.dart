@@ -108,8 +108,9 @@ void main() {
         expect(column.children.length, 3); // Indicator, SizedBox, Text
       });
 
-      testWidgets('should have correct spacing when message provided',
-          (tester) async {
+      testWidgets('should have correct spacing when message provided', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           const MaterialApp(
             home: Scaffold(

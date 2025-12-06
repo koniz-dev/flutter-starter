@@ -50,8 +50,9 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    testWidgets('should show loading indicator when isLoading is true',
-        (tester) async {
+    testWidgets('should show loading indicator when isLoading is true', (
+      tester,
+    ) async {
       // Arrange
       const buttonText = 'Login';
 

@@ -277,8 +277,8 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         Text(
           '$label: ',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Expanded(
           child: Text(

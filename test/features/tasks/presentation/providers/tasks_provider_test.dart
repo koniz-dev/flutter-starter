@@ -49,8 +49,9 @@ void main() {
 
       // Set default mock for getAllTasksUseCase to handle automatic
       // initial load
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
       container = ProviderContainer(
         overrides: [
@@ -58,8 +59,9 @@ void main() {
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ],
       );
     });
@@ -73,19 +75,22 @@ void main() {
         // Arrange
         final tasks = createTaskList(count: 2);
         final testMockGetAllTasksUseCase = MockGetAllTasksUseCase();
-        when(testMockGetAllTasksUseCase.call)
-            .thenAnswer((_) => Future.value(Success(tasks)));
+        when(
+          testMockGetAllTasksUseCase.call,
+        ).thenAnswer((_) => Future.value(Success(tasks)));
 
         // Create a new container with the mock set up before creation
         final testContainer = ProviderContainer(
           overrides: [
-            getAllTasksUseCaseProvider
-                .overrideWithValue(testMockGetAllTasksUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              testMockGetAllTasksUseCase,
+            ),
             createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
             updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
             deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-            toggleTaskCompletionUseCaseProvider
-                .overrideWithValue(mockToggleTaskCompletionUseCase),
+            toggleTaskCompletionUseCaseProvider.overrideWithValue(
+              mockToggleTaskCompletionUseCase,
+            ),
           ],
         );
 
@@ -118,8 +123,9 @@ void main() {
       test('should reload tasks successfully', () async {
         // Arrange
         final tasks = createTaskList();
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(tasks)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(Success(tasks)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete
@@ -140,8 +146,9 @@ void main() {
       test('should handle refresh failure', () async {
         // Arrange
         const failure = CacheFailure('Failed to load tasks');
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const ResultFailure(failure)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const ResultFailure(failure)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete (it will fail, but we need to wait)
@@ -168,8 +175,9 @@ void main() {
             description: any(named: 'description'),
           ),
         ).thenAnswer((_) => Future.value(Success(newTask)));
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(allTasks)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(Success(allTasks)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete
@@ -201,8 +209,9 @@ void main() {
           ),
         ).thenAnswer((_) => Future.value(const ResultFailure(failure)));
         // Ensure getAllTasksUseCase is set up for initial load
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -227,8 +236,9 @@ void main() {
             description: any(named: 'description'),
           ),
         ).thenAnswer((_) => createCompleter.future);
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete
@@ -259,10 +269,12 @@ void main() {
         // Arrange
         final task = createTask(id: 'task-1', title: 'Updated Task');
         final allTasks = createTaskList(count: 2);
-        when(() => mockUpdateTaskUseCase(any()))
-            .thenAnswer((_) => Future.value(Success(task)));
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(allTasks)));
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) => Future.value(Success(task)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(Success(allTasks)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete
@@ -282,11 +294,13 @@ void main() {
         // Arrange
         final task = createTask(id: 'task-1');
         const failure = CacheFailure('Failed to update task');
-        when(() => mockUpdateTaskUseCase(any()))
-            .thenAnswer((_) => Future.value(const ResultFailure(failure)));
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) => Future.value(const ResultFailure(failure)));
         // Ensure getAllTasksUseCase is set up for initial load
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -306,10 +320,12 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         final allTasks = createTaskList(count: 1);
-        when(() => mockDeleteTaskUseCase(any()))
-            .thenAnswer((_) => Future.value(const Success(null)));
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(allTasks)));
+        when(
+          () => mockDeleteTaskUseCase(any()),
+        ).thenAnswer((_) => Future.value(const Success(null)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(Success(allTasks)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete
@@ -329,11 +345,13 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         const failure = CacheFailure('Failed to delete task');
-        when(() => mockDeleteTaskUseCase(any()))
-            .thenAnswer((_) => Future.value(const ResultFailure(failure)));
+        when(
+          () => mockDeleteTaskUseCase(any()),
+        ).thenAnswer((_) => Future.value(const ResultFailure(failure)));
         // Ensure getAllTasksUseCase is set up for initial load
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -359,8 +377,9 @@ void main() {
             Success(task.copyWith(isCompleted: true)),
           ),
         );
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(allTasks)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(Success(allTasks)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         // Wait for initial load to complete
@@ -380,11 +399,13 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         const failure = CacheFailure('Failed to toggle task');
-        when(() => mockToggleTaskCompletionUseCase(any()))
-            .thenAnswer((_) => Future.value(const ResultFailure(failure)));
+        when(
+          () => mockToggleTaskCompletionUseCase(any()),
+        ).thenAnswer((_) => Future.value(const ResultFailure(failure)));
         // Ensure getAllTasksUseCase is set up for initial load
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -400,40 +421,45 @@ void main() {
     });
 
     group('edge cases', () {
-      test('should clear error on successful operation after failure',
-          () async {
-        // Arrange
-        const failure = CacheFailure('Operation failed');
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const ResultFailure(failure)));
+      test(
+        'should clear error on successful operation after failure',
+        () async {
+          // Arrange
+          const failure = CacheFailure('Operation failed');
+          when(
+            () => mockGetAllTasksUseCase(),
+          ).thenAnswer((_) => Future.value(const ResultFailure(failure)));
 
-        final notifier = container.read(tasksNotifierProvider.notifier);
-        // Wait for initial load to complete (it will fail)
-        await Future<void>.delayed(const Duration(milliseconds: 200));
+          final notifier = container.read(tasksNotifierProvider.notifier);
+          // Wait for initial load to complete (it will fail)
+          await Future<void>.delayed(const Duration(milliseconds: 200));
 
-        var state = container.read(tasksNotifierProvider);
-        expect(state.error, 'Operation failed');
+          var state = container.read(tasksNotifierProvider);
+          expect(state.error, 'Operation failed');
 
-        // Set up for success
-        final tasks = createTaskList(count: 2);
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(tasks)));
+          // Set up for success
+          final tasks = createTaskList(count: 2);
+          when(
+            () => mockGetAllTasksUseCase(),
+          ).thenAnswer((_) => Future.value(Success(tasks)));
 
-        // Act
-        await notifier.refresh();
-        // Wait for refresh to complete
-        await Future<void>.delayed(const Duration(milliseconds: 100));
+          // Act
+          await notifier.refresh();
+          // Wait for refresh to complete
+          await Future<void>.delayed(const Duration(milliseconds: 100));
 
-        // Assert
-        state = container.read(tasksNotifierProvider);
-        expect(state.error, isNull);
-        expect(state.tasks, tasks);
-      });
+          // Assert
+          state = container.read(tasksNotifierProvider);
+          expect(state.error, isNull);
+          expect(state.tasks, tasks);
+        },
+      );
 
       test('should handle empty tasks list', () async {
         // Arrange
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         // Wait for initial load to complete
         await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -458,8 +484,9 @@ void main() {
             description: any(named: 'description'),
           ),
         ).thenAnswer((_) => Future.value(Success(newTask)));
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -489,8 +516,9 @@ void main() {
             description: any(named: 'description'),
           ),
         ).thenAnswer((_) => Future.value(Success(newTask)));
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -513,10 +541,12 @@ void main() {
           id: 'task-1',
           title: 'Updated Task',
         );
-        when(() => mockUpdateTaskUseCase(any()))
-            .thenAnswer((_) => Future.value(Success(task)));
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) => Future.value(Success(task)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -532,12 +562,15 @@ void main() {
       test('should handle multiple rapid operations', () async {
         // Arrange
         final tasks = createTaskList(count: 2);
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(Success(tasks)));
-        when(() => mockToggleTaskCompletionUseCase(any()))
-            .thenAnswer((_) => Future.value(Success(tasks.first)));
-        when(() => mockDeleteTaskUseCase(any()))
-            .thenAnswer((_) => Future.value(const Success(null)));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(Success(tasks)));
+        when(
+          () => mockToggleTaskCompletionUseCase(any()),
+        ).thenAnswer((_) => Future.value(Success(tasks.first)));
+        when(
+          () => mockDeleteTaskUseCase(any()),
+        ).thenAnswer((_) => Future.value(const Success(null)));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -557,10 +590,12 @@ void main() {
         // Arrange
         final task = createTask(id: 'task-1');
         final updateCompleter = Completer<Result<Task>>();
-        when(() => mockUpdateTaskUseCase(any()))
-            .thenAnswer((_) => updateCompleter.future);
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) => updateCompleter.future);
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -586,10 +621,12 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         final deleteCompleter = Completer<Result<void>>();
-        when(() => mockDeleteTaskUseCase(any()))
-            .thenAnswer((_) => deleteCompleter.future);
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockDeleteTaskUseCase(any()),
+        ).thenAnswer((_) => deleteCompleter.future);
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -616,10 +653,12 @@ void main() {
         const taskId = 'task-1';
         final task = createTask(id: taskId);
         final toggleCompleter = Completer<Result<Task>>();
-        when(() => mockToggleTaskCompletionUseCase(any()))
-            .thenAnswer((_) => toggleCompleter.future);
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => Future.value(const Success<List<Task>>([])));
+        when(
+          () => mockToggleTaskCompletionUseCase(any()),
+        ).thenAnswer((_) => toggleCompleter.future);
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => Future.value(const Success<List<Task>>([])));
 
         final notifier = container.read(tasksNotifierProvider.notifier);
         await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -645,19 +684,22 @@ void main() {
         // Arrange
         final tasks = createTaskList(count: 100);
         final testMockGetAllTasksUseCase = MockGetAllTasksUseCase();
-        when(testMockGetAllTasksUseCase.call)
-            .thenAnswer((_) => Future.value(Success(tasks)));
+        when(
+          testMockGetAllTasksUseCase.call,
+        ).thenAnswer((_) => Future.value(Success(tasks)));
 
         // Create a new container with the mock set up before creation
         final testContainer = ProviderContainer(
           overrides: [
-            getAllTasksUseCaseProvider
-                .overrideWithValue(testMockGetAllTasksUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              testMockGetAllTasksUseCase,
+            ),
             createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
             updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
             deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-            toggleTaskCompletionUseCaseProvider
-                .overrideWithValue(mockToggleTaskCompletionUseCase),
+            toggleTaskCompletionUseCaseProvider.overrideWithValue(
+              mockToggleTaskCompletionUseCase,
+            ),
           ],
         );
 

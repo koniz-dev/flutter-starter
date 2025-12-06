@@ -78,17 +78,20 @@ void main() {
       (tester) async {
         // Arrange
         final completer = Completer<Result<List<Task>>>();
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) => completer.future);
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) => completer.future);
 
         await tester.pumpWidget(
           createWidgetWithOverrides([
-            getAllTasksUseCaseProvider
-                .overrideWithValue(mockGetAllTasksUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
             createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
             deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-            toggleTaskCompletionUseCaseProvider
-                .overrideWithValue(mockToggleTaskCompletionUseCase),
+            toggleTaskCompletionUseCaseProvider.overrideWithValue(
+              mockToggleTaskCompletionUseCase,
+            ),
           ]),
         );
 
@@ -104,16 +107,18 @@ void main() {
 
     testWidgets('should display empty state when no tasks', (tester) async {
       // Arrange
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -131,20 +136,24 @@ void main() {
     testWidgets('should display tasks list', (tester) async {
       // Arrange
       final tasks = createTaskList();
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
-      when(() => mockToggleTaskCompletionUseCase(any()))
-          .thenAnswer((_) async => Success(tasks.first));
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) async => Success(tasks.first));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -160,16 +169,18 @@ void main() {
     testWidgets('should display error message on error', (tester) async {
       // Arrange
       const failure = CacheFailure('Failed to load tasks');
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -185,8 +196,9 @@ void main() {
       'should show add task dialog when FAB is tapped',
       (tester) async {
         // Arrange
-        when(() => mockGetAllTasksUseCase())
-            .thenAnswer((_) async => const Success<List<Task>>([]));
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) async => const Success<List<Task>>([]));
         when(
           () => mockCreateTaskUseCase(
             title: any(named: 'title'),
@@ -196,12 +208,14 @@ void main() {
 
         await tester.pumpWidget(
           createWidgetWithOverrides([
-            getAllTasksUseCaseProvider
-                .overrideWithValue(mockGetAllTasksUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
             createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
             deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-            toggleTaskCompletionUseCaseProvider
-                .overrideWithValue(mockToggleTaskCompletionUseCase),
+            toggleTaskCompletionUseCaseProvider.overrideWithValue(
+              mockToggleTaskCompletionUseCase,
+            ),
           ]),
         );
 
@@ -220,8 +234,9 @@ void main() {
 
     testWidgets('should create task when form is submitted', (tester) async {
       // Arrange
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
       when(
         () => mockCreateTaskUseCase(
           title: any(named: 'title'),
@@ -232,16 +247,18 @@ void main() {
         return Success(createTask(title: title));
       });
       // Mock reload after create (called by tasksNotifierProvider)
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -272,25 +289,30 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('should toggle task completion when checkbox is tapped',
-        (tester) async {
+    testWidgets('should toggle task completion when checkbox is tapped', (
+      tester,
+    ) async {
       // Arrange
       final tasks = createTaskList(count: 2);
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
-      when(() => mockToggleTaskCompletionUseCase(any()))
-          .thenAnswer((_) async => Success(tasks.first));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) async => Success(tasks.first));
       // Mock reload after toggle (called by tasksNotifierProvider)
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -309,16 +331,18 @@ void main() {
       // Arrange
       final tasks = createTaskList(count: 2);
       // Mock initial load and refresh calls
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -345,16 +369,18 @@ void main() {
         }
         return const Success<List<Task>>([]);
       });
-      when(() => mockDeleteTaskUseCase(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockDeleteTaskUseCase(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -381,16 +407,18 @@ void main() {
     testWidgets('should handle pull-to-refresh', (tester) async {
       // Arrange
       final tasks = createTaskList(count: 2);
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -414,8 +442,9 @@ void main() {
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -433,8 +462,9 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('should display completed and incomplete tasks separately',
-        (tester) async {
+    testWidgets('should display completed and incomplete tasks separately', (
+      tester,
+    ) async {
       // Arrange
       final tasks = [
         createTask(id: 'task-1', title: 'Incomplete Task'),
@@ -444,18 +474,21 @@ void main() {
           title: 'Another Incomplete',
         ),
       ];
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
-      when(() => mockToggleTaskCompletionUseCase(any()))
-          .thenAnswer((_) async => Success(tasks.first));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) async => Success(tasks.first));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -472,24 +505,27 @@ void main() {
       // Arrange
       const failure = CacheFailure('Failed to load tasks');
       final tasks = createTaskList(count: 2);
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
       await tester.pumpAndSettle();
 
       // Set up for success on retry
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       await tester.tap(find.text('Retry'));
@@ -501,16 +537,18 @@ void main() {
 
     testWidgets('should handle canceling add task dialog', (tester) async {
       // Arrange
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -546,16 +584,18 @@ void main() {
           description: 'This is a task description',
         ),
       ];
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -575,16 +615,18 @@ void main() {
           title: 'Task without Description',
         ),
       ];
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -595,8 +637,9 @@ void main() {
       expect(find.text('Task without Description'), findsOneWidget);
     });
 
-    testWidgets('should display completed task with strikethrough',
-        (tester) async {
+    testWidgets('should display completed task with strikethrough', (
+      tester,
+    ) async {
       // Arrange
       final tasks = [
         createTask(
@@ -605,16 +648,18 @@ void main() {
           isCompleted: true,
         ),
       ];
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -630,27 +675,31 @@ void main() {
       expect(checkbox.value, isTrue);
     });
 
-    testWidgets('should create task with description in dialog',
-        (tester) async {
+    testWidgets('should create task with description in dialog', (
+      tester,
+    ) async {
       // Arrange
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
       when(
         () => mockCreateTaskUseCase(
           title: any(named: 'title'),
           description: any(named: 'description'),
         ),
       ).thenAnswer((_) async => Success(createTask()));
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 
@@ -681,16 +730,18 @@ void main() {
 
     testWidgets('should validate title in add task dialog', (tester) async {
       // Arrange
-      when(() => mockGetAllTasksUseCase())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
 
       await tester.pumpWidget(
         createWidgetWithOverrides([
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-          toggleTaskCompletionUseCaseProvider
-              .overrideWithValue(mockToggleTaskCompletionUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
         ]),
       );
 

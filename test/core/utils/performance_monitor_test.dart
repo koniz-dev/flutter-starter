@@ -130,8 +130,9 @@ void main() {
   });
 
   group('PerformanceWidget', () {
-    testWidgets('should measure build performance in debug mode',
-        (tester) async {
+    testWidgets('should measure build performance in debug mode', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: PerformanceWidget(

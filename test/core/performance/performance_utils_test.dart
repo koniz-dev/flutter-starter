@@ -111,10 +111,10 @@ void main() {
 
         final result =
             await PerformanceUtils.measureDatabaseQuery<List<String>>(
-          service: mockService,
-          queryName: 'get_users',
-          query: () async => ['user1', 'user2'],
-        );
+              service: mockService,
+              queryName: 'get_users',
+              query: () async => ['user1', 'user2'],
+            );
 
         expect(result, ['user1', 'user2']);
         verify(

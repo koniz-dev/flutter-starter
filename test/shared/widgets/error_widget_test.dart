@@ -22,8 +22,9 @@ void main() {
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
     });
 
-    testWidgets('should display retry button when onRetry is provided',
-        (tester) async {
+    testWidgets('should display retry button when onRetry is provided', (
+      tester,
+    ) async {
       // Arrange
       var retryCalled = false;
 
@@ -50,8 +51,9 @@ void main() {
       expect(retryCalled, isTrue);
     });
 
-    testWidgets('should not display retry button when onRetry is null',
-        (tester) async {
+    testWidgets('should not display retry button when onRetry is null', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(

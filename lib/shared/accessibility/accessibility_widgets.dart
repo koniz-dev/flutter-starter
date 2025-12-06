@@ -56,7 +56,8 @@ class AccessibleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveLabel = semanticLabel ??
+    final effectiveLabel =
+        semanticLabel ??
         AccessibilityHelpers.getButtonSemanticLabel(
           label,
           isEnabled: isEnabled,
@@ -66,7 +67,8 @@ class AccessibleButton extends StatelessWidget {
     final button = ElevatedButton(
       onPressed: (isEnabled && !isLoading) ? onPressed : null,
       style: style,
-      child: child ??
+      child:
+          child ??
           (isLoading
               ? const SizedBox(
                   height: 20,
@@ -74,15 +76,15 @@ class AccessibleButton extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : (icon != null
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(icon),
-                        const SizedBox(width: 8),
-                        Text(label),
-                      ],
-                    )
-                  : Text(label))),
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(icon),
+                          const SizedBox(width: 8),
+                          Text(label),
+                        ],
+                      )
+                    : Text(label))),
     );
 
     return Semantics(
@@ -306,7 +308,8 @@ class AccessibleProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveValue = semanticValue ??
+    final effectiveValue =
+        semanticValue ??
         (value != null
             ? AccessibilityHelpers.getProgressSemanticValue(value!)
             : null);

@@ -27,16 +27,18 @@ void main() {
           value: true,
           source: FeatureFlagSource.remoteConfig,
         );
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => Success(flag));
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => Success(flag));
 
         // Act
         final result = await manager.isEnabled(FeatureFlags.newFeature);
 
         // Assert
         expect(result, isTrue);
-        verify(() => mockRepository.getFlag(FeatureFlags.newFeature.value))
-            .called(1);
+        verify(
+          () => mockRepository.getFlag(FeatureFlags.newFeature.value),
+        ).called(1);
       });
 
       test('should return false when flag is disabled', () async {
@@ -46,8 +48,9 @@ void main() {
           value: false,
           source: FeatureFlagSource.remoteConfig,
         );
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => Success(flag));
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => Success(flag));
 
         // Act
         final result = await manager.isEnabled(FeatureFlags.newFeature);
@@ -60,8 +63,9 @@ void main() {
         // Arrange
         const failure = CacheFailure('Failed to get flag');
         const resultFailure = ResultFailure<FeatureFlag>(failure);
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act
         final result = await manager.isEnabled(FeatureFlags.newFeature);
@@ -75,8 +79,9 @@ void main() {
         // Arrange
         const failure = CacheFailure('Failed to get flag');
         const resultFailure = ResultFailure<FeatureFlag>(failure);
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act
         final darkModeResult = await manager.isEnabled(FeatureFlags.darkMode);
@@ -99,8 +104,9 @@ void main() {
           source: FeatureFlagSource.remoteConfig,
           description: 'Test flag',
         );
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => Success(flag));
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => Success(flag));
 
         // Act
         final result = await manager.getFlag(FeatureFlags.newFeature);
@@ -116,8 +122,9 @@ void main() {
         // Arrange
         const failure = CacheFailure('Failed to get flag');
         const resultFailure = ResultFailure<FeatureFlag>(failure);
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act
         final result = await manager.getFlag(FeatureFlags.newFeature);
@@ -138,10 +145,12 @@ void main() {
           value: false,
           source: FeatureFlagSource.localOverride,
         );
-        when(() => mockRepository.getFlag(FeatureFlags.newFeature.value))
-            .thenAnswer((_) async => Success(remoteFlag));
-        when(() => mockRepository.getFlag(FeatureFlags.darkMode.value))
-            .thenAnswer((_) async => Success(localFlag));
+        when(
+          () => mockRepository.getFlag(FeatureFlags.newFeature.value),
+        ).thenAnswer((_) async => Success(remoteFlag));
+        when(
+          () => mockRepository.getFlag(FeatureFlags.darkMode.value),
+        ).thenAnswer((_) async => Success(localFlag));
 
         // Act
         final remoteResult = await manager.getFlag(FeatureFlags.newFeature);
@@ -168,8 +177,9 @@ void main() {
             source: FeatureFlagSource.remoteConfig,
           ),
         };
-        when(() => mockRepository.getFlags(any()))
-            .thenAnswer((_) async => Success(flags));
+        when(
+          () => mockRepository.getFlags(any()),
+        ).thenAnswer((_) async => Success(flags));
 
         // Act
         final result = await manager.getFlags([
@@ -188,8 +198,9 @@ void main() {
         // Arrange
         const failure = CacheFailure('Failed to get flags');
         const resultFailure = ResultFailure<Map<String, FeatureFlag>>(failure);
-        when(() => mockRepository.getFlags(any()))
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.getFlags(any()),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act
         final result = await manager.getFlags([
@@ -206,8 +217,9 @@ void main() {
         // Arrange
         const emptyFlags = <String, FeatureFlag>{};
         const success = Success<Map<String, FeatureFlag>>(emptyFlags);
-        when(() => mockRepository.getFlags(any()))
-            .thenAnswer((_) async => success);
+        when(
+          () => mockRepository.getFlags(any()),
+        ).thenAnswer((_) async => success);
 
         // Act
         final result = await manager.getFlags([]);
@@ -236,8 +248,9 @@ void main() {
             source: FeatureFlagSource.remoteConfig,
           ),
         };
-        when(() => mockRepository.getFlags(any()))
-            .thenAnswer((_) async => Success(flags));
+        when(
+          () => mockRepository.getFlags(any()),
+        ).thenAnswer((_) async => Success(flags));
 
         // Act
         final result = await manager.getFlags([
@@ -257,8 +270,9 @@ void main() {
     group('refresh', () {
       test('should call repository refreshRemoteFlags', () async {
         // Arrange
-        when(() => mockRepository.refreshRemoteFlags())
-            .thenAnswer((_) async => const Success<void>(null));
+        when(
+          () => mockRepository.refreshRemoteFlags(),
+        ).thenAnswer((_) async => const Success<void>(null));
 
         // Act
         await manager.refresh();
@@ -271,8 +285,9 @@ void main() {
         // Arrange
         const failure = NetworkFailure('Network error');
         const resultFailure = ResultFailure<void>(failure);
-        when(() => mockRepository.refreshRemoteFlags())
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.refreshRemoteFlags(),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act & Assert
         await expectLater(manager.refresh(), completes);
@@ -281,30 +296,32 @@ void main() {
     });
 
     group('setLocalOverride', () {
-      test('should call repository setLocalOverride with correct parameters',
-          () async {
-        // Arrange
-        when(
-          () => mockRepository.setLocalOverride(
-            any(),
-            value: any(named: 'value'),
-          ),
-        ).thenAnswer((_) async => const Success<void>(null));
+      test(
+        'should call repository setLocalOverride with correct parameters',
+        () async {
+          // Arrange
+          when(
+            () => mockRepository.setLocalOverride(
+              any(),
+              value: any(named: 'value'),
+            ),
+          ).thenAnswer((_) async => const Success<void>(null));
 
-        // Act
-        await manager.setLocalOverride(
-          FeatureFlags.newFeature,
-          value: true,
-        );
-
-        // Assert
-        verify(
-          () => mockRepository.setLocalOverride(
-            FeatureFlags.newFeature.value,
+          // Act
+          await manager.setLocalOverride(
+            FeatureFlags.newFeature,
             value: true,
-          ),
-        ).called(1);
-      });
+          );
+
+          // Assert
+          verify(
+            () => mockRepository.setLocalOverride(
+              FeatureFlags.newFeature.value,
+              value: true,
+            ),
+          ).called(1);
+        },
+      );
 
       test('should handle setLocalOverride failure gracefully', () async {
         // Arrange
@@ -328,8 +345,9 @@ void main() {
     group('clearLocalOverride', () {
       test('should call repository clearLocalOverride', () async {
         // Arrange
-        when(() => mockRepository.clearLocalOverride(any()))
-            .thenAnswer((_) async => const Success<void>(null));
+        when(
+          () => mockRepository.clearLocalOverride(any()),
+        ).thenAnswer((_) async => const Success<void>(null));
 
         // Act
         await manager.clearLocalOverride(FeatureFlags.newFeature);
@@ -345,8 +363,9 @@ void main() {
         // Arrange
         const failure = CacheFailure('Failed to clear override');
         const resultFailure = ResultFailure<void>(failure);
-        when(() => mockRepository.clearLocalOverride(any()))
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.clearLocalOverride(any()),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act & Assert
         await expectLater(
@@ -359,8 +378,9 @@ void main() {
     group('clearAllLocalOverrides', () {
       test('should call repository clearAllLocalOverrides', () async {
         // Arrange
-        when(() => mockRepository.clearAllLocalOverrides())
-            .thenAnswer((_) async => const Success<void>(null));
+        when(
+          () => mockRepository.clearAllLocalOverrides(),
+        ).thenAnswer((_) async => const Success<void>(null));
 
         // Act
         await manager.clearAllLocalOverrides();
@@ -373,8 +393,9 @@ void main() {
         // Arrange
         const failure = CacheFailure('Failed to clear overrides');
         const resultFailure = ResultFailure<void>(failure);
-        when(() => mockRepository.clearAllLocalOverrides())
-            .thenAnswer((_) async => resultFailure);
+        when(
+          () => mockRepository.clearAllLocalOverrides(),
+        ).thenAnswer((_) async => resultFailure);
 
         // Act & Assert
         await expectLater(manager.clearAllLocalOverrides(), completes);
@@ -389,8 +410,9 @@ void main() {
           value: true,
           source: FeatureFlagSource.remoteConfig,
         );
-        when(() => mockRepository.getFlag(any()))
-            .thenAnswer((_) async => Success(flag));
+        when(
+          () => mockRepository.getFlag(any()),
+        ).thenAnswer((_) async => Success(flag));
 
         // Act
         final result1 = await manager.isEnabled(FeatureFlags.newFeature);
@@ -401,8 +423,9 @@ void main() {
         expect(result1, isTrue);
         expect(result2, isTrue);
         expect(result3, isTrue);
-        verify(() => mockRepository.getFlag(FeatureFlags.newFeature.value))
-            .called(3);
+        verify(
+          () => mockRepository.getFlag(FeatureFlags.newFeature.value),
+        ).called(3);
       });
 
       test('should handle different flag keys correctly', () async {
@@ -417,10 +440,12 @@ void main() {
           value: false,
           source: FeatureFlagSource.remoteConfig,
         );
-        when(() => mockRepository.getFlag(FeatureFlags.newFeature.value))
-            .thenAnswer((_) async => Success(flag1));
-        when(() => mockRepository.getFlag(FeatureFlags.darkMode.value))
-            .thenAnswer((_) async => Success(flag2));
+        when(
+          () => mockRepository.getFlag(FeatureFlags.newFeature.value),
+        ).thenAnswer((_) async => Success(flag1));
+        when(
+          () => mockRepository.getFlag(FeatureFlags.darkMode.value),
+        ).thenAnswer((_) async => Success(flag2));
 
         // Act
         final result1 = await manager.isEnabled(FeatureFlags.newFeature);

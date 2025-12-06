@@ -69,12 +69,15 @@ void main() {
         ),
       );
 
-      when(() => mockSecureStorage.getString(AppConstants.refreshTokenKey))
-          .thenAnswer((_) async => refreshToken);
-      when(() => mockAuthRepository.refreshToken())
-          .thenAnswer((_) async => const Success(newAccessToken));
-      when(() => mockSecureStorage.setString(any(), any()))
-          .thenAnswer((_) async => true);
+      when(
+        () => mockSecureStorage.getString(AppConstants.refreshTokenKey),
+      ).thenAnswer((_) async => refreshToken);
+      when(
+        () => mockAuthRepository.refreshToken(),
+      ).thenAnswer((_) async => const Success(newAccessToken));
+      when(
+        () => mockSecureStorage.setString(any(), any()),
+      ).thenAnswer((_) async => true);
       when(() => mockSecureStorage.remove(any())).thenAnswer((_) async => true);
 
       // Act
@@ -127,11 +130,13 @@ void main() {
         ),
       );
 
-      when(() => mockSecureStorage.getString(AppConstants.refreshTokenKey))
-          .thenAnswer((_) async => refreshToken);
+      when(
+        () => mockSecureStorage.getString(AppConstants.refreshTokenKey),
+      ).thenAnswer((_) async => refreshToken);
       final failure = createAuthFailure(message: 'Refresh token expired');
-      when(() => mockAuthRepository.refreshToken())
-          .thenAnswer((_) async => ResultFailure(failure));
+      when(
+        () => mockAuthRepository.refreshToken(),
+      ).thenAnswer((_) async => ResultFailure(failure));
       when(() => mockSecureStorage.remove(any())).thenAnswer((_) async => true);
 
       // Act
@@ -145,8 +150,9 @@ void main() {
       // Assert
       verify(() => mockAuthRepository.refreshToken()).called(1);
       verify(() => mockSecureStorage.remove(AppConstants.tokenKey)).called(1);
-      verify(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-          .called(1);
+      verify(
+        () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+      ).called(1);
     });
   });
 }

@@ -110,9 +110,9 @@ final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
 /// Uses ref.read to break circular dependency with apiClientProvider.
 final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
     Provider<AuthRemoteDataSource>((ref) {
-  final apiClient = ref.read<ApiClient>(apiClientProvider);
-  return AuthRemoteDataSourceImpl(apiClient);
-});
+      final apiClient = ref.read<ApiClient>(apiClientProvider);
+      return AuthRemoteDataSourceImpl(apiClient);
+    });
 
 /// Provider for [AuthRepository] instance
 ///
@@ -120,15 +120,15 @@ final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
 /// that coordinates between remote and local data sources.
 final Provider<AuthRepository> authRepositoryProvider =
     Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.read<AuthRemoteDataSource>(
-    authRemoteDataSourceProvider,
-  );
-  final localDataSource = ref.watch(authLocalDataSourceProvider);
-  return AuthRepositoryImpl(
-    remoteDataSource: remoteDataSource,
-    localDataSource: localDataSource,
-  );
-});
+      final remoteDataSource = ref.read<AuthRemoteDataSource>(
+        authRemoteDataSourceProvider,
+      );
+      final localDataSource = ref.watch(authLocalDataSourceProvider);
+      return AuthRepositoryImpl(
+        remoteDataSource: remoteDataSource,
+        localDataSource: localDataSource,
+      );
+    });
 
 /// Provider for [AuthInterceptor] instance
 ///
@@ -137,14 +137,14 @@ final Provider<AuthRepository> authRepositoryProvider =
 /// Uses ref.read to break circular dependency with apiClientProvider.
 final Provider<AuthInterceptor> authInterceptorProvider =
     Provider<AuthInterceptor>((ref) {
-  final secureStorageService = ref.watch(secureStorageServiceProvider);
-  // Use ref.read to break circular dependency with authRepositoryProvider
-  final authRepository = ref.read<AuthRepository>(authRepositoryProvider);
-  return AuthInterceptor(
-    secureStorageService: secureStorageService,
-    authRepository: authRepository,
-  );
-});
+      final secureStorageService = ref.watch(secureStorageServiceProvider);
+      // Use ref.read to break circular dependency with authRepositoryProvider
+      final authRepository = ref.read<AuthRepository>(authRepositoryProvider);
+      return AuthInterceptor(
+        secureStorageService: secureStorageService,
+        authRepository: authRepository,
+      );
+    });
 
 /// Provider for [ApiClient] instance
 ///
@@ -293,6 +293,6 @@ final deleteTaskUseCaseProvider = Provider<DeleteTaskUseCase>((ref) {
 /// that handles toggling task completion status business logic.
 final toggleTaskCompletionUseCaseProvider =
     Provider<ToggleTaskCompletionUseCase>((ref) {
-  final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
-  return ToggleTaskCompletionUseCase(repository);
-});
+      final repository = ref.watch<TasksRepository>(tasksRepositoryProvider);
+      return ToggleTaskCompletionUseCase(repository);
+    });

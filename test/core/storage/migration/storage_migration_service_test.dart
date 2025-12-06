@@ -40,19 +40,21 @@ void main() {
       expect(results['secure'], isNotNull);
     });
 
-    test('migrateRegular executes migrations for regular storage only',
-        () async {
-      final migrationService = StorageMigrationService(
-        storageService: storageService,
-        secureStorageService: secureStorageService,
-        loggingService: loggingService,
-      );
+    test(
+      'migrateRegular executes migrations for regular storage only',
+      () async {
+        final migrationService = StorageMigrationService(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+          loggingService: loggingService,
+        );
 
-      final result = await migrationService.migrateRegular();
+        final result = await migrationService.migrateRegular();
 
-      expect(result, isNotNull);
-      expect(result, greaterThanOrEqualTo(1));
-    });
+        expect(result, isNotNull);
+        expect(result, greaterThanOrEqualTo(1));
+      },
+    );
 
     test('migrateSecure executes migrations for secure storage only', () async {
       final migrationService = StorageMigrationService(

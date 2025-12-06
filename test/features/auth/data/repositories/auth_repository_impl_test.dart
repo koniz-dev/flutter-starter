@@ -47,14 +47,18 @@ void main() {
           token: 'access_token',
           refreshToken: 'refresh_token',
         );
-        when(() => mockRemoteDataSource.login(any(), any()))
-            .thenAnswer((_) async => authResponse);
-        when(() => mockLocalDataSource.cacheUser(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheRefreshToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.login(any(), any()),
+        ).thenAnswer((_) async => authResponse);
+        when(
+          () => mockLocalDataSource.cacheUser(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheRefreshToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.login('test@example.com', 'password');
@@ -70,8 +74,9 @@ void main() {
         ).called(1);
         verify(() => mockLocalDataSource.cacheUser(userModel)).called(1);
         verify(() => mockLocalDataSource.cacheToken('access_token')).called(1);
-        verify(() => mockLocalDataSource.cacheRefreshToken('refresh_token'))
-            .called(1);
+        verify(
+          () => mockLocalDataSource.cacheRefreshToken('refresh_token'),
+        ).called(1);
       });
 
       test(
@@ -79,8 +84,9 @@ void main() {
         'throws ServerException',
         () async {
           // Arrange
-          when(() => mockRemoteDataSource.login(any(), any()))
-              .thenThrow(const ServerException('Server error', code: '500'));
+          when(
+            () => mockRemoteDataSource.login(any(), any()),
+          ).thenThrow(const ServerException('Server error', code: '500'));
 
           // Act
           final result = await repository.login('test@example.com', 'password');
@@ -103,12 +109,15 @@ void main() {
         'throws NetworkException',
         () async {
           // Arrange
-          when(() => mockRemoteDataSource.login(any(), any()))
-              .thenThrow(const NetworkException('Network error'));
-          when(() => mockLocalDataSource.cacheUser(any()))
-              .thenAnswer((_) async => {});
-          when(() => mockLocalDataSource.cacheToken(any()))
-              .thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.login(any(), any()),
+          ).thenThrow(const NetworkException('Network error'));
+          when(
+            () => mockLocalDataSource.cacheUser(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockLocalDataSource.cacheToken(any()),
+          ).thenAnswer((_) async => {});
 
           // Act
           final result = await repository.login('test@example.com', 'password');
@@ -132,12 +141,15 @@ void main() {
           token: 'access_token',
           // refreshToken is null
         );
-        when(() => mockRemoteDataSource.login(any(), any()))
-            .thenAnswer((_) async => authResponse);
-        when(() => mockLocalDataSource.cacheUser(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.login(any(), any()),
+        ).thenAnswer((_) async => authResponse);
+        when(
+          () => mockLocalDataSource.cacheUser(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         await repository.login('test@example.com', 'password');
@@ -159,12 +171,15 @@ void main() {
           user: userModel,
           token: 'access_token',
         );
-        when(() => mockRemoteDataSource.register(any(), any(), any()))
-            .thenAnswer((_) async => authResponse);
-        when(() => mockLocalDataSource.cacheUser(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.register(any(), any(), any()),
+        ).thenAnswer((_) async => authResponse);
+        when(
+          () => mockLocalDataSource.cacheUser(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.register(
@@ -189,12 +204,15 @@ void main() {
 
       test('should return failure when registration fails', () async {
         // Arrange
-        when(() => mockRemoteDataSource.register(any(), any(), any()))
-            .thenThrow(const ServerException('Registration failed'));
-        when(() => mockLocalDataSource.cacheUser(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.register(any(), any(), any()),
+        ).thenThrow(const ServerException('Registration failed'));
+        when(
+          () => mockLocalDataSource.cacheUser(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.register(
@@ -213,8 +231,9 @@ void main() {
       test('should return success when logout succeeds', () async {
         // Arrange
         when(() => mockRemoteDataSource.logout()).thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.clearCache())
-            .thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.clearCache(),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.logout();
@@ -227,10 +246,12 @@ void main() {
 
       test('should return failure when logout fails', () async {
         // Arrange
-        when(() => mockRemoteDataSource.logout())
-            .thenThrow(const NetworkException('Network error'));
-        when(() => mockLocalDataSource.clearCache())
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.logout(),
+        ).thenThrow(const NetworkException('Network error'));
+        when(
+          () => mockLocalDataSource.clearCache(),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.logout();
@@ -249,8 +270,9 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenAnswer((_) async => userModel);
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => userModel);
 
         // Act
         final result = await repository.getCurrentUser();
@@ -265,8 +287,9 @@ void main() {
 
       test('should return null User when no cached user', () async {
         // Arrange
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => null);
 
         // Act
         final result = await repository.getCurrentUser();
@@ -278,8 +301,9 @@ void main() {
 
       test('should return failure when cache read fails', () async {
         // Arrange
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenThrow(const CacheException('Cache error'));
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenThrow(const CacheException('Cache error'));
 
         // Act
         final result = await repository.getCurrentUser();
@@ -297,8 +321,9 @@ void main() {
           id: '1',
           email: 'test@example.com',
         );
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenAnswer((_) async => userModel);
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => userModel);
 
         // Act
         final result = await repository.isAuthenticated();
@@ -310,8 +335,9 @@ void main() {
 
       test('should return false when no cached user', () async {
         // Arrange
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => null);
 
         // Act
         final result = await repository.isAuthenticated();
@@ -334,14 +360,18 @@ void main() {
           token: 'new_access_token',
           refreshToken: 'new_refresh_token',
         );
-        when(() => mockLocalDataSource.getRefreshToken())
-            .thenAnswer((_) async => 'old_refresh_token');
-        when(() => mockRemoteDataSource.refreshToken(any()))
-            .thenAnswer((_) async => authResponse);
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheRefreshToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.getRefreshToken(),
+        ).thenAnswer((_) async => 'old_refresh_token');
+        when(
+          () => mockRemoteDataSource.refreshToken(any()),
+        ).thenAnswer((_) async => authResponse);
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheRefreshToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.refreshToken();
@@ -349,18 +379,21 @@ void main() {
         // Assert
         expect(result.isSuccess, isTrue);
         expect(result.dataOrNull, 'new_access_token');
-        verify(() => mockLocalDataSource.cacheToken('new_access_token'))
-            .called(1);
-        verify(() => mockLocalDataSource.cacheRefreshToken('new_refresh_token'))
-            .called(1);
+        verify(
+          () => mockLocalDataSource.cacheToken('new_access_token'),
+        ).called(1);
+        verify(
+          () => mockLocalDataSource.cacheRefreshToken('new_refresh_token'),
+        ).called(1);
       });
 
       test(
         'should return UnknownFailure when no refresh token available',
         () async {
           // Arrange
-          when(() => mockLocalDataSource.getRefreshToken())
-              .thenAnswer((_) async => null);
+          when(
+            () => mockLocalDataSource.getRefreshToken(),
+          ).thenAnswer((_) async => null);
 
           // Act
           final result = await repository.refreshToken();
@@ -375,14 +408,18 @@ void main() {
 
       test('should return failure when refresh fails', () async {
         // Arrange
-        when(() => mockLocalDataSource.getRefreshToken())
-            .thenAnswer((_) async => 'refresh_token');
-        when(() => mockRemoteDataSource.refreshToken(any()))
-            .thenThrow(const AuthException('Token expired'));
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheRefreshToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.getRefreshToken(),
+        ).thenAnswer((_) async => 'refresh_token');
+        when(
+          () => mockRemoteDataSource.refreshToken(any()),
+        ).thenThrow(const AuthException('Token expired'));
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheRefreshToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.refreshToken();
@@ -403,12 +440,15 @@ void main() {
           token: 'new_access_token',
           // refreshToken is null
         );
-        when(() => mockLocalDataSource.getRefreshToken())
-            .thenAnswer((_) async => 'old_refresh_token');
-        when(() => mockRemoteDataSource.refreshToken(any()))
-            .thenAnswer((_) async => authResponse);
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.getRefreshToken(),
+        ).thenAnswer((_) async => 'old_refresh_token');
+        when(
+          () => mockRemoteDataSource.refreshToken(any()),
+        ).thenAnswer((_) async => authResponse);
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         await repository.refreshToken();
@@ -431,27 +471,33 @@ void main() {
           token: 'access_token',
           refreshToken: 'refresh_token',
         );
-        when(() => mockRemoteDataSource.register(any(), any(), any()))
-            .thenAnswer((_) async => authResponse);
-        when(() => mockLocalDataSource.cacheUser(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheToken(any()))
-            .thenAnswer((_) async => {});
-        when(() => mockLocalDataSource.cacheRefreshToken(any()))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.register(any(), any(), any()),
+        ).thenAnswer((_) async => authResponse);
+        when(
+          () => mockLocalDataSource.cacheUser(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheRefreshToken(any()),
+        ).thenAnswer((_) async => {});
 
         // Act
         await repository.register('test@example.com', 'password', 'Test User');
 
         // Assert
-        verify(() => mockLocalDataSource.cacheRefreshToken('refresh_token'))
-            .called(1);
+        verify(
+          () => mockLocalDataSource.cacheRefreshToken('refresh_token'),
+        ).called(1);
       });
 
       test('login should handle generic Exception', () async {
         // Arrange
-        when(() => mockRemoteDataSource.login(any(), any()))
-            .thenThrow(Exception('Generic error'));
+        when(
+          () => mockRemoteDataSource.login(any(), any()),
+        ).thenThrow(Exception('Generic error'));
 
         // Act
         final result = await repository.login('test@example.com', 'password');
@@ -463,8 +509,9 @@ void main() {
 
       test('register should handle generic Exception', () async {
         // Arrange
-        when(() => mockRemoteDataSource.register(any(), any(), any()))
-            .thenThrow(Exception('Generic error'));
+        when(
+          () => mockRemoteDataSource.register(any(), any(), any()),
+        ).thenThrow(Exception('Generic error'));
 
         // Act
         final result = await repository.register(
@@ -480,8 +527,9 @@ void main() {
 
       test('logout should handle generic Exception', () async {
         // Arrange
-        when(() => mockRemoteDataSource.logout())
-            .thenThrow(Exception('Generic error'));
+        when(
+          () => mockRemoteDataSource.logout(),
+        ).thenThrow(Exception('Generic error'));
 
         // Act
         final result = await repository.logout();
@@ -493,8 +541,9 @@ void main() {
 
       test('getCurrentUser should handle generic Exception', () async {
         // Arrange
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenThrow(Exception('Generic error'));
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenThrow(Exception('Generic error'));
 
         // Act
         final result = await repository.getCurrentUser();
@@ -506,8 +555,9 @@ void main() {
 
       test('isAuthenticated should handle generic Exception', () async {
         // Arrange
-        when(() => mockLocalDataSource.getCachedUser())
-            .thenThrow(Exception('Generic error'));
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenThrow(Exception('Generic error'));
 
         // Act
         final result = await repository.isAuthenticated();
@@ -519,10 +569,12 @@ void main() {
 
       test('refreshToken should handle generic Exception', () async {
         // Arrange
-        when(() => mockLocalDataSource.getRefreshToken())
-            .thenAnswer((_) async => 'refresh_token');
-        when(() => mockRemoteDataSource.refreshToken(any()))
-            .thenThrow(Exception('Generic error'));
+        when(
+          () => mockLocalDataSource.getRefreshToken(),
+        ).thenAnswer((_) async => 'refresh_token');
+        when(
+          () => mockRemoteDataSource.refreshToken(any()),
+        ).thenThrow(Exception('Generic error'));
 
         // Act
         final result = await repository.refreshToken();

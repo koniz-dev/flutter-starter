@@ -49,8 +49,9 @@ void main() {
         updatedAt: testDate,
       );
       Task? updatedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         updatedTask = invocation.positionalArguments[0] as Task;
         return Success(updatedTask!);
       });
@@ -79,8 +80,9 @@ void main() {
         updatedAt: testDate,
       );
       Task? updatedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         updatedTask = invocation.positionalArguments[0] as Task;
         return Success(updatedTask!);
       });
@@ -103,8 +105,9 @@ void main() {
       // Arrange
       final task = createTask(id: 'task-1');
       const failure = CacheFailure('Failed to update task');
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.updateTask(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(task);
@@ -118,8 +121,9 @@ void main() {
       // Arrange
       final task = createTask(id: 'task-1');
       Task? passedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         passedTask = invocation.positionalArguments[0] as Task;
         return Success(passedTask!);
       });
@@ -140,8 +144,9 @@ void main() {
         title: 'Task Title',
       );
       Task? updatedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         updatedTask = invocation.positionalArguments[0] as Task;
         return Success(updatedTask!);
       });
@@ -164,8 +169,9 @@ void main() {
         title: '',
       );
       Task? updatedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         updatedTask = invocation.positionalArguments[0] as Task;
         return Success(updatedTask!);
       });
@@ -189,8 +195,9 @@ void main() {
         title: longTitle,
       );
       Task? updatedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         updatedTask = invocation.positionalArguments[0] as Task;
         return Success(updatedTask!);
       });
@@ -215,8 +222,9 @@ void main() {
         updatedAt: testDate,
       );
       Task? updatedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         updatedTask = invocation.positionalArguments[0] as Task;
         return Success(updatedTask!);
       });
@@ -242,8 +250,9 @@ void main() {
       ];
 
       for (final failure in failures) {
-        when(() => mockRepository.updateTask(any()))
-            .thenAnswer((_) async => ResultFailure(failure));
+        when(
+          () => mockRepository.updateTask(any()),
+        ).thenAnswer((_) async => ResultFailure(failure));
 
         // Act
         final result = await useCase(task);
@@ -268,8 +277,9 @@ void main() {
         isCompleted: true,
       );
       Task? passedTask;
-      when(() => mockRepository.updateTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.updateTask(any())).thenAnswer((
+        invocation,
+      ) async {
         passedTask = invocation.positionalArguments[0] as Task;
         return Success(passedTask!);
       });
@@ -287,34 +297,37 @@ void main() {
       expect(task.updatedAt.isAfter(updatedTask.updatedAt), isTrue);
     });
 
-    test('should update task multiple times with increasing timestamps',
-        () async {
-      // Arrange
-      final baseDate = DateTime(2024);
-      var previousUpdatedAt = baseDate;
+    test(
+      'should update task multiple times with increasing timestamps',
+      () async {
+        // Arrange
+        final baseDate = DateTime(2024);
+        var previousUpdatedAt = baseDate;
 
-      for (var i = 0; i < 3; i++) {
-        final currentTask = createTask(
-          id: 'task-1',
-          updatedAt: previousUpdatedAt,
-        );
-        Task? updatedTask;
-        when(() => mockRepository.updateTask(any()))
-            .thenAnswer((invocation) async {
-          updatedTask = invocation.positionalArguments[0] as Task;
-          return Success(updatedTask!);
-        });
+        for (var i = 0; i < 3; i++) {
+          final currentTask = createTask(
+            id: 'task-1',
+            updatedAt: previousUpdatedAt,
+          );
+          Task? updatedTask;
+          when(() => mockRepository.updateTask(any())).thenAnswer((
+            invocation,
+          ) async {
+            updatedTask = invocation.positionalArguments[0] as Task;
+            return Success(updatedTask!);
+          });
 
-        // Act
-        await useCase(currentTask);
+          // Act
+          await useCase(currentTask);
 
-        // Assert
-        expect(updatedTask, isNotNull);
-        final task = updatedTask!;
-        expect(task.updatedAt.isAfter(previousUpdatedAt), isTrue);
-        previousUpdatedAt = task.updatedAt;
-        clearInteractions(mockRepository);
-      }
-    });
+          // Assert
+          expect(updatedTask, isNotNull);
+          final task = updatedTask!;
+          expect(task.updatedAt.isAfter(previousUpdatedAt), isTrue);
+          previousUpdatedAt = task.updatedAt;
+          clearInteractions(mockRepository);
+        }
+      },
+    );
   });
 }

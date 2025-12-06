@@ -39,8 +39,9 @@ void main() {
     test('should return list of tasks when repository succeeds', () async {
       // Arrange
       final tasks = createTaskList();
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       final result = await useCase();
@@ -54,8 +55,9 @@ void main() {
       'should return empty list when repository returns empty list',
       () async {
         // Arrange
-        when(() => mockRepository.getAllTasks())
-            .thenAnswer((_) async => const Success<List<Task>>([]));
+        when(
+          () => mockRepository.getAllTasks(),
+        ).thenAnswer((_) async => const Success<List<Task>>([]));
 
         // Act
         final result = await useCase();
@@ -69,8 +71,9 @@ void main() {
     test('should return failure when repository fails', () async {
       // Arrange
       const failure = CacheFailure('Failed to get tasks');
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase();
@@ -83,8 +86,9 @@ void main() {
     test('should delegate to repository', () async {
       // Arrange
       final tasks = createTaskList(count: 2);
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       await useCase();
@@ -96,8 +100,9 @@ void main() {
     test('should return large list of tasks', () async {
       // Arrange
       final tasks = createTaskList(count: 100);
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       final result = await useCase();
@@ -111,18 +116,21 @@ void main() {
     test('should return tasks with mixed completion status', () async {
       // Arrange
       final tasks = createTaskList(count: 5, includeCompleted: true);
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       final result = await useCase();
 
       // Assert
       expectResultSuccess(result, tasks);
-      final completedCount =
-          result.dataOrNull!.where((t) => t.isCompleted).length;
-      final incompleteCount =
-          result.dataOrNull!.where((t) => !t.isCompleted).length;
+      final completedCount = result.dataOrNull!
+          .where((t) => t.isCompleted)
+          .length;
+      final incompleteCount = result.dataOrNull!
+          .where((t) => !t.isCompleted)
+          .length;
       expect(completedCount, greaterThan(0));
       expect(incompleteCount, greaterThan(0));
       verify(() => mockRepository.getAllTasks()).called(1);
@@ -137,8 +145,9 @@ void main() {
       ];
 
       for (final failure in failures) {
-        when(() => mockRepository.getAllTasks())
-            .thenAnswer((_) async => ResultFailure(failure));
+        when(
+          () => mockRepository.getAllTasks(),
+        ).thenAnswer((_) async => ResultFailure(failure));
 
         // Act
         final result = await useCase();
@@ -157,8 +166,9 @@ void main() {
         createTask(id: 'task-2'),
         createTask(id: 'task-3'),
       ];
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       final result = await useCase();
@@ -184,8 +194,9 @@ void main() {
           isCompleted: true,
         ),
       ];
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => Success(tasks));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => Success(tasks));
 
       // Act
       final result = await useCase();
@@ -200,8 +211,9 @@ void main() {
 
     test('should handle repository returning null', () async {
       // Arrange
-      when(() => mockRepository.getAllTasks())
-          .thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockRepository.getAllTasks(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
 
       // Act
       final result = await useCase();

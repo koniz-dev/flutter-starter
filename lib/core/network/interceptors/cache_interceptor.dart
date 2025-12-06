@@ -33,8 +33,8 @@ class CacheInterceptor extends Interceptor {
   CacheInterceptor({
     required StorageService storageService,
     CacheConfig? cacheConfig,
-  })  : _storageService = storageService,
-        _cacheConfig = cacheConfig ?? const CacheConfig();
+  }) : _storageService = storageService,
+       _cacheConfig = cacheConfig ?? const CacheConfig();
 
   final StorageService _storageService;
   final CacheConfig _cacheConfig;

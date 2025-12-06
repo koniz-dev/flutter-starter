@@ -18,8 +18,9 @@ void main() {
 
     test('should return Success when logout succeeds', () async {
       // Arrange
-      when(() => mockRepository.logout())
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.logout(),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await logoutUseCase();
@@ -32,8 +33,9 @@ void main() {
     test('should return Failure when logout fails', () async {
       // Arrange
       final failure = createServerFailure(message: 'Logout failed');
-      when(() => mockRepository.logout())
-          .thenAnswer((_) async => ResultFailure(failure));
+      when(
+        () => mockRepository.logout(),
+      ).thenAnswer((_) async => ResultFailure(failure));
 
       // Act
       final result = await logoutUseCase();
@@ -46,8 +48,9 @@ void main() {
 
     test('should delegate to repository', () async {
       // Arrange
-      when(() => mockRepository.logout())
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.logout(),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       await logoutUseCase();
