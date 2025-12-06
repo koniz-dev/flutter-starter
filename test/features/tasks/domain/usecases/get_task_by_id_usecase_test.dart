@@ -39,8 +39,9 @@ void main() {
       // Arrange
       const taskId = 'task-1';
       final task = createTask(id: taskId);
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       final result = await useCase(taskId);
@@ -53,8 +54,9 @@ void main() {
     test('should return null when task not found', () async {
       // Arrange
       const taskId = 'non-existent-task';
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -68,8 +70,9 @@ void main() {
       // Arrange
       const taskId = 'task-1';
       const failure = CacheFailure('Failed to get task');
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(taskId);
@@ -83,8 +86,9 @@ void main() {
       // Arrange
       const taskId = 'task-123';
       final task = createTask(id: taskId);
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       await useCase(taskId);
@@ -97,8 +101,9 @@ void main() {
     test('should handle empty task id', () async {
       // Arrange
       const taskId = '';
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -112,8 +117,9 @@ void main() {
       // Arrange
       const taskId = 'task-123_abc-xyz@test';
       final task = createTask(id: taskId);
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       final result = await useCase(taskId);
@@ -126,8 +132,9 @@ void main() {
     test('should handle very long task id', () async {
       // Arrange
       final taskId = 'task-${'a' * 1000}';
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => const Success(null));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => const Success(null));
 
       // Act
       final result = await useCase(taskId);
@@ -147,8 +154,9 @@ void main() {
       ];
 
       for (final failure in failures) {
-        when(() => mockRepository.getTaskById(any()))
-            .thenAnswer((_) async => ResultFailure(failure));
+        when(
+          () => mockRepository.getTaskById(any()),
+        ).thenAnswer((_) async => ResultFailure(failure));
 
         // Act
         final result = await useCase(taskId);
@@ -168,8 +176,9 @@ void main() {
         description: 'Test Description',
         isCompleted: true,
       );
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       final result = await useCase(taskId);
@@ -190,8 +199,9 @@ void main() {
       final task = createTask(
         id: taskId,
       );
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       final result = await useCase(taskId);
@@ -206,8 +216,9 @@ void main() {
       // Arrange
       const taskId = '12345';
       final task = createTask(id: taskId);
-      when(() => mockRepository.getTaskById(any()))
-          .thenAnswer((_) async => Success(task));
+      when(
+        () => mockRepository.getTaskById(any()),
+      ).thenAnswer((_) async => Success(task));
 
       // Act
       final result = await useCase(taskId);

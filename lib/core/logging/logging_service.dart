@@ -37,9 +37,9 @@ class LoggingService {
     bool? enableLogging,
     bool? enableFileLogging,
     bool? enableRemoteLogging,
-  })  : _enableLogging = enableLogging ?? AppConfig.enableLogging,
-        _enableFileLogging = enableFileLogging ?? AppConfig.isProduction,
-        _enableRemoteLogging = enableRemoteLogging ?? false {
+  }) : _enableLogging = enableLogging ?? AppConfig.enableLogging,
+       _enableFileLogging = enableFileLogging ?? AppConfig.isProduction,
+       _enableRemoteLogging = enableRemoteLogging ?? false {
     _initializeLogger();
   }
 

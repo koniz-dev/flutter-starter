@@ -62,11 +62,11 @@ class LocalizationService {
 
   /// List of supported locales
   static List<Locale> get supportedLocales => [
-        SupportedLocale.en.locale,
-        SupportedLocale.es.locale,
-        SupportedLocale.ar.locale,
-        SupportedLocale.vi.locale,
-      ];
+    SupportedLocale.en.locale,
+    SupportedLocale.es.locale,
+    SupportedLocale.ar.locale,
+    SupportedLocale.vi.locale,
+  ];
 
   /// Get current locale from storage or return default
   Future<Locale> getCurrentLocale() async {

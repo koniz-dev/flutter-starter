@@ -123,23 +123,25 @@ void main() {
       expect(executionOrder, equals([1]));
     });
 
-    test('execute throws MigrationExecutionException on migration failure',
-        () async {
-      await storage.setString(StorageVersion.versionKey, '1');
+    test(
+      'execute throws MigrationExecutionException on migration failure',
+      () async {
+        await storage.setString(StorageVersion.versionKey, '1');
 
-      final failingMigration = _FailingMigration();
+        final failingMigration = _FailingMigration();
 
-      final executor = MigrationExecutor(
-        storage: storage,
-        loggingService: loggingService,
-        migrations: [failingMigration],
-      );
+        final executor = MigrationExecutor(
+          storage: storage,
+          loggingService: loggingService,
+          migrations: [failingMigration],
+        );
 
-      expect(
-        executor.execute,
-        throwsA(isA<MigrationExecutionException>()),
-      );
-    });
+        expect(
+          executor.execute,
+          throwsA(isA<MigrationExecutionException>()),
+        );
+      },
+    );
   });
 }
 

@@ -56,10 +56,12 @@ void main() {
         const cachedData = '{"key": "value"}';
         final timestamp = DateTime.now().subtract(const Duration(minutes: 30));
 
-        when(() => mockStorageService.getString(cacheKey))
-            .thenAnswer((_) async => cachedData);
-        when(() => mockStorageService.getString(timestampKey))
-            .thenAnswer((_) async => timestamp.toIso8601String());
+        when(
+          () => mockStorageService.getString(cacheKey),
+        ).thenAnswer((_) async => cachedData);
+        when(
+          () => mockStorageService.getString(timestampKey),
+        ).thenAnswer((_) async => timestamp.toIso8601String());
 
         // Act
         await interceptor.onRequest(requestOptions, handler);
@@ -86,59 +88,65 @@ void main() {
         verifyNever(() => mockStorageService.getString(any()));
       });
 
-      test('should bypass cache when cache-control header is no-cache',
-          () async {
-        // Arrange
-        final handler = TestRequestInterceptorHandler();
-        final optionsWithNoCache = RequestOptions(
-          path: '/api/test',
-          method: 'GET',
-          headers: {'cache-control': 'no-cache'},
-        );
+      test(
+        'should bypass cache when cache-control header is no-cache',
+        () async {
+          // Arrange
+          final handler = TestRequestInterceptorHandler();
+          final optionsWithNoCache = RequestOptions(
+            path: '/api/test',
+            method: 'GET',
+            headers: {'cache-control': 'no-cache'},
+          );
 
-        // Act
-        await interceptor.onRequest(optionsWithNoCache, handler);
+          // Act
+          await interceptor.onRequest(optionsWithNoCache, handler);
 
-        // Assert
-        expect(handler.resolvedResponse, isNull);
-        verifyNever(() => mockStorageService.getString(any()));
-      });
+          // Assert
+          expect(handler.resolvedResponse, isNull);
+          verifyNever(() => mockStorageService.getString(any()));
+        },
+      );
 
-      test('should bypass cache when cache-control header is no-store',
-          () async {
-        // Arrange
-        final handler = TestRequestInterceptorHandler();
-        final optionsWithNoStore = RequestOptions(
-          path: '/api/test',
-          method: 'GET',
-          headers: {'cache-control': 'no-store'},
-        );
+      test(
+        'should bypass cache when cache-control header is no-store',
+        () async {
+          // Arrange
+          final handler = TestRequestInterceptorHandler();
+          final optionsWithNoStore = RequestOptions(
+            path: '/api/test',
+            method: 'GET',
+            headers: {'cache-control': 'no-store'},
+          );
 
-        // Act
-        await interceptor.onRequest(optionsWithNoStore, handler);
+          // Act
+          await interceptor.onRequest(optionsWithNoStore, handler);
 
-        // Assert
-        expect(handler.resolvedResponse, isNull);
-        verifyNever(() => mockStorageService.getString(any()));
-      });
+          // Assert
+          expect(handler.resolvedResponse, isNull);
+          verifyNever(() => mockStorageService.getString(any()));
+        },
+      );
 
-      test('should bypass cache when authorization header is present',
-          () async {
-        // Arrange
-        final handler = TestRequestInterceptorHandler();
-        final optionsWithAuth = RequestOptions(
-          path: '/api/test',
-          method: 'GET',
-          headers: {'authorization': 'Bearer token'},
-        );
+      test(
+        'should bypass cache when authorization header is present',
+        () async {
+          // Arrange
+          final handler = TestRequestInterceptorHandler();
+          final optionsWithAuth = RequestOptions(
+            path: '/api/test',
+            method: 'GET',
+            headers: {'authorization': 'Bearer token'},
+          );
 
-        // Act
-        await interceptor.onRequest(optionsWithAuth, handler);
+          // Act
+          await interceptor.onRequest(optionsWithAuth, handler);
 
-        // Assert
-        expect(handler.resolvedResponse, isNull);
-        verifyNever(() => mockStorageService.getString(any()));
-      });
+          // Assert
+          expect(handler.resolvedResponse, isNull);
+          verifyNever(() => mockStorageService.getString(any()));
+        },
+      );
 
       test('should bypass cache when cookie header is present', () async {
         // Arrange
@@ -162,8 +170,9 @@ void main() {
         final handler = TestRequestInterceptorHandler();
         const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
 
-        when(() => mockStorageService.getString(cacheKey))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockStorageService.getString(cacheKey),
+        ).thenAnswer((_) async => null);
 
         // Act
         await interceptor.onRequest(requestOptions, handler);
@@ -179,10 +188,12 @@ void main() {
         const timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
 
-        when(() => mockStorageService.getString(cacheKey))
-            .thenAnswer((_) async => cachedData);
-        when(() => mockStorageService.getString(timestampKey))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockStorageService.getString(cacheKey),
+        ).thenAnswer((_) async => cachedData);
+        when(
+          () => mockStorageService.getString(timestampKey),
+        ).thenAnswer((_) async => null);
 
         // Act
         await interceptor.onRequest(requestOptions, handler);
@@ -197,17 +208,22 @@ void main() {
         const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
         const timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
-        final oldTimestamp = DateTime.now()
-            .subtract(const Duration(days: 8)); // Older than maxStale (7 days)
+        final oldTimestamp = DateTime.now().subtract(
+          const Duration(days: 8),
+        ); // Older than maxStale (7 days)
 
-        when(() => mockStorageService.getString(cacheKey))
-            .thenAnswer((_) async => cachedData);
-        when(() => mockStorageService.getString(timestampKey))
-            .thenAnswer((_) async => oldTimestamp.toIso8601String());
-        when(() => mockStorageService.remove(cacheKey))
-            .thenAnswer((_) async => true);
-        when(() => mockStorageService.remove(timestampKey))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.getString(cacheKey),
+        ).thenAnswer((_) async => cachedData);
+        when(
+          () => mockStorageService.getString(timestampKey),
+        ).thenAnswer((_) async => oldTimestamp.toIso8601String());
+        when(
+          () => mockStorageService.remove(cacheKey),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.remove(timestampKey),
+        ).thenAnswer((_) async => true);
 
         // Act
         await interceptor.onRequest(requestOptions, handler);
@@ -227,10 +243,12 @@ void main() {
         // Older than maxAge (1 hour) but within maxStale (7 days)
         final staleTimestamp = DateTime.now().subtract(const Duration(days: 2));
 
-        when(() => mockStorageService.getString(cacheKey))
-            .thenAnswer((_) async => cachedData);
-        when(() => mockStorageService.getString(timestampKey))
-            .thenAnswer((_) async => staleTimestamp.toIso8601String());
+        when(
+          () => mockStorageService.getString(cacheKey),
+        ).thenAnswer((_) async => cachedData);
+        when(
+          () => mockStorageService.getString(timestampKey),
+        ).thenAnswer((_) async => staleTimestamp.toIso8601String());
 
         // Act
         await interceptor.onRequest(requestOptions, handler);
@@ -253,8 +271,9 @@ void main() {
         const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
         const timestampKey = 'http_cache_timestamp_$cacheKey';
 
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         // Act
         await interceptor.onResponse(response, handler);
@@ -339,8 +358,9 @@ void main() {
         );
         final handler = TestResponseInterceptorHandler();
 
-        when(() => mockStorageService.setString(any(), any()))
-            .thenThrow(Exception('Storage error'));
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenThrow(Exception('Storage error'));
 
         // Act & Assert
         await expectLater(
@@ -363,8 +383,9 @@ void main() {
         );
         final handler = TestResponseInterceptorHandler();
 
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         // Act
         await interceptor.onResponse(response, handler);
@@ -458,16 +479,18 @@ void main() {
         );
 
         // Mock all getString calls to return null
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => null);
 
         // Act
         await interceptor.onRequest(options, handler);
 
         // Assert
         // Verify getString was called (for cache data and timestamp)
-        verify(() => mockStorageService.getString(any()))
-            .called(greaterThan(0));
+        verify(
+          () => mockStorageService.getString(any()),
+        ).called(greaterThan(0));
       });
     });
 

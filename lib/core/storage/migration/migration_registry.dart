@@ -20,12 +20,12 @@ class MigrationRegistry {
   /// The executor will automatically sort them, but keeping them ordered
   /// here makes the code more readable.
   static List<StorageMigration> get migrations => [
-        // Add migrations in order
-        MigrationV1ToV2(),
-        // MigrationV2ToV3(),
-        // MigrationV3ToV4(),
-        // ... add more migrations as needed
-      ];
+    // Add migrations in order
+    MigrationV1ToV2(),
+    // MigrationV2ToV3(),
+    // MigrationV3ToV4(),
+    // ... add more migrations as needed
+  ];
 
   /// Get migrations for regular storage (non-sensitive data)
   ///

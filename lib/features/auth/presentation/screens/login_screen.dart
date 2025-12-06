@@ -29,7 +29,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      await ref.read(authNotifierProvider.notifier).login(
+      await ref
+          .read(authNotifierProvider.notifier)
+          .login(
             _emailController.text.trim(),
             _passwordController.text,
           );
@@ -112,8 +114,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed:
-                    authState.isLoading ? null : () => context.goToRegister(),
+                onPressed: authState.isLoading
+                    ? null
+                    : () => context.goToRegister(),
                 child: Text(l10n.dontHaveAccount),
               ),
             ],

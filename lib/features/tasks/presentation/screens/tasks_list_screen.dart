@@ -93,8 +93,9 @@ class TasksListScreen extends ConsumerWidget {
             Icon(
               Icons.task_alt,
               size: 64,
-              color:
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
@@ -149,9 +150,9 @@ class TasksListScreen extends ConsumerWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
@@ -368,7 +369,9 @@ class _AddTaskDialogContentState extends State<_AddTaskDialogContent> {
               Navigator.of(context).pop();
               // Create task after dialog is closed to avoid controller issues
               unawaited(
-                widget.ref.read(tasksNotifierProvider.notifier).createTask(
+                widget.ref
+                    .read(tasksNotifierProvider.notifier)
+                    .createTask(
                       title: title,
                       description: description,
                     ),

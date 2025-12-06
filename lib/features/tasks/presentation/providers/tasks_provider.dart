@@ -155,8 +155,9 @@ class TasksNotifier extends Notifier<TasksState> {
   Future<void> toggleTaskCompletion(String id) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
-    final toggleTaskCompletionUseCase =
-        ref.read(toggleTaskCompletionUseCaseProvider);
+    final toggleTaskCompletionUseCase = ref.read(
+      toggleTaskCompletionUseCaseProvider,
+    );
     final result = await toggleTaskCompletionUseCase(id);
 
     result.when(
@@ -175,5 +176,6 @@ class TasksNotifier extends Notifier<TasksState> {
 }
 
 /// Provider for TasksNotifier (Riverpod 3.0 - using NotifierProvider)
-final tasksNotifierProvider =
-    NotifierProvider<TasksNotifier, TasksState>(TasksNotifier.new);
+final tasksNotifierProvider = NotifierProvider<TasksNotifier, TasksState>(
+  TasksNotifier.new,
+);

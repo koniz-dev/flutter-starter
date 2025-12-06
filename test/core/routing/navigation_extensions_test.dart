@@ -78,8 +78,9 @@ void main() {
       expect(find.text('Login'), findsOneWidget);
     });
 
-    testWidgets('goToRegister should navigate to register route',
-        (tester) async {
+    testWidgets('goToRegister should navigate to register route', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -105,8 +106,9 @@ void main() {
       expect(find.text('Tasks'), findsOneWidget);
     });
 
-    testWidgets('goToTaskDetail should navigate to task detail route',
-        (tester) async {
+    testWidgets('goToTaskDetail should navigate to task detail route', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -119,8 +121,9 @@ void main() {
       expect(find.text('Task task-123'), findsOneWidget);
     });
 
-    testWidgets('goToTaskDetail should handle different task ids',
-        (tester) async {
+    testWidgets('goToTaskDetail should handle different task ids', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -167,11 +170,13 @@ void main() {
       await tester.pumpAndSettle();
 
       // Act - Get context from Scaffold which has GoRouter in its context
-      tester.element(find.byType(Scaffold)).pushNamedRoute(
-        'tasks',
-        pathParameters: {},
-        queryParameters: {},
-      );
+      tester
+          .element(find.byType(Scaffold))
+          .pushNamedRoute(
+            'tasks',
+            pathParameters: {},
+            queryParameters: {},
+          );
 
       // Assert
       await tester.pumpAndSettle();
@@ -184,27 +189,32 @@ void main() {
       await tester.pumpAndSettle();
 
       // Act - Get context from Scaffold which has GoRouter in its context
-      tester.element(find.byType(Scaffold)).pushNamedRoute(
-        'task-detail',
-        pathParameters: {'taskId': 'task-789'},
-      );
+      tester
+          .element(find.byType(Scaffold))
+          .pushNamedRoute(
+            'task-detail',
+            pathParameters: {'taskId': 'task-789'},
+          );
 
       // Assert
       await tester.pumpAndSettle();
       // Route may not exist, but method should not throw
     });
 
-    testWidgets('pushNamedRoute should handle query parameters',
-        (tester) async {
+    testWidgets('pushNamedRoute should handle query parameters', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
 
       // Act - Get context from Scaffold which has GoRouter in its context
-      tester.element(find.byType(Scaffold)).pushNamedRoute(
-        'tasks',
-        queryParameters: {'filter': 'active'},
-      );
+      tester
+          .element(find.byType(Scaffold))
+          .pushNamedRoute(
+            'tasks',
+            queryParameters: {'filter': 'active'},
+          );
 
       // Assert
       await tester.pumpAndSettle();
@@ -224,8 +234,9 @@ void main() {
       expect(find.text('Login'), findsOneWidget);
     });
 
-    testWidgets('replaceRoute should replace route with extra data',
-        (tester) async {
+    testWidgets('replaceRoute should replace route with extra data', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -240,18 +251,21 @@ void main() {
       expect(find.text('Login'), findsOneWidget);
     });
 
-    testWidgets('replaceNamedRoute should replace with named route',
-        (tester) async {
+    testWidgets('replaceNamedRoute should replace with named route', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
 
       // Act - Get context from Scaffold which has GoRouter in its context
-      tester.element(find.byType(Scaffold)).replaceNamedRoute(
-        'tasks',
-        pathParameters: {},
-        queryParameters: {},
-      );
+      tester
+          .element(find.byType(Scaffold))
+          .replaceNamedRoute(
+            'tasks',
+            pathParameters: {},
+            queryParameters: {},
+          );
 
       // Assert
       await tester.pumpAndSettle();
@@ -290,8 +304,9 @@ void main() {
       // Should return to previous route with result
     });
 
-    testWidgets('popUntilRoute should pop until specific route',
-        (tester) async {
+    testWidgets('popUntilRoute should pop until specific route', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -322,8 +337,9 @@ void main() {
       expect(canPop, isTrue);
     });
 
-    testWidgets('canPopRoute should return false when cannot pop',
-        (tester) async {
+    testWidgets('canPopRoute should return false when cannot pop', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -351,8 +367,9 @@ void main() {
       // Should pop back
     });
 
-    testWidgets('popOrGoToHome should go to home when cannot pop',
-        (tester) async {
+    testWidgets('popOrGoToHome should go to home when cannot pop', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();
@@ -378,8 +395,9 @@ void main() {
       // Should navigate to route with empty task id
     });
 
-    testWidgets('goToTaskDetail should handle special characters in task id',
-        (tester) async {
+    testWidgets('goToTaskDetail should handle special characters in task id', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget(const SizedBox()));
       await tester.pumpAndSettle();

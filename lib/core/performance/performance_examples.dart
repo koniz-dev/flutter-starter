@@ -128,7 +128,8 @@ class ExampleScreenWithPerformance extends StatefulWidget {
 }
 
 class _ExampleScreenWithPerformanceState
-    extends State<ExampleScreenWithPerformance> with PerformanceScreenMixin {
+    extends State<ExampleScreenWithPerformance>
+    with PerformanceScreenMixin {
   @override
   String get screenName => 'example_screen';
 

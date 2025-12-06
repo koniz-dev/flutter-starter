@@ -259,26 +259,28 @@ void main() {
         expect(task1, isNot(task2));
       });
 
-      test('should not be equal when one has description and other does not',
-          () {
-        // Arrange
-        final task1 = Task(
-          id: '1',
-          title: 'Test Task',
-          description: 'Description',
-          createdAt: now,
-          updatedAt: later,
-        );
-        final task2 = Task(
-          id: '1',
-          title: 'Test Task',
-          createdAt: now,
-          updatedAt: later,
-        );
+      test(
+        'should not be equal when one has description and other does not',
+        () {
+          // Arrange
+          final task1 = Task(
+            id: '1',
+            title: 'Test Task',
+            description: 'Description',
+            createdAt: now,
+            updatedAt: later,
+          );
+          final task2 = Task(
+            id: '1',
+            title: 'Test Task',
+            createdAt: now,
+            updatedAt: later,
+          );
 
-        // Act & Assert
-        expect(task1, isNot(task2));
-      });
+          // Act & Assert
+          expect(task1, isNot(task2));
+        },
+      );
 
       test('should not be equal when isCompleted is different', () {
         // Arrange

@@ -120,8 +120,9 @@ void main() {
       expect(find.byType(Column), findsOneWidget);
     });
 
-    testWidgets('should have Semantics widgets for accessibility',
-        (tester) async {
+    testWidgets('should have Semantics widgets for accessibility', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(createTestWidget());
 
@@ -129,8 +130,9 @@ void main() {
       expect(find.byType(Semantics), findsWidgets);
     });
 
-    testWidgets('should display debug button when debug features enabled',
-        (tester) async {
+    testWidgets('should display debug button when debug features enabled', (
+      tester,
+    ) async {
       // Arrange
       // Note: This test assumes AppConfig.enableDebugFeatures is true
       // In real scenario, you might need to mock AppConfig
@@ -153,8 +155,9 @@ void main() {
       expect(find.byType(SizedBox), findsWidgets);
     });
 
-    testWidgets('should use headlineMedium text style for welcome',
-        (tester) async {
+    testWidgets('should use headlineMedium text style for welcome', (
+      tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -165,8 +168,9 @@ void main() {
       expect(textWidgets, isNotEmpty);
     });
 
-    testWidgets('should handle tap on debug button when visible',
-        (tester) async {
+    testWidgets('should handle tap on debug button when visible', (
+      tester,
+    ) async {
       // Arrange
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();

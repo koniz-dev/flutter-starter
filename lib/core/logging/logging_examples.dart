@@ -390,8 +390,9 @@ final exampleRepositoryProvider = Provider<ExampleRepository>((ref) {
 });
 
 /// Provider for [ExampleRemoteDataSource] instance
-final exampleRemoteDataSourceProvider =
-    Provider<ExampleRemoteDataSource>((ref) {
+final exampleRemoteDataSourceProvider = Provider<ExampleRemoteDataSource>((
+  ref,
+) {
   final apiClient = ref.watch(exampleApiClientProvider);
   final loggingService = ref.read(loggingServiceProvider);
   return ExampleRemoteDataSourceImpl(

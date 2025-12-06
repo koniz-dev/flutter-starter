@@ -91,7 +91,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       // Read current auth state (safe because redirect is synchronous)
       final authState = ref.read(authNotifierProvider);
       final isAuthenticated = authState.user != null;
-      final isAuthRoute = state.matchedLocation == AppRoutes.login ||
+      final isAuthRoute =
+          state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register;
 
       // Redirect to login if not authenticated and trying to access protected

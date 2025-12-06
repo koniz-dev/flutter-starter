@@ -54,10 +54,12 @@ void main() {
 
     setUp(() {
       mockLocalizationService = MockLocalizationService();
-      when(() => mockLocalizationService.setCurrentLocale(any()))
-          .thenAnswer((_) async => true);
-      when(() => mockLocalizationService.getCurrentLocale())
-          .thenAnswer((_) async => const Locale('en'));
+      when(
+        () => mockLocalizationService.setCurrentLocale(any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => mockLocalizationService.getCurrentLocale(),
+      ).thenAnswer((_) async => const Locale('en'));
     });
 
     testWidgets('should display language switcher button', (tester) async {
@@ -120,10 +122,12 @@ void main() {
 
     setUp(() {
       mockLocalizationService = MockLocalizationService();
-      when(() => mockLocalizationService.setCurrentLocale(any()))
-          .thenAnswer((_) async => true);
-      when(() => mockLocalizationService.getCurrentLocale())
-          .thenAnswer((_) async => const Locale('en'));
+      when(
+        () => mockLocalizationService.setCurrentLocale(any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => mockLocalizationService.getCurrentLocale(),
+      ).thenAnswer((_) async => const Locale('en'));
     });
 
     testWidgets('should display list tile', (tester) async {
@@ -186,10 +190,12 @@ void main() {
 
     setUp(() {
       mockLocalizationService = MockLocalizationService();
-      when(() => mockLocalizationService.setCurrentLocale(any()))
-          .thenAnswer((_) async => true);
-      when(() => mockLocalizationService.getCurrentLocale())
-          .thenAnswer((_) async => const Locale('en'));
+      when(
+        () => mockLocalizationService.setCurrentLocale(any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => mockLocalizationService.getCurrentLocale(),
+      ).thenAnswer((_) async => const Locale('en'));
     });
 
     testWidgets('should display language selection screen', (tester) async {

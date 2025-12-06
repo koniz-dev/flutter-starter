@@ -118,8 +118,9 @@ void main() {
 
     group('getCurrentLocale', () {
       test('should return default locale when storage is empty', () async {
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => null);
 
         final locale = await localizationService.getCurrentLocale();
 
@@ -128,8 +129,9 @@ void main() {
       });
 
       test('should return stored locale when valid', () async {
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => 'es');
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => 'es');
 
         final locale = await localizationService.getCurrentLocale();
 
@@ -137,25 +139,31 @@ void main() {
         verify(() => mockStorageService.getString(any())).called(1);
       });
 
-      test('should return default locale when stored locale is invalid',
-          () async {
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => 'fr');
+      test(
+        'should return default locale when stored locale is invalid',
+        () async {
+          when(
+            () => mockStorageService.getString(any()),
+          ).thenAnswer((_) async => 'fr');
 
-        final locale = await localizationService.getCurrentLocale();
+          final locale = await localizationService.getCurrentLocale();
 
-        expect(locale, LocalizationService.defaultLocale);
-      });
+          expect(locale, LocalizationService.defaultLocale);
+        },
+      );
 
-      test('should return default locale when storage throws exception',
-          () async {
-        when(() => mockStorageService.getString(any()))
-            .thenThrow(Exception('Storage error'));
+      test(
+        'should return default locale when storage throws exception',
+        () async {
+          when(
+            () => mockStorageService.getString(any()),
+          ).thenThrow(Exception('Storage error'));
 
-        final locale = await localizationService.getCurrentLocale();
+          final locale = await localizationService.getCurrentLocale();
 
-        expect(locale, LocalizationService.defaultLocale);
-      });
+          expect(locale, LocalizationService.defaultLocale);
+        },
+      );
 
       test('should handle all supported locales', () async {
         final testCases = [
@@ -166,8 +174,9 @@ void main() {
         ];
 
         for (final (code, expectedLocale) in testCases) {
-          when(() => mockStorageService.getString(any()))
-              .thenAnswer((_) async => code);
+          when(
+            () => mockStorageService.getString(any()),
+          ).thenAnswer((_) async => code);
 
           final locale = await localizationService.getCurrentLocale();
           expect(locale, expectedLocale);
@@ -177,8 +186,9 @@ void main() {
 
     group('setCurrentLocale', () {
       test('should save locale to storage successfully', () async {
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         final result = await localizationService.setCurrentLocale(
           const Locale('es', 'ES'),
@@ -189,8 +199,9 @@ void main() {
       });
 
       test('should return false when storage save fails', () async {
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => false);
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => false);
 
         final result = await localizationService.setCurrentLocale(
           const Locale('es', 'ES'),
@@ -200,8 +211,9 @@ void main() {
       });
 
       test('should return false when storage throws exception', () async {
-        when(() => mockStorageService.setString(any(), any()))
-            .thenThrow(Exception('Storage error'));
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenThrow(Exception('Storage error'));
 
         final result = await localizationService.setCurrentLocale(
           const Locale('es', 'ES'),
@@ -218,13 +230,15 @@ void main() {
           const Locale('vi', 'VN'),
         ];
 
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         for (final locale in testCases) {
           await localizationService.setCurrentLocale(locale);
-          verify(() => mockStorageService.setString(any(), locale.languageCode))
-              .called(1);
+          verify(
+            () => mockStorageService.setString(any(), locale.languageCode),
+          ).called(1);
         }
       });
     });
@@ -280,8 +294,9 @@ void main() {
 
     group('Edge Cases', () {
       test('should handle getCurrentLocale with empty string', () async {
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => '');
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => '');
 
         final locale = await localizationService.getCurrentLocale();
 
@@ -289,8 +304,9 @@ void main() {
       });
 
       test('should handle setCurrentLocale with unsupported locale', () async {
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
 
         final result = await localizationService.setCurrentLocale(
           const Locale('fr', 'FR'),
@@ -301,10 +317,12 @@ void main() {
       });
 
       test('should handle multiple locale changes', () async {
-        when(() => mockStorageService.setString(any(), any()))
-            .thenAnswer((_) async => true);
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => 'vi');
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockStorageService.getString(any()),
+        ).thenAnswer((_) async => 'vi');
 
         await localizationService.setCurrentLocale(const Locale('en', 'US'));
         await localizationService.setCurrentLocale(const Locale('es', 'ES'));
@@ -313,25 +331,31 @@ void main() {
         verify(() => mockStorageService.setString(any(), any())).called(3);
       });
 
-      test('should handle getCurrentLocale with whitespace language code',
-          () async {
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => '  ');
+      test(
+        'should handle getCurrentLocale with whitespace language code',
+        () async {
+          when(
+            () => mockStorageService.getString(any()),
+          ).thenAnswer((_) async => '  ');
 
-        final locale = await localizationService.getCurrentLocale();
+          final locale = await localizationService.getCurrentLocale();
 
-        expect(locale, LocalizationService.defaultLocale);
-      });
+          expect(locale, LocalizationService.defaultLocale);
+        },
+      );
 
-      test('should handle getCurrentLocale with numeric language code',
-          () async {
-        when(() => mockStorageService.getString(any()))
-            .thenAnswer((_) async => '123');
+      test(
+        'should handle getCurrentLocale with numeric language code',
+        () async {
+          when(
+            () => mockStorageService.getString(any()),
+          ).thenAnswer((_) async => '123');
 
-        final locale = await localizationService.getCurrentLocale();
+          final locale = await localizationService.getCurrentLocale();
 
-        expect(locale, LocalizationService.defaultLocale);
-      });
+          expect(locale, LocalizationService.defaultLocale);
+        },
+      );
     });
   });
 }

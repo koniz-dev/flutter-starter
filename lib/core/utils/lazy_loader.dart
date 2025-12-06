@@ -24,9 +24,9 @@ class LazyLoader<K, T> {
     required Future<T> Function(K key) loader,
     this.cacheEnabled = true,
     this.maxCacheSize = 50,
-  })  : _loader = loader,
-        _cache = <K, T>{},
-        _loadingFutures = <K, Future<T>>{};
+  }) : _loader = loader,
+       _cache = <K, T>{},
+       _loadingFutures = <K, Future<T>>{};
 
   /// Loader function that loads the resource
   final Future<T> Function(K key) _loader;

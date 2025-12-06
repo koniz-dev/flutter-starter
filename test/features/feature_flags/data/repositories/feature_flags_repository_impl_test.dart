@@ -32,8 +32,9 @@ void main() {
     group('getFlag', () {
       test('should return local override when available', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockLocalDataSource.getLocalOverride('test_flag'),
+        ).thenAnswer((_) async => true);
 
         // Act
         final result = await repository.getFlag('test_flag');
@@ -45,60 +46,73 @@ void main() {
         expect(flag?.key, 'test_flag');
         expect(flag?.value, isTrue);
         expect(flag?.source, FeatureFlagSource.localOverride);
-        verify(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .called(1);
+        verify(
+          () => mockLocalDataSource.getLocalOverride('test_flag'),
+        ).called(1);
         verifyNever(() => mockRemoteDataSource.getRemoteFlag(any()));
       });
 
-      test('should return remote config when local override not available',
-          () async {
-        // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .thenAnswer((_) async => null);
-        when(() => mockRemoteDataSource.getRemoteFlag('test_flag'))
-            .thenAnswer((_) async => false);
+      test(
+        'should return remote config when local override not available',
+        () async {
+          // Arrange
+          when(
+            () => mockLocalDataSource.getLocalOverride('test_flag'),
+          ).thenAnswer((_) async => null);
+          when(
+            () => mockRemoteDataSource.getRemoteFlag('test_flag'),
+          ).thenAnswer((_) async => false);
 
-        // Act
-        final result = await repository.getFlag('test_flag');
+          // Act
+          final result = await repository.getFlag('test_flag');
 
-        // Assert
-        expect(result.isSuccess, isTrue);
-        final flag = result.dataOrNull;
-        expect(flag, isNotNull);
-        expect(flag?.key, 'test_flag');
-        expect(flag?.value, isFalse);
-        expect(flag?.source, FeatureFlagSource.remoteConfig);
-        verify(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .called(1);
-        verify(() => mockRemoteDataSource.getRemoteFlag('test_flag')).called(1);
-      });
-
-      test('should return local flag when remote and override not available',
-          () async {
-        // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .thenAnswer((_) async => null);
-        when(() => mockRemoteDataSource.getRemoteFlag('test_flag'))
-            .thenAnswer((_) async => null);
-        // Mock LocalFeatureFlagsService to return a flag
-        // Note: This requires the service to be testable or mocked
-
-        // Act
-        final result = await repository.getFlag('test_flag');
-
-        // Assert
-        // Result may be success (if local flag exists) or failure (if not)
-        expect(result, isA<Result<FeatureFlag>>());
-      });
+          // Assert
+          expect(result.isSuccess, isTrue);
+          final flag = result.dataOrNull;
+          expect(flag, isNotNull);
+          expect(flag?.key, 'test_flag');
+          expect(flag?.value, isFalse);
+          expect(flag?.source, FeatureFlagSource.remoteConfig);
+          verify(
+            () => mockLocalDataSource.getLocalOverride('test_flag'),
+          ).called(1);
+          verify(
+            () => mockRemoteDataSource.getRemoteFlag('test_flag'),
+          ).called(1);
+        },
+      );
 
       test(
-          'should return local flag from LocalFeatureFlagsService '
+        'should return local flag when remote and override not available',
+        () async {
+          // Arrange
+          when(
+            () => mockLocalDataSource.getLocalOverride('test_flag'),
+          ).thenAnswer((_) async => null);
+          when(
+            () => mockRemoteDataSource.getRemoteFlag('test_flag'),
+          ).thenAnswer((_) async => null);
+          // Mock LocalFeatureFlagsService to return a flag
+          // Note: This requires the service to be testable or mocked
+
+          // Act
+          final result = await repository.getFlag('test_flag');
+
+          // Assert
+          // Result may be success (if local flag exists) or failure (if not)
+          expect(result, isA<Result<FeatureFlag>>());
+        },
+      );
+
+      test('should return local flag from LocalFeatureFlagsService '
           'when available', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('existing_local_flag'))
-            .thenAnswer((_) async => null);
-        when(() => mockRemoteDataSource.getRemoteFlag('existing_local_flag'))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getLocalOverride('existing_local_flag'),
+        ).thenAnswer((_) async => null);
+        when(
+          () => mockRemoteDataSource.getRemoteFlag('existing_local_flag'),
+        ).thenAnswer((_) async => null);
         // Note: This test depends on LocalFeatureFlagsService having a flag
         // If no local flag exists, it will return NotFoundFailure
 
@@ -113,10 +127,12 @@ void main() {
 
       test('should return NotFoundFailure when flag not found', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('unknown_flag'))
-            .thenAnswer((_) async => null);
-        when(() => mockRemoteDataSource.getRemoteFlag('unknown_flag'))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getLocalOverride('unknown_flag'),
+        ).thenAnswer((_) async => null);
+        when(
+          () => mockRemoteDataSource.getRemoteFlag('unknown_flag'),
+        ).thenAnswer((_) async => null);
 
         // Act
         final result = await repository.getFlag('unknown_flag');
@@ -128,8 +144,9 @@ void main() {
 
       test('should handle exceptions and map to failures', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.getLocalOverride('test_flag'),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.getFlag('test_flag');
@@ -143,12 +160,15 @@ void main() {
     group('getFlags', () {
       test('should return map of flags for multiple keys', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('flag1'))
-            .thenAnswer((_) async => true);
-        when(() => mockLocalDataSource.getLocalOverride('flag2'))
-            .thenAnswer((_) async => null);
-        when(() => mockRemoteDataSource.getRemoteFlag('flag2'))
-            .thenAnswer((_) async => false);
+        when(
+          () => mockLocalDataSource.getLocalOverride('flag1'),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockLocalDataSource.getLocalOverride('flag2'),
+        ).thenAnswer((_) async => null);
+        when(
+          () => mockRemoteDataSource.getRemoteFlag('flag2'),
+        ).thenAnswer((_) async => false);
 
         // Act
         final result = await repository.getFlags(['flag1', 'flag2']);
@@ -164,12 +184,15 @@ void main() {
 
       test('should skip flags that do not exist', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('flag1'))
-            .thenAnswer((_) async => true);
-        when(() => mockLocalDataSource.getLocalOverride('unknown'))
-            .thenAnswer((_) async => null);
-        when(() => mockRemoteDataSource.getRemoteFlag('unknown'))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getLocalOverride('flag1'),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockLocalDataSource.getLocalOverride('unknown'),
+        ).thenAnswer((_) async => null);
+        when(
+          () => mockRemoteDataSource.getRemoteFlag('unknown'),
+        ).thenAnswer((_) async => null);
 
         // Act
         final result = await repository.getFlags(['flag1', 'unknown']);
@@ -185,8 +208,9 @@ void main() {
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.getLocalOverride(any()),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.getFlags(['flag1']);
@@ -195,28 +219,33 @@ void main() {
         expect(result.isFailure, isTrue);
       });
 
-      test('should throw exception when getFlag returns non-NotFoundFailure',
-          () async {
-        // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('flag1'))
-            .thenAnswer((_) async => true);
-        when(() => mockLocalDataSource.getLocalOverride('flag2'))
-            .thenThrow(const NetworkException('Network error'));
+      test(
+        'should throw exception when getFlag returns non-NotFoundFailure',
+        () async {
+          // Arrange
+          when(
+            () => mockLocalDataSource.getLocalOverride('flag1'),
+          ).thenAnswer((_) async => true);
+          when(
+            () => mockLocalDataSource.getLocalOverride('flag2'),
+          ).thenThrow(const NetworkException('Network error'));
 
-        // Act & Assert
-        final result = await repository.getFlags(['flag1', 'flag2']);
+          // Act & Assert
+          final result = await repository.getFlags(['flag1', 'flag2']);
 
-        // Should return failure because non-NotFoundFailure was thrown
-        expect(result.isFailure, isTrue);
-        expect(result.failureOrNull, isA<Failure>());
-      });
+          // Should return failure because non-NotFoundFailure was thrown
+          expect(result.isFailure, isTrue);
+          expect(result.failureOrNull, isA<Failure>());
+        },
+      );
     });
 
     group('getAllFlags', () {
       test('should return all flags with correct priority', () async {
         // Arrange
-        when(() => mockLocalDataSource.getAllLocalOverrides())
-            .thenAnswer((_) async => {'override_flag': true});
+        when(
+          () => mockLocalDataSource.getAllLocalOverrides(),
+        ).thenAnswer((_) async => {'override_flag': true});
         when(() => mockRemoteDataSource.getAllRemoteFlags()).thenAnswer(
           (_) async => {
             'remote_flag': false,
@@ -242,8 +271,9 @@ void main() {
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockLocalDataSource.getAllLocalOverrides())
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.getAllLocalOverrides(),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.getAllFlags();
@@ -256,8 +286,9 @@ void main() {
     group('refreshRemoteFlags', () {
       test('should fetch and activate remote flags', () async {
         // Arrange
-        when(() => mockRemoteDataSource.fetchAndActivate())
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.fetchAndActivate(),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.refreshRemoteFlags();
@@ -269,8 +300,9 @@ void main() {
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockRemoteDataSource.fetchAndActivate())
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockRemoteDataSource.fetchAndActivate(),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.refreshRemoteFlags();
@@ -329,22 +361,25 @@ void main() {
     group('clearLocalOverride', () {
       test('should clear local override', () async {
         // Arrange
-        when(() => mockLocalDataSource.clearLocalOverride('test_flag'))
-            .thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.clearLocalOverride('test_flag'),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.clearLocalOverride('test_flag');
 
         // Assert
         expect(result.isSuccess, isTrue);
-        verify(() => mockLocalDataSource.clearLocalOverride('test_flag'))
-            .called(1);
+        verify(
+          () => mockLocalDataSource.clearLocalOverride('test_flag'),
+        ).called(1);
       });
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockLocalDataSource.clearLocalOverride(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.clearLocalOverride(any()),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.clearLocalOverride('test_flag');
@@ -357,8 +392,9 @@ void main() {
     group('clearAllLocalOverrides', () {
       test('should clear all local overrides', () async {
         // Arrange
-        when(() => mockLocalDataSource.clearAllLocalOverrides())
-            .thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.clearAllLocalOverrides(),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.clearAllLocalOverrides();
@@ -370,8 +406,9 @@ void main() {
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockLocalDataSource.clearAllLocalOverrides())
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.clearAllLocalOverrides(),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.clearAllLocalOverrides();
@@ -384,8 +421,9 @@ void main() {
     group('isEnabled', () {
       test('should return true when flag is enabled', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockLocalDataSource.getLocalOverride('test_flag'),
+        ).thenAnswer((_) async => true);
 
         // Act
         final result = await repository.isEnabled('test_flag');
@@ -397,8 +435,9 @@ void main() {
 
       test('should return false when flag is disabled', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride('test_flag'))
-            .thenAnswer((_) async => false);
+        when(
+          () => mockLocalDataSource.getLocalOverride('test_flag'),
+        ).thenAnswer((_) async => false);
 
         // Act
         final result = await repository.isEnabled('test_flag');
@@ -410,8 +449,9 @@ void main() {
 
       test('should handle exceptions', () async {
         // Arrange
-        when(() => mockLocalDataSource.getLocalOverride(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockLocalDataSource.getLocalOverride(any()),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.isEnabled('test_flag');
@@ -424,10 +464,12 @@ void main() {
     group('initialize', () {
       test('should initialize remote data source and fetch flags', () async {
         // Arrange
-        when(() => mockRemoteDataSource.initialize())
-            .thenAnswer((_) async => {});
-        when(() => mockRemoteDataSource.fetchAndActivate())
-            .thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.initialize(),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.fetchAndActivate(),
+        ).thenAnswer((_) async => {});
 
         // Act
         final result = await repository.initialize();
@@ -440,8 +482,9 @@ void main() {
 
       test('should handle exceptions during initialization', () async {
         // Arrange
-        when(() => mockRemoteDataSource.initialize())
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockRemoteDataSource.initialize(),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.initialize();
@@ -452,10 +495,12 @@ void main() {
 
       test('should handle exceptions during fetch', () async {
         // Arrange
-        when(() => mockRemoteDataSource.initialize())
-            .thenAnswer((_) async => {});
-        when(() => mockRemoteDataSource.fetchAndActivate())
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockRemoteDataSource.initialize(),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockRemoteDataSource.fetchAndActivate(),
+        ).thenThrow(Exception('Test error'));
 
         // Act
         final result = await repository.initialize();
@@ -464,25 +509,30 @@ void main() {
         expect(result.isFailure, isTrue);
       });
 
-      test('should handle non-Exception errors during initialization',
-          () async {
-        // Arrange - Throw a non-Exception object to test Object catch block
-        when(() => mockRemoteDataSource.initialize()).thenThrow('String error');
+      test(
+        'should handle non-Exception errors during initialization',
+        () async {
+          // Arrange - Throw a non-Exception object to test Object catch block
+          when(
+            () => mockRemoteDataSource.initialize(),
+          ).thenThrow('String error');
 
-        // Act
-        final result = await repository.initialize();
+          // Act
+          final result = await repository.initialize();
 
-        // Assert
-        expect(result.isFailure, isTrue);
-        expect(result.failureOrNull, isA<UnknownFailure>());
-      });
+          // Assert
+          expect(result.isFailure, isTrue);
+          expect(result.failureOrNull, isA<UnknownFailure>());
+        },
+      );
     });
 
     group('Object catch blocks', () {
       test('getFlag should handle non-Exception errors', () async {
         // Arrange - Throw a non-Exception object
-        when(() => mockLocalDataSource.getLocalOverride(any()))
-            .thenThrow('String error');
+        when(
+          () => mockLocalDataSource.getLocalOverride(any()),
+        ).thenThrow('String error');
 
         // Act
         final result = await repository.getFlag('test_flag');
@@ -494,8 +544,9 @@ void main() {
 
       test('getFlags should handle non-Exception errors', () async {
         // Arrange - Throw a non-Exception object
-        when(() => mockLocalDataSource.getLocalOverride(any()))
-            .thenThrow(123); // Throw an int
+        when(
+          () => mockLocalDataSource.getLocalOverride(any()),
+        ).thenThrow(123); // Throw an int
 
         // Act
         final result = await repository.getFlags(['flag1']);
@@ -507,8 +558,9 @@ void main() {
 
       test('getAllFlags should handle non-Exception errors', () async {
         // Arrange - Throw a non-Exception object
-        when(() => mockLocalDataSource.getAllLocalOverrides())
-            .thenThrow(<String, dynamic>{}); // Throw a Map
+        when(
+          () => mockLocalDataSource.getAllLocalOverrides(),
+        ).thenThrow(<String, dynamic>{}); // Throw a Map
 
         // Act
         final result = await repository.getAllFlags();
@@ -520,8 +572,9 @@ void main() {
 
       test('refreshRemoteFlags should handle non-Exception errors', () async {
         // Arrange - Throw a non-Exception object
-        when(() => mockRemoteDataSource.fetchAndActivate())
-            .thenThrow(true); // Throw a bool
+        when(
+          () => mockRemoteDataSource.fetchAndActivate(),
+        ).thenThrow(true); // Throw a bool
 
         // Act
         final result = await repository.refreshRemoteFlags();
@@ -553,8 +606,9 @@ void main() {
 
       test('clearLocalOverride should handle non-Exception errors', () async {
         // Arrange - Throw a non-Exception object
-        when(() => mockLocalDataSource.clearLocalOverride(any()))
-            .thenThrow(['list', 'error']); // Throw a List
+        when(
+          () => mockLocalDataSource.clearLocalOverride(any()),
+        ).thenThrow(['list', 'error']); // Throw a List
 
         // Act
         final result = await repository.clearLocalOverride('test_flag');
@@ -564,24 +618,28 @@ void main() {
         expect(result.failureOrNull, isA<UnknownFailure>());
       });
 
-      test('clearAllLocalOverrides should handle non-Exception errors',
-          () async {
-        // Arrange - Throw a non-Exception object
-        when(() => mockLocalDataSource.clearAllLocalOverrides())
-            .thenThrow(Object()); // Throw an Object
+      test(
+        'clearAllLocalOverrides should handle non-Exception errors',
+        () async {
+          // Arrange - Throw a non-Exception object
+          when(
+            () => mockLocalDataSource.clearAllLocalOverrides(),
+          ).thenThrow(Object()); // Throw an Object
 
-        // Act
-        final result = await repository.clearAllLocalOverrides();
+          // Act
+          final result = await repository.clearAllLocalOverrides();
 
-        // Assert
-        expect(result.isFailure, isTrue);
-        expect(result.failureOrNull, isA<UnknownFailure>());
-      });
+          // Assert
+          expect(result.isFailure, isTrue);
+          expect(result.failureOrNull, isA<UnknownFailure>());
+        },
+      );
 
       test('isEnabled should handle non-Exception errors', () async {
         // Arrange - Throw a non-Exception object
-        when(() => mockLocalDataSource.getLocalOverride(any()))
-            .thenThrow('Error string');
+        when(
+          () => mockLocalDataSource.getLocalOverride(any()),
+        ).thenThrow('Error string');
 
         // Act
         final result = await repository.isEnabled('test_flag');
@@ -591,21 +649,25 @@ void main() {
         expect(result.failureOrNull, isA<UnknownFailure>());
       });
 
-      test('initialize should handle non-Exception errors during fetch',
-          () async {
-        // Arrange - Throw a non-Exception object during fetch
-        when(() => mockRemoteDataSource.initialize())
-            .thenAnswer((_) async => {});
-        when(() => mockRemoteDataSource.fetchAndActivate())
-            .thenThrow('String error');
+      test(
+        'initialize should handle non-Exception errors during fetch',
+        () async {
+          // Arrange - Throw a non-Exception object during fetch
+          when(
+            () => mockRemoteDataSource.initialize(),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.fetchAndActivate(),
+          ).thenThrow('String error');
 
-        // Act
-        final result = await repository.initialize();
+          // Act
+          final result = await repository.initialize();
 
-        // Assert
-        expect(result.isFailure, isTrue);
-        expect(result.failureOrNull, isA<UnknownFailure>());
-      });
+          // Assert
+          expect(result.isFailure, isTrue);
+          expect(result.failureOrNull, isA<UnknownFailure>());
+        },
+      );
     });
   });
 }

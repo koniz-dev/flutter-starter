@@ -26,8 +26,9 @@ void main() {
       mockManager = MockFeatureFlagsManager();
     });
 
-    testWidgets('should show enabled builder when flag is enabled',
-        (tester) async {
+    testWidgets('should show enabled builder when flag is enabled', (
+      tester,
+    ) async {
       when(() => mockManager.isEnabled(any())).thenAnswer((_) async => true);
 
       await tester.pumpWidget(
@@ -54,8 +55,9 @@ void main() {
       expect(find.text('Disabled'), findsNothing);
     });
 
-    testWidgets('should show disabled builder when flag is disabled',
-        (tester) async {
+    testWidgets('should show disabled builder when flag is disabled', (
+      tester,
+    ) async {
       when(() => mockManager.isEnabled(any())).thenAnswer((_) async => false);
 
       await tester.pumpWidget(
@@ -116,44 +118,47 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('should show default loading indicator when no loading builder',
-        (tester) async {
-      when(() => mockManager.isEnabled(any())).thenAnswer(
-        (_) => Future<bool>.delayed(
-          const Duration(seconds: 1),
-          () => true,
-        ),
-      );
+    testWidgets(
+      'should show default loading indicator when no loading builder',
+      (tester) async {
+        when(() => mockManager.isEnabled(any())).thenAnswer(
+          (_) => Future<bool>.delayed(
+            const Duration(seconds: 1),
+            () => true,
+          ),
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            featureFlagsManagerProvider.overrideWithValue(mockManager),
-          ],
-          child: MaterialApp(
-            home: Scaffold(
-              body: FeatureFlagBuilder(
-                flag: FeatureFlags.newFeature,
-                enabledBuilder: (context) => const Text('Enabled'),
-                disabledBuilder: (context) => const Text('Disabled'),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              featureFlagsManagerProvider.overrideWithValue(mockManager),
+            ],
+            child: MaterialApp(
+              home: Scaffold(
+                body: FeatureFlagBuilder(
+                  flag: FeatureFlags.newFeature,
+                  enabledBuilder: (context) => const Text('Enabled'),
+                  disabledBuilder: (context) => const Text('Disabled'),
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.pump();
+        await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      // Advance time to complete the future and avoid pending timer
-      await tester.pump(const Duration(seconds: 1));
-      await tester.pumpAndSettle();
-    });
+        // Advance time to complete the future and avoid pending timer
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
+      },
+    );
 
     testWidgets('should show disabled builder on error', (tester) async {
-      when(() => mockManager.isEnabled(any()))
-          .thenThrow(Exception('Test error'));
+      when(
+        () => mockManager.isEnabled(any()),
+      ).thenThrow(Exception('Test error'));
 
       await tester.pumpWidget(
         ProviderScope(
@@ -177,8 +182,9 @@ void main() {
       expect(find.text('Disabled'), findsOneWidget);
     });
 
-    testWidgets('should show nothing when disabled and no disabled builder',
-        (tester) async {
+    testWidgets('should show nothing when disabled and no disabled builder', (
+      tester,
+    ) async {
       when(() => mockManager.isEnabled(any())).thenAnswer((_) async => false);
 
       await tester.pumpWidget(
@@ -261,8 +267,9 @@ void main() {
       expect(find.text('Feature Content'), findsNothing);
     });
 
-    testWidgets('should show nothing when disabled and no fallback',
-        (tester) async {
+    testWidgets('should show nothing when disabled and no fallback', (
+      tester,
+    ) async {
       when(() => mockManager.isEnabled(any())).thenAnswer((_) async => false);
 
       await tester.pumpWidget(

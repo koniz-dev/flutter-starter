@@ -25,8 +25,9 @@ void main() {
         email: 'test@example.com',
         name: 'Test User',
       );
-      when(() => mockRepository.login(any(), any()))
-          .thenAnswer((_) async => const Success(user));
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
 
       // Act
       final result = await loginUseCase('test@example.com', 'password123');
@@ -34,15 +35,17 @@ void main() {
       // Assert
       expect(result.isSuccess, isTrue);
       expect(result.dataOrNull, user);
-      verify(() => mockRepository.login('test@example.com', 'password123'))
-          .called(1);
+      verify(
+        () => mockRepository.login('test@example.com', 'password123'),
+      ).called(1);
     });
 
     test('should return failure when login fails', () async {
       // Arrange
       const failure = AuthFailure('Invalid credentials');
-      when(() => mockRepository.login(any(), any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await loginUseCase('test@example.com', 'wrongpassword');
@@ -50,8 +53,9 @@ void main() {
       // Assert
       expect(result.isFailure, isTrue);
       expect(result.failureOrNull, failure);
-      verify(() => mockRepository.login('test@example.com', 'wrongpassword'))
-          .called(1);
+      verify(
+        () => mockRepository.login('test@example.com', 'wrongpassword'),
+      ).called(1);
     });
 
     test('should delegate to repository with correct parameters', () async {
@@ -60,15 +64,17 @@ void main() {
         id: '1',
         email: 'test@example.com',
       );
-      when(() => mockRepository.login(any(), any()))
-          .thenAnswer((_) async => const Success(user));
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
 
       // Act
       await loginUseCase('test@example.com', 'password123');
 
       // Assert
-      verify(() => mockRepository.login('test@example.com', 'password123'))
-          .called(1);
+      verify(
+        () => mockRepository.login('test@example.com', 'password123'),
+      ).called(1);
       verifyNever(() => mockRepository.login('other@example.com', any()));
     });
   });

@@ -17,8 +17,9 @@ void main() {
 
     setUp(() {
       mockLoggingService = MockLoggingService();
-      when(() => mockLoggingService.info(any(), context: any(named: 'context')))
-          .thenReturn(null);
+      when(
+        () => mockLoggingService.info(any(), context: any(named: 'context')),
+      ).thenReturn(null);
     });
 
     tearDown(() {
@@ -277,8 +278,9 @@ void main() {
       final router = container.read(goRouterProvider);
 
       // Simulate auth state change
-      container.read(authNotifierProvider.notifier).state =
-          const AuthState(user: User(id: '1', email: 'test@example.com'));
+      container.read(authNotifierProvider.notifier).state = const AuthState(
+        user: User(id: '1', email: 'test@example.com'),
+      );
 
       // Assert
       // Router should still be functional after auth state change

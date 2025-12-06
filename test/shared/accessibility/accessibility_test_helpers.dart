@@ -113,13 +113,15 @@ class AccessibilityTestHelpers {
         expect(
           size.width,
           greaterThanOrEqualTo(AccessibilityConstants.minTouchTargetSize),
-          reason: 'Button width must be at least '
+          reason:
+              'Button width must be at least '
               '${AccessibilityConstants.minTouchTargetSize}',
         );
         expect(
           size.height,
           greaterThanOrEqualTo(AccessibilityConstants.minTouchTargetSize),
-          reason: 'Button height must be at least '
+          reason:
+              'Button height must be at least '
               '${AccessibilityConstants.minTouchTargetSize}',
         );
       }
@@ -142,7 +144,8 @@ class AccessibilityTestHelpers {
     expect(
       contrastRatio,
       greaterThanOrEqualTo(AccessibilityConstants.minContrastRatioNormal),
-      reason: 'Text contrast ratio in $context is $contrastRatio, '
+      reason:
+          'Text contrast ratio in $context is $contrastRatio, '
           'which is below the minimum required '
           '${AccessibilityConstants.minContrastRatioNormal}',
     );

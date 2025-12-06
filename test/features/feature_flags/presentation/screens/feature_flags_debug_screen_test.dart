@@ -28,16 +28,18 @@ void main() {
     setUp(() {
       mockManager = MockFeatureFlagsManager();
       when(() => mockManager.refresh()).thenAnswer((_) async => {});
-      when(() => mockManager.clearAllLocalOverrides())
-          .thenAnswer((_) async => {});
+      when(
+        () => mockManager.clearAllLocalOverrides(),
+      ).thenAnswer((_) async => {});
       when(
         () => mockManager.setLocalOverride(
           any(),
           value: any(named: 'value'),
         ),
       ).thenAnswer((_) async => {});
-      when(() => mockManager.clearLocalOverride(any()))
-          .thenAnswer((_) async => {});
+      when(
+        () => mockManager.clearLocalOverride(any()),
+      ).thenAnswer((_) async => {});
     });
 
     Widget createTestWidget({
@@ -77,8 +79,9 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
     });
 
-    testWidgets('should display loading indicator when loading',
-        (tester) async {
+    testWidgets('should display loading indicator when loading', (
+      tester,
+    ) async {
       // Arrange
       const flagsValue = AsyncValue<Map<String, FeatureFlag?>>.loading();
       await tester.pumpWidget(createTestWidget(flagsValue: flagsValue));
@@ -87,8 +90,9 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('should display error message when error occurs',
-        (tester) async {
+    testWidgets('should display error message when error occurs', (
+      tester,
+    ) async {
       // Arrange
       final flagsValue = AsyncValue<Map<String, FeatureFlag?>>.error(
         Exception('Test error'),
@@ -146,8 +150,9 @@ void main() {
       expect(find.text('test_flag_2'), findsOneWidget);
     });
 
-    testWidgets('should refresh flags when refresh button is tapped',
-        (tester) async {
+    testWidgets('should refresh flags when refresh button is tapped', (
+      tester,
+    ) async {
       // Arrange
       const flagsValue = AsyncValue.data(<String, FeatureFlag?>{});
       await tester.pumpWidget(createTestWidget(flagsValue: flagsValue));
@@ -163,8 +168,9 @@ void main() {
       verify(() => mockManager.refresh()).called(1);
     });
 
-    testWidgets('should show clear all dialog when clear button is tapped',
-        (tester) async {
+    testWidgets('should show clear all dialog when clear button is tapped', (
+      tester,
+    ) async {
       // Arrange
       const flagsValue = AsyncValue.data(<String, FeatureFlag?>{});
       await tester.pumpWidget(createTestWidget(flagsValue: flagsValue));
@@ -267,8 +273,9 @@ void main() {
       expect(find.text('Retry'), findsOneWidget);
     });
 
-    testWidgets('should display flag description when available',
-        (tester) async {
+    testWidgets('should display flag description when available', (
+      tester,
+    ) async {
       // Arrange
       const flag = FeatureFlag(
         key: 'test_flag',
@@ -322,8 +329,9 @@ void main() {
       expect(find.text('LOCALOVERRIDE'), findsOneWidget);
     });
 
-    testWidgets('should display last updated time when available',
-        (tester) async {
+    testWidgets('should display last updated time when available', (
+      tester,
+    ) async {
       // Arrange
       final flag = FeatureFlag(
         key: 'test_flag',

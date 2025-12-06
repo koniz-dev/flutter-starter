@@ -14,20 +14,30 @@ class ExceptionToFailureMapper {
   /// - Unknown exceptions → UnknownFailure
   static Failure map(Exception exception) {
     return switch (exception) {
-      ServerException(:final message, :final code) =>
-        ServerFailure(message, code: code),
-      NetworkException(:final message, :final code) =>
-        NetworkFailure(message, code: code),
-      CacheException(:final message, :final code) =>
-        CacheFailure(message, code: code),
-      AuthException(:final message, :final code) =>
-        AuthFailure(message, code: code),
-      ValidationException(:final message, :final code) =>
-        ValidationFailure(message, code: code),
+      ServerException(:final message, :final code) => ServerFailure(
+        message,
+        code: code,
+      ),
+      NetworkException(:final message, :final code) => NetworkFailure(
+        message,
+        code: code,
+      ),
+      CacheException(:final message, :final code) => CacheFailure(
+        message,
+        code: code,
+      ),
+      AuthException(:final message, :final code) => AuthFailure(
+        message,
+        code: code,
+      ),
+      ValidationException(:final message, :final code) => ValidationFailure(
+        message,
+        code: code,
+      ),
       _ => UnknownFailure(
-          'Unexpected error: $exception',
-          code: 'UNKNOWN_ERROR',
-        ),
+        'Unexpected error: $exception',
+        code: 'UNKNOWN_ERROR',
+      ),
     };
   }
 }

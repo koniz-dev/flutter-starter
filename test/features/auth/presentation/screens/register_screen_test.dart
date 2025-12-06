@@ -85,8 +85,9 @@ void main() {
       expect(find.text('Name must be at least 2 characters'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for invalid email',
-        (tester) async {
+    testWidgets('should show validation error for invalid email', (
+      tester,
+    ) async {
       // Arrange
       await pumpApp(
         tester,
@@ -106,8 +107,9 @@ void main() {
       expect(find.text('Please enter a valid email address'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for short password',
-        (tester) async {
+    testWidgets('should show validation error for short password', (
+      tester,
+    ) async {
       // Arrange
       await pumpApp(
         tester,
@@ -132,12 +134,14 @@ void main() {
       );
     });
 
-    testWidgets('should call register use case with correct parameters',
-        (tester) async {
+    testWidgets('should call register use case with correct parameters', (
+      tester,
+    ) async {
       // Arrange
       final user = createUser();
-      when(() => mockRegisterUseCase(any(), any(), any()))
-          .thenAnswer((_) async => Success(user));
+      when(
+        () => mockRegisterUseCase(any(), any(), any()),
+      ).thenAnswer((_) async => Success(user));
       await pumpApp(
         tester,
         const RegisterScreen(),
@@ -166,13 +170,15 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('should show loading indicator during registration',
-        (tester) async {
+    testWidgets('should show loading indicator during registration', (
+      tester,
+    ) async {
       // Arrange
       final user = createUser();
       final completer = Completer<Result<User>>();
-      when(() => mockRegisterUseCase(any(), any(), any()))
-          .thenAnswer((_) => completer.future);
+      when(
+        () => mockRegisterUseCase(any(), any(), any()),
+      ).thenAnswer((_) => completer.future);
       await pumpApp(
         tester,
         const RegisterScreen(),
@@ -197,12 +203,14 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 5));
     });
 
-    testWidgets('should show error message when registration fails',
-        (tester) async {
+    testWidgets('should show error message when registration fails', (
+      tester,
+    ) async {
       // Arrange
       final failure = createAuthFailure(message: 'Registration failed');
-      when(() => mockRegisterUseCase(any(), any(), any()))
-          .thenAnswer((_) async => ResultFailure(failure));
+      when(
+        () => mockRegisterUseCase(any(), any(), any()),
+      ).thenAnswer((_) async => ResultFailure(failure));
       await pumpApp(
         tester,
         const RegisterScreen(),
@@ -224,8 +232,9 @@ void main() {
       expect(find.text('Registration failed'), findsOneWidget);
     });
 
-    testWidgets('should navigate back to login when back button is tapped',
-        (tester) async {
+    testWidgets('should navigate back to login when back button is tapped', (
+      tester,
+    ) async {
       // Arrange
       final router = GoRouter(
         initialLocation: AppRoutes.login,
@@ -293,8 +302,9 @@ void main() {
       // (unique to LoginScreen)
       expect(find.text("Don't have an account? Register"), findsOneWidget);
       // Verify router location is back to login
-      final currentLoginContext =
-          tester.element(find.byType(LoginScreen).first);
+      final currentLoginContext = tester.element(
+        find.byType(LoginScreen).first,
+      );
       final currentRouter = GoRouter.of(currentLoginContext);
       expect(
         currentRouter.routeInformationProvider.value.uri.path,

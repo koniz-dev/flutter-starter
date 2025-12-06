@@ -32,12 +32,12 @@ class ApiClient {
     LoggingService? loggingService,
     PerformanceService? performanceService,
   }) : _dio = _createDio(
-          storageService,
-          secureStorageService,
-          authInterceptor,
-          loggingService,
-          performanceService,
-        );
+         storageService,
+         secureStorageService,
+         authInterceptor,
+         loggingService,
+         performanceService,
+       );
 
   static Dio _createDio(
     StorageService storageService,

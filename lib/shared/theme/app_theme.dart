@@ -22,8 +22,9 @@ class AppTheme {
         displayMedium: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         displaySmall: AppTextStyles.h3.copyWith(color: AppColors.textPrimary),
         headlineMedium: AppTextStyles.h4.copyWith(color: AppColors.textPrimary),
-        bodyLarge:
-            AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
+        bodyLarge: AppTextStyles.bodyLarge.copyWith(
+          color: AppColors.textPrimary,
+        ),
         bodyMedium: AppTextStyles.bodyMedium.copyWith(
           color: AppColors.textSecondary,
         ),

@@ -50,6 +50,17 @@ void main() {
           returnsNormally,
         );
       });
+
+      test('should handle exception in _getPerformanceInstance', () {
+        // Test that PerformanceService constructor handles exceptions
+        // when Firebase Performance is not available
+        // The _getPerformanceInstance method catches exceptions and
+        // returns null
+        expect(
+          PerformanceService.new,
+          returnsNormally,
+        );
+      });
     });
 
     group('measureOperation', () {
@@ -243,11 +254,11 @@ void main() {
       });
 
       test('should handle operation with complex return type', () async {
-        final result =
-            await performanceService.measureOperation<Map<String, dynamic>>(
-          name: 'complex_operation',
-          operation: () async => {'key': 'value', 'number': 42},
-        );
+        final result = await performanceService
+            .measureOperation<Map<String, dynamic>>(
+              name: 'complex_operation',
+              operation: () async => {'key': 'value', 'number': 42},
+            );
         expect(result, {'key': 'value', 'number': 42});
       });
 
@@ -302,13 +313,13 @@ void main() {
       });
 
       test('should handle computation with complex return type', () {
-        final result =
-            performanceService.measureSyncComputation<Map<String, List<int>>>(
-          operationName: 'complex_computation',
-          computation: () => {
-            'numbers': [1, 2, 3],
-          },
-        );
+        final result = performanceService
+            .measureSyncComputation<Map<String, List<int>>>(
+              operationName: 'complex_computation',
+              computation: () => {
+                'numbers': [1, 2, 3],
+              },
+            );
         expect(result, {
           'numbers': [1, 2, 3],
         });
@@ -399,6 +410,23 @@ void main() {
       });
     });
 
+    group('incrementMetric', () {
+      test('should increment metric', () {
+        when(() => mockTrace.incrementMetric(any(), any())).thenReturn(null);
+        performanceTrace.incrementMetric('success', 1);
+        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
+      });
+
+      test('should handle exceptions gracefully', () {
+        when(
+          () => mockTrace.incrementMetric(any(), any()),
+        ).thenThrow(Exception('Test error'));
+        performanceTrace.incrementMetric('success', 1);
+        // Should not throw
+        expect(true, isTrue);
+      });
+    });
+
     group('putMetric', () {
       test('should increment metric', () {
         when(() => mockTrace.incrementMetric(any(), any())).thenReturn(null);
@@ -407,8 +435,9 @@ void main() {
       });
 
       test('should handle exceptions gracefully', () {
-        when(() => mockTrace.incrementMetric(any(), any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.incrementMetric(any(), any()),
+        ).thenThrow(Exception('Test error'));
         performanceTrace.putMetric('success', 1);
         // Should not throw
         expect(true, isTrue);
@@ -423,8 +452,9 @@ void main() {
       });
 
       test('should handle exceptions gracefully', () {
-        when(() => mockTrace.putAttribute(any(), any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.putAttribute(any(), any()),
+        ).thenThrow(Exception('Test error'));
         performanceTrace.putAttribute('key', 'value');
         // Should not throw
         expect(true, isTrue);
@@ -448,8 +478,9 @@ void main() {
       });
 
       test('should return null on exception', () {
-        when(() => mockTrace.getAttribute(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.getAttribute(any()),
+        ).thenThrow(Exception('Test error'));
         final result = performanceTrace.getAttribute('key');
         expect(result, isNull);
       });
@@ -463,11 +494,44 @@ void main() {
       });
 
       test('should return null on exception', () {
-        when(() => mockTrace.getMetric(any()))
-            .thenThrow(Exception('Test error'));
+        when(
+          () => mockTrace.getMetric(any()),
+        ).thenThrow(Exception('Test error'));
         final result = performanceTrace.getMetric('success');
         expect(result, isNull);
       });
+    });
+  });
+
+  group('PerformanceService - measureOperation with null trace', () {
+    test('should execute operation when trace is null', () async {
+      // This test covers the case where startTrace returns null
+      // (line 74: if (trace == null) return operation();)
+      final service = PerformanceService();
+
+      // When monitoring is disabled or Firebase is not available,
+      // startTrace returns null, so measureOperation should still
+      // execute the operation
+      final result = await service.measureOperation<int>(
+        name: 'test_operation',
+        operation: () async => 42,
+      );
+
+      expect(result, 42);
+    });
+
+    test('should handle operation errors when trace is null', () async {
+      final service = PerformanceService();
+
+      expect(
+        () => service.measureOperation<void>(
+          name: 'test_operation',
+          operation: () async {
+            throw Exception('Test error');
+          },
+        ),
+        throwsException,
+      );
     });
   });
 }

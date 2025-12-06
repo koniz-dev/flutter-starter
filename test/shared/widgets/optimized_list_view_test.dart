@@ -70,8 +70,9 @@ void main() {
       expect(find.text('Error loading items'), findsOneWidget);
     });
 
-    testWidgets('should show retry button when error and onRetry provided',
-        (tester) async {
+    testWidgets('should show retry button when error and onRetry provided', (
+      tester,
+    ) async {
       var retryCalled = false;
 
       await tester.pumpWidget(
@@ -96,8 +97,9 @@ void main() {
       expect(retryCalled, isTrue);
     });
 
-    testWidgets('should show load more button when hasMore is true',
-        (tester) async {
+    testWidgets('should show load more button when hasMore is true', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -113,8 +115,9 @@ void main() {
       expect(find.text('Load More'), findsOneWidget);
     });
 
-    testWidgets('should call onLoadMore when load more button is tapped',
-        (tester) async {
+    testWidgets('should call onLoadMore when load more button is tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -153,8 +156,9 @@ void main() {
       expect(find.text('Item 1'), findsOneWidget);
     });
 
-    testWidgets('should support itemExtent for better performance',
-        (tester) async {
+    testWidgets('should support itemExtent for better performance', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

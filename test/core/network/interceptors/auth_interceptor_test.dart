@@ -46,8 +46,9 @@ void main() {
         final options = RequestOptions(path: '/test');
         final handler = RequestInterceptorHandler();
 
-        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
-            .thenAnswer((_) async => token);
+        when(
+          () => mockSecureStorage.getString(AppConstants.tokenKey),
+        ).thenAnswer((_) async => token);
 
         await interceptor.onRequest(options, handler);
 
@@ -58,8 +59,9 @@ void main() {
         final options = RequestOptions(path: '/test');
         final handler = RequestInterceptorHandler();
 
-        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
-            .thenAnswer((_) async => null);
+        when(
+          () => mockSecureStorage.getString(AppConstants.tokenKey),
+        ).thenAnswer((_) async => null);
 
         await interceptor.onRequest(options, handler);
 
@@ -70,8 +72,9 @@ void main() {
         final options = RequestOptions(path: '/test');
         final handler = RequestInterceptorHandler();
 
-        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
-            .thenAnswer((_) async => '');
+        when(
+          () => mockSecureStorage.getString(AppConstants.tokenKey),
+        ).thenAnswer((_) async => '');
 
         await interceptor.onRequest(options, handler);
 
@@ -113,60 +116,69 @@ void main() {
         verifyNever(() => mockAuthRepository.refreshToken());
       });
 
-      test('should trigger token refresh on 401 for non-auth endpoints',
-          () async {
-        const newToken = 'new_token';
+      test(
+        'should trigger token refresh on 401 for non-auth endpoints',
+        () async {
+          const newToken = 'new_token';
 
-        when(() => mockAuthRepository.refreshToken())
-            .thenAnswer((_) async => const Success(newToken));
-        when(
-          () => mockSecureStorage.setString(
-            AppConstants.tokenKey,
-            newToken,
-          ),
-        ).thenAnswer((_) async => true);
-        // Mock remove calls in case retry fails and logout is triggered
-        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
-            .thenAnswer((_) async => true);
-        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-            .thenAnswer((_) async => true);
-        when(() => handler.resolve(any())).thenReturn(null);
-        when(() => handler.reject(any())).thenReturn(null);
+          when(
+            () => mockAuthRepository.refreshToken(),
+          ).thenAnswer((_) async => const Success(newToken));
+          when(
+            () => mockSecureStorage.setString(
+              AppConstants.tokenKey,
+              newToken,
+            ),
+          ).thenAnswer((_) async => true);
+          // Mock remove calls in case retry fails and logout is triggered
+          when(
+            () => mockSecureStorage.remove(AppConstants.tokenKey),
+          ).thenAnswer((_) async => true);
+          when(
+            () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+          ).thenAnswer((_) async => true);
+          when(() => handler.resolve(any())).thenReturn(null);
+          when(() => handler.reject(any())).thenReturn(null);
 
-        // Note: The retry will likely fail in unit tests since we can't
-        // mock Dio, but we verify the refresh token is called
-        try {
-          await interceptor.onError(dioException, handler);
-        } on Exception {
-          // Expected - retry fails in unit tests
-        }
+          // Note: The retry will likely fail in unit tests since we can't
+          // mock Dio, but we verify the refresh token is called
+          try {
+            await interceptor.onError(dioException, handler);
+          } on Exception {
+            // Expected - retry fails in unit tests
+          }
 
-        verify(() => mockAuthRepository.refreshToken()).called(1);
-        verify(
-          () => mockSecureStorage.setString(
-            AppConstants.tokenKey,
-            newToken,
-          ),
-        ).called(1);
-      });
+          verify(() => mockAuthRepository.refreshToken()).called(1);
+          verify(
+            () => mockSecureStorage.setString(
+              AppConstants.tokenKey,
+              newToken,
+            ),
+          ).called(1);
+        },
+      );
 
       test('should logout user when refresh fails', () async {
         const failure = AuthFailure('Refresh token expired');
 
-        when(() => mockAuthRepository.refreshToken())
-            .thenAnswer((_) async => const ResultFailure(failure));
-        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
-            .thenAnswer((_) async => true);
-        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockAuthRepository.refreshToken(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockSecureStorage.remove(AppConstants.tokenKey),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).thenAnswer((_) async => true);
         when(() => handler.reject(any())).thenReturn(null);
 
         await interceptor.onError(dioException, handler);
 
         verify(() => mockAuthRepository.refreshToken()).called(1);
         verify(() => mockSecureStorage.remove(AppConstants.tokenKey)).called(1);
-        verify(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-            .called(1);
+        verify(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).called(1);
         verify(() => handler.reject(any())).called(1);
       });
 
@@ -185,10 +197,12 @@ void main() {
           ),
         );
 
-        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
-            .thenAnswer((_) async => true);
-        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.tokenKey),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).thenAnswer((_) async => true);
         when(() => handler.reject(any())).thenReturn(null);
 
         await interceptor.onError(retryException, handler);
@@ -204,8 +218,9 @@ void main() {
         final handler2 = MockErrorInterceptorHandler();
 
         // First request starts refresh
-        when(() => mockAuthRepository.refreshToken())
-            .thenAnswer((_) async => const Success(newToken));
+        when(
+          () => mockAuthRepository.refreshToken(),
+        ).thenAnswer((_) async => const Success(newToken));
         when(
           () => mockSecureStorage.setString(
             AppConstants.tokenKey,
@@ -213,10 +228,12 @@ void main() {
           ),
         ).thenAnswer((_) async => true);
         // Mock remove calls in case retry fails
-        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
-            .thenAnswer((_) async => true);
-        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.tokenKey),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).thenAnswer((_) async => true);
         when(() => handler1.resolve(any())).thenReturn(null);
         when(() => handler1.reject(any())).thenReturn(null);
         when(() => handler2.resolve(any())).thenReturn(null);
@@ -241,12 +258,15 @@ void main() {
       });
 
       test('should handle exception during refresh', () async {
-        when(() => mockAuthRepository.refreshToken())
-            .thenThrow(Exception('Network error'));
-        when(() => mockSecureStorage.remove(AppConstants.tokenKey))
-            .thenAnswer((_) async => true);
-        when(() => mockSecureStorage.remove(AppConstants.refreshTokenKey))
-            .thenAnswer((_) async => true);
+        when(
+          () => mockAuthRepository.refreshToken(),
+        ).thenThrow(Exception('Network error'));
+        when(
+          () => mockSecureStorage.remove(AppConstants.tokenKey),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).thenAnswer((_) async => true);
         when(() => handler.reject(any())).thenReturn(null);
 
         await interceptor.onError(dioException, handler);
@@ -359,8 +379,9 @@ void main() {
         final options = RequestOptions(path: '/test');
         final handler = RequestInterceptorHandler();
 
-        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
-            .thenAnswer((_) async => token);
+        when(
+          () => mockSecureStorage.getString(AppConstants.tokenKey),
+        ).thenAnswer((_) async => token);
 
         await interceptor.onRequest(options, handler);
 
@@ -372,8 +393,9 @@ void main() {
         final options = RequestOptions(path: '/test');
         final handler = RequestInterceptorHandler();
 
-        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
-            .thenAnswer((_) async => longToken);
+        when(
+          () => mockSecureStorage.getString(AppConstants.tokenKey),
+        ).thenAnswer((_) async => longToken);
 
         await interceptor.onRequest(options, handler);
 
@@ -385,8 +407,9 @@ void main() {
         final options = RequestOptions(path: '/test');
         final handler = RequestInterceptorHandler();
 
-        when(() => mockSecureStorage.getString(AppConstants.tokenKey))
-            .thenAnswer((_) async => token);
+        when(
+          () => mockSecureStorage.getString(AppConstants.tokenKey),
+        ).thenAnswer((_) async => token);
 
         await interceptor.onRequest(options, handler);
 

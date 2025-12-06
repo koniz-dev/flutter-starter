@@ -74,8 +74,9 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -87,15 +88,17 @@ void main() {
         expect(state.user, user);
         expect(state.isLoading, isFalse);
         expect(state.error, isNull);
-        verify(() => mockLoginUseCase('test@example.com', 'password123'))
-            .called(1);
+        verify(
+          () => mockLoginUseCase('test@example.com', 'password123'),
+        ).called(1);
       });
 
       test('should update state with error on failure', () async {
         // Arrange
         const failure = AuthFailure('Login failed');
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -115,8 +118,9 @@ void main() {
           id: '1',
           email: 'test@example.com',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -201,10 +205,12 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
-        when(() => mockLogoutUseCase())
-            .thenAnswer((_) async => const Success(null));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
+        when(
+          () => mockLogoutUseCase(),
+        ).thenAnswer((_) async => const Success(null));
 
         final notifier = container.read(authNotifierProvider.notifier);
         // Set initial user state
@@ -224,8 +230,9 @@ void main() {
       test('should handle logout failure', () async {
         // Arrange
         const failure = AuthFailure('Logout failed');
-        when(() => mockLogoutUseCase())
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLogoutUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -247,10 +254,12 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
-        when(() => mockRefreshTokenUseCase())
-            .thenAnswer((_) async => const Success('new_token'));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
+        when(
+          () => mockRefreshTokenUseCase(),
+        ).thenAnswer((_) async => const Success('new_token'));
 
         final notifier = container.read(authNotifierProvider.notifier);
         // Set initial state
@@ -271,10 +280,12 @@ void main() {
           'Refresh token expired',
           code: 'REFRESH_TOKEN_EXPIRED',
         );
-        when(() => mockRefreshTokenUseCase())
-            .thenAnswer((_) async => const ResultFailure(failure));
-        when(() => mockLogoutUseCase())
-            .thenAnswer((_) async => const Success(null));
+        when(
+          () => mockRefreshTokenUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLogoutUseCase(),
+        ).thenAnswer((_) async => const Success(null));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -295,8 +306,9 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockGetCurrentUserUseCase())
-            .thenAnswer((_) async => const Success(user));
+        when(
+          () => mockGetCurrentUserUseCase(),
+        ).thenAnswer((_) async => const Success(user));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -313,8 +325,9 @@ void main() {
 
       test('should handle null user', () async {
         // Arrange
-        when(() => mockGetCurrentUserUseCase())
-            .thenAnswer((_) async => const Success(null));
+        when(
+          () => mockGetCurrentUserUseCase(),
+        ).thenAnswer((_) async => const Success(null));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -331,8 +344,9 @@ void main() {
     group('isAuthenticated', () {
       test('should return true when authenticated', () async {
         // Arrange
-        when(() => mockIsAuthenticatedUseCase())
-            .thenAnswer((_) async => const Success(true));
+        when(
+          () => mockIsAuthenticatedUseCase(),
+        ).thenAnswer((_) async => const Success(true));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -346,8 +360,9 @@ void main() {
 
       test('should return false when not authenticated', () async {
         // Arrange
-        when(() => mockIsAuthenticatedUseCase())
-            .thenAnswer((_) async => const Success(false));
+        when(
+          () => mockIsAuthenticatedUseCase(),
+        ).thenAnswer((_) async => const Success(false));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -361,8 +376,9 @@ void main() {
       test('should return false on failure', () async {
         // Arrange
         const failure = AuthFailure('Check failed');
-        when(() => mockIsAuthenticatedUseCase())
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockIsAuthenticatedUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -390,8 +406,9 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -401,8 +418,9 @@ void main() {
         expect(state.error, 'Login failed');
 
         // Set up mock for second call to succeed
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
 
         // Second login succeeds
         await notifier.login('test@example.com', 'correctpassword');
@@ -417,8 +435,9 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -434,8 +453,9 @@ void main() {
 
       test('should handle empty email in login', () async {
         const failure = ValidationFailure('Email is required');
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
         await notifier.login('', 'password');
@@ -446,8 +466,9 @@ void main() {
 
       test('should handle empty password in login', () async {
         const failure = ValidationFailure('Password is required');
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
         await notifier.login('test@example.com', '');
@@ -458,8 +479,9 @@ void main() {
 
       test('should handle empty name in register', () async {
         const failure = ValidationFailure('Name is required');
-        when(() => mockRegisterUseCase(any(), any(), any()))
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockRegisterUseCase(any(), any(), any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
         await notifier.register('test@example.com', 'password', '');
@@ -474,10 +496,12 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockLoginUseCase(any(), any()))
-            .thenAnswer((_) async => const Success(user));
-        when(() => mockRefreshTokenUseCase())
-            .thenAnswer((_) async => const Success('new_token'));
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
+        when(
+          () => mockRefreshTokenUseCase(),
+        ).thenAnswer((_) async => const Success('new_token'));
 
         final notifier = container.read(authNotifierProvider.notifier);
         await notifier.login('test@example.com', 'password');
@@ -493,8 +517,9 @@ void main() {
 
       test('should handle getCurrentUser failure', () async {
         const failure = CacheFailure('Cache error');
-        when(() => mockGetCurrentUserUseCase())
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockGetCurrentUserUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
         await notifier.getCurrentUser();
@@ -507,10 +532,12 @@ void main() {
       test('should handle refreshToken with refresh in message', () async {
         // Arrange
         const failure = AuthFailure('Refresh token invalid');
-        when(() => mockRefreshTokenUseCase())
-            .thenAnswer((_) async => const ResultFailure(failure));
-        when(() => mockLogoutUseCase())
-            .thenAnswer((_) async => const Success(null));
+        when(
+          () => mockRefreshTokenUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockLogoutUseCase(),
+        ).thenAnswer((_) async => const Success(null));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -525,8 +552,9 @@ void main() {
       test('should handle refreshToken with non-refresh failure', () async {
         // Arrange
         const failure = AuthFailure('Network error');
-        when(() => mockRefreshTokenUseCase())
-            .thenAnswer((_) async => const ResultFailure(failure));
+        when(
+          () => mockRefreshTokenUseCase(),
+        ).thenAnswer((_) async => const ResultFailure(failure));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -570,8 +598,9 @@ void main() {
 
       test('should set loading state during logout', () async {
         // Arrange
-        when(() => mockLogoutUseCase())
-            .thenAnswer((_) async => const Success(null));
+        when(
+          () => mockLogoutUseCase(),
+        ).thenAnswer((_) async => const Success(null));
 
         final notifier = container.read(authNotifierProvider.notifier);
 
@@ -595,8 +624,9 @@ void main() {
           email: 'test@example.com',
           name: 'Test User',
         );
-        when(() => mockGetCurrentUserUseCase())
-            .thenAnswer((_) async => const Success(user));
+        when(
+          () => mockGetCurrentUserUseCase(),
+        ).thenAnswer((_) async => const Success(user));
 
         final notifier = container.read(authNotifierProvider.notifier);
 

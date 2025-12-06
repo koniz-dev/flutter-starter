@@ -289,8 +289,8 @@ Map<String, dynamic> createUserJson({
   return {
     'id': id,
     'email': email,
-    if (name != null) 'name': name,
-    if (avatarUrl != null) 'avatar_url': avatarUrl,
+    ...?name != null ? {'name': name} : null,
+    ...?avatarUrl != null ? {'avatar_url': avatarUrl} : null,
   };
 }
 
@@ -303,7 +303,7 @@ Map<String, dynamic> createAuthResponseJson({
   return {
     'user': user ?? createUserJson(),
     'token': token,
-    if (refreshToken != null) 'refresh_token': refreshToken,
+    ...?refreshToken != null ? {'refresh_token': refreshToken} : null,
   };
 }
 
@@ -315,8 +315,8 @@ Map<String, dynamic> createErrorResponseJson({
 }) {
   return {
     'message': message,
-    if (code != null) 'code': code,
-    if (error != null) 'error': error,
+    ...?code != null ? {'code': code} : null,
+    ...?error != null ? {'error': error} : null,
   };
 }
 
@@ -443,7 +443,7 @@ Map<String, dynamic> createTaskJson({
   return {
     'id': id ?? now.millisecondsSinceEpoch.toString(),
     'title': title,
-    if (description != null) 'description': description,
+    ...?description != null ? {'description': description} : null,
     'is_completed': isCompleted,
     'created_at': (createdAt ?? now).toIso8601String(),
     'updated_at': (updatedAt ?? now).toIso8601String(),

@@ -15,14 +15,14 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 class SecureStorageService implements IStorageService {
   /// Creates a [SecureStorageService] instance with platform-specific options
   SecureStorageService()
-      : _storage = const FlutterSecureStorage(
-          aOptions: AndroidOptions(
-            encryptedSharedPreferences: true,
-          ),
-          iOptions: IOSOptions(
-            accessibility: KeychainAccessibility.first_unlock_this_device,
-          ),
-        );
+    : _storage = const FlutterSecureStorage(
+        aOptions: AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
 
   final FlutterSecureStorage _storage;
 

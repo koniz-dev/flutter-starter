@@ -21,8 +21,8 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor({
     required SecureStorageService secureStorageService,
     required AuthRepository authRepository,
-  })  : _secureStorageService = secureStorageService,
-        _authRepository = authRepository;
+  }) : _secureStorageService = secureStorageService,
+       _authRepository = authRepository;
 
   /// Secure storage service for retrieving and storing authentication tokens
   final SecureStorageService _secureStorageService;

@@ -330,8 +330,9 @@ void main() {
         expect(authResult, isA<AuthFailure>());
 
         const validationException = ValidationException('test');
-        final validationResult =
-            ExceptionToFailureMapper.map(validationException);
+        final validationResult = ExceptionToFailureMapper.map(
+          validationException,
+        );
         expect(validationResult, isA<ValidationFailure>());
 
         final unknownException = Exception('test');

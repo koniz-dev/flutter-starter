@@ -30,8 +30,9 @@ void main() {
       const title = 'New Task';
       const description = 'Task description';
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -53,8 +54,9 @@ void main() {
       // Arrange
       const title = 'New Task';
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -76,8 +78,9 @@ void main() {
       const title = 'New Task';
       final beforeCreation = DateTime.now();
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -116,8 +119,9 @@ void main() {
       // Arrange
       const title = 'New Task';
       const failure = CacheFailure('Failed to create task');
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.createTask(any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act
       final result = await useCase(title: title);
@@ -132,8 +136,9 @@ void main() {
       const title = 'Test Task';
       const description = 'Test Description';
       Task? passedTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         passedTask = invocation.positionalArguments[0] as Task;
         return Success(passedTask!);
       });
@@ -153,8 +158,9 @@ void main() {
       // Arrange
       const title = '';
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -173,8 +179,9 @@ void main() {
       // Arrange
       final longTitle = 'A' * 1000;
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -194,8 +201,9 @@ void main() {
       const title = 'New Task';
       final longDescription = 'B' * 5000;
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -214,8 +222,9 @@ void main() {
       // Arrange
       const title = r'Task @#$%^&*()_+-=[]{}|;:,.<>?';
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -235,8 +244,9 @@ void main() {
       const title = 'Task 任务 🎯 タスク';
       const description = 'Description Описание 説明';
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });
@@ -263,8 +273,9 @@ void main() {
       ];
 
       for (final failure in failures) {
-        when(() => mockRepository.createTask(any()))
-            .thenAnswer((_) async => ResultFailure(failure));
+        when(
+          () => mockRepository.createTask(any()),
+        ).thenAnswer((_) async => ResultFailure(failure));
 
         // Act
         final result = await useCase(title: title);
@@ -283,8 +294,9 @@ void main() {
 
       for (var i = 0; i < 5; i++) {
         Task? createdTask;
-        when(() => mockRepository.createTask(any()))
-            .thenAnswer((invocation) async {
+        when(() => mockRepository.createTask(any())).thenAnswer((
+          invocation,
+        ) async {
           createdTask = invocation.positionalArguments[0] as Task;
           return Success(createdTask!);
         });
@@ -312,8 +324,9 @@ void main() {
       // Arrange
       const title = 'New Task';
       Task? createdTask;
-      when(() => mockRepository.createTask(any()))
-          .thenAnswer((invocation) async {
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
         createdTask = invocation.positionalArguments[0] as Task;
         return Success(createdTask!);
       });

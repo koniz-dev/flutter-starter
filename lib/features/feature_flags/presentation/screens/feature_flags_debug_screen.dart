@@ -114,7 +114,8 @@ class _FeatureFlagsDebugScreenState
       if (flag == null) continue;
 
       // Try to find category from FeatureFlags definitions
-      final flagKey = FeatureFlags.all
+      final flagKey =
+          FeatureFlags.all
               .where((FeatureFlagKey key) => key.value == flag.key)
               .firstOrNull ??
           FeatureFlagKey(
@@ -154,7 +155,8 @@ class _FeatureFlagsDebugScreenState
   }
 
   Widget _buildFlagTile(FeatureFlag flag) {
-    final flagKey = FeatureFlags.all
+    final flagKey =
+        FeatureFlags.all
             .where((FeatureFlagKey key) => key.value == flag.key)
             .firstOrNull ??
         FeatureFlagKey(

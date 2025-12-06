@@ -593,7 +593,8 @@ void main() {
       test('should handle special characters in message', () {
         // Arrange
         final service = LoggingService(enableLogging: true);
-        const specialMessage = 'Message with special chars: '
+        const specialMessage =
+            'Message with special chars: '
             r'!@#$%^&*()_+-=[]{}|;:,.<>?';
 
         // Act & Assert

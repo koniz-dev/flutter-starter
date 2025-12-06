@@ -61,8 +61,9 @@ void main() {
       test('should start trace when performance service returns trace', () {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        when(() => mockPerformanceService.startHttpTrace(any(), any()))
-            .thenReturn(mockTrace);
+        when(
+          () => mockPerformanceService.startHttpTrace(any(), any()),
+        ).thenReturn(mockTrace);
         when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
         when(() => mockTrace.startSync()).thenReturn(null);
 
@@ -70,8 +71,9 @@ void main() {
         interceptor.onRequest(requestOptions, handler);
 
         // Assert
-        verify(() => mockPerformanceService.startHttpTrace('GET', '/api/test'))
-            .called(1);
+        verify(
+          () => mockPerformanceService.startHttpTrace('GET', '/api/test'),
+        ).called(1);
         verify(
           () => mockTrace.putAttribute(
             PerformanceAttributes.httpMethod,
@@ -91,15 +93,17 @@ void main() {
       test('should not start trace when performance service returns null', () {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        when(() => mockPerformanceService.startHttpTrace(any(), any()))
-            .thenReturn(null);
+        when(
+          () => mockPerformanceService.startHttpTrace(any(), any()),
+        ).thenReturn(null);
 
         // Act
         interceptor.onRequest(requestOptions, handler);
 
         // Assert
-        verify(() => mockPerformanceService.startHttpTrace('GET', '/api/test'))
-            .called(1);
+        verify(
+          () => mockPerformanceService.startHttpTrace('GET', '/api/test'),
+        ).called(1);
         verifyNever(() => mockTrace.putAttribute(any(), any()));
         verifyNever(() => mockTrace.startSync());
         expect(requestOptions.extra['performance_trace'], isNull);
@@ -108,8 +112,9 @@ void main() {
       test('should store trace in request options extra', () {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        when(() => mockPerformanceService.startHttpTrace(any(), any()))
-            .thenReturn(mockTrace);
+        when(
+          () => mockPerformanceService.startHttpTrace(any(), any()),
+        ).thenReturn(mockTrace);
         when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
         when(() => mockTrace.startSync()).thenReturn(null);
 
@@ -129,8 +134,9 @@ void main() {
             method: method,
           );
           final handler = TestRequestInterceptorHandler();
-          when(() => mockPerformanceService.startHttpTrace(any(), any()))
-              .thenReturn(mockTrace);
+          when(
+            () => mockPerformanceService.startHttpTrace(any(), any()),
+          ).thenReturn(mockTrace);
           when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
           when(() => mockTrace.startSync()).thenReturn(null);
 
@@ -177,8 +183,9 @@ void main() {
             '200',
           ),
         ).called(1);
-        verify(() => mockTrace.putMetric(PerformanceMetrics.success, 1))
-            .called(1);
+        verify(
+          () => mockTrace.putMetric(PerformanceMetrics.success, 1),
+        ).called(1);
         verify(() => mockTrace.stopSync()).called(1);
       });
 
@@ -204,8 +211,9 @@ void main() {
             '404',
           ),
         ).called(1);
-        verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
-            .called(1);
+        verify(
+          () => mockTrace.putMetric(PerformanceMetrics.error, 1),
+        ).called(1);
         verify(() => mockTrace.stopSync()).called(1);
       });
 
@@ -255,8 +263,9 @@ void main() {
             '0',
           ),
         ).called(1);
-        verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
-            .called(1);
+        verify(
+          () => mockTrace.putMetric(PerformanceMetrics.error, 1),
+        ).called(1);
       });
 
       test('should handle response with string data', () {
@@ -417,8 +426,9 @@ void main() {
         interceptor.onError(dioException, handler);
 
         // Assert
-        verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
-            .called(1);
+        verify(
+          () => mockTrace.putMetric(PerformanceMetrics.error, 1),
+        ).called(1);
         verify(
           () => mockTrace.putAttribute(
             PerformanceAttributes.errorType,
@@ -510,8 +520,9 @@ void main() {
           interceptor.onError(dioException, handler);
 
           // Assert
-          verify(() => mockTrace.putMetric(PerformanceMetrics.error, 1))
-              .called(1);
+          verify(
+            () => mockTrace.putMetric(PerformanceMetrics.error, 1),
+          ).called(1);
           verify(() => mockTrace.stopSync()).called(1);
           clearInteractions(mockTrace);
         }
