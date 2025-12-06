@@ -686,5 +686,82 @@ void main() {
         }
       });
     });
+
+    group('whenLegacy() - Deprecated Pattern Matching', () {
+      test('should call success callback for Success', () {
+        const result = Success<String>('test');
+        String? capturedData;
+
+        result.when(
+          success: (data) {
+            capturedData = data;
+          },
+          failureCallback: (f) {
+            fail('Should not call failure callback');
+          },
+        );
+
+        expect(capturedData, 'test');
+      });
+
+      test('should call failureCallback with message and code for '
+          'ResultFailure', () {
+        const failure = ServerFailure('Server error', code: '500');
+        const result = ResultFailure<String>(failure);
+        String? capturedMessage;
+        String? capturedCode;
+
+        result.when(
+          success: (data) {
+            fail('Should not call success callback');
+          },
+          failureCallback: (f) {
+            capturedMessage = f.message;
+            capturedCode = f.code;
+          },
+        );
+
+        expect(capturedMessage, 'Server error');
+        expect(capturedCode, '500');
+      });
+
+      test('should handle null code in failureCallback', () {
+        const failure = NetworkFailure('Network error');
+        const result = ResultFailure<String>(failure);
+        String? capturedCode;
+
+        result.when(
+          success: (data) {
+            fail('Should not call success callback');
+          },
+          failureCallback: (f) {
+            capturedCode = f.code;
+          },
+        );
+
+        expect(capturedCode, isNull);
+      });
+
+      test('should return value from success callback', () {
+        const result = Success<int>(42);
+        final value = result.when(
+          success: (data) => data * 2,
+          failureCallback: (failure) => 0,
+        );
+
+        expect(value, 84);
+      });
+
+      test('should return value from failureCallback', () {
+        const failure = NetworkFailure('Network error');
+        const result = ResultFailure<int>(failure);
+        final value = result.when(
+          success: (data) => data * 2,
+          failureCallback: (failure) => -1,
+        );
+
+        expect(value, -1);
+      });
+    });
   });
 }

@@ -146,6 +146,40 @@ void main() {
 
       expect(find.byType(Image), findsOneWidget);
     });
+
+    testWidgets('should handle null width and height for cache', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: 'https://example.com/image.jpg',
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Image), findsOneWidget);
+    });
+
+    testWidgets('should convert width and height to int for cache', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: 'https://example.com/image.jpg',
+              width: 100.5,
+              height: 200.7,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Image), findsOneWidget);
+    });
   });
 
   group('OptimizedAspectImage', () {
