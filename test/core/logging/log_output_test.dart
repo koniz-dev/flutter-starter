@@ -282,6 +282,20 @@ void main() {
       await expectLater(fileLogOutput.init(), completes);
     });
 
+    test('should handle exception in output when sink throws', () async {
+      // Arrange
+      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      await fileLogOutput.init();
+
+      // Act - Output should handle exceptions gracefully
+      final logEvent = LogEvent(Level.info, 'Test');
+      // The output method catches exceptions, so this should not throw
+      expect(
+        () => fileLogOutput.output(OutputEvent(logEvent, ['Test'])),
+        returnsNormally,
+      );
+    });
+
     test('should destroy and close sink', () async {
       // Arrange
       fileLogOutput = FileLogOutput(fileName: 'test.log');

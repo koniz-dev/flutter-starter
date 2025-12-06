@@ -399,6 +399,23 @@ void main() {
       });
     });
 
+    group('incrementMetric', () {
+      test('should increment metric', () {
+        when(() => mockTrace.incrementMetric(any(), any())).thenReturn(null);
+        performanceTrace.incrementMetric('success', 1);
+        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
+      });
+
+      test('should handle exceptions gracefully', () {
+        when(
+          () => mockTrace.incrementMetric(any(), any()),
+        ).thenThrow(Exception('Test error'));
+        performanceTrace.incrementMetric('success', 1);
+        // Should not throw
+        expect(true, isTrue);
+      });
+    });
+
     group('putMetric', () {
       test('should increment metric', () {
         when(() => mockTrace.incrementMetric(any(), any())).thenReturn(null);

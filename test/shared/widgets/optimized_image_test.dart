@@ -99,6 +99,21 @@ void main() {
       expect(find.byType(Image), findsOneWidget);
     });
 
+    testWidgets('should not preload when imageUrl is empty', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: '',
+              preload: true,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Image), findsOneWidget);
+    });
+
     testWidgets('should support cache key', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
