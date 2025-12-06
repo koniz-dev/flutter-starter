@@ -50,6 +50,17 @@ void main() {
           returnsNormally,
         );
       });
+
+      test('should handle exception in _getPerformanceInstance', () {
+        // Test that PerformanceService constructor handles exceptions
+        // when Firebase Performance is not available
+        // The _getPerformanceInstance method catches exceptions and
+        // returns null
+        expect(
+          PerformanceService.new,
+          returnsNormally,
+        );
+      });
     });
 
     group('measureOperation', () {

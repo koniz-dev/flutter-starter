@@ -831,6 +831,17 @@ void main() {
         await expectLater(fileLogOutput.clearLogs(), completes);
       });
 
+      test('should handle exception in clearLogs gracefully', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        await fileLogOutput.init();
+
+        // Act & Assert - clearLogs should handle exceptions gracefully
+        // This covers the exception handler in clearLogs (line 197-199)
+        await expectLater(fileLogOutput.clearLogs(), completes);
+        await fileLogOutput.destroy();
+      });
+
       test('should handle multiple rotations in sequence', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(

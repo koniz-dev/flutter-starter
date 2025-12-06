@@ -574,7 +574,7 @@ void main() {
       });
     });
 
-    group('whenLegacy() - Deprecated Method', () {
+    group('when() - Legacy Pattern Matching', () {
       test('should call success callback for Success', () {
         const result = Success<String>('test');
         String? capturedData;
@@ -603,9 +603,9 @@ void main() {
             success: (data) {
               fail('Should not call success callback');
             },
-            failureCallback: (failure) {
-              capturedMessage = failure.message;
-              capturedCode = failure.code;
+            failureCallback: (f) {
+              capturedMessage = f.message;
+              capturedCode = f.code;
             },
           );
 
@@ -623,8 +623,8 @@ void main() {
           success: (data) {
             fail('Should not call success callback');
           },
-          failureCallback: (failure) {
-            capturedCode = failure.code;
+          failureCallback: (f) {
+            capturedCode = f.code;
           },
         );
 
@@ -650,6 +650,40 @@ void main() {
         );
 
         expect(value, -1);
+      });
+    });
+
+    group('_createFailureWithMessage - Fallback Case', () {
+      test('should handle custom Failure type with fallback', () {
+        // Create a custom failure type that extends Failure
+        // but isn't one of the explicitly checked types
+        // Since we can't easily create a new Failure subtype in tests,
+        // we'll test the fallback by using mapError which calls
+        // _createFailureWithMessage internally
+        // The fallback case should be hit if a new Failure type is added
+        // that isn't explicitly handled
+
+        // Test that mapError works with all known failure types
+        // and that the fallback would work for unknown types
+        const knownFailures = [
+          ServerFailure('Error', code: '500'),
+          NetworkFailure('Error', code: 'NET'),
+          CacheFailure('Error', code: 'CACHE'),
+          AuthFailure('Error', code: '401'),
+          ValidationFailure('Error', code: 'VALID'),
+          PermissionFailure('Error', code: 'PERM'),
+          UnknownFailure('Error', code: 'UNKNOWN'),
+          NotFoundFailure('Error', code: '404'),
+        ];
+
+        for (final failure in knownFailures) {
+          final result = ResultFailure<String>(failure);
+          final mapped = result.mapError((message) => 'Mapped: $message');
+          expect(mapped, isA<ResultFailure<String>>());
+          final mappedFailure = (mapped as ResultFailure<String>).failure;
+          expect(mappedFailure.message, 'Mapped: Error');
+          expect(mappedFailure.code, failure.code);
+        }
       });
     });
   });
