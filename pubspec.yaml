@@ -124,7 +124,6 @@ flutter:
   # The .env file is optional - the app works with --dart-define flags too
   assets:
     - .env.example
-    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
