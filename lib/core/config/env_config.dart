@@ -2,8 +2,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Environment configuration loader with fallback chain:
 /// 1. .env file (for local development)
-/// 2. --dart-define flags (for CI/CD)
-/// 3. Default values
+/// 2. Default values
+///
+/// Note: --dart-define flags are compile-time only and cannot be accessed
+/// dynamically at runtime. They must be accessed via const
+/// String.fromEnvironment() for specific known keys if needed.
 ///
 /// Usage:
 /// ```dart
@@ -20,7 +23,7 @@ class EnvConfig {
   /// This should be called before runApp() in main.dart
   ///
   /// The .env file is optional. If it doesn't exist, the system will fall back
-  /// to --dart-define flags or default values.
+  /// to default values.
   ///
   /// Note: For .env to be loaded, it must be added to pubspec.yaml assets
   /// after creating it from .env.example
@@ -50,13 +53,11 @@ class EnvConfig {
 
   /// Get environment variable with fallback chain:
   /// 1. .env file value (if loaded)
-  /// 2. --dart-define flag value
-  /// 3. Default value (if provided)
+  /// 2. Default value (if provided)
   ///
   /// Parameters:
   /// - [key]: The environment variable key
-  /// - [defaultValue]: Optional default value if not found in .env or
-  ///   --dart-define
+  /// - [defaultValue]: Optional default value if not found in .env
   ///
   /// Returns:
   /// The environment variable value, or [defaultValue] if not found
@@ -78,17 +79,14 @@ class EnvConfig {
           return value;
         }
       } on Exception {
-        // Variable not found in .env, continue to next priority
+        // Variable not found in .env, continue to default
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      return dartDefineValue;
-    }
-
-    // Priority 3: Return default value
+    // Return default value
+    // Note: --dart-define flags are compile-time only and cannot be
+    // accessed dynamically at runtime. They must be accessed via
+    // const String.fromEnvironment() for specific known keys.
     return defaultValue;
   }
 
@@ -102,21 +100,11 @@ class EnvConfig {
       try {
         return dotenv.getBool(key, fallback: defaultValue);
       } on Exception {
-        // Variable not found in .env, continue to next priority
+        // Variable not found in .env, continue to default
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      final lowerValue = dartDefineValue.toLowerCase().trim();
-      return lowerValue == 'true' ||
-          lowerValue == '1' ||
-          lowerValue == 'yes' ||
-          lowerValue == 'on';
-    }
-
-    // Priority 3: Return default value
+    // Return default value
     return defaultValue;
   }
 
@@ -129,17 +117,11 @@ class EnvConfig {
       try {
         return dotenv.getInt(key, fallback: defaultValue);
       } on Exception {
-        // Variable not found in .env, continue to next priority
+        // Variable not found in .env, continue to default
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      return int.tryParse(dartDefineValue) ?? defaultValue;
-    }
-
-    // Priority 3: Return default value
+    // Return default value
     return defaultValue;
   }
 
@@ -152,23 +134,17 @@ class EnvConfig {
       try {
         return dotenv.getDouble(key, fallback: defaultValue);
       } on Exception {
-        // Variable not found in .env, continue to next priority
+        // Variable not found in .env, continue to default
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      return double.tryParse(dartDefineValue) ?? defaultValue;
-    }
-
-    // Priority 3: Return default value
+    // Return default value
     return defaultValue;
   }
 
   /// Check if an environment variable exists
   ///
-  /// Returns true if the variable exists in .env file or --dart-define
+  /// Returns true if the variable exists in .env file
   static bool has(String key) {
     // Check .env file (if loaded)
     if (_isInitialized) {
@@ -181,8 +157,8 @@ class EnvConfig {
         // Variable not found in .env
       }
     }
-    // Check --dart-define flags
-    return String.fromEnvironment(key).isNotEmpty;
+    // Note: --dart-define values cannot be checked dynamically at runtime
+    return false;
   }
 
   /// Get all environment variables as a map
