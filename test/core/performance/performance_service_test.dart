@@ -502,4 +502,36 @@ void main() {
       });
     });
   });
+
+  group('PerformanceService - measureOperation with null trace', () {
+    test('should execute operation when trace is null', () async {
+      // This test covers the case where startTrace returns null
+      // (line 74: if (trace == null) return operation();)
+      final service = PerformanceService();
+
+      // When monitoring is disabled or Firebase is not available,
+      // startTrace returns null, so measureOperation should still
+      // execute the operation
+      final result = await service.measureOperation<int>(
+        name: 'test_operation',
+        operation: () async => 42,
+      );
+
+      expect(result, 42);
+    });
+
+    test('should handle operation errors when trace is null', () async {
+      final service = PerformanceService();
+
+      expect(
+        () => service.measureOperation<void>(
+          name: 'test_operation',
+          operation: () async {
+            throw Exception('Test error');
+          },
+        ),
+        throwsException,
+      );
+    });
+  });
 }

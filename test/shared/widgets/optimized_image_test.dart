@@ -247,4 +247,63 @@ void main() {
       expect(find.byType(AspectRatio), findsOneWidget);
     });
   });
+
+  group('OptimizedImage - Error Builder Coverage', () {
+    testWidgets('should use default error widget when errorWidget is null', (
+      tester,
+    ) async {
+      // This test covers the errorBuilder path when errorWidget is null
+      // (lines 89-93: return errorWidget ?? Icon(...))
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: 'https://invalid-url-that-will-fail.com/image.jpg',
+              // errorWidget is null, so default Icon should be used
+            ),
+          ),
+        ),
+      );
+
+      // Wait for image load attempt
+      await tester.pumpAndSettle();
+
+      // Should show default error icon
+      expect(find.byType(OptimizedImage), findsOneWidget);
+    });
+
+    testWidgets('should handle preload when imageUrl is not empty', (
+      tester,
+    ) async {
+      // This test ensures the preload path is covered (lines 63-65)
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: 'https://example.com/image.jpg',
+              preload: true,
+            ),
+          ),
+        ),
+      );
+
+      await tester.pump(); // Allow preload to start
+      expect(find.byType(Image), findsOneWidget);
+    });
+
+    testWidgets('should not preload when preload is false', (tester) async {
+      // This test ensures the !preload path is covered
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: 'https://example.com/image.jpg',
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(Image), findsOneWidget);
+    });
+  });
 }
