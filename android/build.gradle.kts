@@ -30,14 +30,6 @@ subprojects {
                 }
             }
         }
-        
-        // Apply Google Services plugin to Firebase plugins that need it
-        if (project.plugins.hasPlugin("com.android.library") && 
-            (project.name.contains("firebase") || project.name == "firebase_core")) {
-            if (!project.plugins.hasPlugin("com.google.gms.google-services")) {
-                project.plugins.apply("com.google.gms.google-services")
-            }
-        }
     }
 }
 
