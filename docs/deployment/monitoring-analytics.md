@@ -23,7 +23,7 @@ Update `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  firebase_core: ^3.0.0
+  firebase_core: ^2.24.2
   firebase_crashlytics: ^4.0.0
 ```
 

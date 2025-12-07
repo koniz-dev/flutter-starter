@@ -2,21 +2,6 @@
 
 This guide will help you set up your development environment and get the Flutter Starter project running.
 
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Flutter SDK**: Version 3.0.0 or higher
-  - Check your version: `flutter --version`
-  - Install/update: [Flutter Installation Guide](https://docs.flutter.dev/get-started/install)
-  
-- **Dart SDK**: Version 3.0.0 or higher (included with Flutter)
-
-- **IDE**: Choose one of the following:
-  - **VS Code** (recommended): Install Flutter and Dart extensions
-  - **Android Studio**: Install Flutter and Dart plugins
-  - **IntelliJ IDEA**: Install Flutter and Dart plugins
-
 - **Platform-specific tools** (for your target platforms):
   - **Android**: Android Studio with Android SDK
   - **iOS**: Xcode (macOS only)

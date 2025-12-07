@@ -159,8 +159,8 @@ lib/
 
 ### Prerequisites
 
-- Flutter SDK (>=3.0.0)
-- Dart SDK (>=3.0.0)
+- Flutter SDK (>=3.27.0)
+- Dart SDK (>=3.8.0)
 - Android Studio / VS Code with Flutter extensions
 - Xcode (for iOS development on macOS)
 
