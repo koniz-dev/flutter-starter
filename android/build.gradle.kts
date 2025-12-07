@@ -20,6 +20,17 @@ rootProject.layout.buildDirectory.value(newBuildDir)
 subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
+    
+    // Configure Java toolchain for all subprojects (including firebase plugins)
+    afterEvaluate {
+        if (project.plugins.hasPlugin("java") || project.plugins.hasPlugin("com.android.library")) {
+            project.extensions.findByType<JavaPluginExtension>()?.apply {
+                toolchain {
+                    languageVersion.set(JavaLanguageVersion.of(17))
+                }
+            }
+        }
+    }
 }
 subprojects {
     project.evaluationDependsOn(":app")
