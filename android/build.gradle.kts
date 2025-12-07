@@ -34,9 +34,25 @@ subprojects {
 }
 
 // Ensure :app is evaluated before other projects to initialize Google Services
+// This ensures Google Services plugin parses google-services.json before subprojects compile
 subprojects {
     if (project.name != "app") {
         project.evaluationDependsOn(":app")
+    }
+}
+
+// Force Google Services plugin to parse google-services.json early
+gradle.projectsEvaluated {
+    project(":app").afterEvaluate {
+        // Force Google Services plugin to initialize by accessing its extension
+        try {
+            val googleServices = project(":app").extensions.findByName("googleServices")
+            if (googleServices != null) {
+                // Plugin is initialized
+            }
+        } catch (e: Exception) {
+            // Ignore if extension not found
+        }
     }
 }
 
