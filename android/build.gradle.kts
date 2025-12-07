@@ -41,21 +41,6 @@ subprojects {
     }
 }
 
-// Force Google Services plugin to parse google-services.json early
-gradle.projectsEvaluated {
-    project(":app").afterEvaluate {
-        // Force Google Services plugin to initialize by accessing its extension
-        try {
-            val googleServices = project(":app").extensions.findByName("googleServices")
-            if (googleServices != null) {
-                // Plugin is initialized
-            }
-        } catch (e: Exception) {
-            // Ignore if extension not found
-        }
-    }
-}
-
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
