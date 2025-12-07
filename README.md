@@ -219,7 +219,8 @@ lib/
 1. **Rename the project** (if needed) - Update package name from `flutter_starter` to your project name
 2. **Configure your environment** - See [Configuration System](#-configuration-system) below
 3. **Set up Firebase** (optional) - For remote feature flags and performance monitoring
-   - Add `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+   - **Setup Firebase Config**: Add `google-services.json` (Android) and `GoogleService-Info.plist` (iOS).
+     > **Note**: These files are gitignored for security. You must add them manually for local development. For CI/CD, use environment variables to generate them.
    - Initialize Firebase in your app
 4. **Customize the theme** - Edit `lib/shared/theme/app_theme.dart`
 5. **Explore example features** - Check out `lib/features/` for examples:

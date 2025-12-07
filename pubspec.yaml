@@ -18,9 +18,9 @@ dependencies:
   equatable: ^2.0.7
 
   # Firebase - Remote Config for feature flags
-  firebase_core: ^4.2.1
-  firebase_performance: ^0.11.1+2
-  firebase_remote_config: ^6.1.1
+  firebase_core: ^2.24.2
+  firebase_performance: ^0.9.3+8
+  firebase_remote_config: ^4.3.6
 
   # Flutter SDK - Core Flutter framework
   flutter:

@@ -477,6 +477,7 @@ void main() async {
 3. **Configure Firebase Projects**:
    - Create Firebase projects for each environment
    - Add `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+   - **Note:** These files are gitignored. For CI/CD (e.g., GitHub Actions), store them as Base64 secrets (`ANDROID_GOOGLE_SERVICES_JSON`, `IOS_GOOGLE_SERVICE_INFO`) and decode them during the build process.
    - Place in appropriate flavor directories
 
 ### Analytics Integration

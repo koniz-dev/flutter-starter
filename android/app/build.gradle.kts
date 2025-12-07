@@ -5,12 +5,6 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 android {
     namespace = "com.example.flutter_starter"
     compileSdk = flutter.compileSdkVersion
@@ -49,6 +43,4 @@ flutter {
     source = "../.."
 }
 
-// Apply Google Services plugin at the end to ensure google-services.json is parsed
-// This must be after android block is evaluated
 apply(plugin = "com.google.gms.google-services")

@@ -11,30 +11,22 @@ allprojects {
     }
 }
 
-val newBuildDir: Directory =
-    rootProject.layout.buildDirectory
-        .dir("../../build")
-        .get()
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
 subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
-    
-    // Configure Java toolchain for all subprojects (including firebase plugins)
+
     afterEvaluate {
         if (project.plugins.hasPlugin("java") || project.plugins.hasPlugin("com.android.library")) {
             project.extensions.findByType<JavaPluginExtension>()?.apply {
-                toolchain {
-                    languageVersion.set(JavaLanguageVersion.of(17))
-                }
+                toolchain { languageVersion.set(JavaLanguageVersion.of(17)) }
             }
         }
     }
 }
 
-// Ensure :app is evaluated before other projects to initialize Google Services
-// This ensures Google Services plugin parses google-services.json before subprojects compile
 subprojects {
     if (project.name != "app") {
         project.evaluationDependsOn(":app")
