@@ -5,6 +5,11 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Conditionally apply Google Services plugin only if google-services.json exists
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.example.flutter_starter"
     compileSdk = flutter.compileSdkVersion
