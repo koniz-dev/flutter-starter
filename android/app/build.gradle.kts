@@ -3,7 +3,6 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services")
 }
 
 java {
@@ -49,3 +48,7 @@ android {
 flutter {
     source = "../.."
 }
+
+// Apply Google Services plugin at the end to ensure google-services.json is parsed
+// This must be after android block is evaluated
+apply(plugin = "com.google.gms.google-services")
