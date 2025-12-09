@@ -165,10 +165,10 @@ class EnvConfig {
 
     // Priority 2: Check --dart-define flags (native only)
     if (!kIsWeb) {
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      return double.tryParse(dartDefineValue) ?? defaultValue;
-    }
+      final dartDefineValue = String.fromEnvironment(key);
+      if (dartDefineValue.isNotEmpty) {
+        return double.tryParse(dartDefineValue) ?? defaultValue;
+      }
     }
 
     // Priority 3: Return default value
@@ -192,9 +192,7 @@ class EnvConfig {
     }
     // Check --dart-define flags (native only)
     if (!kIsWeb) {
-      return String
-          .fromEnvironment(key)
-          .isNotEmpty;
+      return String.fromEnvironment(key).isNotEmpty;
     }
 
     return false;
