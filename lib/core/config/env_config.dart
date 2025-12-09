@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Environment configuration loader with fallback chain:
@@ -82,10 +83,12 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      return dartDefineValue;
+    // Priority 2: Check --dart-define flags (native only)
+    if (!kIsWeb) {
+      final dartDefineValue = String.fromEnvironment(key);
+      if (dartDefineValue.isNotEmpty) {
+        return dartDefineValue;
+      }
     }
 
     // Priority 3: Return default value
@@ -106,14 +109,16 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      final lowerValue = dartDefineValue.toLowerCase().trim();
-      return lowerValue == 'true' ||
-          lowerValue == '1' ||
-          lowerValue == 'yes' ||
-          lowerValue == 'on';
+    // Priority 2: Check --dart-define flags (native only)
+    if (!kIsWeb) {
+      final dartDefineValue = String.fromEnvironment(key);
+      if (dartDefineValue.isNotEmpty) {
+        final lowerValue = dartDefineValue.toLowerCase().trim();
+        return lowerValue == 'true' ||
+            lowerValue == '1' ||
+            lowerValue == 'yes' ||
+            lowerValue == 'on';
+      }
     }
 
     // Priority 3: Return default value
@@ -133,10 +138,12 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = String.fromEnvironment(key);
-    if (dartDefineValue.isNotEmpty) {
-      return int.tryParse(dartDefineValue) ?? defaultValue;
+    // Priority 2: Check --dart-define flags (native only)
+    if (!kIsWeb) {
+      final dartDefineValue = String.fromEnvironment(key);
+      if (dartDefineValue.isNotEmpty) {
+        return int.tryParse(dartDefineValue) ?? defaultValue;
+      }
     }
 
     // Priority 3: Return default value
@@ -156,10 +163,12 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags
+    // Priority 2: Check --dart-define flags (native only)
+    if (!kIsWeb) {
     final dartDefineValue = String.fromEnvironment(key);
     if (dartDefineValue.isNotEmpty) {
       return double.tryParse(dartDefineValue) ?? defaultValue;
+    }
     }
 
     // Priority 3: Return default value
@@ -181,8 +190,14 @@ class EnvConfig {
         // Variable not found in .env
       }
     }
-    // Check --dart-define flags
-    return String.fromEnvironment(key).isNotEmpty;
+    // Check --dart-define flags (native only)
+    if (!kIsWeb) {
+      return String
+          .fromEnvironment(key)
+          .isNotEmpty;
+    }
+
+    return false;
   }
 
   /// Get all environment variables as a map
