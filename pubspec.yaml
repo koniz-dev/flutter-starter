@@ -38,6 +38,9 @@ dependencies:
 
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
   flutter_secure_storage: ^10.0.0
+  
+  # Security - RASP (Runtime Application Self-Protection) Anti-Root/Tamper
+  freerasp: ^6.1.1
 
   # Code Generation - Runtime annotations for Freezed immutable classes
   freezed_annotation: ^3.1.0
@@ -62,11 +65,18 @@ dependencies:
   # Storage - Simple key-value storage for non-sensitive data
   shared_preferences: ^2.5.3
 
+  # Network Layer - WebSocket client
+  web_socket_channel: ^3.0.1
+
 
 
 dev_dependencies:
   # Code Generation - Build system for generating code from annotations
   build_runner: ^2.10.3
+
+  # Branding & UI configuration tools
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.1
 
   # Testing - Flutter testing framework and utilities
   flutter_test:
@@ -81,9 +91,11 @@ dev_dependencies:
   # Testing - Mocking library for unit tests (no code generation required)
   mocktail: ^1.0.4
 
+  # Testing - End-to-End testing framework
+  patrol: ^3.10.0
+
   # Linting - Comprehensive lint rules for Flutter/Dart (Very Good Ventures)
   very_good_analysis: ^10.0.0
-
 
 
 # For information on the generic Dart part of this file, see the

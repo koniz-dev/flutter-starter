@@ -53,6 +53,7 @@ Use the provided script:
 
 ```bash
 ./scripts/ci/bump_version.sh [major|minor|patch] [build_number]
+./scripts/ci/bump_version.sh [major|minor|patch] [build_number]
 ```
 
 **Examples**:
@@ -350,7 +351,7 @@ The release workflow can be automated:
 
 ### Release Script
 
-See `scripts/ci/release.sh` for complete release automation.
+See `./scripts/ci/release.sh` for complete release automation.
 
 ---
 

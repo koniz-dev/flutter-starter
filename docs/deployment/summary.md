@@ -199,10 +199,9 @@ docs/deployment/
 └── deploy-web.yml            # Web deployment
 
 scripts/
-├── bump_version.sh           # Version bumping
-├── generate_changelog.sh     # Changelog generation
-├── release.sh                # Release automation
-└── build_all.sh              # Build all platforms
+├── ci/                    # CI/CD scripts (build, release, version)
+├── dev/                   # Developer scripts (setup, scaffold)
+└── test/                  # Test scripts (coverage, analysis)
 
 fastlane/
 ├── Fastfile                  # Android deployment lanes

@@ -131,7 +131,7 @@ CERTIFICATE_FINGERPRINTS=AA:BB:CC:DD:EE:FF:11:22:33:44:55:66:77:88:99:00:AA:BB:C
 Create a build script:
 
 ```bash
-# scripts/build_release.sh
+# scripts/ci/build_release.sh
 #!/bin/bash
 
 ENVIRONMENT=${1:-production}
@@ -168,7 +168,7 @@ echo "⚠️  IMPORTANT: Store debug-info files securely for crash symbolication
 
 Make it executable:
 ```bash
-chmod +x scripts/build_release.sh
+chmod +x scripts/ci/build_release.sh
 ```
 
 #### Step 2: Update CI/CD
@@ -749,55 +749,44 @@ signingConfigs {
 
 ---
 
-### 7. Root/Jailbreak Detection
+### 7. Root/Jailbreak Detection (FreeRASP)
 
-#### Step 1: Add Dependency
+To implement enterprise-grade Runtime Application Self-Protection (RASP), we utilize `freerasp` which operates at a lower level than typical check plugins.
 
-```yaml
-# pubspec.yaml
-dependencies:
-  root_jailbreak: ^1.0.0
-```
+#### Step 1: Initialize RASP Service
 
-#### Step 2: Create Device Security Service
+Ensure `freerasp` is configured with your production hashes and connected to the `raspServiceProvider` in `lib/core/security/`. 
 
 ```dart
-// lib/core/security/device_security.dart
-import 'package:root_jailbreak/root_jailbreak.dart';
-import 'package:flutter_starter/core/config/app_config.dart';
+// lib/shared/security/freerasp_service_impl.dart
+final config = TalsecConfig(
+  androidConfig: AndroidConfig(
+    packageName: 'com.example.flutter_starter',
+    signingCertHashes: ['YOUR_BASE64_CERT_HASH'], // Crucial for production
+    supportedStores: ['com.android.vending'], // Only Google Play Store
+  ),
+  iosConfig: IOSConfig(
+    bundleIds: ['com.example.flutterStarter'],
+    teamId: 'YOUR_TEAM_ID',
+  ),
+  watcherMail: 'security@yourcompany.com',
+  isProd: kReleaseMode,
+);
+```
 
-/// Service for checking device security status
-class DeviceSecurity {
-  DeviceSecurity._();
+#### Step 2: Listen for Threats
 
-  /// Check if device is secure (not rooted/jailbroken)
-  static Future<bool> isDeviceSecure() async {
-    try {
-      final isRooted = await RootJailbreak.isRooted;
-      final isJailbroken = await RootJailbreak.isJailbroken;
-      return !isRooted && !isJailbroken;
-    } catch (e) {
-      // If check fails, assume device is secure to avoid false positives
-      // Log the error for monitoring
-      return true;
-    }
-  }
+The `FreeRaspServiceImpl` pushes security anomalies through the `onThreatDetected` stream. You should listen to this stream on app startup and take appropriate actions (e.g., forcing a logout or showing a warning dialog).
 
-  /// Check device security and throw exception if insecure
-  static Future<void> checkDeviceSecurity() async {
-    if (!AppConfig.isProduction) {
-      // Skip check in development
-      return;
-    }
+```dart
+final raspService = ref.read(raspServiceProvider);
+await raspService.startProtection();
 
-    final isSecure = await isDeviceSecure();
-    if (!isSecure) {
-      throw DeviceSecurityException(
-        'Device is rooted or jailbroken. App cannot run on insecure devices.',
-      );
-    }
-  }
-}
+raspService.onThreatDetected.listen((threat) {
+  // Handle privilegedAccess (root/jailbreak), emulator, tampered, etc.
+  handleSecurityThreat(threat);
+});
+```
 
 /// Exception thrown when device security check fails
 class DeviceSecurityException implements Exception {

@@ -302,7 +302,7 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
 
 4. **Build Size**
    ```bash
-   ./scripts/analyze_build_size.sh
+   ./scripts/ci/build_all.sh --analyze-size
    ```
 
 ---

@@ -64,7 +64,7 @@ Main coverage script with options:
 ./scripts/test/test_coverage.sh --exclude=lib/generated
 ```
 
-#### analyze_coverage.sh
+#### calculate_layer_coverage.sh
 
 Analyzes coverage by layer:
 

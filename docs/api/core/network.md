@@ -6,6 +6,7 @@ HTTP client and interceptors for making API requests.
 
 The network layer provides:
 - `ApiClient` - HTTP client wrapper around Dio
+- `IRealtimeClient` - Decoupled interface for WebSocket streams
 - `AuthInterceptor` - Automatic token injection and refresh
 - `ErrorInterceptor` - Exception conversion
 - `LoggingInterceptor` - Request/response logging
@@ -171,6 +172,37 @@ The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
 - Timeouts from `AppConfig` (connect, receive, send)
 - Interceptors: ErrorInterceptor, AuthInterceptor, LoggingInterceptor (if enabled)
+
+---
+
+## Realtime Client
+
+The project provides an abstract interface `IRealtimeClient` for handling persistent connection data like WebSockets without leaking package specifics to the domain layer.
+
+**Location:** `lib/core/network/realtime/`
+
+### Implementations
+- `NoOpRealtimeClient`: A mocked dummy client injected by default to prevent connection errors where real-time is not needed.
+- `RawWebSocketClientImpl`: Concrete class powered by the `web_socket_channel` package.
+
+### Usage Example
+```dart
+final realtimeClient = ref.read(realtimeClientProvider);
+
+// Connect
+await realtimeClient.connect('wss://example.com/socket');
+
+// Subscribe to stream
+realtimeClient.stream.listen((data) {
+  print('Received real-time event: $data');
+});
+
+// Send payload
+realtimeClient.send({'type': 'ping'});
+
+// Disconnect
+realtimeClient.disconnect();
+```
 
 ---
 

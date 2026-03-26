@@ -58,10 +58,10 @@ flutter pub upgrade flutter_riverpod:^3.0.3
 
 ```bash
 # Check for migration scripts
-ls scripts/migration/
+ls scripts/dev/migration/
 
 # Run migration script for specific version
-dart scripts/migration/migrate_to_v2.0.0.dart
+dart scripts/dev/migration/migrate_to_v2.0.0.dart
 ```
 
 ### Step 6: Fix Breaking Changes
@@ -111,7 +111,7 @@ final counterProvider = NotifierProvider<CounterNotifier, int>(
 
 **Script:**
 ```bash
-dart scripts/migration/migrate_riverpod_3.0.dart
+dart scripts/dev/migration/migrate_riverpod_3.0.dart
 ```
 
 #### Result Pattern Update
@@ -140,7 +140,7 @@ result.when(
 
 **Script:**
 ```bash
-dart scripts/migration/migrate_result_pattern.dart
+dart scripts/dev/migration/migrate_result_pattern.dart
 ```
 
 ### Version 1.1.0 (Hypothetical Future Version)
@@ -167,11 +167,11 @@ final baseUrl = AppConfig.baseUrl;
 
 ### Creating Migration Scripts
 
-Migration scripts are located in `scripts/migration/`. They help automate common migration tasks.
+Migration scripts are located in `scripts/dev/migration/`. They help automate common migration tasks.
 
 **Example Script Structure:**
 ```dart
-// scripts/migration/migrate_to_v2.0.0.dart
+// scripts/dev/migration/migrate_to_v2.0.0.dart
 import 'dart:io';
 
 void main() {
@@ -205,13 +205,13 @@ void _updateCodePatterns() {
 
 ```bash
 # Make script executable
-chmod +x scripts/migration/migrate_to_v2.0.0.dart
+chmod +x scripts/dev/migration/migrate_to_v2.0.0.dart
 
 # Run script
-dart scripts/migration/migrate_to_v2.0.0.dart
+dart scripts/dev/migration/migrate_to_v2.0.0.dart
 
 # Or with Flutter
-flutter pub run scripts/migration/migrate_to_v2.0.0.dart
+flutter pub run scripts/dev/migration/migrate_to_v2.0.0.dart
 ```
 
 ## Common Upgrade Scenarios

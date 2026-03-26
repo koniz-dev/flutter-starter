@@ -14,6 +14,13 @@ flutter test
 ./scripts/test/test_coverage.sh --html
 ```
 
+### E2E Testing (Patrol)
+Ensure you have `patrol_cli` installed:
+```bash
+dart pub global activate patrol_cli
+./scripts/test/run_e2e_tests.sh
+```
+
 ### Analyze Coverage
 ```bash
 ./scripts/test/calculate_layer_coverage.sh
@@ -37,7 +44,8 @@ test/
 ├── core/            # Core layer tests
 ├── features/        # Feature layer tests
 ├── shared/          # Shared components
-└── integration/     # Integration tests
+├── integration/     # Standard integration tests
+└── integration_test/# E2E Patrol tests (e.g. auth_flow_test.dart)
 ```
 
 ## Key Files
