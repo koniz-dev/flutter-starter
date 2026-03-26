@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "Running pre-commit checks..."
+
+# Check if Flutter is available
+if ! command -v flutter &> /dev/null; then
+  echo "⚠️ Flutter not found. Skipping checks."
+  exit 0
+fi
+
+# Run dart format
+echo "📝 Checking code formatting..."
+dart format --set-exit-if-changed . || {
+  echo "❌ Code formatting check failed!"
+  echo "Please run: dart format ."
+  exit 1
+}
+
+# Run flutter analyze
+echo "🔍 Running code analysis..."
+flutter analyze || {
+  echo "❌ Code analysis failed!"
+  exit 1
+}
+
+echo "✅ Pre-commit checks passed!"
+exit 0

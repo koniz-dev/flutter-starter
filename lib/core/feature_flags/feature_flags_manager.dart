@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
 import 'package:flutter_starter/features/feature_flags/domain/repositories/feature_flags_repository.dart';
@@ -28,8 +27,8 @@ class FeatureFlagsManager {
   Future<bool> isEnabled(FeatureFlagKey key) async {
     final result = await _repository.getFlag(key.value);
     return result.when(
-      success: (FeatureFlag flag) => flag.value,
-      failureCallback: (Failure _) => key.defaultValue,
+      success: (flag) => flag.value,
+      failureCallback: (_) => key.defaultValue,
     );
   }
 
@@ -37,19 +36,18 @@ class FeatureFlagsManager {
   Future<FeatureFlag?> getFlag(FeatureFlagKey key) async {
     final result = await _repository.getFlag(key.value);
     return result.when(
-      success: (FeatureFlag flag) => flag,
-      failureCallback: (Failure _) => null,
+      success: (flag) => flag,
+      failureCallback: (_) => null,
     );
   }
 
   /// Get multiple feature flags
   Future<Map<String, bool>> getFlags(List<FeatureFlagKey> keys) async {
-    final flagKeys = keys.map((FeatureFlagKey k) => k.value).toList();
+    final flagKeys = keys.map((k) => k.value).toList();
     final result = await _repository.getFlags(flagKeys);
     return result.when(
-      success: (Map<String, FeatureFlag> flags) =>
-          flags.map((String k, FeatureFlag v) => MapEntry(k, v.value)),
-      failureCallback: (Failure _) => <String, bool>{},
+      success: (flags) => flags.map((k, v) => MapEntry(k, v.value)),
+      failureCallback: (_) => <String, bool>{},
     );
   }
 

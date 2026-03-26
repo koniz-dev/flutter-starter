@@ -1,7 +1,23 @@
 /// Performance monitoring module
 ///
 /// This module provides comprehensive performance monitoring capabilities
-/// using Firebase Performance Monitoring.
+/// with a pluggable backend architecture.
+///
+/// ## Default Behavior
+///
+/// By default, the module uses [NoOpPerformanceService] which does nothing
+/// and has zero external dependencies. This means your app runs without
+/// any performance monitoring overhead by default.
+///
+/// ## Enabling Firebase Performance
+///
+/// To enable Firebase Performance monitoring, override the provider:
+///
+/// ```dart
+/// final performanceServiceProvider = Provider<IPerformanceService>((ref) {
+///   return FirebasePerformanceService();
+/// });
+/// ```
 ///
 /// ## Features
 ///
@@ -17,7 +33,7 @@
 /// ### Basic Usage
 ///
 /// ```dart
-/// final performanceService = PerformanceService();
+/// final performanceService = ref.watch(performanceServiceProvider);
 /// final trace = performanceService.startTrace('my_operation');
 /// await trace?.start();
 /// // ... perform operation ...
@@ -43,30 +59,18 @@
 /// }
 /// ```
 ///
-/// ### Repository Performance Tracking
-///
-/// ```dart
-/// class MyRepositoryImpl
-///     implements MyRepository with PerformanceRepositoryMixin {
-///   @override
-///   PerformanceService? get performanceService => _performanceService;
-///
-///   Future<Result<List<Item>>> getItems() {
-///     return measureRepositoryOperation(
-///       operationName: 'get_items',
-///       operation: () => _fetchItems(),
-///     );
-///   }
-/// }
-/// ```
-///
-/// See `performance_examples.dart` for more examples.
+/// See `examples/performance_examples.dart` for more examples.
 library;
 
+import 'package:flutter_starter/core/performance/noop_performance_service.dart'
+    show NoOpPerformanceService;
+
+export 'package:flutter_starter/core/performance/i_performance_service.dart';
+export 'package:flutter_starter/core/performance/noop_performance_service.dart';
 export 'package:flutter_starter/core/performance/performance_attributes.dart';
 export 'package:flutter_starter/core/performance/performance_providers.dart';
 export 'package:flutter_starter/core/performance/performance_repository_mixin.dart';
 export 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
-export 'package:flutter_starter/core/performance/performance_service.dart';
+
 export 'package:flutter_starter/core/performance/performance_usecase_mixin.dart';
 export 'package:flutter_starter/core/performance/performance_utils.dart';

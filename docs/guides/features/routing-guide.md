@@ -476,3 +476,4 @@ This implementation follows go_router best practices:
 - [Flutter Deep Linking Guide](https://docs.flutter.dev/ui/navigation/deep-linking) - Deep linking setup
 - [Riverpod Documentation](https://riverpod.dev/) - Riverpod state management
 
+

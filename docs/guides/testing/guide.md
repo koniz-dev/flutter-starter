@@ -442,13 +442,13 @@ flutter test --coverage
 ### Generate HTML Coverage Report
 
 ```bash
-./scripts/test_coverage.sh --html
+./scripts/test/test_coverage.sh --html
 ```
 
 ### Analyze Coverage by Layer
 
 ```bash
-./scripts/analyze_coverage.sh
+./scripts/test/calculate_layer_coverage.sh
 ```
 
 ### Run Specific Test File
@@ -480,7 +480,7 @@ Tests run automatically on:
 
 ### Viewing Coverage
 
-1. **Local**: Run `./scripts/test_coverage.sh --html --open`
+1. **Local**: Run `./scripts/test/test_coverage.sh --html --open`
 2. **CI/CD**: Check workflow artifacts
 3. **Codecov**: https://codecov.io/gh/[your-repo]
 
@@ -652,4 +652,5 @@ await pumpApp(
 - [Mocktail Documentation](https://pub.dev/packages/mocktail)
 - [Riverpod Testing](https://riverpod.dev/docs/concepts/testing)
 - [Clean Architecture Testing](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
 

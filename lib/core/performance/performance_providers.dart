@@ -1,16 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
+import 'package:flutter_starter/core/performance/noop_performance_service.dart';
 
-/// Provider for [PerformanceService] instance
+/// Provider for [IPerformanceService] instance
 ///
-/// This provider creates a singleton instance of [PerformanceService] that can
-/// be used throughout the application for performance monitoring.
+/// By default, this uses [NoOpPerformanceService] which has zero external
+/// dependencies. To enable Firebase Performance monitoring, override this
+/// provider:
 ///
-/// The service automatically respects the ENABLE_PERFORMANCE_MONITORING flag
-/// from AppConfig.
-final performanceServiceProvider = Provider<PerformanceService>((ref) {
-  return PerformanceService();
+/// ```dart
+/// final performanceServiceProvider = Provider<IPerformanceService>((ref) {
+///   return FirebasePerformanceService();
+/// });
+/// ```
+final performanceServiceProvider = Provider<IPerformanceService>((ref) {
+  return NoOpPerformanceService();
 });
 
 /// Provider for [PerformanceInterceptor] instance

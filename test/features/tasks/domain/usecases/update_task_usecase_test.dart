@@ -138,10 +138,11 @@ void main() {
     });
 
     test('should update task with null description', () async {
-      // Arrange
+      final testDate = DateTime(2024);
       final originalTask = createTask(
         id: 'task-1',
         title: 'Task Title',
+        updatedAt: testDate,
       );
       Task? updatedTask;
       when(() => mockRepository.updateTask(any())).thenAnswer((
@@ -163,10 +164,11 @@ void main() {
     });
 
     test('should update task with empty title', () async {
-      // Arrange
+      final testDate = DateTime(2024);
       final originalTask = createTask(
         id: 'task-1',
         title: '',
+        updatedAt: testDate,
       );
       Task? updatedTask;
       when(() => mockRepository.updateTask(any())).thenAnswer((
@@ -188,11 +190,12 @@ void main() {
     });
 
     test('should update task with very long title', () async {
-      // Arrange
+      final testDate = DateTime(2024);
       final longTitle = 'A' * 1000;
       final originalTask = createTask(
         id: 'task-1',
         title: longTitle,
+        updatedAt: testDate,
       );
       Task? updatedTask;
       when(() => mockRepository.updateTask(any())).thenAnswer((
@@ -265,11 +268,12 @@ void main() {
     });
 
     test('should update task with all fields changed', () async {
-      // Arrange
+      final testDate = DateTime(2024);
       final originalTask = createTask(
         id: 'task-1',
         title: 'Original Title',
         description: 'Original Description',
+        updatedAt: testDate,
       );
       final updatedTask = originalTask.copyWith(
         title: 'Updated Title',
@@ -318,6 +322,7 @@ void main() {
           });
 
           // Act
+          await Future<void>.delayed(const Duration(milliseconds: 1));
           await useCase(currentTask);
 
           // Assert

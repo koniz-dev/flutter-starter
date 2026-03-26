@@ -176,3 +176,4 @@ See [Errors API](../api/core/errors.md) for all error types.
 - ✅ Review [Common Patterns](../api/examples/common-patterns.md)
 - ✅ Explore existing features (e.g., `lib/features/auth/`)
 
+

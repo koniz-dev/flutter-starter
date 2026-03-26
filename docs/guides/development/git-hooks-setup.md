@@ -281,7 +281,7 @@ Add to `README.md` or setup instructions:
 
 ```bash
 # Install Git hooks
-./scripts/setup-git-hooks.sh
+./scripts/dev/setup_git_hooks.sh
 ```
 
 ---
@@ -297,7 +297,7 @@ For this Flutter Starter template, we recommend using **manual Git hooks** becau
 
 ### Quick Setup Script
 
-Create `scripts/setup-git-hooks.sh`:
+Create `scripts/dev/setup_git_hooks.sh`:
 
 ```bash
 #!/bin/bash
@@ -419,8 +419,8 @@ fi
 
 ```bash
 # Run setup script
-chmod +x scripts/setup-git-hooks.sh
-./scripts/setup-git-hooks.sh
+chmod +x scripts/dev/setup_git_hooks.sh
+./scripts/dev/setup_git_hooks.sh
 ```
 
 ---
@@ -519,7 +519,7 @@ exit /b 0
 
 3. **Reinstall hooks:**
    ```bash
-   ./scripts/setup-git-hooks.sh
+   ./scripts/dev/setup_git_hooks.sh
    ```
 
 ### Hooks Too Slow
@@ -571,4 +571,5 @@ If hooks are too slow, you can:
 ---
 
 **Questions?** Open an issue or check the [Contributing Guide](../CONTRIBUTING.md).
+
 

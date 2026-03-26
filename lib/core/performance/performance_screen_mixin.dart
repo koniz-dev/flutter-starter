@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 
 /// Mixin for automatic screen performance monitoring
 ///
@@ -28,8 +28,8 @@ import 'package:flutter_starter/core/performance/performance_service.dart';
 /// }
 /// ```
 mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
-  PerformanceTrace? _screenTrace;
-  PerformanceService? _performanceService;
+  IPerformanceTrace? _screenTrace;
+  IPerformanceService? _performanceService;
 
   /// The name of the screen for performance tracking
   /// Override this to provide a custom screen name
@@ -43,11 +43,11 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
 
   /// Get the performance service instance
   /// Override this if you need to provide a custom service
-  PerformanceService? get performanceService => _performanceService;
+  IPerformanceService? get performanceService => _performanceService;
 
   /// Set the performance service instance
   /// This is typically called from the widget's build method or initState
-  set performanceService(PerformanceService? service) {
+  set performanceService(IPerformanceService? service) {
     _performanceService = service;
   }
 
@@ -150,8 +150,8 @@ class PerformanceScreenWrapper extends StatefulWidget {
   /// The child widget to wrap
   final Widget child;
 
-  /// Optional performance service (if not provided, will create a new one)
-  final PerformanceService? performanceService;
+  /// Optional performance service (if not provided, will use NoOp)
+  final IPerformanceService? performanceService;
 
   @override
   State<PerformanceScreenWrapper> createState() =>
@@ -159,13 +159,14 @@ class PerformanceScreenWrapper extends StatefulWidget {
 }
 
 class _PerformanceScreenWrapperState extends State<PerformanceScreenWrapper> {
-  PerformanceTrace? _screenTrace;
-  late PerformanceService _performanceService;
+  IPerformanceTrace? _screenTrace;
+  late IPerformanceService _performanceService;
 
   @override
   void initState() {
     super.initState();
-    _performanceService = widget.performanceService ?? PerformanceService();
+    _performanceService =
+        widget.performanceService ?? _NoOpPerformanceServiceInline();
     _startScreenTrace();
   }
 
@@ -208,4 +209,34 @@ class _PerformanceScreenWrapperState extends State<PerformanceScreenWrapper> {
   Widget build(BuildContext context) {
     return widget.child;
   }
+}
+
+/// Private inline NoOp fallback (avoids circular import)
+class _NoOpPerformanceServiceInline implements IPerformanceService {
+  @override
+  bool get isEnabled => false;
+  @override
+  IPerformanceTrace? startTrace(String name) => null;
+  @override
+  Future<T> measureOperation<T>({
+    required String name,
+    required Future<T> Function() operation,
+    Map<String, String>? attributes,
+  }) => operation();
+  @override
+  T measureSyncOperation<T>({
+    required String name,
+    required T Function() operation,
+    Map<String, String>? attributes,
+  }) => operation();
+  @override
+  T measureSyncComputation<T>({
+    required String operationName,
+    required T Function() computation,
+    Map<String, String>? attributes,
+  }) => computation();
+  @override
+  IPerformanceTrace? startHttpTrace(String method, String path) => null;
+  @override
+  IPerformanceTrace? startScreenTrace(String screenName) => null;
 }

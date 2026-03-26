@@ -15,10 +15,14 @@ class ImageCacheHelper {
   /// such as images in a list that's about to be scrolled into view.
   ///
   /// Returns true if successful, false otherwise.
-  static Future<bool> preloadImage(String url) async {
+  static Future<bool> preloadImage(String url, {BuildContext? context}) async {
     try {
       final imageProvider = NetworkImage(url);
-      await precacheImage(imageProvider, _getImageContext());
+      await precacheImage(
+        imageProvider,
+        context ?? _getImageContext(),
+        onError: (e, stack) => debugPrint(r'Preload error: $e'),
+      );
       return true;
     } on Object catch (e) {
       // Catch all errors (Exception and Error) since the dummy context

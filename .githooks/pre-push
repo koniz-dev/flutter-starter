@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Running pre-push checks..."
+
+# Check if Flutter is available
+if ! command -v flutter &> /dev/null; then
+  echo "⚠️ Flutter not found. Skipping tests."
+  exit 0
+fi
+
+# Run tests
+echo "🧪 Running tests..."
+flutter test || {
+  echo "❌ Tests failed!"
+  exit 1
+}
+
+echo "✅ Pre-push checks passed!"
+exit 0

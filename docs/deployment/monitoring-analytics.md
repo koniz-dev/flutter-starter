@@ -279,107 +279,78 @@ AnalyticsService.setUserProperty(name: 'subscription', value: 'premium');
 
 #### 1. Add Dependencies
 
+Firebase Performance is already decoupled but can be installed via:
+
 ```yaml
 dependencies:
-  firebase_performance: ^0.9.0
+  firebase_performance: ^0.11.1+2
 ```
 
-#### 2. Create Performance Service
+#### 2. Service Architecture
 
-Create `lib/core/performance/performance_service.dart`:
+The system uses an abstract interface `IPerformanceService` to decouple application code from Firebase.
+By default, the `NoOpPerformanceService` is provided.
+
+To use Firebase Performance, enable the `FirebasePerformanceService` provider override in your run configuration:
 
 ```dart
-import 'package:firebase_performance/firebase_performance.dart';
-import 'package:flutter_starter/core/config/app_config.dart';
+// lib/main.dart or provider setup
+import 'package:flutter_starter/shared/performance/firebase_performance_service.dart';
+import 'package:flutter_starter/core/performance/performance_providers.dart';
 
-class PerformanceService {
-  PerformanceService._();
-  
-  static final FirebasePerformance _performance = 
-      FirebasePerformance.instance;
-  
-  static bool get _isEnabled => AppConfig.enablePerformanceMonitoring;
-  
-  /// Start a trace
-  static Trace? startTrace(String name) {
-    if (!_isEnabled) return null;
-    return _performance.newTrace(name);
-  }
-  
-  /// Measure API call performance
-  static Future<T> measureApiCall<T>({
-    required String name,
-    required Future<T> Function() call,
-  }) async {
-    if (!_isEnabled) return await call();
-    
-    final trace = _performance.newTrace('api_$name');
-    await trace.start();
-    
-    try {
-      final result = await call();
-      trace.putMetric('success', 1);
-      return result;
-    } catch (e) {
-      trace.putMetric('error', 1);
-      rethrow;
-    } finally {
-      await trace.stop();
-    }
-  }
-  
-  /// Measure screen load time
-  static Future<void> measureScreenLoad({
-    required String screenName,
-    required Future<void> Function() load,
-  }) async {
-    if (!_isEnabled) {
-      await load();
-      return;
-    }
-    
-    final trace = _performance.newTrace('screen_$screenName');
-    await trace.start();
-    
-    try {
-      await load();
-      trace.putMetric('success', 1);
-    } catch (e) {
-      trace.putMetric('error', 1);
-      rethrow;
-    } finally {
-      await trace.stop();
-    }
-  }
-}
+runApp(
+  ProviderScope(
+    overrides: [
+      performanceServiceProvider.overrideWith((ref) => FirebasePerformanceService()),
+    ],
+    child: const MyApp(),
+  ),
+);
 ```
 
 #### 3. Usage Examples
 
+**Measuring HTTP performance via Dio Interceptor (Automatic):**
+The `PerformanceInterceptor` is injected by default if you use ApiClient:
+
 ```dart
-import 'package:flutter_starter/core/performance/performance_service.dart';
+final performanceInterceptor = ref.watch(performanceInterceptorProvider);
+_dio.interceptors.add(performanceInterceptor);
+```
 
-// Measure API calls
-final data = await PerformanceService.measureApiCall(
-  name: 'fetch_user_data',
-  call: () => apiService.getUserData(),
-);
+**Measuring functions manually via Provider:**
 
-// Measure screen loads
-await PerformanceService.measureScreenLoad(
-  screenName: 'home',
-  load: () async {
-    // Load screen data
-    await loadHomeData();
-  },
-);
+```dart
+import 'package:flutter_starter/core/performance/performance_providers.dart';
 
-// Custom traces
-final trace = PerformanceService.startTrace('custom_operation');
-if (trace != null) {
-  // Your operation
-  trace.putMetric('items_processed', 10);
-  await trace.stop();
+void myFunction(WidgetRef ref) async {
+  final performance = ref.read(performanceServiceProvider);
+  
+  await performance.measureScreenLoad(
+    screenName: 'home',
+    load: () async {
+      // Your load logic goes here
+    },
+  );
+}
+```
+
+**Using the Performance Mixins:**
+You can also use `PerformanceRepositoryMixin` or `PerformanceScreenMixin` for streamlined tracking.
+
+```dart
+class MyRepository with PerformanceRepositoryMixin {
+  @override
+  IPerformanceService get performanceService => _service;
+
+  Future<void> fetchData() async {
+    return measureRepositoryOperation(
+      operationName: 'fetchData',
+      operation: () async {
+        // ...
+      },
+    );
+  }
 }
 ```
 
@@ -638,4 +609,5 @@ Logger.error('Error message', error, stackTrace);
 - [Firebase Analytics](https://firebase.google.com/docs/analytics)
 - [Firebase Performance](https://firebase.google.com/docs/perf-mon)
 - [Sentry Flutter](https://docs.sentry.io/platforms/flutter/)
+
 

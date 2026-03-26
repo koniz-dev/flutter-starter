@@ -625,3 +625,4 @@ flutter pub add firebase_messaging
 - [Common Patterns](../../api/examples/common-patterns.md) - Common patterns and best practices
 - [Understanding the Codebase](../onboarding/understanding-codebase.md) - Architecture overview
 
+

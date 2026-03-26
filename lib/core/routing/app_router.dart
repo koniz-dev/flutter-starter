@@ -87,7 +87,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
     // Redirect logic for authentication-based routing
     // This function is called whenever navigation occurs or auth state changes
-    redirect: (BuildContext context, GoRouterState state) {
+    redirect: (context, state) {
       // Read current auth state (safe because redirect is synchronous)
       final authState = ref.read(authNotifierProvider);
       final isAuthenticated = authState.user != null;

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Changelog generation script for Flutter Starter
-# Usage: ./scripts/generate_changelog.sh [version]
+# Usage: ./scripts/ci/generate_changelog.sh [version]
 
 set -e
 
@@ -186,4 +186,5 @@ echo -e "  ${YELLOW}Version:${NC} $VERSION"
 echo -e "  ${YELLOW}Date:${NC} $DATE"
 echo ""
 echo "Review CHANGELOG.md and commit if satisfied."
+
 

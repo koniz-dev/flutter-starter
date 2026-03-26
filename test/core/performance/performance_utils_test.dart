@@ -1,9 +1,9 @@
-import 'package:flutter_starter/core/performance/performance_service.dart';
+﻿import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockPerformanceService extends Mock implements PerformanceService {}
+class MockPerformanceService extends Mock implements IPerformanceService {}
 
 void main() {
   group('PerformanceUtils', () {

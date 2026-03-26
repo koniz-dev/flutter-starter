@@ -1,16 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
+import 'package:flutter_starter/core/performance/noop_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_providers.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('performanceServiceProvider', () {
-    test('should provide PerformanceService instance', () {
+    test('should provide IPerformanceService instance', () {
       final container = ProviderContainer();
       final service = container.read(performanceServiceProvider);
 
-      expect(service, isA<PerformanceService>());
+      expect(service, isA<IPerformanceService>());
+    });
+
+    test('should provide NoOpPerformanceService by default', () {
+      final container = ProviderContainer();
+      final service = container.read(performanceServiceProvider);
+
+      expect(service, isA<NoOpPerformanceService>());
     });
 
     test('should provide singleton instance', () {
@@ -52,7 +60,7 @@ void main() {
       final service = container.read(performanceServiceProvider);
 
       expect(interceptor, isA<PerformanceInterceptor>());
-      expect(service, isA<PerformanceService>());
+      expect(service, isA<IPerformanceService>());
     });
 
     test('should be accessible as Provider', () {
@@ -82,7 +90,7 @@ void main() {
       for (var i = 0; i < 5; i++) {
         final service = container.read(performanceServiceProvider);
         final interceptor = container.read(performanceInterceptorProvider);
-        expect(service, isA<PerformanceService>());
+        expect(service, isA<IPerformanceService>());
         expect(interceptor, isA<PerformanceInterceptor>());
       }
     });

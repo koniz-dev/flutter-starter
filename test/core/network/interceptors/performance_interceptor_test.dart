@@ -1,13 +1,13 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockPerformanceService extends Mock implements PerformanceService {}
+class MockPerformanceService extends Mock implements IPerformanceService {}
 
-class MockPerformanceTrace extends Mock implements PerformanceTrace {}
+class MockPerformanceTrace extends Mock implements IPerformanceTrace {}
 
 /// Test handler for request interceptor
 class TestRequestInterceptorHandler extends RequestInterceptorHandler {

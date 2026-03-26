@@ -62,7 +62,7 @@ class OptimizedImage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (preload && imageUrl.isNotEmpty) {
       // Preload image in background
-      unawaited(ImageCacheHelper.preloadImage(imageUrl));
+      unawaited(ImageCacheHelper.preloadImage(imageUrl, context: context));
     }
 
     return Image.network(

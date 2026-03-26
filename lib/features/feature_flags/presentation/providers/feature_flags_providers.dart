@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/feature_flags/feature_flags_manager.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_local_datasource.dart';
@@ -83,7 +82,7 @@ final featureFlagsInitializationProvider = FutureProvider<void>((ref) async {
 /// ```
 // ignore: specify_nonobvious_property_types
 final isFeatureEnabledProvider = FutureProvider.family<bool, FeatureFlagKey>(
-  (ref, FeatureFlagKey key) async {
+  (ref, key) async {
     final manager = ref.watch(featureFlagsManagerProvider);
     return manager.isEnabled(key);
   },
@@ -99,7 +98,7 @@ final isFeatureEnabledProvider = FutureProvider.family<bool, FeatureFlagKey>(
 /// ```
 // ignore: specify_nonobvious_property_types
 final featureFlagProvider = FutureProvider.family<FeatureFlag?, FeatureFlagKey>(
-  (ref, FeatureFlagKey key) async {
+  (ref, key) async {
     final manager = ref.watch(featureFlagsManagerProvider);
     return manager.getFlag(key);
   },
@@ -113,7 +112,7 @@ final allFeatureFlagsProvider = FutureProvider<Map<String, FeatureFlag?>>((
 
   final result = await repository.getAllFlags();
   return result.when(
-    success: (Map<String, FeatureFlag> flags) => flags,
-    failureCallback: (Failure _) => <String, FeatureFlag?>{},
+    success: (flags) => flags,
+    failureCallback: (_) => <String, FeatureFlag?>{},
   );
 });

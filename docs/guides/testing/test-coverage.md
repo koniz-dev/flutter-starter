@@ -33,7 +33,7 @@ Test coverage measures how much of the codebase is executed during tests. We aim
 
 2. **Generate HTML report:**
    ```bash
-   ./scripts/test_coverage.sh --html
+   ./scripts/test/test_coverage.sh --html
    ```
 
 3. **View report:**
@@ -49,19 +49,19 @@ Main coverage script with options:
 
 ```bash
 # Basic coverage check
-./scripts/test_coverage.sh
+./scripts/test/test_coverage.sh
 
 # Generate HTML report
-./scripts/test_coverage.sh --html
+./scripts/test/test_coverage.sh --html
 
 # Open HTML report automatically
-./scripts/test_coverage.sh --html --open
+./scripts/test/test_coverage.sh --html --open
 
 # Set minimum threshold
-./scripts/test_coverage.sh --min=85
+./scripts/test/test_coverage.sh --min=85
 
 # Exclude paths from coverage
-./scripts/test_coverage.sh --exclude=lib/generated
+./scripts/test/test_coverage.sh --exclude=lib/generated
 ```
 
 #### analyze_coverage.sh
@@ -69,7 +69,7 @@ Main coverage script with options:
 Analyzes coverage by layer:
 
 ```bash
-./scripts/analyze_coverage.sh
+./scripts/test/calculate_layer_coverage.sh
 ```
 
 Output shows:
@@ -125,7 +125,7 @@ To increase the minimum threshold:
    MIN_COVERAGE=85  # Change from 80 to 85
    ```
 
-2. **Update coverage script** (`scripts/test_coverage.sh`):
+2. **Update coverage script** (`scripts/test/test_coverage.sh`):
    ```bash
    MIN_COVERAGE=85  # Change default
    ```
@@ -138,7 +138,7 @@ To increase the minimum threshold:
 
 1. **Run coverage analysis:**
    ```bash
-   ./scripts/analyze_coverage.sh
+   ./scripts/test/calculate_layer_coverage.sh
    ```
 
 2. **View HTML report:**
@@ -168,7 +168,7 @@ To increase the minimum threshold:
 3. **Verify coverage:**
    ```bash
    flutter test --coverage
-   ./scripts/test_coverage.sh
+   ./scripts/test/test_coverage.sh
    ```
 
 ### Common Coverage Gaps
@@ -382,7 +382,7 @@ When reviewing coverage reports, focus on **executable code coverage** rather th
 **Problem:** Coverage below 80%
 
 **Solutions:**
-1. Identify gaps: `./scripts/analyze_coverage.sh`
+1. Identify gaps: `./scripts/test/calculate_layer_coverage.sh`
 2. Add tests for uncovered code
 3. Focus on high-impact areas first
 4. Set incremental goals (e.g., 75% → 80% → 85%)
@@ -427,4 +427,5 @@ Cloud coverage tracking:
 - [Codecov Documentation](https://docs.codecov.com)
 - [LCOV Documentation](https://github.com/linux-test-project/lcov)
 - [Testing Guide](guide.md)
+
 

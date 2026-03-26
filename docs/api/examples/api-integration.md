@@ -392,3 +392,4 @@ Future<void> _refreshToken() async {
 - [Error Handling](../../core/errors.md) - Exception and Failure types
 - [Common Patterns](common-patterns.md) - Common usage patterns
 
+

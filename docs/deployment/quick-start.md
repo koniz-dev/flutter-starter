@@ -82,13 +82,13 @@ flutter build web --release
 
 ```bash
 # Bump version
-./scripts/bump_version.sh patch
+./scripts/ci/bump_version.sh patch
 
 # Generate changelog
-./scripts/generate_changelog.sh
+./scripts/ci/generate_changelog.sh
 
 # Create release (automated)
-./scripts/release.sh patch
+./scripts/ci/release.sh patch
 ```
 
 Or manually:
@@ -132,4 +132,5 @@ git push origin v1.0.0
 - [Android Guide](./android-deployment.md)
 - [iOS Guide](./ios-deployment.md)
 - [Web Guide](./web-deployment.md)
+
 

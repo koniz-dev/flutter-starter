@@ -330,22 +330,22 @@ Format: `MAJOR.MINOR.PATCH+BUILD_NUMBER`
 
 Use the provided script:
 ```bash
-./scripts/bump_version.sh [major|minor|patch] [build_number]
+./scripts/ci/bump_version.sh [major|minor|patch] [build_number]
 ```
 
 Examples:
 ```bash
 # Bump patch version
-./scripts/bump_version.sh patch
+./scripts/ci/bump_version.sh patch
 
 # Bump minor version
-./scripts/bump_version.sh minor
+./scripts/ci/bump_version.sh minor
 
 # Bump major version
-./scripts/bump_version.sh major
+./scripts/ci/bump_version.sh major
 
 # Set specific build number
-./scripts/bump_version.sh patch 42
+./scripts/ci/bump_version.sh patch 42
 ```
 
 ### Changelog Generation
@@ -364,7 +364,7 @@ chore: Maintenance tasks
 
 Generate changelog:
 ```bash
-./scripts/generate_changelog.sh
+./scripts/ci/generate_changelog.sh
 ```
 
 ### Pre-Release Checklist
@@ -571,4 +571,5 @@ See [web-deployment.md](./web-deployment.md) for detailed Web-specific deploymen
 3. Set up Firebase projects for each environment
 4. Test build process locally
 5. Create first release
+
 

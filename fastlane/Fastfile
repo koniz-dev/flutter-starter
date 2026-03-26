@@ -228,7 +228,7 @@ platform :android do
   lane :increment_build do
     # This would require a script to update pubspec.yaml
     # For now, use the bump_version.sh script
-    UI.message("Use ./scripts/bump_version.sh build to increment build number")
+    UI.message("Use ./scripts/ci/bump_version.sh build to increment build number")
   end
   
   desc "Update changelog"
@@ -265,4 +265,5 @@ platform :android do
     sh("cd .. && flutter analyze")
   end
 end
+
 

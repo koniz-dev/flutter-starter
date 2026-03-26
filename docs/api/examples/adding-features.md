@@ -383,3 +383,4 @@ final _productsProvider = FutureProvider<List<Product>>((ref) async {
 - [API Integration](api-integration.md) - API integration patterns
 - [Auth - Repositories](../features/auth/repositories.md) - Example repository
 
+

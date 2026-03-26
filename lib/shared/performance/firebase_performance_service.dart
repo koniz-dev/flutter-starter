@@ -2,24 +2,26 @@ import 'dart:async';
 
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
+import 'package:flutter_starter/core/performance/noop_performance_service.dart'
+    show NoOpPerformanceService;
+import 'package:flutter_starter/core/performance/performance.dart'
+    show NoOpPerformanceService;
 
-/// Performance monitoring service that wraps Firebase Performance
+/// Firebase Performance monitoring service
 ///
-/// This service provides a clean API for performance monitoring while:
-/// - Respecting the ENABLE_PERFORMANCE_MONITORING flag
-/// - Providing abstraction over Firebase Performance
-/// - Being testable and non-intrusive
+/// This is the Firebase-backed implementation of [IPerformanceService].
+/// It is NOT used by default â€” the default is [NoOpPerformanceService].
 ///
-/// Usage:
+/// To enable Firebase Performance, override the provider:
 /// ```dart
-/// final service = PerformanceService();
-/// final trace = service.startTrace('api_call');
-/// // ... perform operation ...
-/// await trace?.stop();
+/// final performanceServiceProvider = Provider<IPerformanceService>((ref) {
+///   return FirebasePerformanceService();
+/// });
 /// ```
-class PerformanceService {
-  /// Creates a [PerformanceService] instance
-  PerformanceService() : _performance = _getPerformanceInstance();
+class FirebasePerformanceService implements IPerformanceService {
+  /// Creates a [FirebasePerformanceService] instance
+  FirebasePerformanceService() : _performance = _getPerformanceInstance();
 
   final FirebasePerformance? _performance;
 
@@ -27,40 +29,25 @@ class PerformanceService {
     try {
       return FirebasePerformance.instance;
     } on Exception {
-      // Return null if Firebase is not initialized
       return null;
     }
   }
 
-  /// Returns true if performance monitoring is enabled
+  @override
   bool get isEnabled => AppConfig.enablePerformanceMonitoring;
 
-  /// Start a custom trace
-  ///
-  /// Returns null if performance monitoring is disabled.
-  ///
-  /// [name] - The name of the trace (max 100 characters)
-  /// Returns a [PerformanceTrace] that can be used to record metrics and stop
-  PerformanceTrace? startTrace(String name) {
+  @override
+  IPerformanceTrace? startTrace(String name) {
     if (!isEnabled || _performance == null) return null;
     try {
       final trace = _performance.newTrace(name);
-      return PerformanceTrace(trace);
+      return FirebasePerformanceTrace(trace);
     } on Exception {
-      // If Firebase Performance is not initialized, return null
       return null;
     }
   }
 
-  /// Measure an async operation with automatic trace management
-  ///
-  /// This method automatically starts a trace, executes the operation,
-  /// records success/error metrics, and stops the trace.
-  ///
-  /// [name] - The name of the trace
-  /// [operation] - The async operation to measure
-  /// [attributes] - Optional attributes to add to the trace
-  /// Returns the result of the operation
+  @override
   Future<T> measureOperation<T>({
     required String name,
     required Future<T> Function() operation,
@@ -94,15 +81,7 @@ class PerformanceService {
     }
   }
 
-  /// Measure a sync operation with automatic trace management
-  ///
-  /// This method automatically starts a trace, executes the operation,
-  /// records success/error metrics, and stops the trace.
-  ///
-  /// [name] - The name of the trace
-  /// [operation] - The sync operation to measure
-  /// [attributes] - Optional attributes to add to the trace
-  /// Returns the result of the operation
+  @override
   T measureSyncOperation<T>({
     required String name,
     required T Function() operation,
@@ -136,14 +115,7 @@ class PerformanceService {
     }
   }
 
-  /// Measure a sync computation with automatic trace management
-  ///
-  /// This is a convenience method for measuring sync computations.
-  ///
-  /// [operationName] - The name of the operation
-  /// [computation] - The sync computation to measure
-  /// [attributes] - Optional attributes to add to the trace
-  /// Returns the result of the computation
+  @override
   T measureSyncComputation<T>({
     required String operationName,
     required T Function() computation,
@@ -156,18 +128,10 @@ class PerformanceService {
     );
   }
 
-  /// Create a HTTP request trace
-  ///
-  /// This is a convenience method for tracking HTTP requests.
-  /// The trace name will be formatted as: `"http_<method>_<path>"`
-  ///
-  /// [method] - HTTP method (GET, POST, etc.)
-  /// [path] - Request path
-  /// Returns a [PerformanceTrace] configured for HTTP tracking
-  PerformanceTrace? startHttpTrace(String method, String path) {
+  @override
+  IPerformanceTrace? startHttpTrace(String method, String path) {
     if (!isEnabled) return null;
 
-    // Sanitize path to avoid too many unique traces
     final sanitizedPath = _sanitizePath(path);
     final traceName = 'http_${method.toLowerCase()}_$sanitizedPath';
     final trace = startTrace(traceName);
@@ -179,14 +143,8 @@ class PerformanceService {
     return trace;
   }
 
-  /// Create a screen trace
-  ///
-  /// This is a convenience method for tracking screen load times.
-  /// The trace name will be formatted as: `"screen_<screenName>"`
-  ///
-  /// [screenName] - Name of the screen
-  /// Returns a [PerformanceTrace] configured for screen tracking
-  PerformanceTrace? startScreenTrace(String screenName) {
+  @override
+  IPerformanceTrace? startScreenTrace(String screenName) {
     if (!isEnabled) return null;
 
     final traceName = 'screen_$screenName';
@@ -198,12 +156,8 @@ class PerformanceService {
   }
 
   /// Sanitize path to avoid creating too many unique traces
-  ///
-  /// Replaces dynamic segments (like IDs) with placeholders
   String _sanitizePath(String path) {
-    // Remove query parameters
     final withoutQuery = path.split('?').first;
-    // Replace common ID patterns with placeholders
     return withoutQuery
         .replaceAll(RegExp(r'/\d+'), '/:id')
         .replaceAll(RegExp('/[a-f0-9-]{36}'), '/:uuid')
@@ -211,14 +165,14 @@ class PerformanceService {
   }
 }
 
-/// Wrapper around Firebase Trace for better abstraction and testability
-class PerformanceTrace {
-  /// Creates a [PerformanceTrace] wrapping a Firebase [Trace]
-  PerformanceTrace(this._trace);
+/// Firebase-backed wrapper around Firebase [Trace]
+class FirebasePerformanceTrace implements IPerformanceTrace {
+  /// Creates a [FirebasePerformanceTrace] wrapping a Firebase [Trace]
+  FirebasePerformanceTrace(this._trace);
 
   final Trace _trace;
 
-  /// Start the trace (async)
+  @override
   Future<void> start() async {
     try {
       await _trace.start();
@@ -227,7 +181,7 @@ class PerformanceTrace {
     }
   }
 
-  /// Start the trace (sync)
+  @override
   void startSync() {
     try {
       unawaited(_trace.start());
@@ -236,7 +190,7 @@ class PerformanceTrace {
     }
   }
 
-  /// Stop the trace (async)
+  @override
   Future<void> stop() async {
     try {
       await _trace.stop();
@@ -245,7 +199,7 @@ class PerformanceTrace {
     }
   }
 
-  /// Stop the trace (sync)
+  @override
   void stopSync() {
     try {
       unawaited(_trace.stop());
@@ -254,7 +208,7 @@ class PerformanceTrace {
     }
   }
 
-  /// Increment a metric by the given value
+  @override
   void incrementMetric(String metricName, int value) {
     try {
       _trace.incrementMetric(metricName, value);
@@ -263,26 +217,16 @@ class PerformanceTrace {
     }
   }
 
-  /// Set a metric to the given value
-  ///
-  /// Note: Firebase Performance only supports incrementing metrics.
-  /// This method increments the metric by the given value. For setting
-  /// a specific value, use incrementMetric with the desired value directly.
+  @override
   void putMetric(String metricName, int value) {
     try {
-      // Firebase Performance only supports incrementing, so we increment by
-      // value. If you need to set to a specific value, track the current value
-      // separately
       _trace.incrementMetric(metricName, value);
     } on Exception {
       // Ignore errors if Firebase Performance is not available
     }
   }
 
-  /// Set an attribute on the trace
-  ///
-  /// [name] - Attribute name (max 40 characters)
-  /// [value] - Attribute value (max 100 characters)
+  @override
   void putAttribute(String name, String value) {
     try {
       _trace.putAttribute(name, value);
@@ -291,14 +235,14 @@ class PerformanceTrace {
     }
   }
 
-  /// Set multiple attributes on the trace
+  @override
   void putAttributes(Map<String, String> attributes) {
     for (final entry in attributes.entries) {
       putAttribute(entry.key, entry.value);
     }
   }
 
-  /// Get an attribute value
+  @override
   String? getAttribute(String name) {
     try {
       return _trace.getAttribute(name);
@@ -307,7 +251,7 @@ class PerformanceTrace {
     }
   }
 
-  /// Get a metric value
+  @override
   int? getMetric(String metricName) {
     try {
       return _trace.getMetric(metricName);

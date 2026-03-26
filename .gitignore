@@ -49,3 +49,6 @@ app.*.map.json
 .env
 .env.local
 .env.*.local
+
+# Antigravity AI
+.agent/

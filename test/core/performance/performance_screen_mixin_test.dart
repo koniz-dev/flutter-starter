@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
 import 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockPerformanceService extends Mock implements PerformanceService {}
+class MockPerformanceService extends Mock implements IPerformanceService {}
 
-class MockPerformanceTrace extends Mock implements PerformanceTrace {}
+class MockPerformanceTrace extends Mock implements IPerformanceTrace {}
 
 void main() {
   group('PerformanceScreenMixin', () {
@@ -230,7 +230,7 @@ void main() {
 class _TestScreenWithMixin extends StatefulWidget {
   const _TestScreenWithMixin({required this.performanceService});
 
-  final PerformanceService? performanceService;
+  final IPerformanceService? performanceService;
 
   @override
   State<_TestScreenWithMixin> createState() => _TestScreenWithMixinState();
@@ -239,7 +239,7 @@ class _TestScreenWithMixin extends StatefulWidget {
 class _TestScreenWithMixinState extends State<_TestScreenWithMixin>
     with PerformanceScreenMixin {
   @override
-  PerformanceService? get performanceService => widget.performanceService;
+  IPerformanceService? get performanceService => widget.performanceService;
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +252,7 @@ class _TestScreenWithMixinState extends State<_TestScreenWithMixin>
 class _TestScreenWithCustomName extends StatefulWidget {
   const _TestScreenWithCustomName({required this.performanceService});
 
-  final PerformanceService? performanceService;
+  final IPerformanceService? performanceService;
 
   @override
   State<_TestScreenWithCustomName> createState() =>
@@ -265,7 +265,7 @@ class _TestScreenWithCustomNameState extends State<_TestScreenWithCustomName>
   String get screenName => 'custom_screen';
 
   @override
-  PerformanceService? get performanceService => widget.performanceService;
+  IPerformanceService? get performanceService => widget.performanceService;
 
   @override
   Widget build(BuildContext context) {

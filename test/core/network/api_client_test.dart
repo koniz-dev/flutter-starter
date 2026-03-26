@@ -1,8 +1,8 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,7 +16,7 @@ class MockAuthInterceptor extends Mock implements AuthInterceptor {}
 
 class MockLoggingService extends Mock implements LoggingService {}
 
-class MockPerformanceService extends Mock implements PerformanceService {}
+class MockPerformanceService extends Mock implements IPerformanceService {}
 
 void main() {
   group('ApiClient', () {

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build script for all platforms
-# Usage: ./scripts/build_all.sh [environment] [options]
+# Usage: ./scripts/ci/build_all.sh [environment] [options]
 # Options:
 #   --analyze-size    Analyze build size and provide optimization recommendations
 
@@ -30,7 +30,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo -e "${RED}Unknown option: $1${NC}"
-      echo "Usage: ./scripts/build_all.sh [environment] [--analyze-size]"
+      echo "Usage: ./scripts/ci/build_all.sh [environment] [--analyze-size]"
       echo "Valid environments: development, staging, production"
       exit 1
       ;;
@@ -229,4 +229,5 @@ echo "Build artifacts:"
 echo "  Android: build/app/outputs/"
 echo "  iOS: build/ios/ipa/"
 echo "  Web: build/web/"
+
 

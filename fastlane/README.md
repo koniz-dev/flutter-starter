@@ -186,7 +186,7 @@ Update changelog at:
 
 Or use the script:
 ```bash
-./scripts/generate_changelog.sh 1.0.0
+./scripts/ci/generate_changelog.sh 1.0.0
 ```
 
 ## 🔗 Integration with CI/CD
@@ -233,7 +233,8 @@ See [Deployment Documentation](../docs/deployment/) for CI/CD setup.
 
 1. **Test locally first**: Always test builds locally before deploying
 2. **Use staging environment**: Test with staging environment first
-3. **Version management**: Use `./scripts/bump_version.sh` to manage versions
+3. **Version management**: Use `./scripts/ci/bump_version.sh` to manage versions
 4. **Changelog**: Keep changelog updated for each release
 5. **CI/CD**: Use GitHub Actions for automated deployments
+
 

@@ -77,8 +77,8 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       for (final key in keys) {
         final result = await getFlag(key);
         result.when(
-          success: (FeatureFlag flag) => flags[flag.key] = flag,
-          failureCallback: (Failure failure) {
+          success: (flag) => flags[flag.key] = flag,
+          failureCallback: (failure) {
             // Skip flags that don't exist (NotFoundFailure)
             // But fail on other exceptions
             if (failure is! NotFoundFailure) {
@@ -210,7 +210,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   Future<Result<bool>> isEnabled(String key) async {
     try {
       final result = await getFlag(key);
-      return result.map((FeatureFlag flag) => flag.value);
+      return result.map((flag) => flag.value);
     } on Exception catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Object catch (e) {

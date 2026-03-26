@@ -1,5 +1,5 @@
+﻿import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 
 /// Mixin for repository performance monitoring
@@ -32,7 +32,7 @@ import 'package:flutter_starter/core/utils/result.dart';
 mixin PerformanceRepositoryMixin {
   /// Get the performance service instance
   /// Override this to provide the service
-  PerformanceService? get performanceService => null;
+  IPerformanceService? get performanceService => null;
 
   /// Measure a repository operation with automatic performance tracking
   ///

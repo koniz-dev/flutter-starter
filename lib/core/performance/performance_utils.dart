@@ -1,4 +1,4 @@
-import 'package:flutter_starter/core/performance/performance_service.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 
 /// Performance monitoring utilities
 ///
@@ -25,7 +25,7 @@ class PerformanceUtils {
   /// );
   /// ```
   static Future<T> measureApiCall<T>({
-    required PerformanceService service,
+    required IPerformanceService service,
     required String method,
     required String path,
     required Future<T> Function() call,
@@ -58,7 +58,7 @@ class PerformanceUtils {
   /// );
   /// ```
   static Future<T> measureDatabaseQuery<T>({
-    required PerformanceService service,
+    required IPerformanceService service,
     required String queryName,
     required Future<T> Function() query,
     Map<String, String>? attributes,
@@ -89,7 +89,7 @@ class PerformanceUtils {
   /// );
   /// ```
   static Future<T> measureComputation<T>({
-    required PerformanceService service,
+    required IPerformanceService service,
     required String operationName,
     required Future<T> Function() computation,
     Map<String, String>? attributes,
@@ -115,7 +115,7 @@ class PerformanceUtils {
   /// );
   /// ```
   static T measureSyncComputation<T>({
-    required PerformanceService service,
+    required IPerformanceService service,
     required String operationName,
     required T Function() computation,
     Map<String, String>? attributes,
@@ -139,8 +139,8 @@ class PerformanceUtils {
   }
 }
 
-/// Extension on [PerformanceService] for convenience methods
-extension PerformanceServiceExtension on PerformanceService {
+/// Extension on [IPerformanceService] for convenience methods
+extension PerformanceServiceExtension on IPerformanceService {
   /// Measure an API call
   Future<T> measureApiCall<T>({
     required String method,

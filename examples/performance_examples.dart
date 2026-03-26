@@ -1,11 +1,11 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
 import 'package:flutter_starter/core/performance/performance_providers.dart';
 import 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_utils.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 
@@ -27,7 +27,7 @@ import 'package:flutter_starter/core/utils/result.dart';
 ///
 /// This example shows how to measure an API call using the performance service.
 Future<Map<String, dynamic>> exampleApiCallTracing(
-  PerformanceService performanceService,
+  IPerformanceService performanceService,
 ) async {
   return performanceService.measureApiCall<Map<String, dynamic>>(
     method: 'GET',
@@ -52,7 +52,7 @@ Future<Map<String, dynamic>> exampleApiCallTracing(
 /// This example shows how to measure a database query using the performance
 /// service.
 Future<List<Map<String, dynamic>>> exampleDatabaseQueryTracing(
-  PerformanceService performanceService,
+  IPerformanceService performanceService,
 ) async {
   return performanceService.measureDatabaseQuery<List<Map<String, dynamic>>>(
     queryName: 'get_users',
@@ -79,7 +79,7 @@ Future<List<Map<String, dynamic>>> exampleDatabaseQueryTracing(
 /// This example shows how to measure a heavy computation using the performance
 /// service.
 Future<String> exampleHeavyComputationTracing(
-  PerformanceService performanceService,
+  IPerformanceService performanceService,
 ) async {
   return performanceService.measureComputation<String>(
     operationName: 'image_processing',
@@ -96,7 +96,7 @@ Future<String> exampleHeavyComputationTracing(
 
 /// Example of measuring sync computation performance
 String exampleSyncComputationTracing(
-  PerformanceService performanceService,
+  IPerformanceService performanceService,
 ) {
   return performanceService.measureSyncComputation<String>(
     operationName: 'json_parsing',
@@ -137,7 +137,7 @@ class _ExampleScreenWithPerformanceState
   String? get screenRoute => '/example';
 
   @override
-  PerformanceService? get performanceService {
+  IPerformanceService? get performanceService {
     // Get from provider or context
     return null; // In real usage, get from provider
   }
@@ -174,12 +174,12 @@ class ExampleScreenWithWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final performanceService = ref.read(performanceServiceProvider);
+    final perfService = ref.read(performanceServiceProvider);
 
     return PerformanceScreenWrapper(
       screenName: 'example_screen_wrapper',
       screenRoute: '/example-wrapper',
-      performanceService: performanceService,
+      performanceService: perfService,
       child: Scaffold(
         appBar: AppBar(title: const Text('Example Screen')),
         body: const Center(child: Text('Example Screen Content')),
@@ -215,16 +215,10 @@ class ExampleRepositoryImpl implements ExampleRepository {
   });
 
   /// Performance service for tracking repository operations
-  final PerformanceService performanceService;
+  final IPerformanceService performanceService;
 
   @override
   Future<Result<List<String>>> getItems() {
-    // In real usage, you would use the mixin:
-    // class ExampleRepositoryImpl with PerformanceRepositoryMixin
-    //   implements ExampleRepository
-    // Then call: return measureDataFetch<List<String>>(...)
-
-    // For this example, we'll use the service directly
     return performanceService.measureOperation<Result<List<String>>>(
       name: 'repository_get_items',
       operation: () async {
@@ -270,7 +264,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
 /// ```dart
 /// class GetItemsUseCase with PerformanceUseCaseMixin {
 ///   @override
-///   PerformanceService? get performanceService => _performanceService;
+///   IPerformanceService? get performanceService => _performanceService;
 ///   // ... rest of implementation
 /// }
 /// ```
@@ -286,14 +280,10 @@ class GetItemsUseCase {
   final ExampleRepository repository;
 
   /// Optional performance service for tracking use case operations
-  final PerformanceService? performanceService;
+  final IPerformanceService? performanceService;
 
   /// Executes the use case to get all items
   Future<Result<List<String>>> call() {
-    // In real usage with the mixin, you would call:
-    // return measureUseCaseOperation<List<String>>(...)
-
-    // For this example, we'll use the service directly
     if (performanceService == null || !performanceService!.isEnabled) {
       return repository.getItems();
     }
@@ -317,7 +307,9 @@ class GetItemsUseCase {
 /// Example of creating a custom trace with metrics
 ///
 /// This example shows how to create a custom trace and record metrics manually.
-Future<void> exampleCustomTrace(PerformanceService performanceService) async {
+Future<void> exampleCustomTrace(
+  IPerformanceService performanceService,
+) async {
   final trace = performanceService.startTrace('custom_operation');
   if (trace == null) return;
 
@@ -355,7 +347,7 @@ Future<void> exampleCustomTrace(PerformanceService performanceService) async {
 
 /// Example of using PerformanceUtils convenience methods
 Future<void> exampleUsingPerformanceUtils(
-  PerformanceService performanceService,
+  IPerformanceService performanceService,
 ) async {
   // Measure API call
   await PerformanceUtils.measureApiCall(

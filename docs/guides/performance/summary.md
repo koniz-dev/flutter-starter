@@ -62,7 +62,7 @@ This document provides a comprehensive summary of all performance optimizations 
 - ✅ Removed unused dependencies
 - ✅ Code splitting with deferred imports (LazyLoader utility)
 - ✅ Asset optimization guidelines
-- ✅ Build size analysis script
+- ✅ Build size analysis script (`scripts/ci/build_all.sh --analyze-size`)
 
 ### UI Performance
 
@@ -122,7 +122,7 @@ This document provides a comprehensive summary of all performance optimizations 
 
 ### Scripts
 
-1. **Build Size Analysis** (`scripts/analyze_build_size.sh`)
+1. **Build Size Analysis** (`scripts/ci/build_all.sh --analyze-size`)
    - Automatic APK/App Bundle size analysis
    - Dependency count analysis
    - Optimization recommendations
@@ -364,3 +364,4 @@ For detailed information, see:
 ---
 
 **Last Updated:** November 16, 2025
+

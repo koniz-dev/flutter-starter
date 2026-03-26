@@ -1,17 +1,17 @@
-import 'package:firebase_performance/firebase_performance.dart';
+﻿import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
+import 'package:flutter_starter/shared/performance/firebase_performance_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockTrace extends Mock implements Trace {}
 
 void main() {
-  group('PerformanceService', () {
-    late PerformanceService performanceService;
+  group('FirebasePerformanceService', () {
+    late FirebasePerformanceService performanceService;
 
     setUp(() {
-      performanceService = PerformanceService();
+      performanceService = FirebasePerformanceService();
     });
 
     group('isEnabled', () {
@@ -34,7 +34,7 @@ void main() {
         expect(trace, anyOf(isNull, isNotNull));
       });
 
-      test('should return PerformanceTrace when monitoring is enabled', () {
+      test('should return IPerformanceTrace when monitoring is enabled', () {
         // This test verifies the method doesn't throw
         // Actual behavior depends on Firebase initialization
         expect(
@@ -57,7 +57,7 @@ void main() {
         // The _getPerformanceInstance method catches exceptions and
         // returns null
         expect(
-          PerformanceService.new,
+          FirebasePerformanceService.new,
           returnsNormally,
         );
       });
@@ -202,7 +202,7 @@ void main() {
 
     group('_sanitizePath', () {
       test('should remove query parameters', () {
-        final service = PerformanceService();
+        final service = FirebasePerformanceService();
         // Access private method through reflection or test public methods
         // that use it
         final trace = service.startHttpTrace('GET', '/users?page=1&limit=10');
@@ -341,13 +341,13 @@ void main() {
     });
   });
 
-  group('PerformanceTrace', () {
+  group('FirebasePerformanceTrace', () {
     late MockTrace mockTrace;
-    late PerformanceTrace performanceTrace;
+    late FirebasePerformanceTrace performanceTrace;
 
     setUp(() {
       mockTrace = MockTrace();
-      performanceTrace = PerformanceTrace(mockTrace);
+      performanceTrace = FirebasePerformanceTrace(mockTrace);
     });
 
     group('start', () {
@@ -507,7 +507,7 @@ void main() {
     test('should execute operation when trace is null', () async {
       // This test covers the case where startTrace returns null
       // (line 74: if (trace == null) return operation();)
-      final service = PerformanceService();
+      final service = FirebasePerformanceService();
 
       // When monitoring is disabled or Firebase is not available,
       // startTrace returns null, so measureOperation should still
@@ -521,7 +521,7 @@ void main() {
     });
 
     test('should handle operation errors when trace is null', () async {
-      final service = PerformanceService();
+      final service = FirebasePerformanceService();
 
       expect(
         () => service.measureOperation<void>(

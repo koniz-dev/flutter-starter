@@ -364,3 +364,4 @@ final response = await apiClient.get(
 - [Errors](errors.md) - Exception types thrown by ApiClient
 - [Configuration](../../README.md#configuration) - AppConfig for base URL and timeouts
 
+

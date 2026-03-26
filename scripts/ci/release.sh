@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Release automation script for Flutter Starter
-# Usage: ./scripts/release.sh [major|minor|patch]
+# Usage: ./scripts/ci/release.sh [major|minor|patch]
 
 set -e
 
@@ -60,14 +60,14 @@ echo ""
 
 # Step 3: Bump version
 echo -e "${YELLOW}Step 3: Bumping version...${NC}"
-./scripts/bump_version.sh $BUMP_TYPE
+./scripts/ci/bump_version.sh $BUMP_TYPE
 NEW_VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
 echo -e "${GREEN}✓ Version bumped to $NEW_VERSION${NC}"
 echo ""
 
 # Step 4: Generate changelog
 echo -e "${YELLOW}Step 4: Generating changelog...${NC}"
-./scripts/generate_changelog.sh $NEW_VERSION
+./scripts/ci/generate_changelog.sh $NEW_VERSION
 echo -e "${GREEN}✓ Changelog generated${NC}"
 echo ""
 
@@ -118,4 +118,5 @@ echo "     git merge $RELEASE_BRANCH"
 echo "     git push origin main"
 echo ""
 echo -e "${BLUE}Release: v$NEW_VERSION${NC}"
+
 

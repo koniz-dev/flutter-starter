@@ -90,3 +90,4 @@ echo "Domain Layer: ${DOMAIN_COV}%"
 echo "Data Layer: ${DATA_COV}%"
 echo "Presentation Layer: ${PRESENTATION_COV}%"
 echo "Core Layer: ${CORE_COV}%"
+

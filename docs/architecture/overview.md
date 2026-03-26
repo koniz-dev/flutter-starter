@@ -185,10 +185,7 @@ Clear boundaries make it easy to:
 - Understand dependencies (inner layers don't depend on outer)
 - Make changes without breaking other parts
 
-**Example:** Changing state management from Riverpod to Bloc:
-- Only affects Presentation layer
-- Domain and Data layers unchanged
-- Business logic remains intact
+
 
 ### 3. **Scalability**
 
@@ -540,4 +537,5 @@ Start here, learn the patterns, and adapt as needed for your specific use case.
 - **[Common Tasks](../guides/features/common-tasks.md)** - How to add features following Clean Architecture
 - **[Adding Features](../api/examples/adding-features.md)** - Step-by-step guide to adding new features
 - **[API Documentation](../api/README.md)** - Complete API reference
+
 

@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart
 import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 
@@ -30,7 +30,7 @@ class ApiClient {
     required SecureStorageService secureStorageService,
     required AuthInterceptor authInterceptor,
     LoggingService? loggingService,
-    PerformanceService? performanceService,
+    IPerformanceService? performanceService,
   }) : _dio = _createDio(
          storageService,
          secureStorageService,
@@ -44,7 +44,7 @@ class ApiClient {
     SecureStorageService secureStorageService,
     AuthInterceptor authInterceptor,
     LoggingService? loggingService,
-    PerformanceService? performanceService,
+    IPerformanceService? performanceService,
   ) {
     final dio = Dio(
       BaseOptions(

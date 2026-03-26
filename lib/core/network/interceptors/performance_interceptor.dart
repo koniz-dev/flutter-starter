@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
-import 'package:flutter_starter/core/performance/performance_service.dart';
 
 /// Interceptor for automatically tracking HTTP request performance
 ///
@@ -12,14 +12,14 @@ import 'package:flutter_starter/core/performance/performance_service.dart';
 /// - HTTP method and path
 ///
 /// The interceptor respects the ENABLE_PERFORMANCE_MONITORING flag through
-/// the PerformanceService.
+/// the [IPerformanceService].
 class PerformanceInterceptor extends Interceptor {
   /// Creates a [PerformanceInterceptor] with the given [performanceService]
   PerformanceInterceptor({
-    required PerformanceService performanceService,
+    required IPerformanceService performanceService,
   }) : _performanceService = performanceService;
 
-  final PerformanceService _performanceService;
+  final IPerformanceService _performanceService;
 
   @override
   void onRequest(
@@ -122,9 +122,9 @@ class PerformanceInterceptor extends Interceptor {
   }
 
   /// Get the performance trace from request options
-  PerformanceTrace? _getTrace(RequestOptions options) {
+  IPerformanceTrace? _getTrace(RequestOptions options) {
     final trace = options.extra['performance_trace'];
-    if (trace is PerformanceTrace) {
+    if (trace is IPerformanceTrace) {
       return trace;
     }
     return null;

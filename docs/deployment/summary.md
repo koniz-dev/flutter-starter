@@ -101,26 +101,26 @@ Located in `scripts/`:
    - Bumps major, minor, or patch version
    - Increments build number
    - Updates pubspec.yaml
-   - Usage: `./scripts/bump_version.sh [major|minor|patch|build] [build_number]`
+   - Usage: `./scripts/ci/bump_version.sh [major|minor|patch|build] [build_number]`
 
 2. **generate_changelog.sh** - Changelog generation:
    - Reads git commits since last tag
    - Groups by commit type (feat, fix, etc.)
    - Generates markdown changelog
    - Updates CHANGELOG.md
-   - Usage: `./scripts/generate_changelog.sh [version]`
+   - Usage: `./scripts/ci/generate_changelog.sh [version]`
 
 3. **release.sh** - Release automation:
    - Runs tests and analysis
    - Bumps version
    - Generates changelog
    - Creates release branch and tag
-   - Usage: `./scripts/release.sh [major|minor|patch]`
+   - Usage: `./scripts/ci/release.sh [major|minor|patch]`
 
 4. **build_all.sh** - Build all platforms:
    - Builds Android, iOS, and Web
    - Environment-specific builds
-   - Usage: `./scripts/build_all.sh [environment]`
+   - Usage: `./scripts/ci/build_all.sh [environment]`
 
 ## 📋 Configuration Files
 
@@ -176,7 +176,7 @@ Located in `scripts/`:
 1. **Quick Start**: Read [quick-start.md](./quick-start.md)
 2. **Platform Setup**: Follow platform-specific guides
 3. **CI/CD Setup**: Configure GitHub Actions secrets
-4. **First Release**: Use `./scripts/release.sh`
+4. **First Release**: Use `./scripts/ci/release.sh`
 
 ## 📚 Documentation Structure
 
@@ -245,4 +245,5 @@ Before deploying, ensure:
 
 **Created**: Complete deployment documentation for Flutter Starter
 **Last Updated**: November 16, 2025
+
 

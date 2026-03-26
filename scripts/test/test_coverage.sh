@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Test coverage script
-# Usage: ./scripts/test_coverage.sh [options]
+# Usage: ./scripts/test/test_coverage.sh [options]
 # Options:
 #   --html          Generate HTML coverage report
 #   --open          Open HTML report after generation
@@ -58,7 +58,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo -e "${RED}Unknown option: $1${NC}"
-      echo "Usage: ./scripts/test_coverage.sh [--html] [--open] [--min=<percent>] [--exclude=<path>] [--analyze] [--no-test]"
+      echo "Usage: ./scripts/test/test_coverage.sh [--html] [--open] [--min=<percent>] [--exclude=<path>] [--analyze] [--no-test]"
       exit 1
       ;;
   esac
@@ -296,4 +296,5 @@ echo ""
 echo -e "${GREEN}Coverage report complete!${NC}"
 
 exit $EXIT_CODE
+
 

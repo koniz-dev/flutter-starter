@@ -821,3 +821,4 @@ final service = ref.read(authServiceProvider);
 - See [Adding Features](../../api/examples/adding-features.md)
 - Consider using [go_router](https://pub.dev/packages/go_router) for navigation
 
+

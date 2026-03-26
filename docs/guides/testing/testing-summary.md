@@ -11,12 +11,12 @@ flutter test
 
 ### Generate Coverage
 ```bash
-./scripts/test_coverage.sh --html
+./scripts/test/test_coverage.sh --html
 ```
 
 ### Analyze Coverage
 ```bash
-./scripts/analyze_coverage.sh
+./scripts/test/calculate_layer_coverage.sh
 ```
 
 ## Coverage Targets
@@ -44,8 +44,8 @@ test/
 
 - **Test Helpers:** `test/helpers/test_helpers.dart`
 - **Test Fixtures:** `test/helpers/test_fixtures.dart`
-- **Coverage Script:** `scripts/test_coverage.sh`
-- **Analysis Script:** `scripts/analyze_coverage.sh`
+- **Coverage Script:** `scripts/test/test_coverage.sh`
+- **Analysis Script:** `scripts/test/calculate_layer_coverage.sh`
 
 ## CI/CD
 
@@ -70,10 +70,10 @@ flutter test
 flutter test --coverage
 
 # Generate HTML report
-./scripts/test_coverage.sh --html --open
+./scripts/test/test_coverage.sh --html --open
 
 # Analyze by layer
-./scripts/analyze_coverage.sh
+./scripts/test/calculate_layer_coverage.sh
 
 # Run specific test
 flutter test test/features/auth/domain/usecases/login_usecase_test.dart
@@ -93,4 +93,5 @@ flutter test test/features/auth/domain/usecases/login_usecase_test.dart
 - [Flutter Testing Docs](https://docs.flutter.dev/testing)
 - [Mocktail Documentation](https://pub.dev/packages/mocktail)
 - [Riverpod Testing](https://riverpod.dev/docs/concepts/testing)
+
 

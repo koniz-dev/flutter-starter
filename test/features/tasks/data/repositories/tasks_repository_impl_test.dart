@@ -338,8 +338,8 @@ void main() {
 
         // Assert
         result.when(
-          success: (Task task) => expect(task.isCompleted, isTrue),
-          failureCallback: (Failure _) => fail('Expected success'),
+          success: (task) => expect(task.isCompleted, isTrue),
+          failureCallback: (_) => fail('Expected success'),
         );
         verify(() => mockLocalDataSource.getTaskById(taskId)).called(1);
         verify(() => mockLocalDataSource.saveTask(any())).called(1);
@@ -358,8 +358,8 @@ void main() {
         // Assert
         expectResultFailureType(result, CacheFailure);
         result.when(
-          success: (Task _) => fail('Expected failure'),
-          failureCallback: (Failure failure) =>
+          success: (_) => fail('Expected failure'),
+          failureCallback: (failure) =>
               expect(failure.message, 'Task not found'),
         );
       });
@@ -398,8 +398,8 @@ void main() {
 
         // Assert
         result.when(
-          success: (Task task) => expect(task.isCompleted, isFalse),
-          failureCallback: (Failure _) => fail('Expected success'),
+          success: (task) => expect(task.isCompleted, isFalse),
+          failureCallback: (_) => fail('Expected success'),
         );
       });
 
@@ -425,11 +425,11 @@ void main() {
 
         // Assert
         result.when(
-          success: (Task task) {
+          success: (task) {
             expect(task.updatedAt, isNot(originalTime));
             expect(task.updatedAt.isAfter(originalTime), isTrue);
           },
-          failureCallback: (Failure _) => fail('Expected success'),
+          failureCallback: (_) => fail('Expected success'),
         );
       });
     });
@@ -737,8 +737,8 @@ void main() {
 
           // Assert
           result.when(
-            success: (Task task) => expect(task.isCompleted, isFalse),
-            failureCallback: (Failure _) => fail('Expected success'),
+            success: (task) => expect(task.isCompleted, isFalse),
+            failureCallback: (_) => fail('Expected success'),
           );
           verify(() => mockLocalDataSource.getTaskById(taskId)).called(1);
           verify(() => mockLocalDataSource.saveTask(any())).called(1);

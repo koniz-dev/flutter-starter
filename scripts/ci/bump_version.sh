@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Version bumping script for Flutter Starter
-# Usage: ./scripts/bump_version.sh [major|minor|patch|build] [build_number]
+# Usage: ./scripts/ci/bump_version.sh [major|minor|patch|build] [build_number]
 
 set -e
 
@@ -85,4 +85,5 @@ echo "Don't forget to:"
 echo "  1. Commit the version change"
 echo "  2. Update CHANGELOG.md"
 echo "  3. Create a release tag"
+
 

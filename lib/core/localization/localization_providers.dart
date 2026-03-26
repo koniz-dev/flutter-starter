@@ -27,7 +27,7 @@ class LocaleNotifier extends Notifier<Locale> {
   Locale build() {
     // Initialize from storage when provider is first created
     ref.listen<AsyncValue<Locale>>(currentLocaleProvider, (previous, next) {
-      next.whenData((Locale locale) {
+      next.whenData((locale) {
         state = locale;
       });
     });

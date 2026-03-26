@@ -52,26 +52,26 @@ Follow [Semantic Versioning 2.0.0](https://semver.org/):
 Use the provided script:
 
 ```bash
-./scripts/bump_version.sh [major|minor|patch] [build_number]
+./scripts/ci/bump_version.sh [major|minor|patch] [build_number]
 ```
 
 **Examples**:
 
 ```bash
 # Bump patch version (1.0.0+1 → 1.0.1+2)
-./scripts/bump_version.sh patch
+./scripts/ci/bump_version.sh patch
 
 # Bump minor version (1.0.0+1 → 1.1.0+2)
-./scripts/bump_version.sh minor
+./scripts/ci/bump_version.sh minor
 
 # Bump major version (1.0.0+1 → 2.0.0+2)
-./scripts/bump_version.sh major
+./scripts/ci/bump_version.sh major
 
 # Set specific build number (1.0.0+1 → 1.0.0+42)
-./scripts/bump_version.sh patch 42
+./scripts/ci/bump_version.sh patch 42
 
 # Keep version, only bump build (1.0.0+1 → 1.0.0+2)
-./scripts/bump_version.sh build
+./scripts/ci/bump_version.sh build
 ```
 
 ### Manual Bumping
@@ -130,7 +130,7 @@ chore(deps): Update dependencies
 ### Generate Changelog
 
 ```bash
-./scripts/generate_changelog.sh [version]
+./scripts/ci/generate_changelog.sh [version]
 ```
 
 This script:
@@ -286,7 +286,7 @@ git checkout -b hotfix/v1.0.2
 # Make fix
 # Test thoroughly
 # Bump patch version
-./scripts/bump_version.sh patch
+./scripts/ci/bump_version.sh patch
 ```
 
 ### 3. Release
@@ -350,7 +350,7 @@ The release workflow can be automated:
 
 ### Release Script
 
-See `scripts/release.sh` for complete release automation.
+See `scripts/ci/release.sh` for complete release automation.
 
 ---
 
@@ -400,4 +400,5 @@ See `scripts/release.sh` for complete release automation.
 - [Semantic Versioning](https://semver.org/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Keep a Changelog](https://keepachangelog.com/)
+
 

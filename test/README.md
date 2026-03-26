@@ -33,13 +33,13 @@ flutter test --coverage
 ### Using Coverage Scripts
 ```bash
 # Generate HTML report and check coverage
-./scripts/test_coverage.sh --html
+./scripts/test/test_coverage.sh --html
 
 # Analyze coverage by layer
-./scripts/analyze_coverage.sh
+./scripts/test/calculate_layer_coverage.sh
 
 # Open HTML report automatically
-./scripts/test_coverage.sh --html --open
+./scripts/test/test_coverage.sh --html --open
 ```
 
 ### Specific Test File
@@ -116,4 +116,5 @@ Widget testing helpers:
 4. Mock external dependencies
 5. Test edge cases
 6. Keep tests fast (<100ms each)
+
 

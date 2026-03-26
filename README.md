@@ -202,7 +202,9 @@ lib/
 
 5. **Set up Git hooks** (optional but recommended)
    ```bash
-   ./scripts/setup-git-hooks.sh
+   ./scripts/dev/setup_git_hooks.sh
+   # OR Windows (PowerShell):
+   .\scripts\dev\setup_git_hooks.ps1
    ```
    This will install Git hooks for:
    - Code formatting checks (pre-commit)
@@ -228,6 +230,22 @@ lib/
    - **Tasks** - Complete CRUD example with local storage
 6. **Add your first feature** - Follow the pattern in example features
 7. **Read the documentation** - Check out `docs/` folder for detailed guides
+
+### Adding New Features (CLI)
+
+You can quickly scaffold a new feature using our CLI scripts. This will generate the complete Clean Architecture folder structure and boilerplate code for you!
+
+**Windows (PowerShell):**
+```powershell
+.\scripts\dev\create_feature.ps1 my_new_feature
+```
+
+**Mac/Linux (Bash):**
+```bash
+./scripts/dev/create_feature.sh my_new_feature
+```
+
+This script generates `lib/features/my_new_feature/` with the `data`, `domain`, `di`, and `presentation` layers ready for development.
 
 ## ⚙️ Configuration System
 
