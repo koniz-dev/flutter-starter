@@ -96,8 +96,14 @@ void main(List<String> args) {
     _copyGoldenFile(goldenPath, root.path, relative);
   }
 
+  if (removeBoth || removeTasks || removeFeatureFlags) {
+    _patchProviders(
+      p.join(root.path, 'lib/core/di/providers.dart'),
+      removeTasks: removeBoth || removeTasks,
+      removeFeatureFlags: removeBoth || removeFeatureFlags,
+    );
+  }
   if (removeBoth || removeTasks) {
-    _patchProviders(p.join(root.path, 'lib/core/di/providers.dart'));
     _patchTestFixtures(p.join(root.path, 'test/helpers/test_fixtures.dart'));
     _patchMockFactories(p.join(root.path, 'test/helpers/mock_factories.dart'));
     _patchProvidersTest(p.join(root.path, 'test/core/di/providers_test.dart'));
@@ -146,13 +152,25 @@ void _deleteDir(Directory dir) {
   }
 }
 
-void _patchProviders(String path) {
+void _patchProviders(
+  String path, {
+  required bool removeTasks,
+  required bool removeFeatureFlags,
+}) {
   final file = File(path);
   var s = file.readAsStringSync().replaceAll('\r\n', '\n');
-  s = s.replaceAll(
-    "export 'package:flutter_starter/features/tasks/di/tasks_providers.dart';\n",
-    '',
-  );
+  if (removeTasks) {
+    s = s.replaceAll(
+      "export 'package:flutter_starter/features/tasks/di/tasks_providers.dart';\n",
+      '',
+    );
+  }
+  if (removeFeatureFlags) {
+    s = s.replaceAll(
+      "export 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';\n",
+      '',
+    );
+  }
   file.writeAsStringSync(s);
 }
 
