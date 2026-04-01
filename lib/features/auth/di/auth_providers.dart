@@ -70,10 +70,9 @@ final Provider<AuthRepository> authRepositoryProvider =
 final Provider<AuthInterceptor> authInterceptorProvider =
     Provider<AuthInterceptor>((ref) {
       final tokenStore = ref.watch(tokenStoreProvider);
-      final authRepository = ref.read<AuthRepository>(authRepositoryProvider);
       return AuthInterceptor(
         tokenStore: tokenStore,
-        authRepository: authRepository,
+        refreshToken: () => ref.read(authRepositoryProvider).refreshToken(),
       );
     });
 

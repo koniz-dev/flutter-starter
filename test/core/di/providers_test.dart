@@ -4,10 +4,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
+import 'package:flutter_starter/core/network/api_client.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_migration_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/is_authenticated_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/refresh_token_usecase.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
 import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
 import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
@@ -156,216 +166,70 @@ void main() {
       test(
         'authRemoteDataSourceProvider should provide AuthRemoteDataSource',
         () {
-          // Providers use ref.read() to break circular dependency at runtime.
-          // The circular dependency chain is:
-          // apiClientProvider -> authInterceptorProvider ->
-          // authRepositoryProvider -> authRemoteDataSourceProvider ->
-          // apiClientProvider
-          // We can test this by reading all providers in the chain together,
-          // which allows Riverpod to resolve the circular dependency.
-          // Circular dependency is expected in unit tests. Providers work
-          // correctly in production with ref.read() breaking the cycle.
-          expect(
-            () {
-              container
-                ..read(apiClientProvider)
-                ..read(authInterceptorProvider)
-                ..read(authRepositoryProvider)
-                ..read(authRemoteDataSourceProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
-            ),
-          );
+          final dataSource = container.read(authRemoteDataSourceProvider);
+          expect(dataSource, isA<AuthRemoteDataSource>());
         },
       );
     });
 
     group('Auth Repository Provider', () {
       test('authRepositoryProvider should provide AuthRepository', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authInterceptorProvider)
-              ..read(authRepositoryProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final repo = container.read(authRepositoryProvider);
+        expect(repo, isA<AuthRepository>());
       });
     });
 
     group('Auth Interceptor Provider', () {
       test('authInterceptorProvider should provide AuthInterceptor', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authRepositoryProvider)
-              ..read(authInterceptorProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final interceptor = container.read(authInterceptorProvider);
+        expect(interceptor, isA<AuthInterceptor>());
       });
     });
 
     group('API Client Provider', () {
       test('apiClientProvider should provide ApiClient', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container.read(apiClientProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final client = container.read(apiClientProvider);
+        expect(client, isA<ApiClient>());
       });
     });
 
     group('Use Case Providers', () {
       test('loginUseCaseProvider should provide LoginUseCase', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authRepositoryProvider)
-              ..read(loginUseCaseProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final useCase = container.read(loginUseCaseProvider);
+        expect(useCase, isA<LoginUseCase>());
       });
 
       test('registerUseCaseProvider should provide RegisterUseCase', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authRepositoryProvider)
-              ..read(registerUseCaseProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final useCase = container.read(registerUseCaseProvider);
+        expect(useCase, isA<RegisterUseCase>());
       });
 
       test('logoutUseCaseProvider should provide LogoutUseCase', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authRepositoryProvider)
-              ..read(logoutUseCaseProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final useCase = container.read(logoutUseCaseProvider);
+        expect(useCase, isA<LogoutUseCase>());
       });
 
       test(
         'refreshTokenUseCaseProvider should provide RefreshTokenUseCase',
         () {
-          // Circular dependency is expected in unit tests
-          expect(
-            () {
-              container
-                ..read(apiClientProvider)
-                ..read(authRepositoryProvider)
-                ..read(refreshTokenUseCaseProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
-            ),
-          );
+          final useCase = container.read(refreshTokenUseCaseProvider);
+          expect(useCase, isA<RefreshTokenUseCase>());
         },
       );
 
       test(
         'getCurrentUserUseCaseProvider should provide GetCurrentUserUseCase',
         () {
-          // Circular dependency is expected in unit tests
-          expect(
-            () {
-              container
-                ..read(apiClientProvider)
-                ..read(authRepositoryProvider)
-                ..read(getCurrentUserUseCaseProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
-            ),
-          );
+          final useCase = container.read(getCurrentUserUseCaseProvider);
+          expect(useCase, isA<GetCurrentUserUseCase>());
         },
       );
 
       test(
         'isAuthenticatedUseCaseProvider should provide IsAuthenticatedUseCase',
         () {
-          // Circular dependency is expected in unit tests
-          expect(
-            () {
-              container
-                ..read(apiClientProvider)
-                ..read(authRepositoryProvider)
-                ..read(isAuthenticatedUseCaseProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
-            ),
-          );
+          final useCase = container.read(isAuthenticatedUseCaseProvider);
+          expect(useCase, isA<IsAuthenticatedUseCase>());
         },
       );
     });
@@ -382,102 +246,31 @@ void main() {
       test(
         'authRemoteDataSourceProvider should depend on apiClientProvider',
         () {
-          // Circular dependency is expected in unit tests
-          expect(
-            () {
-              container
-                ..read(apiClientProvider)
-                ..read(authInterceptorProvider)
-                ..read(authRepositoryProvider)
-                ..read(authRemoteDataSourceProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
-            ),
-          );
+          final dataSource = container.read(authRemoteDataSourceProvider);
+          expect(dataSource, isNotNull);
         },
       );
 
       test('authRepositoryProvider should depend on data source providers', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authInterceptorProvider)
-              ..read(authRepositoryProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        final repo = container.read(authRepositoryProvider);
+        expect(repo, isNotNull);
       });
 
       test('use case providers should depend on authRepositoryProvider', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authRepositoryProvider)
-              ..read(loginUseCaseProvider)
-              ..read(registerUseCaseProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        expect(container.read(loginUseCaseProvider), isNotNull);
+        expect(container.read(registerUseCaseProvider), isNotNull);
       });
 
       test(
         'apiClientProvider should depend on storage and interceptor providers',
         () {
-          // Circular dependency is expected in unit tests
-          expect(
-            () {
-              container.read(apiClientProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
-            ),
-          );
+          expect(container.read(apiClientProvider), isNotNull);
         },
       );
 
       test('authInterceptorProvider should depend on secure storage '
           'and repository', () {
-        // Circular dependency is expected in unit tests
-        expect(
-          () {
-            container
-              ..read(apiClientProvider)
-              ..read(authRepositoryProvider)
-              ..read(authInterceptorProvider);
-          },
-          throwsA(
-            predicate(
-              (e) =>
-                  e.toString().contains('uninitialized provider') ||
-                  e.toString().contains('circular dependency'),
-            ),
-          ),
-        );
+        expect(container.read(authInterceptorProvider), isNotNull);
       });
     });
 

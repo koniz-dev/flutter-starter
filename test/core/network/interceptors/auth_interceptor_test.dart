@@ -5,13 +5,14 @@ import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
-import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+class MockAuthRepository extends Mock {
+  Future<Result<String>> refreshToken();
+}
 
 class MockErrorInterceptorHandler extends Mock
     implements ErrorInterceptorHandler {}
@@ -36,7 +37,7 @@ void main() {
       mockAuthRepository = MockAuthRepository();
       interceptor = AuthInterceptor(
         secureStorageService: mockSecureStorage,
-        authRepository: mockAuthRepository,
+        refreshToken: mockAuthRepository.refreshToken,
       );
     });
 

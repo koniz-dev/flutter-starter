@@ -8,7 +8,6 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
-import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 
 /// Pending request data structure for queuing requests during token refresh
 class _PendingRequest {
@@ -25,7 +24,7 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor({
     ITokenStore? tokenStore,
     SecureStorageService? secureStorageService,
-    required AuthRepository authRepository,
+    required Future<Result<String>> Function() refreshToken,
   }) : _tokenStore =
            tokenStore ??
            (secureStorageService != null
@@ -33,13 +32,16 @@ class AuthInterceptor extends Interceptor {
                : throw ArgumentError(
                    'Either tokenStore or secureStorageService must be provided.',
                  )),
-       _authRepository = authRepository;
+       _refreshToken = refreshToken;
 
   /// Token storage for retrieving and storing authentication tokens
   final ITokenStore _tokenStore;
 
-  /// Auth repository for refreshing tokens
-  final AuthRepository _authRepository;
+  /// Callback to refresh the access token.
+  ///
+  /// Intentionally a callback (instead of depending on a repository/provider)
+  /// to avoid DI cycles during app bootstrap.
+  final Future<Result<String>> Function() _refreshToken;
 
   /// Creates a Dio instance for retrying requests
   /// Uses the same base configuration as the main ApiClient
@@ -133,7 +135,7 @@ class AuthInterceptor extends Interceptor {
     _isRefreshing = true;
 
     try {
-      final result = await _authRepository.refreshToken();
+      final result = await _refreshToken();
 
       if (result.isSuccess) {
         final newToken = result.dataOrNull;

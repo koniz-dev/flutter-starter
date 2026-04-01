@@ -51,7 +51,7 @@ void main() {
       mockSecureStorage = createMockSecureStorageService();
       interceptor = AuthInterceptor(
         secureStorageService: mockSecureStorage,
-        authRepository: mockAuthRepository,
+        refreshToken: mockAuthRepository.refreshToken,
       );
     });
 

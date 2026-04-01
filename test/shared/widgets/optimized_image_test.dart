@@ -1,8 +1,166 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/optimized_image.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+// 1x1 transparent PNG.
+final Uint8List _kTestPng = Uint8List.fromList(<int>[
+  0x89,
+  0x50,
+  0x4E,
+  0x47,
+  0x0D,
+  0x0A,
+  0x1A,
+  0x0A,
+  0x00,
+  0x00,
+  0x00,
+  0x0D,
+  0x49,
+  0x48,
+  0x44,
+  0x52,
+  0x00,
+  0x00,
+  0x00,
+  0x01,
+  0x00,
+  0x00,
+  0x00,
+  0x01,
+  0x08,
+  0x06,
+  0x00,
+  0x00,
+  0x00,
+  0x1F,
+  0x15,
+  0xC4,
+  0x89,
+  0x00,
+  0x00,
+  0x00,
+  0x0A,
+  0x49,
+  0x44,
+  0x41,
+  0x54,
+  0x78,
+  0x9C,
+  0x63,
+  0x00,
+  0x01,
+  0x00,
+  0x00,
+  0x05,
+  0x00,
+  0x01,
+  0x0D,
+  0x0A,
+  0x2D,
+  0xB4,
+  0x00,
+  0x00,
+  0x00,
+  0x00,
+  0x49,
+  0x45,
+  0x4E,
+  0x44,
+  0xAE,
+  0x42,
+  0x60,
+  0x82,
+]);
+
+class _TestHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return _TestHttpClient();
+  }
+}
+
+class _TestHttpClient implements HttpClient {
+  @override
+  bool autoUncompress = false;
+
+  @override
+  Future<HttpClientRequest> getUrl(Uri url) async {
+    return _TestHttpClientRequest(url);
+  }
+
+  // Image.network uses getUrl; other members are unused in these tests.
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _TestHttpClientRequest implements HttpClientRequest {
+  _TestHttpClientRequest(this._url);
+
+  final Uri _url;
+
+  @override
+  Future<HttpClientResponse> close() async {
+    final shouldFail = _url.host.contains('invalid-url-that-will-fail.com');
+    return _TestHttpClientResponse(
+      statusCode: shouldFail ? HttpStatus.notFound : HttpStatus.ok,
+      body: shouldFail ? Uint8List(0) : _kTestPng,
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _TestHttpClientResponse extends Stream<List<int>>
+    implements HttpClientResponse {
+  _TestHttpClientResponse({required this.statusCode, required Uint8List body})
+    : _body = body;
+
+  final Uint8List _body;
+
+  @override
+  final int statusCode;
+
+  @override
+  HttpClientResponseCompressionState get compressionState =>
+      HttpClientResponseCompressionState.notCompressed;
+
+  @override
+  int get contentLength => _body.length;
+
+  @override
+  StreamSubscription<List<int>> listen(
+    void Function(List<int> event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return Stream<List<int>>.value(_body).listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 void main() {
+  setUpAll(() {
+    HttpOverrides.global = _TestHttpOverrides();
+  });
+
+  tearDownAll(() {
+    HttpOverrides.global = null;
+  });
+
   group('OptimizedImage', () {
     testWidgets('should display image with URL', (tester) async {
       await tester.pumpWidget(
@@ -48,7 +206,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Error widget should be shown if image fails to load
-      expect(find.byType(OptimizedImage), findsOneWidget);
+      expect(find.byIcon(Icons.error), findsOneWidget);
     });
 
     testWidgets('should support width and height constraints', (tester) async {
@@ -258,7 +416,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Should show default error icon
-      expect(find.byType(OptimizedImage), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
     });
 
     testWidgets('should handle preload when imageUrl is not empty', (
