@@ -1,14 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockLoggingService extends Mock implements LoggingService {}
+
+class _TestAuthNotifier extends AuthNotifier {
+  _TestAuthNotifier(this._initial);
+
+  final AuthState _initial;
+
+  @override
+  AuthState build() => _initial;
+}
 
 void main() {
   group('goRouterProvider', () {
@@ -43,27 +55,9 @@ void main() {
     });
 
     test('should have router configuration', () {
-      // Arrange
       container = ProviderContainer();
-
-      // Act
       final router = container.read(goRouterProvider);
-
-      // Assert
       expect(router.configuration, isNotNull);
-    });
-
-    test('should have router configuration', () {
-      // Arrange
-      container = ProviderContainer();
-
-      // Act
-      final router = container.read(goRouterProvider);
-
-      // Assert
-      // Observers are configured during router creation
-      // We verify router is created successfully
-      expect(router, isNotNull);
     });
 
     test('should have all routes configured', () {
@@ -137,65 +131,119 @@ void main() {
       }
     });
 
-    test('should have redirect function configured', () {
-      // Arrange
-      container = ProviderContainer();
+    testWidgets('should redirect unauthenticated user from home to login', (
+      tester,
+    ) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(1000, 3000);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
-      // Act
-      final router = container.read(goRouterProvider);
-
-      // Assert
-      // Redirect function is configured during router creation
-      expect(router, isNotNull);
-    });
-
-    test('should have router configuration', () {
-      // Arrange
-      container = ProviderContainer();
-
-      // Act
-      final router = container.read(goRouterProvider);
-
-      // Assert
-      expect(router.configuration, isNotNull);
-    });
-
-    test('should redirect unauthenticated user to login', () {
-      // Arrange
       container = ProviderContainer(
         overrides: [
           authNotifierProvider.overrideWith(() => AuthNotifier()..build()),
         ],
       );
-
-      // Act
       final router = container.read(goRouterProvider);
-      final redirect = router.configuration.redirect;
 
-      // Assert
-      // Redirect should return login route for unauthenticated users
-      // Note: This is a simplified test - actual redirect logic requires
-      // proper context setup
-      expect(redirect, isNotNull);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en')],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(router.routeInformationProvider.value.uri.path, AppRoutes.login);
     });
 
-    test('should redirect authenticated user away from auth routes', () {
-      // Arrange
+    testWidgets('should allow unauthenticated user to access register route', (
+      tester,
+    ) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(1000, 3000);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      container = ProviderContainer(
+        overrides: [
+          authNotifierProvider.overrideWith(() => AuthNotifier()..build()),
+        ],
+      );
+      final router = container.read(goRouterProvider);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en')],
+          ),
+        ),
+      );
+      router.go(AppRoutes.register);
+      await tester.pumpAndSettle();
+
+      expect(
+        router.routeInformationProvider.value.uri.path,
+        AppRoutes.register,
+      );
+    });
+
+    testWidgets('should redirect authenticated user away from auth routes', (
+      tester,
+    ) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(1000, 3000);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       const user = User(id: '1', email: 'test@example.com');
       container = ProviderContainer(
         overrides: [
           authNotifierProvider.overrideWith(
-            () => AuthNotifier()..state = const AuthState(user: user),
+            () => _TestAuthNotifier(const AuthState(user: user)),
           ),
         ],
       );
-
-      // Act
       final router = container.read(goRouterProvider);
-      final redirect = router.configuration.redirect;
 
-      // Assert
-      expect(redirect, isNotNull);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en')],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      router.go(AppRoutes.login);
+      await tester.pumpAndSettle();
+
+      expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
     });
 
     test('should return same router instance on multiple reads', () {
