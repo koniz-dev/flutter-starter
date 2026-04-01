@@ -2,6 +2,20 @@
 
 This guide covers common issues, solutions, and frequently asked questions.
 
+## Quick diagnosis (30 seconds)
+
+Run these commands first; they answer 80% of “why doesn’t it build/run/test?”:
+
+```bash
+flutter --version
+flutter doctor -v
+flutter pub get
+dart analyze
+flutter test --fail-fast
+```
+
+If you are stuck after that, check the sections below by symptom (build/codegen/config/routing/iOS/CI hooks).
+
 ## Common Issues
 
 ### 1. `dart format .` fails or errors under `build/`
@@ -18,7 +32,7 @@ dart format lib test integration_test tool bricks
 
 CI and git hooks use the scoped paths above, not the whole repo root.
 
-### 2. Code Generation Errors
+### 2. Code Generation / `build_runner` errors
 
 **Problem**: `build_runner` fails or generates incorrect code.
 
@@ -35,6 +49,12 @@ flutter pub run build_runner build --delete-conflicting-outputs
 - Check for syntax errors in `@freezed` or `@JsonSerializable` classes
 - Ensure all required imports are present
 - Delete generated files (`.freezed.dart`, `.g.dart`) and regenerate
+- If you use Riverpod codegen, ensure `build.yaml`/annotations are consistent across packages (and you didn’t rename imports without regenerating)
+
+**Common failure messages and fixes:**
+- **`Conflicting outputs`**: always run with `--delete-conflicting-outputs` (or clean + re-run).
+- **`Target of URI doesn't exist`**: file moved/renamed but generated code still imports old path → clean + build again.
+- **Analyzer sees stale generated files**: restart IDE analysis server after regen.
 
 ### 3. Configuration Not Loading
 
@@ -54,6 +74,22 @@ if (AppConfig.isDebugMode) {
 }
 ```
 
+### 4. Mason issues (bricks, versions, missing commands)
+
+**Problem**: `mason`/`mason get`/`mason make ...` fails.
+
+**Solutions:**
+```bash
+dart pub global activate mason_cli
+mason --version
+mason get
+```
+
+**Common causes:**
+- Mason CLI not installed globally.
+- Brick constraints not met (check `environment.mason` in `bricks/**/brick.yaml`).
+- You renamed the repo/package and expected Mason to rewrite Markdown automatically (it doesn’t; docs may still show `flutter_starter` until you update them).
+
 ### 4. Provider Not Found Errors
 
 **Problem**: `ProviderNotFoundException` when accessing providers.
@@ -63,6 +99,10 @@ if (AppConfig.isDebugMode) {
 2. Check provider is defined in `lib/core/di/providers.dart`
 3. Verify provider name is correct (case-sensitive)
 4. Ensure provider is registered before use
+
+**Extra tip (tests):**
+- Prefer `ProviderContainer(overrides: [...])` + `container.read(...)` for unit tests.
+- For routing tests, validate current location via `GoRouter.routeInformationProvider.value.uri.path` to avoid brittle widget-finder assertions.
 
 ### 5. Network/API Errors
 
@@ -109,6 +149,12 @@ flutter test
 - Async operations not awaited
 - State not reset between tests
 
+**If tests try to hit real network:**
+- Widget tests must not depend on external URLs. Use `HttpOverrides` or mock the network image loading to make tests deterministic.
+
+**If `git push` fails with “failed to push some refs” but the real reason is tests:**
+- Your repo likely has a pre-push hook that runs `flutter test`. Scroll up in the terminal output: the first failing test is the root cause.
+
 ### 8. Import Errors
 
 **Problem**: Cannot find imports or "file not found" errors.
@@ -131,6 +177,31 @@ flutter test
    - Static variable changes
 2. Use hot restart (`R` in terminal) instead
 3. If still not working, do a full restart
+
+### 10. GoRouter redirects / “stuck on login” / unexpected navigation
+
+**Problem**: Navigation keeps redirecting (e.g. always to `/login`) or routes don’t match expected paths.
+
+**Quick checks:**
+1. Confirm route constants and registered routes match (see `lib/core/routing/app_routes.dart` and `lib/core/routing/routes_registry.dart`).
+2. Check the auth state provider used by router redirect logic (typically `authNotifierProvider`).
+3. In tests, use `MaterialApp.router(routerConfig: router)` and assert `router.routeInformationProvider.value.uri.path`.
+
+### 11. iOS CocoaPods issues
+
+**Problem**: iOS build fails with Pod / Xcode errors.
+
+**Solutions:**
+```bash
+flutter clean
+flutter pub get
+cd ios
+pod repo update
+pod install
+cd ..
+```
+
+If you changed iOS bundle id or signing, open `ios/Runner.xcworkspace` and verify Signing & Capabilities.
 
 ## FAQ
 

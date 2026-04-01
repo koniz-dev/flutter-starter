@@ -38,6 +38,24 @@ mason get
 mason make flutter_starter_setup
 ```
 
+#### Demo (GIF/video)
+
+If you want the README to feel “hands-on”, add a short demo clip showing feature generation.
+
+- **Suggested asset path**: `docs/assets/mason-generate-feature.gif`
+- **Suggested flow**:
+  - `mason get`
+  - `mason make feature_clean` (or your feature brick)
+  - quick peek at generated folders under `lib/features/<feature>/`
+
+Recording checklist: `docs/guides/support/mason-demo-script.md`.
+
+After recording, reference it here:
+
+```md
+![Mason demo](docs/assets/mason-generate-feature.gif)
+```
+
 See [bricks/README.md](bricks/README.md) and [bricks/flutter_starter_setup/README.md](bricks/flutter_starter_setup/README.md). If you rename everything by hand and do not need Mason, you can remove **`bricks/`** and **`mason.yaml`**. To drop sample `tasks` and `feature_flags` without Mason: `dart run tool/strip_sample_features.dart --apply`.
 
 ---

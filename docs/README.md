@@ -41,6 +41,7 @@ Navigate through the folders to dive deeper into the project modules:
 
 - 🏛️ [**Architecture**](architecture/README.md) - Boundaries, contracts, adapters, and migration strategy.
 - 📖 [**Guides**](guides/onboarding/getting-started.md) - Onboarding and practical implementation guides.
+- 🧰 [**Troubleshooting**](guides/support/troubleshooting.md) - Common setup/build/test issues and quick fixes.
 - 🚀 [**Deployment**](deployment/README.md) - Store releases, Fastlane, and GitHub Actions deploy workflows.
 - 🛡️ [**Security**](guides/security/README.md) - Security baseline, checklist, and implementation notes.
 - ⚙️ [**Configuration**](guides/configuration.md) - `.env` and `--dart-define` setup.

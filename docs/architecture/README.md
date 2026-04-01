@@ -11,6 +11,35 @@ This section covers:
 - Trade-offs and alternatives
 - When to use this template
 
+## Architecture diagram (data flow)
+
+The diagram below shows the “happy path” request flow from **UI → Riverpod → Use case → Repository → Remote data source → API**, and how results come back up.
+
+```mermaid
+flowchart LR
+  UI[Presentation<br/>Screens / Widgets] --> RP[Riverpod<br/>Providers / Notifiers]
+  RP --> UC[Domain<br/>Use cases]
+  UC --> REPO[Domain contract<br/>Repository interface]
+  REPO --> REPOIMPL[Data<br/>Repository implementation]
+
+  REPOIMPL --> RDS[Data<br/>Remote data source]
+  REPOIMPL --> LDS[Data<br/>Local data source]
+
+  RDS --> APIC[Core<br/>ApiClient (Dio facade)]
+  APIC --> NET[Core<br/>DioNetworkClient]
+  NET --> API[(Backend API)]
+
+  LDS --> STORE[Core<br/>Storage adapters]
+
+  API --> NET --> APIC --> RDS --> REPOIMPL --> UC --> RP --> UI
+
+  RP -. emits state .-> UI
+```
+
+Notes:
+- **Contracts live in Domain/Core**: UI depends on providers, providers depend on use cases, use cases depend on repository contracts, and implementations live in Data/Core adapters.
+- **Replaceable integrations**: you can swap storage/network/auth/RASP implementations via providers/contracts without changing domain logic.
+
 ## Documentation
 
 ### Core Architecture
