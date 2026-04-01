@@ -86,10 +86,12 @@ void main(List<String> args) {
     'lib/core/routing/app_router.g.dart',
     'lib/core/routing/routes_registry.dart',
     'lib/core/routing/app_routes.dart',
+    'lib/core/routing/navigation_extensions.dart',
     'lib/main.dart',
     'lib/features/home/presentation/screens/home_screen.dart',
     'test/core/routing/app_routes_test.dart',
     'test/core/routing/app_router_test.dart',
+    'test/core/routing/navigation_extensions_test.dart',
     'integration_test/app_e2e_test.dart',
     'integration_test/auth_flow_test.dart',
   ]) {

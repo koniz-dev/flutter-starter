@@ -7,6 +7,7 @@ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 
 /// Home screen widget.
 class HomeScreen extends ConsumerWidget {
+  /// Creates a [HomeScreen].
   const HomeScreen({super.key});
 
   @override
