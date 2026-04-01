@@ -7,11 +7,7 @@ void main() {
     testWidgets('should display loading indicator', (tester) async {
       // Arrange & Act
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: LoadingIndicator(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: LoadingIndicator())),
       );
 
       // Assert
@@ -25,9 +21,7 @@ void main() {
       // Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: LoadingIndicator(message: message),
-          ),
+          home: Scaffold(body: LoadingIndicator(message: message)),
         ),
       );
 
@@ -39,11 +33,7 @@ void main() {
     testWidgets('should not display message when null', (tester) async {
       // Arrange & Act
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: LoadingIndicator(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: LoadingIndicator())),
       );
 
       // Assert
@@ -54,11 +44,7 @@ void main() {
     testWidgets('should be centered', (tester) async {
       // Arrange & Act
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: LoadingIndicator(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: LoadingIndicator())),
       );
 
       // Assert
@@ -70,9 +56,7 @@ void main() {
       testWidgets('should handle empty message', (tester) async {
         await tester.pumpWidget(
           const MaterialApp(
-            home: Scaffold(
-              body: LoadingIndicator(message: ''),
-            ),
+            home: Scaffold(body: LoadingIndicator(message: '')),
           ),
         );
 
@@ -84,9 +68,7 @@ void main() {
         final longMessage = 'A' * 100;
         await tester.pumpWidget(
           MaterialApp(
-            home: Scaffold(
-              body: LoadingIndicator(message: longMessage),
-            ),
+            home: Scaffold(body: LoadingIndicator(message: longMessage)),
           ),
         );
 
@@ -97,9 +79,7 @@ void main() {
       testWidgets('should have correct column structure', (tester) async {
         await tester.pumpWidget(
           const MaterialApp(
-            home: Scaffold(
-              body: LoadingIndicator(message: 'Loading...'),
-            ),
+            home: Scaffold(body: LoadingIndicator(message: 'Loading...')),
           ),
         );
 
@@ -113,15 +93,11 @@ void main() {
       ) async {
         await tester.pumpWidget(
           const MaterialApp(
-            home: Scaffold(
-              body: LoadingIndicator(message: 'Loading...'),
-            ),
+            home: Scaffold(body: LoadingIndicator(message: 'Loading...')),
           ),
         );
 
-        final sizedBox = tester.widget<SizedBox>(
-          find.byType(SizedBox),
-        );
+        final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
         expect(sizedBox.height, 16);
       });
     });

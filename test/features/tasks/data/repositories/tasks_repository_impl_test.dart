@@ -583,9 +583,7 @@ void main() {
         'should handle updateTask with task having null description',
         () async {
           // Arrange
-          final task = createTask(
-            id: 'task-1',
-          );
+          final task = createTask(id: 'task-1');
           when(
             () => mockLocalDataSource.saveTask(any()),
           ).thenAnswer((_) async => {});

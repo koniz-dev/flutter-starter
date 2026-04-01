@@ -67,9 +67,7 @@ class _FeatureFlagsDebugScreenState
                 ref.invalidate(allFeatureFlagsProvider);
                 if (!mounted) return;
                 messenger.showSnackBar(
-                  const SnackBar(
-                    content: Text('All local overrides cleared'),
-                  ),
+                  const SnackBar(content: Text('All local overrides cleared')),
                 );
               }
             },
@@ -101,9 +99,7 @@ class _FeatureFlagsDebugScreenState
 
   Widget _buildFlagsList(Map<String, FeatureFlag?> flags) {
     if (flags.isEmpty) {
-      return const Center(
-        child: Text('No feature flags found'),
-      );
+      return const Center(child: Text('No feature flags found'));
     }
 
     // Group flags by category
@@ -169,10 +165,7 @@ class _FeatureFlagsDebugScreenState
           if (flagKey.description.isNotEmpty)
             Text(
               flagKey.description,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
           const SizedBox(height: 4),
           Row(
@@ -182,10 +175,7 @@ class _FeatureFlagsDebugScreenState
               if (flag.lastUpdated != null)
                 Text(
                   'Updated: ${_formatDate(flag.lastUpdated!)}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey[500],
-                  ),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                 ),
             ],
           ),
@@ -201,9 +191,7 @@ class _FeatureFlagsDebugScreenState
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                '${flag.key} ${value ? "enabled" : "disabled"}',
-              ),
+              content: Text('${flag.key} ${value ? "enabled" : "disabled"}'),
               duration: const Duration(seconds: 1),
             ),
           );
@@ -215,9 +203,7 @@ class _FeatureFlagsDebugScreenState
         ref.invalidate(allFeatureFlagsProvider);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Override cleared for ${flag.key}'),
-          ),
+          SnackBar(content: Text('Override cleared for ${flag.key}')),
         );
       },
     );

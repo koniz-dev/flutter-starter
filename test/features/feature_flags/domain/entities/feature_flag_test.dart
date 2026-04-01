@@ -440,10 +440,7 @@ void main() {
           FeatureFlagSource.values,
           contains(FeatureFlagSource.environment),
         );
-        expect(
-          FeatureFlagSource.values,
-          contains(FeatureFlagSource.buildMode),
-        );
+        expect(FeatureFlagSource.values, contains(FeatureFlagSource.buildMode));
         expect(
           FeatureFlagSource.values,
           contains(FeatureFlagSource.remoteConfig),

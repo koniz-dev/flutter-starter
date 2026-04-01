@@ -31,9 +31,7 @@ void main() {
     test('can be overridden with a mock implementation', () {
       final mockClient = MockRealtimeClient();
       final container = ProviderContainer(
-        overrides: [
-          realtimeClientProvider.overrideWithValue(mockClient),
-        ],
+        overrides: [realtimeClientProvider.overrideWithValue(mockClient)],
       );
       addTearDown(container.dispose);
 

@@ -12,10 +12,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AuthButton(
-              text: buttonText,
-              onPressed: () {},
-            ),
+            body: AuthButton(text: buttonText, onPressed: () {}),
           ),
         ),
       );
@@ -110,10 +107,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AuthButton(
-              text: buttonText,
-              onPressed: () {},
-            ),
+            body: AuthButton(text: buttonText, onPressed: () {}),
           ),
         ),
       );
@@ -130,11 +124,7 @@ void main() {
       // Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AuthButton(
-              text: buttonText,
-            ),
-          ),
+          home: Scaffold(body: AuthButton(text: buttonText)),
         ),
       );
 
@@ -149,10 +139,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: AuthButton(
-                text: '',
-                onPressed: () {},
-              ),
+              body: AuthButton(text: '', onPressed: () {}),
             ),
           ),
         );
@@ -165,10 +152,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: AuthButton(
-                text: longText,
-                onPressed: () {},
-              ),
+              body: AuthButton(text: longText, onPressed: () {}),
             ),
           ),
         );

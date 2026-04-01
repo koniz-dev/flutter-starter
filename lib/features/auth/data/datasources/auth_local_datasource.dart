@@ -1,7 +1,8 @@
 import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
-import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/json_helper.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 
@@ -35,17 +36,25 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   /// [secureStorageService]
   ///
   /// [storageService] - Used for non-sensitive data (user data)
-  /// [secureStorageService] - Used for sensitive data (tokens)
+  /// [tokenStore] - Used for sensitive data (tokens)
   AuthLocalDataSourceImpl({
     required this.storageService,
-    required this.secureStorageService,
-  });
+    ITokenStore? tokenStore,
+    SecureStorageService? secureStorageService,
+  }) : tokenStore =
+           tokenStore ??
+           (secureStorageService != null
+               ? SecureTokenStore(secureStorageService)
+               : throw ArgumentError(
+                   'Either tokenStore or secureStorageService must '
+                   'be provided.',
+                 ));
 
   /// Storage service for non-sensitive data (user data, preferences)
-  final StorageService storageService;
+  final IKeyValueStore storageService;
 
-  /// Secure storage service for sensitive data (tokens, passwords)
-  final SecureStorageService secureStorageService;
+  /// Token storage for sensitive data (tokens, passwords)
+  final ITokenStore tokenStore;
 
   @override
   Future<void> cacheUser(UserModel user) async {
@@ -79,10 +88,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> cacheToken(String token) async {
     try {
-      final success = await secureStorageService.setString(
-        AppConstants.tokenKey,
-        token,
-      );
+      final success = await tokenStore.setAccessToken(token);
       if (!success) {
         throw const CacheException('Failed to cache token: storage error');
       }
@@ -94,7 +100,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<String?> getToken() async {
     try {
-      return await secureStorageService.getString(AppConstants.tokenKey);
+      return await tokenStore.getAccessToken();
     } on Exception catch (e) {
       throw CacheException('Failed to get token: $e');
     }
@@ -103,10 +109,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> cacheRefreshToken(String token) async {
     try {
-      final success = await secureStorageService.setString(
-        AppConstants.refreshTokenKey,
-        token,
-      );
+      final success = await tokenStore.setRefreshToken(token);
       if (!success) {
         throw const CacheException(
           'Failed to cache refresh token: storage error',
@@ -120,9 +123,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<String?> getRefreshToken() async {
     try {
-      return await secureStorageService.getString(
-        AppConstants.refreshTokenKey,
-      );
+      return await tokenStore.getRefreshToken();
     } on Exception catch (e) {
       throw CacheException('Failed to get refresh token: $e');
     }
@@ -134,8 +135,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       // Clear user data from regular storage
       await storageService.remove(AppConstants.userDataKey);
       // Clear tokens from secure storage
-      await secureStorageService.remove(AppConstants.tokenKey);
-      await secureStorageService.remove(AppConstants.refreshTokenKey);
+      await tokenStore.clearAllTokens();
     } on Exception catch (e) {
       throw CacheException('Failed to clear cache: $e');
     }

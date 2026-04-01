@@ -126,10 +126,7 @@ void main() {
         final service = LoggingService(enableLogging: true);
 
         // Act & Assert
-        expect(
-          () => service.debug('Debug message'),
-          returnsNormally,
-        );
+        expect(() => service.debug('Debug message'), returnsNormally);
       });
     });
 
@@ -215,10 +212,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => service.warning(
-            'Warning message',
-            error: error,
-          ),
+          () => service.warning('Warning message', error: error),
           returnsNormally,
         );
       });
@@ -230,10 +224,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => service.warning(
-            'Warning message',
-            stackTrace: stackTrace,
-          ),
+          () => service.warning('Warning message', stackTrace: stackTrace),
           returnsNormally,
         );
       });
@@ -279,10 +270,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => service.error(
-            'Error message',
-            context: {'errorCode': 'E001'},
-          ),
+          () => service.error('Error message', context: {'errorCode': 'E001'}),
           returnsNormally,
         );
       });
@@ -294,10 +282,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => service.error(
-            'Error message',
-            error: error,
-          ),
+          () => service.error('Error message', error: error),
           returnsNormally,
         );
       });
@@ -309,10 +294,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => service.error(
-            'Error message',
-            stackTrace: stackTrace,
-          ),
+          () => service.error('Error message', stackTrace: stackTrace),
           returnsNormally,
         );
       });
@@ -377,10 +359,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => service.debug(
-            'Message',
-            context: {'key': 'value'},
-          ),
+          () => service.debug('Message', context: {'key': 'value'}),
           returnsNormally,
         );
       });
@@ -615,14 +594,8 @@ void main() {
         final service = LoggingService(enableLogging: true);
 
         // Act & Assert
-        expect(
-          () => service.warning('Warning'),
-          returnsNormally,
-        );
-        expect(
-          () => service.error('Error'),
-          returnsNormally,
-        );
+        expect(() => service.warning('Warning'), returnsNormally);
+        expect(() => service.error('Error'), returnsNormally);
       });
 
       test('should handle null stackTrace', () {
@@ -630,14 +603,8 @@ void main() {
         final service = LoggingService(enableLogging: true);
 
         // Act & Assert
-        expect(
-          () => service.warning('Warning'),
-          returnsNormally,
-        );
-        expect(
-          () => service.error('Error'),
-          returnsNormally,
-        );
+        expect(() => service.warning('Warning'), returnsNormally);
+        expect(() => service.error('Error'), returnsNormally);
       });
     });
   });

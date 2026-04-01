@@ -44,38 +44,26 @@ Future<void> pumpAndSettleApp(
 }
 
 /// Asserts that a Result is a Success with expected data
-void expectResultSuccess<T>(
-  Result<T> result,
-  T expectedData,
-) {
+void expectResultSuccess<T>(Result<T> result, T expectedData) {
   expect(result.isSuccess, isTrue, reason: 'Expected success but got failure');
   expect(result.dataOrNull, expectedData);
 }
 
 /// Asserts that a Result is a Failure with expected failure
-void expectResultFailure<T>(
-  Result<T> result,
-  Failure expectedFailure,
-) {
+void expectResultFailure<T>(Result<T> result, Failure expectedFailure) {
   expect(result.isFailure, isTrue, reason: 'Expected failure but got success');
   expect(result.failureOrNull, expectedFailure);
 }
 
 /// Asserts that a Result is a Failure of specific type
-void expectResultFailureType<T>(
-  Result<T> result,
-  Type failureType,
-) {
+void expectResultFailureType<T>(Result<T> result, Type failureType) {
   expect(result.isFailure, isTrue, reason: 'Expected failure but got success');
   expect(result.failureOrNull, isA<Failure>());
   expect(result.failureOrNull?.runtimeType, failureType);
 }
 
 /// Asserts that a Result is a Failure with expected message
-void expectResultFailureMessage<T>(
-  Result<T> result,
-  String expectedMessage,
-) {
+void expectResultFailureMessage<T>(Result<T> result, String expectedMessage) {
   expect(result.isFailure, isTrue, reason: 'Expected failure but got success');
   expect(result.failureOrNull?.message, expectedMessage);
 }
@@ -108,12 +96,10 @@ Finder findTextFormFieldByLabel(String label) {
   // TextFormField decoration is not accessible in widget tests.
   // Return a finder that looks for Text widgets with the label text
   // positioned near TextFormField widgets.
-  return find.byWidgetPredicate(
-    (widget) {
-      if (widget is! Text) return false;
-      return widget.data == label;
-    },
-  );
+  return find.byWidgetPredicate((widget) {
+    if (widget is! Text) return false;
+    return widget.data == label;
+  });
 }
 
 /// Creates a mock provider override
@@ -127,10 +113,7 @@ Finder findTextFormFieldByLabel(String label) {
 ///
 /// Note: This is a convenience wrapper around provider.overrideWithValue().
 /// The return type uses dynamic because Override is not exported from riverpod.
-dynamic createProviderOverride<T>(
-  Provider<T> provider,
-  T mockValue,
-) {
+dynamic createProviderOverride<T>(Provider<T> provider, T mockValue) {
   return provider.overrideWithValue(mockValue);
 }
 

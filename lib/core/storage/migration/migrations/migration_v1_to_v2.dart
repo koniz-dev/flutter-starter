@@ -66,11 +66,7 @@ class MigrationV1ToV2 extends StorageMigration {
     }
 
     // Example 5: Clean up deprecated keys
-    final deprecatedKeys = [
-      'old_setting_1',
-      'old_setting_2',
-      'deprecated_key',
-    ];
+    final deprecatedKeys = ['old_setting_1', 'old_setting_2', 'deprecated_key'];
 
     for (final key in deprecatedKeys) {
       if (await storage.containsKey(key)) {

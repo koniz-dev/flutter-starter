@@ -29,19 +29,13 @@ class MockUpdateTaskUseCase extends Mock implements UpdateTaskUseCase {}
 
 class MockGetAllTasksUseCase extends Mock implements GetAllTasksUseCase {}
 
-Widget createTestWidget({
-  required Widget child,
-  dynamic overrides,
-}) {
+Widget createTestWidget({required Widget child, dynamic overrides}) {
   // Create a simple GoRouter for navigation (needed for context.pop())
   // Use a builder function to ensure router is properly initialized
   final router = GoRouter(
     initialLocation: AppRoutes.tasks,
     routes: [
-      GoRoute(
-        path: AppRoutes.tasks,
-        builder: (context, state) => child,
-      ),
+      GoRoute(path: AppRoutes.tasks, builder: (context, state) => child),
     ],
   );
 
@@ -87,14 +81,8 @@ void main() {
       ).thenAnswer((_) async => const Success<List<Task>>([]));
     });
 
-    Widget createWidgetWithOverrides(
-      Widget child,
-      dynamic overrides,
-    ) {
-      return createTestWidget(
-        child: child,
-        overrides: overrides,
-      );
+    Widget createWidgetWithOverrides(Widget child, dynamic overrides) {
+      return createTestWidget(child: child, overrides: overrides);
     }
 
     group('creating new task', () {
@@ -108,23 +96,16 @@ void main() {
         ).thenAnswer((_) async => Success(createTask()));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act
@@ -146,23 +127,16 @@ void main() {
         ).thenAnswer((_) async => Success(createTask()));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle(const Duration(seconds: 5));
@@ -185,23 +159,16 @@ void main() {
       testWidgets('should validate required title field', (tester) async {
         // Arrange
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -233,23 +200,16 @@ void main() {
         ).thenAnswer((_) => completer.future);
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act - pump to allow initState to run and start loading
@@ -265,10 +225,7 @@ void main() {
 
       testWidgets('should display task details when loaded', (tester) async {
         // Arrange
-        final task = createTask(
-          id: 'task-1',
-          description: 'Test Description',
-        );
+        final task = createTask(id: 'task-1', description: 'Test Description');
         when(
           () => mockGetTaskByIdUseCase(any<String>()),
         ).thenAnswer((_) async => Success(task));
@@ -277,23 +234,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act
@@ -347,23 +297,16 @@ void main() {
         ).thenAnswer((_) async => const ResultFailure(failure));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act
@@ -385,23 +328,16 @@ void main() {
         ).thenAnswer((_) async => const ResultFailure(failure));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle(const Duration(seconds: 5));
@@ -443,23 +379,16 @@ void main() {
         ).thenAnswer((_) async => Success(updatedTask));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -491,23 +420,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -534,23 +456,16 @@ void main() {
         ).thenAnswer((_) async => const ResultFailure(failure));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -565,31 +480,22 @@ void main() {
 
       testWidgets('should display task with null description', (tester) async {
         // Arrange
-        final task = createTask(
-          id: 'task-1',
-        );
+        final task = createTask(id: 'task-1');
         when(
           () => mockGetTaskByIdUseCase(any<String>()),
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act
@@ -611,23 +517,16 @@ void main() {
         ).thenAnswer((_) async => const ResultFailure(failure));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -649,23 +548,16 @@ void main() {
       testWidgets('should handle cancel button in create mode', (tester) async {
         // Arrange
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -694,23 +586,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -750,23 +635,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act
@@ -784,9 +662,7 @@ void main() {
         tester,
       ) async {
         // Arrange
-        final task = createTask(
-          id: 'task-1',
-        );
+        final task = createTask(id: 'task-1');
         when(
           () => mockGetTaskByIdUseCase(any<String>()),
         ).thenAnswer((_) async => Success(task));
@@ -795,23 +671,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act
@@ -838,23 +707,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -886,23 +748,16 @@ void main() {
         ).thenAnswer((_) => completer.future);
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -922,23 +777,16 @@ void main() {
       testWidgets('should handle retry when taskId is null', (tester) async {
         // Arrange
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         await tester.pumpAndSettle();
@@ -963,23 +811,16 @@ void main() {
         ).thenAnswer((_) async => Success(task));
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(
-            const TaskDetailScreen(taskId: 'task-1'),
-            [
-              getTaskByIdUseCaseProvider.overrideWithValue(
-                mockGetTaskByIdUseCase,
-              ),
-              createTaskUseCaseProvider.overrideWithValue(
-                mockCreateTaskUseCase,
-              ),
-              updateTaskUseCaseProvider.overrideWithValue(
-                mockUpdateTaskUseCase,
-              ),
-              getAllTasksUseCaseProvider.overrideWithValue(
-                mockGetAllTasksUseCase,
-              ),
-            ],
-          ),
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
         );
 
         // Act

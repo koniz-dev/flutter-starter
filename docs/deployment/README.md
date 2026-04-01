@@ -1,64 +1,24 @@
-# Deployment Documentation
+# Deployment
 
-Complete deployment documentation for Flutter Starter across all platforms.
+Store and CI deployment for this starter are **templates**: workflows default to **manual** (`workflow_dispatch`) until you uncomment triggers and add secrets.
 
-## Quick Start
+## Where to look
 
-1. **Read the main guide**: [deployment.md](./deployment.md)
-2. **Platform-specific guides**:
-   - [Android Deployment](./android-deployment.md)
-   - [iOS Deployment](./ios-deployment.md)
-   - [Web Deployment](./web-deployment.md)
-3. **Release process**: [release-process.md](./release-process.md)
-4. **Monitoring setup**: [monitoring-analytics.md](./monitoring-analytics.md)
+| Topic | Location |
+| --- | --- |
+| **GitHub Actions** | [`.github/workflows/deploy-android.yml`](../../.github/workflows/deploy-android.yml), [`.github/workflows/deploy-ios.yml`](../../.github/workflows/deploy-ios.yml), [`.github/workflows/deploy-web.yml`](../../.github/workflows/deploy-web.yml), [`.github/workflows/build.yml`](../../.github/workflows/build.yml) |
+| **Fastlane (local / lane reference)** | [`fastlane/README.md`](../../fastlane/README.md) |
+| **Android credentials & Play upload** | [Android deployment](android-deployment.md) |
+| **iOS signing & App Store Connect** | [iOS deployment](ios-deployment.md) |
+| **Release checklist** | [Deployment summary](summary.md) |
 
-## Documentation Structure
+## Quick path
 
-```
-docs/deployment/
-├── README.md                 # This file
-├── deployment.md             # Main deployment guide
-├── android-deployment.md     # Android-specific guide
-├── ios-deployment.md         # iOS-specific guide
-├── web-deployment.md         # Web-specific guide
-├── release-process.md        # Release workflow
-└── monitoring-analytics.md   # Monitoring setup
-```
+1. Fork/rename the app ([Fork and customize](../guides/onboarding/fork-and-customize.md)).
+2. Configure signing, bundle IDs, and store API keys (see Android / iOS pages above).
+3. Open the workflow you need in GitHub **Actions** and use **Run workflow** (or enable `push` / `tags` triggers in the YAML when ready).
 
-## CI/CD Workflows
+## Related docs
 
-GitHub Actions workflows are located in `.github/workflows/`:
-
-- **ci.yml**: Continuous integration (tests, builds)
-- **test.yml**: Dedicated test workflow with coverage
-- **coverage.yml**: Coverage analysis and reporting
-- **deploy-android.yml**: Android deployment to Play Store
-- **deploy-ios.yml**: iOS deployment to App Store
-- **deploy-web.yml**: Web deployment to hosting platforms
-
-For workflow configuration, see the [Deployment Guide](./deployment.md#cicd-pipeline) section.
-
-## Helper Scripts
-
-Scripts are located in `scripts/`:
-
-- **bump_version.sh**: Bump version in pubspec.yaml
-- **generate_changelog.sh**: Generate changelog from git commits
-- **release.sh**: Complete release automation
-- **build_all.sh**: Build for all platforms
-
-## Getting Help
-
-- Check platform-specific guides for detailed instructions
-- Review [Troubleshooting Guide](../guides/support/troubleshooting.md)
-- Check GitHub Actions logs for CI/CD issues
-
-## Next Steps
-
-1. Set up code signing (Android & iOS)
-2. Configure GitHub Actions secrets
-3. Set up Firebase projects
-4. Test build process locally
-5. Create your first release
-
-
+- [Configuration](../guides/configuration.md) — `BASE_URL`, flavors, and `dart-define`.
+- [Security implementation](../guides/security/implementation.md) — obfuscation, pinning, release hardening.

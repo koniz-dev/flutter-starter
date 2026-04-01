@@ -114,10 +114,7 @@ void main() {
 
       test('should set loading state during login', () async {
         // Arrange
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const user = User(id: '1', email: 'test@example.com');
         when(
           () => mockLoginUseCase(any(), any()),
         ).thenAnswer((_) async => const Success(user));
@@ -153,11 +150,7 @@ void main() {
         final notifier = container.read(authNotifierProvider.notifier);
 
         // Act
-        await notifier.register(
-          'test@example.com',
-          'password123',
-          'Test User',
-        );
+        await notifier.register('test@example.com', 'password123', 'Test User');
 
         // Assert
         final state = container.read(authNotifierProvider);
@@ -183,11 +176,7 @@ void main() {
         final notifier = container.read(authNotifierProvider.notifier);
 
         // Act
-        await notifier.register(
-          'test@example.com',
-          'password123',
-          'Test User',
-        );
+        await notifier.register('test@example.com', 'password123', 'Test User');
 
         // Assert
         final state = container.read(authNotifierProvider);

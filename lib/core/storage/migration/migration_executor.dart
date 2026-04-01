@@ -249,10 +249,7 @@ class MigrationExecutor {
 /// Exception thrown when migration execution fails
 class MigrationExecutionException implements Exception {
   /// Creates a [MigrationExecutionException] with the given [message]
-  MigrationExecutionException(
-    this.message, {
-    this.originalException,
-  });
+  MigrationExecutionException(this.message, {this.originalException});
 
   /// Error message describing what went wrong
   final String message;

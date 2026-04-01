@@ -34,9 +34,7 @@ void main() {
 
     setUp(() {
       mockStorageService = MockStorageService();
-      interceptor = CacheInterceptor(
-        storageService: mockStorageService,
-      );
+      interceptor = CacheInterceptor(storageService: mockStorageService);
       requestOptions = RequestOptions(
         path: '/api/test',
         method: 'GET',
@@ -75,10 +73,7 @@ void main() {
       test('should not cache non-GET requests', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        final postOptions = RequestOptions(
-          path: '/api/test',
-          method: 'POST',
-        );
+        final postOptions = RequestOptions(path: '/api/test', method: 'POST');
 
         // Act
         await interceptor.onRequest(postOptions, handler);
@@ -295,10 +290,7 @@ void main() {
 
       test('should not cache non-GET responses', () async {
         // Arrange
-        final postOptions = RequestOptions(
-          path: '/api/test',
-          method: 'POST',
-        );
+        final postOptions = RequestOptions(path: '/api/test', method: 'POST');
         final response = Response<dynamic>(
           requestOptions: postOptions,
           statusCode: 200,
@@ -363,10 +355,7 @@ void main() {
         ).thenThrow(Exception('Storage error'));
 
         // Act & Assert
-        await expectLater(
-          interceptor.onResponse(response, handler),
-          completes,
-        );
+        await expectLater(interceptor.onResponse(response, handler), completes);
       });
 
       test('should include query parameters in cache key', () async {
@@ -394,10 +383,8 @@ void main() {
         // Cache saves data and timestamp, so setString is called twice
         // Both should contain the query parameters in the key
         verify(
-          () => mockStorageService.setString(
-            any(that: contains('page')),
-            any(),
-          ),
+          () =>
+              mockStorageService.setString(any(that: contains('page')), any()),
         ).called(2);
       });
     });

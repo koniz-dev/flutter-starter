@@ -134,9 +134,8 @@ class LazyLoader<K, T> {
 /// ```
 class DeferredImportLoader {
   /// Creates a [DeferredImportLoader] with the given [loadFunction]
-  DeferredImportLoader({
-    required Future<void> Function() loadFunction,
-  }) : _loadFunction = loadFunction;
+  DeferredImportLoader({required Future<void> Function() loadFunction})
+    : _loadFunction = loadFunction;
 
   /// Function to load the deferred library
   final Future<void> Function() _loadFunction;
@@ -194,9 +193,8 @@ class DeferredImportLoader {
 /// ```
 class LazyInitializer<T> {
   /// Creates a [LazyInitializer] with the given [initializer]
-  LazyInitializer({
-    required Future<T> Function() initializer,
-  }) : _initializer = initializer;
+  LazyInitializer({required Future<T> Function() initializer})
+    : _initializer = initializer;
 
   /// Function to initialize the resource
   final Future<T> Function() _initializer;

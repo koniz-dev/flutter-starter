@@ -66,9 +66,7 @@ void main() {
       // Act
       for (var i = 0; i < 5; i++) {
         final logEvent = LogEvent(Level.info, 'Log entry $i');
-        fileLogOutput.output(
-          OutputEvent(logEvent, ['Log entry $i']),
-        );
+        fileLogOutput.output(OutputEvent(logEvent, ['Log entry $i']));
       }
 
       // Wait for async operations
@@ -91,19 +89,12 @@ void main() {
       fileLogOutput = FileLogOutput(fileName: 'test.log');
       await fileLogOutput.init();
 
-      final levels = [
-        Level.debug,
-        Level.info,
-        Level.warning,
-        Level.error,
-      ];
+      final levels = [Level.debug, Level.info, Level.warning, Level.error];
 
       // Act
       for (final level in levels) {
         final logEvent = LogEvent(level, '${level.name} message');
-        fileLogOutput.output(
-          OutputEvent(logEvent, ['${level.name} message']),
-        );
+        fileLogOutput.output(OutputEvent(logEvent, ['${level.name} message']));
       }
 
       // Wait for async operations
@@ -136,10 +127,9 @@ void main() {
           'This is a long log message that will fill up the file quickly.',
         );
         fileLogOutput.output(
-          OutputEvent(
-            logEvent,
-            ['This is a long log message that will fill up the file quickly.'],
-          ),
+          OutputEvent(logEvent, [
+            'This is a long log message that will fill up the file quickly.',
+          ]),
         );
       }
 
@@ -168,10 +158,7 @@ void main() {
           'Long message to trigger rotation',
         );
         fileLogOutput.output(
-          OutputEvent(
-            logEvent,
-            ['Long message to trigger rotation'],
-          ),
+          OutputEvent(logEvent, ['Long message to trigger rotation']),
         );
       }
 
@@ -374,10 +361,7 @@ void main() {
 
       // Act - Write enough to trigger rotation
       for (var i = 0; i < 30; i++) {
-        final logEvent = LogEvent(
-          Level.info,
-          'Rotation test message $i',
-        );
+        final logEvent = LogEvent(Level.info, 'Rotation test message $i');
         fileLogOutput.output(
           OutputEvent(logEvent, ['Rotation test message $i']),
         );
@@ -416,10 +400,7 @@ void main() {
 
     test('should handle rotation when file does not exist yet', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(
-        fileName: 'new.log',
-        maxFileSize: 50,
-      );
+      fileLogOutput = FileLogOutput(fileName: 'new.log', maxFileSize: 50);
       await fileLogOutput.init();
 
       // Act - Write small amount (won't trigger rotation)
@@ -438,16 +419,11 @@ void main() {
       await fileLogOutput.init();
 
       // Act - Multiple concurrent outputs
-      final futures = List.generate(
-        10,
-        (i) {
-          final logEvent = LogEvent(Level.info, 'Concurrent $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Concurrent $i']),
-          );
-          return Future<void>.value();
-        },
-      );
+      final futures = List.generate(10, (i) {
+        final logEvent = LogEvent(Level.info, 'Concurrent $i');
+        fileLogOutput.output(OutputEvent(logEvent, ['Concurrent $i']));
+        return Future<void>.value();
+      });
       await Future.wait(futures);
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
@@ -534,10 +510,7 @@ void main() {
         );
 
         final logEvent = LogEvent(Level.info, 'Line 1\nLine 2\nLine 3');
-        final event = OutputEvent(
-          logEvent,
-          ['Line 1', 'Line 2', 'Line 3'],
-        );
+        final event = OutputEvent(logEvent, ['Line 1', 'Line 2', 'Line 3']);
 
         // Act
         customOutput.output(event);
@@ -575,10 +548,7 @@ void main() {
       test('should format log event as JSON', () {
         // Arrange
         final formatter = JsonLogFormatter();
-        final event = LogEvent(
-          Level.info,
-          'Test message',
-        );
+        final event = LogEvent(Level.info, 'Test message');
 
         // Act
         final lines = formatter.log(event);
@@ -597,11 +567,7 @@ void main() {
         // Arrange
         final formatter = JsonLogFormatter();
         final error = Exception('Test error');
-        final event = LogEvent(
-          Level.error,
-          'Error message',
-          error: error,
-        );
+        final event = LogEvent(Level.error, 'Error message', error: error);
 
         // Act
         final lines = formatter.log(event);
@@ -635,10 +601,7 @@ void main() {
       test('should handle null error and stackTrace', () {
         // Arrange
         final formatter = JsonLogFormatter();
-        final event = LogEvent(
-          Level.info,
-          'Info message',
-        );
+        final event = LogEvent(Level.info, 'Info message');
 
         // Act
         final lines = formatter.log(event);
@@ -652,12 +615,7 @@ void main() {
       test('should format different log levels', () {
         // Arrange
         final formatter = JsonLogFormatter();
-        final levels = [
-          Level.debug,
-          Level.info,
-          Level.warning,
-          Level.error,
-        ];
+        final levels = [Level.debug, Level.info, Level.warning, Level.error];
 
         // Act & Assert
         for (final level in levels) {
@@ -1071,9 +1029,7 @@ void main() {
         // Act - Write enough to trigger rotation
         for (var i = 0; i < 20; i++) {
           final logEvent = LogEvent(Level.info, 'Long message $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Long message $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['Long message $i']));
         }
         await Future<void>.delayed(const Duration(milliseconds: 500));
 
@@ -1134,9 +1090,7 @@ void main() {
         // Act - Write enough to trigger rotation
         for (var i = 0; i < 10; i++) {
           final logEvent = LogEvent(Level.info, 'Long message $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Long message $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['Long message $i']));
         }
         await Future<void>.delayed(const Duration(milliseconds: 500));
 
@@ -1158,9 +1112,7 @@ void main() {
         // This tests the case where oldFile.existsSync() is false
         for (var i = 0; i < 10; i++) {
           final logEvent = LogEvent(Level.info, 'Long message $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Long message $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['Long message $i']));
         }
         await Future<void>.delayed(const Duration(milliseconds: 500));
 
@@ -1221,9 +1173,7 @@ void main() {
         // Act - Write enough to potentially trigger rotation check
         for (var i = 0; i < 15; i++) {
           final logEvent = LogEvent(Level.info, 'Rotation check $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Rotation check $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['Rotation check $i']));
         }
 
         // Wait for rotation check to complete
@@ -1273,18 +1223,14 @@ void main() {
         // Act - Trigger first rotation
         for (var i = 0; i < 15; i++) {
           final logEvent = LogEvent(Level.info, 'First rotation $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['First rotation $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['First rotation $i']));
         }
         await Future<void>.delayed(const Duration(milliseconds: 1000));
 
         // Trigger second rotation (should handle existing .1, .2 files)
         for (var i = 0; i < 15; i++) {
           final logEvent = LogEvent(Level.info, 'Second rotation $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Second rotation $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['Second rotation $i']));
         }
         await Future<void>.delayed(const Duration(milliseconds: 1000));
 
@@ -1343,9 +1289,7 @@ void main() {
         // Act - Trigger rotation
         for (var i = 0; i < 15; i++) {
           final logEvent = LogEvent(Level.info, 'Trigger rotation $i');
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Trigger rotation $i']),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, ['Trigger rotation $i']));
         }
         await Future<void>.delayed(const Duration(milliseconds: 1000));
 
@@ -1432,9 +1376,7 @@ void main() {
           for (var i = 0; i < logFiles.length - 1; i++) {
             expect(
               logFiles[i].lastModifiedSync(),
-              greaterThanOrEqualTo(
-                logFiles[i + 1].lastModifiedSync(),
-              ),
+              greaterThanOrEqualTo(logFiles[i + 1].lastModifiedSync()),
             );
           }
         }
@@ -1498,9 +1440,7 @@ void main() {
         for (var i = 0; i < 10; i++) {
           final message = 'Long message to trigger rotation $i';
           final logEvent = LogEvent(Level.info, message);
-          fileLogOutput.output(
-            OutputEvent(logEvent, [message]),
-          );
+          fileLogOutput.output(OutputEvent(logEvent, [message]));
         }
 
         // Wait for rotation to complete
@@ -1573,9 +1513,7 @@ void main() {
 
 /// Test implementation of CustomLogOutput
 class _TestCustomLogOutput extends CustomLogOutput {
-  _TestCustomLogOutput({
-    required this.onOutputLine,
-  });
+  _TestCustomLogOutput({required this.onOutputLine});
 
   final void Function(String line, Level level) onOutputLine;
 

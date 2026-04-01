@@ -20,38 +20,25 @@ void main() {
     });
 
     group('Data Source Providers', () {
-      test(
-        'featureFlagsLocalDataSourceProvider should provide '
-        'FeatureFlagsLocalDataSource',
-        () {
-          final dataSource = container.read(
-            featureFlagsLocalDataSourceProvider,
-          );
-          expect(dataSource, isA<FeatureFlagsLocalDataSource>());
-        },
-      );
+      test('featureFlagsLocalDataSourceProvider should provide '
+          'FeatureFlagsLocalDataSource', () {
+        final dataSource = container.read(featureFlagsLocalDataSourceProvider);
+        expect(dataSource, isA<FeatureFlagsLocalDataSource>());
+      });
 
-      test(
-        'featureFlagsRemoteDataSourceProvider should provide '
-        'FeatureFlagsRemoteDataSource',
-        () {
-          final dataSource = container.read(
-            featureFlagsRemoteDataSourceProvider,
-          );
-          expect(dataSource, isA<FeatureFlagsRemoteDataSource>());
-        },
-      );
+      test('featureFlagsRemoteDataSourceProvider should provide '
+          'FeatureFlagsRemoteDataSource', () {
+        final dataSource = container.read(featureFlagsRemoteDataSourceProvider);
+        expect(dataSource, isA<FeatureFlagsRemoteDataSource>());
+      });
     });
 
     group('Repository Provider', () {
-      test(
-        'featureFlagsRepositoryProvider should provide '
-        'FeatureFlagsRepository',
-        () {
-          final repository = container.read(featureFlagsRepositoryProvider);
-          expect(repository, isA<FeatureFlagsRepository>());
-        },
-      );
+      test('featureFlagsRepositoryProvider should provide '
+          'FeatureFlagsRepository', () {
+        final repository = container.read(featureFlagsRepositoryProvider);
+        expect(repository, isA<FeatureFlagsRepository>());
+      });
     });
 
     group('Manager Provider', () {
@@ -127,9 +114,7 @@ void main() {
         'allFeatureFlagsProvider should provide map of feature flags',
         () async {
           try {
-            final future = container.read(
-              allFeatureFlagsProvider.future,
-            );
+            final future = container.read(allFeatureFlagsProvider.future);
             final result = await future;
             expect(result, isA<Map<String, FeatureFlag?>>());
           } on Object catch (e) {
@@ -147,9 +132,7 @@ void main() {
           // The provider uses result.when() with failureCallback that returns
           // empty map
           try {
-            final future = container.read(
-              allFeatureFlagsProvider.future,
-            );
+            final future = container.read(allFeatureFlagsProvider.future);
             final result = await future;
             // Should return empty map on failure
             expect(result, isA<Map<String, FeatureFlag?>>());

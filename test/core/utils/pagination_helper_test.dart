@@ -355,11 +355,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: listView),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: listView)));
 
       await tester.pump();
 
@@ -386,11 +382,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: listView),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: listView)));
 
       await tester.pump();
 
@@ -416,11 +408,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: listView),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: listView)));
 
       await tester.pump();
 

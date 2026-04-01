@@ -102,10 +102,7 @@ class JsonHelper {
   }
 
   /// Safely get a Map from a Map by key
-  static Map<String, dynamic>? getMap(
-    Map<String, dynamic>? map,
-    String key,
-  ) {
+  static Map<String, dynamic>? getMap(Map<String, dynamic>? map, String key) {
     return getValue<Map<String, dynamic>>(map, key);
   }
 
@@ -174,10 +171,7 @@ class JsonHelper {
 
       if (value is Map<String, dynamic> &&
           result[key] is Map<String, dynamic>) {
-        result[key] = deepMerge(
-          result[key] as Map<String, dynamic>,
-          value,
-        );
+        result[key] = deepMerge(result[key] as Map<String, dynamic>, value);
       } else {
         result[key] = value;
       }
@@ -189,9 +183,7 @@ class JsonHelper {
   /// Remove null values from a Map
   static Map<String, dynamic> removeNulls(Map<String, dynamic>? map) {
     if (map == null) return {};
-    return Map.fromEntries(
-      map.entries.where((entry) => entry.value != null),
-    );
+    return Map.fromEntries(map.entries.where((entry) => entry.value != null));
   }
 
   /// Convert a Map to a query string format

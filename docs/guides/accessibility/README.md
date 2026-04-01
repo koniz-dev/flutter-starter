@@ -108,15 +108,21 @@ Semantics(
 ## File Structure
 
 ```
+lib/core/accessibility/
+├── accessibility_constants.dart   # WCAG-related constants
+├── accessibility_helpers.dart     # Helper functions
+└── focus_announcer.dart           # Screen reader announcements
+
 lib/shared/accessibility/
-├── accessibility_constants.dart      # WCAG constants
-├── accessibility_helpers.dart         # Helper functions
-├── accessibility_widgets.dart        # Accessible widgets
-├── accessibility_test_helpers.dart   # Testing utilities
-└── focus_announcer.dart              # Screen reader announcements
+└── accessibility_widgets.dart     # Accessible widget wrappers
+
+test/core/accessibility/
+├── accessibility_helpers_test.dart
+└── focus_announcer_test.dart
 
 test/shared/accessibility/
-└── accessibility_helpers_test.dart   # Unit tests
+├── accessibility_test_helpers.dart  # Pump / test utilities
+└── accessibility_widgets_test.dart
 ```
 
 ## Standards Compliance

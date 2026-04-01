@@ -1,4 +1,4 @@
-﻿import 'package:flutter_starter/core/performance/i_performance_service.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -35,10 +35,7 @@ void main() {
           () => mockService.measureOperation<String>(
             name: 'api_get_/users',
             operation: any(named: 'operation'),
-            attributes: {
-              'http_method': 'GET',
-              'http_path': '/users',
-            },
+            attributes: {'http_method': 'GET', 'http_path': '/users'},
           ),
         ).called(1);
       });
@@ -121,9 +118,7 @@ void main() {
           () => mockService.measureOperation<List<String>>(
             name: 'db_query_get_users',
             operation: any(named: 'operation'),
-            attributes: {
-              'query_name': 'get_users',
-            },
+            attributes: {'query_name': 'get_users'},
           ),
         ).called(1);
       });
@@ -148,10 +143,7 @@ void main() {
           () => mockService.measureOperation<List<String>>(
             name: any(named: 'name'),
             operation: any(named: 'operation'),
-            attributes: {
-              'query_name': 'get_users',
-              'table': 'users',
-            },
+            attributes: {'query_name': 'get_users', 'table': 'users'},
           ),
         ).called(1);
       });
@@ -288,10 +280,7 @@ void main() {
         () => mockService.measureOperation<String>(
           name: 'api_get_/users',
           operation: any(named: 'operation'),
-          attributes: {
-            'http_method': 'GET',
-            'http_path': '/users',
-          },
+          attributes: {'http_method': 'GET', 'http_path': '/users'},
         ),
       ).called(1);
     });
@@ -315,9 +304,7 @@ void main() {
         () => mockService.measureOperation<List<String>>(
           name: 'db_query_get_users',
           operation: any(named: 'operation'),
-          attributes: {
-            'query_name': 'get_users',
-          },
+          attributes: {'query_name': 'get_users'},
         ),
       ).called(1);
     });

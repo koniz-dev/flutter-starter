@@ -29,10 +29,8 @@ class AppConfig {
   /// - .env file: `ENVIRONMENT=production`
   /// - --dart-define: `--dart-define=ENVIRONMENT=production`
   /// - Default: `development`
-  static String get environment => EnvConfig.get(
-    'ENVIRONMENT',
-    defaultValue: 'development',
-  ).toLowerCase();
+  static String get environment =>
+      EnvConfig.get('ENVIRONMENT', defaultValue: 'development').toLowerCase();
 
   /// Returns true if the current environment is development
   static bool get isDevelopment => environment == 'development';
@@ -108,6 +106,38 @@ class AppConfig {
   /// Can be overridden via .env: `API_SEND_TIMEOUT=60`
   static int get apiSendTimeout =>
       EnvConfig.getInt('API_SEND_TIMEOUT', defaultValue: 30);
+
+  /// List of valid SSL certificate fingerprints (SHA-256)
+  ///
+  /// Can be configured via .env (comma separated):
+  /// `API_SSL_FINGERPRINTS=f4:34:b2...,c8:2f:13...`
+  static List<String> get apiSslFingerprints {
+    final envValue = EnvConfig.get('API_SSL_FINGERPRINTS');
+    if (envValue.isNotEmpty) {
+      return envValue
+          .split(',')
+          .map((s) => s.trim().replaceAll(':', '').toLowerCase())
+          .where((s) => s.isNotEmpty)
+          .toList();
+    }
+    return const [];
+  }
+
+  /// Enable SSL/Certificate Pinning
+  ///
+  /// Enforces verification of server certificate fingerprints using
+  /// [apiSslFingerprints].
+  /// Default behavior:
+  /// - Development: `false` (to allow proxy debugging like Charles/Proxyman)
+  /// - Staging/Production: `true`
+  ///
+  /// Can be overridden via .env: `ENABLE_SSL_PINNING=true`
+  static bool get enableSslPinning {
+    if (EnvConfig.has('ENABLE_SSL_PINNING')) {
+      return EnvConfig.getBool('ENABLE_SSL_PINNING');
+    }
+    return isStaging || isProduction;
+  }
 
   // ==========================================================================
   // Feature Flags
@@ -197,18 +227,14 @@ class AppConfig {
   /// App version (from pubspec.yaml or environment)
   ///
   /// Can be set via .env: `APP_VERSION=1.0.0`
-  static String get appVersion => EnvConfig.get(
-    'APP_VERSION',
-    defaultValue: '1.0.0',
-  );
+  static String get appVersion =>
+      EnvConfig.get('APP_VERSION', defaultValue: '1.0.0');
 
   /// App build number
   ///
   /// Can be set via .env: `APP_BUILD_NUMBER=1`
-  static String get appBuildNumber => EnvConfig.get(
-    'APP_BUILD_NUMBER',
-    defaultValue: '1',
-  );
+  static String get appBuildNumber =>
+      EnvConfig.get('APP_BUILD_NUMBER', defaultValue: '1');
 
   /// Enable HTTP request/response logging
   ///
@@ -251,6 +277,8 @@ class AppConfig {
       debugPrint('  Connect Timeout: ${apiConnectTimeout}s');
       debugPrint('  Receive Timeout: ${apiReceiveTimeout}s');
       debugPrint('  Send Timeout: ${apiSendTimeout}s');
+      debugPrint('  SSL Pinning Enabled: $enableSslPinning');
+      debugPrint('  SSL Fingerprints Configured: ${apiSslFingerprints.length}');
       debugPrint('');
       debugPrint('🚩 Feature Flags:');
       debugPrint('  Logging: $enableLogging');
@@ -283,6 +311,8 @@ class AppConfig {
       'apiConnectTimeout': apiConnectTimeout,
       'apiReceiveTimeout': apiReceiveTimeout,
       'apiSendTimeout': apiSendTimeout,
+      'enableSslPinning': enableSslPinning,
+      'apiSslFingerprintsCount': apiSslFingerprints.length,
       'enableLogging': enableLogging,
       'enableAnalytics': enableAnalytics,
       'enableCrashReporting': enableCrashReporting,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_starter/shared/accessibility/accessibility_helpers.dart';
+import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
 
 /// Accessible button widget with proper semantics and touch targets
 ///
@@ -211,10 +211,7 @@ class AccessibleText extends StatelessWidget {
       return ExcludeSemantics(child: widget);
     }
 
-    return Semantics(
-      label: semanticLabel ?? text,
-      child: widget,
-    );
+    return Semantics(label: semanticLabel ?? text, child: widget);
   }
 }
 
@@ -257,21 +254,13 @@ class AccessibleImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = SizedBox(
-      width: width,
-      height: height,
-      child: image,
-    );
+    final widget = SizedBox(width: width, height: height, child: image);
 
     if (isDecorative) {
       return ExcludeSemantics(child: widget);
     }
 
-    return Semantics(
-      label: semanticLabel,
-      image: true,
-      child: widget,
-    );
+    return Semantics(label: semanticLabel, image: true, child: widget);
   }
 }
 

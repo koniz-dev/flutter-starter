@@ -152,10 +152,7 @@ class LocalizedFormatters {
   ///
   /// [number] - The number to format
   /// [locale] - The locale to use for formatting
-  static String formatCompactNumber(
-    num number, {
-    required Locale locale,
-  }) {
+  static String formatCompactNumber(num number, {required Locale locale}) {
     return NumberFormat.compact(locale: locale.toString()).format(number);
   }
 

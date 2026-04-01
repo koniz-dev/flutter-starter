@@ -197,10 +197,7 @@ void main() {
 
     test('should have page sizes that work together', () {
       // Page sizes should work together in pagination logic
-      expect(
-        AppConstants.maxPageSize >= AppConstants.defaultPageSize,
-        isTrue,
-      );
+      expect(AppConstants.maxPageSize >= AppConstants.defaultPageSize, isTrue);
       expect(
         AppConstants.maxPageSize ~/ AppConstants.defaultPageSize,
         greaterThan(0),

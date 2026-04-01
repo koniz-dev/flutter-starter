@@ -218,55 +218,49 @@ void main() {
     });
 
     group('Data Separation', () {
-      test(
-        'should store tokens in secure storage and user data in regular '
-        'storage',
-        () async {
-          const token = 'test_token';
-          const refreshToken = 'test_refresh_token';
-          const user = UserModel(
-            id: '1',
-            email: 'test@example.com',
-            name: 'Test User',
-          );
+      test('should store tokens in secure storage and user data in regular '
+          'storage', () async {
+        const token = 'test_token';
+        const refreshToken = 'test_refresh_token';
+        const user = UserModel(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
 
-          await dataSource.cacheToken(token);
-          await dataSource.cacheRefreshToken(refreshToken);
-          await dataSource.cacheUser(user);
+        await dataSource.cacheToken(token);
+        await dataSource.cacheRefreshToken(refreshToken);
+        await dataSource.cacheUser(user);
 
-          // Verify tokens are in secure storage
-          expect(
-            await secureStorageService.getString(AppConstants.tokenKey),
-            token,
-          );
-          expect(
-            await secureStorageService.getString(AppConstants.refreshTokenKey),
-            refreshToken,
-          );
+        // Verify tokens are in secure storage
+        expect(
+          await secureStorageService.getString(AppConstants.tokenKey),
+          token,
+        );
+        expect(
+          await secureStorageService.getString(AppConstants.refreshTokenKey),
+          refreshToken,
+        );
 
-          // Verify tokens are NOT in regular storage
-          expect(
-            await storageService.getString(AppConstants.tokenKey),
-            isNull,
-          );
-          expect(
-            await storageService.getString(AppConstants.refreshTokenKey),
-            isNull,
-          );
+        // Verify tokens are NOT in regular storage
+        expect(await storageService.getString(AppConstants.tokenKey), isNull);
+        expect(
+          await storageService.getString(AppConstants.refreshTokenKey),
+          isNull,
+        );
 
-          // Verify user data is in regular storage
-          expect(
-            await storageService.getString(AppConstants.userDataKey),
-            isNotNull,
-          );
+        // Verify user data is in regular storage
+        expect(
+          await storageService.getString(AppConstants.userDataKey),
+          isNotNull,
+        );
 
-          // Verify user data is NOT in secure storage
-          expect(
-            await secureStorageService.getString(AppConstants.userDataKey),
-            isNull,
-          );
-        },
-      );
+        // Verify user data is NOT in secure storage
+        expect(
+          await secureStorageService.getString(AppConstants.userDataKey),
+          isNull,
+        );
+      });
     });
 
     group('Clear Cache', () {
@@ -533,10 +527,7 @@ void main() {
       });
 
       test('should handle user with minimal fields', () async {
-        const user = UserModel(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const user = UserModel(id: '1', email: 'test@example.com');
 
         await dataSource.cacheUser(user);
         final retrieved = await dataSource.getCachedUser();

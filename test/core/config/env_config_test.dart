@@ -444,14 +444,11 @@ void main() {
         },
       );
 
-      test(
-        'should check dart-define for getInt when .env not initialized',
-        () {
-          // When _isInitialized is false, should check dart-define
-          final value = EnvConfig.getInt('TEST_INT', defaultValue: 42);
-          expect(value, 42);
-        },
-      );
+      test('should check dart-define for getInt when .env not initialized', () {
+        // When _isInitialized is false, should check dart-define
+        final value = EnvConfig.getInt('TEST_INT', defaultValue: 42);
+        expect(value, 42);
+      });
 
       test(
         'should check dart-define for getDouble when .env not initialized',

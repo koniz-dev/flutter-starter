@@ -59,6 +59,7 @@ jobs:
         with:
           flutter-version: 'stable'
           channel: 'stable'
+          cache: true
 
       - name: Get dependencies
         run: flutter pub get
@@ -114,6 +115,7 @@ jobs:
         with:
           flutter-version: 'stable'
           channel: 'stable'
+          cache: true
 
       - name: Get dependencies
         run: flutter pub get
@@ -165,6 +167,7 @@ jobs:
         with:
           flutter-version: 'stable'
           channel: 'stable'
+          cache: true
 
       - name: Get dependencies
         run: flutter pub get

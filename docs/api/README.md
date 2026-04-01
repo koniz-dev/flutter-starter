@@ -11,8 +11,9 @@ This documentation provides comprehensive reference for all public APIs in the F
 ### Core APIs
 
 - **[Errors](core/errors.md)** - Exception and Failure types for error handling
-- **[Network](core/network.md)** - HTTP client and interceptors
-- **[Storage](core/storage.md)** - Storage services (regular and secure)
+- **[Network](core/network.md)** - HTTP client, GraphQL template, and interceptors
+- **[Storage](core/storage.md)** - Storage services and Offline Database template
+- **[Logging](core/logging.md)** - Logging service and Crashlytics template
 - **[Utils](core/utils.md)** - Utility classes (Result, JsonHelper, DateFormatter, Validators)
 
 ### Feature APIs
@@ -98,6 +99,20 @@ result.when(
 ```
 
 See [Errors](core/errors.md) for details.
+
+## Core vs Optional APIs
+
+### Core APIs (hard-fixed in starter)
+- Network foundation with Dio `ApiClient` and interceptors.
+- Routing and dependency injection through Riverpod providers.
+- Core storage (`StorageService`, `SecureStorageService`) used by auth/session flow.
+
+### Optional APIs (pluggable)
+- Remote feature flags provider implementations (Firebase or custom provider override).
+- RASP provider implementations (FreeRASP or custom/no-op).
+- Crashlytics output template for logging.
+- GraphQL template client.
+- `ILocalDatabase` implementations (e.g. Isar template).
 
 ## Architecture Layers
 

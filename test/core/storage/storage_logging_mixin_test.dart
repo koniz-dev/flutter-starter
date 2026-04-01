@@ -25,10 +25,7 @@ void main() {
     group('logStorageRead', () {
       test('should log storage read operation', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageRead(
@@ -47,10 +44,7 @@ void main() {
 
       test('should log storage read without value', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageRead('getString', 'test_key');
@@ -67,10 +61,7 @@ void main() {
     group('logStorageWrite', () {
       test('should log storage write operation', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageWrite(
@@ -89,10 +80,7 @@ void main() {
 
       test('should sanitize sensitive values', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageWrite(
@@ -116,10 +104,7 @@ void main() {
 
       test('should truncate long values', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         final longValue = 'a' * 200;
@@ -147,10 +132,7 @@ void main() {
     group('logStorageDelete', () {
       test('should log storage delete operation', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageDelete('remove', 'test_key');
@@ -222,10 +204,7 @@ void main() {
     group('value sanitization', () {
       test('should sanitize password values', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageWrite(
@@ -249,10 +228,7 @@ void main() {
 
       test('should sanitize token values', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageWrite(
@@ -276,10 +252,7 @@ void main() {
 
       test('should not sanitize non-sensitive values', () {
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         storageService.logStorageWrite(

@@ -1,11 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
-import 'package:flutter_starter/core/storage/secure_storage_service.dart'
-    show SecureStorageService;
-import 'package:flutter_starter/core/storage/storage_service.dart'
-    show StorageService;
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
@@ -24,14 +20,14 @@ import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.d
 /// Provider for [AuthLocalDataSource] instance
 ///
 /// Uses:
-/// - [SecureStorageService] for tokens (secure)
-/// - [StorageService] for user data (non-sensitive)
+/// - [ITokenStore] for tokens (secure)
+/// - [IKeyValueStore] for user data (non-sensitive)
 final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
-  final storageService = ref.watch(storageServiceProvider);
-  final secureStorageService = ref.watch(secureStorageServiceProvider);
+  final storageService = ref.watch(keyValueStoreProvider);
+  final tokenStore = ref.watch(tokenStoreProvider);
   return AuthLocalDataSourceImpl(
     storageService: storageService,
-    secureStorageService: secureStorageService,
+    tokenStore: tokenStore,
   );
 });
 
@@ -40,7 +36,7 @@ final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
 /// Uses ref.read to break circular dependency with apiClientProvider.
 final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
     Provider<AuthRemoteDataSource>((ref) {
-      final apiClient = ref.read<ApiClient>(apiClientProvider);
+      final apiClient = ref.read(networkClientProvider);
       return AuthRemoteDataSourceImpl(apiClient);
     });
 
@@ -73,10 +69,10 @@ final Provider<AuthRepository> authRepositoryProvider =
 /// 401 errors. Uses ref.read to break circular dependency.
 final Provider<AuthInterceptor> authInterceptorProvider =
     Provider<AuthInterceptor>((ref) {
-      final secureStorageService = ref.watch(secureStorageServiceProvider);
+      final tokenStore = ref.watch(tokenStoreProvider);
       final authRepository = ref.read<AuthRepository>(authRepositoryProvider);
       return AuthInterceptor(
-        secureStorageService: secureStorageService,
+        tokenStore: tokenStore,
         authRepository: authRepository,
       );
     });

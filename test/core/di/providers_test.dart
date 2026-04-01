@@ -103,49 +103,45 @@ void main() {
         timeout: const Timeout(Duration(seconds: 3)),
       );
 
-      test(
-        'storageInitializationProvider should create '
-        'StorageMigrationService and call migrateAll',
-        () async {
-          // This test ensures the code path where StorageMigrationService is
-          // created and migrateAll is called is covered
-          // In unit test environment, this may fail due to missing plugins,
-          // but we want to ensure the code path is executed
+      test('storageInitializationProvider should create '
+          'StorageMigrationService and call migrateAll', () async {
+        // This test ensures the code path where StorageMigrationService is
+        // created and migrateAll is called is covered
+        // In unit test environment, this may fail due to missing plugins,
+        // but we want to ensure the code path is executed
+        try {
+          final storageService = container.read(storageServiceProvider);
+          final secureStorageService = container.read(
+            secureStorageServiceProvider,
+          );
+          final loggingService = container.read(loggingServiceProvider);
+
+          // Initialize storage services first
+          await storageService.init();
+
+          // Create migration service directly to test the code path
+          // This mirrors what storageInitializationProvider does
+          final migrationService = StorageMigrationService(
+            storageService: storageService,
+            secureStorageService: secureStorageService,
+            loggingService: loggingService,
+          );
+
+          // Try to run migrations (may fail in unit test environment)
           try {
-            final storageService = container.read(storageServiceProvider);
-            final secureStorageService = container.read(
-              secureStorageServiceProvider,
-            );
-            final loggingService = container.read(loggingServiceProvider);
-
-            // Initialize storage services first
-            await storageService.init();
-
-            // Create migration service directly to test the code path
-            // This mirrors what storageInitializationProvider does
-            final migrationService = StorageMigrationService(
-              storageService: storageService,
-              secureStorageService: secureStorageService,
-              loggingService: loggingService,
-            );
-
-            // Try to run migrations (may fail in unit test environment)
-            try {
-              await migrationService.migrateAll();
-            } on Exception catch (e) {
-              // Expected in unit test environment
-              expect(e, isNotNull);
-            }
-          } on MissingPluginException {
+            await migrationService.migrateAll();
+          } on Exception catch (e) {
             // Expected in unit test environment
-            expect(true, isTrue);
-          } on Exception {
-            // Expected in unit test environment
-            expect(true, isTrue);
+            expect(e, isNotNull);
           }
-        },
-        timeout: const Timeout(Duration(seconds: 5)),
-      );
+        } on MissingPluginException {
+          // Expected in unit test environment
+          expect(true, isTrue);
+        } on Exception {
+          // Expected in unit test environment
+          expect(true, isTrue);
+        }
+      }, timeout: const Timeout(Duration(seconds: 5)));
     });
 
     group('Auth Data Source Providers', () {
@@ -464,28 +460,25 @@ void main() {
         },
       );
 
-      test(
-        'authInterceptorProvider should depend on secure storage '
-        'and repository',
-        () {
-          // Circular dependency is expected in unit tests
-          expect(
-            () {
-              container
-                ..read(apiClientProvider)
-                ..read(authRepositoryProvider)
-                ..read(authInterceptorProvider);
-            },
-            throwsA(
-              predicate(
-                (e) =>
-                    e.toString().contains('uninitialized provider') ||
-                    e.toString().contains('circular dependency'),
-              ),
+      test('authInterceptorProvider should depend on secure storage '
+          'and repository', () {
+        // Circular dependency is expected in unit tests
+        expect(
+          () {
+            container
+              ..read(apiClientProvider)
+              ..read(authRepositoryProvider)
+              ..read(authInterceptorProvider);
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e.toString().contains('uninitialized provider') ||
+                  e.toString().contains('circular dependency'),
             ),
-          );
-        },
-      );
+          ),
+        );
+      });
     });
 
     group('Provider Singleton Behavior', () {
@@ -554,15 +547,12 @@ void main() {
         expect(useCase, isA<DeleteTaskUseCase>());
       });
 
-      test(
-        'toggleTaskCompletionUseCaseProvider should provide '
-        'ToggleTaskCompletionUseCase',
-        () {
-          final useCase = container.read(toggleTaskCompletionUseCaseProvider);
-          expect(useCase, isNotNull);
-          expect(useCase, isA<ToggleTaskCompletionUseCase>());
-        },
-      );
+      test('toggleTaskCompletionUseCaseProvider should provide '
+          'ToggleTaskCompletionUseCase', () {
+        final useCase = container.read(toggleTaskCompletionUseCaseProvider);
+        expect(useCase, isNotNull);
+        expect(useCase, isA<ToggleTaskCompletionUseCase>());
+      });
     });
 
     group('Tasks Provider Dependencies', () {
@@ -574,14 +564,11 @@ void main() {
         },
       );
 
-      test(
-        'tasksRepositoryProvider should depend on '
-        'tasksLocalDataSourceProvider',
-        () {
-          final repository = container.read(tasksRepositoryProvider);
-          expect(repository, isNotNull);
-        },
-      );
+      test('tasksRepositoryProvider should depend on '
+          'tasksLocalDataSourceProvider', () {
+        final repository = container.read(tasksRepositoryProvider);
+        expect(repository, isNotNull);
+      });
 
       test(
         'tasks use case providers should depend on tasksRepositoryProvider',
@@ -625,35 +612,31 @@ void main() {
     });
 
     group('Storage Initialization Provider - Error Handling', () {
-      test(
-        'storageInitializationProvider should handle errors '
-        'in storageService.init',
-        () async {
-          // This test ensures the error handling path in
-          // storageInitializationProvider is covered when
-          // storageService.init() throws an exception
-          try {
-            final future = container.read(storageInitializationProvider.future);
-            await future.timeout(
-              const Duration(seconds: 2),
-              onTimeout: () {
-                // Timeout is expected in unit test environment
-                return;
-              },
-            );
-          } on TimeoutException {
-            // Expected in unit test environment when plugins are missing
-            expect(true, isTrue);
-          } on MissingPluginException {
-            // Expected in unit test environment
-            expect(true, isTrue);
-          } on Exception catch (e) {
-            // Provider should handle errors gracefully (covers lines 68-83)
-            expect(e, isNotNull);
-          }
-        },
-        timeout: const Timeout(Duration(seconds: 3)),
-      );
+      test('storageInitializationProvider should handle errors '
+          'in storageService.init', () async {
+        // This test ensures the error handling path in
+        // storageInitializationProvider is covered when
+        // storageService.init() throws an exception
+        try {
+          final future = container.read(storageInitializationProvider.future);
+          await future.timeout(
+            const Duration(seconds: 2),
+            onTimeout: () {
+              // Timeout is expected in unit test environment
+              return;
+            },
+          );
+        } on TimeoutException {
+          // Expected in unit test environment when plugins are missing
+          expect(true, isTrue);
+        } on MissingPluginException {
+          // Expected in unit test environment
+          expect(true, isTrue);
+        } on Exception catch (e) {
+          // Provider should handle errors gracefully (covers lines 68-83)
+          expect(e, isNotNull);
+        }
+      }, timeout: const Timeout(Duration(seconds: 3)));
 
       test(
         'storageInitializationProvider should handle errors in migrateAll',

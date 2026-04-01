@@ -15,17 +15,13 @@ import 'package:flutter_starter/core/performance/performance_attributes.dart';
 /// the [IPerformanceService].
 class PerformanceInterceptor extends Interceptor {
   /// Creates a [PerformanceInterceptor] with the given [performanceService]
-  PerformanceInterceptor({
-    required IPerformanceService performanceService,
-  }) : _performanceService = performanceService;
+  PerformanceInterceptor({required IPerformanceService performanceService})
+    : _performanceService = performanceService;
 
   final IPerformanceService _performanceService;
 
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     // Store trace in request options for use in onResponse/onError
     final trace = _performanceService.startHttpTrace(
       options.method,
@@ -36,14 +32,8 @@ class PerformanceInterceptor extends Interceptor {
       // Store trace in request options extra for later use
       options.extra['performance_trace'] = trace;
       trace
-        ..putAttribute(
-          PerformanceAttributes.httpMethod,
-          options.method,
-        )
-        ..putAttribute(
-          PerformanceAttributes.httpPath,
-          options.path,
-        )
+        ..putAttribute(PerformanceAttributes.httpMethod, options.method)
+        ..putAttribute(PerformanceAttributes.httpPath, options.path)
         ..startSync();
     }
 
@@ -92,19 +82,13 @@ class PerformanceInterceptor extends Interceptor {
   }
 
   @override
-  void onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     final trace = _getTrace(err.requestOptions);
     if (trace != null) {
       // Record error metrics
       trace
         ..putMetric(PerformanceMetrics.error, 1)
-        ..putAttribute(
-          PerformanceAttributes.errorType,
-          err.type.toString(),
-        );
+        ..putAttribute(PerformanceAttributes.errorType, err.type.toString());
 
       if (err.response != null) {
         final statusCode = err.response!.statusCode ?? 0;

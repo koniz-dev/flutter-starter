@@ -4,29 +4,9 @@ This directory contains comprehensive migration guides for the Flutter starter p
 
 ## Available Guides
 
-### From Other Architectures
-
-1. **[From MVC to Clean Architecture](from-mvc-to-clean-architecture.md)**
-   - Step-by-step guide to migrate from MVC architecture
-   - Converting controllers to use cases
-   - Moving business logic to domain layer
-   - Setting up Clean Architecture layers
-
-2. **[From BLoC to Riverpod](from-bloc-to-riverpod.md)**
-   - Migrating from BLoC/Cubit to Riverpod
-   - Converting events to methods
-   - Replacing BlocBuilder with ConsumerWidget
-   - Updating dependency injection
-
-3. **[From GetX to This Setup](from-getx-to-this-setup.md)**
-   - Migrating from GetX to Clean Architecture + Riverpod
-   - Replacing GetxController with Notifier
-   - Converting GetX navigation to standard Flutter
-   - Migrating GetStorage to StorageService
-
 ### Upgrading This Starter
 
-4. **[Upgrading This Starter](upgrading-this-starter.md)**
+1. **[Upgrading This Starter](upgrading-this-starter.md)**
    - Version upgrade process
    - Breaking changes documentation
    - Migration scripts
@@ -34,7 +14,7 @@ This directory contains comprehensive migration guides for the Flutter starter p
 
 ### Customization
 
-5. **[Customization Guide](customization-guide.md)**
+2. **[Customization Guide](customization-guide.md)**
    - Removing unused features
    - Adding custom features
    - Adapting to specific needs
@@ -44,9 +24,6 @@ This directory contains comprehensive migration guides for the Flutter starter p
 
 ### Choosing the Right Guide
 
-- **Migrating from MVC?** → Start with [From MVC to Clean Architecture](from-mvc-to-clean-architecture.md)
-- **Migrating from BLoC?** → Start with [From BLoC to Riverpod](from-bloc-to-riverpod.md)
-- **Migrating from GetX?** → Start with [From GetX to This Setup](from-getx-to-this-setup.md)
 - **Upgrading this starter?** → See [Upgrading This Starter](upgrading-this-starter.md)
 - **Customizing the starter?** → See [Customization Guide](customization-guide.md)
 
@@ -90,74 +67,6 @@ This directory contains comprehensive migration guides for the Flutter starter p
    - Commit changes
 
 ## Common Patterns
-
-### State Management Migration
-
-**Before (Various Patterns):**
-```dart
-// MVC: setState
-setState(() => _count++);
-
-// BLoC: emit
-emit(state + 1);
-
-// GetX: .obs
-count.value++;
-```
-
-**After (Riverpod):**
-```dart
-// Riverpod: state assignment
-state = state + 1;
-```
-
-### Dependency Injection Migration
-
-**Before (Various Patterns):**
-```dart
-// MVC: Direct instantiation
-final service = MyService();
-
-// BLoC: BlocProvider
-final bloc = context.read<MyBloc>();
-
-// GetX: Get.find()
-final service = Get.find<MyService>();
-```
-
-**After (Riverpod):**
-```dart
-// Riverpod: ref.read/ref.watch
-final service = ref.read(myServiceProvider);
-```
-
-### Error Handling Migration
-
-**Before (Various Patterns):**
-```dart
-// try-catch
-try {
-  final data = await fetchData();
-} catch (e) {
-  print('Error: $e');
-}
-
-// Null returns
-final user = await login();
-if (user == null) {
-  // Handle error
-}
-```
-
-**After (Result Pattern):**
-```dart
-// Result<T> pattern
-final result = await loginUseCase(email, password);
-result.when(
-  success: (user) => handleSuccess(user),
-  failureCallback: (failure) => handleFailure(failure),
-);
-```
 
 ## Best Practices
 

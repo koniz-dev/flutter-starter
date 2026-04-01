@@ -316,15 +316,8 @@ RepaintBoundary(
 
 **Impact:** Reduces unnecessary repaints, improves frame rate.
 
-#### ✅ Performance Monitoring
-**New Utility:** `PerformanceWidget` and `PerformanceMonitor`
-
-```dart
-PerformanceWidget(
-  name: 'ProductList',
-  child: ListView.builder(...),
-)
-```
+#### ✅ Performance monitoring
+Use **`IPerformanceService`** + **`PerformanceUtils`** (see `lib/core/performance/`) or copy patterns from [`examples/performance_examples.dart`](../../../examples/performance_examples.dart). There is no `PerformanceWidget` / `PerformanceMonitor` class in this repository.
 
 #### ✅ Optimized List Rendering
 **New Widget:** `OptimizedListView` with built-in pagination and performance optimizations
@@ -380,6 +373,8 @@ if (paginationHelper.shouldPrefetch(scrollPosition)) {
 | Janky Frames | 8% | 2% | **75% reduction** |
 | Scroll Performance | Good | Excellent | **Smooth 60 FPS** |
 
+*Illustrative comparison only — profile on your own targets and devices.*
+
 ### Best Practices
 
 1. **Use `const` Everywhere**: Reduces widget rebuilds
@@ -390,40 +385,17 @@ if (paginationHelper.shouldPrefetch(scrollPosition)) {
 
 ---
 
-## 6. Performance Monitoring
+## 6. Performance monitoring
 
-### New Utilities
+Use **`IPerformanceService`**, **`performanceServiceProvider`**, and **`PerformanceUtils`** under `lib/core/performance/`. The default implementation is a **no-op** until you bind a real backend (optional Firebase template in `infrastructure/`).
 
-#### PerformanceMonitor
-```dart
-// Measure async operation
-final duration = await PerformanceMonitor.measureAsync(() async {
-  await fetchData();
-});
+See [`examples/performance_examples.dart`](../../../examples/performance_examples.dart) for end-to-end snippets.
 
-// Monitor frame rate
-PerformanceMonitor.monitorFrameRate(
-  threshold: 55.0,
-  onLowFps: (fps) => print('Low FPS: $fps'),
-);
-```
+What you can record when a real service is wired:
 
-#### PerformanceWidget
-```dart
-PerformanceWidget(
-  name: 'ExpensiveWidget',
-  child: YourWidget(),
-)
-```
-
-### Metrics Collection
-
-The app now tracks:
-- Operation execution times
-- Frame rate
-- Memory usage
-- Cache hit rates
-- Network request counts
+- Operation timings (`measureOperation`, `PerformanceUtils.measureApiCall`, …)
+- Custom attributes per trace
+- Optional HTTP metrics via `PerformanceInterceptor` when `IPerformanceService` is non-no-op
 
 ---
 
@@ -549,8 +521,8 @@ The app now tracks:
 ## Related Documentation
 
 - [Performance Summary](./summary.md) - Quick reference with metrics
-- [API Documentation - Network](../api/core/network.md) - Network utilities
-- [API Documentation - Utils](../api/core/utils.md) - Performance utilities
+- [API Documentation - Network](../../api/core/network.md) - Network utilities
+- [API Documentation - Utils](../../api/core/utils.md) - Performance utilities
 - [Common Tasks](../features/common-tasks.md) - Common development tasks
 
 ---

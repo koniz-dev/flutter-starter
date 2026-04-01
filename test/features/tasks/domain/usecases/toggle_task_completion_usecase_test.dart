@@ -183,9 +183,7 @@ void main() {
         final task = createTask(id: taskId, isCompleted: isCompleted);
         isCompleted = !isCompleted;
         when(() => mockRepository.toggleTaskCompletion(any())).thenAnswer(
-          (_) async => Success(
-            task.copyWith(isCompleted: isCompleted),
-          ),
+          (_) async => Success(task.copyWith(isCompleted: isCompleted)),
         );
 
         // Act
@@ -207,9 +205,7 @@ void main() {
         description: 'Test Description',
       );
       when(() => mockRepository.toggleTaskCompletion(any())).thenAnswer(
-        (_) async => Success(
-          originalTask.copyWith(isCompleted: true),
-        ),
+        (_) async => Success(originalTask.copyWith(isCompleted: true)),
       );
 
       // Act

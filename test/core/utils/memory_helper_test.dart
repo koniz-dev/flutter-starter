@@ -91,10 +91,7 @@ void main() {
 
     test('should dispose resources', () async {
       // Test that disposeResources doesn't throw
-      await expectLater(
-        MemoryHelper.disposeResources(),
-        completes,
-      );
+      await expectLater(MemoryHelper.disposeResources(), completes);
     });
 
     test('should dispose resources and clear cache', () async {
@@ -130,11 +127,7 @@ void main() {
     });
 
     testWidgets('should handle empty disposables list', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: _TestWidgetEmpty(),
-        ),
-      );
+      await tester.pumpWidget(const MaterialApp(home: _TestWidgetEmpty()));
 
       // Should not throw when disposing with no disposables
       await tester.pumpWidget(const SizedBox());
@@ -144,10 +137,7 @@ void main() {
 }
 
 class _TestWidget extends StatefulWidget {
-  const _TestWidget({
-    required this.onDispose1,
-    required this.onDispose2,
-  });
+  const _TestWidget({required this.onDispose1, required this.onDispose2});
 
   final VoidCallback onDispose1;
   final VoidCallback onDispose2;

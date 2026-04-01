@@ -1,19 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Runs before push. Matches CI spirit without building platform targets.
+set -euo pipefail
 
 echo "Running pre-push checks..."
 
-# Check if Flutter is available
-if ! command -v flutter &> /dev/null; then
-  echo "⚠️ Flutter not found. Skipping tests."
+if ! command -v flutter >/dev/null 2>&1; then
+  echo "⚠️  Flutter not found. Skipping tests."
   exit 0
 fi
 
-# Run tests
-echo "🧪 Running tests..."
-flutter test || {
-  echo "❌ Tests failed!"
+echo "🧱 Running flutter test (compact reporter, 15m timeout)..."
+if ! flutter test --reporter compact --timeout 15m; then
+  echo "❌ flutter test failed."
   exit 1
-}
+fi
 
-echo "✅ Pre-push checks passed!"
-exit 0
+echo "✅ Pre-push checks passed."

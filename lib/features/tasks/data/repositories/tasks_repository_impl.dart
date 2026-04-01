@@ -10,9 +10,7 @@ import 'package:flutter_starter/features/tasks/domain/repositories/tasks_reposit
 /// Implementation of tasks repository
 class TasksRepositoryImpl implements TasksRepository {
   /// Creates a [TasksRepositoryImpl] with the given [localDataSource]
-  TasksRepositoryImpl({
-    required this.localDataSource,
-  });
+  TasksRepositoryImpl({required this.localDataSource});
 
   /// Local data source for tasks
   final TasksLocalDataSource localDataSource;
@@ -98,9 +96,7 @@ class TasksRepositoryImpl implements TasksRepository {
     try {
       final taskModel = await localDataSource.getTaskById(id);
       if (taskModel == null) {
-        return const ResultFailure(
-          CacheFailure('Task not found'),
-        );
+        return const ResultFailure(CacheFailure('Task not found'));
       }
 
       final updatedTaskModel = TaskModel(

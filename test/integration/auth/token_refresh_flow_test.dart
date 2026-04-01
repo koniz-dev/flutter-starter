@@ -63,10 +63,7 @@ void main() {
       final dioException = DioException(
         requestOptions: requestOptions,
         type: DioExceptionType.badResponse,
-        response: Response(
-          requestOptions: requestOptions,
-          statusCode: 401,
-        ),
+        response: Response(requestOptions: requestOptions, statusCode: 401),
       );
 
       when(
@@ -81,10 +78,7 @@ void main() {
       when(() => mockSecureStorage.remove(any())).thenAnswer((_) async => true);
 
       // Act
-      await interceptor.onError(
-        dioException,
-        TestErrorInterceptorHandler(),
-      );
+      await interceptor.onError(dioException, TestErrorInterceptorHandler());
 
       // Wait for async operations
       await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -99,10 +93,7 @@ void main() {
       final dioException = DioException(
         requestOptions: requestOptions,
         type: DioExceptionType.badResponse,
-        response: Response(
-          requestOptions: requestOptions,
-          statusCode: 401,
-        ),
+        response: Response(requestOptions: requestOptions, statusCode: 401),
       );
       final handler = TestErrorInterceptorHandler();
 
@@ -124,10 +115,7 @@ void main() {
       final dioException = DioException(
         requestOptions: requestOptions,
         type: DioExceptionType.badResponse,
-        response: Response(
-          requestOptions: requestOptions,
-          statusCode: 401,
-        ),
+        response: Response(requestOptions: requestOptions, statusCode: 401),
       );
 
       when(
@@ -140,10 +128,7 @@ void main() {
       when(() => mockSecureStorage.remove(any())).thenAnswer((_) async => true);
 
       // Act
-      await interceptor.onError(
-        dioException,
-        TestErrorInterceptorHandler(),
-      );
+      await interceptor.onError(dioException, TestErrorInterceptorHandler());
 
       await Future<void>.delayed(const Duration(milliseconds: 100));
 

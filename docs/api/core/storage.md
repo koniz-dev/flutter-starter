@@ -7,8 +7,14 @@ Storage services for persisting data locally.
 The storage layer provides two services:
 - `StorageService` - For non-sensitive data (uses SharedPreferences)
 - `SecureStorageService` - For sensitive data (uses encrypted storage)
+- `IKeyValueStore` - Contract for non-sensitive key-value persistence
+- `ITokenStore` - Contract for access/refresh token lifecycle
+- `ILocalDatabase` - Interface for advanced relational/document storage (Template)
 
 Both implement the `IStorageService` interface for consistent API.
+
+The decoupled runtime path now uses `IKeyValueStore` and `ITokenStore` in
+auth/network boundaries to avoid direct concrete coupling.
 
 ---
 
@@ -211,6 +217,48 @@ if (token == null) {
 - API keys
 - Credit card information
 - Any sensitive or personal data
+
+---
+
+## Local Database (Advanced Storage)
+
+The project provides an interface `ILocalDatabase` for advanced offline storage (Listings, Searching, Schema-based) which complements the simple Key-Value `IStorageService`.
+
+**Location:** `lib/core/storage/local_database.dart`
+
+### Interface
+
+The template conforms to `ILocalDatabase`:
+
+```dart
+abstract class ILocalDatabase {
+  /// Open/init database
+  Future<void> init();
+  
+  /// Save or query objects of type T
+  Future<void> save<T>(T object);
+  Future<List<T>> getAll<T>();
+  Future<T?> getById<T>(int id);
+  
+  /// Close or cleanup
+  Future<void> close();
+}
+```
+
+### Isar Implementation Template
+
+The recommended implementation is **Isar** (high-performance NoSQL for Flutter).
+
+**Location:** `lib/core/storage/isar_database_template.dart`
+
+#### Setup
+
+1. Run: `flutter pub add isar isar_flutter_libs`
+2. Run: `flutter pub add --dev isar_generator`
+3. Follow the instructions within the template file to define your collections and open the database.
+
+The default starter does not bind `ILocalDatabase` in DI, so this remains fully optional.
+
 
 ---
 

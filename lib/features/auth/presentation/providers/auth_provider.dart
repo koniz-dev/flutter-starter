@@ -1,10 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_provider.freezed.dart';
+part 'auth_provider.g.dart';
 
 /// Authentication state
 @freezed
@@ -22,14 +25,34 @@ abstract class AuthState with _$AuthState {
   }) = _AuthState;
 }
 
-/// Authentication provider (Riverpod 3.0 - using Notifier)
-class AuthNotifier extends Notifier<AuthState> {
+/// Snapshot adapter for exposing auth state through boundary contracts.
+class RiverpodAuthStateSnapshot implements AuthStateSnapshot {
+  /// Adapts the Riverpod [AuthState] to the boundary snapshot contract.
+  const RiverpodAuthStateSnapshot(this._state);
+
+  final AuthState _state;
+
   @override
-  AuthState build() {
-    return const AuthState();
-  }
+  bool get isLoading => _state.isLoading;
+
+  @override
+  String? get error => _state.error;
+
+  @override
+  bool get isAuthenticated => _state.user != null;
+}
+
+/// Authentication provider (Riverpod 3.0 - using Notifier)
+@Riverpod(keepAlive: true)
+class AuthNotifier extends _$AuthNotifier implements IAuthController {
+  @override
+  AuthStateSnapshot get snapshot => RiverpodAuthStateSnapshot(state);
+
+  @override
+  AuthState build() => const AuthState();
 
   /// Attempts to login with the given [email] and [password]
+  @override
   Future<void> login(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
 
@@ -38,27 +61,17 @@ class AuthNotifier extends Notifier<AuthState> {
 
     result.when(
       success: (user) {
-        state = state.copyWith(
-          user: user,
-          isLoading: false,
-          error: null,
-        );
+        state = state.copyWith(user: user, isLoading: false, error: null);
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
 
   /// Attempts to register a new user with [email], [password], and [name]
-  Future<void> register(
-    String email,
-    String password,
-    String name,
-  ) async {
+  @override
+  Future<void> register(String email, String password, String name) async {
     state = state.copyWith(isLoading: true, error: null);
 
     final registerUseCase = ref.read(registerUseCaseProvider);
@@ -66,22 +79,16 @@ class AuthNotifier extends Notifier<AuthState> {
 
     result.when(
       success: (user) {
-        state = state.copyWith(
-          user: user,
-          isLoading: false,
-          error: null,
-        );
+        state = state.copyWith(user: user, isLoading: false, error: null);
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
 
   /// Logs out the current user
+  @override
   Future<void> logout() async {
     state = state.copyWith(isLoading: true, error: null);
 
@@ -93,10 +100,7 @@ class AuthNotifier extends Notifier<AuthState> {
         state = const AuthState();
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
@@ -105,6 +109,7 @@ class AuthNotifier extends Notifier<AuthState> {
   ///
   /// This is typically called automatically by the AuthInterceptor,
   /// but can be called manually if needed.
+  @override
   Future<void> refreshToken() async {
     final refreshTokenUseCase = ref.read(refreshTokenUseCaseProvider);
     final result = await refreshTokenUseCase();
@@ -126,6 +131,7 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   /// Gets the current authenticated user
+  @override
   Future<void> getCurrentUser() async {
     state = state.copyWith(isLoading: true, error: null);
 
@@ -134,17 +140,10 @@ class AuthNotifier extends Notifier<AuthState> {
 
     result.when(
       success: (user) {
-        state = state.copyWith(
-          user: user,
-          isLoading: false,
-          error: null,
-        );
+        state = state.copyWith(user: user, isLoading: false, error: null);
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
@@ -153,6 +152,7 @@ class AuthNotifier extends Notifier<AuthState> {
   ///
   /// Returns true if user is authenticated, false otherwise.
   /// This method does not update the state.
+  @override
   Future<bool> isAuthenticated() async {
     final isAuthenticatedUseCase = ref.read(isAuthenticatedUseCaseProvider);
     final result = await isAuthenticatedUseCase();
@@ -164,7 +164,13 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 }
 
-/// Provider for AuthNotifier (Riverpod 3.0 - using NotifierProvider)
-final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
-  AuthNotifier.new,
-);
+/// Boundary provider exposing auth controller contract.
+final authControllerProvider = Provider<IAuthController>((ref) {
+  return ref.read(authNotifierProvider.notifier);
+});
+
+/// Backward-compatible alias for the generated provider.
+///
+/// Riverpod Generator shortens `AuthNotifier` -> `authProvider` by default.
+/// Keep the original name as a stable API surface for app code and tests.
+const AuthNotifierProvider authNotifierProvider = authProvider;

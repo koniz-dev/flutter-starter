@@ -29,18 +29,12 @@ void main() {
 
     // Override type is not exported from riverpod package.
     dynamic getOverrides() {
-      return [
-        registerUseCaseProvider.overrideWithValue(mockRegisterUseCase),
-      ];
+      return [registerUseCaseProvider.overrideWithValue(mockRegisterUseCase)];
     }
 
     testWidgets('should display registration form fields', (tester) async {
       // Arrange & Act
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Assert
       // Check AppBar title
@@ -53,11 +47,7 @@ void main() {
 
     testWidgets('should show validation error for empty name', (tester) async {
       // Arrange
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       await tester.tap(find.widgetWithText(ElevatedButton, 'Register'));
@@ -69,11 +59,7 @@ void main() {
 
     testWidgets('should show validation error for short name', (tester) async {
       // Arrange
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       final nameField = find.byType(TextFormField).first;
@@ -89,11 +75,7 @@ void main() {
       tester,
     ) async {
       // Arrange
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       final nameField = find.byType(TextFormField).first;
@@ -111,11 +93,7 @@ void main() {
       tester,
     ) async {
       // Arrange
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       final nameField = find.byType(TextFormField).first;
@@ -142,11 +120,7 @@ void main() {
       when(
         () => mockRegisterUseCase(any(), any(), any()),
       ).thenAnswer((_) async => Success(user));
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       final nameField = find.byType(TextFormField).first;
@@ -162,11 +136,8 @@ void main() {
 
       // Assert
       verify(
-        () => mockRegisterUseCase(
-          'test@example.com',
-          'password123',
-          'Test User',
-        ),
+        () =>
+            mockRegisterUseCase('test@example.com', 'password123', 'Test User'),
       ).called(1);
     });
 
@@ -179,11 +150,7 @@ void main() {
       when(
         () => mockRegisterUseCase(any(), any(), any()),
       ).thenAnswer((_) => completer.future);
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       final nameField = find.byType(TextFormField).first;
@@ -211,11 +178,7 @@ void main() {
       when(
         () => mockRegisterUseCase(any(), any(), any()),
       ).thenAnswer((_) async => ResultFailure(failure));
-      await pumpApp(
-        tester,
-        const RegisterScreen(),
-        overrides: getOverrides(),
-      );
+      await pumpApp(tester, const RegisterScreen(), overrides: getOverrides());
 
       // Act
       final nameField = find.byType(TextFormField).first;

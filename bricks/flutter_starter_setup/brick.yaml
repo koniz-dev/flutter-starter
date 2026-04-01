@@ -1,0 +1,43 @@
+name: flutter_starter_setup
+description: Rename Dart package, Android applicationId, iOS bundle id; optionally strip tasks/feature_flags samples.
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.2 <0.3.0"
+
+vars:
+  package_name:
+    type: string
+    description: Dart package name (snake_case), must be a valid pub package name.
+    default: my_app
+    prompt: Dart package name (snake_case)?
+  application_id:
+    type: string
+    description: Android applicationId and Kotlin namespace (e.g. com.example.my_app).
+    default: com.example.my_app
+    prompt: Android applicationId / namespace?
+  ios_bundle_id:
+    type: string
+    description: iOS bundle id for Runner (RunnerTests will get .RunnerTests).
+    default: com.example.myApp
+    prompt: iOS bundle identifier (Runner)?
+  app_display_name:
+    type: string
+    description: Android launcher label (and reference for you to align iOS display name).
+    default: My App
+    prompt: App display name (Android manifest label)?
+  strip_sample_features:
+    type: boolean
+    description: Remove tasks + feature_flags modules (keeps auth). Runs tool/strip_sample_features.dart first.
+    default: false
+    prompt: Strip sample tasks and feature_flags?
+  include_tasks_sample:
+    type: boolean
+    description: Include the sample tasks CRUD feature module.
+    default: true
+    prompt: Include tasks (CRUD sample)?
+  include_feature_flags_sample:
+    type: boolean
+    description: Include the sample feature flags module.
+    default: true
+    prompt: Include feature flags sample?

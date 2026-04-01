@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_starter/shared/accessibility/accessibility_constants.dart';
-import 'package:flutter_starter/shared/accessibility/accessibility_helpers.dart';
+import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Accessibility testing helpers
@@ -48,10 +48,7 @@ class AccessibilityTestHelpers {
   /// Check if text has sufficient contrast ratio
   ///
   /// Checks if the text color meets WCAG AA standards for normal text.
-  static bool hasSufficientContrast(
-    Color foreground,
-    Color background,
-  ) {
+  static bool hasSufficientContrast(Color foreground, Color background) {
     return AccessibilityHelpers.meetsContrastRatioAA(foreground, background);
   }
 

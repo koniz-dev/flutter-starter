@@ -8,10 +8,7 @@ import 'package:flutter_starter/core/errors/dio_exception_mapper.dart';
 /// are converted to domain exceptions before other interceptors process them.
 class ErrorInterceptor extends Interceptor {
   @override
-  void onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     // Convert DioException to domain exception
     final domainException = DioExceptionMapper.map(err);
 

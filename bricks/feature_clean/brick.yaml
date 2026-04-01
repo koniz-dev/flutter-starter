@@ -1,0 +1,23 @@
+name: feature_clean
+description: Generate a clean-architecture feature module (data/domain/presentation/di + optional tests).
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.2 <0.3.0"
+
+vars:
+  feature_name:
+    type: string
+    description: Feature folder name (snake_case) under lib/features/.
+    default: profile
+    prompt: Feature name (snake_case)?
+  class_name:
+    type: string
+    description: Base class name (PascalCase) for the feature (e.g. Profile).
+    default: Profile
+    prompt: Base class name (PascalCase)?
+  include_tests:
+    type: boolean
+    description: Generate a minimal unit test skeleton under test/features/.
+    default: true
+    prompt: Include tests?

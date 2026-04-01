@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 /// operations including navigation, theming, and UI feedback.
 ///
 /// **Navigation Approach:**
-/// This extension provides basic navigation methods. For advanced routing
-/// features (deep linking, type-safe routes, etc.), use the navigation
-/// extensions from `core/routing/navigation_extensions.dart` which use GoRouter.
+/// This extension provides Navigator-based helpers for generic UI flows.
+/// For route-based navigation, use `GoRouter` directly in your widgets.
 ///
 /// **Usage:**
 /// ```dart
@@ -80,16 +79,14 @@ extension ContextExtensions on BuildContext {
 
   /// Navigate to a route
   Future<T?> navigateTo<T>(Widget route) {
-    return Navigator.of(this).push<T>(
-      MaterialPageRoute(builder: (_) => route),
-    );
+    return Navigator.of(this).push<T>(MaterialPageRoute(builder: (_) => route));
   }
 
   /// Navigate and replace current route
   Future<T?> navigateToReplacement<T>(Widget route) {
-    return Navigator.of(this).pushReplacement<T, void>(
-      MaterialPageRoute(builder: (_) => route),
-    );
+    return Navigator.of(
+      this,
+    ).pushReplacement<T, void>(MaterialPageRoute(builder: (_) => route));
   }
 
   /// Pop current route

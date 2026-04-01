@@ -516,7 +516,7 @@ FocusAnnouncer.announceActionResult(context, 'Saved successfully');
 See the following files for implementation examples:
 
 - `lib/shared/accessibility/accessibility_widgets.dart` - Accessible widget implementations
-- `lib/shared/accessibility/accessibility_helpers.dart` - Helper functions
+- `lib/core/accessibility/accessibility_helpers.dart` - Helper functions
 - `lib/features/auth/presentation/widgets/auth_button.dart` - Example of accessible button
 - `lib/shared/widgets/error_widget.dart` - Example of accessible error handling
 

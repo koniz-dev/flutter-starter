@@ -819,10 +819,7 @@ void main() {
               const PermissionFailure('Error', code: 'PERM'),
               'PermissionFailure',
             ),
-            (
-              const UnknownFailure('Error', code: 'UNKNOWN'),
-              'UnknownFailure',
-            ),
+            (const UnknownFailure('Error', code: 'UNKNOWN'), 'UnknownFailure'),
             (const NotFoundFailure('Error', code: '404'), 'NotFoundFailure'),
           ];
 

@@ -49,10 +49,7 @@ class CacheInterceptor extends Interceptor {
   static const List<String> _cacheableMethods = ['GET'];
 
   /// Headers that should not be cached
-  static const List<String> _noCacheHeaders = [
-    'authorization',
-    'cookie',
-  ];
+  static const List<String> _noCacheHeaders = ['authorization', 'cookie'];
 
   @override
   Future<void> onRequest(
@@ -111,11 +108,7 @@ class CacheInterceptor extends Interceptor {
 
     // Cache the response
     final cacheKey = _getCacheKey(requestOptions);
-    await _cacheResponse(
-      cacheKey,
-      response.data,
-      response.headers.map,
-    );
+    await _cacheResponse(cacheKey, response.data, response.headers.map);
 
     super.onResponse(response, handler);
   }
@@ -176,10 +169,7 @@ class CacheInterceptor extends Interceptor {
       final decodedData = JsonHelper.decode(cachedData);
       // Headers are not cached separately, return empty headers
       // In production, you might want to cache headers separately
-      return {
-        'data': decodedData,
-        'headers': <String, List<String>>{},
-      };
+      return {'data': decodedData, 'headers': <String, List<String>>{}};
     } on Exception catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache read error: $e');

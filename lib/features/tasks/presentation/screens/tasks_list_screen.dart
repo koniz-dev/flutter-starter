@@ -70,9 +70,7 @@ class TasksListScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               state.error!,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -98,10 +96,7 @@ class TasksListScreen extends ConsumerWidget {
               ).colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
-            Text(
-              l10n.noTasks,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text(l10n.noTasks, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
               l10n.addYourFirstTask,
@@ -121,23 +116,13 @@ class TasksListScreen extends ConsumerWidget {
         if (incompleteTasks.isNotEmpty) ...[
           _buildSectionHeader(l10n.incompleteTasks, context),
           ...incompleteTasks.map(
-            (task) => _buildTaskTile(
-              context,
-              task,
-              notifier,
-              l10n,
-            ),
+            (task) => _buildTaskTile(context, task, notifier, l10n),
           ),
         ],
         if (completedTasks.isNotEmpty) ...[
           _buildSectionHeader(l10n.completedTasks, context),
           ...completedTasks.map(
-            (task) => _buildTaskTile(
-              context,
-              task,
-              notifier,
-              l10n,
-            ),
+            (task) => _buildTaskTile(context, task, notifier, l10n),
           ),
         ],
       ],
@@ -195,13 +180,9 @@ class TasksListScreen extends ConsumerWidget {
         trailing: PopupMenuButton<String>(
           onSelected: (value) {
             if (value == 'edit') {
-              context.pushRoute(
-                '${AppRoutes.tasks}/${task.id}',
-              );
+              context.pushRoute('${AppRoutes.tasks}/${task.id}');
             } else if (value == 'delete') {
-              unawaited(
-                _showDeleteConfirmation(context, task, notifier, l10n),
-              );
+              unawaited(_showDeleteConfirmation(context, task, notifier, l10n));
             }
           },
           itemBuilder: (context) => [
@@ -221,10 +202,7 @@ class TasksListScreen extends ConsumerWidget {
                 children: [
                   const Icon(Icons.delete, size: 20, color: Colors.red),
                   const SizedBox(width: 8),
-                  Text(
-                    l10n.delete,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+                  Text(l10n.delete, style: const TextStyle(color: Colors.red)),
                 ],
               ),
             ),
@@ -244,10 +222,7 @@ class TasksListScreen extends ConsumerWidget {
   ) async {
     await showDialog<void>(
       context: context,
-      builder: (dialogContext) => _AddTaskDialogContent(
-        ref: ref,
-        l10n: l10n,
-      ),
+      builder: (dialogContext) => _AddTaskDialogContent(ref: ref, l10n: l10n),
     );
   }
 
@@ -286,10 +261,7 @@ class TasksListScreen extends ConsumerWidget {
 
 /// Dialog content widget that manages TextEditingController lifecycle
 class _AddTaskDialogContent extends StatefulWidget {
-  const _AddTaskDialogContent({
-    required this.ref,
-    required this.l10n,
-  });
+  const _AddTaskDialogContent({required this.ref, required this.l10n});
 
   final WidgetRef ref;
   final AppLocalizations l10n;
@@ -371,10 +343,7 @@ class _AddTaskDialogContentState extends State<_AddTaskDialogContent> {
               unawaited(
                 widget.ref
                     .read(tasksNotifierProvider.notifier)
-                    .createTask(
-                      title: title,
-                      description: description,
-                    ),
+                    .createTask(title: title, description: description),
               );
             }
           },

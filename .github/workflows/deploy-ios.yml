@@ -49,6 +49,7 @@ jobs:
         with:
           flutter-version: 'stable'
           channel: 'stable'
+          cache: true
 
       - name: Get dependencies
         run: flutter pub get
@@ -140,7 +141,7 @@ jobs:
       #       --api_issuer ${APP_STORE_CONNECT_ISSUER_ID}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
           path: build/ios/ipa/*.ipa

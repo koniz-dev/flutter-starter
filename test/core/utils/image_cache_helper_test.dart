@@ -12,37 +12,24 @@ void main() {
 
     group('preloadImage', () {
       testWidgets('should return false for invalid URL', (tester) async {
-        await tester.pumpWidget(
-          const MaterialApp(
-            home: Scaffold(),
-          ),
-        );
+        await tester.pumpWidget(const MaterialApp(home: Scaffold()));
 
-        // Note: preloadImage uses a dummy context internally which may fail
-        // This test verifies the method exists and handles errors
         final result = await ImageCacheHelper.preloadImage('');
 
         expect(result, isFalse);
       });
 
       testWidgets('should return false for invalid URL format', (tester) async {
-        await tester.pumpWidget(
-          const MaterialApp(
-            home: Scaffold(),
-          ),
-        );
+        await tester.pumpWidget(const MaterialApp(home: Scaffold()));
 
-        // Note: preloadImage uses a dummy context internally which may fail
-        // This test verifies the method exists and handles errors
         final result = await ImageCacheHelper.preloadImage('not-a-url');
 
         expect(result, isFalse);
       });
 
       // Note: Testing actual network image loading requires network access
-      // and may be flaky in CI. These tests verify the API exists.
-      // The dummy context implementation may cause exceptions, but they
-      // are caught and return false.
+      // and may be flaky in CI. Without context, preload uses
+      // ImageProvider.resolve.
     });
 
     group('preloadImages', () {
@@ -53,21 +40,13 @@ void main() {
       });
 
       testWidgets('should handle multiple URLs', (tester) async {
-        await tester.pumpWidget(
-          const MaterialApp(
-            home: Scaffold(),
-          ),
-        );
+        await tester.pumpWidget(const MaterialApp(home: Scaffold()));
 
         final urls = [
           'https://example.com/image1.jpg',
           'https://example.com/image2.jpg',
         ];
 
-        // Note: Actual preloading requires network access and a real
-        // BuildContext. The dummy context may cause exceptions, but they
-        // are caught. This test verifies the method exists and handles
-        // the list
         final count = await ImageCacheHelper.preloadImages(urls);
 
         expect(count, greaterThanOrEqualTo(0));
@@ -77,10 +56,7 @@ void main() {
 
     group('clearCache', () {
       test('should clear image cache', () {
-        expect(
-          ImageCacheHelper.clearCache,
-          returnsNormally,
-        );
+        expect(ImageCacheHelper.clearCache, returnsNormally);
       });
     });
 

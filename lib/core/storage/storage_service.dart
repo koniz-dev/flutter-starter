@@ -1,3 +1,4 @@
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Abstract interface for storage operations
@@ -43,7 +44,7 @@ abstract class IStorageService {
 }
 
 /// Implementation of storage service using SharedPreferences
-class StorageService implements IStorageService {
+class StorageService implements IStorageService, IKeyValueStore {
   SharedPreferences? _prefs;
 
   /// Get SharedPreferences instance (lazy initialization)

@@ -114,9 +114,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final authResponse = await remoteDataSource.refreshToken(refreshToken);
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {
-        await localDataSource.cacheRefreshToken(
-          authResponse.refreshToken!,
-        );
+        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
       return Success(authResponse.token);
     } on AppException catch (e) {

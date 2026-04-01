@@ -43,9 +43,7 @@ void main() {
       );
 
       return ProviderScope(
-        overrides: [
-          loginUseCaseProvider.overrideWithValue(mockLoginUseCase),
-        ],
+        overrides: [loginUseCaseProvider.overrideWithValue(mockLoginUseCase)],
         child: MaterialApp.router(
           routerConfig: router,
           localizationsDelegates: const [
@@ -81,72 +79,62 @@ void main() {
       expect(find.text('Please enter your email'), findsOneWidget);
     });
 
-    testWidgets(
-      'should show validation error for invalid email',
-      (tester) async {
-        // Arrange
-        await tester.pumpWidget(createTestWidget());
-        final emailField = find.byType(TextFormField).first;
+    testWidgets('should show validation error for invalid email', (
+      tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(createTestWidget());
+      final emailField = find.byType(TextFormField).first;
 
-        // Act
-        await tester.enterText(emailField, 'invalid-email');
-        await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
-        await tester.pump();
+      // Act
+      await tester.enterText(emailField, 'invalid-email');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+      await tester.pump();
 
-        // Assert
-        expect(
-          find.text('Please enter a valid email address'),
-          findsOneWidget,
-        );
-      },
-    );
+      // Assert
+      expect(find.text('Please enter a valid email address'), findsOneWidget);
+    });
 
-    testWidgets(
-      'should show validation error for empty password',
-      (tester) async {
-        // Arrange
-        await tester.pumpWidget(createTestWidget());
-        final emailField = find.byType(TextFormField).first;
+    testWidgets('should show validation error for empty password', (
+      tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(createTestWidget());
+      final emailField = find.byType(TextFormField).first;
 
-        // Act
-        await tester.enterText(emailField, 'test@example.com');
-        await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
-        await tester.pump();
+      // Act
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+      await tester.pump();
 
-        // Assert
-        expect(find.text('Please enter your password'), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.text('Please enter your password'), findsOneWidget);
+    });
 
-    testWidgets(
-      'should show validation error for short password',
-      (tester) async {
-        // Arrange
-        await tester.pumpWidget(createTestWidget());
-        final emailField = find.byType(TextFormField).first;
-        final passwordField = find.byType(TextFormField).last;
+    testWidgets('should show validation error for short password', (
+      tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(createTestWidget());
+      final emailField = find.byType(TextFormField).first;
+      final passwordField = find.byType(TextFormField).last;
 
-        // Act
-        await tester.enterText(emailField, 'test@example.com');
-        await tester.enterText(passwordField, 'short');
-        await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
-        await tester.pump();
+      // Act
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.enterText(passwordField, 'short');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+      await tester.pump();
 
-        // Assert
-        expect(
-          find.text('Password must be at least 8 characters'),
-          findsOneWidget,
-        );
-      },
-    );
+      // Assert
+      expect(
+        find.text('Password must be at least 8 characters'),
+        findsOneWidget,
+      );
+    });
 
     testWidgets('should call login when form is valid', (tester) async {
       // Arrange
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User',
-      );
+      const user = User(id: '1', email: 'test@example.com', name: 'Test User');
       when(
         () => mockLoginUseCase(any(), any()),
       ).thenAnswer((_) async => const Success(user));
@@ -167,37 +155,33 @@ void main() {
       ).called(1);
     });
 
-    testWidgets(
-      'should display error message on login failure',
-      (tester) async {
-        // Arrange
-        const failure = AuthFailure('Invalid credentials');
-        when(
-          () => mockLoginUseCase(any(), any()),
-        ).thenAnswer((_) async => const ResultFailure(failure));
+    testWidgets('should display error message on login failure', (
+      tester,
+    ) async {
+      // Arrange
+      const failure = AuthFailure('Invalid credentials');
+      when(
+        () => mockLoginUseCase(any(), any()),
+      ).thenAnswer((_) async => const ResultFailure(failure));
 
-        await tester.pumpWidget(createTestWidget());
-        final emailField = find.byType(TextFormField).first;
-        final passwordField = find.byType(TextFormField).last;
+      await tester.pumpWidget(createTestWidget());
+      final emailField = find.byType(TextFormField).first;
+      final passwordField = find.byType(TextFormField).last;
 
-        // Act
-        await tester.enterText(emailField, 'test@example.com');
-        await tester.enterText(passwordField, 'password123');
-        await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
-        // Use timeout to prevent hanging
-        await tester.pumpAndSettle(const Duration(seconds: 5));
+      // Act
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.enterText(passwordField, 'password123');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-        // Assert
-        expect(find.text('Invalid credentials'), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.text('Invalid credentials'), findsOneWidget);
+    });
 
     testWidgets('should show loading indicator during login', (tester) async {
       // Arrange
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-      );
+      const user = User(id: '1', email: 'test@example.com');
       final completer = Completer<Result<User>>();
       when(
         () => mockLoginUseCase(any(), any()),
@@ -226,10 +210,7 @@ void main() {
 
     testWidgets('should disable button during loading', (tester) async {
       // Arrange
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-      );
+      const user = User(id: '1', email: 'test@example.com');
       final completer = Completer<Result<User>>();
       when(
         () => mockLoginUseCase(any(), any()),

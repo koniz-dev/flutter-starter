@@ -32,10 +32,7 @@ void main() {
         () => mockManager.clearAllLocalOverrides(),
       ).thenAnswer((_) async => {});
       when(
-        () => mockManager.setLocalOverride(
-          any(),
-          value: any(named: 'value'),
-        ),
+        () => mockManager.setLocalOverride(any(), value: any(named: 'value')),
       ).thenAnswer((_) async => {});
       when(
         () => mockManager.clearLocalOverride(any()),
@@ -248,10 +245,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockManager.setLocalOverride(
-            any(),
-            value: true,
-          ),
+          () => mockManager.setLocalOverride(any(), value: true),
         ).called(1);
       }
     });

@@ -13,11 +13,7 @@ void main() {
   testWidgets('App displays welcome message', (tester) async {
     // Build our app and trigger a frame.
     // Note: MyApp requires ProviderScope, so we need to wrap it
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: MyApp(),
-      ),
-    );
+    await tester.pumpWidget(const ProviderScope(child: MyApp()));
 
     // Wait for async initialization and router navigation
     await tester.pumpAndSettle(const Duration(seconds: 5));

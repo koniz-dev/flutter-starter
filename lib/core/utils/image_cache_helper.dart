@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// Helper class for managing image caching
@@ -12,24 +14,56 @@ class ImageCacheHelper {
   /// Preloads an image from a URL
   ///
   /// This is useful for preloading images that will be displayed soon,
-  /// such as images in a list that's about to be scrolled into view.
+  /// such as images in a list that's about to scroll into view.
+  ///
+  /// Prefer passing a real [BuildContext] from your widget when available
+  /// so [precacheImage] can integrate with the element tree. When [context]
+  /// is omitted, loading uses [ImageProvider.resolve] (no dummy context).
   ///
   /// Returns true if successful, false otherwise.
   static Future<bool> preloadImage(String url, {BuildContext? context}) async {
+    if (url.isEmpty) {
+      return false;
+    }
+
+    final imageProvider = NetworkImage(url);
     try {
-      final imageProvider = NetworkImage(url);
-      await precacheImage(
-        imageProvider,
-        context ?? _getImageContext(),
-        onError: (e, stack) => debugPrint(r'Preload error: $e'),
-      );
-      return true;
+      if (context != null) {
+        await precacheImage(
+          imageProvider,
+          context,
+          onError: (e, stack) => debugPrint('Preload error: $e'),
+        );
+        return true;
+      }
+      return await _preloadViaImageStream(imageProvider);
     } on Object catch (e) {
-      // Catch all errors (Exception and Error) since the dummy context
-      // may throw NoSuchMethodError which is an Error, not Exception
       debugPrint('Failed to preload image: $url, error: $e');
       return false;
     }
+  }
+
+  static Future<bool> _preloadViaImageStream(ImageProvider<Object> provider) {
+    final completer = Completer<bool>();
+    late final ImageStream stream;
+    late final ImageStreamListener listener;
+    listener = ImageStreamListener(
+      (info, synchronousCall) {
+        stream.removeListener(listener);
+        if (!completer.isCompleted) {
+          completer.complete(true);
+        }
+      },
+      onError: (exception, stackTrace) {
+        stream.removeListener(listener);
+        debugPrint('Preload error: $exception');
+        if (!completer.isCompleted) {
+          completer.complete(false);
+        }
+      },
+    );
+    stream = provider.resolve(ImageConfiguration.empty)..addListener(listener);
+    return completer.future;
   }
 
   /// Preloads multiple images
@@ -87,22 +121,4 @@ class ImageCacheHelper {
       'maximumSizeBytes': imageCache.maximumSizeBytes,
     };
   }
-
-  /// Gets a BuildContext for image precaching
-  ///
-  /// This is a workaround since precacheImage requires a BuildContext.
-  /// In production, you should pass the actual context from your widget.
-  static BuildContext _getImageContext() {
-    // This is a fallback - in practice, you should pass context from widget
-    return _ImageCacheContext();
-  }
-}
-
-/// Dummy context for image precaching
-///
-/// This is a workaround and should be replaced with actual context in
-/// production
-class _ImageCacheContext implements BuildContext {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

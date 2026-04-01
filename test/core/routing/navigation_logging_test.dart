@@ -13,14 +13,9 @@ void main() {
 
     setUp(() {
       mockLoggingService = MockLoggingService();
-      observer = NavigationLoggingObserver(
-        loggingService: mockLoggingService,
-      );
+      observer = NavigationLoggingObserver(loggingService: mockLoggingService);
       when(
-        () => mockLoggingService.info(
-          any(),
-          context: any(named: 'context'),
-        ),
+        () => mockLoggingService.info(any(), context: any(named: 'context')),
       ).thenReturn(null);
     });
 
@@ -187,10 +182,7 @@ void main() {
 
         // Assert
         verifyNever(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         );
       });
 
@@ -245,18 +237,13 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).called(1);
       });
 
       test('should handle route with arguments containing uri', () {
         // Arrange
-        final route = _MockRoute(
-          arguments: {'uri': '/custom-uri'},
-        );
+        final route = _MockRoute(arguments: {'uri': '/custom-uri'});
         final previousRoute = _MockRoute(name: '/previous');
 
         // Act
@@ -264,10 +251,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).called(1);
       });
     });
@@ -283,10 +267,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).called(1);
       });
 
@@ -304,10 +285,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).called(3);
       });
     });
@@ -321,10 +299,8 @@ class _MockRoute extends Mock implements Route<dynamic> {
   final Map<String, dynamic>? arguments;
 
   @override
-  RouteSettings get settings => _MockRouteSettings(
-    name: name,
-    arguments: arguments,
-  );
+  RouteSettings get settings =>
+      _MockRouteSettings(name: name, arguments: arguments);
 
   @override
   String toString() => 'Route<dynamic>';

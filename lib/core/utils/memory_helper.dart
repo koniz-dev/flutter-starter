@@ -43,10 +43,7 @@ class MemoryHelper {
   ///
   /// [maxSize] - Maximum number of images to cache
   /// [maxSizeBytes] - Maximum cache size in bytes
-  static void optimizeImageCache({
-    int? maxSize,
-    int? maxSizeBytes,
-  }) {
+  static void optimizeImageCache({int? maxSize, int? maxSizeBytes}) {
     if (maxSize != null) {
       imageCache.maximumSize = maxSize;
     }

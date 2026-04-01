@@ -21,11 +21,16 @@ name: Coverage Analysis
 # workflow_dispatch allows manual triggering from GitHub Actions UI
 # ========================================================================
 on:
-  # push:
-  #   branches: [ main ]  # Uncomment and configure for your project
-  # pull_request:
-  #   branches: [ main ]  # Uncomment and configure for your project
   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+  schedule:
+    - cron: '0 3 * * 1' # weekly (Mon 03:00 UTC)
+
+concurrency:
+  group: coverage-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   coverage-analysis:
@@ -36,12 +41,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history for coverage comparison
+          fetch-depth: 1
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: 'stable'
           channel: 'stable'
           cache: true
       
@@ -49,17 +54,45 @@ jobs:
         run: flutter pub get
       
       - name: Run tests with coverage
-        run: flutter test --coverage
+        timeout-minutes: 20
+        run: flutter test --coverage --timeout=5m
       
       - name: Install lcov
         run: |
           sudo apt-get update
           sudo apt-get install -y lcov bc
+
+      - name: Remove generated files from coverage
+        run: |
+          lcov --remove coverage/lcov.info --ignore-errors unused \
+            '**/*.g.dart' \
+            '**/*.freezed.dart' \
+            '**/*.config.dart' \
+            '**/generated/**' \
+            '**/l10n/**' \
+            '**/main.dart' \
+            'test/**' \
+            '**/*_test.dart' \
+            '**/test_helpers.dart' \
+            '**/test_fixtures.dart' \
+            -o coverage/lcov.info
       
       - name: Generate coverage report
         run: |
           genhtml coverage/lcov.info -o coverage/html --no-function-coverage
-      
+
+      - name: Calculate coverage by layer (architecture gates)
+        id: layer_coverage
+        run: |
+          chmod +x scripts/test/calculate_layer_coverage.sh
+          ./scripts/test/calculate_layer_coverage.sh coverage/lcov.info > /tmp/layer_coverage.txt
+
+          while IFS='=' read -r key value; do
+            echo "${key}=${value}" >> $GITHUB_OUTPUT
+          done < /tmp/layer_coverage.txt
+
+          cat /tmp/layer_coverage.txt
+
       - name: Calculate coverage metrics
         id: metrics
         run: |
@@ -84,6 +117,40 @@ jobs:
           echo "  Data files: ${DATA_TOTAL}"
           echo "  Presentation files: ${PRESENTATION_TOTAL}"
           echo "  Core files: ${CORE_TOTAL}"
+
+      - name: Enforce coverage thresholds
+        run: |
+          OVERALL=${{ steps.metrics.outputs.overall }}
+          DOMAIN_COV=${{ steps.layer_coverage.outputs.domain }}
+          DATA_COV=${{ steps.layer_coverage.outputs.data }}
+          PRESENTATION_COV=${{ steps.layer_coverage.outputs.presentation }}
+          CORE_COV=${{ steps.layer_coverage.outputs.core }}
+
+          FAILED=0
+
+          check_threshold() {
+            local name=$1
+            local current=$2
+            local target=$3
+            if (( $(echo "$current < $target" | bc -l) )); then
+              echo "❌ $name: ${current}% < ${target}%"
+              return 1
+            else
+              echo "✅ $name: ${current}% >= ${target}%"
+              return 0
+            fi
+          }
+
+          check_threshold "Total Coverage" "$OVERALL" 80 || exit 1
+          check_threshold "Domain Layer" "$DOMAIN_COV" 100 || FAILED=1
+          check_threshold "Data Layer" "$DATA_COV" 90 || FAILED=1
+          check_threshold "Presentation Layer" "$PRESENTATION_COV" 80 || FAILED=1
+          check_threshold "Core Layer" "$CORE_COV" 80 || FAILED=1
+
+          if [ $FAILED -eq 1 ]; then
+            echo "⚠️ One or more architectural layers did not meet coverage targets."
+            exit 1
+          fi
       
       # ========================================================================
       # Codecov Upload Configuration
@@ -138,8 +205,10 @@ jobs:
           echo "color=$COLOR" >> $GITHUB_OUTPUT
       
       - name: Comment coverage summary
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: marocchino/sticky-pull-request-comment@v2
+        permissions:
+          pull-requests: write
         with:
           recreate: true
           message: |

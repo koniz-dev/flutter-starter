@@ -6,17 +6,11 @@ void main() {
   group('AuthResponseModel', () {
     test('should create AuthResponseModel with required fields', () {
       // Arrange
-      const user = UserModel(
-        id: 'user-123',
-        email: 'test@example.com',
-      );
+      const user = UserModel(id: 'user-123', email: 'test@example.com');
       const token = 'access-token-123';
 
       // Act
-      const model = AuthResponseModel(
-        user: user,
-        token: token,
-      );
+      const model = AuthResponseModel(user: user, token: token);
 
       // Assert
       expect(model.user, user);
@@ -26,10 +20,7 @@ void main() {
 
     test('should create AuthResponseModel with all fields', () {
       // Arrange
-      const user = UserModel(
-        id: 'user-123',
-        email: 'test@example.com',
-      );
+      const user = UserModel(id: 'user-123', email: 'test@example.com');
       const token = 'access-token-123';
       const refreshToken = 'refresh-token-123';
 
@@ -74,14 +65,8 @@ void main() {
 
       test('should serialize to JSON without refreshToken when null', () {
         // Arrange
-        const user = UserModel(
-          id: 'user-123',
-          email: 'test@example.com',
-        );
-        const model = AuthResponseModel(
-          user: user,
-          token: 'access-token-123',
-        );
+        const user = UserModel(id: 'user-123', email: 'test@example.com');
+        const model = AuthResponseModel(user: user, token: 'access-token-123');
 
         // Act
         final json = model.toJson();
@@ -118,10 +103,7 @@ void main() {
       test('should deserialize from JSON without refreshToken', () {
         // Arrange
         final json = <String, dynamic>{
-          'user': {
-            'id': 'user-123',
-            'email': 'test@example.com',
-          },
+          'user': {'id': 'user-123', 'email': 'test@example.com'},
           'token': 'access-token-123',
         };
 
@@ -143,10 +125,7 @@ void main() {
           name: 'Test User',
           avatarUrl: 'https://example.com/avatar.jpg',
         );
-        const model = AuthResponseModel(
-          user: user,
-          token: 'access-token-123',
-        );
+        const model = AuthResponseModel(user: user, token: 'access-token-123');
 
         // Act
         final json = model.toJson();
@@ -164,10 +143,7 @@ void main() {
     group('Equality', () {
       test('should be equal when all fields match', () {
         // Arrange
-        const user = UserModel(
-          id: 'user-123',
-          email: 'test@example.com',
-        );
+        const user = UserModel(id: 'user-123', email: 'test@example.com');
         const model1 = AuthResponseModel(
           user: user,
           token: 'token-123',
@@ -187,18 +163,9 @@ void main() {
 
       test('should not be equal when token differs', () {
         // Arrange
-        const user = UserModel(
-          id: 'user-123',
-          email: 'test@example.com',
-        );
-        const model1 = AuthResponseModel(
-          user: user,
-          token: 'token-123',
-        );
-        const model2 = AuthResponseModel(
-          user: user,
-          token: 'token-456',
-        );
+        const user = UserModel(id: 'user-123', email: 'test@example.com');
+        const model1 = AuthResponseModel(user: user, token: 'token-123');
+        const model2 = AuthResponseModel(user: user, token: 'token-456');
 
         // Assert
         expect(model1.token, isNot(model2.token));

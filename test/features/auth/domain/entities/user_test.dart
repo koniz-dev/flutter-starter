@@ -5,10 +5,7 @@ void main() {
   group('User', () {
     test('should create user with required fields', () {
       // Arrange & Act
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-      );
+      const user = User(id: '1', email: 'test@example.com');
 
       // Assert
       expect(user.id, '1');
@@ -35,11 +32,7 @@ void main() {
 
     test('should create user with only name', () {
       // Arrange & Act
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User',
-      );
+      const user = User(id: '1', email: 'test@example.com', name: 'Test User');
 
       // Assert
       expect(user.id, '1');
@@ -66,16 +59,8 @@ void main() {
     group('equality', () {
       test('should be equal when id and email are same', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test@example.com',
-          name: 'User 1',
-        );
-        const user2 = User(
-          id: '1',
-          email: 'test@example.com',
-          name: 'User 2',
-        );
+        const user1 = User(id: '1', email: 'test@example.com', name: 'User 1');
+        const user2 = User(id: '1', email: 'test@example.com', name: 'User 2');
 
         // Act & Assert
         expect(user1, user2);
@@ -84,14 +69,8 @@ void main() {
 
       test('should not be equal when id is different', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test@example.com',
-        );
-        const user2 = User(
-          id: '2',
-          email: 'test@example.com',
-        );
+        const user1 = User(id: '1', email: 'test@example.com');
+        const user2 = User(id: '2', email: 'test@example.com');
 
         // Act & Assert
         expect(user1, isNot(user2));
@@ -100,14 +79,8 @@ void main() {
 
       test('should not be equal when email is different', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test1@example.com',
-        );
-        const user2 = User(
-          id: '1',
-          email: 'test2@example.com',
-        );
+        const user1 = User(id: '1', email: 'test1@example.com');
+        const user2 = User(id: '1', email: 'test2@example.com');
 
         // Act & Assert
         expect(user1, isNot(user2));
@@ -116,14 +89,8 @@ void main() {
 
       test('should not be equal when both id and email are different', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test1@example.com',
-        );
-        const user2 = User(
-          id: '2',
-          email: 'test2@example.com',
-        );
+        const user1 = User(id: '1', email: 'test1@example.com');
+        const user2 = User(id: '2', email: 'test2@example.com');
 
         // Act & Assert
         expect(user1, isNot(user2));
@@ -132,10 +99,7 @@ void main() {
 
       test('should be equal to itself', () {
         // Arrange
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const user = User(id: '1', email: 'test@example.com');
 
         // Act & Assert
         expect(user, user);
@@ -144,10 +108,7 @@ void main() {
 
       test('should not be equal to null', () {
         // Arrange
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const user = User(id: '1', email: 'test@example.com');
 
         // Act & Assert
         expect(user, isNot(null));
@@ -155,10 +116,7 @@ void main() {
 
       test('should not be equal to different type', () {
         // Arrange
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const user = User(id: '1', email: 'test@example.com');
 
         // Act & Assert
         // User should not equal objects of different types
@@ -191,16 +149,8 @@ void main() {
     group('hashCode', () {
       test('should have same hashCode for equal users', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test@example.com',
-          name: 'User 1',
-        );
-        const user2 = User(
-          id: '1',
-          email: 'test@example.com',
-          name: 'User 2',
-        );
+        const user1 = User(id: '1', email: 'test@example.com', name: 'User 1');
+        const user2 = User(id: '1', email: 'test@example.com', name: 'User 2');
 
         // Act & Assert
         expect(user1.hashCode, user2.hashCode);
@@ -208,14 +158,8 @@ void main() {
 
       test('should have different hashCode for different ids', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test@example.com',
-        );
-        const user2 = User(
-          id: '2',
-          email: 'test@example.com',
-        );
+        const user1 = User(id: '1', email: 'test@example.com');
+        const user2 = User(id: '2', email: 'test@example.com');
 
         // Act & Assert
         expect(user1.hashCode, isNot(user2.hashCode));
@@ -223,14 +167,8 @@ void main() {
 
       test('should have different hashCode for different emails', () {
         // Arrange
-        const user1 = User(
-          id: '1',
-          email: 'test1@example.com',
-        );
-        const user2 = User(
-          id: '1',
-          email: 'test2@example.com',
-        );
+        const user1 = User(id: '1', email: 'test1@example.com');
+        const user2 = User(id: '1', email: 'test2@example.com');
 
         // Act & Assert
         expect(user1.hashCode, isNot(user2.hashCode));
@@ -259,10 +197,7 @@ void main() {
     group('edge cases', () {
       test('should handle empty id', () {
         // Arrange & Act
-        const user = User(
-          id: '',
-          email: 'test@example.com',
-        );
+        const user = User(id: '', email: 'test@example.com');
 
         // Assert
         expect(user.id, isEmpty);
@@ -271,10 +206,7 @@ void main() {
 
       test('should handle empty email', () {
         // Arrange & Act
-        const user = User(
-          id: '1',
-          email: '',
-        );
+        const user = User(id: '1', email: '');
 
         // Assert
         expect(user.id, '1');
@@ -283,11 +215,7 @@ void main() {
 
       test('should handle empty name', () {
         // Arrange & Act
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-          name: '',
-        );
+        const user = User(id: '1', email: 'test@example.com', name: '');
 
         // Assert
         expect(user.id, '1');
@@ -297,11 +225,7 @@ void main() {
 
       test('should handle empty avatarUrl', () {
         // Arrange & Act
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-          avatarUrl: '',
-        );
+        const user = User(id: '1', email: 'test@example.com', avatarUrl: '');
 
         // Assert
         expect(user.id, '1');
@@ -314,10 +238,7 @@ void main() {
         final longId = 'a' * 1000;
 
         // Act
-        final user = User(
-          id: longId,
-          email: 'test@example.com',
-        );
+        final user = User(id: longId, email: 'test@example.com');
 
         // Assert
         expect(user.id.length, 1000);
@@ -329,10 +250,7 @@ void main() {
         final longEmail = 'a' * 1000 + '@example.com';
 
         // Act
-        final user = User(
-          id: '1',
-          email: longEmail,
-        );
+        final user = User(id: '1', email: longEmail);
 
         // Assert
         expect(user.email.length, greaterThan(1000));
@@ -341,10 +259,7 @@ void main() {
 
       test('should handle special characters in id', () {
         // Arrange & Act
-        const user = User(
-          id: 'user-123_abc.xyz',
-          email: 'test@example.com',
-        );
+        const user = User(id: 'user-123_abc.xyz', email: 'test@example.com');
 
         // Assert
         expect(user.id, 'user-123_abc.xyz');
@@ -352,10 +267,7 @@ void main() {
 
       test('should handle special characters in email', () {
         // Arrange & Act
-        const user = User(
-          id: '1',
-          email: 'test+tag@example.co.uk',
-        );
+        const user = User(id: '1', email: 'test+tag@example.co.uk');
 
         // Assert
         expect(user.email, 'test+tag@example.co.uk');
@@ -365,10 +277,7 @@ void main() {
     group('immutability', () {
       test('should be immutable (const constructor)', () {
         // Arrange & Act
-        const user = User(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const user = User(id: '1', email: 'test@example.com');
 
         // Assert
         expect(user, isA<User>());

@@ -181,10 +181,8 @@ void main() {
           home: Scaffold(
             body: OptimizedListView<String>(
               items: List.generate(20, (i) => 'Item $i'),
-              itemBuilder: (context, item, index) => SizedBox(
-                height: 100,
-                child: Text(item),
-              ),
+              itemBuilder: (context, item, index) =>
+                  SizedBox(height: 100, child: Text(item)),
               hasMore: true,
               onLoadMore: () async {
                 return (<String>[], false);

@@ -154,7 +154,7 @@ final _productsProvider = FutureProvider<List<Product>>((ref) async {
 });
 ```
 
-**Full Example**: See [Adding Features](../api/examples/adding-features.md) for a complete walkthrough.
+**Full Example**: See [Adding Features](../../api/examples/adding-features.md) for a complete walkthrough.
 
 ## Adding a New API Endpoint
 
@@ -207,7 +207,7 @@ final _productsProvider = FutureProvider<List<Product>>((ref) async {
    });
    ```
 
-See [API Integration](../api/examples/api-integration.md) for more patterns.
+See [API Integration](../../api/examples/api-integration.md) for more patterns.
 
 ## Adding New Screens
 
@@ -331,11 +331,11 @@ onPressed: () {
 - Use `Notifier` for complex state that changes over time
 - Use `FutureProvider` for async data that loads once
 
-See [Auth Provider Example](../api/features/auth/providers.md) for a complete example.
+See [Auth Provider Example](../../api/features/auth/providers.md) for a complete example.
 
 ## Next Steps
 
-- ✅ Review [Development Workflow](../development/development-workflow.md) for Git and PR process
+- ✅ Review [Customization Guide](../migration/customization-guide.md) for starter adaptation workflow
 - ✅ Check [Common Patterns](../../api/examples/common-patterns.md) for more examples
 - ✅ See [Troubleshooting](../support/troubleshooting.md) if you encounter issues
 

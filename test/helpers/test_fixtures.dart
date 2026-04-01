@@ -93,10 +93,7 @@ AuthResponseModel createAuthResponseWithoutRefresh({
   UserModel? user,
   String token = 'test-access-token',
 }) {
-  return AuthResponseModel(
-    user: user ?? createUserModel(),
-    token: token,
-  );
+  return AuthResponseModel(user: user ?? createUserModel(), token: token);
 }
 
 // ============================================================================
@@ -130,10 +127,7 @@ NetworkException createNetworkException({
   String message = 'Network error',
   String? code,
 }) {
-  return NetworkException(
-    message,
-    code: code ?? 'NETWORK_ERROR',
-  );
+  return NetworkException(message, code: code ?? 'NETWORK_ERROR');
 }
 
 /// Creates a test CacheException
@@ -145,10 +139,7 @@ CacheException createCacheException({
   String message = 'Cache error',
   String? code,
 }) {
-  return CacheException(
-    message,
-    code: code ?? 'CACHE_ERROR',
-  );
+  return CacheException(message, code: code ?? 'CACHE_ERROR');
 }
 
 /// Creates a test AuthException
@@ -160,10 +151,7 @@ AuthException createAuthException({
   String message = 'Authentication failed',
   String? code,
 }) {
-  return AuthException(
-    message,
-    code: code ?? 'AUTH_ERROR',
-  );
+  return AuthException(message, code: code ?? 'AUTH_ERROR');
 }
 
 /// Creates a test ValidationException
@@ -175,10 +163,7 @@ ValidationException createValidationException({
   String message = 'Validation failed',
   String? code,
 }) {
-  return ValidationException(
-    message,
-    code: code ?? 'VALIDATION_ERROR',
-  );
+  return ValidationException(message, code: code ?? 'VALIDATION_ERROR');
 }
 
 // ============================================================================
@@ -194,10 +179,7 @@ ServerFailure createServerFailure({
   String message = 'Server error',
   String? code,
 }) {
-  return ServerFailure(
-    message,
-    code: code ?? 'SERVER_ERROR',
-  );
+  return ServerFailure(message, code: code ?? 'SERVER_ERROR');
 }
 
 /// Creates a test NetworkFailure
@@ -209,10 +191,7 @@ NetworkFailure createNetworkFailure({
   String message = 'Network error',
   String? code,
 }) {
-  return NetworkFailure(
-    message,
-    code: code ?? 'NETWORK_ERROR',
-  );
+  return NetworkFailure(message, code: code ?? 'NETWORK_ERROR');
 }
 
 /// Creates a test CacheFailure
@@ -224,10 +203,7 @@ CacheFailure createCacheFailure({
   String message = 'Cache error',
   String? code,
 }) {
-  return CacheFailure(
-    message,
-    code: code ?? 'CACHE_ERROR',
-  );
+  return CacheFailure(message, code: code ?? 'CACHE_ERROR');
 }
 
 /// Creates a test AuthFailure
@@ -239,10 +215,7 @@ AuthFailure createAuthFailure({
   String message = 'Authentication failed',
   String? code,
 }) {
-  return AuthFailure(
-    message,
-    code: code ?? 'AUTH_ERROR',
-  );
+  return AuthFailure(message, code: code ?? 'AUTH_ERROR');
 }
 
 /// Creates a test ValidationFailure
@@ -254,10 +227,7 @@ ValidationFailure createValidationFailure({
   String message = 'Validation failed',
   String? code,
 }) {
-  return ValidationFailure(
-    message,
-    code: code ?? 'VALIDATION_ERROR',
-  );
+  return ValidationFailure(message, code: code ?? 'VALIDATION_ERROR');
 }
 
 /// Creates a test UnknownFailure
@@ -269,10 +239,7 @@ UnknownFailure createUnknownFailure({
   String message = 'Unknown error',
   String? code,
 }) {
-  return UnknownFailure(
-    message,
-    code: code ?? 'UNKNOWN_ERROR',
-  );
+  return UnknownFailure(message, code: code ?? 'UNKNOWN_ERROR');
 }
 
 // ============================================================================
@@ -339,10 +306,7 @@ Map<String, String> createTokenPair({
   String accessToken = 'test-access-token',
   String refreshToken = 'test-refresh-token',
 }) {
-  return {
-    'access_token': accessToken,
-    'refresh_token': refreshToken,
-  };
+  return {'access_token': accessToken, 'refresh_token': refreshToken};
 }
 
 // ============================================================================

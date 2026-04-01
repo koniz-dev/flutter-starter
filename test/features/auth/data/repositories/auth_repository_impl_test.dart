@@ -79,63 +79,54 @@ void main() {
         ).called(1);
       });
 
-      test(
-        'should return ServerFailure when remote data source '
-        'throws ServerException',
-        () async {
-          // Arrange
-          when(
-            () => mockRemoteDataSource.login(any(), any()),
-          ).thenThrow(const ServerException('Server error', code: '500'));
+      test('should return ServerFailure when remote data source '
+          'throws ServerException', () async {
+        // Arrange
+        when(
+          () => mockRemoteDataSource.login(any(), any()),
+        ).thenThrow(const ServerException('Server error', code: '500'));
 
-          // Act
-          final result = await repository.login('test@example.com', 'password');
+        // Act
+        final result = await repository.login('test@example.com', 'password');
 
-          // Assert
-          expect(result.isFailure, isTrue);
-          final failure = result.failureOrNull;
-          expect(failure, isA<ServerFailure>());
-          expect(failure?.message, 'Server error');
-          expect(failure?.code, '500');
-          verify(
-            () => mockRemoteDataSource.login('test@example.com', 'password'),
-          ).called(1);
-          verifyNever(() => mockLocalDataSource.cacheUser(any()));
-        },
-      );
+        // Assert
+        expect(result.isFailure, isTrue);
+        final failure = result.failureOrNull;
+        expect(failure, isA<ServerFailure>());
+        expect(failure?.message, 'Server error');
+        expect(failure?.code, '500');
+        verify(
+          () => mockRemoteDataSource.login('test@example.com', 'password'),
+        ).called(1);
+        verifyNever(() => mockLocalDataSource.cacheUser(any()));
+      });
 
-      test(
-        'should return NetworkFailure when remote data source '
-        'throws NetworkException',
-        () async {
-          // Arrange
-          when(
-            () => mockRemoteDataSource.login(any(), any()),
-          ).thenThrow(const NetworkException('Network error'));
-          when(
-            () => mockLocalDataSource.cacheUser(any()),
-          ).thenAnswer((_) async => {});
-          when(
-            () => mockLocalDataSource.cacheToken(any()),
-          ).thenAnswer((_) async => {});
+      test('should return NetworkFailure when remote data source '
+          'throws NetworkException', () async {
+        // Arrange
+        when(
+          () => mockRemoteDataSource.login(any(), any()),
+        ).thenThrow(const NetworkException('Network error'));
+        when(
+          () => mockLocalDataSource.cacheUser(any()),
+        ).thenAnswer((_) async => {});
+        when(
+          () => mockLocalDataSource.cacheToken(any()),
+        ).thenAnswer((_) async => {});
 
-          // Act
-          final result = await repository.login('test@example.com', 'password');
+        // Act
+        final result = await repository.login('test@example.com', 'password');
 
-          // Assert
-          expect(result.isFailure, isTrue);
-          final failure = result.failureOrNull;
-          expect(failure, isA<NetworkFailure>());
-          expect(failure?.message, 'Network error');
-        },
-      );
+        // Assert
+        expect(result.isFailure, isTrue);
+        final failure = result.failureOrNull;
+        expect(failure, isA<NetworkFailure>());
+        expect(failure?.message, 'Network error');
+      });
 
       test('should cache refresh token only if provided', () async {
         // Arrange
-        const userModel = UserModel(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const userModel = UserModel(id: '1', email: 'test@example.com');
         const authResponse = AuthResponseModel(
           user: userModel,
           token: 'access_token',
@@ -317,10 +308,7 @@ void main() {
     group('isAuthenticated', () {
       test('should return true when cached user exists', () async {
         // Arrange
-        const userModel = UserModel(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const userModel = UserModel(id: '1', email: 'test@example.com');
         when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenAnswer((_) async => userModel);
@@ -351,10 +339,7 @@ void main() {
     group('refreshToken', () {
       test('should return new token when refresh succeeds', () async {
         // Arrange
-        const userModel = UserModel(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const userModel = UserModel(id: '1', email: 'test@example.com');
         const authResponse = AuthResponseModel(
           user: userModel,
           token: 'new_access_token',
@@ -431,10 +416,7 @@ void main() {
 
       test('should cache refresh token only if provided', () async {
         // Arrange
-        const userModel = UserModel(
-          id: '1',
-          email: 'test@example.com',
-        );
+        const userModel = UserModel(id: '1', email: 'test@example.com');
         const authResponse = AuthResponseModel(
           user: userModel,
           token: 'new_access_token',

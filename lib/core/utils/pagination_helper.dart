@@ -84,18 +84,12 @@ class PaginationState<T> {
 
   /// Creates a new state with error
   PaginationState<T> setError(String errorMessage) {
-    return copyWith(
-      error: errorMessage,
-    );
+    return copyWith(error: errorMessage);
   }
 
   /// Resets pagination to initial state
   PaginationState<T> reset() {
-    return PaginationState<T>(
-      items: [],
-      currentPage: 1,
-      hasMore: true,
-    );
+    return PaginationState<T>(items: [], currentPage: 1, hasMore: true);
   }
 }
 
@@ -125,10 +119,8 @@ class PaginationState<T> {
 class PaginationHelper<T> {
   /// Creates a [PaginationHelper] with the given [config] and [loadPage]
   /// callback
-  PaginationHelper({
-    required this.loadPage,
-    PaginationConfig? config,
-  }) : _config = config ?? const PaginationConfig();
+  PaginationHelper({required this.loadPage, PaginationConfig? config})
+    : _config = config ?? const PaginationConfig();
 
   /// Configuration for pagination
   final PaginationConfig _config;
@@ -160,11 +152,7 @@ class PaginationHelper<T> {
       final (items, hasMore) = await loadPage(_state.currentPage);
       _state = _state.appendPage(items, hasMore: hasMore);
     } on Object catch (e) {
-      _state = _state
-          .setError(
-            e.toString(),
-          )
-          .setLoading(loading: false);
+      _state = _state.setError(e.toString()).setLoading(loading: false);
       if (kDebugMode) {
         debugPrint('Pagination error: $e');
       }

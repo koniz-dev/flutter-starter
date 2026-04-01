@@ -308,10 +308,7 @@ void main() {
           ).thenAnswer((_) async => const Success<void>(null));
 
           // Act
-          await manager.setLocalOverride(
-            FeatureFlags.newFeature,
-            value: true,
-          );
+          await manager.setLocalOverride(FeatureFlags.newFeature, value: true);
 
           // Assert
           verify(

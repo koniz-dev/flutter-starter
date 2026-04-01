@@ -82,12 +82,9 @@ void main() {
 
     test('should handle non-ProviderContainer gracefully', () {
       // Should not throw when passed non-ProviderContainer
-      expect(
-        () {
-          ProviderLifecycleManager.disposeContainer('not a container');
-        },
-        returnsNormally,
-      );
+      expect(() {
+        ProviderLifecycleManager.disposeContainer('not a container');
+      }, returnsNormally);
     });
   });
 }

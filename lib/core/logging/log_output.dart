@@ -120,12 +120,8 @@ class FileLogOutput extends LogOutput {
 
       // Rename existing files
       for (var i = maxFiles - 1; i > 0; i--) {
-        final oldFile = File(
-          path.join(_logDirectory!, '$fileName.$i'),
-        );
-        final newFile = File(
-          path.join(_logDirectory!, '$fileName.${i + 1}'),
-        );
+        final oldFile = File(path.join(_logDirectory!, '$fileName.$i'));
+        final newFile = File(path.join(_logDirectory!, '$fileName.${i + 1}'));
 
         if (oldFile.existsSync()) {
           if (newFile.existsSync()) {

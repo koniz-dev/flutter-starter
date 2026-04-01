@@ -37,10 +37,10 @@ This project follows **Clean Architecture** principles with clear separation of 
 - **Maintainability**: Clear boundaries make changes easier
 
 For detailed architecture documentation, see:
-- [Architecture Documentation](../architecture/README.md) - Complete architecture documentation
-- [Architecture Overview](../architecture/overview.md) - Why Clean Architecture, benefits, trade-offs
-- [Design Decisions](../architecture/design-decisions.md) - Technical decisions and rationale
-- [API Documentation](../api/README.md)
+- [Architecture Documentation](../../architecture/README.md) - Complete architecture documentation
+- [Architecture Overview](../../architecture/overview.md) - Why Clean Architecture, benefits, trade-offs
+- [Design Decisions](../../architecture/design-decisions.md) - Technical decisions and rationale
+- [API Documentation](../../api/README.md)
 
 ## Code Organization
 
@@ -99,7 +99,7 @@ result.when(
 - No exceptions for business logic errors
 - Explicit error types (AuthFailure, NetworkFailure, etc.)
 
-See [Common Patterns](../api/examples/common-patterns.md#result-pattern) for more details.
+See [Common Patterns](../../api/examples/common-patterns.md#result-pattern) for more details.
 
 ### 2. Dependency Injection with Riverpod
 
@@ -117,7 +117,7 @@ final repository = ref.watch(authRepositoryProvider);
 - `ref.read`: One-time access (e.g., in callbacks)
 - `ref.watch`: Reactive access (rebuilds when provider changes)
 
-See [Dependency Injection Pattern](../api/examples/common-patterns.md#dependency-injection-pattern) for more details.
+See [Dependency Injection Pattern](../../api/examples/common-patterns.md#dependency-injection-pattern) for more details.
 
 ### 3. Clean Architecture Layers
 
@@ -152,7 +152,7 @@ result.when(
 );
 ```
 
-See [Errors API](../api/core/errors.md) for all error types.
+See [Errors API](../../api/core/errors.md) for all error types.
 
 ## Where to Find Things
 
@@ -173,7 +173,7 @@ See [Errors API](../api/core/errors.md) for all error types.
 ## Next Steps
 
 - ✅ Learn how to [add features and screens](../features/common-tasks.md)
-- ✅ Review [Common Patterns](../api/examples/common-patterns.md)
+- ✅ Review [Common Patterns](../../api/examples/common-patterns.md)
 - ✅ Explore existing features (e.g., `lib/features/auth/`)
 
 

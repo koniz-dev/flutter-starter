@@ -13,18 +13,14 @@ import 'package:flutter_starter/core/logging/logging_service.dart';
 /// The interceptor respects the ENABLE_HTTP_LOGGING flag from AppConfig.
 class ApiLoggingInterceptor extends Interceptor {
   /// Creates an [ApiLoggingInterceptor] with the given [loggingService]
-  ApiLoggingInterceptor({
-    required LoggingService loggingService,
-  }) : _loggingService = loggingService;
+  ApiLoggingInterceptor({required LoggingService loggingService})
+    : _loggingService = loggingService;
 
   /// Logging service instance
   final LoggingService _loggingService;
 
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (!AppConfig.enableHttpLogging) {
       super.onRequest(options, handler);
       return;
@@ -82,10 +78,7 @@ class ApiLoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (!AppConfig.enableHttpLogging) {
       super.onError(err, handler);
       return;

@@ -1,0 +1,7 @@
+# Local Mason bricks (fork / rename tooling). Not used by `flutter run`.
+# Usage: `mason get` then `mason make flutter_starter_setup` — see bricks/README.md
+bricks:
+  flutter_starter_setup:
+    path: bricks/flutter_starter_setup
+  feature_clean:
+    path: bricks/feature_clean

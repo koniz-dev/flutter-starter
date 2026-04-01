@@ -34,9 +34,7 @@ void main() {
 
     setUp(() {
       mockLoggingService = MockLoggingService();
-      interceptor = ApiLoggingInterceptor(
-        loggingService: mockLoggingService,
-      );
+      interceptor = ApiLoggingInterceptor(loggingService: mockLoggingService);
       requestOptions = RequestOptions(
         path: '/api/test',
         method: 'GET',
@@ -55,10 +53,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         // Act
@@ -77,10 +72,7 @@ void main() {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         // Act
@@ -89,12 +81,7 @@ void main() {
         // Assert
         verify(
           () => mockLoggingService.debug(
-            any(
-              that: allOf(
-                contains('GET'),
-                contains('/api/test'),
-              ),
-            ),
+            any(that: allOf(contains('GET'), contains('/api/test'))),
             context: any(named: 'context'),
           ),
         ).called(1);
@@ -115,10 +102,7 @@ void main() {
         );
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -130,10 +114,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         expect(capturedContext!['headers'], isA<Map<String, dynamic>>());
@@ -152,10 +133,7 @@ void main() {
         );
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -167,10 +145,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         expect(capturedContext!.containsKey('queryParameters'), isTrue);
@@ -186,10 +161,7 @@ void main() {
         );
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -201,10 +173,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         expect(capturedContext!.containsKey('body'), isTrue);
@@ -219,10 +188,7 @@ void main() {
         );
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -230,17 +196,11 @@ void main() {
         });
 
         // Act
-        interceptor.onRequest(
-          optionsWithoutBody,
-          handler,
-        );
+        interceptor.onRequest(optionsWithoutBody, handler);
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         expect(capturedContext!.containsKey('body'), isFalse);
@@ -257,10 +217,7 @@ void main() {
         );
         final handler = TestResponseInterceptorHandler();
         when(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         // Act
@@ -284,10 +241,8 @@ void main() {
         );
         final handler = TestResponseInterceptorHandler();
         when(
-          () => mockLoggingService.warning(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () =>
+              mockLoggingService.warning(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         // Act
@@ -342,10 +297,7 @@ void main() {
         final handler = TestResponseInterceptorHandler();
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -357,10 +309,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.info(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         expect(capturedContext!.containsKey('body'), isTrue);
@@ -475,10 +424,7 @@ void main() {
           ),
         ).called(1);
         expect(capturedContext, isNotNull);
-        expect(
-          capturedContext!['statusCode'],
-          500,
-        );
+        expect(capturedContext!['statusCode'], 500);
       });
 
       test('should sanitize sensitive data in error response', () {
@@ -528,10 +474,7 @@ void main() {
         if (capturedContext!.containsKey('responseBody')) {
           final body = capturedContext!['responseBody'];
           if (body is Map) {
-            expect(
-              body['password'],
-              '***REDACTED***',
-            );
+            expect(body['password'], '***REDACTED***');
             expect(body['token'], '***REDACTED***');
           }
         }
@@ -553,10 +496,7 @@ void main() {
         );
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -568,20 +508,14 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         if (capturedContext!.containsKey('body')) {
           final body = capturedContext!['body'] as Map;
           expect(body['password'], '***REDACTED***');
           expect(body['token'], '***REDACTED***');
-          expect(
-            body['username'],
-            'user',
-          );
+          expect(body['username'], 'user');
         }
       });
 
@@ -592,19 +526,13 @@ void main() {
           path: '/api/test',
           method: 'POST',
           data: {
-            'user': {
-              'name': 'John',
-              'password': 'secret',
-            },
+            'user': {'name': 'John', 'password': 'secret'},
             'token': 'abc123',
           },
         );
         Map<String, dynamic>? capturedContext;
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenAnswer((invocation) {
           capturedContext =
               invocation.namedArguments[#context] as Map<String, dynamic>?;
@@ -616,10 +544,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
         expect(capturedContext, isNotNull);
         if (capturedContext!.containsKey('body')) {
@@ -639,10 +564,7 @@ void main() {
           data: '{"key": "value"}',
         );
         when(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).thenReturn(null);
 
         // Act
@@ -650,10 +572,7 @@ void main() {
 
         // Assert
         verify(
-          () => mockLoggingService.debug(
-            any(),
-            context: any(named: 'context'),
-          ),
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
         ).called(1);
       });
     });

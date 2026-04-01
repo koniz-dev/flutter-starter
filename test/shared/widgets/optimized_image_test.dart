@@ -8,9 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: OptimizedImage(
-              imageUrl: 'https://example.com/image.jpg',
-            ),
+            body: OptimizedImage(imageUrl: 'https://example.com/image.jpg'),
           ),
         ),
       );
@@ -104,12 +102,7 @@ void main() {
     testWidgets('should not preload when imageUrl is empty', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: OptimizedImage(
-              imageUrl: '',
-              preload: true,
-            ),
-          ),
+          home: Scaffold(body: OptimizedImage(imageUrl: '', preload: true)),
         ),
       );
 
@@ -122,9 +115,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: OptimizedImage(
-              imageUrl: 'https://example.com/image.jpg',
-            ),
+            body: OptimizedImage(imageUrl: 'https://example.com/image.jpg'),
           ),
         ),
       );
@@ -153,9 +144,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: OptimizedImage(
-              imageUrl: 'https://example.com/image.jpg',
-            ),
+            body: OptimizedImage(imageUrl: 'https://example.com/image.jpg'),
           ),
         ),
       );
@@ -296,9 +285,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: OptimizedImage(
-              imageUrl: 'https://example.com/image.jpg',
-            ),
+            body: OptimizedImage(imageUrl: 'https://example.com/image.jpg'),
           ),
         ),
       );

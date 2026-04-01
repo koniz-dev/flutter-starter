@@ -23,9 +23,8 @@ import 'package:go_router/go_router.dart';
 /// ```
 class NavigationLoggingObserver extends NavigatorObserver {
   /// Creates a [NavigationLoggingObserver] with the given [loggingService]
-  NavigationLoggingObserver({
-    required LoggingService loggingService,
-  }) : _loggingService = loggingService;
+  NavigationLoggingObserver({required LoggingService loggingService})
+    : _loggingService = loggingService;
 
   /// Logging service instance
   final LoggingService _loggingService;
@@ -33,45 +32,26 @@ class NavigationLoggingObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
-    _logNavigation(
-      'Route Pushed',
-      route,
-      previousRoute,
-    );
+    _logNavigation('Route Pushed', route, previousRoute);
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
-    _logNavigation(
-      'Route Popped',
-      route,
-      previousRoute,
-    );
+    _logNavigation('Route Popped', route, previousRoute);
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
-    _logNavigation(
-      'Route Removed',
-      route,
-      previousRoute,
-    );
+    _logNavigation('Route Removed', route, previousRoute);
   }
 
   @override
-  void didReplace({
-    Route<dynamic>? newRoute,
-    Route<dynamic>? oldRoute,
-  }) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (newRoute != null) {
-      _logNavigation(
-        'Route Replaced',
-        newRoute,
-        oldRoute,
-      );
+      _logNavigation('Route Replaced', newRoute, oldRoute);
     }
   }
 
@@ -90,10 +70,7 @@ class NavigationLoggingObserver extends NavigatorObserver {
         'previousRoutePath': _getRoutePath(previousRoute),
     };
 
-    _loggingService.info(
-      'Navigation: $event',
-      context: context,
-    );
+    _loggingService.info('Navigation: $event', context: context);
   }
 
   /// Get route path from route object

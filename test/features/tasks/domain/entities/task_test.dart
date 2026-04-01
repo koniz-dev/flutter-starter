@@ -505,12 +505,7 @@ void main() {
 
       test('should handle empty title', () {
         // Arrange & Act
-        final task = Task(
-          id: '1',
-          title: '',
-          createdAt: now,
-          updatedAt: later,
-        );
+        final task = Task(id: '1', title: '', createdAt: now, updatedAt: later);
 
         // Assert
         expect(task.id, '1');
@@ -674,18 +669,8 @@ void main() {
         final date1 = DateTime(2023);
         final date2 = DateTime(2023, 1, 2);
         final tasks = [
-          Task(
-            id: '1',
-            title: 'Task 1',
-            createdAt: date1,
-            updatedAt: date2,
-          ),
-          Task(
-            id: '2',
-            title: 'Task 2',
-            createdAt: date1,
-            updatedAt: date2,
-          ),
+          Task(id: '1', title: 'Task 1', createdAt: date1, updatedAt: date2),
+          Task(id: '2', title: 'Task 2', createdAt: date1, updatedAt: date2),
         ];
 
         // Act & Assert

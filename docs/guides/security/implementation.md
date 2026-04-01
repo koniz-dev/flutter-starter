@@ -4,6 +4,12 @@ This guide provides step-by-step instructions and code examples for implementing
 
 ---
 
+## RASP / FreeRASP (optional)
+
+The `freerasp` package is listed in `pubspec.yaml` for teams that want runtime app shielding. By default the app uses a **no-op** implementation via [`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) (`NoOpRaspService`), so nothing is enforced until you override the provider with a concrete implementation (for example `FreeRaspServiceImpl` in `lib/core/security/infrastructure/freerasp_service_impl.dart`). Enabling real RASP requires FreeRASP configuration, platform setup, and usually a commercial agreement—see the [FreeRASP documentation](https://docs.talsec.app/freerasp).
+
+---
+
 ## Table of Contents
 
 1. [Critical Fixes](#critical-fixes)
@@ -22,6 +28,11 @@ This guide provides step-by-step instructions and code examples for implementing
    - [GDPR Consent Management](#9-gdpr-consent-management)
 
 ---
+
+## Conventions (shipped code vs blueprints)
+
+- **In this repository:** Prefer paths that exist under `lib/` today (see [Contracts map](../../architecture/contracts-map.md)).
+- **Blueprints:** Optional modules (session timeout, GDPR UI, extra SSL snippets) live in **[blueprints.md](./blueprints.md)** — not in `lib/`. Use as templates only.
 
 ## Critical Fixes
 
@@ -388,87 +399,12 @@ class LogSanitizer {
 }
 ```
 
-#### Step 2: Update Logging Interceptor
+#### Step 2: API logging (`ApiLoggingInterceptor`)
 
-```dart
-// lib/core/network/interceptors/logging_interceptor.dart
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_starter/core/config/app_config.dart';
-import 'package:flutter_starter/core/utils/log_sanitizer.dart';
+The starter already ships **`ApiLoggingInterceptor`** in `lib/core/network/interceptors/api_logging_interceptor.dart`. It uses **`LoggingService`** (not `debugPrint`) and applies built-in redaction for common sensitive headers and JSON keys when `AppConfig.enableHttpLogging` is true.
 
-/// Interceptor for logging HTTP requests and responses
-class LoggingInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (kDebugMode && AppConfig.enableHttpLogging) {
-      debugPrint('REQUEST[${options.method}] => PATH: ${options.path}');
-      
-      // Sanitize headers
-      final sanitizedHeaders = LogSanitizer.sanitizeHeaders(options.headers);
-      debugPrint('Headers: $sanitizedHeaders');
-      
-      // Sanitize data
-      if (options.data != null) {
-        final sanitizedData = LogSanitizer.sanitizeData(
-          options.data,
-          options.path,
-        );
-        debugPrint('Data: $sanitizedData');
-      }
-      
-      if (options.queryParameters.isNotEmpty) {
-        final sanitizedParams = LogSanitizer.sanitizeMap(
-          options.queryParameters as Map<String, dynamic>,
-        );
-        debugPrint('QueryParams: $sanitizedParams');
-      }
-    }
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(
-    Response<dynamic> response,
-    ResponseInterceptorHandler handler,
-  ) {
-    if (kDebugMode && AppConfig.enableHttpLogging) {
-      debugPrint(
-        'RESPONSE[${response.statusCode}] => '
-        'PATH: ${response.requestOptions.path}',
-      );
-      
-      // Sanitize response data
-      final sanitizedData = LogSanitizer.sanitizeData(
-        response.data,
-        response.requestOptions.path,
-      );
-      debugPrint('Data: $sanitizedData');
-    }
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (kDebugMode && AppConfig.enableHttpLogging) {
-      debugPrint(
-        'ERROR[${err.response?.statusCode}] => '
-        'PATH: ${err.requestOptions.path}',
-      );
-      debugPrint('Message: ${err.message}');
-      
-      if (err.response?.data != null) {
-        final sanitizedData = LogSanitizer.sanitizeData(
-          err.response?.data,
-          err.requestOptions.path,
-        );
-        debugPrint('Error Data: $sanitizedData');
-      }
-    }
-    super.onError(err, handler);
-  }
-}
-```
+- Extend **`_sanitizeHeaders`** / **`_sanitizeJson`** in that file for custom token header names or payload fields.
+- Reuse **`LogSanitizer`** from Step 1 where you want one shared policy for logs outside this interceptor.
 
 ---
 
@@ -757,394 +693,42 @@ To implement enterprise-grade Runtime Application Self-Protection (RASP), we uti
 
 Ensure `freerasp` is configured with your production hashes and connected to the `raspServiceProvider` in `lib/core/security/`. 
 
+Edit the placeholder `TalsecConfig` inside [`lib/core/security/infrastructure/freerasp_service_impl.dart`](../../../lib/core/security/infrastructure/freerasp_service_impl.dart) (package names, signing cert hashes, team id, email, stores). The class **`FreeRaspServiceImpl`** already implements [`IRaspService`](../../../lib/core/security/i_rasp_service.dart).
+
+#### Step 2: Override `raspServiceProvider` and start protection
+
+[`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) defaults to [`NoOpRaspService`](../../../lib/core/security/noop_rasp_service.dart). After you are ready to ship real RASP, override it when you build the [`ProviderContainer`](https://pub.dev/documentation/flutter_riverpod/latest/flutter_riverpod/ProviderContainer-class.html) in `main.dart`, then start listening:
+
 ```dart
-// lib/shared/security/freerasp_service_impl.dart
-final config = TalsecConfig(
-  androidConfig: AndroidConfig(
-    packageName: 'com.example.flutter_starter',
-    signingCertHashes: ['YOUR_BASE64_CERT_HASH'], // Crucial for production
-    supportedStores: ['com.android.vending'], // Only Google Play Store
-  ),
-  iosConfig: IOSConfig(
-    bundleIds: ['com.example.flutterStarter'],
-    teamId: 'YOUR_TEAM_ID',
-  ),
-  watcherMail: 'security@yourcompany.com',
-  isProd: kReleaseMode,
+// lib/main.dart — excerpt after WidgetsFlutterBinding.ensureInitialized()
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/security/infrastructure/freerasp_service_impl.dart';
+import 'package:flutter_starter/core/security/rasp_providers.dart';
+
+final container = ProviderContainer(
+  overrides: [
+    raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
+  ],
 );
-```
 
-#### Step 2: Listen for Threats
-
-The `FreeRaspServiceImpl` pushes security anomalies through the `onThreatDetected` stream. You should listen to this stream on app startup and take appropriate actions (e.g., forcing a logout or showing a warning dialog).
-
-```dart
-final raspService = ref.read(raspServiceProvider);
-await raspService.startProtection();
-
-raspService.onThreatDetected.listen((threat) {
-  // Handle privilegedAccess (root/jailbreak), emulator, tampered, etc.
-  handleSecurityThreat(threat);
+final rasp = container.read(raspServiceProvider);
+await rasp.startProtection();
+rasp.onThreatDetected.listen((threat) {
+  // Map SecurityThreat (privilegedAccess, emulator, debugger, …) to policy
 });
 ```
 
-/// Exception thrown when device security check fails
-class DeviceSecurityException implements Exception {
-  final String message;
-  DeviceSecurityException(this.message);
+Use the same `container` for `UncontrolledProviderScope` / `runApp` so the override applies app-wide.
 
-  @override
-  String toString() => 'DeviceSecurityException: $message';
-}
-```
+There is **no** `device_security.dart` in this starter; wire threat handling in your own module if you need blocking UI or forced logout.
 
-#### Step 3: Check on App Start
+### 8. Session management (blueprint)
 
-```dart
-// lib/main.dart
-import 'package:flutter_starter/core/security/device_security.dart';
+Not in this repo. Full template (session timer + lifecycle sketch): **[Security blueprints → Session management](./blueprints.md#session-management)**.
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+### 9. GDPR consent (blueprint)
 
-  // Check device security in production
-  if (AppConfig.isProduction) {
-    try {
-      await DeviceSecurity.checkDeviceSecurity();
-    } on DeviceSecurityException {
-      // Handle insecure device
-      // Option 1: Show error and exit
-      // Option 2: Log and continue with limited functionality
-      runApp(const SecurityWarningApp());
-      return;
-    }
-  }
-
-  // ... rest of initialization ...
-}
-```
-
----
-
-### 8. Session Management
-
-#### Step 1: Create Session Manager
-
-```dart
-// lib/core/security/session_manager.dart
-import 'dart:async';
-import 'package:flutter_starter/core/storage/secure_storage_service.dart';
-import 'package:flutter_starter/core/constants/app_constants.dart';
-import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
-
-/// Manages user session timeout and activity tracking
-class SessionManager {
-  SessionManager({
-    required this.secureStorageService,
-    required this.authRepository,
-  });
-
-  final SecureStorageService secureStorageService;
-  final AuthRepository authRepository;
-
-  Timer? _sessionTimer;
-  static const Duration sessionTimeout = Duration(hours: 24);
-  DateTime? _lastActivity;
-
-  /// Initialize session manager
-  void initialize() {
-    resetSessionTimer();
-    _lastActivity = DateTime.now();
-  }
-
-  /// Reset session timer (call on user activity)
-  void resetSessionTimer() {
-    _sessionTimer?.cancel();
-    _sessionTimer = Timer(sessionTimeout, () {
-      _handleSessionTimeout();
-    });
-    _lastActivity = DateTime.now();
-  }
-
-  /// Handle user activity (call from app lifecycle or user interactions)
-  void onUserActivity() {
-    resetSessionTimer();
-  }
-
-  /// Handle session timeout
-  Future<void> _handleSessionTimeout() async {
-    // Check if user is still authenticated
-    final token = await secureStorageService.getString(AppConstants.tokenKey);
-    if (token == null) {
-      return; // Already logged out
-    }
-
-    // Logout user
-    await authRepository.logout();
-    
-    // Optionally notify user or trigger re-authentication
-    // You can use a stream or callback to notify UI
-  }
-
-  /// Get time until session timeout
-  Duration? getTimeUntilTimeout() {
-    if (_lastActivity == null) return null;
-    final elapsed = DateTime.now().difference(_lastActivity!);
-    final remaining = sessionTimeout - elapsed;
-    return remaining.isNegative ? Duration.zero : remaining;
-  }
-
-  /// Dispose resources
-  void dispose() {
-    _sessionTimer?.cancel();
-  }
-}
-```
-
-#### Step 2: Integrate with App Lifecycle
-
-```dart
-// lib/main.dart
-import 'package:flutter/material.dart';
-import 'package:flutter_starter/core/security/session_manager.dart';
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  SessionManager? _sessionManager;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    
-    // Initialize session manager
-    final container = ProviderScope.containerOf(context);
-    _sessionManager = SessionManager(
-      secureStorageService: container.read(secureStorageServiceProvider),
-      authRepository: container.read(authRepositoryProvider),
-    );
-    _sessionManager?.initialize();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _sessionManager?.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // User returned to app, reset session timer
-      _sessionManager?.onUserActivity();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      // ... existing config ...
-    );
-  }
-}
-```
-
----
-
-## Compliance Features
-
-### 9. GDPR Consent Management
-
-#### Step 1: Create Consent Manager
-
-```dart
-// lib/core/privacy/consent_manager.dart
-import 'package:flutter_starter/core/storage/secure_storage_service.dart';
-
-/// Manages user consent for GDPR compliance
-class ConsentManager {
-  ConsentManager(this.secureStorageService);
-
-  final SecureStorageService secureStorageService;
-
-  static const String consentKey = 'user_consent_given';
-  static const String consentVersionKey = 'consent_version';
-  static const String consentTimestampKey = 'consent_timestamp';
-  static const int currentConsentVersion = 1;
-
-  /// Check if user has given consent
-  Future<bool> hasUserConsented() async {
-    final consented = await secureStorageService.getBool(consentKey);
-    final version = await secureStorageService.getInt(consentVersionKey);
-    
-    return consented == true && version == currentConsentVersion;
-  }
-
-  /// Record user consent
-  Future<void> recordConsent({
-    required bool accepted,
-    required Map<String, bool> consentDetails,
-  }) async {
-    await secureStorageService.setBool(consentKey, value: accepted);
-    await secureStorageService.setInt(consentVersionKey, currentConsentVersion);
-    await secureStorageService.setInt(
-      consentTimestampKey,
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-    );
-
-    // Store consent details
-    for (final entry in consentDetails.entries) {
-      await secureStorageService.setBool(
-        'consent_${entry.key}',
-        value: entry.value,
-      );
-    }
-
-    // Apply consent preferences
-    if (accepted) {
-      await _applyConsentPreferences(consentDetails);
-    } else {
-      await _revokeConsent();
-    }
-  }
-
-  /// Apply consent preferences
-  Future<void> _applyConsentPreferences(Map<String, bool> preferences) async {
-    // Enable/disable analytics based on consent
-    final analyticsConsent = preferences['analytics'] ?? false;
-    // Configure analytics service
-    
-    // Enable/disable crash reporting
-    final crashReportingConsent = preferences['crash_reporting'] ?? false;
-    // Configure crash reporting service
-    
-    // Enable/disable marketing
-    final marketingConsent = preferences['marketing'] ?? false;
-    // Configure marketing services
-  }
-
-  /// Revoke all consent
-  Future<void> _revokeConsent() async {
-    // Disable all tracking
-    // Clear analytics data
-    // Disable marketing
-  }
-
-  /// Get consent timestamp
-  Future<DateTime?> getConsentTimestamp() async {
-    final timestamp = await secureStorageService.getInt(consentTimestampKey);
-    if (timestamp == null) return null;
-    return DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-  }
-
-  /// Check if consent needs renewal (e.g., after 1 year)
-  Future<bool> needsConsentRenewal() async {
-    final timestamp = await getConsentTimestamp();
-    if (timestamp == null) return true;
-    
-    final oneYearAgo = DateTime.now().subtract(Duration(days: 365));
-    return timestamp.isBefore(oneYearAgo);
-  }
-}
-```
-
-#### Step 2: Create Consent Screen
-
-```dart
-// lib/features/privacy/presentation/screens/consent_screen.dart
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/privacy/consent_manager.dart';
-
-class ConsentScreen extends ConsumerStatefulWidget {
-  const ConsentScreen({super.key});
-
-  @override
-  ConsumerState<ConsentScreen> createState() => _ConsentScreenState();
-}
-
-class _ConsentScreenState extends ConsumerState<ConsentScreen> {
-  bool _analyticsConsent = false;
-  bool _crashReportingConsent = false;
-  bool _marketingConsent = false;
-
-  Future<void> _handleConsent(bool accepted) async {
-    final consentManager = ref.read(consentManagerProvider);
-    
-    await consentManager.recordConsent(
-      accepted: accepted,
-      consentDetails: {
-        'analytics': _analyticsConsent,
-        'crash_reporting': _crashReportingConsent,
-        'marketing': _marketingConsent,
-      },
-    );
-
-    if (mounted) {
-      Navigator.of(context).pop();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Privacy Consent')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'We value your privacy',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Please review and accept our privacy policy and terms of service.',
-            ),
-            const SizedBox(height: 24),
-            CheckboxListTile(
-              title: const Text('Analytics'),
-              subtitle: const Text('Help us improve the app'),
-              value: _analyticsConsent,
-              onChanged: (value) => setState(() => _analyticsConsent = value!),
-            ),
-            CheckboxListTile(
-              title: const Text('Crash Reporting'),
-              subtitle: const Text('Help us fix bugs'),
-              value: _crashReportingConsent,
-              onChanged: (value) => setState(() => _crashReportingConsent = value!),
-            ),
-            CheckboxListTile(
-              title: const Text('Marketing'),
-              subtitle: const Text('Receive promotional content'),
-              value: _marketingConsent,
-              onChanged: (value) => setState(() => _marketingConsent = value!),
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () => _handleConsent(true),
-              child: const Text('Accept All'),
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: () => _handleConsent(false),
-              child: const Text('Reject All'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-```
+Not in this repo. Full template (consent manager + screen): **[Security blueprints → GDPR](./blueprints.md#gdpr-and-consent-ui)**.
 
 ---
 

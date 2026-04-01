@@ -410,7 +410,7 @@ See `test/helpers/test_fixtures.dart` for all available fixtures.
 |-------|--------|----------|
 | **Domain** | 100% | Critical |
 | **Data** | 90%+ | High |
-| **Core** | 90%+ | High |
+| **Core** | 80%+ | High (CI enforces 80% for `lib/core`) |
 | **Presentation** | 80%+ | Medium |
 | **Shared** | 80%+ | Medium |
 
@@ -467,22 +467,24 @@ flutter test --name "login"
 
 ### GitHub Actions
 
-Tests run automatically on:
-- Push to `main` or `develop` branches
-- Pull requests to `main` or `develop`
+Unit-test gates run automatically on push and pull requests targeting **`main`** (see [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml)):
+
+- One job (**Quality gate**): **format → analyze → unit tests** on a **single** Ubuntu runner (fewer billed minutes than parallel jobs).
+- In branch protection, require **Quality gate**.
+
+Platform builds are **not** part of that PR gate by default; use [`.github/workflows/build.yml`](../../../.github/workflows/build.yml) (**Run workflow**) when you want Android/iOS/Web compile checks on CI.
 
 ### Coverage Enforcement
 
-- Minimum coverage threshold: **80%**
-- Coverage reports uploaded to Codecov
-- PR comments with coverage summary
-- Coverage trend tracking
+Layer and overall thresholds (e.g. overall **≥80%**) are enforced in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) via **manual** runs and a **weekly** schedule—not on every PR by default. That workflow can upload to Codecov and (if you enable pull-request triggers) comment on PRs.
+
+For the full picture, see [Testing summary](testing-summary.md).
 
 ### Viewing Coverage
 
 1. **Local**: Run `./scripts/test/test_coverage.sh --html --open`
-2. **CI/CD**: Check workflow artifacts
-3. **Codecov**: https://codecov.io/gh/[your-repo]
+2. **CI**: Run the **Coverage Analysis** workflow and download artifacts, or use Codecov if configured
+3. **Codecov**: https://codecov.io/gh/[your-repo] (when the repo is connected)
 
 ## Best Practices
 

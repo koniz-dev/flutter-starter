@@ -251,9 +251,7 @@ void main() {
 
     testWidgets('should navigate to route', (tester) async {
       // Arrange
-      const targetWidget = Scaffold(
-        body: Text('Target Screen'),
-      );
+      const targetWidget = Scaffold(body: Text('Target Screen'));
 
       await tester.pumpWidget(
         MaterialApp(

@@ -27,6 +27,10 @@ migrate_working_dir/
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
+
+# Mason — hook package cache + compiled hook output (local only)
+bricks/**/hooks/.dart_tool/
+bricks/**/hooks/build/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/

@@ -9,11 +9,7 @@ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart'
 class AppErrorWidget extends StatelessWidget {
   /// Creates an [AppErrorWidget] with the given [message] and optional
   /// [onRetry] callback
-  const AppErrorWidget({
-    required this.message,
-    super.key,
-    this.onRetry,
-  });
+  const AppErrorWidget({required this.message, super.key, this.onRetry});
 
   /// Error message to display
   final String message;

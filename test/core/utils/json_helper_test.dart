@@ -308,14 +308,10 @@ void main() {
         final map = {
           'items': ['a', 'b', 'c'],
         };
-        final result = JsonHelper.getListOf<int>(
-          map,
-          'items',
-          (item) {
-            if (item is int) return item;
-            throw Exception('Cannot convert');
-          },
-        );
+        final result = JsonHelper.getListOf<int>(map, 'items', (item) {
+          if (item is int) return item;
+          throw Exception('Cannot convert');
+        });
         expect(result, isNull);
       });
     });
@@ -357,12 +353,7 @@ void main() {
 
     group('removeNulls', () {
       test('should remove null values', () {
-        final map = {
-          'a': 1,
-          'b': null,
-          'c': 'value',
-          'd': null,
-        };
+        final map = {'a': 1, 'b': null, 'c': 'value', 'd': null};
         final result = JsonHelper.removeNulls(map);
         expect(result.containsKey('a'), isTrue);
         expect(result.containsKey('b'), isFalse);
@@ -375,11 +366,7 @@ void main() {
       });
 
       test('should preserve non-null values', () {
-        final map = {
-          'a': 0,
-          'b': false,
-          'c': '',
-        };
+        final map = {'a': 0, 'b': false, 'c': ''};
         final result = JsonHelper.removeNulls(map);
         expect(result['a'], 0);
         expect(result['b'], false);

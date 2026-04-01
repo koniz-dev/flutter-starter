@@ -4,7 +4,7 @@ Riverpod providers for authentication dependency injection.
 
 ## Overview
 
-All authentication-related providers are defined in `lib/core/di/providers.dart` using Riverpod.
+Authentication providers live in `lib/features/auth/di/auth_providers.dart` and are **re-exported** from `lib/core/di/providers.dart` for a single import surface.
 
 ---
 
@@ -16,19 +16,14 @@ Provider for `AuthLocalDataSource` instance.
 
 ```dart
 /// Provider for [AuthLocalDataSource] instance
-/// 
-/// This provider creates a singleton instance of [AuthLocalDataSourceImpl]
-/// that handles local authentication data caching.
-/// 
-/// Uses:
-/// - [SecureStorageService] for tokens (secure)
-/// - [StorageService] for user data (non-sensitive)
+///
+/// Uses [IKeyValueStore] for user payload and [ITokenStore] for secrets.
 final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
-  final storageService = ref.watch(storageServiceProvider);
-  final secureStorageService = ref.watch(secureStorageServiceProvider);
+  final storageService = ref.watch(keyValueStoreProvider);
+  final tokenStore = ref.watch(tokenStoreProvider);
   return AuthLocalDataSourceImpl(
     storageService: storageService,
-    secureStorageService: secureStorageService,
+    tokenStore: tokenStore,
   );
 });
 ```
@@ -39,12 +34,12 @@ Provider for `AuthRemoteDataSource` instance.
 
 ```dart
 /// Provider for [AuthRemoteDataSource] instance
-/// 
-/// This provider creates a singleton instance of [AuthRemoteDataSourceImpl]
-/// that handles remote authentication operations.
-/// Uses ref.read to break circular dependency with apiClientProvider.
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
-  final apiClient = ref.read<ApiClient>(apiClientProvider);
+///
+/// Uses [networkClientProvider] (typed [ApiClient], same instance as
+/// [apiClientProvider]) with `ref.read` to limit rebuild churn.
+final authRemoteDataSourceProvider =
+    Provider<AuthRemoteDataSource>((ref) {
+  final apiClient = ref.read(networkClientProvider);
   return AuthRemoteDataSourceImpl(apiClient);
 });
 ```

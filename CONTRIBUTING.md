@@ -240,6 +240,27 @@ Examples:
 
 5. **Create a Pull Request** on GitHub
 
+### Pre-PR quality gate (non-platform)
+
+Before opening a PR, run (same scope as CI for Dart — no platform builds):
+
+```bash
+./scripts/dev/audit_template.sh
+```
+
+This runs scoped `dart format --check`, `flutter analyze`, and `flutter test`. On Windows without Bash, run the commands in [docs/guides/testing/testing-summary.md](docs/guides/testing/testing-summary.md) manually.
+
+### GitHub branch protection (recommended)
+
+On the default branch (for example `main`), you can require the **Quality gate** status before merge:
+
+1. Repository **Settings** → **Rules** → **Rulesets** (or **Branches** → **Branch protection rules**, depending on your org).
+2. Add a rule for `main` (or your default branch).
+3. Enable **Require status checks to pass before merging**.
+4. Add the check named **Quality gate** (the single job in `.github/workflows/ci.yml`: format, analyze, then unit tests on **one** runner to limit Actions minutes for forks).
+
+If you later split CI into parallel jobs for speed, you can require each job or add an aggregate job again for one required check.
+
 ---
 
 ## Coding Standards
@@ -249,7 +270,7 @@ Examples:
 - Follow [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style)
 - Use `very_good_analysis` linting rules (already configured)
 - Run `flutter analyze` before committing
-- Run `dart format .` to format code
+- Format Dart sources (not the whole repo — skips `build/`): `./scripts/dev/format_dart.sh` or `dart format lib test integration_test tool bricks`
 
 ### Architecture
 
@@ -318,6 +339,8 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) specifica
 - `chore` - Maintenance tasks
 - `perf` - Performance improvements
 - `ci` - CI/CD changes
+- `build` - Build system or external dependencies (e.g. Gradle, pods)
+- `revert` - Reverts a previous commit
 
 ### Examples
 
@@ -459,7 +482,7 @@ When adding new features:
 
 ### What to Expect
 
-1. **Automated Checks** - CI/CD will run tests and analysis
+1. **Automated Checks** - GitHub Actions runs **Quality gate** (format → analyze → tests on one Ubuntu runner) for branch protection
 2. **Code Review** - Maintainers will review your code
 3. **Feedback** - You may receive suggestions for improvements
 4. **Iteration** - You may need to make changes based on feedback

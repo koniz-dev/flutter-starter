@@ -1,0 +1,153 @@
+name: Build (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Which platform(s) to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - android
+          - ios
+          - web
+      flavor:
+        description: 'App flavor (must exist in your project)'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      base_url:
+        description: 'Override BASE_URL (optional)'
+        required: false
+        default: ''
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}-${{ inputs.platform }}-${{ inputs.flavor }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    if: inputs.platform == 'all' || inputs.platform == 'android'
+    name: Build Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        shell: bash
+        run: |
+          FLAVOR="${{ inputs.flavor }}"
+          BASE_URL="${{ inputs.base_url }}"
+          if [ -z "$BASE_URL" ]; then
+            BASE_URL="http://localhost:3000"
+          fi
+
+          flutter build apk \
+            --flavor "$FLAVOR" \
+            --dart-define=ENVIRONMENT="$FLAVOR" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apks-${{ inputs.flavor }}
+          path: build/app/outputs/flutter-apk/*.apk
+
+  build-ios:
+    if: inputs.platform == 'all' || inputs.platform == 'ios'
+    name: Build iOS (no codesign)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: Build iOS
+        shell: bash
+        run: |
+          FLAVOR="${{ inputs.flavor }}"
+          BASE_URL="${{ inputs.base_url }}"
+          if [ -z "$BASE_URL" ]; then
+            BASE_URL="http://localhost:3000"
+          fi
+
+          flutter build ios \
+            --flavor "$FLAVOR" \
+            --no-codesign \
+            --dart-define=ENVIRONMENT="$FLAVOR" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+  build-web:
+    if: inputs.platform == 'all' || inputs.platform == 'web'
+    name: Build Web
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Web
+        shell: bash
+        run: |
+          FLAVOR="${{ inputs.flavor }}"
+          BASE_URL="${{ inputs.base_url }}"
+          if [ -z "$BASE_URL" ]; then
+            BASE_URL="http://localhost:3000"
+          fi
+
+          flutter build web \
+            --dart-define=ENVIRONMENT="$FLAVOR" \
+            --dart-define=BASE_URL="$BASE_URL"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build-${{ inputs.flavor }}
+          path: build/web
+

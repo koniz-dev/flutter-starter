@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/performance/performance_providers.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_migration_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
@@ -10,7 +12,29 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 
 // Re-export feature providers for backward compatibility
 export 'package:flutter_starter/features/auth/di/auth_providers.dart';
+export 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
 export 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
+
+// ============================================================================
+// Backward-compat providers (stable public surface)
+// ============================================================================
+
+/// Backward-compat alias: non-sensitive key/value store.
+final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
+  return ref.watch(storageServiceProvider);
+});
+
+/// Backward-compat alias: token store for auth.
+final tokenStoreProvider = Provider<ITokenStore>((ref) {
+  final secureStorage = ref.watch(secureStorageServiceProvider);
+  return SecureTokenStore(secureStorage);
+});
+
+/// Backward-compat alias: same instance as [apiClientProvider], typed for auth
+/// remote datasources that depend on the Dio façade (interceptors, SSL, etc.).
+final Provider<ApiClient> networkClientProvider = Provider<ApiClient>((ref) {
+  return ref.watch(apiClientProvider);
+});
 
 // ============================================================================
 // Core Infrastructure Providers

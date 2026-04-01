@@ -6,10 +6,7 @@ void main() {
   group('UserModel', () {
     test('should create UserModel with required fields', () {
       // Arrange & Act
-      const model = UserModel(
-        id: 'user-123',
-        email: 'test@example.com',
-      );
+      const model = UserModel(id: 'user-123', email: 'test@example.com');
 
       // Assert
       expect(model.id, 'user-123');
@@ -36,10 +33,7 @@ void main() {
 
     test('should extend User entity', () {
       // Arrange & Act
-      const model = UserModel(
-        id: 'user-123',
-        email: 'test@example.com',
-      );
+      const model = UserModel(id: 'user-123', email: 'test@example.com');
 
       // Assert
       expect(model, isA<User>());
@@ -67,10 +61,7 @@ void main() {
 
       test('should serialize to JSON with null optional fields', () {
         // Arrange
-        const model = UserModel(
-          id: 'user-123',
-          email: 'test@example.com',
-        );
+        const model = UserModel(id: 'user-123', email: 'test@example.com');
 
         // Act
         final json = model.toJson();
@@ -172,14 +163,8 @@ void main() {
 
       test('should not be equal when fields differ', () {
         // Arrange
-        const model1 = UserModel(
-          id: 'user-123',
-          email: 'test@example.com',
-        );
-        const model2 = UserModel(
-          id: 'user-456',
-          email: 'test@example.com',
-        );
+        const model1 = UserModel(id: 'user-123', email: 'test@example.com');
+        const model2 = UserModel(id: 'user-456', email: 'test@example.com');
 
         // Assert
         expect(model1.id, isNot(model2.id));

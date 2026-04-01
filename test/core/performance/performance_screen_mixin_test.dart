@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
 import 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
@@ -76,9 +76,7 @@ void main() {
       );
 
       tester
-          .state<_TestScreenWithMixinState>(
-            find.byType(_TestScreenWithMixin),
-          )
+          .state<_TestScreenWithMixinState>(find.byType(_TestScreenWithMixin))
           .markScreenLoaded();
 
       verify(
@@ -96,9 +94,7 @@ void main() {
       );
 
       tester
-          .state<_TestScreenWithMixinState>(
-            find.byType(_TestScreenWithMixin),
-          )
+          .state<_TestScreenWithMixinState>(find.byType(_TestScreenWithMixin))
           .recordScreenMetric('custom_metric', 42);
 
       verify(() => mockTrace.putMetric('custom_metric', 42)).called(1);
@@ -114,9 +110,7 @@ void main() {
       );
 
       tester
-          .state<_TestScreenWithMixinState>(
-            find.byType(_TestScreenWithMixin),
-          )
+          .state<_TestScreenWithMixinState>(find.byType(_TestScreenWithMixin))
           .recordScreenAttribute('custom_attr', 'value');
 
       verify(() => mockTrace.putAttribute('custom_attr', 'value')).called(1);
@@ -243,9 +237,7 @@ class _TestScreenWithMixinState extends State<_TestScreenWithMixin>
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text('Test Screen'),
-    );
+    return const Scaffold(body: Text('Test Screen'));
   }
 }
 
@@ -269,8 +261,6 @@ class _TestScreenWithCustomNameState extends State<_TestScreenWithCustomName>
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text('Custom Screen'),
-    );
+    return const Scaffold(body: Text('Custom Screen'));
   }
 }

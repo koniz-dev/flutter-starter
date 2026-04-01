@@ -1,34 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Enforces Conventional Commits on the first line (see CONTRIBUTING.md).
+set -euo pipefail
 
-commit_msg=$(cat "$1")
+msg_file="${1:?commit-msg hook requires message file path}"
+commit_msg="$(head -n 1 "$msg_file")"
 
-# Skip merge commits
-if echo "$commit_msg" | grep -qE "^Merge "; then
+# Merge commits from Git
+if echo "$commit_msg" | grep -qE '^Merge '; then
   exit 0
 fi
 
-# Check Conventional Commits format
-if ! echo "$commit_msg" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|perf|ci)(\(.+\))?: .+"; then
-  echo "❌ Commit message does not follow Conventional Commits format!"
+# Types aligned with CONTRIBUTING + common extensions (build, revert)
+# Subject must be non-empty after ": "
+pattern='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([^)]+\))?: .+'
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "❌ Commit message does not follow Conventional Commits."
   echo ""
-  echo "Format: <type>(<scope>): <subject>"
+  echo "   Format: <type>(<optional-scope>): <subject>"
   echo ""
-  echo "Types:"
-  echo "  feat     - New feature"
-  echo "  fix      - Bug fix"
-  echo "  docs     - Documentation"
-  echo "  style    - Code style"
-  echo "  refactor - Code refactoring"
-  echo "  test     - Tests"
-  echo "  chore    - Maintenance"
-  echo "  perf     - Performance"
-  echo "  ci       - CI/CD"
+  echo "   Types: feat fix docs style refactor test chore perf ci build revert"
   echo ""
-  echo "Examples:"
-  echo "  feat(auth): add login functionality"
-  echo "  fix(network): handle timeout errors"
-  echo "  docs(readme): update installation guide"
+  echo "   Examples:"
+  echo "     feat(auth): add biometric login"
+  echo "     fix: handle null user after logout"
+  echo "     docs(readme): update install steps"
+  echo ""
+  echo "   Bypass (rare): git commit --no-verify"
   exit 1
 fi
-
-exit 0

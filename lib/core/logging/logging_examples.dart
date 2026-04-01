@@ -30,10 +30,7 @@ import 'package:flutter_starter/core/utils/result.dart';
 class ExampleUseCase {
   /// Creates an [ExampleUseCase] with the given [repository] and
   /// [loggingService]
-  ExampleUseCase({
-    required this.repository,
-    required this.loggingService,
-  });
+  ExampleUseCase({required this.repository, required this.loggingService});
 
   /// Repository for data operations
   final ExampleRepository repository;
@@ -59,10 +56,7 @@ class ExampleUseCase {
       // Log success
       loggingService.info(
         'ExampleUseCase: Execution successful',
-        context: {
-          'userId': userId,
-          'resultLength': result.length,
-        },
+        context: {'userId': userId, 'resultLength': result.length},
       );
 
       return Success(result);
@@ -70,17 +64,12 @@ class ExampleUseCase {
       // Log error with full context
       loggingService.error(
         'ExampleUseCase: Execution failed',
-        context: {
-          'userId': userId,
-          'errorType': e.runtimeType.toString(),
-        },
+        context: {'userId': userId, 'errorType': e.runtimeType.toString()},
         error: e,
         stackTrace: stackTrace,
       );
 
-      return ResultFailure(
-        UnknownFailure('Failed to execute use case: $e'),
-      );
+      return ResultFailure(UnknownFailure('Failed to execute use case: $e'));
     }
   }
 }
@@ -126,10 +115,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
     // Log data source operation
     loggingService.debug(
       'Repository: Fetching data from remote source',
-      context: {
-        'userId': userId,
-        'dataSource': 'remote',
-      },
+      context: {'userId': userId, 'dataSource': 'remote'},
     );
 
     try {
@@ -138,10 +124,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
       // Log successful data retrieval
       loggingService.debug(
         'Repository: Data retrieved successfully',
-        context: {
-          'userId': userId,
-          'dataSize': data.length,
-        },
+        context: {'userId': userId, 'dataSize': data.length},
       );
 
       return data;
@@ -149,10 +132,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
       // Log repository error
       loggingService.error(
         'Repository: Failed to fetch data',
-        context: {
-          'userId': userId,
-          'dataSource': 'remote',
-        },
+        context: {'userId': userId, 'dataSource': 'remote'},
         error: e,
         stackTrace: stackTrace,
       );
@@ -247,10 +227,7 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
       // Log API error
       loggingService.error(
         'API: Request failed',
-        context: {
-          'endpoint': '/users/$userId/data',
-          'method': 'GET',
-        },
+        context: {'endpoint': '/users/$userId/data', 'method': 'GET'},
         error: e,
         stackTrace: stackTrace,
       );
@@ -299,9 +276,7 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
 /// - User-friendly error messages
 class ExampleErrorHandler {
   /// Creates an [ExampleErrorHandler] with the given [loggingService]
-  ExampleErrorHandler({
-    required this.loggingService,
-  });
+  ExampleErrorHandler({required this.loggingService});
 
   /// Logging service for structured logging
   final LoggingService loggingService;
@@ -372,10 +347,7 @@ class ExampleErrorHandler {
 final exampleUseCaseProvider = Provider<ExampleUseCase>((ref) {
   final repository = ref.watch(exampleRepositoryProvider);
   final loggingService = ref.read(loggingServiceProvider);
-  return ExampleUseCase(
-    repository: repository,
-    loggingService: loggingService,
-  );
+  return ExampleUseCase(repository: repository, loggingService: loggingService);
 });
 
 // Placeholder providers for examples

@@ -31,10 +31,7 @@ void main() {
 
     test('should be accessible as Provider', () {
       final container = ProviderContainer();
-      expect(
-        () => container.read(performanceServiceProvider),
-        returnsNormally,
-      );
+      expect(() => container.read(performanceServiceProvider), returnsNormally);
     });
   });
 
@@ -75,14 +72,11 @@ void main() {
   group('Provider Integration', () {
     test('should work with ProviderContainer', () {
       final container = ProviderContainer();
-      expect(
-        () {
-          container
-            ..read(performanceServiceProvider)
-            ..read(performanceInterceptorProvider);
-        },
-        returnsNormally,
-      );
+      expect(() {
+        container
+          ..read(performanceServiceProvider)
+          ..read(performanceInterceptorProvider);
+      }, returnsNormally);
     });
 
     test('should handle multiple reads', () {

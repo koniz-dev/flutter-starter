@@ -210,10 +210,7 @@ void main() {
         when(() => mockStorageService.getString(any())).thenThrow(exception);
 
         // Act & Assert
-        expect(
-          () => dataSource.saveTask(task),
-          throwsA(isA<CacheException>()),
-        );
+        expect(() => dataSource.saveTask(task), throwsA(isA<CacheException>()));
       });
     });
 

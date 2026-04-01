@@ -373,9 +373,7 @@ void main() {
         final task = createTask(id: taskId);
         final allTasks = createTaskList(count: 2);
         when(() => mockToggleTaskCompletionUseCase(any())).thenAnswer(
-          (_) => Future.value(
-            Success(task.copyWith(isCompleted: true)),
-          ),
+          (_) => Future.value(Success(task.copyWith(isCompleted: true))),
         );
         when(
           () => mockGetAllTasksUseCase(),
@@ -528,19 +526,12 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 100));
 
         // Assert
-        verify(
-          () => mockCreateTaskUseCase(
-            title: 'New Task',
-          ),
-        ).called(1);
+        verify(() => mockCreateTaskUseCase(title: 'New Task')).called(1);
       });
 
       test('should handle updateTask with null description', () async {
         // Arrange
-        final task = createTask(
-          id: 'task-1',
-          title: 'Updated Task',
-        );
+        final task = createTask(id: 'task-1', title: 'Updated Task');
         when(
           () => mockUpdateTaskUseCase(any()),
         ).thenAnswer((_) => Future.value(Success(task)));
@@ -756,10 +747,7 @@ void main() {
       test('should copy state with new values', () {
         // Arrange
         final originalTasks = createTaskList(count: 2);
-        final state = TasksState(
-          tasks: originalTasks,
-          error: 'Original error',
-        );
+        final state = TasksState(tasks: originalTasks, error: 'Original error');
 
         // Act
         final newTasks = createTaskList();
@@ -778,10 +766,7 @@ void main() {
       test('should copy state with partial values', () {
         // Arrange
         final originalTasks = createTaskList(count: 2);
-        final state = TasksState(
-          tasks: originalTasks,
-          error: 'Original error',
-        );
+        final state = TasksState(tasks: originalTasks, error: 'Original error');
 
         // Act
         final copied = state.copyWith(isLoading: true);

@@ -185,10 +185,7 @@ void main() {
 
     test('should create PermissionFailure with message and code', () {
       // Arrange & Act
-      const failure = PermissionFailure(
-        'Access denied',
-        code: 'ACCESS_DENIED',
-      );
+      const failure = PermissionFailure('Access denied', code: 'ACCESS_DENIED');
 
       // Assert
       expect(failure.message, 'Access denied');
@@ -291,4 +288,9 @@ void main() {
 // Test implementation of Failure for testing
 class TestFailure extends Failure {
   const TestFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return TestFailure(message ?? this.message, code: code ?? this.code);
+  }
 }

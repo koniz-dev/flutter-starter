@@ -86,9 +86,7 @@ void main() {
           requestOptions: requestOptions,
           statusCode: 400,
           data: {
-            'error': {
-              'message': 'Validation failed',
-            },
+            'error': {'message': 'Validation failed'},
           },
         );
 
@@ -126,10 +124,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'message': 'Bad request',
-            'code': 'INVALID_INPUT',
-          },
+          data: {'message': 'Bad request', 'code': 'INVALID_INPUT'},
         );
 
         final dioException = DioException(
@@ -240,9 +235,7 @@ void main() {
       });
 
       test('should handle null message in unknown error', () {
-        final dioException = DioException(
-          requestOptions: requestOptions,
-        );
+        final dioException = DioException(requestOptions: requestOptions);
 
         final result = DioExceptionMapper.map(dioException);
 
@@ -474,9 +467,7 @@ void main() {
       });
 
       test('should return default message for null status code', () {
-        final response = Response<dynamic>(
-          requestOptions: requestOptions,
-        );
+        final response = Response<dynamic>(requestOptions: requestOptions);
 
         final dioException = DioException(
           requestOptions: requestOptions,
@@ -627,9 +618,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'error': 'Error as string in error field',
-          },
+          data: {'error': 'Error as string in error field'},
         );
 
         final dioException = DioException(
@@ -648,9 +637,7 @@ void main() {
           requestOptions: requestOptions,
           statusCode: 400,
           data: {
-            'error': {
-              'error': 'Nested error.error field',
-            },
+            'error': {'error': 'Nested error.error field'},
           },
         );
 
@@ -669,9 +656,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'error': <String, dynamic>{},
-          },
+          data: {'error': <String, dynamic>{}},
         );
 
         final dioException = DioException(

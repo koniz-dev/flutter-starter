@@ -196,9 +196,7 @@ void main() {
     test('should return task with null description', () async {
       // Arrange
       const taskId = 'task-1';
-      final task = createTask(
-        id: taskId,
-      );
+      final task = createTask(id: taskId);
       when(
         () => mockRepository.getTaskById(any()),
       ).thenAnswer((_) async => Success(task));

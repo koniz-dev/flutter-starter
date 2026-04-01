@@ -48,9 +48,8 @@ enum SupportedLocale {
 /// Service for managing application localization
 class LocalizationService {
   /// Creates a [LocalizationService] with the given [storageService]
-  LocalizationService({
-    required StorageService storageService,
-  }) : _storageService = storageService;
+  LocalizationService({required StorageService storageService})
+    : _storageService = storageService;
 
   final StorageService _storageService;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+import 'package:flutter_starter/core/constants/ui_keys.dart';
+import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
@@ -47,9 +48,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.register),
-      ),
+      appBar: AppBar(title: Text(l10n.register)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -123,6 +122,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                 ),
               ElevatedButton(
+                key: UiKeys.registerSubmit,
                 onPressed: authState.isLoading ? null : _handleRegister,
                 child: authState.isLoading
                     ? const SizedBox(
@@ -138,7 +138,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ? null
                     : () {
                         if (context.canPop()) {
-                          context.popRoute<void>();
+                          context.pop<void>();
+                        } else {
+                          context.go(AppRoutes.login);
                         }
                       },
                 child: Text(l10n.alreadyHaveAccount),

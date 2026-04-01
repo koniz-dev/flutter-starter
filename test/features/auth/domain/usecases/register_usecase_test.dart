@@ -20,17 +20,9 @@ void main() {
 
     test('should return User when registration succeeds', () async {
       // Arrange
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User',
-      );
+      const user = User(id: '1', email: 'test@example.com', name: 'Test User');
       when(
-        () => mockRepository.register(
-          any(),
-          any(),
-          any(),
-        ),
+        () => mockRepository.register(any(), any(), any()),
       ).thenAnswer((_) async => const Success(user));
 
       // Act
@@ -56,11 +48,7 @@ void main() {
       // Arrange
       const failure = AuthFailure('Registration failed');
       when(
-        () => mockRepository.register(
-          any(),
-          any(),
-          any(),
-        ),
+        () => mockRepository.register(any(), any(), any()),
       ).thenAnswer((_) async => const ResultFailure(failure));
 
       // Act

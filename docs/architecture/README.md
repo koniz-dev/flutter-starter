@@ -15,8 +15,13 @@ This section covers:
 
 ### Core Architecture
 
+- **[Super starter hub](super-starter-hub.md)** - One-page map of capabilities and deep links
+- **[Choose your stack](choose-your-stack.md)** - Default stack vs replacing implementations (Path A / Path B)
 - **[Architecture Overview](overview.md)** - Why Clean Architecture, benefits, trade-offs, when to use, and learning resources
 - **[Design Decisions](design-decisions.md)** - Detailed rationale for routing, state management, error handling, logging, storage, and HTTP client choices
+- **[ADRs](adr/README.md)** - Decoupling decisions for network, storage, navigation, theme tokens, and state boundaries
+- **[Contracts Map](contracts-map.md)** - Contract files, swap table, optional modules, adapter placement
+- **[Migration Guides](migrations/README.md)** - Incremental rollout plans, quality gates, and risk controls
 
 ### Related Documentation
 

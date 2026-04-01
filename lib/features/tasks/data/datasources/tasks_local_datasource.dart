@@ -27,9 +27,7 @@ abstract class TasksLocalDataSource {
 /// Implementation of local data source for tasks
 class TasksLocalDataSourceImpl implements TasksLocalDataSource {
   /// Creates a [TasksLocalDataSourceImpl] with the given [storageService]
-  TasksLocalDataSourceImpl({
-    required this.storageService,
-  });
+  TasksLocalDataSourceImpl({required this.storageService});
 
   /// Storage service for persisting tasks
   final StorageService storageService;

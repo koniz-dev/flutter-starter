@@ -169,10 +169,9 @@ void main() {
 
         // Assert
         verify(
-          () => mockStorageService.setStringList(
-            'feature_flag_override_keys',
-            ['new_key'],
-          ),
+          () => mockStorageService.setStringList('feature_flag_override_keys', [
+            'new_key',
+          ]),
         ).called(1);
       });
 
@@ -233,10 +232,9 @@ void main() {
 
         // Assert
         verify(
-          () => mockStorageService.setStringList(
-            'feature_flag_override_keys',
-            ['key2'],
-          ),
+          () => mockStorageService.setStringList('feature_flag_override_keys', [
+            'key2',
+          ]),
         ).called(1);
       });
 

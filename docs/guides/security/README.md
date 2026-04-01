@@ -5,8 +5,9 @@ Security audit, implementation guides, and checklists for the Flutter Starter ap
 ## Documentation
 
 1. **[Audit Report](./audit.md)** - Comprehensive security assessment and recommendations
-2. **[Implementation Guide](./implementation.md)** - Step-by-step implementation instructions
-3. **[Checklist](./checklist.md)** - Quick reference checklist for security hardening
+2. **[Implementation Guide](./implementation.md)** - In-repo hardening steps (shorter) + links to blueprints
+3. **[Security blueprints](./blueprints.md)** - Optional session / GDPR templates not shipped in `lib/`
+4. **[Checklist](./checklist.md)** - Quick reference checklist for security hardening
 
 ## Quick Start
 
@@ -14,7 +15,7 @@ New to security? Start here:
 
 1. Read the [Audit Report](./audit.md) to understand current security posture
 2. Review the [Checklist](./checklist.md) for prioritized tasks
-3. Follow the [Implementation Guide](./implementation.md) for step-by-step instructions
+3. Follow the [Implementation Guide](./implementation.md); use [Blueprints](./blueprints.md) for long optional samples
 
 ## Overview
 
@@ -38,13 +39,13 @@ This security documentation covers five critical security domains:
 - ✅ HTTPS support in production
 - ✅ Good architecture foundation
 
-### Critical Issues
+### Critical / high-attention items
 
-- 🔴 Missing SSL certificate pinning
-- 🔴 No code obfuscation
-- 🔴 Debug signing in release builds
-- 🔴 Logging interceptor exposes sensitive data
-- 🔴 Missing security headers
+- 🔴 Missing SSL certificate pinning (if you need MITM resistance)
+- 🔴 No code obfuscation in release (when you ship production)
+- 🔴 Debug signing or missing release keystore for store builds
+- 🟡 Verify **`ApiLoggingInterceptor`** redaction covers your tokens/payloads — see [audit](./audit.md)
+- 🟡 Security headers / web hardening for your hosting setup
 
 ## Implementation Priority
 

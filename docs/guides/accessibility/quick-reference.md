@@ -211,7 +211,7 @@ FocusAnnouncer.announceActionResult(context, 'Saved')
 
 - **Full Guide:** [guide.md](./guide.md)
 - **Testing Procedures:** [testing-procedures.md](./testing-procedures.md)
-- **Code:** `lib/shared/accessibility/`
+- **Code:** `lib/core/accessibility/` (helpers, constants, focus) and `lib/shared/accessibility/` (widgets)
 
 ## Common Mistakes
 

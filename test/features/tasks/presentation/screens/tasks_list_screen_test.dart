@@ -28,10 +28,7 @@ class MockDeleteTaskUseCase extends Mock implements DeleteTaskUseCase {}
 class MockToggleTaskCompletionUseCase extends Mock
     implements ToggleTaskCompletionUseCase {}
 
-Widget createTestWidget({
-  required Widget child,
-  dynamic overrides,
-}) {
+Widget createTestWidget({required Widget child, dynamic overrides}) {
   return ProviderScope(
     // Override type is not exported from riverpod package.
     // When overrides is provided, it's already List<Override> from
@@ -73,37 +70,32 @@ void main() {
       );
     }
 
-    testWidgets(
-      'should display loading indicator when loading',
-      (tester) async {
-        // Arrange
-        final completer = Completer<Result<List<Task>>>();
-        when(
-          () => mockGetAllTasksUseCase(),
-        ).thenAnswer((_) => completer.future);
+    testWidgets('should display loading indicator when loading', (
+      tester,
+    ) async {
+      // Arrange
+      final completer = Completer<Result<List<Task>>>();
+      when(() => mockGetAllTasksUseCase()).thenAnswer((_) => completer.future);
 
-        await tester.pumpWidget(
-          createWidgetWithOverrides([
-            getAllTasksUseCaseProvider.overrideWithValue(
-              mockGetAllTasksUseCase,
-            ),
-            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-            toggleTaskCompletionUseCaseProvider.overrideWithValue(
-              mockToggleTaskCompletionUseCase,
-            ),
-          ]),
-        );
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
+        ]),
+      );
 
-        // Act
-        await tester.pump();
+      // Act
+      await tester.pump();
 
-        // Assert
-        expect(find.byType(CircularProgressIndicator), findsWidgets);
-        completer.complete(const Success<List<Task>>([]));
-        await tester.pumpAndSettle();
-      },
-    );
+      // Assert
+      expect(find.byType(CircularProgressIndicator), findsWidgets);
+      completer.complete(const Success<List<Task>>([]));
+      await tester.pumpAndSettle();
+    });
 
     testWidgets('should display empty state when no tasks', (tester) async {
       // Arrange
@@ -192,45 +184,42 @@ void main() {
       expect(find.text('Retry'), findsOneWidget);
     });
 
-    testWidgets(
-      'should show add task dialog when FAB is tapped',
-      (tester) async {
-        // Arrange
-        when(
-          () => mockGetAllTasksUseCase(),
-        ).thenAnswer((_) async => const Success<List<Task>>([]));
-        when(
-          () => mockCreateTaskUseCase(
-            title: any(named: 'title'),
-            description: any(named: 'description'),
+    testWidgets('should show add task dialog when FAB is tapped', (
+      tester,
+    ) async {
+      // Arrange
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
+      when(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).thenAnswer((_) async => Success(createTask()));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
           ),
-        ).thenAnswer((_) async => Success(createTask()));
+        ]),
+      );
 
-        await tester.pumpWidget(
-          createWidgetWithOverrides([
-            getAllTasksUseCaseProvider.overrideWithValue(
-              mockGetAllTasksUseCase,
-            ),
-            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
-            toggleTaskCompletionUseCaseProvider.overrideWithValue(
-              mockToggleTaskCompletionUseCase,
-            ),
-          ]),
-        );
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-        await tester.pumpAndSettle(const Duration(seconds: 5));
+      // Act
+      await tester.tap(find.byType(FloatingActionButton));
+      // Use timeout to prevent hanging
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
-        // Act
-        await tester.tap(find.byType(FloatingActionButton));
-        // Use timeout to prevent hanging
-        await tester.pumpAndSettle(const Duration(seconds: 5));
-
-        // Assert
-        expect(find.text('Add Task'), findsOneWidget);
-        expect(find.text('Title'), findsOneWidget);
-      },
-    );
+      // Assert
+      expect(find.text('Add Task'), findsOneWidget);
+      expect(find.text('Title'), findsOneWidget);
+    });
 
     testWidgets('should create task when form is submitted', (tester) async {
       // Arrange
@@ -469,10 +458,7 @@ void main() {
       final tasks = [
         createTask(id: 'task-1', title: 'Incomplete Task'),
         createTask(id: 'task-2', title: 'Completed Task', isCompleted: true),
-        createTask(
-          id: 'task-3',
-          title: 'Another Incomplete',
-        ),
+        createTask(id: 'task-3', title: 'Another Incomplete'),
       ];
       when(
         () => mockGetAllTasksUseCase(),
@@ -610,10 +596,7 @@ void main() {
     testWidgets('should display task without description', (tester) async {
       // Arrange
       final tasks = [
-        createTask(
-          id: 'task-1',
-          title: 'Task without Description',
-        ),
+        createTask(id: 'task-1', title: 'Task without Description'),
       ];
       when(
         () => mockGetAllTasksUseCase(),
@@ -642,11 +625,7 @@ void main() {
     ) async {
       // Arrange
       final tasks = [
-        createTask(
-          id: 'task-1',
-          title: 'Completed Task',
-          isCompleted: true,
-        ),
+        createTask(id: 'task-1', title: 'Completed Task', isCompleted: true),
       ];
       when(
         () => mockGetAllTasksUseCase(),
@@ -669,9 +648,7 @@ void main() {
       // Assert
       expect(find.text('Completed Task'), findsOneWidget);
       // Check that checkbox is checked
-      final checkbox = tester.widget<Checkbox>(
-        find.byType(Checkbox).first,
-      );
+      final checkbox = tester.widget<Checkbox>(find.byType(Checkbox).first);
       expect(checkbox.value, isTrue);
     });
 
@@ -756,10 +733,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert
-      expect(
-        find.text('Please enter a task title'),
-        findsOneWidget,
-      );
+      expect(find.text('Please enter a task title'), findsOneWidget);
       verifyNever(
         () => mockCreateTaskUseCase(
           title: any(named: 'title'),

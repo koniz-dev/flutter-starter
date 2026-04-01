@@ -1,4 +1,4 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
@@ -75,10 +75,7 @@ void main() {
           () => mockPerformanceService.startHttpTrace('GET', '/api/test'),
         ).called(1);
         verify(
-          () => mockTrace.putAttribute(
-            PerformanceAttributes.httpMethod,
-            'GET',
-          ),
+          () => mockTrace.putAttribute(PerformanceAttributes.httpMethod, 'GET'),
         ).called(1);
         verify(
           () => mockTrace.putAttribute(
@@ -129,10 +126,7 @@ void main() {
         // Arrange
         final methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
         for (final method in methods) {
-          final options = RequestOptions(
-            path: '/api/test',
-            method: method,
-          );
+          final options = RequestOptions(path: '/api/test', method: method);
           final handler = TestRequestInterceptorHandler();
           when(
             () => mockPerformanceService.startHttpTrace(any(), any()),
@@ -245,9 +239,7 @@ void main() {
       test('should handle response with null status code', () {
         // Arrange
         requestOptions.extra['performance_trace'] = mockTrace;
-        final response = Response<dynamic>(
-          requestOptions: requestOptions,
-        );
+        final response = Response<dynamic>(requestOptions: requestOptions);
         final handler = TestResponseInterceptorHandler();
         when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
         when(() => mockTrace.putMetric(any(), any())).thenReturn(null);
@@ -258,10 +250,8 @@ void main() {
 
         // Assert
         verify(
-          () => mockTrace.putAttribute(
-            PerformanceAttributes.httpStatusCode,
-            '0',
-          ),
+          () =>
+              mockTrace.putAttribute(PerformanceAttributes.httpStatusCode, '0'),
         ).called(1);
         verify(
           () => mockTrace.putMetric(PerformanceMetrics.error, 1),

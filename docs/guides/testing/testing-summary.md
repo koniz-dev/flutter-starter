@@ -2,6 +2,24 @@
 
 Quick reference guide for testing in the Flutter Starter project.
 
+## Checklist before opening a PR
+
+Run the same gates CI uses for Dart code (no Android/iOS/Web builds):
+
+```bash
+./scripts/dev/audit_template.sh
+```
+
+Or step by step:
+
+```bash
+./scripts/dev/format_dart.sh --check   # or: dart format --set-exit-if-changed lib test integration_test tool bricks
+flutter analyze
+flutter test
+```
+
+Optional (slower, matches coverage job): `flutter test --coverage --timeout=5m`. See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for full contribution flow.
+
 ## Quick Start
 
 ### Run Tests
@@ -32,7 +50,7 @@ dart pub global activate patrol_cli
 |-------|--------|
 | Domain | 100% |
 | Data | 90%+ |
-| Core | 90%+ |
+| Core | 80%+ |
 | Presentation | 80%+ |
 | **Overall** | **80%+** |
 
@@ -57,20 +75,27 @@ test/
 
 ## CI/CD
 
-- ✅ Tests run on every push/PR
-- ✅ Coverage enforced (80% minimum)
-- ✅ Reports uploaded to Codecov
-- ✅ PR comments with coverage summary
+- ✅ **Quality gate** on every push/PR to `main` ([`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml)): format → analyze → unit tests on **one** runner (keeps GitHub Actions minutes low; branch protection can require **Quality gate**).
+- ✅ Coverage thresholds (overall ≥80%, domain 100%, data ≥90%, presentation/core ≥80%) run in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) (manual **Run workflow** and weekly schedule), not on every PR.
+- ✅ Codecov upload and optional PR comments live in that coverage workflow when you enable triggers that include pull requests.
+
+### E2E on GitHub Actions (manual only)
+
+Patrol E2E **does not block PRs**. To run on CI: open **Actions → [E2E Android (Patrol)](../../../.github/workflows/e2e-android.yml) → Run workflow**. Requires a working backend if the login flow calls your API. Integration tests use stable `ValueKey`s from `lib/core/constants/ui_keys.dart`.
 
 ## Documentation
 
 - 📖 [Testing Guide](guide.md) - Comprehensive testing guide
 - 📊 [Coverage Guide](test-coverage.md) - Coverage measurement and improvement
-- 📝 [Test README](../../test/README.md) - Test directory documentation
+- 📝 [Test README](../../../test/README.md) - Test directory documentation
+- 📂 [Repository layout (non-platform)](../onboarding/repository-layout.md) - Where tests and tools live in the tree
 
 ## Common Commands
 
 ```bash
+# Format Dart (same scope as CI — avoids formatting `build/`)
+./scripts/dev/format_dart.sh
+
 # Run all tests
 flutter test
 

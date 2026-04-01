@@ -182,11 +182,7 @@ void main() {
     test('should return tasks with all properties', () async {
       // Arrange
       final tasks = [
-        createTask(
-          id: 'task-1',
-          title: 'Task 1',
-          description: 'Description 1',
-        ),
+        createTask(id: 'task-1', title: 'Task 1', description: 'Description 1'),
         createTask(
           id: 'task-2',
           title: 'Task 2',

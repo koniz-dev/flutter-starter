@@ -865,6 +865,8 @@ Consider alternatives if:
 
 ## Migration Guides
 
+The subsections below are **illustrative migration sketches** (hypothetical file names such as `navigator_service.dart` or `app_router.gr.dart`). They are **not** present in this repository unless you create them while migrating away from the current GoRouter setup.
+
 ### Switching to Different Routing Solution
 
 #### From go_router to Navigator
@@ -1006,7 +1008,7 @@ Consider alternatives if:
 
 #### From Riverpod to BLoC
 
-See the comprehensive migration guide: `docs/guides/migration/from-bloc-to-riverpod.md` (reverse the steps)
+See the migration guidance in `docs/guides/migration/README.md` and apply equivalent reverse steps.
 
 ### Using Different HTTP Client
 

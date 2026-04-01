@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   # UI Components - iOS style icons
+  crypto: ^3.0.7
   cupertino_icons: ^1.0.8
 
   # Network Layer - HTTP client with interceptors support
@@ -16,11 +17,6 @@ dependencies:
 
   # Utilities - Value equality comparison for objects
   equatable: ^2.0.7
-
-  # Firebase - Remote Config for feature flags
-  firebase_core: ^4.2.1
-  firebase_performance: ^0.11.1+2
-  firebase_remote_config: ^6.1.1
 
   # Flutter SDK - Core Flutter framework
   flutter:
@@ -38,8 +34,7 @@ dependencies:
 
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
   flutter_secure_storage: ^10.0.0
-  
-  # Security - RASP (Runtime Application Self-Protection) Anti-Root/Tamper
+  # Security (optional) - FreeRASP concrete implementation
   freerasp: ^6.1.1
 
   # Code Generation - Runtime annotations for Freezed immutable classes
@@ -62,12 +57,14 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
 
+  # Riverpod Generator - annotations for @riverpod
+  riverpod_annotation: ^3.0.3
+
   # Storage - Simple key-value storage for non-sensitive data
   shared_preferences: ^2.5.3
 
   # Network Layer - WebSocket client
   web_socket_channel: ^3.0.1
-
 
 
 dev_dependencies:
@@ -85,14 +82,26 @@ dev_dependencies:
   # Code Generation - Generates immutable classes, unions, and more
   freezed: ^3.2.3
 
+  # Integration / E2E driver binding (Flutter convention — tests live in
+  # integration_test/). Patrol builds on this stack.
+  integration_test:
+    sdk: flutter
+
   # Code Generation - Generates JSON serialization/deserialization code
   json_serializable: ^6.11.1
+
+  # Mason brick hooks import package:mason; dev_dependency here so the analyzer
+  # resolves it for bricks/flutter_starter_setup/hooks/post_gen.dart.
+  mason: ^0.1.2
 
   # Testing - Mocking library for unit tests (no code generation required)
   mocktail: ^1.0.4
 
   # Testing - End-to-End testing framework
   patrol: ^3.10.0
+
+  # Riverpod Generator - generates provider boilerplate
+  riverpod_generator: ^3.0.3
 
   # Linting - Comprehensive lint rules for Flutter/Dart (Very Good Ventures)
   very_good_analysis: ^10.0.0
@@ -149,3 +158,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Patrol E2E (https://patrol.leancode.co/) — used by integration_test/*.dart
+patrol:
+  app_name: flutter_starter
+  android:
+    package_name: com.example.flutter_starter

@@ -265,10 +265,7 @@ void main() {
       });
 
       test('should handle exceptions with unicode characters', () {
-        const exception = NetworkException(
-          '网络错误: 连接超时',
-          code: 'UNICODE',
-        );
+        const exception = NetworkException('网络错误: 连接超时', code: 'UNICODE');
 
         final result = ExceptionToFailureMapper.map(exception);
 
@@ -341,10 +338,7 @@ void main() {
       });
 
       test('should extract message and code from pattern matching', () {
-        const exception = ServerException(
-          'Test message',
-          code: 'TEST_CODE',
-        );
+        const exception = ServerException('Test message', code: 'TEST_CODE');
 
         final result = ExceptionToFailureMapper.map(exception);
 

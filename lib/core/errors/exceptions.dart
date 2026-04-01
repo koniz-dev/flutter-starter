@@ -14,11 +14,7 @@ abstract class AppException implements Exception {
 class ServerException extends AppException {
   /// Creates a [ServerException] with the given [message], optional [code],
   /// and optional [statusCode]
-  const ServerException(
-    super.message, {
-    super.code,
-    this.statusCode,
-  });
+  const ServerException(super.message, {super.code, this.statusCode});
 
   /// HTTP status code from the server response (e.g., 404, 500)
   final int? statusCode;

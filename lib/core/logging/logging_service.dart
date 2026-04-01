@@ -62,10 +62,7 @@ class LoggingService {
   void _initializeLogger() {
     if (!_enableLogging) {
       // Create a no-op logger if logging is disabled
-      _logger = Logger(
-        output: _NoOpOutput(),
-        printer: _NoOpPrinter(),
-      );
+      _logger = Logger(output: _NoOpOutput(), printer: _NoOpPrinter());
       return;
     }
 
@@ -73,9 +70,7 @@ class LoggingService {
 
     // Console output (always enabled in debug mode)
     if (kDebugMode) {
-      outputs.add(
-        ConsoleOutput(),
-      );
+      outputs.add(ConsoleOutput());
     }
 
     // File output (if enabled)
@@ -99,11 +94,7 @@ class LoggingService {
         ? JsonLogFormatter() // JSON for production
         : PrettyPrinter();
 
-    _logger = Logger(
-      printer: printer,
-      output: output,
-      level: _getLogLevel(),
-    );
+    _logger = Logger(printer: printer, output: output, level: _getLogLevel());
   }
 
   /// Get the appropriate log level based on environment
@@ -118,10 +109,7 @@ class LoggingService {
   ///
   /// [message] - The log message
   /// [context] - Optional context/metadata to include in the log
-  void debug(
-    String message, {
-    Map<String, dynamic>? context,
-  }) {
+  void debug(String message, {Map<String, dynamic>? context}) {
     if (!_enableLogging) return;
     _logger.d(_formatMessage(message, context));
   }
@@ -130,10 +118,7 @@ class LoggingService {
   ///
   /// [message] - The log message
   /// [context] - Optional context/metadata to include in the log
-  void info(
-    String message, {
-    Map<String, dynamic>? context,
-  }) {
+  void info(String message, {Map<String, dynamic>? context}) {
     if (!_enableLogging) return;
     _logger.i(_formatMessage(message, context));
   }
@@ -179,10 +164,7 @@ class LoggingService {
   }
 
   /// Format a log message with optional context
-  String _formatMessage(
-    String message,
-    Map<String, dynamic>? context,
-  ) {
+  String _formatMessage(String message, Map<String, dynamic>? context) {
     if (context == null || context.isEmpty) {
       return message;
     }

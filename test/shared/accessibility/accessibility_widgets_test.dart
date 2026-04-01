@@ -348,9 +348,7 @@ void main() {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: app_widgets.AccessibleText('Test Text'),
-          ),
+          home: Scaffold(body: app_widgets.AccessibleText('Test Text')),
         ),
       );
 
@@ -366,10 +364,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: app_widgets.AccessibleText(
-              'Test Text',
-              style: style,
-            ),
+            body: app_widgets.AccessibleText('Test Text', style: style),
           ),
         ),
       );
@@ -445,10 +440,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: app_widgets.AccessibleText(
-              'Test Text',
-              maxLines: 2,
-            ),
+            body: app_widgets.AccessibleText('Test Text', maxLines: 2),
           ),
         ),
       );
@@ -574,9 +566,7 @@ void main() {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: app_widgets.AccessibleProgressIndicator(),
-          ),
+          home: Scaffold(body: app_widgets.AccessibleProgressIndicator()),
         ),
       );
 
@@ -686,11 +676,7 @@ void main() {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: app_widgets.FocusManager(
-              child: Text('Test'),
-            ),
-          ),
+          home: Scaffold(body: app_widgets.FocusManager(child: Text('Test'))),
         ),
       );
 

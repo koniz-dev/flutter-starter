@@ -1,9 +1,9 @@
 # 🚀 Flutter Starter
 
-A highly modular, production-ready Flutter starter framework focusing on **Clean Architecture**, security compliance (RASP), robust environment configurations, and extensive developer tooling.
+A highly modular, production-ready Flutter starter framework focusing on **Clean Architecture**, optional hardening (RASP), robust environment configuration, and extensive developer tooling.
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?logo=flutter)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?logo=dart)](https://dart.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.8+-0175C2?logo=dart)](https://dart.dev)
 [![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-blue)](docs/architecture/)
 
 ---
@@ -11,13 +11,34 @@ A highly modular, production-ready Flutter starter framework focusing on **Clean
 ## 🌟 Key Highlights
 
 - 🏛️ **Clean Architecture:** Domain, Data, Presentation layers powered by `Riverpod` and `Freezed`.
-- 🛡️ **Enterprise Security (RASP):** Real-time monitoring against Jailbreak, Debugging, and Tampering (`freerasp`).
+- 🛡️ **RASP (optional):** `freerasp` is in `pubspec.yaml`; the app defaults to a **no-op** `raspServiceProvider` until you wire a real implementation. See [Security implementation](docs/guides/security/implementation.md).
 - 🌐 **Network Protocol:** Resilient HTTP Client (`dio`) with intercepts and a detached WebSocket Real-Time Interface.
-- 🧪 **Comprehensive Automation:** End-to-End (`patrol`), UI/Unit Testing covering all core layers.
+- 🧪 **Comprehensive Automation:** Unit/widget/integration tests, optional E2E with **Patrol** (local or [manual CI workflow](.github/workflows/e2e-android.yml)).
 - 🎨 **1-Click Branding:** Native splash screens and launcher icons scaffolded straight from `logo.png`.
 - ⚙️ **Powerful Configurations:** Layered Fallback configurations allowing Local `.env`, `remote-configs`, and `dart-defines` overrides.
 
 > Looking for the complete list of features and tech-stack? Check out the [**Comprehensive Documentation**](docs/README.md).
+
+---
+
+## Super starter (fork and customize)
+
+- **[Super starter hub](docs/architecture/super-starter-hub.md)** — capability map and links
+- **[Choose your stack](docs/architecture/choose-your-stack.md)** — keep defaults vs swap adapters
+- **[Fork and customize](docs/guides/onboarding/fork-and-customize.md)** — rename package, Android/iOS ids, optional strip
+- **[Repository layout](docs/guides/onboarding/repository-layout.md)** — non-platform folders (`lib`, `test`, `docs`, `scripts`, …)
+
+### Mason brick (optional)
+
+With [Mason CLI](https://pub.dev/packages/mason_cli) installed:
+
+```bash
+dart pub global activate mason_cli
+mason get
+mason make flutter_starter_setup
+```
+
+See [bricks/README.md](bricks/README.md) and [bricks/flutter_starter_setup/README.md](bricks/flutter_starter_setup/README.md). If you rename everything by hand and do not need Mason, you can remove **`bricks/`** and **`mason.yaml`**. To drop sample `tasks` and `feature_flags` without Mason: `dart run tool/strip_sample_features.dart --apply`.
 
 ---
 
@@ -56,6 +77,10 @@ _(Open `.env` and fill out backend specifics before compiling)_
 flutter run
 ```
 
+### 6. E2E tests (Patrol, optional)
+
+Patrol does not run on every PR by default. Locally: `dart pub global activate patrol_cli` then `./scripts/test/run_e2e_tests.sh` (or `patrol test --target integration_test/app_e2e_test.dart`). On GitHub: **Actions → E2E Android (Patrol) → Run workflow** (Android emulator). Stable selectors use [`lib/core/constants/ui_keys.dart`](lib/core/constants/ui_keys.dart).
+
 ---
 
 ## 📚 Central Documentation
@@ -68,8 +93,8 @@ Rather than cluttering this repository root, we've broken down every system beha
 *   🌐 **[Network & Real-Time Websockets APIs](docs/api/core/network.md)**
 *   🛡️ **[Security, Anti-Tamper & RASP Implementation](docs/guides/security/implementation.md)**
 *   🧪 **[Testing & Automated Coverage Checks](docs/guides/testing/testing-summary.md)**
-*   🚀 **[Deployment, App Stores & Git Triggers](docs/deployment/deployment.md)**
-*   🆕 **[Creating New Features via CLI Scaffold](docs/api/examples/adding-features.md)**
+*   🚀 **[Deployment (stores & CI)](docs/deployment/README.md)**
+*   🆕 **[Creating New Features](docs/api/examples/adding-features.md)**
 
 ---
 

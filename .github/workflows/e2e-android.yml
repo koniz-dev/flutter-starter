@@ -1,0 +1,62 @@
+# Patrol E2E on Android — manual only (does not block PRs).
+# Requires a reachable API if the auth flow calls the network; see integration_test/app_e2e_test.dart.
+name: E2E Android (Patrol)
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_level:
+        description: 'Android API level'
+        required: true
+        default: '34'
+      emulator_profile:
+        description: 'AVD profile name'
+        required: true
+        default: 'pixel_6'
+
+concurrency:
+  group: e2e-android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  patrol:
+    name: Patrol on Android emulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Add Pub global bin to PATH
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
+      - name: Install Patrol CLI
+        run: dart pub global activate patrol_cli
+
+      - name: Run Patrol tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ inputs.api_level }}
+          arch: x86_64
+          profile: ${{ inputs.emulator_profile }}
+          script: patrol test --target integration_test/app_e2e_test.dart

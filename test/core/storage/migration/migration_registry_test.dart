@@ -20,10 +20,7 @@ void main() {
         final migrations = MigrationRegistry.migrations;
 
         // Assert
-        expect(
-          migrations.any((m) => m is MigrationV1ToV2),
-          isTrue,
-        );
+        expect(migrations.any((m) => m is MigrationV1ToV2), isTrue);
       });
 
       test('should have migrations in correct order', () {
@@ -80,10 +77,7 @@ void main() {
         // Assert
         expect(regularMigrations.length, migrations.length);
         for (var i = 0; i < migrations.length; i++) {
-          expect(
-            regularMigrations[i].runtimeType,
-            migrations[i].runtimeType,
-          );
+          expect(regularMigrations[i].runtimeType, migrations[i].runtimeType);
         }
       });
     });
@@ -106,10 +100,7 @@ void main() {
         // Assert
         expect(secureMigrations.length, migrations.length);
         for (var i = 0; i < migrations.length; i++) {
-          expect(
-            secureMigrations[i].runtimeType,
-            migrations[i].runtimeType,
-          );
+          expect(secureMigrations[i].runtimeType, migrations[i].runtimeType);
         }
       });
     });

@@ -183,24 +183,5 @@ extension ResultExtensions<T> on Result<T> {
 
 /// Helper to create a new failure with updated message
 Failure _createFailureWithMessage(Failure original, String newMessage) {
-  if (original is ServerFailure) {
-    return ServerFailure(newMessage, code: original.code);
-  } else if (original is NetworkFailure) {
-    return NetworkFailure(newMessage, code: original.code);
-  } else if (original is CacheFailure) {
-    return CacheFailure(newMessage, code: original.code);
-  } else if (original is AuthFailure) {
-    return AuthFailure(newMessage, code: original.code);
-  } else if (original is ValidationFailure) {
-    return ValidationFailure(newMessage, code: original.code);
-  } else if (original is PermissionFailure) {
-    return PermissionFailure(newMessage, code: original.code);
-  } else if (original is UnknownFailure) {
-    return UnknownFailure(newMessage, code: original.code);
-  } else if (original is NotFoundFailure) {
-    return NotFoundFailure(newMessage, code: original.code);
-  } else {
-    // Fallback for any other failure types
-    return UnknownFailure(newMessage, code: original.code);
-  }
+  return original.copyWith(message: newMessage);
 }

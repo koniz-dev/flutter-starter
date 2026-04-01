@@ -14,6 +14,7 @@ New to performance optimization? Start here:
 1. Read the [Summary](./summary.md) for an overview of all optimizations
 2. Review the [Optimization Guide](./optimization-guide.md) for detailed information
 3. Check the [API Documentation](../../api/core/utils.md) for utility classes
+4. Optional runnable patterns: [`examples/performance_examples.dart`](../../../examples/performance_examples.dart) (not wired into `main.dart`)
 
 ## Key Topics
 
@@ -54,9 +55,10 @@ New to performance optimization? Start here:
 - `MemoryHelper` - Memory management utilities
 - `DisposalTracker` - Automatic resource disposal
 
-### Performance
-- `PerformanceMonitor` - Performance monitoring
-- `PerformanceWidget` - Widget performance tracking
+### Performance (in `lib/core/performance/`)
+- `IPerformanceService` — contract; default `NoOpPerformanceService`, optional Firebase template under `infrastructure/`
+- `performance_providers.dart` — Riverpod wiring
+- Mixins / helpers — `PerformanceScreenMixin`, `performance_utils.dart`, etc.
 
 ## Related Documentation
 
@@ -67,6 +69,6 @@ New to performance optimization? Start here:
 
 ---
 
-**Last Updated:** November 16, 2025
+**Last updated:** Align with `lib/` when changing performance APIs.
 
 

@@ -11,9 +11,7 @@ void main() {
       // Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AppErrorWidget(message: errorMessage),
-          ),
+          home: Scaffold(body: AppErrorWidget(message: errorMessage)),
         ),
       );
 
@@ -57,9 +55,7 @@ void main() {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: AppErrorWidget(message: 'Error'),
-          ),
+          home: Scaffold(body: AppErrorWidget(message: 'Error')),
         ),
       );
 
@@ -73,9 +69,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData.light(),
-          home: const Scaffold(
-            body: AppErrorWidget(message: 'Error'),
-          ),
+          home: const Scaffold(body: AppErrorWidget(message: 'Error')),
         ),
       );
 

@@ -58,9 +58,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       }
 
       // Flag not found
-      return ResultFailure(
-        NotFoundFailure('Feature flag not found: $key'),
-      );
+      return ResultFailure(NotFoundFailure('Feature flag not found: $key'));
     } on Exception catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Object catch (e) {

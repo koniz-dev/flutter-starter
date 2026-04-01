@@ -111,10 +111,7 @@ void main() {
 
       for (final type in types) {
         // Arrange
-        dioException = DioException(
-          requestOptions: requestOptions,
-          type: type,
-        );
+        dioException = DioException(requestOptions: requestOptions, type: type);
         final handler = TestErrorInterceptorHandler();
 
         // Act
@@ -430,9 +427,7 @@ void main() {
           requestOptions: requestOptions,
           statusCode: 400,
           data: {
-            'error': {
-              'message': 'Nested error message',
-            },
+            'error': {'message': 'Nested error message'},
           },
         );
         dioException = DioException(
@@ -453,9 +448,7 @@ void main() {
           requestOptions: requestOptions,
           statusCode: 400,
           data: {
-            'error': {
-              'error': 'Alternative error message',
-            },
+            'error': {'error': 'Alternative error message'},
           },
         );
         dioException = DioException(
@@ -475,9 +468,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'error_message': 'Error message from error_message field',
-          },
+          data: {'error_message': 'Error message from error_message field'},
         );
         dioException = DioException(
           requestOptions: requestOptions,
@@ -496,9 +487,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'msg': 'Message from msg field',
-          },
+          data: {'msg': 'Message from msg field'},
         );
         dioException = DioException(
           requestOptions: requestOptions,
@@ -517,9 +506,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'error': 'String error message',
-          },
+          data: {'error': 'String error message'},
         );
         dioException = DioException(
           requestOptions: requestOptions,
@@ -578,10 +565,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'code': 'INVALID_INPUT',
-            'message': 'Invalid input',
-          },
+          data: {'code': 'INVALID_INPUT', 'message': 'Invalid input'},
         );
         dioException = DioException(
           requestOptions: requestOptions,
@@ -644,9 +628,7 @@ void main() {
         final response = Response(
           requestOptions: requestOptions,
           statusCode: 400,
-          data: {
-            'message': 'Error without code',
-          },
+          data: {'message': 'Error without code'},
         );
         dioException = DioException(
           requestOptions: requestOptions,
@@ -773,9 +755,7 @@ void main() {
       });
 
       test('should handle unknown with null message', () {
-        dioException = DioException(
-          requestOptions: requestOptions,
-        );
+        dioException = DioException(requestOptions: requestOptions);
         final handler = TestErrorInterceptorHandler();
 
         interceptor.onError(dioException, handler);

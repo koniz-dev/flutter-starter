@@ -33,10 +33,7 @@ mixin StorageLoggingMixin {
       if (value != null) 'value': _sanitizeValue(value),
     };
 
-    loggingService.debug(
-      'Storage Read: $operation',
-      context: context,
-    );
+    loggingService.debug('Storage Read: $operation', context: context);
   }
 
   /// Log a storage write operation
@@ -47,23 +44,14 @@ mixin StorageLoggingMixin {
       if (value != null) 'value': _sanitizeValue(value),
     };
 
-    loggingService.debug(
-      'Storage Write: $operation',
-      context: context,
-    );
+    loggingService.debug('Storage Write: $operation', context: context);
   }
 
   /// Log a storage delete operation
   void logStorageDelete(String operation, String key) {
-    final context = <String, dynamic>{
-      'operation': operation,
-      'key': key,
-    };
+    final context = <String, dynamic>{'operation': operation, 'key': key};
 
-    loggingService.debug(
-      'Storage Delete: $operation',
-      context: context,
-    );
+    loggingService.debug('Storage Delete: $operation', context: context);
   }
 
   /// Log a storage error
@@ -73,10 +61,7 @@ mixin StorageLoggingMixin {
     Object error, {
     StackTrace? stackTrace,
   }) {
-    final context = <String, dynamic>{
-      'operation': operation,
-      'key': key,
-    };
+    final context = <String, dynamic>{'operation': operation, 'key': key};
 
     loggingService.error(
       'Storage Error: $operation',
@@ -91,13 +76,7 @@ mixin StorageLoggingMixin {
     if (value == null) return null;
 
     final valueString = value.toString().toLowerCase();
-    const sensitivePatterns = [
-      'password',
-      'token',
-      'secret',
-      'key',
-      'auth',
-    ];
+    const sensitivePatterns = ['password', 'token', 'secret', 'key', 'auth'];
 
     final isSensitive = sensitivePatterns.any(valueString.contains);
 

@@ -68,10 +68,7 @@ void main() {
 
     test('should create NetworkException with message and code', () {
       // Arrange & Act
-      const exception = NetworkException(
-        'Connection timeout',
-        code: 'TIMEOUT',
-      );
+      const exception = NetworkException('Connection timeout', code: 'TIMEOUT');
 
       // Assert
       expect(exception.message, 'Connection timeout');

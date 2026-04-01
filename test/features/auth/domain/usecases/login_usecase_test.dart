@@ -20,11 +20,7 @@ void main() {
 
     test('should return User when login succeeds', () async {
       // Arrange
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User',
-      );
+      const user = User(id: '1', email: 'test@example.com', name: 'Test User');
       when(
         () => mockRepository.login(any(), any()),
       ).thenAnswer((_) async => const Success(user));
@@ -60,10 +56,7 @@ void main() {
 
     test('should delegate to repository with correct parameters', () async {
       // Arrange
-      const user = User(
-        id: '1',
-        email: 'test@example.com',
-      );
+      const user = User(id: '1', email: 'test@example.com');
       when(
         () => mockRepository.login(any(), any()),
       ).thenAnswer((_) async => const Success(user));

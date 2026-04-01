@@ -89,8 +89,8 @@ abstract class ${FEATURE_PASCAL}LocalDataSource {
 class ${FEATURE_PASCAL}LocalDataSourceImpl implements ${FEATURE_PASCAL}LocalDataSource {
   @override
   Future<${FEATURE_PASCAL}Model> get${FEATURE_PASCAL}() async {
-    // TODO: implement
-    throw UnimplementedError();
+    // Replace with cache, local DB, or API — this scaffold compiles until you do.
+    throw UnimplementedError('${FEATURE_PASCAL}LocalDataSource.get${FEATURE_PASCAL}');
   }
 }
 EOL

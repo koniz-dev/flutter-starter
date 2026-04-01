@@ -24,9 +24,8 @@ abstract class FeatureFlagsLocalDataSource {
 class FeatureFlagsLocalDataSourceImpl implements FeatureFlagsLocalDataSource {
   /// Creates a [FeatureFlagsLocalDataSourceImpl] with the given
   /// [storageService]
-  FeatureFlagsLocalDataSourceImpl({
-    required StorageService storageService,
-  }) : _storageService = storageService;
+  FeatureFlagsLocalDataSourceImpl({required StorageService storageService})
+    : _storageService = storageService;
 
   final StorageService _storageService;
   static const String _prefix = 'feature_flag_override_';

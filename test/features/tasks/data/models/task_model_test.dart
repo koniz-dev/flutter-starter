@@ -28,9 +28,7 @@ void main() {
 
     test('should create TaskModel from JSON without description', () {
       // Arrange
-      final json = createTaskJson(
-        id: 'task-1',
-      );
+      final json = createTaskJson(id: 'task-1');
 
       // Act
       final taskModel = TaskModel.fromJson(json);
@@ -64,9 +62,7 @@ void main() {
 
     test('should convert TaskModel to JSON without description', () {
       // Arrange
-      final taskModel = createTaskModel(
-        id: 'task-1',
-      );
+      final taskModel = createTaskModel(id: 'task-1');
 
       // Act
       final json = taskModel.toJson();

@@ -1,7 +1,11 @@
+// Constructor preserves backward-compatible parameter ordering/signature.
+// ignore_for_file: always_put_required_named_parameters_first, lines_longer_than_80_chars
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
-import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
@@ -19,13 +23,20 @@ class _PendingRequest {
 class AuthInterceptor extends Interceptor {
   /// Creates an [AuthInterceptor] with the given dependencies
   AuthInterceptor({
-    required SecureStorageService secureStorageService,
+    ITokenStore? tokenStore,
+    SecureStorageService? secureStorageService,
     required AuthRepository authRepository,
-  }) : _secureStorageService = secureStorageService,
+  }) : _tokenStore =
+           tokenStore ??
+           (secureStorageService != null
+               ? SecureTokenStore(secureStorageService)
+               : throw ArgumentError(
+                   'Either tokenStore or secureStorageService must be provided.',
+                 )),
        _authRepository = authRepository;
 
-  /// Secure storage service for retrieving and storing authentication tokens
-  final SecureStorageService _secureStorageService;
+  /// Token storage for retrieving and storing authentication tokens
+  final ITokenStore _tokenStore;
 
   /// Auth repository for refreshing tokens
   final AuthRepository _authRepository;
@@ -66,7 +77,7 @@ class AuthInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     // Get token from secure storage
-    final token = await _secureStorageService.getString(AppConstants.tokenKey);
+    final token = await _tokenStore.getAccessToken();
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -133,10 +144,7 @@ class AuthInterceptor extends Interceptor {
         }
 
         // Update token in secure storage
-        await _secureStorageService.setString(
-          AppConstants.tokenKey,
-          newToken,
-        );
+        await _tokenStore.setAccessToken(newToken);
 
         // Retry original request with new token
         final retryResponse = await _retryRequest(err, newToken);
@@ -226,8 +234,7 @@ class AuthInterceptor extends Interceptor {
   /// Logs out the user by clearing all authentication data
   Future<void> _logoutUser() async {
     // Clear tokens from secure storage
-    await _secureStorageService.remove(AppConstants.tokenKey);
-    await _secureStorageService.remove(AppConstants.refreshTokenKey);
+    await _tokenStore.clearAllTokens();
 
     // Note: User data is cleared via AuthRepository.logout() if needed
     // This is a minimal cleanup for the interceptor

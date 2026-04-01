@@ -1,8 +1,8 @@
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-
-/// Remote data source for feature flags
+/// Remote data source for feature flags.
 ///
-/// Handles fetching feature flags from Firebase Remote Config.
+/// The default starter does **not** depend on Firebase. If you want a Firebase
+/// Remote Config implementation, use the `.template` file under
+/// `lib/features/feature_flags/data/datasources/`.
 abstract class FeatureFlagsRemoteDataSource {
   /// Initialize the remote config
   Future<void> initialize();
@@ -20,116 +20,24 @@ abstract class FeatureFlagsRemoteDataSource {
   Future<void> setDefaults(Map<String, dynamic> defaults);
 }
 
-/// Implementation of [FeatureFlagsRemoteDataSource] using Firebase Remote
-/// Config
-class FeatureFlagsRemoteDataSourceImpl implements FeatureFlagsRemoteDataSource {
-  /// Creates a [FeatureFlagsRemoteDataSourceImpl] with optional
-  /// [defaultValues]
-  FeatureFlagsRemoteDataSourceImpl({
-    Map<String, dynamic>? defaultValues,
-  }) : _defaultValues = defaultValues ?? {};
-
-  final Map<String, dynamic> _defaultValues;
-  FirebaseRemoteConfig? _remoteConfig;
-  bool _isInitialized = false;
-
-  /// Get the Firebase Remote Config instance
-  FirebaseRemoteConfig get remoteConfig {
-    if (_remoteConfig == null) {
-      throw StateError(
-        'Remote Config not initialized. Call initialize() first.',
-      );
-    }
-    return _remoteConfig!;
-  }
+/// Default implementation: no remote source (local-only).
+final class NoOpFeatureFlagsRemoteDataSource
+    implements FeatureFlagsRemoteDataSource {
+  /// Creates an empty remote layer (local-only flags still work).
+  const NoOpFeatureFlagsRemoteDataSource();
 
   @override
-  Future<void> initialize() async {
-    if (_isInitialized) {
-      return;
-    }
-
-    try {
-      _remoteConfig = FirebaseRemoteConfig.instance;
-
-      // Set default values
-      if (_defaultValues.isNotEmpty) {
-        await _remoteConfig!.setConfigSettings(
-          RemoteConfigSettings(
-            fetchTimeout: const Duration(seconds: 10),
-            minimumFetchInterval: const Duration(hours: 1),
-          ),
-        );
-        await _remoteConfig!.setDefaults(_defaultValues);
-      }
-
-      _isInitialized = true;
-    } on Exception {
-      // If Firebase is not initialized, we'll handle it gracefully
-      // The app can still work with local flags only
-      _isInitialized = false;
-    }
-  }
+  Future<void> initialize() async {}
 
   @override
-  Future<void> fetchAndActivate() async {
-    if (!_isInitialized || _remoteConfig == null) {
-      return;
-    }
-
-    try {
-      await _remoteConfig!.fetchAndActivate();
-    } on Exception {
-      // If fetch fails, continue with cached/default values
-      // This allows the app to work offline
-    }
-  }
+  Future<void> fetchAndActivate() async {}
 
   @override
-  Future<bool?> getRemoteFlag(String key) async {
-    if (!_isInitialized || _remoteConfig == null) {
-      return null;
-    }
-
-    try {
-      return _remoteConfig!.getBool(key);
-    } on Exception {
-      // If key doesn't exist or is not a bool, return null
-      return null;
-    }
-  }
+  Future<bool?> getRemoteFlag(String key) async => null;
 
   @override
-  Future<Map<String, bool>> getAllRemoteFlags() async {
-    if (!_isInitialized || _remoteConfig == null) {
-      return {};
-    }
-
-    try {
-      final allKeys = _remoteConfig!.getAll();
-      final flags = <String, bool>{};
-
-      for (final entry in allKeys.entries) {
-        try {
-          // Try to get as bool
-          final value = _remoteConfig!.getBool(entry.key);
-          flags[entry.key] = value;
-        } on Exception {
-          // Skip non-bool values
-        }
-      }
-
-      return flags;
-    } on Exception {
-      return {};
-    }
-  }
+  Future<Map<String, bool>> getAllRemoteFlags() async => const {};
 
   @override
-  Future<void> setDefaults(Map<String, dynamic> defaults) async {
-    _defaultValues.addAll(defaults);
-    if (_isInitialized && _remoteConfig != null) {
-      await _remoteConfig!.setDefaults(defaults);
-    }
-  }
+  Future<void> setDefaults(Map<String, dynamic> defaults) async {}
 }

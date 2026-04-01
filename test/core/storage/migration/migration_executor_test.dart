@@ -136,10 +136,7 @@ void main() {
           migrations: [failingMigration],
         );
 
-        expect(
-          executor.execute,
-          throwsA(isA<MigrationExecutionException>()),
-        );
+        expect(executor.execute, throwsA(isA<MigrationExecutionException>()));
       },
     );
   });

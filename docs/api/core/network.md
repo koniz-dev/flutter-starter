@@ -6,10 +6,16 @@ HTTP client and interceptors for making API requests.
 
 The network layer provides:
 - `ApiClient` - HTTP client wrapper around Dio
+- `INetworkClient` - Transport-agnostic network contract
+- `DioNetworkClient` - Adapter implementing `INetworkClient`
+- `IGraphQLClient` - Optional GraphQL support template
 - `IRealtimeClient` - Decoupled interface for WebSocket streams
 - `AuthInterceptor` - Automatic token injection and refresh
 - `ErrorInterceptor` - Exception conversion
-- `LoggingInterceptor` - Request/response logging
+- `RetryInterceptor` - Retries transient failures
+- `CacheInterceptor` - Response caching via storage
+- `PerformanceInterceptor` - Optional HTTP timing (when performance service is wired)
+- `ApiLoggingInterceptor` - Request/response logging via `LoggingService` when enabled
 
 ---
 
@@ -18,6 +24,11 @@ The network layer provides:
 HTTP client for making API requests using Dio.
 
 **Location:** `lib/core/network/api_client.dart`
+
+`ApiClient` delegates transport calls to `INetworkClient` (`DioNetworkClient`).
+Feature code that needs the full interceptor stack (auth, retry, logging, etc.)
+should inject `ApiClient` via `apiClientProvider` or the typed alias
+`networkClientProvider` (same instance).
 
 ### Constructor
 
@@ -171,7 +182,7 @@ Future<Response<dynamic>> delete(
 The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
 - Timeouts from `AppConfig` (connect, receive, send)
-- Interceptors: ErrorInterceptor, AuthInterceptor, LoggingInterceptor (if enabled)
+- Interceptors (order matters; see `ApiClient._createDio`): `ErrorInterceptor`, optional `PerformanceInterceptor`, `CacheInterceptor`, `AuthInterceptor`, `RetryInterceptor`, optional `ApiLoggingInterceptor` when a `LoggingService` is provided
 
 ---
 
@@ -203,6 +214,42 @@ realtimeClient.send({'type': 'ping'});
 // Disconnect
 realtimeClient.disconnect();
 ```
+
+---
+
+## GraphQL Client
+
+The project provides an interface `IGraphQLClient` and a structured template for integrating GraphQL into your network layer when needed.
+
+**Location:** `lib/core/network/graphql_client_template.dart`
+
+### Setup
+
+1. Run: `flutter pub add graphql_flutter`
+2. Follow the setup instructions at the top of the file to uncomment the logic.
+
+This integration is optional and is not wired in the default dependency graph.
+
+### Interface
+
+The template conforms to `IGraphQLClient`:
+
+```dart
+abstract class IGraphQLClient {
+  /// Performs a GraphQL Query
+  Future<dynamic> query(String document, {Map<String, dynamic>? variables});
+  
+  /// Performs a GraphQL Mutation
+  Future<dynamic> mutate(String document, {Map<String, dynamic>? variables});
+}
+```
+
+### Features
+
+- **Auth Injection**: Demonstrates how to tie Auth repository tokens into GraphQL headers.
+- **Link Concatenation**: Example for concatenating HttpLink with AuthLink for secure communication.
+- **Error Handling**: Template for mapping GraphQL exceptions into domain exceptions.
+
 
 ---
 
@@ -279,42 +326,19 @@ Interceptor for converting DioException to domain exceptions.
 
 ---
 
-## LoggingInterceptor
+## ApiLoggingInterceptor
 
-Interceptor for logging HTTP requests and responses.
+Interceptor for logging HTTP traffic through **`LoggingService`** (not raw `debugPrint`).
 
-**Location:** `lib/core/network/interceptors/logging_interceptor.dart`
+**Location:** `lib/core/network/interceptors/api_logging_interceptor.dart`
 
 ### Behavior
 
-- Logs request method, path, headers, data, query parameters
-- Logs response status code, data
-- Logs error status code, message, error data
-- Only logs in debug mode (`kDebugMode`)
-- Enabled when `AppConfig.enableHttpLogging` is true
-
-### Log Format
-
-**Request:**
-```
-REQUEST[GET] => PATH: /users
-Headers: {...}
-Data: {...}
-QueryParams: {...}
-```
-
-**Response:**
-```
-RESPONSE[200] => PATH: /users
-Data: {...}
-```
-
-**Error:**
-```
-ERROR[404] => PATH: /users/123
-Message: Not Found
-Error Data: {...}
-```
+- No-op when `AppConfig.enableHttpLogging` is false
+- **Request:** logs method, path, base URL, sanitized headers, query parameters, body
+- **Response:** logs status, path, sanitized headers/body (warning level for 4xx+)
+- **Error:** logs Dio error type, path, method, status, sanitized bodies
+- Redacts sensitive header keys (`authorization`, `cookie`, `x-api-key`) and common secret fields in JSON bodies (see `_sanitizeHeaders` / `_sanitizeJson` in the source file)
 
 ---
 

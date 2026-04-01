@@ -5,9 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('LazyLoader', () {
     test('should create instance with loader function', () {
-      final loader = LazyLoader<String, int>(
-        loader: (key) async => key.length,
-      );
+      final loader = LazyLoader<String, int>(loader: (key) async => key.length);
 
       expect(loader, isNotNull);
       expect(loader.cacheEnabled, isTrue);
@@ -124,9 +122,7 @@ void main() {
     });
 
     test('should clear cache', () async {
-      final loader = LazyLoader<String, int>(
-        loader: (key) async => key.length,
-      );
+      final loader = LazyLoader<String, int>(loader: (key) async => key.length);
 
       await loader.load('test');
       expect(loader.cacheSize, 1);
@@ -136,9 +132,7 @@ void main() {
     });
 
     test('should evict specific key', () async {
-      final loader = LazyLoader<String, int>(
-        loader: (key) async => key.length,
-      );
+      final loader = LazyLoader<String, int>(loader: (key) async => key.length);
 
       await loader.load('test1');
       await loader.load('test2');
@@ -150,9 +144,7 @@ void main() {
     });
 
     test('should check if key is cached', () async {
-      final loader = LazyLoader<String, int>(
-        loader: (key) async => key.length,
-      );
+      final loader = LazyLoader<String, int>(loader: (key) async => key.length);
 
       expect(loader.isCached('test'), isFalse);
       await loader.load('test');
@@ -161,9 +153,7 @@ void main() {
 
     test('should check if key is loading', () async {
       final completer = Completer<int>();
-      final loader = LazyLoader<String, int>(
-        loader: (key) => completer.future,
-      );
+      final loader = LazyLoader<String, int>(loader: (key) => completer.future);
 
       final loadFuture = loader.load('test');
       expect(loader.isLoading('test'), isTrue);
@@ -180,18 +170,13 @@ void main() {
         },
       );
 
-      expect(
-        () => loader.load('test'),
-        throwsA(isA<Exception>()),
-      );
+      expect(() => loader.load('test'), throwsA(isA<Exception>()));
     });
   });
 
   group('DeferredImportLoader', () {
     test('should create instance with load function', () {
-      final loader = DeferredImportLoader(
-        loadFunction: () async {},
-      );
+      final loader = DeferredImportLoader(loadFunction: () async {});
 
       expect(loader, isNotNull);
       expect(loader.isLoaded, isFalse);
@@ -232,11 +217,7 @@ void main() {
         },
       );
 
-      await Future.wait([
-        loader.load(),
-        loader.load(),
-        loader.load(),
-      ]);
+      await Future.wait([loader.load(), loader.load(), loader.load()]);
 
       expect(loadCount, 1);
     });
@@ -266,19 +247,14 @@ void main() {
         },
       );
 
-      expect(
-        loader.load,
-        throwsA(isA<Exception>()),
-      );
+      expect(loader.load, throwsA(isA<Exception>()));
       expect(loader.isLoaded, isFalse);
     });
   });
 
   group('LazyInitializer', () {
     test('should create instance with initializer', () {
-      final initializer = LazyInitializer<int>(
-        initializer: () async => 42,
-      );
+      final initializer = LazyInitializer<int>(initializer: () async => 42);
 
       expect(initializer, isNotNull);
       expect(initializer.isInitialized, isFalse);
@@ -313,11 +289,7 @@ void main() {
         },
       );
 
-      final futures = [
-        initializer.get(),
-        initializer.get(),
-        initializer.get(),
-      ];
+      final futures = [initializer.get(), initializer.get(), initializer.get()];
 
       final results = await Future.wait(futures);
       expect(results, [42, 42, 42]);
@@ -350,10 +322,7 @@ void main() {
         },
       );
 
-      expect(
-        initializer.get,
-        throwsA(isA<Exception>()),
-      );
+      expect(initializer.get, throwsA(isA<Exception>()));
       expect(initializer.isInitialized, isFalse);
     });
   });

@@ -19,9 +19,7 @@ Widget createTestWidget({
     overrides: [
       localizationServiceProvider.overrideWithValue(mockLocalizationService),
       // Override currentLocaleProvider to avoid async issues
-      currentLocaleProvider.overrideWith(
-        (ref) async => const Locale('en'),
-      ),
+      currentLocaleProvider.overrideWith((ref) async => const Locale('en')),
       // localeStateProvider will be initialized from currentLocaleProvider
     ],
   );

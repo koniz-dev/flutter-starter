@@ -319,19 +319,19 @@ test('text meets contrast requirements', () {
 ### Run All Accessibility Tests
 
 ```bash
-flutter test test/shared/accessibility/
+flutter test test/core/accessibility/ test/shared/accessibility/
 ```
 
 ### Run Specific Test File
 
 ```bash
-flutter test test/shared/accessibility/accessibility_helpers_test.dart
+flutter test test/core/accessibility/accessibility_helpers_test.dart
 ```
 
 ### Run Tests with Coverage
 
 ```bash
-flutter test --coverage test/shared/accessibility/
+flutter test --coverage test/core/accessibility/ test/shared/accessibility/
 ```
 
 ## Reporting Issues

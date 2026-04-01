@@ -69,9 +69,9 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         content,
@@ -228,9 +228,7 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                 onPressed: () {
                   // Navigate to analytics screen
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Navigating to Analytics...'),
-                    ),
+                    const SnackBar(content: Text('Navigating to Analytics...')),
                   );
                 },
                 icon: const Icon(Icons.analytics),

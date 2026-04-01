@@ -7,11 +7,21 @@ Welcome to the Flutter Starter project! These guides will help you get up and ru
 New to the project? Start here:
 
 1. **[Getting Started](onboarding/getting-started.md)** - Prerequisites, setup, and running the app
-2. **[Understanding the Codebase](onboarding/understanding-codebase.md)** - Architecture and code organization
-3. **[Common Tasks](features/common-tasks.md)** - How to add features, screens, and APIs
-4. **[Routing Guide](features/routing-guide.md)** - GoRouter navigation, deep linking, and auth-based routing
-5. **[Development Workflow](development/development-workflow.md)** - Git workflow, commits, and PRs
-6. **[Troubleshooting](support/troubleshooting.md)** - Common issues and solutions
+2. **[Fork and customize](onboarding/fork-and-customize.md)** - Rename package, Mason, strip sample features
+3. **[Repository layout](onboarding/repository-layout.md)** - Non-platform directories (`lib`, `test`, `scripts`, …)
+4. **[Understanding the Codebase](onboarding/understanding-codebase.md)** - Architecture and code organization
+5. **[Common Tasks](features/common-tasks.md)** - How to add features, screens, and APIs
+6. **[Routing Guide](features/routing-guide.md)** - GoRouter navigation, deep linking, and auth-based routing
+7. **[Troubleshooting](support/troubleshooting.md)** - Common issues and solutions
+
+## Deployment
+
+For store releases and CI deploy templates:
+
+1. **[Deployment hub](../deployment/README.md)** — GitHub Actions deploy workflows and Fastlane entry points
+2. **[Android deployment](../deployment/android-deployment.md)** — Play Console and signing overview
+3. **[iOS deployment](../deployment/ios-deployment.md)** — App Store Connect and signing overview
+4. **[Deployment summary](../deployment/summary.md)** — Pre-release checklist
 
 ## Security
 
@@ -55,13 +65,6 @@ For implementing specific features and technical aspects:
 3. **[Internationalization Guide](features/internationalization-guide.md)** - i18n implementation and best practices
 4. **[Storage Migration Guide](features/storage-migration-guide.md)** - How to migrate storage schemas
 
-## Development
-
-For development workflow and tooling:
-
-1. **[Development Workflow](development/development-workflow.md)** - Git workflow, commits, and PRs
-2. **[Git Hooks Setup](development/git-hooks-setup.md)** - Setting up pre-commit hooks and automation
-
 ## Support
 
 For troubleshooting and getting help:
@@ -70,14 +73,11 @@ For troubleshooting and getting help:
 
 ## Migration Guides
 
-For migrating from other architectures or upgrading this starter:
+For upgrading or adapting this starter:
 
 1. **[Migration Guides Overview](migration/README.md)** - Overview of all migration guides
-2. **[From MVC to Clean Architecture](migration/from-mvc-to-clean-architecture.md)** - Migrate from MVC architecture
-3. **[From BLoC to Riverpod](migration/from-bloc-to-riverpod.md)** - Migrate from BLoC state management
-4. **[From GetX to This Setup](migration/from-getx-to-this-setup.md)** - Migrate from GetX framework
-5. **[Upgrading This Starter](migration/upgrading-this-starter.md)** - Version upgrades and breaking changes
-6. **[Customization Guide](migration/customization-guide.md)** - Remove unused features and add custom features
+2. **[Upgrading This Starter](migration/upgrading-this-starter.md)** - Version upgrades and breaking changes
+3. **[Customization Guide](migration/customization-guide.md)** - Remove unused features and add custom features
 
 ## Guide Structure
 
@@ -124,7 +124,6 @@ For migrating from other architectures or upgrading this starter:
 - Testing procedures and best practices
 
 ### Migration
-- Migrating from MVC, BLoC, or GetX
 - Upgrading to newer versions
 - Handling breaking changes
 - Customizing the starter

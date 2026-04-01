@@ -91,10 +91,7 @@ void main() {
         requestOptions = RequestOptions(path: '/api/user/profile');
         dioException = DioException(
           requestOptions: requestOptions,
-          response: Response(
-            requestOptions: requestOptions,
-            statusCode: 401,
-          ),
+          response: Response(requestOptions: requestOptions, statusCode: 401),
         );
         handler = MockErrorInterceptorHandler();
       });
@@ -125,10 +122,7 @@ void main() {
             () => mockAuthRepository.refreshToken(),
           ).thenAnswer((_) async => const Success(newToken));
           when(
-            () => mockSecureStorage.setString(
-              AppConstants.tokenKey,
-              newToken,
-            ),
+            () => mockSecureStorage.setString(AppConstants.tokenKey, newToken),
           ).thenAnswer((_) async => true);
           // Mock remove calls in case retry fails and logout is triggered
           when(
@@ -150,10 +144,7 @@ void main() {
 
           verify(() => mockAuthRepository.refreshToken()).called(1);
           verify(
-            () => mockSecureStorage.setString(
-              AppConstants.tokenKey,
-              newToken,
-            ),
+            () => mockSecureStorage.setString(AppConstants.tokenKey, newToken),
           ).called(1);
         },
       );
@@ -184,10 +175,7 @@ void main() {
 
       test('should prevent infinite retry loop', () async {
         final retryRequestOptions = requestOptions.copyWith(
-          headers: {
-            ...requestOptions.headers,
-            'X-Retry-Count': '1',
-          },
+          headers: {...requestOptions.headers, 'X-Retry-Count': '1'},
         );
         final retryException = DioException(
           requestOptions: retryRequestOptions,
@@ -222,10 +210,7 @@ void main() {
           () => mockAuthRepository.refreshToken(),
         ).thenAnswer((_) async => const Success(newToken));
         when(
-          () => mockSecureStorage.setString(
-            AppConstants.tokenKey,
-            newToken,
-          ),
+          () => mockSecureStorage.setString(AppConstants.tokenKey, newToken),
         ).thenAnswer((_) async => true);
         // Mock remove calls in case retry fails
         when(

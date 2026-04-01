@@ -4,7 +4,21 @@ This guide covers common issues, solutions, and frequently asked questions.
 
 ## Common Issues
 
-### 1. Code Generation Errors
+### 1. `dart format .` fails or errors under `build/`
+
+**Problem:** On some machines, `dart format .` walks the `build/` tree and can error (e.g. broken plugin paths on Windows).
+
+**Solutions:**
+```bash
+flutter clean   # optional but clears a bad build/ tree
+./scripts/dev/format_dart.sh
+# or explicitly:
+dart format lib test integration_test tool bricks
+```
+
+CI and git hooks use the scoped paths above, not the whole repo root.
+
+### 2. Code Generation Errors
 
 **Problem**: `build_runner` fails or generates incorrect code.
 
@@ -22,7 +36,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 - Ensure all required imports are present
 - Delete generated files (`.freezed.dart`, `.g.dart`) and regenerate
 
-### 2. Configuration Not Loading
+### 3. Configuration Not Loading
 
 **Problem**: Environment variables not being read.
 
@@ -40,7 +54,7 @@ if (AppConfig.isDebugMode) {
 }
 ```
 
-### 3. Provider Not Found Errors
+### 4. Provider Not Found Errors
 
 **Problem**: `ProviderNotFoundException` when accessing providers.
 
@@ -50,7 +64,7 @@ if (AppConfig.isDebugMode) {
 3. Verify provider name is correct (case-sensitive)
 4. Ensure provider is registered before use
 
-### 4. Network/API Errors
+### 5. Network/API Errors
 
 **Problem**: API calls failing or timing out.
 
@@ -61,7 +75,7 @@ if (AppConfig.isDebugMode) {
 4. Review interceptor logs (if HTTP logging enabled)
 5. Verify authentication tokens are valid
 
-### 5. Storage Errors
+### 6. Storage Errors
 
 **Problem**: Storage operations failing.
 
@@ -71,7 +85,7 @@ if (AppConfig.isDebugMode) {
 3. Verify storage keys are correct
 4. For secure storage, check platform-specific setup
 
-### 6. Test Failures
+### 7. Test Failures
 
 **Problem**: Tests failing after changes.
 
@@ -95,7 +109,7 @@ flutter test
 - Async operations not awaited
 - State not reset between tests
 
-### 7. Import Errors
+### 8. Import Errors
 
 **Problem**: Cannot find imports or "file not found" errors.
 
@@ -106,7 +120,7 @@ flutter test
 4. Check file paths are correct
 5. Verify `analysis_options.yaml` settings
 
-### 8. Hot Reload Not Working
+### 9. Hot Reload Not Working
 
 **Problem**: Changes not reflected after hot reload.
 
@@ -147,14 +161,14 @@ A: Add to `EnvConfig` for loading, then add typed getter in `AppConfig`. Update 
 ## Where to Get Help
 
 1. **Documentation**:
-   - [API Documentation](../api/README.md)
-   - [Common Patterns](../api/examples/common-patterns.md)
-   - [Architecture Docs](../architecture/) (if available)
+   - [API Documentation](../../api/README.md)
+   - [Common Patterns](../../api/examples/common-patterns.md)
+   - [Architecture Docs](../../architecture/README.md)
 
 2. **Code Examples**:
    - Check existing features (e.g., `lib/features/auth/`)
    - Review test files for usage patterns
-   - See [Examples](../api/examples/)
+   - See [Examples](../../api/examples/)
 
 3. **Team Resources**:
    - Ask in team chat/Slack
@@ -170,6 +184,6 @@ A: Add to `EnvConfig` for loading, then add typed getter in `AppConfig`. Update 
 
 - ✅ Review [Getting Started](../onboarding/getting-started.md) if setup issues persist
 - ✅ Check [Common Tasks](../features/common-tasks.md) for development patterns
-- ✅ Review [Development Workflow](../development/development-workflow.md) for Git and PR process
+- ✅ Review [Customization Guide](../migration/customization-guide.md) for adaptation workflow
 
 

@@ -12,28 +12,21 @@ void main() {
           routes: [
             GoRoute(
               path: AppRoutes.home,
-              builder: (context, state) => const Scaffold(
-                body: Text('Home'),
-              ),
+              builder: (context, state) => const Scaffold(body: Text('Home')),
             ),
             GoRoute(
               path: AppRoutes.login,
-              builder: (context, state) => const Scaffold(
-                body: Text('Login'),
-              ),
+              builder: (context, state) => const Scaffold(body: Text('Login')),
             ),
             GoRoute(
               path: AppRoutes.register,
-              builder: (context, state) => const Scaffold(
-                body: Text('Register'),
-              ),
+              builder: (context, state) =>
+                  const Scaffold(body: Text('Register')),
             ),
             GoRoute(
               path: AppRoutes.tasks,
               name: 'tasks',
-              builder: (context, state) => const Scaffold(
-                body: Text('Tasks'),
-              ),
+              builder: (context, state) => const Scaffold(body: Text('Tasks')),
               routes: [
                 GoRoute(
                   path: ':taskId',
@@ -172,11 +165,7 @@ void main() {
       // Act - Get context from Scaffold which has GoRouter in its context
       tester
           .element(find.byType(Scaffold))
-          .pushNamedRoute(
-            'tasks',
-            pathParameters: {},
-            queryParameters: {},
-          );
+          .pushNamedRoute('tasks', pathParameters: {}, queryParameters: {});
 
       // Assert
       await tester.pumpAndSettle();
@@ -211,10 +200,7 @@ void main() {
       // Act - Get context from Scaffold which has GoRouter in its context
       tester
           .element(find.byType(Scaffold))
-          .pushNamedRoute(
-            'tasks',
-            queryParameters: {'filter': 'active'},
-          );
+          .pushNamedRoute('tasks', queryParameters: {'filter': 'active'});
 
       // Assert
       await tester.pumpAndSettle();
@@ -261,11 +247,7 @@ void main() {
       // Act - Get context from Scaffold which has GoRouter in its context
       tester
           .element(find.byType(Scaffold))
-          .replaceNamedRoute(
-            'tasks',
-            pathParameters: {},
-            queryParameters: {},
-          );
+          .replaceNamedRoute('tasks', pathParameters: {}, queryParameters: {});
 
       // Assert
       await tester.pumpAndSettle();

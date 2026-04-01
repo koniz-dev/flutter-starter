@@ -141,9 +141,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   @override
   Widget build(BuildContext context) {
     if (widget.items.isEmpty && !widget.isLoading) {
-      return const Center(
-        child: Text('No items found'),
-      );
+      return const Center(child: Text('No items found'));
     }
 
     return ListView.builder(

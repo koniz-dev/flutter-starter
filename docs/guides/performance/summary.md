@@ -117,7 +117,7 @@ This document provides a comprehensive summary of all performance optimizations 
 - `lib/core/network/interceptors/cache_interceptor.dart` - HTTP response caching
 - `lib/core/utils/debouncer.dart` - Debouncing and throttling utilities
 - `lib/core/utils/image_cache_helper.dart` - Image cache management
-- `lib/core/utils/performance_monitor.dart` - Performance monitoring
+- `lib/core/performance/` — `IPerformanceService`, mixins, and providers (see also `examples/performance_examples.dart`)
 - `lib/core/utils/memory_helper.dart` - Memory management utilities
 
 ### Scripts
@@ -231,20 +231,20 @@ ImageCacheHelper.clearCache();
 final stats = ImageCacheHelper.getCacheStats();
 ```
 
-### Using Performance Monitoring
+### Using performance monitoring (`IPerformanceService`)
+
+The app uses **`IPerformanceService`** (default: `NoOpPerformanceService`). Use **`PerformanceUtils`** helpers or `measureOperation` on a real implementation (see optional Firebase template under `lib/core/performance/infrastructure/`).
 
 ```dart
-// Measure operation time
-final duration = await PerformanceMonitor.measureAsync(() async {
-  await fetchData();
-});
-
-// Wrap widgets for performance tracking
-PerformanceWidget(
-  name: 'ProductList',
-  child: ListView.builder(...),
-)
+final data = await PerformanceUtils.measureApiCall(
+  service: performanceService,
+  method: 'GET',
+  path: '/users',
+  call: () => apiClient.get('/users'),
+);
 ```
+
+More patterns: [`examples/performance_examples.dart`](../../../examples/performance_examples.dart).
 
 ---
 

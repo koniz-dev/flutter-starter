@@ -36,15 +36,15 @@ This audit covers:
 
 ### Issues & Recommendations
 
-#### 🔴 CRITICAL: Logging Interceptor Exposes Sensitive Data
+#### 🟡 MEDIUM: Verify API logging redaction for your stack
 
-**Issue:** `LoggingInterceptor` logs all request headers, including Authorization tokens, in debug mode.
+**Issue:** `ApiLoggingInterceptor` redacts common headers and JSON keys, but custom header names or payload shapes may still leak secrets if not covered.
 
-**Location:** `lib/core/network/interceptors/logging_interceptor.dart`
+**Location:** `lib/core/network/interceptors/api_logging_interceptor.dart`
 
-**Risk:** Authorization tokens could be exposed in logs, console output, or crash reports.
+**Risk:** Tokens or PII could appear in structured logs or crash attachments if logging is enabled in a given build.
 
-**Recommendation:** See [Security Implementation Guide](./implementation.md#3-log-sanitization) for detailed implementation.
+**Recommendation:** Review `_sanitizeHeaders` / `_sanitizeJson` for your API; align with [Security Implementation Guide](./implementation.md#3-log-sanitization) and `LogSanitizer` where needed.
 
 #### 🟡 MEDIUM: Token Expiration Handling
 

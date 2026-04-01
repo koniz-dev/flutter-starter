@@ -85,10 +85,7 @@ void main() {
 
     testWidgets('should show loading builder when loading', (tester) async {
       when(() => mockManager.isEnabled(any())).thenAnswer(
-        (_) => Future<bool>.delayed(
-          const Duration(seconds: 1),
-          () => true,
-        ),
+        (_) => Future<bool>.delayed(const Duration(seconds: 1), () => true),
       );
 
       await tester.pumpWidget(
@@ -122,10 +119,7 @@ void main() {
       'should show default loading indicator when no loading builder',
       (tester) async {
         when(() => mockManager.isEnabled(any())).thenAnswer(
-          (_) => Future<bool>.delayed(
-            const Duration(seconds: 1),
-            () => true,
-          ),
+          (_) => Future<bool>.delayed(const Duration(seconds: 1), () => true),
         );
 
         await tester.pumpWidget(

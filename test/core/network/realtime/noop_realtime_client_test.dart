@@ -22,10 +22,7 @@ void main() {
     });
 
     test('connect completes without error', () async {
-      await expectLater(
-        client.connect('ws://localhost:8080'),
-        completes,
-      );
+      await expectLater(client.connect('ws://localhost:8080'), completes);
     });
 
     test('isConnected remains false after connect', () async {
@@ -79,12 +76,7 @@ void main() {
 
       client.disconnect();
 
-      expect(
-        logs,
-        contains(
-          'NoOpRealtimeClient: Simulated disconnection',
-        ),
-      );
+      expect(logs, contains('NoOpRealtimeClient: Simulated disconnection'));
 
       debugPrint = debugPrintSynchronously;
     });
@@ -97,12 +89,7 @@ void main() {
 
       client.send('hello');
 
-      expect(
-        logs,
-        contains(
-          'NoOpRealtimeClient: Simulated send -> hello',
-        ),
-      );
+      expect(logs, contains('NoOpRealtimeClient: Simulated send -> hello'));
 
       debugPrint = debugPrintSynchronously;
     });

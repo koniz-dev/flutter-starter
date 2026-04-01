@@ -14,7 +14,7 @@ Test coverage measures how much of the codebase is executed during tests. We aim
 |-------|--------|-----------|
 | **Domain** | 100% | Business logic must be fully tested |
 | **Data** | 90%+ | Data transformations and error handling are critical |
-| **Core** | 90%+ | Infrastructure code affects entire app |
+| **Core** | 80%+ | Matches CI gate; raise locally if your team wants stricter core coverage |
 | **Presentation** | 80%+ | UI logic should be well-tested |
 | **Shared** | 80%+ | Shared utilities used across features |
 
@@ -120,10 +120,7 @@ The CI pipeline enforces an **80% minimum coverage**. If coverage drops below th
 
 To increase the minimum threshold:
 
-1. **Update CI workflow** (`.github/workflows/test.yml`):
-   ```yaml
-   MIN_COVERAGE=85  # Change from 80 to 85
-   ```
+1. **Update coverage workflow** (`.github/workflows/coverage.yml`), step **Enforce coverage thresholds** — adjust the numeric targets in the `check_threshold` calls (e.g. total `80`, domain `100`, data `90`).
 
 2. **Update coverage script** (`scripts/test/test_coverage.sh`):
    ```bash

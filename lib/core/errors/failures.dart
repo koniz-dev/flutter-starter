@@ -57,24 +57,42 @@ abstract class Failure extends Equatable {
 
   @override
   List<Object?> get props => [message, code];
+
+  /// Creates a copy of this failure with the given fields replaced
+  Failure copyWith({String? message, String? code});
 }
 
 /// Server failure thrown when API requests fail
 class ServerFailure extends Failure {
   /// Creates a [ServerFailure] with the given [message] and optional [code]
   const ServerFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return ServerFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Network failure thrown when network requests fail
 class NetworkFailure extends Failure {
   /// Creates a [NetworkFailure] with the given [message] and optional [code]
   const NetworkFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return NetworkFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Cache failure thrown when local storage operations fail
 class CacheFailure extends Failure {
   /// Creates a [CacheFailure] with the given [message] and optional [code]
   const CacheFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return CacheFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Validation failure thrown when input validation fails
@@ -82,12 +100,22 @@ class ValidationFailure extends Failure {
   /// Creates a [ValidationFailure] with the given [message] and optional
   /// [code]
   const ValidationFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return ValidationFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Authentication failure thrown when authentication/authorization fails
 class AuthFailure extends Failure {
   /// Creates an [AuthFailure] with the given [message] and optional [code]
   const AuthFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return AuthFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Permission failure thrown when user lacks required permissions
@@ -95,6 +123,11 @@ class PermissionFailure extends Failure {
   /// Creates a [PermissionFailure] with the given [message] and optional
   /// [code]
   const PermissionFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return PermissionFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Unknown failure thrown when the error type cannot be determined
@@ -102,6 +135,11 @@ class UnknownFailure extends Failure {
   /// Creates an [UnknownFailure] with the given [message] and optional
   /// [code]
   const UnknownFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return UnknownFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 /// Not found failure thrown when a requested resource is not found
@@ -109,4 +147,9 @@ class NotFoundFailure extends Failure {
   /// Creates a [NotFoundFailure] with the given [message] and optional
   /// [code]
   const NotFoundFailure(super.message, {super.code});
+
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return NotFoundFailure(message ?? this.message, code: code ?? this.code);
+  }
 }

@@ -46,10 +46,7 @@ void main() {
         verify(
           () => mockApiClient.post(
             '/auth/login',
-            data: {
-              'email': 'test@example.com',
-              'password': 'password123',
-            },
+            data: {'email': 'test@example.com', 'password': 'password123'},
           ),
         ).called(1);
       });
@@ -82,15 +79,8 @@ void main() {
 
         // Act & Assert
         expect(
-          () => dataSource.login(
-            'test@example.com',
-            'wrongpassword',
-          ),
-          throwsA(
-            predicate<DioException>(
-              (e) => e.error is ServerException,
-            ),
-          ),
+          () => dataSource.login('test@example.com', 'wrongpassword'),
+          throwsA(predicate<DioException>((e) => e.error is ServerException)),
         );
       });
 
@@ -117,15 +107,8 @@ void main() {
 
         // Act & Assert
         expect(
-          () => dataSource.login(
-            'test@example.com',
-            'password123',
-          ),
-          throwsA(
-            predicate<DioException>(
-              (e) => e.error is NetworkException,
-            ),
-          ),
+          () => dataSource.login('test@example.com', 'password123'),
+          throwsA(predicate<DioException>((e) => e.error is NetworkException)),
         );
       });
     });
@@ -209,9 +192,7 @@ void main() {
           ).thenAnswer((_) async => response);
 
           // Act
-          final result = await dataSource.refreshToken(
-            'refresh-token',
-          );
+          final result = await dataSource.refreshToken('refresh-token');
 
           // Assert
           expect(result, isA<AuthResponseModel>());
@@ -364,10 +345,8 @@ void main() {
 
         await dataSource.refreshToken('');
         verify(
-          () => mockApiClient.post(
-            '/auth/refresh',
-            data: {'refresh_token': ''},
-          ),
+          () =>
+              mockApiClient.post('/auth/refresh', data: {'refresh_token': ''}),
         ).called(1);
       });
 

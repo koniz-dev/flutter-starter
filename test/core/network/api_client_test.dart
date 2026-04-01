@@ -1,4 +1,4 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
@@ -42,10 +42,7 @@ void main() {
       expect(apiClient.dio.options.baseUrl, isNotEmpty);
       expect(apiClient.dio.options.connectTimeout, isNotNull);
       expect(apiClient.dio.options.receiveTimeout, isNotNull);
-      expect(
-        apiClient.dio.options.headers['Content-Type'],
-        'application/json',
-      );
+      expect(apiClient.dio.options.headers['Content-Type'], 'application/json');
       expect(apiClient.dio.options.headers['Accept'], 'application/json');
     });
 

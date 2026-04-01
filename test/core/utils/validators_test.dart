@@ -74,10 +74,7 @@ void main() {
       test('should handle very long emails', () {
         final longLocal = 'a' * 64;
         final longDomain = 'b' * 63;
-        expect(
-          Validators.isValidEmail('$longLocal@$longDomain.com'),
-          isTrue,
-        );
+        expect(Validators.isValidEmail('$longLocal@$longDomain.com'), isTrue);
       });
 
       test('should handle emails with multiple dots in domain', () {
@@ -247,10 +244,7 @@ void main() {
       });
 
       test('should handle URLs with query parameters', () {
-        expect(
-          Validators.isValidUrl('https://example.com?key=value'),
-          isTrue,
-        );
+        expect(Validators.isValidUrl('https://example.com?key=value'), isTrue);
         expect(
           Validators.isValidUrl('https://example.com/path?key=value'),
           isTrue,
@@ -312,6 +306,63 @@ void main() {
         expect(Validators.isValidPassword('password'), isTrue);
         expect(Validators.isValidPassword('PASSWORD'), isTrue);
         expect(Validators.isValidPassword('Password'), isTrue);
+      });
+    });
+    group('isStrongPassword', () {
+      test('should return true for passwords meeting all criteria', () {
+        expect(Validators.isStrongPassword('Password123!'), isTrue);
+        expect(Validators.isStrongPassword('ABCdef12@'), isTrue);
+      });
+
+      test('should return false if missing uppercase', () {
+        expect(Validators.isStrongPassword('password123!'), isFalse);
+      });
+
+      test('should return false if missing lowercase', () {
+        expect(Validators.isStrongPassword('PASSWORD123!'), isFalse);
+      });
+
+      test('should return false if missing digit', () {
+        expect(Validators.isStrongPassword('Password!@#'), isFalse);
+      });
+
+      test('should return false if missing special character', () {
+        expect(Validators.isStrongPassword('Password123'), isFalse);
+      });
+
+      test('should return false if less than 8 characters', () {
+        expect(Validators.isStrongPassword('Pas12!'), isFalse);
+      });
+    });
+
+    group('isNumeric', () {
+      test('should return true for purely numeric strings', () {
+        expect(Validators.isNumeric('12345'), isTrue);
+        expect(Validators.isNumeric('-123'), isTrue);
+      });
+
+      test('should return false for alphanumeric strings', () {
+        expect(Validators.isNumeric('123a'), isFalse);
+        expect(Validators.isNumeric('a123'), isFalse);
+      });
+
+      test('should return false for empty string', () {
+        expect(Validators.isNumeric(''), isFalse);
+      });
+    });
+
+    group('isAlphaNumeric', () {
+      test('should return true for alphanumeric strings', () {
+        expect(Validators.isAlphaNumeric('abc123'), isTrue);
+        expect(Validators.isAlphaNumeric('ABC123'), isTrue);
+        expect(Validators.isAlphaNumeric('12345'), isTrue);
+        expect(Validators.isAlphaNumeric('abcde'), isTrue);
+      });
+
+      test('should return false for strings with special characters', () {
+        expect(Validators.isAlphaNumeric('abc_123'), isFalse);
+        expect(Validators.isAlphaNumeric('abc-123'), isFalse);
+        expect(Validators.isAlphaNumeric('abc 123'), isFalse);
       });
     });
   });

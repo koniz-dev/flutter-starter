@@ -12,10 +12,7 @@ import 'package:go_router/go_router.dart';
 /// Task detail/edit screen
 class TaskDetailScreen extends ConsumerStatefulWidget {
   /// Creates a [TaskDetailScreen] widget
-  const TaskDetailScreen({
-    super.key,
-    this.taskId,
-  });
+  const TaskDetailScreen({super.key, this.taskId});
 
   /// Optional task ID for editing existing task
   final String? taskId;
@@ -123,17 +120,13 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         appBar: AppBar(
           title: Text(widget.taskId != null ? l10n.editTask : l10n.addTask),
         ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_error != null) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.error),
-        ),
+        appBar: AppBar(title: Text(l10n.error)),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -146,9 +139,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
               const SizedBox(height: 16),
               Text(
                 _error!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -276,15 +267,12 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         const SizedBox(width: 8),
         Text(
           '$label: ',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         Expanded(
-          child: Text(
-            value,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          child: Text(value, style: Theme.of(context).textTheme.bodyMedium),
         ),
       ],
     );

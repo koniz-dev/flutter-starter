@@ -316,10 +316,7 @@ void main() {
       test('should set local override', () async {
         // Arrange
         when(
-          () => mockLocalDataSource.setLocalOverride(
-            'test_flag',
-            value: true,
-          ),
+          () => mockLocalDataSource.setLocalOverride('test_flag', value: true),
         ).thenAnswer((_) async => {});
 
         // Act
@@ -331,10 +328,7 @@ void main() {
         // Assert
         expect(result.isSuccess, isTrue);
         verify(
-          () => mockLocalDataSource.setLocalOverride(
-            'test_flag',
-            value: true,
-          ),
+          () => mockLocalDataSource.setLocalOverride('test_flag', value: true),
         ).called(1);
       });
 

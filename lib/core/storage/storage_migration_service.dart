@@ -76,10 +76,7 @@ class StorageMigrationService {
       );
       results['secure'] = await secureExecutor.execute();
 
-      loggingService.info(
-        'All storage migrations completed',
-        context: results,
-      );
+      loggingService.info('All storage migrations completed', context: results);
     } catch (e, stackTrace) {
       loggingService.error(
         'Storage migration failed',

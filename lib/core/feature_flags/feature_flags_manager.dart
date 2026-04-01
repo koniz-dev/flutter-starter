@@ -35,10 +35,7 @@ class FeatureFlagsManager {
   /// Get a feature flag with full details
   Future<FeatureFlag?> getFlag(FeatureFlagKey key) async {
     final result = await _repository.getFlag(key.value);
-    return result.when(
-      success: (flag) => flag,
-      failureCallback: (_) => null,
-    );
+    return result.when(success: (flag) => flag, failureCallback: (_) => null);
   }
 
   /// Get multiple feature flags

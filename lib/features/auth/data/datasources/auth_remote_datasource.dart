@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
@@ -23,23 +24,22 @@ abstract class AuthRemoteDataSource {
 
 /// Implementation of remote data source
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  /// Creates an [AuthRemoteDataSourceImpl] with the given [apiClient]
-  AuthRemoteDataSourceImpl(this.apiClient);
+  /// Creates an [AuthRemoteDataSourceImpl] using the shared [ApiClient] (Dio +
+  /// interceptors). To use a different transport, rebind the auth remote data
+  /// source in `lib/features/auth/di/auth_providers.dart` with your own
+  /// [AuthRemoteDataSource] implementation.
+  AuthRemoteDataSourceImpl(this._apiClient);
 
-  /// API client for making HTTP requests
-  final ApiClient apiClient;
+  final ApiClient _apiClient;
 
   @override
   Future<AuthResponseModel> login(String email, String password) async {
     // Error interceptor handles DioException conversion automatically
     // Dio throws for non-2xx status codes, so we don't need status code checks
-    final response = await apiClient.post(
-      ApiEndpoints.login,
-      data: {
-        'email': email,
-        'password': password,
-      },
-    );
+    final response = await _post(ApiEndpoints.login, <String, dynamic>{
+      'email': email,
+      'password': password,
+    });
 
     final data = response.data as Map<String, dynamic>;
     return AuthResponseModel.fromJson(data);
@@ -53,14 +53,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   ) async {
     // Error interceptor handles DioException conversion automatically
     // Dio throws for non-2xx status codes, so we don't need status code checks
-    final response = await apiClient.post(
-      ApiEndpoints.register,
-      data: {
-        'email': email,
-        'password': password,
-        'name': name,
-      },
-    );
+    final response = await _post(ApiEndpoints.register, <String, dynamic>{
+      'email': email,
+      'password': password,
+      'name': name,
+    });
 
     final data = response.data as Map<String, dynamic>;
     return AuthResponseModel.fromJson(data);
@@ -69,21 +66,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logout() async {
     // Error interceptor handles DioException conversion automatically
-    await apiClient.post(ApiEndpoints.logout);
+    await _post(ApiEndpoints.logout, null);
   }
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async {
     // Error interceptor handles DioException conversion automatically
     // Dio throws for non-2xx status codes, so we don't need status code checks
-    final response = await apiClient.post(
-      ApiEndpoints.refreshToken,
-      data: {
-        'refresh_token': refreshToken,
-      },
-    );
+    final response = await _post(ApiEndpoints.refreshToken, <String, dynamic>{
+      'refresh_token': refreshToken,
+    });
 
     final data = response.data as Map<String, dynamic>;
     return AuthResponseModel.fromJson(data);
+  }
+
+  Future<Response<dynamic>> _post(String path, Map<String, dynamic>? body) {
+    return _apiClient.post(path, data: body);
   }
 }

@@ -12,11 +12,7 @@ import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart'
 /// The selected language is persisted and the app updates immediately.
 class LanguageSwitcher extends ConsumerWidget {
   /// Creates a [LanguageSwitcher] widget
-  const LanguageSwitcher({
-    super.key,
-    this.icon = Icons.language,
-    this.tooltip,
-  });
+  const LanguageSwitcher({super.key, this.icon = Icons.language, this.tooltip});
 
   /// Icon to display
   final IconData icon;
@@ -89,10 +85,7 @@ class LanguageSwitcher extends ConsumerWidget {
 /// Can be used in AppBar actions or other menus
 class LanguageSwitcherMenuItem extends ConsumerWidget {
   /// Creates a [LanguageSwitcherMenuItem] widget
-  const LanguageSwitcherMenuItem({
-    super.key,
-    this.icon = Icons.language,
-  });
+  const LanguageSwitcherMenuItem({super.key, this.icon = Icons.language});
 
   /// Icon to display
   final IconData icon;
@@ -179,9 +172,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.selectLanguage),
-      ),
+      appBar: AppBar(title: Text(l10n.selectLanguage)),
       body: RadioGroup<Locale>(
         groupValue: currentLocale,
         onChanged: (locale) async {

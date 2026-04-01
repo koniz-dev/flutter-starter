@@ -72,10 +72,7 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
 
     _screenTrace = service.startScreenTrace(screenName);
     if (_screenTrace != null) {
-      _screenTrace!.putAttribute(
-        PerformanceAttributes.screenName,
-        screenName,
-      );
+      _screenTrace!.putAttribute(PerformanceAttributes.screenName, screenName);
       if (screenRoute != null) {
         _screenTrace!.putAttribute(
           PerformanceAttributes.screenRoute,

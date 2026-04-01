@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+import 'package:flutter_starter/core/constants/ui_keys.dart';
+import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 /// Login screen for user authentication
 class LoginScreen extends ConsumerStatefulWidget {
@@ -31,10 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       await ref
           .read(authNotifierProvider.notifier)
-          .login(
-            _emailController.text.trim(),
-            _passwordController.text,
-          );
+          .login(_emailController.text.trim(), _passwordController.text);
     }
   }
 
@@ -44,9 +42,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.login),
-      ),
+      appBar: AppBar(title: Text(l10n.login)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -103,6 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               const SizedBox(height: 16),
               ElevatedButton(
+                key: UiKeys.loginSubmit,
                 onPressed: authState.isLoading ? null : _handleLogin,
                 child: authState.isLoading
                     ? const SizedBox(
@@ -116,7 +113,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               TextButton(
                 onPressed: authState.isLoading
                     ? null
-                    : () => context.goToRegister(),
+                    : () => context.go(AppRoutes.register),
                 child: Text(l10n.dontHaveAccount),
               ),
             ],

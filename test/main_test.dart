@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/main.dart';
-import 'package:flutter_starter/shared/screens/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -18,10 +17,7 @@ void main() {
     testWidgets('should build MaterialApp with correct title', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       // Wait for router to initialize and navigation to complete
@@ -37,10 +33,7 @@ void main() {
     testWidgets('should use light theme by default', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
@@ -50,10 +43,7 @@ void main() {
     testWidgets('should have dark theme configured', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
@@ -63,10 +53,7 @@ void main() {
     testWidgets('should configure router correctly', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       await tester.pumpAndSettle(const Duration(seconds: 5));
@@ -78,10 +65,7 @@ void main() {
     testWidgets('should configure localization delegates', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
@@ -92,10 +76,7 @@ void main() {
     testWidgets('should configure supported locales', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
@@ -106,10 +87,7 @@ void main() {
     testWidgets('should use locale from provider', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       await tester.pump();
@@ -123,10 +101,7 @@ void main() {
     ) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       await tester.pump();
@@ -139,10 +114,7 @@ void main() {
     testWidgets('should wrap content in RepaintBoundary', (tester) async {
       final container = ProviderContainer();
       await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MyApp(),
-        ),
+        UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       await tester.pump();

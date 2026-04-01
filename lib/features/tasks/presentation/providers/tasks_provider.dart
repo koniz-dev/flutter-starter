@@ -1,18 +1,16 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'tasks_provider.g.dart';
 
 /// Tasks state
 class TasksState {
   /// Creates a [TasksState] with the given [tasks], [isLoading], and [error]
-  const TasksState({
-    this.tasks = const [],
-    this.isLoading = false,
-    this.error,
-  });
+  const TasksState({this.tasks = const [], this.isLoading = false, this.error});
 
   /// List of tasks
   final List<Task> tasks;
@@ -38,8 +36,9 @@ class TasksState {
   }
 }
 
-/// Tasks provider (Riverpod 3.0 - using Notifier)
-class TasksNotifier extends Notifier<TasksState> {
+/// Tasks provider (Riverpod Generator).
+@Riverpod(keepAlive: true)
+class TasksNotifier extends _$TasksNotifier {
   @override
   TasksState build() {
     // Load tasks when provider is initialized
@@ -69,10 +68,7 @@ class TasksNotifier extends Notifier<TasksState> {
       },
       failureCallback: (failure) {
         if (!ref.mounted) return;
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
@@ -83,10 +79,7 @@ class TasksNotifier extends Notifier<TasksState> {
   }
 
   /// Creates a new task with [title] and optional [description]
-  Future<void> createTask({
-    required String title,
-    String? description,
-  }) async {
+  Future<void> createTask({required String title, String? description}) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     final createTaskUseCase = ref.read(createTaskUseCaseProvider);
@@ -101,10 +94,7 @@ class TasksNotifier extends Notifier<TasksState> {
         unawaited(_loadTasks());
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
@@ -122,10 +112,7 @@ class TasksNotifier extends Notifier<TasksState> {
         unawaited(_loadTasks());
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
@@ -143,10 +130,7 @@ class TasksNotifier extends Notifier<TasksState> {
         unawaited(_loadTasks());
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
@@ -166,16 +150,11 @@ class TasksNotifier extends Notifier<TasksState> {
         unawaited(_loadTasks());
       },
       failureCallback: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message,
-        );
+        state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
 }
 
-/// Provider for TasksNotifier (Riverpod 3.0 - using NotifierProvider)
-final tasksNotifierProvider = NotifierProvider<TasksNotifier, TasksState>(
-  TasksNotifier.new,
-);
+/// Alias for [tasksProvider] (older imports use `tasksNotifierProvider`).
+const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
