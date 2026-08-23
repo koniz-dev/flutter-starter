@@ -147,8 +147,6 @@ void main() {
 
       test('should preserve type information in success callback', () {
         const result = Success<List<String>>(['a', 'b', 'c']);
-        // when() returns a value, so cascade operator is not appropriate here
-        // ignore: cascade_invocations
         result.when(
           success: (data) {
             // Type should be List<String>
@@ -166,8 +164,6 @@ void main() {
         const authFailure = AuthFailure('Auth error', code: '401');
         const result = ResultFailure<String>(authFailure);
 
-        // when() returns a value, so cascade operator is not appropriate here
-        // ignore: cascade_invocations
         result.when(
           success: (data) {
             fail('Should not call success callback');
@@ -212,8 +208,6 @@ void main() {
 
       test('should handle nullable T types', () {
         const result = Success<String?>(null);
-        // when() returns a value, so cascade operator is not appropriate here
-        // ignore: cascade_invocations
         result.when(
           success: (data) {
             expect(data, isNull);
