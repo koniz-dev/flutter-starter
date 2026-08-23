@@ -1,0 +1,12 @@
+# Tag configuration for `flutter test`.
+#
+# Golden tests render PNGs through the host's renderer, so byte output differs
+# between macOS and the Linux CI runner. They are therefore skipped by default
+# (plain `flutter test`, the Quality gate in .github/workflows/ci.yml, and the
+# .githooks/pre-push hook) and opted into explicitly by
+# ./scripts/test/run_acceptance.sh, which passes --run-skipped --tags golden.
+#
+# See docs/issue-workflow.md ("Acceptance verification").
+tags:
+  golden:
+    skip: "Host-renderer dependent. Run ./scripts/test/run_acceptance.sh."
