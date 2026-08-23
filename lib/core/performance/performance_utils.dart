@@ -34,7 +34,7 @@ class PerformanceUtils {
     final attributes = <String, String>{
       'http_method': method,
       'http_path': path,
-      if (additionalAttributes != null) ...additionalAttributes,
+      ...?additionalAttributes,
     };
 
     return service.measureOperation<T>(
@@ -65,7 +65,7 @@ class PerformanceUtils {
   }) async {
     final queryAttributes = <String, String>{
       'query_name': queryName,
-      if (attributes != null) ...attributes,
+      ...?attributes,
     };
 
     return service.measureOperation<T>(

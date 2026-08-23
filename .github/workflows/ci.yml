@@ -35,6 +35,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # `channel: stable` is intentionally left floating - no `flutter-version`
+      # pin (removed deliberately in a4bc68a) - so this gate also acts as an
+      # early warning that a new stable SDK has landed.
+      #
+      # Consequence to know about: `flutter analyze` exits non-zero on ANY
+      # diagnostic, including `info`. A new stable can therefore turn `main` red
+      # without a single line of app code changing, and the failure will surface
+      # on whatever PR happens to be open next. When that happens the fix is to
+      # clear the new lints on `main` first (do not chase it inside an unrelated
+      # PR). This is what happened in run 32638785145 under stable-3.47.1.
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
