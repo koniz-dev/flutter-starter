@@ -22,8 +22,8 @@ import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Default capture surface. Wider than the 800x600 test default because Ahem
-/// glyphs are far wider than real ones, so a narrow surface wraps and clips text
-/// that the real app lays out on one line.
+/// glyphs are far wider than real ones, so a narrow surface wraps and clips
+/// text that the real app lays out on one line.
 ///
 /// This reduces the problem but does not remove it. In Ahem every glyph is a
 /// full em square, so the 51-character English `welcome` string at 28px
@@ -71,7 +71,7 @@ Future<void> pumpAcceptance(
   await tester.pumpAndSettle();
 }
 
-/// Captures [finder] to `goldens/<name>.png`, relative to the calling test file.
+/// Captures [finder] to `goldens/<name>.png`, relative to the test file.
 ///
 /// Regenerate with `./scripts/test/run_acceptance.sh --update`.
 Future<void> captureAcceptanceGolden(Finder finder, String name) {
