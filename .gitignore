@@ -56,3 +56,10 @@ app.*.map.json
 
 # Antigravity AI
 .agent/
+
+# Acceptance evidence is deliberately committed: the issue-driven workflow closes
+# an issue only against retrievable artifacts (docs/issue-workflow.md,
+# invariant 4). Without this negation the `*.log` rule above silently swallows
+# every log written by scripts/test/run_acceptance.sh, and `git add <dir>` skips
+# ignored files without erroring - so the evidence links would 404.
+!docs/verification/**/*.log
