@@ -1,0 +1,6 @@
+# Criterion 5: CI runs on main, before and after the fix
+
+run 32639767495  success  275fbcc  2026-08-23T12:34:08Z
+run 32639311403  success  dc4ca54  2026-08-23T12:24:41Z
+run 32638785145  failure  cd523df  2026-08-23T12:13:36Z
+run 23848482595  success  cd523df  2026-04-01T12:26:24Z

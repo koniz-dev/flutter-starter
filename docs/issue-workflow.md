@@ -464,17 +464,29 @@ gh issue edit N --repo "$REPO" \
 
 ### Close with evidence
 
-Evidence must be committed **before** the closing comment, so the links resolve.
+Evidence must be **merged** before the closing comment, so the links resolve on
+`main`.
+
+Prefer putting the evidence in the **same PR as the fix**. When the fix has
+already merged (as happens when verification turns up extra work), send the
+evidence as its own small PR - it still goes through a branch, because
+`docs/verification/**` is not exempt from the branch-and-PR rule. Be aware that
+an evidence-only PR touches nothing but `docs/**`, which `ci.yml` excludes via
+`paths-ignore`, so it will report **no checks at all**. That is expected: the
+gate for evidence is a human or agent reading it, not CI.
 
 ```bash
 ./scripts/test/run_acceptance.sh N          # writes docs/verification/issue-N/
 # Now OPEN every PNG and log it produced and confirm each criterion.
 
+git checkout -b chore/acceptance-evidence-issue-N
 git add docs/verification/issue-N
 git commit -m "test: acceptance evidence for issue N
 
 Refs koniz-dev/flutter-starter#N"
-git push
+git push -u origin chore/acceptance-evidence-issue-N
+gh pr create --fill --body "Refs koniz-dev/flutter-starter#N"
+gh pr merge --squash --delete-branch
 
 gh issue close N --repo "$REPO" --reason completed --comment "$(cat <<'EOF'
 ## PASS
