@@ -1,0 +1,7 @@
+# Criterion 2: no stale 'tool bricks' references remain
+
+$ grep -rn 'tool bricks' CONTRIBUTING.md scripts/ docs/guides/
+(no matches)
+
+# Criterion 3: scripts/README.md no longer claims format_dart.sh covers bricks
+9:| [`format_dart.sh`](dev/format_dart.sh) | Format only `lib`, `test`, `integration_test`, `tool`, `examples` (avoids scanning `build/`). Use `--check` for CI-style verification, or `--print-paths` to read the scope. Not `bricks/`: it holds Mason templates whose mustache is not valid Dart, so `dart format` exits 65 on it. |
