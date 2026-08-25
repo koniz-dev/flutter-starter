@@ -114,7 +114,14 @@ Users prefer dark mode for better battery life and eye comfort, especially in lo
 
 ### Pull Requests
 
-Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests:
+Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests.
+
+> Issues are the single source of truth for what gets worked on, in what order,
+> and when it counts as done. Before picking something up, read
+> [docs/issue-workflow.md](docs/issue-workflow.md) — it defines the label state
+> machine, the acceptance-criteria requirement, and why commits link to issues
+> rather than closing them.
+
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -136,7 +143,7 @@ Before submitting a PR, make sure:
 - [ ] Documentation is updated (if needed)
 - [ ] Commit messages follow the guidelines
 - [ ] PR description is clear and descriptive
-- [ ] Related issues are referenced (if any)
+- [ ] Related issues are referenced with `Refs owner/repo#N` (never `Closes`/`Fixes`/`Resolves`)
 
 ---
 
@@ -362,7 +369,14 @@ test(auth): add login use case tests
 - Keep subject line under 50 characters
 - Capitalize first letter of subject
 - No period at end of subject
-- Reference issues in footer: `Closes #123`
+- Reference issues in the footer as `Refs koniz-dev/flutter-starter#123`
+
+> **Do not use `Closes`, `Fixes`, or `Resolves`.** GitHub auto-closes an issue
+> when a commit carrying those keywords lands on the default branch. That closes
+> it at *merge* time, before anyone has run its acceptance criteria — which
+> removes the verification gate the workflow exists to enforce. Use the fully
+> qualified `owner/repo#N` form so the reference survives being quoted elsewhere.
+> See [docs/issue-workflow.md](docs/issue-workflow.md).
 
 ---
 
