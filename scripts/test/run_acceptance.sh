@@ -110,7 +110,10 @@ if [[ "$RUN_GOLDENS" -eq 1 && -d test/acceptance ]]; then
 fi
 
 # Collect the PNGs this run verified so the evidence directory is self-contained.
-if [[ -d test/acceptance ]]; then
+# Only when the golden layer actually ran: copying goldens into the evidence
+# directory of a non-visual issue invites a PASS table that cites a screenshot
+# proving nothing.
+if [[ "$RUN_GOLDENS" -eq 1 && -d test/acceptance ]]; then
   while IFS= read -r png; do
     cp "$png" "$OUT/$(basename "$png")"
   done < <(find test/acceptance -name '*.png' -type f)
