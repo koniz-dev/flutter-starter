@@ -115,6 +115,12 @@ make the loop worthless.
 - **Docs-only PRs get no Quality gate.** `ci.yml` has
   `paths-ignore: ['**/*.md', 'docs/**']`, so `gh pr checks` reports no checks
   rather than a pass. Expected; do not wait on it and do not call it a failure.
+  **But do not confuse that with the registration race:** run straight after
+  `gh pr create`, `gh pr checks` says "no checks reported" even for a PR that
+  will get them, because GitHub has not created them yet. Poll until
+  `gh pr checks --json name --jq 'length'` is non-zero before watching, and use
+  `gh pr diff --name-only` against `paths-ignore` to decide which case you are
+  in. Merging on the wrong reading skips the gate entirely.
 
 ### Evidence discipline
 

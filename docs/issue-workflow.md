@@ -308,8 +308,26 @@ One issue at a time. Each change stays small and revertible.
    Refs koniz-dev/flutter-starter#12"
    git push -u origin fix/short-description
    gh pr create --fill --body "Refs koniz-dev/flutter-starter#12"
+
+   # Wait for checks to REGISTER before watching them. Run immediately after
+   # `pr create`, `gh pr checks` reports "no checks reported on the ... branch"
+   # simply because GitHub has not created them yet - indistinguishable from a
+   # docs-only PR that will genuinely never get any. Merging on that reading
+   # skips the gate entirely.
+   for _ in 1 2 3 4 5 6; do
+     [[ "$(gh pr checks --json name --jq 'length' 2>/dev/null || echo 0)" -gt 0 ]] && break
+     sleep 10
+   done
    gh pr checks --watch
    gh pr merge --squash --delete-branch
+   ```
+
+   To tell the two cases apart, compare the changed files against `ci.yml`'s
+   `paths-ignore` (`**/*.md`, `docs/**`): if every changed path matches, no check
+   will ever appear and there is nothing to wait for.
+
+   ```bash
+   gh pr diff --name-only
    ```
 
 6. **Verify and close, or hand off.** Run the acceptance harness, open every

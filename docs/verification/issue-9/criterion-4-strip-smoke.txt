@@ -1,0 +1,12 @@
+# Criterion 4: strip leaves an analyzable tree (Strip + analyze + test on PR #19)
+
+  Quality gate: SUCCESS
+  Strip + analyze + test: SUCCESS
+
+Runs exactly: dart run tool/strip_sample_features.dart --apply, then
+flutter pub get, flutter analyze, flutter test - per .github/workflows/strip-smoke.yml.
+
+No tool/golden/* counterpart needed updating: strip COPIES golden files over
+the root files (tool/strip_sample_features.dart:98 _copyGoldenFile), so the
+pre-strip content of integration_test/app_e2e_test.dart does not reach the
+post-strip tree. lib/core/constants/ui_keys.dart has no golden counterpart.
