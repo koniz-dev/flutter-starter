@@ -49,8 +49,14 @@ jobs:
       - name: Add Pub global bin to PATH
         run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
 
+      # The CLI version MUST match the `patrol` dependency pinned in
+      # pubspec.yaml (^3.10.0 -> 3.20.0). Activating unpinned resolves the newest
+      # CLI (4.7.0), which aborts with "Patrol version 3.20.0 ... is not
+      # compatible with patrol_cli version 4.7.0" before any test runs.
+      # If you bump `patrol`, bump this together with it, using
+      # https://patrol.leancode.co/documentation/compatibility-table
       - name: Install Patrol CLI
-        run: dart pub global activate patrol_cli
+        run: dart pub global activate patrol_cli 3.11.0
 
       - name: Run Patrol tests
         uses: reactivecircus/android-emulator-runner@v2

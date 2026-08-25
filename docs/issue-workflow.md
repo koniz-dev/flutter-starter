@@ -575,10 +575,27 @@ checked the arithmetic - it is not evidence of a layout bug.
 Route these to `status:needs-uat`:
 
 - **Patrol E2E.** `integration_test/` exists and `patrol: ^3.10.0` is in
-  `pubspec.yaml`, but `patrol_cli` is not installed, no Android or iOS device or
-  emulator is connected (only macOS desktop and Chrome), and
+  `pubspec.yaml`, but `patrol_cli` is not installed locally, no Android or iOS
+  device or emulator is connected (only macOS desktop and Chrome), and
   [`e2e-android.yml`](../.github/workflows/e2e-android.yml) is
   `workflow_dispatch`-only by design. A session cannot run Patrol.
+
+  A human cannot usefully run it either, and the failure mode is the dangerous
+  kind: **the workflow reports success while executing zero tests.** Run
+  32870753971 built the APK, booted the emulator, and printed
+  `Total: 0  Successful: 0  Failed: 0  Skipped: 0` before exiting 0.
+
+  The cause is that Patrol's native Android harness was never scaffolded: there
+  is no `android/app/src/androidTest/` source set, no
+  `testInstrumentationRunner` in `android/app/build.gradle.kts`, and no Patrol
+  Gradle dependencies. Instrumentation therefore collects nothing. A pinned
+  `patrol_cli` gets past the compatibility check, which is necessary but not
+  sufficient.
+
+  Consequences for a `needs-uat` hand-off: do not send a human to that workflow
+  and treat a green tick as verification. If you must reference it, tell them to
+  open the run and check that `Total:` is non-zero - a green job with `Total: 0`
+  is a false pass, not evidence.
 - **Real device behavior.** Anything RASP-related
   (`lib/core/security/`) is a no-op by default and only becomes meaningful on a
   real device with a real implementation wired in.

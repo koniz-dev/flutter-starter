@@ -7,7 +7,7 @@ End-to-end tests here drive a **real app** on a device or emulator (unlike `test
 ## Prerequisites
 
 ```bash
-dart pub global activate patrol_cli
+dart pub global activate patrol_cli 3.11.0
 flutter pub get
 ```
 

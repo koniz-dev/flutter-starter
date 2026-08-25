@@ -97,7 +97,7 @@ flutter run
 
 ### 6. E2E tests (Patrol, optional)
 
-Patrol does not run on every PR by default. Locally: `dart pub global activate patrol_cli` then `./scripts/test/run_e2e_tests.sh` (or `patrol test --target integration_test/app_e2e_test.dart`). On GitHub: **Actions → E2E Android (Patrol) → Run workflow** (Android emulator). Stable selectors use [`lib/core/constants/ui_keys.dart`](lib/core/constants/ui_keys.dart).
+Patrol does not run on every PR by default. Locally: `dart pub global activate patrol_cli 3.11.0` then `./scripts/test/run_e2e_tests.sh` (or `patrol test --target integration_test/app_e2e_test.dart`). On GitHub: **Actions → E2E Android (Patrol) → Run workflow** (Android emulator). Stable selectors use [`lib/core/constants/ui_keys.dart`](lib/core/constants/ui_keys.dart).
 
 ---
 

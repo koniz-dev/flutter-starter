@@ -98,10 +98,21 @@ make the loop worthless.
   still wraps, versus ~714px in a real font. Treat wrapped or clipped text in a
   golden as a font artifact until you have checked the arithmetic.
 - **Patrol E2E.** `integration_test/` and `patrol: ^3.10.0` exist, but
-  `patrol_cli` is not installed, no Android/iOS device or emulator is connected
-  (only macOS desktop and Chrome), and
+  `patrol_cli` is not installed locally, no Android/iOS device or emulator is
+  connected (only macOS desktop and Chrome), and
   [`e2e-android.yml`](.github/workflows/e2e-android.yml) is
-  `workflow_dispatch`-only by design. A session cannot run Patrol.
+  `workflow_dispatch`-only by design. **A session cannot run Patrol.**
+  A human cannot usefully run it either, and the reason matters: **the workflow
+  goes green while running zero tests.** Run 32870753971 built the APK, booted
+  the emulator, and reported `Total: 0  Successful: 0  Failed: 0  Skipped: 0` -
+  then exited 0, so the job is a green tick that proves nothing. Patrol's native
+  Android harness was never scaffolded (no `android/app/src/androidTest/`, no
+  `testInstrumentationRunner`, no Patrol Gradle deps), so instrumentation finds
+  no tests to collect.
+  **Never cite a green E2E Android run as evidence.** Open the run and confirm
+  `Total:` is non-zero first. Keep `patrol_cli` pinned to the version matching
+  the `patrol` dependency; unpinned resolves an incompatible CLI and aborts
+  before any test runs.
 - **Real device behavior**, including everything RASP (`lib/core/security/` is a
   no-op by default and only meaningful on a real device).
 - **Gestures**: hover, right-click, drag, long-press discoverability,
