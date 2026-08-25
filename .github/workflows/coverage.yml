@@ -56,7 +56,10 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          # No `flutter-version:` here. "stable" is a CHANNEL, not a version, and
+          # passing it as a version makes flutter-action fail with "Unable to
+          # determine Flutter version for channel: stable version: stable".
+          # ci.yml sets only `channel:`, which is why ci.yml has always worked.
           channel: 'stable'
           cache: true
       
