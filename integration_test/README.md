@@ -29,7 +29,11 @@ patrol test --target integration_test/app_e2e_test.dart
 
 Do not rely on translated button labels for critical steps. Use `ValueKey`s from [`lib/core/constants/ui_keys.dart`](../lib/core/constants/ui_keys.dart) (e.g. `e2e_login_submit`, `e2e_home_content`).
 
-**Full starter:** `app_e2e_test.dart` may also use tasks keys (`e2e_open_tasks`, `e2e_tasks_fab`, …). **After** `dart run tool/strip_sample_features.dart --apply`, golden files rewrite E2E to **auth → home** only; keep tests in sync if you maintain a fork without running strip.
+`app_e2e_test.dart` covers **auth → home** and nothing else, in the full starter as well as after a strip. It asserts only `e2e_login_submit` and `e2e_home_content`.
+
+**There is no tasks coverage, on purpose.** `UiKeys.openTasks`, `UiKeys.tasksFab`, and `UiKeys.addTaskSubmit` are declared but attached to no widget in `lib/`: `HomeScreen` is a deliberately minimal shell with no entry point into the sample `tasks` feature. Patrol matches on the widget tree, so a selector written against an unattached key finds nothing — attach the key first if your fork adds that entry point. `tool/golden/no_feature_flags/` shows the wiring, and its own `app_e2e_test.dart` does drive the full tasks flow.
+
+**After** `dart run tool/strip_sample_features.dart --apply`, golden files replace these E2E files outright, so the post-strip variant is whatever `tool/golden/<variant>/integration_test/` contains — editing the copies here does not affect it.
 
 ## CI
 
