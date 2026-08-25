@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$ROOT"
-echo "==> format (lib test integration_test tool bricks)"
+echo "==> format ($("$SCRIPT_DIR/format_dart.sh" --print-paths))"
 "$SCRIPT_DIR/format_dart.sh" --check
 echo "==> flutter analyze"
 flutter analyze

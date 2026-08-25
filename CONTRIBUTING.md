@@ -270,7 +270,7 @@ If you later split CI into parallel jobs for speed, you can require each job or 
 - Follow [Dart Style Guide](https://dart.dev/guides/language/effective-dart/style)
 - Use `very_good_analysis` linting rules (already configured)
 - Run `flutter analyze` before committing
-- Format Dart sources (not the whole repo — skips `build/`): `./scripts/dev/format_dart.sh` or `dart format lib test integration_test tool bricks`
+- Format Dart sources (not the whole repo — skips `build/`): `./scripts/dev/format_dart.sh` or `dart format lib test integration_test tool examples`
 
 ### Architecture
 

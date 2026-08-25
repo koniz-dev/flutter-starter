@@ -6,7 +6,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 
 | Script | Purpose |
 |--------|---------|
-| [`format_dart.sh`](dev/format_dart.sh) | Format only `lib`, `test`, `integration_test`, `tool`, `bricks` (avoids scanning `build/`). Use `--check` for CI-style verification. |
+| [`format_dart.sh`](dev/format_dart.sh) | Format only `lib`, `test`, `integration_test`, `tool`, `examples` (avoids scanning `build/`). Use `--check` for CI-style verification, or `--print-paths` to read the scope. Not `bricks/`: it holds Mason templates whose mustache is not valid Dart, so `dart format` exits 65 on it. |
 | [`audit_template.sh`](dev/audit_template.sh) | Full non-platform gate: format check, `flutter analyze`, `flutter test`. |
 | [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Copy `.githooks/*` â†’ `.git/hooks/` (single source of truth in repo). |
 | [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
