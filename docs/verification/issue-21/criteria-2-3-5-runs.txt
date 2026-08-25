@@ -1,0 +1,21 @@
+# Criteria 2, 3, 5: the workflow now runs and completes
+
+-- all coverage.yml runs, newest 5 --
+  success  workflow_dispatch  main  2026-08-25T15:44:29Z
+  success  workflow_dispatch  fix/coverage-workflow-invalid  2026-08-25T15:36:55Z
+  failure  workflow_dispatch  fix/coverage-workflow-invalid  2026-08-25T15:35:32Z
+  failure  push  main  2026-08-25T15:33:35Z
+  failure  push  chore/acceptance-evidence-issue-9  2026-08-25T15:29:16Z
+
+Criterion 2: workflow_dispatch on main -> run 32867670872, conclusion SUCCESS,
+  reaching every real step (previously startup_failure).
+
+Criterion 3: the fix merged to main at 2026-08-25T15:44:01Z. The newest
+  push-triggered run is 2026-08-25T15:33:35Z, i.e. BEFORE the merge. No
+  push-triggered run has been created since, because the file now parses
+  and its on: triggers (workflow_dispatch + schedule) are honoured.
+
+Criterion 5: the run COMPLETES. It no longer fails at all:
+    lines......: 89.8% (3388 of 3772 lines)
+    Overall: 89.8%
+    Domain files: 15   Data files: 12   Presentation files: 11   Core files: 70
