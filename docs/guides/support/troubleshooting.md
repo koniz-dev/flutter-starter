@@ -27,7 +27,7 @@ If you are stuck after that, check the sections below by symptom (build/codegen/
 flutter clean   # optional but clears a bad build/ tree
 ./scripts/dev/format_dart.sh
 # or explicitly:
-dart format lib test integration_test tool bricks
+dart format lib test integration_test tool examples
 ```
 
 CI and git hooks use the scoped paths above, not the whole repo root.

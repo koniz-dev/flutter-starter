@@ -13,7 +13,7 @@ Run the same gates CI uses for Dart code (no Android/iOS/Web builds):
 Or step by step:
 
 ```bash
-./scripts/dev/format_dart.sh --check   # or: dart format --set-exit-if-changed lib test integration_test tool bricks
+./scripts/dev/format_dart.sh --check   # or: dart format --set-exit-if-changed lib test integration_test tool examples
 flutter analyze
 flutter test
 ```
