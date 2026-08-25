@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
 void main() {
-  patrolTest('E2E: Auth -> home (stripped starter; stable ValueKeys)', (
+  patrolTest('E2E: auth -> home (stable ValueKeys)', (
     $,
   ) async {
     app.main();
