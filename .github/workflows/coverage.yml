@@ -36,6 +36,16 @@ jobs:
   coverage-analysis:
     name: Coverage Analysis
     runs-on: ubuntu-latest
+
+    # `pull-requests: write` is needed by the "Comment coverage summary" step.
+    # It MUST live here (job level) or at workflow level - GitHub rejects
+    # `permissions:` on an individual step, and an unparseable workflow file
+    # fails at startup on every push while ignoring its own `on:` triggers.
+    # Job-level permissions replace the workflow-level block wholesale, so
+    # `contents: read` is restated rather than inherited.
+    permissions:
+      contents: read
+      pull-requests: write
     
     steps:
       - name: Checkout code
@@ -207,8 +217,6 @@ jobs:
       - name: Comment coverage summary
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: marocchino/sticky-pull-request-comment@v2
-        permissions:
-          pull-requests: write
         with:
           recreate: true
           message: |
