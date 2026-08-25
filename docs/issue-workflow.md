@@ -575,10 +575,19 @@ checked the arithmetic - it is not evidence of a layout bug.
 Route these to `status:needs-uat`:
 
 - **Patrol E2E.** `integration_test/` exists and `patrol: ^3.10.0` is in
-  `pubspec.yaml`, but `patrol_cli` is not installed, no Android or iOS device or
-  emulator is connected (only macOS desktop and Chrome), and
+  `pubspec.yaml`, but `patrol_cli` is not installed locally, no Android or iOS
+  device or emulator is connected (only macOS desktop and Chrome), and
   [`e2e-android.yml`](../.github/workflows/e2e-android.yml) is
   `workflow_dispatch`-only by design. A session cannot run Patrol.
+
+  A human can, through Actions -> E2E Android (Patrol) -> Run workflow. Two
+  things to know before writing that hand-off. First, the CLI must be pinned to
+  the version matching the `patrol` dependency - activating it unpinned resolves
+  a newer major and aborts with a compatibility error before any test executes.
+  Second, the test will still fail on the network, because the auth flow calls a
+  backend that does not exist in CI. So a `needs-uat` comment that just says
+  "run the workflow" hands someone a guaranteed red run. Name the assertion they
+  should look at and what a real pass would look like.
 - **Real device behavior.** Anything RASP-related
   (`lib/core/security/`) is a no-op by default and only becomes meaningful on a
   real device with a real implementation wired in.

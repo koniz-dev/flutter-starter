@@ -98,10 +98,17 @@ make the loop worthless.
   still wraps, versus ~714px in a real font. Treat wrapped or clipped text in a
   golden as a font artifact until you have checked the arithmetic.
 - **Patrol E2E.** `integration_test/` and `patrol: ^3.10.0` exist, but
-  `patrol_cli` is not installed, no Android/iOS device or emulator is connected
-  (only macOS desktop and Chrome), and
+  `patrol_cli` is not installed locally, no Android/iOS device or emulator is
+  connected (only macOS desktop and Chrome), and
   [`e2e-android.yml`](.github/workflows/e2e-android.yml) is
-  `workflow_dispatch`-only by design. A session cannot run Patrol.
+  `workflow_dispatch`-only by design. **A session cannot run Patrol.**
+  A *human* can, via Actions -> E2E Android (Patrol) -> Run workflow: the
+  emulator boots and the CLI installs. Expect the test itself to fail on the
+  network - the auth flow calls a backend that does not exist in CI - so a
+  `needs-uat` hand-off must say which assertion the human should watch, not just
+  "run the workflow". Keep `patrol_cli` pinned to the version matching the
+  `patrol` dependency; unpinned resolves an incompatible CLI and aborts before
+  any test runs.
 - **Real device behavior**, including everything RASP (`lib/core/security/` is a
   no-op by default and only meaningful on a real device).
 - **Gestures**: hover, right-click, drag, long-press discoverability,
