@@ -580,14 +580,22 @@ Route these to `status:needs-uat`:
   [`e2e-android.yml`](../.github/workflows/e2e-android.yml) is
   `workflow_dispatch`-only by design. A session cannot run Patrol.
 
-  A human can, through Actions -> E2E Android (Patrol) -> Run workflow. Two
-  things to know before writing that hand-off. First, the CLI must be pinned to
-  the version matching the `patrol` dependency - activating it unpinned resolves
-  a newer major and aborts with a compatibility error before any test executes.
-  Second, the test will still fail on the network, because the auth flow calls a
-  backend that does not exist in CI. So a `needs-uat` comment that just says
-  "run the workflow" hands someone a guaranteed red run. Name the assertion they
-  should look at and what a real pass would look like.
+  A human cannot usefully run it either, and the failure mode is the dangerous
+  kind: **the workflow reports success while executing zero tests.** Run
+  32870753971 built the APK, booted the emulator, and printed
+  `Total: 0  Successful: 0  Failed: 0  Skipped: 0` before exiting 0.
+
+  The cause is that Patrol's native Android harness was never scaffolded: there
+  is no `android/app/src/androidTest/` source set, no
+  `testInstrumentationRunner` in `android/app/build.gradle.kts`, and no Patrol
+  Gradle dependencies. Instrumentation therefore collects nothing. A pinned
+  `patrol_cli` gets past the compatibility check, which is necessary but not
+  sufficient.
+
+  Consequences for a `needs-uat` hand-off: do not send a human to that workflow
+  and treat a green tick as verification. If you must reference it, tell them to
+  open the run and check that `Total:` is non-zero - a green job with `Total: 0`
+  is a false pass, not evidence.
 - **Real device behavior.** Anything RASP-related
   (`lib/core/security/`) is a no-op by default and only becomes meaningful on a
   real device with a real implementation wired in.
