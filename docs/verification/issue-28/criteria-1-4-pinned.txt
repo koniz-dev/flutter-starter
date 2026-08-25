@@ -1,0 +1,11 @@
+# Criteria 1 and 4: every patrol_cli activation is pinned
+
+$ grep -rn 'activate patrol_cli' --include='*.yml' --include='*.sh' --include='*.md' .
+README.md:100:Patrol does not run on every PR by default. Locally: `dart pub global activate patrol_cli 3.11.0` then `./scripts/test/run_e2e_tests.sh` (or `patrol test --target integration_test/app_e2e_test.dart`). On GitHub: **Actions → E2E Android (Patrol) → Run workflow** (Android emulator). Stable selectors use [`lib/core/constants/ui_keys.dart`](lib/core/constants/ui_keys.dart).
+integration_test/README.md:10:dart pub global activate patrol_cli 3.11.0
+docs/guides/testing/testing-summary.md:38:dart pub global activate patrol_cli 3.11.0
+scripts/test/run_e2e_tests.sh:4:# Requires patrol_cli globally: `dart pub global activate patrol_cli 3.11.0`
+scripts/test/run_e2e_tests.sh:22:    echo "Please install it by running: dart pub global activate patrol_cli 3.11.0"
+.github/workflows/e2e-android.yml:59:        run: dart pub global activate patrol_cli 3.11.0
+
+All five sites pin 3.11.0 and point at the Patrol compatibility table.
