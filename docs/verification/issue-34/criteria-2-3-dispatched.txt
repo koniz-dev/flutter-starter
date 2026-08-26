@@ -1,0 +1,18 @@
+# Criteria 2 and 3: both platforms dispatched and verified
+
+-- Criterion 2: platform=android (previously FAILED at Build APK) --
+  run 32971439671  workflow_dispatch  completed/success
+JOBS
+✓ Build Android in 6m23s (ID 98185885895)
+- Build Web (ID 98185890163)
+- Build iOS (no codesign) (ID 98185890255)
+  artifact: android-apks-development  32223960 bytes
+
+-- Criterion 3: platform=web (must not regress) --
+  run 32971452663  completed/success
+  artifact: web-build-development  14226706 bytes
+
+BEFORE (run 32966668310, --flavor still present):
+  X Build APK
+  Task 'assembleDevelopmentRelease' not found in root project 'android'
+  [!] does not define any custom product flavors. You cannot use --flavor.
