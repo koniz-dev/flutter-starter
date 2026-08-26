@@ -25,9 +25,10 @@ void main() {
   // rendered login screen exercises the native Patrol harness, app bootstrap,
   // the Riverpod scope, the router, and localization.
   patrolTest('E2E: app boots to a usable login screen', ($) async {
-    app.main();
+    await app.main();
     await $.pumpAndSettle();
 
+    await $(#e2e_login_submit).waitUntilVisible();
     expect($(#e2e_login_submit), findsOneWidget);
 
     await $(TextField).at(0).enterText('test@example.com');
@@ -38,7 +39,7 @@ void main() {
   patrolTest(
     'E2E: auth -> home, stripped starter (requires a reachable backend)',
     ($) async {
-      app.main();
+      await app.main();
       await $.pumpAndSettle();
 
       if ($(#e2e_login_submit).exists) {
