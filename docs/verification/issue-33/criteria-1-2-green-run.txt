@@ -1,0 +1,24 @@
+# Criteria 1 and 2: green with no backend, and the gated test is visibly skipped
+
+run 32978638487 (workflow_dispatch, fix/e2e-green-without-backend) -> SUCCESS
+
+  📝 Total: 2
+  ✅ Successful: 1
+  ❌ Failed: 0
+  ⏩ Skipped: 1
+
+  Patrol reported test count: 2
+  OK: 2 test(s) collected and executed, 0 failed.
+
+Criterion 1: Total > 0, Failed 0, job SUCCESS, no backend configured.
+Criterion 2: Skipped: 1 - the authenticated flow is visible as skipped,
+  not silently absent.
+
+-- the three attempts it took, and what each proved --
+  32970921492  FAIL  Total 2 / Failed 1  smoke found 0 widgets:
+                     app.main() was called without await, and could not be
+                     awaited at all because it was declared 'void main() async'.
+  32975097312  FAIL  Total 2 / Failed 1  'pumpAndSettle timed out' after 131s:
+                     awaiting main() worked, but the tree never reaches an
+                     idle frame on a real device.
+  32978638487  PASS  Total 2 / Successful 1 / Skipped 1 / Failed 0

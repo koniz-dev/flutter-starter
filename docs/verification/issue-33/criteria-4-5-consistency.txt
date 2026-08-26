@@ -1,0 +1,16 @@
+# Criteria 4 and 5: auth_flow_test consistent, all six goldens updated
+
+$ grep -c hasBackend integration_test/*.dart tool/golden/*/integration_test/*.dart
+integration_test/app_e2e_test.dart:2
+tool/golden/no_tasks/integration_test/app_e2e_test.dart:2
+integration_test/auth_flow_test.dart:2
+tool/golden/no_feature_flags/integration_test/auth_flow_test.dart:2
+tool/golden/stripped/integration_test/app_e2e_test.dart:2
+tool/golden/no_feature_flags/integration_test/app_e2e_test.dart:2
+tool/golden/no_tasks/integration_test/auth_flow_test.dart:2
+tool/golden/stripped/integration_test/auth_flow_test.dart:2
+
+$ grep -rn pumpAndSettle integration_test/ tool/golden/*/integration_test/ | grep -v '///'
+(none outside doc comments)
+
+Strip + analyze + test on the PR: pass (goldens consistent with the root tree).
