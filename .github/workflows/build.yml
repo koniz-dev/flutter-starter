@@ -13,8 +13,14 @@ on:
           - android
           - ios
           - web
-      flavor:
-        description: 'App flavor (must exist in your project)'
+      # NOT a Gradle product flavor. This project configures itself through
+      # `.env` layering and --dart-define (see docs/guides/configuration.md and
+      # lib/core/config/app_config.dart, which reads ENVIRONMENT). No
+      # productFlavors are declared in android/app/build.gradle.kts, so passing
+      # --flavor made `flutter build apk` fail with
+      # "Task 'assembleDevelopmentRelease' not found".
+      environment:
+        description: 'Value passed as --dart-define=ENVIRONMENT'
         required: true
         default: 'development'
         type: choice
@@ -28,7 +34,7 @@ on:
         default: ''
 
 concurrency:
-  group: build-${{ github.workflow }}-${{ github.ref }}-${{ inputs.platform }}-${{ inputs.flavor }}
+  group: build-${{ github.workflow }}-${{ github.ref }}-${{ inputs.platform }}-${{ inputs.environment }}
   cancel-in-progress: true
 
 permissions:
@@ -56,21 +62,20 @@ jobs:
       - name: Build APK
         shell: bash
         run: |
-          FLAVOR="${{ inputs.flavor }}"
+          ENVIRONMENT="${{ inputs.environment }}"
           BASE_URL="${{ inputs.base_url }}"
           if [ -z "$BASE_URL" ]; then
             BASE_URL="http://localhost:3000"
           fi
 
           flutter build apk \
-            --flavor "$FLAVOR" \
-            --dart-define=ENVIRONMENT="$FLAVOR" \
+            --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: android-apks-${{ inputs.flavor }}
+          name: android-apks-${{ inputs.environment }}
           path: build/app/outputs/flutter-apk/*.apk
 
   build-ios:
@@ -99,16 +104,15 @@ jobs:
       - name: Build iOS
         shell: bash
         run: |
-          FLAVOR="${{ inputs.flavor }}"
+          ENVIRONMENT="${{ inputs.environment }}"
           BASE_URL="${{ inputs.base_url }}"
           if [ -z "$BASE_URL" ]; then
             BASE_URL="http://localhost:3000"
           fi
 
           flutter build ios \
-            --flavor "$FLAVOR" \
             --no-codesign \
-            --dart-define=ENVIRONMENT="$FLAVOR" \
+            --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL"
 
   build-web:
@@ -132,19 +136,19 @@ jobs:
       - name: Build Web
         shell: bash
         run: |
-          FLAVOR="${{ inputs.flavor }}"
+          ENVIRONMENT="${{ inputs.environment }}"
           BASE_URL="${{ inputs.base_url }}"
           if [ -z "$BASE_URL" ]; then
             BASE_URL="http://localhost:3000"
           fi
 
           flutter build web \
-            --dart-define=ENVIRONMENT="$FLAVOR" \
+            --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: web-build-${{ inputs.flavor }}
+          name: web-build-${{ inputs.environment }}
           path: build/web
 
