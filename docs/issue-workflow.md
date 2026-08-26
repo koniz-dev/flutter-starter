@@ -580,22 +580,23 @@ Route these to `status:needs-uat`:
   [`e2e-android.yml`](../.github/workflows/e2e-android.yml) is
   `workflow_dispatch`-only by design. A session cannot run Patrol.
 
-  A human cannot usefully run it either, and the failure mode is the dangerous
-  kind: **the workflow reports success while executing zero tests.** Run
-  32870753971 built the APK, booted the emulator, and printed
-  `Total: 0  Successful: 0  Failed: 0  Skipped: 0` before exiting 0.
+  A human can, through Actions -> E2E Android (Patrol) -> Run workflow, and that
+  path is now real: the native harness exists
+  (`android/app/src/androidTest/java/.../MainActivityTest.java`,
+  `PatrolJUnitRunner`, the AndroidX orchestrator) and run 32966672465 collected
+  and executed a genuine test (`Total: 1`).
 
-  The cause is that Patrol's native Android harness was never scaffolded: there
-  is no `android/app/src/androidTest/` source set, no
-  `testInstrumentationRunner` in `android/app/build.gradle.kts`, and no Patrol
-  Gradle dependencies. Instrumentation therefore collects nothing. A pinned
-  `patrol_cli` gets past the compatibility check, which is necessary but not
-  sufficient.
+  Two things to put in the hand-off comment.
 
-  Consequences for a `needs-uat` hand-off: do not send a human to that workflow
-  and treat a green tick as verification. If you must reference it, tell them to
-  open the run and check that `Total:` is non-zero - a green job with `Total: 0`
-  is a false pass, not evidence.
+  First, **the shipped test fails without a reachable backend.** The sample auth
+  flow posts to `BASE_URL`; with no server the app stays on the login screen and
+  `expect($(#e2e_home_content), findsOneWidget)` finds nothing. Ask whether the
+  human has an API before sending them there.
+
+  Second, a green run is now trustworthy, which it was not before. The job fails
+  when the summary reports `Total: 0` or a non-zero `Failed:` count, closing two
+  false-green paths: an empty test set (`patrol test` exits 0 on one) and a
+  failing set whose exit code was swallowed by a pipe without `pipefail`.
 - **Real device behavior.** Anything RASP-related
   (`lib/core/security/`) is a no-op by default and only becomes meaningful on a
   real device with a real implementation wired in.
