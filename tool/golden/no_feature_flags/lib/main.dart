@@ -13,7 +13,11 @@ import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 
-void main() async {
+// Returns a Future so callers can await startup. `void main() async` would
+// discard it: integration tests could not wait for runApp, and any error
+// thrown by the awaits below would surface as an unhandled async error
+// instead of propagating.
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Future.wait([EnvConfig.load(), _initializeImageCache()]);
