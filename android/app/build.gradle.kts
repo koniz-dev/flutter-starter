@@ -28,6 +28,18 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Patrol E2E (integration_test/). Required for the androidTest source
+        // set to be discovered; without it `patrol test` collects 0 tests and
+        // still exits 0. Harmless for normal app builds.
+        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
+
+    // Patrol runs each Dart test in a fresh process via the AndroidX test
+    // orchestrator, so state does not leak between tests.
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     buildTypes {
@@ -41,4 +53,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Test-only: pulled in for androidTest variants, not shipped in the app.
+    androidTestUtil("androidx.test:orchestrator:1.5.1")
 }
