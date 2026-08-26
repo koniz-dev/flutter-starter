@@ -64,7 +64,11 @@ jobs:
           api-level: ${{ inputs.api_level }}
           arch: x86_64
           profile: ${{ inputs.emulator_profile }}
-          script: patrol test --target integration_test/app_e2e_test.dart 2>&1 | tee patrol-output.log
+          # `bash -o pipefail` is load-bearing. The emulator-runner executes this
+          # via /usr/bin/sh, so a bare `patrol test ... | tee` returns tee's exit
+          # status and a FAILING test set reports as a green job. Verified: a run
+          # with "Failed: 1" concluded success until this was added.
+          script: bash -o pipefail -c 'patrol test --target integration_test/app_e2e_test.dart 2>&1 | tee patrol-output.log'
 
       # `patrol test` exits 0 on an EMPTY test set. Before the native androidTest
       # source set existed, this job went green reporting "Total: 0" - a tick that
@@ -86,7 +90,12 @@ jobs:
             echo "::error::Patrol collected 0 tests. A green run here would be a false pass."
             exit 1
           fi
-          echo "OK: $total test(s) were actually collected and executed."
+          failed="$(grep -oE 'Failed: *[0-9]+' patrol-output.log | tail -1 | grep -oE '[0-9]+' || echo 0)"
+          if [ "$failed" -ne 0 ]; then
+            echo "::error::$failed of $total Patrol test(s) failed. See the patrol-output artifact."
+            exit 1
+          fi
+          echo "OK: $total test(s) collected and executed, 0 failed."
 
       - name: Upload Patrol output
         if: always()
