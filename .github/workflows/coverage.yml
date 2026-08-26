@@ -98,13 +98,15 @@ jobs:
         id: layer_coverage
         run: |
           chmod +x scripts/test/calculate_layer_coverage.sh
-          ./scripts/test/calculate_layer_coverage.sh coverage/lcov.info > /tmp/layer_coverage.txt
 
-          while IFS='=' read -r key value; do
-            echo "${key}=${value}" >> $GITHUB_OUTPUT
-          done < /tmp/layer_coverage.txt
+          # --github-output emits ONLY key=value lines. The previous version
+          # appended the script's human summary too, so prose like
+          # "Summary of coverage by layer" became a step-output key (#39).
+          ./scripts/test/calculate_layer_coverage.sh --github-output coverage/lcov.info \
+            >> "$GITHUB_OUTPUT"
 
-          cat /tmp/layer_coverage.txt
+          # And print the readable form for whoever is reading the log.
+          ./scripts/test/calculate_layer_coverage.sh coverage/lcov.info
 
       - name: Calculate coverage metrics
         id: metrics
@@ -112,24 +114,27 @@ jobs:
           # Overall coverage
           OVERALL=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1 | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//' || echo "0")
           
-          # Coverage by layer (simplified)
-          DOMAIN_TOTAL=$(grep "^SF:.*lib/features/.*/domain" coverage/lcov.info | wc -l || echo "0")
-          DATA_TOTAL=$(grep "^SF:.*lib/features/.*/data" coverage/lcov.info | wc -l || echo "0")
-          PRESENTATION_TOTAL=$(grep "^SF:.*lib/features/.*/presentation" coverage/lcov.info | wc -l || echo "0")
-          CORE_TOTAL=$(grep "^SF:.*lib/core" coverage/lcov.info | wc -l || echo "0")
-          
+          # File counts, kept only as context. They are NOT coverage - labelling
+          # them "Domain files: 15" beside a percentage is what made issue #25
+          # look like a real defect. Per-layer percentages come from the
+          # layer_coverage step above.
+          DOMAIN_FILES=$(grep -c "^SF:.*lib/features/.*/domain" coverage/lcov.info || echo "0")
+          DATA_FILES=$(grep -c "^SF:.*lib/features/.*/data" coverage/lcov.info || echo "0")
+          PRESENTATION_FILES=$(grep -c "^SF:.*lib/features/.*/presentation" coverage/lcov.info || echo "0")
+          CORE_FILES=$(grep -c "^SF:.*lib/core" coverage/lcov.info || echo "0")
+
           echo "overall=$OVERALL" >> $GITHUB_OUTPUT
-          echo "domain_files=$DOMAIN_TOTAL" >> $GITHUB_OUTPUT
-          echo "data_files=$DATA_TOTAL" >> $GITHUB_OUTPUT
-          echo "presentation_files=$PRESENTATION_TOTAL" >> $GITHUB_OUTPUT
-          echo "core_files=$CORE_TOTAL" >> $GITHUB_OUTPUT
-          
-          echo "📊 Coverage Metrics:"
-          echo "  Overall: ${OVERALL}%"
-          echo "  Domain files: ${DOMAIN_TOTAL}"
-          echo "  Data files: ${DATA_TOTAL}"
-          echo "  Presentation files: ${PRESENTATION_TOTAL}"
-          echo "  Core files: ${CORE_TOTAL}"
+          echo "domain_files=$DOMAIN_FILES" >> $GITHUB_OUTPUT
+          echo "data_files=$DATA_FILES" >> $GITHUB_OUTPUT
+          echo "presentation_files=$PRESENTATION_FILES" >> $GITHUB_OUTPUT
+          echo "core_files=$CORE_FILES" >> $GITHUB_OUTPUT
+
+          echo "📊 Overall line coverage: ${OVERALL}%"
+          echo ""
+          echo "Source files measured per layer (counts, not coverage):"
+          echo "  domain: ${DOMAIN_FILES}   data: ${DATA_FILES}   presentation: ${PRESENTATION_FILES}   core: ${CORE_FILES}"
+          echo "Per-layer coverage percentages are reported by the"
+          echo "'Calculate coverage by layer (architecture gates)' step above."
 
       - name: Enforce coverage thresholds
         run: |
