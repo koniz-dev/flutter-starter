@@ -21,9 +21,12 @@ Future<void> _probe(PatrolIntegrationTester $, String label) async {
       EnginePhase.sendSemanticsUpdate,
       const Duration(seconds: 25),
     );
+    // Printing is the point: this is a probe whose only output is the verdict
+    // in the CI log.
     // ignore: avoid_print
     print('PROBE-40 $label: SETTLED');
   } on Object catch (e) {
+    // Printing is the point: see above.
     // ignore: avoid_print
     print('PROBE-40 $label: TIMED OUT -> $e');
   }
@@ -31,14 +34,14 @@ Future<void> _probe(PatrolIntegrationTester $, String label) async {
 
 void main() {
   patrolTest('probe: framePolicy onlyPumps', ($) async {
-    final b = WidgetsBinding.instance as LiveTestWidgetsFlutterBinding;
-    b.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
+    (WidgetsBinding.instance as LiveTestWidgetsFlutterBinding).framePolicy =
+        LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
     await _probe($, 'onlyPumps');
   });
 
   patrolTest('probe: framePolicy fadePointers (Patrol default)', ($) async {
-    final b = WidgetsBinding.instance as LiveTestWidgetsFlutterBinding;
-    b.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fadePointers;
+    (WidgetsBinding.instance as LiveTestWidgetsFlutterBinding).framePolicy =
+        LiveTestWidgetsFlutterBindingFramePolicy.fadePointers;
     await _probe($, 'fadePointers');
   });
 }
