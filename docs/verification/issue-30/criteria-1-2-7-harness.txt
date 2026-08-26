@@ -1,0 +1,13 @@
+# Criteria 1, 2, 7: the native harness exists and analysis is unaffected
+
+$ find android -path '*androidTest*' -name '*.java'
+android/app/src/androidTest/java/com/example/flutter_starter/MainActivityTest.java
+
+$ grep -n testInstrumentationRunner android/app/build.gradle.kts
+35:        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+36:        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+42:        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+60:    androidTestUtil("androidx.test:orchestrator:1.5.1")
+
+$ flutter analyze  (android/** is excluded from analysis)
+No issues found! (ran in 2.5s)

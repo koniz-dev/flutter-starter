@@ -102,17 +102,16 @@ make the loop worthless.
   connected (only macOS desktop and Chrome), and
   [`e2e-android.yml`](.github/workflows/e2e-android.yml) is
   `workflow_dispatch`-only by design. **A session cannot run Patrol.**
-  A human cannot usefully run it either, and the reason matters: **the workflow
-  goes green while running zero tests.** Run 32870753971 built the APK, booted
-  the emulator, and reported `Total: 0  Successful: 0  Failed: 0  Skipped: 0` -
-  then exited 0, so the job is a green tick that proves nothing. Patrol's native
-  Android harness was never scaffolded (no `android/app/src/androidTest/`, no
-  `testInstrumentationRunner`, no Patrol Gradle deps), so instrumentation finds
-  no tests to collect.
-  **Never cite a green E2E Android run as evidence.** Open the run and confirm
-  `Total:` is non-zero first. Keep `patrol_cli` pinned to the version matching
-  the `patrol` dependency; unpinned resolves an incompatible CLI and aborts
-  before any test runs.
+  A **human** can now run it: Actions -> E2E Android (Patrol) -> Run workflow.
+  The native harness exists (`android/app/src/androidTest/`,
+  `PatrolJUnitRunner`, orchestrator) and run 32966672465 collected and executed a
+  real test (`Total: 1`). The job also fails on `Total: 0` or a non-zero
+  `Failed:` count, so a green run there is now trustworthy - that was not true
+  before, when it went green having run nothing.
+  Two live caveats: the shipped test still **fails without a reachable backend**
+  (the auth flow posts to `BASE_URL`), so a `needs-uat` hand-off must say whether
+  the human has an API; and `patrol_cli` must stay pinned to the version matching
+  the `patrol` dependency, or it aborts before any test runs.
 - **Real device behavior**, including everything RASP (`lib/core/security/` is a
   no-op by default and only meaningful on a real device).
 - **Gestures**: hover, right-click, drag, long-press discoverability,
