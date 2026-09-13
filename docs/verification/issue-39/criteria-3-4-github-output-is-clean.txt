@@ -1,0 +1,34 @@
+Criterion 3/4: only key=value lines reach $GITHUB_OUTPUT; no key contains a space.
+Generated locally against coverage/lcov.info on 4f5bc36 (2026-09-13T05:08:39Z).
+
+=== ./scripts/test/calculate_layer_coverage.sh --github-output coverage/lcov.info (stdout) ===
+domain=100.0
+data=96.2
+presentation=93.5
+core=85.2
+domain_display=100.0%
+data_display=96.2%
+presentation_display=93.5%
+core_display=85.2%
+
+=== line count / key audit ===
+total stdout lines: 8
+lines WITHOUT an '=': 0
+keys containing a space: 0
+
+=== parsed keys ===
+  key: [domain]
+  key: [data]
+  key: [presentation]
+  key: [core]
+  key: [domain_display]
+  key: [data_display]
+  key: [presentation_display]
+  key: [core_display]
+
+=== human mode (no --github-output) goes to the log, not to $GITHUB_OUTPUT ===
+Coverage by layer (percentage of executable lines covered):
+  Domain:       100.0%
+  Data:         96.2%
+  Presentation: 93.5%
+  Core:         85.2%
