@@ -1,0 +1,47 @@
+Upgrading analysis_options.yaml to exclude build and platform directories.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart
+00:00 +0: full app reaches an idle frame (#40 regression) pumpAndSettle on the whole app does not time out
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +1: All tests passed!
+=== the regression test, as merged (test/main_test.dart) ===
+void main() {
+  // Regression guard for #40. On a real device `pumpAndSettle` never returns,
+  // and the natural suspicion is that the app tree schedules frames forever.
+  // It does not: under the standard test binding the whole app - router,
+  // Riverpod scope, localization and the initial route - reaches an idle frame.
+  //
+  // That makes this test the control. If it ever starts timing out, something
+  // in `lib/` really has begun scheduling frames continuously, and that is a
+  // battery and jank bug on device, not just a test problem. The device-side
+  // timeout is a property of Patrol's live binding instead; see
+  // `test/helpers/pump_app.dart` and `integration_test/README.md`.
+  group('full app reaches an idle frame (#40 regression)', () {
+    testWidgets('pumpAndSettle on the whole app does not time out', (
+      tester,
+    ) async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(container: container, child: const MyApp()),
+      );
+
+      // A generous but finite timeout: this throws `pumpAndSettle timed out`
+      // rather than hanging if the tree ever stops quiescing.
+      final frames = await tester.pumpAndSettle(const Duration(seconds: 10));
+
+      // Settling in a finite number of frames IS the assertion - a tree that
+      // schedules frames forever never gets here.
+      expect(frames, greaterThan(0));
+      expect(tester.binding.hasScheduledFrame, isFalse);
+    });
+  });
+
+  group('MyApp', () {
+    testWidgets('should create MyApp widget', (tester) async {
+      const myApp = MyApp();

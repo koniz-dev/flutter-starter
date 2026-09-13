@@ -1,0 +1,42 @@
+On-device probe - run 34740075658 (E2E Android (Patrol), branch investigate/frame-policy-probe-v2)
+Target: integration_test/frame_policy_probe_test.dart
+The probe runs the SAME pumpAndSettle (25s timeout) under both frame policies.
+
+=== patrol summary ===
+Total: 2
+Successful: 2
+Failed: 0
+Skipped: 0
+
+=== per-test durations, from the Gradle instrumentation report ===
+runDartTest[frame_policy_probe_test probe: framePolicy fadePointers (Patrol default)]  passed (1m46.07s)
+runDartTest[frame_policy_probe_test probe: framePolicy onlyPumps]                      passed (1m51.33s)
+
+READ THIS BEFORE USING THE NUMBERS ABOVE
+
+'passed' here does NOT mean pumpAndSettle settled. The probe wraps the call
+in try/catch and prints its verdict, so the test passes either way - passing
+only means the probe itself ran.
+
+The probe's print() output goes to logcat, not to patrol's stdout, and was
+not captured. So the PROBE-40 verdict lines are NOT available and this run
+is suggestive, not conclusive.
+
+What the durations suggest: the settle timeout is 25s. If one policy had
+settled and the other timed out, the two tests would differ by roughly 25s.
+They differ by 5s and are both ~1m50s, which is what you get when BOTH time
+out at 25s on top of ~80s of fixed boot and native-automation overhead.
+
+That matches the source analysis in criterion-1-cause-in-source.txt, and it
+is why the probe's original decision rule was wrong. That rule said:
+
+    onlyPumps settles + fadePointers times out -> the binding is the cause.
+    both time out                              -> the app is the cause.
+
+The second line is false. onlyPumps re-arms the next frame exactly as
+fadePointers does - the re-arming branch at flutter_test binding.dart:2823
+excludes only 'benchmark'. So 'both time out' is the EXPECTED result of a
+binding cause, and reading it as an app cause would send the next reader
+hunting a bug in lib/ that is not there.
+
+The conclusive evidence for this issue is the source, not this run.
