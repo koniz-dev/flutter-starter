@@ -72,7 +72,7 @@ jobs:
           # via /usr/bin/sh, so a bare `patrol test ... | tee` returns tee's exit
           # status and a FAILING test set reports as a green job. Verified: a run
           # with "Failed: 1" concluded success until this was added.
-          script: bash -o pipefail -c 'patrol test --target ${{ inputs.target }} 2>&1 | tee patrol-output.log'
+          script: bash -o pipefail -c 'patrol test --verbose --target ${{ inputs.target }} 2>&1 | tee patrol-output.log'
 
       # `patrol test` exits 0 on an EMPTY test set. Before the native androidTest
       # source set existed, this job went green reporting "Total: 0" - a tick that
@@ -107,4 +107,15 @@ jobs:
         with:
           name: patrol-output
           path: patrol-output.log
+          if-no-files-found: warn
+
+      # `patrol test` prints only "Gradle test execution failed with code 1" when
+      # the instrumentation dies before collecting anything. The real reason is
+      # in the connectedAndroidTest report, so keep it.
+      - name: Upload instrumentation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-test-report
+          path: build/app/reports/androidTests/connected/
           if-no-files-found: warn
