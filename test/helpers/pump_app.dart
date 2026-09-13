@@ -11,6 +11,30 @@ import 'package:flutter_test/flutter_test.dart';
 /// providers.
 /// It automatically wraps the widget in ProviderScope and MaterialApp.
 ///
+/// Note that this pumps [widget] inside its *own* `MaterialApp`. It does not
+/// boot the real app, so there is no router, no `main()` bootstrap and no
+/// navigation observer. To exercise those, pump `MyApp` directly - see
+/// `test/main_test.dart`.
+///
+/// ## `pumpAndSettle` is safe here, but not on a device
+///
+/// Under the standard test binding (`flutter test`, which is what these helpers
+/// run on) `pumpAndSettle` works normally, including on the full app.
+///
+/// It does **not** work under a live binding on a real device, which is what
+/// Patrol uses for `integration_test/`. That is not a property of this app's
+/// widget tree - it is how `LiveTestWidgetsFlutterBinding` works. After any
+/// frame the test did not itself pump, `handleDrawFrame` calls
+/// `platformDispatcher.scheduleFrame()` again for every frame policy except
+/// `benchmark`, so a frame is always pending, `hasScheduledFrame` is never
+/// false, and the `do { pump } while (hasScheduledFrame)` loop inside
+/// `pumpAndSettle` cannot exit. On device it throws `pumpAndSettle timed out`
+/// regardless of what the app is doing.
+///
+/// In `integration_test/`, use Patrol's `waitUntilVisible` (which polls rather
+/// than demanding quiescence) instead of `pumpAndSettle`. See
+/// `integration_test/README.md` and issue #40.
+///
 /// Example:
 /// ```dart
 /// await pumpApp(

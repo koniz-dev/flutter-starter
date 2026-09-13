@@ -14,11 +14,17 @@ const hasBackend = bool.fromEnvironment('E2E_BACKEND');
 
 /// Boots the app and waits for the first frame.
 ///
-/// Deliberately does NOT use `pumpAndSettle`. On a real device it times out
-/// whenever the tree never reaches an idle frame, which is what happened here:
-/// `pumpAndSettle timed out` after 131s with the app running fine. Patrol's
-/// `waitUntilVisible` polls instead of demanding quiescence, so it tolerates
-/// any ongoing platform or animation activity.
+/// Deliberately does NOT use `pumpAndSettle`, which cannot work on a device.
+/// This is a property of the test binding, not of this app: `PatrolBinding`
+/// extends `LiveTestWidgetsFlutterBinding`, whose `handleDrawFrame` calls
+/// `platformDispatcher.scheduleFrame()` again after any frame the test did not
+/// itself pump (`flutter_test/lib/src/binding.dart:2823-2825`, every policy but
+/// `benchmark`). A frame is therefore always pending, so the
+/// `do { pump } while (hasScheduledFrame)` loop inside `pumpAndSettle` never
+/// exits and throws `pumpAndSettle timed out` however idle the app is.
+///
+/// Patrol's `waitUntilVisible` polls instead of demanding quiescence, so it is
+/// unaffected. See `integration_test/README.md` and issue #40.
 Future<void> _boot(PatrolIntegrationTester $) async {
   await app.main();
   await $.pump(const Duration(seconds: 1));
