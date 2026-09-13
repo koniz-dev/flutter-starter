@@ -8,6 +8,38 @@ import 'package:flutter_starter/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  // Regression guard for #40. On a real device `pumpAndSettle` never returns,
+  // and the natural suspicion is that the app tree schedules frames forever.
+  // It does not: under the standard test binding the whole app - router,
+  // Riverpod scope, localization and the initial route - reaches an idle frame.
+  //
+  // That makes this test the control. If it ever starts timing out, something
+  // in `lib/` really has begun scheduling frames continuously, and that is a
+  // battery and jank bug on device, not just a test problem. The device-side
+  // timeout is a property of Patrol's live binding instead; see
+  // `test/helpers/pump_app.dart` and `integration_test/README.md`.
+  group('full app reaches an idle frame (#40 regression)', () {
+    testWidgets('pumpAndSettle on the whole app does not time out', (
+      tester,
+    ) async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(container: container, child: const MyApp()),
+      );
+
+      // A generous but finite timeout: this throws `pumpAndSettle timed out`
+      // rather than hanging if the tree ever stops quiescing.
+      final frames = await tester.pumpAndSettle(const Duration(seconds: 10));
+
+      // Settling in a finite number of frames IS the assertion - a tree that
+      // schedules frames forever never gets here.
+      expect(frames, greaterThan(0));
+      expect(tester.binding.hasScheduledFrame, isFalse);
+    });
+  });
+
   group('MyApp', () {
     testWidgets('should create MyApp widget', (tester) async {
       const myApp = MyApp();
