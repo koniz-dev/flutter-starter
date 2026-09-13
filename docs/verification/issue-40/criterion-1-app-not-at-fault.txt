@@ -1,0 +1,15 @@
+Criterion 1 (corroboration) - nothing in lib/ schedules frames.
+Commit: 490ce23
+
+### Frame/ticker/vsync scheduling APIs across lib/ (generated files excluded)
+$ grep -rnE 'addPersistentFrameCallback|addPostFrameCallback|scheduleFrame|addTimingsCallback|SchedulerBinding|Ticker|vsync|AnimationController' lib/
+(no matches)
+
+### Every Timer in lib/
+$ grep -rn 'Timer' lib/ | grep -v generated
+lib/core/utils/debouncer.dart:30:  Timer? _timer;
+lib/core/utils/debouncer.dart:38:    _timer = Timer(_duration, callback);
+
+-> The only timer is the one-shot in core/utils/debouncer.dart. There is no
+   AnimationController, no Ticker, no frame callback and no Timer.periodic.
+   The app tree cannot be what keeps frames scheduled.

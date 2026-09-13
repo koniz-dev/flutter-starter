@@ -1,0 +1,73 @@
+Criterion 1 - the cause, as source.
+Flutter Flutter 3.47.0 ; patrol 3.20.0
+
+### 1. pumpAndSettle exits only when no frame is scheduled
+--- /usr/local/share/flutter/packages/flutter_test/lib/src/widget_tester.dart:711-723
+711:    }());
+712:    return TestAsyncUtils.guard<int>(() async {
+713:      final DateTime endTime = binding.clock.fromNowBy(timeout);
+714:      var count = 0;
+715:      do {
+716:        if (binding.clock.now().isAfter(endTime)) {
+717:          throw FlutterError('pumpAndSettle timed out');
+718:        }
+719:        await binding.pump(duration, phase);
+720:        count += 1;
+721:      } while (binding.hasScheduledFrame);
+722:      return count;
+723:    });
+
+### 2. The live binding re-arms a frame after every frame the test did not pump
+--- /usr/local/share/flutter/packages/flutter_test/lib/src/binding.dart:2810-2826
+2810:    }
+2811:    if (_drawFrame == _HandleDrawFrame.drawFrame) {
+2812:      super.handleDrawFrame();
+2813:    }
+2814:    _drawFrame = _HandleDrawFrame.reset;
+2815:    _viewNeedsPaint = false;
+2816:    _expectingFrameToReassemble = false;
+2817:    if (_expectingFrame) {
+2818:      // set during pump
+2819:      assert(_pendingFrame != null);
+2820:      _pendingFrame!.complete(); // unlocks the test API
+2821:      _pendingFrame = null;
+2822:      _expectingFrame = false;
+2823:    } else if (framePolicy != LiveTestWidgetsFlutterBindingFramePolicy.benchmark) {
+2824:      platformDispatcher.scheduleFrame();
+2825:    }
+2826:  }
+
+### 3. ...and its default policy is fadePointers, not benchmark
+--- /usr/local/share/flutter/packages/flutter_test/lib/src/binding.dart:2754-2755
+2754:  LiveTestWidgetsFlutterBindingFramePolicy framePolicy =
+2755:      LiveTestWidgetsFlutterBindingFramePolicy.fadePointers;
+
+### 4. benchmark - the one policy that does NOT re-arm - is explicitly rejected
+--- /usr/local/share/flutter/packages/flutter_test/lib/src/widget_tester.dart:698-711
+698:    assert(timeout > Duration.zero);
+699:    assert(() {
+700:      final WidgetsBinding binding = this.binding;
+701:      if (binding is LiveTestWidgetsFlutterBinding &&
+702:          binding.framePolicy == LiveTestWidgetsFlutterBindingFramePolicy.benchmark) {
+703:        matcher_expect.fail(
+704:          'When using LiveTestWidgetsFlutterBindingFramePolicy.benchmark, '
+705:          'hasScheduledFrame is never set to true. This means that pumpAndSettle() '
+706:          'cannot be used, because it has no way to know if the application has '
+707:          'stopped registering new frames.',
+708:        );
+709:      }
+710:      return true;
+711:    }());
+
+### 5. Patrol inherits all of it
+--- patrol-3.20.0/lib/src/binding.dart:43
+43:class PatrolBinding extends LiveTestWidgetsFlutterBinding {
+--- patrol-3.20.0/lib/src/common.dart:96-103
+96:  LiveTestWidgetsFlutterBindingFramePolicy framePolicy =
+97:      LiveTestWidgetsFlutterBindingFramePolicy.fadePointers,
+98:}) {
+99:  final patrolLog = PatrolLogWriter(config: {'printLogs': config.printLogs});
+100:  final automator = NativeAutomator(config: nativeAutomatorConfig);
+101:  final automator2 = NativeAutomator2(config: nativeAutomatorConfig);
+102:  final patrolBinding = PatrolBinding.ensureInitialized(nativeAutomatorConfig)
+103:    ..framePolicy = framePolicy;
