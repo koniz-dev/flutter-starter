@@ -1,0 +1,105 @@
+======== STEP: Calculate coverage by layer (architecture gates) ========
+##[group]Run chmod +x scripts/test/calculate_layer_coverage.sh
+^[[36;1mchmod +x scripts/test/calculate_layer_coverage.sh^[[0m
+^[[36;1m^[[0m
+^[[36;1m# --github-output emits ONLY key=value lines. The previous version^[[0m
+^[[36;1m# appended the script's human summary too, so prose like^[[0m
+^[[36;1m# "Summary of coverage by layer" became a step-output key (#39).^[[0m
+^[[36;1m./scripts/test/calculate_layer_coverage.sh --github-output coverage/lcov.info \^[[0m
+^[[36;1m  >> "$GITHUB_OUTPUT"^[[0m
+^[[36;1m^[[0m
+^[[36;1m# And print the readable form for whoever is reading the log.^[[0m
+^[[36;1m./scripts/test/calculate_layer_coverage.sh coverage/lcov.info^[[0m
+shell: /usr/bin/bash -e {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.4-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+##[endgroup]
+Coverage by layer (percentage of executable lines covered):
+  Domain:       100.0%
+  Data:         96.0%
+  Presentation: 95.4%
+  Core:         85.1%
+
+======== STEP: Calculate coverage metrics ========
+##[group]Run # Overall coverage
+^[[36;1m# Overall coverage^[[0m
+^[[36;1mOVERALL=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1 | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//' || echo "0")^[[0m
+^[[36;1m^[[0m
+^[[36;1m# File counts, kept only as context. They are NOT coverage - labelling^[[0m
+^[[36;1m# them "Domain files: 15" beside a percentage is what made issue #25^[[0m
+^[[36;1m# look like a real defect. Per-layer percentages come from the^[[0m
+^[[36;1m# layer_coverage step above.^[[0m
+^[[36;1mDOMAIN_FILES=$(grep -c "^SF:.*lib/features/.*/domain" coverage/lcov.info || echo "0")^[[0m
+^[[36;1mDATA_FILES=$(grep -c "^SF:.*lib/features/.*/data" coverage/lcov.info || echo "0")^[[0m
+^[[36;1mPRESENTATION_FILES=$(grep -c "^SF:.*lib/features/.*/presentation" coverage/lcov.info || echo "0")^[[0m
+^[[36;1mCORE_FILES=$(grep -c "^SF:.*lib/core" coverage/lcov.info || echo "0")^[[0m
+^[[36;1m^[[0m
+^[[36;1mecho "overall=$OVERALL" >> $GITHUB_OUTPUT^[[0m
+^[[36;1mecho "domain_files=$DOMAIN_FILES" >> $GITHUB_OUTPUT^[[0m
+^[[36;1mecho "data_files=$DATA_FILES" >> $GITHUB_OUTPUT^[[0m
+^[[36;1mecho "presentation_files=$PRESENTATION_FILES" >> $GITHUB_OUTPUT^[[0m
+^[[36;1mecho "core_files=$CORE_FILES" >> $GITHUB_OUTPUT^[[0m
+^[[36;1m^[[0m
+^[[36;1mecho "📊 Overall line coverage: ${OVERALL}%"^[[0m
+^[[36;1mecho ""^[[0m
+^[[36;1mecho "Source files measured per layer (counts, not coverage):"^[[0m
+^[[36;1mecho "  domain: ${DOMAIN_FILES}   data: ${DATA_FILES}   presentation: ${PRESENTATION_FILES}   core: ${CORE_FILES}"^[[0m
+^[[36;1mecho "Per-layer coverage percentages are reported by the"^[[0m
+^[[36;1mecho "'Calculate coverage by layer (architecture gates)' step above."^[[0m
+shell: /usr/bin/bash -e {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.4-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+##[endgroup]
+📊 Overall line coverage: 89.9%
+
+Source files measured per layer (counts, not coverage):
+  domain: 15   data: 12   presentation: 11   core: 70
+Per-layer coverage percentages are reported by the
+'Calculate coverage by layer (architecture gates)' step above.
+
+======== STEP: Enforce coverage thresholds ========
+##[group]Run OVERALL=89.9
+^[[36;1mOVERALL=89.9^[[0m
+^[[36;1mDOMAIN_COV=100.0^[[0m
+^[[36;1mDATA_COV=96.0^[[0m
+^[[36;1mPRESENTATION_COV=95.4^[[0m
+^[[36;1mCORE_COV=85.1^[[0m
+^[[36;1m^[[0m
+^[[36;1mFAILED=0^[[0m
+^[[36;1m^[[0m
+^[[36;1mcheck_threshold() {^[[0m
+^[[36;1m  local name=$1^[[0m
+^[[36;1m  local current=$2^[[0m
+^[[36;1m  local target=$3^[[0m
+^[[36;1m  if (( $(echo "$current < $target" | bc -l) )); then^[[0m
+^[[36;1m    echo "❌ $name: ${current}% < ${target}%"^[[0m
+^[[36;1m    return 1^[[0m
+^[[36;1m  else^[[0m
+^[[36;1m    echo "✅ $name: ${current}% >= ${target}%"^[[0m
+^[[36;1m    return 0^[[0m
+^[[36;1m  fi^[[0m
+^[[36;1m}^[[0m
+^[[36;1m^[[0m
+^[[36;1mcheck_threshold "Total Coverage" "$OVERALL" 80 || exit 1^[[0m
+^[[36;1mcheck_threshold "Domain Layer" "$DOMAIN_COV" 100 || FAILED=1^[[0m
+^[[36;1mcheck_threshold "Data Layer" "$DATA_COV" 90 || FAILED=1^[[0m
+^[[36;1mcheck_threshold "Presentation Layer" "$PRESENTATION_COV" 80 || FAILED=1^[[0m
+^[[36;1mcheck_threshold "Core Layer" "$CORE_COV" 80 || FAILED=1^[[0m
+^[[36;1m^[[0m
+^[[36;1mif [ $FAILED -eq 1 ]; then^[[0m
+^[[36;1m  echo "⚠️ One or more architectural layers did not meet coverage targets."^[[0m
+^[[36;1m  exit 1^[[0m
+^[[36;1mfi^[[0m
+shell: /usr/bin/bash -e {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.4-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+##[endgroup]
+✅ Total Coverage: 89.9% >= 80%
+✅ Domain Layer: 100.0% >= 100%
+✅ Data Layer: 96.0% >= 90%
+✅ Presentation Layer: 95.4% >= 80%
+✅ Core Layer: 85.1% >= 80%
+
