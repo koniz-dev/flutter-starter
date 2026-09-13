@@ -4,7 +4,23 @@
 
 set -e
 
-LCOV_FILE="${1:-coverage/lcov.info}"
+# Two output modes, deliberately separated:
+#   (default)         human summary, for a developer running this by hand
+#   --github-output   ONLY `key=value` lines, safe to append to $GITHUB_OUTPUT
+#
+# They used to be mixed on stdout, and .github/workflows/coverage.yml appended
+# every line with `while IFS='=' read -r key value`, so prose such as
+# "Summary of coverage by layer" became a step-output key. See issue #39.
+GITHUB_OUTPUT_MODE=0
+LCOV_FILE=""
+for arg in "$@"; do
+  case "$arg" in
+    --github-output) GITHUB_OUTPUT_MODE=1 ;;
+    -h|--help) sed -n '2,4p' "$0"; exit 0 ;;
+    *) LCOV_FILE="$arg" ;;
+  esac
+done
+LCOV_FILE="${LCOV_FILE:-coverage/lcov.info}"
 
 if [ ! -f "$LCOV_FILE" ]; then
   echo "Error: lcov file not found at $LCOV_FILE" >&2
@@ -70,24 +86,23 @@ DATA_COV=$(calculate_layer_coverage "/features/.*/data/")
 PRESENTATION_COV=$(calculate_layer_coverage "/features/.*/presentation/")
 CORE_COV=$(calculate_layer_coverage "/core/")
 
-# Output values with % suffix for display
-echo "Output values with % suffix for display"
-echo "domain_display=$DOMAIN_COV%"
-echo "data_display=$DATA_COV%"
-echo "presentation_display=$PRESENTATION_COV%"
-echo "core_display=$CORE_COV%"
+if [ "$GITHUB_OUTPUT_MODE" -eq 1 ]; then
+  # Machine-readable only. Every line here MUST be a valid key=value pair.
+  echo "domain=$DOMAIN_COV"
+  echo "data=$DATA_COV"
+  echo "presentation=$PRESENTATION_COV"
+  echo "core=$CORE_COV"
+  echo "domain_display=$DOMAIN_COV%"
+  echo "data_display=$DATA_COV%"
+  echo "presentation_display=$PRESENTATION_COV%"
+  echo "core_display=$CORE_COV%"
+  exit 0
+fi
 
-# Output numeric values for comparison
-echo "Output numeric values for comparison"
-echo "domain=$DOMAIN_COV"
-echo "data=$DATA_COV"
-echo "presentation=$PRESENTATION_COV"
-echo "core=$CORE_COV"
-
-# Print to console for visibility
-echo "Summary of coverage by layer"
-echo "Domain Layer: ${DOMAIN_COV}%"
-echo "Data Layer: ${DATA_COV}%"
-echo "Presentation Layer: ${PRESENTATION_COV}%"
-echo "Core Layer: ${CORE_COV}%"
+# Human summary. These are line-coverage percentages, not file counts.
+echo "Coverage by layer (percentage of executable lines covered):"
+echo "  Domain:       ${DOMAIN_COV}%"
+echo "  Data:         ${DATA_COV}%"
+echo "  Presentation: ${PRESENTATION_COV}%"
+echo "  Core:         ${CORE_COV}%"
 

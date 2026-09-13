@@ -66,16 +66,26 @@ Main coverage script with options:
 
 #### calculate_layer_coverage.sh
 
-Analyzes coverage by layer:
+Reports the percentage of executable lines covered, per architectural layer:
 
 ```bash
-./scripts/test/calculate_layer_coverage.sh
+./scripts/test/calculate_layer_coverage.sh                       # human summary
+./scripts/test/calculate_layer_coverage.sh --github-output       # key=value only
 ```
 
-Output shows:
-- Coverage by layer (Domain, Data, Presentation, Core, Shared)
-- Files with low coverage (< 60%)
-- Coverage percentages per component
+```
+Coverage by layer (percentage of executable lines covered):
+  Domain:       100.0%
+  Data:         96.2%
+  Presentation: 93.5%
+  Core:         85.2%
+```
+
+Four layers only — `domain`, `data`, `presentation` and `core`. It does **not**
+list individual low-coverage files, and there is no `shared` layer figure; this
+description previously claimed both. `--github-output` exists so
+[`coverage.yml`](../../../.github/workflows/coverage.yml) can append the values
+straight to `$GITHUB_OUTPUT` without the human text becoming step-output keys.
 
 ## CI/CD Coverage
 
