@@ -221,31 +221,29 @@ void main() {
       });
     });
 
+    // `getAll()` cannot throw: it returns an empty map unless a file was
+    // loaded, and reads `dotenv.env` only when it was. The try/catch these
+    // tests used to carry (and its `expect(e, isA<Exception>())`) hid that,
+    // and would have turned any genuine assertion failure into a pass.
     group('getAll method', () {
-      test('should have getAll method', () {
-        // Assert
-        // Note: getAll() may throw if dotenv.env is accessed when .env file
-        // doesn't exist. This is a limitation of the flutter_dotenv package.
-        // We verify the method exists and handle the exception if thrown.
-        expect(EnvConfig.getAll, isA<Function>());
-        try {
-          final result = EnvConfig.getAll();
-          expect(result, isA<Map<String, String>>());
-        } on Exception {
-          // Expected if .env file doesn't exist
-          // Test passes if method exists (checked above)
-        }
+      test('returns an empty map when no .env file was loaded', () async {
+        await EnvConfig.load(fileName: 'definitely-not-here.env');
+
+        expect(EnvConfig.isInitialized, isFalse);
+        expect(EnvConfig.getAll(), isEmpty);
       });
 
-      test('should return Map type', () {
-        // Test that getAll returns a Map even if empty
-        try {
-          final result = EnvConfig.getAll();
-          expect(result, isA<Map<String, String>>());
-        } on Exception catch (e) {
-          // Expected if .env file doesn't exist
-          expect(e, isA<Exception>());
-        }
+      test('returns the parsed file contents once a file is loaded', () async {
+        // `.env.example` is a declared Flutter asset (pubspec.yaml), so it is
+        // readable from `flutter test` - unlike `.env`, which is gitignored.
+        await EnvConfig.load(fileName: '.env.example');
+
+        expect(EnvConfig.isInitialized, isTrue);
+        expect(
+          EnvConfig.getAll(),
+          containsPair('ENVIRONMENT', 'development'),
+          reason: 'getAll must expose what the loaded file actually contains',
+        );
       });
     });
 
@@ -365,26 +363,16 @@ void main() {
     });
 
     group('getAll - Additional Cases', () {
-      test('should return empty map when no env vars', () {
-        try {
-          final result = EnvConfig.getAll();
-          expect(result, isA<Map<String, String>>());
-        } on Exception {
-          // Expected if .env file doesn't exist
-          expect(true, isTrue);
-        }
-      });
+      test('a failed load leaves getAll empty rather than stale', () async {
+        await EnvConfig.load(fileName: '.env.example');
+        expect(EnvConfig.getAll(), isNotEmpty);
 
-      test('should handle getAll when not initialized', () async {
-        // Reset by loading non-existent file
+        // A later failed load must reset the state, not keep serving the
+        // previously parsed file.
         await EnvConfig.load(fileName: 'non-existent.env');
-        try {
-          final result = EnvConfig.getAll();
-          expect(result, isA<Map<String, String>>());
-        } on Exception {
-          // Expected
-          expect(true, isTrue);
-        }
+
+        expect(EnvConfig.isInitialized, isFalse);
+        expect(EnvConfig.getAll(), isEmpty);
       });
     });
 
@@ -637,14 +625,12 @@ void main() {
         expect(exists, isA<bool>());
       });
 
-      test('should get all from .env when initialized', () {
-        try {
-          final all = EnvConfig.getAll();
-          expect(all, isA<Map<String, String>>());
-        } on Exception {
-          // Expected if .env doesn't exist
-          expect(true, isTrue);
-        }
+      test('should get all from .env when initialized', () async {
+        await EnvConfig.load(fileName: '.env.example');
+
+        final all = EnvConfig.getAll();
+        expect(all.keys, contains('BASE_URL'));
+        expect(all['ENVIRONMENT'], 'development');
       });
     });
 

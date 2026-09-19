@@ -4,6 +4,10 @@
 // minted access token travelled over an unpinned transport; and requesting
 // pinning without fingerprints disabled it in silence.
 
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:crypto/crypto.dart';
 import 'package:dio/io.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
@@ -48,9 +52,43 @@ class _InMemoryTokenStore implements ITokenStore {
   Future<bool> setRefreshToken(String token) async => true;
 }
 
-// A plausible SHA-256 fingerprint; never actually matched in these tests.
+// A plausible SHA-256 fingerprint; never matches [_certificateBytes].
 const _fingerprint =
     '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+
+/// Stand-in DER bytes for a server certificate. The pinning check only ever
+/// hashes `cert.der`, so real ASN.1 is not needed to exercise it.
+final Uint8List _certificateBytes = Uint8List.fromList(
+  List<int>.generate(64, (i) => i),
+);
+
+String _hashOf(Uint8List der) => sha256.convert(der).toString().toLowerCase();
+
+/// Minimal [X509Certificate]: the pinning check reads only [der].
+class _FakeCertificate implements X509Certificate {
+  _FakeCertificate(this.der);
+
+  @override
+  final Uint8List der;
+
+  @override
+  DateTime get endValidity => DateTime.utc(2099);
+
+  @override
+  String get issuer => 'CN=Test CA';
+
+  @override
+  String get pem => '-----BEGIN CERTIFICATE-----';
+
+  @override
+  Uint8List get sha1 => Uint8List(20);
+
+  @override
+  DateTime get startValidity => DateTime.utc(2020);
+
+  @override
+  String get subject => 'CN=api.example.com';
+}
 
 void main() {
   group('SslPinning', () {
@@ -77,6 +115,54 @@ void main() {
       const off = SslPinning(enabled: false, fingerprints: [_fingerprint]);
 
       expect(off.createAdapter(), isNull);
+    });
+
+    // Criterion 4 of #53. These assert the *wiring* of the pinning branch:
+    // which adapter an ApiClient ends up with, and what the installed
+    // fingerprint check answers. Real TLS behaviour - an actual handshake
+    // against a server presenting a mismatched certificate - is tier 3 and is
+    // not verified here.
+    test('the pinned adapter installs a certificate check', () {
+      const pinned = SslPinning(enabled: true, fingerprints: [_fingerprint]);
+
+      final adapter = pinned.createAdapter()! as IOHttpClientAdapter;
+
+      // A non-null createHttpClient is what distinguishes the pinned
+      // transport from Dio's default one: it is the hook that installs the
+      // empty trust store plus badCertificateCallback.
+      expect(adapter.createHttpClient, isNotNull);
+      expect(adapter.createHttpClient!(), isA<HttpClient>());
+    });
+
+    test('accepts a certificate whose fingerprint is pinned', () {
+      final cert = _FakeCertificate(_certificateBytes);
+      final pinning = SslPinning(
+        enabled: true,
+        fingerprints: [_hashOf(_certificateBytes)],
+      );
+
+      expect(pinning.acceptsCertificate(cert, host: 'api.example.com'), isTrue);
+    });
+
+    test('rejects a certificate whose fingerprint is not pinned', () {
+      final cert = _FakeCertificate(_certificateBytes);
+      const pinning = SslPinning(
+        enabled: true,
+        fingerprints: [_fingerprint],
+      );
+
+      expect(
+        pinning.acceptsCertificate(cert, host: 'api.example.com'),
+        isFalse,
+        reason: 'an unpinned certificate must not be trusted',
+      );
+    });
+
+    test('rejects every certificate when the pin list is empty', () {
+      final cert = _FakeCertificate(_certificateBytes);
+      const pinning = SslPinning(enabled: true, fingerprints: []);
+
+      expect(pinning.acceptsCertificate(cert), isFalse);
     });
 
     test('fails loudly when enabled with no fingerprints', () {
@@ -115,6 +201,38 @@ void main() {
         sslPinning: pinning,
       );
     }
+
+    test('installs the pinned adapter, and only when pinning is on', () {
+      // Criterion 4 of #53: the unpinned case is not "some IOHttpClientAdapter"
+      // - Dio's default transport is one of those too. What separates them is
+      // the createHttpClient hook, which only the pinned policy sets.
+      final pinnedClient = buildClient(
+        AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async => const Success<String>('unused'),
+        ),
+        const SslPinning(enabled: true, fingerprints: [_fingerprint]),
+      );
+      final unpinnedClient = buildClient(
+        AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async => const Success<String>('unused'),
+        ),
+        const SslPinning(enabled: false, fingerprints: [_fingerprint]),
+      );
+
+      final pinnedAdapter =
+          pinnedClient.dio.httpClientAdapter as IOHttpClientAdapter;
+      final unpinnedAdapter =
+          unpinnedClient.dio.httpClientAdapter as IOHttpClientAdapter;
+
+      expect(pinnedAdapter.createHttpClient, isNotNull);
+      expect(
+        unpinnedAdapter.createHttpClient,
+        isNull,
+        reason: 'pinning off must leave Dio on its default transport',
+      );
+    });
 
     test('replays through the main client pinned adapter', () {
       final authInterceptor = AuthInterceptor(

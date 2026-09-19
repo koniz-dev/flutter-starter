@@ -477,17 +477,18 @@ void main() {
           secureStorageService: secureStorageService,
         );
 
-        // Act & Assert - Use try-catch to verify exception is thrown
-        try {
-          await testDataSource.clearCache();
-          fail('Expected CacheException to be thrown');
-        } on CacheException catch (e) {
-          expect(e, isA<CacheException>());
-        } finally {
-          // Restore original handler to prevent tearDown from failing
+        // Restore the handler however the assertion goes, so tearDown does
+        // not fail on a still-broken channel.
+        addTearDown(() {
           TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
               .setMockMethodCallHandler(sharedPrefsChannel, originalHandler);
-        }
+        });
+
+        // Act & Assert
+        await expectLater(
+          testDataSource.clearCache(),
+          throwsA(isA<CacheException>()),
+        );
       });
     });
 
