@@ -20,8 +20,9 @@ import 'package:go_router/go_router.dart';
 
 import 'acceptance_helpers.dart';
 
-/// Visual evidence for #51: what a cold start actually shows, with and
-/// without a persisted session.
+/// Visual evidence for #51 and #85: what a cold start actually shows for a
+/// persisted session, for empty storage, and for a cached user whose token
+/// is gone.
 ///
 /// Remember what these PNGs can and cannot prove (see acceptance_helpers.dart):
 /// every glyph is an opaque Ahem block, so the screen *identity* is asserted
@@ -134,6 +135,35 @@ void main() {
       await captureAcceptanceGolden(
         find.byType(MaterialApp),
         'cold_start_no_session',
+      );
+    });
+  });
+
+  group('cold start acceptance (#85)', () {
+    testWidgets('a cached user with no token opens on login, not home', (
+      tester,
+    ) async {
+      // The state AuthInterceptor's forced logout leaves behind: the user blob
+      // outlived the token clear. Before #85 this booted into the
+      // authenticated shell and then 401'd on every request.
+      final router = await _pumpColdStart(
+        tester,
+        localDataSource: _StubLocalDataSource(
+          user: const UserModel(
+            id: 'u-1',
+            email: 'returning@example.com',
+            name: 'Returning User',
+          ),
+        ),
+      );
+
+      expect(router.routeInformationProvider.value.uri.path, AppRoutes.login);
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(find.byType(HomeScreen), findsNothing);
+
+      await captureAcceptanceGolden(
+        find.byType(MaterialApp),
+        'cold_start_stale_user_no_token',
       );
     });
   });
