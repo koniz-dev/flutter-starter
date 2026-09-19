@@ -87,6 +87,20 @@ class ApiClient {
     // instead of a bare, system-trust-store Dio.
     authInterceptor.attachTransport(dio);
 
+    // Shares AuthInterceptor's token store on purpose: the cache must know
+    // whether a credential exists, and it cannot learn that from the request
+    // headers, which AuthInterceptor only writes at its own position in the
+    // chain. See CacheInterceptor's class doc and #77.
+    final cacheInterceptor = CacheInterceptor(
+      storageService: storageService,
+      tokenStore: authInterceptor.tokenStore,
+    );
+
+    // A forced logout (401 whose refresh fails) has to empty the same cache
+    // `AuthRepositoryImpl.logout()` empties, or the session boundary the user
+    // did not choose leaves cached bodies behind. See #114.
+    authInterceptor.attachResponseCache(cacheInterceptor);
+
     // Add interceptors - Order matters!
     //
     // dio runs `onRequest` in list order AND `onError` in list order (see
@@ -107,14 +121,7 @@ class ApiClient {
     dio.interceptors.addAll([
       if (performanceService != null)
         PerformanceInterceptor(performanceService: performanceService),
-      // Shares AuthInterceptor's token store on purpose: the cache must know
-      // whether a credential exists, and it cannot learn that from the request
-      // headers, which AuthInterceptor only writes at its own position in the
-      // chain. See CacheInterceptor's class doc and #77.
-      CacheInterceptor(
-        storageService: storageService,
-        tokenStore: authInterceptor.tokenStore,
-      ),
+      cacheInterceptor,
       authInterceptor,
       RetryInterceptor(dio: dio, loggingService: loggingService),
       if (loggingService != null)

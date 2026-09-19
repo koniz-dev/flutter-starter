@@ -296,6 +296,14 @@ AuthInterceptor({
 4. On success: Updates token, retries original request, processes queued requests
 5. On failure: Logs out user and rejects request
 
+**Forced logout (the 401 path):**
+
+When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out".
+
+The cache reference is supplied by `ApiClient._createDio` through `authInterceptor.attachResponseCache(...)`, because the cache is a `CacheInterceptor` the client builds itself and so does not exist when `authInterceptorProvider` constructs the interceptor. It is optional: an interceptor nobody attaches a cache to simply skips that step, exactly as `httpCache` is optional on `AuthRepositoryImpl`.
+
+Every step of the teardown is independently guarded and best-effort. A step that throws - or a dependency that was never wired - must never leave the 401 handler uncompleted, so the error still surfaces to the caller either way.
+
 **Excluded Endpoints:**
 - `/login`
 - `/register`
@@ -435,7 +443,10 @@ Do not relax the credential check without first moving the store to `SecureStora
 - `maxStale` (default 7 days): older entries are still served, then removed once past this.
 - `CacheInterceptor.clearCache()` walks `http_cache_index` and removes every body, every timestamp and the index itself.
 
-`clearCache()` is reachable as `apiClient.responseCache` (typed `IHttpResponseCache`, so callers do not depend on dio) and `AuthRepositoryImpl.logout()` calls it, so cached bodies do not outlive a session.
+`clearCache()` is reachable as `apiClient.responseCache` (typed `IHttpResponseCache`, so callers do not depend on dio). **Both** logout paths call it, so cached bodies do not outlive a session whichever way the session ends:
+
+- explicit logout - `AuthRepositoryImpl.logout()`, in the same unconditional teardown block that clears the tokens and the cached user;
+- forced logout - `AuthInterceptor`, on a 401 whose refresh fails (see [AuthInterceptor](#authinterceptor)).
 
 ### Configuration
 
