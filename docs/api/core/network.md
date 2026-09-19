@@ -464,11 +464,74 @@ Interceptor for logging HTTP traffic through **`LoggingService`** (not raw `debu
 ### Behavior
 
 - No-op when `AppConfig.enableHttpLogging` is false
-- **Request:** logs method, path, base URL, sanitized headers, query parameters, body
+- **Request:** logs method, path, base URL, sanitized headers, sanitized query parameters, sanitized body
 - **Response:** logs status, path, sanitized headers/body (warning level for 4xx+)
-- **Error:** logs Dio error type, path, method, status, sanitized bodies
-- Redacts sensitive header keys (`authorization`, `cookie`, `set-cookie`, `x-api-key`) and common secret fields in JSON bodies (see `_sanitizeHeaders` / `_sanitizeJson` in the source file)
-- Header matching is **case-insensitive**: dio stores headers in a case-insensitive map that preserves the caller's original casing, so the `Authorization` key written by `AuthInterceptor` is redacted just like a lowercase `authorization`
+- **Error:** logs Dio error type, path, method, status, sanitized bodies. This path became reachable in `8a73fd2`; before that `ErrorInterceptor` terminated the chain first, so a failed login never reached the logger
+
+### What gets redacted, and how it is decided
+
+Redaction is decided by **key name only, never by the shape of the value**. A
+value-shape rule ("redact anything that looks like a JWT") would catch tokens
+hiding under unexpected key names, but it also redacts legitimate base64
+payloads, hashes and opaque ids, and it makes the redaction set impossible to
+predict by reading the code. The cost of the key-name rule is real and is stated
+here rather than hidden: **a secret carried under a key name that is not listed
+below is still logged.** The lists in `api_logging_interceptor.dart` are the
+security boundary; extend them when an API invents a new credential parameter.
+
+Every redacted value is replaced with the single literal `***REDACTED***`.
+
+**Key matching.** A key is normalized to lowercase with every non-alphanumeric
+character dropped, so `access_token`, `accessToken` and `X-Access-Token` all
+reduce to `accesstoken`. It is then matched:
+
+| Rule | Entries | Example match |
+|---|---|---|
+| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode` | `refresh_token`, `client_secret` |
+| Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid` | `pin`, but not `shipping` |
+
+The exact-match list exists because these names are too short to use as
+fragments: `pin` occurs inside `shipping`, `cvc` inside `cvcNote`.
+
+**Headers** additionally carry an explicit roster - `authorization`,
+`proxy-authorization`, `cookie`, `set-cookie`, `x-api-key`, `api-key`,
+`x-auth-token`, `x-refresh-token`, `x-csrf-token` - matched case-insensitively.
+Header names are a closed, standardised namespace, so an explicit list is
+auditable; the key rule above is applied as a second pass so a non-standard
+credential header is still caught. Case-insensitivity matters because dio stores
+headers in a case-insensitive map that preserves the caller's original casing,
+so the `Authorization` key written by `AuthInterceptor` is redacted just like a
+lowercase `authorization`.
+
+**Query parameters** go through exactly the same key rule as bodies. They used
+to be logged raw while the body of the same request was sanitized, which leaked
+password-reset tokens, `?access_token=` values and `?api_key=` credentials.
+
+One named residual: an OAuth **`code`** query parameter is *not* redacted. It is
+a credential, but `code` is also one of the most common non-secret field names
+there is (error code, country code, coupon code), and matching it would gut the
+diagnostic value of every error body. If your provider's flow makes that
+trade-off wrong for you, add `code` to the exact-match list.
+
+**Bodies** are an allow-list of shapes the interceptor can actually walk:
+
+| Body | Logged as |
+|---|---|
+| `Map` / `List` | walked recursively, sensitive keys replaced |
+| `String` that decodes to a JSON object or array | decoded, then walked recursively |
+| `String` that is not JSON - form-encoded, plain text, HTML | `***REDACTED***` wholesale |
+| `String` that decodes to a bare JSON scalar (`"<token>"`, `42`) | `***REDACTED***` wholesale |
+| `null`, `num`, `bool` | as-is |
+| Anything else - `FormData`, streams, byte buffers | `***REDACTED***` wholesale |
+
+The wholesale cases are deliberate. A `String` body that fails to parse offers
+no keys to judge, and a form-encoded login body
+(`grant_type=password&password=hunter2`) is a credential carrier; logging it
+verbatim because parsing failed was the defect reported in
+koniz-dev/flutter-starter#78. The trade-off is that plain-text error bodies are
+no longer readable in the log - the status code, path and method still are. The
+same reasoning covers `FormData`: a multipart login form holds the password in
+`FormData.fields`, which no key walk can reach.
 
 ---
 

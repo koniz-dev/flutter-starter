@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
@@ -579,6 +581,375 @@ void main() {
             expect(body['token'], '***REDACTED***');
           }
         }
+      });
+    });
+
+    /// Refs koniz-dev/flutter-starter#78.
+    ///
+    /// Every test here asserts on what the LoggingService actually received,
+    /// and every secret literal is one that must not survive into any sink.
+    group('secret redaction', () {
+      Map<String, dynamic>? captureRequest(RequestOptions options) {
+        Map<String, dynamic>? captured;
+        when(
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
+        ).thenAnswer((invocation) {
+          captured =
+              invocation.namedArguments[#context] as Map<String, dynamic>?;
+          return;
+        });
+        interceptor.onRequest(options, TestRequestInterceptorHandler());
+        return captured;
+      }
+
+      Map<String, dynamic>? captureError(DioException err) {
+        Map<String, dynamic>? captured;
+        when(
+          () => mockLoggingService.error(
+            any(),
+            context: any(named: 'context'),
+            error: any(named: 'error'),
+            stackTrace: any(named: 'stackTrace'),
+          ),
+        ).thenAnswer((invocation) {
+          captured =
+              invocation.namedArguments[#context] as Map<String, dynamic>?;
+          return;
+        });
+        interceptor.onError(err, TestErrorInterceptorHandler());
+        return captured;
+      }
+
+      // Criterion 1: a String body holding JSON is parsed and sanitized.
+      test('sanitizes a pre-encoded JSON string body field by field', () {
+        // Arrange. jsonEncode is the standard way to control encoding, and it
+        // is exactly the shape _sanitizeBody used to log verbatim.
+        const encoded = '{"email":"a@b.c","password":"hunter2"}';
+        final options = RequestOptions(
+          path: '/api/auth/login',
+          method: 'POST',
+          data: jsonEncode(<String, String>{
+            'email': 'a@b.c',
+            'password': 'hunter2',
+          }),
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        expect(context, isNotNull);
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('hunter2')));
+        expect(rendered, isNot(contains(encoded)));
+        expect(rendered, contains('***REDACTED***'));
+        final body = context!['body'] as Map<String, dynamic>;
+        expect(body['password'], '***REDACTED***');
+        expect(body['email'], 'a@b.c');
+      });
+
+      // Criterion 2: pins the behavior for a String body that is not JSON.
+      // The decision is redacted wholesale, not passed through: a form-encoded
+      // body is a credential carrier and there is no key structure left to
+      // judge once parsing has failed.
+      test('redacts a form-encoded string body wholesale', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/oauth/token',
+          method: 'POST',
+          data: 'grant_type=password&username=a%40b.c&password=hunter2',
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        expect(context!['body'], '***REDACTED***');
+        expect(context.toString(), isNot(contains('hunter2')));
+        expect(context.toString(), isNot(contains('grant_type')));
+        // Redacted, not dropped: the key survives so a reader can tell a body
+        // existed and was withheld.
+        expect(context.containsKey('body'), isTrue);
+      });
+
+      test('redacts a plain-text string body wholesale', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/api/test',
+          method: 'POST',
+          data: '502 Bad Gateway',
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        expect(context!['body'], '***REDACTED***');
+      });
+
+      test('redacts a bare JSON scalar string body, which has no key to '
+          'judge by', () {
+        // Arrange. jsonEncode of a naked token parses cleanly as JSON, so a
+        // decode-then-sanitize rule that trusts any parse result leaks it.
+        final options = RequestOptions(
+          path: '/api/auth/refresh',
+          method: 'POST',
+          data: jsonEncode('rt_live_9f3c2b1a'),
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        expect(context!['body'], '***REDACTED***');
+        expect(context.toString(), isNot(contains('rt_live_9f3c2b1a')));
+      });
+
+      test('sanitizes a top-level JSON array body', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/api/batch',
+          method: 'POST',
+          data: jsonEncode(<Map<String, String>>[
+            {'user': 'a', 'password': 'hunter2'},
+            {'user': 'b', 'access_token': 'at_live_1'},
+          ]),
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('hunter2')));
+        expect(rendered, isNot(contains('at_live_1')));
+        expect(rendered, contains('***REDACTED***'));
+        expect(rendered, contains('user'));
+      });
+
+      test('redacts a body shape it cannot walk, such as FormData', () {
+        // Arrange. A multipart login form carries the password in
+        // FormData.fields, which no key walk of ours can reach.
+        final options = RequestOptions(
+          path: '/api/auth/login',
+          method: 'POST',
+          data: FormData.fromMap(<String, dynamic>{
+            'email': 'a@b.c',
+            'password': 'hunter2',
+          }),
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        expect(context!['body'], '***REDACTED***');
+        expect(context.toString(), isNot(contains('hunter2')));
+      });
+
+      // Criterion 3: query parameters obey the same rules as bodies.
+      test('sanitizes query parameters by the same rules as bodies', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/api/password-reset',
+          method: 'GET',
+          queryParameters: <String, dynamic>{
+            'reset_token': 'abc123',
+            'page': '2',
+          },
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('abc123')));
+        final query = context!['queryParameters'] as Map<String, dynamic>;
+        expect(query['reset_token'], '***REDACTED***');
+        expect(query['page'], '2');
+      });
+
+      test('sanitizes the query parameters conventionally used to carry '
+          'credentials', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/oauth/callback',
+          method: 'GET',
+          queryParameters: <String, dynamic>{
+            'access_token': 'at_live_1',
+            'api_key': 'ak_live_2',
+            'signature': 'sig_live_3',
+            'state': 'xyz',
+          },
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        final query = context!['queryParameters'] as Map<String, dynamic>;
+        expect(query['access_token'], '***REDACTED***');
+        expect(query['api_key'], '***REDACTED***');
+        expect(query['signature'], '***REDACTED***');
+        expect(query['state'], 'xyz');
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('at_live_1')));
+        expect(rendered, isNot(contains('ak_live_2')));
+        expect(rendered, isNot(contains('sig_live_3')));
+      });
+
+      // Criterion 4: the header roster covers the standard credential headers,
+      // driven through dio's own RequestOptions in mixed casing.
+      test('redacts proxy-authorization, x-auth-token, x-refresh-token and '
+          'api-key in mixed casing', () {
+        // Arrange
+        final options = RequestOptions(path: '/api/test', method: 'GET');
+        options.headers['Proxy-Authorization'] = 'Basic cHJveHk6c2VjcmV0';
+        options.headers['X-Auth-Token'] = 'xat_live_1';
+        options.headers['x-REFRESH-token'] = 'xrt_live_2';
+        options.headers['Api-Key'] = 'ak_live_3';
+        options.headers['X-Csrf-Token'] = 'csrf_live_4';
+        options.headers['Content-Type'] = 'application/json';
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        final headers = context!['headers'] as Map<String, dynamic>;
+        expect(headers['Proxy-Authorization'], '***REDACTED***');
+        expect(headers['X-Auth-Token'], '***REDACTED***');
+        expect(headers['x-REFRESH-token'], '***REDACTED***');
+        expect(headers['Api-Key'], '***REDACTED***');
+        expect(headers['X-Csrf-Token'], '***REDACTED***');
+        expect(headers['Content-Type'], 'application/json');
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('cHJveHk6c2VjcmV0')));
+        expect(rendered, isNot(contains('xat_live_1')));
+        expect(rendered, isNot(contains('xrt_live_2')));
+        expect(rendered, isNot(contains('ak_live_3')));
+        expect(rendered, isNot(contains('csrf_live_4')));
+      });
+
+      // Criterion 5: the error path, live for the first time since 8a73fd2.
+      test('leaves no secret in the error context for a failed login with a '
+          'string request body and a string response body', () {
+        // Arrange. Before 8a73fd2 ErrorInterceptor rejected first and this
+        // code never ran; it now runs on every DioException.
+        final failedLogin = RequestOptions(
+          path: '/api/auth/login',
+          method: 'POST',
+          data: jsonEncode(<String, String>{
+            'email': 'a@b.c',
+            'password': 'hunter2',
+          }),
+        );
+        final err = DioException(
+          requestOptions: failedLogin,
+          type: DioExceptionType.badResponse,
+          response: Response<dynamic>(
+            requestOptions: failedLogin,
+            statusCode: 401,
+            data: jsonEncode(<String, String>{
+              'error': 'invalid_grant',
+              'refresh_token': 'rt_live_9f3c2b1a',
+            }),
+          ),
+        );
+
+        // Act
+        final context = captureError(err);
+
+        // Assert
+        expect(context, isNotNull);
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('hunter2')));
+        expect(rendered, isNot(contains('rt_live_9f3c2b1a')));
+        final requestBody = context!['requestBody'] as Map<String, dynamic>;
+        expect(requestBody['password'], '***REDACTED***');
+        expect(requestBody['email'], 'a@b.c');
+        final responseBody = context['responseBody'] as Map<String, dynamic>;
+        expect(responseBody['refresh_token'], '***REDACTED***');
+        expect(responseBody['error'], 'invalid_grant');
+        expect(context['statusCode'], 401);
+      });
+
+      test('leaves no secret in the error context when the bodies are not '
+          'JSON', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/api/auth/refresh',
+          method: 'POST',
+          data: 'refresh_token=rt_live_9f3c2b1a',
+        );
+        final err = DioException(
+          requestOptions: options,
+          type: DioExceptionType.badResponse,
+          response: Response<dynamic>(
+            requestOptions: options,
+            statusCode: 401,
+            data: 'access_token=at_live_7&expires_in=3600',
+          ),
+        );
+
+        // Act
+        final context = captureError(err);
+
+        // Assert
+        expect(context!['requestBody'], '***REDACTED***');
+        expect(context['responseBody'], '***REDACTED***');
+        final rendered = context.toString();
+        expect(rendered, isNot(contains('rt_live_9f3c2b1a')));
+        expect(rendered, isNot(contains('at_live_7')));
+      });
+
+      // The cost of the rule, pinned so it cannot regress silently: matching
+      // is on key names only, and short keys match exactly so that innocent
+      // fields stay readable.
+      test('does not redact innocent fields whose names merely contain a '
+          'short secret key', () {
+        // Arrange
+        final options = RequestOptions(
+          path: '/api/orders',
+          method: 'POST',
+          data: <String, dynamic>{
+            'shipping': 'express',
+            'author': 'jane',
+            'description': 'a pin badge',
+            'pin': '4321',
+            'session': 'sess_live_1',
+          },
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        final body = context!['body'] as Map<String, dynamic>;
+        expect(body['shipping'], 'express');
+        expect(body['author'], 'jane');
+        expect(body['description'], 'a pin badge');
+        expect(body['pin'], '***REDACTED***');
+        expect(body['session'], '***REDACTED***');
+      });
+
+      test('decides by key name, not value shape, so a token under an '
+          'unlisted key is still logged', () {
+        // Arrange. This pins the accepted trade-off rather than a bug:
+        // value-shape matching would catch this, but it would also redact
+        // legitimate opaque ids and make the rule unpredictable.
+        final options = RequestOptions(
+          path: '/api/test',
+          method: 'POST',
+          data: <String, dynamic>{'blob': 'eyJhbGciOiJIUzI1NiJ9.payload.sig'},
+        );
+
+        // Act
+        final context = captureRequest(options);
+
+        // Assert
+        final body = context!['body'] as Map<String, dynamic>;
+        expect(body['blob'], 'eyJhbGciOiJIUzI1NiJ9.payload.sig');
       });
     });
 
