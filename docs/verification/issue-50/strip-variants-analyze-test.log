@@ -1,0 +1,20 @@
+=== bare --apply (removeBoth) ===
+Analyzing stripclone...                                         
+No issues found! (ran in 5.9s)
+01:18 +1921 ~5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/stripclone/test/main_test.dart: HomeScreen should display welcome message
+01:18 +1922 ~5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/stripclone/test/main_test.dart: HomeScreen should have app bar with title
+01:18 +1923 ~5: All tests passed!
+
+=== --remove-tasks ===
+Analyzing s_tasks...                                            
+No issues found! (ran in 6.0s)
+01:25 +2097 ~5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/s_tasks/test/main_test.dart: HomeScreen should display welcome message
+01:25 +2098 ~5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/s_tasks/test/main_test.dart: HomeScreen should have app bar with title
+01:25 +2099 ~5: All tests passed!
+
+=== --remove-feature-flags ===
+Analyzing s_ff...                                               
+No issues found! (ran in 6.0s)
+01:28 +2227 ~5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/s_ff/test/main_test.dart: HomeScreen should display welcome message
+01:28 +2228 ~5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/s_ff/test/main_test.dart: HomeScreen should have app bar with title
+01:28 +2229 ~5: All tests passed!
