@@ -12,10 +12,17 @@ abstract class AuthRepository {
   /// Logout current user
   Future<Result<void>> logout();
 
-  /// Get current user
+  /// The user of the session this device can use, or null when there is none.
+  ///
+  /// "None" includes a device that still holds a cached user but no usable
+  /// credentials: an implementation must consult the token store, not just the
+  /// cached user. This is the boot path's only source of truth (#85).
   Future<Result<User?>> getCurrentUser();
 
-  /// Check if user is authenticated
+  /// Whether a usable session is present, i.e. `getCurrentUser() != null`.
+  ///
+  /// Implementations must keep the two in agreement; a guard that disagrees
+  /// with the boot path is the defect this contract exists to prevent.
   Future<Result<bool>> isAuthenticated();
 
   /// Refresh authentication token

@@ -169,6 +169,40 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// Never throws. Storage can fail in ways the data layer does not model as
   /// an `Exception` (a missing platform plugin, a decode `Error`), and this
   /// runs unawaited at boot, where an escaping error would be uncaught.
+  ///
+  /// ## What counts as a restorable session
+  ///
+  /// A cached user blob is **not** enough. `AuthRepository.getCurrentUser()`
+  /// requires a non-empty access token as well, so a device holding a stale
+  /// user blob with no credentials boots to `/login` instead of into the
+  /// authenticated shell it cannot make a single request from (#85).
+  ///
+  /// ## Expired-but-present token: restore, do not bounce
+  ///
+  /// Decided here rather than left implied by the code. A token that is
+  /// present but expired **restores the session**, and the 401 refresh flow
+  /// deals with it. Three reasons:
+  ///
+  /// 1. **Expiry is not locally observable.** `ITokenStore` persists opaque
+  ///    strings and no expiry metadata. Deciding "expired" would mean decoding
+  ///    a JWT the contract never promises - the token may be an opaque handle
+  ///    or a session id - and a wrong guess signs out a perfectly good session.
+  ///    The server is the only authority on expiry, and it answers with a 401.
+  /// 2. **The 401 path is now correct.** Since #59 `AuthInterceptor` refreshes
+  ///    once, replays the queued requests, and on a failed refresh clears the
+  ///    tokens *and* the cached user blob - exactly the state a logout leaves.
+  ///    The next `getCurrentUser()` therefore returns null and the next cold
+  ///    start lands on `/login`. Restoring optimistically no longer strands
+  ///    anybody.
+  /// 3. **Bouncing would make refresh dead code** for the population it exists
+  ///    for. Access tokens are short-lived by design; a returning user's is
+  ///    routinely stale. Pessimistically bouncing them discards a valid refresh
+  ///    token and shows a login form to someone who did not need one.
+  ///
+  /// The accepted cost: a user whose refresh token is *also* dead sees one
+  /// authenticated frame before the first 401 resolves. That is strictly better
+  /// than a guaranteed `/login` flash for every returning user, and it is the
+  /// trade #51 was about.
   Future<void> restoreSession() async {
     try {
       final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);

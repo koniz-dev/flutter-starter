@@ -325,13 +325,16 @@ void main() {
     });
 
     group('getCurrentUser', () {
-      test('should return User when cached user exists', () async {
+      test('should return User when a token and a cached user exist', () async {
         // Arrange
         const userModel = UserModel(
           id: '1',
           email: 'test@example.com',
           name: 'Test User',
         );
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
         when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenAnswer((_) async => userModel);
@@ -350,6 +353,9 @@ void main() {
       test('should return null User when no cached user', () async {
         // Arrange
         when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
+        when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenAnswer((_) async => null);
 
@@ -361,8 +367,80 @@ void main() {
         expect(result.dataOrNull, isNull);
       });
 
+      // Regression for #85: the cold-start restore reads this method, so a
+      // cached user with no token here is what booted a credential-less
+      // device straight into the authenticated shell.
+      test('should return null User when the token is gone but the user blob '
+          'survives', () async {
+        // Arrange
+        const userModel = UserModel(id: '1', email: 'test@example.com');
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => userModel);
+
+        // Act
+        final result = await repository.getCurrentUser();
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        expect(result.dataOrNull, isNull);
+      });
+
+      test('should return null User when the stored token is empty', () async {
+        // Arrange
+        const userModel = UserModel(id: '1', email: 'test@example.com');
+        when(() => mockLocalDataSource.getToken()).thenAnswer((_) async => '');
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => userModel);
+
+        // Act
+        final result = await repository.getCurrentUser();
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        expect(result.dataOrNull, isNull);
+      });
+
+      test('should not read the user blob at all without a token', () async {
+        // Arrange
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => null);
+
+        // Act
+        final result = await repository.getCurrentUser();
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        expect(result.dataOrNull, isNull);
+        verifyNever(() => mockLocalDataSource.getCachedUser());
+      });
+
+      // #85 criterion 2: an unreadable token store must surface as a modelled
+      // failure, not an escaping throw on the boot path.
+      test('should return failure when the token store throws', () async {
+        // Arrange
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenThrow(const CacheException('Failed to get token: keychain'));
+
+        // Act
+        final result = await repository.getCurrentUser();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<CacheFailure>());
+      });
+
       test('should return failure when cache read fails', () async {
         // Arrange
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
         when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenThrow(const CacheException('Cache error'));
@@ -448,6 +526,51 @@ void main() {
         // Assert
         expect(result.isSuccess, isTrue);
         expect(result.dataOrNull, isFalse);
+      });
+
+      // #85 criterion 4: the guard and the boot path must answer the same
+      // question. Every storage combination, one predicate.
+      test('should agree with getCurrentUser on every storage state', () async {
+        const userModel = UserModel(id: '1', email: 'test@example.com');
+        const cases = <(String?, UserModel?)>[
+          ('tk', userModel),
+          ('tk', null),
+          (null, userModel),
+          ('', userModel),
+          (null, null),
+        ];
+
+        for (final (token, user) in cases) {
+          when(
+            () => mockLocalDataSource.getToken(),
+          ).thenAnswer((_) async => token);
+          when(
+            () => mockLocalDataSource.getCachedUser(),
+          ).thenAnswer((_) async => user);
+
+          final authenticated = await repository.isAuthenticated();
+          final current = await repository.getCurrentUser();
+
+          expect(
+            authenticated.dataOrNull,
+            current.dataOrNull != null,
+            reason: 'token=$token user=${user?.id} disagreed',
+          );
+        }
+      });
+
+      test('should propagate a token store failure', () async {
+        // Arrange
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenThrow(const CacheException('Failed to get token: keychain'));
+
+        // Act
+        final result = await repository.isAuthenticated();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<CacheFailure>());
       });
     });
 
@@ -638,6 +761,9 @@ void main() {
 
       test('getCurrentUser should handle generic Exception', () async {
         // Arrange
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
         when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenThrow(Exception('Generic error'));

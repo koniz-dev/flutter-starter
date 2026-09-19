@@ -1,4 +1,5 @@
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
@@ -124,11 +125,27 @@ class AuthRepositoryImpl implements AuthRepository {
       ? ExceptionToFailureMapper.map(error)
       : UnknownFailure('Unexpected error: $error', code: 'UNKNOWN_ERROR');
 
+  /// The user of the session this device can actually use, or null.
+  ///
+  /// Requires a non-empty access token **as well as** the cached user blob.
+  /// The two are written together by [login]/[register] and dropped together
+  /// by [logout], but they live in different stores - the user in
+  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
+  /// forced logout can clear the token while the blob survives a failed
+  /// removal. Returning the blob alone is what let a cold start promote a
+  /// tokenless device straight into the authenticated shell (#85): the user
+  /// saw home, then every request 401'd.
+  ///
+  /// The token is read first and deliberately not inspected beyond
+  /// "present and non-empty" - see [isAuthenticated].
   @override
   Future<Result<User?>> getCurrentUser() async {
     try {
-      final cachedUser = await localDataSource.getCachedUser();
-      return Success(cachedUser);
+      final token = await localDataSource.getToken();
+      if (token == null || token.isEmpty) {
+        return const Success(null);
+      }
+      return Success(await localDataSource.getCachedUser());
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
@@ -138,24 +155,23 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Whether a usable session is present on this device.
   ///
-  /// Requires a token **and** a cached user. Reading the user alone reported
-  /// `true` after `AuthInterceptor` force-logged-out on a failed refresh, which
-  /// clears tokens: every subsequent request then 401'd and re-triggered a
-  /// refresh that could not succeed.
+  /// Defined as `getCurrentUser() != null` and implemented by delegating to it,
+  /// so the boot path (which reads the user) and every guard (which reads this
+  /// predicate) cannot disagree about whether a device is signed in. Requiring
+  /// a token here but not there is exactly the split that produced #85.
+  ///
+  /// "Present and non-empty" is the whole test. Whether the token is *expired*
+  /// is not decidable here: [ITokenStore] holds opaque strings with no expiry
+  /// metadata, and only the server can answer it. An expired token therefore
+  /// reports a session, and the 401 refresh flow resolves it - see
+  /// `AuthNotifier.restoreSession` for the reasoning behind that choice.
   @override
   Future<Result<bool>> isAuthenticated() async {
-    try {
-      final token = await localDataSource.getToken();
-      if (token == null || token.isEmpty) {
-        return const Success(false);
-      }
-      final cachedUser = await localDataSource.getCachedUser();
-      return Success(cachedUser != null);
-    } on AppException catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    }
+    final result = await getCurrentUser();
+    return switch (result) {
+      Success<User?>(:final data) => Success(data != null),
+      ResultFailure<User?>(:final failure) => ResultFailure<bool>(failure),
+    };
   }
 
   @override
