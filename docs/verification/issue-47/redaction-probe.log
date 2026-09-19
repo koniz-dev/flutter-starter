@@ -1,0 +1,65 @@
+Probe for issue #47: ApiLoggingInterceptor driven with request headers written
+exactly the way AuthInterceptor writes them in production
+(`options.headers['Authorization'] = 'Bearer <token>'`), plus a dio
+`Headers.fromMap(..., preserveHeaderCase: true)` response carrying `Set-Cookie`.
+The `LoggingService` context captured by a mock is printed verbatim.
+
+The probe is a throwaway test file (`test/probe_issue47_test.dart`, reproduced
+at the bottom of this log) run with `flutter test`. It is not committed - the
+permanent regression coverage lives in
+`test/core/network/interceptors/api_logging_interceptor_test.dart`.
+
+=== BEFORE the fix (lib/core/network/interceptors/api_logging_interceptor.dart at 3cbbb9f^) ===
+PROBE_REQUEST_CONTEXT: {method: GET, path: /api/me, baseUrl: , headers: {Authorization: Bearer eyJhbGciOi.REAL_USER_JWT.sig, Cookie: session=abc123, X-Api-Key: live-api-key-9f2, Content-Type: application/json}}
+PROBE_RESPONSE_CONTEXT: {statusCode: 200, path: /api/me, headers: {Set-Cookie: [session=abc123; HttpOnly], Content-Type: [application/json]}}
+
+=== AFTER the fix (merged main, commit 3cbbb9f) ===
+PROBE_REQUEST_CONTEXT: {method: GET, path: /api/me, baseUrl: , headers: {Authorization: ***REDACTED***, Cookie: ***REDACTED***, X-Api-Key: ***REDACTED***, Content-Type: application/json}}
+PROBE_RESPONSE_CONTEXT: {statusCode: 200, path: /api/me, headers: {Set-Cookie: ***REDACTED***, Content-Type: [application/json]}}
+
+=== Probe source (test/probe_issue47_test.dart, run then deleted) ===
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockLoggingService extends Mock implements LoggingService {}
+
+void main() {
+  test('probe', () {
+    final log = MockLoggingService();
+    final interceptor = ApiLoggingInterceptor(loggingService: log);
+    Map<String, dynamic>? reqCtx;
+    Map<String, dynamic>? resCtx;
+    when(
+      () => log.debug(any(), context: any(named: 'context')),
+    ).thenAnswer((i) {
+      reqCtx = i.namedArguments[#context] as Map<String, dynamic>?;
+    });
+    when(() => log.info(any(), context: any(named: 'context'))).thenAnswer((i) {
+      resCtx = i.namedArguments[#context] as Map<String, dynamic>?;
+    });
+
+    // Exactly how AuthInterceptor writes it.
+    final options = RequestOptions(path: '/api/me', method: 'GET');
+    options.headers['Authorization'] = 'Bearer eyJhbGciOi.REAL_USER_JWT.sig';
+    options.headers['Cookie'] = 'session=abc123';
+    options.headers['X-Api-Key'] = 'live-api-key-9f2';
+    options.headers['Content-Type'] = 'application/json';
+    interceptor.onRequest(options, RequestInterceptorHandler());
+
+    final response = Response<dynamic>(
+      requestOptions: options,
+      statusCode: 200,
+      headers: Headers.fromMap(<String, List<String>>{
+        'Set-Cookie': ['session=abc123; HttpOnly'],
+        'Content-Type': ['application/json'],
+      }, preserveHeaderCase: true),
+    );
+    interceptor.onResponse(response, ResponseInterceptorHandler());
+
+    print('PROBE_REQUEST_CONTEXT: $reqCtx');
+    print('PROBE_RESPONSE_CONTEXT: $resCtx');
+  });
+}
