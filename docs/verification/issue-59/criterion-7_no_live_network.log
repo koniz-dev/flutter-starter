@@ -1,0 +1,152 @@
+Criterion 7: no test in test/core/network/ makes a live network call.
+
+A test can only reach a socket if some Dio in it keeps the default
+HttpClientAdapter. Two greps below: every AuthInterceptor built in a
+test injects retryDioFactory (so the 401 replay client is fake), and
+every Dio those tests create has httpClientAdapter reassigned to a
+fake transport.
+
+$ grep -rn -A3 'AuthInterceptor(' test/core/network test/integration/auth
+
+test/core/network/interceptors/auth_interceptor_test.dart:70:      interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_test.dart-71-        secureStorageService: mockSecureStorage,
+test/core/network/interceptors/auth_interceptor_test.dart-72-        refreshToken: mockAuthRepository.refreshToken,
+test/core/network/interceptors/auth_interceptor_test.dart-73-        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+test/core/network/interceptors/auth_interceptor_test.dart-74-      );
+--
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:138:        final interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-139-          tokenStore: tokenStore,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-140-          refreshToken: () async {
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-141-            refreshCalls++;
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-142-            if (!refreshStarted.isCompleted) {
+--
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:190:        final interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-191-          tokenStore: tokenStore,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-192-          refreshToken: () async {
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-193-            refreshCalls++;
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-194-            if (!refreshStarted.isCompleted) {
+--
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:231:        final interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-232-          tokenStore: tokenStore,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-233-          refreshToken: () async {
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-234-            refreshCalls++;
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-235-            // An Error, not an Exception: the old `on Exception` catch missed
+--
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:256:      final interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-257-        tokenStore: tokenStore,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-258-        refreshToken: () async => const Success<String>('fresh-access-token'),
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-259-        retryDioFactory: () {
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-260-          retryDiosBuilt++;
+--
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:285:      final interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-286-        tokenStore: tokenStore,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-287-        refreshToken: () async {
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-288-          if (!refreshStarted.isCompleted) {
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-289-            refreshStarted.complete();
+--
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:317:        final interceptor = AuthInterceptor(
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-318-          tokenStore: tokenStore,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-319-          refreshToken: () async => const Success<String>('fresh-access-token'),
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-320-          retryDioFactory: () => Dio()
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart-321-            ..httpClientAdapter = retryAdapter
+--
+test/core/network/api_client_interceptor_chain_test.dart:201:        final authInterceptor = AuthInterceptor(
+test/core/network/api_client_interceptor_chain_test.dart-202-          tokenStore: _InMemoryTokenStore(),
+test/core/network/api_client_interceptor_chain_test.dart-203-          refreshToken: () async => const Success('unused'),
+test/core/network/api_client_interceptor_chain_test.dart-204-        );
+test/core/network/api_client_interceptor_chain_test.dart-205-        final apiClient = ApiClient(
+--
+test/core/network/api_client_interceptor_chain_test.dart:237:        final authInterceptor = AuthInterceptor(
+test/core/network/api_client_interceptor_chain_test.dart-238-          tokenStore: tokenStore,
+test/core/network/api_client_interceptor_chain_test.dart-239-          refreshToken: () async {
+test/core/network/api_client_interceptor_chain_test.dart-240-            refreshCalls++;
+test/core/network/api_client_interceptor_chain_test.dart-241-            return const Success('fresh-access-token');
+--
+test/core/network/api_client_interceptor_chain_test.dart:270:      final authInterceptor = AuthInterceptor(
+test/core/network/api_client_interceptor_chain_test.dart-271-        tokenStore: _InMemoryTokenStore(),
+test/core/network/api_client_interceptor_chain_test.dart-272-        refreshToken: () async => const Success('unused'),
+test/core/network/api_client_interceptor_chain_test.dart-273-      );
+test/core/network/api_client_interceptor_chain_test.dart-274-      final apiClient = ApiClient(
+--
+test/core/network/api_client_test.dart:36:      authInterceptor = MockAuthInterceptor();
+test/core/network/api_client_test.dart-37-      apiClient = ApiClient(
+test/core/network/api_client_test.dart-38-        storageService: storageService,
+test/core/network/api_client_test.dart-39-        secureStorageService: secureStorageService,
+test/core/network/api_client_test.dart-40-        authInterceptor: authInterceptor,
+--
+test/core/network/ssl_pinning_test.dart:120:      final authInterceptor = AuthInterceptor(
+test/core/network/ssl_pinning_test.dart-121-        tokenStore: _InMemoryTokenStore(),
+test/core/network/ssl_pinning_test.dart-122-        refreshToken: () async => const Success<String>('unused'),
+test/core/network/ssl_pinning_test.dart-123-      );
+test/core/network/ssl_pinning_test.dart-124-      final apiClient = buildClient(
+--
+test/core/network/ssl_pinning_test.dart:146:      final authInterceptor = AuthInterceptor(
+test/core/network/ssl_pinning_test.dart-147-        tokenStore: _InMemoryTokenStore(),
+test/core/network/ssl_pinning_test.dart-148-        refreshToken: () async => const Success<String>('unused'),
+test/core/network/ssl_pinning_test.dart-149-      );
+test/core/network/ssl_pinning_test.dart-150-      final apiClient = buildClient(
+--
+test/core/network/ssl_pinning_test.dart:165:      final authInterceptor = AuthInterceptor(
+test/core/network/ssl_pinning_test.dart-166-        tokenStore: _InMemoryTokenStore(),
+test/core/network/ssl_pinning_test.dart-167-        refreshToken: () async => const Success<String>('unused'),
+test/core/network/ssl_pinning_test.dart-168-      );
+test/core/network/ssl_pinning_test.dart-169-      final apiClient = buildClient(
+--
+test/integration/auth/token_refresh_flow_test.dart:82:      interceptor = AuthInterceptor(
+test/integration/auth/token_refresh_flow_test.dart-83-        secureStorageService: mockSecureStorage,
+test/integration/auth/token_refresh_flow_test.dart-84-        refreshToken: mockAuthRepository.refreshToken,
+test/integration/auth/token_refresh_flow_test.dart-85-        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+test/integration/auth/token_refresh_flow_test.dart-86-      );
+
+$ grep -rn 'httpClientAdapter' test/core/network test/integration/auth
+
+test/core/network/interceptors/auth_interceptor_test.dart:73:        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:126:        ..httpClientAdapter = mainAdapter
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:152:            return Dio()..httpClientAdapter = retryAdapter;
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:202:            return Dio()..httpClientAdapter = retryAdapter;
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:239:          retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:261:          return Dio()..httpClientAdapter = retryAdapter;
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:294:        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:321:            ..httpClientAdapter = retryAdapter
+test/core/network/api_client_interceptor_chain_test.dart:209:        )..dio.httpClientAdapter = adapter;
+test/core/network/api_client_interceptor_chain_test.dart:245:          retryDioFactory: () => Dio()..httpClientAdapter = adapter,
+test/core/network/api_client_interceptor_chain_test.dart:251:        )..dio.httpClientAdapter = adapter;
+test/core/network/api_client_interceptor_chain_test.dart:279:      )..dio.httpClientAdapter = adapter;
+test/core/network/ssl_pinning_test.dart:130:      expect(apiClient.dio.httpClientAdapter, isA<IOHttpClientAdapter>());
+test/core/network/ssl_pinning_test.dart:134:      final retryAdapter = authInterceptor.retryDio().httpClientAdapter;
+test/core/network/ssl_pinning_test.dart:139:          apiClient.dio.httpClientAdapter,
+test/core/network/ssl_pinning_test.dart:155:          authInterceptor.retryDio().httpClientAdapter
+test/core/network/ssl_pinning_test.dart:159:      apiClient.dio.httpClientAdapter = replacement;
+test/integration/auth/token_refresh_flow_test.dart:85:        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+
+$ grep -rn 'retry fails in unit tests' test/
+
+(no matches - the two tests that admitted to a live replay are gone)
+
+Runtime confirmation: each rewritten test asserts a hit count on its
+fake adapter (expect(retryAdapter.hits, ...)), which is only reachable
+if the replay was served in-process.
+
+$ grep -rn 'retryAdapter.hits' test/core/network test/integration/auth
+
+test/core/network/interceptors/auth_interceptor_test.dart:179:          expect(retryAdapter.hits, 1);
+test/core/network/interceptors/auth_interceptor_test.dart:273:        expect(retryAdapter.hits, 2);
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:174:        expect(retryAdapter.hits, 0);
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:219:        expect(retryAdapter.hits, 3);
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:310:      expect(retryAdapter.hits, 0);
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:340:        expect(retryAdapter.hits, 1);
+test/integration/auth/token_refresh_flow_test.dart:120:      expect(retryAdapter.hits, 1);
+
+Three AuthInterceptor constructions above have no retryDioFactory:
+ssl_pinning_test.dart:120/146/165 and api_client_interceptor_chain_test.dart
+:201/270. None of them replays anything.
+
+  - ssl_pinning_test only inspects adapters; no request is ever sent, and the
+    replay client it builds delegates to the ApiClient adapter rather than
+    opening a transport of its own.
+  - api_client_interceptor_chain_test:201 scripts a 503 and :270 a 400, so the
+    401 branch never runs; both point ApiClient.dio at the counting fake.
+
+Wall clock for the whole suite is in criterion-7_network_suite.log: 206 tests
+in ~11s, of which ~8s is the deliberate RetryInterceptor backoff in the 503
+test. Nothing waits on a socket.
