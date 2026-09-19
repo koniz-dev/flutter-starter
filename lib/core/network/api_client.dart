@@ -50,6 +50,7 @@ class ApiClient {
          sslPinning ?? SslPinning.fromConfig(),
        ) {
     _networkClient = DioNetworkClient(_dio);
+    _cacheInterceptor = _dio.interceptors.whereType<CacheInterceptor>().single;
   }
 
   static Dio _createDio(
@@ -106,7 +107,14 @@ class ApiClient {
     dio.interceptors.addAll([
       if (performanceService != null)
         PerformanceInterceptor(performanceService: performanceService),
-      CacheInterceptor(storageService: storageService),
+      // Shares AuthInterceptor's token store on purpose: the cache must know
+      // whether a credential exists, and it cannot learn that from the request
+      // headers, which AuthInterceptor only writes at its own position in the
+      // chain. See CacheInterceptor's class doc and #77.
+      CacheInterceptor(
+        storageService: storageService,
+        tokenStore: authInterceptor.tokenStore,
+      ),
       authInterceptor,
       RetryInterceptor(dio: dio, loggingService: loggingService),
       if (loggingService != null)
@@ -119,12 +127,19 @@ class ApiClient {
 
   final Dio _dio;
   late final INetworkClient _networkClient;
+  late final CacheInterceptor _cacheInterceptor;
 
   /// Getter for the underlying Dio instance
   Dio get dio => _dio;
 
   /// Getter for transport-agnostic network contract.
   INetworkClient get networkClient => _networkClient;
+
+  /// The locally persisted HTTP response cache installed on this client.
+  ///
+  /// Session teardown calls `clearCache()` on it so cached bodies do not
+  /// survive a logout.
+  IHttpResponseCache get responseCache => _cacheInterceptor;
 
   /// GET request
   ///

@@ -1,3 +1,4 @@
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
@@ -14,6 +15,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    this.httpCache,
   });
 
   /// Remote data source for API calls
@@ -21,6 +23,12 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Local data source for caching
   final AuthLocalDataSource localDataSource;
+
+  /// Locally persisted HTTP response cache, cleared on logout.
+  ///
+  /// Optional so existing call sites keep compiling; production wiring
+  /// supplies it from `apiClientProvider`.
+  final IHttpResponseCache? httpCache;
 
   @override
   Future<Result<User>> login(String email, String password) async {
@@ -69,6 +77,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await remoteDataSource.logout();
       await localDataSource.clearCache();
+      // Cached HTTP bodies are local session state too - drop them with the
+      // rest of it, or the next sign-in can be served the previous user's
+      // responses (#77).
+      await httpCache?.clearCache();
       return const Success(null);
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));

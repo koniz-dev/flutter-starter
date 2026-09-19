@@ -41,6 +41,13 @@ class AuthInterceptor extends Interceptor {
   /// Token storage for retrieving and storing authentication tokens
   final ITokenStore _tokenStore;
 
+  /// The token store this interceptor authenticates from.
+  ///
+  /// Exposed so other interceptors can make credential-dependent decisions
+  /// from the same source of truth instead of inspecting request headers,
+  /// which are only populated once [onRequest] has run.
+  ITokenStore get tokenStore => _tokenStore;
+
   /// Callback to refresh the access token.
   ///
   /// Intentionally a callback (instead of depending on a repository/provider)

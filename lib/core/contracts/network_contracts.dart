@@ -55,3 +55,11 @@ class NetworkError implements Exception {
 abstract class INetworkClient {
   Future<NetworkResponse<dynamic>> send(NetworkRequest request);
 }
+
+/// Locally persisted HTTP response cache, as seen from outside the transport.
+///
+/// Exists so session teardown can drop cached response bodies without the auth
+/// layer importing `ApiClient` or any dio type.
+abstract class IHttpResponseCache {
+  Future<void> clearCache();
+}

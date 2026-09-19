@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/json_helper.dart';
 
@@ -23,27 +25,70 @@ class CacheConfig {
   final bool enableCache;
 }
 
-/// Interceptor for caching HTTP responses
+/// Interceptor for caching HTTP responses.
 ///
-/// This interceptor caches GET requests based on cache headers or custom
-/// cache configuration. Cached responses are stored in local storage.
-class CacheInterceptor extends Interceptor {
-  /// Creates a [CacheInterceptor] with the given [storageService] and
-  /// [cacheConfig]
+/// ## What is cached
+///
+/// Only **unauthenticated** `GET` responses with status 200. Before touching
+/// the cache - on read and on write - the interceptor asks the [ITokenStore]
+/// whether a session credential exists. If one does, the request neither
+/// reads from nor writes to the cache and goes straight to the network.
+///
+/// The credential check deliberately reads the token store rather than
+/// sniffing `options.headers` for `Authorization`. `AuthInterceptor` writes
+/// that header from its own `onRequest`, and dio runs `onRequest` in
+/// registration order, so a header sniff only works while this interceptor
+/// happens to be registered *after* `AuthInterceptor` - an invariant nothing
+/// enforces, on a surface koniz-dev/flutter-starter#46 already proved is easy
+/// to get wrong. Reading the same store `AuthInterceptor` reads makes the
+/// decision correct at any position in the chain. The header check is kept as
+/// a secondary guard for credentials a caller attaches by hand through
+/// `Options(headers: ...)`, which *are* already present this early.
+///
+/// ## Where it is stored
+///
+/// In [StorageService], i.e. `shared_preferences` - plaintext, readable on a
+/// rooted or jailbroken device and included in unencrypted device backups.
+/// That is acceptable only because nothing authenticated ever lands there. Do
+/// not relax the credential check without moving to encrypted storage.
+///
+/// ## Lifetime
+///
+/// [clearCache] removes every entry. It is wired to logout through
+/// [IHttpResponseCache], so an anonymous response cached before sign-in
+/// cannot outlive the session boundary.
+class CacheInterceptor extends Interceptor implements IHttpResponseCache {
+  /// Creates a [CacheInterceptor] with the given [storageService],
+  /// [cacheConfig] and [tokenStore].
+  ///
+  /// [tokenStore] should be the same store `AuthInterceptor` uses. When it is
+  /// omitted the interceptor cannot tell an authenticated request from an
+  /// anonymous one and falls back to the header check alone, so production
+  /// wiring must always supply it - `ApiClient` does.
   CacheInterceptor({
     required StorageService storageService,
     CacheConfig? cacheConfig,
+    ITokenStore? tokenStore,
   }) : _storageService = storageService,
+       _tokenStore = tokenStore,
        _cacheConfig = cacheConfig ?? const CacheConfig();
 
   final StorageService _storageService;
   final CacheConfig _cacheConfig;
+  final ITokenStore? _tokenStore;
 
   /// Cache key prefix
   static const String _cacheKeyPrefix = 'http_cache_';
 
   /// Timestamp key prefix
   static const String _timestampKeyPrefix = 'http_cache_timestamp_';
+
+  /// Key holding the list of every cache key currently written.
+  ///
+  /// `StorageService` exposes no key enumeration, so the interceptor keeps its
+  /// own index. Without it [clearCache] cannot know what to remove - which is
+  /// why the previous implementation was an empty method body.
+  static const String _indexKey = 'http_cache_index';
 
   /// HTTP methods that should be cached
   static const List<String> _cacheableMethods = ['GET'];
@@ -63,7 +108,7 @@ class CacheInterceptor extends Interceptor {
     }
 
     // Check if request should bypass cache
-    if (_shouldBypassCache(options)) {
+    if (await _shouldBypassCache(options)) {
       return super.onRequest(options, handler);
     }
 
@@ -102,7 +147,7 @@ class CacheInterceptor extends Interceptor {
     }
 
     // Check if response should be cached
-    if (_shouldBypassCache(requestOptions)) {
+    if (await _shouldBypassCache(requestOptions)) {
       return super.onResponse(response, handler);
     }
 
@@ -114,7 +159,7 @@ class CacheInterceptor extends Interceptor {
   }
 
   /// Checks if the request should bypass cache
-  bool _shouldBypassCache(RequestOptions options) {
+  Future<bool> _shouldBypassCache(RequestOptions options) async {
     // Check for no-cache header
     final cacheControl = options.headers['cache-control'] as String?;
     if (cacheControl != null &&
@@ -123,14 +168,36 @@ class CacheInterceptor extends Interceptor {
       return true;
     }
 
-    // Don't cache requests with sensitive headers
+    // Secondary guard: a credential the caller attached directly to the
+    // request is visible here regardless of interceptor order.
     for (final header in _noCacheHeaders) {
       if (options.headers.containsKey(header)) {
         return true;
       }
     }
 
-    return false;
+    // Primary guard: never touch the cache while a session credential exists.
+    return _hasSessionCredential();
+  }
+
+  /// Returns true when a session credential exists in the token store.
+  ///
+  /// Fails closed: if the store throws, the credential state is unknown and
+  /// the request is treated as authenticated.
+  Future<bool> _hasSessionCredential() async {
+    final store = _tokenStore;
+    if (store == null) {
+      return false;
+    }
+    try {
+      final token = await store.getAccessToken();
+      return token != null && token.isNotEmpty;
+    } on Object catch (e) {
+      if (AppConfig.isDebugMode) {
+        debugPrint('Cache credential check error: $e');
+      }
+      return true;
+    }
   }
 
   /// Gets the cache key for the request
@@ -161,6 +228,7 @@ class CacheInterceptor extends Interceptor {
           // Too stale, remove cache
           await _storageService.remove(cacheKey);
           await _storageService.remove(timestampKey);
+          await _removeFromIndex(cacheKey);
           return null;
         }
         // Stale but acceptable (can be used with warning in production)
@@ -195,6 +263,8 @@ class CacheInterceptor extends Interceptor {
         timestampKey,
         DateTime.now().toIso8601String(),
       );
+
+      await _addToIndex(cacheKey);
     } on Exception catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache write error: $e');
@@ -202,12 +272,40 @@ class CacheInterceptor extends Interceptor {
     }
   }
 
-  /// Clears all cached responses
+  Future<List<String>> _readIndex() async {
+    return await _storageService.getStringList(_indexKey) ?? <String>[];
+  }
+
+  Future<void> _addToIndex(String cacheKey) async {
+    final index = await _readIndex();
+    if (index.contains(cacheKey)) return;
+    await _storageService.setStringList(_indexKey, [...index, cacheKey]);
+  }
+
+  Future<void> _removeFromIndex(String cacheKey) async {
+    final index = await _readIndex();
+    if (!index.contains(cacheKey)) return;
+    final remaining = index.where((key) => key != cacheKey).toList();
+    if (remaining.isEmpty) {
+      await _storageService.remove(_indexKey);
+      return;
+    }
+    await _storageService.setStringList(_indexKey, remaining);
+  }
+
+  /// Clears every cached response.
+  ///
+  /// Walks the key index written by [_cacheResponse] and removes each body,
+  /// its timestamp, and finally the index itself.
+  @override
   Future<void> clearCache() async {
     try {
-      // Note: This is a simplified implementation
-      // In production, you might want to track cache keys separately
-      // and remove them individually
+      final index = await _readIndex();
+      for (final cacheKey in index) {
+        await _storageService.remove(cacheKey);
+        await _storageService.remove('$_timestampKeyPrefix$cacheKey');
+      }
+      await _storageService.remove(_indexKey);
     } on Exception catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache clear error: $e');

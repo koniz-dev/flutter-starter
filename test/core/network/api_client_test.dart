@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
@@ -17,7 +18,36 @@ class MockStorageService extends Mock implements StorageService {}
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
-class MockAuthInterceptor extends Mock implements AuthInterceptor {}
+/// Signed-out token store: `CacheInterceptor` reads the auth interceptor's
+/// store to decide whether a response may be cached (#77), so the mock has to
+/// expose a real one.
+class StubTokenStore implements ITokenStore {
+  @override
+  Future<void> clearAccessToken() async {}
+
+  @override
+  Future<void> clearAllTokens() async {}
+
+  @override
+  Future<void> clearRefreshToken() async {}
+
+  @override
+  Future<String?> getAccessToken() async => null;
+
+  @override
+  Future<String?> getRefreshToken() async => null;
+
+  @override
+  Future<bool> setAccessToken(String token) async => true;
+
+  @override
+  Future<bool> setRefreshToken(String token) async => true;
+}
+
+class MockAuthInterceptor extends Mock implements AuthInterceptor {
+  @override
+  ITokenStore get tokenStore => StubTokenStore();
+}
 
 class MockLoggingService extends Mock implements LoggingService {}
 
