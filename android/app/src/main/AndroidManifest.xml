@@ -3,10 +3,13 @@
          The stock `flutter create` layout declares INTERNET only in the debug
          and profile source sets, which is correct for an app that makes no
          network calls. This template does make them: lib/core/network/ and the
-         auth flow post to AppConfig.baseUrl, and without this a release build
-         fails every request with
-         `SocketException: ... EPERM (Operation not permitted)`.
-         No plugin in this project supplies the permission via manifest merge. -->
+         auth flow post to AppConfig.baseUrl.
+         A release build happens to receive INTERNET transitively today, from an
+         Android library manifest in the dependency graph rather than from any
+         Flutter plugin's own manifest (see
+         docs/verification/issue-49/baseline-release-manifest.xml). Do not rely
+         on that: a permission the app needs for its own traffic must not vanish
+         when a dependency is dropped or bumped. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="flutter_starter"
