@@ -1,4 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Declared in the main source set so it reaches the RELEASE manifest.
+         The stock `flutter create` layout declares INTERNET only in the debug
+         and profile source sets, which is correct for an app that makes no
+         network calls. This template does make them: lib/core/network/ and the
+         auth flow post to AppConfig.baseUrl, and without this a release build
+         fails every request with
+         `SocketException: ... EPERM (Operation not permitted)`.
+         No plugin in this project supplies the permission via manifest merge. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="flutter_starter"
         android:name="${applicationName}"
