@@ -72,7 +72,8 @@ implementer is active (see Parallelism in `CLAUDE.md`).
    `.png`/`.log` files gets **Issue refs** alone. Every PR gets at least one, so
    zero checks means they have not registered yet, never that the PR is exempt.
    Poll until `gh pr checks --json name --jq 'length'` is non-zero before
-   watching. `main` is protected: no direct pushes, so the PR is the only route.
+   watching. `main` has no branch protection, so nothing stops a direct push or
+   a merge over a red check except you.
 
    Before committing, revert `flutter pub get` churn (`analysis_options.yaml`,
    `ios/Podfile`, `macos/Podfile`, `*.xcconfig`) and stage explicitly. Never

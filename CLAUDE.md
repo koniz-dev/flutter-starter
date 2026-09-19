@@ -79,9 +79,9 @@ GitHub issues are the single source of truth. Full spec:
    `./scripts/dev/check_issue_refs.sh --range origin/main..HEAD`.
 9. Ship via feature branch + PR (`CONTRIBUTING.md` naming, Conventional
    Commits), wait for the checks the PR actually gets (see "Which checks a PR
-   gets" below), merge `--squash --delete-branch`. `main` is protected: direct
-   pushes, force pushes and deletions are rejected, so the PR is the only route
-   in.
+   gets" below), merge `--squash --delete-branch`. `main` is **not** protected -
+   a direct push would succeed - so the branch-and-PR rule is discipline, not
+   enforcement. Never test that.
 10. Done means closed AND evidence-backed. One issue at a time.
 
 **Canonical epic list:
@@ -170,11 +170,14 @@ race, not a path exclusion. Poll until `gh pr checks --json name --jq 'length'`
 is non-zero before `gh pr checks --watch`; merging on the "no checks reported"
 reading skips the gate entirely.
 
-`main` is protected (no direct pushes, no force pushes, no deletions, PR
-required), but **no check is required to merge yet** - see the `needs-uat` note
-on koniz-dev/flutter-starter#58. Quality gate cannot be made required while
-`ci.yml` carries `paths-ignore`, because a required check that never reports
-blocks every docs-only PR forever. Read a red check yourself before merging.
+**None of these checks gates a merge, and `main` has no branch protection.**
+`gh pr merge --squash` succeeds on a red PR, and a direct push to `main` is not
+rejected. Reading the checks is therefore the session's job, not the platform's.
+Enabling protection needs a human (criterion 5 of
+koniz-dev/flutter-starter#58); the exact command is in that issue's `needs-uat`
+comment. Note that Quality gate cannot become a *required* check while `ci.yml`
+carries `paths-ignore`, because a required check that never reports leaves every
+docs-only PR permanently unmergeable.
 
 ### Evidence discipline
 
