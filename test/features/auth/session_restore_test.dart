@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -29,13 +30,21 @@ import 'package:mocktail/mocktail.dart';
 /// location, which is the observable the bug was about.
 
 class _StubLocalDataSource implements AuthLocalDataSource {
-  _StubLocalDataSource({this.user, this.token, this.onGetCachedUser});
+  _StubLocalDataSource({
+    this.user,
+    this.token,
+    this.onGetCachedUser,
+    this.onGetToken,
+  });
 
   final UserModel? user;
   final String? token;
 
   /// Invoked before [getCachedUser] answers, so a test can make storage fail.
   final void Function()? onGetCachedUser;
+
+  /// Invoked before [getToken] answers, for the same reason.
+  final void Function()? onGetToken;
 
   @override
   Future<UserModel?> getCachedUser() async {
@@ -44,7 +53,10 @@ class _StubLocalDataSource implements AuthLocalDataSource {
   }
 
   @override
-  Future<String?> getToken() async => token;
+  Future<String?> getToken() async {
+    onGetToken?.call();
+    return token;
+  }
 
   @override
   Future<String?> getRefreshToken() async => null;
@@ -240,11 +252,15 @@ void main() {
       when(
         () => store.getString(AppConstants.userDataKey),
       ).thenAnswer((_) async => '{ this is not json');
+      // The token is read first (#85), so it has to be readable for the
+      // corrupt blob below to be reached at all.
+      final tokenStore = _MockTokenStore();
+      when(tokenStore.getAccessToken).thenAnswer((_) async => 'valid-token');
 
       container = ProviderContainer(
         overrides: [
           keyValueStoreProvider.overrideWithValue(store),
-          tokenStoreProvider.overrideWithValue(_MockTokenStore()),
+          tokenStoreProvider.overrideWithValue(tokenStore),
         ],
       );
 
@@ -281,6 +297,152 @@ void main() {
       expect(_location(router).path, AppRoutes.login);
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(tester.takeException(), isNull);
+    });
+  });
+
+  /// Regression tests for #85: the cold-start restore promoted a device to
+  /// authenticated on the cached user blob alone, never consulting the token
+  /// store, so a device holding a stale blob with no credentials booted into
+  /// the authenticated shell and then 401'd on every request.
+  ///
+  /// These sit beside the #51 cases deliberately: the two issues pull in
+  /// opposite directions (restore more eagerly / restore less eagerly) and the
+  /// only way to see that neither has been over-corrected is to read them
+  /// together.
+  group('cold start requires a token, not just a cached user (#85)', () {
+    late ProviderContainer container;
+
+    tearDown(() => container.dispose());
+
+    testWidgets('a cached user with no token lands on /login, not /', (
+      tester,
+    ) async {
+      container = ProviderContainer(
+        overrides: [
+          authLocalDataSourceProvider.overrideWithValue(
+            // The exact state AuthInterceptor's forced logout leaves if the
+            // user blob outlives the token clear.
+            _StubLocalDataSource(user: _cachedUser),
+          ),
+        ],
+      );
+
+      await container.read(sessionRestorationProvider.future);
+
+      final router = await _pumpRouter(tester, container);
+      await tester.pumpAndSettle();
+
+      expect(_location(router).path, AppRoutes.login);
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(find.byType(HomeScreen), findsNothing);
+      expect(container.read(authNotifierProvider).user, isNull);
+    });
+
+    testWidgets('a cached user with an empty token lands on /login', (
+      tester,
+    ) async {
+      container = ProviderContainer(
+        overrides: [
+          authLocalDataSourceProvider.overrideWithValue(
+            _StubLocalDataSource(user: _cachedUser, token: ''),
+          ),
+        ],
+      );
+
+      await container.read(sessionRestorationProvider.future);
+
+      final router = await _pumpRouter(tester, container);
+      await tester.pumpAndSettle();
+
+      expect(_location(router).path, AppRoutes.login);
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(container.read(authNotifierProvider).user, isNull);
+    });
+
+    testWidgets('an unreadable token store lands on /login without throwing', (
+      tester,
+    ) async {
+      // The real data source over a failing token store, so the failure is
+      // wrapped exactly as it would be on device (CacheException), rather than
+      // simulated at the repository boundary.
+      final store = _MockKeyValueStore();
+      when(
+        () => store.getString(AppConstants.userDataKey),
+      ).thenAnswer((_) async => jsonEncode(_cachedUser.toJson()));
+
+      final tokenStore = _MockTokenStore();
+      when(
+        tokenStore.getAccessToken,
+      ).thenThrow(Exception('keychain is unreadable'));
+
+      container = ProviderContainer(
+        overrides: [
+          keyValueStoreProvider.overrideWithValue(store),
+          tokenStoreProvider.overrideWithValue(tokenStore),
+        ],
+      );
+
+      await container.read(sessionRestorationProvider.future);
+
+      final router = await _pumpRouter(tester, container);
+      await tester.pumpAndSettle();
+
+      expect(_location(router).path, AppRoutes.login);
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(container.read(authNotifierProvider).user, isNull);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets(
+      'a token store throwing an Error lands on /login without throwing',
+      (tester) async {
+        container = ProviderContainer(
+          overrides: [
+            authLocalDataSourceProvider.overrideWithValue(
+              _StubLocalDataSource(
+                user: _cachedUser,
+                // An Error, not an Exception: the data layer only converts
+                // Exceptions, so this is what escapes if nothing catches it.
+                onGetToken: () => throw StateError('secure storage is gone'),
+              ),
+            ),
+          ],
+        );
+
+        await container.read(sessionRestorationProvider.future);
+
+        final router = await _pumpRouter(tester, container);
+        await tester.pumpAndSettle();
+
+        expect(_location(router).path, AppRoutes.login);
+        expect(find.byType(LoginScreen), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets('a cached user with a readable token still lands on /', (
+      tester,
+    ) async {
+      // The other direction: #85 must not undo #51. An expired-but-present
+      // token is indistinguishable from a fresh one here by design (see
+      // AuthNotifier.restoreSession), so "present" is the whole test.
+      container = ProviderContainer(
+        overrides: [
+          authLocalDataSourceProvider.overrideWithValue(
+            _StubLocalDataSource(user: _cachedUser, token: 'expired-token'),
+          ),
+        ],
+      );
+
+      await container.read(sessionRestorationProvider.future);
+
+      final router = await _pumpRouter(tester, container);
+      await tester.pumpAndSettle();
+
+      expect(_location(router).path, AppRoutes.home);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(find.byType(LoginScreen), findsNothing);
+      expect(container.read(authNotifierProvider).user, _cachedUser);
     });
   });
 
