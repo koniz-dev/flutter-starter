@@ -35,6 +35,18 @@ class DefaultDesignTokens implements AppDesignTokens {
   Color get textOnPrimary => AppColors.textInverse;
 
   @override
+  Color get textSecondaryOnDark => AppColors.textSecondaryInverse;
+
+  @override
+  Color get success => AppColors.success;
+
+  @override
+  Color get warning => AppColors.warning;
+
+  @override
+  Color get info => AppColors.info;
+
+  @override
   TextStyle get displayLarge => AppTypography.displayLarge;
 
   @override
@@ -46,7 +58,14 @@ class DefaultDesignTokens implements AppDesignTokens {
   @override
   TextStyle get bodyMedium => AppTypography.bodyMedium;
 
+  /// Label style as it appears in a `TextTheme`.
+  ///
+  /// Coloured with [textPrimary], not [textOnPrimary]: a `TextTheme` entry is
+  /// rendered against the scaffold background, so white here is white on
+  /// `#F8F9FA` (1.05:1). Buttons stay legible because the button themes set
+  /// their own `foregroundColor` from [textOnPrimary], and the dark theme
+  /// overrides this colour for its own background.
   @override
   TextStyle get labelLarge =>
-      AppTypography.labelButton.copyWith(color: textOnPrimary);
+      AppTypography.labelButton.copyWith(color: textPrimary);
 }

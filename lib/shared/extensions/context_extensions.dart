@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 
 /// BuildContext extension methods
 ///
@@ -71,7 +72,7 @@ extension ContextExtensions on BuildContext {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: AppColors.success,
         duration: duration ?? const Duration(seconds: 3),
       ),
     );

@@ -6,6 +6,12 @@ class AppTheme {
   AppTheme._();
   static const _tokens = DefaultDesignTokens();
 
+  /// Dark-theme surface (cards, dialogs, app bar).
+  static const _darkSurface = Color(0xFF1E1E1E);
+
+  /// Dark-theme scaffold background.
+  static const _darkBackground = Color(0xFF121212);
+
   /// Light theme
   static ThemeData get lightTheme {
     return ThemeData(
@@ -16,8 +22,11 @@ class AppTheme {
         surface: _tokens.surface,
         error: _tokens.error,
         onPrimary: _tokens.textOnPrimary,
-        onSecondary: _tokens.textPrimary,
+        // White, not textPrimary: #212529 on the #6C757D secondary fill is
+        // 3.29:1, below AA for normal text.
+        onSecondary: _tokens.textOnPrimary,
         onSurface: _tokens.textPrimary,
+        onError: _tokens.textOnPrimary,
       ),
       scaffoldBackgroundColor: _tokens.background,
       textTheme: TextTheme(
@@ -68,20 +77,32 @@ class AppTheme {
       colorScheme: ColorScheme.dark(
         primary: _tokens.primary,
         secondary: _tokens.secondary,
-        surface: const Color(0xFF1E1E1E),
+        surface: _darkSurface,
         error: _tokens.error,
         onPrimary: _tokens.textOnPrimary,
+        onSecondary: _tokens.textOnPrimary,
+        // Set from tokens rather than inheriting the Material dark baseline,
+        // which knows nothing about this palette.
+        onSurface: _tokens.textOnPrimary,
+        onError: _tokens.textOnPrimary,
       ),
-      scaffoldBackgroundColor: const Color(0xFF121212),
+      scaffoldBackgroundColor: _darkBackground,
       textTheme: TextTheme(
-        displayLarge: _tokens.displayLarge.copyWith(color: Colors.white),
-        displayMedium: _tokens.displayMedium.copyWith(color: Colors.white),
-        bodyLarge: _tokens.bodyLarge.copyWith(color: Colors.white),
-        bodyMedium: _tokens.bodyMedium.copyWith(color: Colors.white70),
-        labelLarge: _tokens.labelLarge,
+        displayLarge: _tokens.displayLarge.copyWith(
+          color: _tokens.textOnPrimary,
+        ),
+        displayMedium: _tokens.displayMedium.copyWith(
+          color: _tokens.textOnPrimary,
+        ),
+        bodyLarge: _tokens.bodyLarge.copyWith(color: _tokens.textOnPrimary),
+        bodyMedium: _tokens.bodyMedium.copyWith(
+          color: _tokens.textSecondaryOnDark,
+        ),
+        // The token is coloured for a light surface; invert it here.
+        labelLarge: _tokens.labelLarge.copyWith(color: _tokens.textOnPrimary),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF1E1E1E),
+        backgroundColor: _darkSurface,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
