@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -58,6 +59,29 @@ class AuthInterceptor extends Interceptor {
   /// construct this interceptor by hand keep compiling; the app wires it in
   /// `lib/features/auth/di/auth_providers.dart`.
   final IKeyValueStore? _keyValueStore;
+
+  /// Locally persisted HTTP response cache, if wired.
+  ///
+  /// Set by `ApiClient` through [attachResponseCache] rather than by the
+  /// constructor: the cache is a `CacheInterceptor` the client builds itself,
+  /// so it does not exist yet when this interceptor is constructed in
+  /// `authInterceptorProvider`.
+  ///
+  /// Stays null when nobody attaches one, which mirrors how `httpCache` is
+  /// optional in `AuthRepositoryImpl`.
+  IHttpResponseCache? _responseCache;
+
+  /// Binds the response cache this interceptor must empty on forced logout.
+  ///
+  /// Called by `ApiClient` once the cache interceptor is built. Safe to call
+  /// more than once; the last cache wins.
+  ///
+  /// A method rather than the setter `use_setters_to_change_properties` asks
+  /// for, to pair with [attachTransport]: both are post-construction wiring
+  /// performed by `ApiClient`, and reading them the same way is worth more here
+  /// than the lint.
+  // ignore: use_setters_to_change_properties
+  void attachResponseCache(IHttpResponseCache cache) => _responseCache = cache;
 
   /// Callback to refresh the access token.
   ///
@@ -357,13 +381,17 @@ class AuthInterceptor extends Interceptor {
 
   /// Logs out the user by clearing all authentication data.
   ///
-  /// Clears the cached user blob as well as the tokens, so this forced logout
-  /// leaves exactly the state `AuthRepository.logout()` leaves. Clearing only
-  /// the tokens used to leave a user blob behind that `isAuthenticated()` read
-  /// as a live session with no token to send.
+  /// Clears the tokens, the cached user blob and the HTTP response cache, so
+  /// this forced logout leaves exactly the state `AuthRepository.logout()`
+  /// leaves. Clearing only the tokens used to leave a user blob behind that
+  /// `isAuthenticated()` read as a live session with no token to send, and
+  /// leaving the response cache behind let bodies cached before the session
+  /// ended outlive it on the path the user does not control
+  /// (koniz-dev/flutter-starter#114).
   ///
-  /// Each step is guarded separately: cleanup must never stop a handler from
-  /// being completed, and a failure of one step must not skip the other.
+  /// Each step is guarded separately and no step is reachable only through
+  /// another: cleanup must never stop a handler from being completed, and a
+  /// failure - or absence - of one step must not skip the rest.
   Future<void> _logoutUser() async {
     // Clear tokens from secure storage
     try {
@@ -374,13 +402,24 @@ class AuthInterceptor extends Interceptor {
 
     // Clear the cached user from non-sensitive storage
     final keyValueStore = _keyValueStore;
-    if (keyValueStore == null) {
+    if (keyValueStore != null) {
+      try {
+        await keyValueStore.remove(AppConstants.userDataKey);
+      } on Object catch (_) {
+        // Same reason as above: cleanup is best-effort, completion is not.
+      }
+    }
+
+    // Drop cached response bodies: they are local session state too.
+    final responseCache = _responseCache;
+    if (responseCache == null) {
       return;
     }
     try {
-      await keyValueStore.remove(AppConstants.userDataKey);
+      await responseCache.clearCache();
     } on Object catch (_) {
-      // Same reason as above: cleanup is best-effort, completion is not.
+      // Same reason again. A cache that cannot be emptied must not strand the
+      // 401 that triggered this logout.
     }
   }
 }
