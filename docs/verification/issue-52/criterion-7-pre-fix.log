@@ -1,0 +1,224 @@
+# Post-fix tests run against the PRE-fix lib/ (git checkout 3c3f951d1417d2775aa80523e120488b6e86c8ed^ -- lib/).
+# Expected: the assertions this issue added fail, proving they are load-bearing.
+
+$ flutter test --reporter expanded --timeout=5m test/features/auth/logout_teardown_test.dart test/features/auth/data/repositories/auth_repository_impl_test.dart test/features/auth/presentation/providers/auth_provider_test.dart test/core/network/interceptors/auth_interceptor_test.dart
+
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart
+00:00 +0: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:00 +0: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a NetworkException
+00:00 +1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a NetworkException
+00:00 +2: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a NetworkException
+00:00 +3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a NetworkException
+00:00 +3 -1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +4 -1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +5 -1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +6 -1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -2: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -2: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a NetworkException [E]
+  Expected: null
+    Actual: 'access-token'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/logout_teardown_test.dart 250:9  main.<fn>.<fn>
+  
+00:00 +7 -3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a 500 ServerException [E]
+  Expected: null
+    Actual: 'access-token'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/logout_teardown_test.dart 250:9  main.<fn>.<fn>
+  
+00:00 +7 -3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should return failure when logout fails [E]
+  No matching calls (actually, no calls at all).
+  (If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+  package:matcher                                                             fail
+  package:mocktail/src/mocktail.dart 728:7                                    _VerifyCall._checkWith
+  package:mocktail/src/mocktail.dart 519:18                                   _makeVerify.<fn>
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 259:15  main.<fn>.<fn>.<fn>
+  
+00:00 +7 -4: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -4: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a connection timeout [E]
+  Expected: null
+    Actual: 'access-token'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/auth/logout_teardown_test.dart 250:9  main.<fn>.<fn>
+  
+00:00 +7 -5: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -6: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -6: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call times out [E]
+  No matching calls (actually, no calls at all).
+  (If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+  package:matcher                                                             fail
+  package:mocktail/src/mocktail.dart 728:7                                    _VerifyCall._checkWith
+  package:mocktail/src/mocktail.dart 519:18                                   _makeVerify.<fn>
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 280:15  main.<fn>.<fn>.<fn>
+  
+00:00 +7 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +7 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after an Error [E]
+  Bad state: MissingPluginException
+  test/features/auth/logout_teardown_test.dart 148:5                                       _FailingRemoteDataSource.logout
+  package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart 78:30  AuthRepositoryImpl.logout
+  test/features/auth/logout_teardown_test.dart 242:41                                      main.<fn>.<fn>
+  
+00:00 +8 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:00 +9 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +9 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call throws an Error [E]
+  Bad state: plugin missing
+  package:mocktail/src/mocktail.dart 249:7                                                 When.thenThrow.<fn>
+  package:mocktail/src/mocktail.dart 131:37                                                Mock.noSuchMethod
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 13:7                 MockAuthRemoteDataSource.logout
+  package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart 78:30  AuthRepositoryImpl.logout
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 295:41               main.<fn>.<fn>.<fn>
+  
+00:00 +10 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +11 -7: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +11 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +12 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +13 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +13 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should report the local failure when the teardown also fails [E]
+  Expected: <Instance of 'CacheFailure'>
+    Actual: NetworkFailure:<NetworkFailure(Network error, null)>
+     Which: is not an instance of 'CacheFailure'
+  
+  package:matcher                                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18                         expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 322:9  main.<fn>.<fn>.<fn>
+  
+00:00 +14 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +15 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +16 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +17 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +18 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +19 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +20 -8: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +20 -9: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +20 -10: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +20 -10: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the token is gone but the user blob survives [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18                         expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 434:9  main.<fn>.<fn>.<fn>
+  
+00:00 +20 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +20 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the stored token is empty [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18                         expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 450:9  main.<fn>.<fn>.<fn>
+  
+00:00 +21 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +22 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +22 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier logout should clear the user when the remote logout fails [E]
+  Expected: null
+    Actual: <Instance of 'User'>
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/features/auth/presentation/providers/auth_provider_test.dart 264:9  main.<fn>.<fn>.<fn>
+  
+00:00 +23 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +24 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +25 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +26 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +27 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +28 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +29 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +30 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +31 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +32 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +33 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +34 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +35 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +36 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +37 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +38 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +39 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +40 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+test/core/network/interceptors/auth_interceptor_test.dart:460:11: Error: No named parameter with the name 'keyValueStore'.
+          keyValueStore: keyValueStore,
+          ^^^^^^^^^^^^^
+lib/core/network/interceptors/auth_interceptor.dart:26:3: Context: Found this candidate, but the arguments don't match.
+  AuthInterceptor({
+  ^^^^^^^^^^^^^^^
+00:00 +41 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +42 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +43 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +44 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +45 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +46 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +47 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +48 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +49 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +50 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +51 -11: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:00 +51 -12: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/core/network/interceptors/auth_interceptor_test.dart [E]
+  Failed to load "/private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/core/network/interceptors/auth_interceptor_test.dart":
+  Compilation failed for testPath=/private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/core/network/interceptors/auth_interceptor_test.dart: test/core/network/interceptors/auth_interceptor_test.dart:460:11: Error: No named parameter with the name 'keyValueStore'.
+            keyValueStore: keyValueStore,
+            ^^^^^^^^^^^^^
+  lib/core/network/interceptors/auth_interceptor.dart:26:3: Context: Found this candidate, but the arguments don't match.
+    AuthInterceptor({
+    ^^^^^^^^^^^^^^^
+  .
+00:00 +51 -13: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart [E]
+  Error: The Dart compiler exited unexpectedly.
+  package:flutter_tools/src/base/common.dart 34:3  throwToolExit
+  package:flutter_tools/src/compile.dart 1021:11   DefaultResidentCompiler._compile.<fn>
+  dart:async/zone_root.dart 48:47                  _rootRunUnary
+  dart:async/zone.dart 816:35                      _CustomZone.runUnary
+  dart:async/future_impl.dart 948:45               Future._propagateToListeners.handleValueCallback
+  dart:async/future_impl.dart 977:13               Future._propagateToListeners
+  dart:async/future_impl.dart 862:9                Future._propagateToListeners
+  dart:async/future_impl.dart 720:5                Future._completeWithValue
+  dart:async/future_impl.dart 804:7                Future._asyncCompleteWithValue.<fn>
+  dart:async/zone_root.dart 35:13                  _rootRun
+  dart:async/zone.dart 810:35                      _CustomZone.run
+  dart:async/zone.dart 702:7                       _CustomZone.runGuarded
+  dart:async/zone.dart 743:23                      _CustomZone.bindCallbackGuarded.<fn>
+  dart:async/schedule_microtask.dart 40:35         _microtaskLoop
+  dart:async/schedule_microtask.dart 49:5          _startMicrotaskLoop
+  dart:isolate-patch/isolate_patch.dart 127:13     _runPendingImmediateCallback
+  dart:isolate-patch/isolate_patch.dart 193:5      _RawReceivePort._handleMessage
+  
+00:01 +51 -13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: <Instance of 'UserModel'>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart:347:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart line 347
+The test description was:
+  router leaves home for login after the remote call fails
+00:01 +51 -14: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails [E]
+  Test failed. See exception logs above.
+  The test description was: router leaves home for login after the remote call fails
+  
+00:01 +51 -14: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/core/network/interceptors/auth_interceptor_test.dart: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/core/network/interceptors/auth_interceptor_test.dart
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the stored token is empty
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the token is gone but the user blob survives
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prefix/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call throws an Error
+  ... and 10 more
+exit: 1
