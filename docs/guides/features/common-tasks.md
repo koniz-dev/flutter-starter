@@ -335,8 +335,8 @@ See [Auth Provider Example](../../api/features/auth/providers.md) for a complete
 
 ## Next Steps
 
-- ✅ Review [Customization Guide](../migration/customization-guide.md) for starter adaptation workflow
-- ✅ Check [Common Patterns](../../api/examples/common-patterns.md) for more examples
-- ✅ See [Troubleshooting](../support/troubleshooting.md) if you encounter issues
+- Review [Customization Guide](../migration/customization-guide.md) for starter adaptation workflow
+- Check [Common Patterns](../../api/examples/common-patterns.md) for more examples
+- See [Troubleshooting](../support/troubleshooting.md) if you encounter issues
 
 

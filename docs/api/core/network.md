@@ -322,7 +322,7 @@ Interceptor for converting DioException to domain exceptions.
 
 - 4xx/5xx status codes → `ServerException`
 - Network errors (timeout, connection) → `NetworkException`
-- Other errors → `UnknownException`
+- Everything else (cancel, bad certificate, unknown) → `NetworkException`, with a `code` such as `UNKNOWN_NETWORK_ERROR` (`lib/core/errors/dio_exception_mapper.dart:13-75`). There is no `UnknownException` type.
 
 ---
 
@@ -419,6 +419,6 @@ final response = await apiClient.get(
 
 - [Storage](storage.md) - Storage services used by interceptors
 - [Errors](errors.md) - Exception types thrown by ApiClient
-- [Configuration](../../README.md#configuration) - AppConfig for base URL and timeouts
+- [Configuration](../../guides/configuration.md) - AppConfig for base URL and timeouts
 
 

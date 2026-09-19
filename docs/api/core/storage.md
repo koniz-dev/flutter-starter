@@ -267,10 +267,10 @@ The default starter does not bind `ILocalDatabase` in DI, so this remains fully 
 ### 1. Use Secure Storage for Tokens
 
 ```dart
-// ✅ Good
+// Good
 await secureStorage.setString('token', token);
 
-// ❌ Bad
+// Bad
 await storage.setString('token', token);
 ```
 
@@ -323,6 +323,6 @@ Future<void> logout() async {
 
 - [Network](network.md) - Uses secure storage for tokens
 - [Features - Auth Providers](../features/auth/providers.md) - Uses storage services
-- [Configuration](../../README.md#configuration) - AppConfig for configuration
+- [Configuration](../../guides/configuration.md) - AppConfig for configuration
 
 

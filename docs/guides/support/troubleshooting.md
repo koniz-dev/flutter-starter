@@ -253,8 +253,8 @@ A: Add to `EnvConfig` for loading, then add typed getter in `AppConfig`. Update 
 
 ## Next Steps
 
-- ✅ Review [Getting Started](../onboarding/getting-started.md) if setup issues persist
-- ✅ Check [Common Tasks](../features/common-tasks.md) for development patterns
-- ✅ Review [Customization Guide](../migration/customization-guide.md) for adaptation workflow
+- Review [Getting Started](../onboarding/getting-started.md) if setup issues persist
+- Check [Common Tasks](../features/common-tasks.md) for development patterns
+- Review [Customization Guide](../migration/customization-guide.md) for adaptation workflow
 
 

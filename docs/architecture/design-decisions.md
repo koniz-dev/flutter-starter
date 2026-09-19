@@ -44,16 +44,16 @@ Flutter apps need a way to navigate between screens. The basic `Navigator` API i
 
 #### 1. **Basic Navigator (Flutter SDK)**
 **Pros:**
-- ✅ No dependencies
-- ✅ Simple for basic navigation
-- ✅ Built into Flutter
+- No dependencies
+- Simple for basic navigation
+- Built into Flutter
 
 **Cons:**
-- ❌ No deep linking support
-- ❌ Imperative API (harder to reason about)
-- ❌ No URL-based navigation
-- ❌ Manual route management
-- ❌ No type safety
+- No deep linking support
+- Imperative API (harder to reason about)
+- No URL-based navigation
+- Manual route management
+- No type safety
 
 **When to use:**
 - Very simple apps with 2-3 screens
@@ -62,16 +62,16 @@ Flutter apps need a way to navigate between screens. The basic `Navigator` API i
 
 #### 2. **AutoRoute**
 **Pros:**
-- ✅ Code generation (type-safe routes)
-- ✅ Deep linking support
-- ✅ Declarative configuration
-- ✅ Good documentation
+- Code generation (type-safe routes)
+- Deep linking support
+- Declarative configuration
+- Good documentation
 
 **Cons:**
-- ❌ Code generation overhead
-- ❌ Less flexible than go_router
-- ❌ Smaller community
-- ❌ Requires build_runner
+- Code generation overhead
+- Less flexible than go_router
+- Smaller community
+- Requires build_runner
 
 **When to use:**
 - Teams that prefer code generation
@@ -80,18 +80,18 @@ Flutter apps need a way to navigate between screens. The basic `Navigator` API i
 
 #### 3. **go_router (Chosen)**
 **Pros:**
-- ✅ Declarative routing
-- ✅ Deep linking built-in
-- ✅ URL-based navigation
-- ✅ Authentication redirects
-- ✅ Active maintenance (Flutter team)
-- ✅ No code generation needed
-- ✅ Good performance
-- ✅ Excellent documentation
+- Declarative routing
+- Deep linking built-in
+- URL-based navigation
+- Authentication redirects
+- Active maintenance (Flutter team)
+- No code generation needed
+- Good performance
+- Excellent documentation
 
 **Cons:**
-- ❌ Learning curve (different from Navigator)
-- ❌ Some boilerplate for complex routes
+- Learning curve (different from Navigator)
+- Some boilerplate for complex routes
 
 **When to use:**
 - Production apps
@@ -134,15 +134,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 ### Trade-offs
 
 **Advantages:**
-- ✅ Declarative routing configuration
-- ✅ Deep linking support
-- ✅ Authentication redirects
-- ✅ Active maintenance
+- Declarative routing configuration
+- Deep linking support
+- Authentication redirects
+- Active maintenance
 
 **Disadvantages:**
-- ⚠️ Different API from Navigator (learning curve)
-- ⚠️ Some boilerplate for complex nested routes
-- ⚠️ Requires understanding of GoRouter concepts
+- Different API from Navigator (learning curve)
+- Some boilerplate for complex nested routes
+- Requires understanding of GoRouter concepts
 
 ### When to Reconsider
 
@@ -169,16 +169,16 @@ Flutter apps need a way to manage state across the widget tree. State management
 
 #### 1. **Provider**
 **Pros:**
-- ✅ Simple API
-- ✅ Official Flutter recommendation
-- ✅ Good documentation
-- ✅ Lightweight
+- Simple API
+- Official Flutter recommendation
+- Good documentation
+- Lightweight
 
 **Cons:**
-- ❌ Can have performance issues with complex state
-- ❌ Less powerful than Riverpod
-- ❌ No compile-time safety
-- ❌ Limited dependency injection
+- Can have performance issues with complex state
+- Less powerful than Riverpod
+- No compile-time safety
+- Limited dependency injection
 
 **When to use:**
 - Simple apps
@@ -187,17 +187,17 @@ Flutter apps need a way to manage state across the widget tree. State management
 
 #### 2. **BLoC (Business Logic Component)**
 **Pros:**
-- ✅ Event-driven architecture
-- ✅ Predictable state changes
-- ✅ Good for complex state
-- ✅ Strong testing support
-- ✅ Large community
+- Event-driven architecture
+- Predictable state changes
+- Good for complex state
+- Strong testing support
+- Large community
 
 **Cons:**
-- ❌ More boilerplate (Events, States, Bloc classes)
-- ❌ Steeper learning curve
-- ❌ Can be overkill for simple state
-- ❌ Requires understanding of streams
+- More boilerplate (Events, States, Bloc classes)
+- Steeper learning curve
+- Can be overkill for simple state
+- Requires understanding of streams
 
 **When to use:**
 - Complex state management
@@ -207,18 +207,18 @@ Flutter apps need a way to manage state across the widget tree. State management
 
 #### 3. **Riverpod (Chosen)**
 **Pros:**
-- ✅ Compile-time safety
-- ✅ Built-in dependency injection
-- ✅ Excellent performance
-- ✅ Less boilerplate than BLoC
-- ✅ Great testing support
-- ✅ Active development
-- ✅ Works well with Clean Architecture
+- Compile-time safety
+- Built-in dependency injection
+- Excellent performance
+- Less boilerplate than BLoC
+- Great testing support
+- Active development
+- Works well with Clean Architecture
 
 **Cons:**
-- ❌ Learning curve (different from Provider)
-- ❌ Requires understanding of providers
-- ❌ Some concepts can be complex
+- Learning curve (different from Provider)
+- Requires understanding of providers
+- Some concepts can be complex
 
 **When to use:**
 - Production apps
@@ -262,16 +262,16 @@ class AuthNotifier extends Notifier<AuthState> {
 ### Trade-offs
 
 **Advantages:**
-- ✅ Compile-time safety
-- ✅ Built-in dependency injection
-- ✅ Excellent performance
-- ✅ Less boilerplate than BLoC
-- ✅ Great for Clean Architecture
+- Compile-time safety
+- Built-in dependency injection
+- Excellent performance
+- Less boilerplate than BLoC
+- Great for Clean Architecture
 
 **Disadvantages:**
-- ⚠️ Learning curve (provider concepts)
-- ⚠️ Different from Provider (even though similar name)
-- ⚠️ Some advanced features can be complex
+- Learning curve (provider concepts)
+- Different from Provider (even though similar name)
+- Some advanced features can be complex
 
 ### When to Reconsider
 
@@ -297,15 +297,15 @@ Flutter apps need a way to handle errors from async operations. Traditional exce
 
 #### 1. **Exceptions (Traditional)**
 **Pros:**
-- ✅ Familiar to most developers
-- ✅ Simple try-catch
-- ✅ Works with existing Dart code
+- Familiar to most developers
+- Simple try-catch
+- Works with existing Dart code
 
 **Cons:**
-- ❌ Not type-safe (can forget to catch)
-- ❌ Doesn't force error handling
-- ❌ Hard to distinguish error types
-- ❌ Not functional-friendly
+- Not type-safe (can forget to catch)
+- Doesn't force error handling
+- Hard to distinguish error types
+- Not functional-friendly
 
 **When to use:**
 - Simple error handling
@@ -314,16 +314,16 @@ Flutter apps need a way to handle errors from async operations. Traditional exce
 
 #### 2. **Either Pattern (fpdart)**
 **Pros:**
-- ✅ Functional programming approach
-- ✅ Type-safe error handling
-- ✅ Forces error handling
-- ✅ Good for functional codebases
+- Functional programming approach
+- Type-safe error handling
+- Forces error handling
+- Good for functional codebases
 
 **Cons:**
-- ❌ Requires functional programming knowledge
-- ❌ Less familiar to most developers
-- ❌ Additional dependency (fpdart)
-- ❌ Can be verbose
+- Requires functional programming knowledge
+- Less familiar to most developers
+- Additional dependency (fpdart)
+- Can be verbose
 
 **When to use:**
 - Functional programming codebase
@@ -332,17 +332,17 @@ Flutter apps need a way to handle errors from async operations. Traditional exce
 
 #### 3. **Result Pattern (Chosen)**
 **Pros:**
-- ✅ Type-safe error handling
-- ✅ Forces error handling (can't ignore errors)
-- ✅ Clear success/failure distinction
-- ✅ Works with pattern matching (Dart 3.0)
-- ✅ No external dependencies
-- ✅ Familiar to developers from other languages (Rust, Swift)
+- Type-safe error handling
+- Forces error handling (can't ignore errors)
+- Clear success/failure distinction
+- Works with pattern matching (Dart 3.0)
+- No external dependencies
+- Familiar to developers from other languages (Rust, Swift)
 
 **Cons:**
-- ❌ Different from exceptions (learning curve)
-- ❌ Requires consistent usage
-- ❌ Some boilerplate
+- Different from exceptions (learning curve)
+- Requires consistent usage
+- Some boilerplate
 
 **When to use:**
 - Production apps
@@ -401,16 +401,16 @@ result.when(
 ### Trade-offs
 
 **Advantages:**
-- ✅ Type-safe error handling
-- ✅ Forces explicit error handling
-- ✅ Works with pattern matching
-- ✅ No external dependencies
-- ✅ Clear success/failure distinction
+- Type-safe error handling
+- Forces explicit error handling
+- Works with pattern matching
+- No external dependencies
+- Clear success/failure distinction
 
 **Disadvantages:**
-- ⚠️ Different from exceptions (learning curve)
-- ⚠️ Requires consistent usage across codebase
-- ⚠️ Some boilerplate for error mapping
+- Different from exceptions (learning curve)
+- Requires consistent usage across codebase
+- Some boilerplate for error mapping
 
 ### When to Reconsider
 
@@ -443,16 +443,16 @@ Logging should:
 
 #### 1. **print() / debugPrint()**
 **Pros:**
-- ✅ No dependencies
-- ✅ Simple
-- ✅ Built into Dart
+- No dependencies
+- Simple
+- Built into Dart
 
 **Cons:**
-- ❌ No log levels
-- ❌ No file logging
-- ❌ No structured logging
-- ❌ Can't disable in production
-- ❌ Poor performance
+- No log levels
+- No file logging
+- No structured logging
+- Can't disable in production
+- Poor performance
 
 **When to use:**
 - Quick debugging
@@ -461,15 +461,15 @@ Logging should:
 
 #### 2. **developer.log()**
 **Pros:**
-- ✅ Built into Flutter
-- ✅ Better than print()
-- ✅ Supports log levels
+- Built into Flutter
+- Better than print()
+- Supports log levels
 
 **Cons:**
-- ❌ No file logging
-- ❌ No remote logging
-- ❌ Limited features
-- ❌ Not structured
+- No file logging
+- No remote logging
+- Limited features
+- Not structured
 
 **When to use:**
 - Simple logging needs
@@ -478,18 +478,18 @@ Logging should:
 
 #### 3. **logger Package + Custom Service (Chosen)**
 **Pros:**
-- ✅ Multiple outputs (console, file, remote)
-- ✅ Log levels (debug, info, warning, error)
-- ✅ Structured logging
-- ✅ Configurable per environment
-- ✅ File rotation
-- ✅ Good performance
-- ✅ Extensible
+- Multiple outputs (console, file, remote)
+- Log levels (debug, info, warning, error)
+- Structured logging
+- Configurable per environment
+- File rotation
+- Good performance
+- Extensible
 
 **Cons:**
-- ❌ Requires custom implementation
-- ❌ Some setup needed
-- ❌ Additional dependency
+- Requires custom implementation
+- Some setup needed
+- Additional dependency
 
 **When to use:**
 - Production apps
@@ -551,16 +551,16 @@ class LoggingService {
 ### Trade-offs
 
 **Advantages:**
-- ✅ Multiple outputs
-- ✅ Environment-aware
-- ✅ Structured logging
-- ✅ File rotation
-- ✅ Extensible
+- Multiple outputs
+- Environment-aware
+- Structured logging
+- File rotation
+- Extensible
 
 **Disadvantages:**
-- ⚠️ Custom implementation needed
-- ⚠️ Some setup required
-- ⚠️ Additional dependency
+- Custom implementation needed
+- Some setup required
+- Additional dependency
 
 ### When to Reconsider
 
@@ -588,14 +588,14 @@ Using one storage solution for everything is either:
 
 #### 1. **SharedPreferences Only**
 **Pros:**
-- ✅ Simple API
-- ✅ No encryption overhead
-- ✅ Fast
+- Simple API
+- No encryption overhead
+- Fast
 
 **Cons:**
-- ❌ Not secure (plain text)
-- ❌ Can't store sensitive data safely
-- ❌ Security risk
+- Not secure (plain text)
+- Can't store sensitive data safely
+- Security risk
 
 **When to use:**
 - No sensitive data
@@ -604,13 +604,13 @@ Using one storage solution for everything is either:
 
 #### 2. **Secure Storage Only**
 **Pros:**
-- ✅ Secure for all data
-- ✅ Encrypted storage
+- Secure for all data
+- Encrypted storage
 
 **Cons:**
-- ❌ Slower (encryption overhead)
-- ❌ Overkill for non-sensitive data
-- ❌ More complex API
+- Slower (encryption overhead)
+- Overkill for non-sensitive data
+- More complex API
 
 **When to use:**
 - All data is sensitive
@@ -619,16 +619,16 @@ Using one storage solution for everything is either:
 
 #### 3. **Dual Storage System (Chosen)**
 **Pros:**
-- ✅ Right tool for the job
-- ✅ Secure for sensitive data
-- ✅ Fast for non-sensitive data
-- ✅ Clear separation of concerns
-- ✅ Unified interface (IStorageService)
+- Right tool for the job
+- Secure for sensitive data
+- Fast for non-sensitive data
+- Clear separation of concerns
+- Unified interface (IStorageService)
 
 **Cons:**
-- ❌ Need to choose which storage to use
-- ❌ Two storage systems to manage
-- ❌ Some complexity
+- Need to choose which storage to use
+- Two storage systems to manage
+- Some complexity
 
 **When to use:**
 - Production apps
@@ -682,15 +682,15 @@ await secureStorage.setString('auth_token', token);
 ### Trade-offs
 
 **Advantages:**
-- ✅ Secure for sensitive data
-- ✅ Fast for non-sensitive data
-- ✅ Unified interface
-- ✅ Clear separation
+- Secure for sensitive data
+- Fast for non-sensitive data
+- Unified interface
+- Clear separation
 
 **Disadvantages:**
-- ⚠️ Need to choose which storage
-- ⚠️ Two systems to manage
-- ⚠️ Some complexity
+- Need to choose which storage
+- Two systems to manage
+- Some complexity
 
 ### When to Reconsider
 
@@ -715,15 +715,15 @@ Apps need to make HTTP requests. The basic `http` package:
 
 #### 1. **http Package (Flutter SDK)**
 **Pros:**
-- ✅ No dependencies
-- ✅ Simple API
-- ✅ Built into Flutter
+- No dependencies
+- Simple API
+- Built into Flutter
 
 **Cons:**
-- ❌ Limited interceptor support
-- ❌ Basic error handling
-- ❌ No request/response transformation
-- ❌ No retry logic
+- Limited interceptor support
+- Basic error handling
+- No request/response transformation
+- No retry logic
 
 **When to use:**
 - Simple HTTP requests
@@ -732,18 +732,18 @@ Apps need to make HTTP requests. The basic `http` package:
 
 #### 2. **Dio (Chosen)**
 **Pros:**
-- ✅ Powerful interceptor system
-- ✅ Request/response transformation
-- ✅ Built-in retry logic
-- ✅ Good error handling
-- ✅ Cancel tokens
-- ✅ Form data support
-- ✅ Active maintenance
+- Powerful interceptor system
+- Request/response transformation
+- Built-in retry logic
+- Good error handling
+- Cancel tokens
+- Form data support
+- Active maintenance
 
 **Cons:**
-- ❌ Additional dependency
-- ❌ More complex than http
-- ❌ Learning curve
+- Additional dependency
+- More complex than http
+- Learning curve
 
 **When to use:**
 - Production apps
@@ -803,15 +803,15 @@ class ApiClient {
 ### Trade-offs
 
 **Advantages:**
-- ✅ Powerful interceptor system
-- ✅ Good error handling
-- ✅ Retry logic
-- ✅ Active maintenance
+- Powerful interceptor system
+- Good error handling
+- Retry logic
+- Active maintenance
 
 **Disadvantages:**
-- ⚠️ Additional dependency
-- ⚠️ More complex than http
-- ⚠️ Learning curve
+- Additional dependency
+- More complex than http
+- Learning curve
 
 ### When to Reconsider
 
@@ -828,39 +828,39 @@ Consider alternatives if:
 
 | Feature | Navigator | go_router | AutoRoute |
 |---------|-----------|-----------|-----------|
-| **Deep Linking** | ❌ Manual | ✅ Built-in | ✅ Built-in |
-| **Type Safety** | ❌ | ⚠️ Partial | ✅ Full (code gen) |
-| **Declarative** | ❌ | ✅ | ✅ |
-| **Auth Redirects** | ❌ Manual | ✅ Built-in | ✅ Built-in |
-| **Code Generation** | ❌ | ❌ | ✅ Required |
-| **Learning Curve** | ✅ Low | ⚠️ Medium | ⚠️ Medium |
-| **Dependencies** | ✅ None | ⚠️ go_router | ⚠️ auto_route + code gen |
-| **Maintenance** | ✅ Flutter team | ✅ Flutter team | ⚠️ Community |
+| **Deep Linking** | Manual | Built-in | Built-in |
+| **Type Safety** | No | Partial | Full (code gen) |
+| **Declarative** | No | Yes | Yes |
+| **Auth Redirects** | Manual | Built-in | Built-in |
+| **Code Generation** | No | No | Required |
+| **Learning Curve** | Low | Medium | Medium |
+| **Dependencies** | None | go_router | auto_route + code gen |
+| **Maintenance** | Flutter team | Flutter team | Community |
 | **Best For** | Simple apps | Production apps | Type-safe apps |
 
 ### State Management
 
 | Feature | Provider | Riverpod | BLoC |
 |---------|----------|----------|------|
-| **Compile-time Safety** | ❌ | ✅ | ⚠️ Partial |
-| **Dependency Injection** | ⚠️ Basic | ✅ Built-in | ⚠️ Manual |
-| **Boilerplate** | ✅ Low | ⚠️ Medium | ❌ High |
-| **Learning Curve** | ✅ Low | ⚠️ Medium | ❌ High |
-| **Performance** | ⚠️ Good | ✅ Excellent | ✅ Excellent |
-| **Testing** | ✅ Easy | ✅ Easy | ✅ Easy |
-| **Event-driven** | ❌ | ❌ | ✅ |
+| **Compile-time Safety** | No | Yes | Partial |
+| **Dependency Injection** | Basic | Built-in | Manual |
+| **Boilerplate** | Low | Medium | High |
+| **Learning Curve** | Low | Medium | High |
+| **Performance** | Good | Excellent | Excellent |
+| **Testing** | Easy | Easy | Easy |
+| **Event-driven** | No | No | Yes |
 | **Best For** | Simple apps | Production apps | Complex state |
 
 ### Error Handling Patterns
 
 | Feature | Exceptions | Result Pattern | Either Pattern |
 |---------|------------|----------------|----------------|
-| **Type Safety** | ❌ | ✅ | ✅ |
-| **Forces Handling** | ❌ | ✅ | ✅ |
-| **Familiar** | ✅ | ⚠️ Medium | ❌ Low |
-| **Dependencies** | ✅ None | ✅ None | ⚠️ fpdart |
-| **Pattern Matching** | ⚠️ Partial | ✅ Full | ✅ Full |
-| **Functional** | ❌ | ⚠️ Partial | ✅ Full |
+| **Type Safety** | No | Yes | Yes |
+| **Forces Handling** | No | Yes | Yes |
+| **Familiar** | Yes | Medium | Low |
+| **Dependencies** | None | None | fpdart |
+| **Pattern Matching** | Partial | Full | Full |
+| **Functional** | No | Partial | Full |
 | **Best For** | Simple apps | Production apps | Functional codebases |
 
 ---
@@ -1189,11 +1189,11 @@ This template makes deliberate choices for each major decision:
 - **HTTP Client**: Dio for powerful interceptors
 
 Each decision includes:
-- ✅ Problem statement
-- ✅ Alternatives considered
-- ✅ Chosen solution and rationale
-- ✅ Trade-offs
-- ✅ When to reconsider
+- Problem statement
+- Alternatives considered
+- Chosen solution and rationale
+- Trade-offs
+- When to reconsider
 
 Use this template as a starting point, understand the decisions, and adapt as needed for your specific requirements.
 

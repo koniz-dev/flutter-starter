@@ -388,8 +388,8 @@ Future<void> _refreshToken() async {
 
 ## Related APIs
 
-- [Network APIs](../../core/network.md) - ApiClient and interceptors
-- [Error Handling](../../core/errors.md) - Exception and Failure types
+- [Network APIs](../core/network.md) - ApiClient and interceptors
+- [Error Handling](../core/errors.md) - Exception and Failure types
 - [Common Patterns](common-patterns.md) - Common usage patterns
 
 

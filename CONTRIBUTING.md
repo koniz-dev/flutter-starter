@@ -151,10 +151,16 @@ Before submitting a PR, make sure:
 
 ### Prerequisites
 
-- Flutter SDK (>=3.0.0)
-- Dart SDK (>=3.0.0)
+- Flutter SDK **>=3.38.4**
+- Dart SDK **>=3.10.3** (bundled with Flutter)
 - Git
 - IDE (VS Code, Android Studio, or IntelliJ IDEA)
+
+Those are the floors the committed `pubspec.lock` resolves against (see its
+`sdks:` block). `pubspec.yaml` declares the looser `environment: sdk: '^3.8.0'`
+and no `flutter:` constraint at all, so an older SDK does not fail with a clear
+message - it fails inside `flutter pub get` with a transitive solve error
+naming a package such as `path_provider_foundation`. Trust the lockfile.
 
 ### Setup Steps
 
@@ -227,9 +233,23 @@ Examples:
    ```
 
 2. **Make your changes** and commit frequently
+
+   Stage explicitly. Do **not** use `git add .`: `flutter pub get` rewrites
+   `analysis_options.yaml` and writes `ios/Podfile`, `macos/Podfile` and four
+   `*.xcconfig` files as a side effect, and `git add .` sweeps that tooling
+   churn into your commit where a reviewer has to work out whether it was
+   deliberate.
+
    ```bash
-   git add .
+   git status                       # see exactly what changed
+   git add lib/features/products    # name what you touched
    git commit -m "feat: add product listing screen"
+   ```
+
+   Revert the churn before committing if it appears:
+
+   ```bash
+   git checkout -- analysis_options.yaml ios/Flutter macos/Flutter
    ```
 
 3. **Keep your branch up to date**
@@ -256,6 +276,16 @@ Before opening a PR, run (same scope as CI for Dart — no platform builds):
 ```
 
 This runs scoped `dart format --check`, `flutter analyze`, and `flutter test`. On Windows without Bash, run the commands in [docs/guides/testing/testing-summary.md](docs/guides/testing/testing-summary.md) manually.
+
+If your change touches markdown, also run the docs checker - `ci.yml` skips
+docs, so the **Docs check** workflow is what gates them:
+
+```bash
+dart run tool/check_docs.dart
+```
+
+It verifies every relative link and heading anchor under `docs/` resolves, and
+that `docs/`, `CLAUDE.md` and `.claude/` stay emoji-free.
 
 ### GitHub branch protection (recommended)
 
@@ -414,24 +444,80 @@ test/
 
 ### Example Test
 
+This project uses **mocktail**, not mockito, and its own `Result` type
+(`Success` / `ResultFailure`), not `Either` / `Right` - there is no `dartz` or
+`fpdart` dependency. Two mocktail specifics that trip people up: matchers are
+**called** (`any()`, not `any`), and the stubbed call is wrapped in a closure
+(`when(() => ...)`).
+
 ```dart
-group('LoginUseCase', () {
-  test('should return Success when login is successful', () async {
-    // Arrange
-    final mockRepository = MockAuthRepository();
-    when(mockRepository.login(any, any))
-        .thenAnswer((_) async => Right(mockUser));
-    final useCase = LoginUseCase(mockRepository);
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-    // Act
-    final result = await useCase('email@example.com', 'password');
+class MockAuthRepository extends Mock implements AuthRepository {}
 
-    // Assert
-    expect(result.isSuccess, true);
-    verify(mockRepository.login('email@example.com', 'password')).called(1);
+void main() {
+  group('LoginUseCase', () {
+    late MockAuthRepository mockRepository;
+    late LoginUseCase useCase;
+
+    setUp(() {
+      mockRepository = MockAuthRepository();
+      useCase = LoginUseCase(mockRepository);
+    });
+
+    test('returns Success when the repository succeeds', () async {
+      // Arrange
+      const user = User(id: '1', email: 'email@example.com', name: 'Ada');
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
+
+      // Act
+      final result = await useCase('email@example.com', 'password');
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      expect(result.dataOrNull, user);
+      verify(
+        () => mockRepository.login('email@example.com', 'password'),
+      ).called(1);
+    });
+
+    test('returns a failure when the repository fails', () async {
+      // Arrange
+      const failure = AuthFailure('Invalid credentials');
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const ResultFailure<User>(failure));
+
+      // Act
+      final result = await useCase('email@example.com', 'wrong-password');
+
+      // Assert
+      expect(result.isFailure, isTrue);
+      expect(result.failureOrNull, failure);
+    });
   });
+}
+```
+
+`any()` needs no setup for built-in types such as `String`. When you stub a
+method that takes one of your own classes, register a fallback first:
+
+```dart
+setUpAll(() {
+  registerFallbackValue(const User(id: '0', email: 'fallback@example.com'));
 });
 ```
+
+See `test/features/auth/domain/usecases/login_usecase_test.dart` for the
+version that ships.
 
 ### Running Tests
 

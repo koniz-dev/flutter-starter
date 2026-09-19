@@ -215,12 +215,12 @@ FocusAnnouncer.announceActionResult(context, 'Saved')
 
 ## Common Mistakes
 
-❌ **Don't:**
+**Don't:**
 ```dart
 IconButton(icon: Icon(Icons.delete), onPressed: () {})
 ```
 
-✅ **Do:**
+**Do:**
 ```dart
 AccessibleIconButton(
   icon: Icons.delete,
@@ -229,12 +229,12 @@ AccessibleIconButton(
 )
 ```
 
-❌ **Don't:**
+**Don't:**
 ```dart
 Text('Submit', style: TextStyle(fontSize: 16))
 ```
 
-✅ **Do:**
+**Do:**
 ```dart
 AccessibleText(
   'Submit',
@@ -242,12 +242,12 @@ AccessibleText(
 )
 ```
 
-❌ **Don't:**
+**Don't:**
 ```dart
 Image.asset('assets/logo.png')
 ```
 
-✅ **Do:**
+**Do:**
 ```dart
 AccessibleImage(
   image: Image.asset('assets/logo.png'),

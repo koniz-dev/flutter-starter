@@ -7,8 +7,8 @@ Comprehensive logging service for the application with multiple outputs and envi
 The logging layer provides:
 - `LoggingService` - Core logging management
 - `LogOutput` templates - Plug-and-play outputs (Console, File, Crashlytics)
-- `LogFormatter` - JSON and pretty-print formatting
-- `LogProviders` - Riverpod providers for dependency injection
+- `JsonLogFormatter` - JSON log printer used outside development (`lib/core/logging/log_output.dart:202`)
+- `loggingServiceProvider` - Riverpod provider for dependency injection (`lib/core/logging/logging_providers.dart:19`)
 
 ---
 
@@ -76,5 +76,5 @@ This template is opt-in and not enabled by default.
 
 ## Related Documentation
 
-- [Configuration System](../guides/configuration.md) - How to toggle logging via `.env`
+- [Configuration System](../../guides/configuration.md) - How to toggle logging via `.env`
 - [Common Patterns](../examples/common-patterns.md) - Error handling and logging best practices

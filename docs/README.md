@@ -35,42 +35,42 @@ Keep docs and examples pointing here unless the tree moves:
 - **Blueprints:** Long-form guides (especially [Security implementation](guides/security/implementation.md)) mix edits to existing files with **optional** modules you add yourself; headings mark blueprints where relevant.
 - **`examples/`:** [`examples/`](../examples/) — see [`examples/README.md`](../examples/README.md); also [Repository layout](guides/onboarding/repository-layout.md).
 
-## 📚 General Documentation Map
+## General Documentation Map
 
 Navigate through the folders to dive deeper into the project modules:
 
-- 🏛️ [**Architecture**](architecture/README.md) - Boundaries, contracts, adapters, and migration strategy.
-- 📖 [**Guides**](guides/onboarding/getting-started.md) - Onboarding and practical implementation guides.
-- 🧰 [**Troubleshooting**](guides/support/troubleshooting.md) - Common setup/build/test issues and quick fixes.
-- 🚀 [**Deployment**](deployment/README.md) - Store releases, Fastlane, and GitHub Actions deploy workflows.
-- 🛡️ [**Security**](guides/security/README.md) - Security baseline, checklist, and implementation notes.
-- ⚙️ [**Configuration**](guides/configuration.md) - `.env` and `--dart-define` setup.
-- 🎨 [**Design System**](architecture/adr/0004-theme-token-boundary.md) - Semantic token contract and theme mapping.
-- 💻 [**API Specs**](api/README.md) - Core and feature API references.
+- [**Architecture**](architecture/README.md) - Boundaries, contracts, adapters, and migration strategy.
+- [**Guides**](guides/onboarding/getting-started.md) - Onboarding and practical implementation guides.
+- [**Troubleshooting**](guides/support/troubleshooting.md) - Common setup/build/test issues and quick fixes.
+- [**Deployment**](deployment/README.md) - Store releases, Fastlane, and GitHub Actions deploy workflows.
+- [**Security**](guides/security/README.md) - Security baseline, checklist, and implementation notes.
+- [**Configuration**](guides/configuration.md) - `.env` and `--dart-define` setup.
+- [**Design System**](architecture/adr/0004-theme-token-boundary.md) - Semantic token contract and theme mapping.
+- [**API Specs**](api/README.md) - Core and feature API references.
 
 ---
 
 ## Starter Principles
 ### Architecture and Quality
-- ✅ **Clean Architecture** - Domain/data/presentation separation
-- ✅ **Explicit Boundaries** - Contracts in `core/contracts` + adapters
-- ✅ **State Management** - Riverpod with controller boundary contracts
-- ✅ **Code Quality** - Strict linting and test-first migration flow
+- **Clean Architecture** - Domain/data/presentation separation
+- **Explicit Boundaries** - Contracts in `core/contracts` + adapters
+- **State Management** - Riverpod with controller boundary contracts
+- **Code Quality** - Strict linting and test-first migration flow
 
 ### Security and Storage
-- ✅ **Optional RASP** - No-op by default, FreeRASP via override
-- ✅ **Token Boundary** - `ITokenStore` abstraction for sensitive secrets
-- ✅ **Storage Boundary** - `IKeyValueStore` and adapters
+- **Optional RASP** - No-op by default, FreeRASP via override
+- **Token Boundary** - `ITokenStore` abstraction for sensitive secrets
+- **Storage Boundary** - `IKeyValueStore` and adapters
 
 ### Networking
-- ✅ **Transport Contract** - `INetworkClient` + `NetworkRequest/Response/Error`
-- ✅ **Dio façade** - `ApiClient` exposes Dio + interceptors and delegates to `DioNetworkClient`
-- ✅ **Typed DI** - `apiClientProvider` and `networkClientProvider` (same `ApiClient` instance)
+- **Transport Contract** - `INetworkClient` + `NetworkRequest/Response/Error`
+- **Dio façade** - `ApiClient` exposes Dio + interceptors and delegates to `DioNetworkClient`
+- **Typed DI** - `apiClientProvider` and `networkClientProvider` (same `ApiClient` instance)
 
 ### Testing and DX
-- ✅ **Unit/Widget Coverage** - Core and feature behavior tests
-- ✅ **Template Modules** - GraphQL, Crashlytics output, and Isar templates
-- ✅ **Design Tokens** - Shared source of truth for app theme and Widgetbook
+- **Unit/Widget Coverage** - Core and feature behavior tests
+- **Template Modules** - GraphQL, Crashlytics output, and Isar templates
+- **Design Tokens** - Shared source of truth for app theme and Widgetbook
 
 ---
 
@@ -92,7 +92,7 @@ Navigate through the folders to dive deeper into the project modules:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core Dependencies
 - **Flutter** - UI framework

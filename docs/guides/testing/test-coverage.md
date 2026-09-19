@@ -91,11 +91,21 @@ straight to `$GITHUB_OUTPUT` without the human text becoming step-output keys.
 
 ### GitHub Actions
 
-Coverage is automatically:
-- ✅ Calculated on every push/PR
-- ✅ Enforced with 80% minimum threshold
-- ✅ Uploaded to Codecov
-- ✅ Commented on PRs
+Coverage does **not** run on pushes or pull requests. The triggers in
+[`coverage.yml`](../../../.github/workflows/coverage.yml) are `workflow_dispatch`
+and a weekly `schedule` (Mondays, 03:00 UTC) only; the per-branch `push` and
+`pull_request` triggers are present but commented out, waiting for you to pick
+your branch names. `ci.yml` (the **Quality gate** that does run on every PR)
+has no coverage step at all.
+
+So on a manual or scheduled run, coverage is:
+- Calculated over the whole repository
+- Enforced against the thresholds in the **Enforce coverage thresholds** step
+- Uploaded to Codecov
+
+To gate PRs on coverage, uncomment the `push:` / `pull_request:` triggers at
+the top of `coverage.yml` and set your branches. Until you do, treat coverage
+as a weekly report, not a gate.
 
 ### Codecov Integration
 
@@ -111,20 +121,27 @@ https://codecov.io/gh/[your-username]/[your-repo]
 
 ### PR Comments
 
-Every PR automatically receives a coverage comment showing:
-- Overall coverage percentage
-- Coverage by layer
-- Coverage trend (increase/decrease)
-- Link to detailed report
+The workflow has a **Comment PR with coverage** step, but it is guarded by
+`if: github.event_name == 'pull_request'`
+([`coverage.yml:226`](../../../.github/workflows/coverage.yml)). With only
+`workflow_dispatch` and `schedule` enabled, that condition is never true and
+**no PR ever receives a coverage comment**. Enable the `pull_request` trigger
+first; then each PR gets a comment showing overall percentage, per-layer
+coverage, and a link to the detailed report.
 
 ## Coverage Enforcement
 
 ### Minimum Threshold
 
-The CI pipeline enforces an **80% minimum coverage**. If coverage drops below this:
-- ❌ CI fails
-- 📊 Coverage report shows gaps
-- 🔍 PR comment highlights issues
+The **Coverage Analysis** workflow enforces an **80% minimum** overall, plus
+per-layer floors (domain 100%, data 90%, presentation 80%, core 80%) in its
+**Enforce coverage thresholds** step
+([`coverage.yml:139-171`](../../../.github/workflows/coverage.yml)). If coverage
+drops below any of them, that workflow run fails.
+
+Because the workflow is manual plus weekly, a failing threshold does **not**
+block a pull request and does not turn the **Quality gate** red. Nothing in the
+per-PR path looks at coverage.
 
 ### Increasing Threshold
 
@@ -295,10 +312,10 @@ Coverage reports help identify:
 
 ### 4. Maintain Coverage Over Time
 
-- ✅ Check coverage before merging PRs
-- ✅ Set up coverage alerts
-- ✅ Review coverage trends
-- ✅ Fix coverage regressions
+- Check coverage before merging PRs
+- Set up coverage alerts
+- Review coverage trends
+- Fix coverage regressions
 
 ## Files with Low Coverage (By Design)
 
@@ -314,7 +331,7 @@ Our project maintains **~80% overall coverage**, which is above our minimum thre
 
 **Reason:** These files contain private constructors that cannot be executed during tests. All constant values are tested through their usage in other parts of the codebase.
 
-**Status:** ✅ All constant values are verified through integration tests and usage in production code.
+**Status:** All constant values are verified through integration tests and usage in production code.
 
 ### Localization Generated Files (0-50% coverage)
 
@@ -325,7 +342,7 @@ Our project maintains **~80% overall coverage**, which is above our minimum thre
 
 **Reason:** These are auto-generated files from Flutter's localization system (`flutter gen-l10n`). Generated code should not be tested directly as it's maintained by the framework.
 
-**Status:** ✅ Localization functionality is tested through integration tests and UI tests that verify correct string display.
+**Status:** Localization functionality is tested through integration tests and UI tests that verify correct string display.
 
 ### Main Entry Point (~56% coverage)
 
@@ -336,7 +353,7 @@ Our project maintains **~80% overall coverage**, which is above our minimum thre
 
 **Reason:** The `runApp()` function is the application entry point and cannot be meaningfully tested in isolation. Initialization functions and setup logic are tested separately in dedicated test files.
 
-**Status:** ✅ All initialization logic and setup functions are covered by separate unit tests.
+**Status:** All initialization logic and setup functions are covered by separate unit tests.
 
 ### Task Use Cases (56-58% coverage)
 
@@ -347,7 +364,7 @@ Our project maintains **~80% overall coverage**, which is above our minimum thre
 
 **Reason:** Lower coverage percentages are due to blank lines and comments in the code. All executable code paths are fully tested.
 
-**Status:** ✅ Each use case has 12-13 comprehensive test cases covering all business logic, error handling, and edge cases.
+**Status:** Each use case has 12-13 comprehensive test cases covering all business logic, error handling, and edge cases.
 
 ### Environment Configuration (~36% coverage)
 
@@ -358,17 +375,17 @@ Our project maintains **~80% overall coverage**, which is above our minimum thre
 
 **Reason:** The `dotenv.load()` function looks for files in the assets directory, which is difficult to test in unit test environments. The parsing and validation functions are tested via default values and mock scenarios.
 
-**Status:** ✅ All parsing logic and configuration handling is tested through default values and integration tests.
+**Status:** All parsing logic and configuration handling is tested through default values and integration tests.
 
 ## Summary
 
 These low-coverage files are **intentional design decisions**, not testing gaps:
 
-- ✅ All executable business logic is tested
-- ✅ All constant values are verified through usage
-- ✅ Generated code is excluded (as per best practices)
-- ✅ Entry points are tested through integration tests
-- ✅ Configuration parsing is tested via defaults
+- All executable business logic is tested
+- All constant values are verified through usage
+- Generated code is excluded (as per best practices)
+- Entry points are tested through integration tests
+- Configuration parsing is tested via defaults
 
 When reviewing coverage reports, focus on **executable code coverage** rather than raw percentages. Our **~80% overall coverage** reflects comprehensive testing of all critical paths and business logic.
 
