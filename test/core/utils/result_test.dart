@@ -832,5 +832,63 @@ void main() {
         },
       );
     });
+
+    group('equality', () {
+      test('two Success values with equal data are equal', () {
+        // Success(1) == Success(1) used to be false, because neither Success
+        // nor ResultFailure defined == while the Failure they wrap is
+        // Equatable.
+        expect(const Success<int>(1), const Success<int>(1));
+        expect(const Success<int>(1).hashCode, const Success<int>(1).hashCode);
+        expect(const Success<String>('a'), const Success<String>('a'));
+      });
+
+      test('Success values with different data are not equal', () {
+        expect(const Success<int>(1), isNot(const Success<int>(2)));
+      });
+
+      test('two ResultFailure values wrapping equal failures are equal', () {
+        const a = ResultFailure<int>(ServerFailure('boom', code: 'E'));
+        const b = ResultFailure<int>(ServerFailure('boom', code: 'E'));
+        expect(a, b);
+        expect(a.hashCode, b.hashCode);
+      });
+
+      test('ResultFailure values wrapping different failures differ', () {
+        expect(
+          const ResultFailure<int>(ServerFailure('boom')),
+          isNot(const ResultFailure<int>(NetworkFailure('boom'))),
+        );
+      });
+
+      test('a Success never equals a ResultFailure', () {
+        expect(
+          const Success<int>(1),
+          isNot(const ResultFailure<int>(ServerFailure('boom'))),
+        );
+      });
+
+      test('equality is only as deep as T, so lists compare by identity', () {
+        final shared = [1, 2, 3];
+        expect(Success<List<int>>(shared), Success<List<int>>(shared));
+
+        final one = [1, 2, 3];
+        final another = [1, 2, 3];
+        expect(Success<List<int>>(one), isNot(Success<List<int>>(another)));
+      });
+
+      test('results are usable directly in expect', () {
+        Result<int> compute() => const Success(7);
+        expect(compute(), const Success<int>(7));
+      });
+
+      test('toString names the variant and its payload', () {
+        expect(const Success<int>(7).toString(), contains('7'));
+        expect(
+          const ResultFailure<int>(ServerFailure('boom')).toString(),
+          contains('boom'),
+        );
+      });
+    });
   });
 }

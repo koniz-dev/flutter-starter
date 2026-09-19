@@ -47,9 +47,11 @@ class LazyLoader<K, T> {
   ///
   /// Returns cached value if available, otherwise loads it
   Future<T> load(K key) async {
-    // Return cached value if available
+    // Return cached value if available.
+    // `as T` rather than `!`: a LazyLoader<K, T?> may legitimately cache a
+    // null value, and the null-check operator threw on the second load.
     if (cacheEnabled && _cache.containsKey(key)) {
-      return _cache[key]!;
+      return _cache[key] as T;
     }
 
     // Return existing loading future if already loading

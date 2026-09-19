@@ -113,18 +113,93 @@ void main() {
       );
 
       expect(result.isFailure, isTrue);
-      verify(() => mockService.startTrace('repository_get_items')).called(1);
+      verify(
+        () => mockService.startTrace('repository_get_items_error'),
+      ).called(1);
       verify(
         () => mockTrace.putAttribute(
           PerformanceAttributes.errorType,
           'ServerFailure',
         ),
       ).called(1);
+      // The error trace must be started and stopped, or it is never reported.
+      verify(() => mockTrace.startSync()).called(1);
+      verify(() => mockTrace.stopSync()).called(1);
     });
 
     test(
-      'measureRepositoryOperation throws exception inside measureOperation',
+      'measureRepositoryOperation runs the operation exactly once on failure',
       () async {
+        when(
+          () => mockService.measureOperation<Result<String>>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((invocation) async {
+          final cb =
+              invocation.namedArguments[#operation]
+                  as Future<Result<String>> Function();
+          return cb();
+        });
+        when(() => mockService.startTrace(any())).thenReturn(mockTrace);
+
+        var calls = 0;
+        final result = await repository.measureRepositoryOperation<String>(
+          operationName: 'save_order',
+          operation: () async {
+            calls++;
+            return const ResultFailure(ServerFailure('500'));
+          },
+        );
+
+        expect(result.isFailure, isTrue);
+        expect(calls, 1);
+      },
+    );
+
+    test(
+      'measureDataSave never executes the wrapped operation twice',
+      () async {
+        // The operation increments a counter and then throws. The old
+        // `on Exception { return operation(); }` fallback re-ran it, which
+        // turned one failed POST into two.
+        when(
+          () => mockService.measureOperation<Result<String>>(
+            name: any(named: 'name'),
+            operation: any(named: 'operation'),
+            attributes: any(named: 'attributes'),
+          ),
+        ).thenAnswer((invocation) async {
+          final cb =
+              invocation.namedArguments[#operation]
+                  as Future<Result<String>> Function();
+          return cb();
+        });
+
+        var calls = 0;
+        await expectLater(
+          repository.measureDataSave<String>(
+            operationName: 'create_order',
+            operation: () async {
+              calls++;
+              throw Exception('POST /orders returned 500');
+            },
+          ),
+          throwsA(isA<Exception>()),
+        );
+
+        expect(calls, 1);
+      },
+    );
+
+    test(
+      'instrumentation failure propagates instead of re-running the operation',
+      () async {
+        // measureOperation awaits `operation` inside itself, so a catch here
+        // cannot tell an instrumentation failure from an operation failure.
+        // Re-running the operation was therefore a duplicate execution; the
+        // error surfaces to the caller instead.
         when(
           () => mockService.measureOperation<Result<String>>(
             name: any(named: 'name'),
@@ -133,13 +208,19 @@ void main() {
           ),
         ).thenThrow(Exception('Telemetry failed'));
 
-        final result = await repository.measureRepositoryOperation<String>(
-          operationName: 'get_items',
-          operation: () async => const Success('data'),
+        var calls = 0;
+        await expectLater(
+          repository.measureRepositoryOperation<String>(
+            operationName: 'get_items',
+            operation: () async {
+              calls++;
+              return const Success('data');
+            },
+          ),
+          throwsA(isA<Exception>()),
         );
 
-        expect(result.isSuccess, isTrue);
-        expect((result as Success).data, equals('data'));
+        expect(calls, 0);
       },
     );
 

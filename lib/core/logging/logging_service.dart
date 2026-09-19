@@ -76,6 +76,9 @@ class LoggingService {
     // File output (if enabled)
     if (_enableFileLogging) {
       _fileOutput = FileLogOutput();
+      // init() is async and the logger must exist synchronously. Lines
+      // emitted before it resolves are buffered by FileLogOutput and written
+      // once the sink is open, so startup logs are not dropped.
       unawaited(_fileOutput!.init());
       outputs.add(_fileOutput!);
     }

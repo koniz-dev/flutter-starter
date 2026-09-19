@@ -8,6 +8,18 @@ abstract class AppException implements Exception {
 
   /// Optional error code for programmatic error handling
   final String? code;
+
+  /// A readable description carrying the type, the code, and the message.
+  ///
+  /// Without this, the default `Object.toString()` gives
+  /// `Instance of 'SomeException'`, and anything that interpolates the
+  /// exception - the `ExceptionToFailureMapper` fallback, for one - loses
+  /// both the message and the code.
+  @override
+  String toString() {
+    final label = code == null ? '$runtimeType' : '$runtimeType($code)';
+    return '$label: $message';
+  }
 }
 
 /// Server exception thrown when API requests fail
@@ -44,4 +56,22 @@ class ValidationException extends AppException {
 class AuthException extends AppException {
   /// Creates an [AuthException] with the given [message] and optional [code]
   const AuthException(super.message, {super.code});
+}
+
+/// Permission exception thrown when an operation is not permitted
+///
+/// Counterpart of `PermissionFailure`.
+class PermissionException extends AppException {
+  /// Creates a [PermissionException] with the given [message] and optional
+  /// [code]
+  const PermissionException(super.message, {super.code});
+}
+
+/// Not-found exception thrown when a requested resource does not exist
+///
+/// Counterpart of `NotFoundFailure`.
+class NotFoundException extends AppException {
+  /// Creates a [NotFoundException] with the given [message] and optional
+  /// [code]
+  const NotFoundException(super.message, {super.code});
 }

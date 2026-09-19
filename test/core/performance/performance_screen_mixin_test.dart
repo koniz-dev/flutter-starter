@@ -218,7 +218,100 @@ void main() {
 
       verifyNever(() => mockPerformanceService.startScreenTrace(any()));
     });
+
+    testWidgets('the documented setter wiring actually starts a trace', (
+      tester,
+    ) async {
+      // The mixin used to start the trace from its own initState, before a
+      // subclass following the documented example could supply the service,
+      // so `performanceService = ...` in initState was inert and nothing was
+      // ever traced - silently. The trace now starts on the first
+      // didChangeDependencies, which runs after every initState.
+      when(() => mockPerformanceService.isEnabled).thenReturn(true);
+      when(
+        () => mockPerformanceService.startScreenTrace(any()),
+      ).thenReturn(mockTrace);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: _TestScreenWiredFromInitState(
+            performanceService: mockPerformanceService,
+          ),
+        ),
+      );
+
+      verify(
+        () => mockPerformanceService.startScreenTrace('setter_wired_screen'),
+      ).called(1);
+      verify(
+        () => mockTrace.putAttribute(
+          PerformanceAttributes.screenName,
+          'setter_wired_screen',
+        ),
+      ).called(1);
+      verify(() => mockTrace.startSync()).called(1);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      verify(() => mockTrace.stopSync()).called(1);
+    });
+
+    testWidgets('the trace starts exactly once across rebuilds', (
+      tester,
+    ) async {
+      when(() => mockPerformanceService.isEnabled).thenReturn(true);
+      when(
+        () => mockPerformanceService.startScreenTrace(any()),
+      ).thenReturn(mockTrace);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: _TestScreenWiredFromInitState(
+            performanceService: mockPerformanceService,
+          ),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.dark(),
+          home: _TestScreenWiredFromInitState(
+            performanceService: mockPerformanceService,
+          ),
+        ),
+      );
+
+      verify(() => mockPerformanceService.startScreenTrace(any())).called(1);
+    });
   });
+}
+
+/// Supplies the service the way the mixin's own setter documents: assigned
+/// from the subclass's initState, after `super.initState()`.
+class _TestScreenWiredFromInitState extends StatefulWidget {
+  const _TestScreenWiredFromInitState({required this.performanceService});
+
+  final IPerformanceService performanceService;
+
+  @override
+  State<_TestScreenWiredFromInitState> createState() =>
+      _TestScreenWiredFromInitStateState();
+}
+
+class _TestScreenWiredFromInitStateState
+    extends State<_TestScreenWiredFromInitState>
+    with PerformanceScreenMixin {
+  @override
+  String get screenName => 'setter_wired_screen';
+
+  @override
+  void initState() {
+    super.initState();
+    performanceService = widget.performanceService;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: Text('Setter wired'));
+  }
 }
 
 class _TestScreenWithMixin extends StatefulWidget {

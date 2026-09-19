@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 
 /// Result class for handling success and failure states
@@ -17,6 +18,7 @@ import 'package:flutter_starter/core/errors/failures.dart';
 ///   failureCallback: (failure) => print('Error: ${failure.message}'),
 /// );
 /// ```
+@immutable
 sealed class Result<T> {
   /// Creates a [Result] instance
   const Result();
@@ -29,6 +31,24 @@ final class Success<T> extends Result<T> {
 
   /// The successful data value
   final T data;
+
+  /// Two [Success] values are equal when their [data] are equal.
+  ///
+  /// The [Failure] wrapped by [ResultFailure] is `Equatable`, so without
+  /// this `Success(1) == Success(1)` was false while
+  /// `ResultFailure(f) == ResultFailure(f)` was also false - which made
+  /// `expect(result, Success(1))` unusable in tests and surprising anywhere
+  /// a Result is compared. Equality is only as deep as `T`'s own `==`, so a
+  /// `Success<List<int>>` still compares by identity of the list.
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is Success<T> && other.data == data;
+
+  @override
+  int get hashCode => Object.hash(Success<T>, data);
+
+  @override
+  String toString() => 'Success<$T>($data)';
 }
 
 /// Failure result containing typed failure information
@@ -70,6 +90,21 @@ final class ResultFailure<T> extends Result<T> {
 
   /// Error code from the failure (convenience getter)
   String? get code => failure.code;
+
+  /// Two [ResultFailure] values are equal when their [failure] are equal.
+  ///
+  /// [Failure] is already `Equatable`, so this simply stops the wrapper from
+  /// discarding that.
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ResultFailure<T> && other.failure == failure;
+
+  @override
+  int get hashCode => Object.hash(ResultFailure<T>, failure);
+
+  @override
+  String toString() => 'ResultFailure<$T>($failure)';
 }
 
 /// Extension methods for Result

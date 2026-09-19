@@ -35,5 +35,16 @@ void main() {
 
       expect(() => output.output(event), returnsNormally);
     });
+
+    test('accepts fatal logs, which the level filter used to omit', () {
+      // logger.f(...) is the highest severity the logger offers and never
+      // reached Crashlytics at all.
+      final event = OutputEvent(
+        LogEvent(Level.fatal, 'Fatal message'),
+        ['Fatal message'],
+      );
+
+      expect(() => output.output(event), returnsNormally);
+    });
   });
 }

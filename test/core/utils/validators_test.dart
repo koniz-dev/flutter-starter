@@ -4,82 +4,101 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Validators', () {
     group('isValidEmail', () {
-      test('should return true for valid email addresses', () {
-        expect(Validators.isValidEmail('test@example.com'), isTrue);
-        expect(Validators.isValidEmail('user.name@example.co.uk'), isTrue);
-        expect(Validators.isValidEmail('user+tag@example.com'), isTrue);
-        expect(Validators.isValidEmail('user123@example123.com'), isTrue);
+      // Table-driven. The standard validated against is documented on the
+      // Validators class: an RFC 5322 `dot-atom` local part, widened for
+      // RFC 6531 (SMTPUTF8), at a domain of two or more RFC 1035 LDH
+      // labels, within the RFC 5321 size limits.
+
+      // Every entry here is a legitimate address. Rejecting one of these is
+      // a worse bug than accepting a malformed address, so the awkward but
+      // legal cases are in the table on purpose.
+      const validAddresses = <String, String>{
+        'test@example.com': 'the ordinary case',
+        'user.name@example.co.uk': 'dots inside the local part, two-level TLD',
+        'user+tag@example.com': 'plus addressing',
+        'a+b@example.co.uk': 'plus addressing, two-level TLD',
+        'first.last@sub.domain.example.com': 'deep subdomain',
+        'a@b.co': 'shortest plausible address',
+        'user-name@ex-ample.com': 'hyphens inside labels',
+        '_user@example.com': 'leading underscore is atext, unlike a dot',
+        'user_@example.com': 'trailing underscore is atext, unlike a dot',
+        '123user@example.com': 'digit-leading local part',
+        'user@123example.com': 'digit-leading domain label',
+        r"!#$%&'*+-/=?^_`{|}~@example.com":
+            'every printable ASCII atext character',
+        'user@example.xn--p1ai': 'punycode TLD - digits and hyphens inside',
+        'jos\u00e9@example.com': 'non-ASCII local part, valid under SMTPUTF8',
+        '\u7528\u6237@\u4f8b\u5b50.\u6d4b\u8bd5':
+            'fully internationalised address (RFC 6531)',
+      };
+
+      // Every entry here is malformed or deliberately out of scope.
+      const invalidAddresses = <String, String>{
+        'user@example..com': 'empty DNS label',
+        'user@-example.com': 'label starts with a hyphen',
+        'user@example-.com': 'label ends with a hyphen',
+        '.user@example.com': 'leading dot in the local part',
+        'user.@example.com': 'trailing dot in the local part',
+        'user..name@example.com': 'consecutive dots in the local part',
+        'user@@example.com': 'two at-signs',
+        'user@example': 'single-label domain',
+        'user@.com': 'empty first label',
+        'user@example.c': 'one-character TLD',
+        'user@example.123': 'all-digit TLD',
+        'user@example.com.': 'trailing root dot',
+        '': 'empty string',
+        'user': 'no at-sign',
+        'invalid-email': 'no at-sign',
+        'user@': 'empty domain',
+        '@example.com': 'empty local part',
+        'user name@example.com': 'space in the local part',
+        'user@exam ple.com': 'space in the domain',
+        ' user@example.com': 'leading space',
+        'user@example.com ': 'trailing space',
+        'user@example .com': 'space before the dot',
+        'user@localhost': 'deliberately rejected: single-label domain',
+        '"john doe"@example.com':
+            'deliberately rejected: quoted-string local part',
+        'user@[192.168.0.1]': 'deliberately rejected: domain literal',
+        'user(comment)@example.com':
+            'deliberately rejected: comment in the local part',
+      };
+
+      validAddresses.forEach((address, why) {
+        test('accepts <$address> - $why', () {
+          expect(Validators.isValidEmail(address), isTrue);
+        });
       });
 
-      test('should return false for invalid email addresses', () {
-        expect(Validators.isValidEmail('invalid-email'), isFalse);
-        expect(Validators.isValidEmail('@example.com'), isFalse);
-        expect(Validators.isValidEmail('user@'), isFalse);
-        expect(Validators.isValidEmail('user@example'), isFalse);
-        expect(Validators.isValidEmail('user name@example.com'), isFalse);
-        expect(Validators.isValidEmail(''), isFalse);
+      invalidAddresses.forEach((address, why) {
+        test('rejects <$address> - $why', () {
+          expect(Validators.isValidEmail(address), isFalse);
+        });
       });
 
-      test('should handle edge cases', () {
-        expect(Validators.isValidEmail('a@b.co'), isTrue);
-        expect(Validators.isValidEmail('test@sub.domain.example.com'), isTrue);
+      test('rejects newline injection at either end', () {
+        expect(Validators.isValidEmail('user@example.com\n'), isFalse);
+        expect(Validators.isValidEmail('\nuser@example.com'), isFalse);
+        expect(
+          Validators.isValidEmail('user@example.com\nbcc:x@y.com'),
+          isFalse,
+        );
       });
 
-      test('should handle emails with hyphens', () {
-        expect(Validators.isValidEmail('user-name@example.com'), isTrue);
-        expect(Validators.isValidEmail('user@example-domain.com'), isTrue);
-        expect(Validators.isValidEmail('user-name@example-domain.com'), isTrue);
+      test('enforces the RFC 5321 local part limit of 64 octets', () {
+        expect(Validators.isValidEmail('${'a' * 64}@example.com'), isTrue);
+        expect(Validators.isValidEmail('${'a' * 65}@example.com'), isFalse);
       });
 
-      test('should handle emails with underscores', () {
-        expect(Validators.isValidEmail('user_name@example.com'), isTrue);
-        expect(Validators.isValidEmail('_user@example.com'), isTrue);
-        expect(Validators.isValidEmail('user_@example.com'), isTrue);
+      test('enforces the RFC 1035 label limit of 63 octets', () {
+        expect(Validators.isValidEmail('u@${'b' * 63}.com'), isTrue);
+        expect(Validators.isValidEmail('u@${'b' * 64}.com'), isFalse);
       });
 
-      test('should handle emails with numbers', () {
-        expect(Validators.isValidEmail('user123@example.com'), isTrue);
-        expect(Validators.isValidEmail('123user@example.com'), isTrue);
-        expect(Validators.isValidEmail('user@123example.com'), isTrue);
-      });
-
-      test('should reject emails with invalid characters', () {
-        // Test emails that should be rejected
-        // Note: 'user@.example.com' actually passes because
-        // '.example.com' matches [a-zA-Z0-9.-]+
-        // The regex allows dot after @ in domain part
-        final result = Validators.isValidEmail('user@.example.com');
-        expect(result, isA<bool>());
-        // Note: '.user@example.com' actually passes the regex
-        // because [a-zA-Z0-9._%+-]+ allows leading dot
-        // Test actual behavior - this passes regex
-        expect(Validators.isValidEmail('.user@example.com'), isTrue);
-        // Note: Regex pattern [a-zA-Z0-9._%+-]+ allows consecutive dots
-        // 'user@example..com' passes because 'example..com' matches
-        // [a-zA-Z0-9.-]+
-        // 'user..name@example.com' passes because 'user..name' matches
-        // [a-zA-Z0-9._%+-]+
-        // These are edge cases that the regex allows
-        expect(Validators.isValidEmail('user@example..com'), isTrue);
-        expect(Validators.isValidEmail('user..name@example.com'), isTrue);
-      });
-
-      test('should reject emails with spaces', () {
-        expect(Validators.isValidEmail('user name@example.com'), isFalse);
-        expect(Validators.isValidEmail('user@example .com'), isFalse);
-        expect(Validators.isValidEmail(' user@example.com'), isFalse);
-        expect(Validators.isValidEmail('user@example.com '), isFalse);
-      });
-
-      test('should handle very long emails', () {
-        final longLocal = 'a' * 64;
-        final longDomain = 'b' * 63;
-        expect(Validators.isValidEmail('$longLocal@$longDomain.com'), isTrue);
-      });
-
-      test('should handle emails with multiple dots in domain', () {
-        expect(Validators.isValidEmail('user@sub.example.co.uk'), isTrue);
-        expect(Validators.isValidEmail('user@a.b.c.example.com'), isTrue);
+      test('enforces the overall 254-octet limit', () {
+        final tooLong = '${'a' * 64}@${'b' * 63}.${'c' * 63}.${'d' * 60}.com';
+        expect(tooLong.length, greaterThan(254));
+        expect(Validators.isValidEmail(tooLong), isFalse);
       });
     });
 
@@ -332,6 +351,38 @@ void main() {
 
       test('should return false if less than 8 characters', () {
         expect(Validators.isStrongPassword('Pas12!'), isFalse);
+      });
+
+      test('accepts every non-alphanumeric as the special character', () {
+        // The old hand-written class was [!@#\$%^&*(),.?":{}|<>], so each of
+        // these was rejected while the doc comment promised otherwise.
+        for (final special in [
+          '_',
+          '-',
+          '+',
+          '=',
+          '[',
+          ']',
+          ';',
+          '/',
+          r'\',
+          '~',
+          ' ',
+          "'",
+        ]) {
+          expect(
+            Validators.isStrongPassword('Passw0rd$special'),
+            isTrue,
+            reason: 'special character <$special> should satisfy the rule',
+          );
+        }
+      });
+
+      test('doc comment and behaviour agree: no special char means false', () {
+        // `Password1` satisfies length, upper, lower and digit. The doc now
+        // states the fourth requirement, so this result is documented rather
+        // than surprising.
+        expect(Validators.isStrongPassword('Password1'), isFalse);
       });
     });
 

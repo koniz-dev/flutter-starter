@@ -30,6 +30,39 @@ void main() {
       // Note: Testing actual network image loading requires network access
       // and may be flaky in CI. Without context, preload uses
       // ImageProvider.resolve.
+
+      testWidgets('reports failure when given a context', (tester) async {
+        // precacheImage swallows the failure through its onError callback,
+        // so the context branch returned true for every failed preload
+        // while the no-context branch correctly returned false.
+        await tester.pumpWidget(const MaterialApp(home: Scaffold()));
+        final context = tester.element(find.byType(Scaffold));
+
+        final withContext = await ImageCacheHelper.preloadImage(
+          'https://example.invalid/missing.jpg',
+          context: context,
+          timeout: const Duration(seconds: 2),
+        );
+        final withoutContext = await ImageCacheHelper.preloadImage(
+          'https://example.invalid/missing.jpg',
+          timeout: const Duration(seconds: 2),
+        );
+
+        expect(withContext, isFalse);
+        expect(
+          withContext,
+          withoutContext,
+          reason: 'both branches must agree about a failed preload',
+        );
+      });
+
+      test('exposes a default timeout', () {
+        expect(ImageCacheHelper.defaultPreloadTimeout, isA<Duration>());
+        expect(
+          ImageCacheHelper.defaultPreloadTimeout,
+          greaterThan(Duration.zero),
+        );
+      });
     });
 
     group('preloadImages', () {

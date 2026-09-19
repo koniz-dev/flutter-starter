@@ -60,35 +60,37 @@ mixin PerformanceRepositoryMixin {
       ...?attributes,
     };
 
-    try {
-      final result = await service.measureOperation<Result<T>>(
-        name: 'repository_$operationName',
-        operation: operation,
-        attributes: operationAttributes,
-      );
+    // No try/catch around measureOperation. It awaits `operation` inside
+    // itself, so a catch here cannot tell "instrumentation threw" from "the
+    // wrapped operation threw" - and re-running `operation` in the fallback
+    // turned every transient failure of a non-idempotent write into a
+    // duplicate write. Same class of bug as the RetryInterceptor replaying
+    // non-idempotent HTTP methods. Instrumentation failures propagate to the
+    // caller instead of being papered over with a second execution.
+    final result = await service.measureOperation<Result<T>>(
+      name: 'repository_$operationName',
+      operation: operation,
+      attributes: operationAttributes,
+    );
 
-      // Record success/error based on result
-      if (result.isSuccess) {
-        // Success is already recorded by measureOperation
-      } else {
-        // Error is already recorded by measureOperation
-        final failure = result.failureOrNull;
-        if (failure != null) {
-          final trace = service.startTrace('repository_$operationName');
-          if (trace != null) {
-            trace.putAttribute(
-              PerformanceAttributes.errorType,
-              failure.runtimeType.toString(),
-            );
-          }
-        }
+    final failure = result.failureOrNull;
+    if (failure != null) {
+      // startTrace only creates a trace; it does not start it. A trace that
+      // is never started and never stopped is never reported, so start and
+      // stop it here.
+      final trace = service.startTrace('repository_${operationName}_error');
+      if (trace != null) {
+        trace
+          ..startSync()
+          ..putAttribute(
+            PerformanceAttributes.errorType,
+            failure.runtimeType.toString(),
+          )
+          ..stopSync();
       }
-
-      return result;
-    } on Exception {
-      // If measureOperation throws, just execute the operation
-      return operation();
     }
+
+    return result;
   }
 
   /// Measure a data fetching operation

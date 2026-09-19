@@ -113,17 +113,48 @@ void main() {
       );
 
       expect(result.isFailure, isTrue);
-      verify(() => mockService.startTrace('usecase_get_items')).called(1);
+      verify(() => mockService.startTrace('usecase_get_items_error')).called(1);
       verify(
         () => mockTrace.putAttribute(
           PerformanceAttributes.errorType,
           'ServerFailure',
         ),
       ).called(1);
+      // The error trace must be started and stopped, or it is never reported.
+      verify(() => mockTrace.startSync()).called(1);
+      verify(() => mockTrace.stopSync()).called(1);
+    });
+
+    test('measureUseCaseOperation runs the operation exactly once', () async {
+      when(
+        () => mockService.measureOperation<Result<String>>(
+          name: any(named: 'name'),
+          operation: any(named: 'operation'),
+          attributes: any(named: 'attributes'),
+        ),
+      ).thenAnswer((invocation) async {
+        final cb =
+            invocation.namedArguments[#operation]
+                as Future<Result<String>> Function();
+        return cb();
+      });
+      when(() => mockService.startTrace(any())).thenReturn(mockTrace);
+
+      var calls = 0;
+      final result = await usecase.measureUseCaseOperation<String>(
+        operationName: 'get_items',
+        operation: () async {
+          calls++;
+          return const ResultFailure<String>(ServerFailure('500'));
+        },
+      );
+
+      expect(result.isFailure, isTrue);
+      expect(calls, 1);
     });
 
     test(
-      'measureUseCaseOperation throws exception inside measureOperation',
+      'instrumentation failure propagates instead of re-running the operation',
       () async {
         when(
           () => mockService.measureOperation<Result<String>>(
@@ -133,13 +164,19 @@ void main() {
           ),
         ).thenThrow(Exception('Telemetry failed'));
 
-        final result = await usecase.measureUseCaseOperation<String>(
-          operationName: 'get_items',
-          operation: () async => const Success('data'),
+        var calls = 0;
+        await expectLater(
+          usecase.measureUseCaseOperation<String>(
+            operationName: 'get_items',
+            operation: () async {
+              calls++;
+              return const Success('data');
+            },
+          ),
+          throwsA(isA<Exception>()),
         );
 
-        expect(result.isSuccess, isTrue);
-        expect((result as Success).data, equals('data'));
+        expect(calls, 0);
       },
     );
   });

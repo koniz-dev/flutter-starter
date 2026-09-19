@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_starter/core/logging/log_output.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
+import 'package:path/path.dart' as path;
 
 void main() {
   // Initialize Flutter binding for path_provider
@@ -545,6 +547,28 @@ void main() {
     });
 
     group('JsonLogFormatter', () {
+      test('emits an offset-bearing UTC timestamp', () {
+        // Arrange
+        final formatter = JsonLogFormatter();
+        final event = LogEvent(Level.info, 'Test message');
+
+        // Act
+        final decoded =
+            jsonDecode(formatter.log(event).first) as Map<String, dynamic>;
+        final timestamp = decoded['timestamp']! as String;
+
+        // Assert - a local DateTime's toIso8601String() carries no offset at
+        // all, and every aggregator reads an offset-less ISO-8601 string as
+        // UTC, so a UTC+7 device's logs landed seven hours in the future.
+        expect(timestamp.endsWith('Z'), isTrue, reason: timestamp);
+        final parsed = DateTime.parse(timestamp);
+        expect(parsed.isUtc, isTrue);
+        expect(
+          DateTime.now().toUtc().difference(parsed).abs(),
+          lessThan(const Duration(minutes: 1)),
+        );
+      });
+
       test('should format log event as JSON', () {
         // Arrange
         final formatter = JsonLogFormatter();
@@ -1508,6 +1532,186 @@ void main() {
         },
       );
     });
+
+    group('sink lifecycle (real temp directory)', () {
+      late Directory tempRoot;
+
+      setUp(() async {
+        tempRoot = await Directory.systemTemp.createTemp('log_output_test');
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(_pathProviderChannel, (call) async {
+              if (call.method == 'getApplicationDocumentsDirectory') {
+                return tempRoot.path;
+              }
+              return null;
+            });
+      });
+
+      tearDown(() async {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(_pathProviderChannel, null);
+        if (tempRoot.existsSync()) {
+          tempRoot.deleteSync(recursive: true);
+        }
+      });
+
+      OutputEvent lineEvent(String line) =>
+          OutputEvent(LogEvent(Level.info, line), [line]);
+
+      test('lines emitted before init resolves are not dropped', () async {
+        // Arrange - logging_service calls init() unawaited, so this window
+        // is app startup: exactly what a startup-crash investigation needs.
+        final output = FileLogOutput(fileName: 'startup.log');
+        final pending = output.init();
+
+        // Act - emit while init is still in flight.
+        output.output(lineEvent('emitted before init resolved'));
+        expect(output.pendingLineCount, 1);
+        await pending;
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Assert
+        expect(output.pendingLineCount, 0);
+        final file = File(
+          path.join(tempRoot.path, 'logs', 'startup.log'),
+        );
+        expect(file.existsSync(), isTrue);
+        expect(
+          await file.readAsString(),
+          contains('emitted before init resolved'),
+        );
+        await output.destroy();
+      });
+
+      test('the pending buffer is bounded', () async {
+        final output = FileLogOutput(
+          fileName: 'bounded.log',
+          maxPendingLines: 3,
+        );
+        // No init: there is no sink, so everything buffers.
+        for (var i = 0; i < 20; i++) {
+          output.output(lineEvent('line $i'));
+        }
+        expect(output.pendingLineCount, 3);
+        await output.destroy();
+      });
+
+      test(
+        'a log emitted during rotation does not throw, and is kept',
+        () async {
+          // Arrange - a tiny maxFileSize so a write crosses the threshold.
+          final output = FileLogOutput(fileName: 'rotate.log', maxFileSize: 64);
+          await output.init();
+
+          // Act - keep writing across the rotation window. Writing to a
+          // closed IOSink throws StateError, an Error, which used to escape
+          // the logging call into the code it was meant to observe.
+          for (var round = 0; round < 5; round++) {
+            for (var i = 0; i < 10; i++) {
+              expect(
+                () => output.output(
+                  lineEvent('rotating round $round line $i padding padding'),
+                ),
+                returnsNormally,
+              );
+            }
+            await Future<void>.delayed(const Duration(milliseconds: 150));
+          }
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+
+          // Assert - rotation happened and the current log is open again.
+          final logDir = Directory(path.join(tempRoot.path, 'logs'));
+          final files = logDir.listSync().whereType<File>().toList();
+          final names = files.map((f) => path.basename(f.path)).toList();
+          expect(names, contains('rotate.log'));
+          expect(names, contains('rotate.log.1'));
+
+          // Nothing written across the rotation window was lost: every line
+          // is somewhere in the current file or a rotated generation.
+          final everything = files.map((f) => f.readAsStringSync()).join();
+          for (var round = 0; round < 5; round++) {
+            for (var i = 0; i < 10; i++) {
+              expect(
+                everything,
+                contains('rotating round $round line $i padding padding'),
+              );
+            }
+          }
+
+          // The sink is usable again after rotation, and nothing was lost to
+          // an abandoned sink.
+          output.output(lineEvent('after rotation'));
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+          expect(output.pendingLineCount, 0);
+          expect(
+            await File(path.join(logDir.path, 'rotate.log')).readAsString(),
+            contains('after rotation'),
+          );
+          await output.destroy();
+        },
+      );
+
+      test('two concurrent rotations do not discard a generation', () async {
+        final output = FileLogOutput(fileName: 'concurrent.log');
+        await output.init();
+        output.output(lineEvent('generation one'));
+        await Future<void>.delayed(const Duration(milliseconds: 150));
+        final logDir = Directory(path.join(tempRoot.path, 'logs'));
+
+        // Fire two rotations back to back. The guard makes the second a
+        // no-op rather than a second rename pass, which would have shifted
+        // .1 to .2 with nothing left in .1.
+        await Future.wait([output.debugRotate(), output.debugRotate()]);
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+
+        final names = logDir
+            .listSync()
+            .whereType<File>()
+            .map((f) => path.basename(f.path))
+            .toSet();
+        expect(names, contains('concurrent.log'));
+        expect(
+          names,
+          contains('concurrent.log.1'),
+          reason: 'exactly one generation was produced',
+        );
+        expect(names.contains('concurrent.log.2'), isFalse);
+        expect(
+          await File(path.join(logDir.path, 'concurrent.log.1')).readAsString(),
+          contains('generation one'),
+        );
+        await output.destroy();
+      });
+
+      test('clearLogs closes the sink it replaces', () async {
+        final output = FileLogOutput(fileName: 'clear.log');
+        await output.init();
+        output.output(lineEvent('before clear'));
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+
+        // Hold the sink clearLogs is about to replace. IOSink.done only
+        // completes once close() has run, so this is a direct observation
+        // that the old sink was closed rather than abandoned - the omission
+        // leaked one file descriptor per call.
+        final replaced = output.debugSink;
+        expect(replaced, isNotNull);
+        await output.clearLogs();
+        await expectLater(replaced!.done, completes);
+        expect(output.debugSink, isNot(same(replaced)));
+
+        // The replacement sink works, and the old content is gone.
+        output.output(lineEvent('after clear'));
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+        final content = await File(
+          path.join(tempRoot.path, 'logs', 'clear.log'),
+        ).readAsString();
+        expect(content, contains('after clear'));
+        expect(content, isNot(contains('before clear')));
+
+        // destroy() after clearLogs must not throw on an already-closed sink.
+        await expectLater(output.destroy(), completes);
+      });
+    });
   });
 }
 
@@ -1522,3 +1726,7 @@ class _TestCustomLogOutput extends CustomLogOutput {
     onOutputLine(line, level);
   }
 }
+
+const MethodChannel _pathProviderChannel = MethodChannel(
+  'plugins.flutter.io/path_provider',
+);

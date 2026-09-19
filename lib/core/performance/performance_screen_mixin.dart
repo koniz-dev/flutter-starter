@@ -7,15 +7,32 @@ import 'package:flutter_starter/core/performance/performance_attributes.dart';
 /// This mixin can be used with StatefulWidget to automatically track
 /// screen load times and rendering performance.
 ///
-/// Usage:
+/// ## Supplying the service
+///
+/// The mixin traces nothing unless it can reach an [IPerformanceService].
+/// Two wirings work, and both are shown below. The trace starts on the first
+/// [didChangeDependencies], not in [initState], precisely so that a service
+/// assigned from a subclass's `initState` (after `super.initState()`) is
+/// already in place by the time the trace starts.
+///
+/// Override the getter - preferred, and the only one that works when the
+/// service comes from a provider:
+///
 /// ```dart
-/// class MyScreen extends StatefulWidget {
-///   const MyScreen({super.key});
+/// class _MyScreenState extends ConsumerState<MyScreen>
+///     with PerformanceScreenMixin {
+///   @override
+///   String get screenName => 'my_screen';
 ///
 ///   @override
-///   State<MyScreen> createState() => _MyScreenState();
+///   IPerformanceService? get performanceService =>
+///       ref.read(performanceServiceProvider);
 /// }
+/// ```
 ///
+/// Or assign the setter from `initState`:
+///
+/// ```dart
 /// class _MyScreenState extends State<MyScreen> with PerformanceScreenMixin {
 ///   @override
 ///   String get screenName => 'my_screen';
@@ -23,10 +40,13 @@ import 'package:flutter_starter/core/performance/performance_attributes.dart';
 ///   @override
 ///   void initState() {
 ///     super.initState();
-///     // Your initialization code
+///     performanceService = myPerformanceService;
 ///   }
 /// }
 /// ```
+///
+/// A subclass that overrides neither traces nothing. That is intentional:
+/// the default is a silent no-op rather than a hard dependency.
 mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
   IPerformanceTrace? _screenTrace;
   IPerformanceService? _performanceService;
@@ -51,10 +71,20 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
     _performanceService = service;
   }
 
+  /// Whether the one-shot trace start has already been attempted.
+  bool _traceStartAttempted = false;
+
   @override
-  void initState() {
-    super.initState();
-    _startScreenTrace();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Deliberately not initState: a subclass assigning `performanceService`
+    // from its own initState runs after `super.initState()`, so a trace
+    // started there would always see a null service. didChangeDependencies
+    // runs after every initState and before the first build.
+    if (!_traceStartAttempted) {
+      _traceStartAttempted = true;
+      _startScreenTrace();
+    }
   }
 
   @override

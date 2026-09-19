@@ -52,19 +52,24 @@ class PaginationState<T> {
   final String? error;
 
   /// Creates a copy with updated values
+  ///
+  /// Pass `clearError: true` to drop the current [error]. `error: null`
+  /// cannot express that, because `null` is also "leave it alone" - which is
+  /// why an error used to be unclearable once set.
   PaginationState<T> copyWith({
     List<T>? items,
     int? currentPage,
     bool? hasMore,
     bool? isLoading,
     String? error,
+    bool clearError = false,
   }) {
     return PaginationState<T>(
       items: items ?? this.items,
       currentPage: currentPage ?? this.currentPage,
       hasMore: hasMore ?? this.hasMore,
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
+      error: clearError ? null : (error ?? this.error),
     );
   }
 
@@ -88,8 +93,16 @@ class PaginationState<T> {
   }
 
   /// Resets pagination to initial state
-  PaginationState<T> reset() {
-    return PaginationState<T>(items: [], currentPage: 1, hasMore: true);
+  ///
+  /// [initialPage] defaults to 1. [PaginationHelper.reset] passes the
+  /// configured [PaginationConfig.initialPage] so a 0-indexed API resets to
+  /// page 0.
+  PaginationState<T> reset({int initialPage = 1}) {
+    return PaginationState<T>(
+      items: [],
+      currentPage: initialPage,
+      hasMore: true,
+    );
   }
 }
 
@@ -131,14 +144,23 @@ class PaginationHelper<T> {
   final Future<(List<T>, bool)> Function(int page) loadPage;
 
   /// Current pagination state
-  PaginationState<T> _state = PaginationState<T>(
+  late PaginationState<T> _state = PaginationState<T>(
     items: [],
-    currentPage: 1,
+    currentPage: _config.initialPage,
     hasMore: true,
   );
 
   /// Get current state
   PaginationState<T> get state => _state;
+
+  /// The configuration this helper was built with
+  PaginationConfig get config => _config;
+
+  /// Number of items the [loadPage] callback is expected to request
+  ///
+  /// The helper cannot pass this to [loadPage] without changing its
+  /// signature, so read it here when building the request.
+  int get pageSize => _config.pageSize;
 
   /// Load the next page
   Future<void> loadNextPage() async {
@@ -151,6 +173,7 @@ class PaginationHelper<T> {
     try {
       final (items, hasMore) = await loadPage(_state.currentPage);
       _state = _state.appendPage(items, hasMore: hasMore);
+      _state = _state.copyWith(clearError: true);
     } on Object catch (e) {
       _state = _state.setError(e.toString()).setLoading(loading: false);
       if (kDebugMode) {
@@ -159,9 +182,10 @@ class PaginationHelper<T> {
     }
   }
 
-  /// Reset pagination to initial state
+  /// Reset pagination to initial state, back to
+  /// [PaginationConfig.initialPage]
   void reset() {
-    _state = _state.reset();
+    _state = _state.reset(initialPage: _config.initialPage);
   }
 
   /// Check if should prefetch next page based on scroll position
@@ -186,9 +210,18 @@ class PaginationHelper<T> {
 /// Extension for ScrollController to check pagination
 extension PaginationScrollExtension on ScrollController {
   /// Get scroll position as a ratio (0.0 to 1.0)
+  ///
+  /// Returns 1.0 when the content fits entirely on screen
+  /// (`maxScrollExtent == 0`): there is nothing left to scroll, so the
+  /// viewer is at the end. Returning 0 there meant [isNearEnd] was never
+  /// true for a short list and pagination stalled on the first page.
+  /// Returns 0 when there is no attached viewport yet.
   double get scrollRatio {
-    if (!hasClients || position.maxScrollExtent == 0) {
+    if (!hasClients) {
       return 0;
+    }
+    if (position.maxScrollExtent == 0) {
+      return 1;
     }
     return position.pixels / position.maxScrollExtent;
   }

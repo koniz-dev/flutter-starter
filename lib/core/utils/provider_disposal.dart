@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/utils/memory_helper.dart';
 
 /// Mixin for automatic provider disposal tracking
 ///
@@ -30,32 +29,6 @@ mixin ProviderDisposal<T extends ConsumerStatefulWidget> on ConsumerState<T> {
     _disposables.add(disposable);
   }
 
-  /// Register a provider subscription for automatic disposal
-  ///
-  /// This ensures the provider subscription is properly cancelled
-  ///
-  /// Note: In Riverpod 3.0, provider subscriptions are automatically
-  /// disposed when the widget is disposed, so manual disposal is not needed.
-  void registerProviderSubscription<TValue>(
-    // The provider type is inferred from usage - any Riverpod provider
-    // can be passed
-    dynamic provider,
-    void Function(TValue? previous, TValue next) listener,
-  ) {
-    // Riverpod automatically manages subscription lifecycle
-    // No manual disposal needed - subscriptions are cleaned up when widget
-    // disposes
-    // ProviderListenable is an internal Riverpod type not exported, but
-    // providers work at runtime
-    ref.listen<TValue>(
-      // ProviderListenable is not exported from Riverpod, but dynamic
-      // provider works correctly at runtime with ref.listen
-      // ignore: argument_type_not_assignable
-      provider,
-      listener,
-    );
-  }
-
   @override
   void dispose() {
     // Dispose all registered resources
@@ -68,15 +41,11 @@ mixin ProviderDisposal<T extends ConsumerStatefulWidget> on ConsumerState<T> {
     }
     _disposables.clear();
 
-    // Clear image cache if memory is low
-    final memoryInfo = MemoryHelper.getMemoryInfo();
-    final cacheSize = memoryInfo['imageCacheSizeBytes'] as int? ?? 0;
-    final maxSize = memoryInfo['imageCacheMaxSizeBytes'] as int? ?? 0;
-
-    // Clear cache if it's using more than 80% of max
-    if (maxSize > 0 && cacheSize > (maxSize * 0.8)) {
-      MemoryHelper.clearImageCache();
-    }
+    // Deliberately does NOT touch the global image cache. It used to call
+    // MemoryHelper.clearImageCache() whenever the cache was above 80% full,
+    // which evicted images still mounted on the screen underneath this one.
+    // Global cache pressure is not one widget's business; call
+    // MemoryHelper.clearImageCache() explicitly if you want that.
 
     super.dispose();
   }
@@ -84,26 +53,6 @@ mixin ProviderDisposal<T extends ConsumerStatefulWidget> on ConsumerState<T> {
 
 /// Typedef for disposable resources
 typedef Disposable = void Function();
-
-/// Extension for ProviderRef to add auto-disposal helpers
-extension ProviderDisposalExtension on WidgetRef {
-  /// Watch a provider with automatic disposal tracking
-  ///
-  /// This is a convenience method that automatically tracks the provider
-  /// for disposal. Use this in StatefulWidget states with ProviderDisposal
-  /// mixin.
-  TValue watchWithDisposal<TValue>(
-    // Using dynamic for provider parameter because ProviderListenable is not
-    // exported from Riverpod, but providers work correctly at runtime
-    dynamic provider,
-    ConsumerState<ConsumerStatefulWidget> state,
-  ) {
-    // Note: Riverpod automatically handles provider disposal
-    // This method is kept for API compatibility
-    // ignore: argument_type_not_assignable
-    return watch<TValue>(provider);
-  }
-}
 
 /// Helper class for managing provider lifecycle
 class ProviderLifecycleManager {
