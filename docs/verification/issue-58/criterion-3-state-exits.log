@@ -1,0 +1,108 @@
+Criterion 3 - every state has a documented exit AND a role that performs it
+
+docs/issue-workflow.md section 2, transition table:
+**Every state has an exit, and a role that performs it.** A state nobody moves
+issues out of is a leak: koniz-dev/flutter-starter#39 and #40 sat in
+`status:blocked` for 18 days because no role read that label, and the queue
+reported itself empty the whole time.
+
+| From | To | Who | Trigger |
+|---|---|---|---|
+| Backlog | `status:todo` | planner | triage |
+| `status:todo` | `status:in-progress` | implementer | claim |
+| `status:in-progress` | closed | implementer | criteria PASS with evidence |
+| `status:in-progress` | `status:needs-uat` | implementer | a criterion is tier 3 |
+| any | `status:blocked` | any role | missing decision, credential, or criteria |
+| `status:needs-uat` | closed / `status:todo` | planner sweep | human commented PASS / FAIL |
+| `status:blocked` | `status:todo` | planner sweep | the blocker is gone |
+| `status:in-progress` | `status:todo` | any role | the claim is stale (its session died) |
+
+The planner sweep is not optional and does not wait for an empty queue - see
+[`.claude/agents/planner.md`](../.claude/agents/planner.md). Recipes for each
+row are in [section 5](#5-gh-recipes).
+
+**Closing never changes the status label.** Whatever state an issue was in when
+
+CLAUDE.md Workflow item 3, showing the return transitions:
+3. States, with every exit and the role that performs it:
+
+   ```
+   Backlog (no status label) --planner triage--> status:todo
+   status:todo        --implementer claim-->     status:in-progress
+   status:in-progress --implementer verifies-->  closed
+   status:in-progress --implementer hands off--> status:needs-uat
+   any state          --any role, + comment-->   status:blocked
+   status:needs-uat   --planner sweep, human PASS--> closed
+   status:needs-uat   --planner sweep, human FAIL--> status:todo
+   status:blocked     --planner sweep, blocker gone--> status:todo
+   status:in-progress --planner sweep, claim is stale--> status:todo
+   ```
+
+   No state is a one-way door. `status:blocked` and `status:needs-uat` are
+   exited by the **planner** sweep (see `.claude/agents/planner.md`), which is
+   why the planner runs even when the `status:todo` queue looks non-empty.
+4. Exactly one state per open issue, and a `status:*` label is only ever
+
+The role that performs them - planner.md now sweeps the parked states:
+5. **Sweep the parked states. Every run, before you triage anything.** You are
+   the only role that reads them: the implementer reads `status:todo` alone, and
+   qa and security read merged diffs. If you skip this, work parked here is
+   parked forever - koniz-dev/flutter-starter#39 and #40 sat in `status:blocked`
+   for 18 days while the queue reported itself empty.
+
+   ```bash
+   gh issue list --state open --label status:blocked \
+     --json number,title,updatedAt
+   gh issue list --state open --label status:needs-uat \
+     --json number,title,updatedAt
+   gh issue list --state open --label status:in-progress \
+     --json number,title,assignees,updatedAt
+   ```
+
+   - **`status:blocked`**: blocker gone (a decision landed, the missing criteria
+     can now be written, the upstream fix shipped) -> comment what changed and
+     swap to `status:todo`. Still blocked -> say so, so the stall is visible.
+   - **`status:needs-uat`**: a human commented PASS -> close, citing their
+     comment plus the existing evidence directory. FAIL -> swap to
+     `status:todo` with their feedback. No verdict yet -> leave it.
+   - **`status:in-progress` with a dead claim**: a session that died still holds
+     the issue. Confirm it is dead (stale `updatedAt`, no branch, no open PR)
+     before touching it - releasing a live claim causes the collision the claim
+     exists to prevent. Then unassign, swap back to `status:todo`, and comment
+     **whether the work had already merged and in which PR**, so the next
+     implementer does not rewrite it.
+
+   Exact commands for all three: "Unblock", "Release a stale claim" and the
+   needs-uat recipes in
+   [`docs/issue-workflow.md`](../../docs/issue-workflow.md).
+
+## What you never do
+
+Recipes for each exit:
+$ grep -n "^### " docs/issue-workflow.md
+26:### Type
+43:### Epic
+63:### Priority
+74:### Status
+137:### Invariant 1 - Exactly one state per open issue
+172:### Invariant 2 - Acceptance criteria live in the issue body
+205:### Invariant 3 - Commits link, never close
+241:### Invariant 4 - Definition of Done is closed AND evidence-backed
+268:### Invariant 5 - `status:needs-uat` means a human must verify this
+293:### Invariant 6 - Labels are the source of truth
+455:### Create (filed straight into the queue)
+478:### Create into Backlog (untriaged, no status label)
+487:### List the queue
+508:### Triage (Backlog -> todo)
+518:### Claim (todo -> in-progress), then confirm
+533:### Hand off to a human (in-progress -> needs-uat)
+553:### Human rejects (needs-uat -> todo)
+561:### Block (any state -> blocked)
+570:### Unblock (blocked -> todo)
+589:### Release a stale claim (in-progress -> todo)
+621:### Close with evidence
+667:### Close an invalid issue (no evidence directory)
+702:### Tier 1 - `flutter test` (agent-drivable, no device)
+714:### Tier 2 - acceptance goldens (agent-drivable, committed PNGs)
+743:### Tier 3 - what nothing in this repository can drive
+786:### Evidence discipline

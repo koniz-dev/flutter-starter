@@ -1,0 +1,24 @@
+==> format (lib test integration_test tool examples)
+Formatted 335 files (0 changed) in 3.03 seconds.
+==> flutter analyze
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing agent-a7494430e8329da4e...                            
+No issues found! (ran in 6.6s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/core/feature_flags/feature_flags_manager_test.dart
+
+[... 3500 lines of per-test progress elided; re-run ./scripts/dev/audit_template.sh ...]
+
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+01:50 +2440 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:50 +2441 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: HomeScreen should display welcome message
+01:50 +2442 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: HomeScreen should have app bar with title
+01:50 +2443 ~6: All tests passed!
+exit=0
+
+$ dart run tool/check_docs.dart
+Running build hooks...Running build hooks...links: checked 516 relative link(s) in 78 file(s); 0 broken
+emoji: scanned 70 file(s); 0 line(s) with emoji
+
+OK: documentation checks passed.
+exit=0
