@@ -1,0 +1,22 @@
+$ flutter build ios --no-codesign --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com
+(the exact command scripts/ci/build_all.sh runs on macOS for a non-production
+environment, now that --flavor is gone; run directly because the script builds
+Android first and this machine has no Android SDK)
+
+Warning: Building for device with codesigning disabled. You will have to manually codesign before deploying to device.
+Building com.example.flutterStarter for device (ios-release)...
+Updating minimum iOS deployment target to 15.0.
+Upgrading project.pbxproj
+Upgrading AppFrameworkInfo.plist
+Upgrading Podfile
+Adding Swift Package Manager integration...                        13.4s
+Finished migration to UIScene lifecycle. See https://flutter.dev/to/uiscene-migration for details.
+The following plugins do not support Swift Package Manager for ios:
+  - freerasp
+  - patrol
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Running pod install...                                              3.5s
+Running Xcode build...                                          
+Xcode build done.                                           129.5s
+✓ Built build/ios/iphoneos/Runner.app (26.0MB)
+ios build exit=0

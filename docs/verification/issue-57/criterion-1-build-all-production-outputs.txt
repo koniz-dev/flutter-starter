@@ -1,0 +1,24 @@
+=== build/app/outputs ===
+build/app/outputs/mapping/release/resources.txt
+build/app/outputs/mapping/release/mapping.txt
+build/app/outputs/mapping/release/usage.txt
+build/app/outputs/mapping/release/configuration.txt
+build/app/outputs/mapping/release/seeds.txt
+build/app/outputs/logs/manifest-merger-release-report.txt
+build/app/outputs/bundle/release/app-release.aab
+=== build/web ===
+total 3196
+drwxr-xr-x  5 runner runner    4096 Sep 19 12:22 .
+drwxr-xr-x 11 runner runner    4096 Sep 19 12:21 ..
+-rw-r--r--  1 runner runner      32 Sep 19 12:22 .last_build_id
+drwxr-xr-x  5 runner runner    4096 Sep 19 12:22 assets
+drwxr-xr-x  4 runner runner    4096 Sep 19 12:21 canvaskit
+-rw-r--r--  1 runner runner     917 Sep 19 12:22 favicon.png
+-rw-r--r--  1 runner runner   12136 Sep 19 12:21 flutter.js
+-rw-r--r--  1 runner runner   13093 Sep 19 12:21 flutter_bootstrap.js
+-rw-r--r--  1 runner runner     784 Sep 19 12:22 flutter_service_worker.js
+drwxr-xr-x  2 runner runner    4096 Sep 19 12:22 icons
+-rw-r--r--  1 runner runner    1211 Sep 19 12:21 index.html
+-rw-r--r--  1 runner runner 3194984 Sep 19 12:22 main.dart.js
+-rw-r--r--  1 runner runner     926 Sep 19 12:22 manifest.json
+-rw-r--r--  1 runner runner     100 Sep 19 12:22 version.json

@@ -1,0 +1,171 @@
+=== actionlint on the untouched workflows (baseline) ===
+baseline exit=0
+
+=== BEFORE: pre-fix setup_ci.dart (a688cbd), run with --yes ===
+--- GitHub Actions Configuration ---
+Do you want to enable automatic CI/CD triggers on push/pull_request? (y/N)
+Enabled triggers for: strip-smoke.yml
+Enabled triggers for: coverage.yml
+Enabled triggers for: deploy-android.yml
+Enabled triggers for: docs-check.yml
+Enabled triggers for: deploy-web.yml
+Enabled triggers for: deploy-ios.yml
+Enabled triggers for: e2e-android.yml
+Enabled triggers for: scripts-smoke.yml
+Enabled triggers for: ci.yml
+Enabled triggers for: build.yml
+Done! Commit these changes to activate CI/CD.
+
+-- what it did to deploy-android.yml --
+--- /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-android.yml	2026-09-19 18:50:31
++++ /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-android.yml	2026-09-19 19:19:02
+@@ -7,12 +7,12 @@
+ # Uncomment and configure according to your deployment strategy:
+ #
+ # Option 1: Deploy on version tags
+-#   push:
++push:
+ #     tags:
+ #       - 'v*.*.*'  # Deploy when version tag is pushed (e.g., v1.0.0)
+ #
+ # Option 2: Deploy on branch push
+-#   push:
++push:
+ #     branches: [ main ]  # Deploy when pushing to main branch
+ #
+ # Option 3: Manual trigger only (workflow_dispatch)
+@@ -20,7 +20,7 @@
+ #   - Use GitHub Actions UI to trigger manually
+ # ========================================================================
+ on:
+-  # push:
++  push:
+   #   tags:
+   #     - 'v*.*.*'  # Uncomment to deploy on version tags
+   #   branches: [ main ]  # Uncomment to deploy on branch push
+
+-- what it did to coverage.yml --
+--- /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/coverage.yml	2026-09-19 18:50:31
++++ /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/coverage.yml	2026-09-19 19:19:02
+@@ -7,15 +7,15 @@
+ # Uncomment and configure the branches according to your project needs:
+ #
+ # For example:
+-#   push:
++push:
+ #     branches: [ main, develop ]
+-#   pull_request:
++pull_request:
+ #     branches: [ main, develop ]
+ #
+ # Or for a single branch:
+-#   push:
++push:
+ #     branches: [ main ]
+-#   pull_request:
++pull_request:
+ #     branches: [ main ]
+ #
+ # workflow_dispatch allows manual triggering from GitHub Actions UI
+
+-- actionlint on the result --
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/coverage.yml:10:1: unexpected key "push" for "workflow" section. expected one of "concurrency", "defaults", "env", "jobs", "name", "on", "permissions", "run-name" [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/coverage.yml:12:1: unexpected key "pull_request" for "workflow" section. expected one of "concurrency", "defaults", "env", "jobs", "name", "on", "permissions", "run-name" [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/coverage.yml:16:1: key "push" is duplicated in workflow. previously defined at line:10,col:1 [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/coverage.yml:18:1: key "pull_request" is duplicated in workflow. previously defined at line:12,col:1 [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-android.yml:10:1: unexpected key "push" for "workflow" section. expected one of "concurrency", "defaults", "env", "jobs", "name", "on", "permissions", "run-name" [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-android.yml:15:1: key "push" is duplicated in workflow. previously defined at line:10,col:1 [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-ios.yml:10:1: unexpected key "push" for "workflow" section. expected one of "concurrency", "defaults", "env", "jobs", "name", "on", "permissions", "run-name" [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-ios.yml:15:1: key "push" is duplicated in workflow. previously defined at line:10,col:1 [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-web.yml:10:1: unexpected key "push" for "workflow" section. expected one of "concurrency", "defaults", "env", "jobs", "name", "on", "permissions", "run-name" [syntax-check]
+../../../../../../../var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/before/.github/workflows/deploy-web.yml:15:1: key "push" is duplicated in workflow. previously defined at line:10,col:1 [syntax-check]
+BEFORE actionlint exit=1
+
+=== AFTER: fixed setup_ci.dart, run with --yes ===
+  no commented triggers in `on:`, unchanged: build.yml
+  no commented triggers in `on:`, unchanged: ci.yml
+  no commented triggers in `on:`, unchanged: coverage.yml
+  enabled in deploy-android.yml:
+    push:
+    tags:
+    - 'v*.*.*'
+    branches: [ main ]
+  enabled in deploy-ios.yml:
+    push:
+    tags:
+    - 'v*.*.*'
+    branches: [ main ]
+  enabled in deploy-web.yml:
+    push:
+    branches: [ main ]
+    tags:
+    - 'v*.*.*'
+  no commented triggers in `on:`, unchanged: docs-check.yml
+  no commented triggers in `on:`, unchanged: e2e-android.yml
+  no commented triggers in `on:`, unchanged: scripts-smoke.yml
+  no commented triggers in `on:`, unchanged: strip-smoke.yml
+
+Note: deploy-android.yml, deploy-ios.yml, deploy-web.yml now run automatically. Confirm the required secrets exist before pushing.
+Done! Commit these changes to activate CI/CD.
+
+-- every file it changed --
+diff -ru /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-android.yml /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/after/.github/workflows/deploy-android.yml
+--- /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-android.yml	2026-09-19 18:50:31
++++ /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/after/.github/workflows/deploy-android.yml	2026-09-19 19:19:03
+@@ -20,10 +20,10 @@
+ #   - Use GitHub Actions UI to trigger manually
+ # ========================================================================
+ on:
+-  # push:
+-  #   tags:
+-  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+-  #   branches: [ main ]  # Uncomment to deploy on branch push
++  push:
++    tags:
++      - 'v*.*.*'
++    branches: [ main ]
+   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+     inputs:
+       environment:
+diff -ru /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-ios.yml /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/after/.github/workflows/deploy-ios.yml
+--- /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-ios.yml	2026-09-19 18:50:31
++++ /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/after/.github/workflows/deploy-ios.yml	2026-09-19 19:19:03
+@@ -20,10 +20,10 @@
+ #   - Use GitHub Actions UI to trigger manually
+ # ========================================================================
+ on:
+-  # push:
+-  #   tags:
+-  #     - 'v*.*.*'  # Uncomment to deploy on version tags
+-  #   branches: [ main ]  # Uncomment to deploy on branch push
++  push:
++    tags:
++      - 'v*.*.*'
++    branches: [ main ]
+   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+     inputs:
+       environment:
+diff -ru /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-web.yml /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/after/.github/workflows/deploy-web.yml
+--- /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/.github/workflows/deploy-web.yml	2026-09-19 18:55:34
++++ /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.jylUW6wiZp/after/.github/workflows/deploy-web.yml	2026-09-19 19:19:03
+@@ -20,10 +20,10 @@
+ #   - Use GitHub Actions UI to trigger manually
+ # ========================================================================
+ on:
+-  # push:
+-  #   branches: [ main ]  # Uncomment to deploy on branch push
+-  #   tags:
+-  #     - 'v*.*.*'  # Uncomment to deploy on version tags
++  push:
++    branches: [ main ]
++    tags:
++      - 'v*.*.*'
+   workflow_dispatch:  # Allows manual trigger from GitHub Actions UI
+     inputs:
+       environment:
+
+-- actionlint on the result --
+AFTER actionlint exit=0
+
+=== AFTER: --dry-run writes nothing ===
+unchanged after --dry-run: YES
