@@ -1,186 +1,308 @@
+# Scaffolds a Clean Architecture feature slice under lib/features/, plus its
+# mirrored test under test/features/.
+#
+# Usage: pwsh scripts/dev/create_feature.ps1 <feature_name>   # snake_case
+#
+# Output is byte-identical to scripts/dev/create_feature.sh (LF endings, UTF-8
+# without BOM); both are generated from the same verified source (issue #57).
 param (
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$FeatureName
 )
 
-# Convert feature_name to PascalCase (e.g., test_feature -> TestFeature)
-$FeaturePascal = (Culture).TextInfo.ToTitleCase($FeatureName.Replace('_', ' ')).Replace(' ', '')
+$ErrorActionPreference = 'Stop'
 
-# Convert to camelCase (e.g., TestFeature -> testFeature)
-$FeatureCamel = $FeaturePascal.Substring(0,1).ToLower() + $FeaturePascal.Substring(1)
+if ($FeatureName -cnotmatch '^[a-z][a-z0-9]*(_[a-z0-9]+)*$') {
+    Write-Error "Feature name must be snake_case, got '$FeatureName'"
+    exit 1
+}
 
-$BaseDir = "lib\features\$FeatureName"
+$Root = Resolve-Path (Join-Path $PSScriptRoot '..' '..')
+Set-Location $Root
+
+$BaseDir = "lib/features/$FeatureName"
+$TestDir = "test/features/$FeatureName"
+
+if ((Test-Path $BaseDir) -or (Test-Path $TestDir)) {
+    Write-Error "$BaseDir or $TestDir already exists; refusing to overwrite"
+    exit 1
+}
+
+# snake_case -> PascalCase (test_feature -> TestFeature). `Get-Culture`, not
+# `Culture`: the latter is not a cmdlet and aborted this script on line 1.
+$FeaturePascal = (Get-Culture).TextInfo.ToTitleCase($FeatureName.Replace('_', ' ')).Replace(' ', '')
+# PascalCase -> camelCase (TestFeature -> testFeature)
+$FeatureCamel = $FeaturePascal.Substring(0, 1).ToLower() + $FeaturePascal.Substring(1)
 
 Write-Host "Creating feature: $FeatureName"
 
-New-Item -ItemType Directory -Force -Path "$BaseDir\data\datasources" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\data\models" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\data\repositories" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\di" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\domain\entities" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\domain\repositories" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\domain\usecases" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\presentation\providers" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\presentation\screens" | Out-Null
-New-Item -ItemType Directory -Force -Path "$BaseDir\presentation\widgets" | Out-Null
-
-# Create Entity
-@"
-class ${FeaturePascal} {
-  const ${FeaturePascal}();
+# LF endings and UTF-8 without a BOM, so the output matches create_feature.sh
+# byte for byte no matter what core.autocrlf did to this file on checkout.
+function Write-GeneratedFile {
+    param([string]$Path, [string]$Content)
+    $dir = Split-Path -Parent $Path
+    if ($dir) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+    $normalized = $Content -replace "`r`n", "`n"
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText((Join-Path (Get-Location) $Path), $normalized, $utf8NoBom)
 }
-"@ | Out-File -FilePath "$BaseDir\domain\entities\${FeatureName}.dart" -Encoding UTF8
 
-# Create Repository Interface
-@"
-import '../entities/${FeatureName}.dart';
+Write-GeneratedFile "lib/features/$($FeatureName)/domain/entities/$($FeatureName).dart" @"
+import 'package:equatable/equatable.dart';
 
-abstract class ${FeaturePascal}Repository {
-  Future<${FeaturePascal}> get${FeaturePascal}();
+/// Domain entity for the ${FeaturePascal} feature.
+final class ${FeaturePascal}Entity extends Equatable {
+  /// Creates a [${FeaturePascal}Entity] with the given [id].
+  const ${FeaturePascal}Entity({required this.id});
+
+  /// Stable identifier of this ${FeaturePascal}.
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
 }
-"@ | Out-File -FilePath "$BaseDir\domain\repositories\${FeatureName}_repository.dart" -Encoding UTF8
+"@
 
-# Create UseCase
-@"
-import '../entities/${FeatureName}.dart';
-import '../repositories/${FeatureName}_repository.dart';
+Write-GeneratedFile "lib/features/$($FeatureName)/domain/repositories/$($FeatureName)_repository.dart" @"
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
 
-class Get${FeaturePascal}UseCase {
-  final ${FeaturePascal}Repository repository;
-
-  Get${FeaturePascal}UseCase(this.repository);
-
-  Future<${FeaturePascal}> call() {
-    return repository.get${FeaturePascal}();
-  }
+/// Data-layer contract for the ${FeaturePascal} feature.
+// Scaffolds start with one method; drop the ignore once a second one lands.
+// ignore: one_member_abstracts
+abstract interface class ${FeaturePascal}Repository {
+  /// Loads the [${FeaturePascal}Entity] identified by [id].
+  Future<Result<${FeaturePascal}Entity>> getById(String id);
 }
-"@ | Out-File -FilePath "$BaseDir\domain\usecases\get_${FeatureName}_usecase.dart" -Encoding UTF8
+"@
 
-# Create Model
-@"
-import '../../domain/entities/${FeatureName}.dart';
+Write-GeneratedFile "lib/features/$($FeatureName)/domain/usecases/get_$($FeatureName)_by_id_usecase.dart" @"
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/repositories/${FeatureName}_repository.dart';
 
-class ${FeaturePascal}Model extends ${FeaturePascal} {
-  const ${FeaturePascal}Model();
+/// Loads a single [${FeaturePascal}Entity] by id.
+final class Get${FeaturePascal}ByIdUseCase {
+  /// Creates a [Get${FeaturePascal}ByIdUseCase].
+  const Get${FeaturePascal}ByIdUseCase(this._repository);
 
+  final ${FeaturePascal}Repository _repository;
+
+  /// Runs the use case for [id].
+  Future<Result<${FeaturePascal}Entity>> call(String id) => _repository.getById(id);
+}
+"@
+
+Write-GeneratedFile "lib/features/$($FeatureName)/data/datasources/$($FeatureName)_remote_datasource.dart" @"
+/// Remote source of raw ${FeaturePascal} data.
+///
+/// Implement this against ``ApiClient`` (see lib/core/network/), then
+/// override the provider declared in the feature's ``di/`` directory.
+// Scaffolds start with one method; drop the ignore once a second one lands.
+// ignore: one_member_abstracts
+abstract interface class ${FeaturePascal}RemoteDataSource {
+  /// Fetches the raw JSON for [id].
+  Future<Map<String, dynamic>> fetchById(String id);
+}
+"@
+
+Write-GeneratedFile "lib/features/$($FeatureName)/data/models/$($FeatureName)_model.dart" @"
+import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
+
+/// Data-layer representation of a ${FeaturePascal}.
+final class ${FeaturePascal}Model {
+  /// Creates a [${FeaturePascal}Model] with the given [id].
+  const ${FeaturePascal}Model({required this.id});
+
+  /// Builds a [${FeaturePascal}Model] from decoded [json].
   factory ${FeaturePascal}Model.fromJson(Map<String, dynamic> json) {
-    return const ${FeaturePascal}Model();
+    return ${FeaturePascal}Model(id: (json['id'] ?? '').toString());
   }
 
-  Map<String, dynamic> toJson() {
-    return {};
-  }
+  /// Stable identifier of this ${FeaturePascal}.
+  final String id;
+
+  /// Converts this model into its domain entity.
+  ${FeaturePascal}Entity toEntity() => ${FeaturePascal}Entity(id: id);
 }
-"@ | Out-File -FilePath "$BaseDir\data\models\${FeatureName}_model.dart" -Encoding UTF8
+"@
 
-# Create Local Datasource
-@"
-import '../models/${FeatureName}_model.dart';
+Write-GeneratedFile "lib/features/$($FeatureName)/data/repositories/$($FeatureName)_repository_impl.dart" @"
+import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/${FeatureName}/data/datasources/${FeatureName}_remote_datasource.dart';
+import 'package:flutter_starter/features/${FeatureName}/data/models/${FeatureName}_model.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/repositories/${FeatureName}_repository.dart';
 
-abstract class ${FeaturePascal}LocalDataSource {
-  Future<${FeaturePascal}Model> get${FeaturePascal}();
-}
+/// Default [${FeaturePascal}Repository] implementation.
+final class ${FeaturePascal}RepositoryImpl implements ${FeaturePascal}Repository {
+  /// Creates a [${FeaturePascal}RepositoryImpl].
+  const ${FeaturePascal}RepositoryImpl({required this.remoteDataSource});
 
-class ${FeaturePascal}LocalDataSourceImpl implements ${FeaturePascal}LocalDataSource {
-  @override
-  Future<${FeaturePascal}Model> get${FeaturePascal}() async {
-    // TODO: implement
-    throw UnimplementedError();
-  }
-}
-"@ | Out-File -FilePath "$BaseDir\data\datasources\${FeatureName}_local_datasource.dart" -Encoding UTF8
-
-# Create Repository Impl
-@"
-import '../../domain/entities/${FeatureName}.dart';
-import '../../domain/repositories/${FeatureName}_repository.dart';
-import '../datasources/${FeatureName}_local_datasource.dart';
-
-class ${FeaturePascal}RepositoryImpl implements ${FeaturePascal}Repository {
-  final ${FeaturePascal}LocalDataSource localDataSource;
-
-  ${FeaturePascal}RepositoryImpl({required this.localDataSource});
+  /// Source of raw ${FeaturePascal} data.
+  final ${FeaturePascal}RemoteDataSource remoteDataSource;
 
   @override
-  Future<${FeaturePascal}> get${FeaturePascal}() async {
-    return await localDataSource.get${FeaturePascal}();
+  Future<Result<${FeaturePascal}Entity>> getById(String id) async {
+    try {
+      final json = await remoteDataSource.fetchById(id);
+      return Success(${FeaturePascal}Model.fromJson(json).toEntity());
+    } on Exception catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
+    }
   }
 }
-"@ | Out-File -FilePath "$BaseDir\data\repositories\${FeatureName}_repository_impl.dart" -Encoding UTF8
+"@
 
-# Create Providers
-@"
+Write-GeneratedFile "lib/features/$($FeatureName)/di/$($FeatureName)_providers.dart" @"
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/datasources/${FeatureName}_local_datasource.dart';
-import '../data/repositories/${FeatureName}_repository_impl.dart';
-import '../domain/repositories/${FeatureName}_repository.dart';
-import '../domain/usecases/get_${FeatureName}_usecase.dart';
+import 'package:flutter_starter/features/${FeatureName}/data/datasources/${FeatureName}_remote_datasource.dart';
+import 'package:flutter_starter/features/${FeatureName}/data/repositories/${FeatureName}_repository_impl.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/repositories/${FeatureName}_repository.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/usecases/get_${FeatureName}_by_id_usecase.dart';
 
-final ${FeatureCamel}LocalDataSourceProvider = Provider<${FeaturePascal}LocalDataSource>((ref) {
-  return ${FeaturePascal}LocalDataSourceImpl();
+/// Remote data source for the ${FeaturePascal} feature.
+///
+/// Deliberately unimplemented: override this provider with a real
+/// implementation in main.dart or in a test's ``ProviderScope``.
+final ${FeatureCamel}RemoteDataSourceProvider = Provider<${FeaturePascal}RemoteDataSource>((
+  ref,
+) {
+  throw UnimplementedError(
+    'Override this provider with a real '
+    '${FeaturePascal}RemoteDataSource implementation.',
+  );
 });
 
+/// Repository for the ${FeaturePascal} feature.
 final ${FeatureCamel}RepositoryProvider = Provider<${FeaturePascal}Repository>((ref) {
   return ${FeaturePascal}RepositoryImpl(
-    localDataSource: ref.watch(${FeatureCamel}LocalDataSourceProvider),
+    remoteDataSource: ref.watch(${FeatureCamel}RemoteDataSourceProvider),
   );
 });
 
-final get${FeaturePascal}UseCaseProvider = Provider<Get${FeaturePascal}UseCase>((ref) {
-  return Get${FeaturePascal}UseCase(
-    ref.watch(${FeatureCamel}RepositoryProvider),
-  );
+/// Use case that loads one ${FeaturePascal} by id.
+final get${FeaturePascal}ByIdUseCaseProvider = Provider<Get${FeaturePascal}ByIdUseCase>((ref) {
+  return Get${FeaturePascal}ByIdUseCase(ref.watch(${FeatureCamel}RepositoryProvider));
 });
-"@ | Out-File -FilePath "$BaseDir\di\${FeatureName}_providers.dart" -Encoding UTF8
+"@
 
-# Create UI Provider
-@"
+Write-GeneratedFile "lib/features/$($FeatureName)/presentation/providers/$($FeatureName)_provider.dart" @"
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/${FeatureName}.dart';
-import '../../di/${FeatureName}_providers.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/${FeatureName}/di/${FeatureName}_providers.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
 
-final ${FeatureCamel}NotifierProvider = AsyncNotifierProvider<${FeaturePascal}Notifier, ${FeaturePascal}>(() {
-  return ${FeaturePascal}Notifier();
-});
+/// UI state for the ${FeaturePascal} screen.
+final ${FeatureCamel}StateProvider =
+    NotifierProvider<${FeaturePascal}Notifier, AsyncValue<${FeaturePascal}Entity?>>(
+      ${FeaturePascal}Notifier.new,
+    );
 
-class ${FeaturePascal}Notifier extends AsyncNotifier<${FeaturePascal}> {
+/// Loads a ${FeaturePascal} for the screen.
+final class ${FeaturePascal}Notifier extends Notifier<AsyncValue<${FeaturePascal}Entity?>> {
   @override
-  Future<${FeaturePascal}> build() async {
-    final get${FeaturePascal} = ref.read(get${FeaturePascal}UseCaseProvider);
-    return await get${FeaturePascal}();
+  AsyncValue<${FeaturePascal}Entity?> build() => const AsyncData(null);
+
+  /// Loads the ${FeaturePascal} identified by [id].
+  Future<void> load(String id) async {
+    state = const AsyncLoading();
+    final result = await ref.read(get${FeaturePascal}ByIdUseCaseProvider)(id);
+    state = result.when(
+      success: AsyncData.new,
+      failureCallback: (failure) => AsyncError(failure, StackTrace.current),
+    );
   }
 }
-"@ | Out-File -FilePath "$BaseDir\presentation\providers\${FeatureName}_provider.dart" -Encoding UTF8
+"@
 
-# Create Screen
-@"
+Write-GeneratedFile "lib/features/$($FeatureName)/presentation/screens/$($FeatureName)_screen.dart" @"
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/${FeatureName}_provider.dart';
+import 'package:flutter_starter/features/${FeatureName}/presentation/providers/${FeatureName}_provider.dart';
 
+/// Screen showing a single ${FeaturePascal}.
 class ${FeaturePascal}Screen extends ConsumerWidget {
-  const ${FeaturePascal}Screen({super.key});
+  /// Creates a [${FeaturePascal}Screen] for [id].
+  const ${FeaturePascal}Screen({required this.id, super.key});
+
+  /// Identifier of the ${FeaturePascal} to display.
+  final String id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(${FeatureCamel}NotifierProvider);
+    final state = ref.watch(${FeatureCamel}StateProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('${FeaturePascal}'),
+      appBar: AppBar(title: const Text('${FeaturePascal}')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: state.when(
+          data: (entity) => Text(entity?.id ?? 'Not loaded'),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Text('Error: `$error'),
+        ),
       ),
-      body: state.when(
-        data: (data) => Center(child: Text(data.toString())),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: `$err')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => ref.read(${FeatureCamel}StateProvider.notifier).load(id),
+        child: const Icon(Icons.refresh),
       ),
     );
   }
 }
-"@ | Out-File -FilePath "$BaseDir\presentation\screens\${FeatureName}_screen.dart" -Encoding UTF8
+"@
 
-# Create Widgets (e.g. empty)
-New-Item -ItemType File -Force -Path "$BaseDir\presentation\widgets\.gitkeep" | Out-Null
+Write-GeneratedFile "test/features/$($FeatureName)/$($FeatureName)_repository_impl_test.dart" @"
+import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/${FeatureName}/data/datasources/${FeatureName}_remote_datasource.dart';
+import 'package:flutter_starter/features/${FeatureName}/data/repositories/${FeatureName}_repository_impl.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-Write-Host "Feature $FeatureName created successfully at $BaseDir"
+class _Mock${FeaturePascal}RemoteDataSource extends Mock
+    implements ${FeaturePascal}RemoteDataSource {}
 
+void main() {
+  group('${FeaturePascal}RepositoryImpl', () {
+    test('returns Success when the data source returns JSON', () async {
+      final remote = _Mock${FeaturePascal}RemoteDataSource();
+      when(() => remote.fetchById('1')).thenAnswer((_) async => {'id': '1'});
+
+      final repository = ${FeaturePascal}RepositoryImpl(remoteDataSource: remote);
+      final result = await repository.getById('1');
+
+      expect(result.isSuccess, isTrue);
+      expect(result.dataOrNull?.id, '1');
+    });
+
+    test('returns a Failure when the data source throws', () async {
+      final remote = _Mock${FeaturePascal}RemoteDataSource();
+      when(() => remote.fetchById('1')).thenThrow(
+        const NetworkException('boom'),
+      );
+
+      final repository = ${FeaturePascal}RepositoryImpl(remoteDataSource: remote);
+      final result = await repository.getById('1');
+
+      expect(result.isFailure, isTrue);
+      expect(result.errorOrNull, 'boom');
+    });
+  });
+}
+"@
+
+
+# The formatter, not this script, decides where long generated lines wrap, so
+# the result satisfies `dart format --set-exit-if-changed` for any name length.
+if (Get-Command dart -ErrorAction SilentlyContinue) {
+    dart format $BaseDir $TestDir | Out-Null
+} else {
+    Write-Warning "dart not on PATH; run 'dart format $BaseDir $TestDir'"
+}
+
+Write-Host "Feature $FeatureName created:"
+Write-Host "  $BaseDir"
+Write-Host "  $TestDir"
+Write-Host "Next: flutter analyze && flutter test $TestDir"

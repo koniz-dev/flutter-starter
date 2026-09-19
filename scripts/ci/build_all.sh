@@ -73,17 +73,21 @@ echo -e "${GREEN}✓ Cleaned${NC}"
 echo ""
 
 # Build Android
+#
+# No --flavor anywhere below. ENVIRONMENT here is a --dart-define value read by
+# lib/core/config/app_config.dart, NOT a Gradle product flavor: no
+# productFlavors are declared in android/app/build.gradle.kts, so passing
+# --flavor fails with "Task 'bundleProductionRelease' not found". Issue #34
+# removed the flag from the workflows and missed this script (issue #57).
 echo -e "${YELLOW}Building Android...${NC}"
 if [ "$ENVIRONMENT" == "production" ]; then
     flutter build appbundle \
-        --flavor production \
         --release \
         --dart-define=ENVIRONMENT=$ENVIRONMENT \
         --dart-define=BASE_URL=$BASE_URL
     echo -e "${GREEN}✓ Android App Bundle built${NC}"
 else
     flutter build apk \
-        --flavor $ENVIRONMENT \
         --dart-define=ENVIRONMENT=$ENVIRONMENT \
         --dart-define=BASE_URL=$BASE_URL
     echo -e "${GREEN}✓ Android APK built${NC}"
@@ -101,7 +105,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         echo -e "${GREEN}✓ iOS IPA built${NC}"
     else
         flutter build ios \
-            --flavor $ENVIRONMENT \
             --no-codesign \
             --dart-define=ENVIRONMENT=$ENVIRONMENT \
             --dart-define=BASE_URL=$BASE_URL
@@ -116,9 +119,10 @@ fi
 # Build Web
 echo -e "${YELLOW}Building Web...${NC}"
 if [ "$ENVIRONMENT" == "production" ]; then
+    # --web-renderer was removed from `flutter build web` (see
+    # `flutter build web --help`); passing it now aborts the build.
     flutter build web \
         --release \
-        --web-renderer canvaskit \
         --dart-define=ENVIRONMENT=$ENVIRONMENT \
         --dart-define=BASE_URL=$BASE_URL
 else

@@ -87,7 +87,6 @@ jobs:
           
       #     flutter build web \
       #       --release \
-      #       --web-renderer canvaskit \
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL"
 
@@ -136,7 +135,6 @@ jobs:
           
       #     flutter build web \
       #       --release \
-      #       --web-renderer canvaskit \
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL"
 
@@ -187,7 +185,6 @@ jobs:
           
       #     flutter build web \
       #       --release \
-      #       --web-renderer canvaskit \
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL"
 
