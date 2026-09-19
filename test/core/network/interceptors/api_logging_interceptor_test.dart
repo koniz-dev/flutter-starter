@@ -87,19 +87,23 @@ void main() {
         ).called(1);
       });
 
-      test('should sanitize sensitive headers', () {
-        // Arrange
+      test('should sanitize sensitive headers written the way production '
+          'writes them', () {
+        // Arrange. Headers go through dio's own RequestOptions, whose setter
+        // wraps them in caseInsensitiveKeyMap - a map that compares keys
+        // case-insensitively but stores them exactly as written.
+        // AuthInterceptor writes `options.headers['Authorization']`, so the
+        // capitalised spelling below is the one production actually produces.
         final handler = TestRequestInterceptorHandler();
         final optionsWithSensitiveHeaders = RequestOptions(
           path: '/api/test',
           method: 'GET',
-          headers: {
-            'authorization': 'Bearer secret-token',
-            'cookie': 'session=abc123',
-            'x-api-key': 'secret-key',
-            'content-type': 'application/json',
-          },
+          headers: <String, dynamic>{'Content-Type': 'application/json'},
         );
+        optionsWithSensitiveHeaders.headers['Authorization'] =
+            'Bearer secret-token';
+        optionsWithSensitiveHeaders.headers['Cookie'] = 'session=abc123';
+        optionsWithSensitiveHeaders.headers['X-Api-Key'] = 'secret-key';
         Map<String, dynamic>? capturedContext;
         when(
           () => mockLoggingService.debug(any(), context: any(named: 'context')),
@@ -119,9 +123,70 @@ void main() {
         expect(capturedContext, isNotNull);
         expect(capturedContext!['headers'], isA<Map<String, dynamic>>());
         final headers = capturedContext!['headers'] as Map<String, dynamic>;
-        expect(headers['authorization'], '***REDACTED***');
-        expect(headers['cookie'], '***REDACTED***');
-        expect(headers['x-api-key'], '***REDACTED***');
+        expect(headers['Authorization'], '***REDACTED***');
+        expect(headers['Cookie'], '***REDACTED***');
+        expect(headers['X-Api-Key'], '***REDACTED***');
+        expect(headers['Content-Type'], 'application/json');
+      });
+
+      test('should sanitize sensitive headers regardless of casing', () {
+        // Arrange
+        final handler = TestRequestInterceptorHandler();
+        final options = RequestOptions(
+          path: '/api/test',
+          method: 'GET',
+          headers: <String, dynamic>{
+            'AUTHORIZATION': 'Bearer secret-token',
+            'cOoKiE': 'session=abc123',
+            'x-API-key': 'secret-key',
+          },
+        );
+        Map<String, dynamic>? capturedContext;
+        when(
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
+        ).thenAnswer((invocation) {
+          capturedContext =
+              invocation.namedArguments[#context] as Map<String, dynamic>?;
+          return;
+        });
+
+        // Act
+        interceptor.onRequest(options, handler);
+
+        // Assert
+        final headers = capturedContext!['headers'] as Map<String, dynamic>;
+        expect(headers['AUTHORIZATION'], '***REDACTED***');
+        expect(headers['cOoKiE'], '***REDACTED***');
+        expect(headers['x-API-key'], '***REDACTED***');
+      });
+
+      test('should leave no secret anywhere in the logged context for an '
+          'authenticated request', () {
+        // Arrange
+        final handler = TestRequestInterceptorHandler();
+        final options = RequestOptions(path: '/api/test', method: 'POST');
+        options.headers['Authorization'] =
+            'Bearer eyJhbGciOi.REAL_USER_JWT.sig';
+        options.headers['Cookie'] = 'session=abc123';
+        options.headers['X-Api-Key'] = 'secret-key';
+        Map<String, dynamic>? capturedContext;
+        when(
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
+        ).thenAnswer((invocation) {
+          capturedContext =
+              invocation.namedArguments[#context] as Map<String, dynamic>?;
+          return;
+        });
+
+        // Act
+        interceptor.onRequest(options, handler);
+
+        // Assert
+        final rendered = capturedContext.toString();
+        expect(rendered, isNot(contains('Bearer ')));
+        expect(rendered, isNot(contains('REAL_USER_JWT')));
+        expect(rendered, isNot(contains('abc123')));
+        expect(rendered, isNot(contains('secret-key')));
       });
       test('should include query parameters when present', () {
         // Arrange
@@ -313,6 +378,42 @@ void main() {
         ).called(1);
         expect(capturedContext, isNotNull);
         expect(capturedContext!.containsKey('body'), isTrue);
+      });
+
+      test('should redact Set-Cookie in the response header log', () {
+        // Arrange. dio builds response headers through Headers.fromMap, which
+        // is the same case-insensitive map used for requests.
+        final response = Response<dynamic>(
+          requestOptions: requestOptions,
+          statusCode: 200,
+          headers: Headers.fromMap(<String, List<String>>{
+            'Set-Cookie': ['session=abc123; HttpOnly'],
+            'Authorization': ['Bearer secret-token'],
+            'Content-Type': ['application/json'],
+          }, preserveHeaderCase: true),
+        );
+        final handler = TestResponseInterceptorHandler();
+        Map<String, dynamic>? capturedContext;
+        when(
+          () => mockLoggingService.info(any(), context: any(named: 'context')),
+        ).thenAnswer((invocation) {
+          capturedContext =
+              invocation.namedArguments[#context] as Map<String, dynamic>?;
+          return;
+        });
+
+        // Act
+        interceptor.onResponse(response, handler);
+
+        // Assert
+        expect(capturedContext, isNotNull);
+        final headers = capturedContext!['headers'] as Map<String, dynamic>;
+        expect(headers['Set-Cookie'], '***REDACTED***');
+        expect(headers['Authorization'], '***REDACTED***');
+        expect(headers['Content-Type'], <String>['application/json']);
+        final rendered = capturedContext.toString();
+        expect(rendered, isNot(contains('abc123')));
+        expect(rendered, isNot(contains('Bearer ')));
       });
     });
 

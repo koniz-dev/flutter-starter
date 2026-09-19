@@ -338,7 +338,8 @@ Interceptor for logging HTTP traffic through **`LoggingService`** (not raw `debu
 - **Request:** logs method, path, base URL, sanitized headers, query parameters, body
 - **Response:** logs status, path, sanitized headers/body (warning level for 4xx+)
 - **Error:** logs Dio error type, path, method, status, sanitized bodies
-- Redacts sensitive header keys (`authorization`, `cookie`, `x-api-key`) and common secret fields in JSON bodies (see `_sanitizeHeaders` / `_sanitizeJson` in the source file)
+- Redacts sensitive header keys (`authorization`, `cookie`, `set-cookie`, `x-api-key`) and common secret fields in JSON bodies (see `_sanitizeHeaders` / `_sanitizeJson` in the source file)
+- Header matching is **case-insensitive**: dio stores headers in a case-insensitive map that preserves the caller's original casing, so the `Authorization` key written by `AuthInterceptor` is redacted just like a lowercase `authorization`
 
 ---
 
