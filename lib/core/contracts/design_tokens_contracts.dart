@@ -14,6 +14,11 @@ abstract class AppDesignTokens {
   Color get textPrimary;
   Color get textSecondary;
   Color get textOnPrimary;
+  Color get textSecondaryOnDark;
+
+  Color get success;
+  Color get warning;
+  Color get info;
 
   TextStyle get displayLarge;
   TextStyle get displayMedium;

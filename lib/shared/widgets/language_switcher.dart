@@ -5,6 +5,7 @@ import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
+import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 
 /// Language switcher widget
 ///
@@ -196,7 +197,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
               ),
               value: supportedLocale.locale,
               secondary: isSelected
-                  ? const Icon(Icons.check_circle, color: Colors.green)
+                  ? const Icon(Icons.check_circle, color: AppColors.success)
                   : null,
             );
           }).toList(),

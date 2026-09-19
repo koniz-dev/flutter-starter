@@ -6,9 +6,7 @@ void main() {
   group('AppColors Semantic Tokens Verification', () {
     test('Primary colors are valid objects', () {
       expect(AppColors.primary, isA<Color>());
-      expect(AppColors.primaryDark, isA<Color>());
       expect(AppColors.secondary, isA<Color>());
-      expect(AppColors.accent, isA<Color>());
     });
 
     test('Surface colors are valid objects', () {
@@ -20,6 +18,7 @@ void main() {
       expect(AppColors.textPrimary, isA<Color>());
       expect(AppColors.textSecondary, isA<Color>());
       expect(AppColors.textInverse, isA<Color>());
+      expect(AppColors.textSecondaryInverse, isA<Color>());
     });
 
     test('Status colors are valid objects', () {
