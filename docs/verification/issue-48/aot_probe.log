@@ -1,0 +1,14 @@
+$ dart compile exe docs/verification/issue-48/aot_probe.dart -o /tmp/issue48_probe -DBASE_URL=https://api.example.com -DENVIRONMENT=production
+Generated: /tmp/issue48_probe
+
+$ /tmp/issue48_probe   # AOT binary, same Dart AOT pipeline as flutter build --release
+runtimeLookup("BASE_URL")    = ""
+constLookup("BASE_URL")      = "https://api.example.com"
+runtimeLookup("ENVIRONMENT") = ""
+constLookup("ENVIRONMENT")   = "production"
+
+$ dart run -DBASE_URL=https://api.example.com -DENVIRONMENT=production docs/verification/issue-48/aot_probe.dart   # JIT, for contrast
+Running build hooks...Running build hooks...runtimeLookup("BASE_URL")    = "https://api.example.com"
+constLookup("BASE_URL")      = "https://api.example.com"
+runtimeLookup("ENVIRONMENT") = "production"
+constLookup("ENVIRONMENT")   = "production"

@@ -1,0 +1,31 @@
+$ flutter test --dart-define=BASE_URL=https://api.example.com test/core/config/dart_defines_test.dart --reporter compact
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:01 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:02 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:02 +0: DartDefines lookup returns the compile-time value for a known key
+00:02 +1: DartDefines lookup returns the compile-time value for a known key
+00:02 +1: DartDefines lookup returns the empty string for an unknown key
+00:02 +2: DartDefines lookup returns the empty string for an unknown key
+00:02 +2: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:02 +3: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:02 +3: dart-define mechanism every fromEnvironment call in lib/ takes a string literal
+00:02 +4: dart-define mechanism every fromEnvironment call in lib/ takes a string literal
+00:02 +4: dart-define mechanism env_config.dart contains no fromEnvironment call at all
+00:02 +5: dart-define mechanism env_config.dart contains no fromEnvironment call at all
+00:02 +5: dart-define mechanism dart_defines.dart declares the table as const
+00:02 +6: dart-define mechanism dart_defines.dart declares the table as const
+00:02 +6: dart-define mechanism every dart-define read is guarded by kIsWeb
+00:02 +7: dart-define mechanism every dart-define read is guarded by kIsWeb
+00:02 +7: key coverage every .env.example key has a DartDefines entry
+00:02 +8: key coverage every .env.example key has a DartDefines entry
+00:02 +8: key coverage every DartDefines entry is documented in .env.example
+00:02 +9: key coverage every DartDefines entry is documented in .env.example
+00:02 +9: key coverage ENVIRONMENT and BASE_URL are covered
+00:02 +10: key coverage ENVIRONMENT and BASE_URL are covered
+00:02 +10: key coverage every key EnvConfig is asked for in lib/ has an entry
+00:02 +11: key coverage every key EnvConfig is asked for in lib/ has an entry
+00:02 +11: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:02 +12: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:02 +12: All tests passed!
+exit: 0
