@@ -1,7 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
@@ -49,8 +54,8 @@ void main() {
     test('should have interceptors configured', () {
       // Assert
       expect(apiClient.dio.interceptors, isNotEmpty);
-      // ErrorInterceptor should be first
-      expect(apiClient.dio.interceptors.first, isA<Interceptor>());
+      // ErrorInterceptor terminates the error chain, so it must be last.
+      expect(apiClient.dio.interceptors.last, isA<ErrorInterceptor>());
     });
 
     group('GET requests', () {
@@ -147,12 +152,52 @@ void main() {
         expect(headers['Accept'], 'application/json');
       });
 
-      test('should have interceptors in correct order', () {
-        final interceptors = apiClient.dio.interceptors;
-        expect(interceptors.length, greaterThanOrEqualTo(2));
-        // ErrorInterceptor should be first
-        expect(interceptors.first, isA<Interceptor>());
+      test('should register the concrete interceptor types in order', () {
+        // dio runs BOTH onRequest and onError in registration order, and
+        // ErrorInterceptor.onError calls handler.reject(), which terminates
+        // the chain. It must therefore be registered last, or retry, 401
+        // refresh, performance teardown and error logging never run.
+        // Refs koniz-dev/flutter-starter#46.
+        final interceptors = apiClient.dio.interceptors.toList();
+
+        expect(interceptors, hasLength(5));
+        // dio seeds the list with its own ImplyContentTypeInterceptor, which
+        // is not exported from package:dio, hence the runtimeType check.
+        expect(
+          interceptors[0].runtimeType.toString(),
+          'ImplyContentTypeInterceptor',
+        );
+        expect(interceptors[1], isA<CacheInterceptor>());
+        expect(interceptors[2], same(authInterceptor));
+        expect(interceptors[3], isA<RetryInterceptor>());
+        expect(interceptors[4], isA<ErrorInterceptor>());
       });
+
+      test(
+        'should register logging and performance before ErrorInterceptor',
+        () {
+          final client = ApiClient(
+            storageService: storageService,
+            secureStorageService: secureStorageService,
+            authInterceptor: authInterceptor,
+            loggingService: MockLoggingService(),
+            performanceService: MockPerformanceService(),
+          );
+          final interceptors = client.dio.interceptors.toList();
+
+          expect(interceptors, hasLength(7));
+          expect(
+            interceptors[0].runtimeType.toString(),
+            'ImplyContentTypeInterceptor',
+          );
+          expect(interceptors[1], isA<PerformanceInterceptor>());
+          expect(interceptors[2], isA<CacheInterceptor>());
+          expect(interceptors[3], same(authInterceptor));
+          expect(interceptors[4], isA<RetryInterceptor>());
+          expect(interceptors[5], isA<ApiLoggingInterceptor>());
+          expect(interceptors[6], isA<ErrorInterceptor>());
+        },
+      );
     });
 
     group('Edge Cases', () {

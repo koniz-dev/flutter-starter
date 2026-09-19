@@ -96,11 +96,12 @@ class ApiClient {
       }
     }
 
-    // Add interceptors - ErrorInterceptor must be first
+    // Add interceptors - ErrorInterceptor must be LAST: it terminates the
+    // error chain, and dio runs error handlers in registration order.
     dio.interceptors.addAll([
-      ErrorInterceptor(),
       authInterceptor,
       if (AppConfig.enableLogging) LoggingInterceptor(),
+      ErrorInterceptor(),
     ]);
 
     return dio;

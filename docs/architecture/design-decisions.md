@@ -784,13 +784,15 @@ class ApiClient {
       connectTimeout: Duration(seconds: AppConfig.apiConnectTimeout),
     ));
     
-    // Add interceptors
+    // Add interceptors. ErrorInterceptor goes LAST: it rejects, and dio
+    // runs error handlers in registration order.
     dio.interceptors.addAll([
-      ErrorInterceptor(),           // Convert to domain exceptions
       PerformanceInterceptor(),     // Track performance
       CacheInterceptor(),           // Cache responses
-      AuthInterceptor(),            // Add auth tokens
-      ApiLoggingInterceptor(),     // Log requests/responses
+      AuthInterceptor(),            // Add auth tokens, refresh on 401
+      RetryInterceptor(),           // Retry transient failures
+      ApiLoggingInterceptor(),      // Log requests/responses
+      ErrorInterceptor(),           // Convert to domain exceptions
     ]);
     
     return dio;
