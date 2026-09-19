@@ -43,6 +43,38 @@ six invariants there are binding.
    no epic fits, that is a signal the taxonomy needs a human decision - say so
    rather than guessing.
 
+5. **Sweep the parked states. Every run, before you triage anything.** You are
+   the only role that reads them: the implementer reads `status:todo` alone, and
+   qa and security read merged diffs. If you skip this, work parked here is
+   parked forever - koniz-dev/flutter-starter#39 and #40 sat in `status:blocked`
+   for 18 days while the queue reported itself empty.
+
+   ```bash
+   gh issue list --state open --label status:blocked \
+     --json number,title,updatedAt
+   gh issue list --state open --label status:needs-uat \
+     --json number,title,updatedAt
+   gh issue list --state open --label status:in-progress \
+     --json number,title,assignees,updatedAt
+   ```
+
+   - **`status:blocked`**: blocker gone (a decision landed, the missing criteria
+     can now be written, the upstream fix shipped) -> comment what changed and
+     swap to `status:todo`. Still blocked -> say so, so the stall is visible.
+   - **`status:needs-uat`**: a human commented PASS -> close, citing their
+     comment plus the existing evidence directory. FAIL -> swap to
+     `status:todo` with their feedback. No verdict yet -> leave it.
+   - **`status:in-progress` with a dead claim**: a session that died still holds
+     the issue. Confirm it is dead (stale `updatedAt`, no branch, no open PR)
+     before touching it - releasing a live claim causes the collision the claim
+     exists to prevent. Then unassign, swap back to `status:todo`, and comment
+     **whether the work had already merged and in which PR**, so the next
+     implementer does not rewrite it.
+
+   Exact commands for all three: "Unblock", "Release a stale claim" and the
+   needs-uat recipes in
+   [`docs/issue-workflow.md`](../../docs/issue-workflow.md).
+
 ## What you never do
 
 - Never edit files under `lib/`, `test/`, `scripts/`, or `docs/`. If a doc is

@@ -2,8 +2,11 @@
 
 Guidance for Claude Code sessions working in this repository.
 
-Flutter enterprise starter built on Clean Architecture: 157 files in `lib/`,
-134 test files, single root `pubspec.yaml`, default branch `main`.
+Flutter enterprise starter built on Clean Architecture: 161 Dart files in
+`lib/`, 142 `*_test.dart` files under `test/` (plus 2 in `integration_test/`),
+single root `pubspec.yaml`, default branch `main`. Recheck the counts with
+`find lib -name '*.dart' | wc -l` and `find test -name '*_test.dart' | wc -l`
+rather than trusting this line.
 
 ## Commands
 
@@ -33,25 +36,52 @@ GitHub issues are the single source of truth. Full spec:
 1. Labels are authoritative. Any Project board is a read-only mirror.
 2. Taxonomy: `type:{bug,feature,task}` (native issue types are org-only and
    unavailable here), one `epic:*`, one `priority:P0..P3`, one `status:*`.
-3. States: Backlog (no status label) -> `status:todo` -> `status:in-progress`
-   -> closed, or `status:needs-uat`, or `status:blocked`.
-4. Exactly one state per open issue. A `status:*` label comes off only by
-   closing the issue or swapping to another state - never stripped alone, or the
-   issue lands in invisible limbo.
+3. States, with every exit and the role that performs it:
+
+   ```
+   Backlog (no status label) --planner triage--> status:todo
+   status:todo        --implementer claim-->     status:in-progress
+   status:in-progress --implementer verifies-->  closed
+   status:in-progress --implementer hands off--> status:needs-uat
+   any state          --any role, + comment-->   status:blocked
+   status:needs-uat   --planner sweep, human PASS--> closed
+   status:needs-uat   --planner sweep, human FAIL--> status:todo
+   status:blocked     --planner sweep, blocker gone--> status:todo
+   status:in-progress --planner sweep, claim is stale--> status:todo
+   ```
+
+   No state is a one-way door. `status:blocked` and `status:needs-uat` are
+   exited by the **planner** sweep (see `.claude/agents/planner.md`), which is
+   why the planner runs even when the `status:todo` queue looks non-empty.
+4. Exactly one state per open issue, and a `status:*` label is only ever
+   **swapped** for another one - never stripped on its own, or the issue lands
+   in invisible limbo. **Closing does not touch the label:** the last state
+   stays on the closed issue as a record, so `gh issue list --state closed
+   --label status:in-progress` is expected to return most closed issues. Always
+   pass `--state open` when you mean the live queue. The one legitimate
+   no-status issue is an untriaged Backlog issue, open or closed.
 5. Every startable issue has a `## Acceptance criteria` section (exact heading)
    with observable steps. No criteria means not startable.
-6. Take the highest-priority unassigned `status:todo` issue; ties break oldest
-   first. If the queue is empty, triage one Backlog issue in, then restart.
+6. Take the top issue from the **Tiebreaker priority order** below - there is
+   exactly one such order, and `docs/issue-workflow.md` implements it rather
+   than restating it. If the queue is empty, triage one Backlog issue in, then
+   restart.
 7. Claim by self-assigning and swapping the label, then **re-read the issue** -
    `--add-assignee` adds you alongside an existing assignee rather than failing,
    so this is the only way to know you won the race. If you lost, unassign and
    take the next issue.
 8. Commits and PR bodies use `Refs koniz-dev/flutter-starter#N`. `Fixes`,
    `Closes`, and `Resolves` are banned: auto-closing on merge destroys the
-   verification gate.
+   verification gate. This is now machine-checked -
+   [`scripts/dev/check_issue_refs.sh`](scripts/dev/check_issue_refs.sh), run on
+   every PR by [`issue-refs.yml`](.github/workflows/issue-refs.yml). Run it
+   locally before pushing:
+   `./scripts/dev/check_issue_refs.sh --range origin/main..HEAD`.
 9. Ship via feature branch + PR (`CONTRIBUTING.md` naming, Conventional
-   Commits), wait for the **Quality gate** check, merge `--squash
-   --delete-branch`.
+   Commits), wait for the checks the PR actually gets (see "Which checks a PR
+   gets" below), merge `--squash --delete-branch`. `main` is protected: direct
+   pushes, force pushes and deletions are rejected, so the PR is the only route
+   in.
 10. Done means closed AND evidence-backed. One issue at a time.
 
 **Canonical epic list:
@@ -122,15 +152,29 @@ make the loop worthless.
   reachable API exists here.
 - **Coverage thresholds.** [`coverage.yml`](.github/workflows/coverage.yml) is
   manual plus weekly, not per-PR.
-- **Docs-only PRs get no Quality gate.** `ci.yml` has
-  `paths-ignore: ['**/*.md', 'docs/**']`, so `gh pr checks` reports no checks
-  rather than a pass. Expected; do not wait on it and do not call it a failure.
-  **But do not confuse that with the registration race:** run straight after
-  `gh pr create`, `gh pr checks` says "no checks reported" even for a PR that
-  will get them, because GitHub has not created them yet. Poll until
-  `gh pr checks --json name --jq 'length'` is non-zero before watching, and use
-  `gh pr diff --name-only` against `paths-ignore` to decide which case you are
-  in. Merging on the wrong reading skips the gate entirely.
+### Which checks a PR gets
+
+Three workflows run on PRs, each with its own path filter, so "no Quality gate"
+is normal rather than a failure:
+
+| Workflow | Check name | Runs when |
+|---|---|---|
+| [`ci.yml`](.github/workflows/ci.yml) | Quality gate | any path **outside** `**/*.md` and `docs/**` |
+| [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or the workflow itself |
+| [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
+
+So a docs-only PR gets **Docs check** and **Issue refs** but no Quality gate,
+and an evidence-only PR of `.log`/`.png` files gets **Issue refs** alone. Every
+PR now gets at least one check - a PR reporting zero checks is the registration
+race, not a path exclusion. Poll until `gh pr checks --json name --jq 'length'`
+is non-zero before `gh pr checks --watch`; merging on the "no checks reported"
+reading skips the gate entirely.
+
+`main` is protected (no direct pushes, no force pushes, no deletions, PR
+required), but **no check is required to merge yet** - see the `needs-uat` note
+on koniz-dev/flutter-starter#58. Quality gate cannot be made required while
+`ci.yml` carries `paths-ignore`, because a required check that never reports
+blocks every docs-only PR forever. Read a red check yourself before merging.
 
 ### Evidence discipline
 
@@ -145,6 +189,19 @@ make the loop worthless.
   not evidence and its context is not retrievable later.
 - Name the artifact that proves each criterion, one row per criterion. "All
   criteria pass, see logs" is not a PASS summary.
+- **Account for the standing goldens.** `run_acceptance.sh` copies every PNG
+  under `test/acceptance/goldens/` into the evidence directory, so a non-visual
+  issue still ships six screenshots that prove nothing about it. Do not cite
+  them. Say so explicitly in the closing comment, backed by a checksum showing
+  they are the repository's unchanged goldens:
+
+  ```bash
+  shasum -a 256 test/acceptance/goldens/*.png docs/verification/issue-<N>/*.png \
+    | sort | tee docs/verification/issue-<N>/goldens-checksums.txt
+  ```
+
+  Matching pairs mean the run did not change them and no criterion rests on
+  them. A mismatch is a golden regression and needs explaining, not ignoring.
 - If a criterion cannot be driven, say which one and why, and route to
   `status:needs-uat` with the exact human steps and what PASS would look like.
 
@@ -172,6 +229,27 @@ planner  ->  implementer  ->  qa  ->  security (risk-gated)  ->  close or hand o
 `lib/core/storage/`, `lib/core/network/`, `.env*`, dependency versions, or
 anything auth-related. Otherwise skip it.
 
+#### Who invokes each phase
+
+No role invokes another role - none of them can. The phase order is driven by
+**the session that owns the loop**:
+
+- **Orchestrated run** (a top-level session dispatching role subagents): that
+  session is the owner. It dispatches `planner`, then `implementer`, then `qa`
+  on the merged change, then `security` if G3 holds. It is also the only party
+  that can see two implementers at once, so it enforces Parallelism. This is how
+  `qa` came to file koniz-dev/flutter-starter#88 and #89.
+- **Solo run** (one session working an issue end to end, no subagents): there is
+  nobody to dispatch, so the implementer **performs the `qa` checklist itself**
+  before closing, as the last step of G4. The checklist is in
+  [`.claude/agents/implementer.md`](.claude/agents/implementer.md) ("Self-QA
+  before closing") and is a copy of steps 2 and 3 of
+  [`.claude/agents/qa.md`](.claude/agents/qa.md).
+
+Self-QA is the weaker of the two - the same session that wrote the PASS is
+auditing it. Prefer a separate `qa` pass on anything non-trivial. What is never
+acceptable is skipping both and closing anyway.
+
 ### Gate table
 
 What must be true before the next phase starts:
@@ -181,10 +259,18 @@ What must be true before the next phase starts:
 | G1 | implementer | Issue has a `## Acceptance criteria` section with observable steps; scope fits one `epic:*`; issue is `status:in-progress` and assigned to this session (re-read confirmed) |
 | G2 | qa | Change is merged to `main`; commits carry `Refs owner/repo#N` and no `Fixes`/`Closes`/`Resolves`; `./scripts/dev/audit_template.sh` exits 0 |
 | G3 | security | G2 held and the diff touches a risk surface listed above |
-| G4 | close | Every criterion has a named artifact under `docs/verification/issue-<N>/`; every PNG was opened and inspected by the closing session; evidence is committed and pushed |
+| G4 | close | Every criterion has a named artifact under `docs/verification/issue-<N>/`; every PNG was opened and inspected by the closing session; evidence is committed and pushed; a `qa` pass or the self-QA checklist has run |
 | G5 | needs-uat | The blocking criterion is genuinely in tier 3; the comment states the human steps and what PASS means |
 
 A gate that does not hold is not a judgment call. Stop and route.
+
+**The one exception to G4: an issue whose premise is false.** A bug that does
+not exist has nothing to verify, so demanding evidence would force a fabricated
+PASS table. Close it `--reason "not planned"` with a comment showing *why* the
+premise fails - the file and line that already behave correctly, or the command
+whose output contradicts the report - and no `docs/verification/` directory.
+That is the only close without evidence, and the comment is what makes it
+auditable. Precedents: koniz-dev/flutter-starter#25 and #84.
 
 ### Escalation
 
@@ -198,16 +284,29 @@ A gate that does not hold is not a judgment call. Stop and route.
 - **Missing or unobservable criteria**: `status:blocked` with a comment naming
   what is missing. Back to the planner. Never guess the intent.
 - **Lost claim race**: unassign, take the next issue, no comment needed.
+- **Stale claim** (a session died holding `status:in-progress`): any role may
+  release it - unassign, swap `status:in-progress` back to `status:todo`, and
+  comment whether the work had already merged, so the next implementer does not
+  redo it. Recipe: "Release a stale claim" in
+  [`docs/issue-workflow.md`](docs/issue-workflow.md). Only release a claim you
+  have reason to believe is dead; a live claim belongs to its holder.
 
 ### Tiebreaker priority order
 
-When two candidate issues compete:
+**This list is the only definition of the order.** `docs/issue-workflow.md`
+implements it in its queue selector and does not restate it; nothing else may
+paraphrase it. When two candidate issues compete:
 
 1. `priority:P0` over anything else.
 2. Unblocks another issue over standalone.
 3. Lower `priority:*` number.
 4. `type:bug` over `type:feature` over `type:task`.
 5. Lower issue number (oldest first).
+
+Levels 1, 3, 4 and 5 are mechanical and the selector sorts by them. Level 2 is
+not - no label records "unblocks #N" - so the selector prints the ranked
+candidates instead of picking blindly, and the session applies level 2 by
+reading them.
 
 ### Parallelism
 
