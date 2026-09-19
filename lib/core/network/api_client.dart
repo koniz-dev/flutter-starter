@@ -101,14 +101,23 @@ class ApiClient {
     }
 
     // Add interceptors - Order matters!
-    // ErrorInterceptor must be first to catch all errors
+    //
+    // dio runs `onRequest` in list order AND `onError` in list order (see
+    // `dio_mixin.dart`: both loops iterate `interceptors` forwards). An
+    // `onError` that calls `handler.reject(...)` terminates the error chain,
+    // so every interceptor registered after it never sees the error.
+    // ErrorInterceptor does exactly that, therefore it must be registered
+    // LAST - registering it first silently disabled retry, 401 token refresh,
+    // performance trace teardown and error logging.
+    //
     // PerformanceInterceptor should be early to track all requests
     // CacheInterceptor should be early to intercept requests before network
-    // AuthInterceptor handles token injection
-    // ApiLoggingInterceptor should be last to log final request/response
+    // AuthInterceptor handles token injection and 401 refresh
+    // RetryInterceptor retries transient failures (timeouts, 5xx)
+    // ApiLoggingInterceptor logs the raw DioException before it is mapped
     // (omitted if loggingService is null)
+    // ErrorInterceptor converts whatever survives into a domain exception
     dio.interceptors.addAll([
-      ErrorInterceptor(),
       if (performanceService != null)
         PerformanceInterceptor(performanceService: performanceService),
       CacheInterceptor(storageService: storageService),
@@ -116,6 +125,7 @@ class ApiClient {
       RetryInterceptor(dio: dio, loggingService: loggingService),
       if (loggingService != null)
         ApiLoggingInterceptor(loggingService: loggingService),
+      ErrorInterceptor(),
     ]);
 
     return dio;

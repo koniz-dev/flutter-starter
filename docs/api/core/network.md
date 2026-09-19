@@ -182,7 +182,7 @@ Future<Response<dynamic>> delete(
 The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
 - Timeouts from `AppConfig` (connect, receive, send)
-- Interceptors (order matters; see `ApiClient._createDio`): `ErrorInterceptor`, optional `PerformanceInterceptor`, `CacheInterceptor`, `AuthInterceptor`, `RetryInterceptor`, optional `ApiLoggingInterceptor` when a `LoggingService` is provided
+- Interceptors (order matters; see `ApiClient._createDio`): optional `PerformanceInterceptor`, `CacheInterceptor`, `AuthInterceptor`, `RetryInterceptor`, optional `ApiLoggingInterceptor` when a `LoggingService` is provided, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
 
 ---
 
@@ -315,7 +315,7 @@ Interceptor for converting DioException to domain exceptions.
 ### Behavior
 
 - Converts DioException to domain exceptions (`ServerException`, `NetworkException`, etc.)
-- Should be added FIRST in the interceptor chain
+- Must be added LAST in the interceptor chain: its `onError` terminates the chain with `handler.reject(...)`, and dio invokes error handlers in registration order
 - Allows domain exceptions to be extracted in catch blocks
 
 ### Exception Mapping

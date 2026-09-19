@@ -3,9 +3,11 @@ import 'package:flutter_starter/core/errors/dio_exception_mapper.dart';
 
 /// Interceptor for converting DioException to domain exceptions
 ///
-/// This interceptor should be added FIRST in the interceptor chain
-/// (before auth and logging interceptors) to ensure all DioExceptions
-/// are converted to domain exceptions before other interceptors process them.
+/// This interceptor must be added LAST in the interceptor chain. Its
+/// [onError] terminates the chain with `handler.reject(...)`, and dio runs
+/// error handlers in registration order, so any interceptor registered after
+/// it never sees the error - that would disable retry, 401 token refresh,
+/// performance trace teardown and error logging.
 class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {

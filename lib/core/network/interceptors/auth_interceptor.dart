@@ -25,7 +25,9 @@ class AuthInterceptor extends Interceptor {
     ITokenStore? tokenStore,
     SecureStorageService? secureStorageService,
     required Future<Result<String>> Function() refreshToken,
-  }) : _tokenStore =
+    Dio Function()? retryDioFactory,
+  }) : _retryDioFactory = retryDioFactory,
+       _tokenStore =
            tokenStore ??
            (secureStorageService != null
                ? SecureTokenStore(secureStorageService)
@@ -43,9 +45,21 @@ class AuthInterceptor extends Interceptor {
   /// to avoid DI cycles during app bootstrap.
   final Future<Result<String>> Function() _refreshToken;
 
+  /// Optional factory for the Dio instance used to replay the original
+  /// request after a successful refresh.
+  ///
+  /// Production leaves this null and gets a plain, interceptor-free Dio so the
+  /// replay cannot re-enter this interceptor. Tests inject a factory to point
+  /// the replay at a fake [HttpClientAdapter].
+  final Dio Function()? _retryDioFactory;
+
   /// Creates a Dio instance for retrying requests
   /// Uses the same base configuration as the main ApiClient
   Dio _createRetryDio() {
+    final factory = _retryDioFactory;
+    if (factory != null) {
+      return factory();
+    }
     return Dio(
       BaseOptions(
         baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
