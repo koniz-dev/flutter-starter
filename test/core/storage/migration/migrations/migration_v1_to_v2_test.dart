@@ -134,7 +134,7 @@ void main() {
         expect(tags, ['tag1', 'tag2', 'tag3']);
       });
 
-      test('should handle empty tags string', () async {
+      test('should convert an empty tags string to an empty list', () async {
         // Arrange
         await storage.setString(StorageVersion.versionKey, '1');
         await storage.setString('user_tags', '');
@@ -142,12 +142,9 @@ void main() {
         // Act
         await migration.migrate(storage);
 
-        // Assert
-        // Should not migrate empty string (code checks isNotEmpty)
-        // So old string key should remain or be removed
-        final hasOldKey = await storage.containsKey('user_tags');
-        // If empty, migration doesn't run, so old key may still exist
-        expect(hasOldKey, isA<bool>());
+        // Assert - the key holds a list afterwards whatever the old value
+        // was, so a later `getStringList` never hits a String.
+        expect(await storage.getStringList('user_tags'), isEmpty);
       });
 
       test('should add default language if not exists', () async {
@@ -341,6 +338,53 @@ void main() {
         // Assert
         final tags = await storage.getStringList('user_tags');
         expect(tags, ['single-tag']);
+      });
+    });
+
+    // This migration rewrites 'user_tags' in place with a different type.
+    // A re-run used to read it back with `getString`, which throws a
+    // `TypeError` - an Error, so every `on Exception` handler missed it -
+    // and that threw before `runApp` on every launch.
+    group('idempotency (#60)', () {
+      test('migrate twice does not throw and leaves the same data', () async {
+        // Arrange
+        await storage.setString(StorageVersion.versionKey, '1');
+        await storage.setString('user_name', 'testuser');
+        await storage.setString('theme', 'dark');
+        await storage.setString('user_tags', 'tag1, tag2');
+
+        // Act
+        await migration.migrate(storage);
+        await expectLater(migration.migrate(storage), completes);
+
+        // Assert - second run is a no-op, not a partial re-application
+        expect(await storage.getString('username'), 'testuser');
+        expect(await storage.getString('theme_mode'), 'dark');
+        expect(await storage.getStringList('user_tags'), ['tag1', 'tag2']);
+        expect(await storage.getString('language'), 'en');
+      });
+
+      test('migrate recovers a store left mid-migration', () async {
+        // Arrange - exactly the bricked state: data already converted by an
+        // earlier run, but the version stamp never written.
+        await storage.setString(StorageVersion.versionKey, '1');
+        await storage.setStringList('user_tags', ['tag1', 'tag2']);
+
+        // Act & Assert
+        await expectLater(migration.migrate(storage), completes);
+        expect(await storage.getStringList('user_tags'), ['tag1', 'tag2']);
+      });
+
+      test('execute after a re-run leaves storage stamped at v2', () async {
+        // Arrange
+        await storage.setString(StorageVersion.versionKey, '1');
+        await storage.setStringList('user_tags', ['tag1']);
+
+        // Act
+        await migration.execute(storage);
+
+        // Assert
+        expect(await storage.getString(StorageVersion.versionKey), '2');
       });
     });
   });

@@ -1,6 +1,7 @@
 import 'package:flutter_starter/core/storage/migration/migration_registry.dart';
 import 'package:flutter_starter/core/storage/migration/migrations/migration_v1_to_v2.dart';
 import 'package:flutter_starter/core/storage/migration/storage_migration.dart';
+import 'package:flutter_starter/core/storage/storage_version.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -105,14 +106,32 @@ void main() {
       });
     });
 
-    group('Edge Cases', () {
-      test('should handle empty migrations list gracefully', () {
-        // Note: Currently has at least one migration, but test structure
-        // Act
-        final migrations = MigrationRegistry.migrations;
+    // Criterion 3 of #60. Bumping StorageVersion.current without registering
+    // the matching migration must fail here, not on a user's device where the
+    // executor throws before the first frame.
+    group('chain coverage (#60)', () {
+      test('migrations span initial -> current with no gap', () {
+        _expectSpansVersionChain(MigrationRegistry.migrations);
+      });
 
-        // Assert
-        expect(migrations, isA<List<StorageMigration>>());
+      test('regularStorageMigrations span initial -> current', () {
+        _expectSpansVersionChain(MigrationRegistry.regularStorageMigrations);
+      });
+
+      test('secureStorageMigrations span initial -> current', () {
+        _expectSpansVersionChain(MigrationRegistry.secureStorageMigrations);
+      });
+    });
+
+    group('Edge Cases', () {
+      test('returns an independent list on each call', () {
+        // The getter builds a fresh list, so a caller that sorts or filters
+        // it (MigrationExecutor sorts a copy) cannot corrupt the registry.
+        final first = MigrationRegistry.migrations..clear();
+        final second = MigrationRegistry.migrations;
+
+        expect(first, isEmpty);
+        expect(second, isNotEmpty);
       });
 
       test('should have consistent regular and secure migrations', () {
@@ -125,4 +144,46 @@ void main() {
       });
     });
   });
+}
+
+/// Walk [migrations] from [StorageVersion.initial] and assert the chain
+/// lands exactly on [StorageVersion.current].
+void _expectSpansVersionChain(List<StorageMigration> migrations) {
+  final byFromVersion = <int, StorageMigration>{};
+  for (final migration in migrations) {
+    expect(
+      byFromVersion.containsKey(migration.fromVersion),
+      isFalse,
+      reason:
+          'two migrations both start at v${migration.fromVersion}; the '
+          'executor would pick one of them arbitrarily',
+    );
+    byFromVersion[migration.fromVersion] = migration;
+  }
+
+  var version = StorageVersion.initial;
+  while (version < StorageVersion.current) {
+    final step = byFromVersion[version];
+    expect(
+      step,
+      isNotNull,
+      reason:
+          'no migration registered from v$version, so a device stamped '
+          'v$version can never reach v${StorageVersion.current}',
+    );
+    expect(
+      step!.toVersion,
+      greaterThan(version),
+      reason: 'migration from v$version does not advance the version',
+    );
+    version = step.toVersion;
+  }
+
+  expect(
+    version,
+    StorageVersion.current,
+    reason:
+        'the chain overshoots StorageVersion.current '
+        '(${StorageVersion.current}) and stops at v$version',
+  );
 }

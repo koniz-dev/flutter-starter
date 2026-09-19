@@ -108,9 +108,11 @@ void main() {
         ).thenReturn(null);
 
         final longValue = 'a' * 200;
+        // A non-sensitive key: redaction is decided by the key now, and
+        // 'test_key' would be redacted before truncation could apply.
         storageService.logStorageWrite(
           'setString',
-          'test_key',
+          'user_note',
           value: longValue,
         );
 
@@ -272,6 +274,74 @@ void main() {
             ),
           ),
         ).called(1);
+      });
+    });
+
+    // Criterion 8 of #60. Redaction used to match the *value* against
+    // ['password','token','secret','key','auth']. A real JWT contains none
+    // of those, so it fell through to the 100-character truncation and the
+    // header plus most of the payload went into the log - under a key the
+    // caller had already named `auth_token`.
+    group('key-based redaction (#60)', () {
+      /// The canonical HS256 example token. Lower-cased it contains none of
+      /// the sensitive substrings, which is the whole point.
+      const jwt =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.'
+          'eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0Ijox'
+          'NTE2MjM5MDIyfQ.'
+          'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
+      Object? loggedValue() {
+        final captured = verify(
+          () => mockLoggingService.debug(
+            any(),
+            context: captureAny(named: 'context'),
+          ),
+        ).captured;
+        return (captured.single as Map<String, dynamic>)['value'];
+      }
+
+      setUp(() {
+        when(
+          () => mockLoggingService.debug(any(), context: any(named: 'context')),
+        ).thenReturn(null);
+      });
+
+      test('redacts a realistic JWT stored under auth_token', () {
+        // Guard the premise: the value itself looks innocuous.
+        for (final pattern in StorageLoggingMixin.sensitiveKeyPatterns) {
+          expect(jwt.toLowerCase().contains(pattern), isFalse);
+        }
+
+        storageService.logStorageWrite('setString', 'auth_token', value: jwt);
+
+        final value = loggedValue();
+        expect(value, '***REDACTED***');
+        expect('$value'.contains('eyJhbGciOi'), isFalse);
+      });
+
+      test('redacts a JWT on read as well as write', () {
+        storageService.logStorageRead('getString', 'auth_token', value: jwt);
+
+        expect(loggedValue(), '***REDACTED***');
+      });
+
+      test('does not redact a harmless value mentioning a pattern', () {
+        storageService.logStorageWrite(
+          'setString',
+          'note',
+          value: 'my keyboard password hint is a secret joke',
+        );
+
+        expect(loggedValue(), 'my keyboard password hint is a secret joke');
+      });
+
+      test('still truncates long non-sensitive values', () {
+        final long = 'a' * 150;
+
+        storageService.logStorageWrite('setString', 'note', value: long);
+
+        expect(loggedValue(), '${'a' * 100}... (truncated)');
       });
     });
   });

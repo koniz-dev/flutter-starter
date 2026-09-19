@@ -27,10 +27,14 @@ class MigrationExecutor {
   /// [loggingService] - Service for logging migration activities
   /// [migrations] - List of migrations to execute
   /// (should be ordered by version)
+  ///
+  /// [targetVersion] defaults to [StorageVersion.current] and exists so tests
+  /// can exercise chains longer than the one this build ships.
   MigrationExecutor({
     required this.storage,
     required this.loggingService,
     required this.migrations,
+    this.targetVersion = StorageVersion.current,
   }) {
     // Sort migrations by fromVersion to ensure correct execution order
     _sortedMigrations = List<StorageMigration>.from(migrations)
@@ -46,6 +50,9 @@ class MigrationExecutor {
   /// List of migrations to execute
   final List<StorageMigration> migrations;
 
+  /// Version the storage must end up at
+  final int targetVersion;
+
   /// Sorted list of migrations (by fromVersion)
   late final List<StorageMigration> _sortedMigrations;
 
@@ -60,7 +67,6 @@ class MigrationExecutor {
   /// Returns the final version after migration
   Future<int> execute() async {
     final currentVersion = await _getCurrentVersion();
-    const targetVersion = StorageVersion.current;
 
     loggingService.info(
       'Starting storage migration',
@@ -72,7 +78,7 @@ class MigrationExecutor {
     );
 
     // If already at target version, no migration needed
-    if (currentVersion >= targetVersion) {
+    if (currentVersion == targetVersion) {
       loggingService.info(
         'Storage is already at target version',
         context: {'current_version': currentVersion},
@@ -80,19 +86,31 @@ class MigrationExecutor {
       return currentVersion;
     }
 
-    // Find migrations that need to be executed
-    final applicableMigrations = _findApplicableMigrations(currentVersion);
-
-    if (applicableMigrations.isEmpty) {
-      loggingService.warning(
-        'No migrations found to reach target version',
+    // Stored data is NEWER than this build understands (for example a beta
+    // build stamped v3, then production v2 is installed over it). There is no
+    // safe way to read v3-shaped data with v2 code, and silently returning
+    // here would do exactly that. Reported separately from
+    // "already up to date" so the caller can tell the two apart.
+    if (currentVersion > targetVersion) {
+      loggingService.error(
+        'Storage version is newer than this build supports',
         context: {
           'current_version': currentVersion,
           'target_version': targetVersion,
         },
       );
-      return currentVersion;
+      throw StorageDowngradeException(
+        'Stored data is at version $currentVersion but this build only '
+        'supports version $targetVersion. Refusing to read newer data with '
+        'older code.',
+        storedVersion: currentVersion,
+        supportedVersion: targetVersion,
+      );
     }
+
+    // Build the full chain up front. A missing link throws rather than
+    // migrating part of the way and reporting success.
+    final applicableMigrations = _planMigrations(currentVersion);
 
     // Execute migrations in sequence
     for (final migration in applicableMigrations) {
@@ -153,22 +171,29 @@ class MigrationExecutor {
       }
     }
 
-    // Verify final version
+    // Verify final version. Reaching this point with the wrong stamp means a
+    // version write was accepted by the storage backend but did not stick -
+    // on the next launch the whole chain would run again over already
+    // migrated data, so this is a failure, not a warning.
     final finalVersion = await _getCurrentVersion();
     if (finalVersion != targetVersion) {
-      loggingService.warning(
+      loggingService.error(
         'Migration completed but version mismatch',
         context: {
           'expected_version': targetVersion,
           'actual_version': finalVersion,
         },
       );
-    } else {
-      loggingService.info(
-        'All migrations completed successfully',
-        context: {'final_version': finalVersion},
+      throw MigrationExecutionException(
+        'Migrations ran but storage is stamped v$finalVersion instead of '
+        'v$targetVersion. The version stamp was not persisted.',
       );
     }
+
+    loggingService.info(
+      'All migrations completed successfully',
+      context: {'final_version': finalVersion},
+    );
 
     return finalVersion;
   }
@@ -210,39 +235,74 @@ class MigrationExecutor {
     }
   }
 
-  /// Find migrations that need to be executed to reach target version
-  List<StorageMigration> _findApplicableMigrations(int currentVersion) {
-    final applicable = <StorageMigration>[];
+  /// Build the ordered chain of migrations from [currentVersion] to
+  /// [targetVersion].
+  ///
+  /// Throws [MigrationPathException] when the chain cannot be completed -
+  /// either because nothing is registered for some intermediate version, or
+  /// because a registered migration jumps past [targetVersion]. Returning a
+  /// partial chain instead would let the app start on half-migrated data.
+  List<StorageMigration> _planMigrations(int currentVersion) {
+    final planned = <StorageMigration>[];
     var nextVersion = currentVersion;
 
-    for (final migration in _sortedMigrations) {
-      if (migration.fromVersion == nextVersion &&
-          migration.toVersion > nextVersion) {
-        applicable.add(migration);
-        nextVersion = migration.toVersion;
+    while (nextVersion < targetVersion) {
+      final step = _migrationFrom(nextVersion);
 
-        // If we've reached or exceeded target, stop
-        if (nextVersion >= StorageVersion.current) {
-          break;
-        }
-      }
-    }
-
-    // Check for gaps in migration chain
-    if (applicable.isNotEmpty) {
-      final firstMigration = applicable.first;
-      if (firstMigration.fromVersion != currentVersion) {
-        loggingService.warning(
-          'Migration chain gap detected',
+      if (step == null) {
+        loggingService.error(
+          'No migration registered for the stored storage version',
           context: {
             'current_version': currentVersion,
-            'first_migration_from': firstMigration.fromVersion,
+            'target_version': targetVersion,
+            'missing_from_version': nextVersion,
           },
         );
+        throw MigrationPathException(
+          'No migration path from v$currentVersion to v$targetVersion: '
+          'nothing is registered to migrate from v$nextVersion.',
+          currentVersion: currentVersion,
+          targetVersion: targetVersion,
+          missingFromVersion: nextVersion,
+        );
       }
+
+      if (step.toVersion > targetVersion) {
+        loggingService.error(
+          'Registered migration overshoots the target storage version',
+          context: {
+            'current_version': currentVersion,
+            'target_version': targetVersion,
+            'from_version': step.fromVersion,
+            'to_version': step.toVersion,
+          },
+        );
+        throw MigrationPathException(
+          'No migration path from v$currentVersion to v$targetVersion: the '
+          'migration from v${step.fromVersion} jumps to v${step.toVersion}, '
+          'past the target.',
+          currentVersion: currentVersion,
+          targetVersion: targetVersion,
+          missingFromVersion: nextVersion,
+        );
+      }
+
+      planned.add(step);
+      nextVersion = step.toVersion;
     }
 
-    return applicable;
+    return planned;
+  }
+
+  /// The first registered migration starting at [fromVersion], or null.
+  StorageMigration? _migrationFrom(int fromVersion) {
+    for (final migration in _sortedMigrations) {
+      if (migration.fromVersion == fromVersion &&
+          migration.toVersion > fromVersion) {
+        return migration;
+      }
+    }
+    return null;
   }
 }
 
@@ -265,4 +325,49 @@ class MigrationExecutionException implements Exception {
     }
     return 'MigrationExecutionException: $message';
   }
+}
+
+/// Exception thrown when no complete migration chain reaches the target
+/// version
+///
+/// This is the "missing migration" case: storage is behind
+/// [StorageVersion.current] and either nothing is registered for some
+/// intermediate version, or a registered migration jumps past the target.
+class MigrationPathException extends MigrationExecutionException {
+  /// Creates a [MigrationPathException] with the given [message]
+  MigrationPathException(
+    super.message, {
+    required this.currentVersion,
+    required this.targetVersion,
+    required this.missingFromVersion,
+  });
+
+  /// Version currently stamped in storage
+  final int currentVersion;
+
+  /// Version the app expects storage to be at
+  final int targetVersion;
+
+  /// Version the chain could not be continued from
+  final int missingFromVersion;
+}
+
+/// Exception thrown when storage is stamped with a version newer than this
+/// build supports
+///
+/// Distinct from "already at target version": the data on disk was written by
+/// a newer build and cannot be safely read by this one.
+class StorageDowngradeException extends MigrationExecutionException {
+  /// Creates a [StorageDowngradeException] with the given [message]
+  StorageDowngradeException(
+    super.message, {
+    required this.storedVersion,
+    required this.supportedVersion,
+  });
+
+  /// Version currently stamped in storage
+  final int storedVersion;
+
+  /// Highest version this build understands
+  final int supportedVersion;
 }

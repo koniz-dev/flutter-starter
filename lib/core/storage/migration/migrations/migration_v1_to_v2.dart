@@ -52,9 +52,17 @@ class MigrationV1ToV2 extends StorageMigration {
 
     // Example 3: Migrate list data
     // Old: comma-separated string -> New: proper string list
-    final oldTags = await storage.getString('user_tags');
-    if (oldTags != null && oldTags.isNotEmpty) {
-      final tagsList = oldTags.split(',').map((e) => e.trim()).toList();
+    //
+    // This rewrites 'user_tags' in place with a *different type*, so the read
+    // has to tolerate a value that is already a list - see
+    // [_readLegacyString]. Without that guard a second run throws and the app
+    // cannot start. Prefer renaming the key (examples 1 and 2) when the type
+    // changes; keep this shape only if you also keep the guard.
+    final oldTags = await _readLegacyString(storage, 'user_tags');
+    if (oldTags != null) {
+      final tagsList = oldTags.isEmpty
+          ? <String>[]
+          : oldTags.split(',').map((e) => e.trim()).toList();
       await storage.setStringList('user_tags', tagsList);
     }
 
@@ -89,6 +97,29 @@ class MigrationV1ToV2 extends StorageMigration {
         // If parsing fails, remove corrupted data
         await storage.remove('user_data');
       }
+    }
+  }
+
+  /// Read [key] as a String, treating a value of any other type as absent.
+  ///
+  /// A store written by an earlier run of this migration holds a
+  /// `List<String>` under 'user_tags'. `SharedPreferences.getString` casts
+  /// the cached value blindly, so reading it throws a `TypeError` - an
+  /// `Error`, not an `Exception`, which every `on Exception` handler in the
+  /// storage and auth layers misses. That turned a re-run into a crash before
+  /// `runApp`.
+  ///
+  /// Returning null instead is what makes this migration idempotent: the
+  /// second run sees nothing left to convert and does nothing.
+  Future<String?> _readLegacyString(IStorageService storage, String key) async {
+    try {
+      return await storage.getString(key);
+      // Catching an Error is the point here: the failure is a blind cast
+      // inside the storage backend, not a condition it reports as an
+      // Exception, and there is no type-probing read on IStorageService.
+      // ignore: avoid_catching_errors
+    } on TypeError {
+      return null;
     }
   }
 }
