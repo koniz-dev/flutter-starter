@@ -251,10 +251,7 @@ void main() {
         final result = await repository.deleteTask(taskId);
 
         // Assert
-        result.when(
-          success: (_) => expect(true, isTrue),
-          failureCallback: (_) => fail('Expected success'),
-        );
+        expect(result.isSuccess, isTrue, reason: 'Expected success: $result');
         verify(() => mockLocalDataSource.deleteTask(taskId)).called(1);
       });
 
@@ -293,10 +290,7 @@ void main() {
         final result = await repository.deleteCompletedTasks();
 
         // Assert
-        result.when(
-          success: (_) => expect(true, isTrue),
-          failureCallback: (_) => fail('Expected success'),
-        );
+        expect(result.isSuccess, isTrue, reason: 'Expected success: $result');
         // A single atomic read-modify-write, not a separate read then write.
         verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
         verifyNever(() => mockLocalDataSource.getAllTasks());
@@ -598,9 +592,10 @@ void main() {
           final result = await repository.deleteCompletedTasks();
 
           // Assert
-          result.when(
-            success: (_) => expect(true, isTrue),
-            failureCallback: (_) => fail('Expected success'),
+          expect(
+            result.isSuccess,
+            isTrue,
+            reason: 'Expected success: $result',
           );
           expect(stored, isEmpty);
         },
@@ -620,9 +615,10 @@ void main() {
           final result = await repository.deleteCompletedTasks();
 
           // Assert
-          result.when(
-            success: (_) => expect(true, isTrue),
-            failureCallback: (_) => fail('Expected success'),
+          expect(
+            result.isSuccess,
+            isTrue,
+            reason: 'Expected success: $result',
           );
           expect(stored.length, 2);
         },
@@ -638,10 +634,7 @@ void main() {
         final result = await repository.deleteTask('');
 
         // Assert
-        result.when(
-          success: (_) => expect(true, isTrue),
-          failureCallback: (_) => fail('Expected success'),
-        );
+        expect(result.isSuccess, isTrue, reason: 'Expected success: $result');
       });
 
       test('should handle getTaskById with empty string ID', () async {
@@ -667,9 +660,10 @@ void main() {
           final result = await repository.deleteCompletedTasks();
 
           // Assert
-          result.when(
-            success: (_) => expect(true, isTrue),
-            failureCallback: (_) => fail('Expected success'),
+          expect(
+            result.isSuccess,
+            isTrue,
+            reason: 'Expected success: $result',
           );
           expect(stored, isEmpty);
         },

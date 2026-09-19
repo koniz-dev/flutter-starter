@@ -94,11 +94,25 @@ void main() {
       await expectLater(MemoryHelper.disposeResources(), completes);
     });
 
-    test('should dispose resources and clear cache', () async {
-      // Verify that disposeResources calls clearImageCache
+    test('disposeResources empties a populated image cache', () async {
+      // The old version of this test awaited disposeResources over an empty
+      // cache and asserted `expect(true, isTrue)`, so it passed whether or not
+      // the cache was ever touched. Seeding the cache first is what makes the
+      // assertion mean anything. A completer that never delivers keeps the
+      // entry pending, which is enough to observe the clear and avoids
+      // decoding a real image (that needs `tester.runAsync`).
+      imageCache.putIfAbsent('memory-helper-test', _NeverCompletes.new);
+      expect(
+        imageCache.pendingImageCount,
+        greaterThan(0),
+        reason: 'the cache must actually hold something before it is cleared',
+      );
+
       await MemoryHelper.disposeResources();
-      // If no exception is thrown, the method executed successfully
-      expect(true, isTrue);
+
+      expect(imageCache.pendingImageCount, 0);
+      expect(imageCache.currentSize, 0);
+      expect(imageCache.liveImageCount, 0);
     });
   });
 
@@ -128,10 +142,14 @@ void main() {
 
     testWidgets('should handle empty disposables list', (tester) async {
       await tester.pumpWidget(const MaterialApp(home: _TestWidgetEmpty()));
+      expect(find.byType(_TestWidgetEmpty), findsOneWidget);
 
-      // Should not throw when disposing with no disposables
+      // Disposing with nothing registered must tear the widget down cleanly
+      // rather than throwing out of DisposalTracker.dispose.
       await tester.pumpWidget(const SizedBox());
-      expect(true, isTrue);
+
+      expect(find.byType(_TestWidgetEmpty), findsNothing);
+      expect(tester.takeException(), isNull);
     });
   });
 }
@@ -174,3 +192,7 @@ class _TestWidgetEmptyState extends State<_TestWidgetEmpty>
     return const SizedBox();
   }
 }
+
+/// An [ImageStreamCompleter] that never delivers a frame, so an entry put into
+/// [imageCache] stays pending until something clears the cache.
+class _NeverCompletes extends ImageStreamCompleter {}

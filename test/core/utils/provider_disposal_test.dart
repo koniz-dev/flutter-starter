@@ -70,14 +70,17 @@ void main() {
   group('ProviderLifecycleManager', () {
     test('should dispose ProviderContainer', () {
       final container = ProviderContainer();
+      final probe = Provider<String>((ref) => 'alive');
 
-      // Override dispose to track calls
-      // Note: ProviderContainer.dispose() is final, so we can't mock it
-      // This test verifies the method exists and accepts ProviderContainer
-      expect(container, isA<ProviderContainer>());
-      container.dispose();
-      // If we get here without error, the method works
-      expect(true, isTrue);
+      // The old version of this test called `container.dispose()` directly -
+      // never touching ProviderLifecycleManager at all - and ended in
+      // `expect(true, isTrue)`. Reading a provider after the call is what
+      // shows the container really was disposed.
+      expect(container.read(probe), 'alive');
+
+      ProviderLifecycleManager.disposeContainer(container);
+
+      expect(() => container.read(probe), throwsStateError);
     });
 
     test('should handle non-ProviderContainer gracefully', () {

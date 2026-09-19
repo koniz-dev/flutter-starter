@@ -68,24 +68,42 @@ class SslPinning {
         // Empty trusted roots force every connection through
         // badCertificateCallback, so the fingerprint check cannot be skipped.
         return HttpClient(context: SecurityContext())
-          ..badCertificateCallback = (cert, host, port) {
-            final certHash = sha256
-                .convert(cert.der)
-                .toString()
-                .replaceAll(':', '')
-                .toLowerCase();
-            final isPinned = accepted.contains(certHash);
-
-            if (!isPinned && AppConfig.isDebugMode) {
-              debugPrint(
-                'SSL Pinning failure for $host: \n'
-                'Expected one of: $accepted\n'
-                'Got: $certHash',
-              );
-            }
-            return isPinned;
-          };
+          ..badCertificateCallback = (cert, host, port) =>
+              _accepts(cert, host, accepted);
       },
     );
+  }
+
+  /// Whether [cert] matches one of [fingerprints].
+  ///
+  /// This is the exact decision the pinned adapter installs on its
+  /// [HttpClient]. It is exposed because `HttpClient.badCertificateCallback`
+  /// is setter-only in `dart:io`: once installed, the check cannot be read
+  /// back off the client, so there is no other way for a host-VM test to
+  /// assert that a mismatched fingerprint is rejected.
+  @visibleForTesting
+  bool acceptsCertificate(X509Certificate cert, {String host = ''}) =>
+      _accepts(cert, host, fingerprints);
+
+  static bool _accepts(
+    X509Certificate cert,
+    String host,
+    List<String> accepted,
+  ) {
+    final certHash = sha256
+        .convert(cert.der)
+        .toString()
+        .replaceAll(':', '')
+        .toLowerCase();
+    final isPinned = accepted.contains(certHash);
+
+    if (!isPinned && AppConfig.isDebugMode) {
+      debugPrint(
+        'SSL Pinning failure for $host: \n'
+        'Expected one of: $accepted\n'
+        'Got: $certHash',
+      );
+    }
+    return isPinned;
   }
 }

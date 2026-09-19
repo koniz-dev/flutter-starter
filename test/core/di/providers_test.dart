@@ -1,14 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/storage/migration/migration_executor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
-import 'package:flutter_starter/core/storage/storage_migration_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/storage/storage_version.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
@@ -27,6 +25,7 @@ import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_us
 import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   // Initialize Flutter binding for tests that need it
@@ -61,97 +60,6 @@ void main() {
         final service = container.read(iStorageServiceProvider);
         expect(service, isA<IStorageService>());
       });
-
-      test(
-        'storageInitializationProvider should initialize storage',
-        () async {
-          // In unit test environment, SharedPreferences plugin may not be
-          // available, so we handle MissingPluginException gracefully
-          try {
-            final storageService = container.read(storageServiceProvider);
-            await storageService.init();
-
-            final future = container.read(storageInitializationProvider.future);
-            await future;
-            expect(future, completes);
-          } on MissingPluginException {
-            // Expected in unit test environment - SharedPreferences plugin
-            // is not available. Test passes by handling the exception.
-            expect(true, isTrue);
-          }
-        },
-        timeout: const Timeout(Duration(seconds: 5)),
-      );
-
-      test(
-        'storageInitializationProvider should handle initialization errors',
-        () async {
-          // Test that the provider handles errors gracefully
-          // This covers the error handling paths in the provider
-          // Note: This test may timeout in unit test environment due to
-          // missing plugins, so we use a shorter timeout
-          try {
-            final future = container.read(storageInitializationProvider.future);
-            await future.timeout(
-              const Duration(seconds: 2),
-              onTimeout: () {
-                // Timeout is expected in unit test environment
-                return;
-              },
-            );
-          } on TimeoutException {
-            // Expected in unit test environment when plugins are missing
-            expect(true, isTrue);
-          } on MissingPluginException {
-            // Expected in unit test environment
-            expect(true, isTrue);
-          } on Exception catch (e) {
-            // Provider should handle other errors gracefully
-            expect(e, isNotNull);
-          }
-        },
-        timeout: const Timeout(Duration(seconds: 3)),
-      );
-
-      test('storageInitializationProvider should create '
-          'StorageMigrationService and call migrateAll', () async {
-        // This test ensures the code path where StorageMigrationService is
-        // created and migrateAll is called is covered
-        // In unit test environment, this may fail due to missing plugins,
-        // but we want to ensure the code path is executed
-        try {
-          final storageService = container.read(storageServiceProvider);
-          final secureStorageService = container.read(
-            secureStorageServiceProvider,
-          );
-          final loggingService = container.read(loggingServiceProvider);
-
-          // Initialize storage services first
-          await storageService.init();
-
-          // Create migration service directly to test the code path
-          // This mirrors what storageInitializationProvider does
-          final migrationService = StorageMigrationService(
-            storageService: storageService,
-            secureStorageService: secureStorageService,
-            loggingService: loggingService,
-          );
-
-          // Try to run migrations (may fail in unit test environment)
-          try {
-            await migrationService.migrateAll();
-          } on Exception catch (e) {
-            // Expected in unit test environment
-            expect(e, isNotNull);
-          }
-        } on MissingPluginException {
-          // Expected in unit test environment
-          expect(true, isTrue);
-        } on Exception {
-          // Expected in unit test environment
-          expect(true, isTrue);
-        }
-      }, timeout: const Timeout(Duration(seconds: 5)));
     });
 
     group('Auth Data Source Providers', () {
@@ -404,93 +312,134 @@ void main() {
       });
     });
 
-    group('Storage Initialization Provider - Error Handling', () {
-      test('storageInitializationProvider should handle errors '
-          'in storageService.init', () async {
-        // This test ensures the error handling path in
-        // storageInitializationProvider is covered when
-        // storageService.init() throws an exception
-        try {
-          final future = container.read(storageInitializationProvider.future);
-          await future.timeout(
-            const Duration(seconds: 2),
-            onTimeout: () {
-              // Timeout is expected in unit test environment
-              return;
-            },
-          );
-        } on TimeoutException {
-          // Expected in unit test environment when plugins are missing
-          expect(true, isTrue);
-        } on MissingPluginException {
-          // Expected in unit test environment
-          expect(true, isTrue);
-        } on Exception catch (e) {
-          // Provider should handle errors gracefully (covers lines 68-83)
-          expect(e, isNotNull);
-        }
-      }, timeout: const Timeout(Duration(seconds: 3)));
+    // Before #53 this group held three verbatim duplicates of the tests above,
+    // every one of which ended in `expect(true, isTrue)` or
+    // `expect(e, isNotNull)` inside a `catch`. Replacing the whole body of
+    // `storageInitializationProvider` with `async {}` left all of them green.
+    //
+    // These tests assert what the provider is actually for: both stores end up
+    // stamped at the current schema version, and a failure on either leg
+    // reaches the caller instead of being swallowed. `main()` awaits this
+    // provider before `runApp`, so a silent failure means launching on
+    // unmigrated data.
+    group('storageInitializationProvider', () {
+      final secureBacking = <String, String>{};
 
-      test(
-        'storageInitializationProvider should handle errors in migrateAll',
-        () async {
-          // This test ensures the error handling path when migrateAll() throws
-          try {
-            final future = container.read(storageInitializationProvider.future);
-            await future.timeout(
-              const Duration(seconds: 2),
-              onTimeout: () {
-                return;
-              },
-            );
-          } on TimeoutException {
-            expect(true, isTrue);
-          } on MissingPluginException {
-            expect(true, isTrue);
-          } on Exception catch (e) {
-            // Provider should handle errors gracefully
-            expect(e, isNotNull);
-          }
-        },
-        timeout: const Timeout(Duration(seconds: 3)),
-      );
+      /// Installs an in-memory Keychain for the secure store.
+      ///
+      /// Without it the plugin channel is unimplemented, every secure write is
+      /// swallowed into `false`, and the version stamp never persists.
+      void installSecureBackend() {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(_secureChannel, (methodCall) async {
+              final arguments = methodCall.arguments as Map<Object?, Object?>?;
+              final key = arguments?['key'] as String? ?? '';
+              switch (methodCall.method) {
+                case 'read':
+                  return secureBacking[key];
+                case 'write':
+                  secureBacking[key] = arguments?['value'] as String? ?? '';
+                  return null;
+                case 'delete':
+                  secureBacking.remove(key);
+                  return null;
+                case 'deleteAll':
+                  secureBacking.clear();
+                  return null;
+                default:
+                  return null;
+              }
+            });
+      }
 
-      test(
-        'storageInitializationProvider should create StorageMigrationService',
-        () async {
-          // This test ensures the code path where
-          // StorageMigrationService is created is executed
-          try {
-            final storageService = container.read(storageServiceProvider);
-            final secureStorageService = container.read(
-              secureStorageServiceProvider,
-            );
-            final loggingService = container.read(loggingServiceProvider);
+      void removeSecureBackend() {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(_secureChannel, null);
+      }
 
-            await storageService.init();
+      setUp(() {
+        SharedPreferences.setMockInitialValues({});
+        secureBacking.clear();
+        installSecureBackend();
+      });
 
-            // Create migration service to test the code path
-            final migrationService = StorageMigrationService(
-              storageService: storageService,
-              secureStorageService: secureStorageService,
-              loggingService: loggingService,
-            );
+      tearDown(() {
+        secureBacking.clear();
+        removeSecureBackend();
+      });
 
-            // Try to run migrations
-            try {
-              await migrationService.migrateAll();
-            } on Exception {
-              // Expected in unit test environment
-              expect(true, isTrue);
-            }
-          } on MissingPluginException {
-            expect(true, isTrue);
-          } on Exception {
-            expect(true, isTrue);
-          }
-        },
-        timeout: const Timeout(Duration(seconds: 5)),
-      );
+      test('stamps both stores at the current schema version', () async {
+        await container.read(storageInitializationProvider.future);
+
+        final storageService = container.read(storageServiceProvider);
+        expect(
+          await storageService.getString(StorageVersion.versionKey),
+          StorageVersion.current.toString(),
+          reason: 'regular storage must end up migrated, not merely touched',
+        );
+        expect(
+          secureBacking[StorageVersion.versionKey],
+          StorageVersion.current.toString(),
+          reason: 'the secure store is migrated on the same startup path',
+        );
+      }, timeout: const Timeout(Duration(seconds: 10)));
+
+      test('surfaces a storage init failure to the caller', () async {
+        final failingContainer = ProviderContainer(
+          overrides: [
+            storageServiceProvider.overrideWithValue(_FailingStorageService()),
+          ],
+        );
+        addTearDown(failingContainer.dispose);
+
+        await expectLater(
+          failingContainer.read(storageInitializationProvider.future),
+          throwsA(
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              _FailingStorageService.failureMessage,
+            ),
+          ),
+        );
+      }, timeout: const Timeout(Duration(seconds: 10)));
+
+      test('surfaces a migration failure to the caller', () async {
+        // No secure backend: every secure write is swallowed, so the version
+        // stamp cannot persist and MigrationExecutor reports it rather than
+        // returning a success the next launch would contradict.
+        removeSecureBackend();
+
+        // The retry opt-out is load-bearing and is NOT what `main()` does.
+        // Riverpod 3 retries any failure that is not an `Error`
+        // (ProviderContainer.defaultRetry), and
+        // `MigrationExecutionException implements Exception`, so on the bare
+        // `ProviderContainer()` that `main()` builds this same future never
+        // completes at all - measured at over 120 s with no result, which
+        // means the `StartupFailureApp` guard in `main()` never fires.
+        // TODO(koniz-dev): drop this override once the startup container
+        // opts out of retry - koniz-dev/flutter-starter#101.
+        final noRetryContainer = ProviderContainer(retry: (_, _) => null);
+        addTearDown(noRetryContainer.dispose);
+
+        await expectLater(
+          noRetryContainer.read(storageInitializationProvider.future),
+          throwsA(isA<MigrationExecutionException>()),
+        );
+      }, timeout: const Timeout(Duration(seconds: 10)));
     });
   });
+}
+
+const MethodChannel _secureChannel = MethodChannel(
+  'plugins.it_nomads.com/flutter_secure_storage',
+);
+
+/// A [StorageService] whose `init()` always fails, standing in for a storage
+/// backend that is unavailable at startup.
+class _FailingStorageService extends StorageService {
+  static const String failureMessage = 'storage backend unavailable';
+
+  @override
+  Future<void> init() async => throw StateError(failureMessage);
 }

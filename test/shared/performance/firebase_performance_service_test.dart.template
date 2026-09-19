@@ -96,14 +96,18 @@ void main() {
       });
 
       test('should add attributes when provided', () async {
+        var ran = false;
+
         await performanceService.measureOperation<void>(
           name: 'test_operation',
-          operation: () async {},
+          operation: () async {
+            ran = true;
+          },
           attributes: {'key': 'value'},
         );
 
-        // Operation should complete without errors
-        expect(true, isTrue);
+        // Attributes must not stop the wrapped operation from running.
+        expect(ran, isTrue);
       });
     });
 
@@ -139,14 +143,18 @@ void main() {
       });
 
       test('should add attributes when provided', () {
+        var ran = false;
+
         performanceService.measureSyncOperation<void>(
           name: 'test_operation',
-          operation: () {},
+          operation: () {
+            ran = true;
+          },
           attributes: {'key': 'value'},
         );
 
-        // Operation should complete without errors
-        expect(true, isTrue);
+        // Attributes must not stop the wrapped operation from running.
+        expect(ran, isTrue);
       });
     });
 
@@ -247,11 +255,16 @@ void main() {
 
     group('measureOperation - Edge Cases', () {
       test('should handle operation that returns void', () async {
+        var ran = false;
+
         await performanceService.measureOperation<void>(
           name: 'void_operation',
-          operation: () async {},
+          operation: () async {
+            ran = true;
+          },
         );
-        expect(true, isTrue);
+
+        expect(ran, isTrue);
       });
 
       test('should handle operation with complex return type', () async {
@@ -264,35 +277,50 @@ void main() {
       });
 
       test('should handle operation with multiple attributes', () async {
+        var ran = false;
+
         await performanceService.measureOperation<void>(
           name: 'multi_attr_operation',
-          operation: () async {},
+          operation: () async {
+            ran = true;
+          },
           attributes: {
             'key1': 'value1',
             'key2': 'value2',
             'key3': 'value3',
           },
         );
-        expect(true, isTrue);
+
+        expect(ran, isTrue);
       });
 
       test('should handle operation with empty attributes', () async {
+        var ran = false;
+
         await performanceService.measureOperation<void>(
           name: 'empty_attr_operation',
-          operation: () async {},
+          operation: () async {
+            ran = true;
+          },
           attributes: {},
         );
-        expect(true, isTrue);
+
+        expect(ran, isTrue);
       });
     });
 
     group('measureSyncOperation - Edge Cases', () {
       test('should handle operation that returns void', () {
+        var ran = false;
+
         performanceService.measureSyncOperation<void>(
           name: 'void_operation',
-          operation: () {},
+          operation: () {
+            ran = true;
+          },
         );
-        expect(true, isTrue);
+
+        expect(ran, isTrue);
       });
 
       test('should handle operation with complex return type', () {
@@ -306,11 +334,16 @@ void main() {
 
     group('measureSyncComputation - Edge Cases', () {
       test('should handle computation that returns void', () {
+        var ran = false;
+
         performanceService.measureSyncComputation<void>(
           operationName: 'void_computation',
-          computation: () {},
+          computation: () {
+            ran = true;
+          },
         );
-        expect(true, isTrue);
+
+        expect(ran, isTrue);
       });
 
       test('should handle computation with complex return type', () {
@@ -360,9 +393,10 @@ void main() {
 
       test('should handle exceptions gracefully', () async {
         when(() => mockTrace.start()).thenThrow(Exception('Test error'));
-        await performanceTrace.start();
-        // Should not throw
-        expect(true, isTrue);
+
+        // The failure is swallowed, but the call is still attempted.
+        await expectLater(performanceTrace.start(), completes);
+        verify(() => mockTrace.start()).called(1);
       });
     });
 
@@ -375,9 +409,9 @@ void main() {
 
       test('should handle exceptions gracefully', () {
         when(() => mockTrace.start()).thenThrow(Exception('Test error'));
-        performanceTrace.startSync();
-        // Should not throw
-        expect(true, isTrue);
+
+        expect(performanceTrace.startSync, returnsNormally);
+        verify(() => mockTrace.start()).called(1);
       });
     });
 
@@ -390,9 +424,9 @@ void main() {
 
       test('should handle exceptions gracefully', () async {
         when(() => mockTrace.stop()).thenThrow(Exception('Test error'));
-        await performanceTrace.stop();
-        // Should not throw
-        expect(true, isTrue);
+
+        await expectLater(performanceTrace.stop(), completes);
+        verify(() => mockTrace.stop()).called(1);
       });
     });
 
@@ -405,9 +439,9 @@ void main() {
 
       test('should handle exceptions gracefully', () {
         when(() => mockTrace.stop()).thenThrow(Exception('Test error'));
-        performanceTrace.stopSync();
-        // Should not throw
-        expect(true, isTrue);
+
+        expect(performanceTrace.stopSync, returnsNormally);
+        verify(() => mockTrace.stop()).called(1);
       });
     });
 
@@ -422,9 +456,12 @@ void main() {
         when(
           () => mockTrace.incrementMetric(any(), any()),
         ).thenThrow(Exception('Test error'));
-        performanceTrace.incrementMetric('success', 1);
-        // Should not throw
-        expect(true, isTrue);
+
+        expect(
+          () => performanceTrace.incrementMetric('success', 1),
+          returnsNormally,
+        );
+        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
       });
     });
 
@@ -439,9 +476,12 @@ void main() {
         when(
           () => mockTrace.incrementMetric(any(), any()),
         ).thenThrow(Exception('Test error'));
-        performanceTrace.putMetric('success', 1);
-        // Should not throw
-        expect(true, isTrue);
+
+        expect(
+          () => performanceTrace.putMetric('success', 1),
+          returnsNormally,
+        );
+        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
       });
     });
 
@@ -456,9 +496,12 @@ void main() {
         when(
           () => mockTrace.putAttribute(any(), any()),
         ).thenThrow(Exception('Test error'));
-        performanceTrace.putAttribute('key', 'value');
-        // Should not throw
-        expect(true, isTrue);
+
+        expect(
+          () => performanceTrace.putAttribute('key', 'value'),
+          returnsNormally,
+        );
+        verify(() => mockTrace.putAttribute('key', 'value')).called(1);
       });
     });
 
