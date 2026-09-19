@@ -1,4 +1,5 @@
-// Variant baseline: keep routes minimal; focus is on wiring.
+// Strip variant `--remove-tasks`: feature flags sample kept, tasks route
+// constants dropped along with the feature.
 // ignore_for_file: public_member_api_docs
 
 /// Application route paths and names.
@@ -18,14 +19,16 @@ class AppRoutes {
   static const String featureFlagsDebugName = 'feature-flags-debug';
 }
 
+/// Route parameter keys
 class RouteParams {
   RouteParams._();
 }
 
+/// Query parameter keys
 class RouteQueryParams {
   RouteQueryParams._();
 
-  // Destination the auth guard bounced away from, carried on `/login` so a
-  // deep link survives the login round trip.
+  /// Destination the auth guard bounced away from, carried on `/login` so a
+  /// deep link survives the login round trip.
   static const String redirect = 'redirect';
 }

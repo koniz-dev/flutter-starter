@@ -1,87 +1,31 @@
 // Removes sample `tasks` and `feature_flags` feature modules and rewires
-// the app using golden files under tool/golden/stripped/.
+// the app using golden files under tool/golden/<variant>/.
 //
 // Usage (from repository root):
-//   dart run tool/strip_sample_features.dart --apply
+//   dart run tool/strip_sample_features.dart --apply                       both
+//   dart run tool/strip_sample_features.dart --apply --remove-tasks
+//   dart run tool/strip_sample_features.dart --apply --remove-feature-flags
 //
 // Then:
 //   flutter pub get && flutter analyze && flutter test
+//
+// Every variant is exercised by .github/workflows/strip-smoke.yml. Adding a
+// golden file that no variant lists, or listing one that does not exist, is a
+// hard error here - that is what kept the partial variants broken while CI
+// only ever ran the `stripped` one.
 
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-void main(List<String> args) {
-  if (!args.contains('--apply')) {
-    stderr.writeln(
-      'Usage: dart run tool/strip_sample_features.dart --apply\n'
-      'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
-      'and core FeatureFlagsManager. Rewires entrypoints from '
-      'tool/golden/stripped/. Keeps auth sample.',
-    );
-    exitCode = 1;
-    return;
-  }
-
-  final removeTasks =
-      args.contains('--tasks-only') || args.contains('--remove-tasks');
-  final removeFeatureFlags =
-      args.contains('--feature-flags-only') ||
-      args.contains('--remove-feature-flags');
-  final removeBoth = !removeTasks && !removeFeatureFlags;
-
-  final root = Directory.current;
-  final scriptDir = File.fromUri(Platform.script).parent;
-  final goldenVariant = removeBoth
-      ? 'stripped'
-      : removeTasks
-      ? 'no_tasks'
-      : 'no_feature_flags';
-  final goldenRoot = Directory(p.join(scriptDir.path, 'golden', goldenVariant));
-  if (!goldenRoot.existsSync()) {
-    stderr.writeln('Missing golden directory: ${goldenRoot.path}');
-    exitCode = 2;
-    return;
-  }
-
-  if (removeBoth || removeTasks) {
-    _deleteDir(Directory(p.join(root.path, 'lib/features/tasks')));
-    _deleteDir(Directory(p.join(root.path, 'test/features/tasks')));
-  }
-  if (removeBoth || removeFeatureFlags) {
-    _deleteDir(Directory(p.join(root.path, 'lib/features/feature_flags')));
-    _deleteDir(Directory(p.join(root.path, 'test/features/feature_flags')));
-    _deleteDir(Directory(p.join(root.path, 'test/core/feature_flags')));
-  }
-
-  if (removeBoth || removeFeatureFlags) {
-    final manager = File(
-      p.join(root.path, 'lib/core/feature_flags/feature_flags_manager.dart'),
-    );
-    if (manager.existsSync()) {
-      manager.deleteSync();
-    }
-    final ffDir = Directory(p.join(root.path, 'lib/core/feature_flags'));
-    if (ffDir.existsSync() && ffDir.listSync().isEmpty) {
-      ffDir.deleteSync();
-    }
-  }
-
-  if (removeBoth || removeTasks) {
-    final f = File(p.join(root.path, 'docs/features/tasks.md'));
-    if (f.existsSync()) {
-      f.deleteSync();
-    }
-  }
-  if (removeBoth || removeFeatureFlags) {
-    final f = File(p.join(root.path, 'docs/features/feature-flags.md'));
-    if (f.existsSync()) {
-      f.deleteSync();
-    }
-  }
-
-  final goldenPath = goldenRoot.path;
-  for (final relative in [
+/// Files each variant overwrites from `tool/golden/<variant>/`.
+///
+/// Only files whose post-strip content actually differs from the committed
+/// tree are listed. The partial variants need far fewer overrides than
+/// `stripped` because `lib/core/routing/routes_registry.dart`, `lib/main.dart`
+/// and the home screen are already feature-agnostic on the committed tree.
+const _goldenOverrides = <String, List<String>>{
+  'stripped': [
     'lib/core/routing/app_router.dart',
     'lib/core/routing/app_router.g.dart',
     'lib/core/routing/routes_registry.dart',
@@ -94,28 +38,128 @@ void main(List<String> args) {
     'test/core/routing/navigation_extensions_test.dart',
     'integration_test/app_e2e_test.dart',
     'integration_test/auth_flow_test.dart',
-  ]) {
+  ],
+  'no_tasks': [
+    'lib/core/routing/app_routes.dart',
+    'lib/core/routing/navigation_extensions.dart',
+    'test/core/routing/navigation_extensions_test.dart',
+  ],
+  'no_feature_flags': [
+    'lib/core/routing/app_routes.dart',
+    'lib/core/routing/navigation_extensions.dart',
+  ],
+};
+
+void main(List<String> args) {
+  if (!args.contains('--apply')) {
+    stderr.writeln(
+      'Usage: dart run tool/strip_sample_features.dart --apply '
+      '[--remove-tasks] [--remove-feature-flags]\n'
+      'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
+      'and core FeatureFlagsManager. Rewires entrypoints from '
+      'tool/golden/<variant>/. Keeps auth sample.',
+    );
+    exitCode = 1;
+    return;
+  }
+
+  final tasksFlag =
+      args.contains('--tasks-only') || args.contains('--remove-tasks');
+  final featureFlagsFlag =
+      args.contains('--feature-flags-only') ||
+      args.contains('--remove-feature-flags');
+
+  // Naming both samples is the same request as naming neither: remove both.
+  // This used to fall through to `removeBoth == false`, which deleted both
+  // feature trees, installed the `no_tasks` golden over them and only then
+  // exited 3 - an unbuildable tree with no way back short of git.
+  final removeBoth = tasksFlag == featureFlagsFlag;
+  final removeTasks = removeBoth || tasksFlag;
+  final removeFeatureFlags = removeBoth || featureFlagsFlag;
+
+  final root = Directory.current;
+  final scriptDir = File.fromUri(Platform.script).parent;
+  final goldenVariant = removeBoth
+      ? 'stripped'
+      : tasksFlag
+      ? 'no_tasks'
+      : 'no_feature_flags';
+  final goldenRoot = Directory(p.join(scriptDir.path, 'golden', goldenVariant));
+  if (!goldenRoot.existsSync()) {
+    stderr.writeln('Missing golden directory: ${goldenRoot.path}');
+    exitCode = 2;
+    return;
+  }
+
+  // Validate the golden tree before deleting anything, so a bad golden set
+  // leaves the working tree untouched.
+  final overrides = _goldenOverrides[goldenVariant]!;
+  final goldenProblems = _validateGoldenTree(goldenRoot, overrides);
+  if (goldenProblems.isNotEmpty) {
+    stderr.writeln(
+      'Golden tree for variant "$goldenVariant" is inconsistent; '
+      'nothing was deleted:\n${goldenProblems.join('\n')}',
+    );
+    exitCode = 2;
+    return;
+  }
+
+  if (removeTasks) {
+    _deleteDir(Directory(p.join(root.path, 'lib/features/tasks')));
+    _deleteDir(Directory(p.join(root.path, 'test/features/tasks')));
+  }
+  if (removeFeatureFlags) {
+    _deleteDir(Directory(p.join(root.path, 'lib/features/feature_flags')));
+    _deleteDir(Directory(p.join(root.path, 'test/features/feature_flags')));
+    _deleteDir(Directory(p.join(root.path, 'test/core/feature_flags')));
+  }
+
+  if (removeFeatureFlags) {
+    final manager = File(
+      p.join(root.path, 'lib/core/feature_flags/feature_flags_manager.dart'),
+    );
+    if (manager.existsSync()) {
+      manager.deleteSync();
+    }
+    final ffDir = Directory(p.join(root.path, 'lib/core/feature_flags'));
+    if (ffDir.existsSync() && ffDir.listSync().isEmpty) {
+      ffDir.deleteSync();
+    }
+  }
+
+  if (removeTasks) {
+    final f = File(p.join(root.path, 'docs/features/tasks.md'));
+    if (f.existsSync()) {
+      f.deleteSync();
+    }
+  }
+  if (removeFeatureFlags) {
+    final f = File(p.join(root.path, 'docs/features/feature-flags.md'));
+    if (f.existsSync()) {
+      f.deleteSync();
+    }
+  }
+
+  final goldenPath = goldenRoot.path;
+  for (final relative in overrides) {
     _copyGoldenFile(goldenPath, root.path, relative);
   }
 
-  if (removeBoth || removeTasks || removeFeatureFlags) {
-    _patchProviders(
-      p.join(root.path, 'lib/core/di/providers.dart'),
-      removeTasks: removeBoth || removeTasks,
-      removeFeatureFlags: removeBoth || removeFeatureFlags,
-    );
-  }
-  if (removeBoth || removeTasks) {
+  _patchProviders(
+    p.join(root.path, 'lib/core/di/providers.dart'),
+    removeTasks: removeTasks,
+    removeFeatureFlags: removeFeatureFlags,
+  );
+  if (removeTasks) {
     _patchTestFixtures(p.join(root.path, 'test/helpers/test_fixtures.dart'));
     _patchMockFactories(p.join(root.path, 'test/helpers/mock_factories.dart'));
     _patchProvidersTest(p.join(root.path, 'test/core/di/providers_test.dart'));
   }
 
   final needles = <String>[
-    if (removeBoth || removeTasks) 'package:flutter_starter/features/tasks/',
-    if (removeBoth || removeFeatureFlags)
-      'package:flutter_starter/features/feature_flags/',
-    if (removeBoth || removeFeatureFlags)
+    if (removeTasks) 'package:flutter_starter/features/tasks/',
+    if (removeFeatureFlags) 'package:flutter_starter/features/feature_flags/',
+    if (removeFeatureFlags)
       'package:flutter_starter/core/feature_flags/feature_flags_manager.dart',
   ];
   final violations = _collectStrippedViolations(root, needles);
@@ -132,6 +176,31 @@ void main(List<String> args) {
   stdout.writeln(
     'Strip complete. Run: flutter pub get && flutter analyze && flutter test',
   );
+}
+
+/// Checks that `tool/golden/<variant>/` holds exactly the declared overrides.
+///
+/// A declared file that is absent would crash mid-strip; a file on disk that
+/// no variant declares is never copied, so it rots silently - which is how
+/// `no_tasks` and `no_feature_flags` came to import a routing layout that had
+/// been refactored away.
+List<String> _validateGoldenTree(Directory goldenRoot, List<String> declared) {
+  final onDisk =
+      goldenRoot
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .map((f) => p.relative(f.path, from: goldenRoot.path))
+          .map((rel) => p.split(rel).join('/'))
+          .toList()
+        ..sort();
+
+  final problems = <String>[
+    for (final rel in declared)
+      if (!onDisk.contains(rel)) '  missing golden file: $rel',
+    for (final rel in onDisk)
+      if (!declared.contains(rel)) '  golden file no variant copies: $rel',
+  ];
+  return problems;
 }
 
 void _copyGoldenFile(

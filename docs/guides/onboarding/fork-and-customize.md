@@ -74,6 +74,11 @@ dart run tool/strip_sample_features.dart --apply --tasks-only
 dart run tool/strip_sample_features.dart --apply --feature-flags-only
 ```
 
+Naming both samples is the same request as naming neither, so
+`--apply --tasks-only --feature-flags-only` behaves exactly like a bare `--apply`.
+
+All three variants are exercised by [`strip-smoke.yml`](../../../.github/workflows/strip-smoke.yml), which applies each one and then runs `flutter analyze` and `flutter test` over the result.
+
 Then delete or adjust any remaining docs under `docs/features/` that referenced removed modules.
 
 ## 5. Remove auth sample (advanced)

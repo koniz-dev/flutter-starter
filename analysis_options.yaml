@@ -15,6 +15,11 @@ analyzer:
     # Mason brick templates contain mustache placeholders (not valid Dart).
     - bricks/**/__brick__/**
     # Golden tree mirrors lib/ for strip_sample_features; not part of the app.
+    # Analyzing these in place would measure them against the unstripped
+    # sources they exist to replace, so the exclusion stays. Coverage comes
+    # from .github/workflows/strip-smoke.yml instead: it applies each strip
+    # variant and analyzes the resulting tree, which is the only state in
+    # which a golden's correctness is a meaningful question.
     - tool/golden/**
 
 linter:
