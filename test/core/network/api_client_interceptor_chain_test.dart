@@ -14,6 +14,7 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
@@ -33,7 +34,7 @@ class _MockSecureStorageService extends Mock implements SecureStorageService {}
 class _CountingAdapter implements HttpClientAdapter {
   _CountingAdapter(this._replies);
 
-  final List<ResponseBody Function()> _replies;
+  final List<_Reply> _replies;
 
   /// Number of times the transport was actually hit.
   int hits = 0;
@@ -46,21 +47,33 @@ class _CountingAdapter implements HttpClientAdapter {
   ) async {
     final index = hits < _replies.length ? hits : _replies.length - 1;
     hits++;
-    return _replies[index]();
+    return _replies[index](options);
   }
 
   @override
   void close({bool force = false}) {}
 }
 
-ResponseBody Function() _json(int statusCode, Map<String, dynamic> body) {
-  return () => ResponseBody.fromString(
+/// A scripted transport reply, given the options dio is about to send.
+typedef _Reply = ResponseBody Function(RequestOptions options);
+
+_Reply _json(int statusCode, Map<String, dynamic> body) {
+  return (_) => ResponseBody.fromString(
     jsonEncode(body),
     statusCode,
     headers: {
       Headers.contentTypeHeader: [Headers.jsonContentType],
     },
   );
+}
+
+/// Fails the transport with a real [DioException] of [type].
+///
+/// The exception carries the live [RequestOptions], so interceptors see the
+/// actual method - dio rethrows an adapter-thrown DioException untouched
+/// (`DioMixin.assureDioException`).
+_Reply _fails(DioExceptionType type) {
+  return (options) => throw DioException(requestOptions: options, type: type);
 }
 
 class _InMemoryTokenStore implements ITokenStore {
@@ -188,13 +201,24 @@ void main() {
       secureStorageService = _MockSecureStorageService();
     });
 
-    // POST is used throughout: CacheInterceptor only touches GET, so the
-    // storage mock is never called and the chain under test stays isolated.
+    // POST is used for the 401 and performance cases: CacheInterceptor only
+    // touches GET, so the storage mock is never called and the chain under
+    // test stays isolated.
+    //
+    // The retry case must use GET. Since #88, RetryInterceptor replays only
+    // safe methods by default, so a POST would reach the transport once and
+    // prove nothing about reachability. The GET path needs the cache lookup
+    // stubbed to a miss (see below) but exercises the identical error chain.
 
     test(
       'retries a 503 through the assembled client (1 original + 3 retries) '
       'and still surfaces a domain ServerException',
       () async {
+        // CacheInterceptor reads storage on GET; a miss lets the request out.
+        when(
+          () => storageService.getString(any()),
+        ).thenAnswer((_) async => null);
+
         final adapter = _CountingAdapter([
           _json(503, {'message': 'Service unavailable'}),
         ]);
@@ -210,14 +234,15 @@ void main() {
 
         Object? thrown;
         try {
-          await apiClient.post('/tasks', data: {'title': 'x'});
+          await apiClient.get('/tasks');
         } on Object catch (e) {
           thrown = e;
         }
 
-        // Criterion 1: RetryInterceptor is reachable on the error path.
+        // Criterion 1 of #46: RetryInterceptor is reachable on the error path.
         expect(adapter.hits, 4);
-        // Criterion 3: ErrorInterceptor still maps the exhausted failure.
+        // Criterion 3 of #46: ErrorInterceptor still maps the exhausted
+        // failure.
         expect(thrown, isA<ServerException>());
         expect((thrown! as ServerException).statusCode, 503);
         expect(thrown, isNot(isA<DioException>()));
@@ -291,5 +316,128 @@ void main() {
       expect(trace.getMetric(PerformanceMetrics.error), 1);
       expect(trace.getAttribute(PerformanceAttributes.httpStatusCode), '400');
     });
+  });
+
+  // Regression cover for koniz-dev/flutter-starter#88: retry became reachable
+  // for every method in #46, so a failing POST was replayed 4 times against a
+  // degraded backend. Only safe methods are replayed now.
+  group('ApiClient retry idempotency', () {
+    late _MockStorageService storageService;
+    late _MockSecureStorageService secureStorageService;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      secureStorageService = _MockSecureStorageService();
+    });
+
+    ApiClient buildClient(_CountingAdapter adapter) {
+      return ApiClient(
+        storageService: storageService,
+        secureStorageService: secureStorageService,
+        authInterceptor: AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async => const Success('unused'),
+        ),
+      )..dio.httpClientAdapter = adapter;
+    }
+
+    test('a POST that fails with 503 reaches the transport once', () async {
+      final adapter = _CountingAdapter([
+        _json(503, {'message': 'Service unavailable'}),
+      ]);
+      final apiClient = buildClient(adapter);
+
+      Object? thrown;
+      try {
+        await apiClient.post(
+          '/auth/register',
+          data: {'email': 'a@b.c', 'password': 'x'},
+        );
+      } on Object catch (e) {
+        thrown = e;
+      }
+
+      expect(adapter.hits, 1);
+      expect(thrown, isA<ServerException>());
+      expect((thrown! as ServerException).statusCode, 503);
+    });
+
+    final nonReplayableFailures = <String, _Reply>{
+      '503': _json(503, {'message': 'Service unavailable'}),
+      '500': _json(500, {'message': 'Boom'}),
+      'sendTimeout': _fails(DioExceptionType.sendTimeout),
+      'receiveTimeout': _fails(DioExceptionType.receiveTimeout),
+    };
+
+    for (final method in ['POST', 'PUT', 'PATCH', 'DELETE']) {
+      for (final failure in nonReplayableFailures.entries) {
+        test(
+          '$method failing with ${failure.key} reaches the transport once',
+          () async {
+            final adapter = _CountingAdapter([failure.value]);
+            final apiClient = buildClient(adapter);
+
+            await expectLater(
+              apiClient.dio.request<dynamic>(
+                '/orders',
+                data: {'amount': 1},
+                options: Options(method: method),
+              ),
+              throwsA(isA<DioException>()),
+            );
+
+            expect(
+              adapter.hits,
+              1,
+              reason: '$method must not be replayed on ${failure.key}',
+            );
+          },
+        );
+      }
+    }
+
+    test(
+      'a POST is still replayed on connectionTimeout, which proves the '
+      'request never reached the server',
+      () async {
+        final adapter = _CountingAdapter([
+          _fails(DioExceptionType.connectionTimeout),
+        ]);
+        final apiClient = buildClient(adapter);
+
+        await expectLater(
+          apiClient.post('/auth/register', data: {'email': 'a@b.c'}),
+          throwsA(isA<NetworkException>()),
+        );
+
+        expect(adapter.hits, 4);
+      },
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
+
+    test(
+      'an Idempotency-Key header opts a POST back into retry through the '
+      'ApiClient facade',
+      () async {
+        final adapter = _CountingAdapter([
+          _json(503, {'message': 'Service unavailable'}),
+        ]);
+        final apiClient = buildClient(adapter);
+
+        await expectLater(
+          apiClient.post(
+            '/orders',
+            data: {'amount': 1},
+            options: Options(
+              headers: {RetryInterceptor.idempotencyKeyHeader: 'key-1'},
+            ),
+          ),
+          throwsA(isA<ServerException>()),
+        );
+
+        expect(adapter.hits, 4);
+      },
+      timeout: const Timeout(Duration(minutes: 2)),
+    );
   });
 }
