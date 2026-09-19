@@ -1,0 +1,40 @@
+Criterion 8 - stale note removed, counts corrected, G4 gains an invalid-issue route
+
+8a. The stale CONTRIBUTING note is gone:
+$ grep -n "contradicts the current advice" docs/issue-workflow.md
+(no output above = removed)
+
+CONTRIBUTING.md is in fact correct, which is what made the note stale:
+$ grep -n "Refs owner/repo\|Refs koniz-dev" CONTRIBUTING.md
+146:- [ ] Related issues are referenced with `Refs owner/repo#N` (never `Closes`/`Fixes`/`Resolves`)
+402:- Reference issues in the footer as `Refs koniz-dev/flutter-starter#123`
+
+8b. The stale counts. Old text is gone:
+$ grep -rn "157 files\|134 test files\|all seven historical" CLAUDE.md docs/issue-workflow.md
+(no output above = corrected)
+
+Replaced with commit-anchored counts, because the repository moved twice while
+this issue was being worked (142 -> 143 -> 146 test files in a few hours):
+CLAUDE.md:6:`pubspec.yaml`, default branch `main`. As of `08cad8d`, 161 Dart files in
+docs/issue-workflow.md:704:As of `08cad8d`, 161 Dart files in `lib/` and 146 `*_test.dart` files under
+
+$ git log --oneline -1
+08cad8d test: make ten catch-swallowing tests and 24 vacuous assertions honest (#111)
+$ find lib -name "*.dart" | wc -l
+     161
+$ find test -name "*_test.dart" | wc -l
+     146
+$ gh pr list --state merged --limit 200 --json number --jq length   (was documented as "seven")
+65
+
+8c. G4 now has an explicit route for closing an invalid issue (CLAUDE.md):
+**The one exception to G4: an issue whose premise is false.** A bug that does
+not exist has nothing to verify, so demanding evidence would force a fabricated
+PASS table. Close it `--reason "not planned"` with a comment showing *why* the
+premise fails - the file and line that already behave correctly, or the command
+whose output contradicts the report - and no `docs/verification/` directory.
+That is the only close without evidence, and the comment is what makes it
+auditable. Precedents: koniz-dev/flutter-starter#25 and #84.
+
+and the matching recipe heading in docs/issue-workflow.md:
+667:### Close an invalid issue (no evidence directory)

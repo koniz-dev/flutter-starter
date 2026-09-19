@@ -1,0 +1,61 @@
+Criterion 5 - main is protected: NOT DONE, routed to status:needs-uat
+
+Current state of the repository (unchanged by this issue):
+$ gh api repos/koniz-dev/flutter-starter/branches/main/protection
+{"message":"Branch not protected","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"404"}gh: Branch not protected (HTTP 404)
+
+$ gh api repos/koniz-dev/flutter-starter/rulesets
+[]
+
+$ gh api repos/koniz-dev/flutter-starter --jq .permissions
+{"admin":true,"maintain":true,"pull":true,"push":true,"triage":true}
+
+WHY THIS WAS NOT DONE
+=====================
+
+The token has admin on the repository, so the API call is available in
+principle. It was attempted, with this payload:
+
+  PUT /repos/koniz-dev/flutter-starter/branches/main/protection
+  {
+    "required_status_checks": null,
+    "enforce_admins": true,
+    "required_pull_request_reviews": {
+      "dismiss_stale_reviews": false,
+      "require_code_owner_reviews": false,
+      "required_approving_review_count": 0
+    },
+    "restrictions": null,
+    "required_linear_history": false,
+    "allow_force_pushes": false,
+    "allow_deletions": false,
+    "block_creations": false,
+    "required_conversation_resolution": false,
+    "lock_branch": false,
+    "allow_fork_syncing": false
+  }
+
+The session's permission layer refused the call outright - it is a repository
+SETTINGS write, not a repository CONTENT write - so no protection was applied
+and nothing about the branch changed. That is an environment limit, not a
+judgement call, and it is why this criterion is routed to status:needs-uat with
+the payload above as the exact human step.
+
+THE TRAP A HUMAN MUST NOT WALK INTO
+===================================
+
+The criterion asks for "the Quality gate is a required status check". Applied
+literally, that bricks this repository's docs workflow:
+
+  .github/workflows/ci.yml carries
+      paths-ignore: ['**/*.md', 'docs/**']
+
+so the Quality gate never runs on a docs-only PR. A required status check that
+never reports leaves such a PR permanently unmergeable ("Expected - waiting for
+status to be reported"). Every acceptance-evidence PR this workflow produces is
+docs-only, so the loop would stop being able to close issues at all.
+
+Only the two unfiltered workflows are safe to mark required as things stand:
+"Issue refs" (added for criterion 4) and the three "Strip ... + analyze + test"
+jobs from strip-smoke.yml. Making Quality gate required first needs ci.yml
+reworked so the job always reports - a separate, tooling-ci change.

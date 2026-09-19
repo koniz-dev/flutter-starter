@@ -2,11 +2,12 @@
 
 Guidance for Claude Code sessions working in this repository.
 
-Flutter enterprise starter built on Clean Architecture: 161 Dart files in
-`lib/`, 142 `*_test.dart` files under `test/` (plus 2 in `integration_test/`),
-single root `pubspec.yaml`, default branch `main`. Recheck the counts with
-`find lib -name '*.dart' | wc -l` and `find test -name '*_test.dart' | wc -l`
-rather than trusting this line.
+Flutter enterprise starter built on Clean Architecture: single root
+`pubspec.yaml`, default branch `main`. As of `08cad8d`, 161 Dart files in
+`lib/` and 146 `*_test.dart` files under `test/` (plus 2 in
+`integration_test/`) - a count anchored to a commit, because the unanchored
+version in this line was wrong within a day twice running. Recheck with
+`find lib -name '*.dart' | wc -l` and `find test -name '*_test.dart' | wc -l`.
 
 ## Commands
 

@@ -701,9 +701,10 @@ has three verification tiers.
 
 ### Tier 1 - `flutter test` (agent-drivable, no device)
 
-161 Dart files in `lib/`, 142 `*_test.dart` files under `test/`
-(`find lib -name '*.dart' | wc -l`, `find test -name '*_test.dart' | wc -l`;
-recheck rather than trusting the numbers). Unit and widget tests run on the
+As of `08cad8d`, 161 Dart files in `lib/` and 146 `*_test.dart` files under
+`test/` - counts anchored to a commit, because an unanchored one here was stale
+by 3 files the day it was written (`find lib -name '*.dart' | wc -l`,
+`find test -name '*_test.dart' | wc -l`). Unit and widget tests run on the
 host VM.
 Widget tests can pump real screens through
 [`test/helpers/pump_app.dart`](../test/helpers/pump_app.dart) and assert against

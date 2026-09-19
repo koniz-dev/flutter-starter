@@ -1,0 +1,49 @@
+Criterion 7 - the epic list lives only in scripts/bootstrap-issue-labels.sh
+
+$ grep -rn "epic:core-network" CLAUDE.md docs/ .claude/ README.md CONTRIBUTING.md --exclude-dir=verification
+docs/issue-workflow.md:512:  --add-label type:bug --add-label epic:core-network --add-label priority:P2 \
+
+(the single hit is an example inside a gh command, not a list)
+
+$ grep -rn "epic:core-network" scripts/
+
+What the docs say instead (docs/issue-workflow.md, Epic section):
+### Epic
+
+One functional area per issue. Each epic maps to a real directory or surface in
+the tree, so "which epic" is answerable by looking at the diff.
+
+**The list is not reproduced here.** It lives in the `EPICS` array of
+[`scripts/bootstrap-issue-labels.sh`](../scripts/bootstrap-issue-labels.sh),
+which also creates the labels, so the script, the live labels and every reader
+cannot drift apart. A copy in this document had already drifted from it once.
+Read it with:
+
+```bash
+./scripts/bootstrap-issue-labels.sh --list-epics          # slugs only
+./scripts/bootstrap-issue-labels.sh --dry-run             # slugs + descriptions
+```
+
+Exactly one per issue. If a change genuinely spans two epics, it is too big:
+split it. If no epic fits, that is a taxonomy gap and a human decision - say so
+rather than forcing the nearest label.
+
+### Priority
+
+$ ./scripts/bootstrap-issue-labels.sh --list-epics
+epic:core-network
+epic:core-storage
+epic:core-security
+epic:core-config
+epic:core-routing
+epic:feature-auth
+epic:feature-tasks
+epic:design-system
+epic:testing
+epic:tooling-ci
+epic:docs
+
+(the scripts/ grep above is empty because the script stores slugs unprefixed
+in its EPICS array and adds "epic:" when creating labels:)
+$ grep -n "core-network" scripts/bootstrap-issue-labels.sh
+52:  "core-network|lib/core/network: Dio ApiClient, interceptors, realtime/WebSocket"
