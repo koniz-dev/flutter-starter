@@ -1,13 +1,7 @@
-import 'package:flutter/foundation.dart';
-
 // Compatibility facade keeps legacy API signatures and formatting for now.
-// ignore_for_file: directives_ordering, lines_longer_than_80_chars
+// ignore_for_file: directives_ordering
 
-import 'dart:io';
-
-import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
@@ -21,6 +15,7 @@ import 'package:flutter_starter/core/network/interceptors/error_interceptor.dart
 
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
+import 'package:flutter_starter/core/network/ssl_pinning.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
@@ -37,18 +32,22 @@ class ApiClient {
   /// [ApiLoggingInterceptor] for HTTP logging.
   /// [performanceService] - Optional performance service for automatic HTTP
   /// request tracking
+  /// [sslPinning] - Certificate pinning policy; defaults to
+  /// [SslPinning.fromConfig] (`ENABLE_SSL_PINNING` / `API_SSL_FINGERPRINTS`)
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
     required AuthInterceptor authInterceptor,
     LoggingService? loggingService,
     IPerformanceService? performanceService,
+    SslPinning? sslPinning,
   }) : _dio = _createDio(
          storageService,
          secureStorageService,
          authInterceptor,
          loggingService,
          performanceService,
+         sslPinning ?? SslPinning.fromConfig(),
        ) {
     _networkClient = DioNetworkClient(_dio);
   }
@@ -59,6 +58,7 @@ class ApiClient {
     AuthInterceptor authInterceptor,
     LoggingService? loggingService,
     IPerformanceService? performanceService,
+    SslPinning sslPinning,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -72,33 +72,19 @@ class ApiClient {
       ),
     );
 
-    // SSL Pinning Configuration
-    if (AppConfig.enableSslPinning && AppConfig.apiSslFingerprints.isNotEmpty) {
-      dio.httpClientAdapter = IOHttpClientAdapter(
-        createHttpClient: () {
-          // Initialize with empty trusted roots to force all connections through badCertificateCallback
-          return HttpClient(context: SecurityContext())
-            ..badCertificateCallback = (cert, host, port) {
-              // Compute SHA-256 fingerprint from the certificate DER
-              final certHash = sha256
-                  .convert(cert.der)
-                  .toString()
-                  .replaceAll(':', '')
-                  .toLowerCase();
-              final isPinned = AppConfig.apiSslFingerprints.contains(certHash);
-
-              if (!isPinned && AppConfig.isDebugMode) {
-                debugPrint(
-                  'SSL Pinning failure for $host: \n'
-                  'Expected one of: ${AppConfig.apiSslFingerprints}\n'
-                  'Got: $certHash',
-                );
-              }
-              return isPinned;
-            };
-        },
-      );
+    // SSL Pinning Configuration.
+    //
+    // Returns null when pinning is off; when it is requested without
+    // fingerprints, SslPinning logs and asserts instead of degrading quietly.
+    final pinnedAdapter = sslPinning.createAdapter();
+    if (pinnedAdapter != null) {
+      dio.httpClientAdapter = pinnedAdapter;
     }
+
+    // Let the 401 replay client borrow this transport, so a retry carrying a
+    // freshly minted access token goes through the same pinned adapter
+    // instead of a bare, system-trust-store Dio.
+    authInterceptor.attachTransport(dio);
 
     // Add interceptors - Order matters!
     //

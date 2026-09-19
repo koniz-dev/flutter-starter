@@ -180,6 +180,37 @@ void main() {
         expect(debugInfo.containsKey('enableHttpLogging'), isTrue);
       });
 
+      test('getDebugInfo should report effective SSL pinning state', () {
+        // Regression cover for koniz-dev/flutter-starter#59: the dump used to
+        // report only the requested flag, so an adopter with
+        // ENABLE_SSL_PINNING=true and no fingerprints saw "true" while
+        // nothing was pinned.
+        final debugInfo = AppConfig.getDebugInfo();
+
+        expect(debugInfo.containsKey('enableSslPinning'), isTrue);
+        expect(debugInfo.containsKey('sslPinningEffective'), isTrue);
+        expect(debugInfo.containsKey('sslPinningMisconfigured'), isTrue);
+        expect(debugInfo['sslPinningEffective'], AppConfig.sslPinningEffective);
+        expect(
+          debugInfo['sslPinningMisconfigured'],
+          AppConfig.sslPinningMisconfigured,
+        );
+        // Effective means requested AND at least one fingerprint.
+        expect(
+          AppConfig.sslPinningEffective,
+          AppConfig.enableSslPinning && AppConfig.apiSslFingerprints.isNotEmpty,
+        );
+        expect(
+          AppConfig.sslPinningMisconfigured,
+          AppConfig.enableSslPinning && AppConfig.apiSslFingerprints.isEmpty,
+        );
+        // Requesting pinning without fingerprints can never be effective.
+        expect(
+          AppConfig.sslPinningEffective && AppConfig.sslPinningMisconfigured,
+          isFalse,
+        );
+      });
+
       test('getDebugInfo should contain app info', () {
         final debugInfo = AppConfig.getDebugInfo();
         expect(debugInfo.containsKey('appBuildNumber'), isTrue);
@@ -318,6 +349,33 @@ void main() {
 
       test('printConfig should not throw in debug mode', () {
         expect(AppConfig.printConfig, returnsNormally);
+      });
+
+      test('printConfig should print the effective SSL pinning state', () {
+        // Regression cover for koniz-dev/flutter-starter#59.
+        final lines = <String>[];
+        final original = debugPrint;
+        debugPrint = (message, {wrapWidth}) => lines.add(message ?? '');
+        try {
+          AppConfig.printConfig();
+        } finally {
+          debugPrint = original;
+        }
+
+        expect(
+          lines,
+          contains('  SSL Pinning Requested: ${AppConfig.enableSslPinning}'),
+        );
+        expect(
+          lines,
+          contains(
+            '  SSL Pinning Effective: ${AppConfig.sslPinningEffective}',
+          ),
+        );
+        expect(
+          lines.where((l) => l.contains('SSL PINNING MISCONFIGURED')),
+          AppConfig.sslPinningMisconfigured ? hasLength(1) : isEmpty,
+        );
       });
     });
   });
