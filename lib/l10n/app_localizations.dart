@@ -503,6 +503,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Updated'**
   String get updatedAt;
+
+  /// Title of the 404 screen shown for an unmatched route
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get pageNotFoundTitle;
+
+  /// Body text of the 404 screen shown for an unmatched route
+  ///
+  /// In en, this message translates to:
+  /// **'The page you are looking for does not exist.'**
+  String get pageNotFoundMessage;
+
+  /// Action on the 404 screen that returns to the home route
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get backToHome;
 }
 
 class _AppLocalizationsDelegate

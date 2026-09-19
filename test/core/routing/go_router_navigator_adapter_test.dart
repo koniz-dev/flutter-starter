@@ -73,14 +73,19 @@ void main() {
       verifyNever(() => router.go(any()));
     });
 
-    test('back should go to login when canPop is false', () async {
+    test('back should go home when canPop is false', () async {
+      // Home, not login: for an authenticated user with an empty stack,
+      // going to /login is a real navigation that the auth guard immediately
+      // bounces back to /, rebuilding home and logging two spurious events.
+      // This matches NavigationExtensions.popOrGoToHome.
       when(() => router.canPop()).thenReturn(false);
       when(() => router.go(any())).thenAnswer((_) {});
 
       await navigator.back<void>();
 
       verify(() => router.canPop()).called(1);
-      verify(() => router.go(AppRoutes.login)).called(1);
+      verify(() => router.go(AppRoutes.home)).called(1);
+      verifyNever(() => router.go(AppRoutes.login));
       verifyNever(() => router.pop<void>(any()));
     });
   });

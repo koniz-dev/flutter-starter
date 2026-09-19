@@ -292,6 +292,18 @@
   "updatedAt": "Đã cập nhật",
   "@updatedAt": {
     "description": "Updated at label"
+  },
+  "pageNotFoundTitle": "Không tìm thấy trang",
+  "@pageNotFoundTitle": {
+    "description": "Title of the 404 screen shown for an unmatched route"
+  },
+  "pageNotFoundMessage": "Trang bạn tìm không tồn tại.",
+  "@pageNotFoundMessage": {
+    "description": "Body text of the 404 screen shown for an unmatched route"
+  },
+  "backToHome": "Về trang chủ",
+  "@backToHome": {
+    "description": "Action on the 404 screen that returns to the home route"
   }
 }
 

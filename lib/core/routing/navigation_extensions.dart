@@ -32,7 +32,7 @@ extension NavigationExtensions on BuildContext {
   /// Navigate to register screen
   void goToRegister() => go(AppRoutes.register);
 
-  /// Navigate to feature flags debug screen (nested route)
+  /// Navigate to the feature flags debug screen
   void goToFeatureFlagsDebug() => go(AppRoutes.featureFlagsDebug);
 
   /// Navigate to tasks list screen
@@ -88,13 +88,23 @@ extension NavigationExtensions on BuildContext {
     pop<T>(result);
   }
 
-  /// Pop until a specific route
+  /// Pop until [location] is the top of the stack.
+  ///
+  /// Reads the location from the router rather than from `this`.
+  /// `GoRouterState.of(this)` is the state of the caller's own `ModalRoute`,
+  /// and this element is not rebuilt during a synchronous loop, so it is a
+  /// loop invariant: the old form either stopped on iteration 0 or popped the
+  /// whole stack.
   void popUntilRoute(String location) {
-    while (canPop()) {
-      if (GoRouterState.of(this).matchedLocation == location) {
+    final router = GoRouter.of(this);
+    while (router.state.matchedLocation != location && router.canPop()) {
+      final before = router.state.matchedLocation;
+      router.pop();
+      // A route with an `onExit` guard defers its pop, leaving the match list
+      // untouched. Without this the loop would spin forever.
+      if (router.state.matchedLocation == before) {
         break;
       }
-      pop();
     }
   }
 

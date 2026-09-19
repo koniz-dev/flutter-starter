@@ -101,6 +101,18 @@
   "taskDetails": "Detalles de la Tarea",
   "taskStatus": "Estado",
   "createdAt": "Creada",
-  "updatedAt": "Actualizada"
+  "updatedAt": "Actualizada",
+  "pageNotFoundTitle": "Página no encontrada",
+  "@pageNotFoundTitle": {
+    "description": "Title of the 404 screen shown for an unmatched route"
+  },
+  "pageNotFoundMessage": "La página que buscas no existe.",
+  "@pageNotFoundMessage": {
+    "description": "Body text of the 404 screen shown for an unmatched route"
+  },
+  "backToHome": "Volver al inicio",
+  "@backToHome": {
+    "description": "Action on the 404 screen that returns to the home route"
+  }
 }
 

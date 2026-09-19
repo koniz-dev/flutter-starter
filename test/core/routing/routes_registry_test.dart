@@ -14,7 +14,8 @@ void main() {
       final appRoutesProvider = Provider<List<RouteBase>>(buildAppRoutes);
       final routes = container.read(appRoutesProvider);
 
-      // Stripped baseline: auth routes first, then home.
+      // Auth routes first, home last; any sample-feature modules sit between
+      // them, so this holds for every strip variant.
       expect(routes.length, greaterThanOrEqualTo(3));
 
       final authRoutesProvider = Provider<List<RouteBase>>(buildAuthRoutes);
@@ -30,6 +31,8 @@ void main() {
       }
 
       // Last route is home route (per routes_registry).
+      // Feature modules assert their own registration in
+      // test/features/<feature>/routing/.
       final homeRouteProvider = Provider<GoRoute>(buildHomeRoute);
       final expectedHome = container.read(homeRouteProvider);
       final actualHome = routes.last as GoRoute;

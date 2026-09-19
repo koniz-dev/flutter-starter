@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_logging.dart';
+import 'package:flutter_starter/core/routing/route_not_found_screen.dart';
 import 'package:flutter_starter/core/routing/routes_registry.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,10 @@ GoRouter goRouter(Ref ref) {
     debugLogDiagnostics: kDebugMode,
     observers: [NavigationLoggingObserver(loggingService: loggingService)],
     routes: buildAppRoutes(ref),
+    // Without this, an unmatched location renders go_router's own red debug
+    // page - framework exception and stack trace, at the user.
+    errorBuilder: (context, state) =>
+        RouteNotFoundScreen(location: state.uri.toString()),
     redirect: (context, state) {
       final restoration = ref.read(sessionRestorationProvider);
       final authState = ref.read(authNotifierProvider);
