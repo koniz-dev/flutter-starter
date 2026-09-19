@@ -10,7 +10,9 @@ import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
+import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 
@@ -29,7 +31,19 @@ Future<void> main() async {
 
   final container = ProviderContainer();
 
-  await container.read(storageInitializationProvider.future);
+  // Storage initialization runs the schema migrations. It is the one startup
+  // step that can fail with the user's local data on the line, and throwing
+  // here means `runApp` is never reached: a black window on every launch,
+  // with no way out. Catching `Object` rather than `Exception` is deliberate
+  // - a migration reading a key whose stored type changed throws a
+  // `TypeError`, which is an `Error`.
+  try {
+    await container.read(storageInitializationProvider.future);
+  } on Object catch (error) {
+    container.dispose();
+    runApp(StartupFailureApp(error: error, onRetry: main));
+    return;
+  }
 
   // Restore a session persisted by a previous launch BEFORE the first frame.
   // Without this the app boots unauthenticated, the router redirects to

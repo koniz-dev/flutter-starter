@@ -62,8 +62,23 @@ abstract class StorageMigration {
   }
 
   /// Set the storage version after successful migration
+  ///
+  /// Throws [MigrationException] when the write is rejected. The result must
+  /// not be discarded: `SecureStorageService` swallows its own errors and
+  /// returns false, so an unavailable Keychain would otherwise leave the data
+  /// migrated but the version stamp untouched - and the whole chain would run
+  /// again on every launch.
   Future<void> _setVersion(IStorageService storage, int version) async {
-    await storage.setString(StorageVersion.versionKey, version.toString());
+    final persisted = await storage.setString(
+      StorageVersion.versionKey,
+      version.toString(),
+    );
+    if (!persisted) {
+      throw MigrationException(
+        'Migration to v$version applied but the storage version stamp could '
+        'not be written. Storage is still marked as v$fromVersion.',
+      );
+    }
   }
 
   /// Execute migration with validation and version update

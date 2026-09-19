@@ -124,11 +124,32 @@ if (oldTheme != null) {
 
 ### Migrating Lists
 
+Changing the *type* stored under a key is the one pattern that is not safely
+re-runnable by default. `SharedPreferences.getString` casts the cached value
+blindly, so reading a key that now holds a `List<String>` throws a `TypeError`
+- an `Error`, not an `Exception`, so `on Exception` handlers do not catch it.
+
+Prefer a new key:
+
 ```dart
 final oldTags = await storage.getString('user_tags');
-if (oldTags != null && oldTags.isNotEmpty) {
-  final tagsList = oldTags.split(',').map((e) => e.trim()).toList();
-  await storage.setStringList('user_tags', tagsList);
+if (oldTags != null) {
+  await storage.setStringList('tags', oldTags.split(',').map((e) => e.trim()).toList());
+  await storage.remove('user_tags');
+}
+```
+
+If you must reuse the key, guard the read so a second run sees nothing to do -
+this is what `MigrationV1ToV2` does:
+
+```dart
+Future<String?> _readLegacyString(IStorageService storage, String key) async {
+  try {
+    return await storage.getString(key);
+    // ignore: avoid_catching_errors
+  } on TypeError {
+    return null; // already converted by an earlier run
+  }
 }
 ```
 
@@ -213,6 +234,31 @@ test('migration renames key correctly', () async {
 });
 ```
 
+## Failure Modes
+
+The executor fails loudly rather than reporting a success it cannot back up.
+Each of these throws out of `migrateAll()`, and `main.dart` catches it and
+shows `StartupFailureApp` instead of leaving a blank window:
+
+| Situation | Result |
+|---|---|
+| No migration registered for the stored version | `MigrationPathException` |
+| Gap mid-chain (v1->v2 and v3->v4 registered, current 4) | `MigrationPathException`, thrown before any migration runs |
+| A registered migration jumps past `StorageVersion.current` | `MigrationPathException` |
+| Stored version is newer than `StorageVersion.current` | `StorageDowngradeException` |
+| Stored version equals `StorageVersion.current` | Success, nothing runs |
+| A migration throws | `MigrationExecutionException` |
+| The version stamp write is rejected | `MigrationException` -> `MigrationExecutionException` |
+
+The chain is planned in full before the first migration runs, so a gap never
+leaves storage half-migrated. `migration_registry_test.dart` walks the same
+chain, which means bumping `StorageVersion.current` without registering the
+matching migration fails CI rather than a user's device.
+
+`SecureStorageService` swallows platform errors and returns `false`. The
+version stamp write therefore checks its return value: an unavailable Keychain
+is a migration failure, not a silent no-op that re-runs on every launch.
+
 ## Storage-Specific Migrations
 
 If you need different migrations for regular vs secure storage, override the registry methods:
@@ -267,11 +313,13 @@ await migrationService.migrateSecure();
 
 ### Version Mismatch
 
-If you see version mismatch warnings:
+If startup fails with a version mismatch:
 
 1. Check that all migrations update version correctly
-2. Verify migration chain is complete (no gaps)
+2. Verify migration chain is complete (no gaps) - see Failure Modes above
 3. Check for corrupted version data
+4. On secure storage, confirm the Keychain / EncryptedSharedPreferences is
+   actually writable; a rejected version write now fails the migration
 
 ## Testing
 

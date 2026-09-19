@@ -14,16 +14,21 @@ void main() {
       expect(db, isNotNull);
     });
 
-    test('calls init gracefully', () async {
-      expect(() => db.init(), returnsNormally);
+    // `returnsNormally` is a synchronous matcher: against an async method it
+    // only asserts that calling it returned a Future, which is true even of
+    // an implementation that always throws (#60). Await the future instead.
+    test('init completes', () async {
+      await expectLater(db.init(), completes);
     });
 
-    test('calls save gracefully', () async {
-      expect(() => db.save<String>('Test Object'), returnsNormally);
+    test('save completes and stores nothing (template is a no-op)', () async {
+      await expectLater(db.save<String>('Test Object'), completes);
+      expect(await db.getAll<String>(), isEmpty);
     });
 
-    test('calls saveAll gracefully', () async {
-      expect(() => db.saveAll<String>(['Obj1', 'Obj2']), returnsNormally);
+    test('saveAll completes and stores nothing', () async {
+      await expectLater(db.saveAll<String>(['Obj1', 'Obj2']), completes);
+      expect(await db.getAll<String>(), isEmpty);
     });
 
     test('returns empty list for getAll', () async {
@@ -41,12 +46,13 @@ void main() {
       expect(result, isFalse);
     });
 
-    test('calls clear gracefully', () async {
-      expect(() => db.clear<String>(), returnsNormally);
+    test('clear completes', () async {
+      await expectLater(db.clear<String>(), completes);
+      expect(await db.getAll<String>(), isEmpty);
     });
 
-    test('calls close gracefully', () async {
-      expect(() => db.close(), returnsNormally);
+    test('close completes', () async {
+      await expectLater(db.close(), completes);
     });
   });
 }

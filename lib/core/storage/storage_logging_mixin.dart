@@ -22,6 +22,19 @@ import 'package:flutter_starter/core/logging/logging_service.dart';
 /// }
 /// ```
 mixin StorageLoggingMixin {
+  /// Key-name fragments whose values are never logged
+  ///
+  /// Matched against the storage key, lower-cased.
+  static const sensitiveKeyPatterns = <String>[
+    'password',
+    'token',
+    'secret',
+    'key',
+    'auth',
+    'credential',
+    'session',
+  ];
+
   /// Logging service instance (must be provided by implementing class)
   LoggingService get loggingService;
 
@@ -30,7 +43,7 @@ mixin StorageLoggingMixin {
     final context = <String, dynamic>{
       'operation': operation,
       'key': key,
-      if (value != null) 'value': _sanitizeValue(value),
+      if (value != null) 'value': _sanitizeValue(key, value),
     };
 
     loggingService.debug('Storage Read: $operation', context: context);
@@ -41,7 +54,7 @@ mixin StorageLoggingMixin {
     final context = <String, dynamic>{
       'operation': operation,
       'key': key,
-      if (value != null) 'value': _sanitizeValue(value),
+      if (value != null) 'value': _sanitizeValue(key, value),
     };
 
     loggingService.debug('Storage Write: $operation', context: context);
@@ -72,13 +85,17 @@ mixin StorageLoggingMixin {
   }
 
   /// Sanitize sensitive values before logging
-  dynamic _sanitizeValue(dynamic value) {
+  ///
+  /// Sensitivity is decided by the **key**, never by the value. A real JWT
+  /// contains none of [sensitiveKeyPatterns] - matching against the value
+  /// would log the header and most of the payload of a token stored under a
+  /// key the caller already named `auth_token`, while redacting a harmless
+  /// note that happens to contain the word "keyboard".
+  dynamic _sanitizeValue(String key, dynamic value) {
     if (value == null) return null;
 
-    final valueString = value.toString().toLowerCase();
-    const sensitivePatterns = ['password', 'token', 'secret', 'key', 'auth'];
-
-    final isSensitive = sensitivePatterns.any(valueString.contains);
+    final keyName = key.toLowerCase();
+    final isSensitive = sensitiveKeyPatterns.any(keyName.contains);
 
     if (isSensitive) {
       return '***REDACTED***';

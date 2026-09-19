@@ -71,10 +71,10 @@ void main() {
       );
 
       final result = await executor.execute();
-      expect(result, greaterThanOrEqualTo(StorageVersion.initial));
+      expect(result, equals(StorageVersion.current));
 
       final version = await storage.getString(StorageVersion.versionKey);
-      expect(version, isNotNull);
+      expect(version, equals(StorageVersion.current.toString()));
     });
 
     test('execute handles corrupted version gracefully', () async {
@@ -87,10 +87,10 @@ void main() {
       );
 
       final result = await executor.execute();
-      expect(result, greaterThanOrEqualTo(StorageVersion.initial));
+      expect(result, equals(StorageVersion.current));
 
       final version = await storage.getString(StorageVersion.versionKey);
-      expect(int.tryParse(version ?? ''), isNotNull);
+      expect(version, equals(StorageVersion.current.toString()));
     });
 
     test('execute runs migrations in correct order', () async {
@@ -139,7 +139,216 @@ void main() {
         expect(executor.execute, throwsA(isA<MigrationExecutionException>()));
       },
     );
+
+    // A missing migration path used to log a warning and return the stale
+    // version, which every caller discards - so the app started and read
+    // new-shaped keys off old-shaped data.
+    group('missing migration path (#60)', () {
+      test('throws when no migration reaches the target version', () async {
+        await storage.setString(StorageVersion.versionKey, '1');
+
+        final executor = MigrationExecutor(
+          storage: storage,
+          loggingService: loggingService,
+          migrations: const [],
+        );
+
+        await expectLater(
+          executor.execute(),
+          throwsA(
+            isA<MigrationPathException>()
+                .having((e) => e.currentVersion, 'currentVersion', 1)
+                .having(
+                  (e) => e.targetVersion,
+                  'targetVersion',
+                  StorageVersion.current,
+                )
+                .having((e) => e.missingFromVersion, 'missingFromVersion', 1),
+          ),
+        );
+
+        // Nothing ran, so the stamp is untouched.
+        expect(await storage.getString(StorageVersion.versionKey), '1');
+      });
+
+      test('throws on a mid-chain gap (v1->v2, v3->v4, target 4)', () async {
+        await storage.setString(StorageVersion.versionKey, '1');
+
+        final executed = <int>[];
+        final executor = MigrationExecutor(
+          storage: storage,
+          loggingService: loggingService,
+          targetVersion: 4,
+          migrations: [
+            _TestMigration(
+              fromVersion: 1,
+              toVersion: 2,
+              onExecute: () => executed.add(1),
+            ),
+            _TestMigration(
+              fromVersion: 3,
+              toVersion: 4,
+              onExecute: () => executed.add(3),
+            ),
+          ],
+        );
+
+        await expectLater(
+          executor.execute(),
+          throwsA(
+            isA<MigrationPathException>().having(
+              (e) => e.missingFromVersion,
+              'missingFromVersion',
+              2,
+            ),
+          ),
+        );
+
+        // The chain is planned before anything runs, so v1->v2 did not fire
+        // and storage was not left half-migrated.
+        expect(executed, isEmpty);
+        expect(await storage.getString(StorageVersion.versionKey), '1');
+      });
+
+      test('throws when a migration overshoots the target version', () async {
+        await storage.setString(StorageVersion.versionKey, '1');
+
+        final executor = MigrationExecutor(
+          storage: storage,
+          loggingService: loggingService,
+          // targetVersion left at StorageVersion.current (2).
+          migrations: [
+            _TestMigration(fromVersion: 1, toVersion: 4, onExecute: () {}),
+          ],
+        );
+
+        await expectLater(
+          executor.execute(),
+          throwsA(isA<MigrationPathException>()),
+        );
+      });
+    });
+
+    group('downgrade detection (#60)', () {
+      test('throws distinctly when stored version is newer', () async {
+        await storage.setString(
+          StorageVersion.versionKey,
+          '${StorageVersion.current + 1}',
+        );
+
+        final executor = MigrationExecutor(
+          storage: storage,
+          loggingService: loggingService,
+          migrations: [MigrationV1ToV2()],
+        );
+
+        await expectLater(
+          executor.execute(),
+          throwsA(
+            isA<StorageDowngradeException>()
+                .having(
+                  (e) => e.storedVersion,
+                  'storedVersion',
+                  StorageVersion.current + 1,
+                )
+                .having(
+                  (e) => e.supportedVersion,
+                  'supportedVersion',
+                  StorageVersion.current,
+                ),
+          ),
+        );
+      });
+
+      test('an exact version match is still a plain success', () async {
+        await storage.setString(
+          StorageVersion.versionKey,
+          '${StorageVersion.current}',
+        );
+
+        final executor = MigrationExecutor(
+          storage: storage,
+          loggingService: loggingService,
+          migrations: [MigrationV1ToV2()],
+        );
+
+        expect(await executor.execute(), StorageVersion.current);
+      });
+    });
+
+    group('version stamp write failure (#60)', () {
+      test('surfaces a rejected version write instead of returning', () async {
+        await storage.setString(StorageVersion.versionKey, '1');
+        final failingStamp = _VersionWriteFailingStorage(storage);
+
+        final executor = MigrationExecutor(
+          storage: failingStamp,
+          loggingService: loggingService,
+          migrations: [MigrationV1ToV2()],
+        );
+
+        await expectLater(
+          executor.execute(),
+          throwsA(isA<MigrationExecutionException>()),
+        );
+      });
+    });
   });
+}
+
+/// Storage that accepts every write except the version stamp
+///
+/// Models `SecureStorageService` on a device with no usable Keychain: it
+/// swallows its own errors and returns false rather than throwing.
+class _VersionWriteFailingStorage implements IStorageService {
+  _VersionWriteFailingStorage(this._inner);
+
+  final IStorageService _inner;
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    if (key == StorageVersion.versionKey) return false;
+    return _inner.setString(key, value);
+  }
+
+  @override
+  Future<String?> getString(String key) => _inner.getString(key);
+
+  @override
+  Future<int?> getInt(String key) => _inner.getInt(key);
+
+  @override
+  Future<bool> setInt(String key, int value) => _inner.setInt(key, value);
+
+  @override
+  Future<bool?> getBool(String key) => _inner.getBool(key);
+
+  @override
+  Future<bool> setBool(String key, {required bool value}) =>
+      _inner.setBool(key, value: value);
+
+  @override
+  Future<double?> getDouble(String key) => _inner.getDouble(key);
+
+  @override
+  Future<bool> setDouble(String key, double value) =>
+      _inner.setDouble(key, value);
+
+  @override
+  Future<List<String>?> getStringList(String key) => _inner.getStringList(key);
+
+  @override
+  Future<bool> setStringList(String key, List<String> value) =>
+      _inner.setStringList(key, value);
+
+  @override
+  Future<bool> remove(String key) => _inner.remove(key);
+
+  @override
+  Future<bool> clear() => _inner.clear();
+
+  @override
+  Future<bool> containsKey(String key) => _inner.containsKey(key);
 }
 
 /// Test migration that tracks execution
