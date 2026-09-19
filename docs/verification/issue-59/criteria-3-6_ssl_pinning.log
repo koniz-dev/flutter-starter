@@ -1,0 +1,13 @@
+$ flutter test --reporter expanded test/core/network/ssl_pinning_test.dart
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a33db2ee8e4f10e3d/test/core/network/ssl_pinning_test.dart
+00:00 +0: SslPinning is effective only when enabled with fingerprints
+00:00 +1: SslPinning builds a pinned adapter when fingerprints are present
+00:00 +2: SslPinning returns no adapter when pinning is disabled
+00:00 +3: SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:00 +4: 401 replay transport replays through the main client pinned adapter
+00:00 +5: 401 replay transport follows the main client transport when it is swapped
+00:00 +6: 401 replay transport inherits the main client base url and timeouts
+00:00 +7: All tests passed!
+exit: 0
