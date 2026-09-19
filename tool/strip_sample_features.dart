@@ -22,8 +22,17 @@ import 'package:path/path.dart' as p;
 ///
 /// Only files whose post-strip content actually differs from the committed
 /// tree are listed. The partial variants need far fewer overrides than
-/// `stripped` because `lib/core/routing/routes_registry.dart`, `lib/main.dart`
-/// and the home screen are already feature-agnostic on the committed tree.
+/// `stripped` because `lib/main.dart` and the home screen are already
+/// feature-agnostic on the committed tree. `routes_registry.dart` is not:
+/// since #56 it composes the tasks and feature-flags route modules, so every
+/// variant needs its own copy.
+///
+/// The `test/core/routing/` files are deliberately absent: since #56 those
+/// tests assert only the routes every variant keeps, and each sample feature
+/// asserts its own routing in `test/features/<feature>/routing/`, which the
+/// strip deletes with the feature. Three near-identical copies of a test file
+/// is how the `stripped` copy of `app_router_test.dart` silently stayed on
+/// the pre-#51 router.
 const _goldenOverrides = <String, List<String>>{
   'stripped': [
     'lib/core/routing/app_router.dart',
@@ -33,20 +42,18 @@ const _goldenOverrides = <String, List<String>>{
     'lib/core/routing/navigation_extensions.dart',
     'lib/main.dart',
     'lib/features/home/presentation/screens/home_screen.dart',
-    'test/core/routing/app_routes_test.dart',
-    'test/core/routing/app_router_test.dart',
-    'test/core/routing/navigation_extensions_test.dart',
     'integration_test/app_e2e_test.dart',
     'integration_test/auth_flow_test.dart',
   ],
   'no_tasks': [
     'lib/core/routing/app_routes.dart',
     'lib/core/routing/navigation_extensions.dart',
-    'test/core/routing/navigation_extensions_test.dart',
+    'lib/core/routing/routes_registry.dart',
   ],
   'no_feature_flags': [
     'lib/core/routing/app_routes.dart',
     'lib/core/routing/navigation_extensions.dart',
+    'lib/core/routing/routes_registry.dart',
   ],
 };
 

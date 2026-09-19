@@ -292,6 +292,18 @@
   "updatedAt": "Updated",
   "@updatedAt": {
     "description": "Updated at label"
+  },
+  "pageNotFoundTitle": "Page not found",
+  "@pageNotFoundTitle": {
+    "description": "Title of the 404 screen shown for an unmatched route"
+  },
+  "pageNotFoundMessage": "The page you are looking for does not exist.",
+  "@pageNotFoundMessage": {
+    "description": "Body text of the 404 screen shown for an unmatched route"
+  },
+  "backToHome": "Back to home",
+  "@backToHome": {
+    "description": "Action on the 404 screen that returns to the home route"
   }
 }
 

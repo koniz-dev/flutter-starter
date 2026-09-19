@@ -101,6 +101,18 @@
   "taskDetails": "تفاصيل المهمة",
   "taskStatus": "الحالة",
   "createdAt": "تم الإنشاء",
-  "updatedAt": "تم التحديث"
+  "updatedAt": "تم التحديث",
+  "pageNotFoundTitle": "الصفحة غير موجودة",
+  "@pageNotFoundTitle": {
+    "description": "Title of the 404 screen shown for an unmatched route"
+  },
+  "pageNotFoundMessage": "الصفحة التي تبحث عنها غير موجودة.",
+  "@pageNotFoundMessage": {
+    "description": "Body text of the 404 screen shown for an unmatched route"
+  },
+  "backToHome": "العودة إلى الصفحة الرئيسية",
+  "@backToHome": {
+    "description": "Action on the 404 screen that returns to the home route"
+  }
 }
 

@@ -234,4 +234,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updatedAt => 'تم التحديث';
+
+  @override
+  String get pageNotFoundTitle => 'الصفحة غير موجودة';
+
+  @override
+  String get pageNotFoundMessage => 'الصفحة التي تبحث عنها غير موجودة.';
+
+  @override
+  String get backToHome => 'العودة إلى الصفحة الرئيسية';
 }

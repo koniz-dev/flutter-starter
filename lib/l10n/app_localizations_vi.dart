@@ -238,4 +238,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get updatedAt => 'Đã cập nhật';
+
+  @override
+  String get pageNotFoundTitle => 'Không tìm thấy trang';
+
+  @override
+  String get pageNotFoundMessage => 'Trang bạn tìm không tồn tại.';
+
+  @override
+  String get backToHome => 'Về trang chủ';
 }

@@ -35,12 +35,19 @@ class GoRouterNavigatorAdapter implements AppNavigator {
     await _router.pushReplacement(location, extra: extra);
   }
 
+  /// Pops the stack, or goes home when there is nothing to pop.
+  ///
+  /// Home, not login: an authenticated user on `/` with an empty stack would
+  /// otherwise make a real two-hop navigation (`/login`, bounced straight
+  /// back to `/` by the auth redirect), tearing down and rebuilding home and
+  /// logging two spurious navigation events. This matches
+  /// `NavigationExtensions.popOrGoToHome`.
   @override
   Future<void> back<T>([T? result]) async {
     if (_router.canPop()) {
       _router.pop<T>(result);
       return;
     }
-    _router.go(AppRoutes.login);
+    _router.go(AppRoutes.home);
   }
 }

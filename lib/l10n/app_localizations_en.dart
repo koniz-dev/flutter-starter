@@ -235,4 +235,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updatedAt => 'Updated';
+
+  @override
+  String get pageNotFoundTitle => 'Page not found';
+
+  @override
+  String get pageNotFoundMessage =>
+      'The page you are looking for does not exist.';
+
+  @override
+  String get backToHome => 'Back to home';
 }
