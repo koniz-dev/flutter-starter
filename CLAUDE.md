@@ -79,9 +79,9 @@ GitHub issues are the single source of truth. Full spec:
    `./scripts/dev/check_issue_refs.sh --range origin/main..HEAD`.
 9. Ship via feature branch + PR (`CONTRIBUTING.md` naming, Conventional
    Commits), wait for the checks the PR actually gets (see "Which checks a PR
-   gets" below), merge `--squash --delete-branch`. `main` is protected: direct
-   pushes, force pushes and deletions are rejected, so the PR is the only route
-   in.
+   gets" below), merge `--squash --delete-branch`. `main` is **not** protected -
+   a direct push would succeed - so the branch-and-PR rule is discipline, not
+   enforcement. Never test that.
 10. Done means closed AND evidence-backed. One issue at a time.
 
 **Canonical epic list:
@@ -154,27 +154,32 @@ make the loop worthless.
   manual plus weekly, not per-PR.
 ### Which checks a PR gets
 
-Three workflows run on PRs, each with its own path filter, so "no Quality gate"
-is normal rather than a failure:
+Four workflows run on PRs and only two of them filter on paths, so "no Quality
+gate" is normal rather than a failure:
 
-| Workflow | Check name | Runs when |
+| Workflow | Check name(s) | Runs when |
 |---|---|---|
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | any path **outside** `**/*.md` and `docs/**` |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or the workflow itself |
 | [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
+| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR, no path filter |
 
-So a docs-only PR gets **Docs check** and **Issue refs** but no Quality gate,
-and an evidence-only PR of `.log`/`.png` files gets **Issue refs** alone. Every
-PR now gets at least one check - a PR reporting zero checks is the registration
-race, not a path exclusion. Poll until `gh pr checks --json name --jq 'length'`
-is non-zero before `gh pr checks --watch`; merging on the "no checks reported"
-reading skips the gate entirely.
+So a docs-only PR gets Docs check, Issue refs and the three Strip jobs but no
+Quality gate, and an evidence-only PR of `.log`/`.png` files gets Issue refs
+and the Strip jobs. **Every PR gets at least four checks** - a PR reporting
+zero is the registration race, not a path exclusion. Poll until
+`gh pr checks --json name --jq 'length'` is non-zero before
+`gh pr checks --watch`; merging on the "no checks reported" reading skips the
+gate entirely.
 
-`main` is protected (no direct pushes, no force pushes, no deletions, PR
-required), but **no check is required to merge yet** - see the `needs-uat` note
-on koniz-dev/flutter-starter#58. Quality gate cannot be made required while
-`ci.yml` carries `paths-ignore`, because a required check that never reports
-blocks every docs-only PR forever. Read a red check yourself before merging.
+**None of these checks gates a merge, and `main` has no branch protection.**
+`gh pr merge --squash` succeeds on a red PR, and a direct push to `main` is not
+rejected. Reading the checks is therefore the session's job, not the platform's.
+Enabling protection needs a human (criterion 5 of
+koniz-dev/flutter-starter#58); the exact command is in that issue's `needs-uat`
+comment. Note that Quality gate cannot become a *required* check while `ci.yml`
+carries `paths-ignore`, because a required check that never reports leaves every
+docs-only PR permanently unmergeable.
 
 ### Evidence discipline
 

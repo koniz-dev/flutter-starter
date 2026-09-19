@@ -390,7 +390,8 @@ One issue at a time. Each change stays small and revertible.
    commit with Conventional Commits plus `Refs owner/repo#N`, open a PR, wait for
    the checks that PR gets (see
    [section 7](#7-adaptations-for-this-repository) for which ones and why), then
-   merge. `main` is protected, so the PR is the only route in.
+   merge. Nothing enforces this: `main` has no branch protection, so the rule
+   holds only because every session follows it.
 
    ```bash
    git checkout main && git pull
@@ -625,8 +626,8 @@ Evidence must be **merged** before the closing comment, so the links resolve on
 Prefer putting the evidence in the **same PR as the fix**. When the fix has
 already merged (as happens when verification turns up extra work), send the
 evidence as its own small PR - it still goes through a branch, because
-`docs/verification/**` is not exempt from the branch-and-PR rule (and `main` is
-protected, so there is no other way in). Be aware that an evidence-only PR of
+`docs/verification/**` is not exempt from the branch-and-PR rule. Be aware that
+an evidence-only PR of
 `.png` and `.log` files matches neither `ci.yml` nor `docs-check.yml`, so its
 only check is **Issue refs**. That is expected: the gate for evidence is a human
 or agent reading it, not CI.
@@ -822,32 +823,42 @@ The generic pattern was adjusted in four places. Each is a deliberate deviation.
    `type:*` family. The state machine is unchanged either way, because type was
    never part of it.
 
-2. **Feature branch plus PR, not straight to `main`.** `main` is protected:
-   direct pushes, force pushes and branch deletion are rejected, and a pull
-   request is required. Every merged change has gone through one. The session
-   opens the PR, waits for the checks that PR actually gets, and merges with
-   `--squash --delete-branch`.
+2. **Feature branch plus PR, not straight to `main`.** `main` carries **no
+   branch protection** - `gh api repos/koniz-dev/flutter-starter/branches/main/protection`
+   returns 404 and `rulesets` returns `[]` - so a direct push would succeed and
+   `gh pr merge --squash` succeeds on a red PR. Every merged change has still
+   gone through a PR, by discipline alone. The session opens the PR, waits for
+   the checks that PR actually gets, and merges with `--squash --delete-branch`.
 
-   Which checks it gets depends on the paths, and two of the three workflows
-   filter on them:
+   Which checks it gets depends on the paths, and only two of the four
+   workflows filter on them:
 
-   | Workflow | Check | Runs when |
+   | Workflow | Check(s) | Runs when |
    |---|---|---|
    | [`ci.yml`](../.github/workflows/ci.yml) | Quality gate | any path outside `**/*.md` and `docs/**` |
    | [`docs-check.yml`](../.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or itself |
    | [`issue-refs.yml`](../.github/workflows/issue-refs.yml) | Issue refs | every PR, unconditionally |
+   | [`strip-smoke.yml`](../.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test, three of them | every PR, unconditionally |
 
-   A docs-only PR therefore gets **Docs check** and **Issue refs** but no
-   Quality gate; that is expected, not a failure. An evidence-only PR of
-   `.png` and `.log` files gets **Issue refs** alone. Since every PR now gets at
-   least one check, a PR showing zero is the registration race described in step
-   5 of [section 4](#4-the-per-issue-agent-loop), not a path exclusion.
+   A docs-only PR therefore gets Docs check, Issue refs and the three Strip
+   jobs, but no Quality gate; that is expected, not a failure. An evidence-only
+   PR of `.png` and `.log` files gets Issue refs and the Strip jobs. Every PR
+   gets at least four checks, so a PR showing zero is the registration race
+   described in step 5 of [section 4](#4-the-per-issue-agent-loop), never a path
+   exclusion. This document said the opposite until
+   koniz-dev/flutter-starter#58 - that an evidence-only PR gets "no checks at
+   all" - which was already false when `strip-smoke.yml` landed without a path
+   filter.
 
-   **No check is required to merge yet.** Protection blocks the push paths, not
-   a red check, so reading the checks remains the session's job. Quality gate
-   cannot be made a required check while `ci.yml` carries `paths-ignore`: a
-   required check that never reports leaves every docs-only PR permanently
-   unmergeable. Tracked on koniz-dev/flutter-starter#58.
+   **No check gates a merge**, and with no protection in place nothing else
+   does either, so reading the checks is the session's job. Enabling protection
+   needs a human: see criterion 5 of koniz-dev/flutter-starter#58, whose
+   `needs-uat` comment carries the exact `gh api` call. One thing to get right
+   when doing it: Quality gate cannot be made a *required* check while `ci.yml`
+   carries `paths-ignore`, because a required check that never reports leaves
+   every docs-only PR - including every evidence PR - permanently unmergeable.
+   Only the two unfiltered workflows, **Issue refs** and **Strip smoke**, are
+   safe to mark required as things stand.
 
 3. **Golden PNGs instead of a browser harness.** There is no browser or e2e
    harness a session can drive here (tier 3 above). Golden capture is the only
