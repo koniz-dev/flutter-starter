@@ -68,9 +68,10 @@ implementer is active (see Parallelism in `CLAUDE.md`).
    ```
 
    Which checks a PR gets depends on its paths - a docs-only PR gets **Docs
-   check** and **Issue refs** but no Quality gate; an evidence-only PR of
-   `.png`/`.log` files gets **Issue refs** alone. Every PR gets at least one, so
-   zero checks means they have not registered yet, never that the PR is exempt.
+   check**, **Issue refs** and the three **Strip** jobs but no Quality gate; an
+   evidence-only PR of `.png`/`.log` files gets Issue refs and the Strip jobs.
+   Every PR gets at least four, so zero checks means they have not registered
+   yet, never that the PR is exempt. The full table is in `CLAUDE.md`.
    Poll until `gh pr checks --json name --jq 'length'` is non-zero before
    watching. `main` has no branch protection, so nothing stops a direct push or
    a merge over a red check except you.
