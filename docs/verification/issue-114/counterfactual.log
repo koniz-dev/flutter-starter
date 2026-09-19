@@ -1,0 +1,76 @@
+# Counterfactual for koniz-dev/flutter-starter#114, run against merged main (4e32f40).
+#
+# Patch applied (NOT committed): the single line
+#   authInterceptor.attachResponseCache(cacheInterceptor);
+# in ApiClient._createDio commented out, i.e. the pre-fix wiring in which
+# AuthInterceptor holds no reference to the HTTP response cache.
+#
+# 4 of the 6 tests fail, including the criterion-3 equivalence test, whose
+# reported difference IS the surviving http_cache_* keys. Criteria 4 and 5
+# still pass by construction: one attaches its own cache, the other asserts
+# behaviour when none is attached at all.
+
+$ flutter test test/core/network/forced_logout_cache_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aae760b8df1392933/test/core/network/forced_logout_cache_test.dart
+00:00 +0: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +0 -1: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache [E]
+  Expected: empty
+    Actual: ['http_cache_http://localhost:3000/v1/public/config_{}']
+  cached bodies must not survive a forced logout
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/core/network/forced_logout_cache_test.dart 353:7  main.<fn>.<fn>
+  
+00:00 +0 -1: forced logout empties the HTTP response cache (#114) criterion 2: the same holds when there is no refresh token at all
+00:00 +0 -2: forced logout empties the HTTP response cache (#114) criterion 2: the same holds when there is no refresh token at all [E]
+  Expected: empty
+    Actual: ['http_cache_http://localhost:3000/v1/public/config_{}']
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/core/network/forced_logout_cache_test.dart 380:9  main.<fn>.<fn>
+  
+00:00 +0 -2: forced logout empties the HTTP response cache (#114) criterion 2 (second call site): the retry-exhausted early logout at auth_interceptor.dart clears the cache before rejecting
+00:00 +0 -3: forced logout empties the HTTP response cache (#114) criterion 2 (second call site): the retry-exhausted early logout at auth_interceptor.dart clears the cache before rejecting [E]
+  Expected: empty
+    Actual: ['http_cache_http://localhost:3000/v1/public/config_{}']
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/core/network/forced_logout_cache_test.dart 404:9  main.<fn>.<fn>
+  
+00:00 +0 -3: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state
+00:00 +0 -4: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state [E]
+  Expected: {'keyValueStore': {}, 'accessToken': null, 'refreshToken': null}
+    Actual: {
+              'keyValueStore': {
+                'http_cache_http://localhost:3000/v1/public/config_{}': '{"motd":"cached-before-logout"}',
+                'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/config_{}': '<write time>',
+                'http_cache_index': ['http_cache_http://localhost:3000/v1/public/config_{}']
+              },
+              'accessToken': null,
+              'refreshToken': null
+            }
+     Which: at location ['keyValueStore'] is {
+              'http_cache_http://localhost:3000/v1/public/config_{}': '{"motd":"cached-before-logout"}',
+              'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/config_{}': '<write time>',
+              'http_cache_index': ['http_cache_http://localhost:3000/v1/public/config_{}']
+            } which has different length and has extra map key 'http_cache_http://localhost:3000/v1/public/config_{}'
+  forced logout must leave exactly what explicit logout leaves
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/core/network/forced_logout_cache_test.dart 444:9  main.<fn>.<fn>
+  
+00:00 +0 -4: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +1 -4: the cache dependency is optional (#114 criterion 5) an AuthInterceptor with no cache attached still forces a clean logout
+00:00 +2 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aae760b8df1392933/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aae760b8df1392933/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 2 (second call site): the retry-exhausted early logout at auth_interceptor.dart clears the cache before rejecting
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aae760b8df1392933/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 2: the same holds when there is no refresh token at all
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aae760b8df1392933/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state
+exit: 1
