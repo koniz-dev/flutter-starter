@@ -105,15 +105,29 @@ class ApiLoggingInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 
+  /// Header names whose values must never reach a log sink, lowercased.
+  ///
+  /// Matched case-insensitively. Dio keeps headers in a case-insensitive map
+  /// that stores each key exactly as the caller wrote it, so `AuthInterceptor`
+  /// (`options.headers['Authorization'] = ...`) hands this interceptor a
+  /// capitalised key. A case-sensitive lookup against these literals would
+  /// miss it and log the bearer token verbatim.
+  static const _sensitiveHeaderKeys = <String>{
+    'authorization',
+    'cookie',
+    'set-cookie',
+    'x-api-key',
+  };
+
   /// Sanitize headers to remove sensitive information
   Map<String, dynamic> _sanitizeHeaders(Map<String, dynamic> headers) {
-    final sanitized = Map<String, dynamic>.from(headers);
-    const sensitiveKeys = ['authorization', 'cookie', 'x-api-key'];
+    final sanitized = <String, dynamic>{};
 
-    for (final key in sensitiveKeys) {
-      if (sanitized.containsKey(key)) {
-        sanitized[key] = '***REDACTED***';
-      }
+    for (final entry in headers.entries) {
+      sanitized[entry.key] =
+          _sensitiveHeaderKeys.contains(entry.key.trim().toLowerCase())
+          ? '***REDACTED***'
+          : entry.value;
     }
 
     return sanitized;
