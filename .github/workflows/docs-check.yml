@@ -1,0 +1,60 @@
+name: Docs check
+
+# ========================================================================
+# Documentation integrity gate.
+#
+# This exists because `ci.yml` has `paths-ignore: ['**/*.md', 'docs/**']`,
+# so the Quality gate never sees a docs-only change. Broken relative links,
+# broken heading anchors and emoji (against the convention in CLAUDE.md)
+# therefore accumulated with nothing to catch them - 29 broken links and
+# 487 emoji lines by the time koniz-dev/flutter-starter#54 was filed.
+#
+# Deliberately the mirror image of ci.yml: this job runs ONLY on markdown
+# and on the checker itself, so the two gates never both fire on the same
+# file and never both stay silent.
+# ========================================================================
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.md'
+      - 'tool/check_docs.dart'
+      - '.github/workflows/docs-check.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/*.md'
+      - 'tool/check_docs.dart'
+      - '.github/workflows/docs-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: docs-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    name: Docs check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # `tool/check_docs.dart` imports only `dart:io`, but it lives inside a
+      # package, so `dart run` still resolves `pubspec.yaml` and would trigger
+      # an implicit `pub get` that needs the Flutter SDK. Set Flutter up rather
+      # than rely on a trick that breaks the first time someone adds an import.
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check documentation links, anchors and emoji
+        run: dart run tool/check_docs.dart

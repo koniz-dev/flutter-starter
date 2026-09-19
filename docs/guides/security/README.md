@@ -22,35 +22,39 @@ New to security? Start here:
 This security documentation covers five critical security domains:
 
 1. **Authentication & Authorization** - Token management, session handling
-2. **Data Protection** - Encryption, secure storage, SSL pinning
+2. **Data Protection** - Encryption, secure storage, SSL pinning (implemented)
 3. **Code Security** - Obfuscation, signing, anti-tampering
 4. **Platform Security** - Android, iOS, and Web security configurations
 5. **Compliance** - GDPR, privacy, data management
 
 ## Security Posture
 
-**Overall Security Posture:** ⚠️ **Moderate** - Good foundation with several critical improvements needed for production.
+**Overall Security Posture:** Moderate - good foundation, with several
+improvements still needed before production.
 
 ### Current Strengths
 
-- ✅ Secure token storage with `flutter_secure_storage`
-- ✅ Automatic token refresh mechanism
-- ✅ Proper environment variable management
-- ✅ HTTPS support in production
-- ✅ Good architecture foundation
+- Secure token storage with `flutter_secure_storage`
+- Automatic token refresh mechanism
+- Proper environment variable management
+- HTTPS support in production
+- **SSL certificate pinning is implemented** (`lib/core/network/api_client.dart:75-101`),
+  enabled by default in staging and production
+- Good architecture foundation
 
 ### Critical / high-attention items
 
-- 🔴 Missing SSL certificate pinning (if you need MITM resistance)
-- 🔴 No code obfuscation in release (when you ship production)
-- 🔴 Debug signing or missing release keystore for store builds
-- 🟡 Verify **`ApiLoggingInterceptor`** redaction covers your tokens/payloads — see [audit](./audit.md)
-- 🟡 Security headers / web hardening for your hosting setup
+- SSL pinning ships but is inert until you set `API_SSL_FINGERPRINTS`; it
+  fails open with no warning ([#84](https://github.com/koniz-dev/flutter-starter/issues/84))
+- No code obfuscation in release (when you ship production)
+- Debug signing or missing release keystore for store builds
+- Verify **`ApiLoggingInterceptor`** redaction covers your tokens/payloads — see [audit](./audit.md)
+- Security headers / web hardening for your hosting setup
 
 ## Implementation Priority
 
 ### Phase 1: Critical Security (Week 1)
-1. SSL Pinning
+1. SSL pinning fingerprints (configure, do not re-implement)
 2. Code Obfuscation
 3. Release Signing
 4. Log Sanitization
@@ -72,7 +76,7 @@ This security documentation covers five critical security domains:
 
 ### Critical Fixes
 
-- **[SSL Certificate Pinning](./implementation.md#1-ssl-certificate-pinning)** - Prevent MITM attacks
+- **[SSL Certificate Pinning](./implementation.md#1-ssl-certificate-pinning)** - implemented; configure your fingerprints
 - **[Code Obfuscation](./implementation.md#2-code-obfuscation)** - Protect intellectual property
 - **[Log Sanitization](./implementation.md#3-log-sanitization)** - Prevent sensitive data exposure
 - **[Android Release Signing](./implementation.md#4-android-release-signing)** - Required for app store
@@ -81,12 +85,12 @@ This security documentation covers five critical security domains:
 ### High Priority Fixes
 
 - **[Network Security Config](./implementation.md#6-network-security-config)** - Android security
-- **[Root/Jailbreak Detection](./implementation.md#7-rootjailbreak-detection)** - Device security
-- **[Session Management](./implementation.md#8-session-management)** - Session timeout
+- **[Root/Jailbreak Detection](./implementation.md#7-rootjailbreak-detection-freerasp)** - Device security
+- **[Session Management](./implementation.md#8-session-management-blueprint)** - Session timeout
 
 ### Compliance Features
 
-- **[GDPR Consent Management](./implementation.md#9-gdpr-consent-management)** - Privacy compliance
+- **[GDPR Consent Management](./implementation.md#9-gdpr-consent-blueprint)** - Privacy compliance
 
 ## Testing
 
@@ -109,11 +113,11 @@ This security documentation covers five critical security domains:
 
 ## Standards & Compliance
 
-- ✅ OWASP Mobile Top 10 guidelines
-- ✅ Flutter Security Best Practices
-- ✅ Android Security Guidelines
-- ✅ iOS Security Guidelines
-- ✅ GDPR compliance requirements
+- OWASP Mobile Top 10 guidelines
+- Flutter Security Best Practices
+- Android Security Guidelines
+- iOS Security Guidelines
+- GDPR compliance requirements
 
 ## Resources
 
@@ -124,8 +128,8 @@ This security documentation covers five critical security domains:
 - [iOS Security Guidelines](https://developer.apple.com/security/)
 
 ### Tools & Libraries
-- `flutter_secure_storage` - ✅ Already in use
-- `dio_certificate_pinning` - For SSL pinning
+- `flutter_secure_storage` - Already in use
+- SSL pinning - already implemented natively with `crypto` + `IOHttpClientAdapter`; no extra package needed
 - `local_auth` - Biometric authentication
 - `root_jailbreak` - Device security checks
 - `encrypt` - Additional encryption

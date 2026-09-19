@@ -6,11 +6,20 @@ This guide will help you set up your development environment and get the Flutter
 
 Before you begin, ensure you have the following installed:
 
-- **Flutter SDK**: Version 3.0.0 or higher
+- **Flutter SDK**: **3.38.4 or newer**
   - Check your version: `flutter --version`
   - Install/update: [Flutter Installation Guide](https://docs.flutter.dev/get-started/install)
-  
-- **Dart SDK**: Version 3.0.0 or higher (included with Flutter)
+
+- **Dart SDK**: **3.10.3 or newer** (included with Flutter)
+
+> **Where those numbers come from.** The committed `pubspec.lock` records the
+> resolved graph's requirements in its `sdks:` block:
+> `dart: ">=3.10.3 <4.0.0"`, `flutter: ">=3.38.4"`. `pubspec.yaml` declares
+> only `environment: sdk: '^3.8.0'` and carries **no `flutter:` constraint**,
+> so an older SDK does not produce a clear "upgrade Flutter" message - step 2
+> below (`flutter pub get`) fails with a version-solve error naming a
+> transitive package such as `path_provider_foundation`. If you see that,
+> upgrade Flutter before anything else.
 
 - **IDE**: Choose one of the following:
   - **VS Code** (recommended): Install Flutter and Dart extensions
@@ -192,12 +201,12 @@ if (AppConfig.enableLogging) {
 }
 ```
 
-For more details, see the [Configuration System](../../README.md#configuration-system) in the main README.
+For more details, see the [Configuration guide](../configuration.md).
 
 ## Next Steps
 
-- ✅ Continue to [Understanding the Codebase](understanding-codebase.md)
-- ✅ Review [Common Tasks](../features/common-tasks.md) for development patterns
-- ✅ Check [Troubleshooting](../support/troubleshooting.md) if you encounter issues
+- Continue to [Understanding the Codebase](understanding-codebase.md)
+- Review [Common Tasks](../features/common-tasks.md) for development patterns
+- Check [Troubleshooting](../support/troubleshooting.md) if you encounter issues
 
 

@@ -265,14 +265,14 @@ final end = now.endOfDay;
 ### 1. Always Use Result Pattern
 
 ```dart
-// ✅ Good
+// Good
 final result = await useCase();
 result.when(
   success: (data) => handleSuccess(data),
   failureCallback: (failure) => handleFailure(failure),
 );
 
-// ❌ Bad
+// Bad
 try {
   final data = await useCase();
   handleSuccess(data);
@@ -284,10 +284,10 @@ try {
 ### 2. Use Providers for Dependency Injection
 
 ```dart
-// ✅ Good
+// Good
 final useCase = ref.read(loginUseCaseProvider);
 
-// ❌ Bad
+// Bad
 final repository = AuthRepositoryImpl(...);
 final useCase = LoginUseCase(repository);
 ```
@@ -295,7 +295,7 @@ final useCase = LoginUseCase(repository);
 ### 3. Handle Errors Appropriately
 
 ```dart
-// ✅ Good - Type-safe error handling
+// Good - Type-safe error handling
 result.when(
   success: (data) => ...,
   failureCallback: (failure) {
@@ -307,7 +307,7 @@ result.when(
   },
 );
 
-// ❌ Bad - Generic error handling
+// Bad - Generic error handling
 result.when(
   success: (data) => ...,
   failureCallback: (failure) => showError('Error occurred'),
@@ -317,21 +317,21 @@ result.when(
 ### 4. Use Secure Storage for Sensitive Data
 
 ```dart
-// ✅ Good - Use secure storage for tokens
+// Good - Use secure storage for tokens
 await secureStorage.setString('token', token);
 
-// ❌ Bad - Don't use regular storage for tokens
+// Bad - Don't use regular storage for tokens
 await storage.setString('token', token);
 ```
 
 ### 5. Leverage Extensions
 
 ```dart
-// ✅ Good - Use extensions
+// Good - Use extensions
 if (email.isValidEmail) { ... }
 context.showSnackBar('Message');
 
-// ❌ Bad - Don't duplicate logic
+// Bad - Don't duplicate logic
 final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 if (emailRegex.hasMatch(email)) { ... }
 ScaffoldMessenger.of(context).showSnackBar(SnackBar(...));
@@ -340,14 +340,14 @@ ScaffoldMessenger.of(context).showSnackBar(SnackBar(...));
 ### 6. Use Constants for Keys
 
 ```dart
-// ✅ Good
+// Good
 class StorageKeys {
   static const String token = 'auth_token';
 }
 
 await storage.setString(StorageKeys.token, token);
 
-// ❌ Bad
+// Bad
 await storage.setString('token', token);
 ```
 
@@ -400,8 +400,8 @@ void main() {
 
 ## Related APIs
 
-- [Result API](../../core/utils.md#result) - Result type documentation
-- [Storage APIs](../../core/storage.md) - Storage services
-- [Extensions](../../README.md#extensions) - Extension methods
+- [Result API](../core/utils.md#result) - Result type documentation
+- [Storage APIs](../core/storage.md) - Storage services
+- [Extensions](../core/utils.md#extension-methods) - Result extension methods
 
 

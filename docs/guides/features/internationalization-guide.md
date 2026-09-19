@@ -392,12 +392,12 @@ Flutter widgets automatically handle RTL when `Directionality` is set correctly.
 
 ### 1. Always Use Localized Strings
 
-❌ **Don't:**
+**Don't:**
 ```dart
 Text('Welcome')
 ```
 
-✅ **Do:**
+**Do:**
 ```dart
 Text(AppLocalizations.of(context)!.welcome)
 ```
@@ -422,7 +422,7 @@ Text(l10n.welcome);
 
 ### 3. Use Meaningful Keys
 
-❌ **Don't:**
+**Don't:**
 ```json
 {
   "msg1": "Hello",
@@ -430,7 +430,7 @@ Text(l10n.welcome);
 }
 ```
 
-✅ **Do:**
+**Do:**
 ```json
 {
   "greeting": "Hello",
@@ -463,12 +463,12 @@ Test your app in all supported languages to ensure:
 
 Always use `LocalizedFormatters` instead of hardcoding formats:
 
-❌ **Don't:**
+**Don't:**
 ```dart
 Text('${date.year}-${date.month}-${date.day}');
 ```
 
-✅ **Do:**
+**Do:**
 ```dart
 Text(LocalizedFormatters.formatDate(date, locale: locale));
 ```

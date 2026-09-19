@@ -52,38 +52,46 @@ Clean Architecture solves this by enforcing **separation of concerns** and **dep
 
 This template follows Clean Architecture with four main layers:
 
+Every arrow below means "depends on", and every arrow points **inward**. The
+domain layer is the centre: it depends on nothing outside it, and both of the
+outer layers depend on it.
+
 ```
-┌─────────────────────────────────────┐
-│   Presentation Layer (UI)           │
-│  - Screens, Widgets, Providers     │
-│  - State Management (Riverpod)      │
-│  - User Interactions               │
-└──────────────┬──────────────────────┘
-               │ Depends on
-┌──────────────▼──────────────────────┐
-│      Domain Layer                   │
-│  - Entities (Business Objects)      │
-│  - Use Cases (Business Logic)       │
-│  - Repository Interfaces            │
-│  - Framework-free, Pure Dart        │
-└──────────────┬──────────────────────┘
-               │ Depends on
-┌──────────────▼──────────────────────┐
-│      Data Layer                     │
-│  - Models (Data Transfer Objects)    │
-│  - Data Sources (Remote & Local)    │
-│  - Repository Implementations       │
-│  - Framework-specific (Dio, etc.)  │
-└──────────────┬──────────────────────┘
-               │ Depends on
-┌──────────────▼──────────────────────┐
-│      Core Layer                     │
-│  - Network (ApiClient, Dio)         │
-│  - Storage (SharedPrefs, Secure)    │
-│  - Configuration (AppConfig)         │
-│  - Utilities (Result, Validators)   │
-└─────────────────────────────────────┘
+   +------------------------------+          +------------------------------+
+   |  Presentation Layer          |          |  Data Layer                  |
+   |  - Screens, Widgets          |          |  - Models (DTOs)             |
+   |  - Riverpod providers        |          |  - Remote/local data sources |
+   |  - User interactions         |          |  - Repository impls          |
+   +--------------+---------------+          +--------------+---------------+
+                  |                                         |
+                  | depends on                   depends on |
+                  | (use cases, entities)  (implements the  |
+                  |                         repo interfaces)|
+                  +--------------+      +-------------------+
+                                 v      v
+                       +------------------------------+
+                       |  Domain Layer                |
+                       |  - Entities                  |
+                       |  - Use cases                 |
+                       |  - Repository interfaces     |
+                       +------------------------------+
+
+   Core Layer - cross-cutting; presentation and data depend on it
+   +-------------------------------------------------------------------+
+   |  Network (ApiClient, Dio)     Storage (SharedPrefs, Secure)        |
+   |  Configuration (AppConfig)    Utilities (Result, Validators)       |
+   +-------------------------------------------------------------------+
 ```
+
+Nothing points out of the domain layer. The data layer depends on domain
+because it *implements* the repository interfaces domain declares - that
+inversion is the whole point, and the previous version of this diagram had it
+backwards.
+
+The domain layer does use `Result` and `Failure` from the core layer
+(`lib/core/utils/result.dart`, `lib/core/errors/failures.dart`). Those are
+plain data types with no framework behind them, which is what keeps that
+dependency acceptable.
 
 ### Layer Responsibilities
 
@@ -98,32 +106,44 @@ This template follows Clean Architecture with four main layers:
 - Error display
 
 **Dependencies:**
-- ✅ Domain layer (use cases, entities)
-- ✅ Flutter framework
-- ✅ Riverpod
+- Domain layer (use cases, entities)
+- Flutter framework
+- Riverpod
 
 **Should NOT:**
-- ❌ Make direct network calls
-- ❌ Access storage directly
-- ❌ Contain business logic
+- Make direct network calls
+- Access storage directly
+- Contain business logic
 
 #### 2. Domain Layer
 **Location:** `lib/features/*/domain/`
 
 **Responsibilities:**
 - Business logic (use cases)
-- Business entities (pure Dart classes)
+- Business entities (plain classes, annotated `@immutable`)
 - Repository interfaces (contracts)
 - Domain-specific validation
 
 **Dependencies:**
-- ✅ Pure Dart (no Flutter, no frameworks)
-- ✅ Core utilities (Result, Failures)
+- Core utilities (`Result`, `Failure`) - plain data types, no framework
+- `package:flutter/foundation.dart`, for the `@immutable` annotation only
 
 **Should NOT:**
-- ❌ Depend on any framework
-- ❌ Know about UI or data sources
-- ❌ Import Flutter or external packages
+- Depend on a framework for behaviour
+- Know about UI or data sources
+- Import `package:flutter/material.dart`, Dio, or any I/O package
+
+**On "pure Dart".** The rule is *no framework behaviour in the domain layer*,
+not *no Flutter import at all*. The three domain entities
+(`lib/features/auth/domain/entities/user.dart:1`,
+`lib/features/tasks/domain/entities/task.dart:1`,
+`lib/features/feature_flags/domain/entities/feature_flag.dart:1`) each import
+`package:flutter/foundation.dart` for `@immutable`, a compile-time annotation
+re-exported from `package:meta` that contributes nothing at runtime. Those
+three lines are the only Flutter imports anywhere under
+`lib/features/*/domain/`; use cases and repository interfaces are
+framework-free. This guide states what the code does - it previously claimed
+an absolute purity the code has never had.
 
 #### 3. Data Layer
 **Location:** `lib/features/*/data/`
@@ -135,13 +155,13 @@ This template follows Clean Architecture with four main layers:
 - Repository implementations
 
 **Dependencies:**
-- ✅ Domain layer (implements repository interfaces)
-- ✅ Core layer (ApiClient, Storage)
-- ✅ Dio, SharedPreferences, etc.
+- Domain layer (implements repository interfaces)
+- Core layer (ApiClient, Storage)
+- Dio, SharedPreferences, etc.
 
 **Should NOT:**
-- ❌ Contain business logic
-- ❌ Know about UI
+- Contain business logic
+- Know about UI
 
 #### 4. Core Layer
 **Location:** `lib/core/`
@@ -153,8 +173,8 @@ This template follows Clean Architecture with four main layers:
 - Dependency injection setup
 
 **Dependencies:**
-- ✅ External packages (Dio, Riverpod, etc.)
-- ✅ Platform-specific code
+- External packages (Dio, Riverpod, etc.)
+- Platform-specific code
 
 ---
 
@@ -162,7 +182,7 @@ This template follows Clean Architecture with four main layers:
 
 ### 1. **Testability**
 
-Business logic lives in the domain layer (pure Dart), making it easy to test:
+Business logic lives in the domain layer, free of Flutter, Dio and Riverpod, making it easy to test:
 
 ```dart
 // Domain layer - no mocks needed for business logic
@@ -211,10 +231,10 @@ Each feature is self-contained and doesn't affect others.
 
 ### 4. **Framework Independence**
 
-Business logic doesn't depend on Flutter or external packages:
+Use cases and repository interfaces depend on no framework:
 
 ```dart
-// Domain layer - could work in Dart CLI, web, mobile
+// lib/features/auth/domain/usecases/login_usecase.dart - no Flutter import
 class LoginUseCase {
   Future<Result<User>> call(String email, String password) {
     // Pure business logic - no Flutter, no Dio, no Riverpod
@@ -225,7 +245,12 @@ class LoginUseCase {
 This means:
 - Easy to port to other platforms
 - Easy to reuse business logic
-- Easy to test without Flutter
+- Easy to test without a widget tree
+
+The one caveat, stated above: domain **entities** import
+`package:flutter/foundation.dart` for `@immutable`, so lifting them into a
+plain `dart:io` CLI would need that annotation swapped for
+`package:meta/meta.dart` first.
 
 ### 5. **Team Collaboration**
 
@@ -305,7 +330,7 @@ Different team members can work on different layers:
 
 ## When to Use This Template
 
-### ✅ Ideal Scenarios
+### Ideal Scenarios
 
 1. **Production Apps**
    - Apps that will be maintained long-term
@@ -332,7 +357,7 @@ Different team members can work on different layers:
    - Planning web/mobile/desktop versions
    - Want framework independence
 
-### ❌ When to Consider Alternatives
+### When to Consider Alternatives
 
 1. **Simple Prototypes**
    - Quick proof of concept
@@ -367,10 +392,10 @@ Different team members can work on different layers:
 - Quick prototypes
 
 **Trade-offs:**
-- ❌ Business logic often mixed with UI
-- ❌ Harder to test
-- ✅ Simpler structure
-- ✅ Faster initial development
+- Business logic often mixed with UI
+- Harder to test
+- Simpler structure
+- Faster initial development
 
 #### 2. **MVVM (Model-View-ViewModel)**
 **When to use:**
@@ -379,10 +404,10 @@ Different team members can work on different layers:
 - Need for data binding
 
 **Trade-offs:**
-- ❌ Less separation than Clean Architecture
-- ❌ ViewModels can become bloated
-- ✅ Good for UI-heavy apps
-- ✅ Clear separation of UI and logic
+- Less separation than Clean Architecture
+- ViewModels can become bloated
+- Good for UI-heavy apps
+- Clear separation of UI and logic
 
 #### 3. **Feature-First (No Clean Architecture)**
 **When to use:**
@@ -391,10 +416,10 @@ Different team members can work on different layers:
 - Rapid iteration
 
 **Trade-offs:**
-- ❌ Business logic can leak into UI
-- ❌ Harder to test
-- ✅ Faster development
-- ✅ Less boilerplate
+- Business logic can leak into UI
+- Harder to test
+- Faster development
+- Less boilerplate
 
 #### 4. **Layered Architecture (Simpler)**
 **When to use:**
@@ -412,10 +437,10 @@ lib/
 ```
 
 **Trade-offs:**
-- ❌ Less strict boundaries
-- ❌ Can mix concerns
-- ✅ Simpler than Clean Architecture
-- ✅ Still organized
+- Less strict boundaries
+- Can mix concerns
+- Simpler than Clean Architecture
+- Still organized
 
 ---
 
@@ -497,26 +522,26 @@ lib/
 
 Clean Architecture provides:
 
-✅ **Benefits:**
+**Benefits:**
 - Testability
 - Maintainability
 - Scalability
 - Framework independence
 - Team collaboration
 
-⚠️ **Trade-offs:**
+**Trade-offs:**
 - Initial complexity
 - Learning curve
 - More files
 - More abstraction
 
-🎯 **Use when:**
+**Use when:**
 - Production apps
 - Complex business logic
 - Team projects
 - Long-term maintenance
 
-🚫 **Consider alternatives when:**
+**Consider alternatives when:**
 - Simple prototypes
 - Very small apps
 - Tight deadlines

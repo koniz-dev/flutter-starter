@@ -1,6 +1,14 @@
 # Upgrading This Starter
 
-This guide helps you upgrade your Flutter starter project to newer versions, handle breaking changes, and use migration scripts.
+This guide helps you upgrade your Flutter starter project to newer versions and
+handle breaking changes.
+
+**Scope note.** This starter is at `1.0.0+1` and has shipped no releases with
+breaking changes yet. Everything below the "Breaking Changes by Version"
+heading is an **illustration of the format** future release notes will use, not
+a record of changes you need to make. In the same spirit, `scripts/dev/migration/`
+**does not exist** in this repository - it is the convention this guide proposes
+for migration scripts you or a future release may add.
 
 ## Overview
 
@@ -31,7 +39,9 @@ Before upgrading, always check:
 ### Step 3: Backup Your Project
 
 ```bash
-# Create a backup branch
+# Create a backup branch. `git add .` is deliberate here - a backup wants
+# everything, including generated files. Do not carry the habit into a
+# feature branch; see CONTRIBUTING.md.
 git checkout -b backup-before-upgrade
 git add .
 git commit -m "Backup before upgrading to vX.Y.Z"
@@ -54,14 +64,15 @@ flutter pub upgrade
 flutter pub upgrade flutter_riverpod:^3.0.3
 ```
 
-### Step 5: Run Migration Scripts (if available)
+### Step 5: Run Migration Scripts (if any)
+
+No migration scripts ship with this starter today; `scripts/dev/migration/`
+does not exist. When a release adds one, its release notes name the script and
+you run it from the repository root:
 
 ```bash
-# Check for migration scripts
-ls scripts/dev/migration/
-
-# Run migration script for specific version
-dart scripts/dev/migration/migrate_to_v2.0.0.dart
+# Only if the release notes say a script exists
+ls scripts/dev/migration/ 2>/dev/null || echo "no migration scripts in this version"
 ```
 
 ### Step 6: Fix Breaking Changes
@@ -109,10 +120,8 @@ final counterProvider = NotifierProvider<CounterNotifier, int>(
 3. Update `build()` method signature
 4. Replace `ref.read(provider.notifier)` with `ref.read(provider.notifier)`
 
-**Script:**
-```bash
-dart scripts/dev/migration/migrate_riverpod_3.0.dart
-```
+**Script:** none ships today. If this release existed, it would provide
+`scripts/dev/migration/migrate_riverpod_3.0.dart`.
 
 #### Result Pattern Update
 
@@ -138,10 +147,8 @@ result.when(
 1. Find all `result.when(` occurrences
 2. Replace `failure:` with `failureCallback:`
 
-**Script:**
-```bash
-dart scripts/dev/migration/migrate_result_pattern.dart
-```
+**Script:** none ships today. If this release existed, it would provide
+`scripts/dev/migration/migrate_result_pattern.dart`.
 
 ### Version 1.1.0 (Hypothetical Future Version)
 
@@ -167,7 +174,9 @@ final baseUrl = AppConfig.baseUrl;
 
 ### Creating Migration Scripts
 
-Migration scripts are located in `scripts/dev/migration/`. They help automate common migration tasks.
+There are no migration scripts in this repository yet, and no
+`scripts/dev/migration/` directory. The convention below is what to follow if
+you add one - create the directory as part of that change.
 
 **Example Script Structure:**
 ```dart
@@ -204,7 +213,7 @@ void _updateCodePatterns() {
 ### Running Migration Scripts
 
 ```bash
-# Make script executable
+# Make script executable (after you have created it)
 chmod +x scripts/dev/migration/migrate_to_v2.0.0.dart
 
 # Run script
@@ -297,13 +306,9 @@ Use this checklist for each upgrade:
 
 ## Version-Specific Guides
 
-### Upgrading to v2.0.0
-
-See [Migration Guide: v1.0.0 to v2.0.0](v1-to-v2-migration.md) (if available)
-
-### Upgrading to v1.1.0
-
-See [Migration Guide: v1.0.0 to v1.1.0](v1.0-to-v1.1-migration.md) (if available)
+No version-specific guides exist yet, because no version after `1.0.0` has been
+released. When one is, it will be added to this directory and listed here, and
+linked from `CHANGELOG.md`.
 
 ## Troubleshooting Upgrades
 

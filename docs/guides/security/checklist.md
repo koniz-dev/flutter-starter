@@ -2,19 +2,29 @@
 
 Quick reference checklist for security hardening. Check off items as you complete them.
 
+Items marked **(shipped)** are already implemented in this starter; the box is
+for confirming you have configured them for your deployment, not for writing
+them.
+
 ---
 
-## 🔴 Critical (Must Fix Before Production)
+## Critical (Must Fix Before Production)
 
 ### Authentication & Authorization
-- [ ] Sanitize logging interceptor to remove Authorization tokens
+- [ ] Confirm the logging interceptor redaction **(shipped, partial)** covers
+      your header names and payload shapes - see
+      [#78](https://github.com/koniz-dev/flutter-starter/issues/78)
 - [ ] Implement token expiration checking
 - [ ] Add session timeout mechanism
 - [ ] Test token refresh flow thoroughly
 
 ### Data Protection
-- [ ] **Implement SSL certificate pinning**
-- [ ] Sanitize all logged data (requests, responses, errors)
+- [ ] **Configure SSL certificate pinning (shipped)** - set
+      `API_SSL_FINGERPRINTS` and `ENABLE_SSL_PINNING` in your environment.
+      The adapter is implemented at `lib/core/network/api_client.dart:75-101`;
+      with no fingerprints it silently does nothing
+      ([#84](https://github.com/koniz-dev/flutter-starter/issues/84))
+- [ ] Close the remaining log-sanitization gaps (string bodies, query parameters)
 - [ ] Encrypt sensitive data at rest (if required)
 - [ ] Remove sensitive data from crash reports
 
@@ -34,7 +44,7 @@ Quick reference checklist for security hardening. Check off items as you complet
 
 ---
 
-## 🟡 High Priority (Fix Within 1-2 Sprints)
+## High Priority (Fix Within 1-2 Sprints)
 
 ### Authentication & Authorization
 - [ ] Add biometric authentication option
@@ -60,7 +70,7 @@ Quick reference checklist for security hardening. Check off items as you complet
 
 ---
 
-## 🟢 Medium Priority (Fix Within 1 Month)
+## Medium Priority (Fix Within 1 Month)
 
 ### Compliance
 - [ ] **Implement GDPR consent management**
@@ -84,7 +94,7 @@ Quick reference checklist for security hardening. Check off items as you complet
 
 ---
 
-## 📋 Pre-Production Checklist
+## Pre-Production Checklist
 
 ### Build Configuration
 - [ ] Release builds use obfuscation
@@ -94,7 +104,7 @@ Quick reference checklist for security hardening. Check off items as you complet
 - [ ] No debug code in production builds
 
 ### Network Security
-- [ ] SSL pinning implemented and tested
+- [ ] SSL pinning fingerprints set and verified against a proxy
 - [ ] Network security config in place
 - [ ] No cleartext traffic in production
 - [ ] Certificate fingerprints stored securely
@@ -125,7 +135,7 @@ Quick reference checklist for security hardening. Check off items as you complet
 
 ---
 
-## 🔄 Ongoing Security Tasks
+## Ongoing Security Tasks
 
 ### Weekly
 - [ ] Review security logs
@@ -152,7 +162,7 @@ Quick reference checklist for security hardening. Check off items as you complet
 
 ---
 
-## 🚨 Incident Response Checklist
+## Incident Response Checklist
 
 If a security incident occurs:
 
@@ -168,7 +178,7 @@ If a security incident occurs:
 
 ---
 
-## 📚 Security Resources
+## Security Resources
 
 ### Documentation
 - [ ] Security audit report reviewed
@@ -184,7 +194,7 @@ If a security incident occurs:
 
 ---
 
-## ✅ Sign-Off
+## Sign-Off
 
 Before deploying to production, ensure:
 

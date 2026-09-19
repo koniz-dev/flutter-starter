@@ -13,7 +13,7 @@ The `freerasp` package is listed in `pubspec.yaml` for teams that want runtime a
 ## Table of Contents
 
 1. [Critical Fixes](#critical-fixes)
-   - [SSL Certificate Pinning](#1-ssl-certificate-pinning)
+   - [SSL Certificate Pinning](#1-ssl-certificate-pinning) (shipped - configure only)
    - [Code Obfuscation](#2-code-obfuscation)
    - [Log Sanitization](#3-log-sanitization)
    - [Android Release Signing](#4-android-release-signing)
@@ -21,11 +21,11 @@ The `freerasp` package is listed in `pubspec.yaml` for teams that want runtime a
 
 2. [High Priority Fixes](#high-priority-fixes)
    - [Network Security Config](#6-network-security-config)
-   - [Root/Jailbreak Detection](#7-rootjailbreak-detection)
-   - [Session Management](#8-session-management)
+   - [Root/Jailbreak Detection](#7-rootjailbreak-detection-freerasp)
+   - [Session Management](#8-session-management-blueprint)
 
 3. [Compliance Features](#compliance-features)
-   - [GDPR Consent Management](#9-gdpr-consent-management)
+   - [GDPR Consent Management](#9-gdpr-consent-blueprint)
 
 ---
 
@@ -38,15 +38,30 @@ The `freerasp` package is listed in `pubspec.yaml` for teams that want runtime a
 
 ### 1. SSL Certificate Pinning
 
-#### Step 1: Add Dependency
+**Already implemented.** Do not add a pinning package and do not rewrite
+`ApiClient`. This section tells you how to *configure* what ships.
 
-```yaml
-# pubspec.yaml
-dependencies:
-  dio_certificate_pinning: ^2.2.0
-```
+#### What ships
 
-#### Step 2: Extract Certificate Fingerprint
+`ApiClient._createDio` installs an `IOHttpClientAdapter` whose
+`badCertificateCallback` SHA-256s the presented certificate's DER bytes and
+accepts the connection only if that digest is in the configured pin set
+(`lib/core/network/api_client.dart:75-101`). The `HttpClient` is constructed
+with an empty `SecurityContext()`, so the platform trust store is bypassed and
+every certificate goes through the callback.
+
+The pin set and the on/off switch come from `AppConfig`
+(`lib/core/config/app_config.dart:110-141`):
+
+| Setting | Env variable | Default |
+|---|---|---|
+| `AppConfig.apiSslFingerprints` | `API_SSL_FINGERPRINTS` | empty list |
+| `AppConfig.enableSslPinning` | `ENABLE_SSL_PINNING` | `false` in development, `true` in staging and production |
+
+Fingerprints are normalised on read: comma-separated, colons stripped,
+lowercased. Supply them in either form.
+
+#### Step 1: Extract your certificate fingerprint
 
 ```bash
 # For your API server
@@ -57,82 +72,41 @@ openssl s_client -servername api.example.com -connect api.example.com:443 < /dev
 # SHA256 Fingerprint=AA:BB:CC:DD:EE:FF:...
 ```
 
-#### Step 3: Update ApiClient
+Pin at least two values - the certificate you serve today and the one you will
+rotate to - or a rotation will brick every installed client.
 
-```dart
-// lib/core/network/api_client.dart
-import 'package:dio/dio.dart';
-import 'package:dio_certificate_pinning/dio_certificate_pinning.dart';
-import 'package:flutter_starter/core/config/app_config.dart';
-// ... other imports
-
-class ApiClient {
-  // ... existing code ...
-
-  static Dio _createDio(
-    StorageService storageService,
-    SecureStorageService secureStorageService,
-    AuthInterceptor authInterceptor,
-  ) {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
-        connectTimeout: Duration(seconds: AppConfig.apiConnectTimeout),
-        receiveTimeout: Duration(seconds: AppConfig.apiReceiveTimeout),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-
-    // Add certificate pinning for production
-    if (AppConfig.isProduction) {
-      final fingerprints = _getCertificateFingerprints();
-      if (fingerprints.isNotEmpty) {
-        dio.httpClientAdapter = CertificatePinningAdapter(
-          allowedSHAFingerprints: fingerprints,
-        );
-      }
-    }
-
-    // Add interceptors - ErrorInterceptor must be LAST: it terminates the
-    // error chain, and dio runs error handlers in registration order.
-    dio.interceptors.addAll([
-      authInterceptor,
-      if (AppConfig.enableLogging) LoggingInterceptor(),
-      ErrorInterceptor(),
-    ]);
-
-    return dio;
-  }
-
-  /// Get certificate fingerprints from environment
-  /// Format: "FINGERPRINT1,FINGERPRINT2" (comma-separated, no spaces)
-  static List<String> _getCertificateFingerprints() {
-    final fingerprints = EnvConfig.get('CERTIFICATE_FINGERPRINTS');
-    if (fingerprints.isEmpty) {
-      return [];
-    }
-    return fingerprints
-        .split(',')
-        .map((f) => f.trim().replaceAll(':', '').toUpperCase())
-        .where((f) => f.isNotEmpty)
-        .toList();
-  }
-
-  // ... rest of existing code ...
-}
-```
-
-#### Step 4: Add to Environment Config
+#### Step 2: Set the environment variables
 
 ```bash
-# .env.example
-CERTIFICATE_FINGERPRINTS=AA:BB:CC:DD:EE:FF:11:22:33:44:55:66:77:88:99:00:AA:BB:CC:DD:EE:FF:11:22:33:44:55:66:77:88:99:00,BB:CC:DD:EE:FF:AA:11:22:33:44:55:66:77:88:99:00:AA:BB:CC:DD:EE:FF:11:22:33:44:55:66:77:88:99:00
+# .env (and your CI secret store)
+API_SSL_FINGERPRINTS=aabbccddeeff...,bbccddeeffaa...
+ENABLE_SSL_PINNING=true
 ```
 
-**Note:** Store actual fingerprints securely. Never commit real fingerprints to git.
+`.env.example:34-39` already carries both keys, empty.
+
+#### Step 3: Verify it is actually on
+
+This is the step people skip. `api_client.dart:76` requires **both**
+`enableSslPinning` and a non-empty fingerprint list:
+
+```dart
+if (AppConfig.enableSslPinning && AppConfig.apiSslFingerprints.isNotEmpty) {
+```
+
+With `ENABLE_SSL_PINNING=true` and no fingerprints, the adapter is never
+installed, the app talks to anything the platform trust store accepts, and
+**nothing is logged**. Confirm both values before you believe you are pinned;
+`AppConfig.printConfig()` prints `SSL Pinning Enabled` and
+`SSL Fingerprints Configured` (`app_config.dart:280-281`) and you have to read
+them together. Tracked as
+[#84](https://github.com/koniz-dev/flutter-starter/issues/84).
+
+Then point a proxy (Charles, Proxyman, Burp) at the app: with pinning active
+the request must fail, not succeed.
+
+**Note:** treat fingerprints as configuration, not secrets, but keep production
+values out of the repository so a rotation does not require a code change.
 
 ---
 
@@ -175,7 +149,7 @@ elif [ "$BUILD_TYPE" = "ios" ]; then
 fi
 
 echo "Build complete. Debug info saved to ./build/debug-info/"
-echo "⚠️  IMPORTANT: Store debug-info files securely for crash symbolication!"
+echo " IMPORTANT: Store debug-info files securely for crash symbolication!"
 ```
 
 Make it executable:
@@ -726,6 +700,8 @@ There is **no** `device_security.dart` in this starter; wire threat handling in 
 ### 8. Session management (blueprint)
 
 Not in this repo. Full template (session timer + lifecycle sketch): **[Security blueprints → Session management](./blueprints.md#session-management)**.
+
+## Compliance Features
 
 ### 9. GDPR consent (blueprint)
 

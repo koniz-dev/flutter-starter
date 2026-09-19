@@ -2,6 +2,29 @@
 
 Maintenance utilities run with `dart run` from the **repository root**.
 
+## `check_docs.dart`
+
+Documentation integrity checker. Two checks, both of which had silently rotted:
+
+- **Links and anchors** under `docs/`: every relative path resolves, and every
+  `#fragment` matches a heading slug in the target file (GitHub's slug rules,
+  including duplicate `-1` suffixes).
+- **Emoji** in `docs/`, `CLAUDE.md` and `.claude/`, per the convention stated in
+  `CLAUDE.md`. `README.md` and `CONTRIBUTING.md` are exempt (they predate it), and
+  so is `docs/verification/`, whose files quote captured tool output verbatim.
+
+```bash
+dart run tool/check_docs.dart            # both checks
+dart run tool/check_docs.dart --links    # links and anchors only
+dart run tool/check_docs.dart --emoji    # emoji only
+```
+
+Exits 1 and prints `file:line` for every problem. CI runs it as **Docs check**
+(`.github/workflows/docs-check.yml`) on any PR touching markdown - which is
+exactly the set of PRs `ci.yml` skips via its `paths-ignore`. It is deliberately
+**not** part of `scripts/dev/audit_template.sh`: that script gates code changes,
+and a broken doc link should not block an unrelated `lib/` fix.
+
 ## `strip_sample_features.dart`
 
 Removes sample **`tasks`** and **`feature_flags`** modules (and related tests), deletes `lib/core/feature_flags/feature_flags_manager.dart` when present, and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.

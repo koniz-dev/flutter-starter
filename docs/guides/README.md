@@ -148,6 +148,6 @@ For understanding architectural decisions and design rationale:
 - Review [Common Patterns](../api/examples/common-patterns.md)
 - Ask in team chat or create an issue
 
-**Welcome to the team! 🚀**
+**Welcome to the team!**
 
 

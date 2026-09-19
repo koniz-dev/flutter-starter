@@ -12,7 +12,7 @@ The utilities layer provides:
 
 ---
 
-## Result<T>
+## Result
 
 Sealed class for handling success and failure states with type-safe pattern matching.
 

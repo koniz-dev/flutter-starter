@@ -75,9 +75,9 @@ test/
 
 ## CI/CD
 
-- ✅ **Quality gate** on every push/PR to `main` ([`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml)): format → analyze → unit tests on **one** runner (keeps GitHub Actions minutes low; branch protection can require **Quality gate**).
-- ✅ Coverage thresholds (overall ≥80%, domain 100%, data ≥90%, presentation/core ≥80%) run in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) (manual **Run workflow** and weekly schedule), not on every PR.
-- ✅ Codecov upload and optional PR comments live in that coverage workflow when you enable triggers that include pull requests.
+- **Quality gate** on every push/PR to `main` ([`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml)): format → analyze → unit tests on **one** runner (keeps GitHub Actions minutes low; branch protection can require **Quality gate**).
+- Coverage thresholds (overall ≥80%, domain 100%, data ≥90%, presentation/core ≥80%) run in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) (manual **Run workflow** and weekly schedule), not on every PR.
+- Codecov upload and optional PR comments live in that coverage workflow when you enable triggers that include pull requests.
 
 ### E2E on GitHub Actions (manual only)
 
@@ -85,10 +85,10 @@ Patrol E2E **does not block PRs**. To run on CI: open **Actions → [E2E Android
 
 ## Documentation
 
-- 📖 [Testing Guide](guide.md) - Comprehensive testing guide
-- 📊 [Coverage Guide](test-coverage.md) - Coverage measurement and improvement
-- 📝 [Test README](../../../test/README.md) - Test directory documentation
-- 📂 [Repository layout (non-platform)](../onboarding/repository-layout.md) - Where tests and tools live in the tree
+- [Testing Guide](guide.md) - Comprehensive testing guide
+- [Coverage Guide](test-coverage.md) - Coverage measurement and improvement
+- [Test README](../../../test/README.md) - Test directory documentation
+- [Repository layout (non-platform)](../onboarding/repository-layout.md) - Where tests and tools live in the tree
 
 ## Common Commands
 
@@ -114,12 +114,12 @@ flutter test test/features/auth/domain/usecases/login_usecase_test.dart
 
 ## Best Practices
 
-1. ✅ Use AAA pattern (Arrange, Act, Assert)
-2. ✅ Mock all dependencies
-3. ✅ Test edge cases
-4. ✅ Keep tests fast (<100ms)
-5. ✅ Use descriptive test names
-6. ✅ Test error scenarios
+1. Use AAA pattern (Arrange, Act, Assert)
+2. Mock all dependencies
+3. Test edge cases
+4. Keep tests fast (<100ms)
+5. Use descriptive test names
+6. Test error scenarios
 
 ## Resources
 
