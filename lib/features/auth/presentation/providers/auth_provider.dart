@@ -148,6 +148,42 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
     );
   }
 
+  /// Restores a session persisted by a previous run of the app.
+  ///
+  /// `build()` is synchronous and cannot read storage, so a cold start begins
+  /// unauthenticated even when `login()` cached a user and tokens. This reads
+  /// the cached user back and promotes the state to authenticated.
+  ///
+  /// A restore that finds nothing - or fails outright - is not a user-facing
+  /// error: it just means there is no session to resume, so the state is left
+  /// unauthenticated and `error` stays null rather than greeting a first-time
+  /// user with a failure message on the login screen.
+  ///
+  /// Never throws. Storage can fail in ways the data layer does not model as
+  /// an `Exception` (a missing platform plugin, a decode `Error`), and this
+  /// runs unawaited at boot, where an escaping error would be uncaught.
+  Future<void> restoreSession() async {
+    try {
+      final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
+      final result = await getCurrentUserUseCase();
+
+      result.when(
+        success: (user) {
+          if (user != null) {
+            state = state.copyWith(user: user, isLoading: false, error: null);
+          }
+        },
+        failureCallback: (_) {},
+      );
+      // A bare catch is the point: `on Exception` would let a plugin/decode
+      // Error escape into the unawaited boot path, which is precisely the
+      // crash this restore must not cause.
+      // ignore: avoid_catches_without_on_clauses
+    } catch (_) {
+      // Unrestorable session: stay logged out.
+    }
+  }
+
   /// Checks if the user is authenticated
   ///
   /// Returns true if user is authenticated, false otherwise.
@@ -167,6 +203,25 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
 /// Boundary provider exposing auth controller contract.
 final authControllerProvider = Provider<IAuthController>((ref) {
   return ref.read(authNotifierProvider.notifier);
+});
+
+/// Restores the persisted session, once per app launch.
+///
+/// Three states, and every consumer has to handle all three:
+/// * `loading` - storage has not answered yet, so it is **not** yet known
+///   whether this is a returning user. Treating this as "logged out" is what
+///   bounces a returning user to `/login` for a frame.
+/// * `data` - the restore finished. [authNotifierProvider] now holds the
+///   session if there was one.
+/// * `error` - only reachable if a consumer replaces this provider; the
+///   restore itself swallows failures (see [AuthNotifier.restoreSession]).
+///
+/// `main()` awaits this before `runApp`, so the first frame of a cold start
+/// already has the answer. The router still handles the loading state because
+/// anything that builds the router without awaiting first (widget tests, an
+/// embedder) does observe the window.
+final sessionRestorationProvider = FutureProvider<void>((ref) async {
+  await ref.read(authNotifierProvider.notifier).restoreSession();
 });
 
 /// Backward-compatible alias for the generated provider.
