@@ -228,4 +228,130 @@ void main() {
       expect(options.extra['retry_count'], 1);
     });
   });
+
+  // Regression cover for koniz-dev/flutter-starter#88.
+  group('RetryInterceptor idempotency gate', () {
+    late _MockDio dio;
+    late RetryInterceptor interceptor;
+
+    setUp(() {
+      dio = _MockDio();
+      interceptor = RetryInterceptor(
+        dio: dio,
+        maxRetries: 1,
+        initialExecutionDelay: Duration.zero,
+      );
+
+      when(
+        () => dio.request<dynamic>(
+          any(),
+          data: any<dynamic>(named: 'data'),
+          queryParameters: any<Map<String, dynamic>>(named: 'queryParameters'),
+          cancelToken: any<CancelToken?>(named: 'cancelToken'),
+          options: any<Options>(named: 'options'),
+          onReceiveProgress: any<ProgressCallback?>(named: 'onReceiveProgress'),
+          onSendProgress: any<ProgressCallback?>(named: 'onSendProgress'),
+        ),
+      ).thenAnswer(
+        (_) async => Response<dynamic>(
+          requestOptions: RequestOptions(path: '/x'),
+          statusCode: 200,
+        ),
+      );
+    });
+
+    /// Runs one error through the interceptor and reports whether it replayed.
+    Future<bool> replayed(RequestOptions options, DioExceptionType type) async {
+      final err = DioException(
+        requestOptions: options,
+        type: type,
+        response: type == DioExceptionType.badResponse
+            ? Response<dynamic>(requestOptions: options, statusCode: 503)
+            : null,
+      );
+
+      var didResolve = false;
+      await interceptor.onError(
+        err,
+        _FakeErrorHandler(
+          onResolve: (_) => didResolve = true,
+          onReject: (_) {},
+          onNext: (_) {},
+        ),
+      );
+      return didResolve;
+    }
+
+    for (final method in ['GET', 'HEAD', 'OPTIONS']) {
+      test('$method is replayed on a 5xx', () async {
+        final options = RequestOptions(path: '/x')..method = method;
+        expect(
+          await replayed(options, DioExceptionType.badResponse),
+          isTrue,
+        );
+      });
+    }
+
+    for (final method in ['POST', 'PUT', 'PATCH', 'DELETE']) {
+      test('$method is not replayed on receiveTimeout', () async {
+        final options = RequestOptions(path: '/x')..method = method;
+        expect(
+          await replayed(options, DioExceptionType.receiveTimeout),
+          isFalse,
+        );
+      });
+
+      test('$method is not replayed on connectionError', () async {
+        // A socket error can also be a reset after the body was delivered.
+        final options = RequestOptions(path: '/x')..method = method;
+        expect(
+          await replayed(options, DioExceptionType.connectionError),
+          isFalse,
+        );
+      });
+
+      test('$method is replayed on connectionTimeout', () async {
+        // The socket never connected, so no byte reached the server.
+        final options = RequestOptions(path: '/x')..method = method;
+        expect(
+          await replayed(options, DioExceptionType.connectionTimeout),
+          isTrue,
+        );
+      });
+    }
+
+    test('extra retry:true opts a POST into replay', () async {
+      final options = RequestOptions(path: '/x')
+        ..method = 'POST'
+        ..extra[RetryInterceptor.retryExtraKey] = true;
+
+      expect(await replayed(options, DioExceptionType.receiveTimeout), isTrue);
+    });
+
+    test('an Idempotency-Key header opts a POST into replay', () async {
+      final options = RequestOptions(
+        path: '/x',
+        headers: <String, dynamic>{'idempotency-key': 'key-1'},
+      )..method = 'POST';
+
+      expect(await replayed(options, DioExceptionType.receiveTimeout), isTrue);
+    });
+
+    test('an empty Idempotency-Key header does not opt in', () async {
+      final options = RequestOptions(
+        path: '/x',
+        headers: <String, dynamic>{RetryInterceptor.idempotencyKeyHeader: ''},
+      )..method = 'POST';
+
+      expect(await replayed(options, DioExceptionType.receiveTimeout), isFalse);
+    });
+
+    test('extra retry:false suppresses replay for a GET', () async {
+      final options = RequestOptions(path: '/x')
+        ..method = 'GET'
+        ..extra[RetryInterceptor.retryExtraKey] = false;
+
+      expect(await replayed(options, DioExceptionType.receiveTimeout), isFalse);
+    });
+  });
 }

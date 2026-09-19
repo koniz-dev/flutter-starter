@@ -12,7 +12,7 @@ The network layer provides:
 - `IRealtimeClient` - Decoupled interface for WebSocket streams
 - `AuthInterceptor` - Automatic token injection and refresh
 - `ErrorInterceptor` - Exception conversion
-- `RetryInterceptor` - Retries transient failures
+- `RetryInterceptor` - Retries transient failures for safe methods only
 - `CacheInterceptor` - Response caching via storage
 - `PerformanceInterceptor` - Optional HTTP timing (when performance service is wired)
 - `ApiLoggingInterceptor` - Request/response logging via `LoggingService` when enabled
@@ -182,7 +182,7 @@ Future<Response<dynamic>> delete(
 The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
 - Timeouts from `AppConfig` (connect, receive, send)
-- Interceptors (order matters; see `ApiClient._createDio`): optional `PerformanceInterceptor`, `CacheInterceptor`, `AuthInterceptor`, `RetryInterceptor`, optional `ApiLoggingInterceptor` when a `LoggingService` is provided, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
+- Interceptors (order matters; see `ApiClient._createDio`): optional `PerformanceInterceptor`, `CacheInterceptor`, `AuthInterceptor`, `RetryInterceptor` (safe methods only by default - see [RetryInterceptor](#retryinterceptor)), optional `ApiLoggingInterceptor` when a `LoggingService` is provided, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
 
 ---
 
@@ -323,6 +323,80 @@ Interceptor for converting DioException to domain exceptions.
 - 4xx/5xx status codes → `ServerException`
 - Network errors (timeout, connection) → `NetworkException`
 - Everything else (cancel, bad certificate, unknown) → `NetworkException`, with a `code` such as `UNKNOWN_NETWORK_ERROR` (`lib/core/errors/dio_exception_mapper.dart:13-75`). There is no `UnknownException` type.
+
+---
+
+## RetryInterceptor
+
+Replays transient failures with exponential backoff plus jitter.
+
+**Location:** `lib/core/network/interceptors/retry_interceptor.dart`
+
+### Defaults
+
+| Setting | Default |
+|---|---|
+| Methods retried | `GET`, `HEAD`, `OPTIONS` only |
+| Attempts | 1 original + `maxRetries` replays, `maxRetries = 3` |
+| Backoff | `initialExecutionDelay` (1s) doubled per attempt, plus 0-500ms jitter, so roughly 1s, 2s, 4s |
+| Error types retried | `connectionTimeout`, `sendTimeout`, `receiveTimeout`, `connectionError`, and any `badResponse` with a 5xx status |
+
+`ApiClient._createDio` constructs the interceptor with these defaults.
+
+### Which methods are retried, and why
+
+Only the **safe** methods of RFC 9110 section 9.2.1 (`GET`, `HEAD`, `OPTIONS`)
+are replayed automatically. They have no server-side effect, so an extra
+attempt cannot duplicate work.
+
+`POST`, `PUT`, `PATCH` and `DELETE` are **not** replayed by default. For those,
+the only retried error type is `connectionTimeout` - the one `DioExceptionType`
+that proves no request byte reached the server, because the socket never
+finished connecting. Every other transient failure leaves open the possibility
+that the server received and committed the request:
+
+| Failure | Replayed for a non-safe method? | Why |
+|---|---|---|
+| `connectionTimeout` | yes | The connection was never established; nothing was sent |
+| `connectionError` | no | A `SocketException` also covers a connection reset *after* the body was delivered |
+| `sendTimeout` | no | The request may have been fully or partly delivered |
+| `receiveTimeout` | no | The server has the request and may already have committed it |
+| 5xx | no | A 502/504 from a proxy can follow a successful upstream write |
+
+Note that `PUT` and `DELETE` are idempotent but not safe, and are therefore
+excluded as well. Idempotency promises only that the server-side *state* is
+unchanged by a repeat, not that the repeat is harmless: a replayed `DELETE`
+answers 404 and a replayed `PUT` can clobber a write that landed in between.
+
+### Opting a non-safe request in
+
+Two equivalent per-request opt-ins, both **off by default**:
+
+```dart
+// 1. Idempotency-Key header - works through the ApiClient facade, which
+//    forwards headers but not `extra`. Send the key your backend
+//    de-duplicates on.
+await apiClient.post(
+  '/orders',
+  data: {'amount': 1},
+  options: Options(headers: {'Idempotency-Key': orderUuid}),
+);
+
+// 2. extra['retry'] - for code holding a raw Dio instance.
+await apiClient.dio.post(
+  '/orders',
+  data: {'amount': 1},
+  options: Options(extra: {'retry': true}),
+);
+```
+
+The header match is case-insensitive and an empty value does not opt in.
+`extra: {'retry': false}` is the mirror image and suppresses retry even for a
+safe method.
+
+An override decides only **whether** a request may be replayed. The error-type
+table and `maxRetries` still apply, so an opted-in `POST` gets the same 1 + 3
+attempts a `GET` does.
 
 ---
 
