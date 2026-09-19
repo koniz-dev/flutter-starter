@@ -27,4 +27,8 @@ class RouteParams {
 
 class RouteQueryParams {
   RouteQueryParams._();
+
+  // Destination the auth guard bounced away from, carried on `/login` so a
+  // deep link survives the login round trip.
+  static const String redirect = 'redirect';
 }

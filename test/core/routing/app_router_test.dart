@@ -22,6 +22,15 @@ class _TestAuthNotifier extends AuthNotifier {
   AuthState build() => _initial;
 }
 
+// Since #51 the guard holds the requested location while
+// `sessionRestorationProvider` is loading instead of bouncing to `/login` -
+// otherwise every returning user flashes the login screen. A widget test with
+// no mock storage channel never settles the real restore
+// (`SharedPreferences.getInstance()` never answers under the test binding), so
+// the tests below that boot unauthenticated say "restore finished and found
+// nothing" explicitly, which is what `main()` has already awaited by the time
+// it calls `runApp`.
+
 void main() {
   group('goRouterProvider', () {
     late ProviderContainer container;
@@ -142,6 +151,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           authNotifierProvider.overrideWith(() => AuthNotifier()..build()),
+          sessionRestorationProvider.overrideWith((ref) async {}),
         ],
       );
       final router = container.read(goRouterProvider);
@@ -177,6 +187,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           authNotifierProvider.overrideWith(() => AuthNotifier()..build()),
+          sessionRestorationProvider.overrideWith((ref) async {}),
         ],
       );
       final router = container.read(goRouterProvider);

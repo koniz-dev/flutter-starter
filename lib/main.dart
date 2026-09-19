@@ -10,6 +10,7 @@ import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 
@@ -29,6 +30,13 @@ Future<void> main() async {
   final container = ProviderContainer();
 
   await container.read(storageInitializationProvider.future);
+
+  // Restore a session persisted by a previous launch BEFORE the first frame.
+  // Without this the app boots unauthenticated, the router redirects to
+  // /login, and every cold start logs the user out even though the user and
+  // tokens are still on disk. Awaiting here also means the router never sees
+  // the restore-in-flight state in production.
+  await container.read(sessionRestorationProvider.future);
 
   final localizationService = container.read(localizationServiceProvider);
   final savedLocale = await localizationService.getCurrentLocale();
