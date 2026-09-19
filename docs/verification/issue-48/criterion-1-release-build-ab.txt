@@ -1,0 +1,42 @@
+Criterion 1 - a --dart-define value is resolved in a real Flutter AOT build.
+
+A/B on the shipping pipeline: the same app, the same build command, built
+twice - once with the pre-fix runtime-keyed lookup, once with the merged
+const table - then the release AOT snapshot searched for the supplied URL.
+macOS is used because it is the only AOT target available in this
+environment; the Dart AOT compiler is the same one flutter build apk uses.
+
+================================================================================
+A. PRE-FIX code (EnvConfig calling String.fromEnvironment(key) directly)
+
+$ flutter build macos --release --dart-define=BASE_URL=https://api-probe-issue48.example.com
+✓ Built build/macos/Build/Products/Release/flutter_starter.app (49.7MB)
+
+$ strings -a .../App.framework/Versions/A/App | grep -c api-probe-issue48
+0
+   -> the supplied value is NOT in the binary: this build can only fall back
+      to the hardcoded default.
+
+$ strings -a .../App | grep -c localhost:3000
+1
+   -> and the development default IS there.
+
+================================================================================
+B. MERGED code (EnvConfig indexing the const DartDefines table) - commit 67e09a6
+
+$ flutter build macos --release --dart-define=BASE_URL=https://api-probe-issue48.example.com
+✓ Built build/macos/Build/Products/Release/flutter_starter.app (49.7MB)
+
+$ strings -a .../App.framework/Versions/A/App | grep -n api-probe-issue48
+30075:https://api-probe-issue48.example.com
+   -> the value supplied on the command line is compiled into the release
+      snapshot, inside the const table EnvConfig reads.
+
+================================================================================
+What this does NOT show
+
+That the running release app returns the value from AppConfig.baseUrl was
+not observed: AppConfig.printConfig() is behind an isDebugMode guard, so a
+release build prints nothing, and no session here can drive a device or an
+installed app. The binary contains the value and the lookup is a plain map
+index, but the runtime observation is the human step on the issue.
