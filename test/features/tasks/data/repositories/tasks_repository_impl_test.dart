@@ -12,9 +12,34 @@ import '../../../../helpers/test_helpers.dart';
 
 class MockTasksLocalDataSource extends Mock implements TasksLocalDataSource {}
 
+/// Stubs [TasksLocalDataSource.mutateTasks] over an in-memory list, the way
+/// the real data source behaves: read the stored list, apply the transform,
+/// write the result back atomically.
+///
+/// The returned list is updated in place on every mutation, so a test can
+/// assert on exactly what was written.
+List<TaskModel> stubMutateTasks(
+  MockTasksLocalDataSource mock, [
+  List<TaskModel> initial = const [],
+]) {
+  final stored = <TaskModel>[...initial];
+  when(() => mock.mutateTasks(any())).thenAnswer((invocation) async {
+    final transform =
+        invocation.positionalArguments.first
+            as List<TaskModel> Function(List<TaskModel>);
+    final next = transform(List<TaskModel>.of(stored));
+    stored
+      ..clear()
+      ..addAll(next);
+    return next;
+  });
+  return stored;
+}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(createTaskModel());
+    registerFallbackValue((List<TaskModel> tasks) => tasks);
   });
 
   group('TasksRepositoryImpl', () {
@@ -262,12 +287,7 @@ void main() {
           createTaskModel(id: 'task-3', isCompleted: true),
           createTaskModel(id: 'task-4'),
         ];
-        when(
-          () => mockLocalDataSource.getAllTasks(),
-        ).thenAnswer((_) async => allTasks);
-        when(
-          () => mockLocalDataSource.saveTasks(any()),
-        ).thenAnswer((_) async => {});
+        final stored = stubMutateTasks(mockLocalDataSource, allTasks);
 
         // Act
         final result = await repository.deleteCompletedTasks();
@@ -277,40 +297,21 @@ void main() {
           success: (_) => expect(true, isTrue),
           failureCallback: (_) => fail('Expected success'),
         );
-        verify(() => mockLocalDataSource.getAllTasks()).called(1);
-        final savedTasks =
-            verify(
-                  () => mockLocalDataSource.saveTasks(captureAny()),
-                ).captured.first
-                as List<TaskModel>;
-        expect(savedTasks.length, 2);
-        expect(savedTasks.every((t) => !t.isCompleted), isTrue);
+        // A single atomic read-modify-write, not a separate read then write.
+        verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
+        verifyNever(() => mockLocalDataSource.getAllTasks());
+        expect(stored.length, 2);
+        expect(stored.every((t) => !t.isCompleted), isTrue);
       });
 
       test(
-        'should return CacheFailure when getAllTasks throws exception',
+        'should return CacheFailure when mutateTasks throws exception',
         () async {
           // Arrange
           final exception = createCacheException(message: 'Storage error');
-          when(() => mockLocalDataSource.getAllTasks()).thenThrow(exception);
-
-          // Act
-          final result = await repository.deleteCompletedTasks();
-
-          // Assert
-          expectResultFailureType(result, CacheFailure);
-        },
-      );
-
-      test(
-        'should return CacheFailure when saveTasks throws exception',
-        () async {
-          // Arrange
           when(
-            () => mockLocalDataSource.getAllTasks(),
-          ).thenAnswer((_) async => []);
-          final exception = createCacheException(message: 'Storage error');
-          when(() => mockLocalDataSource.saveTasks(any())).thenThrow(exception);
+            () => mockLocalDataSource.mutateTasks(any()),
+          ).thenThrow(exception);
 
           // Act
           final result = await repository.deleteCompletedTasks();
@@ -326,12 +327,7 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         final taskModel = createTaskModel(id: taskId);
-        when(
-          () => mockLocalDataSource.getTaskById(any()),
-        ).thenAnswer((_) async => taskModel);
-        when(
-          () => mockLocalDataSource.saveTask(any()),
-        ).thenAnswer((_) async => {});
+        final stored = stubMutateTasks(mockLocalDataSource, [taskModel]);
 
         // Act
         final result = await repository.toggleTaskCompletion(taskId);
@@ -341,16 +337,18 @@ void main() {
           success: (task) => expect(task.isCompleted, isTrue),
           failureCallback: (_) => fail('Expected success'),
         );
-        verify(() => mockLocalDataSource.getTaskById(taskId)).called(1);
-        verify(() => mockLocalDataSource.saveTask(any())).called(1);
+        // The flip is computed inside one atomic mutation, so nothing reads
+        // the task outside the write lock.
+        verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
+        verifyNever(() => mockLocalDataSource.getTaskById(any()));
+        verifyNever(() => mockLocalDataSource.saveTask(any()));
+        expect(stored.single.isCompleted, isTrue);
       });
 
       test('should return CacheFailure when task not found', () async {
         // Arrange
         const taskId = 'non-existent';
-        when(
-          () => mockLocalDataSource.getTaskById(any()),
-        ).thenAnswer((_) async => null);
+        stubMutateTasks(mockLocalDataSource);
 
         // Act
         final result = await repository.toggleTaskCompletion(taskId);
@@ -365,13 +363,13 @@ void main() {
       });
 
       test(
-        'should return CacheFailure when getTaskById throws exception',
+        'should return CacheFailure when mutateTasks throws exception',
         () async {
           // Arrange
           const taskId = 'task-1';
           final exception = createCacheException(message: 'Storage error');
           when(
-            () => mockLocalDataSource.getTaskById(any()),
+            () => mockLocalDataSource.mutateTasks(any()),
           ).thenThrow(exception);
 
           // Act
@@ -386,12 +384,7 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         final taskModel = createTaskModel(id: taskId, isCompleted: true);
-        when(
-          () => mockLocalDataSource.getTaskById(any()),
-        ).thenAnswer((_) async => taskModel);
-        when(
-          () => mockLocalDataSource.saveTask(any()),
-        ).thenAnswer((_) async => {});
+        stubMutateTasks(mockLocalDataSource, [taskModel]);
 
         // Act
         final result = await repository.toggleTaskCompletion(taskId);
@@ -413,12 +406,7 @@ void main() {
           createdAt: originalTime,
           updatedAt: originalTime,
         );
-        when(
-          () => mockLocalDataSource.getTaskById(any()),
-        ).thenAnswer((_) async => taskModel);
-        when(
-          () => mockLocalDataSource.saveTask(any()),
-        ).thenAnswer((_) async => {});
+        stubMutateTasks(mockLocalDataSource, [taskModel]);
 
         // Act
         final result = await repository.toggleTaskCompletion(taskId);
@@ -507,7 +495,7 @@ void main() {
       test('should handle generic Exception in deleteCompletedTasks', () async {
         // Arrange
         when(
-          () => mockLocalDataSource.getAllTasks(),
+          () => mockLocalDataSource.mutateTasks(any()),
         ).thenThrow(Exception('Generic error'));
 
         // Act
@@ -521,7 +509,7 @@ void main() {
         // Arrange
         const taskId = 'task-1';
         when(
-          () => mockLocalDataSource.getTaskById(any()),
+          () => mockLocalDataSource.mutateTasks(any()),
         ).thenThrow(Exception('Generic error'));
 
         // Act
@@ -604,12 +592,7 @@ void main() {
             createTaskModel(id: 'task-1', isCompleted: true),
             createTaskModel(id: 'task-2', isCompleted: true),
           ];
-          when(
-            () => mockLocalDataSource.getAllTasks(),
-          ).thenAnswer((_) async => allTasks);
-          when(
-            () => mockLocalDataSource.saveTasks(any()),
-          ).thenAnswer((_) async => {});
+          final stored = stubMutateTasks(mockLocalDataSource, allTasks);
 
           // Act
           final result = await repository.deleteCompletedTasks();
@@ -619,12 +602,7 @@ void main() {
             success: (_) => expect(true, isTrue),
             failureCallback: (_) => fail('Expected success'),
           );
-          final savedTasks =
-              verify(
-                    () => mockLocalDataSource.saveTasks(captureAny()),
-                  ).captured.first
-                  as List<TaskModel>;
-          expect(savedTasks, isEmpty);
+          expect(stored, isEmpty);
         },
       );
 
@@ -636,12 +614,7 @@ void main() {
             createTaskModel(id: 'task-1'),
             createTaskModel(id: 'task-2'),
           ];
-          when(
-            () => mockLocalDataSource.getAllTasks(),
-          ).thenAnswer((_) async => allTasks);
-          when(
-            () => mockLocalDataSource.saveTasks(any()),
-          ).thenAnswer((_) async => {});
+          final stored = stubMutateTasks(mockLocalDataSource, allTasks);
 
           // Act
           final result = await repository.deleteCompletedTasks();
@@ -651,12 +624,7 @@ void main() {
             success: (_) => expect(true, isTrue),
             failureCallback: (_) => fail('Expected success'),
           );
-          final savedTasks =
-              verify(
-                    () => mockLocalDataSource.saveTasks(captureAny()),
-                  ).captured.first
-                  as List<TaskModel>;
-          expect(savedTasks.length, 2);
+          expect(stored.length, 2);
         },
       );
 
@@ -693,12 +661,7 @@ void main() {
         'should handle deleteCompletedTasks with empty tasks list',
         () async {
           // Arrange
-          when(
-            () => mockLocalDataSource.getAllTasks(),
-          ).thenAnswer((_) async => []);
-          when(
-            () => mockLocalDataSource.saveTasks(any()),
-          ).thenAnswer((_) async => {});
+          final stored = stubMutateTasks(mockLocalDataSource);
 
           // Act
           final result = await repository.deleteCompletedTasks();
@@ -708,12 +671,7 @@ void main() {
             success: (_) => expect(true, isTrue),
             failureCallback: (_) => fail('Expected success'),
           );
-          final savedTasks =
-              verify(
-                    () => mockLocalDataSource.saveTasks(captureAny()),
-                  ).captured.first
-                  as List<TaskModel>;
-          expect(savedTasks, isEmpty);
+          expect(stored, isEmpty);
         },
       );
 
@@ -723,12 +681,7 @@ void main() {
           // Arrange
           const taskId = 'task-1';
           final taskModel = createTaskModel(id: taskId, isCompleted: true);
-          when(
-            () => mockLocalDataSource.getTaskById(any()),
-          ).thenAnswer((_) async => taskModel);
-          when(
-            () => mockLocalDataSource.saveTask(any()),
-          ).thenAnswer((_) async => {});
+          final stored = stubMutateTasks(mockLocalDataSource, [taskModel]);
 
           // Act
           final result = await repository.toggleTaskCompletion(taskId);
@@ -738,8 +691,8 @@ void main() {
             success: (task) => expect(task.isCompleted, isFalse),
             failureCallback: (_) => fail('Expected success'),
           );
-          verify(() => mockLocalDataSource.getTaskById(taskId)).called(1);
-          verify(() => mockLocalDataSource.saveTask(any())).called(1);
+          verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
+          expect(stored.single.isCompleted, isFalse);
         },
       );
     });

@@ -287,37 +287,50 @@ void main() {
       }
     });
 
-    test('should create multiple tasks with unique ids', () async {
-      // Arrange
+    test('should create 100 tasks with unique ids and no delay', () async {
+      // Arrange - no sleeping: a timestamp-only id collides whenever two
+      // tasks are created inside the same millisecond, which a tight loop
+      // guarantees. `saveTask` upserts by id, so a collision silently
+      // destroys the earlier task.
       const title = 'Task';
-      final taskIds = <String>{};
+      final createdIds = <String>[];
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
+        final task = invocation.positionalArguments[0] as Task;
+        createdIds.add(task.id);
+        return Success(task);
+      });
 
-      for (var i = 0; i < 5; i++) {
-        Task? createdTask;
-        when(() => mockRepository.createTask(any())).thenAnswer((
-          invocation,
-        ) async {
-          createdTask = invocation.positionalArguments[0] as Task;
-          return Success(createdTask!);
-        });
-
-        // Act
+      // Act
+      for (var i = 0; i < 100; i++) {
         await useCase(title: title);
-
-        // Assert
-        expect(createdTask, isNotNull);
-        final task = createdTask!;
-        expect(task.id, isNotEmpty);
-        taskIds.add(task.id);
-        clearInteractions(mockRepository);
-
-        // Add small delay to ensure unique timestamps
-        await Future<void>.delayed(const Duration(milliseconds: 2));
       }
 
-      // All task IDs should be unique (or at least most of them)
-      // Note: In rare cases, IDs might collide if created in same millisecond
-      expect(taskIds.length, greaterThanOrEqualTo(4));
+      // Assert
+      expect(createdIds, hasLength(100));
+      expect(createdIds.every((id) => id.isNotEmpty), isTrue);
+      expect(createdIds.toSet(), hasLength(100));
+    });
+
+    test('should create unique ids for concurrent creations', () async {
+      // Arrange
+      final createdIds = <String>[];
+      when(() => mockRepository.createTask(any())).thenAnswer((
+        invocation,
+      ) async {
+        final task = invocation.positionalArguments[0] as Task;
+        createdIds.add(task.id);
+        return Success(task);
+      });
+
+      // Act - 100 creations issued without awaiting in between.
+      await Future.wait([
+        for (var i = 0; i < 100; i++) useCase(title: 'Task $i'),
+      ]);
+
+      // Assert
+      expect(createdIds.toSet(), hasLength(100));
     });
 
     test('should create task with createdAt and updatedAt equal', () async {

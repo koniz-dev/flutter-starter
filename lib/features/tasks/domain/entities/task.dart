@@ -32,11 +32,17 @@ class Task {
   /// Task last update timestamp
   final DateTime updatedAt;
 
-  /// Creates a copy of this task with the given fields replaced
+  /// Sentinel distinguishing "argument omitted" from an explicit `null`.
+  static const Object _unset = Object();
+
+  /// Creates a copy of this task with the given fields replaced.
+  ///
+  /// Passing `description: null` explicitly **clears** the description;
+  /// omitting it keeps the current value.
   Task copyWith({
     String? id,
     String? title,
-    String? description,
+    Object? description = _unset,
     bool? isCompleted,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -44,7 +50,9 @@ class Task {
     return Task(
       id: id ?? this.id,
       title: title ?? this.title,
-      description: description ?? this.description,
+      description: identical(description, _unset)
+          ? this.description
+          : description as String?,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -59,12 +67,17 @@ class Task {
           id == other.id &&
           title == other.title &&
           description == other.description &&
-          isCompleted == other.isCompleted;
+          isCompleted == other.isCompleted &&
+          createdAt == other.createdAt &&
+          updatedAt == other.updatedAt;
 
   @override
-  int get hashCode =>
-      id.hashCode ^
-      title.hashCode ^
-      description.hashCode ^
-      isCompleted.hashCode;
+  int get hashCode => Object.hash(
+    id,
+    title,
+    description,
+    isCompleted,
+    createdAt,
+    updatedAt,
+  );
 }

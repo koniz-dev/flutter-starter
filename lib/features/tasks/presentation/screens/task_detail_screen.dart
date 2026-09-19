@@ -60,6 +60,11 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
     final result = await getTaskByIdUseCase(widget.taskId!);
 
+    // The screen can be popped while the load is in flight; both controllers
+    // are disposed by then, so neither setState nor a controller write is
+    // safe past this point.
+    if (!mounted) return;
+
     result.when(
       success: (task) {
         setState(() {

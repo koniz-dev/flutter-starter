@@ -80,9 +80,11 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Result<void>> deleteCompletedTasks() async {
     try {
-      final tasks = await localDataSource.getAllTasks();
-      final incompleteTasks = tasks.where((task) => !task.isCompleted).toList();
-      await localDataSource.saveTasks(incompleteTasks);
+      // Atomic read-modify-write: a concurrent mutation cannot be overwritten
+      // by a stale snapshot taken before it landed.
+      await localDataSource.mutateTasks(
+        (current) => current.where((task) => !task.isCompleted).toList(),
+      );
       return const Success(null);
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
@@ -94,21 +96,31 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Result<Task>> toggleTaskCompletion(String id) async {
     try {
-      final taskModel = await localDataSource.getTaskById(id);
-      if (taskModel == null) {
+      // The flip is computed inside the atomic mutation, so two overlapping
+      // toggles of the same task cannot both read the same starting value.
+      TaskModel? updatedTaskModel;
+      await localDataSource.mutateTasks((current) {
+        final index = current.indexWhere((task) => task.id == id);
+        if (index < 0) return current;
+
+        final taskModel = current[index];
+        final updated = TaskModel(
+          id: taskModel.id,
+          title: taskModel.title,
+          description: taskModel.description,
+          isCompleted: !taskModel.isCompleted,
+          createdAt: taskModel.createdAt,
+          updatedAt: DateTime.now(),
+        );
+        updatedTaskModel = updated;
+        return [...current]..[index] = updated;
+      });
+
+      final updated = updatedTaskModel;
+      if (updated == null) {
         return const ResultFailure(CacheFailure('Task not found'));
       }
-
-      final updatedTaskModel = TaskModel(
-        id: taskModel.id,
-        title: taskModel.title,
-        description: taskModel.description,
-        isCompleted: !taskModel.isCompleted,
-        createdAt: taskModel.createdAt,
-        updatedAt: DateTime.now(),
-      );
-      await localDataSource.saveTask(updatedTaskModel);
-      return Success(updatedTaskModel.toEntity());
+      return Success(updated.toEntity());
     } on AppException catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {

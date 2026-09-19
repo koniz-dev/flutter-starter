@@ -64,8 +64,10 @@ class _FeatureFlagsDebugScreenState
                 await ref
                     .read(featureFlagsManagerProvider)
                     .clearAllLocalOverrides();
-                ref.invalidate(allFeatureFlagsProvider);
+                // The screen can be popped while the await above is in
+                // flight; `ref` is unusable past disposal, so guard first.
                 if (!mounted) return;
+                ref.invalidate(allFeatureFlagsProvider);
                 messenger.showSnackBar(
                   const SnackBar(content: Text('All local overrides cleared')),
                 );
@@ -187,8 +189,10 @@ class _FeatureFlagsDebugScreenState
           await ref
               .read(featureFlagsManagerProvider)
               .setLocalOverride(flagKey, value: value);
-          ref.invalidate(allFeatureFlagsProvider);
+          // The screen can be popped while the await above is in flight;
+          // `ref` is unusable past disposal, so guard first.
           if (!mounted) return;
+          ref.invalidate(allFeatureFlagsProvider);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${flag.key} ${value ? "enabled" : "disabled"}'),
@@ -200,8 +204,10 @@ class _FeatureFlagsDebugScreenState
       onLongPress: () async {
         // Long press to clear override
         await ref.read(featureFlagsManagerProvider).clearLocalOverride(flagKey);
-        ref.invalidate(allFeatureFlagsProvider);
+        // The screen can be popped while the await above is in flight;
+        // `ref` is unusable past disposal, so guard first.
         if (!mounted) return;
+        ref.invalidate(allFeatureFlagsProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Override cleared for ${flag.key}')),
         );

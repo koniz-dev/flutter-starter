@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -248,6 +250,46 @@ void main() {
           () => mockManager.setLocalOverride(any(), value: true),
         ).called(1);
       }
+    });
+
+    testWidgets('unmounting mid-override does not touch ref after dispose', (
+      tester,
+    ) async {
+      // Arrange
+      const flag = FeatureFlag(
+        key: 'test_flag',
+        value: false,
+        source: FeatureFlagSource.remoteConfig,
+      );
+      const flagsValue = AsyncValue.data(<String, FeatureFlag?>{
+        'test_flag': flag,
+      });
+      final inFlight = Completer<void>();
+      when(
+        () => mockManager.setLocalOverride(any(), value: any(named: 'value')),
+      ).thenAnswer((_) => inFlight.future);
+      await tester.pumpWidget(createTestWidget(flagsValue: flagsValue));
+      await tester.pumpAndSettle();
+
+      final expansionTile = find.byType(ExpansionTile);
+      if (expansionTile.evaluate().isNotEmpty) {
+        await tester.tap(expansionTile);
+        await tester.pumpAndSettle();
+      }
+      final switchWidget = find.byType(Switch);
+      expect(switchWidget, findsOneWidget);
+
+      // Act - leave the screen while the override write is in flight.
+      await tester.tap(switchWidget);
+      await tester.pump();
+      await tester.pumpWidget(const SizedBox.shrink());
+      inFlight.complete();
+      await tester.pump();
+      await tester.pump();
+
+      // Assert - `ref.invalidate` sits behind the `mounted` guard, so
+      // nothing reaches a disposed ConsumerState.
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('should retry when retry button is tapped', (tester) async {

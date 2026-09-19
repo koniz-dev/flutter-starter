@@ -9,8 +9,14 @@ part 'tasks_provider.g.dart';
 
 /// Tasks state
 class TasksState {
-  /// Creates a [TasksState] with the given [tasks], [isLoading], and [error]
-  const TasksState({this.tasks = const [], this.isLoading = false, this.error});
+  /// Creates a [TasksState] with the given [tasks], [isLoading], [error] and
+  /// [pendingTaskIds]
+  const TasksState({
+    this.tasks = const [],
+    this.isLoading = false,
+    this.error,
+    this.pendingTaskIds = const {},
+  });
 
   /// List of tasks
   final List<Task> tasks;
@@ -21,17 +27,25 @@ class TasksState {
   /// Error message if operation failed, null otherwise
   final String? error;
 
+  /// Ids of tasks with a mutation currently in flight.
+  ///
+  /// The list screen disables the per-task controls for these ids so a second
+  /// tap cannot queue a second mutation against a stale value.
+  final Set<String> pendingTaskIds;
+
   /// Creates a copy of this state with the given fields replaced
   TasksState copyWith({
     List<Task>? tasks,
     bool? isLoading,
     String? error,
     bool clearError = false,
+    Set<String>? pendingTaskIds,
   }) {
     return TasksState(
       tasks: tasks ?? this.tasks,
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
+      pendingTaskIds: pendingTaskIds ?? this.pendingTaskIds,
     );
   }
 }
@@ -47,19 +61,28 @@ class TasksNotifier extends _$TasksNotifier {
     return const TasksState();
   }
 
+  /// Sequence number of the most recently started load.
+  ///
+  /// Reloads can overlap, and they do not necessarily complete in the order
+  /// they were issued. Only the newest load is allowed to write its snapshot
+  /// to state, so a slow older load cannot land after a newer one and
+  /// resurrect stale data.
+  int _loadToken = 0;
+
   /// Loads all tasks
   Future<void> _loadTasks() async {
     if (!ref.mounted) return;
+    final token = ++_loadToken;
     state = state.copyWith(isLoading: true, clearError: true);
 
     final getAllTasksUseCase = ref.read(getAllTasksUseCaseProvider);
     final result = await getAllTasksUseCase();
 
-    if (!ref.mounted) return;
+    // Superseded by a newer load, or the provider is gone: drop the snapshot.
+    if (!ref.mounted || token != _loadToken) return;
 
     result.when(
       success: (tasks) {
-        if (!ref.mounted) return;
         state = state.copyWith(
           tasks: tasks,
           isLoading: false,
@@ -67,7 +90,6 @@ class TasksNotifier extends _$TasksNotifier {
         );
       },
       failureCallback: (failure) {
-        if (!ref.mounted) return;
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
@@ -88,12 +110,15 @@ class TasksNotifier extends _$TasksNotifier {
       description: description,
     );
 
-    result.when(
-      success: (_) {
-        // Reload tasks to get updated list
-        unawaited(_loadTasks());
-      },
-      failureCallback: (failure) {
+    if (!ref.mounted) return;
+
+    await result.when(
+      // Await the reload so the caller only resumes once `state.tasks`
+      // reflects the mutation.
+      success: (_) => _loadTasks(),
+      failureCallback: (failure) async {
+        // Keep the already-loaded tasks: a failed mutation reports an error,
+        // it does not empty the list.
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
@@ -106,12 +131,11 @@ class TasksNotifier extends _$TasksNotifier {
     final updateTaskUseCase = ref.read(updateTaskUseCaseProvider);
     final result = await updateTaskUseCase(task);
 
-    result.when(
-      success: (_) {
-        // Reload tasks to get updated list
-        unawaited(_loadTasks());
-      },
-      failureCallback: (failure) {
+    if (!ref.mounted) return;
+
+    await result.when(
+      success: (_) => _loadTasks(),
+      failureCallback: (failure) async {
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
@@ -119,17 +143,18 @@ class TasksNotifier extends _$TasksNotifier {
 
   /// Deletes a task by [id]
   Future<void> deleteTask(String id) async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    if (state.pendingTaskIds.contains(id)) return;
+    state = _withPending(id).copyWith(isLoading: true, clearError: true);
 
     final deleteTaskUseCase = ref.read(deleteTaskUseCaseProvider);
     final result = await deleteTaskUseCase(id);
 
-    result.when(
-      success: (_) {
-        // Reload tasks to get updated list
-        unawaited(_loadTasks());
-      },
-      failureCallback: (failure) {
+    if (!ref.mounted) return;
+    state = _withoutPending(id);
+
+    await result.when(
+      success: (_) => _loadTasks(),
+      failureCallback: (failure) async {
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
@@ -137,23 +162,33 @@ class TasksNotifier extends _$TasksNotifier {
 
   /// Toggles task completion status by [id]
   Future<void> toggleTaskCompletion(String id) async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    // A toggle is already in flight for this task: ignore the repeat tap
+    // instead of computing a second flip from the same stale value.
+    if (state.pendingTaskIds.contains(id)) return;
+    state = _withPending(id).copyWith(isLoading: true, clearError: true);
 
     final toggleTaskCompletionUseCase = ref.read(
       toggleTaskCompletionUseCaseProvider,
     );
     final result = await toggleTaskCompletionUseCase(id);
 
-    result.when(
-      success: (_) {
-        // Reload tasks to get updated list
-        unawaited(_loadTasks());
-      },
-      failureCallback: (failure) {
+    if (!ref.mounted) return;
+    state = _withoutPending(id);
+
+    await result.when(
+      success: (_) => _loadTasks(),
+      failureCallback: (failure) async {
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
   }
+
+  TasksState _withPending(String id) =>
+      state.copyWith(pendingTaskIds: {...state.pendingTaskIds, id});
+
+  TasksState _withoutPending(String id) => state.copyWith(
+    pendingTaskIds: {...state.pendingTaskIds}..remove(id),
+  );
 }
 
 /// Alias for [tasksProvider] (older imports use `tasksNotifierProvider`).

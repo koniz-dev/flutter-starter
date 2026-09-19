@@ -57,52 +57,59 @@ class TasksListScreen extends ConsumerWidget {
     TasksNotifier notifier,
     AppLocalizations l10n,
   ) {
-    if (state.error != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              state.error!,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => notifier.refresh(),
-              child: Text(l10n.retry),
-            ),
-          ],
+    // Only take over the whole screen when there is nothing else to show. A
+    // mutation that failed while tasks are loaded reports the error inline
+    // instead of wiping the list.
+    if (state.error != null && state.tasks.isEmpty) {
+      return _alwaysScrollable(
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                state.error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => notifier.refresh(),
+                child: Text(l10n.retry),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     if (state.tasks.isEmpty && !state.isLoading) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.task_alt,
-              size: 64,
-              color: Theme.of(
-                context,
-              ).colorScheme.primary.withValues(alpha: 0.5),
-            ),
-            const SizedBox(height: 16),
-            Text(l10n.noTasks, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Text(
-              l10n.addYourFirstTask,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
+      return _alwaysScrollable(
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.task_alt,
+                size: 64,
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.5),
+              ),
+              const SizedBox(height: 16),
+              Text(l10n.noTasks, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(
+                l10n.addYourFirstTask,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -113,19 +120,58 @@ class TasksListScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(8),
       children: [
+        if (state.error != null) _buildErrorBanner(context, state),
         if (incompleteTasks.isNotEmpty) ...[
           _buildSectionHeader(l10n.incompleteTasks, context),
           ...incompleteTasks.map(
-            (task) => _buildTaskTile(context, task, notifier, l10n),
+            (task) => _buildTaskTile(context, task, state, notifier, l10n),
           ),
         ],
         if (completedTasks.isNotEmpty) ...[
           _buildSectionHeader(l10n.completedTasks, context),
           ...completedTasks.map(
-            (task) => _buildTaskTile(context, task, notifier, l10n),
+            (task) => _buildTaskTile(context, task, state, notifier, l10n),
           ),
         ],
       ],
+    );
+  }
+
+  /// Wraps a non-scrollable body so [RefreshIndicator] still responds to a
+  /// pull gesture - otherwise pull-to-refresh is inert in exactly the empty
+  /// and error states where it is most wanted.
+  Widget _alwaysScrollable(Widget child) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorBanner(BuildContext context, TasksState state) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      color: colorScheme.errorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Icon(Icons.error_outline, color: colorScheme.onErrorContainer),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                state.error!,
+                style: TextStyle(color: colorScheme.onErrorContainer),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -145,15 +191,22 @@ class TasksListScreen extends ConsumerWidget {
   Widget _buildTaskTile(
     BuildContext context,
     Task task,
+    TasksState state,
     TasksNotifier notifier,
     AppLocalizations l10n,
   ) {
+    // A mutation for this task is already in flight: the row goes inert so a
+    // second tap cannot be computed against the pre-mutation value, and so a
+    // tap aimed at the disabled checkbox does not fall through to the tile.
+    final isPending = state.pendingTaskIds.contains(task.id);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         leading: Checkbox(
           value: task.isCompleted,
-          onChanged: (value) => notifier.toggleTaskCompletion(task.id),
+          onChanged: isPending
+              ? null
+              : (value) => notifier.toggleTaskCompletion(task.id),
         ),
         title: Text(
           task.title,
@@ -208,9 +261,9 @@ class TasksListScreen extends ConsumerWidget {
             ),
           ],
         ),
-        onTap: () {
-          context.pushRoute('${AppRoutes.tasks}/${task.id}');
-        },
+        onTap: isPending
+            ? null
+            : () => context.pushRoute('${AppRoutes.tasks}/${task.id}'),
       ),
     );
   }
