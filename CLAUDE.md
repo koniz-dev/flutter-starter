@@ -154,21 +154,23 @@ make the loop worthless.
   manual plus weekly, not per-PR.
 ### Which checks a PR gets
 
-Three workflows run on PRs, each with its own path filter, so "no Quality gate"
-is normal rather than a failure:
+Four workflows run on PRs and only two of them filter on paths, so "no Quality
+gate" is normal rather than a failure:
 
-| Workflow | Check name | Runs when |
+| Workflow | Check name(s) | Runs when |
 |---|---|---|
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | any path **outside** `**/*.md` and `docs/**` |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or the workflow itself |
 | [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
+| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR, no path filter |
 
-So a docs-only PR gets **Docs check** and **Issue refs** but no Quality gate,
-and an evidence-only PR of `.log`/`.png` files gets **Issue refs** alone. Every
-PR now gets at least one check - a PR reporting zero checks is the registration
-race, not a path exclusion. Poll until `gh pr checks --json name --jq 'length'`
-is non-zero before `gh pr checks --watch`; merging on the "no checks reported"
-reading skips the gate entirely.
+So a docs-only PR gets Docs check, Issue refs and the three Strip jobs but no
+Quality gate, and an evidence-only PR of `.log`/`.png` files gets Issue refs
+and the Strip jobs. **Every PR gets at least four checks** - a PR reporting
+zero is the registration race, not a path exclusion. Poll until
+`gh pr checks --json name --jq 'length'` is non-zero before
+`gh pr checks --watch`; merging on the "no checks reported" reading skips the
+gate entirely.
 
 **None of these checks gates a merge, and `main` has no branch protection.**
 `gh pr merge --squash` succeeds on a red PR, and a direct push to `main` is not

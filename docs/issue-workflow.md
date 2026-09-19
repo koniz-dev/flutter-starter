@@ -830,20 +830,25 @@ The generic pattern was adjusted in four places. Each is a deliberate deviation.
    gone through a PR, by discipline alone. The session opens the PR, waits for
    the checks that PR actually gets, and merges with `--squash --delete-branch`.
 
-   Which checks it gets depends on the paths, and two of the three workflows
-   filter on them:
+   Which checks it gets depends on the paths, and only two of the four
+   workflows filter on them:
 
-   | Workflow | Check | Runs when |
+   | Workflow | Check(s) | Runs when |
    |---|---|---|
    | [`ci.yml`](../.github/workflows/ci.yml) | Quality gate | any path outside `**/*.md` and `docs/**` |
    | [`docs-check.yml`](../.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or itself |
    | [`issue-refs.yml`](../.github/workflows/issue-refs.yml) | Issue refs | every PR, unconditionally |
+   | [`strip-smoke.yml`](../.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test, three of them | every PR, unconditionally |
 
-   A docs-only PR therefore gets **Docs check** and **Issue refs** but no
-   Quality gate; that is expected, not a failure. An evidence-only PR of
-   `.png` and `.log` files gets **Issue refs** alone. Since every PR now gets at
-   least one check, a PR showing zero is the registration race described in step
-   5 of [section 4](#4-the-per-issue-agent-loop), not a path exclusion.
+   A docs-only PR therefore gets Docs check, Issue refs and the three Strip
+   jobs, but no Quality gate; that is expected, not a failure. An evidence-only
+   PR of `.png` and `.log` files gets Issue refs and the Strip jobs. Every PR
+   gets at least four checks, so a PR showing zero is the registration race
+   described in step 5 of [section 4](#4-the-per-issue-agent-loop), never a path
+   exclusion. This document said the opposite until
+   koniz-dev/flutter-starter#58 - that an evidence-only PR gets "no checks at
+   all" - which was already false when `strip-smoke.yml` landed without a path
+   filter.
 
    **No check gates a merge**, and with no protection in place nothing else
    does either, so reading the checks is the session's job. Enabling protection
@@ -852,8 +857,8 @@ The generic pattern was adjusted in four places. Each is a deliberate deviation.
    when doing it: Quality gate cannot be made a *required* check while `ci.yml`
    carries `paths-ignore`, because a required check that never reports leaves
    every docs-only PR - including every evidence PR - permanently unmergeable.
-   **Issue refs** is the one check with no path filter, so it is the only
-   current candidate for a required check.
+   Only the two unfiltered workflows, **Issue refs** and **Strip smoke**, are
+   safe to mark required as things stand.
 
 3. **Golden PNGs instead of a browser harness.** There is no browser or e2e
    harness a session can drive here (tier 3 above). Golden capture is the only
