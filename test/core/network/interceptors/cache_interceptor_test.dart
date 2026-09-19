@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,6 +27,43 @@ class TestResponseInterceptorHandler extends ResponseInterceptorHandler {
   TestResponseInterceptorHandler() : super();
 }
 
+/// Token store with a fixed access token, signed out when none is given.
+class _StubTokenStore implements ITokenStore {
+  _StubTokenStore({this.accessToken});
+
+  String? accessToken;
+
+  @override
+  Future<void> clearAccessToken() async => accessToken = null;
+
+  @override
+  Future<void> clearAllTokens() async => accessToken = null;
+
+  @override
+  Future<void> clearRefreshToken() async {}
+
+  @override
+  Future<String?> getAccessToken() async => accessToken;
+
+  @override
+  Future<String?> getRefreshToken() async => null;
+
+  @override
+  Future<bool> setAccessToken(String token) async {
+    accessToken = token;
+    return true;
+  }
+
+  @override
+  Future<bool> setRefreshToken(String token) async => true;
+}
+
+/// Token store whose reads fail, so the credential state is unknowable.
+class _ThrowingTokenStore extends _StubTokenStore {
+  @override
+  Future<String?> getAccessToken() async => throw StateError('keychain down');
+}
+
 void main() {
   group('CacheInterceptor', () {
     late CacheInterceptor interceptor;
@@ -43,6 +81,20 @@ void main() {
 
       // Register fallback values
       registerFallbackValue('');
+      registerFallbackValue(<String>[]);
+
+      // The interceptor keeps its own key index so clearCache knows what to
+      // remove (#77); StorageService has no key enumeration. Default it to
+      // empty so every existing case still exercises the path it used to.
+      when(
+        () => mockStorageService.getStringList(any()),
+      ).thenAnswer((_) async => null);
+      when(
+        () => mockStorageService.setStringList(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => mockStorageService.remove(any()),
+      ).thenAnswer((_) async => true);
     });
 
     group('onRequest', () {
@@ -485,6 +537,139 @@ void main() {
       test('should handle clear cache without errors', () async {
         // Act & Assert
         await expectLater(interceptor.clearCache(), completes);
+      });
+
+      test('should remove every indexed entry, its timestamp and the '
+          'index itself', () async {
+        // Arrange - two entries previously written by the interceptor.
+        const keyOne = 'http_cache_https://api.example.com/api/one_{}';
+        const keyTwo = 'http_cache_https://api.example.com/api/two_{}';
+        when(
+          () => mockStorageService.getStringList('http_cache_index'),
+        ).thenAnswer((_) async => [keyOne, keyTwo]);
+
+        // Act
+        await interceptor.clearCache();
+
+        // Assert
+        verify(() => mockStorageService.remove(keyOne)).called(1);
+        verify(
+          () => mockStorageService.remove('http_cache_timestamp_$keyOne'),
+        ).called(1);
+        verify(() => mockStorageService.remove(keyTwo)).called(1);
+        verify(
+          () => mockStorageService.remove('http_cache_timestamp_$keyTwo'),
+        ).called(1);
+        verify(
+          () => mockStorageService.remove('http_cache_index'),
+        ).called(1);
+      });
+
+      test('should be a no-op when nothing was cached', () async {
+        // Act
+        await interceptor.clearCache();
+
+        // Assert - only the index key is swept.
+        verify(
+          () => mockStorageService.remove('http_cache_index'),
+        ).called(1);
+        verifyNever(
+          () => mockStorageService.remove(
+            any(that: startsWith('http_cache_https')),
+          ),
+        );
+      });
+    });
+
+    group('credential-aware bypass (#77)', () {
+      test(
+        'does not write a response to storage while the token store holds '
+        'an access token, even though the request has no Authorization header',
+        () async {
+          // Arrange
+          final interceptorWithToken = CacheInterceptor(
+            storageService: mockStorageService,
+            tokenStore: _StubTokenStore(accessToken: 'user-a-token'),
+          );
+          final response = Response<dynamic>(
+            requestOptions: requestOptions,
+            statusCode: 200,
+            data: {'ssn': '000-00-0000'},
+          );
+          expect(requestOptions.headers.containsKey('authorization'), isFalse);
+
+          // Act
+          await interceptorWithToken.onResponse(
+            response,
+            TestResponseInterceptorHandler(),
+          );
+
+          // Assert
+          verifyNever(() => mockStorageService.setString(any(), any()));
+        },
+      );
+
+      test('does not read from storage while a credential exists', () async {
+        // Arrange
+        final interceptorWithToken = CacheInterceptor(
+          storageService: mockStorageService,
+          tokenStore: _StubTokenStore(accessToken: 'user-a-token'),
+        );
+        final handler = TestRequestInterceptorHandler();
+
+        // Act
+        await interceptorWithToken.onRequest(requestOptions, handler);
+
+        // Assert
+        expect(handler.resolvedResponse, isNull);
+        verifyNever(() => mockStorageService.getString(any()));
+      });
+
+      test('still caches while signed out', () async {
+        // Arrange
+        final interceptorSignedOut = CacheInterceptor(
+          storageService: mockStorageService,
+          tokenStore: _StubTokenStore(),
+        );
+        final response = Response<dynamic>(
+          requestOptions: requestOptions,
+          statusCode: 200,
+          data: {'key': 'value'},
+        );
+        when(
+          () => mockStorageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
+
+        // Act
+        await interceptorSignedOut.onResponse(
+          response,
+          TestResponseInterceptorHandler(),
+        );
+
+        // Assert
+        verify(() => mockStorageService.setString(any(), any())).called(2);
+      });
+
+      test('fails closed when the token store throws', () async {
+        // Arrange
+        final interceptorFailing = CacheInterceptor(
+          storageService: mockStorageService,
+          tokenStore: _ThrowingTokenStore(),
+        );
+        final response = Response<dynamic>(
+          requestOptions: requestOptions,
+          statusCode: 200,
+          data: {'key': 'value'},
+        );
+
+        // Act
+        await interceptorFailing.onResponse(
+          response,
+          TestResponseInterceptorHandler(),
+        );
+
+        // Assert - unknown credential state is treated as authenticated.
+        verifyNever(() => mockStorageService.setString(any(), any()));
       });
     });
   });

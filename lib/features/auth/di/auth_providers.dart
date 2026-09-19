@@ -56,6 +56,9 @@ final Provider<AuthRepository> authRepositoryProvider =
       return AuthRepositoryImpl(
         remoteDataSource: remoteDataSource,
         localDataSource: localDataSource,
+        // Same ApiClient instance the remote data source already resolved, so
+        // this adds no new edge to the provider graph.
+        httpCache: ref.read(networkClientProvider).responseCache,
       );
     });
 

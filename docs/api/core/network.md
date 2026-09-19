@@ -13,7 +13,7 @@ The network layer provides:
 - `AuthInterceptor` - Automatic token injection and refresh
 - `ErrorInterceptor` - Exception conversion
 - `RetryInterceptor` - Retries transient failures for safe methods only
-- `CacheInterceptor` - Response caching via storage
+- `CacheInterceptor` - Caches unauthenticated `GET` responses in plaintext `shared_preferences`; see [CacheInterceptor](#cacheinterceptor)
 - `PerformanceInterceptor` - Optional HTTP timing (when performance service is wired)
 - `ApiLoggingInterceptor` - Request/response logging via `LoggingService` when enabled
 
@@ -49,6 +49,8 @@ ApiClient({
 ### Properties
 
 - `Dio get dio` - Getter for the underlying Dio instance
+- `INetworkClient get networkClient` - Transport-agnostic view of the same client
+- `IHttpResponseCache get responseCache` - The locally persisted response cache; call `clearCache()` on session teardown (see [CacheInterceptor](#cacheinterceptor))
 
 ### Methods
 
@@ -182,7 +184,7 @@ Future<Response<dynamic>> delete(
 The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
 - Timeouts from `AppConfig` (connect, receive, send)
-- Interceptors (order matters; see `ApiClient._createDio`): optional `PerformanceInterceptor`, `CacheInterceptor`, `AuthInterceptor`, `RetryInterceptor` (safe methods only by default - see [RetryInterceptor](#retryinterceptor)), optional `ApiLoggingInterceptor` when a `LoggingService` is provided, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
+- Interceptors (order matters; see `ApiClient._createDio`): optional `PerformanceInterceptor`, `CacheInterceptor` (its bypass decision is order-independent - see [CacheInterceptor](#cacheinterceptor)), `AuthInterceptor`, `RetryInterceptor` (safe methods only by default - see [RetryInterceptor](#retryinterceptor)), optional `ApiLoggingInterceptor` when a `LoggingService` is provided, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
 
 ---
 
@@ -397,6 +399,59 @@ safe method.
 An override decides only **whether** a request may be replayed. The error-type
 table and `maxRetries` still apply, so an opted-in `POST` gets the same 1 + 3
 attempts a `GET` does.
+
+---
+
+## CacheInterceptor
+
+Caches HTTP response bodies in local storage so a repeat request can be served without a round trip.
+
+**Location:** `lib/core/network/interceptors/cache_interceptor.dart`
+
+### What is cached
+
+Only responses that satisfy **all** of these:
+
+- Method is `GET`.
+- Status is exactly `200`.
+- The request carries no `cache-control: no-cache` / `no-store`, and no `authorization` or `cookie` header the caller attached itself.
+- **There is no session credential.** Before every cache read and every cache write, the interceptor asks the same `ITokenStore` that `AuthInterceptor` authenticates from whether an access token exists. If one does, the request neither reads from nor writes to the cache and goes straight to the network.
+
+**Authenticated responses are therefore never cached, and a response cached while signed out is never replayed to a signed-in request.** A signed-in app gets no HTTP response caching at all - that is deliberate, and it is the reason the plaintext store below is acceptable.
+
+The credential check reads the token store rather than sniffing the outgoing `Authorization` header. dio runs `onRequest` in registration order and `CacheInterceptor` is registered before `AuthInterceptor`, so on the request leg that header does not exist yet - a header sniff there is dead code. Asking the store makes the decision correct wherever the interceptor sits in the chain.
+
+### Where it is stored
+
+In `StorageService`, i.e. **`shared_preferences`** - `/data/data/<pkg>/shared_prefs/*.xml` on Android, the app's `NSUserDefaults` plist on iOS. That is **plaintext**: readable on a rooted or jailbroken device and included in unencrypted device backups. It is not `SecureStorageService`.
+
+Keys are `http_cache_<uri>_<queryParameters>` for the body and `http_cache_timestamp_<body key>` for the write time, plus `http_cache_index`, a `StringList` of every body key currently written.
+
+Do not relax the credential check without first moving the store to `SecureStorageService`.
+
+### Lifetime
+
+- `maxAge` (default 1 hour): entries newer than this are served directly.
+- `maxStale` (default 7 days): older entries are still served, then removed once past this.
+- `CacheInterceptor.clearCache()` walks `http_cache_index` and removes every body, every timestamp and the index itself.
+
+`clearCache()` is reachable as `apiClient.responseCache` (typed `IHttpResponseCache`, so callers do not depend on dio) and `AuthRepositoryImpl.logout()` calls it, so cached bodies do not outlive a session.
+
+### Configuration
+
+```dart
+CacheInterceptor(
+  storageService: storageService,
+  tokenStore: authInterceptor.tokenStore,
+  cacheConfig: const CacheConfig(
+    maxAge: Duration(minutes: 5),
+    maxStale: Duration(hours: 12),
+    enableCache: true,
+  ),
+);
+```
+
+`enableCache: false` disables the interceptor entirely. Omitting `tokenStore` leaves only the header check, which cannot see a credential `AuthInterceptor` has not written yet - production wiring in `ApiClient._createDio` always passes it.
 
 ---
 
