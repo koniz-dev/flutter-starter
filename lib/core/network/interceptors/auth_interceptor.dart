@@ -4,6 +4,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -28,7 +29,9 @@ class AuthInterceptor extends Interceptor {
     SecureStorageService? secureStorageService,
     required Future<Result<String>> Function() refreshToken,
     Dio Function()? retryDioFactory,
+    IKeyValueStore? keyValueStore,
   }) : _retryDioFactory = retryDioFactory,
+       _keyValueStore = keyValueStore,
        _tokenStore =
            tokenStore ??
            (secureStorageService != null
@@ -47,6 +50,14 @@ class AuthInterceptor extends Interceptor {
   /// from the same source of truth instead of inspecting request headers,
   /// which are only populated once [onRequest] has run.
   ITokenStore get tokenStore => _tokenStore;
+
+  /// Non-sensitive storage holding the cached user blob, if wired.
+  ///
+  /// Needed so a forced logout here leaves the same state as
+  /// `AuthRepository.logout()`. Optional only so existing call sites that
+  /// construct this interceptor by hand keep compiling; the app wires it in
+  /// `lib/features/auth/di/auth_providers.dart`.
+  final IKeyValueStore? _keyValueStore;
 
   /// Callback to refresh the access token.
   ///
@@ -344,7 +355,15 @@ class AuthInterceptor extends Interceptor {
     }
   }
 
-  /// Logs out the user by clearing all authentication data
+  /// Logs out the user by clearing all authentication data.
+  ///
+  /// Clears the cached user blob as well as the tokens, so this forced logout
+  /// leaves exactly the state `AuthRepository.logout()` leaves. Clearing only
+  /// the tokens used to leave a user blob behind that `isAuthenticated()` read
+  /// as a live session with no token to send.
+  ///
+  /// Each step is guarded separately: cleanup must never stop a handler from
+  /// being completed, and a failure of one step must not skip the other.
   Future<void> _logoutUser() async {
     // Clear tokens from secure storage
     try {
@@ -353,7 +372,15 @@ class AuthInterceptor extends Interceptor {
       // Never let cleanup failure stop a handler from being completed.
     }
 
-    // Note: User data is cleared via AuthRepository.logout() if needed
-    // This is a minimal cleanup for the interceptor
+    // Clear the cached user from non-sensitive storage
+    final keyValueStore = _keyValueStore;
+    if (keyValueStore == null) {
+      return;
+    }
+    try {
+      await keyValueStore.remove(AppConstants.userDataKey);
+    } on Object catch (_) {
+      // Same reason as above: cleanup is best-effort, completion is not.
+    }
   }
 }

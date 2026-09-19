@@ -233,6 +233,38 @@ void main() {
         expect(state.isLoading, isFalse);
         expect(state.error, 'Logout failed');
       });
+
+      // Regression for #52 criterion 4. The repository tears the local session
+      // down even when the remote call fails, so the notifier must not keep
+      // presenting an authenticated session: the router keys its redirect off
+      // state.user.
+      test('should clear the user when the remote logout fails', () async {
+        // Arrange
+        const user = User(
+          id: '1',
+          email: 'test@example.com',
+          name: 'Test User',
+        );
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) async => const Success(user));
+        when(() => mockLogoutUseCase()).thenAnswer(
+          (_) async => const ResultFailure(NetworkFailure('Network error')),
+        );
+
+        final notifier = container.read(authNotifierProvider.notifier);
+        await notifier.login('test@example.com', 'password123');
+        expect(container.read(authNotifierProvider).user, isNotNull);
+
+        // Act
+        await notifier.logout();
+
+        // Assert
+        final state = container.read(authNotifierProvider);
+        expect(state.user, isNull);
+        expect(state.isLoading, isFalse);
+        expect(state.error, 'Network error');
+      });
     });
 
     group('refreshToken', () {

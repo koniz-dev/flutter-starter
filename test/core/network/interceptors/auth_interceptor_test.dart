@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
@@ -19,6 +20,8 @@ class MockAuthRepository extends Mock {
 
 class MockErrorInterceptorHandler extends Mock
     implements ErrorInterceptorHandler {}
+
+class MockKeyValueStore extends Mock implements IKeyValueStore {}
 
 class FakeDioException extends Fake implements DioException {}
 
@@ -436,6 +439,79 @@ void main() {
         // Token with only whitespace should still be added
         expect(options.headers['Authorization'], 'Bearer $token');
       });
+    });
+
+    // Regression for #52 criterion 6: the forced logout cleared tokens only,
+    // leaving the cached user blob behind, so the two logout paths
+    // (AuthRepository.logout() and this one) left different state.
+    group('forced logout cleanup', () {
+      late MockKeyValueStore keyValueStore;
+      late AuthInterceptor interceptorWithUserStore;
+      late MockErrorInterceptorHandler handler;
+      late DioException dioException;
+
+      setUp(() {
+        keyValueStore = MockKeyValueStore();
+        handler = MockErrorInterceptorHandler();
+        interceptorWithUserStore = AuthInterceptor(
+          secureStorageService: mockSecureStorage,
+          refreshToken: mockAuthRepository.refreshToken,
+          retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
+          keyValueStore: keyValueStore,
+        );
+
+        final requestOptions = RequestOptions(path: '/api/user/profile');
+        dioException = DioException(
+          requestOptions: requestOptions,
+          response: Response(requestOptions: requestOptions, statusCode: 401),
+        );
+
+        when(
+          () => mockSecureStorage.remove(AppConstants.tokenKey),
+        ).thenAnswer((_) async => true);
+        when(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).thenAnswer((_) async => true);
+        when(() => handler.reject(any())).thenReturn(null);
+      });
+
+      test('clears the cached user as well as the tokens', () async {
+        when(
+          () => mockAuthRepository.refreshToken(),
+        ).thenAnswer((_) async => const ResultFailure(AuthFailure('expired')));
+        when(
+          () => keyValueStore.remove(AppConstants.userDataKey),
+        ).thenAnswer((_) async => true);
+
+        await interceptorWithUserStore.onError(dioException, handler);
+
+        verify(() => mockSecureStorage.remove(AppConstants.tokenKey)).called(1);
+        verify(
+          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+        ).called(1);
+        verify(
+          () => keyValueStore.remove(AppConstants.userDataKey),
+        ).called(1);
+        verify(() => handler.reject(any())).called(1);
+      });
+
+      test(
+        'still completes the handler when clearing the user throws',
+        () async {
+          when(
+            () => mockAuthRepository.refreshToken(),
+          ).thenAnswer(
+            (_) async => const ResultFailure(AuthFailure('expired')),
+          );
+          when(
+            () => keyValueStore.remove(AppConstants.userDataKey),
+          ).thenThrow(Exception('storage unavailable'));
+
+          await interceptorWithUserStore.onError(dioException, handler);
+
+          verify(() => handler.reject(any())).called(1);
+        },
+      );
     });
   });
 }
