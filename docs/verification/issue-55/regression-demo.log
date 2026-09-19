@@ -1,0 +1,110 @@
+Criterion 6 - a palette value that drops a pair below WCAG AA makes
+`flutter test` fail.
+
+Change applied to the merged tree (textSecondary put back to its old
+#6C757D, which is 4.45:1 on the #F8F9FA scaffold). Reverted immediately
+after this run; `main` still carries #5A6268.
+
+diff --git a/lib/shared/design_system/tokens/app_colors.dart b/lib/shared/design_system/tokens/app_colors.dart
+index a0916ee..2970291 100644
+--- a/lib/shared/design_system/tokens/app_colors.dart
++++ b/lib/shared/design_system/tokens/app_colors.dart
+@@ -41,7 +41,7 @@ abstract class AppColors {
+   /// Secondary text color (muted).
+   ///
+   /// Reads at 5.89:1 on [background] and 6.21:1 on [surface].
+-  static const Color textSecondary = Color(0xFF5A6268);
++  static const Color textSecondary = Color(0xFF6C757D);
+ 
+   /// Inverse text color (light text on dark background)
+   static const Color textInverse = Color(0xFFFFFFFF);
+
+========================================================================
+$ flutter test test/shared/theme/theme_contrast_test.dart --reporter expanded
+exit: 1
+(pub get preamble elided)
+
+00:00 +0: loading test/shared/theme/theme_contrast_test.dart
+00:00 +0: theme contrast light theme onPrimary on primary meets 4.5:1
+00:00 +1: theme contrast light theme onSecondary on secondary meets 4.5:1
+00:00 +2: theme contrast light theme onSurface on surface meets 4.5:1
+00:00 +3: theme contrast light theme onError on error meets 4.5:1
+00:00 +4: theme contrast light theme displayLarge on background meets 4.5:1
+00:00 +5: theme contrast light theme displayMedium on background meets 4.5:1
+00:00 +6: theme contrast light theme bodyLarge on background meets 4.5:1
+00:00 +7: theme contrast light theme bodyMedium on background meets 4.5:1
+00:00 +7 -1: theme contrast light theme bodyMedium on background meets 4.5:1 [E]
+  Expected: a value greater than or equal to <4.5>
+    Actual: <4.448582058922892>
+     Which: is not a value greater than or equal to <4.5>
+  light theme bodyMedium on background: Color(alpha: 1.0000, red: 0.4235, green: 0.4588, blue: 0.4902, colorSpace: ColorSpace.sRGB) on Color(alpha: 1.0000, red: 0.9725, green: 0.9765, blue: 0.9804, colorSpace: ColorSpace.sRGB) is 4.45:1, below 4.5:1
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/shared/theme/theme_contrast_test.dart 315:11   main.verify.<fn>.<fn>
+  
+00:00 +7 -1: theme contrast light theme labelLarge on background meets 4.5:1
+00:00 +8 -1: theme contrast light theme bodyMedium on surface meets 4.5:1
+00:00 +8 -2: theme contrast light theme bodyMedium on surface meets 4.5:1 [E]
+  Expected: a numeric value within <0.01> of <6.21>
+    Actual: <4.689301797380369>
+     Which:  differs by <1.5206982026196307>
+  light theme bodyMedium on surface: measured 4.69:1 but the test pins 6.21:1 - a palette value changed
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/shared/theme/theme_contrast_test.dart 323:11   main.verify.<fn>.<fn>
+  
+00:00 +8 -2: theme contrast light theme labelLarge on surface meets 4.5:1
+00:00 +9 -2: theme contrast light theme appBar foreground on appBar background meets 4.5:1
+00:00 +10 -2: theme contrast light theme ElevatedButton foreground on its background meets 4.5:1
+00:00 +11 -2: theme contrast dark theme onPrimary on primary meets 4.5:1
+00:00 +12 -2: theme contrast dark theme onSecondary on secondary meets 4.5:1
+00:00 +13 -2: theme contrast dark theme onSurface on surface meets 4.5:1
+00:00 +14 -2: theme contrast dark theme onError on error meets 4.5:1
+00:00 +15 -2: theme contrast dark theme displayLarge on background meets 4.5:1
+00:00 +16 -2: theme contrast dark theme displayMedium on background meets 4.5:1
+00:00 +17 -2: theme contrast dark theme bodyLarge on background meets 4.5:1
+00:00 +18 -2: theme contrast dark theme bodyMedium on background meets 4.5:1
+00:00 +19 -2: theme contrast dark theme labelLarge on background meets 4.5:1
+00:00 +20 -2: theme contrast dark theme bodyMedium on surface meets 4.5:1
+00:00 +21 -2: theme contrast dark theme appBar foreground on appBar background meets 4.5:1
+00:00 +22 -2: theme contrast dark theme ElevatedButton foreground on its background meets 4.5:1
+00:00 +23 -2: theme contrast status tokens textInverse on the success fill meets 4.5:1
+00:00 +24 -2: theme contrast status tokens textPrimary on the warning fill meets 4.5:1
+00:00 +25 -2: theme contrast status tokens textInverse on the info fill meets 4.5:1
+00:00 +26 -2: theme contrast status tokens success as a foreground on background meets 4.5:1
+00:00 +27 -2: theme contrast status tokens success as a foreground on surface meets 4.5:1
+00:00 +28 -2: theme contrast status tokens info as a foreground on background meets 4.5:1
+00:00 +29 -2: theme contrast non-text tokens primary as a focus ring on the dark surface meets 3.0:1
+00:00 +30 -2: theme contrast non-text tokens primary as a focus ring on the dark background meets 3.0:1
+00:00 +31 -2: theme contrast non-text tokens success as an icon on the dark surface meets 3.0:1
+00:00 +32 -2: theme contrast light labelLarge is not white on the near-white scaffold
+00:00 +33 -2: theme contrast secondary and textSecondary are no longer the same colour
+00:00 +33 -3: theme contrast secondary and textSecondary are no longer the same colour [E]
+  Expected: not Color:<Color(alpha: 1.0000, red: 0.4235, green: 0.4588, blue: 0.4902, colorSpace: ColorSpace.sRGB)>
+    Actual: Color:<Color(alpha: 1.0000, red: 0.4235, green: 0.4588, blue: 0.4902, colorSpace: ColorSpace.sRGB)>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/shared/theme/theme_contrast_test.dart 360:7    main.<fn>.<fn>
+  
+00:00 +33 -3: Some tests failed.
+
+Failing tests:
+  test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyMedium on background meets 4.5:1
+  test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyMedium on surface meets 4.5:1
+  test/shared/theme/theme_contrast_test.dart: theme contrast secondary and textSecondary are no longer the same colour
+
+========================================================================
+$ flutter test --timeout=5m --reporter compact
+exit: 1
+
+Failure lines only; the compact reporter interleaves app logging that is
+not reproduced here. Re-run the command above for the full output.
+
+  01:29 +2166 ~1 -1: test/shared/theme/app_colors_test.dart: AppColors tokens should have semantic text colors [E]
+  01:30 +2174 ~1 -2: test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyMedium on background meets 4.5:1 [E]
+  01:30 +2175 ~1 -3: test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyMedium on surface meets 4.5:1 [E]
+  01:30 +2200 ~1 -4: test/shared/theme/theme_contrast_test.dart: theme contrast secondary and textSecondary are no longer the same colour [E]
+  01:39 +2300 ~3 -4: Some tests failed.
