@@ -127,9 +127,17 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   # Environment configuration files
-  # Note: Only .env.example is included (it's committed to git)
-  # Users should copy .env.example to .env for local development
-  # The .env file is optional - the app works with --dart-define flags too
+  # Note: Only .env.example is shipped here (the real .env is gitignored).
+  #
+  # To use a real .env locally: copy .env.example to .env AND add `- .env` to
+  # the list below. flutter_dotenv reads through rootBundle, so an .env that is
+  # not declared as an asset cannot be loaded at all - EnvConfig.load() fails
+  # silently and every value falls through to the next priority.
+  #
+  # --dart-define is the other supported mechanism. It works on native builds
+  # (Android, iOS, macOS, Windows, Linux) in every build mode, but not on
+  # Flutter web, and only for the keys declared in
+  # lib/core/config/dart_defines.dart. See docs/guides/configuration.md.
   assets:
     - .env.example
 

@@ -1,10 +1,19 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_starter/core/config/dart_defines.dart';
 
 /// Environment configuration loader with fallback chain:
-/// 1. .env file (for local development)
-/// 2. --dart-define flags (for CI/CD)
+/// 1. .env file (for local development; requires the file to be declared as a
+///    Flutter asset - see `docs/guides/configuration.md`)
+/// 2. --dart-define flags (native builds only, and only for the keys listed in
+///    [DartDefines.values]; unavailable on Flutter web because every read here
+///    is guarded by `if (!kIsWeb)`)
 /// 3. Default values
+///
+/// Dart-define reads go through the compile-time [DartDefines] table rather
+/// than `String.fromEnvironment(key)`. A runtime-keyed `String.fromEnvironment`
+/// call is not const and therefore always returns `''` in AOT (release and
+/// profile) builds.
 ///
 /// Usage:
 /// ```dart
@@ -85,7 +94,7 @@ class EnvConfig {
 
     // Priority 2: Check --dart-define flags (native only)
     if (!kIsWeb) {
-      final dartDefineValue = String.fromEnvironment(key);
+      final dartDefineValue = DartDefines.lookup(key);
       if (dartDefineValue.isNotEmpty) {
         return dartDefineValue;
       }
@@ -111,7 +120,7 @@ class EnvConfig {
 
     // Priority 2: Check --dart-define flags (native only)
     if (!kIsWeb) {
-      final dartDefineValue = String.fromEnvironment(key);
+      final dartDefineValue = DartDefines.lookup(key);
       if (dartDefineValue.isNotEmpty) {
         final lowerValue = dartDefineValue.toLowerCase().trim();
         return lowerValue == 'true' ||
@@ -140,7 +149,7 @@ class EnvConfig {
 
     // Priority 2: Check --dart-define flags (native only)
     if (!kIsWeb) {
-      final dartDefineValue = String.fromEnvironment(key);
+      final dartDefineValue = DartDefines.lookup(key);
       if (dartDefineValue.isNotEmpty) {
         return int.tryParse(dartDefineValue) ?? defaultValue;
       }
@@ -165,7 +174,7 @@ class EnvConfig {
 
     // Priority 2: Check --dart-define flags (native only)
     if (!kIsWeb) {
-      final dartDefineValue = String.fromEnvironment(key);
+      final dartDefineValue = DartDefines.lookup(key);
       if (dartDefineValue.isNotEmpty) {
         return double.tryParse(dartDefineValue) ?? defaultValue;
       }
@@ -192,7 +201,7 @@ class EnvConfig {
     }
     // Check --dart-define flags (native only)
     if (!kIsWeb) {
-      return String.fromEnvironment(key).isNotEmpty;
+      return DartDefines.lookup(key).isNotEmpty;
     }
 
     return false;
@@ -209,8 +218,9 @@ class EnvConfig {
       env.addAll(dotenv.env);
     }
 
-    // Note: --dart-define values are compile-time only and cannot be
-    // enumerated at runtime. They must be accessed via String.fromEnvironment()
+    // Note: --dart-define values are compile-time only. They are not merged
+    // in here; read them through [get]/[getBool]/[getInt]/[getDouble], which
+    // consult the compile-time [DartDefines.values] table.
     return env;
   }
 
