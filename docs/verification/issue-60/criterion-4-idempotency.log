@@ -1,0 +1,8 @@
+$ flutter test test/core/storage/migration/migrations/migration_v1_to_v2_test.dart --reporter expanded --plain-name idempotency
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migrations/migration_v1_to_v2_test.dart
+00:00 +0: MigrationV1ToV2 idempotency (#60) migrate twice does not throw and leaves the same data
+00:00 +1: MigrationV1ToV2 idempotency (#60) migrate recovers a store left mid-migration
+00:00 +2: MigrationV1ToV2 idempotency (#60) execute after a re-run leaves storage stamped at v2
+00:00 +3: All tests passed!
+exit: 0
