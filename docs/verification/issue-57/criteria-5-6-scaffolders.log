@@ -1,0 +1,106 @@
+
+=== 0. mason get (resolves bricks/feature_clean from mason.yaml) ===
+⠋ Getting bricks...✓ Got bricks (0.1s)
+
+=== 0b. baseline: flutter analyze on the committed tree ===
+Analyzing agent-a509334bb4e966eb1...                            
+No issues found! (ran in 3.4s)
+
+=== 1. ./scripts/dev/create_feature.sh profile ===
+Creating feature: profile
+Feature profile created:
+  lib/features/profile
+  test/features/profile
+Next: flutter analyze && flutter test test/features/profile
+-- files created --
+lib/features/profile/data/datasources/profile_remote_datasource.dart
+lib/features/profile/data/models/profile_model.dart
+lib/features/profile/data/repositories/profile_repository_impl.dart
+lib/features/profile/di/profile_providers.dart
+lib/features/profile/domain/entities/profile.dart
+lib/features/profile/domain/repositories/profile_repository.dart
+lib/features/profile/domain/usecases/get_profile_by_id_usecase.dart
+lib/features/profile/presentation/providers/profile_provider.dart
+lib/features/profile/presentation/screens/profile_screen.dart
+test/features/profile/profile_repository_impl_test.dart
+
+=== 2. gates on the create_feature.sh output ===
+$ dart format --set-exit-if-changed --output=none lib/features/profile test/features/profile
+Formatted 10 files (0 changed) in 0.04 seconds.
+   exit=0
+$ flutter analyze
+Analyzing agent-a509334bb4e966eb1...                            
+No issues found! (ran in 3.5s)
+$ flutter test test/features/profile
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/features/profile/profile_repository_impl_test.dart
+00:00 +0: ProfileRepositoryImpl returns Success when the data source returns JSON
+00:00 +1: ProfileRepositoryImpl returns a Failure when the data source throws
+00:00 +2: All tests passed!
+
+=== 3. mason make feature_clean --include_tests true, over the same names ===
+⠋ Making feature_clean...✓ Generated 10 files. (71ms)
+  created test/features/profile/profile_repository_impl_test.dart
+  created lib/features/profile/di/profile_providers.dart
+  created lib/features/profile/data/datasources/profile_remote_datasource.dart
+  created lib/features/profile/data/repositories/profile_repository_impl.dart
+  created lib/features/profile/data/models/profile_model.dart
+  created lib/features/profile/domain/repositories/profile_repository.dart
+  created lib/features/profile/domain/usecases/get_profile_by_id_usecase.dart
+  created lib/features/profile/domain/entities/profile.dart
+  created lib/features/profile/presentation/providers/profile_provider.dart
+  created lib/features/profile/presentation/screens/profile_screen.dart
+
+=== 4. brick output vs create_feature.sh output ===
+identical: the brick and create_feature.sh emit the same bytes
+
+=== 5. gates on the mason output ===
+$ dart format --set-exit-if-changed --output=none lib/features/profile test/features/profile
+Formatted 10 files (0 changed) in 0.04 seconds.
+   exit=0
+$ flutter analyze
+Analyzing agent-a509334bb4e966eb1...                            
+No issues found! (ran in 3.4s)
+$ flutter test test/features/profile
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/features/profile/profile_repository_impl_test.dart
+00:00 +0: ProfileRepositoryImpl returns Success when the data source returns JSON
+00:00 +1: ProfileRepositoryImpl returns a Failure when the data source throws
+00:00 +2: All tests passed!
+
+=== 6. mason make feature_clean --include_tests false ===
+⠋ Making feature_clean...✓ Generated 9 files. (68ms)
+  created lib/features/profile/di/profile_providers.dart
+  created lib/features/profile/data/datasources/profile_remote_datasource.dart
+  created lib/features/profile/data/repositories/profile_repository_impl.dart
+  created lib/features/profile/data/models/profile_model.dart
+  created lib/features/profile/domain/repositories/profile_repository.dart
+  created lib/features/profile/domain/usecases/get_profile_by_id_usecase.dart
+  created lib/features/profile/domain/entities/profile.dart
+  created lib/features/profile/presentation/providers/profile_provider.dart
+  created lib/features/profile/presentation/screens/profile_screen.dart
+-- test/features/profile after include_tests:false --
+no test directory and no empty test file were written
+
+=== 7. a long, multi-word feature name still passes every gate ===
+Creating feature: user_profile_settings
+Feature user_profile_settings created:
+  lib/features/user_profile_settings
+  test/features/user_profile_settings
+Next: flutter analyze && flutter test test/features/user_profile_settings
+Formatted 10 files (0 changed) in 0.04 seconds.
+   dart format exit=0
+Analyzing agent-a509334bb4e966eb1...                            
+No issues found! (ran in 3.7s)
+00:00 +0: UserProfileSettingsRepositoryImpl returns Success when the data source returns JSON
+00:00 +1: UserProfileSettingsRepositoryImpl returns a Failure when the data source throws
+00:00 +2: All tests passed!
+
+=== 8. input validation and refusal to clobber ===
+Error: feature name must be snake_case, got 'Bad-Name'
+   exit=1
+Error: lib/features/user_profile_settings or test/features/user_profile_settings already exists; refusing to overwrite
+   exit=1
+
+=== 9. cleanup ===
+scaffolds removed; tree back to:
+Analyzing agent-a509334bb4e966eb1...                            
+No issues found! (ran in 3.6s)

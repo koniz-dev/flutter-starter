@@ -1,0 +1,385 @@
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	﻿2026-09-19T12:16:05.3617922Z Current runner version: '2.337.0'
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3660954Z ##[group]Runner Image Provisioner
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3662246Z Hosted Compute Agent
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3662819Z Version: 20260828.587
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3663430Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3664141Z Build Date: 2026-08-28T16:44:25Z
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3664779Z Worker ID: {a94695ca-07e4-4908-8613-67e02ea6e964}
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3666006Z Azure Region: northcentralus
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3666672Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3668105Z ##[group]Operating System
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3668842Z Microsoft Windows Server 2025
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3669422Z 10.0.26100
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3669913Z Datacenter
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3670439Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3670935Z ##[group]Runner Image
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3671511Z Image: windows-2025-vs2026
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3672076Z Version: 20260907.229.1
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3673154Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260907.229/images/windows/Windows2025-VS2026-Readme.md
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3675122Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260907.229
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3676094Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3677156Z ##[group]GITHUB_TOKEN Permissions
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3679093Z Contents: read
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3679707Z Metadata: read
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3680344Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3682346Z Secret source: Actions
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3683330Z Cache mode: write
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.3684086Z Prepare workflow directory
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.4131416Z Prepare all required actions
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.4185661Z Getting action download info
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.5988737Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:05.7252266Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:06.0361771Z Getting action download info
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:06.1202469Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+create_feature.sh == create_feature.ps1 (Windows)	Set up job	2026-09-19T12:16:06.2953598Z Complete job name: create_feature.sh == create_feature.ps1 (Windows)
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	﻿2026-09-19T12:16:06.4395696Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4405255Z ##[group]Run actions/checkout@v4
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4406047Z with:
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4406525Z   repository: koniz-dev/flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4410850Z   token: ***
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4411313Z   ssh-strict: true
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4411814Z   ssh-user: git
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4412269Z   persist-credentials: true
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4412770Z   clean: true
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4413218Z   sparse-checkout-cone-mode: true
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4413786Z   fetch-depth: 1
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4414239Z   fetch-tags: false
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4414689Z   show-progress: true
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4415154Z   lfs: false
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4415587Z   submodules: false
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4416079Z   set-safe-directory: true
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4416599Z   allow-unsafe-pr-checkout: false
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.4417409Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.6004272Z Syncing repository: koniz-dev/flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.6006261Z ##[group]Getting Git version info
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.6007050Z Working directory is 'D:\a\flutter-starter\flutter-starter'
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.6795821Z [command]"C:\Program Files\Git\bin\git.exe" version
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8219779Z git version 2.55.0.windows.5
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8264397Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8283701Z Temporarily overriding HOME='D:\a\_temp\7d628e76-352f-48b3-994c-714a8640fcc9' before making global git config changes
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8288448Z Adding repository directory to the temporary git global config as a safe directory
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8295309Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\flutter-starter\flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8643881Z Deleting the contents of 'D:\a\flutter-starter\flutter-starter'
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8650532Z ##[group]Initializing the repository
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.8659526Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\flutter-starter\flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9187801Z Initialized empty Git repository in D:/a/flutter-starter/flutter-starter/.git/
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9229889Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/koniz-dev/flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9555774Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9556611Z ##[group]Disabling automatic garbage collection
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9564269Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9852980Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9853775Z ##[group]Setting up auth
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:06.9865210Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:07.0154658Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:08.1381801Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:08.1692191Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:08.7315271Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:08.7618477Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:09.2989636Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:09.3288965Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:09.3289552Z ##[group]Fetching the repository
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:09.3301965Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f22d80605337c2d5d01ccb76c95321ed71177d6b:refs/remotes/origin/main
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.0770369Z From https://github.com/koniz-dev/flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.0771367Z  * [new ref]         f22d80605337c2d5d01ccb76c95321ed71177d6b -> origin/main
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.0808632Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.0809297Z ##[group]Determining the checkout info
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.0811131Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.0825283Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.1171222Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.1496583Z ##[group]Checking out the ref
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.1510168Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B main refs/remotes/origin/main
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.4457966Z Switched to a new branch 'main'
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.4481614Z branch 'main' set up to track 'origin/main'.
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.4532426Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.4856311Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+create_feature.sh == create_feature.ps1 (Windows)	Checkout code	2026-09-19T12:16:10.5114029Z f22d80605337c2d5d01ccb76c95321ed71177d6b
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	﻿2026-09-19T12:16:10.5746875Z ##[group]Run subosito/flutter-action@v2
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5747658Z with:
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5747856Z   channel: stable
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5748052Z   cache: true
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5748242Z   architecture: X64
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5748453Z   pub-cache-path: default
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5749474Z   dry-run: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5749774Z   git-source: https://github.com/flutter/flutter.git
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5750119Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5809911Z ##[start-action display=Make yq tool available on Windows runners;id=__subosito_flutter-action.__run]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5834562Z ##[end-action id=__subosito_flutter-action.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5836829Z ##[start-action display=Make setup script executable;id=__subosito_flutter-action.__run_2]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5997674Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.5998371Z ^[[36;1mchmod +x "$GITHUB_ACTION_PATH/setup.sh"^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6018161Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6018812Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6788195Z ##[end-action id=__subosito_flutter-action.__run_2;outcome=success;conclusion=success;duration_ms=94]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6792411Z ##[start-action display=Set action inputs;id=__subosito_flutter-action.flutter-action]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6979340Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6979765Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh -p \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6980036Z ^[[36;1m  -n '' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6980228Z ^[[36;1m  -f '' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6980413Z ^[[36;1m  -a 'X64' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6980597Z ^[[36;1m  -k '' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6980777Z ^[[36;1m  -c '' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6980947Z ^[[36;1m  -l '' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6981179Z ^[[36;1m  -d 'default' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6981472Z ^[[36;1m  -g 'https://github.com/flutter/flutter.git' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6981777Z ^[[36;1m  stable^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6996977Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:10.6997389Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6213822Z ##[end-action id=__subosito_flutter-action.flutter-action;outcome=success;conclusion=success;duration_ms=2941]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6218454Z ##[start-action display=Cache Flutter;id=__subosito_flutter-action.cache-flutter]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6366362Z ##[group]Run actions/cache@v5
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6366618Z with:
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6366871Z   path: C:\hostedtoolcache\windows\flutter\stable-3.47.5-x64
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6367356Z   key: flutter-windows-stable-3.47.5-x64-6a19cca56475dbfba1478ee68d7bd0c2ef891da1
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6367781Z   enableCrossOsArchive: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6368012Z   fail-on-cache-miss: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6368225Z   lookup-only: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6368407Z   save-always: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:13.6368589Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.0529044Z Cache not found for input keys: flutter-windows-stable-3.47.5-x64-6a19cca56475dbfba1478ee68d7bd0c2ef891da1
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.0632182Z ##[end-action id=__subosito_flutter-action.cache-flutter;outcome=success;conclusion=success;duration_ms=441]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.0635217Z ##[start-action display=Cache pub dependencies;id=__subosito_flutter-action.cache-pub]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4379452Z ##[group]Run actions/cache@v5
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4379689Z with:
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4379906Z   path: C:\Users\runneradmin\AppData\Local\Pub\Cache
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4380680Z   key: flutter-pub-windows-stable-3.47.5-x64-6a19cca56475dbfba1478ee68d7bd0c2ef891da1-342526f23055431950cac2770ead58f390b043758dd1c832d951f6c6d11f349e
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4381410Z   enableCrossOsArchive: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4381638Z   fail-on-cache-miss: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4381849Z   lookup-only: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4382033Z   save-always: false
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.4382218Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.7914262Z Cache not found for input keys: flutter-pub-windows-stable-3.47.5-x64-6a19cca56475dbfba1478ee68d7bd0c2ef891da1-342526f23055431950cac2770ead58f390b043758dd1c832d951f6c6d11f349e
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8028701Z ##[end-action id=__subosito_flutter-action.cache-pub;outcome=success;conclusion=success;duration_ms=739]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8031645Z ##[start-action display=Run setup script;id=__subosito_flutter-action.__run_3]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8182918Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8183248Z ^[[36;1m$GITHUB_ACTION_PATH/setup.sh \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8183500Z ^[[36;1m  -n '3.47.5' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8183706Z ^[[36;1m  -a 'x64' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8184009Z ^[[36;1m  -c 'C:\hostedtoolcache\windows\flutter\stable-3.47.5-x64' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8184417Z ^[[36;1m  -d 'C:\Users\runneradmin\AppData\Local\Pub\Cache' \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8184953Z ^[[36;1m  stable^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8198474Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:14.8198877Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:17.3505576Z   % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:17.3506334Z                                  Dload  Upload  Total   Spent   Left   Speed
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:17.3506760Z 
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:18.3494739Z   0      0   0      0   0      0      0      0                              0
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:19.3487483Z   8  1.79G   8 152.8M   0      0 146.3M      0   00:12   00:01   00:11 153.0M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:20.3494724Z  18  1.79G  18 332.7M   0      0 162.8M      0   00:11   00:02   00:09 166.5M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:21.3498266Z  27  1.79G  27 507.5M   0      0 166.7M      0   00:11   00:03   00:08 169.2M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:22.3497437Z  35  1.79G  35 660.9M   0      0 163.3M      0   00:11   00:04   00:07 165.2M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:23.3491128Z  44  1.79G  44 820.2M   0      0 162.5M      0   00:11   00:05   00:06 164.0M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:24.3482583Z  54  1.79G  54  0.98G   0      0 167.1M      0   00:11   00:06   00:05 171.4M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:25.3477272Z  64  1.79G  64  1.15G   0      0 167.5M      0   00:11   00:07   00:04 169.5M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:26.3476604Z  73  1.79G  73  1.32G   0      0 169.1M      0   00:10   00:08   00:02 170.6M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:27.3473052Z  82  1.79G  82  1.48G   0      0 168.3M      0   00:10   00:09   00:01 172.3M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:28.2109320Z  91  1.79G  91  1.65G   0      0 168.6M      0   00:10   00:10         174.8M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:28.2110645Z 100  1.79G 100  1.79G   0      0 169.0M      0   00:10   00:10         174.8M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:28.2111395Z 100  1.79G 100  1.79G   0      0 169.0M      0   00:10   00:10         174.8M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:16:28.2112407Z 100  1.79G 100  1.79G   0      0 169.0M      0   00:10   00:10         174.8M
+create_feature.sh == create_feature.ps1 (Windows)	Setup Flutter	2026-09-19T12:17:43.5415429Z ##[end-action id=__subosito_flutter-action.__run_3;outcome=success;conclusion=success;duration_ms=88737]
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	﻿2026-09-19T12:17:43.5654803Z ##[group]Run flutter pub get
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:43.5655155Z ^[[36;1mflutter pub get^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:43.5801152Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:43.5801608Z env:
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:43.5802002Z   FLUTTER_ROOT: C:\hostedtoolcache\windows\flutter\stable-3.47.5-x64/flutter
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:43.5802571Z   PUB_CACHE: C:\Users\runneradmin\AppData\Local\Pub\Cache
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:43.5802981Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:45.9550293Z Building flutter tool... 
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:45.9591314Z Running pub upgrade... 
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:45.9998491Z Resolving dependencies...
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:46.6301608Z Downloading packages...
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:17:57.7469675Z Got dependencies.
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:15.6126308Z Resolving dependencies...
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:16.8430267Z Downloading packages...
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9656787Z   _fe_analyzer_shared 91.0.0 (108.0.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9658770Z   analyzer 8.4.0 (14.4.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9659434Z   analyzer_buffer 0.1.11 (0.3.4 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9660263Z   analyzer_plugin 0.13.10 (0.14.17 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9660890Z   archive 4.0.9 (4.3.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9662364Z   async 2.13.0 (2.13.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9662991Z   build 4.0.5 (4.0.11 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9663588Z   build_config 1.3.0 (1.3.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9664544Z   build_daemon 4.1.1 (4.1.6 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9665161Z   build_runner 2.13.1 (2.16.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9665839Z   built_value 8.12.4 (8.13.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9666453Z > characters 1.4.1 (was 1.4.0)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9667701Z   cli_util 0.4.2 (0.6.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9668682Z   clock 1.1.2 (1.1.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9669857Z   code_assets 1.0.0 (2.1.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9670454Z   code_builder 4.11.1 (4.12.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9671084Z   coverage 1.15.0 (1.15.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9671646Z   cupertino_icons 1.0.8 (1.0.9 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9672464Z   custom_lint_core 0.8.1 (0.8.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9673052Z   custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9673549Z   dart_style 3.1.3 (3.1.13 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9673858Z   dio 5.9.2 (5.11.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9674155Z   dio_web_adapter 2.1.2 (2.2.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9674481Z   equatable 2.0.8 (3.0.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9674791Z   flutter_dotenv 6.0.0 (6.0.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9675125Z   flutter_launcher_icons 0.13.1 (0.14.4 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9675490Z   flutter_native_splash 2.4.7 (2.4.8 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9675878Z   flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9676375Z   flutter_riverpod 3.0.3 (3.4.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9676728Z   flutter_secure_storage 10.0.0 (11.2.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9677104Z   flutter_secure_storage_darwin 0.2.0 (0.4.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9677507Z   flutter_secure_storage_linux 3.0.0 (3.0.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9677929Z   flutter_secure_storage_platform_interface 2.0.1 (2.1.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9678416Z   flutter_secure_storage_web 2.1.0 (2.1.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9678833Z   flutter_secure_storage_windows 4.1.0 (4.2.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9679491Z   freerasp 6.12.0 (8.2.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9679951Z   freezed 3.2.3 (4.0.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9680244Z   glob 2.1.3 (2.2.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9680525Z   go_router 17.1.0 (18.0.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9680818Z   hooks 1.0.2 (2.2.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9681056Z   html 0.15.6 (0.15.7 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9681271Z   image 4.8.0 (4.10.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9681485Z > intl 0.20.3 (was 0.20.2)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9681688Z   io 1.0.5 (1.1.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9681911Z   json_annotation 4.9.0 (4.12.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9682180Z   json_serializable 6.11.2 (6.14.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9684587Z   logger 2.7.0 (2.8.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9684839Z   mason 0.1.2 (0.1.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9685097Z   mason_logger 0.3.5 (0.3.6 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9685361Z > matcher 0.12.20 (was 0.12.17)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9685684Z > material_color_utilities 0.13.0 (was 0.11.1) (0.13.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9686033Z > meta 1.19.0 (was 1.17.0)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9686249Z   mime 2.0.0 (2.1.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9686469Z   mockito 5.6.4 (5.8.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9686700Z   mocktail 1.0.4 (1.0.5 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9686951Z   mustache_template 2.0.4 (2.0.6 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9687235Z   native_toolchain_c 0.17.6 (0.19.5 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9687510Z   objective_c 9.3.0 (9.6.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9687761Z   package_config 2.2.0 (3.0.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9688017Z   path_provider 2.1.5 (2.1.6 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9688287Z   path_provider_android 2.2.22 (2.3.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9688582Z   path_provider_linux 2.2.1 (2.2.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9688902Z   path_provider_platform_interface 2.1.2 (2.1.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9689202Z   patrol 3.20.0 (4.10.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9689446Z   patrol_finders 2.9.0 (3.6.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9689701Z   patrol_log 0.5.0 (0.10.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9690625Z   platform 3.1.6 (3.2.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9691019Z   pool 1.5.2 (1.5.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9691238Z   posix 6.5.0 (6.5.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9691459Z   process 5.0.5 (5.0.6 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9691685Z   pub_semver 2.2.0 (2.2.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9691920Z   pubspec_parse 1.5.0 (1.6.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9692158Z   riverpod 3.0.3 (3.4.3 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9692676Z   riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9693017Z   riverpod_annotation 3.0.3 (4.0.7 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9693305Z   riverpod_generator 3.0.3 (4.0.9 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9693578Z   shared_preferences 2.5.4 (2.5.5 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9693871Z   shared_preferences_android 2.4.21 (2.4.28 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9694203Z   shared_preferences_foundation 2.5.6 (2.5.7 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9694558Z   shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9694886Z   source_gen 4.2.2 (4.3.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9695132Z   source_helper 1.3.8 (1.3.13 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9695383Z   source_maps 0.10.13 (0.10.14 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9695629Z   stack_trace 1.12.1 (1.12.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9695877Z   stream_transform 2.1.1 (2.1.2 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9696142Z > test 1.31.1 (was 1.26.3) (1.32.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9696412Z > test_api 0.7.12 (was 0.7.7) (0.7.14 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9696697Z > test_core 0.6.18 (was 0.6.12) (0.6.20 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9696971Z   uuid 4.5.3 (4.6.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9697188Z > vector_math 2.4.3 (was 2.2.0)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9697426Z   very_good_analysis 10.1.0 (11.0.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9697688Z   vm_service 15.0.2 (15.3.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9697923Z   webdriver 3.1.0 (3.2.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9698151Z   win32 5.15.0 (6.4.0 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9698372Z   xml 6.6.1 (7.0.1 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9698581Z   yaml 3.1.3 (3.1.4 available)
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9698832Z These packages are no longer being depended on:
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9699113Z - js 0.7.2
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9699335Z Changed 10 dependencies!
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9699677Z 91 packages have newer versions incompatible with dependency constraints.
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:31.9700089Z Try `flutter pub outdated` for more information.
+create_feature.sh == create_feature.ps1 (Windows)	Install dependencies	2026-09-19T12:18:32.4421508Z Upgrading analysis_options.yaml to exclude build and platform directories.
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	﻿2026-09-19T12:18:32.8343006Z ##[group]Run set -euo pipefail
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8343415Z ^[[36;1mset -euo pipefail^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8343713Z ^[[36;1m./scripts/dev/create_feature.sh smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8344029Z ^[[36;1mmkdir -p ../sh-output^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8344379Z ^[[36;1mmv lib/features/smoke_feature ../sh-output/lib_smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8344823Z ^[[36;1mmv test/features/smoke_feature ../sh-output/test_smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8345187Z ^[[36;1m^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8345457Z ^[[36;1mpwsh -File scripts/dev/create_feature.ps1 smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8362188Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8362594Z env:
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8362892Z   FLUTTER_ROOT: C:\hostedtoolcache\windows\flutter\stable-3.47.5-x64/flutter
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8363329Z   PUB_CACHE: C:\Users\runneradmin\AppData\Local\Pub\Cache
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:32.8363628Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:33.1139940Z Creating feature: smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:33.4309972Z Feature smoke_feature created:
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:33.4311289Z   lib/features/smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:33.4312046Z   test/features/smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:33.4312770Z Next: flutter analyze && flutter test test/features/smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:33.9178432Z Creating feature: smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:34.0874097Z Feature smoke_feature created:
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:34.0879739Z   lib/features/smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:34.0885336Z   test/features/smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Scaffold with create_feature.sh, then with create_feature.ps1	2026-09-19T12:18:34.0890795Z Next: flutter analyze && flutter test test/features/smoke_feature
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	﻿2026-09-19T12:18:34.1604499Z ##[group]Run set -euo pipefail
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1604956Z ^[[36;1mset -euo pipefail^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1605379Z ^[[36;1mdiff -r ../sh-output/lib_smoke_feature lib/features/smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1605953Z ^[[36;1mdiff -r ../sh-output/test_smoke_feature test/features/smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1606567Z ^[[36;1mecho "create_feature.ps1 output is identical to create_feature.sh"^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1623662Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1624122Z env:
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1624487Z   FLUTTER_ROOT: C:\hostedtoolcache\windows\flutter\stable-3.47.5-x64/flutter
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1625015Z   PUB_CACHE: C:\Users\runneradmin\AppData\Local\Pub\Cache
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.1625373Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-09-19T12:18:34.2692990Z create_feature.ps1 output is identical to create_feature.sh
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	﻿2026-09-19T12:18:34.2888360Z ##[group]Run set -euo pipefail
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2888981Z ^[[36;1mset -euo pipefail^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2889518Z ^[[36;1mdart format --set-exit-if-changed --output=none \^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2890223Z ^[[36;1m  lib/features/smoke_feature test/features/smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2890829Z ^[[36;1mflutter analyze^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2891270Z ^[[36;1mflutter test test/features/smoke_feature^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2918157Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2918841Z env:
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2919704Z   FLUTTER_ROOT: C:\hostedtoolcache\windows\flutter\stable-3.47.5-x64/flutter
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2920489Z   PUB_CACHE: C:\Users\runneradmin\AppData\Local\Pub\Cache
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.2921007Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:34.4200249Z Formatted 10 files (0 changed) in 0.05 seconds.
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:53.9817380Z Analyzing flutter-starter...                                    
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:53.9845748Z No issues found! (ran in 17.2s)
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:18:57.7444122Z 
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:19:05.8769654Z ##[group]✅ Passing tests
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:19:05.8770338Z ✅ SmokeFeatureRepositoryImpl returns Success when the data source returns JSON
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:19:05.8808285Z ✅ SmokeFeatureRepositoryImpl returns a Failure when the data source throws
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:19:05.9040062Z ##[endgroup]
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:19:05.9040286Z 
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-09-19T12:19:05.9046728Z 🎉 2 tests passed.
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	﻿2026-09-19T12:19:06.0027626Z Post job cleanup.
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:06.0031874Z ##[start-action display=Cache pub dependencies;id=__a16fd1ea-bfbb-449c-9e5c-b3b5fa055eca.cache-pub]
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:06.7051763Z Post job cleanup.
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:07.4603799Z [command]"C:\Program Files\Git\usr\bin\tar.exe" --posix -cf cache.tzst --exclude cache.tzst -P -C D:/a/flutter-starter/flutter-starter --files-from manifest.txt --force-local --use-compress-program "zstd -T0"
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:16.3142837Z Sent 72133184 of 72133184 (100.0%), 68.7 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:16.5198955Z Cache saved with key: flutter-pub-windows-stable-3.47.5-x64-6a19cca56475dbfba1478ee68d7bd0c2ef891da1-342526f23055431950cac2770ead58f390b043758dd1c832d951f6c6d11f349e
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:16.5327144Z ##[end-action id=__a16fd1ea-bfbb-449c-9e5c-b3b5fa055eca.cache-pub;outcome=success;conclusion=success;duration_ms=10529]
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:16.5330242Z ##[start-action display=Cache Flutter;id=__a16fd1ea-bfbb-449c-9e5c-b3b5fa055eca.cache-flutter]
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:16.5489279Z Post job cleanup.
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:19:16.8200450Z [command]"C:\Program Files\Git\usr\bin\tar.exe" --posix -cf cache.tzst --exclude cache.tzst -P -C D:/a/flutter-starter/flutter-starter --files-from manifest.txt --force-local --use-compress-program "zstd -T0"
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:01.6189389Z Sent 0 of 1927021539 (0.0%), 0.0 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:02.6185035Z Sent 536870912 of 1927021539 (27.9%), 255.2 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:03.6187272Z Sent 939524096 of 1927021539 (48.8%), 298.0 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:04.6191642Z Sent 1140850688 of 1927021539 (59.2%), 271.5 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:05.6203093Z Sent 1859912675 of 1927021539 (96.5%), 354.2 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:05.7277228Z Sent 1927021539 of 1927021539 (100.0%), 359.2 MBs/sec
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:06.0176927Z Cache saved with key: flutter-windows-stable-3.47.5-x64-6a19cca56475dbfba1478ee68d7bd0c2ef891da1
+create_feature.sh == create_feature.ps1 (Windows)	Post Setup Flutter	2026-09-19T12:21:06.0363745Z ##[end-action id=__a16fd1ea-bfbb-449c-9e5c-b3b5fa055eca.cache-flutter;outcome=success;conclusion=success;duration_ms=109502]
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	﻿2026-09-19T12:21:06.0657388Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.0658811Z Post job cleanup.
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.2950838Z [command]"C:\Program Files\Git\bin\git.exe" version
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.3803075Z git version 2.55.0.windows.5
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.3881839Z Temporarily overriding HOME='D:\a\_temp\40eb9361-0aa3-499e-a424-8830fe59201a' before making global git config changes
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.3883178Z Adding repository directory to the temporary git global config as a safe directory
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.3898459Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\flutter-starter\flutter-starter
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.4252797Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:06.4579204Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:07.0724422Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:07.1030614Z http.https://github.com/.extraheader
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:07.1070759Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:07.1380347Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:07.7024084Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+create_feature.sh == create_feature.ps1 (Windows)	Post Checkout code	2026-09-19T12:21:07.7334071Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+create_feature.sh == create_feature.ps1 (Windows)	Complete job	﻿2026-09-19T12:21:08.3089890Z Cleaning up orphan processes
+create_feature.sh == create_feature.ps1 (Windows)	Complete job	2026-09-19T12:21:08.3173864Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
