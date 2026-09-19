@@ -34,7 +34,11 @@ for arg in "$@"; do
     --dry-run) DRY_RUN=1 ;;
     --prune-defaults) PRUNE_DEFAULTS=1 ;;
     --list-epics) LIST_EPICS_ONLY=1 ;;
-    -h|--help) sed -n '2,30p' "$0"; exit 0 ;;
+    # Print the header comment and stop at the end of it. This used to be
+    # `sed -n '2,30p'`, a hardcoded range that ran five lines past the comment
+    # block and trailed off into `set -euo pipefail` and the flag variables.
+    # Walking to the first non-comment line cannot drift as the header grows.
+    -h|--help) awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0"; exit 0 ;;
     *) echo "Unknown argument: $arg" >&2; exit 2 ;;
   esac
 done
@@ -63,12 +67,28 @@ if [[ "$LIST_EPICS_ONLY" -eq 1 ]]; then
   exit 0
 fi
 
-if ! command -v gh >/dev/null 2>&1; then
+# `gh` is required only to CHANGE something. --dry-run and --list-epics print
+# what this script knows and touch nothing, so they must work on a machine with
+# no `gh` and no authentication - that is the whole point of a dry run.
+if [[ "$DRY_RUN" -eq 0 ]] && ! command -v gh >/dev/null 2>&1; then
   echo "ERROR: the GitHub CLI (gh) is required. See https://cli.github.com" >&2
   exit 1
 fi
 
-REPO="${REPO:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
+if [[ -z "${REPO:-}" ]]; then
+  if command -v gh >/dev/null 2>&1; then
+    # Still guard the call itself: `gh` can be installed but unauthenticated,
+    # in which case this fails and a dry run has nothing to report a target as.
+    REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null || true)"
+  fi
+  REPO="${REPO:-<unknown - set REPO=owner/name>}"
+fi
+
+if [[ "$DRY_RUN" -eq 0 && "$REPO" == "<unknown"* ]]; then
+  echo "ERROR: could not determine the target repository. Run from a checkout" >&2
+  echo "       with 'gh auth login' done, or pass REPO=owner/name." >&2
+  exit 1
+fi
 echo "Target repository: $REPO"
 [[ "$DRY_RUN" -eq 1 ]] && echo "(dry run - no changes will be made)"
 echo

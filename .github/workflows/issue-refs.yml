@@ -1,0 +1,62 @@
+name: Issue refs
+
+# ========================================================================
+# Invariant 3 of docs/issue-workflow.md, mechanically enforced.
+#
+# Commits and PR bodies must LINK to an issue (`Refs owner/repo#N`) and must
+# never CLOSE one: `Closes #12` auto-closes the issue when the squash lands on
+# `main`, at merge time, before anything has run the acceptance criteria. The
+# rule existed from the start with nothing checking it - the commit-msg hook
+# reads only the subject line, so a body carrying `Closes #12` passed.
+#
+# NO path filter, deliberately. `ci.yml` skips markdown and `docs/**`, and
+# `docs-check.yml` only runs on markdown, which left evidence-only PRs of
+# `.png` and `.log` files with zero checks and no way to tell that apart from
+# checks that had not registered yet. This job runs on every pull request, so
+# "zero checks" now always means "not registered yet".
+# ========================================================================
+# No `workflow_dispatch`: every step reads `github.event.pull_request`, which
+# does not exist outside a pull request event.
+on:
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: issue-refs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  refs:
+    name: Issue refs
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth: 0 because the check walks base..head. A shallow clone has
+      # neither end of that range.
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Through the environment, never interpolated into the shell: a PR title
+      # or body is attacker-controlled text.
+      - name: Capture the pull request title and body
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          {
+            printf '%s\n\n' "$PR_TITLE"
+            printf '%s\n' "$PR_BODY"
+          } > "$RUNNER_TEMP/pr.txt"
+
+      - name: Check issue references
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          ./scripts/dev/check_issue_refs.sh \
+            --range "$BASE_SHA..$HEAD_SHA" \
+            --body-file "$RUNNER_TEMP/pr.txt"

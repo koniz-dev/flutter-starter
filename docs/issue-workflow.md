@@ -45,22 +45,20 @@ Exactly one per issue.
 One functional area per issue. Each epic maps to a real directory or surface in
 the tree, so "which epic" is answerable by looking at the diff.
 
-| Label | Surface |
-|---|---|
-| `epic:core-network` | `lib/core/network` - Dio `ApiClient`, interceptors, realtime/WebSocket |
-| `epic:core-storage` | `lib/core/storage` - key-value and secure adapters, token store, migrations |
-| `epic:core-security` | `lib/core/security` - RASP providers, hardening, `docs/guides/security/` |
-| `epic:core-config` | `lib/core/config` - env layers, `.env`, dart-defines, feature-flag plumbing |
-| `epic:core-routing` | `lib/core/routing` - GoRouter tree, guards, navigation adapters |
-| `epic:feature-auth` | `lib/features/auth` - login, register, session |
-| `epic:feature-tasks` | `lib/features/tasks` - CRUD sample slice |
-| `epic:design-system` | `lib/shared` - tokens, theme, shared widgets, accessibility |
-| `epic:testing` | `test/`, `integration_test/`, coverage gates, Patrol E2E, golden acceptance |
-| `epic:tooling-ci` | `.github/workflows`, `scripts/`, `tool/`, `bricks/`, git hooks |
-| `epic:docs` | `docs/`, `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md` |
+**The list is not reproduced here.** It lives in the `EPICS` array of
+[`scripts/bootstrap-issue-labels.sh`](../scripts/bootstrap-issue-labels.sh),
+which also creates the labels, so the script, the live labels and every reader
+cannot drift apart. A copy in this document had already drifted from it once.
+Read it with:
+
+```bash
+./scripts/bootstrap-issue-labels.sh --list-epics          # slugs only
+./scripts/bootstrap-issue-labels.sh --dry-run             # slugs + descriptions
+```
 
 Exactly one per issue. If a change genuinely spans two epics, it is too big:
-split it.
+split it. If no epic fits, that is a taxonomy gap and a human decision - say so
+rather than forcing the nearest label.
 
 ### Priority
 
@@ -91,9 +89,9 @@ At most one per issue, and **exactly** one on any triaged open issue.
 
 ```
 Backlog (open, no status label)
-   |  triage: add type + epic + priority, write acceptance criteria
+   |  planner triage: add type + epic + priority, write acceptance criteria
    v
-status:todo ──claim: assign + relabel──> status:in-progress
+status:todo ──implementer claims: assign + relabel──> status:in-progress
                                               | ship (branch, PR, merge)
                                               v
                                         run acceptance criteria
@@ -106,6 +104,29 @@ status:todo ──claim: assign + relabel──> status:in-progress
    any state ── stuck / needs a decision ──> status:blocked (+ comment, unassign)
 ```
 
+**Every state has an exit, and a role that performs it.** A state nobody moves
+issues out of is a leak: koniz-dev/flutter-starter#39 and #40 sat in
+`status:blocked` for 18 days because no role read that label, and the queue
+reported itself empty the whole time.
+
+| From | To | Who | Trigger |
+|---|---|---|---|
+| Backlog | `status:todo` | planner | triage |
+| `status:todo` | `status:in-progress` | implementer | claim |
+| `status:in-progress` | closed | implementer | criteria PASS with evidence |
+| `status:in-progress` | `status:needs-uat` | implementer | a criterion is tier 3 |
+| any | `status:blocked` | any role | missing decision, credential, or criteria |
+| `status:needs-uat` | closed / `status:todo` | planner sweep | human commented PASS / FAIL |
+| `status:blocked` | `status:todo` | planner sweep | the blocker is gone |
+| `status:in-progress` | `status:todo` | any role | the claim is stale (its session died) |
+
+The planner sweep is not optional and does not wait for an empty queue - see
+[`.claude/agents/planner.md`](../.claude/agents/planner.md). Recipes for each
+row are in [section 5](#5-gh-recipes).
+
+**Closing never changes the status label.** Whatever state an issue was in when
+it closed stays on it, as the record of how it ended. See invariant 1.
+
 ---
 
 ## 3. The six invariants
@@ -115,8 +136,26 @@ unattended loop fail in a specific way.
 
 ### Invariant 1 - Exactly one state per open issue
 
-A `status:*` label comes off only by **closing** the issue or by **moving it to
-another state**. Never strip a status label on its own.
+A `status:*` label is only ever **swapped** for another `status:*` label. Never
+strip one on its own, and **never strip one in order to close**: closing is not
+a state transition here, it is the end of the line, and the label that was on
+the issue stays as the record of how it ended.
+
+Two consequences worth stating before they surprise someone:
+
+- `gh issue list --state closed --label status:in-progress` returns most closed
+  issues. That is correct, not a leak. Always pass `--state open` when you mean
+  the live queue - every recipe in [section 5](#5-gh-recipes) does.
+- An issue closed straight out of Backlog (never triaged, e.g. closed as
+  invalid) has no status label and never gains one. Nothing to swap.
+
+This was ambiguous until koniz-dev/flutter-starter#58: `CLAUDE.md` read as
+"closing removes the label", this document read as "closing keeps it", and the
+history split - 21 of 24 closed issues kept it, while #39 and #40 had it
+stripped two seconds before closing, spending those two seconds as open issues
+in exactly the invisible limbo the rule exists to prevent. This document wins;
+`CLAUDE.md` now defers to it, and #39 and #40 have had their final state
+restored.
 
 An open issue with no status label is invisible limbo: it will not appear in the
 `status:todo` queue, so no session will ever pick it up, and it will not appear
@@ -180,9 +219,24 @@ is the entire point of this workflow.
 Use the fully qualified `owner/repo#N` form so the reference survives being
 quoted in another repository or in release notes.
 
-> This contradicts the current advice in `CONTRIBUTING.md`
-> ("Reference issues in footer: `Closes #123`"). That line is tracked as a bug;
-> this document wins.
+**This is machine-checked.**
+[`scripts/dev/check_issue_refs.sh`](../scripts/dev/check_issue_refs.sh) rejects
+a commit message or PR body that carries GitHub's auto-closing syntax, or that
+carries no `Refs owner/repo#N` at all.
+[`issue-refs.yml`](../.github/workflows/issue-refs.yml) runs it on every pull
+request, with no path filter, so it is the one check even an evidence-only PR
+gets. Run it before pushing:
+
+```bash
+./scripts/dev/check_issue_refs.sh --range origin/main..HEAD
+./scripts/dev/check_issue_refs.sh --range origin/main..HEAD --body-file pr-body.md
+```
+
+The check matches the keyword only where GitHub would actually act on it -
+directly before an issue reference, as in `Closes #12`. Prose that merely starts
+with the word, like PR #44's "Closes out the investigation in #40", does not
+auto-close anything and is not flagged; a blanket `grep -i closes` would have
+called that a violation and taught everyone to ignore the check.
 
 ### Invariant 4 - Definition of Done is closed AND evidence-backed
 
@@ -200,6 +254,16 @@ Done. Those are inputs to a verdict, not the verdict.
 Evidence must be retrievable *later*, by someone who was not in the session.
 Terminal scrollback is not evidence. A screenshot that exists only in a
 subagent's context is not evidence.
+
+**The one exception: an issue whose premise is false.** A defect that does not
+exist has no criteria to run, so requiring an evidence directory would force
+someone to fabricate a PASS table for a fix that was never needed. Close it as
+not planned, with a comment that shows *why* the premise fails - the file and
+line that already behave correctly, or the command whose output contradicts the
+report. That comment is the audit trail, and it is the only substitute for an
+evidence directory this workflow accepts. Precedents:
+koniz-dev/flutter-starter#25 and #84. The recipe is in
+[section 5](#5-gh-recipes).
 
 ### Invariant 5 - `status:needs-uat` means a human must verify this
 
@@ -220,6 +284,12 @@ When routing, the comment must state exactly what the human has to do and what
 result would count as PASS. A human's rejection sends the issue back to
 `status:todo` with feedback, not to `blocked`.
 
+The human writes a comment; they do not relabel. The **planner sweep** reads
+`status:needs-uat` on every run and acts on the verdict - closing on PASS
+(citing the human's comment alongside the existing evidence directory), or
+swapping to `status:todo` on FAIL. Without that sweep, `needs-uat` is where
+issues go to be forgotten, which is exactly what happened to `status:blocked`.
+
 ### Invariant 6 - Labels are the source of truth
 
 Label state is authoritative. Any GitHub Project or board view is a
@@ -235,28 +305,50 @@ Boards are allowed. Boards deciding anything are not.
 
 One issue at a time. Each change stays small and revertible.
 
-1. **Select.** Take the highest-priority `status:todo` issue with no assignee.
-   Ties break by lowest issue number (oldest first).
+1. **Select.** Rank the unassigned `status:todo` queue by the **Tiebreaker
+   priority order** in [`CLAUDE.md`](../CLAUDE.md#tiebreaker-priority-order).
+   That list is the single definition of the order; this selector implements it
+   and deliberately does not restate it.
 
    ```bash
-   pick=""
-   for p in P0 P1 P2 P3; do
-     pick=$(gh issue list --state open \
-       --label status:todo --label "priority:$p" \
-       --search "no:assignee sort:created-asc" \
-       --json number,title,labels --jq '.[0] // empty')
-     [[ -n "$pick" ]] && break
-   done
-   echo "${pick:-queue empty - triage one Backlog issue (step 2)}"
+   gh issue list --state open --label status:todo \
+     --search "no:assignee" --limit 200 \
+     --json number,title,labels --jq '
+     [ .[]
+       | { number, title,
+           labels: [.labels[].name] }
+       | { number, title,
+           priority: ((.labels[] | select(startswith("priority:P"))) // "priority:P3"),
+           type:     ((.labels[] | select(startswith("type:")))      // "type:task"),
+           epic:     ((.labels[] | select(startswith("epic:")))      // "epic:?") }
+       | . + { prank: (.priority | ltrimstr("priority:P") | tonumber),
+               trank: ({"type:bug":0,"type:feature":1,"type:task":2}[.type] // 3) } ]
+     | sort_by(.prank, .trank, .number)
+     | .[]
+     | "P\(.prank) \(.type) #\(.number) \(.epic) \(.title)"'
    ```
 
-   Two details are load-bearing here, both learned the hard way:
+   Three details are load-bearing, all learned the hard way:
 
-   - **`.[0] // empty` plus a `-n` test, not `&& break`.** `gh issue list`
-     exits 0 when nothing matches, so `... --jq '.[0]' && break` breaks on the
-     first iteration (`P0`) every time and the loop never reaches `P1`.
-   - **`sort:created-asc`.** `gh issue list` defaults to newest-first, which
-     silently inverts the oldest-first tiebreaker.
+   - **Rank, do not pick.** Level 2 of the order ("unblocks another issue") has
+     no label to sort on, so the selector prints every candidate in order and
+     the session applies level 2 by reading them. Taking `.[0]` blindly
+     implements 4 of the 5 levels while looking like it implements all of them.
+   - **`sort_by` in jq, not four `gh` calls.** The older loop-per-priority form
+     sorted on priority and issue number only, silently dropping the
+     `type:bug` > `type:feature` > `type:task` level. It also had to be written
+     as `.[0] // empty` plus a `-n` test, because `gh issue list` exits 0 when
+     nothing matches and `--jq '.[0]' && break` therefore breaks on `P0` every
+     time and never reaches `P1`.
+   - **Sort locally, not with `sort:created-asc`.** `gh issue list` defaults to
+     newest-first; sorting by `.number` in jq makes the oldest-first level
+     explicit instead of relying on a search qualifier nobody notices is
+     missing.
+
+   Empty output means the queue is empty: go to step 2. Then check what the
+   other states are holding - `status:blocked`, `status:needs-uat`, and stale
+   `status:in-progress` claims are queue entries too, and they are the
+   planner's, per [section 2](#2-lifecycle).
 
 2. **Triage if the queue is empty.** If nothing is in `status:todo`, take one
    Backlog issue (open, no `status:*`), add `type:*`, `epic:*`, `priority:*`,
@@ -296,7 +388,9 @@ One issue at a time. Each change stays small and revertible.
 5. **Implement and ship.** Branch from `main` using the `CONTRIBUTING.md`
    convention (`fix/`, `feature/`, `docs/`, `test/`, `chore/`, `refactor/`),
    commit with Conventional Commits plus `Refs owner/repo#N`, open a PR, wait for
-   the **Quality gate** check, then merge.
+   the checks that PR gets (see
+   [section 7](#7-adaptations-for-this-repository) for which ones and why), then
+   merge. `main` is protected, so the PR is the only route in.
 
    ```bash
    git checkout main && git pull
@@ -306,14 +400,15 @@ One issue at a time. Each change stays small and revertible.
    git commit -m "fix(scope): what changed
 
    Refs koniz-dev/flutter-starter#12"
+   ./scripts/dev/check_issue_refs.sh --range origin/main..HEAD   # invariant 3
    git push -u origin fix/short-description
    gh pr create --fill --body "Refs koniz-dev/flutter-starter#12"
 
    # Wait for checks to REGISTER before watching them. Run immediately after
    # `pr create`, `gh pr checks` reports "no checks reported on the ... branch"
-   # simply because GitHub has not created them yet - indistinguishable from a
-   # docs-only PR that will genuinely never get any. Merging on that reading
-   # skips the gate entirely.
+   # simply because GitHub has not created them yet. Merging on that reading
+   # skips the gate entirely. Every PR gets at least the "Issue refs" check, so
+   # a PR that still shows zero after the poll is stuck, not exempt.
    for _ in 1 2 3 4 5 6; do
      [[ "$(gh pr checks --json name --jq 'length' 2>/dev/null || echo 0)" -gt 0 ]] && break
      sleep 10
@@ -322,9 +417,8 @@ One issue at a time. Each change stays small and revertible.
    gh pr merge --squash --delete-branch
    ```
 
-   To tell the two cases apart, compare the changed files against `ci.yml`'s
-   `paths-ignore` (`**/*.md`, `docs/**`): if every changed path matches, no check
-   will ever appear and there is nothing to wait for.
+   Which checks to expect follows from the changed paths, so look at them before
+   concluding anything about a missing check:
 
    ```bash
    gh pr diff --name-only
@@ -474,11 +568,54 @@ gh issue edit N --repo "$REPO" \
 
 ### Unblock (blocked -> todo)
 
+Run by the **planner sweep**. Nobody else reads `status:blocked`, so if the
+planner does not run this, nothing ever will.
+
 ```bash
+# The sweep: everything parked, oldest first
+gh issue list --repo "$REPO" --state open --label status:blocked \
+  --json number,title,updatedAt
+
 gh issue comment N --repo "$REPO" --body "Unblocked: <what changed>"
 gh issue edit N --repo "$REPO" \
   --remove-label status:blocked --add-label status:todo
 ```
+
+A blocked issue whose blocker is *not* gone still gets looked at: if it has been
+parked for weeks with nobody able to unblock it, say so in a comment. Silence is
+what turned koniz-dev/flutter-starter#39 and #40 into an 18-day stall.
+
+### Release a stale claim (in-progress -> todo)
+
+A session can die mid-issue - the process is killed, the context runs out, the
+harness restarts. The claim outlives it: the issue keeps `status:in-progress`
+and an assignee forever, and no other session will touch it.
+
+Before releasing, establish the claim really is dead. `updatedAt` hours old with
+no branch and no PR is a dead claim; a branch pushed minutes ago is a live one.
+**Releasing a live claim causes exactly the collision the claim prevents.**
+
+```bash
+gh issue list --repo "$REPO" --state open --label status:in-progress \
+  --json number,title,assignees,updatedAt
+git ls-remote --heads origin | grep -i '<issue-number>\|<slug>'   # any branch?
+gh pr list --repo "$REPO" --state all --search "<issue-number>"   # any PR?
+```
+
+Then release it, and say what the next implementer is walking into:
+
+```bash
+gh issue comment N --repo "$REPO" --body "Releasing a stale claim: the session
+holding this issue is gone. <State whether a fix already merged, and in which
+PR, so the next implementer does not redo it.>"
+gh issue edit N --repo "$REPO" \
+  --remove-assignee <login> \
+  --remove-label status:in-progress --add-label status:todo
+```
+
+The comment is the load-bearing half. A released claim whose work had already
+merged looks identical to one where nothing happened, and the next implementer
+will happily rewrite the merged change.
 
 ### Close with evidence
 
@@ -488,10 +625,11 @@ Evidence must be **merged** before the closing comment, so the links resolve on
 Prefer putting the evidence in the **same PR as the fix**. When the fix has
 already merged (as happens when verification turns up extra work), send the
 evidence as its own small PR - it still goes through a branch, because
-`docs/verification/**` is not exempt from the branch-and-PR rule. Be aware that
-an evidence-only PR touches nothing but `docs/**`, which `ci.yml` excludes via
-`paths-ignore`, so it will report **no checks at all**. That is expected: the
-gate for evidence is a human or agent reading it, not CI.
+`docs/verification/**` is not exempt from the branch-and-PR rule (and `main` is
+protected, so there is no other way in). Be aware that an evidence-only PR of
+`.png` and `.log` files matches neither `ci.yml` nor `docs-check.yml`, so its
+only check is **Issue refs**. That is expected: the gate for evidence is a human
+or agent reading it, not CI.
 
 ```bash
 ./scripts/test/run_acceptance.sh N          # writes docs/verification/issue-N/
@@ -525,6 +663,34 @@ EOF
 Closing an issue satisfies invariant 1 - the `status:in-progress` label stays on
 the closed issue as a record. Do not strip it.
 
+### Close an invalid issue (no evidence directory)
+
+The one close that carries no `docs/verification/` directory. Use it when the
+issue's premise is factually wrong, never as a shortcut when verification is
+merely inconvenient. Show the evidence *against* the premise in the comment.
+
+````bash
+gh issue close N --repo "$REPO" --reason "not planned" --comment "$(cat <<'EOF'
+## Not reproducible - premise is wrong
+
+The report says <claim>. The code does the opposite:
+
+`lib/path/to/file.dart:120-134` <what it actually does>
+
+```
+$ <command that contradicts the report>
+<output>
+```
+
+No fix is needed, so there is nothing to verify and no evidence directory. See
+invariant 4.
+EOF
+)"
+````
+
+The status label follows invariant 1: whatever state it was in stays. An issue
+closed straight out of Backlog simply has none.
+
 ---
 
 ## 6. What the acceptance tooling cannot verify
@@ -534,7 +700,10 @@ has three verification tiers.
 
 ### Tier 1 - `flutter test` (agent-drivable, no device)
 
-157 files in `lib/`, 134 test files. Unit and widget tests run on the host VM.
+161 Dart files in `lib/`, 142 `*_test.dart` files under `test/`
+(`find lib -name '*.dart' | wc -l`, `find test -name '*_test.dart' | wc -l`;
+recheck rather than trusting the numbers). Unit and widget tests run on the
+host VM.
 Widget tests can pump real screens through
 [`test/helpers/pump_app.dart`](../test/helpers/pump_app.dart) and assert against
 the stable keys in
@@ -625,6 +794,19 @@ Route these to `status:needs-uat`:
   subagent's confidence is not evidence, and its context is not retrievable.
 - Name the artifact per criterion. "All criteria pass, see the logs" is not a
   PASS summary.
+- **Account for the standing goldens.** The runner copies every PNG under
+  `test/acceptance/goldens/` into `docs/verification/issue-<N>/`, so a non-visual
+  issue still ships six screenshots of screens it never touched. They are not
+  evidence for it. Checksum them against the committed goldens and say in the
+  closing comment that no criterion rests on them:
+
+  ```bash
+  shasum -a 256 test/acceptance/goldens/*.png docs/verification/issue-<N>/*.png \
+    | sort | tee docs/verification/issue-<N>/goldens-checksums.txt
+  ```
+
+  Identical pairs prove the run left them untouched. A mismatch is a golden
+  regression: explain it, do not delete it.
 
 ---
 
@@ -640,14 +822,32 @@ The generic pattern was adjusted in four places. Each is a deliberate deviation.
    `type:*` family. The state machine is unchanged either way, because type was
    never part of it.
 
-2. **Feature branch plus PR, not straight to `main`.** `main` is currently
-   unprotected, but `CONTRIBUTING.md` mandates PRs and all seven historical
-   changes went through one. The session opens the PR, waits for the
-   **Quality gate** check in [`ci.yml`](../.github/workflows/ci.yml), and merges
-   with `--squash --delete-branch`. Note that `ci.yml` has
-   `paths-ignore: ['**/*.md', 'docs/**']`, so a docs-only PR gets **no** Quality
-   gate run - `gh pr checks --watch` will report no checks rather than a pass.
-   That is expected; do not treat it as a failure, and do not wait on it.
+2. **Feature branch plus PR, not straight to `main`.** `main` is protected:
+   direct pushes, force pushes and branch deletion are rejected, and a pull
+   request is required. Every merged change has gone through one. The session
+   opens the PR, waits for the checks that PR actually gets, and merges with
+   `--squash --delete-branch`.
+
+   Which checks it gets depends on the paths, and two of the three workflows
+   filter on them:
+
+   | Workflow | Check | Runs when |
+   |---|---|---|
+   | [`ci.yml`](../.github/workflows/ci.yml) | Quality gate | any path outside `**/*.md` and `docs/**` |
+   | [`docs-check.yml`](../.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or itself |
+   | [`issue-refs.yml`](../.github/workflows/issue-refs.yml) | Issue refs | every PR, unconditionally |
+
+   A docs-only PR therefore gets **Docs check** and **Issue refs** but no
+   Quality gate; that is expected, not a failure. An evidence-only PR of
+   `.png` and `.log` files gets **Issue refs** alone. Since every PR now gets at
+   least one check, a PR showing zero is the registration race described in step
+   5 of [section 4](#4-the-per-issue-agent-loop), not a path exclusion.
+
+   **No check is required to merge yet.** Protection blocks the push paths, not
+   a red check, so reading the checks remains the session's job. Quality gate
+   cannot be made a required check while `ci.yml` carries `paths-ignore`: a
+   required check that never reports leaves every docs-only PR permanently
+   unmergeable. Tracked on koniz-dev/flutter-starter#58.
 
 3. **Golden PNGs instead of a browser harness.** There is no browser or e2e
    harness a session can drive here (tier 3 above). Golden capture is the only
@@ -671,3 +871,20 @@ section of [`CLAUDE.md`](../CLAUDE.md).
 The load-bearing rule: **reviewer roles file issues, they do not fix them.** QA
 and security have no write access to `lib/`. A QA failure returns to the
 implementer, never to the planner.
+
+**Who invokes `qa`.** No role can invoke another; they are all leaves. The
+phase order is driven by whoever owns the loop:
+
+- An **orchestrating session** dispatching role subagents runs the phases in
+  order and is the only party that can see two implementers at once, so it also
+  enforces the parallelism rules. That is how `qa` filed
+  koniz-dev/flutter-starter#88 and #89.
+- A **solo session** has nobody to dispatch, so the implementer runs the qa
+  checklist on its own change before closing - "Self-QA before closing" in
+  [`.claude/agents/implementer.md`](../.claude/agents/implementer.md), which
+  mirrors steps 2 and 3 of [`.claude/agents/qa.md`](../.claude/agents/qa.md).
+
+Self-QA is weaker: the session auditing the PASS is the one that wrote it.
+Prefer a real `qa` pass on anything non-trivial. Skipping both and closing
+anyway is the failure this rule exists to prevent - it is how the loop ran for
+its first twelve issues.
