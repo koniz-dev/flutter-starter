@@ -1,0 +1,5 @@
+$ flutter analyze
+
+Analyzing verify...                                             
+No issues found! (ran in 4.0s)
+exit: 0
