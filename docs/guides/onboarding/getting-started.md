@@ -65,7 +65,15 @@ cp .env.example .env
 
 # Edit .env with your local configuration
 # The .env file is gitignored and won't be committed
+
+# Feed it to the build - this is how it is read, on every native target
+flutter run --dart-define-from-file=.env
 ```
+
+Do **not** add `- .env` to the `assets:` list in `pubspec.yaml` to make plain
+`flutter run` pick it up. Flutter asset lists are not build-mode scoped, so
+that ships your values inside every release APK, IPA and web build. See
+[Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle).
 
 **Option B: Using `--dart-define` flags (For CI/CD or when not using .env)**
 

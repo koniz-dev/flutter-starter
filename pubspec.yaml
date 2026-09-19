@@ -127,17 +127,37 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   # Environment configuration files
-  # Note: Only .env.example is shipped here (the real .env is gitignored).
+  # Only .env.example is shipped here: every value in it is blank or a
+  # placeholder. The real .env is gitignored and MUST NOT be added below.
   #
-  # To use a real .env locally: copy .env.example to .env AND add `- .env` to
-  # the list below. flutter_dotenv reads through rootBundle, so an .env that is
-  # not declared as an asset cannot be loaded at all - EnvConfig.load() fails
-  # silently and every value falls through to the next priority.
+  # DO NOT add `- .env` to this list. An asset declaration is NOT build-mode
+  # scoped - there is no debug-only asset list - so anything here is copied
+  # into the release APK, the release IPA and the web build exactly as it is
+  # copied into a debug build. A bundled .env is readable by anyone who
+  # unzips the shipped APK or IPA payload, and on web it is fetchable
+  # unauthenticated at https://<host>/assets/.env and listed in
+  # AssetManifest.json. Publishing one means rotating every value in it.
   #
-  # --dart-define is the other supported mechanism. It works on native builds
-  # (Android, iOS, macOS, Windows, Linux) in every build mode, but not on
-  # Flutter web, and only for the keys declared in
-  # lib/core/config/dart_defines.dart. See docs/guides/configuration.md.
+  # Use instead, for a real .env on native (Android, iOS, macOS, Windows,
+  # Linux) in every build mode:
+  #
+  #   flutter run --dart-define-from-file=.env
+  #   flutter build apk --release --dart-define-from-file=.env
+  #
+  # Nothing is bundled as a readable file, and the keys must be declared in
+  # lib/core/config/dart_defines.dart. Note that dart-define values are still
+  # compiled into the binary and recoverable from it, so they are build
+  # configuration, not a secret store.
+  #
+  # Flutter web has no dart-define path here (EnvConfig guards every
+  # dart-define read with !kIsWeb) and a web client cannot hold a secret at
+  # all - the whole bundle is downloaded by the user. Serve secrets from your
+  # backend; keep only publishable values in the bundle.
+  #
+  # `dart run tool/check_env_assets.dart` and
+  # test/tooling/check_env_assets_test.dart fail if an env file other than
+  # .env.example appears below. See docs/guides/configuration.md
+  # ("Never ship a secret in the bundle") for the deliberate-exception marker.
   assets:
     - .env.example
 
