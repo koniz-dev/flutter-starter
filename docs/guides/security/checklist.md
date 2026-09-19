@@ -29,6 +29,13 @@ them.
 - [ ] Remove sensitive data from crash reports
 
 ### Code Security
+- [ ] **Confirm no env file is bundled as an asset (shipped)** - run
+      `dart run tool/check_env_assets.dart` before every release. Flutter asset
+      lists are not build-mode scoped, so a `.env` in `pubspec.yaml` ships in
+      the release APK, the release IPA and the web build. Use
+      `--dart-define-from-file=.env` on native; on web, keep secrets on the
+      server. See
+      [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
 - [ ] **Enable code obfuscation for release builds**
 - [ ] **Configure proper Android release signing** (remove debug signing)
 - [ ] Add production build guards (prevent debug code in production)
