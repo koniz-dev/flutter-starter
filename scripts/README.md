@@ -10,7 +10,18 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | [`audit_template.sh`](dev/audit_template.sh) | Full non-platform gate: format check, `flutter analyze`, `flutter test`. |
 | [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Copy `.githooks/*` â†’ `.git/hooks/` (single source of truth in repo). |
 | [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
-| [`create_feature.sh`](dev/create_feature.sh) | Scaffold a new feature slice under `lib/features/`. |
+| [`create_feature.sh`](dev/create_feature.sh) | Scaffold a feature slice under `lib/features/<name>/` plus its mirrored test under `test/features/<name>/`. Output passes `flutter analyze` and `dart format --set-exit-if-changed` as generated. |
+| [`create_feature.ps1`](dev/create_feature.ps1) | Windows equivalent of `create_feature.sh`. Writes byte-identical files (LF, UTF-8 without BOM); the parity is checked by the `scaffold-parity` job in [`scripts-smoke.yml`](../.github/workflows/scripts-smoke.yml). |
+| [`setup_ci.dart`](dev/setup_ci.dart) | Uncomment the `push:` / `pull_request:` triggers inside each workflow's top-level `on:` block. `--dry-run` shows what it would change; `--yes` skips the prompt. |
+
+## `scripts/ci/`
+
+| Script | Purpose |
+|--------|---------|
+| [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`. No `--flavor`: this project has no Gradle product flavors and configures itself through `--dart-define`. |
+| [`bump_version.sh`](ci/bump_version.sh) | Bump `version:` in `pubspec.yaml`. Handles both `1.0.0` and `1.0.0+1`, validates before writing, and leaves the file untouched on any error. |
+| [`generate_changelog.sh`](ci/generate_changelog.sh) | Build a CHANGELOG section from the commit log. |
+| [`release.sh`](ci/release.sh) | Test, analyze, bump, changelog, branch, tag. |
 
 ## `scripts/test/`
 

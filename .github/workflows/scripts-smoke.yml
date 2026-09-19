@@ -1,0 +1,136 @@
+# Runs the developer scripts that need a toolchain no contributor machine is
+# guaranteed to have: an Android SDK for `scripts/ci/build_all.sh`, and
+# PowerShell for `scripts/dev/create_feature.ps1`.
+#
+# Both scripts are advertised as the supported path in docs/ and scripts/
+# README, and both have shipped broken - `build_all.sh` kept the `--flavor`
+# flag for months after koniz-dev/flutter-starter#34 removed it everywhere
+# else, and `create_feature.ps1` called a `Culture` cmdlet that does not exist
+# (koniz-dev/flutter-starter#57). Neither failure was reachable from `ci.yml`,
+# which never leaves the Ubuntu Dart/Flutter toolchain.
+#
+# Manual by design: an Android release build plus a Windows Flutter setup is
+# far too expensive to put on every push. Run it after touching
+# scripts/ci/build_all.sh or either create_feature script.
+name: Scripts smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Which smoke job to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - build-all
+          - scaffold-parity
+      environment:
+        description: 'Argument passed to scripts/ci/build_all.sh'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+concurrency:
+  group: scripts-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-all:
+    if: inputs.job == 'all' || inputs.job == 'build-all'
+    name: build_all.sh (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # No `flutter pub get` step: build_all.sh runs `flutter clean` and
+      # `flutter pub get` itself, and the point is to exercise the script
+      # exactly as an adopter would.
+      - name: Run scripts/ci/build_all.sh
+        shell: bash
+        run: |
+          set -o pipefail
+          ./scripts/ci/build_all.sh "${{ inputs.environment }}" 2>&1 \
+            | tee build_all.log
+
+      - name: Show Android and Web outputs
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "=== build/app/outputs ==="
+            find build/app/outputs -type f 2>/dev/null | head -40
+            echo "=== build/web ==="
+            ls -la build/web 2>/dev/null | head -20
+          } | tee build_outputs.txt
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-all-${{ inputs.environment }}
+          path: |
+            build_all.log
+            build_outputs.txt
+
+  scaffold-parity:
+    if: inputs.job == 'all' || inputs.job == 'scaffold-parity'
+    name: create_feature.sh == create_feature.ps1 (Windows)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Git Bash ships on the Windows runner, so both scaffolders can run in
+      # the same job and their output compared byte for byte.
+      - name: Scaffold with create_feature.sh, then with create_feature.ps1
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./scripts/dev/create_feature.sh smoke_feature
+          mkdir -p ../sh-output
+          mv lib/features/smoke_feature ../sh-output/lib_smoke_feature
+          mv test/features/smoke_feature ../sh-output/test_smoke_feature
+
+          pwsh -File scripts/dev/create_feature.ps1 smoke_feature
+
+      - name: Compare the two outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          diff -r ../sh-output/lib_smoke_feature lib/features/smoke_feature
+          diff -r ../sh-output/test_smoke_feature test/features/smoke_feature
+          echo "create_feature.ps1 output is identical to create_feature.sh"
+
+      - name: Gate the generated slice
+        shell: bash
+        run: |
+          set -euo pipefail
+          dart format --set-exit-if-changed --output=none \
+            lib/features/smoke_feature test/features/smoke_feature
+          flutter analyze
+          flutter test test/features/smoke_feature

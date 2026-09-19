@@ -5,26 +5,39 @@ set -euo pipefail
 msg_file="${1:?commit-msg hook requires message file path}"
 commit_msg="$(head -n 1 "$msg_file")"
 
-# Merge commits from Git
-if echo "$commit_msg" | grep -qE '^Merge '; then
+# Subjects Git itself generates, or that exist only to be autosquashed. None of
+# them is under the author's control, so rejecting them forced --no-verify,
+# which switches off every hook rather than just this rule (issue #57).
+#
+#   Merge branch 'x'          git merge
+#   Revert "feat(auth): x"    git revert
+#   fixup! feat: x            git commit --fixup
+#   squash! feat: x           git commit --squash
+#   amend! feat: x            git commit --fixup=amend
+if echo "$commit_msg" | grep -qE '^(Merge |Revert "|(fixup|squash|amend)! )'; then
   exit 0
 fi
 
-# Types aligned with CONTRIBUTING + common extensions (build, revert)
-# Subject must be non-empty after ": "
-pattern='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([^)]+\))?: .+'
+# Types aligned with CONTRIBUTING + common extensions (build, revert).
+# `!` before the colon is the Conventional Commits breaking-change marker and
+# is valid both with and without a scope: `feat!: x` and `feat(api)!: x`.
+# Subject must be non-empty after ": ".
+pattern='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\([^)]+\))?!?: .+'
 
 if ! echo "$commit_msg" | grep -qE "$pattern"; then
   echo "❌ Commit message does not follow Conventional Commits."
   echo ""
-  echo "   Format: <type>(<optional-scope>): <subject>"
+  echo "   Format: <type>(<optional-scope>)<optional-!>: <subject>"
   echo ""
   echo "   Types: feat fix docs style refactor test chore perf ci build revert"
   echo ""
   echo "   Examples:"
   echo "     feat(auth): add biometric login"
   echo "     fix: handle null user after logout"
+  echo "     feat(api)!: drop the v1 endpoints (breaking)"
   echo "     docs(readme): update install steps"
+  echo ""
+  echo "   Also accepted: Merge..., Revert \"...\", fixup!/squash!/amend! ..."
   echo ""
   echo "   Bypass (rare): git commit --no-verify"
   exit 1
