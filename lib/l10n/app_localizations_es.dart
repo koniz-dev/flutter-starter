@@ -253,4 +253,85 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backToHome => 'Volver al inicio';
+
+  @override
+  String get noItemsFound => 'No se encontraron elementos';
+
+  @override
+  String get loadMore => 'Cargar más';
+
+  @override
+  String get retryHint => 'Intenta volver a cargar el contenido';
+
+  @override
+  String get selectLanguageHint => 'Abre el diálogo de selección de idioma';
+
+  @override
+  String get progressIndicator => 'Indicador de progreso';
+
+  @override
+  String percentValue(int percent) {
+    return '$percent por ciento';
+  }
+
+  @override
+  String get stateLoading => 'Cargando';
+
+  @override
+  String get stateDisabled => 'Desactivado';
+
+  @override
+  String focusedOn(String label) {
+    return 'Foco en $label';
+  }
+
+  @override
+  String navigatedTo(String page) {
+    return 'Se navegó a $page';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hace $count horas',
+      one: 'Hace 1 hora',
+      zero: 'Ahora mismo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hace $count días',
+      one: 'Hace 1 día',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hace $count meses',
+      one: 'Hace 1 mes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hace $count años',
+      one: 'Hace 1 año',
+    );
+    return '$_temp0';
+  }
 }

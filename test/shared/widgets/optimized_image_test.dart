@@ -281,19 +281,21 @@ void main() {
       expect(find.byType(Image), findsOneWidget);
     });
 
-    testWidgets('should support cache key', (tester) async {
+    testWidgets('should forward a semantic label', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: OptimizedImage(
               imageUrl: 'https://example.com/image.jpg',
-              cacheKey: 'test_cache_key',
+              semanticLabel: 'Profile photo',
             ),
           ),
         ),
       );
 
-      expect(find.byType(Image), findsOneWidget);
+      final image = tester.widget<Image>(find.byType(Image));
+      expect(image.semanticLabel, 'Profile photo');
+      expect(image.excludeFromSemantics, isFalse);
     });
 
     testWidgets('should handle null width and height for cache', (
@@ -378,20 +380,24 @@ void main() {
       expect(find.byType(AspectRatio), findsOneWidget);
     });
 
-    testWidgets('should support cache key', (tester) async {
+    testWidgets('should forward a semantic label', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
             body: OptimizedAspectImage(
               imageUrl: 'https://example.com/image.jpg',
               aspectRatio: 1,
-              cacheKey: 'test_cache_key',
+              semanticLabel: 'Cover art',
             ),
           ),
         ),
       );
 
       expect(find.byType(AspectRatio), findsOneWidget);
+      expect(
+        tester.widget<Image>(find.byType(Image)).semanticLabel,
+        'Cover art',
+      );
     });
   });
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+import 'package:flutter_starter/core/localization/localization_extensions.dart';
 
 /// Accessible button widget with proper semantics and touch targets
 ///
@@ -60,6 +61,7 @@ class AccessibleButton extends StatelessWidget {
         semanticLabel ??
         AccessibilityHelpers.getButtonSemanticLabel(
           label,
+          l10n: context.l10n,
           isEnabled: isEnabled,
           isLoading: isLoading,
         );
@@ -211,7 +213,14 @@ class AccessibleText extends StatelessWidget {
       return ExcludeSemantics(child: widget);
     }
 
-    return Semantics(label: semanticLabel ?? text, child: widget);
+    // `excludeSemantics` stops the wrapped `Text` from producing a second
+    // node, which would otherwise make a screen reader announce the string
+    // twice.
+    return Semantics(
+      label: semanticLabel ?? text,
+      excludeSemantics: true,
+      child: widget,
+    );
   }
 }
 
@@ -260,7 +269,14 @@ class AccessibleImage extends StatelessWidget {
       return ExcludeSemantics(child: widget);
     }
 
-    return Semantics(label: semanticLabel, image: true, child: widget);
+    // `excludeSemantics` stops [image] from contributing its own (usually
+    // unlabeled) node alongside this one.
+    return Semantics(
+      label: semanticLabel,
+      image: true,
+      excludeSemantics: true,
+      child: widget,
+    );
   }
 }
 
@@ -297,14 +313,15 @@ class AccessibleProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final effectiveValue =
         semanticValue ??
         (value != null
-            ? AccessibilityHelpers.getProgressSemanticValue(value!)
+            ? AccessibilityHelpers.getProgressSemanticValue(value!, l10n: l10n)
             : null);
 
     return Semantics(
-      label: semanticLabel ?? 'Progress indicator',
+      label: semanticLabel ?? l10n.progressIndicator,
       value: effectiveValue,
       child: LinearProgressIndicator(
         value: value,
@@ -320,9 +337,15 @@ class AccessibleProgressIndicator extends StatelessWidget {
 /// Focus management widget
 ///
 /// Helps manage focus for keyboard navigation and screen readers.
-class FocusManager extends StatelessWidget {
-  /// Creates a [FocusManager] widget
-  const FocusManager({
+///
+/// Deliberately **not** named `FocusManager`: this library is meant to be
+/// imported alongside `package:flutter/material.dart`, which exports Flutter's
+/// own `FocusManager` singleton. A same-named class here makes the very common
+/// `FocusManager.instance.primaryFocus?.unfocus()` a hard compile error
+/// (`'FocusManager' is imported from both ...`) in any file that imports both.
+class AccessibleFocus extends StatelessWidget {
+  /// Creates an [AccessibleFocus] widget
+  const AccessibleFocus({
     required this.child,
     super.key,
     this.autofocus = false,

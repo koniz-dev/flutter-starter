@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Accessibility helper functions
 ///
@@ -90,9 +91,12 @@ class AccessibilityHelpers {
 
   /// Get semantic label for a button based on its state
   ///
-  /// Combines the base label with state information for screen readers.
+  /// Combines the base label with state information for screen readers. The
+  /// state words come from [l10n] so a screen reader in any supported locale
+  /// announces them in that locale - pass `context.l10n`.
   static String getButtonSemanticLabel(
     String baseLabel, {
+    required AppLocalizations l10n,
     bool? isEnabled,
     bool? isLoading,
     String? additionalInfo,
@@ -100,13 +104,13 @@ class AccessibilityHelpers {
     final parts = <String>[];
 
     if (isLoading ?? false) {
-      parts.add('Loading');
+      parts.add(l10n.stateLoading);
     }
 
     parts.add(baseLabel);
 
     if (!(isEnabled ?? true)) {
-      parts.add('Disabled');
+      parts.add(l10n.stateDisabled);
     }
 
     if (additionalInfo != null && additionalInfo.isNotEmpty) {
@@ -118,9 +122,13 @@ class AccessibilityHelpers {
 
   /// Get semantic value for a progress indicator
   ///
-  /// Formats percentage for screen readers.
-  static String getProgressSemanticValue(double value) {
+  /// Formats the percentage for screen readers using [l10n], so the wording
+  /// follows the active locale - pass `context.l10n`.
+  static String getProgressSemanticValue(
+    double value, {
+    required AppLocalizations l10n,
+  }) {
     final percentage = (value * 100).round();
-    return '$percentage percent';
+    return l10n.percentValue(percentage);
   }
 }

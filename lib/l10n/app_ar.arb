@@ -55,7 +55,7 @@
   "gatewayTimeout": "انتهت مهلة البوابة. يرجى المحاولة لاحقاً.",
   "clientError": "حدث خطأ في العميل.",
   "serverError": "حدث خطأ في الخادم. يرجى المحاولة لاحقاً.",
-  "itemCount": "{count, plural, =0{لا توجد عناصر} =1{عنصر واحد} other{{count} عناصر}}",
+  "itemCount": "{count, plural, zero{لا توجد عناصر} one{عنصر واحد} two{عنصران} few{{count} عناصر} many{{count} عنصرًا} other{{count} عنصر}}",
   "@itemCount": {
     "placeholders": {
       "count": {
@@ -63,7 +63,7 @@
       }
     }
   },
-  "minutesAgo": "{count, plural, =0{الآن} =1{منذ دقيقة واحدة} other{منذ {count} دقائق}}",
+  "minutesAgo": "{count, plural, zero{الآن} one{منذ دقيقة واحدة} two{منذ دقيقتين} few{منذ {count} دقائق} many{منذ {count} دقيقة} other{منذ {count} دقيقة}}",
   "@minutesAgo": {
     "placeholders": {
       "count": {
@@ -113,6 +113,20 @@
   "backToHome": "العودة إلى الصفحة الرئيسية",
   "@backToHome": {
     "description": "Action on the 404 screen that returns to the home route"
-  }
+  },
+  "noItemsFound": "لا توجد عناصر",
+  "loadMore": "تحميل المزيد",
+  "retryHint": "يحاول إعادة تحميل المحتوى",
+  "selectLanguageHint": "يفتح مربع حوار اختيار اللغة",
+  "progressIndicator": "مؤشر التقدم",
+  "percentValue": "{percent} بالمئة",
+  "stateLoading": "جاري التحميل",
+  "stateDisabled": "معطل",
+  "focusedOn": "التركيز على {label}",
+  "navigatedTo": "تم الانتقال إلى {page}",
+  "hoursAgo": "{count, plural, zero{الآن} one{منذ ساعة واحدة} two{منذ ساعتين} few{منذ {count} ساعات} many{منذ {count} ساعة} other{منذ {count} ساعة}}",
+  "daysAgo": "{count, plural, zero{اليوم} one{منذ يوم واحد} two{منذ يومين} few{منذ {count} أيام} many{منذ {count} يومًا} other{منذ {count} يوم}}",
+  "monthsAgo": "{count, plural, zero{هذا الشهر} one{منذ شهر واحد} two{منذ شهرين} few{منذ {count} أشهر} many{منذ {count} شهرًا} other{منذ {count} شهر}}",
+  "yearsAgo": "{count, plural, zero{هذا العام} one{منذ سنة واحدة} two{منذ سنتين} few{منذ {count} سنوات} many{منذ {count} سنة} other{منذ {count} سنة}}"
 }
 

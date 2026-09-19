@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
-import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 
@@ -23,7 +23,7 @@ class LanguageSwitcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.l10n;
     final currentLocale = ref.watch<Locale>(localeStateProvider);
 
     return AccessibleIconButton(
@@ -31,7 +31,7 @@ class LanguageSwitcher extends ConsumerWidget {
       onPressed: () => _showLanguageDialog(context, ref, currentLocale),
       semanticLabel: tooltip ?? l10n.selectLanguage,
       tooltip: tooltip ?? l10n.selectLanguage,
-      semanticHint: 'Opens language selection dialog',
+      semanticHint: l10n.selectLanguageHint,
     );
   }
 
@@ -40,7 +40,7 @@ class LanguageSwitcher extends ConsumerWidget {
     WidgetRef ref,
     Locale currentLocale,
   ) async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.l10n;
     final localizationService = ref.read<LocalizationService>(
       localizationServiceProvider,
     );
@@ -93,18 +93,18 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.l10n;
     final currentLocale = ref.watch<Locale>(localeStateProvider);
 
     return ListTile(
       leading: Icon(icon),
       title: Text(l10n.language),
+      // `firstWhere` without `orElse` used to throw `Bad state: No element`
+      // here and red-screen the containing route, because `LocaleNotifier`
+      // accepts any `Locale` (its value comes from unvalidated storage).
       subtitle: Text(
-        SupportedLocale.values
-            .firstWhere(
-              (locale) =>
-                  locale.locale.languageCode == currentLocale.languageCode,
-            )
+        (SupportedLocale.fromLanguageCode(currentLocale.languageCode) ??
+                SupportedLocale.fallback)
             .displayName,
       ),
       onTap: () => _showLanguageDialog(context, ref, currentLocale),
@@ -116,7 +116,7 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
     WidgetRef ref,
     Locale currentLocale,
   ) async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.l10n;
     final localizationService = ref.read<LocalizationService>(
       localizationServiceProvider,
     );
@@ -166,7 +166,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.l10n;
     final currentLocale = ref.watch<Locale>(localeStateProvider);
     final localizationService = ref.read<LocalizationService>(
       localizationServiceProvider,
@@ -192,9 +192,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
                 supportedLocale.locale.languageCode;
             return RadioListTile<Locale>(
               title: Text(supportedLocale.displayName),
-              subtitle: Text(
-                _getLanguageDescription(supportedLocale.locale.languageCode),
-              ),
+              subtitle: Text(supportedLocale.regionDisplayName),
               value: supportedLocale.locale,
               secondary: isSelected
                   ? const Icon(Icons.check_circle, color: AppColors.success)
@@ -204,20 +202,5 @@ class LanguageSelectionScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  String _getLanguageDescription(String languageCode) {
-    switch (languageCode) {
-      case 'en':
-        return 'English (United States)';
-      case 'es':
-        return 'Español (España)';
-      case 'ar':
-        return 'العربية (السعودية)';
-      case 'vi':
-        return 'Tiếng Việt (Việt Nam)';
-      default:
-        return '';
-    }
   }
 }

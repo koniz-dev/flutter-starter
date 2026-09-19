@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  final en = lookupAppLocalizations(const Locale('en'));
+  final vi = lookupAppLocalizations(const Locale('vi'));
+
   group('AccessibilityHelpers', () {
     group('getContrastRatio', () {
       test('returns high contrast for black on white', () {
@@ -93,13 +97,17 @@ void main() {
 
     group('getButtonSemanticLabel', () {
       test('returns base label when no state provided', () {
-        final label = AccessibilityHelpers.getButtonSemanticLabel('Submit');
+        final label = AccessibilityHelpers.getButtonSemanticLabel(
+          'Submit',
+          l10n: en,
+        );
         expect(label, 'Submit');
       });
 
       test('includes loading state', () {
         final label = AccessibilityHelpers.getButtonSemanticLabel(
           'Submit',
+          l10n: en,
           isLoading: true,
         );
         expect(label, 'Loading, Submit');
@@ -108,6 +116,7 @@ void main() {
       test('includes disabled state', () {
         final label = AccessibilityHelpers.getButtonSemanticLabel(
           'Submit',
+          l10n: en,
           isEnabled: false,
         );
         expect(label, 'Submit, Disabled');
@@ -116,25 +125,55 @@ void main() {
       test('includes all states', () {
         final label = AccessibilityHelpers.getButtonSemanticLabel(
           'Submit',
+          l10n: en,
           isLoading: true,
           isEnabled: false,
           additionalInfo: 'Form validation',
         );
         expect(label, 'Loading, Submit, Disabled, Form validation');
       });
+
+      test('state words follow the supplied locale', () {
+        final label = AccessibilityHelpers.getButtonSemanticLabel(
+          'Gui',
+          l10n: vi,
+          isLoading: true,
+          isEnabled: false,
+        );
+        expect(label, '${vi.stateLoading}, Gui, ${vi.stateDisabled}');
+        expect(label, isNot(contains('Loading')));
+        expect(label, isNot(contains('Disabled')));
+      });
     });
 
     group('getProgressSemanticValue', () {
       test('formats percentage correctly', () {
         expect(
-          AccessibilityHelpers.getProgressSemanticValue(0.5),
+          AccessibilityHelpers.getProgressSemanticValue(0.5, l10n: en),
           '50 percent',
         );
-        expect(AccessibilityHelpers.getProgressSemanticValue(0), '0 percent');
-        expect(AccessibilityHelpers.getProgressSemanticValue(1), '100 percent');
         expect(
-          AccessibilityHelpers.getProgressSemanticValue(0.123),
+          AccessibilityHelpers.getProgressSemanticValue(0, l10n: en),
+          '0 percent',
+        );
+        expect(
+          AccessibilityHelpers.getProgressSemanticValue(1, l10n: en),
+          '100 percent',
+        );
+        expect(
+          AccessibilityHelpers.getProgressSemanticValue(0.123, l10n: en),
           '12 percent',
+        );
+      });
+
+      test('follows the supplied locale', () {
+        expect(
+          AccessibilityHelpers.getProgressSemanticValue(0.5, l10n: vi),
+          vi.percentValue(50),
+        );
+        expect(
+          AccessibilityHelpers.getProgressSemanticValue(0.5, l10n: vi),
+          isNot(contains('percent')),
         );
       });
     });

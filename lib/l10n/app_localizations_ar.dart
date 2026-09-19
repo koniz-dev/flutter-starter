@@ -142,7 +142,10 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count عناصر',
+      other: '$count عنصر',
+      many: '$count عنصرًا',
+      few: '$count عناصر',
+      two: 'عنصران',
       one: 'عنصر واحد',
       zero: 'لا توجد عناصر',
     );
@@ -154,7 +157,10 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'منذ $count دقائق',
+      other: 'منذ $count دقيقة',
+      many: 'منذ $count دقيقة',
+      few: 'منذ $count دقائق',
+      two: 'منذ دقيقتين',
       one: 'منذ دقيقة واحدة',
       zero: 'الآن',
     );
@@ -243,4 +249,100 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backToHome => 'العودة إلى الصفحة الرئيسية';
+
+  @override
+  String get noItemsFound => 'لا توجد عناصر';
+
+  @override
+  String get loadMore => 'تحميل المزيد';
+
+  @override
+  String get retryHint => 'يحاول إعادة تحميل المحتوى';
+
+  @override
+  String get selectLanguageHint => 'يفتح مربع حوار اختيار اللغة';
+
+  @override
+  String get progressIndicator => 'مؤشر التقدم';
+
+  @override
+  String percentValue(int percent) {
+    return '$percent بالمئة';
+  }
+
+  @override
+  String get stateLoading => 'جاري التحميل';
+
+  @override
+  String get stateDisabled => 'معطل';
+
+  @override
+  String focusedOn(String label) {
+    return 'التركيز على $label';
+  }
+
+  @override
+  String navigatedTo(String page) {
+    return 'تم الانتقال إلى $page';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count ساعة',
+      many: 'منذ $count ساعة',
+      few: 'منذ $count ساعات',
+      two: 'منذ ساعتين',
+      one: 'منذ ساعة واحدة',
+      zero: 'الآن',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count يوم',
+      many: 'منذ $count يومًا',
+      few: 'منذ $count أيام',
+      two: 'منذ يومين',
+      one: 'منذ يوم واحد',
+      zero: 'اليوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count شهر',
+      many: 'منذ $count شهرًا',
+      few: 'منذ $count أشهر',
+      two: 'منذ شهرين',
+      one: 'منذ شهر واحد',
+      zero: 'هذا الشهر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count سنة',
+      many: 'منذ $count سنة',
+      few: 'منذ $count سنوات',
+      two: 'منذ سنتين',
+      one: 'منذ سنة واحدة',
+      zero: 'هذا العام',
+    );
+    return '$_temp0';
+  }
 }

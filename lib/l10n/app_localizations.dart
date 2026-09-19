@@ -521,6 +521,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to home'**
   String get backToHome;
+
+  /// Empty state message for a list with no items
+  ///
+  /// In en, this message translates to:
+  /// **'No items found'**
+  String get noItemsFound;
+
+  /// Button label that loads the next page of a list
+  ///
+  /// In en, this message translates to:
+  /// **'Load More'**
+  String get loadMore;
+
+  /// Screen reader hint for the retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Attempts to reload the content'**
+  String get retryHint;
+
+  /// Screen reader hint for the language switcher button
+  ///
+  /// In en, this message translates to:
+  /// **'Opens language selection dialog'**
+  String get selectLanguageHint;
+
+  /// Default screen reader label for a progress indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Progress indicator'**
+  String get progressIndicator;
+
+  /// Screen reader value for a progress indicator
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} percent'**
+  String percentValue(int percent);
+
+  /// Screen reader state word for a control that is loading
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get stateLoading;
+
+  /// Screen reader state word for a disabled control
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get stateDisabled;
+
+  /// Screen reader announcement when focus moves
+  ///
+  /// In en, this message translates to:
+  /// **'Focused on {label}'**
+  String focusedOn(String label);
+
+  /// Screen reader announcement when a new screen opens
+  ///
+  /// In en, this message translates to:
+  /// **'Navigated to {page}'**
+  String navigatedTo(String page);
+
+  /// Pluralized hours ago
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Just now} =1{1 hour ago} other{{count} hours ago}}'**
+  String hoursAgo(int count);
+
+  /// Pluralized days ago
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day ago} other{{count} days ago}}'**
+  String daysAgo(int count);
+
+  /// Pluralized months ago
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 month ago} other{{count} months ago}}'**
+  String monthsAgo(int count);
+
+  /// Pluralized years ago
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 year ago} other{{count} years ago}}'**
+  String yearsAgo(int count);
 }
 
 class _AppLocalizationsDelegate

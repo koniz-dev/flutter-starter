@@ -245,4 +245,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToHome => 'Back to home';
+
+  @override
+  String get noItemsFound => 'No items found';
+
+  @override
+  String get loadMore => 'Load More';
+
+  @override
+  String get retryHint => 'Attempts to reload the content';
+
+  @override
+  String get selectLanguageHint => 'Opens language selection dialog';
+
+  @override
+  String get progressIndicator => 'Progress indicator';
+
+  @override
+  String percentValue(int percent) {
+    return '$percent percent';
+  }
+
+  @override
+  String get stateLoading => 'Loading';
+
+  @override
+  String get stateDisabled => 'Disabled';
+
+  @override
+  String focusedOn(String label) {
+    return 'Focused on $label';
+  }
+
+  @override
+  String navigatedTo(String page) {
+    return 'Navigated to $page';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours ago',
+      one: '1 hour ago',
+      zero: 'Just now',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count months ago',
+      one: '1 month ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years ago',
+      one: '1 year ago',
+    );
+    return '$_temp0';
+  }
 }
