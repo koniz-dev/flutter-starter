@@ -1,0 +1,9 @@
+$ flutter test test/core/storage/migration/storage_migration_service_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/storage_migration_service_test.dart
+00:00 +0: StorageMigrationService migrateAll leaves both stores stamped at the current version
+00:00 +1: StorageMigrationService migrateRegular executes migrations for regular storage only
+00:00 +2: StorageMigrationService migrateSecure executes migrations for secure storage only
+00:00 +3: StorageMigrationService migrateSecure surfaces an unwritable secure backend
+00:00 +4: All tests passed!
+exit: 0

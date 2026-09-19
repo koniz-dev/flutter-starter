@@ -1,0 +1,6 @@
+$ flutter test test/core/storage/migration/migration_executor_test.dart --reporter expanded --plain-name version stamp write failure
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_executor_test.dart
+00:00 +0: MigrationExecutor version stamp write failure (#60) surfaces a rejected version write instead of returning
+00:00 +1: All tests passed!
+exit: 0
