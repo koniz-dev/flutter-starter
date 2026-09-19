@@ -76,6 +76,9 @@ final Provider<AuthInterceptor> authInterceptorProvider =
       final interceptor = AuthInterceptor(
         tokenStore: tokenStore,
         refreshToken: () => ref.read(authRepositoryProvider).refreshToken(),
+        // A forced logout on a failed refresh has to drop the cached user too,
+        // or the app keeps presenting a session it has no token for.
+        keyValueStore: ref.watch(keyValueStoreProvider),
       );
       // Releases the single 401-replay client and its connection pool.
       ref.onDispose(interceptor.dispose);

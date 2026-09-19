@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -235,6 +236,10 @@ void main() {
         verify(() => mockLocalDataSource.clearCache()).called(1);
       });
 
+      // Regression for #52. This test predates the fix and set up exactly
+      // this scenario, but asserted only on the Result - so it passed while
+      // clearCache() was never reached and the tokens stayed on the device.
+      // The two verify() calls are the assertions it was missing.
       test('should return failure when logout fails', () async {
         // Arrange
         when(
@@ -250,6 +255,72 @@ void main() {
         // Assert
         expect(result.isFailure, isTrue);
         expect(result.failureOrNull, isA<NetworkFailure>());
+        verify(() => mockRemoteDataSource.logout()).called(1);
+        verify(() => mockLocalDataSource.clearCache()).called(1);
+      });
+
+      test('should clear the local session when the remote call times '
+          'out', () async {
+        // Arrange - what an offline device or an unreachable host produces.
+        when(() => mockRemoteDataSource.logout()).thenAnswer((_) async {
+          throw DioException.connectionTimeout(
+            timeout: const Duration(seconds: 30),
+            requestOptions: RequestOptions(path: '/auth/logout'),
+          );
+        });
+        when(
+          () => mockLocalDataSource.clearCache(),
+        ).thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.logout();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        verify(() => mockLocalDataSource.clearCache()).called(1);
+      });
+
+      test('should clear the local session when the remote call throws an '
+          'Error', () async {
+        // Arrange - an Error is not an Exception, so the pre-fix `on Exception`
+        // chain did not even convert it to a Result: it escaped the repository.
+        when(
+          () => mockRemoteDataSource.logout(),
+        ).thenThrow(StateError('plugin missing'));
+        when(
+          () => mockLocalDataSource.clearCache(),
+        ).thenAnswer((_) async => {});
+
+        // Act
+        final result = await repository.logout();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<UnknownFailure>());
+        expect(result.failureOrNull?.code, 'UNKNOWN_ERROR');
+        verify(() => mockLocalDataSource.clearCache()).called(1);
+      });
+
+      // Pins the documented precedence: when both sides fail, the caller is
+      // told about the local one, because that is the state still on the
+      // device.
+      test('should report the local failure when the teardown also '
+          'fails', () async {
+        // Arrange
+        when(
+          () => mockRemoteDataSource.logout(),
+        ).thenThrow(const NetworkException('Network error'));
+        when(
+          () => mockLocalDataSource.clearCache(),
+        ).thenThrow(const CacheException('Keychain locked'));
+
+        // Act
+        final result = await repository.logout();
+
+        // Assert
+        expect(result.isFailure, isTrue);
+        expect(result.failureOrNull, isA<CacheFailure>());
+        expect(result.failureOrNull?.message, 'Keychain locked');
       });
     });
 
@@ -306,9 +377,12 @@ void main() {
     });
 
     group('isAuthenticated', () {
-      test('should return true when cached user exists', () async {
+      test('should return true when a token and a cached user exist', () async {
         // Arrange
         const userModel = UserModel(id: '1', email: 'test@example.com');
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
         when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenAnswer((_) async => userModel);
@@ -324,8 +398,49 @@ void main() {
       test('should return false when no cached user', () async {
         // Arrange
         when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
+        when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenAnswer((_) async => null);
+
+        // Act
+        final result = await repository.isAuthenticated();
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        expect(result.dataOrNull, isFalse);
+      });
+
+      // Regression for #52 criterion 5: AuthInterceptor's forced logout clears
+      // tokens, and reading the user blob alone reported that as a live
+      // session.
+      test('should return false when the token is gone but the user blob '
+          'survives', () async {
+        // Arrange
+        const userModel = UserModel(id: '1', email: 'test@example.com');
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => null);
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => userModel);
+
+        // Act
+        final result = await repository.isAuthenticated();
+
+        // Assert
+        expect(result.isSuccess, isTrue);
+        expect(result.dataOrNull, isFalse);
+      });
+
+      test('should return false when the stored token is empty', () async {
+        // Arrange
+        const userModel = UserModel(id: '1', email: 'test@example.com');
+        when(() => mockLocalDataSource.getToken()).thenAnswer((_) async => '');
+        when(
+          () => mockLocalDataSource.getCachedUser(),
+        ).thenAnswer((_) async => userModel);
 
         // Act
         final result = await repository.isAuthenticated();
@@ -537,6 +652,9 @@ void main() {
 
       test('isAuthenticated should handle generic Exception', () async {
         // Arrange
+        when(
+          () => mockLocalDataSource.getToken(),
+        ).thenAnswer((_) async => 'tk');
         when(
           () => mockLocalDataSource.getCachedUser(),
         ).thenThrow(Exception('Generic error'));
