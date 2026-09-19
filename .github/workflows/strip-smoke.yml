@@ -1,4 +1,17 @@
-# Verifies `dart run tool/strip_sample_features.dart --apply` leaves an analyzable tree.
+# Verifies every `tool/strip_sample_features.dart` variant leaves an
+# analyzable, testable tree.
+#
+# All three variants run, not just the default one. Until #50 only the bare
+# `--apply` was exercised, so `--remove-tasks` and `--remove-feature-flags`
+# shipped goldens that imported a routing layout refactored away months
+# earlier and no job ever noticed.
+#
+# This matrix is also why `analysis_options.yaml` can keep excluding
+# `tool/golden/**`: a golden is only meaningful once it has been copied over
+# the tree it patches, and analyzing it in place would check it against the
+# unstripped sources it is meant to replace. Applying each variant and running
+# `flutter analyze` afterwards checks the goldens in the only state where the
+# answer means anything.
 name: Strip smoke
 
 on:
@@ -17,8 +30,19 @@ permissions:
 
 jobs:
   stripped-tree:
-    name: Strip + analyze + test
+    name: Strip ${{ matrix.variant }} + analyze + test
     runs-on: ubuntu-latest
+    strategy:
+      # One broken variant must not hide the state of the other two.
+      fail-fast: false
+      matrix:
+        include:
+          - variant: both-samples-removed
+            flags: ''
+          - variant: tasks-removed
+            flags: '--remove-tasks'
+          - variant: feature-flags-removed
+            flags: '--remove-feature-flags'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,7 +57,7 @@ jobs:
         run: flutter pub get
 
       - name: Apply strip
-        run: dart run tool/strip_sample_features.dart --apply
+        run: dart run tool/strip_sample_features.dart --apply ${{ matrix.flags }}
 
       - name: Install dependencies (after strip)
         run: flutter pub get

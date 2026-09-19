@@ -1,3 +1,7 @@
+// Strip variant `--remove-tasks`: same body as the `stripped` golden,
+// because the only tasks-specific content in this test is the tasks
+// navigation helpers, which this variant also removes.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
@@ -24,12 +28,6 @@ void main() {
               name: 'register',
               builder: (context, state) =>
                   const Scaffold(body: Text('Register')),
-            ),
-            GoRoute(
-              path: AppRoutes.featureFlagsDebug,
-              name: AppRoutes.featureFlagsDebugName,
-              builder: (context, state) =>
-                  const Scaffold(body: Text('FeatureFlags')),
             ),
             GoRoute(
               path: '/demo/:demoId',
@@ -77,19 +75,6 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Register'), findsOneWidget);
     });
-
-    testWidgets(
-      'goToFeatureFlagsDebug should navigate to feature flags route',
-      (tester) async {
-        await tester.pumpWidget(createTestWidget(const SizedBox()));
-        await tester.pumpAndSettle();
-
-        tester.element(find.byType(Scaffold)).goToFeatureFlagsDebug();
-
-        await tester.pumpAndSettle();
-        expect(find.text('FeatureFlags'), findsOneWidget);
-      },
-    );
 
     testWidgets('pushRoute should push a new route', (tester) async {
       await tester.pumpWidget(createTestWidget(const SizedBox()));

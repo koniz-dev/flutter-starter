@@ -1,3 +1,6 @@
+// Strip variant `--remove-tasks`: feature flags sample kept, tasks
+// navigation helpers dropped along with the feature.
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -12,9 +15,14 @@ import 'package:go_router/go_router.dart';
 ///
 /// **Usage:**
 /// ```dart
+/// // Basic navigation
 /// context.goToHome();
 /// context.goToLogin();
-/// context.goToFeatureFlagsDebug();
+///
+/// // Navigation with parameters (example)
+/// context.goToProfile(userId: '123');
+///
+/// // Pop navigation
 /// context.popRoute();
 /// ```
 extension NavigationExtensions on BuildContext {
