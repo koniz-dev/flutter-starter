@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
@@ -7,6 +10,31 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/mock_factories.dart';
 import '../../helpers/test_fixtures.dart';
+
+/// Fake transport for the 401 replay client, so the flow never leaves the
+/// process: the replay used to build a real Dio against `AppConfig.baseUrl`.
+class _FakeRetryAdapter implements HttpClientAdapter {
+  int hits = 0;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    hits++;
+    return ResponseBody.fromString(
+      jsonEncode({'replayed': true}),
+      200,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
 
 /// Test handler for error interceptor
 class TestErrorInterceptorHandler extends ErrorInterceptorHandler {
@@ -45,13 +73,16 @@ void main() {
     late AuthInterceptor interceptor;
     late MockAuthRepository mockAuthRepository;
     late MockSecureStorageService mockSecureStorage;
+    late _FakeRetryAdapter retryAdapter;
 
     setUp(() {
       mockAuthRepository = createMockAuthRepository();
       mockSecureStorage = createMockSecureStorageService();
+      retryAdapter = _FakeRetryAdapter();
       interceptor = AuthInterceptor(
         secureStorageService: mockSecureStorage,
         refreshToken: mockAuthRepository.refreshToken,
+        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
       );
     });
 
@@ -85,6 +116,8 @@ void main() {
 
       // Assert
       verify(() => mockAuthRepository.refreshToken()).called(1);
+      // The replay hit the fake transport, not the network.
+      expect(retryAdapter.hits, 1);
     });
 
     test('should not refresh token for excluded endpoints', () async {

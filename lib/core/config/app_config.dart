@@ -139,6 +139,20 @@ class AppConfig {
     return isStaging || isProduction;
   }
 
+  /// Whether certificate pinning is actually enforced.
+  ///
+  /// [enableSslPinning] is only the request. With no entries in
+  /// [apiSslFingerprints] there is nothing to pin against, so the transport
+  /// falls back to the system trust store and pinning is *not* in effect.
+  static bool get sslPinningEffective =>
+      enableSslPinning && apiSslFingerprints.isNotEmpty;
+
+  /// Whether pinning is requested but unenforceable (no fingerprints).
+  ///
+  /// This is a misconfiguration: the app believes it is pinned and is not.
+  static bool get sslPinningMisconfigured =>
+      enableSslPinning && apiSslFingerprints.isEmpty;
+
   // ==========================================================================
   // Feature Flags
   // ==========================================================================
@@ -277,8 +291,15 @@ class AppConfig {
       debugPrint('  Connect Timeout: ${apiConnectTimeout}s');
       debugPrint('  Receive Timeout: ${apiReceiveTimeout}s');
       debugPrint('  Send Timeout: ${apiSendTimeout}s');
-      debugPrint('  SSL Pinning Enabled: $enableSslPinning');
+      debugPrint('  SSL Pinning Requested: $enableSslPinning');
+      debugPrint('  SSL Pinning Effective: $sslPinningEffective');
       debugPrint('  SSL Fingerprints Configured: ${apiSslFingerprints.length}');
+      if (sslPinningMisconfigured) {
+        debugPrint(
+          '  !! SSL PINNING MISCONFIGURED: requested but no fingerprints '
+          'configured - nothing is pinned',
+        );
+      }
       debugPrint('');
       debugPrint('🚩 Feature Flags:');
       debugPrint('  Logging: $enableLogging');
@@ -311,7 +332,11 @@ class AppConfig {
       'apiConnectTimeout': apiConnectTimeout,
       'apiReceiveTimeout': apiReceiveTimeout,
       'apiSendTimeout': apiSendTimeout,
+      // Requested vs actually enforced - an empty fingerprint list pins
+      // nothing even when enableSslPinning is true.
       'enableSslPinning': enableSslPinning,
+      'sslPinningEffective': sslPinningEffective,
+      'sslPinningMisconfigured': sslPinningMisconfigured,
       'apiSslFingerprintsCount': apiSslFingerprints.length,
       'enableLogging': enableLogging,
       'enableAnalytics': enableAnalytics,

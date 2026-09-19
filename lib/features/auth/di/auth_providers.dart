@@ -70,10 +70,13 @@ final Provider<AuthRepository> authRepositoryProvider =
 final Provider<AuthInterceptor> authInterceptorProvider =
     Provider<AuthInterceptor>((ref) {
       final tokenStore = ref.watch(tokenStoreProvider);
-      return AuthInterceptor(
+      final interceptor = AuthInterceptor(
         tokenStore: tokenStore,
         refreshToken: () => ref.read(authRepositoryProvider).refreshToken(),
       );
+      // Releases the single 401-replay client and its connection pool.
+      ref.onDispose(interceptor.dispose);
+      return interceptor;
     });
 
 // ============================================================================

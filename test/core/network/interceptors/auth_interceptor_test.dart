@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
@@ -21,11 +24,39 @@ class FakeDioException extends Fake implements DioException {}
 
 class FakeResponse extends Fake implements Response<dynamic> {}
 
+/// Fake transport for the 401 replay client.
+///
+/// Every test here injects it, so no test in this file reaches the network -
+/// two of them used to replay against `AppConfig.baseUrl` over real DNS.
+class FakeRetryAdapter implements HttpClientAdapter {
+  int hits = 0;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    hits++;
+    return ResponseBody.fromString(
+      jsonEncode({'replayed': true}),
+      200,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
 void main() {
   group('AuthInterceptor', () {
     late AuthInterceptor interceptor;
     late MockSecureStorageService mockSecureStorage;
     late MockAuthRepository mockAuthRepository;
+    late FakeRetryAdapter retryAdapter;
 
     setUpAll(() {
       registerFallbackValue(FakeDioException());
@@ -35,9 +66,11 @@ void main() {
     setUp(() {
       mockSecureStorage = MockSecureStorageService();
       mockAuthRepository = MockAuthRepository();
+      retryAdapter = FakeRetryAdapter();
       interceptor = AuthInterceptor(
         secureStorageService: mockSecureStorage,
         refreshToken: mockAuthRepository.refreshToken,
+        retryDioFactory: () => Dio()..httpClientAdapter = retryAdapter,
       );
     });
 
@@ -135,18 +168,17 @@ void main() {
           when(() => handler.resolve(any())).thenReturn(null);
           when(() => handler.reject(any())).thenReturn(null);
 
-          // Note: The retry will likely fail in unit tests since we can't
-          // mock Dio, but we verify the refresh token is called
-          try {
-            await interceptor.onError(dioException, handler);
-          } on Exception {
-            // Expected - retry fails in unit tests
-          }
+          await interceptor.onError(dioException, handler);
 
           verify(() => mockAuthRepository.refreshToken()).called(1);
           verify(
             () => mockSecureStorage.setString(AppConstants.tokenKey, newToken),
           ).called(1);
+          // The replay went through the injected fake transport and the
+          // request was resolved, not rejected.
+          expect(retryAdapter.hits, 1);
+          verify(() => handler.resolve(any())).called(1);
+          verifyNever(() => handler.reject(any()));
         },
       );
 
@@ -231,16 +263,18 @@ void main() {
         // Second request should be queued
         final future2 = interceptor.onError(dioException, handler2);
 
-        // Wait for both to complete (may throw due to retry failure)
-        try {
-          await future1;
-          await future2;
-        } on Exception {
-          // Expected - retry fails in unit tests
-        }
+        await future1.timeout(const Duration(seconds: 5));
+        await future2.timeout(const Duration(seconds: 5));
 
         // Refresh should only be called once
         verify(() => mockAuthRepository.refreshToken()).called(1);
+        // Both the original and the queued request were replayed and
+        // resolved - the queued handler used to be left dangling.
+        expect(retryAdapter.hits, 2);
+        verify(() => handler1.resolve(any())).called(1);
+        verify(() => handler2.resolve(any())).called(1);
+        verifyNever(() => handler1.reject(any()));
+        verifyNever(() => handler2.reject(any()));
       });
 
       test('should handle exception during refresh', () async {
