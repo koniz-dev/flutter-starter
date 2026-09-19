@@ -1,0 +1,44 @@
+# Criterion 4: the SSL-pinning branch is covered on the host VM
+
+Scope, stated plainly: these tests assert the *wiring*, not TLS. A real
+handshake against a server presenting a mismatched certificate is tier 3 and is
+not claimed anywhere below.
+
+What is asserted:
+
+- pinned case: `ApiClient` built with `SslPinning(enabled: true, fingerprints:
+  [...])` ends up with an `IOHttpClientAdapter` whose `createHttpClient` hook is
+  set - that hook is what installs the empty trust store plus the certificate
+  callback.
+- unpinned case: `ApiClient` built with `enabled: false` keeps Dio's default
+  transport, i.e. `createHttpClient` is null. Asserting `isA<IOHttpClientAdapter>`
+  alone would not have separated the two: Dio's default adapter is one too.
+- mismatch: a certificate whose SHA-256 is not in the pin list is rejected, a
+  matching one is accepted, and an empty pin list accepts nothing.
+  `HttpClient.badCertificateCallback` is setter-only in `dart:io`, so the check
+  cannot be read back off the client; `SslPinning.acceptsCertificate` is the
+  same decision the adapter installs (one implementation, shared), which is what
+  makes this assertable without duplicating the hashing logic in the test.
+
+$ flutter test --timeout=90s test/core/network/ssl_pinning_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a334023fbf2e73cfb/test/core/network/ssl_pinning_test.dart
+00:00 +0: SslPinning is effective only when enabled with fingerprints
+00:00 +1: SslPinning builds a pinned adapter when fingerprints are present
+00:00 +2: SslPinning returns no adapter when pinning is disabled
+00:00 +3: SslPinning the pinned adapter installs a certificate check
+00:00 +4: SslPinning accepts a certificate whose fingerprint is pinned
+00:00 +5: SslPinning rejects a certificate whose fingerprint is not pinned
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:00 +6: SslPinning rejects every certificate when the pin list is empty
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:00 +7: SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:00 +8: 401 replay transport installs the pinned adapter, and only when pinning is on
+00:00 +9: 401 replay transport replays through the main client pinned adapter
+00:00 +10: 401 replay transport follows the main client transport when it is swapped
+00:00 +11: 401 replay transport inherits the main client base url and timeouts
+00:00 +12: All tests passed!
