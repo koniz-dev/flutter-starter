@@ -15,7 +15,7 @@ A highly modular, production-ready Flutter starter framework focusing on **Clean
 - 🌐 **Network Protocol:** Resilient HTTP Client (`dio`) with intercepts and a detached WebSocket Real-Time Interface.
 - 🧪 **Comprehensive Automation:** Unit/widget/integration tests, optional E2E with **Patrol** (local or [manual CI workflow](.github/workflows/e2e-android.yml)).
 - 🎨 **1-Click Branding:** Native splash screens and launcher icons scaffolded straight from `logo.png`.
-- ⚙️ **Powerful Configurations:** Layered Fallback configurations allowing Local `.env`, `remote-configs`, and `dart-defines` overrides.
+- ⚙️ **Powerful Configurations:** Layered fallback — local `.env` (declare the file in `pubspec.yaml` assets first), then `--dart-define` (native builds only, for the keys declared in `lib/core/config/dart_defines.dart`), then environment-aware defaults. See [Configuration](docs/guides/configuration.md).
 
 > Looking for the complete list of features and tech-stack? Check out the [**Comprehensive Documentation**](docs/README.md).
 

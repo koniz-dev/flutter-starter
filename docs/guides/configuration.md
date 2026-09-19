@@ -10,16 +10,61 @@ This project includes a production-ready, multi-environment configuration system
 - **Network Configuration**: Timeout settings for API calls
 - **Debug Utilities**: Tools for inspecting configuration
 
+## What works where
+
+Both mechanisms have hard preconditions. Read this table before assuming a
+value reaches the app.
+
+| Mechanism | Precondition | Debug | Release / profile (AOT) | Flutter web |
+|---|---|---|---|---|
+| `.env` file | The file must be declared in the `assets:` list of `pubspec.yaml`. `flutter_dotenv` reads it through `rootBundle`, not the filesystem. | Yes | Yes | Yes |
+| `--dart-define` | The key must be declared in `lib/core/config/dart_defines.dart`. | Yes | Yes | **No** |
+| Defaults | None. | Yes | Yes | Yes |
+
+Two consequences worth stating plainly:
+
+- **`.env` is not loaded out of the box.** This repository ships only
+  `.env.example` as an asset. Copying it to `.env` is not enough; you must also
+  add `- .env` to `pubspec.yaml`. Until you do, `EnvConfig.load()` fails and
+  `EnvConfig.isInitialized` stays `false`.
+- **`--dart-define` is unavailable on Flutter web.** Every dart-define read in
+  `EnvConfig` is guarded by `if (!kIsWeb)`, so on web the chain is `.env` →
+  defaults only.
+
+### Why the dart-define keys are declared in a table
+
+`String.fromEnvironment` is a **const** constructor. The Dart SDK only
+guarantees it works when invoked as `const`; an AOT-compiled binary (every
+release and profile build) carries no compiler options at run time, so a
+non-const invocation returns `''`. A call whose key is a runtime variable -
+`String.fromEnvironment(key)` - can never be const, and that is exactly how
+this repository used to read dart-defines: the value silently vanished in
+release builds and everything fell back to the development defaults.
+
+`lib/core/config/dart_defines.dart` therefore spells each key out as a literal
+inside a `const` map, which the compiler resolves at build time. `EnvConfig`
+indexes that map instead of querying the environment.
+
+**Adding a new key** means adding it in two places: `.env.example` *and*
+`DartDefines.values`. `test/core/config/dart_defines_test.dart` fails if the
+two drift apart, so a key that only works through `.env` cannot slip in
+unnoticed.
+
 ## Architecture
 
-The configuration system consists of two main classes:
+The configuration system consists of three classes:
 
-1. **`EnvConfig`** (`lib/core/config/env_config.dart`): Low-level environment variable loader
-   - Loads from `.env` files using `flutter_dotenv`
-   - Reads from `--dart-define` flags
+1. **`DartDefines`** (`lib/core/config/dart_defines.dart`): the compile-time
+   table of every supported `--dart-define` key
+   - Each entry is a `const String.fromEnvironment('LITERAL_KEY')`
+   - Keys not in the table can only be supplied through `.env`
+
+2. **`EnvConfig`** (`lib/core/config/env_config.dart`): Low-level environment variable loader
+   - Loads from `.env` files using `flutter_dotenv` (asset-backed)
+   - Reads `--dart-define` values through `DartDefines`, on native builds only
    - Provides fallback chain: `.env` → `--dart-define` → defaults
 
-2. **`AppConfig`** (`lib/core/config/app_config.dart`): High-level application configuration
+3. **`AppConfig`** (`lib/core/config/app_config.dart`): High-level application configuration
    - Uses `EnvConfig` to extract robust application state properties.
    - Provides typed getters (String, bool, int)
    - Environment-aware defaults and Feature flags
@@ -35,6 +80,16 @@ cp .env.example .env
 
 # Edit .env with your values
 # The .env file is gitignored and won't be committed
+```
+
+Then declare it as an asset, or it will never be read:
+
+```yaml
+# pubspec.yaml
+flutter:
+  assets:
+    - .env.example
+    - .env
 ```
 
 ### 2. Configure your environment variables
@@ -62,11 +117,12 @@ ENABLE_ANALYTICS=false
 flutter run
 ```
 
-The app will automatically parse runtime overrides from `.env`.
+The app parses runtime overrides from `.env` **only if `.env` is listed under
+`flutter: assets:` in `pubspec.yaml`** (see Setup step 1).
 
 ### Staging Build (using `--dart-define`)
 
-For CI/CD or when you don't want to use `.env` files, you can inject values into the build directly:
+For CI/CD or when you don't want to use `.env` files, you can inject values into the build directly. This works for native targets in every build mode; on Flutter web the flags are ignored by `EnvConfig`, and any key you pass must exist in `lib/core/config/dart_defines.dart`:
 
 ```bash
 flutter run \
@@ -189,6 +245,8 @@ print(config);
 
 ### Troubleshooting missing configuration
 - Ensure `EnvConfig.load()` is called in `main()` before `runApp()`.
+- **`.env` values ignored?** Check that `.env` is listed under `flutter: assets:` in `pubspec.yaml`. Without it `flutter_dotenv` cannot find the file and `EnvConfig.isInitialized` stays `false`.
+- **`--dart-define` value ignored?** Check that the key exists in `lib/core/config/dart_defines.dart`, and that you are not on Flutter web (where dart-defines are skipped by the `kIsWeb` guard). `--dart-define` values are baked in at compile time: change one and you must rebuild, not hot reload.
 - Hot reload doesn't reload system-level environment variables - do a full app restart.
 - Run `flutter pub get` after pulling dependencies or updating flags to rebuild the configuration tree.
 - Run `AppConfig.printConfig()` to inspect parsed fallback maps logic.
