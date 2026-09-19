@@ -110,13 +110,27 @@ void main() {
         expect(copied.title, originalTask.title);
       });
 
-      test('should keep original description when null is passed', () {
+      test('should keep original description when the argument is omitted', () {
         // Act
         final copied = originalTask.copyWith();
 
         // Assert
-        // copyWith uses ?? operator, so null keeps original value
         expect(copied.description, originalTask.description);
+      });
+
+      test('should clear the description when null is passed explicitly', () {
+        // Arrange
+        expect(originalTask.description, isNotNull);
+
+        // Act
+        final copied = originalTask.copyWith(description: null);
+
+        // Assert
+        // An explicit null is a request to clear the field, not to keep it:
+        // the detail screen relies on this to erase a description.
+        expect(copied.description, isNull);
+        expect(copied.title, originalTask.title);
+        expect(copied.id, originalTask.id);
       });
 
       test('should update isCompleted', () {
@@ -344,7 +358,7 @@ void main() {
         expect(task, isNot(<String, dynamic>{}));
       });
 
-      test('should ignore createdAt and updatedAt in equality', () {
+      test('should not be equal when updatedAt is different', () {
         // Arrange
         final task1 = Task(
           id: '1',
@@ -352,15 +366,32 @@ void main() {
           createdAt: now,
           updatedAt: later,
         );
-        final task2 = Task(
-          id: '1',
-          title: 'Test Task',
-          createdAt: now.add(const Duration(days: 1)),
+        final task2 = task1.copyWith(
           updatedAt: later.add(const Duration(days: 1)),
         );
 
         // Act & Assert
-        expect(task1, task2);
+        // UpdateTaskUseCase exists solely to stamp updatedAt; if equality
+        // ignored it, an update would be indistinguishable from a no-op.
+        expect(task1, isNot(task2));
+        expect(task1.hashCode, isNot(task2.hashCode));
+      });
+
+      test('should not be equal when createdAt is different', () {
+        // Arrange
+        final task1 = Task(
+          id: '1',
+          title: 'Test Task',
+          createdAt: now,
+          updatedAt: later,
+        );
+        final task2 = task1.copyWith(
+          createdAt: now.add(const Duration(days: 1)),
+        );
+
+        // Act & Assert
+        expect(task1, isNot(task2));
+        expect(task1.hashCode, isNot(task2.hashCode));
       });
     });
 

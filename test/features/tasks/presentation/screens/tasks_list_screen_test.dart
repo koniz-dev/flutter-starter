@@ -742,4 +742,137 @@ void main() {
       );
     });
   });
+  group('TasksListScreen mutation races and refresh', () {
+    late MockGetAllTasksUseCase mockGetAllTasksUseCase;
+    late MockCreateTaskUseCase mockCreateTaskUseCase;
+    late MockDeleteTaskUseCase mockDeleteTaskUseCase;
+    late MockToggleTaskCompletionUseCase mockToggleTaskCompletionUseCase;
+
+    setUp(() {
+      mockGetAllTasksUseCase = MockGetAllTasksUseCase();
+      mockCreateTaskUseCase = MockCreateTaskUseCase();
+      mockDeleteTaskUseCase = MockDeleteTaskUseCase();
+      mockToggleTaskCompletionUseCase = MockToggleTaskCompletionUseCase();
+    });
+
+    Future<void> pumpScreen(WidgetTester tester) async {
+      await tester.pumpWidget(
+        createTestWidget(
+          child: const TasksListScreen(),
+          overrides: [
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+            toggleTaskCompletionUseCaseProvider.overrideWithValue(
+              mockToggleTaskCompletionUseCase,
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('double-tapping a checkbox toggles exactly once', (
+      tester,
+    ) async {
+      // Arrange
+      final task = createTask(id: 'task-1', title: 'Task 1');
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success([task]));
+      final inFlight = Completer<Result<Task>>();
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) => inFlight.future);
+      await pumpScreen(tester);
+
+      // Act - first tap of the double tap.
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+
+      // Assert - the control is disabled while the toggle is in flight.
+      expect(tester.widget<Checkbox>(find.byType(Checkbox)).onChanged, isNull);
+
+      // Act - second tap, landing before the first mutation resolves.
+      await tester.tap(find.byType(Checkbox), warnIfMissed: false);
+      await tester.pump();
+
+      // Assert - an odd number of toggles: the repeat tap is swallowed
+      // rather than computing a second flip from the pre-toggle value.
+      verify(() => mockToggleTaskCompletionUseCase('task-1')).called(1);
+
+      // Cleanup
+      inFlight.complete(Success(task.copyWith(isCompleted: true)));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('a failed mutation keeps the loaded list on screen', (
+      tester,
+    ) async {
+      // Arrange
+      final tasks = createTaskList();
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success(tasks));
+      when(() => mockToggleTaskCompletionUseCase(any())).thenAnswer(
+        (_) async => const ResultFailure<Task>(CacheFailure('Storage error')),
+      );
+      await pumpScreen(tester);
+      expect(find.text('Task 0'), findsOneWidget);
+
+      // Act
+      await tester.tap(find.byType(Checkbox).first);
+      await tester.pumpAndSettle();
+
+      // Assert - the error is reported, and all three tasks are still there
+      // instead of being replaced by a full-screen error icon.
+      expect(find.text('Storage error'), findsOneWidget);
+      expect(find.byType(ListView), findsOneWidget);
+      expect(find.text('Task 0'), findsOneWidget);
+      expect(find.text('Task 1'), findsOneWidget);
+      expect(find.text('Task 2'), findsOneWidget);
+    });
+
+    testWidgets('pull-to-refresh works in the empty state', (tester) async {
+      // Arrange
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
+      await pumpScreen(tester);
+      expect(find.text('No tasks yet'), findsOneWidget);
+
+      // Act
+      await tester.drag(
+        find.byType(SingleChildScrollView),
+        const Offset(0, 300),
+      );
+      await tester.pumpAndSettle();
+
+      // Assert
+      verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
+    });
+
+    testWidgets('pull-to-refresh works in the error state', (tester) async {
+      // Arrange
+      when(() => mockGetAllTasksUseCase()).thenAnswer(
+        (_) async =>
+            const ResultFailure<List<Task>>(CacheFailure('Storage error')),
+      );
+      await pumpScreen(tester);
+      expect(find.text('Storage error'), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+
+      // Act
+      await tester.drag(
+        find.byType(SingleChildScrollView),
+        const Offset(0, 300),
+      );
+      await tester.pumpAndSettle();
+
+      // Assert
+      verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
+    });
+  });
 }

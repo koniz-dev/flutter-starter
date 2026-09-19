@@ -691,7 +691,7 @@ void main() {
         expect(find.byIcon(Icons.check_circle), findsWidgets);
       });
 
-      testWidgets('should handle empty description when saving', (
+      testWidgets('should clear the description when it is emptied', (
         tester,
       ) async {
         // Arrange
@@ -721,17 +721,136 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        // Act - Clear description and save
+        // Act - clear the description field and save. No `if` around the
+        // edit: if the field is not there, the test must fail, not pass.
         final textFields = find.byType(TextFormField);
-        if (textFields.evaluate().length > 1) {
-          await tester.enterText(textFields.at(1), '');
-          await tester.pump();
-        }
+        expect(textFields, findsNWidgets(2));
+        expect(find.text('Original Description'), findsOneWidget);
+        await tester.enterText(textFields.at(1), '');
+        await tester.pump();
         await tester.tap(find.byIcon(Icons.save));
         await tester.pumpAndSettle(const Duration(seconds: 5));
 
-        // Assert - Should call updateTask with null description
-        verify(() => mockUpdateTaskUseCase(any())).called(1);
+        // Assert - capture the argument. Verifying the call count alone
+        // cannot tell a cleared description from a kept one.
+        final saved =
+            verify(() => mockUpdateTaskUseCase(captureAny())).captured.single
+                as Task;
+        expect(saved.description, isNull);
+        expect(saved.title, task.title);
+        expect(saved.id, task.id);
+      });
+
+      testWidgets('should keep a description that was not cleared', (
+        tester,
+      ) async {
+        // Arrange
+        final task = createTask(
+          id: 'task-1',
+          description: 'Original Description',
+        );
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer((_) async => Success(task));
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) async => Success(task));
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Act
+        await tester.tap(find.byIcon(Icons.save));
+        await tester.pumpAndSettle(const Duration(seconds: 5));
+
+        // Assert
+        final saved =
+            verify(() => mockUpdateTaskUseCase(captureAny())).captured.single
+                as Task;
+        expect(saved.description, 'Original Description');
+      });
+
+      testWidgets('popping before the load resolves throws nothing', (
+        tester,
+      ) async {
+        // Arrange
+        final completer = Completer<Result<Task?>>();
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer((_) => completer.future);
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
+        );
+        await tester.pump();
+        expect(find.byType(CircularProgressIndicator), findsWidgets);
+
+        // Act - leave the screen while the load is still in flight, then let
+        // it resolve. Both text controllers are disposed by now.
+        await tester.pumpWidget(const SizedBox.shrink());
+        completer.complete(Success(createTask(id: 'task-1')));
+        await tester.pump();
+        await tester.pump();
+
+        // Assert - no `setState() called after dispose()` and no
+        // `TextEditingController used after being disposed`.
+        expect(tester.takeException(), isNull);
+      });
+
+      testWidgets('popping before a failed load resolves throws nothing', (
+        tester,
+      ) async {
+        // Arrange
+        final completer = Completer<Result<Task?>>();
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer((_) => completer.future);
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
+        );
+        await tester.pump();
+
+        // Act
+        await tester.pumpWidget(const SizedBox.shrink());
+        completer.complete(
+          const ResultFailure<Task?>(CacheFailure('Storage error')),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        // Assert
+        expect(tester.takeException(), isNull);
       });
 
       testWidgets('should show loading indicator in AppBar when saving', (

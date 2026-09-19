@@ -811,4 +811,193 @@ void main() {
       });
     });
   });
+  group('TasksNotifier ordering and lifecycle', () {
+    late MockGetAllTasksUseCase mockGetAllTasksUseCase;
+    late MockCreateTaskUseCase mockCreateTaskUseCase;
+    late MockDeleteTaskUseCase mockDeleteTaskUseCase;
+    late MockToggleTaskCompletionUseCase mockToggleTaskCompletionUseCase;
+    late ProviderContainer container;
+
+    /// Loads queued by [queueLoad], oldest first.
+    late List<Future<Result<List<Task>>>> loadResponses;
+
+    /// Queues the next answer `getAllTasksUseCase()` will give.
+    void queueLoad(Future<Result<List<Task>>> response) {
+      loadResponses.add(response);
+    }
+
+    setUp(() {
+      mockGetAllTasksUseCase = MockGetAllTasksUseCase();
+      mockCreateTaskUseCase = MockCreateTaskUseCase();
+      mockDeleteTaskUseCase = MockDeleteTaskUseCase();
+      mockToggleTaskCompletionUseCase = MockToggleTaskCompletionUseCase();
+      loadResponses = [];
+
+      when(() => mockGetAllTasksUseCase()).thenAnswer((_) {
+        if (loadResponses.isEmpty) {
+          return Future.value(const Success<List<Task>>([]));
+        }
+        return loadResponses.removeAt(0);
+      });
+
+      container = ProviderContainer(
+        overrides: [
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
+        ],
+      );
+    });
+
+    tearDown(() => container.dispose());
+
+    /// Reads the notifier and lets its initial load finish.
+    Future<TasksNotifier> startedNotifier() async {
+      final notifier = container.read(tasksNotifierProvider.notifier);
+      await pumpEventQueue();
+      return notifier;
+    }
+
+    test('createTask resolves only once state.tasks reflects it', () async {
+      // Arrange
+      final notifier = await startedNotifier();
+      final created = createTask(id: 'new-task', title: 'New Task');
+      when(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).thenAnswer((_) async => Success(created));
+      queueLoad(Future.value(Success([created])));
+
+      // Act
+      await notifier.createTask(title: 'New Task');
+
+      // Assert - no extra pumping: awaiting the mutation has to be enough,
+      // otherwise a caller that pops a screen on completion rebuilds the
+      // list from pre-mutation data.
+      final state = container.read(tasksNotifierProvider);
+      expect(state.tasks, [created]);
+      expect(state.isLoading, isFalse);
+    });
+
+    test('a slow earlier reload cannot land after a newer one', () async {
+      // Arrange
+      final notifier = await startedNotifier();
+      final stale = createTask(id: 'stale', title: 'Stale');
+      final fresh = createTask(id: 'fresh', title: 'Fresh');
+      final slow = Completer<Result<List<Task>>>();
+      final fast = Completer<Result<List<Task>>>();
+      queueLoad(slow.future);
+      queueLoad(fast.future);
+
+      // Act - two overlapping reloads; the newer one answers first.
+      final first = notifier.refresh();
+      final second = notifier.refresh();
+      fast.complete(Success([fresh]));
+      await pumpEventQueue();
+
+      // Assert - newest snapshot applied.
+      expect(container.read(tasksNotifierProvider).tasks, [fresh]);
+
+      // Act - the older reload answers late.
+      slow.complete(Success([stale]));
+      await Future.wait([first, second]);
+
+      // Assert - the stale snapshot is dropped, not applied last.
+      expect(container.read(tasksNotifierProvider).tasks, [fresh]);
+    });
+
+    test('a second toggle while one is in flight is ignored', () async {
+      // Arrange
+      final notifier = await startedNotifier();
+      final toggled = createTask(id: 'task-1', isCompleted: true);
+      final inFlight = Completer<Result<Task>>();
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) => inFlight.future);
+
+      // Act - the double tap.
+      final first = notifier.toggleTaskCompletion('task-1');
+      final second = notifier.toggleTaskCompletion('task-1');
+      await second;
+
+      // Assert - one toggle, not two computed from the same stale value.
+      verify(() => mockToggleTaskCompletionUseCase('task-1')).called(1);
+      expect(
+        container.read(tasksNotifierProvider).pendingTaskIds,
+        contains('task-1'),
+      );
+
+      // Act
+      inFlight.complete(Success(toggled));
+      await first;
+
+      // Assert - the control is released once the mutation lands.
+      expect(container.read(tasksNotifierProvider).pendingTaskIds, isEmpty);
+    });
+
+    test('a failed mutation keeps the already-loaded tasks', () async {
+      // Arrange
+      final tasks = createTaskList();
+      queueLoad(Future.value(Success(tasks)));
+      final notifier = container.read(tasksNotifierProvider.notifier);
+      await pumpEventQueue();
+      expect(container.read(tasksNotifierProvider).tasks, tasks);
+
+      when(() => mockDeleteTaskUseCase(any())).thenAnswer(
+        (_) async => const ResultFailure<void>(CacheFailure('Storage error')),
+      );
+
+      // Act
+      await notifier.deleteTask(tasks.first.id);
+
+      // Assert - the error is reported without discarding the list.
+      final state = container.read(tasksNotifierProvider);
+      expect(state.error, 'Storage error');
+      expect(state.tasks, tasks);
+      expect(state.isLoading, isFalse);
+    });
+
+    test('disposing the provider mid-mutation throws nothing', () async {
+      // Arrange
+      final notifier = await startedNotifier();
+      final inFlight = Completer<Result<Task>>();
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) => inFlight.future);
+
+      // Act - the mutation is still awaiting when the provider goes away.
+      final pending = notifier.toggleTaskCompletion('task-1');
+      container.dispose();
+      inFlight.complete(Success(createTask(id: 'task-1')));
+
+      // Assert - the post-await `state =` writes are guarded, so nothing is
+      // written to a disposed notifier.
+      await expectLater(pending, completes);
+    });
+
+    test('disposing the provider mid-create throws nothing', () async {
+      // Arrange
+      final notifier = await startedNotifier();
+      final inFlight = Completer<Result<Task>>();
+      when(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      ).thenAnswer((_) => inFlight.future);
+
+      // Act
+      final pending = notifier.createTask(title: 'New Task');
+      container.dispose();
+      inFlight.complete(Success(createTask(id: 'new-task')));
+
+      // Assert
+      await expectLater(pending, completes);
+    });
+  });
 }
