@@ -1,0 +1,6 @@
+$ flutter analyze
+
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing agent-a3fd51c44e993d303...                            
+No issues found! (ran in 6.6s)
+exit: 0
