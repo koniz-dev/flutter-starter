@@ -2,6 +2,14 @@
 ///
 /// These constants follow WCAG 2.1 guidelines and Flutter best practices
 /// for accessibility.
+///
+/// Every constant here is **enforced** by code in this repository:
+/// [minTouchTargetSize] by `AccessibilityHelpers.ensureMinTouchTarget` and the
+/// contrast ratios by the `meetsContrastRatio*` checks. Constants that merely
+/// described a guarantee nothing implemented (a focus-announcement debounce, a
+/// minimum readable font size, recommended font sizes, a decorative-icon label
+/// and a touch-target spacing) were removed rather than left to read as
+/// promises - see koniz-dev/flutter-starter#65.
 class AccessibilityConstants {
   AccessibilityConstants._();
 
@@ -10,11 +18,6 @@ class AccessibilityConstants {
   /// WCAG 2.1 Level AAA recommends at least 44x44 CSS pixels.
   /// Flutter uses logical pixels, so 48x48 ensures good touch accessibility.
   static const double minTouchTargetSize = 48;
-
-  /// Minimum spacing between touch targets (8 logical pixels)
-  ///
-  /// Prevents accidental taps on adjacent interactive elements.
-  static const double minTouchTargetSpacing = 8;
 
   /// Minimum contrast ratio for normal text (4.5:1)
   ///
@@ -31,25 +34,4 @@ class AccessibilityConstants {
   ///
   /// WCAG 2.1 Level AAA requirement for normal text.
   static const double minContrastRatioEnhanced = 7;
-
-  /// Default semantic label for decorative icons
-  ///
-  /// Use this when an icon is purely decorative and doesn't convey meaning.
-  static const String decorativeIconLabel = '';
-
-  /// Default timeout for focus announcements (milliseconds)
-  ///
-  /// Time to wait before announcing focus changes to screen readers.
-  static const int focusAnnouncementDelay = 100;
-
-  /// Minimum font size for readable text (12sp)
-  ///
-  /// Ensures text is readable without zooming.
-  static const double minReadableFontSize = 12;
-
-  /// Recommended font size for body text (14sp)
-  static const double recommendedBodyFontSize = 14;
-
-  /// Recommended font size for large text (18sp)
-  static const double recommendedLargeFontSize = 18;
 }

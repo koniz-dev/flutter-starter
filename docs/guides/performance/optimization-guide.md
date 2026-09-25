@@ -161,6 +161,7 @@ OptimizedImage(
   imageUrl: 'https://example.com/image.jpg',
   width: 200,
   height: 200,
+  semanticLabel: 'Product photo', // omit only for decorative images
   placeholder: CircularProgressIndicator(),
   errorWidget: Icon(Icons.error),
   preload: true, // Preload before displaying
@@ -171,8 +172,10 @@ OptimizedImage(
 - Automatic caching
 - Placeholder support
 - Error handling
-- Memory-efficient loading
-- Optional preloading
+- Memory-efficient loading, decoded at `logical size x devicePixelRatio`
+- Optional preloading, fired once per URL rather than on every rebuild
+- `semanticLabel` for screen readers; unlabeled images are excluded from the
+  semantics tree rather than announced as unlabeled nodes
 
 #### Memory Leak Detection
 **New Utility:** `MemoryHelper` and `ProviderDisposal` mixin

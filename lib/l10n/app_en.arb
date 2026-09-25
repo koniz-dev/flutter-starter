@@ -304,6 +304,97 @@
   "backToHome": "Back to home",
   "@backToHome": {
     "description": "Action on the 404 screen that returns to the home route"
+  },
+  "noItemsFound": "No items found",
+  "@noItemsFound": {
+    "description": "Empty state message for a list with no items"
+  },
+  "loadMore": "Load More",
+  "@loadMore": {
+    "description": "Button label that loads the next page of a list"
+  },
+  "retryHint": "Attempts to reload the content",
+  "@retryHint": {
+    "description": "Screen reader hint for the retry button"
+  },
+  "selectLanguageHint": "Opens language selection dialog",
+  "@selectLanguageHint": {
+    "description": "Screen reader hint for the language switcher button"
+  },
+  "progressIndicator": "Progress indicator",
+  "@progressIndicator": {
+    "description": "Default screen reader label for a progress indicator"
+  },
+  "percentValue": "{percent} percent",
+  "@percentValue": {
+    "description": "Screen reader value for a progress indicator",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "stateLoading": "Loading",
+  "@stateLoading": {
+    "description": "Screen reader state word for a control that is loading"
+  },
+  "stateDisabled": "Disabled",
+  "@stateDisabled": {
+    "description": "Screen reader state word for a disabled control"
+  },
+  "focusedOn": "Focused on {label}",
+  "@focusedOn": {
+    "description": "Screen reader announcement when focus moves",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "navigatedTo": "Navigated to {page}",
+  "@navigatedTo": {
+    "description": "Screen reader announcement when a new screen opens",
+    "placeholders": {
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "hoursAgo": "{count, plural, =0{Just now} =1{1 hour ago} other{{count} hours ago}}",
+  "@hoursAgo": {
+    "description": "Pluralized hours ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "@daysAgo": {
+    "description": "Pluralized days ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monthsAgo": "{count, plural, =1{1 month ago} other{{count} months ago}}",
+  "@monthsAgo": {
+    "description": "Pluralized months ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearsAgo": "{count, plural, =1{1 year ago} other{{count} years ago}}",
+  "@yearsAgo": {
+    "description": "Pluralized years ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
 

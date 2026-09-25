@@ -139,6 +139,7 @@ OptimizedImage(
   imageUrl: 'https://example.com/image.jpg',
   width: 200,
   height: 200,
+  semanticLabel: 'Product photo', // omit only for decorative images
   placeholder: CircularProgressIndicator(),
   errorWidget: Icon(Icons.error),
   preload: true,

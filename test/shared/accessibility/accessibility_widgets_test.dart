@@ -671,12 +671,14 @@ void main() {
     });
   });
 
-  group('FocusManager', () {
+  group('AccessibleFocus', () {
     testWidgets('should wrap child with Focus widget', (tester) async {
       // Arrange & Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: app_widgets.FocusManager(child: Text('Test'))),
+          home: Scaffold(
+            body: app_widgets.AccessibleFocus(child: Text('Test')),
+          ),
         ),
       );
 
@@ -690,7 +692,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: app_widgets.FocusManager(
+            body: app_widgets.AccessibleFocus(
               autofocus: true,
               child: Text('Test'),
             ),
@@ -709,7 +711,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: app_widgets.FocusManager(
+            body: app_widgets.AccessibleFocus(
               onFocusChange: (_) {
                 // Callback is set up correctly
               },

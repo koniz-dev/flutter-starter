@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Localized formatting utilities
@@ -86,24 +88,22 @@ class LocalizedFormatters {
     String? currencyCode,
     int? decimalDigits,
   }) {
-    final formatter = currencyCode != null
-        ? NumberFormat.currency(
-            locale: locale.toString(),
-            symbol: '',
-            decimalDigits: decimalDigits,
-          )
-        : NumberFormat.simpleCurrency(
-            locale: locale.toString(),
-            decimalDigits: decimalDigits,
-          );
-
-    if (currencyCode != null) {
-      // Get currency symbol from locale
-      final currencySymbol = _getCurrencySymbol(currencyCode, locale);
-      return '$currencySymbol${formatter.format(amount)}';
+    if (currencyCode == null) {
+      return NumberFormat.simpleCurrency(
+        locale: locale.toString(),
+        decimalDigits: decimalDigits,
+      ).format(amount);
     }
 
-    return formatter.format(amount);
+    // `name` is what makes intl apply the currency's own minor-unit count -
+    // without it every currency inherited the locale's default of 2, so JPY,
+    // KRW and VND (all zero-decimal) were formatted with cents.
+    return NumberFormat.currency(
+      locale: locale.toString(),
+      name: currencyCode,
+      symbol: _getCurrencySymbol(currencyCode, locale),
+      decimalDigits: decimalDigits,
+    ).format(amount);
   }
 
   /// Get currency symbol for currency code
@@ -160,45 +160,39 @@ class LocalizedFormatters {
   ///
   /// [dateTime] - The DateTime to format
   /// [locale] - The locale to use for formatting
+  ///
+  /// The strings come from the ARB files in `lib/l10n/`, so the result is
+  /// genuinely translated. The previous implementation passed an interpolated
+  /// (non-literal) string to `Intl.message`, which is never extracted, so it
+  /// returned its English argument verbatim for every locale.
   static String formatRelativeTime(
     DateTime dateTime, {
     required Locale locale,
   }) {
+    final l10n = _lookup(locale);
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inDays > 365) {
-      final years = (difference.inDays / 365).floor();
-      return Intl.message(
-        '$years year${years == 1 ? '' : 's'} ago',
-        locale: locale.toString(),
-      );
+      return l10n.yearsAgo((difference.inDays / 365).floor());
     } else if (difference.inDays > 30) {
-      final months = (difference.inDays / 30).floor();
-      return Intl.message(
-        '$months month${months == 1 ? '' : 's'} ago',
-        locale: locale.toString(),
-      );
+      return l10n.monthsAgo((difference.inDays / 30).floor());
     } else if (difference.inDays > 0) {
-      return Intl.message(
-        '${difference.inDays} day'
-        '${difference.inDays == 1 ? '' : 's'} ago',
-        locale: locale.toString(),
-      );
+      return l10n.daysAgo(difference.inDays);
     } else if (difference.inHours > 0) {
-      return Intl.message(
-        '${difference.inHours} hour'
-        '${difference.inHours == 1 ? '' : 's'} ago',
-        locale: locale.toString(),
-      );
-    } else if (difference.inMinutes > 0) {
-      return Intl.message(
-        '${difference.inMinutes} minute'
-        '${difference.inMinutes == 1 ? '' : 's'} ago',
-        locale: locale.toString(),
-      );
+      return l10n.hoursAgo(difference.inHours);
     } else {
-      return Intl.message('Just now', locale: locale.toString());
+      // `minutesAgo` renders 0 as "just now" in every locale.
+      return l10n.minutesAgo(difference.inMinutes.clamp(0, 59));
     }
+  }
+
+  /// Resolve the ARB strings for [locale], falling back to the default locale
+  /// when [locale] is not one the app ships.
+  static AppLocalizations _lookup(Locale locale) {
+    final supported =
+        SupportedLocale.fromLanguageCode(locale.languageCode) ??
+        SupportedLocale.fallback;
+    return lookupAppLocalizations(supported.locale);
   }
 }

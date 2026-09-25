@@ -304,6 +304,20 @@
   "backToHome": "Về trang chủ",
   "@backToHome": {
     "description": "Action on the 404 screen that returns to the home route"
-  }
+  },
+  "noItemsFound": "Không tìm thấy mục nào",
+  "loadMore": "Tải thêm",
+  "retryHint": "Thử tải lại nội dung",
+  "selectLanguageHint": "Mở hộp thoại chọn ngôn ngữ",
+  "progressIndicator": "Chỉ báo tiến trình",
+  "percentValue": "{percent} phần trăm",
+  "stateLoading": "Đang tải",
+  "stateDisabled": "Đã tắt",
+  "focusedOn": "Đang chọn {label}",
+  "navigatedTo": "Đã chuyển đến {page}",
+  "hoursAgo": "{count, plural, =0{Vừa xong} other{{count} giờ trước}}",
+  "daysAgo": "{count, plural, other{{count} ngày trước}}",
+  "monthsAgo": "{count, plural, other{{count} tháng trước}}",
+  "yearsAgo": "{count, plural, other{{count} năm trước}}"
 }
 

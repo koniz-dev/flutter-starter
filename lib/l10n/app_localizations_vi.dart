@@ -247,4 +247,81 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get backToHome => 'Về trang chủ';
+
+  @override
+  String get noItemsFound => 'Không tìm thấy mục nào';
+
+  @override
+  String get loadMore => 'Tải thêm';
+
+  @override
+  String get retryHint => 'Thử tải lại nội dung';
+
+  @override
+  String get selectLanguageHint => 'Mở hộp thoại chọn ngôn ngữ';
+
+  @override
+  String get progressIndicator => 'Chỉ báo tiến trình';
+
+  @override
+  String percentValue(int percent) {
+    return '$percent phần trăm';
+  }
+
+  @override
+  String get stateLoading => 'Đang tải';
+
+  @override
+  String get stateDisabled => 'Đã tắt';
+
+  @override
+  String focusedOn(String label) {
+    return 'Đang chọn $label';
+  }
+
+  @override
+  String navigatedTo(String page) {
+    return 'Đã chuyển đến $page';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giờ trước',
+      zero: 'Vừa xong',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ngày trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tháng trước',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count năm trước',
+    );
+    return '$_temp0';
+  }
 }
