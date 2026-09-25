@@ -1,0 +1,7 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aa059230abc5ee9e0/test/core/accessibility/accessibility_helpers_test.dart
+00:00 +0: AccessibilityHelpers opaque colours are scored exactly as before light bodyLarge/labelLarge #212529 on the #F8F9FA scaffold is 14.63:1
+00:00 +1: AccessibilityHelpers opaque colours are scored exactly as before light bodyMedium #5A6268 on the #F8F9FA scaffold is 5.89:1
+00:00 +2: AccessibilityHelpers opaque colours are scored exactly as before button label #FFFFFF on the #0069D9 fill is 5.22:1
+00:00 +3: AccessibilityHelpers opaque colours are scored exactly as before dark bodyMedium #ADB5BD on the #121212 scaffold is 9.03:1
+00:00 +4: AccessibilityHelpers opaque colours are scored exactly as before dark appBar label #FFFFFF on the #1E1E1E bar is 16.67:1
+00:00 +5: All tests passed!
