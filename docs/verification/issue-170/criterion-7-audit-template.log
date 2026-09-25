@@ -1,0 +1,14 @@
+./scripts/dev/audit_template.sh on the merged main (e56c93b), filtered to the
+step banners and results; the full run is ~2700 test lines. Exit status at the
+end is the scripts own exit status.
+
+==> env asset guard
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 364 files (0 changed) in 1.27 seconds.
+==> flutter analyze
+No issues found! (ran in 2.5s)
+==> flutter test
+02:51 +2742 ~8: All tests passed!
+
+exit=0
