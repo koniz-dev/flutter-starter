@@ -1,0 +1,7 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): true
+Number of signers: 1
+V3 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+V3.1 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US

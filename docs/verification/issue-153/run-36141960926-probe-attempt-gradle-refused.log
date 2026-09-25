@@ -1,0 +1,127 @@
+Discarded first attempt at criterion 2b, kept for honesty: build.gradle.kts refuses an unsigned release outright, so this run died in Gradle and never reached the guard. Re-run as 36142784856 with -PallowUnsignedRelease=true.
+
+=== gh run view 36141960926 ===
+
+
+X chore/153-signer-probe Build (Manual) · 36141960926
+Triggered via workflow_dispatch about 27 minutes ago
+
+JOBS
+X Build Android in 2m52s (ID 108093716882)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  ✓ Setup Java
+  ✓ Install dependencies
+  X Build the probe APK
+  - Print APK signer certificate
+  ✓ Post Setup Java
+  ✓ Post Setup Flutter
+  ✓ Post Checkout code
+  ✓ Complete job
+- Build Web in 0s (ID 108093718511)
+- Build iOS (no codesign) in 0s (ID 108093718533)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build Android: .github#4
+
+X Process completed with exit code 1.
+Build Android: .github#84
+
+! setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+Build Android: .github#17
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+Build Android: .github#1
+
+
+To see what failed, try: gh run view 36141960926 --log-failed
+View this run on GitHub: https://github.com/koniz-dev/flutter-starter/actions/runs/36141960926
+
+=== step: Build the probe APK ===
+
+##[group]Run set -euo pipefail
+set -euo pipefail
+case "staging" in
+  development)
+    echo "PROBE: debug-signed APK (expect the guard to FAIL on CN=Android Debug)"
+    flutter build apk --debug \
+      --dart-define=ENVIRONMENT=development \
+      --dart-define=BASE_URL=http://localhost:3000
+    ;;
+  staging)
+    echo "PROBE: unsigned APK (expect the guard to FAIL: no readable certificate)"
+    flutter build apk --release \
+      --dart-define=ENVIRONMENT=staging \
+      --dart-define=BASE_URL=http://localhost:3000
+    ;;
+  *)
+    echo "::error::probe branch supports environment=development or staging only"
+    exit 1
+    ;;
+esac
+ls -l build/app/outputs/flutter-apk/
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+  JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+  JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+##[endgroup]
+PROBE: unsigned APK (expect the guard to FAIL: no readable certificate)
+Upgrading gradle.properties
+Upgrading gradle.properties
+Running Gradle task 'assembleRelease'...
+Warning: Flutter support for your project's Gradle version (8.14.0) will soon be dropped. Please upgrade your Gradle version to a version of at least 9.1.0 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/flutter-starter/flutter-starter/android/gradle/wrapper/gradle-wrapper.properties.
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.11.1) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 9.0.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/home/runner/work/flutter-starter/flutter-starter/android/settings.gradle), by a plugin with the id of com.android.application.
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/home/runner/work/flutter-starter/flutter-starter/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.2.20) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.3.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/home/runner/work/flutter-starter/flutter-starter/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android.
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/home/runner/work/flutter-starter/flutter-starter/android/build.gradle) by the ext.kotlin_version property.
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Release signing is not configured, so this build would produce an
+unsigned (previously: debug-signed) artifact. Refusing.
+
+Create android/key.properties:
+    storeFile=upload-keystore.jks   # relative to android/, or absolute
+    storePassword=...
+    keyAlias=...
+    keyPassword=...
+
+Generate a keystore with:
+    keytool -genkey -v -keystore android/upload-keystore.jks \
+      -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+
+In CI see the "Setup Android keystore" step in
+.github/workflows/deploy-android.yml.
+
+To build an UNSIGNED release anyway - local smoke tests only, the
+artifact cannot be installed or uploaded - pass:
+    flutter build apk --release -PallowUnsignedRelease=true
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2m 19s
+Running Gradle task 'assembleRelease'...                          140.7s
+Gradle task assembleRelease failed with exit code 1
+##[error]Process completed with exit code 1.
