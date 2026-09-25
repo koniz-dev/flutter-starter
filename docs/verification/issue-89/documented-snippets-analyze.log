@@ -1,0 +1,98 @@
+$ flutter analyze test/tmp_issue89_documented_snippets.dart
+#
+# The ApiClient and AuthInterceptor blocks from docs/api/core/network.md,
+# pasted into a scratch file under test/ and turned into real call sites
+# so the analyzer must type-check every documented parameter.
+# The file is listed below, then deleted; the permanent equivalent is
+# test/docs/doc_signatures_test.dart.
+
+Analyzing tmp_issue89_documented_snippets.dart...               
+No issues found! (ran in 3.0s)
+
+--- exit code above: 0 means both snippets compile ---
+
+=== test/tmp_issue89_documented_snippets.dart ===
+// SCRATCH FILE for criterion 3 of koniz-dev/flutter-starter#89.
+//
+// The two constructor blocks documented in docs/api/core/network.md, pasted
+// verbatim and turned into real call sites so `flutter analyze` has to
+// type-check every parameter name and type. Deleted after the analyzer run;
+// the permanent equivalent is test/docs/doc_signatures_test.dart.
+
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/network/api_client.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/network/ssl_pinning.dart';
+import 'package:flutter_starter/core/performance/i_performance_service.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+
+// --------------------------------------------------------------------------
+// docs/api/core/network.md, "ApiClient -> Constructor"
+//
+// ApiClient({
+//   required StorageService storageService,
+//   required SecureStorageService secureStorageService,
+//   required AuthInterceptor authInterceptor,
+//   LoggingService? loggingService,
+//   IPerformanceService? performanceService,
+//   SslPinning? sslPinning,
+// });
+// --------------------------------------------------------------------------
+
+/// Calls `ApiClient` with exactly the documented parameter list.
+ApiClient documentedApiClientCall({
+  required StorageService storageService,
+  required SecureStorageService secureStorageService,
+  required AuthInterceptor authInterceptor,
+  LoggingService? loggingService,
+  IPerformanceService? performanceService,
+  SslPinning? sslPinning,
+}) {
+  return ApiClient(
+    storageService: storageService,
+    secureStorageService: secureStorageService,
+    authInterceptor: authInterceptor,
+    loggingService: loggingService,
+    performanceService: performanceService,
+    sslPinning: sslPinning,
+  );
+}
+
+// --------------------------------------------------------------------------
+// docs/api/core/network.md, "AuthInterceptor -> Constructor"
+//
+// AuthInterceptor({
+//   ITokenStore? tokenStore,
+//   SecureStorageService? secureStorageService,
+//   required Future<Result<String>> Function() refreshToken,
+//   Dio Function()? retryDioFactory,
+//   IKeyValueStore? keyValueStore,
+//   ISessionTerminationSink? sessionSink,
+// });
+// --------------------------------------------------------------------------
+
+/// Calls `AuthInterceptor` with exactly the documented parameter list.
+AuthInterceptor documentedAuthInterceptorCall({
+  // Required first here only to satisfy the repo lint; the documented order
+  // is preserved in the call below and in the comment above.
+  required Future<Result<String>> Function() refreshToken,
+  ITokenStore? tokenStore,
+  SecureStorageService? secureStorageService,
+  Dio Function()? retryDioFactory,
+  IKeyValueStore? keyValueStore,
+  ISessionTerminationSink? sessionSink,
+}) {
+  return AuthInterceptor(
+    tokenStore: tokenStore,
+    secureStorageService: secureStorageService,
+    refreshToken: refreshToken,
+    retryDioFactory: retryDioFactory,
+    keyValueStore: keyValueStore,
+    sessionSink: sessionSink,
+  );
+}

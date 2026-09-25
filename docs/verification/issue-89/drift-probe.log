@@ -1,0 +1,47 @@
+=== BASELINE: both gates green ===
+
+OK: documentation checks passed.
+check_docs exit: 0
+
+=== DRIFT A: doc edited, source untouched (renamed a parameter) ===
+docs/api/core/network.md:35:   param 5: doc `IPerformanceService? perfService` vs source `IPerformanceService? performanceService`
+docs/api/core/network.md:35:   param 6: doc `(missing)` vs source `SslPinning? sslPinning`
+signatures: checked 5 documented constructor(s); 3 mismatched
+
+3 problem(s) found.
+check_docs exit: 1
+
+=== DRIFT B: source edited, doc untouched (new optional parameter) ===
+44:    String? newlyAddedThing,
+--- tool/check_docs.dart --signatures ---
+docs/api/core/network.md:35:   param 7: doc `(missing)` vs source `String? newlyAddedThing`
+signatures: checked 5 documented constructor(s); 2 mismatched
+
+2 problem(s) found.
+check_docs exit: 1
+--- flutter test test/docs/doc_signatures_test.dart ---
+Shell: docs/api/core/network.md:35: ApiClient does not match lib/core/network/api_client.dart
+Shell: docs/api/core/network.md:35:   param 7: doc `(missing)` vs source `String? newlyAddedThing`
+Shell: signatures: checked 5 documented constructor(s); 2 mismatched
+00:00 +0 -1: documented constructor signatures every <!-- signature: --> block matches its source [E]
+  Expected: <0>
+    Actual: <2>
+  A documented constructor no longer matches its source. Run `dart run tool/check_docs.dart --signatures` for the diff, then update the fenced block in docs/ to match the code.
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/doc_signatures_test.dart 103:7            main.<fn>.<fn>
+  
+00:00 +0 -1: documented constructor signatures at least one directive exists to check
+00:00 +1 -1: documented constructor signatures the documented parameter lists compile as written
+00:00 +2 -1: doc_signatures parser reads a multi-line named parameter list
+00:00 +3 -1: doc_signatures parser returns null when the constructor is absent or one-line
+00:00 +4 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a64988a2b7ae8d501/test/docs/doc_signatures_test.dart: documented constructor signatures every <!-- signature: --> block matches its source
+
+=== RESTORED: both gates green again ===
+
+OK: documentation checks passed.
+check_docs exit: 0
