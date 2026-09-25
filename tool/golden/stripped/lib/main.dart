@@ -4,6 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// `Override` is not in flutter_riverpod.dart's export list; misc.dart is
+// where riverpod 3 exposes it. Needed only for createStartupContainer's
+// test seam.
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -14,6 +18,36 @@ import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
+
+// Riverpod 3 retries any failed provider whose error is not an `Error`
+// (`ProviderContainer.defaultRetry`), and every failure the startup sequence
+// can produce here is an `Exception`: `MigrationExecutionException`,
+// `StorageDowngradeException`, `MigrationPathException`, `CacheException`.
+//
+// That default is actively harmful on this path. `main()` reads providers with
+// `container.read(p.future)`, which awaits without listening, so the retry
+// timer invalidates a provider nobody is watching, it never rebuilds, and the
+// awaited future stays in the loading state forever - measured past 120 s with
+// the migration body having run exactly once. The `StartupFailureApp` guard
+// below then never fires and the user gets a process that never calls
+// `runApp`: a black window with no error, no retry, and no way out. A visible
+// failure is recoverable, an unbounded hang is not, so startup opts out and
+// lets the exception surface. Retry here stays user-driven, via the Try again
+// button that calls `main()` again.
+// Refs koniz-dev/flutter-starter#101
+Duration? _neverRetry(int retryCount, Object error) => null;
+
+/// Builds the container `main()` boots from and later hands to `runApp`.
+///
+/// Extracted so tests can drive the real startup sequence through the same
+/// container the app uses, rather than a hand-rolled one that happens to be
+/// configured differently. See [_neverRetry] for why retry is off.
+@visibleForTesting
+ProviderContainer createStartupContainer({
+  List<Override> overrides = const <Override>[],
+}) {
+  return ProviderContainer(retry: _neverRetry, overrides: overrides);
+}
 
 // Returns a Future so callers can await startup. `void main() async` would
 // discard it: integration tests could not wait for runApp, and any error
@@ -28,32 +62,38 @@ Future<void> main() async {
     AppConfig.printConfig();
   }
 
-  final container = ProviderContainer();
+  final container = createStartupContainer();
 
-  // Storage initialization runs the schema migrations. It is the one startup
-  // step that can fail with the user's local data on the line, and throwing
-  // here means `runApp` is never reached: a black window on every launch,
-  // with no way out. Catching `Object` rather than `Exception` is deliberate
-  // - a migration reading a key whose stored type changed throws a
-  // `TypeError`, which is an `Error`.
+  // Everything before the first frame runs inside one guard. Throwing here
+  // means `runApp` is never reached: a black window on every launch, with no
+  // way out. Catching `Object` rather than `Exception` is deliberate - a
+  // migration reading a key whose stored type changed throws a `TypeError`,
+  // which is an `Error`.
+  //
+  // The guard covers the whole sequence, not just the migration: session
+  // restoration and the locale read both touch the same storage the migration
+  // just failed to prepare, and an unguarded throw from either is the same
+  // black window by another route.
   try {
+    // Storage initialization runs the schema migrations. It is the one startup
+    // step that can fail with the user's local data on the line.
     await container.read(storageInitializationProvider.future);
+
+    // Restore a session persisted by a previous launch BEFORE the first frame.
+    // Without this the app boots unauthenticated, the router redirects to
+    // /login, and every cold start logs the user out even though the user and
+    // tokens are still on disk. Awaiting here also means the router never sees
+    // the restore-in-flight state in production.
+    await container.read(sessionRestorationProvider.future);
+
+    final localizationService = container.read(localizationServiceProvider);
+    final savedLocale = await localizationService.getCurrentLocale();
+    container.read(localeStateProvider.notifier).locale = savedLocale;
   } on Object catch (error) {
     container.dispose();
     runApp(StartupFailureApp(error: error, onRetry: main));
     return;
   }
-
-  // Restore a session persisted by a previous launch BEFORE the first frame.
-  // Without this the app boots unauthenticated, the router redirects to
-  // /login, and every cold start logs the user out even though the user and
-  // tokens are still on disk. Awaiting here also means the router never sees
-  // the restore-in-flight state in production.
-  await container.read(sessionRestorationProvider.future);
-
-  final localizationService = container.read(localizationServiceProvider);
-  final savedLocale = await localizationService.getCurrentLocale();
-  container.read(localeStateProvider.notifier).locale = savedLocale;
 
   runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
 }
