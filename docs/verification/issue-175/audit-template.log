@@ -1,0 +1,15 @@
+$ ./scripts/dev/audit_template.sh
+
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 362 files (0 changed) in 1.18 seconds.
+==> flutter analyze
+Analyzing agent-ac3f2ba7ccb9ffdcc...                            
+No issues found! (ran in 3.9s)
+
+[... 4837 lines of per-test output elided; ANSI colour stripped by hand.
+     Reproduce with the command above. ...]
+
+02:39 +2768 ~8: All tests passed!
+exit: 0

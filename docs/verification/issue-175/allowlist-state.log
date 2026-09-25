@@ -1,0 +1,57 @@
+# kAllowedImportViolations as it stands on main @ 22ebb26
+# (test/tooling/import_rules_test.dart, lines 35-70)
+
+const kAllowedImportViolations = <String, Set<String>>{
+  'domain_imports_outer_layer': <String>{},
+  'cross_feature_import': <String>{},
+
+  // The one designated mapper outside `lib/core/network/`. Per
+  // koniz-dev/flutter-starter#176 it is intentional, not scheduled for a fix:
+  // it exists solely to translate `DioException` into a domain exception, and
+  // rewriting it without the import would only move the import somewhere less
+  // obvious. See docs/api/core/network.md, "Where dio is allowed to appear".
+  //
+  // #176 already removed the other dio import this guard was specified with,
+  // in lib/features/auth/data/datasources/auth_remote_datasource.dart, so it
+  // is absent here rather than seeded-and-deleted.
+  'dio_outside_core_network': <String>{
+    'lib/core/errors/dio_exception_mapper.dart',
+  },
+
+  // Empty, and it should stay that way. This guard was specified with three
+  // seeded entries here - login_screen.dart, register_screen.dart and
+  // task_detail_screen.dart, which navigated with raw `context.go()` /
+  // `context.pop()`. koniz-dev/flutter-starter#177 landed while this guard was
+  // being written and removed all three, so they are absent rather than
+  // seeded-and-deleted.
+  'go_router_outside_routing': <String>{},
+
+  // Refs koniz-dev/flutter-starter#118: the `core/di` <-> `features/*/di`
+  // cycle. These three are deliberately NOT scheduled for a fix - no epic in
+  // `./scripts/bootstrap-issue-labels.sh --list-epics` covers `lib/core/di/`,
+  // and breaking the cycle is a sweep across all three slices, not a child
+  // issue. They are allowlisted so that they cannot get worse.
+  'core_imports_feature': <String>{
+    'lib/core/di/providers.dart',
+    'lib/core/feature_flags/feature_flags_manager.dart',
+    'lib/core/routing/app_router.dart',
+  },
+};
+
+
+# Live evidence that each entry is a REAL, current violation.
+
+$ grep -rn "package:dio" lib | grep -v "^lib/core/network/"
+lib/core/errors/dio_exception_mapper.dart:1:import 'package:dio/dio.dart';
+
+$ grep -rn "package:go_router" lib | grep -v "^lib/core/routing/"
+lib/features/home/routing/home_routes.dart:4:import 'package:go_router/go_router.dart';
+lib/features/feature_flags/routing/feature_flags_routes.dart:4:import 'package:go_router/go_router.dart';
+lib/features/tasks/routing/tasks_routes.dart:5:import 'package:go_router/go_router.dart';
+lib/features/auth/routing/auth_routes.dart:5:import 'package:go_router/go_router.dart';
+
+$ grep -rln "package:flutter_starter/features/" lib/core | sort
+lib/core/di/providers.dart
+lib/core/feature_flags/feature_flags_manager.dart
+lib/core/routing/app_router.dart
+lib/core/routing/routes_registry.dart
