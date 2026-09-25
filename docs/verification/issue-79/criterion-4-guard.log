@@ -1,0 +1,96 @@
+Criterion 4: a guard exists so a bundled .env cannot ship silently.
+
+Guard: tool/check_env_assets.dart, wired into scripts/dev/audit_template.sh
+and into flutter test via test/tooling/check_env_assets_test.dart.
+Verified on main at cd56d01 (PR #126).
+
+============================================================
+A. FAILS on a pubspec that declares '- .env' (copy of this
+   repository's pubspec.yaml with one line added)
+============================================================
+
+$ grep -n -A3 '^  assets:' /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/pubspec-with-env.yaml
+161:  assets:
+162-    - .env.example
+163-    - .env
+164-
+
+$ dart run tool/check_env_assets.dart /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/pubspec-with-env.yaml
+Running build hooks...Running build hooks...SECURITY: a secrets file is declared as a Flutter asset.
+
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/pubspec-with-env.yaml:163  - .env
+
+Flutter asset lists are not build-mode scoped, so this file ships in the
+release APK, the release IPA and the web build, not just in debug. Anyone can
+unzip the app bundle to read it, and on web it is served over HTTP at
+/assets/.env and listed in AssetManifest.json.
+
+Use instead:
+  * native (all build modes): --dart-define-from-file=.env, or individual
+    --dart-define flags. Nothing is bundled as a readable file.
+  * web: there is no dart-define path, and a web client cannot hold a secret.
+    Serve secrets from your backend and keep only publishable values in the
+    bundle.
+
+If the file genuinely holds no secrets and must ship (a web build needing
+runtime config), say so inline and this check will pass:
+
+    - .env # env-asset-ack: web build, contains no secrets
+
+See docs/guides/configuration.md ("Never ship a secret in the bundle").
+
+exit: 1
+
+============================================================
+B. PASSES on the current pubspec.yaml
+============================================================
+
+$ dart run tool/check_env_assets.dart
+Running build hooks...Running build hooks...OK: no unacknowledged env file in the Flutter asset list.
+exit: 0
+
+============================================================
+C. The documented exception: an inline, committed acknowledgement
+   passes and prints a reminder instead
+============================================================
+
+$ dart run tool/check_env_assets.dart /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/pubspec-with-env-ack.yaml
+Running build hooks...Running build hooks...check_env_assets: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/pubspec-with-env-ack.yaml:163 bundles ".env" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged env file in the Flutter asset list.
+exit: 0
+
+============================================================
+D. Wired into ./scripts/dev/audit_template.sh
+============================================================
+
+$ sed -n '1,12p' scripts/dev/audit_template.sh
+#!/usr/bin/env bash
+# Non-platform quality gate: env asset guard, format (scoped), analyze,
+# unit/widget tests.
+# Does not run Android/iOS/Web builds or Patrol E2E.
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+cd "$ROOT"
+echo "==> env asset guard"
+dart run tool/check_env_assets.dart
+echo "==> format ($("$SCRIPT_DIR/format_dart.sh" --print-paths))"
+"$SCRIPT_DIR/format_dart.sh" --check
+
+============================================================
+E. Wired into flutter test (so the CI Quality gate catches it)
+============================================================
+
+$ flutter test test/tooling/check_env_assets_test.dart --reporter compact
+  test_core 0.6.18 (0.6.20 available)
+  uuid 4.5.3 (4.6.0 available)
+  very_good_analysis 10.1.0 (11.0.0 available)
+  vm_service 15.0.2 (15.3.0 available)
+  webdriver 3.1.0 (3.2.0 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:08 +8: All tests passed!                                                                                                                                                                            
