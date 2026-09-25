@@ -14,6 +14,7 @@
 #   REPO=owner/name ./scripts/bootstrap-issue-labels.sh  # apply elsewhere
 #   ./scripts/bootstrap-issue-labels.sh --dry-run        # print, change nothing
 #   ./scripts/bootstrap-issue-labels.sh --list-epics     # epic slugs, one per line
+#   ./scripts/bootstrap-issue-labels.sh --list-map       # epic:slug<TAB>path pairs
 #   ./scripts/bootstrap-issue-labels.sh --prune-defaults  # also delete the stock
 #                                                         # GitHub labels that
 #                                                         # duplicate type:*
@@ -28,12 +29,14 @@ set -euo pipefail
 DRY_RUN=0
 PRUNE_DEFAULTS=0
 LIST_EPICS_ONLY=0
+LIST_MAP_ONLY=0
 
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --prune-defaults) PRUNE_DEFAULTS=1 ;;
     --list-epics) LIST_EPICS_ONLY=1 ;;
+    --list-map) LIST_MAP_ONLY=1 ;;
     # Print the header comment and stop at the end of it. This used to be
     # `sed -n '2,30p'`, a hardcoded range that ran five lines past the comment
     # block and trailed off into `set -euo pipefail` and the flag variables.
@@ -45,25 +48,66 @@ done
 
 # ---------------------------------------------------------------------------
 # Epics — the canonical functional split of this repository.
-# Format: slug|description
-# Keep each slug mapped to a real directory or surface in the tree.
+# Format: slug|description|space-separated paths
+#
+# The third field is the machine-readable half: every tracked surface a change
+# can land in maps to exactly one epic, and `--list-map` emits that mapping for
+# tooling. `tool/check_epic_coverage.dart`, run by
+# `test/tooling/epic_coverage_test.dart`, fails if a surface is claimed by no
+# epic or by two, or if an epic claims a path that is not in the tree. Adding a
+# directory therefore means adding it here in the same change.
+#
+# Paths are repository-relative, use forward slashes, and must never contain a
+# space or a `|`. A path claims everything beneath it unless a deeper path in
+# this table claims a subtree explicitly (as `assets/` does).
 # ---------------------------------------------------------------------------
 EPICS=(
-  "core-network|lib/core/network: Dio ApiClient, interceptors, realtime/WebSocket"
-  "core-storage|lib/core/storage: key-value + secure adapters, token store, migrations"
-  "core-security|lib/core/security: RASP providers, hardening, security docs"
-  "core-config|lib/core/config: env layers, .env, dart-defines, feature flags plumbing"
-  "core-routing|lib/core/routing: GoRouter tree, guards, navigation adapters"
-  "feature-auth|lib/features/auth: login, register, session (sample feature slice)"
-  "feature-tasks|lib/features/tasks: CRUD sample feature slice"
-  "design-system|lib/shared: design tokens, theme, shared widgets, accessibility"
-  "testing|test/, integration_test/, coverage gates, Patrol E2E, golden acceptance"
-  "tooling-ci|.github/workflows, scripts/, tool/, bricks/, git hooks"
-  "docs|docs/, README, CONTRIBUTING, CHANGELOG"
+  "core-network|lib/core/network: Dio ApiClient, interceptors, realtime/WebSocket|lib/core/network"
+  "core-storage|lib/core/storage: key-value + secure adapters, token store, migrations|lib/core/storage"
+  "core-security|lib/core/security: RASP providers, hardening, security docs|lib/core/security"
+  "core-config|lib/core/config, assets/config, .env.example: env layers, dart-defines|lib/core/config assets/config .env.example"
+  "core-routing|lib/core/routing: GoRouter tree, guards, navigation adapters|lib/core/routing"
+  "core-di|lib/core/di + lib/core/contracts: composition root, provider wiring, contracts|lib/core/di lib/core/contracts"
+  "core-foundation|lib/core/{utils,errors,logging,performance,constants}: cross-cutting primitives|lib/core/utils lib/core/errors lib/core/logging lib/core/performance lib/core/constants"
+  "feature-auth|lib/features/auth + lib/core/session: login, register, session (sample slice)|lib/features/auth lib/core/session"
+  "feature-tasks|lib/features/tasks: CRUD sample feature slice|lib/features/tasks"
+  "feature-flags|lib/features/feature_flags + lib/core/feature_flags: both halves of the flag stack|lib/features/feature_flags lib/core/feature_flags"
+  "app-shell|lib/main.dart, lib/core/startup, lib/features/home: entry point and app shell|lib/main.dart lib/core/startup lib/features/home"
+  "design-system|lib/shared + lib/core/accessibility + assets/images: tokens, theme, widgets, a11y|lib/shared lib/core/accessibility assets/images"
+  "i18n|lib/l10n, lib/core/localization, l10n.yaml: ARB catalogs and locale plumbing|lib/l10n lib/core/localization l10n.yaml"
+  "testing|test/, integration_test/, coverage gates, Patrol E2E, golden acceptance|test integration_test dart_test.yaml codecov.yml"
+  "tooling-ci|.github, .githooks, scripts/, tool/, bricks/, analyzer and pubspec config|.github .githooks .vscode scripts tool bricks analysis_options.yaml pubspec.yaml pubspec.lock mason.yaml .gitignore .metadata"
+  "docs|docs/, README, CONTRIBUTING, CHANGELOG, CLAUDE.md, .claude roles, examples/|docs examples .claude README.md CONTRIBUTING.md CHANGELOG.md CLAUDE.md LICENSE"
+  "platform-release|android/ ios/ macos/ linux/ windows/ web/ fastlane/: native and release surfaces|android ios macos linux windows web fastlane flutter_launcher_icons.yaml flutter_native_splash.yaml"
 )
+
+# Split one EPICS entry into the globals EPIC_SLUG / EPIC_DESC / EPIC_PATHS.
+# Fails loudly on a malformed entry rather than quietly creating a label with a
+# truncated description, or an epic that claims nothing.
+split_epic() {
+  local entry="$1"
+  IFS='|' read -r EPIC_SLUG EPIC_DESC EPIC_PATHS <<<"$entry"
+  if [[ -z "$EPIC_SLUG" || -z "$EPIC_DESC" || -z "$EPIC_PATHS" ]]; then
+    echo "ERROR: malformed EPICS entry (want slug|description|paths): $entry" >&2
+    exit 2
+  fi
+}
 
 if [[ "$LIST_EPICS_ONLY" -eq 1 ]]; then
   for e in "${EPICS[@]}"; do echo "epic:${e%%|*}"; done
+  exit 0
+fi
+
+# One "epic:<slug><TAB><path>" line per claimed path. Like --list-epics this
+# prints only what is in this file, so it must keep working with no gh, no
+# authentication and no network.
+if [[ "$LIST_MAP_ONLY" -eq 1 ]]; then
+  for e in "${EPICS[@]}"; do
+    split_epic "$e"
+    for claimed_path in $EPIC_PATHS; do
+      printf 'epic:%s\t%s\n' "$EPIC_SLUG" "$claimed_path"
+    done
+  done
   exit 0
 fi
 
@@ -122,7 +166,8 @@ echo
 # ---------------------------------------------------------------------------
 echo "epic:* (functional area; exactly one per issue)"
 for entry in "${EPICS[@]}"; do
-  create_label "epic:${entry%%|*}" "5319e7" "${entry#*|}"
+  split_epic "$entry"
+  create_label "epic:$EPIC_SLUG" "5319e7" "$EPIC_DESC"
 done
 echo
 
