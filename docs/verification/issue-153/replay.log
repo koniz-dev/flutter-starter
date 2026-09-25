@@ -1,0 +1,133 @@
+==============================================================
+case: v2-only release APK (verbatim output of run 36136950123)
+  fixture: v2-only.txt, stub apksigner exits 0, guard expected to exit 0
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+V2 Signer: certificate SHA-256 digest: ff5109dffea87567b6e8ca0c12c312988de575f8138785e0a6a3f7e3973d14b7
+V2 Signer: key algorithm: RSA
+Signers: 1
+Certificate DN(s):
+  CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+OK: <tmp apk> is signed by 1 non-debug signer(s).
+--> exit 0: as expected
+
+==============================================================
+case: v1/JAR-signed APK ('Signer #1' label)
+  fixture: v1-only.txt, stub apksigner exits 0, guard expected to exit 0
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): false
+Number of signers: 1
+Signer #1 certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+Signer #1 certificate SHA-256 digest: ff5109dffea87567b6e8ca0c12c312988de575f8138785e0a6a3f7e3973d14b7
+Signers: 1
+Certificate DN(s):
+  CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+OK: <tmp apk> is signed by 1 non-debug signer(s).
+--> exit 0: as expected
+
+==============================================================
+case: v3 + v3.1 signed APK ('V3 Signer:' / 'V3.1 Signer:' labels)
+  fixture: v3.txt, stub apksigner exits 0, guard expected to exit 0
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): true
+Number of signers: 1
+V3 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+V3.1 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+Signers: 1
+Certificate DN(s):
+  CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+  CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+OK: <tmp apk> is signed by 1 non-debug signer(s).
+--> exit 0: as expected
+
+==============================================================
+case: debug-signed APK
+  fixture: debug.txt, stub apksigner exits 0, guard expected to exit 1
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Number of signers: 1
+Signer #1 certificate DN: CN=Android Debug, O=Android, C=US
+V2 Signer: certificate DN: CN=Android Debug, O=Android, C=US
+Signers: 1
+Certificate DN(s):
+  CN=Android Debug, O=Android, C=US
+  CN=Android Debug, O=Android, C=US
+::error::APK is DEBUG-signed. android/app/build.gradle.kts is supposed to make this impossible.
+--> exit 1: as expected
+
+==============================================================
+case: unsigned APK (apksigner itself exits 1)
+  fixture: unsigned.txt, stub apksigner exits 1, guard expected to exit 1
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+DOES NOT VERIFY
+ERROR: APK Signature Scheme v2 signature verification failed: no signers found
+ERROR: JAR signature verification failed: missing META-INF/MANIFEST.MF
+::error::apksigner could not verify <tmp apk> (exit 1): no readable certificate.
+--> exit 1: as expected
+
+==============================================================
+case: verifies, but 'Number of signers: 0'
+  fixture: zero-signers.txt, stub apksigner exits 0, guard expected to exit 1
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified for SourceStamp: false
+Number of signers: 0
+::error::apksigner reports 0 signers: <tmp apk> is unsigned.
+--> exit 1: as expected
+
+==============================================================
+case: verifies, but no certificate DN printed
+  fixture: no-dn.txt, stub apksigner exits 0, guard expected to exit 1
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v2 scheme (APK Signature Scheme v2): true
+Number of signers: 1
+::error::apksigner printed no certificate DN.
+--> exit 1: as expected
+
+==============================================================
+case: verifies, but no 'Number of signers' line at all
+  fixture: no-count.txt, stub apksigner exits 0, guard expected to exit 1
+--------------------------------------------------------------
+APK: <tmp apk>
+Using: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/docs/verification/issue-153/replay/bin/apksigner
+Verifies
+Verified using v2 scheme (APK Signature Scheme v2): true
+V2 Signer: certificate DN: CN=CI Throwaway, O=flutter-starter, C=US
+::error::apksigner printed no 'Number of signers' line; cannot confirm <tmp apk> is signed.
+--> exit 1: as expected
+
+==============================================================
+all 8 cases behaved as expected

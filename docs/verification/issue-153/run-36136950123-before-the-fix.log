@@ -1,0 +1,99 @@
+Baseline - the run that produced this issue, main at 875113e, BEFORE the fix. The APK is correctly v2-signed; the old guard greps the v1-only label 'Signer #1 certificate DN:' and fails anyway.
+
+=== gh run view 36136950123 ===
+
+
+X main Build (Manual) · 36136950123
+Triggered via workflow_dispatch about 1 hour ago
+
+JOBS
+X Build Android in 6m0s (ID 108077192311)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  ✓ Setup Java
+  ✓ Install dependencies
+  ✓ Generate throwaway release keystore
+  ✓ Build APK
+  X Print APK signer certificate
+  - Upload artifacts
+  ✓ Post Setup Java
+  ✓ Post Setup Flutter
+  ✓ Post Checkout code
+  ✓ Complete job
+- Build iOS (no codesign) (ID 108077194088)
+- Build Web (ID 108077194359)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build Android: .github#4
+
+X Process completed with exit code 1.
+Build Android: .github#51
+
+X apksigner printed no certificate DN.
+Build Android: .github#50
+
+! setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+Build Android: .github#17
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+Build Android: .github#1
+
+
+To see what failed, try: gh run view 36136950123 --log-failed
+View this run on GitHub: https://github.com/koniz-dev/flutter-starter/actions/runs/36136950123
+
+=== step: Print APK signer certificate ===
+
+##[group]Run set -euo pipefail
+set -euo pipefail
+APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
+echo "APK: $APK"
+
+APKSIGNER=$(ls -1 "${ANDROID_HOME:-$ANDROID_SDK_ROOT}"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
+if [ -z "$APKSIGNER" ]; then
+  echo "::error::apksigner not found under ANDROID_HOME; cannot verify the signer."
+  exit 1
+fi
+echo "Using: $APKSIGNER"
+
+"$APKSIGNER" verify --print-certs --verbose "$APK" | tee /tmp/apk-certs.txt
+
+if ! grep -q 'Signer #1 certificate DN:' /tmp/apk-certs.txt; then
+  echo "::error::apksigner printed no certificate DN."
+  exit 1
+fi
+if grep -q 'CN=Android Debug' /tmp/apk-certs.txt; then
+  echo "::error::APK is DEBUG-signed. android/app/build.gradle.kts is supposed to make this impossible."
+  exit 1
+fi
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+  JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+  JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+##[endgroup]
+APK: build/app/outputs/flutter-apk/app-release.apk
+Using: /usr/local/lib/android/sdk/build-tools/37.0.0/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+V2 Signer: certificate SHA-256 digest: ff5109dffea87567b6e8ca0c12c312988de575f8138785e0a6a3f7e3973d14b7
+V2 Signer: certificate SHA-1 digest: eadf47ac5ddc3992525d7e98d6e4f69e5f7a1baa
+V2 Signer: certificate MD5 digest: 957c44d46026edb77db61750157270f3
+V2 Signer: key algorithm: RSA
+V2 Signer: key size (bits): 2048
+V2 Signer: public key SHA-256 digest: c85ea67a4754ec1283a29e46ed3584fdef066d92dd3ebc13aac1954edca2d990
+V2 Signer: public key SHA-1 digest: 42d2378f8a1bffaab4cfa5ef26baf2409bf51756
+V2 Signer: public key MD5 digest: 1fd698d615f17b62c5f95e20628616c1
+##[error]apksigner printed no certificate DN.
+##[error]Process completed with exit code 1.

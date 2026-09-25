@@ -1,0 +1,5 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): false
+Verified for SourceStamp: false
+Number of signers: 0
