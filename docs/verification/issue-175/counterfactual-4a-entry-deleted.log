@@ -1,0 +1,98 @@
+# Criterion 4, step 1: delete ONE allowlist line (line 66,
+# 'lib/core/di/providers.dart' under core_imports_feature).
+# lib/ is NOT touched - the violation is still really there.
+
+$ flutter test test/tooling/import_rules_test.dart --reporter compact
+
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart                                                        
+00:01 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart                                                        
+00:01 +0: import rules over lib/ (setUpAll)                                                                                                                                                            
+00:02 +0: import rules over lib/ (setUpAll)                                                                                                                                                            
+00:02 +0: import rules over lib/ no import-rule violation outside the allowlist                                                                                                                        
+00:02 +0 -1: import rules over lib/ no import-rule violation outside the allowlist [E]                                                                                                                 
+  NEW import-rule violation(s) - 4 found.
+  These break the architecture rules and are not allowlisted:
+  
+    lib/core/di/providers.dart:11
+        imports : package:flutter_starter/features/auth/di/auth_providers.dart
+        rule    : core_imports_feature
+        banned  : lib/core/** importing lib/features/**
+        allowed : lib/core/routing/routes_registry.dart only - the route registry seam composes per-feature route modules by design
+  
+    lib/core/di/providers.dart:14
+        imports : package:flutter_starter/features/auth/di/auth_providers.dart
+        rule    : core_imports_feature
+        banned  : lib/core/** importing lib/features/**
+        allowed : lib/core/routing/routes_registry.dart only - the route registry seam composes per-feature route modules by design
+  
+    lib/core/di/providers.dart:15
+        imports : package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart
+        rule    : core_imports_feature
+        banned  : lib/core/** importing lib/features/**
+        allowed : lib/core/routing/routes_registry.dart only - the route registry seam composes per-feature route modules by design
+  
+    lib/core/di/providers.dart:16
+        imports : package:flutter_starter/features/tasks/di/tasks_providers.dart
+        rule    : core_imports_feature
+        banned  : lib/core/** importing lib/features/**
+        allowed : lib/core/routing/routes_registry.dart only - the route registry seam composes per-feature route modules by design
+  
+  Fix the import. If - and only if - the import is correct as written, add the path under the matching rule in kAllowedImportViolations,
+  in test/tooling/import_rules_test.dart:
+  
+    'core_imports_feature': { ... 'lib/core/di/providers.dart' }
+    'core_imports_feature': { ... 'lib/core/di/providers.dart' }
+    'core_imports_feature': { ... 'lib/core/di/providers.dart' }
+    'core_imports_feature': { ... 'lib/core/di/providers.dart' }
+  
+  package:matcher                            fail
+  test/tooling/import_rules_test.dart 347:7  main.<fn>.<fn>
+  
+
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart -p vm --plain-name 'import rules over lib/ no import-rule violation outside the allowlist'
+
+00:02 +0 -1: import rules over lib/ no stale allowlist entry                                                                                                                                           
+00:02 +1 -1: import rules over lib/ no stale allowlist entry                                                                                                                                           
+00:02 +1 -1: import rules over lib/ every allowlist key names a real rule                                                                                                                              
+00:02 +2 -1: import rules over lib/ every allowlist key names a real rule                                                                                                                              
+00:02 +2 -1: import rules over lib/ every allowlist path exists, unless it is a stripped sample                                                                                                        
+00:02 +3 -1: import rules over lib/ every allowlist path exists, unless it is a stripped sample                                                                                                        
+00:02 +3 -1: import rules over lib/ every rule has exactly one allowlist key                                                                                                                           
+00:02 +4 -1: import rules over lib/ every rule has exactly one allowlist key                                                                                                                           
+00:02 +4 -1: import rules over lib/ (tearDownAll)                                                                                                                                                      
+00:02 +4 -1: rule predicates domain importing its own data or presentation is a violation                                                                                                              
+00:02 +5 -1: rule predicates domain importing its own data or presentation is a violation                                                                                                              
+00:02 +5 -1: rule predicates domain importing its own domain, core or a pub package is fine                                                                                                            
+00:02 +6 -1: rule predicates domain importing its own domain, core or a pub package is fine                                                                                                            
+00:02 +6 -1: rule predicates data importing presentation is outside this rule set                                                                                                                      
+00:02 +7 -1: rule predicates data importing presentation is outside this rule set                                                                                                                      
+00:02 +7 -1: rule predicates one feature importing another is a violation                                                                                                                              
+00:02 +8 -1: rule predicates one feature importing another is a violation                                                                                                                              
+00:02 +8 -1: rule predicates a feature importing itself, core or shared is fine                                                                                                                        
+00:02 +9 -1: rule predicates a feature importing itself, core or shared is fine                                                                                                                        
+00:02 +9 -1: rule predicates lib/features importing lib/core is fine - that is the direction                                                                                                           
+00:02 +10 -1: rule predicates lib/features importing lib/core is fine - that is the direction                                                                                                          
+00:02 +10 -1: rule predicates package:dio is allowed only under lib/core/network/                                                                                                                      
+00:02 +11 -1: rule predicates package:dio is allowed only under lib/core/network/                                                                                                                      
+00:02 +11 -1: rule predicates go_router is allowed in core routing and route modules                                                                                                                   
+00:02 +12 -1: rule predicates go_router is allowed in core routing and route modules                                                                                                                   
+00:02 +12 -1: rule predicates go_router outside those places is a violation                                                                                                                            
+00:02 +13 -1: rule predicates go_router outside those places is a violation                                                                                                                            
+00:02 +13 -1: rule predicates lib/core importing lib/features is a violation                                                                                                                           
+00:02 +14 -1: rule predicates lib/core importing lib/features is a violation                                                                                                                           
+00:02 +14 -1: rule predicates the route registry seam is permanently allowed                                                                                                                           
+00:02 +15 -1: rule predicates the route registry seam is permanently allowed                                                                                                                           
+00:02 +15 -1: strippable sample paths cover what tool/strip_sample_features.dart deletes                                                                                                               
+00:02 +16 -1: strippable sample paths cover what tool/strip_sample_features.dart deletes                                                                                                               
+00:02 +16 -1: strippable sample paths do not cover files no strip variant removes                                                                                                                      
+00:02 +17 -1: strippable sample paths do not cover files no strip variant removes                                                                                                                      
+00:02 +17 -1: directive parsing picks up import and export, with line numbers                                                                                                                          
+00:02 +18 -1: directive parsing picks up import and export, with line numbers                                                                                                                          
+00:02 +18 -1: directive parsing a commented-out directive is not a violation                                                                                                                           
+00:02 +19 -1: directive parsing a commented-out directive is not a violation                                                                                                                           
+00:02 +19 -1: directive parsing handles show/hide/as clauses and double quotes                                                                                                                         
+00:02 +20 -1: directive parsing handles show/hide/as clauses and double quotes                                                                                                                         
+00:02 +20 -1: Some tests failed.                                                                                                                                                                       
+
+exit: 1

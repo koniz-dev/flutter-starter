@@ -1,0 +1,31 @@
+# Criterion 4, step 2: restore the deleted line, change nothing else.
+
+$ flutter test test/tooling/import_rules_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart
+00:00 +0: import rules over lib/ (setUpAll)
+00:00 +0: import rules over lib/ no import-rule violation outside the allowlist
+00:00 +1: import rules over lib/ no stale allowlist entry
+00:00 +2: import rules over lib/ every allowlist key names a real rule
+00:00 +3: import rules over lib/ every allowlist path exists, unless it is a stripped sample
+00:00 +4: import rules over lib/ every rule has exactly one allowlist key
+00:00 +5: import rules over lib/ (tearDownAll)
+00:00 +5: rule predicates domain importing its own data or presentation is a violation
+00:00 +6: rule predicates domain importing its own domain, core or a pub package is fine
+00:00 +7: rule predicates data importing presentation is outside this rule set
+00:00 +8: rule predicates one feature importing another is a violation
+00:00 +9: rule predicates a feature importing itself, core or shared is fine
+00:00 +10: rule predicates lib/features importing lib/core is fine - that is the direction
+00:00 +11: rule predicates package:dio is allowed only under lib/core/network/
+00:00 +12: rule predicates go_router is allowed in core routing and route modules
+00:00 +13: rule predicates go_router outside those places is a violation
+00:00 +14: rule predicates lib/core importing lib/features is a violation
+00:00 +15: rule predicates the route registry seam is permanently allowed
+00:00 +16: strippable sample paths cover what tool/strip_sample_features.dart deletes
+00:00 +17: strippable sample paths do not cover files no strip variant removes
+00:00 +18: directive parsing picks up import and export, with line numbers
+00:00 +19: directive parsing a commented-out directive is not a violation
+00:00 +20: directive parsing handles show/hide/as clauses and double quotes
+00:00 +21: All tests passed!
+
+exit: 0
