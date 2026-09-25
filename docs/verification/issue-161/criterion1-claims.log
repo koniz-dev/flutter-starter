@@ -1,0 +1,102 @@
+Criterion 1 - the claims the new page makes, checked against the pinned
+riverpod 3.0.3 sources and against this repository.
+
+--- 1. Retry resolution order (riverpod/lib/src/core/element.dart) ---
+$ grep -n -B1 -A1 "origin.retry ?? container.retry" $RIVERPOD/element.dart
+
+683-    if (!_disposed) {
+684-      final retry =
+685:          origin.retry ?? container.retry ?? ProviderContainer.defaultRetry;
+686-
+687-      // Capture exceptions. On error, stop retrying if the retry
+
+--- 2. ProviderContainer.defaultRetry (the behaviour this app opts out of) ---
+$ sed -n 823,840p $RIVERPOD/provider_container.dart
+
+  ///
+  /// {@macro riverpod.retry}
+  static Duration? defaultRetry(
+    int retryCount,
+    Object error, {
+    int maxRetries = 10,
+    Duration maxDelay = const Duration(milliseconds: 6400),
+    Duration minDelay = const Duration(milliseconds: 200),
+  }) {
+    if (retryCount >= maxRetries) return null;
+    if (error is ProviderException || error is Error) return null;
+
+    final delay = minDelay * math.pow(2, retryCount).toInt();
+    if (delay > maxDelay) return maxDelay;
+
+    return delay;
+  }
+
+
+--- 3. Where the policy is set, in this repository ---
+$ sed -n 45,68p lib/main.dart
+
+// Refs koniz-dev/flutter-starter#101
+Duration? _neverRetry(int retryCount, Object error) => null;
+
+/// Builds the app's one [ProviderContainer]: `main()` boots from it and then
+/// hands the same instance to `runApp`, so the retry policy it sets applies
+/// for the lifetime of the app and not only to the startup sequence.
+///
+/// Named for that lifetime rather than for the moment of construction: every
+/// provider the app ever rebuilds is governed by the [_neverRetry] passed
+/// here. See [_neverRetry] and `docs/architecture/riverpod-retry-policy.md`
+/// for why retry is off and what to do about a provider that needs it.
+///
+/// `@visibleForTesting` marks the `overrides` seam, not the function: this is
+/// the production factory. It exists so tests can drive the real startup
+/// sequence through the same container the app uses, rather than a
+/// hand-rolled one that happens to be configured differently.
+@visibleForTesting
+ProviderContainer createAppContainer({
+  List<Override> overrides = const <Override>[],
+}) {
+  return ProviderContainer(retry: _neverRetry, overrides: overrides);
+}
+
+// Returns a Future so callers can await startup. `void main() async` would
+
+$ grep -n "UncontrolledProviderScope" -A3 -B3 lib/main.dart
+
+110-    runApp(StartupFailureApp(error: error, onRetry: main));
+111-    return;
+112-  }
+113-
+114:  runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
+115-}
+116-
+117-Future<void> _initializeImageCache() async {
+118-  imageCache.maximumSize = 100;
+
+--- 4. Reachability of the page from docs/README.md and friends ---
+$ grep -rn "riverpod-retry-policy.md" docs/ --include=*.md | grep -v "^docs/verification/"
+
+docs/README.md:12:- [**Riverpod retry policy**](architecture/riverpod-retry-policy.md) — auto-retry is off process-wide; read before adding a provider that can fail
+docs/architecture/README.md:51:- **[Riverpod retry policy](riverpod-retry-policy.md)** - Why Riverpod auto-retry is disabled for the whole app, what still retries, and how to opt one provider back in
+docs/architecture/design-decisions.md:266:[Riverpod retry policy](riverpod-retry-policy.md) before adding a provider that
+docs/guides/features/common-tasks.md:336:  provider - see [Riverpod retry policy](../../architecture/riverpod-retry-policy.md)
+docs/api/core/network.md:552:[Riverpod retry policy](../../architecture/riverpod-retry-policy.md).
+
+--- 5. Page headings (what / where / why / what still retries / how to opt back in) ---
+$ grep -n "^#" docs/architecture/riverpod-retry-policy.md
+
+1:# Riverpod retry policy
+13:## Table of Contents
+26:## The policy in one table
+35:## Where it is set
+62:## Why auto-retry is off
+82:## Why it could not be limited to startup
+100:## What still retries
+114:## What to do when a provider needs retry
+170:## What not to do
+178:## Who this affects today
+200:## Related
+
+--- 6. RetryInterceptor really is wired unconditionally (the "what still retries" claim) ---
+$ grep -rn "RetryInterceptor(" lib/core/network/api_client.dart
+
+lib/core/network/api_client.dart:128:      RetryInterceptor(dio: dio, loggingService: loggingService),
