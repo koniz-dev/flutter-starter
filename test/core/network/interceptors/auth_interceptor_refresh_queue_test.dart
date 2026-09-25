@@ -4,6 +4,15 @@
 // so every assertion is about futures the caller actually awaits - the queued
 // handlers used to be neither resolved nor rejected, which no mock-handler
 // test can observe. No test in this file touches the network.
+//
+// Nothing in this file synchronises on wall-clock time
+// (koniz-dev/flutter-starter#121). The two concurrency tests used to stand in
+// for "the other two requests are queued by now" with
+// `Future.delayed(Duration(milliseconds: 50))`; under full-suite load that
+// window could close before the later 401s arrived, the refresh finished, and
+// each late arrival then legitimately started its own refresh - reported as
+// `refreshCalls` Expected: <1> Actual: <3>. The happens-before is now
+// structural: see [_CountingAuthInterceptor].
 
 import 'dart:async';
 import 'dart:convert';
@@ -99,8 +108,64 @@ Future<Object?> _settle(Future<Response<dynamic>> future) async {
 
 /// A future that must not outlive [seconds]; a hang fails the test instead of
 /// stalling the whole suite.
+///
+/// This is a deadline, not a synchronisation mechanism: no assertion depends on
+/// how much of it elapses, and shortening or lengthening it changes nothing but
+/// how long a genuine hang takes to be reported.
 Future<T> _within<T>(Future<T> future, {int seconds = 5}) {
   return future.timeout(Duration(seconds: seconds));
+}
+
+/// An [AuthInterceptor] that announces when its 401 handling has processed a
+/// given number of errors.
+///
+/// This is the synchronisation primitive for the concurrency tests, and it is
+/// structural rather than timed. `AuthInterceptor.onError` reaches the
+/// `_isRefreshing` single-flight guard and either starts the refresh or queues
+/// the request with **no `await` in between**, so the synchronous prefix of
+/// `super.onError` has already parked this request by the time control returns
+/// here. Awaiting [seen] therefore means "the guard has processed N 401s",
+/// which is exactly the precondition the old 50ms sleep was standing in for -
+/// except that it is a happens-before rather than a bet on machine load.
+///
+/// The override only counts; every behaviour under test is `super`'s.
+///
+/// Should an `await` ever be introduced ahead of that guard, this rendezvous
+/// stops being sound - but it degrades to a *deterministic* failure (the
+/// refresh is released before the later 401s queue, so `refreshCalls` reads 3
+/// on every run), never back to a flake.
+class _CountingAuthInterceptor extends AuthInterceptor {
+  _CountingAuthInterceptor({
+    required super.refreshToken,
+    super.tokenStore,
+    super.retryDioFactory,
+  });
+
+  /// Errors that have been through [onError] so far.
+  int errorsSeen = 0;
+
+  final Map<int, Completer<void>> _marks = {};
+
+  /// Completes once [count] errors have been through 401 handling.
+  Future<void> seen(int count) {
+    if (errorsSeen >= count) {
+      return Future<void>.value();
+    }
+    return (_marks[count] ??= Completer<void>()).future;
+  }
+
+  @override
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) {
+    // super first: it is what queues this request or starts the refresh, and
+    // it does so synchronously, before returning.
+    final handled = super.onError(err, handler);
+    errorsSeen++;
+    final mark = _marks[errorsSeen];
+    if (mark != null && !mark.isCompleted) {
+      mark.complete();
+    }
+    return handled;
+  }
 }
 
 void main() {
@@ -135,7 +200,7 @@ void main() {
         var refreshCalls = 0;
         var retryDiosBuilt = 0;
 
-        final interceptor = AuthInterceptor(
+        final interceptor = _CountingAuthInterceptor(
           tokenStore: tokenStore,
           refreshToken: () async {
             refreshCalls++;
@@ -160,7 +225,21 @@ void main() {
         // ...the other two land while it is in flight and are queued.
         final second = _settle(dio.get<dynamic>('/tasks'));
         final third = _settle(dio.get<dynamic>('/settings'));
-        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        // The queueing is observed, not waited out: this returns only once all
+        // three 401s have been through the single-flight guard.
+        await _within(interceptor.seen(3));
+
+        // Asserted while the refresh is still in flight - releaseRefresh has
+        // not been completed - so this is the single-flight property itself:
+        // three 401s inside one refresh window, one refresh. A guard that let
+        // the second and third through would read 3 here.
+        expect(
+          refreshCalls,
+          1,
+          reason: 'the guard admitted a second refresh while one was in flight',
+        );
+
         releaseRefresh.complete();
 
         final outcomes = await _within(Future.wait([first, second, third]));
@@ -187,7 +266,7 @@ void main() {
         var refreshCalls = 0;
         var retryDiosBuilt = 0;
 
-        final interceptor = AuthInterceptor(
+        final interceptor = _CountingAuthInterceptor(
           tokenStore: tokenStore,
           refreshToken: () async {
             refreshCalls++;
@@ -208,7 +287,22 @@ void main() {
         await _within(refreshStarted.future);
         final second = _settle(dio.get<dynamic>('/tasks'));
         final third = _settle(dio.get<dynamic>('/settings'));
-        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        // Same structural rendezvous as the failing-refresh test above: this
+        // test is exposed to exactly the same race, so it gets the same fix
+        // rather than a comment explaining why it is not.
+        await _within(interceptor.seen(3));
+
+        // Still inside the refresh window, so the single-flight guard is what
+        // is being measured, not how fast the machine happens to be.
+        expect(
+          refreshCalls,
+          1,
+          reason: 'the guard admitted a second refresh while one was in flight',
+        );
+        // Nothing may be replayed before the refresh has produced a token.
+        expect(retryAdapter.hits, 0);
+
         releaseRefresh.complete();
 
         final outcomes = await _within(Future.wait([first, second, third]));
