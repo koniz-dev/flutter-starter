@@ -1,0 +1,12 @@
+$ ./scripts/dev/audit_template.sh
+# Issue #114 criterion 7, run against merged main (4e32f40). Full log trimmed
+# to the gate headers and the test summary; the full-suite output is in
+# tests.log.
+
+==> format (lib test integration_test tool examples)
+Formatted 339 files (0 changed) in 1.92 seconds.
+==> flutter analyze
+No issues found! (ran in 5.6s)
+==> flutter test
+02:41 +2478 ~6: All tests passed!
+exit: 0

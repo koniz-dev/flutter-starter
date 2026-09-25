@@ -1,0 +1,12 @@
+$ flutter test test/core/network/forced_logout_cache_test.dart --reporter expanded
+# Issue #114 acceptance: criteria 1-5, run against merged main (4e32f40).
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aae760b8df1392933/test/core/network/forced_logout_cache_test.dart
+00:00 +0: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +1: forced logout empties the HTTP response cache (#114) criterion 2: the same holds when there is no refresh token at all
+00:00 +2: forced logout empties the HTTP response cache (#114) criterion 2 (second call site): the retry-exhausted early logout at auth_interceptor.dart clears the cache before rejecting
+00:00 +3: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state
+00:00 +4: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +5: the cache dependency is optional (#114 criterion 5) an AuthInterceptor with no cache attached still forces a clean logout
+00:00 +6: All tests passed!
+exit: 0
