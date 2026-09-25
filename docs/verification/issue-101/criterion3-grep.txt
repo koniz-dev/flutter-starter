@@ -1,0 +1,38 @@
+Criterion 3 evidence - koniz-dev/flutter-starter#101
+Commit under test: 8fe402e fix(storage): make a failed startup migration reach StartupFailureApp (#133)
+
+$ grep -n "ProviderContainer(" lib/main.dart
+49:  return ProviderContainer(retry: _neverRetry, overrides: overrides);
+
+--- lib/main.dart:22-52, the retry policy and the comment naming the issue ---
+// Riverpod 3 retries any failed provider whose error is not an `Error`
+// (`ProviderContainer.defaultRetry`), and every failure the startup sequence
+// can produce here is an `Exception`: `MigrationExecutionException`,
+// `StorageDowngradeException`, `MigrationPathException`, `CacheException`.
+//
+// That default is actively harmful on this path. `main()` reads providers with
+// `container.read(p.future)`, which awaits without listening, so the retry
+// timer invalidates a provider nobody is watching, it never rebuilds, and the
+// awaited future stays in the loading state forever - measured past 120 s with
+// the migration body having run exactly once. The `StartupFailureApp` guard
+// below then never fires and the user gets a process that never calls
+// `runApp`: a black window with no error, no retry, and no way out. A visible
+// failure is recoverable, an unbounded hang is not, so startup opts out and
+// lets the exception surface. Retry here stays user-driven, via the Try again
+// button that calls `main()` again.
+// Refs koniz-dev/flutter-starter#101
+Duration? _neverRetry(int retryCount, Object error) => null;
+
+/// Builds the container `main()` boots from and later hands to `runApp`.
+///
+/// Extracted so tests can drive the real startup sequence through the same
+/// container the app uses, rather than a hand-rolled one that happens to be
+/// configured differently. See [_neverRetry] for why retry is off.
+@visibleForTesting
+ProviderContainer createStartupContainer({
+  List<Override> overrides = const <Override>[],
+}) {
+  return ProviderContainer(retry: _neverRetry, overrides: overrides);
+}
+
+// Returns a Future so callers can await startup. `void main() async` would
