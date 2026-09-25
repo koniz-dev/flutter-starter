@@ -1236,8 +1236,9 @@ Rejected alternatives:
    they were documented no-ops carrying the only two
    `// ignore: argument_type_not_assignable` comments in `lib/`, which
    suppress a compile-time **error** rather than a lint.
-4. Wiring `PaginationHelper` and `Debouncer` into the tasks sample is filed
-   separately under `epic:feature-tasks`.
+4. Wiring `PaginationHelper`, `Debouncer` and `DateFormatter` into the tasks
+   sample is filed separately as koniz-dev/flutter-starter#147, under
+   `epic:feature-tasks`.
 
 ### When to reconsider
 

@@ -1,0 +1,109 @@
+# Tests that previously asserted the buggy behaviour, now corrected
+
+Removed (`-`) lines from the diff of the test files touched by
+commit 3191e91. These are the assertions that pinned each defect as
+correct, which is why the suite was green before the fix.
+
+
+## test/core/feature_flags/feature_flags_manager_test.dart
+
+-      test('should return empty map when repository fails', () async {
+-        // Arrange
+-        const failure = CacheFailure('Failed to get flags');
+-        const resultFailure = ResultFailure<Map<String, FeatureFlag>>(failure);
+-        ).thenAnswer((_) async => resultFailure);
+-        expect(result, isA<Map<String, bool>>());
+-        expect(result, isEmpty);
+
+## test/core/performance/performance_repository_mixin_test.dart
+
+-      verify(() => mockService.startTrace('repository_get_items')).called(1);
+-      'measureRepositoryOperation throws exception inside measureOperation',
+-        ).thenThrow(Exception('Telemetry failed'));
+-          operationName: 'get_items',
+-          operation: () async => const Success('data'),
+-        expect(result.isSuccess, isTrue);
+-        expect((result as Success).data, equals('data'));
+
+## test/core/performance/performance_usecase_mixin_test.dart
+
+-      verify(() => mockService.startTrace('usecase_get_items')).called(1);
+-      'measureUseCaseOperation throws exception inside measureOperation',
+-        final result = await usecase.measureUseCaseOperation<String>(
+-          operationName: 'get_items',
+-          operation: () async => const Success('data'),
+-        expect(result.isSuccess, isTrue);
+-        expect((result as Success).data, equals('data'));
+
+## test/core/utils/date_formatter_test.dart
+
+-        // DateFormat.parse() is lenient, so some invalid dates might parse
+-        // Test with clearly invalid formats
+-        // The important thing is that clearly invalid formats return null
+
+## test/core/utils/validators_test.dart
+
+-      test('should return true for valid email addresses', () {
+-        expect(Validators.isValidEmail('test@example.com'), isTrue);
+-        expect(Validators.isValidEmail('user.name@example.co.uk'), isTrue);
+-        expect(Validators.isValidEmail('user+tag@example.com'), isTrue);
+-        expect(Validators.isValidEmail('user123@example123.com'), isTrue);
+-      });
+-      test('should return false for invalid email addresses', () {
+-        expect(Validators.isValidEmail('invalid-email'), isFalse);
+-        expect(Validators.isValidEmail('@example.com'), isFalse);
+-        expect(Validators.isValidEmail('user@'), isFalse);
+-        expect(Validators.isValidEmail('user@example'), isFalse);
+-        expect(Validators.isValidEmail('user name@example.com'), isFalse);
+-        expect(Validators.isValidEmail(''), isFalse);
+-      });
+-      test('should handle edge cases', () {
+-        expect(Validators.isValidEmail('a@b.co'), isTrue);
+-        expect(Validators.isValidEmail('test@sub.domain.example.com'), isTrue);
+-      });
+-      test('should handle emails with hyphens', () {
+-        expect(Validators.isValidEmail('user-name@example.com'), isTrue);
+-        expect(Validators.isValidEmail('user@example-domain.com'), isTrue);
+-        expect(Validators.isValidEmail('user-name@example-domain.com'), isTrue);
+-      });
+-      test('should handle emails with underscores', () {
+-        expect(Validators.isValidEmail('user_name@example.com'), isTrue);
+-        expect(Validators.isValidEmail('_user@example.com'), isTrue);
+-        expect(Validators.isValidEmail('user_@example.com'), isTrue);
+-      });
+-      test('should handle emails with numbers', () {
+-        expect(Validators.isValidEmail('user123@example.com'), isTrue);
+-        expect(Validators.isValidEmail('123user@example.com'), isTrue);
+-        expect(Validators.isValidEmail('user@123example.com'), isTrue);
+-      });
+-      test('should reject emails with invalid characters', () {
+-        // Test emails that should be rejected
+-        // Note: 'user@.example.com' actually passes because
+-        // '.example.com' matches [a-zA-Z0-9.-]+
+-        // The regex allows dot after @ in domain part
+-        final result = Validators.isValidEmail('user@.example.com');
+-        expect(result, isA<bool>());
+-        // Note: '.user@example.com' actually passes the regex
+-        // because [a-zA-Z0-9._%+-]+ allows leading dot
+-        // Test actual behavior - this passes regex
+-        expect(Validators.isValidEmail('.user@example.com'), isTrue);
+-        // Note: Regex pattern [a-zA-Z0-9._%+-]+ allows consecutive dots
+-        // 'user@example..com' passes because 'example..com' matches
+-        // [a-zA-Z0-9.-]+
+-        // 'user..name@example.com' passes because 'user..name' matches
+-        // [a-zA-Z0-9._%+-]+
+-        // These are edge cases that the regex allows
+-        expect(Validators.isValidEmail('user@example..com'), isTrue);
+-        expect(Validators.isValidEmail('user..name@example.com'), isTrue);
+-      test('should reject emails with spaces', () {
+-        expect(Validators.isValidEmail('user name@example.com'), isFalse);
+-        expect(Validators.isValidEmail('user@example .com'), isFalse);
+-        expect(Validators.isValidEmail(' user@example.com'), isFalse);
+-        expect(Validators.isValidEmail('user@example.com '), isFalse);
+-      test('should handle very long emails', () {
+-        final longLocal = 'a' * 64;
+-        final longDomain = 'b' * 63;
+-        expect(Validators.isValidEmail('$longLocal@$longDomain.com'), isTrue);
+-      test('should handle emails with multiple dots in domain', () {
+-        expect(Validators.isValidEmail('user@sub.example.co.uk'), isTrue);
+-        expect(Validators.isValidEmail('user@a.b.c.example.com'), isTrue);
