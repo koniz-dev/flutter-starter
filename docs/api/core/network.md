@@ -32,19 +32,43 @@ should inject `ApiClient` via `apiClientProvider` or the typed alias
 
 ### Constructor
 
+<!-- signature: lib/core/network/api_client.dart ApiClient -->
 ```dart
-/// Creates an instance of [ApiClient] with configured Dio instance
-/// 
-/// Parameters:
-/// - [storageService]: Storage service for non-sensitive data
-/// - [secureStorageService]: Secure storage service for authentication tokens
-/// - [authInterceptor]: Auth interceptor for token management and refresh
 ApiClient({
   required StorageService storageService,
   required SecureStorageService secureStorageService,
   required AuthInterceptor authInterceptor,
+  LoggingService? loggingService,
+  IPerformanceService? performanceService,
+  SslPinning? sslPinning,
 });
 ```
+
+| Parameter | Required | Effect |
+|---|---|---|
+| `storageService` | yes | Non-sensitive storage; backs `CacheInterceptor` |
+| `secureStorageService` | yes | Secure storage for authentication tokens |
+| `authInterceptor` | yes | Token injection and 401 refresh |
+| `loggingService` | no | **Passing it is what installs `ApiLoggingInterceptor`.** Omit it and there is no HTTP logging at all, whatever `ENABLE_HTTP_LOGGING` says |
+| `performanceService` | no | **Passing it is what installs `PerformanceInterceptor`.** Omit it and no HTTP trace is ever started |
+| `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` |
+
+The two optional services are installed conditionally in `ApiClient._createDio`
+(`if (loggingService != null)` / `if (performanceService != null)`), so their
+interceptors are absent from the chain rather than inert when they are omitted.
+
+`apiClientProvider` passes both, so the default app has both interceptors
+installed. They are still quiet by default at *runtime* for separate reasons:
+`ApiLoggingInterceptor` returns early unless `AppConfig.enableHttpLogging` is
+true, and `performanceServiceProvider` yields a no-op service until it is
+overridden. Hand-assembling an `ApiClient` without those two arguments is a
+different thing from leaving the flags off - it removes the interceptors.
+
+The directive above the code block is not decoration: `tool/check_docs.dart`
+compares that parameter list against
+[`lib/core/network/api_client.dart`](../../../lib/core/network/api_client.dart)
+and fails the Docs check if they differ. See
+[Keeping these signatures honest](#keeping-these-signatures-honest).
 
 ### Properties
 
@@ -263,17 +287,90 @@ Dio interceptor for adding authentication tokens to requests and handling automa
 
 ### Constructor
 
+<!-- signature: lib/core/network/interceptors/auth_interceptor.dart AuthInterceptor -->
 ```dart
-/// Creates an [AuthInterceptor] with the given dependencies
-/// 
-/// Parameters:
-/// - [secureStorageService]: Secure storage service for retrieving and storing tokens
-/// - [authRepository]: Auth repository for refreshing tokens
 AuthInterceptor({
-  required SecureStorageService secureStorageService,
-  required AuthRepository authRepository,
+  ITokenStore? tokenStore,
+  SecureStorageService? secureStorageService,
+  required Future<Result<String>> Function() refreshToken,
+  Dio Function()? retryDioFactory,
+  IKeyValueStore? keyValueStore,
+  ISessionTerminationSink? sessionSink,
 });
 ```
+
+| Parameter | Required | Notes |
+|---|---|---|
+| `tokenStore` | no | Where tokens are read and written |
+| `secureStorageService` | no | Legacy alternative to `tokenStore`; wrapped in a `SecureTokenStore` |
+| `refreshToken` | **yes** | Callback that mints a new access token |
+| `retryDioFactory` | no | Builds the client used to replay the original request; see [retryDioFactory](#retrydiofactory) |
+| `keyValueStore` | no | Non-sensitive store holding the cached user blob, cleared on forced logout |
+| `sessionSink` | no | Told the session is over, so the running app drops in-memory session state |
+
+**Exactly one of `tokenStore` or `secureStorageService` must be supplied.**
+Both are individually optional in the signature, but passing neither throws
+`ArgumentError('Either tokenStore or secureStorageService must be provided.')`
+from the initializer list. `tokenStore` wins when both are given.
+
+**`refreshToken` is the only required parameter, and it is a callback, not a
+repository.** That is deliberate: `AuthRepository` depends on `ApiClient`, which
+depends on this interceptor, so holding a repository here would close a
+dependency cycle at bootstrap. `authInterceptorProvider` passes
+`() => ref.read(authRepositoryProvider).refreshToken()`, resolving the
+repository lazily at call time.
+
+Note that `always_put_required_named_parameters_first` is suppressed at the top
+of the source file, so the required parameter sits third. The order above is the
+source order.
+
+### Post-construction wiring
+
+Two dependencies are attached by `ApiClient._createDio` after construction,
+because neither exists yet when `authInterceptorProvider` builds the
+interceptor:
+
+| Call | Supplies | Effect when never called |
+|---|---|---|
+| `attachTransport(dio)` | The host client | The 401 replay builds its own Dio and pins it from `SslPinning.fromConfig()` instead of borrowing the host adapter |
+| `attachResponseCache(cache)` | The `CacheInterceptor` | Forced logout skips the cache-clearing step |
+
+Also public: `tokenStore` (read by `CacheInterceptor` for its credential
+check), `retryDio()` (the lazily built replay client) and `dispose()` (closes
+that client's connection pool; wired to provider disposal).
+
+### retryDioFactory
+
+`retryDioFactory` builds the client that replays the original request after a
+successful token refresh. **Production passes nothing:**
+`authInterceptorProvider` omits it, so `retryDio()` falls back to `_buildRetryDio()`, which creates one
+client, borrows the host transport through `SharedTransportAdapter` (so the
+replay goes through the same pinned adapter), and reuses it. Tests inject a
+factory to aim the replay at a fake `HttpClientAdapter`.
+
+It is a **supported extension point**, not a private hook, and it carries one
+sharp edge:
+
+> **Never return the assembled `ApiClient`'s own `Dio` from this factory.** The
+> replay would re-enter the full interceptor chain - including this
+> `AuthInterceptor` - so a replay that 401s again recurses through the refresh
+> path instead of failing. The default implementation borrows the host
+> *transport* only, never its interceptors, for exactly this reason. Return a
+> fresh `Dio` whose adapter you control.
+
+Replacing the factory also discards the transport-sharing above, so a custom
+client is only pinned if you pin it yourself.
+
+**Why documented rather than annotated `@visibleForTesting`.** The annotation
+does work on a named parameter - a cross-library production call site draws
+`invalid_use_of_visible_for_testing_member`, verified under issue 89 and
+recorded in `docs/verification/issue-89/visible-for-testing-probe.log`. It was
+declined for two reasons. It would edit
+`lib/core/network/interceptors/auth_interceptor.dart`, which is
+`epic:core-network`, not `epic:docs`; and it would forbid the parameter to
+forks that legitimately want to control the replay client, which is a policy
+change rather than a documentation fix. If the parameter should instead be
+test-only, that is a `epic:core-network` decision and belongs in its own issue.
 
 ### Features
 
@@ -286,19 +383,40 @@ AuthInterceptor({
 ### Behavior
 
 **On Request:**
-- Retrieves token from secure storage
-- Adds `Authorization: Bearer <token>` header if token exists
+- Reads the access token from the `ITokenStore`
+- Adds `Authorization: Bearer <token>` header when the token is non-empty
 
-**On 401 Error:**
-1. Checks if endpoint should be excluded (login, register, refresh, logout)
-2. If refresh is in progress, queues the request
-3. Attempts token refresh using `AuthRepository.refreshToken()`
-4. On success: Updates token, retries original request, processes queued requests
-5. On failure: Logs out user and rejects request
+**On 401 Error** (`_handle401Error`, in order):
+
+1. Excluded endpoints (see the list below) are passed straight through - no
+   refresh is attempted.
+2. A request already carrying `X-Retry-Count: 1` has been replayed once
+   already: the session is logged out and this request is rejected.
+3. If a refresh is already in flight, the request is queued in
+   `_pendingRequests` and this handler returns.
+4. Otherwise the `refreshToken` callback runs.
+   - **Success:** the new token is written to the token store, the original
+     request is replayed through `retryDio()` with
+     `Authorization: Bearer <new token>` and `X-Retry-Count: 1`, and the
+     handler resolves with the replayed response.
+   - **Failure** (a `Result` failure, a null token, or anything thrown -
+     `Error` as well as `Exception`): the session is logged out and the
+     handler is rejected.
+5. **Every queued handler is then completed, on both paths.** `finally` clears
+   the in-flight flag first, then drains `_pendingRequests`: with a fresh token
+   each queued request is replayed and resolved (rejected if its replay
+   fails), and without one each is rejected with its own original error.
+
+Point 5 is the part this document used to get wrong. It said "rejects request",
+singular, and until the drain was fixed that was accurate - a concurrent 401
+whose refresh failed left its caller awaiting a future that was never
+completed. `_drainPendingRequests` now rejects every queued handler explicitly,
+and clearing `_isRefreshing` before the drain means a 401 arriving during the
+drain starts a fresh refresh rather than queueing behind a finished one.
 
 **Forced logout (the 401 path):**
 
-When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out".
+When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three persisted things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out". A fourth step then notifies `sessionSink`, so the running app drops the in-memory session too rather than presenting a signed-in UI backed by storage that is now empty.
 
 The cache reference is supplied by `ApiClient._createDio` through `authInterceptor.attachResponseCache(...)`, because the cache is a `CacheInterceptor` the client builds itself and so does not exist when `authInterceptorProvider` constructs the interceptor. It is optional: an interceptor nobody attaches a cache to simply skips that step, exactly as `httpCache` is optional on `AuthRepositoryImpl`.
 
@@ -306,13 +424,17 @@ A fourth step then tells the **running app**. Clearing storage only fixes the ne
 
 The app is **not** navigated anywhere from here. The interceptor only drops the session; the existing guard in `lib/core/routing/app_router.dart` reacts to the state change through its `refreshListenable` and performs the redirect to `/login`. Keeping navigation in one place is what lets the guard's deep-link round trip and its "no `/login` flash while the session restores" behaviour keep working.
 
-Every step of the teardown is independently guarded and best-effort. A step that throws - or a dependency that was never wired - must never leave the 401 handler uncompleted, so the error still surfaces to the caller either way. In particular, notifying the sink is wrapped: a background request can 401 after the app's `ProviderContainer` is gone, and resolving a provider from a disposed container throws.
+Every step of the teardown is independently guarded and best-effort, and no step is nested inside another's null check: a dependency that was never wired skips only its own step. A step that throws must never leave the 401 handler uncompleted, so the error still surfaces to the caller either way. `sessionSink.onSessionTerminated()` swallowing its errors is load-bearing rather than lazy - a background request can 401 after the app's `ProviderContainer` is gone, and resolving a disposed provider throws. In particular, notifying the sink is wrapped: a background request can 401 after the app's `ProviderContainer` is gone, and resolving a provider from a disposed container throws.
 
 **Excluded Endpoints:**
-- `/login`
-- `/register`
-- `/refresh-token`
-- `/logout`
+
+Taken from `ApiEndpoints`, and matched with `path.contains(endpoint)` against
+the request path:
+
+- `/auth/login` (`ApiEndpoints.login`)
+- `/auth/register` (`ApiEndpoints.register`)
+- `/auth/refresh` (`ApiEndpoints.refreshToken`)
+- `/auth/logout` (`ApiEndpoints.logout`)
 
 ### Usage
 
@@ -345,6 +467,18 @@ Interceptor for converting DioException to domain exceptions.
 Replays transient failures with exponential backoff plus jitter.
 
 **Location:** `lib/core/network/interceptors/retry_interceptor.dart`
+
+### Constructor
+
+<!-- signature: lib/core/network/interceptors/retry_interceptor.dart RetryInterceptor -->
+```dart
+RetryInterceptor({
+  required this.dio,
+  this.loggingService,
+  this.maxRetries = 3,
+  this.initialExecutionDelay = const Duration(seconds: 1),
+});
+```
 
 ### Defaults
 
@@ -452,6 +586,28 @@ Do not relax the credential check without first moving the store to `SecureStora
 - explicit logout - `AuthRepositoryImpl.logout()`, in the same unconditional teardown block that clears the tokens and the cached user;
 - forced logout - `AuthInterceptor`, on a 401 whose refresh fails (see [AuthInterceptor](#authinterceptor)).
 
+### Constructor
+
+<!-- signature: lib/core/network/interceptors/cache_interceptor.dart CacheInterceptor -->
+```dart
+CacheInterceptor({
+  required StorageService storageService,
+  CacheConfig? cacheConfig,
+  ITokenStore? tokenStore,
+});
+```
+
+<!-- signature: lib/core/network/interceptors/cache_interceptor.dart CacheConfig -->
+```dart
+const CacheConfig({
+  this.maxAge = const Duration(hours: 1),
+  this.maxStale = const Duration(days: 7),
+  this.enableCache = true,
+});
+```
+
+`cacheConfig` defaults to `const CacheConfig()`, i.e. the defaults above.
+
 ### Configuration
 
 ```dart
@@ -547,6 +703,60 @@ koniz-dev/flutter-starter#78. The trade-off is that plain-text error bodies are
 no longer readable in the log - the status code, path and method still are. The
 same reasoning covers `FormData`: a multipart login form holds the password in
 `FormData.fields`, which no key walk can reach.
+
+---
+
+## Keeping these signatures honest
+
+Every `dart` block above that declares a constructor is preceded by an HTML
+comment of the form:
+
+```text
+<!-- signature: lib/core/network/api_client.dart ApiClient -->
+```
+
+`tool/check_docs.dart` reads those directives (implementation in
+`tool/doc_signatures.dart`), extracts the named-parameter list from the block
+and from the constructor of that name in that source file, and fails when they
+differ - parameter for parameter, in order, including types, `required` markers
+and default values.
+
+**Both drift directions are covered, by two different gates**, because neither
+gate alone sees both:
+
+| Change | Gate that catches it |
+|---|---|
+| Someone edits this file and mistypes a parameter | Docs check (`docs-check.yml`) - fires on `**/*.md` |
+| Someone adds a parameter in `lib/core/network/` and forgets this file | Quality gate (`ci.yml`) - `test/docs/doc_signatures_test.dart` runs the same comparison under `flutter test` |
+
+That split matters. `ci.yml` reports on every PR but **skips its analyze and
+test steps when the diff is only markdown**, and `docs-check.yml` only fires on
+markdown, so a docs-side typo is seen by exactly one of them and a code-side
+addition by exactly the other. Wiring this check into a single gate would leave
+it blind to one direction - and the code side is the direction that produced
+koniz-dev/flutter-starter#89: five commits changing constructors in
+`lib/core/network/` with no markdown in the diff.
+
+Covered here: `ApiClient`, `AuthInterceptor`, `RetryInterceptor`,
+`CacheInterceptor`, `CacheConfig`.
+
+What it does **not** cover, stated plainly:
+
+- **Method signatures.** The `get`/`post`/`put`/`delete` blocks above are
+  checked by hand only.
+- **Prose.** Nothing mechanically ties the behaviour descriptions to the code;
+  a wrong sentence about the 401 path still needs a reader.
+- **One-line constructors.** The parser only matches a constructor whose
+  parameter list opens with `Name({` at the end of a line, which is what
+  `dart format` produces for multi-line lists. `ApiLoggingInterceptor` and
+  `PerformanceInterceptor` each declare a single parameter on one line and are
+  therefore not coverable - a directive pointed at one fails loudly rather than
+  passing silently.
+- **Semantics.** A parameter can match textually and still be documented
+  wrongly in the table beside it.
+
+To add coverage for a new constructor, put the directive above its fenced
+block. No registration list to update.
 
 ---
 

@@ -1,26 +1,35 @@
 // Documentation integrity checker.
 //
-// Two checks, both of which have silently rotted in this repository before:
+// Three checks, all of which have silently rotted in this repository before:
 //
 //   1. Relative links and heading anchors under `docs/` resolve.
 //   2. No emoji in `docs/`, `CLAUDE.md`, or `.claude/` (the stated convention
 //      in CLAUDE.md; `README.md` and `CONTRIBUTING.md` are deliberately
 //      exempt because they predate it).
+//   3. Documented constructor signatures match their source, for every
+//      fenced block carrying a `<!-- signature: <path> <Name> -->` directive
+//      (see `tool/doc_signatures.dart`).
 //
 // Usage:
-//   dart run tool/check_docs.dart            # both checks
-//   dart run tool/check_docs.dart --links    # links and anchors only
-//   dart run tool/check_docs.dart --emoji    # emoji only
+//   dart run tool/check_docs.dart               # all checks
+//   dart run tool/check_docs.dart --links       # links and anchors only
+//   dart run tool/check_docs.dart --emoji       # emoji only
+//   dart run tool/check_docs.dart --signatures  # constructor signatures only
 //
 // Exits 0 when clean, 1 when anything is broken.
 
 import 'dart:io';
 
+import 'doc_signatures.dart';
+
 void main(List<String> args) {
   final linksOnly = args.contains('--links');
   final emojiOnly = args.contains('--emoji');
-  final runLinks = !emojiOnly;
-  final runEmoji = !linksOnly;
+  final signaturesOnly = args.contains('--signatures');
+  final anyFilter = linksOnly || emojiOnly || signaturesOnly;
+  final runLinks = !anyFilter || linksOnly;
+  final runEmoji = !anyFilter || emojiOnly;
+  final runSignatures = !anyFilter || signaturesOnly;
 
   final root = Directory.current;
   var failures = 0;
@@ -30,6 +39,9 @@ void main(List<String> args) {
   }
   if (runEmoji) {
     failures += _checkEmoji(root);
+  }
+  if (runSignatures) {
+    failures += checkSignatures(root);
   }
 
   if (failures > 0) {
