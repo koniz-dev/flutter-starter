@@ -71,9 +71,7 @@ final response = await apiClient.get(
 ```dart
 final response = await apiClient.get(
   '/users',
-  options: Options(
-    headers: {'Custom-Header': 'value'},
-  ),
+  headers: {'Custom-Header': 'value'},
 );
 ```
 

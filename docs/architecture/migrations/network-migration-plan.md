@@ -4,7 +4,9 @@
 Remove direct `Dio` type exposure from feature/data layers while preserving runtime behavior.
 
 ## Current Coupling
-- `ApiClient` returns `Response<dynamic>` and accepts `Options`.
+- `ApiClient` returned `Response<dynamic>` and accepted `Options`. Closed by
+  koniz-dev/flutter-starter#176: the verbs now return `NetworkResponse<dynamic>`
+  and take `Map<String, String>? headers`.
 - Error handling paths include `DioException` assumptions.
 
 Reference file: `lib/core/network/api_client.dart`.

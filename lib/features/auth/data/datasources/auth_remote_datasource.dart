@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 
@@ -81,7 +81,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return AuthResponseModel.fromJson(data);
   }
 
-  Future<Response<dynamic>> _post(String path, Map<String, dynamic>? body) {
+  /// Typed on [NetworkResponse], the transport-agnostic contract, so no dio
+  /// type reaches this feature and the transport stays swappable. See
+  /// koniz-dev/flutter-starter#176.
+  Future<NetworkResponse<dynamic>> _post(
+    String path,
+    Map<String, dynamic>? body,
+  ) {
     return _apiClient.post(path, data: body);
   }
 }

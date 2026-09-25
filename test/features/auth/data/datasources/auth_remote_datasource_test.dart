@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
@@ -22,8 +22,7 @@ void main() {
       test('should return AuthResponseModel when login succeeds', () async {
         // Arrange
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/login'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
@@ -51,64 +50,56 @@ void main() {
         ).called(1);
       });
 
-      test('should throw ServerException on 4xx error', () async {
-        // Arrange
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/login'),
-          statusCode: 401,
-          data: {'message': 'Invalid credentials'},
-        );
-        // Create DioException with ServerException in error field
-        // (as ErrorInterceptor would do in production)
-        const serverException = ServerException(
-          'Invalid credentials',
-          statusCode: 401,
-        );
-        final dioException = DioException(
-          requestOptions: RequestOptions(path: '/auth/login'),
-          type: DioExceptionType.badResponse,
-          response: response,
-          error: serverException,
-        );
+      test('should rethrow ServerException on a 4xx error', () async {
+        // ApiClient unwraps the DioException and rethrows the domain
+        // exception ErrorInterceptor put in `DioException.error`, so a 4xx
+        // reaches this datasource already mapped. Pinned end to end against a
+        // real transport in auth_remote_datasource_failure_test.dart.
         when(
           () => mockApiClient.post(
             any<String>(),
             data: any<dynamic>(named: 'data'),
           ),
-        ).thenThrow(dioException);
+        ).thenThrow(
+          const ServerException('Invalid credentials', statusCode: 401),
+        );
 
         // Act & Assert
-        expect(
+        await expectLater(
           () => dataSource.login('test@example.com', 'wrongpassword'),
-          throwsA(predicate<DioException>((e) => e.error is ServerException)),
+          throwsA(
+            isA<ServerException>().having(
+              (e) => e.statusCode,
+              'statusCode',
+              401,
+            ),
+          ),
         );
       });
 
-      test('should throw NetworkException on network error', () async {
-        // Arrange
-        // Create DioException with NetworkException in error field
-        // (as ErrorInterceptor would do in production)
-        const networkException = NetworkException(
-          'Connection timeout: Connection timeout',
-          code: 'CONNECTION_TIMEOUT',
-        );
-        final dioException = DioException(
-          requestOptions: RequestOptions(path: '/auth/login'),
-          type: DioExceptionType.connectionTimeout,
-          message: 'Connection timeout',
-          error: networkException,
-        );
+      test('should rethrow NetworkException on a network error', () async {
         when(
           () => mockApiClient.post(
             any<String>(),
             data: any<dynamic>(named: 'data'),
           ),
-        ).thenThrow(dioException);
+        ).thenThrow(
+          const NetworkException(
+            'Connection timeout: Connection timeout',
+            code: 'CONNECTION_TIMEOUT',
+          ),
+        );
 
         // Act & Assert
-        expect(
+        await expectLater(
           () => dataSource.login('test@example.com', 'password123'),
-          throwsA(predicate<DioException>((e) => e.error is NetworkException)),
+          throwsA(
+            isA<NetworkException>().having(
+              (e) => e.code,
+              'code',
+              'CONNECTION_TIMEOUT',
+            ),
+          ),
         );
       });
     });
@@ -117,8 +108,7 @@ void main() {
       test('should return AuthResponseModel when register succeeds', () async {
         // Arrange
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/register'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 201,
           data: responseData,
         );
@@ -154,10 +144,7 @@ void main() {
     group('logout', () {
       test('should complete successfully', () async {
         // Arrange
-        final response = Response<dynamic>(
-          requestOptions: RequestOptions(path: '/auth/logout'),
-          statusCode: 200,
-        );
+        const response = NetworkResponse<dynamic>(statusCode: 200, data: null);
         when(
           () => mockApiClient.post(any<String>()),
         ).thenAnswer((_) async => response);
@@ -179,8 +166,7 @@ void main() {
             token: 'new-access-token',
             refreshToken: 'new-refresh-token',
           );
-          final response = Response(
-            requestOptions: RequestOptions(path: '/auth/refresh'),
+          final response = NetworkResponse<dynamic>(
             statusCode: 200,
             data: responseData,
           );
@@ -210,8 +196,7 @@ void main() {
     group('Edge Cases', () {
       test('should handle empty email', () async {
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/login'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
@@ -233,8 +218,7 @@ void main() {
 
       test('should handle empty password', () async {
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/login'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
@@ -256,8 +240,7 @@ void main() {
 
       test('should handle empty name in register', () async {
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/register'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 201,
           data: responseData,
         );
@@ -284,8 +267,7 @@ void main() {
       test('should handle long email', () async {
         final longEmail = 'a' * 100 + '@example.com';
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/login'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
@@ -308,8 +290,7 @@ void main() {
       test('should handle long password', () async {
         final longPassword = 'a' * 200;
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/login'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
@@ -331,8 +312,7 @@ void main() {
 
       test('should handle empty refresh token', () async {
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/refresh'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
@@ -353,8 +333,7 @@ void main() {
       test('should handle long refresh token', () async {
         final longToken = 'a' * 500;
         final responseData = createAuthResponseJson();
-        final response = Response(
-          requestOptions: RequestOptions(path: '/auth/refresh'),
+        final response = NetworkResponse<dynamic>(
           statusCode: 200,
           data: responseData,
         );
