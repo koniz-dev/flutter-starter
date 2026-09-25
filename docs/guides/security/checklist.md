@@ -30,10 +30,14 @@ them.
 
 ### Code Security
 - [ ] **Confirm no env file is bundled as an asset (shipped)** - run
-      `dart run tool/check_env_assets.dart` before every release. Flutter asset
-      lists are not build-mode scoped, so a `.env` in `pubspec.yaml` ships in
-      the release APK, the release IPA and the web build. Use
-      `--dart-define-from-file=.env` on native; on web, keep secrets on the
+      `dart run tool/check_env_assets.dart` **on the tree you are about to
+      build**, every release. Flutter asset lists are not build-mode scoped, so
+      a `.env` in `pubspec.yaml` ships in the release APK, the release IPA and
+      the web build - and so does anything sitting inside a declared directory
+      such as `assets/config/`, with no pubspec entry naming it. The check reads
+      the tree as it is when it runs, and nothing runs it on the release-build
+      path yet ([#135](https://github.com/koniz-dev/flutter-starter/issues/135)).
+      Use `--dart-define-from-file=.env` on native; on web, keep secrets on the
       server. See
       [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
 - [ ] **Enable code obfuscation for release builds**

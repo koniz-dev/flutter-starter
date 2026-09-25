@@ -164,6 +164,11 @@ flutter:
   # only .gitkeep, which is what keeps the directories - and therefore those two
   # declarations - valid on a fresh clone. Flutter does not recurse, so a
   # sub-directory needs its own line.
+  #
+  # The same guard walks those directories, so a .env, a signing key or a
+  # credentials file dropped into one fails the check even though no line below
+  # names it. It sees the tree at the moment it runs: a file created afterwards
+  # ships until something runs the check again.
   assets:
     - .env.example
     - assets/images/
