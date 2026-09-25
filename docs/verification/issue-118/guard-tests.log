@@ -1,37 +1,23 @@
-00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart
-00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: parseEpicMap parses tab-separated epic/path pairs and ignores blank lines
-00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
-00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
-00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
-00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
-00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
-00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
-00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
-00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: rule predicates domain importing its own data or presentation is a violation
-00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
-00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: strippable sample paths cover what tool/strip_sample_features.dart deletes
-00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository the surface list is non-trivial and includes the #118 gaps
-00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository the surface list is non-trivial and includes the #118 gaps
-00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository the surface list is non-trivial and includes the #118 gaps
-00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository the surface list is non-trivial and includes the #118 gaps
-00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes
-00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every epic in --list-epics claims at least one path
-00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (tearDownAll)
-00:00 +32: All tests passed!
+$ flutter test test/tooling/epic_coverage_test.dart -j 1 --reporter expanded   (exit 0)
+
+Run single-file and single-threaded on purpose: a two-file parallel run
+interleaves and the reporter never prints most case names, which made the
+first capture of this log unable to show the counterfactuals it was cited
+for. Paths shortened to repository-relative.
+---------------------------------------------------------------------
+Upgrading analysis_options.yaml to exclude build and platform directories.
+00:00 +0: loading test/tooling/epic_coverage_test.dart
+00:00 +0: parseEpicMap parses tab-separated epic/path pairs and ignores blank lines
+00:00 +1: parseEpicMap strips a trailing slash so lib/core/a/ and lib/core/a are one path
+00:00 +2: parseEpicMap rejects a line that is not exactly epic and path
+00:00 +3: surfacesOf descends only into directories a claim points inside
+00:00 +4: checkEpicCoverage counterfactuals flags a directory no epic claims
+00:00 +5: checkEpicCoverage counterfactuals flags a directory two epics claim
+00:00 +6: checkEpicCoverage counterfactuals flags a claim whose path is no longer in the tree
+00:00 +7: checkEpicCoverage counterfactuals a fully mapped tree is clean
+00:00 +8: the real repository (setUpAll)
+00:00 +8: the real repository every tracked surface maps to exactly one epic
+00:00 +9: the real repository the surface list is non-trivial and includes the #118 gaps
+00:00 +10: the real repository every epic in --list-epics claims at least one path
+00:00 +11: the real repository (tearDownAll)
+00:00 +11: All tests passed!
