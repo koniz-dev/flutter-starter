@@ -1,0 +1,377 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/di/auth_providers_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/di/auth_providers_test.dart: auth_providers (smoke) should build core auth providers with default DI
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: logout tears the local session down even when the remote call fails (#52) clears tokens and the cached user after a NetworkException
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) restore in flight does not flash /login, then lands on /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) restore held open for a user with no session ends on /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) corrupt cached JSON lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start session restore (#51) storage throwing lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:02 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with no token lands on /login, not /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:03 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with an empty token lands on /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:03 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) an unreadable token store lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:03 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a token store throwing an Error lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:03 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with a readable token still lands on /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:03 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) bounce to /login carries the destination, and returns to it
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) an off-site redirect target is ignored
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) an off-site redirect target is ignored
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) an off-site redirect target is ignored
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+00:04 +33: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty email
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty password
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty name in register
+00:04 +36: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle long email
+00:04 +37: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle long password
+00:04 +38: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty refresh token
+00:04 +39: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle long refresh token
+00:05 +40: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:05 +41: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should retrieve token from secure storage
+00:05 +42: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should return null when token does not exist
+00:05 +43: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Refresh Token Storage should cache refresh token in secure storage
+00:05 +44: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Refresh Token Storage should retrieve refresh token from secure storage
+00:05 +45: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Refresh Token Storage should return null when refresh token does not exist
+00:05 +46: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should cache user in regular storage
+00:05 +47: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should retrieve cached user from regular storage
+00:05 +48: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should return null when user does not exist
+00:05 +49: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Data Separation should store tokens in secure storage and user data in regular storage
+00:05 +50: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Clear Cache should clear all cached data from both storages
+00:05 +51: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when token caching fails
+00:05 +52: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when secure storage write fails
+00:05 +53: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when user caching fails
+00:05 +54: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when getCachedUser fails
+00:05 +55: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when cacheRefreshToken fails
+00:05 +56: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when clearCache fails
+00:05 +57: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle empty token
+00:05 +58: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle empty refresh token
+00:05 +59: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle very long token
+00:05 +60: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle user with all optional fields
+00:05 +61: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle user with minimal fields
+00:05 +62: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle multiple cache operations
+00:05 +63: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle clearCache when no data exists
+00:05 +64: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getToken when token does not exist
+00:05 +65: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getRefreshToken when refresh token does not exist
+00:05 +66: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getCachedUser when user does not exist
+00:05 +67: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/models/auth_response_model_test.dart: AuthResponseModel should create AuthResponseModel with required fields
+00:05 +68: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/models/auth_response_model_test.dart: AuthResponseModel should create AuthResponseModel with all fields
+00:05 +69: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/models/auth_response_model_test.dart: AuthResponseModel JSON serialization should serialize to JSON correctly
+00:05 +70: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/models/auth_response_model_test.dart: AuthResponseModel JSON serialization should serialize to JSON without refreshToken when null
+00:05 +71: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:05 +72: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:05 +73: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:05 +74: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:05 +75: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:05 +76: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:05 +76: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return User when login succeeds
+00:06 +77: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return ServerFailure when remote data source throws ServerException
+00:06 +78: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return NetworkFailure when remote data source throws NetworkException
+00:06 +79: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should cache refresh token only if provided
+00:06 +80: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl register should return User when registration succeeds
+00:06 +81: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl register should return failure when registration fails
+00:06 +82: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should return success when logout succeeds
+00:06 +83: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should return failure when logout fails
+00:06 +84: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call times out
+00:06 +85: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call throws an Error
+00:06 +86: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should report the local failure when the teardown also fails
+00:06 +87: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return User when a token and a cached user exist
+00:06 +88: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when no cached user
+00:06 +89: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the token is gone but the user blob survives
+00:06 +90: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the stored token is empty
+00:06 +91: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should not read the user blob at all without a token
+00:06 +92: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return failure when the token store throws
+00:06 +93: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return failure when cache read fails
+00:06 +94: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return true when a token and a cached user exist
+00:06 +95: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when no cached user
+00:06 +96: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the token is gone but the user blob survives
+00:06 +97: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the stored token is empty
+00:06 +98: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should agree with getCurrentUser on every storage state
+00:06 +99: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should propagate a token store failure
+00:06 +100: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return new token when refresh succeeds
+00:06 +101: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return UnknownFailure when no refresh token available
+00:06 +102: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return failure when refresh fails
+00:06 +103: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should cache refresh token only if provided
+00:06 +104: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should cache refresh token when provided
+00:06 +105: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases login should handle generic Exception
+00:06 +106: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should handle generic Exception
+00:06 +107: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases logout should handle generic Exception
+00:06 +108: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases getCurrentUser should handle generic Exception
+00:06 +109: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases isAuthenticated should handle generic Exception
+00:06 +110: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases refreshToken should handle generic Exception
+00:06 +111: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (tearDownAll)
+00:07 +111: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/models/user_model_test.dart: UserModel should create UserModel with required fields
+00:07 +112: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +113: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +114: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +115: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +116: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +117: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +118: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +119: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +120: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +121: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +122: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Success when logout succeeds
+00:07 +123: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should return Failure when logout fails
+00:07 +124: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/logout_usecase_test.dart: LogoutUseCase should delegate to repository
+00:07 +125: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/refresh_token_usecase_test.dart: RefreshTokenUseCase should return new token when refresh succeeds
+00:07 +126: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/refresh_token_usecase_test.dart: RefreshTokenUseCase should return Failure when refresh fails
+00:07 +127: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/refresh_token_usecase_test.dart: RefreshTokenUseCase should delegate to repository
+00:09 +128: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/get_current_user_usecase_test.dart: GetCurrentUserUseCase should return User when user is cached
+00:09 +129: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/get_current_user_usecase_test.dart: GetCurrentUserUseCase should return null User when no user is cached
+00:09 +130: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/get_current_user_usecase_test.dart: GetCurrentUserUseCase should return Failure when getCurrentUser fails
+00:09 +131: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/get_current_user_usecase_test.dart: GetCurrentUserUseCase should delegate to repository
+00:09 +132: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/is_authenticated_usecase_test.dart: IsAuthenticatedUseCase should return true when user is authenticated
+00:09 +133: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/register_usecase_test.dart: RegisterUseCase should return User when registration succeeds
+00:09 +134: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/register_usecase_test.dart: RegisterUseCase should return User when registration succeeds
+00:09 +135: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/register_usecase_test.dart: RegisterUseCase should return User when registration succeeds
+00:09 +136: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/register_usecase_test.dart: RegisterUseCase should return User when registration succeeds
+00:09 +137: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/usecases/register_usecase_test.dart: RegisterUseCase should return failure when registration fails
+00:10 +138: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/domain/entities/user_test.dart: User should create user with required fields
+00:10 +139: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +140: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +141: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +142: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +143: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +144: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +145: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +146: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +147: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +148: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +149: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +150: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +151: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +152: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +153: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +154: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +155: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +156: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +157: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +158: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +159: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +160: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +161: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +162: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +163: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +164: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +165: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +166: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +167: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with user on success
+00:10 +168: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should update state with error on failure
+00:10 +169: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier login should set loading state during login
+00:10 +170: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier register should update state with user on success
+00:10 +171: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier register should update state with error on failure
+00:10 +172: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier logout should clear user on success
+00:10 +173: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier logout should handle logout failure
+00:10 +174: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier logout should clear the user when the remote logout fails
+00:10 +175: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should not change state on success
+00:10 +176: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should logout on refresh token expiry
+00:10 +177: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier getCurrentUser should update state with user on success
+00:10 +178: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier getCurrentUser should handle null user
+00:10 +179: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier isAuthenticated should return true when authenticated
+00:11 +180: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier isAuthenticated should return false when not authenticated
+00:11 +181: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier isAuthenticated should return false on failure
+00:11 +182: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle initial state correctly
+00:11 +183: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should clear error on successful login after failure
+00:11 +184: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle multiple rapid login attempts
+00:11 +185: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle empty email in login
+00:11 +186: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle empty password in login
+00:11 +187: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle empty name in register
+00:11 +188: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should preserve user on refresh token success
+00:11 +189: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle getCurrentUser failure
+00:11 +190: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle refreshToken with refresh in message
+00:11 +191: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle refreshToken with non-refresh failure
+00:11 +192: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should set loading state during register
+00:11 +193: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should set loading state during logout
+00:11 +194: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should set loading state during getCurrentUser
+00:12 +195: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:13 +196: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:13 +197: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +198: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +199: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +200: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +201: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +202: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +203: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +204: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +205: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +206: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:14 +207: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+00:15 +208: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for empty email
+00:15 +209: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short name
+00:15 +210: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for invalid email
+00:15 +211: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for invalid email
+00:15 +212: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for invalid email
+00:15 +213: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show validation error for short password
+00:16 +214: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short password
+00:16 +215: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should call login when form is valid
+00:16 +216: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should call register use case with correct parameters
+00:16 +217: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display error message on login failure
+00:16 +218: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show loading indicator during registration
+00:17 +219: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show loading indicator during login
+00:17 +220: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show error message when registration fails
+00:17 +221: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show error message when registration fails
+00:17 +222: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should navigate to RegisterScreen when register button is tapped
+00:17 +223: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:18 +224: All tests passed!
+exit: 0

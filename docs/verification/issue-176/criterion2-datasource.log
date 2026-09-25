@@ -1,0 +1,56 @@
+# Criterion 2 - auth_remote_datasource.dart declares no dio-typed member.
+
+$ head -5 lib/features/auth/data/datasources/auth_remote_datasource.dart
+import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/network/api_client.dart';
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
+
+
+$ grep -n "dio\|Dio" lib/features/auth/data/datasources/auth_remote_datasource.dart
+27:  /// Creates an [AuthRemoteDataSourceImpl] using the shared [ApiClient] (Dio +
+37:    // Error interceptor handles DioException conversion automatically
+38:    // Dio throws for non-2xx status codes, so we don't need status code checks
+54:    // Error interceptor handles DioException conversion automatically
+55:    // Dio throws for non-2xx status codes, so we don't need status code checks
+68:    // Error interceptor handles DioException conversion automatically
+74:    // Error interceptor handles DioException conversion automatically
+75:    // Dio throws for non-2xx status codes, so we don't need status code checks
+84:  /// Typed on [NetworkResponse], the transport-agnostic contract, so no dio
+exit: 0   (1 = no match: no dio identifier anywhere in the file)
+
+$ sed -n "60,95p" lib/features/auth/data/datasources/auth_remote_datasource.dart
+    });
+
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
+  }
+
+  @override
+  Future<void> logout() async {
+    // Error interceptor handles DioException conversion automatically
+    await _post(ApiEndpoints.logout, null);
+  }
+
+  @override
+  Future<AuthResponseModel> refreshToken(String refreshToken) async {
+    // Error interceptor handles DioException conversion automatically
+    // Dio throws for non-2xx status codes, so we don't need status code checks
+    final response = await _post(ApiEndpoints.refreshToken, <String, dynamic>{
+      'refresh_token': refreshToken,
+    });
+
+    final data = response.data as Map<String, dynamic>;
+    return AuthResponseModel.fromJson(data);
+  }
+
+  /// Typed on [NetworkResponse], the transport-agnostic contract, so no dio
+  /// type reaches this feature and the transport stays swappable. See
+  /// koniz-dev/flutter-starter#176.
+  Future<NetworkResponse<dynamic>> _post(
+    String path,
+    Map<String, dynamic>? body,
+  ) {
+    return _apiClient.post(path, data: body);
+  }
+}

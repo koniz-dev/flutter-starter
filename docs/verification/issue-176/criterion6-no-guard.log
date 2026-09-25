@@ -1,0 +1,8 @@
+# Criterion 6 - no import-rule guard test exists in this tree, so there is
+# no allowlist to delete. Recorded rather than asserted vacuously.
+
+$ ls test/tooling/
+check_env_assets_test.dart
+
+$ grep -rln "auth_remote_datasource" test/tooling/ tool/
+exit: 1   (1 = no match: nothing allowlists the datasource)
