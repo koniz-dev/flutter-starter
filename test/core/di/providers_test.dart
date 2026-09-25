@@ -24,6 +24,7 @@ import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_use
 import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
+import 'package:flutter_starter/main.dart' show createStartupContainer;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -410,20 +411,19 @@ void main() {
         // returning a success the next launch would contradict.
         removeSecureBackend();
 
-        // The retry opt-out is load-bearing and is NOT what `main()` does.
-        // Riverpod 3 retries any failure that is not an `Error`
-        // (ProviderContainer.defaultRetry), and
-        // `MigrationExecutionException implements Exception`, so on the bare
-        // `ProviderContainer()` that `main()` builds this same future never
-        // completes at all - measured at over 120 s with no result, which
-        // means the `StartupFailureApp` guard in `main()` never fires.
-        // TODO(koniz-dev): drop this override once the startup container
-        // opts out of retry - koniz-dev/flutter-starter#101.
-        final noRetryContainer = ProviderContainer(retry: (_, _) => null);
-        addTearDown(noRetryContainer.dispose);
+        // Read through the container `main()` actually builds
+        // (koniz-dev/flutter-starter#101). It opts out of Riverpod 3's default
+        // retry, which would otherwise keep retrying this failure because
+        // `MigrationExecutionException implements Exception` rather than
+        // `Error` - and with `read(...future)` awaiting without listening, the
+        // retry never rebuilds and this future never completes at all. Using
+        // the app's own factory here means a regression in `main.dart` fails
+        // this test instead of hiding behind a hand-rolled container.
+        final startupContainer = createStartupContainer();
+        addTearDown(startupContainer.dispose);
 
         await expectLater(
-          noRetryContainer.read(storageInitializationProvider.future),
+          startupContainer.read(storageInitializationProvider.future),
           throwsA(isA<MigrationExecutionException>()),
         );
       }, timeout: const Timeout(Duration(seconds: 10)));
