@@ -1,0 +1,113 @@
+Criterion 1 (docs half) and criterion 2.
+
+Criterion 1: docs/guides/configuration.md states, where `- .env` used
+to be suggested, that an asset declaration is not build-mode scoped,
+that the file is extractable from a release APK/IPA, and that on web
+it is fetchable over HTTP at /assets/.env.
+
+Criterion 2: the same section names --dart-define /
+--dart-define-from-file as the supported way to configure a RELEASE
+build on native, and says plainly that Flutter web has no equivalent,
+so web secrets must come from the server, not the bundle.
+
+Verified on main at cd56d01 (PR #126).
+
+$ sed -n '/## Never ship a secret in the bundle/,/## What works where/p' docs/guides/configuration.md
+
+  13  ## Never ship a secret in the bundle
+  14  
+  15  Read this before the mechanics. It is the one thing in this guide that costs
+  16  money to get wrong.
+  17  
+  18  **A Flutter `assets:` declaration is not build-mode scoped.** There is no
+  19  debug-only asset list. Anything listed under `flutter: assets:` is copied into
+  20  the release APK, the release IPA and the web build exactly as it is copied into
+  21  a debug build. So a `.env` declared as an asset is:
+  22  
+  23  - **extractable from a release APK or IPA** by anyone who unzips it - no root,
+  24    no jailbreak, no instrumentation, and this is scanned for automatically at
+  25    scale;
+  26  - **fetchable over HTTP on web**, unauthenticated, at
+  27    `https://<your-host>/assets/.env`, and listed in `AssetManifest.json`.
+  28  
+  29  Once such a build is published the only remedy is rotating every value in the
+  30  file, and nothing warns you: `.env` is gitignored, so no secret scanner ever
+  31  sees it.
+  32  
+  33  An earlier version of this guide told you to add `- .env` to `pubspec.yaml`.
+  34  **Do not.** What to do instead:
+  35  
+  36  | Target | Supported way to configure a release build | Can it hold a secret? |
+  37  |---|---|---|
+  38  | Android, iOS, macOS, Windows, Linux | `--dart-define-from-file=.env` (or individual `--dart-define` flags). Nothing is bundled as a readable file. | Not really - see below |
+  39  | Flutter web | Nothing in the bundle. Values that must stay private come from your backend at run time. | **No. Never.** |
+  40  
+  41  `flutter run`, `flutter build apk`, `flutter build ipa` and friends all accept
+  42  `--dart-define-from-file=<file.json|file.env>`, so your existing `.env` works
+  43  unchanged as a *build input* without ever becoming an asset:
+  44  
+  45  ```bash
+  46  flutter run --dart-define-from-file=.env
+  47  flutter build apk --release --dart-define-from-file=.env
+  48  ```
+  49  
+  50  Two honest caveats.
+  51  
+  52  - **A dart-define is not a vault.** The values are compiled into the binary and
+  53    are recoverable from it with ordinary reverse-engineering tools. Moving a key
+  54    from an asset to a dart-define raises the cost of reading it from "unzip" to
+  55    "disassemble"; it does not make it private. Treat dart-defines as build
+  56    configuration - environment name, base URL, feature flags - not as secret
+  57    storage.
+  58  - **A web client cannot hold a secret at all.** The browser downloads your
+  59    entire bundle; there is nowhere in it to hide anything. Any credential that
+  60    matters must live on a server the client authenticates to, which then either
+  61    proxies the call or hands back a short-lived, scoped token. This is a
+  62    property of shipping code to a user agent, not a limitation of this template.
+  63  
+  64  So: API keys, client secrets, signing material, database URLs and admin tokens
+  65  never belong in `.env`, in a dart-define, or in any other part of a client
+  66  build, on any platform.
+  67  
+  68  ### The deliberate exception, and the guard
+  69  
+  70  Web is the awkward case: `EnvConfig` guards every dart-define read with
+  71  `if (!kIsWeb)`, so on web an asset-backed `.env` is the *only* runtime
+  72  configuration mechanism there is. That is allowed - for values you would be
+  73  happy to publish, because publishing them is exactly what it does.
+  74  
+  75  `tool/check_env_assets.dart` fails when any env file other than `.env.example`
+  76  appears in the asset list. It runs in two places:
+  77  
+  78  - `./scripts/dev/audit_template.sh`, as its own step; and
+  79  - `test/tooling/check_env_assets_test.dart`, so `flutter test` - and therefore
+  80    the CI **Quality gate** - fails on a commit that adds one.
+  81  
+  82  To take the web exception, acknowledge it inline. The marker is committed next
+  83  to the entry, so it appears in the diff and in review:
+  84  
+  85  ```yaml
+  86  # pubspec.yaml
+  87  flutter:
+  88    assets:
+  89      - .env.example
+  90      - .env # env-asset-ack: web build, contains no secrets
+  91  ```
+  92  
+  93  The guard then passes and prints a reminder instead of failing. An environment
+  94  variable would not have that property, which is why the escape hatch is a
+  95  comment in the repository rather than a flag on the command line.
+  96  
+  97  Before any release, and as the release-checklist line for this:
+  98  `dart run tool/check_env_assets.dart` exits 0, and any acknowledged entry it
+  99  reports has been re-read for secrets.
+ 100  
+ 101  ## What works where
+
+$ sed -n '/| Mechanism | Precondition/,/| Defaults | None./p' docs/guides/configuration.md
+
+ 106  | Mechanism | Precondition | Debug | Release / profile (AOT) | Flutter web |
+ 107  |---|---|---|---|---|
+ 108  | `.env` file | The file must be declared in the `assets:` list of `pubspec.yaml` - which ships it to every user. `flutter_dotenv` reads it through `rootBundle`, not the filesystem. | Yes | Yes | Yes |
+ 109  | `--dart-define` / `--dart-define-from-file` | The key must be declared in `lib/core/config/dart_defines.dart`. | Yes | Yes | **No** |
+ 110  | Defaults | None. | Yes | Yes | Yes |
