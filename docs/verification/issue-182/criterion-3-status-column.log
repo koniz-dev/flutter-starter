@@ -1,0 +1,32 @@
+# Criterion 3 - three states, distinguishable without grepping
+
+## The legend, verbatim from docs/architecture/contracts-map.md
+
+| Status | Means |
+| --- | --- |
+| **Live** | Production code in `lib/` is typed on the contract and runs against it. Swapping the implementation changes behavior. |
+| **No production consumer** | An implementation exists, and for some rows a provider binds it to the contract, but nothing in `lib/` reads that binding. Tests may. Swapping the implementation changes nothing until a consumer exists. |
+| **No implementor** | The contract is declared and nothing anywhere implements it. |
+
+## The Status cell of every swap-map row (other cells elided)
+
+  `INetworkClient`                                 **Live**
+  `ApiClient` (concrete class, not a contract)     **Live**
+  `IHttpResponseCache`                             **Live**
+  `IKeyValueStore`                                 **Live**
+  `ITokenStore`                                    **Live**
+  `ISessionTerminationSink`                        **Live**
+  `AppNavigator`                                   **No production consumer**
+  `AppDesignTokens`                                **No production consumer**
+  `IAuthController`                                **No production consumer**
+  `ITasksController`                               **No implementor**
+
+## Counts, over the swap-map rows only (the legend table is excluded)
+
+  **Live**                       6 row(s)
+  **No production consumer**     3 row(s)
+  **No implementor**             1 row(s)
+
+  total swap-map rows            10
+
+# Three distinct status values are in use, and every row carries exactly one.

@@ -1,0 +1,27 @@
+# Criterion 1 - koniz-dev/flutter-starter#182
+# NEEDLE = the phantom provider identifier the map used to name.
+# It is substituted at runtime so this log is not itself a match.
+
+# main @ ffa4615  (test(startup): acceptance evidence for #160 (#198))
+# working tree also carries the contracts-map.md wording fix in this PR.
+
+$ grep -rn "$NEEDLE" . --exclude-dir=.git
+exit=1   (1 = no match anywhere outside .git/ = PASS)
+matching lines: 0
+
+# Same grep restricted to lib/ and test/, for the record:
+$ grep -rn "$NEEDLE" lib test
+exit=1
+
+# Control: the identifiers the map names instead all resolve.
+$ grep -rn "tasksNotifierProvider" lib | head -5
+lib/features/tasks/presentation/providers/tasks_provider.dart:194:/// Alias for [tasksProvider] (older imports use `tasksNotifierProvider`).
+lib/features/tasks/presentation/providers/tasks_provider.dart:195:const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+lib/features/tasks/presentation/screens/task_detail_screen.dart:93:    final tasksNotifier = ref.read(tasksNotifierProvider.notifier);
+lib/features/tasks/presentation/screens/task_detail_screen.dart:121:    final tasksState = ref.watch(tasksNotifierProvider);
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:18:    final tasksState = ref.watch(tasksNotifierProvider);
+
+# And ITasksController still has no implementor, which is exactly what
+# the map's 'No implementor' status now says.
+$ grep -rn "implements ITasksController" lib
+exit=1   (1 = nothing implements it)

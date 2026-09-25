@@ -51,9 +51,11 @@ koniz-dev/flutter-starter#64 and its children.
 | `IAuthController` | **No production consumer** | `AuthNotifier` (`lib/features/auth/presentation/providers/auth_provider.dart:47`) | `authControllerProvider` (`lib/features/auth/presentation/providers/auth_provider.dart:284`) binds it, but that identifier has **zero readers** in `lib/` and `test/` - the UI reads the generated `authProvider` directly. | Rebinding `authControllerProvider` to your orchestrator has no effect until something reads it |
 | `ITasksController` | **No implementor** | none | Nowhere. `TasksNotifier` (`lib/features/tasks/presentation/providers/tasks_provider.dart:55`) does **not** implement this contract, and the tasks provider is `tasksProvider` (alias `tasksNotifierProvider`, `:195`). | Implement the contract on `TasksNotifier` first; there is nothing to rebind today |
 
-Until koniz-dev/flutter-starter#182 this table named a `tasksControllerProvider`
-that has never existed in the tree. If you are adding a row, `grep -rn` every
-symbol you put in it.
+Until koniz-dev/flutter-starter#182 the `ITasksController` row named a controller
+provider that has never existed anywhere in the tree - the name is deliberately
+not repeated here, so that grepping for it stays a clean test. **If you add or
+edit a row, `grep -rn "<symbol>" lib` every symbol you put in it.** A symbol whose
+only occurrence in the repository is this file is the tell.
 
 ## Adapter directories (convention)
 
