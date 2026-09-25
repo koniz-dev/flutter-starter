@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
@@ -217,8 +218,12 @@ class TasksListScreen extends ConsumerWidget {
                 )
               : null,
         ),
-        subtitle: task.description != null && task.description!.isNotEmpty
-            ? Text(
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (task.description != null && task.description!.isNotEmpty)
+              Text(
                 task.description!,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -228,8 +233,20 @@ class TasksListScreen extends ConsumerWidget {
                         color: Colors.grey,
                       )
                     : null,
-              )
-            : null,
+              ),
+            // `createdAt` arrives from `TaskModel.fromJson` already converted
+            // to local time, so the local wall-clock formatter is the right
+            // half of `DateFormatter`: `formatIso8601` would render a UTC
+            // instant with a `Z`, which is a storage format, not a display
+            // one.
+            Text(
+              DateFormatter.formatDate(task.createdAt),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
         trailing: PopupMenuButton<String>(
           onSelected: (value) {
             if (value == 'edit') {

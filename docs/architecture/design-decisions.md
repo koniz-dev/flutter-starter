@@ -1240,6 +1240,38 @@ Rejected alternatives:
    sample is filed separately as koniz-dev/flutter-starter#147, under
    `epic:feature-tasks`.
 
+### Call-site status
+
+Re-run the loop above rather than trusting this table; it is a snapshot, and
+the point of the section is that a stale one is how the problem started.
+
+| Utility | Exercised by a running screen? | Where |
+|---|---|---|
+| `DateFormatter` | yes, both pairs | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in `TaskModel` (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
+| `PaginationHelper` | no | - |
+| `Debouncer` / `Throttler` | no | - |
+| `LazyLoader` | no | - |
+| `ProviderDisposal` | no | - |
+| `PerformanceUtils` and the three performance mixins | no | - |
+
+The tasks detail screen previously formatted its two timestamps with a
+hand-rolled `padLeft` chain while `DateFormatter` sat unused one directory
+away - the duplication the "keep them as building blocks" decision is supposed
+to prevent. That call site is now the utility.
+
+`PaginationHelper` and `Debouncer` remain uncalled, and whether the tasks
+sample is the right home for them is **still open** - see the analysis on
+koniz-dev/flutter-starter#147. In short: the tasks sample persists every task
+in a single local JSON blob that `getAllTasks()` reads in full, so a
+`loadPage` callback would re-read the whole list to hand back a slice of it,
+and the list screen partitions tasks into Incomplete and Completed sections
+that a paged window cannot fill correctly. The sample also has no search or
+filter field, so a debounced one would have to be invented for the debouncer
+to have somewhere to live. Neither objection is a verdict on the utilities
+themselves; both say the tasks sample may be the wrong host.
+
+The "when to reconsider" clock below applies to every row still marked "no".
+
 ### When to reconsider
 
 If a utility is still uncalled by the sample features two releases from now
