@@ -1,0 +1,140 @@
+Deadness proof for navigateTo / navigateToReplacement / pop
+All greps run against the PRE-CHANGE tree, commit 4a5f8f2 (parent of the fix).
+Paths searched: lib test examples integration_test tool bricks docs scripts .github
+docs/verification/ is excluded: it is committed log output of past runs,
+not a consumer of the API.
+
+================================================================
+$ git grep -n 'navigateTo' 4a5f8f2 -- lib test examples integration_test tool bricks docs scripts .github
+4a5f8f2:docs/api/core/utils.md:107:    navigateToHome();
+4a5f8f2:docs/api/examples/api-integration.md:263:        context.navigateToReplacement(const HomeScreen());
+4a5f8f2:docs/api/examples/common-patterns.md:22:    navigateToHome();
+4a5f8f2:docs/api/examples/common-patterns.md:215:context.navigateTo(NextScreen());
+4a5f8f2:docs/api/examples/common-patterns.md:216:context.navigateToReplacement(HomeScreen());
+4a5f8f2:docs/api/features/auth/usecases.md:45:///   success: (user) => navigateToHome(),
+4a5f8f2:docs/api/features/auth/usecases.md:124:///   navigateToLogin();
+4a5f8f2:docs/architecture/design-decisions.md:397:  success: (user) => navigateToHome(),
+4a5f8f2:docs/architecture/design-decisions.md:1100:     success: (user) => navigateToHome(),
+4a5f8f2:docs/architecture/design-decisions.md:1107:     navigateToHome();
+4a5f8f2:docs/architecture/design-decisions.md:1168:     success: (user) => navigateToHome(),
+4a5f8f2:docs/architecture/design-decisions.md:1175:     (user) => navigateToHome(),
+4a5f8f2:docs/guides/features/common-tasks.md:235:   context.navigateTo(const MyScreen());
+4a5f8f2:lib/shared/extensions/context_extensions.dart:15:/// context.navigateTo(RegisterScreen());
+4a5f8f2:lib/shared/extensions/context_extensions.dart:82:  Future<T?> navigateTo<T>(Widget route) {
+4a5f8f2:lib/shared/extensions/context_extensions.dart:87:  Future<T?> navigateToReplacement<T>(Widget route) {
+4a5f8f2:test/shared/extensions/context_extensions_test.dart:262:                  onPressed: () => context.navigateTo<void>(targetWidget),
+
+================================================================
+$ git grep -n 'navigateToReplacement' 4a5f8f2 -- lib test examples integration_test tool bricks docs scripts .github
+4a5f8f2:docs/api/examples/api-integration.md:263:        context.navigateToReplacement(const HomeScreen());
+4a5f8f2:docs/api/examples/common-patterns.md:216:context.navigateToReplacement(HomeScreen());
+4a5f8f2:lib/shared/extensions/context_extensions.dart:87:  Future<T?> navigateToReplacement<T>(Widget route) {
+
+================================================================
+'pop' as a ContextExtensions member: every '.pop(' call site in the tree
+$ git grep -n '\.pop(' 4a5f8f2 -- lib test examples integration_test tool bricks
+4a5f8f2:lib/core/routing/navigation_extensions.dart:102:      router.pop();
+4a5f8f2:lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:52:                      onPressed: () => Navigator.pop(context, false),
+4a5f8f2:lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:56:                      onPressed: () => Navigator.pop(context, true),
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:115:      context.pop();
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:157:                    context.pop();
+4a5f8f2:lib/features/tasks/presentation/screens/tasks_list_screen.dart:312:            onPressed: () => Navigator.of(context).pop(false),
+4a5f8f2:lib/features/tasks/presentation/screens/tasks_list_screen.dart:316:            onPressed: () => Navigator.of(context).pop(true),
+4a5f8f2:lib/features/tasks/presentation/screens/tasks_list_screen.dart:401:          onPressed: () => Navigator.of(context).pop(),
+4a5f8f2:lib/features/tasks/presentation/screens/tasks_list_screen.dart:411:              Navigator.of(context).pop();
+4a5f8f2:lib/shared/extensions/context_extensions.dart:95:    Navigator.of(this).pop(result);
+4a5f8f2:lib/shared/widgets/language_switcher.dart:59:                Navigator.of(context).pop();
+4a5f8f2:lib/shared/widgets/language_switcher.dart:75:            onPressed: () => Navigator.of(context).pop(),
+4a5f8f2:lib/shared/widgets/language_switcher.dart:135:                Navigator.of(context).pop();
+4a5f8f2:lib/shared/widgets/language_switcher.dart:151:            onPressed: () => Navigator.of(context).pop(),
+4a5f8f2:lib/shared/widgets/language_switcher.dart:184:              Navigator.of(context).pop();
+4a5f8f2:test/features/tasks/presentation/screens/task_detail_screen_test.dart:34:  // Create a simple GoRouter for navigation (needed for context.pop())
+4a5f8f2:tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart:102:      router.pop();
+4a5f8f2:tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart:99:      router.pop();
+4a5f8f2:tool/golden/stripped/lib/core/routing/navigation_extensions.dart:76:      router.pop();
+
+================================================================
+Which extension does each 'context.pop()' resolve to?
+ContextExtensions.pop is only reachable from a file that imports
+shared/extensions/context_extensions.dart. Files that do, pre-change:
+$ git grep -ln 'shared/extensions/context_extensions.dart' 4a5f8f2 -- lib test examples integration_test tool bricks
+4a5f8f2:test/shared/extensions/context_extensions_test.dart
+
+No file under lib/ imports it, so NO production 'context.pop()' could have
+resolved to ContextExtensions.pop. task_detail_screen.dart imports only
+package:go_router, so its context.pop() is GoRouterHelper.pop:
+$ git grep -n '^import' 4a5f8f2 -- lib/features/tasks/presentation/screens/task_detail_screen.dart
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:1:import 'dart:async';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:3:import 'package:flutter/material.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:4:import 'package:flutter_riverpod/flutter_riverpod.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:5:import 'package:flutter_starter/core/di/providers.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:6:import 'package:flutter_starter/core/utils/date_formatter.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:7:import 'package:flutter_starter/core/utils/result.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:8:import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:9:import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:10:import 'package:flutter_starter/l10n/app_localizations.dart';
+4a5f8f2:lib/features/tasks/presentation/screens/task_detail_screen.dart:11:import 'package:go_router/go_router.dart';
+
+================================================================
+tool/golden/ counterpart check: context_extensions.dart has none.
+$ git ls-tree -r --name-only 4a5f8f2 tool/golden
+tool/golden/no_feature_flags/lib/core/routing/app_routes.dart
+tool/golden/no_feature_flags/lib/core/routing/navigation_extensions.dart
+tool/golden/no_feature_flags/lib/core/routing/routes_registry.dart
+tool/golden/no_tasks/lib/core/routing/app_routes.dart
+tool/golden/no_tasks/lib/core/routing/navigation_extensions.dart
+tool/golden/no_tasks/lib/core/routing/routes_registry.dart
+tool/golden/stripped/integration_test/app_e2e_test.dart
+tool/golden/stripped/integration_test/auth_flow_test.dart
+tool/golden/stripped/lib/core/routing/app_router.dart
+tool/golden/stripped/lib/core/routing/app_router.g.dart
+tool/golden/stripped/lib/core/routing/app_routes.dart
+tool/golden/stripped/lib/core/routing/navigation_extensions.dart
+tool/golden/stripped/lib/core/routing/routes_registry.dart
+tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart
+tool/golden/stripped/lib/main.dart
+
+================================================================
+bricks/ check: no scaffolded feature references any of the three.
+$ git grep -nE 'navigateTo|context\.pop|ContextExtensions|context_extensions' 4a5f8f2 -- bricks
+exit=1  <- 1 means no match
+
+================================================================
+VERDICT
+
+Note first: the many `navigateToHome()` / `navigateToLogin()` hits above are a
+different symbol. They are placeholder function names inside prose snippets
+(`success: (user) => navigateToHome()`), not calls to `ContextExtensions`. The
+substring match picks them up; they are not consumers and are excluded below.
+
+  navigateTo
+    production callers in lib/ : 0
+    test consumers             : 1, and it is the extension's OWN test -
+                                 test/shared/extensions/context_extensions_test.dart:262.
+                                 Counted here as test-only, not as a user.
+    docs snippets              : 2 - docs/api/examples/common-patterns.md:215,
+                                 docs/guides/features/common-tasks.md:235
+    self-reference             : the doc comment at
+                                 lib/shared/extensions/context_extensions.dart:15
+
+  navigateToReplacement
+    production callers in lib/ : 0
+    test consumers             : 0 - nothing at all, not even its own test
+    docs snippets              : 2 - docs/api/examples/common-patterns.md:216,
+                                 docs/api/examples/api-integration.md:263
+
+  pop
+    production callers in lib/ : 0. No file under lib/ imports
+                                 context_extensions.dart, so ContextExtensions.pop
+                                 was not in scope at any production call site.
+                                 Every `context.pop()` in lib/ is
+                                 GoRouterHelper.pop; every other `.pop(` is an
+                                 explicit `Navigator...pop` or `router.pop`.
+    test consumers             : 1, its own test (the `should pop route` case),
+                                 removed with the member.
+    docs snippets              : 1 - docs/api/examples/common-patterns.md:217
+
+  tool/golden/  : no counterpart for lib/shared/extensions/context_extensions.dart;
+                  the three golden trees mirror only lib/core/routing/,
+                  lib/features/home/, lib/main.dart and integration_test/.
+  bricks/       : no match for any of the three.
