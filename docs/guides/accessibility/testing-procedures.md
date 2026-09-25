@@ -63,6 +63,12 @@ test('contrast ratio calculation', () {
 });
 ```
 
+The WCAG formula is defined for opaque colours. `getContrastRatio` composites a
+translucent foreground over the supplied background first, so `Colors.white70`
+on `#121212` scores 9.48:1 rather than opaque white's 18.73:1. A translucent
+*background* throws `ArgumentError`: the colour behind it was never supplied,
+so no ratio can be computed. Pass the opaque scaffold or surface colour.
+
 ### Widget Tests for Semantic Labels
 
 Test that widgets have proper semantic labels:

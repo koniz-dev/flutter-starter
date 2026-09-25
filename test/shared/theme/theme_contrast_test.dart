@@ -293,9 +293,13 @@ void main() {
     group(theme, () {
       for (final pair in pairs) {
         test('${pair.name} meets ${pair.minimum}:1', () {
-          // A translucent colour would make this meaningless: the WCAG formula
-          // has no alpha channel, so getContrastRatio would score a 70% white
-          // as pure white.
+          // getContrastRatio composites a translucent foreground over the
+          // background and rejects a translucent background outright (#82), so
+          // these assertions are no longer load-bearing for correctness. They
+          // stay as a palette rule: a theme token that ships translucent hides
+          // its real contrast behind whatever happens to be painted below it,
+          // and the pinned ratios below would then only hold for this one
+          // backdrop.
           expect(
             pair.foreground.a,
             1.0,

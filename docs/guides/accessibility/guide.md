@@ -258,6 +258,9 @@ testWidgets('button has semantic label', (tester) async {
 2. **Tools:**
    - Use `AccessibilityHelpers.getContrastRatio()` to check ratios
    - Use `AccessibilityHelpers.meetsContrastRatioAA()` to verify compliance
+   - Both composite a translucent foreground over the background before
+     measuring, and throw on a translucent background - pass the opaque colour
+     that is actually painted underneath
 
 ### Testing Tools
 
