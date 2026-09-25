@@ -21,7 +21,7 @@ Keep docs and examples pointing here unless the tree moves:
 | Topic | Path |
 |--------|------|
 | Bootstrap / scope | `lib/main.dart`, `lib/core/di/providers.dart` |
-| Routes | `lib/core/routing/app_router.dart`, `lib/core/routing/navigation_providers.dart` |
+| Routes | `lib/core/routing/app_router.dart`, `lib/core/routing/navigation_extensions.dart` |
 | Network | `lib/core/network/api_client.dart`, `lib/core/network/interceptors/` |
 | Performance | `lib/core/performance/`, [`examples/performance_examples.dart`](../examples/performance_examples.dart) |
 | RASP | `lib/core/security/rasp_providers.dart`, `lib/core/security/infrastructure/freerasp_service_impl.dart` |

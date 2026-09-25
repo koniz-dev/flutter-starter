@@ -12,8 +12,7 @@ lib/core/routing/
 ├── app_routes.dart                 # Route names and paths
 ├── app_router.dart                 # GoRouter setup + auth redirect
 ├── routes_registry.dart            # Composes routes from feature modules
-├── navigation_providers.dart       # AppNavigator provider
-└── adapters/go_router_navigator_adapter.dart
+└── navigation_extensions.dart      # The navigation API screens call
 ```
 
 Feature route modules (convention):
@@ -33,19 +32,30 @@ screen renders - a test that builds its own `GoRouter` proves only that
 
 ## Navigate in UI
 
-Use `GoRouter` directly in screens/widgets:
+Screens navigate through `NavigationExtensions`, never through
+`package:go_router` directly. That import belongs to `lib/core/routing/` and to
+the `lib/features/*/routing/*_routes.dart` modules that declare routes - see
+[ADR 0003](../../architecture/adr/0003-navigation-boundary.md).
 
 ```dart
 import 'package:flutter_starter/core/routing/app_routes.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 
-context.go(AppRoutes.home);
-context.push(AppRoutes.tasks);
-context.pushNamed(
+context.goToHome();
+context.pushRoute(AppRoutes.tasks);
+context.pushNamedRoute(
   AppRoutes.taskDetailName,
   pathParameters: {'taskId': 'task-123'},
 );
+
+if (context.canPopRoute()) {
+  context.popRoute<void>();
+}
 ```
+
+Add a helper to `navigation_extensions.dart` when a screen needs a destination
+it does not cover. Reaching for `context.go` in the screen instead is how the
+starter ended up with three navigation styles.
 
 ## Route Constants
 
@@ -53,10 +63,11 @@ Always use constants from `AppRoutes` instead of hardcoded paths.
 
 ```dart
 // Good
-context.go(AppRoutes.login);
+context.goToLogin();
+context.pushRoute(AppRoutes.tasks);
 
 // Avoid
-context.go('/login');
+context.pushRoute('/tasks');
 ```
 
 ## Authentication Redirect
@@ -98,7 +109,8 @@ configuration (Android/iOS/web) should map incoming URLs to defined route paths.
 
 - Wrong screen opens: verify route path and `AppRoutes` constant mapping.
 - Redirect loops: confirm auth state transitions and redirect conditions.
-- `pop` fails on root: check `canPop()` before popping or provide fallback route.
+- `pop` fails on root: check `context.canPopRoute()` before popping, or use
+  `context.popOrGoToHome()`.
 
 ## References
 

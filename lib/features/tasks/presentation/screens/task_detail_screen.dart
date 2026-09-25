@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 
 /// Task detail/edit screen
 class TaskDetailScreen extends ConsumerStatefulWidget {
@@ -111,8 +111,8 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       );
     }
 
-    if (mounted && context.canPop()) {
-      context.pop();
+    if (mounted && context.canPopRoute()) {
+      context.popRoute<void>();
     }
   }
 
@@ -153,8 +153,8 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 onPressed: () {
                   if (widget.taskId != null) {
                     unawaited(_loadTask());
-                  } else if (context.canPop()) {
-                    context.pop();
+                  } else if (context.canPopRoute()) {
+                    context.popRoute<void>();
                   }
                 },
                 child: Text(l10n.retry),
