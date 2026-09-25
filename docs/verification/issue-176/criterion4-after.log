@@ -1,0 +1,7 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/features/auth/data/datasources/auth_remote_datasource_failure_test.dart
+00:00 +0: AuthRemoteDataSourceImpl failure behaviour (#176) login surfaces a ServerException on a 400
+00:00 +1: AuthRemoteDataSourceImpl failure behaviour (#176) register surfaces a ServerException on a 400
+00:00 +2: AuthRemoteDataSourceImpl failure behaviour (#176) logout surfaces a ServerException on a 400
+00:00 +3: AuthRemoteDataSourceImpl failure behaviour (#176) refreshToken surfaces a ServerException on a 400
+00:00 +4: All tests passed!
+exit: 0
