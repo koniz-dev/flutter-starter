@@ -1,0 +1,107 @@
+# Criterion 6 - mason make flutter_starter_setup with a custom application id
+#
+# A clean copy of this branch (rsync, minus .git / build / .dart_tool /
+# docs/verification) was generated into a scratch directory and the brick run
+# against it with:
+#
+#   package_name      acme_app
+#   application_id    com.acme.mobile
+#   ios_bundle_id     com.acme.mobileApp
+#   app_display_name  Acme App
+#   strip_sample_features / include_* : defaults (nothing stripped)
+#
+#   $ mason get && mason make flutter_starter_setup -c vars.json --on-conflict overwrite
+#   Renamed Dart package to acme_app
+#   Moved MainActivity to match com.acme.mobile
+#   Moved MainActivityTest to match com.acme.mobile
+#   Updated iOS PRODUCT_BUNDLE_IDENTIFIER to com.acme.mobileApp
+#   Updated patrol config to com.acme.mobile
+#   Rewrote identifiers in 21 platform file(s)
+#   Setup complete. Next: flutter pub get && flutter analyze && flutter test
+#
+# Then, over the GENERATED project:
+#
+#   grep -rn 'com\.example\|flutterStarter\|flutter_starter' . \
+#     --exclude-dir=.dart_tool --exclude-dir=build --exclude-dir=docs \
+#     --exclude-dir=bricks --exclude-dir=.claude --exclude-dir=.mason
+#
+# Output follows, unfiltered and unedited apart from shortening the absolute
+# scratch path in mason-lock.json. Every remaining hit is intentional:
+#
+#   - README.md / CONTRIBUTING.md : project prose.
+#     bricks/flutter_starter_setup/README.md states Markdown is not rewritten.
+#   - mason.yaml / mason-lock.json : the brick's own manifest, which names the
+#     brick. Renaming it would break `mason make`.
+#   - pubspec.yaml:94 : a comment pointing at the brick's hook.
+#   - test/tooling/check_env_assets_test.dart:14 : `name: flutter_starter` inside
+#     a synthetic pubspec STRING literal that the test feeds to
+#     findBundledEnvAssets. Not a project identifier; rewriting it would change
+#     nothing the test asserts.
+
+CONTRIBUTING.md:169:   git clone https://github.com/your-username/flutter_starter.git
+CONTRIBUTING.md:170:   cd flutter_starter
+CONTRIBUTING.md:454:import 'package:flutter_starter/core/errors/failures.dart';
+CONTRIBUTING.md:455:import 'package:flutter_starter/core/utils/result.dart';
+CONTRIBUTING.md:456:import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+CONTRIBUTING.md:457:import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+CONTRIBUTING.md:458:import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+README.md:38:mason make flutter_starter_setup
+README.md:59:See [bricks/README.md](bricks/README.md) and [bricks/flutter_starter_setup/README.md](bricks/flutter_starter_setup/README.md). If you rename everything by hand and do not need Mason, you can remove **`bricks/`** and **`mason.yaml`**. To drop sample `tasks` and `feature_flags` without Mason: `dart run tool/strip_sample_features.dart --apply`.
+mason-lock.json:1:{"bricks":{"feature_clean":{"path":".../masontest/bricks/feature_clean"},"flutter_starter_setup":{"path":".../masontest/bricks/flutter_starter_setup"}}}
+mason.yaml:2:# Usage: `mason get` then `mason make flutter_starter_setup` - see bricks/README.md
+mason.yaml:4:  flutter_starter_setup:
+mason.yaml:5:    path: bricks/flutter_starter_setup
+pubspec.yaml:94:  # resolves it for bricks/flutter_starter_setup/hooks/post_gen.dart.
+test/tooling/check_env_assets_test.dart:14:name: flutter_starter
+
+# Before this change the same grep additionally returned, all of them real
+# misses, all of them now rewritten:
+#
+#   android/app/src/androidTest/java/com/example/flutter_starter/MainActivityTest.java
+#   pubspec.yaml patrol.app_name and patrol.android.package_name
+#   macos/Runner/Configs/AppInfo.xcconfig
+#   macos/Runner.xcodeproj/project.pbxproj + xcshareddata/xcschemes/Runner.xcscheme
+#   ios/ExportOptions.plist, ios/Runner/Info.plist
+#   linux/CMakeLists.txt, linux/runner/my_application.cc
+#   windows/CMakeLists.txt, windows/runner/Runner.rc, windows/runner/main.cpp
+#   web/index.html, web/manifest.json
+#   fastlane/{Appfile,Fastfile,README.md}, ios/fastlane/{Appfile,Fastfile}
+#   .github/workflows/deploy-android.yml
+#   scripts/dev/create_feature.sh, scripts/dev/create_feature.ps1
+#   examples/performance_examples.dart and the *.dart.template sources
+#   lib/core/security/infrastructure/freerasp_service_impl.dart
+
+# --- Patrol harness parity in the generated project ---
+#
+#   $ find android/app/src/androidTest android/app/src/main/kotlin -type f
+#   android/app/src/main/kotlin/com/acme/mobile/MainActivity.kt
+#   android/app/src/androidTest/java/com/acme/mobile/MainActivityTest.java
+#
+#   $ head -1 android/app/src/androidTest/java/com/acme/mobile/MainActivityTest.java
+#   package com.acme.mobile;
+#   $ head -1 android/app/src/main/kotlin/com/acme/mobile/MainActivity.kt
+#   package com.acme.mobile
+#
+#   $ grep -n 'namespace =\|applicationId =' android/app/build.gradle.kts
+#   51:    namespace = "com.acme.mobile"
+#   66:        applicationId = "com.acme.mobile"
+#
+#   $ sed -n '/^patrol:/,/package_name/p' pubspec.yaml
+#   patrol:
+#     app_name: Acme App
+#     android:
+#       package_name: com.acme.mobile
+#
+#   $ grep -n 'android:label' android/app/src/main/AndroidManifest.xml
+#   15:        android:label="Acme App"
+#
+# MainActivityTest and MainActivity are in the same package; that package is both
+# the applicationId and the Kotlin namespace; patrol's package_name matches it.
+# That is the static precondition for the androidTest variant to compile
+# (MainActivityTest references MainActivity.class with no import) and for
+# `patrol test` to instrument the app it just installed.
+#
+# NOT verified here: an actual javac / Gradle compile of the renamed androidTest
+# variant. That needs a JDK and an Android SDK; on this machine
+# `java -version` reports "Unable to locate a Java Runtime" and there is no
+# Android SDK. Routed to status:needs-uat.

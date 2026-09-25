@@ -1,0 +1,60 @@
+# Probe: can flutter_secure_storage write and read on macOS with the
+# entitlements exactly as committed on this branch (no keychain-access-groups)?
+#
+# Driven with a temporary integration test, NOT committed:
+#
+#   // integration_test/keychain_probe_test.dart
+#   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+#   testWidgets('secure storage round-trips a value', (tester) async {
+#     const storage = FlutterSecureStorage();
+#     await storage.write(key: 'issue62_probe_key', value: 'probe-value');
+#     expect(await storage.read(key: 'issue62_probe_key'), 'probe-value');
+#   });
+#
+#   $ flutter test -d macos integration_test/keychain_probe_test.dart
+#
+# Output follows.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af6b53fb454d2fa00/integration_test/keychain_probe_test.dart
+Adding Swift Package Manager integration...                      2,985ms
+The following plugins do not support Swift Package Manager for macos:
+  - patrol
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Running pod install...                                           1,425ms
+Building macOS application...                                   
+✓ Built build/macos/Build/Products/Debug/flutter_starter.app
+Failed to foreground app; open returned 1
+00:00 +0: secure storage round-trips a value
+PROBE_RESULT error=PlatformException(Unexpected security result code, Code: -34018, Message: A required entitlement isn't present., -34018, null)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following PlatformException was thrown running a test:
+PlatformException(Unexpected security result code, Code: -34018, Message: A required entitlement
+isn't present., -34018, null)
+
+When the exception was thrown, this was the stack:
+#0      StandardMethodCodec.decodeEnvelope (package:flutter/src/services/message_codecs.dart:653:7)
+#1      MethodChannel._invokeMethod (package:flutter/src/services/platform_channel.dart:366:18)
+<asynchronous suspension>
+#2      FlutterSecureStorage.write (package:flutter_secure_storage/flutter_secure_storage.dart:157:7)
+<asynchronous suspension>
+#3      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af6b53fb454d2fa00/integration_test/keychain_probe_test.dart:17:7)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  secure storage round-trips a value
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: secure storage round-trips a value [E]
+  Test failed. See exception logs above.
+  The test description was: secure storage round-trips a value
+  
+00:00 +0 -1: (tearDownAll)
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af6b53fb454d2fa00/integration_test/keychain_probe_test.dart: secure storage round-trips a value
