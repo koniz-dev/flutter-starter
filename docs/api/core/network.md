@@ -296,6 +296,7 @@ AuthInterceptor({
   Dio Function()? retryDioFactory,
   IKeyValueStore? keyValueStore,
   ISessionTerminationSink? sessionSink,
+  SessionGeneration? sessionGeneration,
 });
 ```
 
@@ -307,6 +308,7 @@ AuthInterceptor({
 | `retryDioFactory` | no | Builds the client used to replay the original request; see [retryDioFactory](#retrydiofactory) |
 | `keyValueStore` | no | Non-sensitive store holding the cached user blob, cleared on forced logout |
 | `sessionSink` | no | Told the session is over, so the running app drops in-memory session state |
+| `sessionGeneration` | no | Marks which sign-in a credential write belongs to; see [Refreshing across a logout](#refreshing-across-a-logout). Defaults to a private instance |
 
 **Exactly one of `tokenStore` or `secureStorageService` must be supplied.**
 Both are individually optional in the signature, but passing neither throws
@@ -398,7 +400,10 @@ test-only, that is a `epic:core-network` decision and belongs in its own issue.
    - **Success:** the new token is written to the token store, the original
      request is replayed through `retryDio()` with
      `Authorization: Bearer <new token>` and `X-Retry-Count: 1`, and the
-     handler resolves with the replayed response.
+     handler resolves with the replayed response. Unless the session ended
+     while the refresh was in flight - see
+     [Refreshing across a logout](#refreshing-across-a-logout), which is
+     checked before any of that happens.
    - **Failure** (a `Result` failure, a null token, or anything thrown -
      `Error` as well as `Exception`): the session is logged out and the
      handler is rejected.
@@ -435,6 +440,47 @@ the request path:
 - `/auth/register` (`ApiEndpoints.register`)
 - `/auth/refresh` (`ApiEndpoints.refreshToken`)
 - `/auth/logout` (`ApiEndpoints.logout`)
+
+### Refreshing across a logout
+
+A refresh is a read-modify-write that spans a full network round trip, and the
+thing it writes back - the access and refresh tokens - is shared mutable state.
+A user tapping "log out" while a background 401 is refreshing is ordinary use,
+not a microsecond race, and until #169 nothing in the refresh path noticed: the
+response came back after the teardown and re-persisted a complete, unexpired
+credential pair onto a device that was signed out on screen. Three unconditional
+writes sat behind that one round trip - `cacheToken` and `cacheRefreshToken`
+inside `AuthRepositoryImpl.refreshToken()`, and `setAccessToken` here.
+
+`SessionGeneration` (`lib/core/session/session_generation.dart`) is what makes
+those writes conditional. It is a monotonically increasing counter, shared
+between this interceptor and `AuthRepositoryImpl` through
+`sessionGenerationProvider`:
+
+- Every transition that replaces or removes the credential set calls
+  `invalidate()` **before** its own `await`s: `AuthRepositoryImpl.logout()`,
+  `login()` and `register()`, and `AuthInterceptor._logoutUser()`.
+- Both refresh paths read `current` before the round trip and check
+  `isCurrent(...)` immediately before persisting. A generation that has been
+  left behind can never become current again, so a stale refresh writes
+  nothing.
+
+A counter rather than a `terminated` flag, because a boolean answers "is there
+a session right now", which is the wrong question: signing back in while an old
+refresh is in flight clears the flag again and the stale response lands on the
+*new* user's tokens. That is also why a stale refresh **skips** its writes
+rather than clearing the store - clearing would destroy the credentials of a
+session that started during the refresh.
+
+Queued requests are **rejected, not replayed**, once the generation they were
+queued under is stale. Replaying would put `Authorization: Bearer ...` on the
+wire for a user who has signed out; the check sits inside the drain loop, so a
+logout landing part-way through stops the remaining replays too. Rejection
+still completes every handler, so the guarantee from point 5 above is
+unaffected.
+
+The guard does not wedge anything. Each refresh reads the generation afresh, so
+the first 401 after a successful `login()` refreshes normally.
 
 ### Usage
 

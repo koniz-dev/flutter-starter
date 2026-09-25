@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/session/session_providers.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
@@ -60,6 +61,11 @@ final Provider<AuthRepository> authRepositoryProvider =
         // Same ApiClient instance the remote data source already resolved, so
         // this adds no new edge to the provider graph.
         httpCache: ref.read(networkClientProvider).responseCache,
+        // The *same* instance `authInterceptorProvider` holds. Two of the
+        // three credential writes behind one 401 refresh happen in this
+        // repository and one in the interceptor; they only agree about which
+        // session is live if they share this counter (#169).
+        sessionGeneration: ref.watch(sessionGenerationProvider),
       );
     });
 
@@ -85,6 +91,9 @@ final Provider<AuthInterceptor> authInterceptorProvider =
         // implements the contract and hands it down; `lib/core/network` never
         // learns that a Riverpod notifier is what it just cleared.
         sessionSink: RiverpodSessionTerminationSink(ref),
+        // Shared with `authRepositoryProvider` above, so a logout raised on
+        // either side is visible to a refresh in flight on the other (#169).
+        sessionGeneration: ref.watch(sessionGenerationProvider),
       );
       // Releases the single 401-replay client and its connection pool.
       ref.onDispose(interceptor.dispose);
