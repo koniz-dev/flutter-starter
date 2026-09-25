@@ -72,12 +72,34 @@ Web is the awkward case: `EnvConfig` guards every dart-define read with
 configuration mechanism there is. That is allowed - for values you would be
 happy to publish, because publishing them is exactly what it does.
 
-`tool/check_env_assets.dart` fails when any env file other than `.env.example`
-appears in the asset list. It runs in two places:
+`tool/check_env_assets.dart` fails when a secrets file would be bundled. It
+runs in two places:
 
 - `./scripts/dev/audit_template.sh`, as its own step; and
 - `test/tooling/check_env_assets_test.dart`, so `flutter test` - and therefore
   the CI **Quality gate** - fails on a commit that adds one.
+
+It checks the two ways a file gets bundled:
+
+1. **Named in the list** - `- .env` and friends.
+2. **Inside a declared directory** - this repository declares `assets/images/`
+   and `assets/config/`, and a directory entry bundles every file directly
+   inside it. A `.env` dropped into `assets/config/` ships with an *empty*
+   pubspec diff, so nothing in review would catch it; `.env` is gitignored, so
+   no secret scanner sees it either. The guard walks those directories.
+
+What counts as a secrets file, by name only - nothing reads file contents:
+
+| Matched | Not matched |
+|---|---|
+| `.env` and `.env.*` (except `.env.example`) | `.env.example` |
+| `.pem`, `.key`, `.p12`, `.pfx`, `.p8`, `.jks`, `.keystore`, `.mobileprovision`, `.provisionprofile` | `.cer`, `.crt`, `.der` - a certificate is public by design, and a pinning setup may legitimately ship one |
+| `secrets.{json,yaml,yml}`, `credentials.json`, `service-account.json`, `key.properties`, `google-services.json`, `GoogleService-Info.plist` | `config.json`, `app_config.yaml` and other ordinary configuration |
+
+The boundary is deliberate. A rule that fired on `config.json` inside a
+directory named `assets/config/` would be wrong on its first run, and a guard
+that cries wolf gets switched off rather than fixed. The cost is the other
+direction: a secret inside an innocuously named file is not detected.
 
 To take the web exception, acknowledge it inline. The marker is committed next
 to the entry, so it appears in the diff and in review:
@@ -90,9 +112,25 @@ flutter:
     - .env # env-asset-ack: web build, contains no secrets
 ```
 
+For a file inside a declared directory there is no line of its own, so the
+acknowledgement goes on the **directory** entry and has to **name the file**:
+
+```yaml
+    - assets/config/ # env-asset-ack: .env.web, publishable values only
+```
+
+Naming it is what keeps the exception narrow: the same comment does not silence
+the next file somebody drops into that directory.
+
 The guard then passes and prints a reminder instead of failing. An environment
 variable would not have that property, which is why the escape hatch is a
 comment in the repository rather than a flag on the command line.
+
+Two things it cannot do. It sees the tree **at the moment it runs**, so a file
+created after the check still ships; and it is not on the release-build path -
+`scripts/ci/build_all.sh` and the deploy workflows can build a tree the guard
+never ran against (koniz-dev/flutter-starter#135). Run it before a release, as
+below.
 
 Before any release, and as the release-checklist line for this:
 `dart run tool/check_env_assets.dart` exits 0, and any acknowledged entry it
