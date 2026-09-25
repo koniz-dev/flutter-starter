@@ -1,0 +1,87 @@
+
+==============================================================
+1a. routes_registry.dart now composes every feature route module
+==============================================================
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/features/auth/routing/auth_routes.dart';
+import 'package:flutter_starter/features/feature_flags/routing/feature_flags_routes.dart';
+import 'package:flutter_starter/features/home/routing/home_routes.dart';
+import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
+import 'package:go_router/go_router.dart';
+
+/// Composes the app route tree from per-feature route modules.
+///
+/// Every screen the app ships reaches the tree through here. A route constant
+/// or navigation helper that no module registers is a 404 waiting to happen,
+/// so add the feature's `routing/` module here in the same change that adds
+/// the constant.
+List<RouteBase> buildAppRoutes(Ref ref) {
+  return <RouteBase>[
+    ...buildAuthRoutes(ref),
+    ...buildTasksRoutes(ref),
+    ...buildFeatureFlagsRoutes(ref),
+    buildHomeRoute(ref),
+  ];
+}
+
+==============================================================
+1b. the per-feature routing modules (two of them are new)
+==============================================================
+
+lib/features/auth/routing/auth_routes.dart
+lib/features/feature_flags/routing/feature_flags_routes.dart
+lib/features/home/routing/home_routes.dart
+lib/features/tasks/routing/tasks_routes.dart
+
+==============================================================
+5a. navigation_extensions_test.dart builds no GoRouter of its own
+==============================================================
+
+$ grep -n "GoRouter(" test/core/routing/navigation_extensions_test.dart
+grep exit: 1  (1 = no matches, which is the expected result)
+
+==============================================================
+5b. it reads the app router from goRouterProvider instead
+==============================================================
+
+4:import 'package:flutter_starter/core/routing/app_router.dart';
+26:// These tests drive the *app's* router (`goRouterProvider`), not a router
+66:    final router = container.read(goRouterProvider);
+
+==============================================================
+5c. no routing test ends in a comment instead of an assertion
+==============================================================
+
+$ grep -rn "// Should \|// Route may not exist" test/core/routing test/features/*/routing
+grep exit: 1  (1 = no matches, which is the expected result)
+
+==============================================================
+6. no isNotNull tautologies left anywhere under test/
+==============================================================
+
+$ grep -rn "expect(router[0-9]*, isNotNull)\|expect(Route[A-Za-z]*Params, isNotNull)" test/
+grep exit: 1  (1 = no matches, which is the expected result)
+
+==============================================================
+For contrast: the same greps against the pre-fix tree (7b24e4c^)
+==============================================================
+
+$ git grep -n "expect(router[0-9]*, isNotNull)|expect(Route[A-Za-z]*Params, isNotNull)" 7b24e4c^ -- test/
+7b24e4c^:test/core/routing/app_router_test.dart:63:      expect(router, isNotNull);
+7b24e4c^:test/core/routing/app_router_test.dart:277:      expect(router, isNotNull);
+7b24e4c^:test/core/routing/app_router_test.dart:298:      expect(router, isNotNull);
+7b24e4c^:test/core/routing/app_router_test.dart:319:      expect(router, isNotNull);
+7b24e4c^:test/core/routing/app_router_test.dart:382:      expect(router1, isNotNull);
+7b24e4c^:test/core/routing/app_router_test.dart:383:      expect(router2, isNotNull);
+7b24e4c^:test/core/routing/app_routes_test.dart:32:      expect(RouteParams, isNotNull);
+7b24e4c^:test/core/routing/app_routes_test.dart:38:      expect(RouteQueryParams, isNotNull);
+
+$ git grep -c "GoRouter(" 7b24e4c^ -- test/core/routing/navigation_extensions_test.dart
+7b24e4c^:test/core/routing/navigation_extensions_test.dart:1
+
+$ git show 7b24e4c^:lib/core/routing/routes_registry.dart | tail -4
+/// Stripped baseline: auth + home only.
+List<RouteBase> buildAppRoutes(Ref ref) {
+  return <RouteBase>[...buildAuthRoutes(ref), buildHomeRoute(ref)];
+}
