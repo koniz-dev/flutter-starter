@@ -1,0 +1,55 @@
+# Source-level checks for koniz-dev/flutter-starter#65
+# main @ d092ce8
+
+## Criterion 1 - no widget named FocusManager remains in lib/
+$ grep -rn "class FocusManager" lib/
+(no matches)
+$ grep -rn "class AccessibleFocus" lib/
+lib/shared/accessibility/accessibility_widgets.dart:346:class AccessibleFocus extends StatelessWidget {
+
+## Criterion 4 - cacheKey removed from OptimizedImage
+$ grep -rn "cacheKey" lib/shared/widgets/optimized_image.dart
+(no matches)
+
+## Criterion 11 - unenforced AccessibilityConstants removed, no dangling references
+references to AccessibilityConstants.minTouchTargetSpacing across lib/ test/ docs/: 0
+references to AccessibilityConstants.decorativeIconLabel across lib/ test/ docs/: 0
+references to AccessibilityConstants.focusAnnouncementDelay across lib/ test/ docs/: 0
+references to AccessibilityConstants.minReadableFontSize across lib/ test/ docs/: 0
+references to AccessibilityConstants.recommendedBodyFontSize across lib/ test/ docs/: 0
+references to AccessibilityConstants.recommendedLargeFontSize across lib/ test/ docs/: 0
+constants remaining in accessibility_constants.dart: 4
+
+## Criteria 5/6 - hardcoded English literals gone from lib/
+$ grep -rn for the literals listed in the issue
+lib/l10n/app_localizations.dart:528:  /// **'No items found'**
+lib/l10n/app_localizations.dart:534:  /// **'Load More'**
+lib/l10n/app_localizations.dart:540:  /// **'Attempts to reload the content'**
+lib/l10n/app_localizations.dart:546:  /// **'Opens language selection dialog'**
+lib/l10n/app_localizations.dart:552:  /// **'Progress indicator'**
+lib/l10n/app_localizations.dart:576:  /// **'Focused on {label}'**
+lib/l10n/app_localizations.dart:582:  /// **'Navigated to {page}'**
+lib/l10n/app_localizations_en.dart:250:  String get noItemsFound => 'No items found';
+lib/l10n/app_localizations_en.dart:253:  String get loadMore => 'Load More';
+lib/l10n/app_localizations_en.dart:256:  String get retryHint => 'Attempts to reload the content';
+lib/l10n/app_localizations_en.dart:259:  String get selectLanguageHint => 'Opens language selection dialog';
+lib/l10n/app_localizations_en.dart:262:  String get progressIndicator => 'Progress indicator';
+lib/l10n/app_localizations_en.dart:277:    return 'Focused on $label';
+lib/l10n/app_localizations_en.dart:282:    return 'Navigated to $page';
+
+## Criterion 6 - sendAnnouncement no longer hardcodes a direction
+$ grep -n "TextDirection" lib/core/accessibility/focus_announcer.dart
+41:  /// Derived from the active locale via [LocalizationService.getTextDirection],
+45:  static TextDirection textDirectionOf(BuildContext context) {
+48:      return LocalizationService.getTextDirection(locale);
+50:    return Directionality.maybeOf(context) ?? TextDirection.ltr;
+
+## Criterion 12 - supportedLocales derived from the enum
+$ sed -n "/List of supported locales/,/];/p" lib/core/localization/localization_service.dart
+  /// List of supported locales
+  ///
+  /// Derived from [SupportedLocale] so there is one list to maintain, not two.
+  static List<Locale> get supportedLocales => [
+    for (final supportedLocale in SupportedLocale.values)
+      supportedLocale.locale,
+  ];
