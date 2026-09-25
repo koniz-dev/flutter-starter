@@ -163,7 +163,12 @@ void main() {
                   'targetVersion',
                   StorageVersion.current,
                 )
-                .having((e) => e.missingFromVersion, 'missingFromVersion', 1),
+                .having((e) => e.missingFromVersion, 'missingFromVersion', 1)
+                .having(
+                  (e) => '$e',
+                  'toString',
+                  startsWith('MigrationPathException:'),
+                ),
           ),
         );
 
@@ -255,6 +260,15 @@ void main() {
                   (e) => e.supportedVersion,
                   'supportedVersion',
                   StorageVersion.current,
+                )
+                // Asserted on the real thrown object, not just a hand-built
+                // one: #142 was found through a widget test failing with
+                // `Found 0 widgets`, which reads as "wrong screen" rather
+                // than "wrong class name". Here it fails at the throw site.
+                .having(
+                  (e) => '$e',
+                  'toString',
+                  startsWith('StorageDowngradeException:'),
                 ),
           ),
         );
@@ -292,6 +306,50 @@ void main() {
           throwsA(isA<MigrationExecutionException>()),
         );
       });
+    });
+  });
+
+  // These assert the exact string, not `contains`, because the string itself
+  // is the product: `main()` renders `'$error'` verbatim into
+  // `StartupFailureApp`, so this is what a user quotes in a bug report.
+  group('exception toString (#142)', () {
+    test('the base class names itself and keeps its original-exception '
+        'line', () {
+      expect(
+        MigrationExecutionException('boom').toString(),
+        'MigrationExecutionException: boom',
+      );
+      expect(
+        MigrationExecutionException(
+          'boom',
+          originalException: StateError('inner'),
+        ).toString(),
+        'MigrationExecutionException: boom\n'
+        'Original exception: Bad state: inner',
+      );
+    });
+
+    test('a downgrade refusal names itself, not its parent', () {
+      final exception = StorageDowngradeException(
+        'boom',
+        storedVersion: 3,
+        supportedVersion: 2,
+      );
+
+      expect(exception.toString(), startsWith('StorageDowngradeException:'));
+      expect(exception.toString(), 'StorageDowngradeException: boom');
+    });
+
+    test('a missing migration path names itself, not its parent', () {
+      final exception = MigrationPathException(
+        'boom',
+        currentVersion: 1,
+        targetVersion: 2,
+        missingFromVersion: 1,
+      );
+
+      expect(exception.toString(), startsWith('MigrationPathException:'));
+      expect(exception.toString(), 'MigrationPathException: boom');
     });
   });
 }

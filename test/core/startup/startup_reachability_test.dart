@@ -334,18 +334,12 @@ void main() {
       await bootRealMain(tester);
 
       expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
-      // Matched on the message, not the class name: StorageDowngradeException
-      // inherits MigrationExecutionException's toString and therefore
-      // introduces itself by its parent's name on screen. That is what the
-      // user actually sees, so that is what is asserted.
       expect(
-        find.textContaining(
-          'Stored data is at version ${StorageVersion.current + 1}',
-        ),
+        find.textContaining('StorageDowngradeException'),
         findsOneWidget,
         reason:
-            'the second failure route reaches the same screen and carries its '
-            'own message, so main() is not rendering one canned error',
+            'the second failure route reaches the same screen and names its '
+            'own class, so main() is not rendering one canned error',
       );
     });
 
