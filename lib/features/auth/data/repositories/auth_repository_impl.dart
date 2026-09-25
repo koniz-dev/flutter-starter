@@ -3,6 +3,7 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -17,7 +18,8 @@ class AuthRepositoryImpl implements AuthRepository {
     required this.remoteDataSource,
     required this.localDataSource,
     this.httpCache,
-  });
+    SessionGeneration? sessionGeneration,
+  }) : sessionGeneration = sessionGeneration ?? SessionGeneration();
 
   /// Remote data source for API calls
   final AuthRemoteDataSource remoteDataSource;
@@ -31,8 +33,24 @@ class AuthRepositoryImpl implements AuthRepository {
   /// supplies it from `apiClientProvider`.
   final IHttpResponseCache? httpCache;
 
+  /// Which sign-in the credentials on this device belong to.
+  ///
+  /// Shared with `AuthInterceptor` via `sessionGenerationProvider`. Every
+  /// method here that replaces or removes the credential set advances it, and
+  /// [refreshToken] - the only method that persists a token it did not itself
+  /// ask the user for - checks it before writing
+  /// (koniz-dev/flutter-starter#169).
+  ///
+  /// Optional in the constructor so existing call sites keep compiling; a
+  /// repository given its own counter still guards its own writes, it just
+  /// cannot see terminations raised by the interceptor.
+  final SessionGeneration sessionGeneration;
+
   @override
   Future<Result<User>> login(String email, String password) async {
+    // A different credential set is about to land. Any refresh already in
+    // flight belongs to the session being replaced and must not overwrite it.
+    sessionGeneration.invalidate();
     try {
       final authResponse = await remoteDataSource.login(email, password);
       await localDataSource.cacheUser(authResponse.user);
@@ -54,6 +72,8 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
     String name,
   ) async {
+    // Same reason as [login]: this writes a new credential set.
+    sessionGeneration.invalidate();
     try {
       final authResponse = await remoteDataSource.register(
         email,
@@ -90,6 +110,13 @@ class AuthRepositoryImpl implements AuthRepository {
   /// is the one the caller must not paper over.
   @override
   Future<Result<void>> logout() async {
+    // First, and synchronously, ahead of every await below: the user has asked
+    // to be signed out, so a refresh already in flight is stale from this
+    // instant. Doing it after the teardown would leave the whole remote call
+    // plus `clearCache()` as a window in which that refresh could still land
+    // and re-persist the pair being removed (koniz-dev/flutter-starter#169).
+    sessionGeneration.invalidate();
+
     // `on Object`: the remote call can throw an Error as well as an Exception
     // (a missing platform plugin, a decode failure), and neither may skip the
     // teardown below.
@@ -174,8 +201,23 @@ class AuthRepositoryImpl implements AuthRepository {
     };
   }
 
+  /// Exchanges the stored refresh token for a new credential pair.
+  ///
+  /// Both writes below are conditional on the session still being the one this
+  /// call started under. A refresh is a read-modify-write across a full
+  /// network round trip, and [logout] - or a forced logout in
+  /// `AuthInterceptor`, or a fresh [login] - can replace the credential set
+  /// while that round trip is open. Writing unconditionally is what re-armed a
+  /// signed-out device with a live access *and* refresh token
+  /// (koniz-dev/flutter-starter#169).
+  ///
+  /// A stale refresh reports failure rather than [Success]: it did not produce
+  /// a token this session can use. It deliberately does not *clear* anything -
+  /// the session that replaced this one may own what is in the store now.
   @override
   Future<Result<String>> refreshToken() async {
+    // Read before the round trip; checked immediately before each write.
+    final generation = sessionGeneration.current;
     try {
       final refreshToken = await localDataSource.getRefreshToken();
       if (refreshToken == null) {
@@ -185,6 +227,14 @@ class AuthRepositoryImpl implements AuthRepository {
       }
 
       final authResponse = await remoteDataSource.refreshToken(refreshToken);
+      if (!sessionGeneration.isCurrent(generation)) {
+        return const ResultFailure(
+          UnknownFailure(
+            'Session ended while the token refresh was in flight',
+            code: 'SESSION_TERMINATED',
+          ),
+        );
+      }
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);

@@ -10,6 +10,7 @@ import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -33,9 +34,11 @@ class AuthInterceptor extends Interceptor {
     Dio Function()? retryDioFactory,
     IKeyValueStore? keyValueStore,
     ISessionTerminationSink? sessionSink,
+    SessionGeneration? sessionGeneration,
   }) : _retryDioFactory = retryDioFactory,
        _keyValueStore = keyValueStore,
        _sessionSink = sessionSink,
+       _sessionGeneration = sessionGeneration ?? SessionGeneration(),
        _tokenStore =
            tokenStore ??
            (secureStorageService != null
@@ -82,6 +85,26 @@ class AuthInterceptor extends Interceptor {
   /// and a missing sink degrades to exactly the pre-#127 behaviour rather than
   /// to a crash.
   final ISessionTerminationSink? _sessionSink;
+
+  /// Which sign-in the credentials this interceptor writes belong to.
+  ///
+  /// The 401 handler reads it before awaiting the refresh and re-checks it
+  /// before persisting anything, so a logout that lands during the round trip
+  /// cannot be undone by the response that arrives after it
+  /// (koniz-dev/flutter-starter#169). [_logoutUser] advances it for the same
+  /// reason in the other direction.
+  ///
+  /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
+  /// production: two of the three credential writes behind one refresh happen
+  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
+  /// would leave those two unguarded.
+  ///
+  /// Optional for the same reason [_keyValueStore] and [_sessionSink] are:
+  /// hand-built call sites keep compiling. A standalone interceptor still
+  /// guards its own writes against its own forced logouts; it simply cannot
+  /// see terminations raised elsewhere, because nothing else holds its
+  /// counter.
+  final SessionGeneration _sessionGeneration;
 
   /// Locally persisted HTTP response cache, if wired.
   ///
@@ -259,6 +282,9 @@ class AuthInterceptor extends Interceptor {
   /// Every exit path completes both this request's handler and every queued
   /// handler: a handler that is neither resolved nor rejected leaves its
   /// caller awaiting a future that never finishes.
+  ///
+  /// No exit path persists a credential belonging to a session that ended
+  /// while the refresh was in flight. See [_sessionGeneration].
   Future<void> _handle401Error(
     DioException err,
     ErrorInterceptorHandler handler,
@@ -281,8 +307,31 @@ class AuthInterceptor extends Interceptor {
     _isRefreshing = true;
     String? refreshedToken;
 
+    // Read before the round trip, checked after it: anything that ends the
+    // session in between makes this value stale for good.
+    final generation = _sessionGeneration.current;
+
     try {
       final result = await _refreshToken();
+
+      if (!_sessionGeneration.isCurrent(generation)) {
+        // The session this refresh belonged to ended while it was in flight -
+        // a logout, a forced logout, or a fresh sign-in. Persist nothing and
+        // replay nothing: the teardown already emptied the store, and a newer
+        // sign-in may have filled it again with credentials that are not ours
+        // to overwrite.
+        //
+        // Deliberately *not* a _logoutUser() call. Whoever advanced the
+        // generation has already torn the session down, and repeating it would
+        // clear a session that started after this refresh did - the exact
+        // damage the guard exists to prevent, inflicted from the other side.
+        //
+        // refreshedToken stays null, so the `finally` drain rejects every
+        // queued request rather than replaying it with a dead token.
+        handler.reject(err);
+        return;
+      }
+
       final newToken = result.isSuccess ? result.dataOrNull : null;
 
       if (newToken == null) {
@@ -311,7 +360,7 @@ class AuthInterceptor extends Interceptor {
       // Reset before draining: a 401 arriving during the drain must be able
       // to start a fresh refresh rather than queue behind a finished one.
       _isRefreshing = false;
-      await _drainPendingRequests(refreshedToken);
+      await _drainPendingRequests(refreshedToken, generation);
     }
   }
 
@@ -378,7 +427,18 @@ class AuthInterceptor extends Interceptor {
   /// With a [newToken] each one is replayed and resolved (or rejected if the
   /// replay fails). Without one the refresh failed, so each queued handler is
   /// rejected with its own original error - never left dangling.
-  Future<void> _drainPendingRequests(String? newToken) async {
+  ///
+  /// [generation] is the session the refresh was started under. A queued
+  /// request is **rejected, not replayed**, once that generation is no longer
+  /// current: replaying would put `Authorization: Bearer ...` on the wire for
+  /// a user who has signed out, and the caller of a request issued before the
+  /// logout has no use for its body afterwards. Rejection still completes the
+  /// handler, so nothing is stranded.
+  ///
+  /// The check is inside the loop rather than above it because each replay is
+  /// awaited: a logout landing part-way through the drain must stop the
+  /// remaining replays too, not only the ones not yet started.
+  Future<void> _drainPendingRequests(String? newToken, int generation) async {
     if (_pendingRequests.isEmpty) {
       return;
     }
@@ -387,7 +447,7 @@ class AuthInterceptor extends Interceptor {
     _pendingRequests.clear();
 
     for (final pending in requests) {
-      if (newToken == null) {
+      if (newToken == null || !_sessionGeneration.isCurrent(generation)) {
         pending.handler.reject(pending.error);
         continue;
       }
@@ -422,7 +482,19 @@ class AuthInterceptor extends Interceptor {
   /// Each step is guarded separately and no step is reachable only through
   /// another: cleanup must never stop a handler from being completed, and a
   /// failure - or absence - of one step must not skip the rest.
+  ///
+  /// The generation is advanced *first*, synchronously, ahead of every
+  /// `await` below. A concurrent refresh - the `retryCount == '1'` branch
+  /// forces a logout while another `_handle401Error` may still be waiting on
+  /// one - is then already stale by the time it reaches its own check, rather
+  /// than racing the teardown it is about to undo
+  /// (koniz-dev/flutter-starter#169).
   Future<void> _logoutUser() async {
+    // Nothing in flight may write a credential for the session being ended.
+    // Unguarded on purpose: it is a synchronous integer increment that cannot
+    // throw, and a try/catch here would suggest it might.
+    _sessionGeneration.invalidate();
+
     // Clear tokens from secure storage
     try {
       await _tokenStore.clearAllTokens();
