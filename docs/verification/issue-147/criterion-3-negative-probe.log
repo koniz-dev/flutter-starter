@@ -1,0 +1,161 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display tasks list
+00:02 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should create task when save is tapped
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should create task when save is tapped
+00:02 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:02 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:02 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:02 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:02 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:02 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:02 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should retry loading when retry button is tapped
+00:02 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:03 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:03 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should validate title when updating task
+00:03 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should toggle task completion when checkbox is tapped
+00:03 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should handle update task failure
+00:03 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should refresh when refresh button is tapped
+00:03 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should refresh when refresh button is tapped
+00:03 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should handle create task failure
+00:03 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show delete confirmation dialog
+00:03 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show delete confirmation dialog
+00:03 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should handle cancel button in edit mode
+00:03 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle pull-to-refresh
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle pull-to-refresh
+00:03 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle pull-to-refresh
+00:03 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should clear the description when it is emptied
+00:03 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should clear the description when it is emptied
+00:03 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display completed and incomplete tasks separately
+00:03 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should keep a description that was not cleared
+00:03 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle error retry button
+00:03 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle error retry button
+00:04 +33: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle error retry button
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should show loading indicator in AppBar when saving
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle canceling add task dialog
+00:04 +36: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle canceling add task dialog
+00:04 +37: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly
+00:04 +38: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly
+00:04 +39: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly
+00:04 +40: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly
+00:04 +41: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "2024-03-15 09:05:00": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart:954:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart line 954
+The test description was:
+  should format date time correctly
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +41 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should validate title in add task dialog
+00:04 +41 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly [E]
+  Test failed. See exception logs above.
+  The test description was: should format date time correctly
+  
+00:04 +41 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should validate title in add task dialog
+00:04 +42 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh double-tapping a checkbox toggles exactly once
+00:04 +43 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh a failed mutation keeps the loaded list on screen
+00:04 +44 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the empty state
+00:04 +45 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+00:05 +46 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering every task row renders its createdAt via DateFormatter
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "2024-03-15": []>
+   Which: means none were found but one was expected
+row for Alpha should show its formatted createdAt
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart:947:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart line 947
+The test description was:
+  every task row renders its createdAt via DateFormatter
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +46 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering every task row renders its createdAt via DateFormatter [E]
+  Test failed. See exception logs above.
+  The test description was: every task row renders its createdAt via DateFormatter
+  
+00:05 +46 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering the date is rendered, not the raw DateTime.toString()
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "2024-03-15": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart:972:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart line 972
+The test description was:
+  the date is rendered, not the raw DateTime.toString()
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +46 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering the date is rendered, not the raw DateTime.toString() [E]
+  Test failed. See exception logs above.
+  The test description was: the date is rendered, not the raw DateTime.toString()
+  
+00:05 +46 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering a row without a description still shows its date
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "2021-06-30": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart:989:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart line 989
+The test description was:
+  a row without a description still shows its date
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +46 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering a row without a description still shows its date [E]
+  Test failed. See exception logs above.
+  The test description was: a row without a description still shows its date
+  
+00:05 +46 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should format date time correctly
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering a row without a description still shows its date
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering every task row renders its createdAt via DateFormatter
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a4940b532a980934b/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering the date is rendered, not the raw DateTime.toString()

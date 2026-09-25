@@ -1,0 +1,31 @@
+HEAD: 578dcb70f4e8244107ffead3f30a5db001fc7d48  (merged #199)
+
+Criterion 4 asks that `grep -rl PaginationHelper lib/` and
+`grep -rl Debouncer lib/` each return at least one path OUTSIDE
+lib/core/utils/. They do not. Recorded as FAIL, not worked around -
+see the issue comment for why neither utility was wired.
+
+$ grep -rl Debouncer lib/
+lib/core/utils/debouncer.dart
+
+$ grep -rl Throttler lib/
+lib/core/utils/debouncer.dart
+
+$ grep -rl PaginationHelper lib/
+lib/core/utils/pagination_helper.dart
+
+$ grep -rl LazyLoader lib/
+lib/core/utils/lazy_loader.dart
+
+$ grep -rl DateFormatter lib/
+lib/core/utils/date_formatter.dart
+lib/features/tasks/data/models/task_model.dart
+lib/features/tasks/presentation/screens/task_detail_screen.dart
+lib/features/tasks/presentation/screens/tasks_list_screen.dart
+
+$ grep -rl ProviderDisposal lib/
+lib/core/utils/provider_disposal.dart
+
+$ grep -rl PerformanceUtils lib/
+lib/core/performance/performance_utils.dart
+
