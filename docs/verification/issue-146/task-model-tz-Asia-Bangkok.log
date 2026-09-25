@@ -1,0 +1,38 @@
+$ TZ=Asia/Bangkok flutter test test/features/tasks/data/models/task_model_test.dart --reporter expanded
+TZ=Asia/Bangkok -> UTC offset +0700 (+07)
+
+[pub resolution output elided]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a433742c998a8e2ec/test/features/tasks/data/models/task_model_test.dart
+00:00 +0: TaskModel should create TaskModel from JSON
+00:00 +1: TaskModel should create TaskModel from JSON without description
+00:00 +2: TaskModel should convert TaskModel to JSON
+00:00 +3: TaskModel should convert TaskModel to JSON without description
+00:00 +4: TaskModel should create TaskModel from entity
+00:00 +5: TaskModel should convert TaskModel to entity
+00:00 +6: TaskModel should handle round-trip conversion (JSON -> Model -> JSON)
+00:00 +7: TaskModel should handle round-trip conversion (Entity -> Model -> Entity)
+00:00 +8: TaskModel Edge cases should handle JSON with null is_completed as false
+00:00 +9: TaskModel Edge cases should handle JSON with missing is_completed field
+00:00 +10: TaskModel Edge cases should handle JSON with empty string description
+00:00 +11: TaskModel Edge cases should preserve all fields in toJson
+00:00 +12: TaskModel Edge cases should handle very long title and description
+00:00 +13: TaskModel Edge cases should handle special characters in title and description
+00:00 +14: TaskModel Edge cases should handle ISO8601 timestamp variations
+00:00 +15: TaskModel Edge cases should handle task with same createdAt and updatedAt
+00:00 +16: TaskModel Edge cases should handle task with updatedAt before createdAt
+00:00 +17: TaskModel Edge cases should handle fromEntity with all fields
+00:00 +18: TaskModel Edge cases should handle fromEntity with null description
+00:00 +19: TaskModel Edge cases should handle toEntity returns same instance
+00:00 +20: TaskModel Edge cases should handle JSON with false is_completed explicitly
+00:00 +21: TaskModel Edge cases should handle toJson with null description
+00:00 +22: TaskModel Timezone-safe timestamps toJson writes a designator for a local DateTime
+00:00 +23: TaskModel Timezone-safe timestamps toJson writes a designator for a UTC DateTime
+00:00 +24: TaskModel Timezone-safe timestamps toJson converts the wall clock by the host UTC offset
+00:00 +25: TaskModel Timezone-safe timestamps a round trip preserves the instant
+00:00 +26: TaskModel Timezone-safe timestamps a stored Z timestamp names one instant in every zone
+00:00 +27: TaskModel Timezone-safe timestamps a stored numeric offset is honoured
+00:00 +28: TaskModel Timezone-safe timestamps a legacy offset-less row is read as local wall clock
+00:00 +29: TaskModel Timezone-safe timestamps a legacy row gains a designator when it is next written
+00:00 +30: TaskModel Timezone-safe timestamps an out-of-range calendar date is rejected, not rolled over
+00:00 +31: TaskModel Timezone-safe timestamps an unparseable or absent timestamp is rejected
+00:00 +32: All tests passed!

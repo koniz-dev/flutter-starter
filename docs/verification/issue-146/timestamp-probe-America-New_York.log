@@ -1,0 +1,30 @@
+$ TZ=America/New_York flutter test docs/verification/issue-146/timestamp_probe.dart --reporter expanded
+TZ=America/New_York -> UTC offset -0400 (EDT)
+
+[pub resolution output elided]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a433742c998a8e2ec/docs/verification/issue-146/timestamp_probe.dart
+00:00 +0: timestamp probe
+Shell: host zone: EST offset -5:00:00.000000
+Shell: 
+Shell: --- criterion 1: toJson writes a designator
+Shell:   in:  2024-01-15 14:30:45.000 (isUtc=false)
+Shell:   out: "2024-01-15T19:30:45.000Z"  endsWith Z: true
+Shell:   in:  2024-01-15 07:30:45.000Z (isUtc=true)
+Shell:   out: "2024-01-15T07:30:45.000Z"  endsWith Z: true
+Shell: 
+Shell: --- criterion 2: round trip preserves the instant
+Shell:   2024-01-15 14:30:45.000 -> 2024-01-15 14:30:45.000  isAtSameMomentAs: true
+Shell:   2024-01-15 07:30:45.000Z -> 2024-01-15 02:30:45.000  isAtSameMomentAs: true
+Shell:   2024-06-30 23:59:59.999 -> 2024-06-30 23:59:59.999  isAtSameMomentAs: true
+Shell: 
+Shell: --- criterion 3: legacy offset-less row
+Shell:   stored:   "2026-09-19T14:30:00.000"
+Shell:   read as:  2026-09-19 14:30:00.000 (isUtc=false)
+Shell:   equals DateTime(2026, 9, 19, 14, 30): true
+Shell:   old DateTime.parse gave: 2026-09-19 14:30:00.000 -> unshifted: true
+Shell:   rewritten on next write: "2026-09-19T18:30:00.000Z"
+Shell: 
+Shell: --- criterion 4: malformed calendar date
+Shell:   DateTime.parse("2024-02-30T00:00:00Z") = 2024-03-01 00:00:00.000Z  <- the silent roll-over
+Shell:   TaskModel.fromJson threw FormatException: Task JSON field "created_at" is not a valid ISO-8601 timestamp
+00:00 +1: All tests passed!
