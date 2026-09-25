@@ -1,0 +1,8 @@
+[0;34mStarting Branding Setup...[0m
+[0;31mError: assets/images/logo.png not found.[0m
+
+Place a high-resolution logo (1024x1024 PNG recommended) at assets/images/logo.png
+and re-run this script. Both flutter_launcher_icons.yaml and
+flutter_native_splash.yaml read that exact path; change them together
+with this script if you want a different location.
+exit=1
