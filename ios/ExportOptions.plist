@@ -20,7 +20,7 @@
 	<string>YOUR_TEAM_ID</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.example.flutter_starter</key>
+		<key>com.example.flutterStarter</key>
 		<string>YOUR_PROVISIONING_PROFILE_NAME</string>
 	</dict>
 </dict>

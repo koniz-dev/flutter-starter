@@ -1,0 +1,36 @@
+PODS:
+  - CocoaAsyncSocket (7.6.5)
+  - Flutter (1.0.0)
+  - freerasp (1.0.0):
+    - Flutter
+  - patrol (0.0.1):
+    - CocoaAsyncSocket (~> 7.6)
+    - Flutter
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - freerasp (from `.symlinks/plugins/freerasp/ios`)
+  - patrol (from `.symlinks/plugins/patrol/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - CocoaAsyncSocket
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  freerasp:
+    :path: ".symlinks/plugins/freerasp/ios"
+  patrol:
+    :path: ".symlinks/plugins/patrol/darwin"
+
+SPEC CHECKSUMS:
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+  freerasp: d77275f774facb901f52e9608e5bd34768728363
+  patrol: 5df5d241d7f95f0df12a6906bbf45acb43a1e537
+
+PODFILE CHECKSUM: 76ea5dd400d249c1a73ab43507375144e641a69b
+
+COCOAPODS: 1.17.0

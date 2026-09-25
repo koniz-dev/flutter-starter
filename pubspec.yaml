@@ -158,8 +158,16 @@ flutter:
   # test/tooling/check_env_assets_test.dart fail if an env file other than
   # .env.example appears below. See docs/guides/configuration.md
   # ("Never ship a secret in the bundle") for the deliberate-exception marker.
+  #
+  # assets/images/ and assets/config/ are declared as directories below: anything
+  # dropped in them is bundled without a further pubspec edit. Both ship holding
+  # only .gitkeep, which is what keeps the directories - and therefore those two
+  # declarations - valid on a fresh clone. Flutter does not recurse, so a
+  # sub-directory needs its own line.
   assets:
     - .env.example
+    - assets/images/
+    - assets/config/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

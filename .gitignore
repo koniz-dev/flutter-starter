@@ -54,6 +54,34 @@ app.*.map.json
 .env.local
 .env.*.local
 
+# fastlane run artifacts (both fastlane/ and ios/fastlane/). fastlane also
+# regenerates its own README.md on every run; that one is not tracked either.
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+ios/fastlane/README.md
+
+# Code signing material - never commit any of it.
+# android/.gitignore already covers key.properties and Android keystores; these
+# patterns cover the Apple side and re-cover keystores from the repo root,
+# because .github/workflows/deploy-ios.yml's (commented) signing step writes
+# certificate.p12 into the working directory, which is the repo root.
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile
+*.cer
+*.certSigningRequest
+*.keystore
+*.jks
+
+# ios/Podfile and macos/Podfile are deliberately COMMITTED, not ignored:
+# `flutter pub get` regenerates them when absent, which made them permanent
+# untracked churn every session had to hand-revert, and left the CocoaPods
+# platform floating. `Pods/` and the ephemeral Flutter configs stay ignored via
+# ios/.gitignore and macos/.gitignore.
+
 # Antigravity AI
 .agent/
 

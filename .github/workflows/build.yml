@@ -56,8 +56,38 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Install dependencies
         run: flutter pub get
+
+      # `flutter build apk` defaults to --release, and android/app/build.gradle.kts
+      # now refuses to sign a release with the debug keystore. This job is a
+      # throwaway smoke build, so it mints a throwaway key and follows exactly the
+      # key.properties recipe documented in deploy-android.yml. The resulting APK
+      # is NOT distributable - it is signed by a key that exists only for the
+      # lifetime of this runner.
+      - name: Generate throwaway release keystore
+        shell: bash
+        run: |
+          set -euo pipefail
+          keytool -genkeypair -v \
+            -keystore android/ci-throwaway-keystore.jks \
+            -storetype JKS \
+            -storepass ci-throwaway -keypass ci-throwaway \
+            -alias ci-throwaway \
+            -keyalg RSA -keysize 2048 -validity 30 \
+            -dname "CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US"
+          {
+            echo "storeFile=ci-throwaway-keystore.jks"
+            echo "storePassword=ci-throwaway"
+            echo "keyAlias=ci-throwaway"
+            echo "keyPassword=ci-throwaway"
+          } > android/key.properties
 
       - name: Build APK
         shell: bash
@@ -71,6 +101,23 @@ jobs:
           flutter build apk \
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL"
+
+      # Proves the APK is not debug-signed. A debug-signed artifact reports
+      # "CN=Android Debug, O=Android, C=US"; this must report the throwaway CI
+      # identity minted above.
+      - name: Print APK signer certificate
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
+          echo "APK: $APK"
+          rm -rf /tmp/apk-sig && mkdir -p /tmp/apk-sig
+          unzip -o -q "$APK" 'META-INF/*' -d /tmp/apk-sig
+          for f in /tmp/apk-sig/META-INF/*.RSA /tmp/apk-sig/META-INF/*.DSA /tmp/apk-sig/META-INF/*.EC; do
+            [ -e "$f" ] || continue
+            echo "--- $f ---"
+            openssl pkcs7 -inform DER -in "$f" -print_certs -noout
+          done
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

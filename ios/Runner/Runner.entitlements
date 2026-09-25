@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Keychain Sharing. flutter_secure_storage_darwin, the backing store for
+	     SecureTokenStore, needs this capability or SecItemAdd returns
+	     errSecMissingEntitlement (-34018) and no token survives a restart.
+
+	     The array is EMPTY on purpose. That grants the app its own default
+	     access group without naming one, so no provisioning profile has to
+	     carry a shared group. Naming a group explicitly, e.g.
+	     "$(AppIdentifierPrefix)$(PRODUCT_BUNDLE_IDENTIFIER)", turns this into a
+	     restricted entitlement that Xcode refuses to build without a matching
+	     profile.
+
+	     Wired into the Runner target's Debug, Release and Profile
+	     configurations via CODE_SIGN_ENTITLEMENTS in Runner.xcodeproj. Verified
+	     against `flutter build ios --no-codesign`, which is what
+	     .github/workflows/build.yml runs. -->
+	<key>keychain-access-groups</key>
+	<array/>
+</dict>
+</plist>
