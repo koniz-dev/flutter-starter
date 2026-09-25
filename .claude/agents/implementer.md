@@ -67,11 +67,11 @@ implementer is active (see Parallelism in `CLAUDE.md`).
    gh pr merge --squash --delete-branch
    ```
 
-   Which checks a PR gets depends on its paths - a docs-only PR gets **Docs
-   check**, **Issue refs** and the three **Strip** jobs but no Quality gate; an
-   evidence-only PR of `.png`/`.log` files gets Issue refs and the Strip jobs.
-   Every PR gets at least four, so zero checks means they have not registered
-   yet, never that the PR is exempt. The full table is in `CLAUDE.md`.
+   Every PR gets **Quality gate**, **Issue refs** and the three **Strip** jobs;
+   markdown changes add **Docs check**. Zero checks means they have not
+   registered yet, never that the PR is exempt. On a docs-only PR the Quality
+   gate reports green in seconds without running format, analyze or test - read
+   its job summary rather than assuming it ran. The full table is in `CLAUDE.md`.
    Poll until `gh pr checks --json name --jq 'length'` is non-zero before
    watching. `main` has no branch protection, so nothing stops a direct push or
    a merge over a red check except you.

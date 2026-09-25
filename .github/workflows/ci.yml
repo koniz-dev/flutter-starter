@@ -6,18 +6,22 @@ name: CI
 # Single Ubuntu job (one checkout + one Flutter setup + one pub get) to keep
 # GitHub Actions minutes low for forks and small teams. For faster feedback at
 # higher cost, split format/analyze/test into parallel jobs again.
+#
+# NO `paths-ignore`, deliberately (koniz-dev/flutter-starter#117). This job has
+# to post a conclusion on EVERY pull request, because a required status check
+# that never reports leaves the pull request stuck on "Expected - waiting for
+# status to be reported" forever. `paths-ignore` suppresses the whole workflow
+# run, so the check never appears at all, and every acceptance-evidence pull
+# request this repository produces is docs-only. The path filtering therefore
+# moved INSIDE the job, to the "Decide the gate scope" step below: the job
+# always runs and always reports, and skips the expensive steps when nothing it
+# checks could have changed.
 # ========================================================================
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
   pull_request:
     branches: [ main ]
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
   workflow_dispatch: # Allows manual trigger from GitHub Actions UI
 
 concurrency:
@@ -32,8 +36,105 @@ jobs:
     name: Quality gate
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth: 0 because the scope step diffs base..head. A shallow clone
+      # has neither end of that range. Costs a second or two on this repository
+      # and is what keeps the skip decision honest.
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Replaces the old workflow-level `paths-ignore: ['**/*.md', 'docs/**']`.
+      #
+      # A path is inert for this gate only if it can change none of the three
+      # things the gate actually runs:
+      #   * `dart format` over lib test integration_test tool examples
+      #   * `flutter analyze` over the package (minus analysis_options excludes)
+      #   * `flutter test` over test/
+      #
+      # `**/*.md` qualifies: no step reads markdown. `docs/**` mostly qualifies
+      # - EXCEPT `docs/**/*.dart`. `analysis_options.yaml` does not exclude
+      # `docs/`, so a Dart file committed as evidence (there is one today,
+      # `docs/verification/issue-48/aot_probe.dart`) is analyzed like any other.
+      # Treating it as inert would let a broken probe through the gate and turn
+      # `main` red on somebody else's unrelated pull request. So `.dart` is
+      # never inert, wherever it lives.
+      #
+      # Anything the step cannot resolve a diff for - workflow_dispatch, a brand
+      # new branch, a force push that dropped `before` - fails SAFE and runs the
+      # full gate.
+      - name: Decide the gate scope
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.event.after }}
+        run: |
+          set -euo pipefail
+
+          have() { git rev-parse -q --verify "$1^{commit}" >/dev/null 2>&1; }
+
+          range=''
+          case "$EVENT_NAME" in
+            pull_request)
+              # Three dots: compare head against the merge base, so commits
+              # that landed on main after this branch started are not counted
+              # as this pull request's changes.
+              if have "$PR_BASE_SHA" && have "$PR_HEAD_SHA"; then
+                range="$PR_BASE_SHA...$PR_HEAD_SHA"
+              fi
+              ;;
+            push)
+              if have "$PUSH_BEFORE" && have "$PUSH_AFTER"; then
+                range="$PUSH_BEFORE..$PUSH_AFTER"
+              fi
+              ;;
+          esac
+
+          if [ -z "$range" ]; then
+            run=true
+            verdict="Could not resolve a diff range for a '$EVENT_NAME' event. Running the full gate."
+            changed=''
+          else
+            changed="$(git diff --name-only "$range")"
+            # Everything outside the inert set, plus every .dart file wherever
+            # it lives.
+            relevant="$(
+              {
+                printf '%s\n' "$changed" | grep -Ev '^(docs/.*|.*\.md)$' || true
+                printf '%s\n' "$changed" | grep -E '^docs/.*\.dart$' || true
+              } | grep -v '^$' | sort -u || true
+            )"
+            if [ -n "$relevant" ]; then
+              run=true
+              verdict="$(printf '%s\n' "$relevant" | wc -l | tr -d ' ') changed path(s) can affect this gate. Running format, analyze and test."
+            else
+              run=false
+              verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file), so nothing this gate checks could have changed. format, analyze and test were NOT run."
+            fi
+          fi
+
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Quality gate scope"
+            echo
+            echo "- event: \`$EVENT_NAME\`"
+            echo "- range: \`${range:-unresolved}\`"
+            echo "- expensive steps run: \`$run\`"
+            echo
+            echo "$verdict"
+            echo
+            echo "<details><summary>Changed paths</summary>"
+            echo
+            echo '```'
+            if [ -n "$changed" ]; then printf '%s\n' "$changed"; else echo "(none)"; fi
+            echo '```'
+            echo
+            echo "</details>"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
 
       # `channel: stable` is intentionally left floating - no `flutter-version`
       # pin (removed deliberately in a4bc68a) - so this gate also acts as an
@@ -46,20 +147,25 @@ jobs:
       # clear the new lints on `main` first (do not chase it inside an unrelated
       # PR). This is what happened in run 32638785145 under stable-3.47.1.
       - name: Setup Flutter
+        if: steps.scope.outputs.run == 'true'
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
       - name: Install dependencies
+        if: steps.scope.outputs.run == 'true'
         run: flutter pub get
 
       - name: Verify formatting
+        if: steps.scope.outputs.run == 'true'
         run: dart format --set-exit-if-changed lib test integration_test tool examples
 
       - name: Analyze code
+        if: steps.scope.outputs.run == 'true'
         run: flutter analyze
 
       - name: Run tests
+        if: steps.scope.outputs.run == 'true'
         timeout-minutes: 15
         run: flutter test --timeout=5m
