@@ -24,7 +24,7 @@ import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_use
 import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
-import 'package:flutter_starter/main.dart' show createStartupContainer;
+import 'package:flutter_starter/main.dart' show createAppContainer;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -419,11 +419,11 @@ void main() {
         // retry never rebuilds and this future never completes at all. Using
         // the app's own factory here means a regression in `main.dart` fails
         // this test instead of hiding behind a hand-rolled container.
-        final startupContainer = createStartupContainer();
-        addTearDown(startupContainer.dispose);
+        final appContainer = createAppContainer();
+        addTearDown(appContainer.dispose);
 
         await expectLater(
-          startupContainer.read(storageInitializationProvider.future),
+          appContainer.read(storageInitializationProvider.future),
           throwsA(isA<MigrationExecutionException>()),
         );
       }, timeout: const Timeout(Duration(seconds: 10)));

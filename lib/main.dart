@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // `Override` is not in flutter_riverpod.dart's export list; misc.dart is
-// where riverpod 3 exposes it. Needed only for createStartupContainer's
+// where riverpod 3 exposes it. Needed only for createAppContainer's
 // test seam.
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_starter/core/config/app_config.dart';
@@ -19,9 +19,17 @@ import 'package:flutter_starter/features/auth/presentation/providers/auth_provid
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 
-// Riverpod 3 retries any failed provider whose error is not an `Error`
-// (`ProviderContainer.defaultRetry`), and every failure the startup sequence
-// can produce here is an `Exception`: `MigrationExecutionException`,
+// Disables Riverpod auto-retry for EVERY provider, for the whole process
+// lifetime - not just for startup. A container-level `Retry` is
+// `(int, Object) -> Duration?`; it is never told which provider failed, so
+// "off for startup, default elsewhere" is not expressible, and this container
+// is the one handed to `runApp`. Per-provider `retry:` is the provider-aware
+// lever: riverpod resolves `origin.retry ?? container.retry ?? defaultRetry`.
+// docs/architecture/riverpod-retry-policy.md is the adopter-facing writeup.
+//
+// Why off at all: riverpod 3 retries any failed provider whose error is not an
+// `Error` (`ProviderContainer.defaultRetry`), and every failure the startup
+// sequence can produce here is an `Exception`: `MigrationExecutionException`,
 // `StorageDowngradeException`, `MigrationPathException`, `CacheException`.
 //
 // That default is actively harmful on this path. `main()` reads providers with
@@ -37,13 +45,21 @@ import 'package:flutter_starter/shared/theme/app_theme.dart';
 // Refs koniz-dev/flutter-starter#101
 Duration? _neverRetry(int retryCount, Object error) => null;
 
-/// Builds the container `main()` boots from and later hands to `runApp`.
+/// Builds the app's one [ProviderContainer]: `main()` boots from it and then
+/// hands the same instance to `runApp`, so the retry policy it sets applies
+/// for the lifetime of the app and not only to the startup sequence.
 ///
-/// Extracted so tests can drive the real startup sequence through the same
-/// container the app uses, rather than a hand-rolled one that happens to be
-/// configured differently. See [_neverRetry] for why retry is off.
+/// Named for that lifetime rather than for the moment of construction: every
+/// provider the app ever rebuilds is governed by the [_neverRetry] passed
+/// here. See [_neverRetry] and `docs/architecture/riverpod-retry-policy.md`
+/// for why retry is off and what to do about a provider that needs it.
+///
+/// `@visibleForTesting` marks the `overrides` seam, not the function: this is
+/// the production factory. It exists so tests can drive the real startup
+/// sequence through the same container the app uses, rather than a
+/// hand-rolled one that happens to be configured differently.
 @visibleForTesting
-ProviderContainer createStartupContainer({
+ProviderContainer createAppContainer({
   List<Override> overrides = const <Override>[],
 }) {
   return ProviderContainer(retry: _neverRetry, overrides: overrides);
@@ -62,7 +78,7 @@ Future<void> main() async {
     AppConfig.printConfig();
   }
 
-  final container = createStartupContainer();
+  final container = createAppContainer();
 
   // Everything before the first frame runs inside one guard. Throwing here
   // means `runApp` is never reached: a black window on every launch, with no

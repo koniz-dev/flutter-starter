@@ -9,6 +9,7 @@ Start here when adopting or forking the template:
 - [**Super starter hub**](architecture/super-starter-hub.md) — capability matrix and links to every area
 - [**Choose your stack**](architecture/choose-your-stack.md) — Path A (defaults) vs Path B (bring your own adapters)
 - [**Contracts and adapter map**](architecture/contracts-map.md) — swap points and optional modules
+- [**Riverpod retry policy**](architecture/riverpod-retry-policy.md) — auto-retry is off process-wide; read before adding a provider that can fail
 - [**Fork and customize**](guides/onboarding/fork-and-customize.md) — rename package, Mason, optional strip
 - [**Repository layout (non-platform)**](guides/onboarding/repository-layout.md) — `lib`, `test`, `docs`, `scripts`, CI, bricks
 
