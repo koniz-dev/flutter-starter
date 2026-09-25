@@ -1,0 +1,79 @@
+# Counterfactual for koniz-dev/flutter-starter#188
+#
+# The merged test file run against the PRE-FIX interceptor, restored with:
+#   git show fb9c389^:lib/core/network/interceptors/cache_interceptor.dart \
+#     > lib/core/network/interceptors/cache_interceptor.dart
+#   TZ=Asia/Bangkok flutter test \
+#     test/core/network/interceptors/cache_interceptor_timestamp_test.dart \
+#     --reporter expanded
+#   git checkout -- lib/core/network/interceptors/cache_interceptor.dart
+#
+# Pre-fix write path: DateTime.now().toIso8601String()   (line 264)
+# Pre-fix read path:  DateTime.parse(timestampStr)       (line 220)
+#
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/network/interceptors/cache_interceptor_timestamp_test.dart
+00:00 +0: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+00:00 +0 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator [E]
+  Expected: match '(Z|[+-]\d{2}:\d{2})$'
+    Actual: '2026-09-26T00:46:03.171360'
+  an offset-less string means whatever zone reads it
+  
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/core/network/interceptors/cache_interceptor_timestamp_test.dart 211:11  main.<fn>.<fn>.<fn>
+  
+00:00 +0 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp is the write instant, not shifted by the host offset
+00:00 +1 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +2 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are served when N is inside maxAge
+00:00 +3 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are served, not deleted, while N is between maxAge and maxStale
+00:00 +4 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 3 - the age does not depend on the zone every zone spelling of one instant yields the same eviction decision
+00:00 +5 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 3 - the age does not depend on the zone an entry written before a 7-hour zone change is still aged correctly
+00:00 +6 -1: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 3 - the age does not depend on the zone a reader in another zone computes the same age for what the interceptor just wrote
+00:00 +6 -2: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 3 - the age does not depend on the zone a reader in another zone computes the same age for what the interceptor just wrote [E]
+  Expected: a value less than Duration:<0:00:05.000000>
+    Actual: Duration:<7:00:00.000145>
+     Which: is not a value less than Duration:<0:00:05.000000>
+  an entry written seconds ago must not be 7h old to a reader 7:00:00.000000 away
+  
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/core/network/interceptors/cache_interceptor_timestamp_test.dart 392:13  main.<fn>.<fn>.<fn>
+  
+00:00 +6 -2: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 3 - the age does not depend on the zone the reverse shift makes a fresh legacy entry look expired, while the Z form does not
+00:00 +7 -2: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an unparseable timestamp is a cache miss and the entry is dropped
+Cache read error: FormatException: Invalid date format
+not-a-timestamp
+00:00 +7 -3: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an unparseable timestamp is a cache miss and the entry is dropped [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/core/network/interceptors/cache_interceptor_timestamp_test.dart 425:11  main.<fn>.<fn>.<fn>
+  
+00:00 +7 -3: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an out-of-range calendar date is a cache miss, not a nearby date
+00:00 +7 -4: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an out-of-range calendar date is a cache miss, not a nearby date [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/core/network/interceptors/cache_interceptor_timestamp_test.dart 437:11  main.<fn>.<fn>.<fn>
+  
+00:00 +7 -4: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an entry dropped for a corrupt timestamp is refetched and rewritten in the new form
+00:00 +7 -5: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an entry dropped for a corrupt timestamp is refetched and rewritten in the new form [E]
+  Expected: a string ending with 'Z'
+    Actual: '2026-09-26T00:46:03.312397'
+  
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/core/network/interceptors/cache_interceptor_timestamp_test.dart 458:11  main.<fn>.<fn>.<fn>
+  
+00:00 +7 -5: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 3 - the age does not depend on the zone a reader in another zone computes the same age for what the interceptor just wrote
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an entry dropped for a corrupt timestamp is refetched and rewritten in the new form
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an out-of-range calendar date is a cache miss, not a nearby date
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 4 - a timestamp with no meaning is a miss an unparseable timestamp is a cache miss and the entry is dropped
