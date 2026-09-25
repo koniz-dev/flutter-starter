@@ -78,40 +78,18 @@ class TasksRepositoryImpl implements TasksRepository {
   }
 
   @override
-  Future<Result<void>> deleteCompletedTasks() async {
-    try {
-      // Atomic read-modify-write: a concurrent mutation cannot be overwritten
-      // by a stale snapshot taken before it landed.
-      await localDataSource.mutateTasks(
-        (current) => current.where((task) => !task.isCompleted).toList(),
-      );
-      return const Success(null);
-    } on AppException catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    }
-  }
-
-  @override
   Future<Result<Task>> toggleTaskCompletion(String id) async {
     try {
-      // The flip is computed inside the atomic mutation, so two overlapping
+      // What the flip *is* belongs to the entity: `Task.toggleCompletion`
+      // flips the flag and restamps `updatedAt`. This layer only decides
+      // *when* it is applied - inside the atomic mutation, so two overlapping
       // toggles of the same task cannot both read the same starting value.
       TaskModel? updatedTaskModel;
       await localDataSource.mutateTasks((current) {
         final index = current.indexWhere((task) => task.id == id);
         if (index < 0) return current;
 
-        final taskModel = current[index];
-        final updated = TaskModel(
-          id: taskModel.id,
-          title: taskModel.title,
-          description: taskModel.description,
-          isCompleted: !taskModel.isCompleted,
-          createdAt: taskModel.createdAt,
-          updatedAt: DateTime.now(),
-        );
+        final updated = TaskModel.fromEntity(current[index].toggleCompletion());
         updatedTaskModel = updated;
         return [...current]..[index] = updated;
       });

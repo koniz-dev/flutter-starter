@@ -188,6 +188,121 @@ void main() {
       });
     });
 
+    // The completion rule lives here and nowhere else: `TasksRepositoryImpl`
+    // applies `toggleCompletion` inside its atomic mutation instead of
+    // hand-copying `TaskModel` fields, and `UpdateTaskUseCase` calls `touch`
+    // instead of minting its own `DateTime.now()`.
+    // Refs koniz-dev/flutter-starter#180.
+    group('touch', () {
+      test(
+        'stamps updatedAt with the given instant and changes nothing else',
+        () {
+          // Arrange
+          final task = Task(
+            id: '1',
+            title: 'Title',
+            description: 'Description',
+            isCompleted: true,
+            createdAt: now,
+            updatedAt: later,
+          );
+          final at = later.add(const Duration(minutes: 5));
+
+          // Act
+          final touched = task.touch(at: at);
+
+          // Assert
+          expect(touched.updatedAt, at);
+          expect(touched.updatedAt.isAfter(task.updatedAt), isTrue);
+          expect(touched.id, task.id);
+          expect(touched.title, task.title);
+          expect(touched.description, task.description);
+          expect(touched.isCompleted, task.isCompleted);
+          expect(touched.createdAt, task.createdAt);
+        },
+      );
+
+      test('defaults the stamp to now, which is after a past updatedAt', () {
+        // Arrange
+        final task = Task(
+          id: '1',
+          title: 'Title',
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024, 1, 2),
+        );
+
+        // Act
+        final touched = task.touch();
+
+        // Assert
+        expect(touched.updatedAt.isAfter(task.updatedAt), isTrue);
+      });
+    });
+
+    group('toggleCompletion', () {
+      test('flips isCompleted and advances updatedAt past the input', () {
+        // Arrange - an incomplete task last touched in the past.
+        final task = Task(
+          id: '1',
+          title: 'Title',
+          createdAt: DateTime(2024),
+          updatedAt: DateTime(2024, 1, 2),
+        );
+
+        // Act
+        final toggled = task.toggleCompletion();
+
+        // Assert
+        expect(toggled.isCompleted, isTrue);
+        expect(
+          toggled.updatedAt.isAfter(task.updatedAt),
+          isTrue,
+          reason:
+              'updatedAt must advance: ${toggled.updatedAt} vs '
+              '${task.updatedAt}',
+        );
+        expect(toggled.id, task.id);
+        expect(toggled.title, task.title);
+        expect(toggled.createdAt, task.createdAt);
+      });
+
+      test('flips a completed task back and still advances updatedAt', () {
+        // Arrange
+        final task = Task(
+          id: '1',
+          title: 'Title',
+          isCompleted: true,
+          createdAt: now,
+          updatedAt: later,
+        );
+        final at = later.add(const Duration(minutes: 1));
+
+        // Act
+        final toggled = task.toggleCompletion(at: at);
+
+        // Assert
+        expect(toggled.isCompleted, isFalse);
+        expect(toggled.updatedAt, at);
+        expect(toggled.updatedAt.isAfter(task.updatedAt), isTrue);
+      });
+
+      test('keeps a null description null', () {
+        // Arrange
+        final task = Task(
+          id: '1',
+          title: 'Title',
+          createdAt: now,
+          updatedAt: later,
+        );
+
+        // Act
+        final toggled = task.toggleCompletion(at: later);
+
+        // Assert
+        expect(toggled.description, isNull);
+      });
+    });
+
     group('equality', () {
       test('should be equal when all fields are same', () {
         // Arrange

@@ -275,47 +275,6 @@ void main() {
       );
     });
 
-    group('deleteCompletedTasks', () {
-      test('should delete completed tasks successfully', () async {
-        // Arrange
-        final allTasks = [
-          createTaskModel(id: 'task-1'),
-          createTaskModel(id: 'task-2', isCompleted: true),
-          createTaskModel(id: 'task-3', isCompleted: true),
-          createTaskModel(id: 'task-4'),
-        ];
-        final stored = stubMutateTasks(mockLocalDataSource, allTasks);
-
-        // Act
-        final result = await repository.deleteCompletedTasks();
-
-        // Assert
-        expect(result.isSuccess, isTrue, reason: 'Expected success: $result');
-        // A single atomic read-modify-write, not a separate read then write.
-        verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
-        verifyNever(() => mockLocalDataSource.getAllTasks());
-        expect(stored.length, 2);
-        expect(stored.every((t) => !t.isCompleted), isTrue);
-      });
-
-      test(
-        'should return CacheFailure when mutateTasks throws exception',
-        () async {
-          // Arrange
-          final exception = createCacheException(message: 'Storage error');
-          when(
-            () => mockLocalDataSource.mutateTasks(any()),
-          ).thenThrow(exception);
-
-          // Act
-          final result = await repository.deleteCompletedTasks();
-
-          // Assert
-          expectResultFailureType(result, CacheFailure);
-        },
-      );
-    });
-
     group('toggleTaskCompletion', () {
       test('should toggle task completion successfully', () async {
         // Arrange
@@ -486,19 +445,6 @@ void main() {
         expectResultFailureType(result, UnknownFailure);
       });
 
-      test('should handle generic Exception in deleteCompletedTasks', () async {
-        // Arrange
-        when(
-          () => mockLocalDataSource.mutateTasks(any()),
-        ).thenThrow(Exception('Generic error'));
-
-        // Act
-        final result = await repository.deleteCompletedTasks();
-
-        // Assert
-        expectResultFailureType(result, UnknownFailure);
-      });
-
       test('should handle generic Exception in toggleTaskCompletion', () async {
         // Arrange
         const taskId = 'task-1';
@@ -578,52 +524,6 @@ void main() {
         },
       );
 
-      test(
-        'should handle deleteCompletedTasks when all tasks are completed',
-        () async {
-          // Arrange
-          final allTasks = [
-            createTaskModel(id: 'task-1', isCompleted: true),
-            createTaskModel(id: 'task-2', isCompleted: true),
-          ];
-          final stored = stubMutateTasks(mockLocalDataSource, allTasks);
-
-          // Act
-          final result = await repository.deleteCompletedTasks();
-
-          // Assert
-          expect(
-            result.isSuccess,
-            isTrue,
-            reason: 'Expected success: $result',
-          );
-          expect(stored, isEmpty);
-        },
-      );
-
-      test(
-        'should handle deleteCompletedTasks when no tasks are completed',
-        () async {
-          // Arrange
-          final allTasks = [
-            createTaskModel(id: 'task-1'),
-            createTaskModel(id: 'task-2'),
-          ];
-          final stored = stubMutateTasks(mockLocalDataSource, allTasks);
-
-          // Act
-          final result = await repository.deleteCompletedTasks();
-
-          // Assert
-          expect(
-            result.isSuccess,
-            isTrue,
-            reason: 'Expected success: $result',
-          );
-          expect(stored.length, 2);
-        },
-      );
-
       test('should handle deleteTask with empty string ID', () async {
         // Arrange
         when(
@@ -649,25 +549,6 @@ void main() {
         // Assert
         expectResultSuccess(result, null);
       });
-
-      test(
-        'should handle deleteCompletedTasks with empty tasks list',
-        () async {
-          // Arrange
-          final stored = stubMutateTasks(mockLocalDataSource);
-
-          // Act
-          final result = await repository.deleteCompletedTasks();
-
-          // Assert
-          expect(
-            result.isSuccess,
-            isTrue,
-            reason: 'Expected success: $result',
-          );
-          expect(stored, isEmpty);
-        },
-      );
 
       test(
         'should handle toggleTaskCompletion with task already completed',

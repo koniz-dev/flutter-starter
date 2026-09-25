@@ -59,6 +59,26 @@ class Task {
     );
   }
 
+  /// Returns a copy of this task whose [updatedAt] is [at], defaulting to now.
+  ///
+  /// Every modification of a task restamps [updatedAt]; that is an invariant of
+  /// the entity, so the stamp is minted here rather than by whichever caller
+  /// happens to be performing the modification. Before
+  /// koniz-dev/flutter-starter#180 three callers minted their own - the update
+  /// use case, `TasksRepositoryImpl.toggleTaskCompletion` in `data/`, and
+  /// `task_detail_screen.dart` in widget code - so the slice taught three
+  /// different answers about where the rule lives.
+  Task touch({DateTime? at}) => copyWith(updatedAt: at ?? DateTime.now());
+
+  /// Returns a copy of this task with [isCompleted] flipped and [updatedAt]
+  /// restamped through [touch].
+  ///
+  /// Completing a task is a modification like any other, so both halves of the
+  /// rule belong together and in `domain/`. `TasksRepositoryImpl` applies this
+  /// inside its atomic mutation rather than restating it.
+  Task toggleCompletion({DateTime? at}) =>
+      copyWith(isCompleted: !isCompleted).touch(at: at);
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

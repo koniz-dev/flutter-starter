@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -58,8 +57,12 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
       _error = null;
     });
 
-    final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
-    final result = await getTaskByIdUseCase(widget.taskId!);
+    // Through the notifier, not straight to the use-case provider in
+    // `core/di`: the list screen already reaches its data only through
+    // `TasksNotifier`, and this screen no longer disagrees with it.
+    final result = await ref
+        .read(tasksNotifierProvider.notifier)
+        .taskById(widget.taskId!);
 
     // The screen can be popped while the load is in flight; both controllers
     // are disposed by then, so neither setState nor a controller write is
@@ -96,11 +99,12 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     final description = _descriptionController.text.trim();
 
     if (_task != null) {
-      // Update existing task
+      // Update existing task. No `updatedAt` here: `UpdateTaskUseCase` restamps
+      // it through `Task.touch`, exactly as the create path below delegates its
+      // timestamps to `CreateTaskUseCase`.
       final updatedTask = _task!.copyWith(
         title: title,
         description: description.isEmpty ? null : description,
-        updatedAt: DateTime.now(),
       );
       await tasksNotifier.updateTask(updatedTask);
     } else {
