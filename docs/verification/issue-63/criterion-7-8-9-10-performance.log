@@ -1,0 +1,94 @@
+# 92 tests, 92 passed, 0 not passed
+
+SUCCESS NoOpPerformanceService measureOperation executes operation and returns its result
+SUCCESS NoOpPerformanceService measureSyncComputation executes computation and returns its result
+SUCCESS NoOpPerformanceService measureSyncOperation executes operation and returns its result
+SUCCESS NoOpPerformanceService startHttpTrace returns null
+SUCCESS NoOpPerformanceService startScreenTrace returns null
+SUCCESS NoOpPerformanceService startTrace returns null
+SUCCESS NoOpPerformanceTrace getAttribute returns null
+SUCCESS NoOpPerformanceTrace getMetric returns null
+SUCCESS NoOpPerformanceTrace incrementMetric completes without error
+SUCCESS NoOpPerformanceTrace putAttribute completes without error
+SUCCESS NoOpPerformanceTrace putAttributes completes without error
+SUCCESS NoOpPerformanceTrace putMetric completes without error
+SUCCESS NoOpPerformanceTrace start completes without error
+SUCCESS NoOpPerformanceTrace startSync completes without error
+SUCCESS NoOpPerformanceTrace stop completes without error
+SUCCESS NoOpPerformanceTrace stopSync completes without error
+SUCCESS PerformanceAttributes should have all HTTP attribute constants
+SUCCESS PerformanceAttributes should have all computation attribute constants
+SUCCESS PerformanceAttributes should have all database attribute constants
+SUCCESS PerformanceAttributes should have all error attribute constants
+SUCCESS PerformanceAttributes should have all feature attribute constants
+SUCCESS PerformanceAttributes should have all non-empty attribute constants
+SUCCESS PerformanceAttributes should have all screen attribute constants
+SUCCESS PerformanceAttributes should have all unique attribute constants
+SUCCESS PerformanceAttributes should have all user attribute constants
+SUCCESS PerformanceMetrics should have all HTTP metric constants
+SUCCESS PerformanceMetrics should have all attributes starting with appropriate prefix
+SUCCESS PerformanceMetrics should have all computation metric constants
+SUCCESS PerformanceMetrics should have all database metric constants
+SUCCESS PerformanceMetrics should have all non-empty metric constants
+SUCCESS PerformanceMetrics should have all screen metric constants
+SUCCESS PerformanceMetrics should have all success/error metric constants
+SUCCESS PerformanceMetrics should have all unique metric constants
+SUCCESS PerformanceMetrics should have consistent naming convention
+SUCCESS PerformanceMetrics should have consistent naming convention for attributes
+SUCCESS PerformanceRepositoryMixin execute operation with disabled performance service
+SUCCESS PerformanceRepositoryMixin execute operation without performance service
+SUCCESS PerformanceRepositoryMixin instrumentation failure propagates instead of re-running the operation
+SUCCESS PerformanceRepositoryMixin measureDataFetch
+SUCCESS PerformanceRepositoryMixin measureDataSave
+SUCCESS PerformanceRepositoryMixin measureDataSave never executes the wrapped operation twice
+SUCCESS PerformanceRepositoryMixin measureRepositoryOperation error
+SUCCESS PerformanceRepositoryMixin measureRepositoryOperation runs the operation exactly once on failure
+SUCCESS PerformanceRepositoryMixin measureRepositoryOperation success
+SUCCESS PerformanceScreenMixin should mark screen as loaded
+SUCCESS PerformanceScreenMixin should not start trace when service is disabled
+SUCCESS PerformanceScreenMixin should record custom attribute
+SUCCESS PerformanceScreenMixin should record custom metric
+SUCCESS PerformanceScreenMixin should start screen trace on init
+SUCCESS PerformanceScreenMixin should stop screen trace on dispose
+SUCCESS PerformanceScreenMixin should use custom screen name
+SUCCESS PerformanceScreenWrapper should not start trace when service is disabled
+SUCCESS PerformanceScreenWrapper should stop trace on dispose
+SUCCESS PerformanceScreenWrapper should wrap child widget
+SUCCESS PerformanceScreenWrapper the documented setter wiring actually starts a trace
+SUCCESS PerformanceScreenWrapper the trace starts exactly once across rebuilds
+SUCCESS PerformanceServiceExtension measureApiCall should delegate to PerformanceUtils
+SUCCESS PerformanceServiceExtension measureComputation should delegate to PerformanceUtils
+SUCCESS PerformanceServiceExtension measureDatabaseQuery should delegate to PerformanceUtils
+SUCCESS PerformanceUseCaseMixin execute operation with disabled performance service
+SUCCESS PerformanceUseCaseMixin execute operation without performance service
+SUCCESS PerformanceUseCaseMixin instrumentation failure propagates instead of re-running the operation
+SUCCESS PerformanceUseCaseMixin measureUseCaseOperation error
+SUCCESS PerformanceUseCaseMixin measureUseCaseOperation runs the operation exactly once
+SUCCESS PerformanceUseCaseMixin measureUseCaseOperation success
+SUCCESS PerformanceUtils measureApiCall sanitizes /api/v1/user-profile-settings to api_get_/api/v1/user-profile-settings
+SUCCESS PerformanceUtils measureApiCall sanitizes /files/abc123def456ghi789jkl to api_get_/files/:token
+SUCCESS PerformanceUtils measureApiCall sanitizes /users/123 to api_get_/users/:id
+SUCCESS PerformanceUtils measureApiCall sanitizes /users/123/orders/456 to api_get_/users/:id/orders/:id
+SUCCESS PerformanceUtils measureApiCall sanitizes /users/123?expand=all to api_get_/users/:id
+SUCCESS PerformanceUtils measureApiCall sanitizes /users/550e8400-e29b-41d4-a716-446655440000 to api_get_/users/:uuid
+SUCCESS PerformanceUtils measureApiCall sanitizes /users/550e8400-e29b-41d4-a716-446655440000/orders to api_get_/users/:uuid/orders
+SUCCESS PerformanceUtils measureApiCall sanitizes /users/f47ac10b-58cc-4372-a567-0e02b2c3d479 to api_get_/users/:uuid
+SUCCESS PerformanceUtils measureApiCall should call measureOperation with correct parameters
+SUCCESS PerformanceUtils measureApiCall should include additional attributes
+SUCCESS PerformanceUtils measureApiCall should sanitize path with IDs
+SUCCESS PerformanceUtils measureComputation should call measureOperation with correct parameters
+SUCCESS PerformanceUtils measureComputation should include attributes
+SUCCESS PerformanceUtils measureDatabaseQuery should call measureOperation with correct parameters
+SUCCESS PerformanceUtils measureDatabaseQuery should include additional attributes
+SUCCESS PerformanceUtils measureSyncComputation should call measureSyncOperation with correct parameters
+SUCCESS PerformanceUtils measureSyncComputation should include attributes
+SUCCESS Provider Integration should handle multiple reads
+SUCCESS Provider Integration should work with ProviderContainer
+SUCCESS performanceInterceptorProvider should be accessible as Provider
+SUCCESS performanceInterceptorProvider should depend on performanceServiceProvider
+SUCCESS performanceInterceptorProvider should provide PerformanceInterceptor instance
+SUCCESS performanceInterceptorProvider should provide singleton instance
+SUCCESS performanceServiceProvider should be accessible as Provider
+SUCCESS performanceServiceProvider should provide IPerformanceService instance
+SUCCESS performanceServiceProvider should provide NoOpPerformanceService by default
+SUCCESS performanceServiceProvider should provide singleton instance

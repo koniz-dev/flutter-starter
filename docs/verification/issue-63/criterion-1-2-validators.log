@@ -1,0 +1,96 @@
+# 94 tests, 94 passed, 0 not passed
+
+SUCCESS Validators isAlphaNumeric should return false for strings with special characters
+SUCCESS Validators isAlphaNumeric should return true for alphanumeric strings
+SUCCESS Validators isEmpty should handle empty strings with special characters
+SUCCESS Validators isEmpty should handle strings with mixed whitespace and content
+SUCCESS Validators isEmpty should handle strings with only whitespace
+SUCCESS Validators isEmpty should handle unicode whitespace
+SUCCESS Validators isEmpty should return false for non-empty strings
+SUCCESS Validators isEmpty should return true for empty or null strings
+SUCCESS Validators isNumeric should return false for alphanumeric strings
+SUCCESS Validators isNumeric should return false for empty string
+SUCCESS Validators isNumeric should return true for purely numeric strings
+SUCCESS Validators isStrongPassword accepts every non-alphanumeric as the special character
+SUCCESS Validators isStrongPassword doc comment and behaviour agree: no special char means false
+SUCCESS Validators isStrongPassword should return false if less than 8 characters
+SUCCESS Validators isStrongPassword should return false if missing digit
+SUCCESS Validators isStrongPassword should return false if missing lowercase
+SUCCESS Validators isStrongPassword should return false if missing special character
+SUCCESS Validators isStrongPassword should return false if missing uppercase
+SUCCESS Validators isStrongPassword should return true for passwords meeting all criteria
+SUCCESS Validators isValidEmail accepts <!#$%&'*+-/=?^_`{|}~@example.com> - every printable ASCII atext character
+SUCCESS Validators isValidEmail accepts <123user@example.com> - digit-leading local part
+SUCCESS Validators isValidEmail accepts <_user@example.com> - leading underscore is atext, unlike a dot
+SUCCESS Validators isValidEmail accepts <a+b@example.co.uk> - plus addressing, two-level TLD
+SUCCESS Validators isValidEmail accepts <a@b.co> - shortest plausible address
+SUCCESS Validators isValidEmail accepts <first.last@sub.domain.example.com> - deep subdomain
+SUCCESS Validators isValidEmail accepts <josé@example.com> - non-ASCII local part, valid under SMTPUTF8
+SUCCESS Validators isValidEmail accepts <test@example.com> - the ordinary case
+SUCCESS Validators isValidEmail accepts <user+tag@example.com> - plus addressing
+SUCCESS Validators isValidEmail accepts <user-name@ex-ample.com> - hyphens inside labels
+SUCCESS Validators isValidEmail accepts <user.name@example.co.uk> - dots inside the local part, two-level TLD
+SUCCESS Validators isValidEmail accepts <user@123example.com> - digit-leading domain label
+SUCCESS Validators isValidEmail accepts <user@example.xn--p1ai> - punycode TLD - digits and hyphens inside
+SUCCESS Validators isValidEmail accepts <user_@example.com> - trailing underscore is atext, unlike a dot
+SUCCESS Validators isValidEmail accepts <用户@例子.测试> - fully internationalised address (RFC 6531)
+SUCCESS Validators isValidEmail enforces the RFC 1035 label limit of 63 octets
+SUCCESS Validators isValidEmail enforces the RFC 5321 local part limit of 64 octets
+SUCCESS Validators isValidEmail enforces the overall 254-octet limit
+SUCCESS Validators isValidEmail rejects < user@example.com> - leading space
+SUCCESS Validators isValidEmail rejects <"john doe"@example.com> - deliberately rejected: quoted-string local part
+SUCCESS Validators isValidEmail rejects <.user@example.com> - leading dot in the local part
+SUCCESS Validators isValidEmail rejects <> - empty string
+SUCCESS Validators isValidEmail rejects <@example.com> - empty local part
+SUCCESS Validators isValidEmail rejects <invalid-email> - no at-sign
+SUCCESS Validators isValidEmail rejects <user name@example.com> - space in the local part
+SUCCESS Validators isValidEmail rejects <user(comment)@example.com> - deliberately rejected: comment in the local part
+SUCCESS Validators isValidEmail rejects <user..name@example.com> - consecutive dots in the local part
+SUCCESS Validators isValidEmail rejects <user.@example.com> - trailing dot in the local part
+SUCCESS Validators isValidEmail rejects <user> - no at-sign
+SUCCESS Validators isValidEmail rejects <user@-example.com> - label starts with a hyphen
+SUCCESS Validators isValidEmail rejects <user@.com> - empty first label
+SUCCESS Validators isValidEmail rejects <user@> - empty domain
+SUCCESS Validators isValidEmail rejects <user@@example.com> - two at-signs
+SUCCESS Validators isValidEmail rejects <user@[192.168.0.1]> - deliberately rejected: domain literal
+SUCCESS Validators isValidEmail rejects <user@exam ple.com> - space in the domain
+SUCCESS Validators isValidEmail rejects <user@example .com> - space before the dot
+SUCCESS Validators isValidEmail rejects <user@example-.com> - label ends with a hyphen
+SUCCESS Validators isValidEmail rejects <user@example..com> - empty DNS label
+SUCCESS Validators isValidEmail rejects <user@example.123> - all-digit TLD
+SUCCESS Validators isValidEmail rejects <user@example.c> - one-character TLD
+SUCCESS Validators isValidEmail rejects <user@example.com > - trailing space
+SUCCESS Validators isValidEmail rejects <user@example.com.> - trailing root dot
+SUCCESS Validators isValidEmail rejects <user@example> - single-label domain
+SUCCESS Validators isValidEmail rejects <user@localhost> - deliberately rejected: single-label domain
+SUCCESS Validators isValidEmail rejects newline injection at either end
+SUCCESS Validators isValidPassword - Edge Cases should accept exactly 8 characters
+SUCCESS Validators isValidPassword - Edge Cases should handle passwords with only letters
+SUCCESS Validators isValidPassword - Edge Cases should handle passwords with only numbers
+SUCCESS Validators isValidPassword - Edge Cases should handle passwords with spaces
+SUCCESS Validators isValidPassword - Edge Cases should handle special characters
+SUCCESS Validators isValidPassword - Edge Cases should handle unicode characters
+SUCCESS Validators isValidPassword - Edge Cases should handle very long passwords
+SUCCESS Validators isValidPassword - Edge Cases should reject 7 characters
+SUCCESS Validators isValidPassword should return false for passwords with less than 8 characters
+SUCCESS Validators isValidPassword should return true for passwords with 8+ characters
+SUCCESS Validators isValidPhone should handle maximum length phone numbers
+SUCCESS Validators isValidPhone should handle minimum length phone numbers
+SUCCESS Validators isValidPhone should handle phone numbers with country codes
+SUCCESS Validators isValidPhone should handle phone numbers without country code
+SUCCESS Validators isValidPhone should reject phone numbers starting with zero
+SUCCESS Validators isValidPhone should reject phone numbers with letters
+SUCCESS Validators isValidPhone should reject phone numbers with special characters
+SUCCESS Validators isValidPhone should return false for invalid phone numbers
+SUCCESS Validators isValidPhone should return true for valid phone numbers
+SUCCESS Validators isValidUrl - Edge Cases should handle URLs with fragments
+SUCCESS Validators isValidUrl - Edge Cases should handle URLs with ports
+SUCCESS Validators isValidUrl - Edge Cases should handle URLs with query parameters
+SUCCESS Validators isValidUrl - Edge Cases should reject URLs without authority
+SUCCESS Validators isValidUrl - Edge Cases should reject URLs without scheme
+SUCCESS Validators isValidUrl should handle URLs with different schemes
+SUCCESS Validators isValidUrl should reject URLs with empty host
+SUCCESS Validators isValidUrl should reject URLs without authority
+SUCCESS Validators isValidUrl should reject URLs without scheme
+SUCCESS Validators isValidUrl should return false for invalid URLs
+SUCCESS Validators isValidUrl should return true for valid URLs

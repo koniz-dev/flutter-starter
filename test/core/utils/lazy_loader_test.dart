@@ -172,6 +172,23 @@ void main() {
 
       expect(() => loader.load('test'), throwsA(isA<Exception>()));
     });
+
+    test('caches a legitimately null value without throwing', () async {
+      // `_cache[key]!` threw "Null check operator used on a null value" on
+      // the SECOND load, because containsKey was true but the value was null.
+      var loads = 0;
+      final loader = LazyLoader<String, String?>(
+        loader: (key) async {
+          loads++;
+          return null;
+        },
+      );
+
+      expect(await loader.load('k'), isNull);
+      expect(await loader.load('k'), isNull);
+      expect(await loader.load('k'), isNull);
+      expect(loads, 1, reason: 'the null value was cached, not reloaded');
+    });
   });
 
   group('DeferredImportLoader', () {
@@ -324,23 +341,6 @@ void main() {
 
       expect(initializer.get, throwsA(isA<Exception>()));
       expect(initializer.isInitialized, isFalse);
-    });
-
-    test('caches a legitimately null value without throwing', () async {
-      // `_cache[key]!` threw "Null check operator used on a null value" on
-      // the SECOND load, because containsKey was true but the value was null.
-      var loads = 0;
-      final loader = LazyLoader<String, String?>(
-        loader: (key) async {
-          loads++;
-          return null;
-        },
-      );
-
-      expect(await loader.load('k'), isNull);
-      expect(await loader.load('k'), isNull);
-      expect(await loader.load('k'), isNull);
-      expect(loads, 1, reason: 'the null value was cached, not reloaded');
     });
   });
 }

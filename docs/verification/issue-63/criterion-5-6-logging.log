@@ -1,0 +1,161 @@
+# 159 tests, 159 passed, 0 not passed
+
+SUCCESS CrashlyticsOutput Template Tests accepts fatal logs, which the level filter used to omit
+SUCCESS CrashlyticsOutput Template Tests output method does not throw when sending error logs
+SUCCESS CrashlyticsOutput Template Tests output method does not throw when sending warning logs
+SUCCESS CrashlyticsOutput Template Tests output method ignores info and debug logs gracefully
+SUCCESS CrashlyticsOutput Template Tests should construct successfully
+SUCCESS FileLogOutput CustomLogOutput should handle empty event lines
+SUCCESS FileLogOutput CustomLogOutput should output lines for each event line
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle clearLogs when directory does not exist
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle destroy when sink is already closed
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle exception in clearLogs gracefully
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle getLogFiles when directory exists but empty
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle getLogFiles when exception occurs
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle getLogFiles with files not matching fileName
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle multiple rotations in sequence
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle output with empty lines list
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle output with multiple lines
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle rotation when file size equals maxFileSize
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle rotation when maxFiles is 1
+SUCCESS FileLogOutput FileLogOutput - Additional Edge Cases should handle rotation with maxFiles = 0
+SUCCESS FileLogOutput FileLogOutput - Edge Cases should handle custom fileName
+SUCCESS FileLogOutput FileLogOutput - Edge Cases should handle custom maxFileSize
+SUCCESS FileLogOutput FileLogOutput - Edge Cases should handle custom maxFiles
+SUCCESS FileLogOutput FileLogOutput - Edge Cases should handle default constructor values
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should create directory when it does not exist during init
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should delete existing file before renaming during rotation
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should filter files by fileName in getLogFiles
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle _checkAndRotate when _logDirectory is null
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle _checkAndRotate when _logFile is null
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle _rotateLogs when _logDirectory is null
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _checkAndRotate gracefully
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _checkAndRotate when fileSize check fails
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _initializeLogFile gracefully
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _rotateLogs gracefully
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _rotateLogs gracefully
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in output method gracefully
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle file size check in _checkAndRotate
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle getLogFiles directory listing
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation when file size exactly equals maxFileSize
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation when old files do not exist
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation with existing rotated files
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation with maxFiles = 1
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should reinitialize log file after rotation
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should rename current log to .1 during rotation
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should return early in _checkAndRotate when _logDirectory is null
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should return early in _checkAndRotate when _logFile is null
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should return early in _rotateLogs when _logDirectory is null
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should rotate when file size equals maxFileSize
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should trigger rotation check after output
+SUCCESS FileLogOutput FileLogOutput - Exception Handling Coverage should write and flush output correctly
+SUCCESS FileLogOutput JsonLogFormatter - Additional Edge Cases should handle empty message
+SUCCESS FileLogOutput JsonLogFormatter - Additional Edge Cases should handle special characters in message
+SUCCESS FileLogOutput JsonLogFormatter - Additional Edge Cases should handle unicode characters in message
+SUCCESS FileLogOutput JsonLogFormatter - Additional Edge Cases should handle very long messages
+SUCCESS FileLogOutput JsonLogFormatter emits an offset-bearing UTC timestamp
+SUCCESS FileLogOutput JsonLogFormatter should format different log levels
+SUCCESS FileLogOutput JsonLogFormatter should format log event as JSON
+SUCCESS FileLogOutput JsonLogFormatter should handle event with both error and stackTrace
+SUCCESS FileLogOutput JsonLogFormatter should handle null error and stackTrace
+SUCCESS FileLogOutput JsonLogFormatter should include ISO8601 timestamp
+SUCCESS FileLogOutput JsonLogFormatter should include error in JSON when present
+SUCCESS FileLogOutput JsonLogFormatter should include stackTrace in JSON when present
+SUCCESS FileLogOutput should clear all log files
+SUCCESS FileLogOutput should destroy and close sink
+SUCCESS FileLogOutput should get all log files
+SUCCESS FileLogOutput should handle clearLogs when directory does not exist
+SUCCESS FileLogOutput should handle concurrent output calls
+SUCCESS FileLogOutput should handle custom fileName
+SUCCESS FileLogOutput should handle destroy multiple times
+SUCCESS FileLogOutput should handle destroy when sink is null
+SUCCESS FileLogOutput should handle different log levels
+SUCCESS FileLogOutput should handle empty output event
+SUCCESS FileLogOutput should handle exception in output when sink throws
+SUCCESS FileLogOutput should handle file write errors gracefully
+SUCCESS FileLogOutput should handle getLogFiles when directory does not exist
+SUCCESS FileLogOutput should handle initialization errors gracefully
+SUCCESS FileLogOutput should handle multiple log entries
+SUCCESS FileLogOutput should handle output when sink is null
+SUCCESS FileLogOutput should handle output with multiple lines
+SUCCESS FileLogOutput should handle rotation when file does not exist yet
+SUCCESS FileLogOutput should handle rotation with different file names
+SUCCESS FileLogOutput should handle very large log messages
+SUCCESS FileLogOutput should initialize log file
+SUCCESS FileLogOutput should respect maxFiles limit
+SUCCESS FileLogOutput should rotate logs when file size exceeds maxFileSize
+SUCCESS FileLogOutput should write log output to file
+SUCCESS FileLogOutput sink lifecycle (real temp directory) a log emitted during rotation does not throw, and is kept
+SUCCESS FileLogOutput sink lifecycle (real temp directory) clearLogs closes the sink it replaces
+SUCCESS FileLogOutput sink lifecycle (real temp directory) lines emitted before init resolves are not dropped
+SUCCESS FileLogOutput sink lifecycle (real temp directory) the pending buffer is bounded
+SUCCESS FileLogOutput sink lifecycle (real temp directory) two concurrent rotations do not discard a generation
+SUCCESS LogLevel comparison can filter levels above threshold
+SUCCESS LogLevel comparison can sort levels by value
+SUCCESS LogLevel enum contains expected values
+SUCCESS LogLevel enum has four values
+SUCCESS LogLevelExtension.name all levels have non-empty names
+SUCCESS LogLevelExtension.name debug returns DEBUG
+SUCCESS LogLevelExtension.name error returns ERROR
+SUCCESS LogLevelExtension.name info returns INFO
+SUCCESS LogLevelExtension.name warning returns WARNING
+SUCCESS LogLevelExtension.value all levels have unique values
+SUCCESS LogLevelExtension.value debug returns 0
+SUCCESS LogLevelExtension.value error returns 3
+SUCCESS LogLevelExtension.value info returns 1
+SUCCESS LogLevelExtension.value levels are ordered by severity
+SUCCESS LogLevelExtension.value warning returns 2
+SUCCESS LoggingService Debug logging should handle empty context
+SUCCESS LoggingService Debug logging should handle null context
+SUCCESS LoggingService Debug logging should log debug message with context
+SUCCESS LoggingService Debug logging should log debug message without context
+SUCCESS LoggingService Debug logging should not log when logging is disabled
+SUCCESS LoggingService Dispose should dispose resources
+SUCCESS LoggingService Dispose should dispose when file logging is disabled
+SUCCESS LoggingService Dispose should dispose when logging is disabled
+SUCCESS LoggingService Edge cases should handle empty message
+SUCCESS LoggingService Edge cases should handle null error
+SUCCESS LoggingService Edge cases should handle null stackTrace
+SUCCESS LoggingService Edge cases should handle special characters in message
+SUCCESS LoggingService Edge cases should handle unicode characters in message
+SUCCESS LoggingService Edge cases should handle very long message
+SUCCESS LoggingService Error logging should log error message with all parameters
+SUCCESS LoggingService Error logging should log error message with context
+SUCCESS LoggingService Error logging should log error message with error
+SUCCESS LoggingService Error logging should log error message with error and stackTrace
+SUCCESS LoggingService Error logging should log error message with stackTrace
+SUCCESS LoggingService Error logging should log error message without error
+SUCCESS LoggingService Error logging should not log when logging is disabled
+SUCCESS LoggingService File logging should clear logs when file logging is disabled
+SUCCESS LoggingService File logging should clear logs when file logging is enabled
+SUCCESS LoggingService File logging should get log files when file logging is enabled
+SUCCESS LoggingService File logging should return empty list when file logging is disabled
+SUCCESS LoggingService Info logging should handle complex context data
+SUCCESS LoggingService Info logging should log info message with context
+SUCCESS LoggingService Info logging should log info message without context
+SUCCESS LoggingService Info logging should not log when logging is disabled
+SUCCESS LoggingService Initialization should initialize with default settings
+SUCCESS LoggingService Initialization should initialize with file logging disabled
+SUCCESS LoggingService Initialization should initialize with file logging enabled
+SUCCESS LoggingService Initialization should initialize with logging disabled
+SUCCESS LoggingService Initialization should initialize with remote logging enabled
+SUCCESS LoggingService Message formatting should format message with complex context
+SUCCESS LoggingService Message formatting should format message with simple context
+SUCCESS LoggingService Message formatting should format message without context
+SUCCESS LoggingService Message formatting should handle JSON encoding errors gracefully
+SUCCESS LoggingService Multiple log calls should handle mixed log level calls
+SUCCESS LoggingService Multiple log calls should handle multiple debug calls
+SUCCESS LoggingService Multiple log calls should handle multiple error calls
+SUCCESS LoggingService Multiple log calls should handle multiple info calls
+SUCCESS LoggingService Multiple log calls should handle multiple warning calls
+SUCCESS LoggingService Warning logging should log warning message with context
+SUCCESS LoggingService Warning logging should log warning message with error
+SUCCESS LoggingService Warning logging should log warning message with error and stackTrace
+SUCCESS LoggingService Warning logging should log warning message with stackTrace
+SUCCESS LoggingService Warning logging should log warning message without error
+SUCCESS LoggingService Warning logging should not log when logging is disabled
+SUCCESS loggingServiceProvider disposes service when container is disposed
+SUCCESS loggingServiceProvider each container creates independent service instances
+SUCCESS loggingServiceProvider provides a LoggingService instance
+SUCCESS loggingServiceProvider returns the same instance on multiple reads
+SUCCESS loggingServiceProvider service can log after being provided

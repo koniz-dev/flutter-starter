@@ -1,0 +1,399 @@
+# 397 tests, 397 passed, 0 not passed
+
+SUCCESS AppException should create exception with message
+SUCCESS AppException should create exception with message and code
+SUCCESS AppException.toString carries the code when there is one
+SUCCESS AppException.toString carries the type and the message
+SUCCESS AppException.toString interpolating an exception no longer loses everything
+SUCCESS AuthException should create AuthException with message
+SUCCESS AuthException should create AuthException with message and code
+SUCCESS AuthException should extend AppException
+SUCCESS AuthFailure should create AuthFailure with message
+SUCCESS AuthFailure should create AuthFailure with message and code
+SUCCESS AuthFailure should extend Failure
+SUCCESS CacheException should create CacheException with message
+SUCCESS CacheException should create CacheException with message and code
+SUCCESS CacheException should extend AppException
+SUCCESS CacheFailure should create CacheFailure with message
+SUCCESS CacheFailure should create CacheFailure with message and code
+SUCCESS CacheFailure should extend Failure
+SUCCESS DeferredImportLoader should create instance with load function
+SUCCESS DeferredImportLoader should handle concurrent loads
+SUCCESS DeferredImportLoader should handle load errors
+SUCCESS DeferredImportLoader should load library
+SUCCESS DeferredImportLoader should not load twice
+SUCCESS DeferredImportLoader should reset loader
+SUCCESS DioExceptionMapper Bad Certificate should map badCertificate to NetworkException
+SUCCESS DioExceptionMapper Bad Response should extract error code from response data
+SUCCESS DioExceptionMapper Bad Response should extract error message from nested error object
+SUCCESS DioExceptionMapper Bad Response should handle string response data
+SUCCESS DioExceptionMapper Bad Response should map badResponse to ServerException with status code
+SUCCESS DioExceptionMapper Bad Response should use default message when response data is null
+SUCCESS DioExceptionMapper Cancel should map cancel to NetworkException
+SUCCESS DioExceptionMapper Connection Error should map connectionError to NetworkException
+SUCCESS DioExceptionMapper Connection Timeout should map connectionTimeout to NetworkException
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should extract error code from errorCode field
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should extract error code from error_code field
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should extract message from error as string
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should extract message from error_message field
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should extract message from msg field
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle empty nested error object
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle empty string response data
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle nested error with error field as string
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle nested error with error.error field
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle null message in badCertificate
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle null message in cancel
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle null message in connectionError
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle null message in connectionTimeout
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle null message in receiveTimeout
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle null message in sendTimeout
+SUCCESS DioExceptionMapper Error Message Extraction Edge Cases should handle unknown error with Network is unreachable
+SUCCESS DioExceptionMapper Receive Timeout should map receiveTimeout to NetworkException
+SUCCESS DioExceptionMapper Send Timeout should map sendTimeout to NetworkException
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 400
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 401
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 403
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 404
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 409
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 422
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 429
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 500
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 502
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 503
+SUCCESS DioExceptionMapper Status Code Messages should return appropriate message for 504
+SUCCESS DioExceptionMapper Status Code Messages should return client error message for 4xx status codes
+SUCCESS DioExceptionMapper Status Code Messages should return default message for null status code
+SUCCESS DioExceptionMapper Status Code Messages should return default message when response is null
+SUCCESS DioExceptionMapper Status Code Messages should return server error message for 5xx status codes
+SUCCESS DioExceptionMapper Unknown should handle null message in unknown error
+SUCCESS DioExceptionMapper Unknown should map unknown to NetworkException
+SUCCESS DioExceptionMapper Unknown should map unknown with SocketException to NetworkException
+SUCCESS Edge Cases All exceptions should implement Exception interface
+SUCCESS Edge Cases AuthException should be accessible
+SUCCESS Edge Cases Exceptions should handle empty message
+SUCCESS Edge Cases Exceptions should handle long messages
+SUCCESS Edge Cases ServerException should handle null statusCode
+SUCCESS Edge Cases ServerException should handle various status codes
+SUCCESS Edge Cases ValidationException should be accessible
+SUCCESS Edge Cases all failure types should extend Failure
+SUCCESS Edge Cases failures should handle empty message
+SUCCESS Edge Cases failures should handle long messages
+SUCCESS Equality Tests different failure types should not be equal
+SUCCESS Equality Tests failures with different codes should not be equal
+SUCCESS Equality Tests failures with different messages should not be equal
+SUCCESS Equality Tests failures with null code should be equal
+SUCCESS Equality Tests failures with same message and code should be equal
+SUCCESS ExceptionToFailureMapper AuthException should map AuthException to AuthFailure
+SUCCESS ExceptionToFailureMapper AuthException should preserve message and code
+SUCCESS ExceptionToFailureMapper CacheException should map CacheException to CacheFailure
+SUCCESS ExceptionToFailureMapper CacheException should preserve message and code
+SUCCESS ExceptionToFailureMapper Edge Cases should handle all exception types
+SUCCESS ExceptionToFailureMapper Edge Cases should handle empty message
+SUCCESS ExceptionToFailureMapper Edge Cases should handle exceptions with newlines in message
+SUCCESS ExceptionToFailureMapper Edge Cases should handle exceptions with special characters in message
+SUCCESS ExceptionToFailureMapper Edge Cases should handle exceptions with unicode characters
+SUCCESS ExceptionToFailureMapper Edge Cases should handle exceptions with very long code
+SUCCESS ExceptionToFailureMapper Edge Cases should handle exceptions with whitespace-only message
+SUCCESS ExceptionToFailureMapper Edge Cases should handle long messages
+SUCCESS ExceptionToFailureMapper NetworkException should map NetworkException to NetworkFailure
+SUCCESS ExceptionToFailureMapper NetworkException should preserve message and code
+SUCCESS ExceptionToFailureMapper Null Code Handling should handle AuthException with null code
+SUCCESS ExceptionToFailureMapper Null Code Handling should handle CacheException with null code
+SUCCESS ExceptionToFailureMapper Null Code Handling should handle NetworkException with null code
+SUCCESS ExceptionToFailureMapper Null Code Handling should handle ValidationException with null code
+SUCCESS ExceptionToFailureMapper Null Code Handling should handle exceptions with null code
+SUCCESS ExceptionToFailureMapper PermissionException and NotFoundException maps NotFoundException to NotFoundFailure
+SUCCESS ExceptionToFailureMapper PermissionException and NotFoundException maps PermissionException to PermissionFailure
+SUCCESS ExceptionToFailureMapper ServerException should map ServerException to ServerFailure
+SUCCESS ExceptionToFailureMapper ServerException should preserve message and code
+SUCCESS ExceptionToFailureMapper Switch Expression Coverage should extract message and code from pattern matching
+SUCCESS ExceptionToFailureMapper Switch Expression Coverage should use pattern matching for all exception types
+SUCCESS ExceptionToFailureMapper Unknown Exception should include exception string in message
+SUCCESS ExceptionToFailureMapper Unknown Exception should map unknown exception to UnknownFailure
+SUCCESS ExceptionToFailureMapper ValidationException should map ValidationException to ValidationFailure
+SUCCESS ExceptionToFailureMapper ValidationException should preserve message and code
+SUCCESS ExceptionToFailureMapper unmapped AppException subclasses a plain Exception still falls through to a described failure
+SUCCESS ExceptionToFailureMapper unmapped AppException subclasses an unknown AppException keeps its message and code
+SUCCESS ExceptionToFailureMapper unmapped AppException subclasses an unknown AppException without a code gets UNKNOWN_ERROR
+SUCCESS Failure should be equatable
+SUCCESS Failure should create failure with message
+SUCCESS Failure should create failure with message and code
+SUCCESS FeatureFlagKey should be equal when values are equal
+SUCCESS FeatureFlagKey should have correct properties
+SUCCESS FeatureFlagKey should not be equal when values are different
+SUCCESS FeatureFlagKey should return value in toString
+SUCCESS FeatureFlags getByCategory should return empty list for unknown category
+SUCCESS FeatureFlags getByCategory should return flags in category
+SUCCESS FeatureFlags should have all feature flags defined
+SUCCESS FeatureFlags should have correct flag properties
+SUCCESS FeatureFlags should have unique flag values
+SUCCESS FeatureFlagsManager Edge Cases should handle different flag keys correctly
+SUCCESS FeatureFlagsManager Edge Cases should handle multiple consecutive calls
+SUCCESS FeatureFlagsManager clearAllLocalOverrides should call repository clearAllLocalOverrides
+SUCCESS FeatureFlagsManager clearAllLocalOverrides should handle clearAllLocalOverrides failure gracefully
+SUCCESS FeatureFlagsManager clearLocalOverride should call repository clearLocalOverride
+SUCCESS FeatureFlagsManager clearLocalOverride should handle clearLocalOverride failure gracefully
+SUCCESS FeatureFlagsManager getFlag should return flag when repository succeeds
+SUCCESS FeatureFlagsManager getFlag should return flag with different sources
+SUCCESS FeatureFlagsManager getFlag should return null when repository fails
+SUCCESS FeatureFlagsManager getFlags a key the repository omits falls back to its default
+SUCCESS FeatureFlagsManager getFlags should fall back to per-key defaults when repository fails
+SUCCESS FeatureFlagsManager getFlags should handle empty list of keys
+SUCCESS FeatureFlagsManager getFlags should handle multiple flags with different values
+SUCCESS FeatureFlagsManager getFlags should return map of flags when repository succeeds
+SUCCESS FeatureFlagsManager isEnabled should return defaultValue for different flags
+SUCCESS FeatureFlagsManager isEnabled should return defaultValue when repository fails
+SUCCESS FeatureFlagsManager isEnabled should return false when flag is disabled
+SUCCESS FeatureFlagsManager isEnabled should return true when flag is enabled
+SUCCESS FeatureFlagsManager refresh should call repository refreshRemoteFlags
+SUCCESS FeatureFlagsManager refresh should handle refresh failure gracefully
+SUCCESS FeatureFlagsManager setLocalOverride should call repository setLocalOverride with correct parameters
+SUCCESS FeatureFlagsManager setLocalOverride should handle setLocalOverride failure gracefully
+SUCCESS ImageCacheHelper clearCache should clear image cache
+SUCCESS ImageCacheHelper getCacheStats should return cache statistics
+SUCCESS ImageCacheHelper maxCacheBytes should get and set max cache bytes
+SUCCESS ImageCacheHelper maxCacheSize should get and set max cache size
+SUCCESS ImageCacheHelper preloadImage exposes a default timeout
+SUCCESS ImageCacheHelper preloadImage reports failure when given a context
+SUCCESS ImageCacheHelper preloadImage should return false for invalid URL
+SUCCESS ImageCacheHelper preloadImage should return false for invalid URL format
+SUCCESS ImageCacheHelper preloadImages should handle multiple URLs
+SUCCESS ImageCacheHelper preloadImages should return 0 for empty list
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle deepMerge with map1 having nested map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle deepMerge with nested non-map values
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle encodePretty with list
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle encodePretty with nested structures
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getBool with null map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getDouble with int value
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getDouble with invalid string
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getDouble with large number
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getDouble with null map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getInt with double value
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getInt with invalid string
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getInt with large number
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getInt with null map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getList with null map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getListOf with empty list
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getListOf with null list
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getMap with null map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle getString with null map
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle removeNulls with all null values
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle removeNulls with no null values
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle toQueryString with all null values
+SUCCESS JsonHelper Edge Cases - Additional Coverage should handle toQueryString with single entry
+SUCCESS JsonHelper decode should decode JSON array
+SUCCESS JsonHelper decode should decode valid JSON string
+SUCCESS JsonHelper decode should return null for invalid JSON
+SUCCESS JsonHelper decode should return null for null or empty string
+SUCCESS JsonHelper decodeList should decode valid JSON list
+SUCCESS JsonHelper decodeList should return null for non-list JSON
+SUCCESS JsonHelper decodeMap should decode valid JSON map
+SUCCESS JsonHelper decodeMap should return null for invalid JSON
+SUCCESS JsonHelper decodeMap should return null for non-map JSON
+SUCCESS JsonHelper deepMerge should deep merge nested maps
+SUCCESS JsonHelper deepMerge should handle null maps
+SUCCESS JsonHelper deepMerge should override non-map values
+SUCCESS JsonHelper encode should encode list to JSON string
+SUCCESS JsonHelper encode should encode map to JSON string
+SUCCESS JsonHelper encode should return null for unencodable objects
+SUCCESS JsonHelper encodePretty should encode map with indentation
+SUCCESS JsonHelper encodePretty should handle encodePretty with Exception during encoding
+SUCCESS JsonHelper encodePretty should return null for unencodable objects
+SUCCESS JsonHelper getBool should get bool value
+SUCCESS JsonHelper getBool should return null for non-bool value
+SUCCESS JsonHelper getDouble should get double value
+SUCCESS JsonHelper getDouble should parse int to double
+SUCCESS JsonHelper getDouble should parse string number to double
+SUCCESS JsonHelper getInt should get int value
+SUCCESS JsonHelper getInt should parse num to int
+SUCCESS JsonHelper getInt should parse string number to int
+SUCCESS JsonHelper getInt should return null for invalid value
+SUCCESS JsonHelper getList should get list value
+SUCCESS JsonHelper getList should return null for non-list value
+SUCCESS JsonHelper getListOf should convert list items
+SUCCESS JsonHelper getListOf should get list of strings
+SUCCESS JsonHelper getListOf should return null for missing key
+SUCCESS JsonHelper getListOf should return null when conversion fails
+SUCCESS JsonHelper getMap should get nested map
+SUCCESS JsonHelper getMap should return null for missing key
+SUCCESS JsonHelper getMap should return null for non-map value
+SUCCESS JsonHelper getString should get string value
+SUCCESS JsonHelper getString should return null for non-string value
+SUCCESS JsonHelper getValue should get value by key
+SUCCESS JsonHelper getValue should return null for missing key
+SUCCESS JsonHelper getValue should return null for null map
+SUCCESS JsonHelper getValue should return null for wrong type
+SUCCESS JsonHelper isValidJson should return false for invalid JSON
+SUCCESS JsonHelper isValidJson should return true for valid JSON
+SUCCESS JsonHelper merge should handle null maps
+SUCCESS JsonHelper merge should merge two maps
+SUCCESS JsonHelper merge should override values from second map
+SUCCESS JsonHelper non-finite and non-Exception failures getInt returns null for a non-finite number
+SUCCESS JsonHelper non-finite and non-Exception failures getInt still converts finite numbers
+SUCCESS JsonHelper non-finite and non-Exception failures getListOf returns null when the converter raises a TypeError
+SUCCESS JsonHelper non-finite and non-Exception failures getListOf still converts a well-formed list
+SUCCESS JsonHelper removeNulls should handle null map
+SUCCESS JsonHelper removeNulls should preserve non-null values
+SUCCESS JsonHelper removeNulls should remove null values
+SUCCESS JsonHelper toQueryString should URL encode values
+SUCCESS JsonHelper toQueryString should convert map to query string
+SUCCESS JsonHelper toQueryString should handle boolean values
+SUCCESS JsonHelper toQueryString should handle empty map
+SUCCESS JsonHelper toQueryString should handle null map
+SUCCESS JsonHelper toQueryString should handle numeric values
+SUCCESS JsonHelper toQueryString should handle special characters in keys
+SUCCESS JsonHelper toQueryString should skip null values
+SUCCESS LazyInitializer should create instance with initializer
+SUCCESS LazyInitializer should handle concurrent initialization
+SUCCESS LazyInitializer should handle initialization errors
+SUCCESS LazyInitializer should initialize and cache value
+SUCCESS LazyInitializer should reset initializer
+SUCCESS LazyLoader caches a legitimately null value without throwing
+SUCCESS LazyLoader should check if key is cached
+SUCCESS LazyLoader should check if key is loading
+SUCCESS LazyLoader should clear cache
+SUCCESS LazyLoader should create instance with custom config
+SUCCESS LazyLoader should create instance with loader function
+SUCCESS LazyLoader should evict oldest entries when cache is full
+SUCCESS LazyLoader should evict specific key
+SUCCESS LazyLoader should handle load errors
+SUCCESS LazyLoader should handle multiple concurrent loads
+SUCCESS LazyLoader should load and cache value
+SUCCESS LazyLoader should not cache when cacheEnabled is false
+SUCCESS LazyLoader should preload multiple resources
+SUCCESS LazyLoader should preload resource
+SUCCESS NetworkException should create NetworkException with message
+SUCCESS NetworkException should create NetworkException with message and code
+SUCCESS NetworkException should extend AppException
+SUCCESS NetworkFailure should create NetworkFailure with message
+SUCCESS NetworkFailure should create NetworkFailure with message and code
+SUCCESS NetworkFailure should extend Failure
+SUCCESS PaginationConfig should create with custom values
+SUCCESS PaginationConfig should create with default values
+SUCCESS PaginationHelper config plumbing a 0-indexed API starts at page 0, not page 1
+SUCCESS PaginationHelper config plumbing an error is cleared by the next successful page
+SUCCESS PaginationHelper config plumbing pageSize is readable, so loadPage can size its request
+SUCCESS PaginationHelper config plumbing reset returns to the configured initial page
+SUCCESS PaginationHelper should append items on load
+SUCCESS PaginationHelper should check if should load next page
+SUCCESS PaginationHelper should check if should prefetch
+SUCCESS PaginationHelper should create with custom config
+SUCCESS PaginationHelper should create with loadPage function
+SUCCESS PaginationHelper should handle load errors
+SUCCESS PaginationHelper should load next page
+SUCCESS PaginationHelper should not load next page when loading
+SUCCESS PaginationHelper should not load next page when no more items
+SUCCESS PaginationHelper should not load when already loading
+SUCCESS PaginationHelper should not load when no more items
+SUCCESS PaginationHelper should not prefetch when disabled
+SUCCESS PaginationHelper should not prefetch when loading
+SUCCESS PaginationHelper should not prefetch when no more items
+SUCCESS PaginationHelper should reset pagination
+SUCCESS PaginationScrollExtension a list that fits on screen counts as at the end
+SUCCESS PaginationScrollExtension should calculate scroll ratio
+SUCCESS PaginationScrollExtension should check if at end
+SUCCESS PaginationScrollExtension should check if near end
+SUCCESS PaginationScrollExtension should return 0 for scroll ratio when no clients
+SUCCESS PaginationState should append page
+SUCCESS PaginationState should copy with partial updates
+SUCCESS PaginationState should copy with updated values
+SUCCESS PaginationState should create with all parameters
+SUCCESS PaginationState should create with required parameters
+SUCCESS PaginationState should reset
+SUCCESS PaginationState should set error
+SUCCESS PaginationState should set loading
+SUCCESS PaginationState.copyWith clearError drops an error that error: null cannot
+SUCCESS PermissionException / NotFoundException NotFoundException carries message and code
+SUCCESS PermissionException / NotFoundException PermissionException carries message and code
+SUCCESS PermissionFailure should create PermissionFailure with message
+SUCCESS PermissionFailure should create PermissionFailure with message and code
+SUCCESS PermissionFailure should extend Failure
+SUCCESS ProviderDisposal does not touch the global image cache on dispose
+SUCCESS ProviderDisposal should dispose registered disposables
+SUCCESS ProviderDisposal should handle disposal errors gracefully
+SUCCESS ProviderDisposal the removed dynamic-provider helpers are gone
+SUCCESS ProviderLifecycleManager should dispose ProviderContainer
+SUCCESS ProviderLifecycleManager should handle non-ProviderContainer gracefully
+SUCCESS Result Edge Cases - Additional Coverage should handle map on ResultFailure
+SUCCESS Result Edge Cases - Additional Coverage should handle mapError on Success
+SUCCESS Result Edge Cases - Additional Coverage should handle mapError with empty message
+SUCCESS Result Edge Cases - Additional Coverage should handle mapError with null code
+SUCCESS Result Edge Cases - Additional Coverage should preserve code when mapping error
+SUCCESS Result Integration with when() should chain map and when
+SUCCESS Result Integration with when() should chain mapError and when
+SUCCESS Result Integration with when() should handle complex type transformations
+SUCCESS Result ResultFailure should create ResultFailure with Failure
+SUCCESS Result ResultFailure should handle different Failure subtypes
+SUCCESS Result ResultFailure should return failure from failureOrNull
+SUCCESS Result ResultFailure should return message from errorOrNull
+SUCCESS Result ResultFailure should return null from dataOrNull
+SUCCESS Result Success should create Success with data
+SUCCESS Result Success should handle nullable data
+SUCCESS Result Success should return data from dataOrNull
+SUCCESS Result Success should return null from errorOrNull
+SUCCESS Result Success should return null from failureOrNull
+SUCCESS Result _createFailureWithMessage - Fallback Case should handle custom Failure type with fallback
+SUCCESS Result _createFailureWithMessage - Fallback Path Coverage should handle all if-else branches in _createFailureWithMessage
+SUCCESS Result _createFailureWithMessage - Fallback Path Coverage should use fallback for unknown Failure types
+SUCCESS Result equality ResultFailure values wrapping different failures differ
+SUCCESS Result equality Success values with different data are not equal
+SUCCESS Result equality a Success never equals a ResultFailure
+SUCCESS Result equality equality is only as deep as T, so lists compare by identity
+SUCCESS Result equality results are usable directly in expect
+SUCCESS Result equality toString names the variant and its payload
+SUCCESS Result equality two ResultFailure values wrapping equal failures are equal
+SUCCESS Result equality two Success values with equal data are equal
+SUCCESS Result map() should map Success data
+SUCCESS Result map() should preserve Failure in map
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map AuthFailure message
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map CacheFailure message
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map NetworkFailure message
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map PermissionFailure message
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map ServerFailure message
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map UnknownFailure message
+SUCCESS Result mapError() - Comprehensive Failure Type Coverage should map ValidationFailure message
+SUCCESS Result mapError() - NotFoundFailure Coverage should map NotFoundFailure message
+SUCCESS Result mapError() should map Failure message
+SUCCESS Result mapError() should not change Success
+SUCCESS Result when() - Legacy Pattern Matching (migrated) should call failureCallback with message and code for ResultFailure
+SUCCESS Result when() - Legacy Pattern Matching (migrated) should call success callback for Success
+SUCCESS Result when() - Legacy Pattern Matching (migrated) should handle null code in failureCallback
+SUCCESS Result when() - Legacy Pattern Matching (migrated) should return value from failureCallback
+SUCCESS Result when() - Legacy Pattern Matching (migrated) should return value from success callback
+SUCCESS Result when() - Legacy Pattern Matching should call failureCallback with message and code for ResultFailure
+SUCCESS Result when() - Legacy Pattern Matching should call success callback for Success
+SUCCESS Result when() - Legacy Pattern Matching should handle null code in failureCallback
+SUCCESS Result when() - Legacy Pattern Matching should return value from failureCallback
+SUCCESS Result when() - Legacy Pattern Matching should return value from success callback
+SUCCESS Result when() - Pattern Matching should call failureCallback for ResultFailure
+SUCCESS Result when() - Pattern Matching should call failureCallback with message and code
+SUCCESS Result when() - Pattern Matching should call success callback for Success
+SUCCESS Result when() - Pattern Matching should call success callback for Success
+SUCCESS Result when() - Pattern Matching should handle all Failure subtypes
+SUCCESS Result when() - Pattern Matching should handle async callbacks
+SUCCESS Result when() - Pattern Matching should handle null code in failureCallback
+SUCCESS Result when() - Pattern Matching should handle nullable T types
+SUCCESS Result when() - Pattern Matching should preserve Failure subtype information
+SUCCESS Result when() - Pattern Matching should preserve type information in success callback
+SUCCESS Result when() - Pattern Matching should return value from failureCallback
+SUCCESS Result when() - Pattern Matching should return value from success callback
+SUCCESS Result whenLegacy() - Deprecated Pattern Matching should call failureCallback with message and code for ResultFailure
+SUCCESS Result whenLegacy() - Deprecated Pattern Matching should call success callback for Success
+SUCCESS Result whenLegacy() - Deprecated Pattern Matching should handle null code in failureCallback
+SUCCESS Result whenLegacy() - Deprecated Pattern Matching should return value from failureCallback
+SUCCESS Result whenLegacy() - Deprecated Pattern Matching should return value from success callback
+SUCCESS ServerException should create ServerException with message
+SUCCESS ServerException should create ServerException with message and statusCode
+SUCCESS ServerException should extend AppException
+SUCCESS ServerFailure should create ServerFailure with message
+SUCCESS ServerFailure should create ServerFailure with message and code
+SUCCESS ServerFailure should extend Failure
+SUCCESS UnknownFailure should create UnknownFailure with message
+SUCCESS UnknownFailure should create UnknownFailure with message and code
+SUCCESS UnknownFailure should extend Failure
+SUCCESS ValidationException should create ValidationException with message
+SUCCESS ValidationException should create ValidationException with message and code
+SUCCESS ValidationException should extend AppException
+SUCCESS ValidationFailure should create ValidationFailure with message
+SUCCESS ValidationFailure should create ValidationFailure with message and code
+SUCCESS ValidationFailure should extend Failure

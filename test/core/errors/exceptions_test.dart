@@ -215,42 +215,42 @@ void main() {
       expect(exception, isA<AuthException>());
       expect(exception, isA<AppException>());
     });
+  });
 
-    group('AppException.toString', () {
-      test('carries the type and the message', () {
-        const exception = TestAppException('Something broke');
-        expect(exception.toString(), contains('TestAppException'));
-        expect(exception.toString(), contains('Something broke'));
-        expect(exception.toString(), isNot(contains('Instance of')));
-      });
-
-      test('carries the code when there is one', () {
-        const exception = TestAppException('Nope', code: 'E_NOPE');
-        expect(exception.toString(), contains('E_NOPE'));
-        expect(exception.toString(), contains('Nope'));
-      });
-
-      test('interpolating an exception no longer loses everything', () {
-        const exception = PermissionException('Camera denied', code: 'E_PERM');
-        expect('$exception', contains('Camera denied'));
-        expect('$exception', contains('E_PERM'));
-      });
+  group('AppException.toString', () {
+    test('carries the type and the message', () {
+      const exception = TestAppException('Something broke');
+      expect(exception.toString(), contains('TestAppException'));
+      expect(exception.toString(), contains('Something broke'));
+      expect(exception.toString(), isNot(contains('Instance of')));
     });
 
-    group('PermissionException / NotFoundException', () {
-      test('PermissionException carries message and code', () {
-        const exception = PermissionException('Denied', code: 'E_PERM');
-        expect(exception, isA<AppException>());
-        expect(exception.message, 'Denied');
-        expect(exception.code, 'E_PERM');
-      });
+    test('carries the code when there is one', () {
+      const exception = TestAppException('Nope', code: 'E_NOPE');
+      expect(exception.toString(), contains('E_NOPE'));
+      expect(exception.toString(), contains('Nope'));
+    });
 
-      test('NotFoundException carries message and code', () {
-        const exception = NotFoundException('Missing', code: 'E_404');
-        expect(exception, isA<AppException>());
-        expect(exception.message, 'Missing');
-        expect(exception.code, 'E_404');
-      });
+    test('interpolating an exception no longer loses everything', () {
+      const exception = PermissionException('Camera denied', code: 'E_PERM');
+      expect('$exception', contains('Camera denied'));
+      expect('$exception', contains('E_PERM'));
+    });
+  });
+
+  group('PermissionException / NotFoundException', () {
+    test('PermissionException carries message and code', () {
+      const exception = PermissionException('Denied', code: 'E_PERM');
+      expect(exception, isA<AppException>());
+      expect(exception.message, 'Denied');
+      expect(exception.code, 'E_PERM');
+    });
+
+    test('NotFoundException carries message and code', () {
+      const exception = NotFoundException('Missing', code: 'E_404');
+      expect(exception, isA<AppException>());
+      expect(exception.message, 'Missing');
+      expect(exception.code, 'E_404');
     });
   });
 }
