@@ -1,0 +1,44 @@
+Criterion 2 - the live labels match the script
+
+$ gh label list --limit 200 | grep '^epic:'   (name and description, as live)
+epic:app-shell	lib/main.dart, lib/core/startup, lib/features/home: entry point and app shell
+epic:core-config	lib/core/config, assets/config, .env.example: env layers, dart-defines
+epic:core-di	lib/core/di + lib/core/contracts: composition root, provider wiring, contracts
+epic:core-foundation	lib/core/{utils,errors,logging,performance,constants}: cross-cutting primitives
+epic:core-network	lib/core/network: Dio ApiClient, interceptors, realtime/WebSocket
+epic:core-routing	lib/core/routing: GoRouter tree, guards, navigation adapters
+epic:core-security	lib/core/security: RASP providers, hardening, security docs
+epic:core-storage	lib/core/storage: key-value + secure adapters, token store, migrations
+epic:design-system	lib/shared + lib/core/accessibility + assets/images: tokens, theme, widgets, a11y
+epic:docs	docs/, README, CONTRIBUTING, CHANGELOG, CLAUDE.md, .claude roles, examples/
+epic:feature-auth	lib/features/auth + lib/core/session: login, register, session (sample slice)
+epic:feature-flags	lib/features/feature_flags + lib/core/feature_flags: both halves of the flag stack
+epic:feature-tasks	lib/features/tasks: CRUD sample feature slice
+epic:i18n	lib/l10n, lib/core/localization, l10n.yaml: ARB catalogs and locale plumbing
+epic:platform-release	android/ ios/ macos/ linux/ windows/ web/ fastlane/: native and release surfaces
+epic:testing	test/, integration_test/, coverage gates, Patrol E2E, golden acceptance
+epic:tooling-ci	.github, .githooks, scripts/, tool/, bricks/, analyzer and pubspec config
+
+$ ./scripts/bootstrap-issue-labels.sh --list-epics | sort
+epic:app-shell
+epic:core-config
+epic:core-di
+epic:core-foundation
+epic:core-network
+epic:core-routing
+epic:core-security
+epic:core-storage
+epic:design-system
+epic:docs
+epic:feature-auth
+epic:feature-flags
+epic:feature-tasks
+epic:i18n
+epic:platform-release
+epic:testing
+epic:tooling-ci
+
+$ diff <(live epic label names, sorted) <(--list-epics, sorted)
+(no output - the two sets are identical)
+
+RESULT: the live epic:* labels are exactly the script's list, 17 of them.
