@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -103,6 +104,77 @@ void main() {
     removeSecureBackend();
     removeEnvAsset();
   });
+
+  /// Runs the real entrypoint and pumps until it has finished booting.
+  ///
+  /// Deliberately NOT `await app.main()` on the fake clock. Inside
+  /// `testWidgets` the clock is fake, so anything `main()` waits on only
+  /// advances while frames are being pumped; awaiting it directly deadlocks
+  /// the test for reasons that have nothing to do with the bug. Starting it
+  /// inside [WidgetTester.runAsync] and pumping afterwards is also the shape
+  /// `integration_test/app_e2e_test.dart` uses on a device.
+  ///
+  /// The frame budget is the point of this helper. `expect(booted, isTrue)`
+  /// is the bounded-time assertion #101 is about: on the pre-fix `main.dart`
+  /// the startup future never completes, so `main()` never returns, and this
+  /// fails with a readable message instead of hanging the suite.
+  ///
+  /// Shared by both end-to-end groups on purpose. The failure group and the
+  /// healthy group must boot through the *same* code path, or "healthy" and
+  /// "failed" stop being comparable outcomes of one entrypoint.
+  /// Refs koniz-dev/flutter-starter#160
+  Future<void> bootRealMain(WidgetTester tester) async {
+    var booted = false;
+    Object? bootError;
+
+    // `tester.runAsync` is mandatory here, and not interchangeable with
+    // pumping. `main()` does real I/O - dotenv reads the asset bundle,
+    // SharedPreferences and the Keychain go over platform channels - and
+    // `testWidgets` runs on a fake clock that never delivers those replies.
+    // Awaiting `main()` on the fake clock stalls for reasons that have
+    // nothing to do with #101, which would make a red run unreadable.
+    await tester.runAsync(() async {
+      try {
+        await app.main().timeout(_bootBudget);
+        booted = true;
+      } on TimeoutException {
+        booted = false;
+      } on Object catch (error) {
+        bootError = error;
+        booted = true;
+      }
+    });
+
+    // THE assertion this whole file exists for. #101 is not "the failure
+    // screen renders wrong", it is "main() never returns, so no screen is
+    // reached at all". On the pre-fix entrypoint this fails here, in bounded
+    // time, instead of hanging the suite.
+    expect(
+      booted,
+      isTrue,
+      reason:
+          'main() did not return within ${_bootBudget.inSeconds}s. That is '
+          'the #101 hang: the awaited startup future stays pending, runApp '
+          'is never called, and no screen - failure or otherwise - exists',
+    );
+    expect(
+      bootError,
+      isNull,
+      reason:
+          'main() must absorb a startup failure into StartupFailureApp, not '
+          'throw out of the entrypoint',
+    );
+
+    // One bounded settle, outside `runAsync`, on the tree `runApp` attached.
+    // `runApp` schedules `attachRootWidget` on a timer, so the tree exists but
+    // has not necessarily been laid out when `main()`'s future completes; this
+    // is what turns it into something `find` can interrogate.
+    await tester.pumpAndSettle(
+      const Duration(milliseconds: 100),
+      EnginePhase.sendSemanticsUpdate,
+      const Duration(seconds: 10),
+    );
+  }
 
   group('startup container surfaces failures instead of hanging (#101)', () {
     test(
@@ -238,67 +310,6 @@ void main() {
   });
 
   group('main() renders StartupFailureApp end to end (#101)', () {
-    /// Runs the real entrypoint and pumps until it has finished booting.
-    ///
-    /// Deliberately NOT `await app.main()`. Inside `testWidgets` the clock is
-    /// fake, so anything `main()` waits on only advances while frames are being
-    /// pumped; awaiting it directly deadlocks the test for reasons that have
-    /// nothing to do with the bug. Starting it and pumping is also the shape
-    /// `integration_test/app_e2e_test.dart` uses on a device.
-    ///
-    /// The frame budget is the point of this helper. `expect(booted, isTrue)`
-    /// is the bounded-time assertion #101 is about: on the pre-fix `main.dart`
-    /// the startup future never completes, so `main()` never returns, and this
-    /// fails with a readable message instead of hanging the suite.
-    Future<void> bootRealMain(WidgetTester tester) async {
-      var booted = false;
-      Object? bootError;
-
-      // `tester.runAsync` is mandatory here, and not interchangeable with
-      // pumping. `main()` does real I/O - dotenv reads the asset bundle,
-      // SharedPreferences and the Keychain go over platform channels - and
-      // `testWidgets` runs on a fake clock that never delivers those replies.
-      // Awaiting `main()` on the fake clock stalls for reasons that have
-      // nothing to do with #101, which would make a red run unreadable.
-      await tester.runAsync(() async {
-        try {
-          await app.main().timeout(_bootBudget);
-          booted = true;
-        } on TimeoutException {
-          booted = false;
-        } on Object catch (error) {
-          bootError = error;
-          booted = true;
-        }
-      });
-
-      // THE assertion this whole file exists for. #101 is not "the failure
-      // screen renders wrong", it is "main() never returns, so no screen is
-      // reached at all". On the pre-fix entrypoint this fails here, in bounded
-      // time, instead of hanging the suite.
-      expect(
-        booted,
-        isTrue,
-        reason:
-            'main() did not return within ${_bootBudget.inSeconds}s. That is '
-            'the #101 hang: the awaited startup future stays pending, runApp '
-            'is never called, and no screen - failure or otherwise - exists',
-      );
-      expect(
-        bootError,
-        isNull,
-        reason:
-            'main() must absorb a startup failure into StartupFailureApp, not '
-            'throw out of the entrypoint',
-      );
-
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 10),
-      );
-    }
-
     testWidgets('a failed version stamp boots into the failure screen', (
       tester,
     ) async {
@@ -342,16 +353,103 @@ void main() {
             'own class, so main() is not rendering one canned error',
       );
     });
+  });
 
-    // A third case - boot the app *successfully* through `main()` and assert
-    // the failure screen is absent - is deliberately absent. `runApp` runs
-    // inside `tester.runAsync` here, and building the full MyApp tree
-    // (router, Riverpod scope, localization) from inside a warm-up frame there
-    // does not return; the test times out for harness reasons that say nothing
-    // about #101. The negative control lives in the group above instead
-    // ('a healthy startup still completes normally'), where it needs no widget
-    // tree, and the two cases here already rule out a hardcoded failure screen
-    // by asserting two *different* exception names.
+  // The mirror image of the group above, and the whole point of #160.
+  //
+  // Both cases above *expect* `StartupFailureApp`, so a regression that turns
+  // every launch into the failure screen makes them pass harder. #160 proved
+  // that by mutation: injecting a throw into `main()`'s `try` left the entire
+  // suite green at 2645 passing tests, and making
+  // `LocalizationService.getCurrentLocale()` throw a `StateError` failed only
+  // that service's own unit tests. Nothing asserted what a *healthy* boot
+  // hands to `runApp`, which is exactly the shape of the closed #60 defect
+  // inverted.
+  //
+  // An earlier comment here claimed this case could not be written, because
+  // `runApp` runs inside `tester.runAsync` and building the full MyApp tree
+  // from a warm-up frame there never returns. That is not what happens on the
+  // pinned toolchain: `AutomatedTestWidgetsFlutterBinding.scheduleWarmUpFrame`
+  // does a synchronous begin/draw pair *before* `attachRootWidget` has run off
+  // its `Timer.run`, so the warm-up frame never touches the MyApp tree at all.
+  // `main()` returns, and a single bounded `pumpAndSettle` afterwards settles
+  // the whole app - router, Riverpod scope and localization included - in one
+  // frame. The comment is replaced by the test it said was impossible.
+  group('main() boots MyApp end to end on a healthy startup (#160)', () {
+    testWidgets('a healthy startup hands MyApp to runApp, not the failure '
+        'screen', (tester) async {
+      // A working Keychain is what separates this from the first failure case:
+      // the version stamp persists, `MigrationExecutor` agrees with itself,
+      // and the whole widened `try` in `main()` runs to completion.
+      installSecureBackend(<String, String>{});
+
+      await bootRealMain(tester);
+
+      // Criterion 1a: what `main()` handed to `runApp`. Read off the attached
+      // tree rather than a hand-constructed one - `test/main_test.dart` and
+      // `test/widget_test.dart` build `UncontrolledProviderScope(child: MyApp())`
+      // themselves, which proves nothing about the entrypoint. The root widget
+      // here is the one `main()`'s last line passed to `runApp`.
+      //
+      // Checked in two steps so the regression reads as a sentence rather
+      // than as `Bad state: No element` out of `Iterable.single`: under the
+      // mutation that makes every boot fail there is no scope in the tree at
+      // all, and that is the finding worth printing.
+      final scopeFinder = find.byType(UncontrolledProviderScope);
+      expect(
+        scopeFinder,
+        findsOneWidget,
+        reason:
+            'main() reached runApp with something other than the '
+            'UncontrolledProviderScope it builds on the healthy path - most '
+            'likely StartupFailureApp, which carries no Riverpod scope',
+      );
+      final rootScope = tester.widget<UncontrolledProviderScope>(scopeFinder);
+      expect(
+        rootScope.child,
+        isA<app.MyApp>(),
+        reason:
+            'main() must reach its final '
+            'runApp(UncontrolledProviderScope(child: MyApp())) on a healthy '
+            'boot; anything else means the '
+            'on-Object catch branch swallowed a working startup',
+      );
+
+      // Criterion 1b: the failure screen is absent. Asserted three ways
+      // because each catches a different regression - the key covers a
+      // reachable StartupFailureApp, the type covers one rendered without its
+      // body, and the string covers a copy-only stand-in. Text, not a golden:
+      // goldens render every glyph as an opaque Ahem block.
+      expect(
+        find.byKey(StartupFailureApp.bodyKey),
+        findsNothing,
+        reason:
+            'a healthy boot must not render the startup failure screen; if '
+            'this finds a widget, main() took its catch branch on a launch '
+            'that had nothing wrong with it',
+      );
+      expect(find.byType(StartupFailureApp), findsNothing);
+      expect(find.text("Couldn't start the app"), findsNothing);
+
+      // The tree really built, rather than merely being attached: only MyApp
+      // uses `MaterialApp.router`, StartupFailureApp uses `MaterialApp(home:)`
+      // with no router at all, so a non-null routerConfig discriminates the
+      // two even if the finders above were somehow satisfied by an empty tree.
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      expect(
+        materialApp.routerConfig,
+        isNotNull,
+        reason:
+            'StartupFailureApp has no routerConfig, so this is MyApp and its '
+            'router resolved a route',
+      );
+
+      // The locale read is the last statement inside `main()`'s widened
+      // `try`, after storage init and session restoration. A non-null locale
+      // on the rendered MaterialApp is the observable end of that sequence:
+      // if `getCurrentLocale()` throws, control never gets here at all.
+      expect(materialApp.locale, isNotNull);
+    });
   });
 }
 
