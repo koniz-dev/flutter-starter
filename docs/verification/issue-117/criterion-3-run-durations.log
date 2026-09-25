@@ -1,0 +1,9 @@
+$ gh run view <id> --json name,event,conclusion,createdAt,updatedAt,headBranch
+{"conclusion":"success","createdAt":"2026-09-25T13:08:50Z","databaseId":36139123873,"displayTitle":"docs(verification): docs-only probe for the Quality gate rework","event":"pull_request","headBranch":"chore/117-gate-docs-probe","updatedAt":"2026-09-25T13:09:01Z"}
+
+{"conclusion":"failure","createdAt":"2026-09-25T13:08:13Z","databaseId":36139061862,"displayTitle":"test(tooling): probe that the Quality gate still fails on bad formatting","event":"pull_request","headBranch":"chore/117-gate-red-probe","updatedAt":"2026-09-25T13:08:41Z"}
+
+{"conclusion":"success","createdAt":"2026-09-25T13:03:12Z","databaseId":36138549535,"displayTitle":"ci: make the Quality gate report on every pull request","event":"pull_request","headBranch":"ci/117-quality-gate-always-reports","updatedAt":"2026-09-25T13:06:13Z"}
+
+{"conclusion":"success","createdAt":"2026-09-25T13:07:01Z","databaseId":36138938309,"displayTitle":"ci: make the Quality gate report on every pull request (#154)","event":"push","headBranch":"main","updatedAt":"2026-09-25T13:09:54Z"}
+

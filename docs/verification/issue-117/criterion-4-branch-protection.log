@@ -1,0 +1,7 @@
+$ gh api repos/koniz-dev/flutter-starter/branches/main/protection
+{"message":"Branch not protected","documentation_url":"https://docs.github.com/rest/branches/branch-protection#get-branch-protection","status":"404"}gh: Branch not protected (HTTP 404)
+
+$ gh api repos/koniz-dev/flutter-starter/rulesets
+[]
+$ gh api repos/koniz-dev/flutter-starter/commits/main/check-runs --jq '[.check_runs[].name]'
+["Quality gate","Strip both-samples-removed + analyze + test","Strip feature-flags-removed + analyze + test","Strip tasks-removed + analyze + test"]
