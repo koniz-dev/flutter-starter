@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
@@ -239,14 +240,14 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                       _buildDetailRow(
                         context,
                         l10n.createdAt,
-                        _formatDateTime(_task!.createdAt),
+                        DateFormatter.formatDateTime(_task!.createdAt),
                         Icons.calendar_today,
                       ),
                       const SizedBox(height: 8),
                       _buildDetailRow(
                         context,
                         l10n.updatedAt,
-                        _formatDateTime(_task!.updatedAt),
+                        DateFormatter.formatDateTime(_task!.updatedAt),
                         Icons.update,
                       ),
                     ],
@@ -281,14 +282,5 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         ),
       ],
     );
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    final year = dateTime.year;
-    final month = dateTime.month.toString().padLeft(2, '0');
-    final day = dateTime.day.toString().padLeft(2, '0');
-    final hour = dateTime.hour.toString().padLeft(2, '0');
-    final minute = dateTime.minute.toString().padLeft(2, '0');
-    return '$year-$month-$day $hour:$minute';
   }
 }

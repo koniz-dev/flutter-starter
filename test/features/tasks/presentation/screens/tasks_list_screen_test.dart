@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
@@ -873,6 +874,122 @@ void main() {
 
       // Assert
       verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
+    });
+  });
+  // Criterion 3 of koniz-dev/flutter-starter#147: the row date must come from
+  // `DateFormatter`, and it is asserted with `find.text()` rather than a
+  // golden - the acceptance goldens render every glyph as an opaque block and
+  // so cannot show a date at all.
+  group('TasksListScreen date rendering', () {
+    late MockGetAllTasksUseCase mockGetAllTasksUseCase;
+    late MockCreateTaskUseCase mockCreateTaskUseCase;
+    late MockDeleteTaskUseCase mockDeleteTaskUseCase;
+    late MockToggleTaskCompletionUseCase mockToggleTaskCompletionUseCase;
+
+    setUp(() {
+      mockGetAllTasksUseCase = MockGetAllTasksUseCase();
+      mockCreateTaskUseCase = MockCreateTaskUseCase();
+      mockDeleteTaskUseCase = MockDeleteTaskUseCase();
+      mockToggleTaskCompletionUseCase = MockToggleTaskCompletionUseCase();
+    });
+
+    Future<void> pumpWithTasks(WidgetTester tester, List<Task> tasks) async {
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success<List<Task>>(tasks));
+      await tester.pumpWidget(
+        createTestWidget(
+          child: const TasksListScreen(),
+          overrides: [
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+            toggleTaskCompletionUseCaseProvider.overrideWithValue(
+              mockToggleTaskCompletionUseCase,
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('every task row renders its createdAt via DateFormatter', (
+      tester,
+    ) async {
+      final tasks = [
+        createTask(
+          id: 'a',
+          title: 'Alpha',
+          createdAt: DateTime(2024, 3, 15, 9, 5),
+          updatedAt: DateTime(2024, 3, 15, 9, 5),
+        ),
+        createTask(
+          id: 'b',
+          title: 'Beta',
+          description: 'has a description too',
+          createdAt: DateTime(2023, 11, 2, 23, 59),
+          updatedAt: DateTime(2023, 11, 2, 23, 59),
+        ),
+        createTask(
+          id: 'c',
+          title: 'Gamma',
+          isCompleted: true,
+          createdAt: DateTime(2022, 1, 7),
+          updatedAt: DateTime(2022, 1, 7),
+        ),
+      ];
+
+      await pumpWithTasks(tester, tasks);
+
+      for (final task in tasks) {
+        expect(
+          find.text(DateFormatter.formatDate(task.createdAt)),
+          findsOneWidget,
+          reason: 'row for ${task.title} should show its formatted createdAt',
+        );
+      }
+      // The exact digits, so the test fails if `formatDate` ever stops
+      // producing `yyyy-MM-dd`.
+      expect(find.text('2024-03-15'), findsOneWidget);
+      expect(find.text('2023-11-02'), findsOneWidget);
+      expect(find.text('2022-01-07'), findsOneWidget);
+    });
+
+    testWidgets('the date is rendered, not the raw DateTime.toString()', (
+      tester,
+    ) async {
+      final task = createTask(
+        id: 'a',
+        title: 'Alpha',
+        createdAt: DateTime(2024, 3, 15, 9, 5),
+        updatedAt: DateTime(2024, 3, 15, 9, 5),
+      );
+
+      await pumpWithTasks(tester, [task]);
+
+      expect(find.text('2024-03-15'), findsOneWidget);
+      expect(find.text(task.createdAt.toString()), findsNothing);
+    });
+
+    testWidgets('a row without a description still shows its date', (
+      tester,
+    ) async {
+      final task = createTask(
+        id: 'a',
+        title: 'No description',
+        createdAt: DateTime(2021, 6, 30),
+        updatedAt: DateTime(2021, 6, 30),
+      );
+
+      await pumpWithTasks(tester, [task]);
+
+      expect(find.text('No description'), findsOneWidget);
+      expect(
+        find.text(DateFormatter.formatDate(task.createdAt)),
+        findsOneWidget,
+      );
     });
   });
 }

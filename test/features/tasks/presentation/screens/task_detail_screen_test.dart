@@ -7,6 +7,7 @@ import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
+import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
@@ -945,10 +946,23 @@ void main() {
         // Act
         await tester.pumpAndSettle();
 
-        // Assert - Check that formatted dates are displayed
-        // Format: YYYY-MM-DD HH:mm
-        expect(find.textContaining('2024-03-15'), findsWidgets);
-        expect(find.textContaining('2024-03-16'), findsWidgets);
+        // Assert - the detail rows render the dates through
+        // `DateFormatter.formatDateTime`, not a hand-rolled padLeft chain
+        // (koniz-dev/flutter-starter#147 criterion 3). Asserted with
+        // `find.text()` because a golden renders every glyph as an opaque
+        // block and cannot show a date.
+        expect(
+          find.text(DateFormatter.formatDateTime(task.createdAt)),
+          findsOneWidget,
+        );
+        expect(
+          find.text(DateFormatter.formatDateTime(task.updatedAt)),
+          findsOneWidget,
+        );
+        // The exact digits, so the test fails if `formatDateTime` ever stops
+        // producing `yyyy-MM-dd HH:mm:ss`.
+        expect(find.text('2024-03-15 09:05:00'), findsOneWidget);
+        expect(find.text('2024-03-16 14:30:00'), findsOneWidget);
       });
     });
   });
