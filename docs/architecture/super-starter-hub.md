@@ -9,7 +9,7 @@ One entry page for **what exists**, **what is optional**, and **where it is docu
 | Clean Architecture (layers) | Yes | N/A (keep boundaries) | [Architecture README](README.md), [overview](overview.md) |
 | Boundaries (contracts + adapters) | Yes | Swap adapters + DI | [contracts-map.md](contracts-map.md), ADRs in [adr/](adr/) |
 | State + DI (Riverpod) | Yes | Path B: rebind presentation to your stack; keep domain | [choose-your-stack.md](choose-your-stack.md) |
-| Routing (GoRouter) | Yes | Replace `AppNavigator` adapter + router module | [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md), [Routing guide](../guides/features/routing-guide.md) |
+| Routing (GoRouter) | Yes | Rewrite `NavigationExtensions` + route modules | [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md), [Routing guide](../guides/features/routing-guide.md) |
 | HTTP (Dio + `INetworkClient`) | Yes | Replace `ApiClient` / feature datasources | [adr/0001-network-boundary.md](adr/0001-network-boundary.md), [Network API](../api/core/network.md) |
 | Key-value + tokens | Yes | Custom `IKeyValueStore` / `ITokenStore` | [adr/0002-storage-boundary.md](adr/0002-storage-boundary.md), [Storage API](../api/core/storage.md) |
 | Theme / design tokens | Yes | New `AppDesignTokens` + `AppTheme` | [adr/0004-theme-token-boundary.md](adr/0004-theme-token-boundary.md) |

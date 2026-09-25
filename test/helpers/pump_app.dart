@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 /// Pumps a widget with ProviderScope
 ///
@@ -72,6 +74,69 @@ Future<void> pumpApp(
       ),
     ),
   );
+}
+
+/// Pumps the **real** application router and returns it.
+///
+/// [pumpApp] wraps a single widget in its own `MaterialApp` with no router, so
+/// a screen pumped that way cannot navigate: `context.goToRegister()` and
+/// friends have no `GoRouter` to find. This helper boots the app's actual
+/// route table through `goRouterProvider`, which is what makes a test able to
+/// tap a link on one screen and assert the next screen rendered.
+///
+/// [overrides] should settle `sessionRestorationProvider` with a completed
+/// future. The auth guard holds every requested location while the session
+/// restore is in flight rather than flashing `/login`, so a test that leaves
+/// the restore pending sits on the initial location forever.
+///
+/// Example:
+/// ```dart
+/// final router = await pumpAppRouter(
+///   tester,
+///   overrides: [
+///     authNotifierProvider.overrideWith(_TestAuthNotifier.new),
+///     sessionRestorationProvider.overrideWith((ref) async {}),
+///   ],
+/// );
+/// ```
+Future<GoRouter> pumpAppRouter(
+  WidgetTester tester, {
+  dynamic overrides,
+  Size surfaceSize = const Size(1000, 3000),
+}) async {
+  tester.view.devicePixelRatio = 1;
+  tester.view.physicalSize = surfaceSize;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  final container = ProviderContainer(
+    // `Override` is not exported by flutter_riverpod, so the parameter is
+    // `dynamic` for the same reason [pumpApp]'s is. A caller passing a list
+    // literal of `provider.overrideWith(...)` gives a real `List<Override>`
+    // at runtime.
+    // ignore: argument_type_not_assignable
+    overrides: overrides ?? <Never>[],
+  );
+  addTearDown(container.dispose);
+
+  final router = container.read(goRouterProvider);
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: container,
+      child: MaterialApp.router(
+        routerConfig: router,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: LocalizationService.supportedLocales,
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+  return router;
 }
 
 /// Pumps a widget and waits for all animations to settle

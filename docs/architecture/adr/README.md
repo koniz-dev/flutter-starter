@@ -10,7 +10,7 @@ This folder tracks major architectural decisions for decoupling the starter.
 ## ADR Index
 - `0001-network-boundary.md` - Transport-agnostic network contract and Dio adapter boundary.
 - `0002-storage-boundary.md` - Split storage contracts into key-value and token-specific concerns.
-- `0003-navigation-boundary.md` - Introduce `AppNavigator` to isolate presentation from router APIs.
+- `0003-navigation-boundary.md` - `NavigationExtensions` as the one navigation API; `go_router` confined to `lib/core/routing/`.
 - `0004-theme-token-boundary.md` - Single semantic token source and theme adapter mapping.
 - `0005-state-boundary.md` - Controller boundaries to reduce direct Riverpod coupling.
 

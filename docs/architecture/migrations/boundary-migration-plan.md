@@ -26,19 +26,20 @@ Rollback strategy:
 
 ## Phase B: Navigation boundary migration
 
-### B1 - Introduce `AppNavigator`
-- Create `GoRouterNavigatorAdapter`.
-- Keep current `NavigationExtensions` as compatibility layer.
+Done. The `AppNavigator` contract this phase originally proposed was deleted instead of wired; `NavigationExtensions` is the navigation boundary. See [adr/0003-navigation-boundary.md](../adr/0003-navigation-boundary.md) for the decision and the rejected alternative.
+
+### B1 - One navigation API
+- `NavigationExtensions` (`lib/core/routing/navigation_extensions.dart`) is the only API presentation code calls.
 
 ### B2 - Migrate orchestration points
-- Replace direct `context.go/push` usage in high-traffic screens/providers with `AppNavigator`.
-- Extract auth redirect logic into a pure policy class.
+- Direct `context.go/push/pop` usage removed from screens.
+- Auth redirect logic lives in `app_router.dart` (session-restore hold state, `redirect` round trip, open-redirect guard).
 
 ### B3 - Cleanup
-- Restrict direct go_router calls to routing adapters and composition root.
+- `package:go_router` is imported only under `lib/core/routing/` and in the `lib/features/*/routing/*_routes.dart` modules that declare routes.
 
 Rollback strategy:
-- Restore extension-based calls in affected screens.
+- Re-import `go_router` in the affected screens; the route table is unchanged.
 
 ## Phase C: Theme/token migration
 
