@@ -1,0 +1,16 @@
+Criterion 4 - the epic list still appears in exactly one place
+
+$ grep -rn "epic:core-network" docs/ CLAUDE.md .claude/
+docs/issue-workflow.md:551:  --add-label type:bug --add-label epic:core-network --add-label priority:P2 \
+docs/api/core/network.md:404:`epic:core-network`, not `epic:docs`; and it would forbid the parameter to
+docs/api/core/network.md:407:test-only, that is a `epic:core-network` decision and belongs in its own issue.
+
+(The two docs/api/core/network.md hits are prose about one label, and the
+ docs/issue-workflow.md hits are inside example gh commands. No enumeration
+ of the epic list exists outside scripts/bootstrap-issue-labels.sh.)
+
+$ grep -rn "epic:platform-release\|epic:core-di\|epic:i18n" docs/ CLAUDE.md .claude/ README.md CONTRIBUTING.md
+(exit 1 - no hit means no doc names any of the six new epics, let alone lists them)
+
+$ grep -rln "EPICS=" . --include=*.sh --include=*.md --include=*.dart --exclude-dir=.git
+./scripts/bootstrap-issue-labels.sh

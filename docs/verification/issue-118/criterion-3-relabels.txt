@@ -1,0 +1,49 @@
+Criterion 3 - near-miss epics on OPEN issues are relabelled; closed ones are not
+
+== #62 (open, status:needs-uat): epic:tooling-ci -> epic:platform-release
+  #62 [OPEN] fix(tooling): macOS/iOS entitlements, release signing, fastlane lanes and the Mason rename hook are all broken off the debug path
+  labels: type:bug, priority:P1, status:needs-uat, epic:platform-release
+  relabel comment: https://github.com/koniz-dev/flutter-starter/issues/62#issuecomment-5836866479
+
+== #207 (open, status:todo): epic:core-config -> epic:feature-flags
+  #207 [OPEN] bug: feature_flags_remote_datasource.dart points at a .template file that does not exist
+  labels: type:bug, priority:P3, status:todo, epic:feature-flags
+  relabel comment: https://github.com/koniz-dev/flutter-starter/issues/207#issuecomment-5836868723
+
+== #180 (open): deliberately NOT relabelled, keeps epic:feature-tasks
+  #180 [OPEN] fix(tasks): the slice teaches two opposite answers about where a business rule lives, and ITasksController has drifted with no implementor
+  labels: type:task, epic:feature-tasks, priority:P3, status:todo
+  reasoning comment: https://github.com/koniz-dev/flutter-starter/issues/180#issuecomment-5836871128
+
+== #63 (CLOSED): left on epic:core-config by policy, not by oversight
+  #63 [CLOSED] fix(core): validators accept malformed emails, date parsing is lenient and timezone-lossy, and a perf mixin re-runs failed operations
+  labels: type:bug, epic:core-config, priority:P2, status:in-progress
+  Policy now written in docs/issue-workflow.md, 'Relabelling after a taxonomy change':
+  the epic on a closed issue is a record of what the taxonomy said when the work
+  shipped; no lock, queue or selector reads it.
+
+== every other OPEN issue, with its epic, checked against the new map
+  #223	epic:core-foundation	chore(core-foundation): delete PaginationHelper once the d
+  #221	epic:core-di	refactor(core-di): core/di/providers.dart and features/aut
+  #210	epic:docs	docs(architecture): the tasks sample is rejected as a host
+  #207	epic:feature-flags	bug: feature_flags_remote_datasource.dart points at a .tem
+  #206	epic:tooling-ci	tooling: nothing checks that an identifier named in a doc 
+  #196	epic:feature-auth	chore(auth): drop the legacy secureStorageService fallback
+  #187	epic:tooling-ci	fix(tooling): strip_sample_features.dart ignores docs/, so
+  #184	epic:testing	test: four test files sit at paths that do not mirror lib/
+  #183	epic:docs	docs: no ADR records which core contracts are load-bearing
+  #181	epic:feature-auth	fix(auth): a failure whose message merely contains "refres
+  #180	epic:feature-tasks	fix(tasks): the slice teaches two opposite answers about w
+  #167	epic:tooling-ci	chore(ci): strip-smoke runs a full three-variant Flutter m
+  #166	epic:tooling-ci	chore(repo): a stray remote branch named 'test' blocks eve
+  #164	epic:tooling-ci	fix(tooling): .gitignore does not cover *.pem or *.key, th
+  #162	epic:docs	docs: the issue-101 evidence README reports test counts th
+  #140	epic:tooling-ci	fix(tooling): pre-commit hook fails inside a git worktree 
+  #135	epic:tooling-ci	chore(ci): run the bundled-.env guard on the release-build
+  #118	epic:tooling-ci	chore(taxonomy): the epic list has no entry for half of li
+  #109	epic:testing	test(logging): log_output_test.dart flakes with "did not c
+  #108	epic:core-security	uat(security): confirm on-device that the HTTP cache lands
+  #62	epic:platform-release	fix(tooling): macOS/iOS entitlements, release signing, fas
+  #59	epic:core-security	fix(security): the 401 refresh queue strands requests, wed
+  #58	epic:docs	docs: the qa phase has no owner and has never run; status-
+  #48	epic:core-config	fix(config): --dart-define never resolves, so release buil

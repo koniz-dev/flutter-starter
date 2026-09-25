@@ -1,0 +1,108 @@
+$ ./scripts/dev/audit_template.sh   (exit 0)
+ANSI escapes stripped; 4855 lines total, head 60 + tail 40 kept.
+Full output is 1.1 MB of per-test app logging - not reviewable, and not
+evidence. The lines that matter are the gate headers and the final count.
+---------------------------------------------------------------------
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 365 files (0 changed) in 1.13 seconds.
+==> flutter analyze
+Analyzing agent-a15bb2689e367125d...                            
+No issues found! (ran in 3.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: parseEpicMap parses tab-separated epic/path pairs and ignores blank lines
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository (setUpAll)
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement for one file does not cover another
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/tooling/epic_coverage_test.dart: the real repository every tracked surface maps to exactly one epic
+...
+[ 4755 lines elided ]
+...
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:44 +2783 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: MyApp should configure localization delegates
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:44 +2784 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: MyApp should configure supported locales
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:44 +2785 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: MyApp should use locale from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:44 +2786 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:44 +2787 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:44 +2788 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:44 +2789 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: HomeScreen should display welcome message
+01:44 +2790 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a15bb2689e367125d/test/main_test.dart: HomeScreen should have app bar with title
+01:44 +2791 ~8: All tests passed!
