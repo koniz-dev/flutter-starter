@@ -162,7 +162,7 @@ jobs** - five checks minimum:
 | Workflow | Check name(s) | Runs when |
 |---|---|---|
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
-| [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or the workflow itself |
+| [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, or the workflow itself |
 | [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
 | [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR, no path filter |
 
