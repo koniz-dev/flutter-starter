@@ -122,9 +122,53 @@ acknowledgement goes on the **directory** entry and has to **name the file**:
 Naming it is what keeps the exception narrow: the same comment does not silence
 the next file somebody drops into that directory.
 
-The guard then passes and prints a reminder instead of failing. An environment
-variable would not have that property, which is why the escape hatch is a
-comment in the repository rather than a flag on the command line.
+### What a given comment covers
+
+The names are matched **exactly**, so you can compute the covered set by eye:
+
+```
+ack       := 'env-asset-ack:' names? separator? prose?
+names     := name (',' name)*
+name      := a bare file name containing a dot - no spaces, no directory part
+separator := ';' | an em or en dash | a hyphen with spaces around it
+             | the first ',' segment that is not a name
+```
+
+The covered set is the **leading comma-separated run of bare file names**, and
+each one must equal the file's own name (case-insensitively). Everything from
+the first segment that is not a file name onwards is prose and covers nothing.
+
+| Comment on `- assets/config/` | Covers | Does not cover |
+|---|---|---|
+| `# env-asset-ack: .env.web` | `.env.web` | anything else |
+| `# env-asset-ack: .env.web, publishable values only` | `.env.web` | `.env` |
+| `# env-asset-ack: .env.web - publishable values only` | `.env.web` | `.env` |
+| `# env-asset-ack: .env.web, .env.staging - publishable` | both named files | `.env` |
+| `# env-asset-ack: .env.example, publishable placeholders only` | `.env.example` | **`.env`** |
+| `# env-asset-ack: .env.web only; there is no .env here` | nothing - the first segment is prose | everything, including `.env.web` |
+
+The last two rows are the point. Until
+koniz-dev/flutter-starter#170 the match was a substring test against the whole
+comment, and every env file name is a prefix of a longer one: an ack naming
+`.env.example` also acknowledged a real `.env`, and even a sentence *denying*
+that a `.env` existed acknowledged it, because the denial contains the name. A
+malformed acknowledgement now covers nothing rather than everything - it fails
+closed, and the guard tells you which file is still unacknowledged.
+
+A name that matches no file in the directory is **stale**. The guard prints a
+`note:` on stderr and does not fail: `.env` is gitignored and a web deployment
+may write its env file at deploy time, so a fresh checkout can legitimately
+lack the acknowledged file, and failing there would red-light a clean CI run on
+a tree that is strictly safer. A stale name cannot hide anything either - the
+file it names is not present, and any file that is present is matched exactly
+or reported. Delete the name when the file is gone for good.
+
+An acknowledgement on a **file** entry does not have to name anything: the entry
+already names exactly one file, so the comment cannot widen what it covers.
+
+The guard then passes and prints a reminder on stderr instead of failing. An
+environment variable would not have that property, which is why the escape hatch
+is a comment in the repository rather than a flag on the command line.
 
 Two things it cannot do. It sees the tree **at the moment it runs**, so a file
 created after the check still ships; and it is not on the release-build path -

@@ -149,6 +149,80 @@ flutter:
     });
   });
 
+  group('parseAcknowledgedNames', () {
+    // The grammar is the contract a reviewer reads a comment against, so every
+    // clause of it gets a case. koniz-dev/flutter-starter#170: it used to be a
+    // raw `contains` against free-form prose.
+    test('returns nothing when there is no marker', () {
+      expect(parseAcknowledgedNames(''), isEmpty);
+      expect(parseAcknowledgedNames('# just a comment'), isEmpty);
+    });
+
+    test('takes the leading comma-separated run of bare file names', () {
+      expect(parseAcknowledgedNames('# $ackMarker .env.web'), <String>[
+        '.env.web',
+      ]);
+      expect(
+        parseAcknowledgedNames('# $ackMarker .env.web, app_config.env'),
+        <String>['.env.web', 'app_config.env'],
+      );
+    });
+
+    test('stops at the first comma segment that is not a file name', () {
+      // The documented form: names, then prose, separated by a comma.
+      expect(
+        parseAcknowledgedNames(
+          '# $ackMarker .env.example, publishable placeholders only',
+        ),
+        <String>['.env.example'],
+      );
+      // A one-word segment is prose too, because it has no dot and so could
+      // never be a file this guard can flag.
+      expect(
+        parseAcknowledgedNames('# $ackMarker .env.web, reviewed'),
+        <String>['.env.web'],
+      );
+    });
+
+    test('allows trailing prose after a semicolon or a dash', () {
+      const separators = <String>[';', ' - ', ' -- ', ' \u2014', ' \u2013'];
+      for (final separator in separators) {
+        expect(
+          parseAcknowledgedNames(
+            '# $ackMarker .env.web$separator publishable values only',
+          ),
+          <String>['.env.web'],
+          reason: 'separator "$separator" should end the name list',
+        );
+      }
+    });
+
+    test('reads a comment that opens with prose as naming nothing', () {
+      // Fails closed: a malformed acknowledgement covers no file at all,
+      // rather than every file whose name the prose happens to contain.
+      expect(
+        parseAcknowledgedNames(
+          '# $ackMarker .env.web only; there is no .env here',
+        ),
+        isEmpty,
+      );
+      expect(
+        parseAcknowledgedNames(
+          '# $ackMarker reviewed, no .env or key material in here',
+        ),
+        isEmpty,
+      );
+      expect(parseAcknowledgedNames('# $ackMarker'), isEmpty);
+    });
+
+    test('does not accept a path, only a bare file name', () {
+      expect(
+        parseAcknowledgedNames('# $ackMarker assets/config/.env.web'),
+        isEmpty,
+      );
+    });
+  });
+
   group('findBundledDirectorySecrets', () {
     late Directory root;
 
@@ -273,6 +347,104 @@ flutter:
       );
     });
 
+    test('an ack naming .env.example does not also cover a real .env', () {
+      // koniz-dev/flutter-starter#170, the whole bug in one case. Every env
+      // file name is a prefix of a longer one, so the old substring test read
+      // this truthful comment about .env.example as covering .env as well: the
+      // guard exited 0 and a live secrets file shipped in the release APK, the
+      // release IPA and the web build.
+      final pubspec = fixture(
+        {'.env.example': 'API_KEY=\n', '.env': 'API_KEY=supersecret\n'},
+        comment:
+            ' # env-asset-ack: .env.example, publishable placeholders only',
+      );
+
+      final findings = findBundledDirectorySecrets(
+        pubspec,
+        projectRoot: root.path,
+      );
+
+      expect(
+        findings.map((f) => f.path),
+        <String>['assets/config/.env'],
+        reason: '.env.example is the one env file that is safe to ship',
+      );
+      expect(
+        findings.single.acknowledged,
+        isFalse,
+        reason: 'the comment names .env.example, not .env',
+      );
+    });
+
+    test('an ack naming several files covers each of them', () {
+      final pubspec = fixture(
+        {'.env.web': '', '.env.staging': ''},
+        comment:
+            ' # env-asset-ack: .env.web, .env.staging, publishable values only',
+      );
+
+      final findings = findBundledDirectorySecrets(
+        pubspec,
+        projectRoot: root.path,
+      );
+
+      expect(findings, hasLength(2));
+      expect(findings.every((f) => f.acknowledged), isTrue);
+      expect(
+        findStaleAcknowledgements(pubspec, projectRoot: root.path),
+        isEmpty,
+      );
+    });
+
+    test('an ack with prose after a dash still names its file', () {
+      final pubspec = fixture(
+        {'.env.web': ''},
+        comment: ' # env-asset-ack: .env.web - publishable values only',
+      );
+
+      final findings = findBundledDirectorySecrets(
+        pubspec,
+        projectRoot: root.path,
+      );
+
+      expect(findings.single.acknowledged, isTrue);
+    });
+
+    test('prose that merely mentions a file does not acknowledge it', () {
+      // The denial case: the comment says there is no .env, and there is one.
+      // Under a substring test the denial acknowledged the file it denied.
+      final pubspec = fixture(
+        {'.env.web': '', '.env': 'DB_PASSWORD=live\n'},
+        comment: ' # env-asset-ack: .env.web only; there is no .env here',
+      );
+
+      final findings = findBundledDirectorySecrets(
+        pubspec,
+        projectRoot: root.path,
+      );
+
+      expect(
+        findings.where((f) => !f.acknowledged).map((f) => f.path),
+        <String>['assets/config/.env', 'assets/config/.env.web'],
+        reason: 'the name list is empty, so the comment covers nothing',
+      );
+    });
+
+    test('matches the acknowledged name case-insensitively', () {
+      final pubspec = fixture(
+        {'GoogleService-Info.plist': ''},
+        comment:
+            ' # env-asset-ack: googleservice-info.plist, placeholders only',
+      );
+
+      final findings = findBundledDirectorySecrets(
+        pubspec,
+        projectRoot: root.path,
+      );
+
+      expect(findings.single.acknowledged, isTrue);
+    });
+
     test('does not report a sub-directory Flutter would not bundle', () {
       // Flutter bundles files directly inside a declared directory and does not
       // recurse; a sub-directory needs its own asset entry, and is then walked
@@ -296,6 +468,90 @@ flutter:
 
       expect(
         findBundledDirectorySecrets(pubspec, projectRoot: root.path),
+        isEmpty,
+      );
+    });
+  });
+
+  group('findStaleAcknowledgements', () {
+    late Directory root;
+
+    setUp(() {
+      root = Directory.systemTemp.createTempSync('check_env_assets_stale_');
+    });
+
+    tearDown(() {
+      root.deleteSync(recursive: true);
+    });
+
+    String fixture(Map<String, String> files, {String comment = ''}) {
+      final dir = Directory('${root.path}/assets/config')
+        ..createSync(recursive: true);
+      files.forEach((name, contents) {
+        File('${dir.path}/$name').writeAsStringSync(contents);
+      });
+      return '''
+flutter:
+  assets:
+    - assets/config/$comment
+''';
+    }
+
+    test('reports a name no file in the directory matches', () {
+      final pubspec = fixture(
+        {'.gitkeep': ''},
+        comment: ' # env-asset-ack: .env.web, publishable values only',
+      );
+
+      final stale = findStaleAcknowledgements(pubspec, projectRoot: root.path);
+
+      expect(stale.map((s) => s.name), <String>['.env.web']);
+      expect(stale.single.entry, 'assets/config/');
+      expect(stale.single.line, 3);
+      expect(
+        findBundledDirectorySecrets(pubspec, projectRoot: root.path),
+        isEmpty,
+        reason: 'a stale name is a note, not a bundled secret',
+      );
+    });
+
+    test('says nothing when the acknowledged file is there', () {
+      final pubspec = fixture(
+        {'.env.web': ''},
+        comment: ' # env-asset-ack: .env.web, publishable values only',
+      );
+
+      expect(
+        findStaleAcknowledgements(pubspec, projectRoot: root.path),
+        isEmpty,
+      );
+    });
+
+    test('treats every name on a missing directory as stale', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - assets/missing/ # env-asset-ack: .env.web, app.env - publishable
+''';
+
+      expect(
+        findStaleAcknowledgements(
+          pubspec,
+          projectRoot: root.path,
+        ).map((s) => s.name),
+        <String>['.env.web', 'app.env'],
+      );
+    });
+
+    test('ignores a file entry, whose ack names nothing by design', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - .env # env-asset-ack: web build, contains no secrets
+''';
+
+      expect(
+        findStaleAcknowledgements(pubspec, projectRoot: root.path),
         isEmpty,
       );
     });
