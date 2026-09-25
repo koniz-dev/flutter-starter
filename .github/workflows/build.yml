@@ -102,38 +102,18 @@ jobs:
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL"
 
-      # Proves the APK is not debug-signed. A debug-signed artifact reports
-      # "CN=Android Debug, O=Android, C=US"; this must report the throwaway CI
-      # identity minted above. The step FAILS if it cannot read a certificate at
-      # all, so it can never silently pass having verified nothing.
-      #
-      # apksigner, not `unzip META-INF/*.RSA`: this APK carries only v2/v3
-      # signatures, which live in the APK Signing Block before the central
-      # directory, not in META-INF. The v1-only reading printed nothing.
+      # Proves the APK is signed, and signed by the throwaway CI identity minted
+      # above rather than by the Android debug key. The check itself lives in
+      # scripts/ci/verify_apk_signer.sh so it can be pointed at a deliberately
+      # debug-signed or deliberately unsigned APK and observed to FAIL - the
+      # inline version could not be, and shipped broken twice as a result
+      # (koniz-dev/flutter-starter#62, koniz-dev/flutter-starter#153).
       - name: Print APK signer certificate
         shell: bash
         run: |
           set -euo pipefail
           APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
-          echo "APK: $APK"
-
-          APKSIGNER=$(ls -1 "${ANDROID_HOME:-$ANDROID_SDK_ROOT}"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)
-          if [ -z "$APKSIGNER" ]; then
-            echo "::error::apksigner not found under ANDROID_HOME; cannot verify the signer."
-            exit 1
-          fi
-          echo "Using: $APKSIGNER"
-
-          "$APKSIGNER" verify --print-certs --verbose "$APK" | tee /tmp/apk-certs.txt
-
-          if ! grep -q 'Signer #1 certificate DN:' /tmp/apk-certs.txt; then
-            echo "::error::apksigner printed no certificate DN."
-            exit 1
-          fi
-          if grep -q 'CN=Android Debug' /tmp/apk-certs.txt; then
-            echo "::error::APK is DEBUG-signed. android/app/build.gradle.kts is supposed to make this impossible."
-            exit 1
-          fi
+          ./scripts/ci/verify_apk_signer.sh "$APK"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

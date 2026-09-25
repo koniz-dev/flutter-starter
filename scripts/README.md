@@ -22,6 +22,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | [`bump_version.sh`](ci/bump_version.sh) | Bump `version:` in `pubspec.yaml`. Handles both `1.0.0` and `1.0.0+1`, validates before writing, and leaves the file untouched on any error. |
 | [`generate_changelog.sh`](ci/generate_changelog.sh) | Build a CHANGELOG section from the commit log. |
 | [`release.sh`](ci/release.sh) | Test, analyze, bump, changelog, branch, tag. |
+| [`verify_apk_signer.sh`](ci/verify_apk_signer.sh) | Assert an APK is signed by a non-debug key. Matches the `certificate DN:` *value*, not apksigner's scheme label (`Signer #1`, `V2 Signer:`, `V3 Signer:`, ...), and requires `Number of signers` >= 1. Used by the `Print APK signer certificate` step in [`build.yml`](../.github/workflows/build.yml). |
 
 ## `scripts/test/`
 
