@@ -1,0 +1,25 @@
+# Criterion 3: AppNavigator is resolved by DELETION, and the tree shows it.
+
+$ grep -rn "AppNavigator\|appNavigatorProvider\|GoRouterNavigatorAdapter" lib test
+(no output above = no trace of the contract anywhere in lib/ or test/)
+
+$ ls -l lib/core/contracts/navigation_contracts.dart lib/core/routing/adapters lib/core/routing/navigation_providers.dart test/core/routing/go_router_navigator_adapter_test.dart test/core/routing/navigation_providers_test.dart
+ls: lib/core/contracts/navigation_contracts.dart: No such file or directory
+ls: lib/core/routing/adapters: No such file or directory
+ls: lib/core/routing/navigation_providers.dart: No such file or directory
+ls: test/core/routing/go_router_navigator_adapter_test.dart: No such file or directory
+ls: test/core/routing/navigation_providers_test.dart: No such file or directory
+
+$ git log --oneline -1 --name-status --diff-filter=D -- lib/core/contracts/navigation_contracts.dart lib/core/routing/adapters lib/core/routing/navigation_providers.dart test/core/routing/go_router_navigator_adapter_test.dart test/core/routing/navigation_providers_test.dart
+b3ec85a refactor(routing): one navigation style, and delete the AppNavigator contract (#201)
+D	lib/core/contracts/navigation_contracts.dart
+D	lib/core/routing/adapters/go_router_navigator_adapter.dart
+D	lib/core/routing/navigation_providers.dart
+D	test/core/routing/go_router_navigator_adapter_test.dart
+D	test/core/routing/navigation_providers_test.dart
+
+$ cat lib/core/contracts/contracts.dart
+export 'design_tokens_contracts.dart';
+export 'network_contracts.dart';
+export 'state_boundary_contracts.dart';
+export 'storage_contracts.dart';

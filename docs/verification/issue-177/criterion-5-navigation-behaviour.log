@@ -1,0 +1,12 @@
+$ flutter test test/core/routing/screen_navigation_test.dart test/features/tasks/presentation/screens/task_detail_navigation_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/core/routing/screen_navigation_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/core/routing/screen_navigation_test.dart: login screen link renders the register screen
+00:02 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:04 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/core/routing/screen_navigation_test.dart: login screen link renders the register screen
+00:04 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:04 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/core/routing/screen_navigation_test.dart: register screen link returns to the login screen
+00:05 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:06 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ad46263ec935f9002/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: (tearDownAll)
+00:06 +3: All tests passed!
+exit: 0

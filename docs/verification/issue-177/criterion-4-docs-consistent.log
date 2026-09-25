@@ -1,0 +1,48 @@
+# Criterion 4: docs/ says nothing that contradicts the tree.
+
+$ grep -rn "AppNavigator" docs/ | grep -v "^docs/verification/"
+docs/architecture/migrations/boundary-migration-plan.md:29:Done. The `AppNavigator` contract this phase originally proposed was deleted instead of wired; `NavigationExtensions` is the navigation boundary. See [adr/0003-navigation-boundary.md](../adr/0003-navigation-boundary.md) for the decision and the rejected alternative.
+docs/architecture/adr/0003-navigation-boundary.md:10:from `package:go_router`, and an `AppNavigator` contract with a
+docs/architecture/adr/0003-navigation-boundary.md:29:The `AppNavigator` contract, `GoRouterNavigatorAdapter` and
+docs/architecture/adr/0003-navigation-boundary.md:38:## Rejected alternative: wire `AppNavigator` instead
+docs/architecture/contracts-map.md:33:`AppNavigator`, was answered in koniz-dev/flutter-starter#177: the contract, its
+
+Every hit above describes the deletion. No hit claims the contract is live.
+
+$ grep -rn "navigation_providers\|go_router_navigator_adapter\|navigation_contracts\|routing/adapters" docs/ README.md CONTRIBUTING.md | grep -v "^docs/verification/"
+(no output = no doc still points at a deleted path)
+
+$ sed -n "1,20p" docs/architecture/adr/0003-navigation-boundary.md
+# ADR 0003: Navigation Boundary
+
+- Status: Accepted
+- Date: 2026-09-25 (supersedes the Proposed version of 2026-03-27)
+
+## Context
+Presentation code navigated through three different APIs at once: the
+`NavigationExtensions` extension on `BuildContext`
+(`lib/core/routing/navigation_extensions.dart`), raw `context.go` / `context.pop`
+from `package:go_router`, and an `AppNavigator` contract with a
+`GoRouterNavigatorAdapter` behind `appNavigatorProvider`. Three answers to "how
+do I navigate here", and the one this ADR originally proposed had **zero**
+production consumers: `appNavigatorProvider` was read only by its own test.
+
+A starter template has to answer this once. Router lock-in is a real cost, but
+the cost is only paid once per navigation *boundary*, not once per boundary
+style.
+
+## Decision
+`NavigationExtensions` is the single navigation API for presentation code, and
+
+$ grep -n "Navigation" docs/architecture/contracts-map.md
+34:adapter and its provider were deleted, and navigation is the `Navigation` row
+51:| Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart:25`) over `go_router` | Every screen that navigates: `lib/features/auth/presentation/screens/login_screen.dart:115`, `register_screen.dart:139`, `lib/features/tasks/presentation/screens/tasks_list_screen.dart:253` and `:283`, `task_detail_screen.dart:114` and `:156`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart:15`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |
+68:| Routing | None. Navigation is a `BuildContext` extension, not a contract plus adapter; `go_router` stays inside `lib/core/routing/` |
+
+$ dart run tool/check_docs.dart
+Running build hooks...Running build hooks...links: checked 644 relative link(s) in 105 file(s); 0 broken
+emoji: scanned 70 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+
+OK: documentation checks passed.
+exit: 0
