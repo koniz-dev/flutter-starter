@@ -1,0 +1,10 @@
+$ gh pr view 156 --json files --jq '[.files[].path]'
+docs/verification/issue-117/docs-only-probe.md
+
+$ gh pr checks 156
+Docs check	pass	40s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139124117/job/108084327509	
+Issue refs	pass	6s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139123992/job/108084327182	
+Quality gate	pass	7s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139123873/job/108084326920	
+Strip both-samples-removed + analyze + test	pass	2m9s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139123906/job/108084327193	
+Strip feature-flags-removed + analyze + test	pass	2m41s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139123906/job/108084326988	
+Strip tasks-removed + analyze + test	pass	2m18s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139123906/job/108084327219	

@@ -1,0 +1,113 @@
+TRIMMED. Full log: https://github.com/koniz-dev/flutter-starter/actions/runs/36138549535
+Kept: the whole 'Decide the gate scope' step, the ##[group] line that
+opens every other step, and the result lines of format/analyze/test.
+Dropped: ~2600 per-test progress lines from 'flutter test'.
+======================================================================
+
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4519829Z ##[group]Run set -euo pipefail
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4520977Z ^[[36;1mset -euo pipefail^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4522089Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4523158Z ^[[36;1mhave() { git rev-parse -q --verify "$1^{commit}" >/dev/null 2>&1; }^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4524430Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4525130Z ^[[36;1mrange=''^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4525916Z ^[[36;1mcase "$EVENT_NAME" in^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4526812Z ^[[36;1m  pull_request)^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4527946Z ^[[36;1m    # Three dots: compare head against the merge base, so commits^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4529494Z ^[[36;1m    # that landed on main after this branch started are not counted^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4530821Z ^[[36;1m    # as this pull request's changes.^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4532191Z ^[[36;1m    if have "$PR_BASE_SHA" && have "$PR_HEAD_SHA"; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4533404Z ^[[36;1m      range="$PR_BASE_SHA...$PR_HEAD_SHA"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4534419Z ^[[36;1m    fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4535141Z ^[[36;1m    ;;^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4535920Z ^[[36;1m  push)^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4536860Z ^[[36;1m    if have "$PUSH_BEFORE" && have "$PUSH_AFTER"; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4538059Z ^[[36;1m      range="$PUSH_BEFORE..$PUSH_AFTER"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4539054Z ^[[36;1m    fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4539777Z ^[[36;1m    ;;^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4540506Z ^[[36;1mesac^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4541386Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4542120Z ^[[36;1mif [ -z "$range" ]; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4543022Z ^[[36;1m  run=true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4544376Z ^[[36;1m  verdict="Could not resolve a diff range for a '$EVENT_NAME' event. Running the full gate."^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4545879Z ^[[36;1m  changed=''^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4546650Z ^[[36;1melse^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4547527Z ^[[36;1m  changed="$(git diff --name-only "$range")"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4548921Z ^[[36;1m  # Everything outside the inert set, plus every .dart file wherever^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4550218Z ^[[36;1m  # it lives.^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4551033Z ^[[36;1m  relevant="$(^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4552009Z ^[[36;1m    {^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4553034Z ^[[36;1m      printf '%s\n' "$changed" | grep -Ev '^(docs/.*|.*\.md)$' || true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4554496Z ^[[36;1m      printf '%s\n' "$changed" | grep -E '^docs/.*\.dart$' || true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4555753Z ^[[36;1m    } | grep -v '^$' | sort -u || true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4556717Z ^[[36;1m  )"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4557481Z ^[[36;1m  if [ -n "$relevant" ]; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4558408Z ^[[36;1m    run=true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4560049Z ^[[36;1m    verdict="$(printf '%s\n' "$relevant" | wc -l | tr -d ' ') changed path(s) can affect this gate. Running format, analyze and test."^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4561987Z ^[[36;1m  else^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4562749Z ^[[36;1m    run=false^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4564856Z ^[[36;1m    verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file), so nothing this gate checks could have changed. format, analyze and test were NOT run."^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4567082Z ^[[36;1m  fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4567795Z ^[[36;1mfi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4568531Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4569302Z ^[[36;1mecho "run=$run" >> "$GITHUB_OUTPUT"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4570270Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4570954Z ^[[36;1m{^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4571835Z ^[[36;1m  echo "### Quality gate scope"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4572788Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4573580Z ^[[36;1m  echo "- event: \`$EVENT_NAME\`"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4574649Z ^[[36;1m  echo "- range: \`${range:-unresolved}\`"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4575771Z ^[[36;1m  echo "- expensive steps run: \`$run\`"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4576759Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4577501Z ^[[36;1m  echo "$verdict"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4578324Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4579234Z ^[[36;1m  echo "<details><summary>Changed paths</summary>"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4580533Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4581394Z ^[[36;1m  echo '```'^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4582531Z ^[[36;1m  if [ -n "$changed" ]; then printf '%s\n' "$changed"; else echo "(none)"; fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4584006Z ^[[36;1m  echo '```'^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4584773Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4585523Z ^[[36;1m  echo "</details>"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4586432Z ^[[36;1m} | tee -a "$GITHUB_STEP_SUMMARY"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4859673Z shell: /usr/bin/bash -e {0}
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4860744Z env:
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4861868Z   EVENT_NAME: pull_request
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4862986Z   PR_BASE_SHA: bc2424b0b3f8b0d88d641381e066b454eebf76e1
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4864209Z   PR_HEAD_SHA: 1a3e65b635957d0496140677f5796e75b12e9182
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4865237Z   PUSH_BEFORE: 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4865968Z   PUSH_AFTER: 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.4866687Z ##[endgroup]
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5128289Z ### Quality gate scope
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5128944Z 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5129309Z - event: `pull_request`
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5130893Z - range: `bc2424b0b3f8b0d88d641381e066b454eebf76e1...1a3e65b635957d0496140677f5796e75b12e9182`
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5134984Z - expensive steps run: `true`
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5135941Z 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5136924Z 2 changed path(s) can affect this gate. Running format, analyze and test.
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5137883Z 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5138288Z <details><summary>Changed paths</summary>
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5138961Z 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5139268Z ```
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5139998Z .claude/agents/implementer.md
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5140927Z .github/workflows/ci.yml
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5142131Z .github/workflows/docs-check.yml
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5143021Z CLAUDE.md
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5143760Z docs/issue-workflow.md
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5144576Z tool/README.md
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5145291Z ```
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5145663Z 
+Quality gate	Decide the gate scope	2026-09-25T13:03:19.5145972Z </details>
+
+---- step boundaries and results ----
+Quality gate	Checkout code	2026-09-25T13:03:17.7773993Z ##[group]Run actions/checkout@v4
+Quality gate	Setup Flutter	2026-09-25T13:03:19.5631800Z ##[group]Run subosito/flutter-action@v2
+Quality gate	Setup Flutter	2026-09-25T13:03:19.5788301Z ##[group]Run chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+Quality gate	Setup Flutter	2026-09-25T13:03:19.6059098Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh -p \
+Quality gate	Setup Flutter	2026-09-25T13:03:19.8015614Z ##[group]Run actions/cache@v5
+Quality gate	Setup Flutter	2026-09-25T13:03:39.1264378Z ##[group]Run actions/cache@v5
+Quality gate	Setup Flutter	2026-09-25T13:03:42.5017486Z ##[group]Run $GITHUB_ACTION_PATH/setup.sh \
+Quality gate	Install dependencies	2026-09-25T13:03:42.6719594Z ##[group]Run flutter pub get
+Quality gate	Verify formatting	2026-09-25T13:03:44.2581031Z ##[group]Run dart format --set-exit-if-changed lib test integration_test tool examples
+Quality gate	Verify formatting	2026-09-25T13:03:45.4399332Z Formatted 355 files (0 changed) in 1.15 seconds.
+Quality gate	Analyze code	2026-09-25T13:03:45.4515667Z ##[group]Run flutter analyze
+Quality gate	Analyze code	2026-09-25T13:04:02.3238367Z No issues found! (ran in 15.7s)
+Quality gate	Run tests	2026-09-25T13:04:02.3381635Z ##[group]Run flutter test --timeout=5m
