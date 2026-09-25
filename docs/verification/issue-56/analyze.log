@@ -1,0 +1,13 @@
+$ flutter analyze
+
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+│ To update to the latest version, run "flutter upgrade". │
+└─────────────────────────────────────────────────────────┘
+[... 103 lines of `flutter pub get` version chatter elided ...]
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing agent-a5860d1092fc3514a...                            
+No issues found! (ran in 31.3s)
+exit: 0

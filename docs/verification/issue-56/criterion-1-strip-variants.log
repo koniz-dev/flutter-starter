@@ -1,0 +1,48 @@
+Criterion 1 interacts with tool/strip_sample_features.dart: routes_registry.dart
+now imports the tasks and feature-flags route modules, so both partial variants
+need their own golden copy of it. All three variants were applied to throwaway
+copies of this tree and analyzed + tested, the same sequence
+.github/workflows/strip-smoke.yml runs.
+
+Reproduce with:
+  dart run tool/strip_sample_features.dart --apply [--remove-tasks|--remove-feature-flags]
+  flutter pub get && flutter analyze && flutter test --timeout=5m
+
+
+==============================================================
+variant: both-samples-removed   flags: <none>
+==============================================================
+$ dart run tool/strip_sample_features.dart --apply 
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ flutter analyze
+Analyzing both-samples-removed...                               
+No issues found! (ran in 13.5s)
+$ flutter test --timeout=5m
+01:57 +1993 ~6: 6 skipped tests.                                                                                                                                                                       
+01:57 +1993 ~6: All other tests passed!                                                                                                                                                                
+
+==============================================================
+variant: tasks-removed   flags: --remove-tasks
+==============================================================
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ flutter analyze
+Analyzing tasks-removed...                                      
+No issues found! (ran in 5.5s)
+$ flutter test --timeout=5m
+01:46 +2176 ~6: 6 skipped tests.                                                                                                                                                                       
+01:46 +2176 ~6: All other tests passed!                                                                                                                                                                
+
+==============================================================
+variant: feature-flags-removed   flags: --remove-feature-flags
+==============================================================
+$ dart run tool/strip_sample_features.dart --apply --remove-feature-flags
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ flutter analyze
+Analyzing feature-flags-removed...                              
+No issues found! (ran in 10.0s)
+$ flutter test --timeout=5m
+02:07 +2303 ~6: 6 skipped tests.                                                                                                                                                                       
+02:07 +2303 ~6: All other tests passed!                                                                                                                                                                
+
+done

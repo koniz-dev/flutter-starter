@@ -1,0 +1,24 @@
+$ flutter test test/core/routing/app_router_test.dart --reporter expanded
+
+[... 96 lines of `flutter pub get` version chatter elided ...]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/routing/app_router_test.dart
+00:00 +0: goRouterProvider should create GoRouter instance
+00:01 +1: goRouterProvider should start on the home location
+00:02 +2: goRouterProvider should have all routes configured
+00:02 +3: goRouterProvider should have login route
+00:02 +4: goRouterProvider should have register route
+00:02 +5: goRouterProvider should have home route
+00:02 +6: goRouterProvider should redirect unauthenticated user from home to login
+00:08 +7: goRouterProvider should allow unauthenticated user to access register route
+00:09 +8: goRouterProvider should redirect authenticated user away from auth routes
+00:10 +9: goRouterProvider should return same router instance on multiple reads
+00:10 +10: goRouterProvider should expose the redirect the auth guard is built from
+00:10 +11: errorBuilder renders the product 404 for an unmatched path, not go_router debug
+00:11 +12: errorBuilder the 404 offers a way back to home
+00:12 +13: _AuthStateNotifier re-runs the redirect when the user logs out
+00:12 +14: Route Configuration should have flat home route without nested children
+00:12 +15: Route Configuration every registered top-level path is unique
+00:13 +16: Edge Cases router creation reflects the auth state it was built with
+00:13 +17: Edge Cases should handle multiple router reads
+00:13 +18: All tests passed!
+exit: 0

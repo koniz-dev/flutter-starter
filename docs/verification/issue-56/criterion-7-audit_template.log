@@ -1,0 +1,26 @@
+$ ./scripts/dev/audit_template.sh
+
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged env file in the Flutter asset list.
+==> format (lib test integration_test tool examples)
+Formatted 341 files (0 changed) in 1.38 seconds.
+==> flutter analyze
+[... `flutter pub get` version chatter elided ...]
+Analyzing agent-a5860d1092fc3514a...                            
+No issues found! (ran in 3.9s)
+==> flutter test
+[... `flutter pub get` version chatter elided ...]
+
+[... 2617 lines of per-test progress elided; re-run the command above to reproduce ...]
+
+01:59 +2477 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure router correctly
+01:59 +2478 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure localization delegates
+01:59 +2479 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure supported locales
+01:59 +2480 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should use locale from provider
+01:59 +2481 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure text direction from provider
+01:59 +2482 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+01:59 +2483 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:59 +2484 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: HomeScreen should display welcome message
+01:59 +2485 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: HomeScreen should have app bar with title
+01:59 +2486 ~6: All tests passed!
+exit: 0

@@ -1,0 +1,22 @@
+$ flutter test test/features/tasks/routing/tasks_routes_test.dart test/features/feature_flags/routing/feature_flags_routes_test.dart test/core/routing/routes_registry_test.dart --reporter expanded
+
+[... 96 lines of `flutter pub get` version chatter elided ...]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: AppRoutes feature flags constants path and name are the ones the route module registers
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/routing/routes_registry_test.dart: buildAppRoutes should include auth routes and home route
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/routing/routes_registry_test.dart: buildAppRoutes should include auth routes and home route
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: buildFeatureFlagsRoutes is composed into the app route tree
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: buildFeatureFlagsRoutes is composed into the app route tree
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:04 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+00:04 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:04 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+00:06 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:06 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+00:07 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:07 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:09 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:10 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app an empty task id falls back to the list, not the detail
+00:11 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app popUntilRoute unwinds a detail screen back to the list
+00:12 +11: All tests passed!
+exit: 0

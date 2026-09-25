@@ -1,0 +1,55 @@
+$ flutter test --timeout=5m --reporter compact
+
+[... `flutter pub get` version chatter elided ...]
+00:11 +74: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/di/providers_test.dart: Providers storageInitializationProvider stamps both stores at the current schema version
+00:11 +76: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/di/providers_test.dart: Providers storageInitializationProvider surfaces a migration failure to the caller
+00:12 +97: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/config/app_config_test.dart: AppConfig Debug utilities should have printConfig method   
+📱 App Configuration
+Environment: development
+
+[... 171 lines of per-test progress elided; re-run the command above to reproduce ...]
+
+01:40 +1421 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/logging/logging_service_test.dart: LoggingService Edge cases should handle empty message
+01:40 +1422 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/logging/logging_service_test.dart: LoggingService Edge cases should handle very long message
+01:40 +1423 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/logging/logging_service_test.dart: LoggingService Edge cases should handle special characters in message
+01:40 +1424 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/logging/logging_service_test.dart: LoggingService Edge cases should handle unicode characters in message
+01:40 +1425 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/logging/logging_service_test.dart: LoggingService Edge cases should handle null error
+01:40 +1426 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/logging/logging_service_test.dart: LoggingService Edge cases should handle null stackTrace
+01:48 +1524 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+01:49 +1539 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+02:12 +1743 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+02:13 +1747 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+02:15 +1753 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+02:17 +1757 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+02:17 +1758 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+02:18 +1782 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app an empty task id falls back to the list, not the detail
+02:18 +1797 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app popUntilRoute unwinds a detail screen back to the list
+02:46 +2029 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+02:48 +2030 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+02:48 +2031 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+02:49 +2032 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start session restore (#51) restore in flight does not flash /login, then lands on /
+02:49 +2033 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start session restore (#51) restore held open for a user with no session ends on /login
+02:50 +2033 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+02:50 +2034 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start session restore (#51) corrupt cached JSON lands on /login without throwing
+02:50 +2035 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start session restore (#51) storage throwing lands on /login without throwing
+02:51 +2049 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with no token lands on /login, not /
+02:51 +2050 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with an empty token lands on /login
+02:51 +2051 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) an unreadable token store lands on /login without throwing
+02:51 +2053 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a token store throwing an Error lands on /login without throwing
+02:52 +2054 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with a readable token still lands on /
+02:52 +2055 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) bounce to /login carries the destination, and returns to it
+02:52 +2056 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) an off-site redirect target is ignored
+03:56 +2471 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/widget_test.dart: App displays welcome message                                          
+03:57 +2471 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: full app reaches an idle frame (#40 regression) pumpAndSettle on the whole app does not time out
+03:58 +2474 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should build MaterialApp with correct title                       
+03:58 +2475 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should use light theme by default                                 
+03:58 +2476 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should have dark theme configured                                 
+03:58 +2477 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure router correctly                                 
+03:58 +2478 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure localization delegates                           
+03:58 +2479 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure supported locales                                
+03:58 +2480 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should use locale from provider                                   
+03:59 +2481 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should configure text direction from provider                     
+03:59 +2482 ~6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/main_test.dart: MyApp should wrap content in RepaintBoundary                            
+03:59 +2486 ~6: 6 skipped tests.                                                                                                                                                                       
+03:59 +2486 ~6: All other tests passed!                                                                                                                                                                
+exit: 0
