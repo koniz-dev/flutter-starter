@@ -317,13 +317,28 @@ class MigrationExecutionException implements Exception {
   /// Original exception that caused the failure (if any)
   final Object? originalException;
 
+  /// Name this exception introduces itself by in [toString].
+  ///
+  /// Subclasses override it so they do not inherit this class's name. Spelled
+  /// out rather than taken from `runtimeType`, because the release builds in
+  /// `docs/guides/security/implementation.md` pass `--obfuscate`, which would
+  /// reduce `runtimeType` to a minified token in exactly the situation this
+  /// string exists for.
+  String get exceptionName => 'MigrationExecutionException';
+
+  /// A readable description carrying the concrete type and the message.
+  ///
+  /// `main()` renders `'$error'` straight into `StartupFailureApp`, so this is
+  /// the first thing a user - and a bug report - sees when a startup migration
+  /// fails. A downgrade refusal that called itself a
+  /// `MigrationExecutionException` was the wrong diagnosis.
   @override
   String toString() {
     if (originalException != null) {
-      return 'MigrationExecutionException: $message\n'
+      return '$exceptionName: $message\n'
           'Original exception: $originalException';
     }
-    return 'MigrationExecutionException: $message';
+    return '$exceptionName: $message';
   }
 }
 
@@ -350,6 +365,9 @@ class MigrationPathException extends MigrationExecutionException {
 
   /// Version the chain could not be continued from
   final int missingFromVersion;
+
+  @override
+  String get exceptionName => 'MigrationPathException';
 }
 
 /// Exception thrown when storage is stamped with a version newer than this
@@ -370,4 +388,7 @@ class StorageDowngradeException extends MigrationExecutionException {
 
   /// Highest version this build understands
   final int supportedVersion;
+
+  @override
+  String get exceptionName => 'StorageDowngradeException';
 }
