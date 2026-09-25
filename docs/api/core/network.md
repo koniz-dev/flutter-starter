@@ -302,7 +302,11 @@ When the refresh fails, there is no refresh token, or the retry is already exhau
 
 The cache reference is supplied by `ApiClient._createDio` through `authInterceptor.attachResponseCache(...)`, because the cache is a `CacheInterceptor` the client builds itself and so does not exist when `authInterceptorProvider` constructs the interceptor. It is optional: an interceptor nobody attaches a cache to simply skips that step, exactly as `httpCache` is optional on `AuthRepositoryImpl`.
 
-Every step of the teardown is independently guarded and best-effort. A step that throws - or a dependency that was never wired - must never leave the 401 handler uncompleted, so the error still surfaces to the caller either way.
+A fourth step then tells the **running app**. Clearing storage only fixes the next launch; the session this launch is rendering lives in memory, in `AuthNotifier`. The interceptor reaches it through `ISessionTerminationSink` (`lib/core/contracts/state_boundary_contracts.dart`), implemented by `RiverpodSessionTerminationSink` in the auth feature and handed down by `authInterceptorProvider`, so nothing in `lib/core/network` imports the feature that owns the session. The sink resolves the notifier lazily, at the moment a session is terminated rather than at construction, which is what keeps the edge notifier -> use case -> repository -> remote data source -> `ApiClient` -> interceptor from closing into a cycle. It is optional for the same reason the cache is.
+
+The app is **not** navigated anywhere from here. The interceptor only drops the session; the existing guard in `lib/core/routing/app_router.dart` reacts to the state change through its `refreshListenable` and performs the redirect to `/login`. Keeping navigation in one place is what lets the guard's deep-link round trip and its "no `/login` flash while the session restores" behaviour keep working.
+
+Every step of the teardown is independently guarded and best-effort. A step that throws - or a dependency that was never wired - must never leave the 401 handler uncompleted, so the error still surfaces to the caller either way. In particular, notifying the sink is wrapped: a background request can 401 after the app's `ProviderContainer` is gone, and resolving a provider from a disposed container throws.
 
 **Excluded Endpoints:**
 - `/login`

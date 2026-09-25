@@ -112,6 +112,23 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
     );
   }
 
+  /// Drops the in-memory session, without touching persisted state.
+  ///
+  /// The counterpart to [logout] for a session the user did not end: the
+  /// transport already cleared the tokens, the cached user and the response
+  /// cache before calling this, so repeating that work here - or calling the
+  /// logout endpoint, which would post credentials that no longer exist -
+  /// would be wrong.
+  ///
+  /// Resets to the initial state rather than only nulling `user`: a forced
+  /// logout can land mid-flight, and leaving `isLoading` true would spin a
+  /// screen forever over a session that no longer exists. `error` is left null
+  /// on purpose - the caller's own failed request surfaces its error, and the
+  /// router is about to replace this screen with `/login` regardless.
+  void clearSession() {
+    state = const AuthState();
+  }
+
   /// Refreshes the authentication token
   ///
   /// This is typically called automatically by the AuthInterceptor,
@@ -239,6 +256,28 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       failureCallback: (_) => false,
     );
   }
+}
+
+/// Adapter letting `lib/core/network` end the in-memory session.
+///
+/// Holds a [Ref] and resolves [authNotifierProvider] only when a session is
+/// actually terminated. That laziness is the whole point: it is the same trick
+/// the `refreshToken` callback in `authInterceptorProvider` uses. The
+/// interceptor is constructed while the provider graph is still being built -
+/// `apiClientProvider` reads it - so resolving the notifier eagerly would close
+/// the loop notifier -> use case -> repository -> remote data source ->
+/// ApiClient -> interceptor -> notifier. Deferred to call time, the edge only
+/// exists once a request has already 401'd, by which point every provider in
+/// that chain is built.
+class RiverpodSessionTerminationSink implements ISessionTerminationSink {
+  /// Binds this sink to the container holding the session.
+  const RiverpodSessionTerminationSink(this._ref);
+
+  final Ref _ref;
+
+  @override
+  void onSessionTerminated() =>
+      _ref.read(authNotifierProvider.notifier).clearSession();
 }
 
 /// Boundary provider exposing auth controller contract.
