@@ -8,27 +8,152 @@
 | File | What it is |
 |---|---|
 | `format.log`, `analyze.log`, `tests.log`, `goldens.log` | `./scripts/test/run_acceptance.sh 146` - the same gates CI runs, plus the golden-tagged acceptance layer |
-| `timestamp_probe.dart` | Prints the exact strings `toJson()` writes and what `fromJson()` reads back, per criterion. Runs under `flutter test`, not `dart run`, because `Task` reaches `package:flutter/foundation.dart` |
-| `timestamp-probe-Asia-Bangkok.log` | Probe at UTC+07:00 |
-| `timestamp-probe-America-New_York.log` | Probe at UTC-05:00 |
-| `timestamp-probe-UTC.log` | Probe at UTC+00:00, the CI runner's zone |
+| `timestamp-probe-Asia-Bangkok.log` | The probe below at UTC+07:00 |
+| `timestamp-probe-America-New_York.log` | The probe below at UTC-05:00 |
+| `timestamp-probe-UTC.log` | The probe below at UTC+00:00, the CI runner's zone |
 | `task-model-tz-*.log` | `test/features/tasks/data/models/task_model_test.dart` under the same three zones |
-| `goldens-checksums.txt` | See below |
-| `*.png` | See below |
+| `goldens-checksums.txt` | See "The PNGs prove nothing about this issue" |
+| `*.png` | See "The PNGs prove nothing about this issue" |
 
-Reproduce the probe:
+## The probe
+
+The three `timestamp-probe-*.log` files are the output of the source below,
+which prints the exact strings `toJson()` writes and what `fromJson()` reads
+back, one section per criterion. To reproduce, save it as
+`test/features/tasks/timestamp_probe_test.dart` and run:
 
 ```bash
-TZ=Asia/Bangkok flutter test docs/verification/issue-146/timestamp_probe.dart \
+TZ=Asia/Bangkok flutter test test/features/tasks/timestamp_probe_test.dart \
   --reporter expanded
+```
+
+It is pasted here rather than committed as a `.dart` file on purpose. The
+logs were captured from `docs/verification/issue-146/timestamp_probe.dart`,
+but a committed Dart file in this directory is analyzed like any other source
+(`analysis_options.yaml` does not exclude `docs/`), and this one imports
+`package:flutter_starter/features/tasks/...`, which
+`tool/strip_sample_features.dart` deletes. That broke the
+`tasks-removed` and `both-samples-removed` strip variants with
+`uri_does_not_exist`. `tool/strip_sample_features.dart` neither deletes nor
+scans Dart files under `docs/`, so nothing warns about this before CI - filed
+as its own issue.
+
+It runs under `flutter test` rather than `dart run` because `Task` reaches
+`package:flutter/foundation.dart`, which needs `dart:ui`. It uses
+`stdout.writeln` rather than `print` because `very_good_analysis` bans the
+latter.
+
+```dart
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter_starter/features/tasks/data/models/task_model.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+TaskModel _task(DateTime at) =>
+    TaskModel(id: 'task-1', title: 'Probe', createdAt: at, updatedAt: at);
+
+Map<String, dynamic> _row(String timestamp) => <String, dynamic>{
+  'id': 'task-1',
+  'title': 'Probe',
+  'created_at': timestamp,
+  'updated_at': timestamp,
+};
+
+void main() {
+  test('timestamp probe', () {
+    final zoneProbe = DateTime(2024, 1, 15, 14, 30, 45);
+    stdout
+      ..writeln(
+        'host zone: ${zoneProbe.timeZoneName} '
+        'offset ${zoneProbe.timeZoneOffset}',
+      )
+      ..writeln()
+      // Criterion 1 - a designator is written for both kinds of DateTime.
+      ..writeln('--- criterion 1: toJson writes a designator');
+    for (final original in <DateTime>[
+      DateTime(2024, 1, 15, 14, 30, 45),
+      DateTime.utc(2024, 1, 15, 7, 30, 45),
+    ]) {
+      final encoded =
+          jsonDecode(jsonEncode(_task(original).toJson()))
+              as Map<String, dynamic>;
+      final written = encoded['created_at'] as String;
+      stdout.writeln(
+        '  in:  $original (isUtc=${original.isUtc})\n'
+        '  out: "$written"  endsWith Z: ${written.endsWith('Z')}',
+      );
+      expect(written.endsWith('Z'), isTrue);
+    }
+
+    // Criterion 2 - the instant survives the round trip in this zone.
+    stdout
+      ..writeln()
+      ..writeln('--- criterion 2: round trip preserves the instant');
+    for (final original in <DateTime>[
+      DateTime(2024, 1, 15, 14, 30, 45),
+      DateTime.utc(2024, 1, 15, 7, 30, 45),
+      DateTime(2024, 6, 30, 23, 59, 59, 999),
+    ]) {
+      final restored = TaskModel.fromJson(_task(original).toJson()).createdAt;
+      stdout.writeln(
+        '  $original -> $restored  '
+        'isAtSameMomentAs: ${restored.isAtSameMomentAs(original)}',
+      );
+      expect(restored.isAtSameMomentAs(original), isTrue);
+    }
+
+    // Criterion 3 - a legacy offset-less row reads unshifted, then gains a
+    // designator the next time the list is written.
+    stdout
+      ..writeln()
+      ..writeln('--- criterion 3: legacy offset-less row');
+    const legacy = '2026-09-19T14:30:00.000';
+    final restored = TaskModel.fromJson(_row(legacy)).createdAt;
+    stdout
+      ..writeln('  stored:   "$legacy"')
+      ..writeln('  read as:  $restored (isUtc=${restored.isUtc})')
+      ..writeln(
+        '  equals DateTime(2026, 9, 19, 14, 30): '
+        '${restored == DateTime(2026, 9, 19, 14, 30)}',
+      )
+      ..writeln(
+        '  old DateTime.parse gave: ${DateTime.parse(legacy)} -> unshifted: '
+        '${restored.isAtSameMomentAs(DateTime.parse(legacy))}',
+      )
+      ..writeln(
+        '  rewritten on next write: '
+        '"${TaskModel.fromJson(_row(legacy)).toJson()['created_at']}"',
+      );
+    expect(restored, DateTime(2026, 9, 19, 14, 30));
+
+    // Criterion 4 - an out-of-range calendar date is rejected.
+    stdout
+      ..writeln()
+      ..writeln('--- criterion 4: malformed calendar date');
+    const malformed = '2024-02-30T00:00:00Z';
+    stdout.writeln(
+      '  DateTime.parse("$malformed") = ${DateTime.parse(malformed)}  '
+      '<- the silent roll-over',
+    );
+    try {
+      TaskModel.fromJson(_row(malformed));
+      fail('TaskModel.fromJson accepted $malformed - criterion 4 fails');
+    } on FormatException catch (e) {
+      stdout.writeln(
+        '  TaskModel.fromJson threw FormatException: ${e.message}',
+      );
+    }
+  });
+}
 ```
 
 ## The PNGs prove nothing about this issue
 
 `run_acceptance.sh` copies every PNG under `test/acceptance/goldens/` into the
 evidence directory whether or not the issue is visual. This one is not: no
-criterion here is about layout, and no screen in the tasks sample renders a
-timestamp in these goldens.
+criterion here is about layout, and no screen in these goldens renders a task
+timestamp.
 
 All 13 copied PNGs are byte-identical to the repository's standing goldens -
 `goldens-checksums.txt` pairs each `docs/verification/issue-146/<name>.png`
