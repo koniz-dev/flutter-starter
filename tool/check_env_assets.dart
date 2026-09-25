@@ -47,7 +47,14 @@
 // whole directory forever:
 //
 //   assets:
-//     - assets/config/ # env-asset-ack: .env.web, publishable values only
+//     - assets/config/ # env-asset-ack: .env.web, app.env - publishable values
+//
+// The names are matched **exactly**, never as a substring: `.env.example` does
+// not also acknowledge `.env`, and prose that merely mentions a file - even
+// prose denying the file exists - acknowledges nothing. The whole grammar is
+// on `parseAcknowledgedNames` below. An acknowledgement that names a file the
+// directory does not hold is reported as a note on stderr and does not fail the
+// run; see that function for why.
 //
 // The acknowledgement has to be committed next to the entry, which is the
 // opposite of shipping silently. An environment variable would not be.
@@ -61,7 +68,9 @@
 //     only; nothing reads file contents;
 //   * a secret in a *sub*-directory of a declared directory, which Flutter does
 //     not bundle either (each sub-directory needs its own asset entry, and the
-//     walk then covers it).
+//     walk then covers it);
+//   * whether an acknowledged file really is free of secrets. The marker
+//     records that a human said so; nothing verifies the claim.
 //
 // Usage:
 //   dart run tool/check_env_assets.dart                 # checks ./pubspec.yaml
@@ -80,6 +89,75 @@ const String allowedEnvAsset = '.env.example';
 
 /// Marker that makes a bundled secrets file a reviewed, deliberate decision.
 const String ackMarker = 'env-asset-ack:';
+
+/// What ends the file-name list in an acknowledgement and starts free prose.
+///
+/// A semicolon, or an em or en dash, or a hyphen with whitespace on both sides.
+/// None of them can occur inside a name accepted by [_ackName], so cutting here
+/// never splits a file name.
+final RegExp _ackProseSeparator = RegExp(r'[;\u2014\u2013]|\s-{1,2}(\s|$)');
+
+/// One bare file name in an acknowledgement: no spaces, no path, no quotes.
+///
+/// It must contain a dot, which costs nothing: every name [secretAssetReason]
+/// can flag has one (`.env`, `.env.*`, an extension from
+/// [secretAssetExtensions], a name from [secretAssetNames]). Requiring it is
+/// what lets a one-word comma segment such as `reviewed` read as prose rather
+/// than as the name of a file that will never exist.
+final RegExp _ackName = RegExp(r'^[A-Za-z0-9_+-]*\.[A-Za-z0-9._+-]*$');
+
+/// The file names an `env-asset-ack:` [comment] covers, in written order.
+///
+/// The whole grammar:
+///
+///     ack       := 'env-asset-ack:' names? separator? prose?
+///     names     := name (',' name)*
+///     name      := a bare file name containing a dot, no spaces and no '/'
+///     separator := ';' | em dash | en dash | ' - ' | the first ',' segment
+///                  that is not a name
+///
+/// So the covered set is exactly the leading comma-separated run of bare file
+/// names, and a reader can compute it by eye. Matching against a file is
+/// **exact** and case-insensitive - see [AssetDeclaration.acknowledges].
+///
+/// Three consequences worth stating, because they are the point:
+///
+///   * `# env-asset-ack: .env.example, publishable placeholders only` covers
+///     `.env.example` and nothing else. It does **not** cover `.env`, which a
+///     substring test used to let through (koniz-dev/flutter-starter#170).
+///   * `# env-asset-ack: .env.web only; there is no .env here` covers
+///     *nothing*: the first segment is not a bare file name, so the list is
+///     empty and the prose - including the `.env` inside it - is ignored. A
+///     malformed acknowledgement fails closed rather than open.
+///   * a name that matches no file in the directory is stale. That is a note on
+///     stderr, not a failure: every `.env` is gitignored and a web deployment
+///     may generate its env file at deploy time, so a fresh checkout can
+///     legitimately lack the acknowledged file, and failing would red-light
+///     clean CI runs on a tree that is strictly safer. A stale name cannot hide
+///     a bundled secret either - the file it names is not there, and any file
+///     that is there is matched exactly or reported.
+List<String> parseAcknowledgedNames(String comment) {
+  final marker = comment.indexOf(ackMarker);
+  if (marker < 0) {
+    return const <String>[];
+  }
+
+  var payload = comment.substring(marker + ackMarker.length);
+  final prose = _ackProseSeparator.firstMatch(payload);
+  if (prose != null) {
+    payload = payload.substring(0, prose.start);
+  }
+
+  final names = <String>[];
+  for (final segment in payload.split(',')) {
+    final token = segment.trim();
+    if (!_ackName.hasMatch(token)) {
+      break;
+    }
+    names.add(token);
+  }
+  return names;
+}
 
 /// Lowercase extensions that are private key or code-signing material.
 ///
@@ -162,10 +240,21 @@ class AssetDeclaration {
   /// Whether Flutter treats this entry as a directory rather than a file.
   bool get isDirectory => path.endsWith('/');
 
+  /// File names this entry's acknowledgement covers. See
+  /// [parseAcknowledgedNames] for the grammar.
+  List<String> get acknowledgedNames => parseAcknowledgedNames(comment);
+
   /// Whether the entry carries an inline acknowledgement covering [fileName].
   ///
-  /// A directory acknowledgement has to name the file it covers; a file entry
-  /// acknowledges itself.
+  /// A **file** entry acknowledges itself: the entry already names exactly one
+  /// file, so the comment cannot widen what it covers and does not have to
+  /// repeat the name.
+  ///
+  /// A **directory** entry has to name the file, and the name is compared
+  /// **exactly** (case-insensitively), never as a substring. Every env file
+  /// name is a prefix of a longer one, so the old substring test let
+  /// `# env-asset-ack: .env.example` acknowledge a real `.env` as well
+  /// (koniz-dev/flutter-starter#170).
   bool acknowledges(String fileName) {
     final marker = comment.indexOf(ackMarker);
     if (marker < 0) {
@@ -174,7 +263,8 @@ class AssetDeclaration {
     if (!isDirectory) {
       return true;
     }
-    return comment.substring(marker + ackMarker.length).contains(fileName);
+    final target = fileName.toLowerCase();
+    return acknowledgedNames.any((name) => name.toLowerCase() == target);
   }
 }
 
@@ -208,6 +298,75 @@ class BundledSecretAsset {
 
   /// Whether the file was found by walking a declared directory.
   bool get viaDirectory => entry != path;
+}
+
+/// A name in a directory acknowledgement that matches no file in that
+/// directory.
+///
+/// Dead text rather than a live exception: the comment claims to cover a file
+/// the tree does not hold. Reported, never fatal - see [parseAcknowledgedNames]
+/// for why an absent file is not by itself an error.
+class StaleAcknowledgement {
+  /// Creates a finding for [name], acknowledged on [entry] at [line].
+  const StaleAcknowledgement({
+    required this.name,
+    required this.entry,
+    required this.line,
+  });
+
+  /// The file name the acknowledgement claims to cover.
+  final String name;
+
+  /// The declared directory the acknowledgement is written on.
+  final String entry;
+
+  /// 1-based line number of that declaration in the pubspec.
+  final int line;
+}
+
+/// Names acknowledged on a declared directory that the directory does not hold.
+///
+/// [projectRoot] is the directory the asset paths are relative to. A declared
+/// directory that does not exist makes every name on it stale; only files
+/// directly inside it count, matching Flutter's own non-recursive bundling.
+List<StaleAcknowledgement> findStaleAcknowledgements(
+  String pubspecYaml, {
+  required String projectRoot,
+}) {
+  final stale = <StaleAcknowledgement>[];
+
+  for (final declaration in parseAssetDeclarations(pubspecYaml)) {
+    if (!declaration.isDirectory) {
+      continue;
+    }
+    final names = declaration.acknowledgedNames;
+    if (names.isEmpty) {
+      continue;
+    }
+
+    final directory = Directory('$projectRoot/${declaration.path}');
+    final present = directory.existsSync()
+        ? directory
+              .listSync()
+              .whereType<File>()
+              .map((f) => f.uri.pathSegments.last.toLowerCase())
+              .toSet()
+        : const <String>{};
+
+    for (final name in names) {
+      if (!present.contains(name.toLowerCase())) {
+        stale.add(
+          StaleAcknowledgement(
+            name: name,
+            entry: declaration.path,
+            line: declaration.line,
+          ),
+        );
+      }
+    }
+  }
+
+  return stale;
 }
 
 /// Every `- path` entry under `flutter: assets:` in [pubspecYaml].
@@ -381,11 +540,26 @@ void main(List<String> args) {
   ];
   final unacknowledged = findings.where((f) => !f.acknowledged).toList();
 
+  // Advisories go to stderr, and none of them is load-bearing. The only thing
+  // that can hide a bundled secret is a false PASS, and that is now an exit 1
+  // below; what is left here is a reminder about files a human has already
+  // signed off on, and acknowledgements that cover nothing at all. Stdout on a
+  // passing run used to carry the real signal, which is exactly how
+  // koniz-dev/flutter-starter#170 stayed quiet in CI.
   for (final f in findings.where((f) => f.acknowledged)) {
-    stdout.writeln(
+    stderr.writeln(
       'check_env_assets: $path:${f.line} bundles "${f.path}" with an '
       'acknowledgement. It ships in every build mode and is public - keep '
       'secrets out of it.',
+    );
+  }
+
+  for (final stale in findStaleAcknowledgements(pubspec, projectRoot: root)) {
+    stderr.writeln(
+      'check_env_assets: note: $path:${stale.line} acknowledges '
+      '"${stale.name}" in "${stale.entry}", which holds no such file. Drop the '
+      'name if the file is gone; keep it if your deployment writes the file '
+      'later.',
     );
   }
 
@@ -429,7 +603,13 @@ For a file inside a declared directory, put the acknowledgement on the
 directory entry and name the file, so it covers that file and not the whole
 directory:
 
-    - assets/config/ # $ackMarker app_config.env, publishable values only
+    - assets/config/ # $ackMarker app_config.env, .env.web - publishable only
+
+The names are a comma-separated list of bare file names, each matched exactly
+against the file name and never as a substring, ending at the first entry that
+is not a file name; free prose may follow after a semicolon or a spaced dash.
+So `.env.example` does not cover `.env`, and prose that merely mentions a file
+does not acknowledge it.
 
 See docs/guides/configuration.md ("Never ship a secret in the bundle").''')
     ..writeln();
