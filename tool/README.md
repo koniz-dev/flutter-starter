@@ -20,8 +20,8 @@ dart run tool/check_docs.dart --emoji    # emoji only
 ```
 
 Exits 1 and prints `file:line` for every problem. CI runs it as **Docs check**
-(`.github/workflows/docs-check.yml`) on any PR touching markdown - which is
-exactly the set of PRs `ci.yml` skips via its `paths-ignore`. It is deliberately
+(`.github/workflows/docs-check.yml`) on any PR touching markdown - exactly the
+set of changes the Quality gate treats as inert and skips. It is deliberately
 **not** part of `scripts/dev/audit_template.sh`: that script gates code changes,
 and a broken doc link should not block an unrelated `lib/` fix.
 

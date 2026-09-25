@@ -3,8 +3,10 @@ name: Docs check
 # ========================================================================
 # Documentation integrity gate.
 #
-# This exists because `ci.yml` has `paths-ignore: ['**/*.md', 'docs/**']`,
-# so the Quality gate never sees a docs-only change. Broken relative links,
+# This exists because the Quality gate in `ci.yml` treats `**/*.md` and
+# `docs/**` as inert and never inspects them (it used to skip the workflow
+# outright via `paths-ignore`; since koniz-dev/flutter-starter#117 it reports
+# on every PR but skips its expensive steps). Broken relative links,
 # broken heading anchors and emoji (against the convention in CLAUDE.md)
 # therefore accumulated with nothing to catch them - 29 broken links and
 # 487 emoji lines by the time koniz-dev/flutter-starter#54 was filed.

@@ -155,32 +155,40 @@ make the loop worthless.
   manual plus weekly, not per-PR.
 ### Which checks a PR gets
 
-Four workflows run on PRs and only two of them filter on paths, so "no Quality
-gate" is normal rather than a failure:
+Four workflows run on PRs. Only one of them still filters at the workflow
+level, so **every PR reports Quality gate, Issue refs and the three Strip
+jobs** - five checks minimum:
 
 | Workflow | Check name(s) | Runs when |
 |---|---|---|
-| [`ci.yml`](.github/workflows/ci.yml) | Quality gate | any path **outside** `**/*.md` and `docs/**` |
+| [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or the workflow itself |
 | [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
 | [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR, no path filter |
 
-So a docs-only PR gets Docs check, Issue refs and the three Strip jobs but no
-Quality gate, and an evidence-only PR of `.log`/`.png` files gets Issue refs
-and the Strip jobs. **Every PR gets at least four checks** - a PR reporting
-zero is the registration race, not a path exclusion. Poll until
+`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117. The filter
+moved into the job's "Decide the gate scope" step, so the check always posts a
+conclusion and can be a required status check. A PR reporting zero checks is the
+registration race, never a path exclusion. Poll until
 `gh pr checks --json name --jq 'length'` is non-zero before
 `gh pr checks --watch`; merging on the "no checks reported" reading skips the
 gate entirely.
+
+**Read a green Quality gate carefully on a docs-only PR.** It does not mean
+format, analyze and test passed - it means they did not run, because no changed
+path could have affected them. The job summary states which of the two happened
+and lists every changed path. The skip set is `**/*.md` anywhere plus `docs/**`,
+minus `.dart`: `analysis_options.yaml` does not exclude `docs/`, so a committed
+evidence probe such as `docs/verification/issue-48/aot_probe.dart` is analyzed
+like any other source and forces the full gate.
 
 **None of these checks gates a merge, and `main` has no branch protection.**
 `gh pr merge --squash` succeeds on a red PR, and a direct push to `main` is not
 rejected. Reading the checks is therefore the session's job, not the platform's.
 Enabling protection needs a human (criterion 5 of
 koniz-dev/flutter-starter#58); the exact command is in that issue's `needs-uat`
-comment. Note that Quality gate cannot become a *required* check while `ci.yml`
-carries `paths-ignore`, because a required check that never reports leaves every
-docs-only PR permanently unmergeable.
+comment. Quality gate is now safe to list in
+`required_status_checks.contexts` - that was not true before #117.
 
 ### Evidence discipline
 
