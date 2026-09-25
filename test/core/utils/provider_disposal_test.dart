@@ -44,26 +44,72 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     });
 
-    testWidgets('should clear image cache when memory is low', (tester) async {
-      var cacheCleared = false;
+    testWidgets('does not touch the global image cache on dispose', (
+      tester,
+    ) async {
+      // dispose() used to call MemoryHelper.clearImageCache() whenever the
+      // global cache was above 80% full, evicting images still mounted on
+      // the screen underneath this one.
+      final image = await tester.runAsync(
+        () => createTestImage(width: 40, height: 40),
+      );
+      final completer = OneFrameImageStreamCompleter(
+        Future<ImageInfo>.value(ImageInfo(image: image!)),
+      );
+      imageCache.putIfAbsent('sentinel', () => completer);
+      ImageStream()
+        ..setCompleter(completer)
+        ..addListener(ImageStreamListener((_, _) {}));
+      await tester.pump();
+
+      final previousMaxBytes = imageCache.maximumSizeBytes;
+      addTearDown(() {
+        imageCache
+          ..maximumSizeBytes = previousMaxBytes
+          ..clear()
+          ..clearLiveImages();
+      });
+
+      // Squeeze the budget so the old `cacheSize > maxSize * 0.8` condition
+      // is unambiguously true. Assert that precondition, or the test would
+      // pass for the wrong reason.
+      imageCache.maximumSizeBytes = imageCache.currentSizeBytes + 1;
+      final info = MemoryHelper.getMemoryInfo();
+      final cacheSize = info['imageCacheSizeBytes']! as int;
+      final maxSize = info['imageCacheMaxSizeBytes']! as int;
+      expect(cacheSize, greaterThan(0));
+      expect(cacheSize, greaterThan(maxSize * 0.8));
 
       await tester.pumpWidget(
         ProviderScope(
-          child: MaterialApp(
-            home: _TestWidgetWithLowMemory(
-              onCacheClear: () {
-                cacheCleared = true;
-              },
-            ),
-          ),
+          child: MaterialApp(home: _TestWidget(onDispose: () {})),
         ),
       );
-
       await tester.pumpWidget(const SizedBox.shrink());
 
-      // Note: In actual implementation, MemoryHelper would be called
-      // This test verifies the disposal logic exists
-      expect(cacheCleared, isFalse); // Mock doesn't actually clear
+      expect(
+        imageCache.containsKey('sentinel'),
+        isTrue,
+        reason: 'disposing a widget must not clear the global image cache',
+      );
+      expect(imageCache.currentSizeBytes, cacheSize);
+    });
+
+    testWidgets('the removed dynamic-provider helpers are gone', (
+      tester,
+    ) async {
+      // registerProviderSubscription and WidgetRef.watchWithDisposal were
+      // no-ops carrying the only two `// ignore:
+      // argument_type_not_assignable` comments in lib/ - suppressing a
+      // compile-time error, not a lint. They are deleted; registerDisposable
+      // is the mixin's remaining, genuinely useful API.
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(home: _TestWidget(onDispose: () {})),
+        ),
+      );
+      final state = tester.state<_TestWidgetState>(find.byType(_TestWidget));
+      expect(state.registerDisposable, isNotNull);
     });
   });
 
@@ -107,40 +153,6 @@ class _TestWidgetState extends ConsumerState<_TestWidget>
   void initState() {
     super.initState();
     registerDisposable(widget.onDispose);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox();
-  }
-}
-
-class _TestWidgetWithLowMemory extends ConsumerStatefulWidget {
-  const _TestWidgetWithLowMemory({required this.onCacheClear});
-
-  final VoidCallback onCacheClear;
-
-  @override
-  ConsumerState<_TestWidgetWithLowMemory> createState() =>
-      _TestWidgetWithLowMemoryState();
-}
-
-class _TestWidgetWithLowMemoryState
-    extends ConsumerState<_TestWidgetWithLowMemory>
-    with ProviderDisposal {
-  @override
-  void dispose() {
-    // Simulate low memory condition
-    final memoryInfo = MemoryHelper.getMemoryInfo();
-    final cacheSize = memoryInfo['imageCacheSizeBytes'] as int? ?? 0;
-    final maxSize = memoryInfo['imageCacheMaxSizeBytes'] as int? ?? 0;
-
-    if (maxSize > 0 && cacheSize > (maxSize * 0.8)) {
-      MemoryHelper.clearImageCache();
-      widget.onCacheClear();
-    }
-
-    super.dispose();
   }
 
   @override

@@ -346,5 +346,68 @@ void main() {
         expect(result.code, 'TEST_CODE');
       });
     });
+
+    group('unmapped AppException subclasses', () {
+      test('an unknown AppException keeps its message and code', () {
+        // The fallback interpolated `$exception`, and AppException had no
+        // toString(), so this produced
+        // UnknownFailure("Unexpected error: Instance of 'CustomException'")
+        // with the message and code both lost.
+        const exception = CustomException('Quota exceeded', code: 'E_QUOTA');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<UnknownFailure>());
+        expect(result.message, 'Quota exceeded');
+        expect(result.code, 'E_QUOTA');
+      });
+
+      test('an unknown AppException without a code gets UNKNOWN_ERROR', () {
+        const exception = CustomException('Quota exceeded');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result.message, 'Quota exceeded');
+        expect(result.code, 'UNKNOWN_ERROR');
+      });
+
+      test('a plain Exception still falls through to a described failure', () {
+        final result = ExceptionToFailureMapper.map(
+          const FormatException('bad input'),
+        );
+
+        expect(result, isA<UnknownFailure>());
+        expect(result.code, 'UNKNOWN_ERROR');
+        expect(result.message, contains('bad input'));
+      });
+    });
+
+    group('PermissionException and NotFoundException', () {
+      test('maps PermissionException to PermissionFailure', () {
+        const exception = PermissionException('Denied', code: 'E_PERM');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<PermissionFailure>());
+        expect(result.message, 'Denied');
+        expect(result.code, 'E_PERM');
+      });
+
+      test('maps NotFoundException to NotFoundFailure', () {
+        const exception = NotFoundException('Missing', code: 'E_404');
+
+        final result = ExceptionToFailureMapper.map(exception);
+
+        expect(result, isA<NotFoundFailure>());
+        expect(result.message, 'Missing');
+        expect(result.code, 'E_404');
+      });
+    });
   });
+}
+
+/// An AppException subclass the mapper has no case for, as an adopter's
+/// would be.
+class CustomException extends AppException {
+  const CustomException(super.message, {super.code});
 }

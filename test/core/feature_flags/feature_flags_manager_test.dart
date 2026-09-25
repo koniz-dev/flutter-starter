@@ -194,13 +194,48 @@ void main() {
         expect(result[FeatureFlags.darkMode.value], isFalse);
       });
 
-      test('should return empty map when repository fails', () async {
-        // Arrange
-        const failure = CacheFailure('Failed to get flags');
-        const resultFailure = ResultFailure<Map<String, FeatureFlag>>(failure);
+      test(
+        'should fall back to per-key defaults when repository fails',
+        () async {
+          // Arrange
+          const failure = CacheFailure('Failed to get flags');
+          const resultFailure = ResultFailure<Map<String, FeatureFlag>>(
+            failure,
+          );
+          when(
+            () => mockRepository.getFlags(any()),
+          ).thenAnswer((_) async => resultFailure);
+
+          // Act
+          final result = await manager.getFlags([
+            FeatureFlags.newFeature,
+            FeatureFlags.darkMode,
+          ]);
+
+          // Assert - the same fallback isEnabled uses, so the two accessors
+          // cannot disagree about the same flag.
+          expect(result, {
+            FeatureFlags.newFeature.value: FeatureFlags.newFeature.defaultValue,
+            FeatureFlags.darkMode.value: FeatureFlags.darkMode.defaultValue,
+          });
+          // isEnabled falls back to the same defaultValue, so the two
+          // accessors now agree instead of reporting true and false.
+          expect(result[FeatureFlags.darkMode.value], isTrue);
+        },
+      );
+
+      test('a key the repository omits falls back to its default', () async {
+        // Arrange - only one of the two requested keys comes back.
+        final flags = {
+          FeatureFlags.newFeature.value: FeatureFlag(
+            key: FeatureFlags.newFeature.value,
+            value: true,
+            source: FeatureFlagSource.remoteConfig,
+          ),
+        };
         when(
           () => mockRepository.getFlags(any()),
-        ).thenAnswer((_) async => resultFailure);
+        ).thenAnswer((_) async => Success(flags));
 
         // Act
         final result = await manager.getFlags([
@@ -209,8 +244,12 @@ void main() {
         ]);
 
         // Assert
-        expect(result, isA<Map<String, bool>>());
-        expect(result, isEmpty);
+        expect(result.length, 2);
+        expect(result[FeatureFlags.newFeature.value], isTrue);
+        expect(
+          result[FeatureFlags.darkMode.value],
+          FeatureFlags.darkMode.defaultValue,
+        );
       });
 
       test('should handle empty list of keys', () async {

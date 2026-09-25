@@ -39,12 +39,24 @@ class FeatureFlagsManager {
   }
 
   /// Get multiple feature flags
+  ///
+  /// Every requested key is present in the result. A key the repository did
+  /// not return, and every key when the whole lookup fails, falls back to
+  /// [FeatureFlagKey.defaultValue] - the same fallback [isEnabled] uses.
+  /// Returning an empty map on failure made the same flag read `true`
+  /// through [isEnabled] and `false` through this method.
   Future<Map<String, bool>> getFlags(List<FeatureFlagKey> keys) async {
+    final defaults = <String, bool>{
+      for (final key in keys) key.value: key.defaultValue,
+    };
     final flagKeys = keys.map((k) => k.value).toList();
     final result = await _repository.getFlags(flagKeys);
     return result.when(
-      success: (flags) => flags.map((k, v) => MapEntry(k, v.value)),
-      failureCallback: (_) => <String, bool>{},
+      success: (flags) => <String, bool>{
+        ...defaults,
+        ...flags.map((k, v) => MapEntry(k, v.value)),
+      },
+      failureCallback: (_) => defaults,
     );
   }
 

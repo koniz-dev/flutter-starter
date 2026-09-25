@@ -8,6 +8,11 @@
 /// - Error handling (all layers)
 ///
 /// These examples show best practices for structured logging with context.
+///
+/// Every identifier that reaches a log line goes through [maskIdentifier]
+/// first. Logs are persisted and shipped to aggregators, so a raw user id in
+/// a log line is a raw user id in a third-party system - which is exactly
+/// what these examples used to demonstrate while claiming to sanitize.
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +21,17 @@ import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+
+/// Mask an identifier before it reaches a log line.
+///
+/// Keeps the first two characters so entries for the same subject can still
+/// be correlated, and replaces the rest. An identifier shorter than four
+/// characters is masked entirely.
+String maskIdentifier(String value) {
+  if (value.isEmpty) return '';
+  if (value.length < 4) return '*' * value.length;
+  return '${value.substring(0, 2)}${'*' * (value.length - 2)}';
+}
 
 // ============================================================================
 // Example 1: Logging in Use Cases (Domain Layer)
@@ -44,7 +60,7 @@ class ExampleUseCase {
     loggingService.info(
       'ExampleUseCase: Starting execution',
       context: {
-        'userId': userId,
+        'userId': maskIdentifier(userId),
         'timestamp': DateTime.now().toIso8601String(),
       },
     );
@@ -56,7 +72,10 @@ class ExampleUseCase {
       // Log success
       loggingService.info(
         'ExampleUseCase: Execution successful',
-        context: {'userId': userId, 'resultLength': result.length},
+        context: {
+          'userId': maskIdentifier(userId),
+          'resultLength': result.length,
+        },
       );
 
       return Success(result);
@@ -64,7 +83,10 @@ class ExampleUseCase {
       // Log error with full context
       loggingService.error(
         'ExampleUseCase: Execution failed',
-        context: {'userId': userId, 'errorType': e.runtimeType.toString()},
+        context: {
+          'userId': maskIdentifier(userId),
+          'errorType': e.runtimeType.toString(),
+        },
         error: e,
         stackTrace: stackTrace,
       );
@@ -115,7 +137,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
     // Log data source operation
     loggingService.debug(
       'Repository: Fetching data from remote source',
-      context: {'userId': userId, 'dataSource': 'remote'},
+      context: {'userId': maskIdentifier(userId), 'dataSource': 'remote'},
     );
 
     try {
@@ -124,7 +146,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
       // Log successful data retrieval
       loggingService.debug(
         'Repository: Data retrieved successfully',
-        context: {'userId': userId, 'dataSize': data.length},
+        context: {'userId': maskIdentifier(userId), 'dataSize': data.length},
       );
 
       return data;
@@ -132,7 +154,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
       // Log repository error
       loggingService.error(
         'Repository: Failed to fetch data',
-        context: {'userId': userId, 'dataSource': 'remote'},
+        context: {'userId': maskIdentifier(userId), 'dataSource': 'remote'},
         error: e,
         stackTrace: stackTrace,
       );
@@ -145,7 +167,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
   Future<void> saveData(String userId, String data) async {
     loggingService.debug(
       'Repository: Saving data',
-      context: {'userId': userId},
+      context: {'userId': maskIdentifier(userId)},
     );
     // Implementation would go here
   }
@@ -154,7 +176,7 @@ class ExampleRepositoryImpl implements ExampleRepository {
   Future<String> deleteData(String userId) async {
     loggingService.debug(
       'Repository: Deleting data',
-      context: {'userId': userId},
+      context: {'userId': maskIdentifier(userId)},
     );
     // Implementation would go here
     return '';
@@ -203,9 +225,9 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
     loggingService.debug(
       'API: Making request to fetch data',
       context: {
-        'endpoint': '/users/$userId/data',
+        'endpoint': '/users/${maskIdentifier(userId)}/data',
         'method': 'GET',
-        'userId': userId,
+        'userId': maskIdentifier(userId),
       },
     );
 
@@ -216,7 +238,7 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
       loggingService.info(
         'API: Request successful',
         context: {
-          'endpoint': '/users/$userId/data',
+          'endpoint': '/users/${maskIdentifier(userId)}/data',
           'statusCode': response.statusCode,
           'responseSize': response.data?.toString().length ?? 0,
         },
@@ -227,7 +249,10 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
       // Log API error
       loggingService.error(
         'API: Request failed',
-        context: {'endpoint': '/users/$userId/data', 'method': 'GET'},
+        context: {
+          'endpoint': '/users/${maskIdentifier(userId)}/data',
+          'method': 'GET',
+        },
         error: e,
         stackTrace: stackTrace,
       );
@@ -241,9 +266,9 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
     loggingService.debug(
       'API: Making request to update data',
       context: {
-        'endpoint': '/users/$userId/data',
+        'endpoint': '/users/${maskIdentifier(userId)}/data',
         'method': 'PUT',
-        'userId': userId,
+        'userId': maskIdentifier(userId),
       },
     );
     // Implementation would go here
@@ -255,9 +280,9 @@ class ExampleRemoteDataSourceImpl implements ExampleRemoteDataSource {
     loggingService.debug(
       'API: Making request to delete data',
       context: {
-        'endpoint': '/users/$userId/data',
+        'endpoint': '/users/${maskIdentifier(userId)}/data',
         'method': 'DELETE',
-        'userId': userId,
+        'userId': maskIdentifier(userId),
       },
     );
     // Implementation would go here

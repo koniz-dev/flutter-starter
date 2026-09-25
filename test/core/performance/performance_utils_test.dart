@@ -94,6 +94,50 @@ void main() {
           ),
         ).called(1);
       });
+
+      // The numeric-id rule used to run before the UUID rule, so any UUID
+      // beginning with a digit - roughly 62% of v4 UUIDs - was rewritten to
+      // '/:ide8400-e29b-...', unique per UUID, and blew through the
+      // backend's cap on distinct custom traces.
+      const pathsToTraceNames = <String, String>{
+        '/users/550e8400-e29b-41d4-a716-446655440000': 'api_get_/users/:uuid',
+        '/users/f47ac10b-58cc-4372-a567-0e02b2c3d479': 'api_get_/users/:uuid',
+        '/users/550e8400-e29b-41d4-a716-446655440000/orders':
+            'api_get_/users/:uuid/orders',
+        '/users/123': 'api_get_/users/:id',
+        '/users/123/orders/456': 'api_get_/users/:id/orders/:id',
+        '/files/abc123def456ghi789jkl': 'api_get_/files/:token',
+        '/api/v1/user-profile-settings':
+            'api_get_/api/v1/user-profile-settings',
+        '/users/123?expand=all': 'api_get_/users/:id',
+      };
+
+      pathsToTraceNames.forEach((requestPath, traceName) {
+        test('sanitizes $requestPath to $traceName', () async {
+          when(
+            () => mockService.measureOperation<String>(
+              name: any(named: 'name'),
+              operation: any(named: 'operation'),
+              attributes: any(named: 'attributes'),
+            ),
+          ).thenAnswer((_) async => 'success');
+
+          await PerformanceUtils.measureApiCall<String>(
+            service: mockService,
+            method: 'GET',
+            path: requestPath,
+            call: () async => 'success',
+          );
+
+          verify(
+            () => mockService.measureOperation<String>(
+              name: traceName,
+              operation: any(named: 'operation'),
+              attributes: any(named: 'attributes'),
+            ),
+          ).called(1);
+        });
+      });
     });
 
     group('measureDatabaseQuery', () {

@@ -428,5 +428,120 @@ void main() {
       final controller = ScrollController();
       expect(controller.scrollRatio, 0);
     });
+
+    testWidgets('a list that fits on screen counts as at the end', (
+      tester,
+    ) async {
+      // scrollRatio returned 0 when maxScrollExtent == 0, so isNearEnd and
+      // isAtEnd were never true for a short list and pagination stalled on
+      // the first page.
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ListView(
+              controller: controller,
+              children: const [SizedBox(height: 10, child: Text('only'))],
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(controller.position.maxScrollExtent, 0);
+      expect(controller.scrollRatio, 1.0);
+      expect(controller.isNearEnd, isTrue);
+      expect(controller.isAtEnd, isTrue);
+    });
+  });
+
+  group('PaginationHelper config plumbing', () {
+    test('a 0-indexed API starts at page 0, not page 1', () {
+      // PaginationConfig.initialPage was never read; _state hardcoded
+      // currentPage: 1, so a 0-indexed API never fetched page 0.
+      final requested = <int>[];
+      final helper = PaginationHelper<int>(
+        config: const PaginationConfig(initialPage: 0),
+        loadPage: (page) async {
+          requested.add(page);
+          return (<int>[page], true);
+        },
+      );
+
+      expect(helper.state.currentPage, 0);
+      return helper.loadNextPage().then((_) {
+        expect(requested, [0]);
+        expect(helper.state.currentPage, 1);
+      });
+    });
+
+    test('reset returns to the configured initial page', () async {
+      final helper = PaginationHelper<int>(
+        config: const PaginationConfig(initialPage: 0),
+        loadPage: (page) async => (<int>[page], true),
+      );
+
+      await helper.loadNextPage();
+      await helper.loadNextPage();
+      expect(helper.state.currentPage, 2);
+
+      helper.reset();
+      expect(helper.state.currentPage, 0);
+      expect(helper.state.items, isEmpty);
+      expect(helper.state.hasMore, isTrue);
+    });
+
+    test('pageSize is readable, so loadPage can size its request', () {
+      final helper = PaginationHelper<int>(
+        config: const PaginationConfig(pageSize: 42),
+        loadPage: (page) async => (<int>[], false),
+      );
+
+      expect(helper.pageSize, 42);
+      expect(helper.config.pageSize, 42);
+      expect(helper.config.initialPage, 1);
+    });
+
+    test('an error is cleared by the next successful page', () async {
+      var shouldFail = true;
+      final helper = PaginationHelper<int>(
+        loadPage: (page) async {
+          if (shouldFail) {
+            shouldFail = false;
+            throw Exception('network down');
+          }
+          return (<int>[page], true);
+        },
+      );
+
+      await helper.loadNextPage();
+      expect(helper.state.error, isNotNull);
+
+      await helper.loadNextPage();
+      expect(
+        helper.state.error,
+        isNull,
+        reason:
+            'copyWith used `error ?? this.error`, so an error set once '
+            'could never be cleared',
+      );
+      expect(helper.state.items, [1]);
+    });
+  });
+
+  group('PaginationState.copyWith', () {
+    test('clearError drops an error that error: null cannot', () {
+      final withError = PaginationState<int>(
+        items: const [],
+        currentPage: 1,
+        hasMore: true,
+      ).setError('boom');
+
+      expect(withError.copyWith().error, 'boom');
+      expect(withError.copyWith(error: null).error, 'boom');
+      expect(withError.copyWith(clearError: true).error, isNull);
+    });
   });
 }

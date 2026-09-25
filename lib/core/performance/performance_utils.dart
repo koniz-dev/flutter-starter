@@ -127,15 +127,38 @@ class PerformanceUtils {
     );
   }
 
+  /// A whole path segment shaped like an RFC 4122 UUID.
+  static final RegExp _uuidSegment = RegExp(
+    '/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}'
+    r'-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(?=/|$)',
+  );
+
+  /// A whole path segment long enough to be an opaque token.
+  ///
+  /// Deliberately excludes `-` and `_` so a long but human-readable route
+  /// segment such as `/user-profile-settings` is left alone.
+  static final RegExp _tokenSegment = RegExp(r'/[a-zA-Z0-9]{20,}(?=/|$)');
+
+  /// A whole path segment that is only digits.
+  static final RegExp _numericIdSegment = RegExp(r'/\d+(?=/|$)');
+
   /// Sanitize path to avoid creating too many unique traces
+  ///
+  /// The order matters. Applying the numeric-id rule first mangled any UUID
+  /// that begins with a digit - roughly 62% of v4 UUIDs - into
+  /// `/:ide8400-e29b-...`, which is still unique per UUID and so still blew
+  /// through the backend's cap on distinct custom traces. Most specific
+  /// pattern first: UUID, then opaque token, then bare numeric id.
+  ///
+  /// Every pattern matches a **whole** segment, so a partial match inside a
+  /// longer segment cannot rewrite it.
   static String _sanitizePath(String path) {
     // Remove query parameters
     final withoutQuery = path.split('?').first;
-    // Replace common ID patterns with placeholders
     return withoutQuery
-        .replaceAll(RegExp(r'/\d+'), '/:id')
-        .replaceAll(RegExp('/[a-f0-9-]{36}'), '/:uuid')
-        .replaceAll(RegExp('/[a-zA-Z0-9]{20,}'), '/:token');
+        .replaceAll(_uuidSegment, '/:uuid')
+        .replaceAll(_tokenSegment, '/:token')
+        .replaceAll(_numericIdSegment, '/:id');
   }
 }
 

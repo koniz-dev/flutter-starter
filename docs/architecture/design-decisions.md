@@ -26,6 +26,7 @@ Each decision includes problem statements, alternatives considered, chosen solut
 - [HTTP Client: Dio](#http-client-dio)
 - [Comparison Tables](#comparison-tables)
 - [Migration Guides](#migration-guides)
+- [Utilities with no sample call site](#utilities-with-no-sample-call-site)
 
 ---
 
@@ -1174,6 +1175,75 @@ See the migration guidance in `docs/guides/migration/README.md` and apply equiva
      (user) => navigateToHome(),
    );
    ```
+
+---
+
+## Utilities with no sample call site
+
+### Problem statement
+
+Roughly a thousand lines of `lib/core/` have full unit-test coverage and zero
+call sites anywhere else in the repository: `Debouncer` and `Throttler`,
+`PaginationHelper`, `LazyLoader`, `DateFormatter`, `ProviderDisposal`,
+`PerformanceUtils`, and the three performance mixins
+(`PerformanceRepositoryMixin`, `PerformanceUseCaseMixin`,
+`PerformanceScreenMixin`). Confirm the list rather than trusting it:
+
+```bash
+for name in Debouncer Throttler PaginationHelper LazyLoader DateFormatter \
+  ProviderDisposal PerformanceUtils; do
+  echo "$name: $(grep -rl "$name" lib/ | tr '\n' ' ')"
+done
+```
+
+Adopters reach for exactly these first, and a green coverage badge on code no
+running screen exercises says nothing about whether it works. Most of the
+defects fixed in koniz-dev/flutter-starter#63 were in this set, and every one
+of them had a passing test alongside it - several tests actually asserted the
+buggy behavior as correct.
+
+### Decision
+
+**Keep them, as adopter-facing building blocks, and make their tests mean
+something.** They are not dead code in a template the way they would be in an
+application: shipping a starter without a debouncer or a pagination helper
+just moves the work to every adopter. What is not acceptable is shipping them
+untested-in-practice behind coverage that implies otherwise.
+
+Rejected alternatives:
+
+- **Delete them.** Removes the defect surface, and removes the reason an
+  adopter would pick a starter over `flutter create`. It is also a breaking
+  change for anyone already on the template.
+- **Wire them into the sample features.** This is the strongest option for
+  `PaginationHelper` and `Debouncer` - a paginated, debounce-searched tasks
+  list would exercise both for real. It belongs to `epic:feature-tasks`,
+  not to the `lib/core/` change that fixed the defects, so it is tracked
+  separately rather than smuggled in.
+
+### What was done
+
+1. Every defect listed in koniz-dev/flutter-starter#63 was fixed, with a
+   regression test that fails against the old behavior.
+2. The tests that asserted buggy behavior were corrected rather than deleted -
+   `validators_test.dart` asserted `isTrue` for five malformed addresses, and
+   `performance_repository_mixin_test.dart` asserted a trace was started
+   without ever checking it was stopped.
+3. Genuinely harmful dead code was removed rather than kept:
+   `ProviderDisposal.dispose` no longer clears the **global** image cache
+   (it evicted images still mounted on the screen underneath), and
+   `registerProviderSubscription` / `WidgetRef.watchWithDisposal` are gone -
+   they were documented no-ops carrying the only two
+   `// ignore: argument_type_not_assignable` comments in `lib/`, which
+   suppress a compile-time **error** rather than a lint.
+4. Wiring `PaginationHelper` and `Debouncer` into the tasks sample is filed
+   separately under `epic:feature-tasks`.
+
+### When to reconsider
+
+If a utility is still uncalled by the sample features two releases from now
+and no adopter has reported using it, delete it. "Provided for adopters" is
+only a defence while somebody could plausibly be the adopter.
 
 ---
 

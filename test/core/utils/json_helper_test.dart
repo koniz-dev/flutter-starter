@@ -560,5 +560,55 @@ void main() {
         expect(result, isEmpty);
       });
     });
+
+    group('non-finite and non-Exception failures', () {
+      test('getInt returns null for a non-finite number', () {
+        // jsonDecode('{"a":1e999}') yields double.infinity, and
+        // Infinity.toInt() throws UnsupportedError - an Error, so no
+        // `on Exception` handler upstream would have caught it.
+        final decoded = JsonHelper.decode('{"a":1e999}')! as Map;
+        final map = Map<String, dynamic>.from(decoded);
+        expect(map['a'], double.infinity);
+        expect(JsonHelper.getInt(map, 'a'), isNull);
+
+        expect(JsonHelper.getInt({'a': double.nan}, 'a'), isNull);
+        expect(
+          JsonHelper.getInt({'a': double.negativeInfinity}, 'a'),
+          isNull,
+        );
+      });
+
+      test('getInt still converts finite numbers', () {
+        expect(JsonHelper.getInt({'a': 3.7}, 'a'), 3);
+        expect(JsonHelper.getInt({'a': 42}, 'a'), 42);
+        expect(JsonHelper.getInt({'a': '42'}, 'a'), 42);
+      });
+
+      test('getListOf returns null when the converter raises a TypeError', () {
+        // A failed cast inside the converter raises TypeError, an Error, not
+        // an Exception.
+        final result = JsonHelper.getListOf<int>(
+          {
+            'items': <dynamic>[1, 'not an int', 3],
+          },
+          'items',
+          (value) => value as int,
+        );
+
+        expect(result, isNull);
+      });
+
+      test('getListOf still converts a well-formed list', () {
+        final result = JsonHelper.getListOf<int>(
+          {
+            'items': <dynamic>[1, 2, 3],
+          },
+          'items',
+          (value) => value as int,
+        );
+
+        expect(result, [1, 2, 3]);
+      });
+    });
   });
 }

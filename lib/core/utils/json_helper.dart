@@ -79,10 +79,18 @@ class JsonHelper {
   }
 
   /// Safely get an int value from a Map by key
+  ///
+  /// Returns null for a non-finite number. `jsonDecode('{"a":1e999}')`
+  /// yields `double.infinity`, and `Infinity.toInt()` throws
+  /// `UnsupportedError` - an Error, so no `on Exception` handler upstream
+  /// would have caught it.
   static int? getInt(Map<String, dynamic>? map, String key) {
     final value = map?[key];
     if (value is int) return value;
-    if (value is num) return value.toInt();
+    if (value is num) {
+      if (!value.isFinite) return null;
+      return value.toInt();
+    }
     if (value is String) return int.tryParse(value);
     return null;
   }
@@ -121,7 +129,9 @@ class JsonHelper {
     if (list == null) return null;
     try {
       return list.map(converter).toList();
-    } on Exception {
+    } on Object {
+      // Object, not Exception: a failed cast inside `converter` raises
+      // TypeError, which is an Error.
       return null;
     }
   }

@@ -17,12 +17,16 @@ import 'package:logger/logger.dart';
 class CrashlyticsOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
-    // Only send WARNING or ERROR logs to Crashlytics
-    if (event.level == Level.error || event.level == Level.warning) {
+    // Only send WARNING, ERROR or FATAL logs to Crashlytics.
+    // Level.fatal was missing, so logger.f(...) - the highest severity the
+    // logger offers - never reached Crashlytics at all.
+    if (event.level == Level.fatal ||
+        event.level == Level.error ||
+        event.level == Level.warning) {
       // Uncomment the code below to fully send logs to crashlytics:
 
       /*
-      final isFatal = event.level == Level.error;
+      final isFatal = event.level == Level.fatal;
       final message = event.lines.join('\n');
 
       FirebaseCrashlytics.instance.recordError(
