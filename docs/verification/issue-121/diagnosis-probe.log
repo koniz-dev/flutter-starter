@@ -1,0 +1,21 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a12fc087932a3a614/test/core/network/interceptors/zz_diagnosis_probe_test.dart
+00:00 +0: stress: N concurrent 401s inside one held-open refresh window
+200 trials x 10 concurrent 401s -> distinct refreshesAdmittedInWindow={1} distinct tokenWritesInWindow={0}
+00:03 +1: sweep: turns granted before releasing the refresh
+--- sweep ---
+turns= -1 refreshCallsAtRelease=1 refreshCallsFinal=3 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  0 refreshCallsAtRelease=1 refreshCallsFinal=3 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  1 refreshCallsAtRelease=1 refreshCallsFinal=3 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  2 refreshCallsAtRelease=1 refreshCallsFinal=2 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  3 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  4 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  5 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  6 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns=  8 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns= 12 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns= 16 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns= 32 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+turns= 64 refreshCallsAtRelease=1 refreshCallsFinal=1 adapterHits=3 setAccessTokenCalls=0 errors=3
+00:03 +2: repeat: 200 trials at 32 turns, guard must admit exactly one
+200 trials at turns=32 -> distinct refreshCallsAtRelease={1}
+00:05 +3: All tests passed!

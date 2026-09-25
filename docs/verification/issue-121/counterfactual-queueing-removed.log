@@ -1,0 +1,30 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a12fc087932a3a614/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+00:00 +0: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+00:00 +0 -1: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete [E]
+  Expected: <1>
+    Actual: <3>
+  the guard admitted a second refresh while one was in flight
+  
+  package:matcher                                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18                             expect
+  test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart 237:9  main.<fn>.<fn>
+  
+00:00 +0 -1: AuthInterceptor 401 refresh queue three concurrent 401s with a succeeding refresh: all three replay through a single retry client
+00:00 +0 -2: AuthInterceptor 401 refresh queue three concurrent 401s with a succeeding refresh: all three replay through a single retry client [E]
+  Expected: <1>
+    Actual: <3>
+  the guard admitted a second refresh while one was in flight
+  
+  package:matcher                                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18                             expect
+  test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart 298:9  main.<fn>.<fn>
+  
+00:00 +0 -2: AuthInterceptor 401 refresh queue an Error thrown by the refresh does not wedge the interceptor
+00:00 +1 -2: AuthInterceptor 401 refresh queue reuses one retry client and closes it on dispose
+00:00 +2 -2: AuthInterceptor 401 refresh queue cancelling the original request aborts the replay
+00:00 +3 -2: AuthInterceptor 401 refresh queue propagates the original cancel token to the replay request
+00:00 +4 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a12fc087932a3a614/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a12fc087932a3a614/test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart: AuthInterceptor 401 refresh queue three concurrent 401s with a succeeding refresh: all three replay through a single retry client

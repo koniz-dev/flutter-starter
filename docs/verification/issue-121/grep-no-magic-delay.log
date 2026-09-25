@@ -1,0 +1,20 @@
+# Criterion 5: no Future.delayed with a magic millisecond constant is
+# used as a synchronisation mechanism in test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+# date: Fri Sep 25 13:16:17 UTC 2026
+
+$ grep -n "Future.delayed" test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+11:// `Future.delayed(Duration(milliseconds: 50))`; under full-suite load that
+
+$ grep -n "milliseconds\|seconds\|Duration" test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+11:// `Future.delayed(Duration(milliseconds: 50))`; under full-suite load that
+109:/// A future that must not outlive [seconds]; a hang fails the test instead of
+115:Future<T> _within<T>(Future<T> future, {int seconds = 5}) {
+116:  return future.timeout(Duration(seconds: seconds));
+
+# The only Duration left is the _within deadline (a hang detector that
+# no assertion depends on) and the prose in the file header describing
+# the delay that was removed. Compare with origin/main:
+
+$ git show origin/main:test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart | grep -n "Future.*delayed"
+163:        await Future<void>.delayed(const Duration(milliseconds: 50));
+211:        await Future<void>.delayed(const Duration(milliseconds: 50));
