@@ -58,12 +58,13 @@ Three things in that table settle the question.
    backend, two racing to write `_tokenStore.setAccessToken`" - does not occur.
 
 Corroborating code reading, in
-`lib/core/network/interceptors/auth_interceptor.dart` (`_handle401Error`, lines
-239-258): the `if (_isRefreshing)` test and the `_isRefreshing = true`
-assignment are separated by no `await` and no other suspension point, so in
-Dart's single-threaded event loop the check-and-set is atomic. The only mutable
-state involved is the instance field; the class's sole `static` member is
-`static const List<String> _excludedEndpoints` (line 188). There is no
+`lib/core/network/interceptors/auth_interceptor.dart` at `cd91303`
+(`_handle401Error`): the `if (_isRefreshing)` test on line 276 and the
+`_isRefreshing = true` assignment on line 281 are separated by no `await` and no
+other suspension point, so in Dart's single-threaded event loop the check-and-set
+is atomic. The only mutable state involved is the instance field on line 205;
+the class's sole `static` member is
+`static const List<String> _excludedEndpoints` (line 211). There is no
 process-wide mutable state, and each test constructs its own interceptor, so
 the cross-test-leakage hypothesis raised on #134 is also ruled out.
 
@@ -97,7 +98,7 @@ property itself rather than a downstream consequence of it.
 | 1. No wall-clock delay establishes ordering; the queued requests are *observed* to have reached the interceptor | PASS | [`auth_interceptor_refresh_queue_test.dart`](../../../test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart) - `_CountingAuthInterceptor` / `await _within(interceptor.seen(3))`; both sleeps gone, see `grep-no-magic-delay.log` |
 | 2. The succeeding-refresh sibling gets the same treatment | PASS | Same file, second test: identical `seen(3)` rendezvous plus a pre-release `retryAdapter.hits == 0` assertion |
 | 3. The test still fails if the interceptor stops queueing | PASS | [`counterfactual-queueing-removed.log`](counterfactual-queueing-removed.log) - with `if (_isRefreshing) return _queueRequest(...)` commented out in `lib/`, **both** tests fail with `Expected: <1> Actual: <3>`, deterministically. The patch was reverted immediately; `lib/` is unchanged in this PR. |
-| 4. 20 consecutive runs of the file pass, and `audit_template.sh` exits 0 | PASS | [`repeat-20x-under-load.log`](repeat-20x-under-load.log) (20/20 PASS under load averages 46-131 on a 6-CPU host) and [`audit-run1.log`](audit-run1.log), [`audit-run2.log`](audit-run2.log), [`audit-run3.log`](audit-run3.log) (3/3 exit 0, 2645 tests) |
+| 4. 20 consecutive runs of the file pass, and `audit_template.sh` exits 0 | PASS | [`repeat-20x-under-load.log`](repeat-20x-under-load.log) (20/20 PASS under load averages 46-131 on a 6-CPU host) and [`audit-run1.log`](audit-run1.log), [`audit-run2.log`](audit-run2.log), [`audit-run3.log`](audit-run3.log) (3/3 exit 0, 2645 tests). On merged `main`: [`acceptance-refresh-queue-named.log`](acceptance-refresh-queue-named.log) (all six tests named, exit 0), [`format.log`](format.log), [`analyze.log`](analyze.log), [`tests.log`](tests.log) (2688 passed, 8 skipped, exit 0), [`goldens.log`](goldens.log) |
 | 5. No `Future.delayed` with a magic millisecond constant remains as a synchronisation mechanism | PASS | [`grep-no-magic-delay.log`](grep-no-magic-delay.log) - the only surviving `Duration` in the file is the `_within` deadline, documented as a hang detector no assertion depends on |
 
 ## Extra: the flake caught in the act
@@ -130,10 +131,30 @@ flutter test test/core/network/interceptors/zz_probe_test.dart
 rm test/core/network/interceptors/zz_probe_test.dart
 ```
 
+## Acceptance harness
+
+`./scripts/test/run_acceptance.sh 121` was run against merged `main` at
+`cd91303`, which contains the fix (`7621ac5`, PR #165). All gates passed:
+`format.log`, `analyze.log`, `tests.log` and `goldens.log` each end `exit: 0`.
+
+`tests.log` uses `--reporter compact`, which overwrites its status line, so it
+records counts (2688 passed, 8 skipped) but no test names.
+`acceptance-refresh-queue-named.log` re-runs the changed file with
+`--reporter expanded` on the same commit so all six tests are named
+individually.
+
 ## Not evidence for this issue
 
 This issue is not visual. `run_acceptance.sh` copies every standing golden PNG
 under `test/acceptance/goldens/` into this directory; those screenshots are of
-screens this change never touches and no criterion above rests on them. See
-`goldens-checksums.txt` for proof the run left them byte-identical to the
-committed goldens.
+screens this change never touches and **no criterion above rests on them**.
+All twelve were opened and inspected by the closing session anyway: they are
+the login screen (with and without an error row), the home screen, the empty
+and error list states, the startup-failure screen, and the light/dark text-style
+sheets, every glyph an opaque Ahem block as expected. Nothing in them bears on a
+test-synchronisation change.
+
+`goldens-checksums.txt` proves the run left them byte-identical to the committed
+goldens: all twelve copies match a `test/acceptance/goldens/*.png` hash exactly
+(eight distinct images; four of the twelve are duplicates of another golden's
+bytes, which is why the same hash appears more than once).
