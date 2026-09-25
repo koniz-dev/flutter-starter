@@ -26,7 +26,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// `runApp` was never called, and the user got a black window.
 ///
 /// So every test here drives reachability, not rendering:
-/// * the provider is read through `app.createStartupContainer()`, the very
+/// * the provider is read through `app.createAppContainer()`, the very
 ///   function `main()` calls, so a regression in main.dart's container fails
 ///   these tests rather than being papered over by a hand-rolled container;
 /// * the end-to-end group calls the real `app.main()` and asserts on what it
@@ -183,7 +183,7 @@ void main() {
         // No secure backend: the version stamp cannot persist, so
         // MigrationExecutor throws MigrationExecutionException rather than
         // returning a success the next launch would contradict.
-        final container = app.createStartupContainer();
+        final container = app.createAppContainer();
         addTearDown(container.dispose);
 
         await expectLater(
@@ -208,7 +208,7 @@ void main() {
       });
       installSecureBackend(<String, String>{});
 
-      final container = app.createStartupContainer();
+      final container = app.createAppContainer();
       addTearDown(container.dispose);
 
       await expectLater(
@@ -222,7 +222,7 @@ void main() {
     test('a plain Exception from storage init is not retried away', () async {
       // Criterion 1 in its barest form: an `Exception`, not an `Error`, which
       // is precisely the class `ProviderContainer.defaultRetry` keeps retrying.
-      final container = app.createStartupContainer(
+      final container = app.createAppContainer(
         overrides: [
           storageInitializationProvider.overrideWith(
             (ref) async => throw Exception(_boom),
@@ -249,7 +249,7 @@ void main() {
       // on today's main.dart. Whatever makes it throw, the startup container
       // has to let that surface rather than park it in an eternal loading
       // state, so the policy is asserted here rather than assumed.
-      final container = app.createStartupContainer(
+      final container = app.createAppContainer(
         overrides: [
           sessionRestorationProvider.overrideWith(
             (ref) async => throw Exception(_boom),
@@ -275,7 +275,7 @@ void main() {
       // the same container `main()` builds, resolves.
       installSecureBackend(<String, String>{});
 
-      final container = app.createStartupContainer();
+      final container = app.createAppContainer();
       addTearDown(container.dispose);
 
       await expectLater(

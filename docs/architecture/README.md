@@ -48,6 +48,7 @@ Notes:
 - **[Choose your stack](choose-your-stack.md)** - Default stack vs replacing implementations (Path A / Path B)
 - **[Architecture Overview](overview.md)** - Why Clean Architecture, benefits, trade-offs, when to use, and learning resources
 - **[Design Decisions](design-decisions.md)** - Detailed rationale for routing, state management, error handling, logging, storage, and HTTP client choices
+- **[Riverpod retry policy](riverpod-retry-policy.md)** - Why Riverpod auto-retry is disabled for the whole app, what still retries, and how to opt one provider back in
 - **[ADRs](adr/README.md)** - Decoupling decisions for network, storage, navigation, theme tokens, and state boundaries
 - **[Contracts Map](contracts-map.md)** - Contract files, swap table, optional modules, adapter placement
 - **[Migration Guides](migrations/README.md)** - Incremental rollout plans, quality gates, and risk controls

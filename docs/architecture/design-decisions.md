@@ -260,6 +260,13 @@ class AuthNotifier extends Notifier<AuthState> {
 }
 ```
 
+**One default this template overrides:** Riverpod 3 retries a failed provider
+automatically, and `lib/main.dart` turns that off for the entire app by passing
+a never-retry `Retry` to the one `ProviderContainer`. Read
+[Riverpod retry policy](riverpod-retry-policy.md) before adding a provider that
+can fail - it explains why, what still retries, and how to opt a single
+provider back in.
+
 ### Trade-offs
 
 **Advantages:**

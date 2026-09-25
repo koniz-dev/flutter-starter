@@ -331,6 +331,9 @@ onPressed: () {
 - Use `ref.watch` for reactive access (in build methods, providers)
 - Use `Notifier` for complex state that changes over time
 - Use `FutureProvider` for async data that loads once
+- A failing provider is **not** retried: this template disables Riverpod
+  auto-retry process-wide. If your provider needs retry, set `retry:` on that
+  provider - see [Riverpod retry policy](../../architecture/riverpod-retry-policy.md)
 
 See [Auth Provider Example](../../api/features/auth/providers.md) for a complete example.
 

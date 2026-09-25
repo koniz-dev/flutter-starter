@@ -546,6 +546,11 @@ Replays transient failures with exponential backoff plus jitter.
 
 **Location:** `lib/core/network/interceptors/retry_interceptor.dart`
 
+**Scope:** Dio traffic only. This is the *only* automatic retry in the
+template - Riverpod's provider-level auto-retry is disabled process-wide, so a
+provider doing non-Dio I/O gets no retry from anywhere. See
+[Riverpod retry policy](../../architecture/riverpod-retry-policy.md).
+
 ### Constructor
 
 <!-- signature: lib/core/network/interceptors/retry_interceptor.dart RetryInterceptor -->
