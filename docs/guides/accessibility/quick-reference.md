@@ -201,6 +201,10 @@ AccessibilityHelpers.meetsContrastRatioAA(foreground, background)
 // Get accessible text color
 AccessibilityHelpers.getAccessibleTextColor(background)
 
+// Alpha: a translucent `foreground` is composited over `background` before
+// being measured, so the ratio is the one the user sees. A translucent
+// `background` throws ArgumentError - pass the opaque colour painted below.
+
 // Announce to screen readers
 FocusAnnouncer.announce(context, 'Message')
 FocusAnnouncer.announcePageChange(context, 'Settings')
