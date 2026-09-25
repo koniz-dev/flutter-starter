@@ -1,0 +1,30 @@
+PODS:
+  - CocoaAsyncSocket (7.6.5)
+  - FlutterMacOS (1.0.0)
+  - patrol (0.0.1):
+    - CocoaAsyncSocket (~> 7.6)
+    - Flutter
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - patrol (from `Flutter/ephemeral/.symlinks/plugins/patrol/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - CocoaAsyncSocket
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  patrol:
+    :path: Flutter/ephemeral/.symlinks/plugins/patrol/darwin
+
+SPEC CHECKSUMS:
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  FlutterMacOS: c232990155153907050900a2e175c7773903ba4e
+  patrol: 5df5d241d7f95f0df12a6906bbf45acb43a1e537
+
+PODFILE CHECKSUM: 1e95c36afbfd1cb6423ceca4de7a8e1b256fb6ac
+
+COCOAPODS: 1.17.0

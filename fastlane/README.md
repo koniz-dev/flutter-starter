@@ -44,27 +44,27 @@ ios/fastlane/
 #### Build App Bundle
 ```bash
 cd fastlane
-fastlane android build_bundle flavor:production environment:production
+fastlane android build_bundle environment:production
 ```
 
 #### Upload to Play Store
 ```bash
 # Internal track
-fastlane android upload_internal flavor:production environment:staging
+fastlane android upload_internal environment:staging
 
 # Alpha track
-fastlane android upload_alpha flavor:production environment:staging
+fastlane android upload_alpha environment:staging
 
 # Beta track
-fastlane android upload_beta flavor:production environment:staging
+fastlane android upload_beta environment:staging
 
 # Production track
-fastlane android upload_production flavor:production environment:production
+fastlane android upload_production environment:production
 ```
 
 #### Custom track
 ```bash
-fastlane android upload flavor:production environment:production track:beta
+fastlane android upload environment:production track:beta
 ```
 
 ### iOS Deployment
@@ -168,7 +168,6 @@ Fastlane lanes support environment-specific builds:
 ```bash
 # Android
 fastlane android upload_production \
-  flavor:production \
   environment:production \
   base_url:https://api.example.com
 

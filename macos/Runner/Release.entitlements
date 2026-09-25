@@ -4,5 +4,35 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
+	<!-- OUTBOUND network. `com.apple.security.network.server` (in
+	     DebugProfile.entitlements) is the INBOUND one, present only so the
+	     Flutter tool can attach to the running app. Without the client
+	     entitlement a sandboxed app launches normally and then fails every
+	     request in lib/core/network/ with
+	     "SocketException: Operation not permitted". -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<!-- KEYCHAIN SHARING - deliberately left commented out. Read before
+	     enabling.
+
+	     flutter_secure_storage_darwin, the backing store for SecureTokenStore,
+	     needs this capability or every write fails with
+	     errSecMissingEntitlement (-34018) and no token survives a restart.
+	     Measured on macOS: see docs/verification/issue-62/.
+
+	     It is a RESTRICTED entitlement. With it present - even as the empty
+	     array below - `flutter build macos` and `flutter run -d macos` fail on
+	     any machine without an Apple development certificate:
+
+	         error: "Runner" has entitlements that require signing with a
+	         development certificate. Enable development signing in the
+	         Signing & Capabilities editor.
+
+	     So: uncomment this in BOTH this file and DebugProfile.entitlements at
+	     the same time you configure signing for macOS, and not before.
+
+	<key>keychain-access-groups</key>
+	<array/>
+	-->
 </dict>
 </plist>

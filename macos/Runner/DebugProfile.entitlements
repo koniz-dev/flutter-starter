@@ -6,7 +6,22 @@
 	<true/>
 	<key>com.apple.security.cs.allow-jit</key>
 	<true/>
+	<!-- INBOUND. Present so the Flutter tool can attach to the running app. -->
 	<key>com.apple.security.network.server</key>
 	<true/>
+	<!-- OUTBOUND. Without it a sandboxed app launches normally and then fails
+	     every request in lib/core/network/ with
+	     "SocketException: Operation not permitted". -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<!-- KEYCHAIN SHARING - deliberately left commented out. See the longer note
+	     in Release.entitlements: it is required for flutter_secure_storage to
+	     work at all on macOS, and it is a RESTRICTED entitlement that makes
+	     every build fail without an Apple development certificate. Uncomment it
+	     here and in Release.entitlements together, when you set up signing. -->
+	<!--
+	<key>keychain-access-groups</key>
+	<array/>
+	-->
 </dict>
 </plist>
