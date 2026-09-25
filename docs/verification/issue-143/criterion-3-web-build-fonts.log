@@ -1,0 +1,49 @@
+Criterion 3 is conditional on a font being bundled. No font was
+bundled, so what this log shows is the *negative*: a release web
+build against merged main ships no app font, and the engine supplies
+its own Roboto over the network on web.
+
+$ flutter build web --release  # see build-web.log tail below
+Compiling lib/main.dart for the Web...                          
+Font asset "CupertinoIcons.ttf" was tree-shaken, reducing it from 257628 to 1472 bytes (99.4% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 9300 bytes (99.4% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Compiling lib/main.dart for the Web...                            199.3s
+✓ Built build/web
+Wasm dry run succeeded. Consider building and testing your application with the `--wasm` flag. See docs for more info: https://docs.flutter.dev/platform-integration/web/wasm
+Use --no-wasm-dry-run to disable these warnings.
+exit: 0
+
+$ tail -3 <build output>
+✓ Built build/web
+
+$ cat build/web/assets/FontManifest.json
+[{"family":"MaterialIcons","fonts":[{"asset":"fonts/MaterialIcons-Regular.otf"}]},{"family":"packages/cupertino_icons/CupertinoIcons","fonts":[{"asset":"packages/cupertino_icons/assets/CupertinoIcons.ttf"}]}]
+exit: 0
+
+$ find build/web/assets -name '*.ttf' -o -name '*.otf' -o -name '*.woff' -o -name '*.woff2'
+build/web/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
+build/web/assets/fonts/MaterialIcons-Regular.otf
+exit: 0
+
+$ grep -c 'Roboto' build/web/assets/FontManifest.json
+0
+exit: 1
+
+$ grep -o 'https://fonts.gstatic.com/s/' build/web/main.dart.js | sort -u
+https://fonts.gstatic.com/s/
+exit: 0
+
+$ grep -o 'roboto/v32/[A-Za-z0-9._-]*' build/web/main.dart.js | sort -u
+roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2
+exit: 0
+
+$ grep -rn 'fonts:' pubspec.yaml
+pubspec.yaml:188:  # fonts:
+pubspec.yaml:190:  #     fonts:
+pubspec.yaml:195:  #     fonts:
+exit: 0
+
+$ find . -name '*.ttf' -not -path './build/*' -not -path './.dart_tool/*'
+(no output)
+exit: 0
+
