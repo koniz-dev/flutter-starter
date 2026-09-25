@@ -1,0 +1,28 @@
+$ flutter test test/core/startup/startup_reachability_test.dart test/core/di/providers_test.dart --reporter compact
+
+Environment: test
+Debug Mode: true
+Release Mode: false
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+═══════════════════════════════════════════════════════════
+00:07 +48: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a12efd43fbec7a869/test/core/startup/startup_reachability_test.dart: ... MyApp to runApp, not the failure screen     
+00:07 +48: All tests passed!                                                                                                                                                                           
+exit: 0

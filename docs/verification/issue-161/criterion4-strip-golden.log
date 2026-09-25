@@ -1,0 +1,14 @@
+Criterion 4 - the tool/golden/stripped counterpart tracks lib/main.dart.
+
+$ diff tool/golden/stripped/lib/main.dart lib/main.dart
+
+(diff exit: 0; 0 and no output = the golden is byte-identical to lib/main.dart)
+
+$ gh pr checks 218   # the merged PR; strip-smoke runs all three variants
+
+Docs check	pass	24s	https://github.com/koniz-dev/flutter-starter/actions/runs/36149930438/job/108120328799	
+Issue refs	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/36149930393/job/108120329201	
+Quality gate	pass	2m46s	https://github.com/koniz-dev/flutter-starter/actions/runs/36149930418/job/108120328864	
+Strip both-samples-removed + analyze + test	pass	2m39s	https://github.com/koniz-dev/flutter-starter/actions/runs/36149930439/job/108120329374	
+Strip feature-flags-removed + analyze + test	pass	2m54s	https://github.com/koniz-dev/flutter-starter/actions/runs/36149930439/job/108120329255	
+Strip tasks-removed + analyze + test	pass	2m33s	https://github.com/koniz-dev/flutter-starter/actions/runs/36149930439/job/108120328965	

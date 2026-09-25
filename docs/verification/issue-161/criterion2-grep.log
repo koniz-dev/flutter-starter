@@ -1,0 +1,20 @@
+$ grep -rn "auto-retry\|defaultRetry" docs/ | grep -v "^docs/verification/"
+
+docs/README.md:12:- [**Riverpod retry policy**](architecture/riverpod-retry-policy.md) — auto-retry is off process-wide; read before adding a provider that can fail
+docs/architecture/riverpod-retry-policy.md:17:- [Why auto-retry is off](#why-auto-retry-is-off)
+docs/architecture/riverpod-retry-policy.md:58:`ProviderContainer.defaultRetry` - the behaviour this template opts out of -
+docs/architecture/riverpod-retry-policy.md:62:## Why auto-retry is off
+docs/architecture/riverpod-retry-policy.md:68:`defaultRetry` retries - Riverpod scheduled a retry by invalidating a provider
+docs/architecture/riverpod-retry-policy.md:118:`origin.retry ?? container.retry ?? ProviderContainer.defaultRetry`
+docs/architecture/riverpod-retry-policy.md:180:Nothing in `lib/` relies on Riverpod auto-retry, which is why the opt-out was
+docs/architecture/riverpod-retry-policy.md:186:  only an `Error` can escape - and `defaultRetry` never retried `Error`s).
+docs/architecture/README.md:51:- **[Riverpod retry policy](riverpod-retry-policy.md)** - Why Riverpod auto-retry is disabled for the whole app, what still retries, and how to opt one provider back in
+docs/guides/features/common-tasks.md:335:  auto-retry process-wide. If your provider needs retry, set `retry:` on that
+docs/api/core/network.md:550:template - Riverpod's provider-level auto-retry is disabled process-wide, so a
+
+matches outside docs/verification/: 11
+
+$ grep -rniE "retry" docs/README.md docs/architecture/README.md
+
+docs/README.md:12:- [**Riverpod retry policy**](architecture/riverpod-retry-policy.md) — auto-retry is off process-wide; read before adding a provider that can fail
+docs/architecture/README.md:51:- **[Riverpod retry policy](riverpod-retry-policy.md)** - Why Riverpod auto-retry is disabled for the whole app, what still retries, and how to opt one provider back in

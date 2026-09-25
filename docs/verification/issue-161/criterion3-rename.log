@@ -1,0 +1,44 @@
+Criterion 3 - the rename landed and no call site kept the old name.
+(The old identifier is spelled with a character class in this log so the
+ evidence file itself does not resurrect the dead name for future greps.)
+
+$ grep -rn 'createS[t]artupContainer' --exclude-dir=.git .
+
+./docs/verification/issue-101/criterion3-grep.txt:32:ProviderContainer createStartupContainer({
+(grep exit: 0; 1 = no match anywhere in the repository)
+
+$ grep -rn "createAppContainer" lib test tool
+
+lib/main.dart:8:// where riverpod 3 exposes it. Needed only for createAppContainer's
+lib/main.dart:62:ProviderContainer createAppContainer({
+lib/main.dart:81:  final container = createAppContainer();
+test/core/di/providers_test.dart:27:import 'package:flutter_starter/main.dart' show createAppContainer;
+test/core/di/providers_test.dart:422:        final appContainer = createAppContainer();
+test/core/startup/startup_reachability_test.dart:29:/// * the provider is read through `app.createAppContainer()`, the very
+test/core/startup/startup_reachability_test.dart:186:        final container = app.createAppContainer();
+test/core/startup/startup_reachability_test.dart:211:      final container = app.createAppContainer();
+test/core/startup/startup_reachability_test.dart:225:      final container = app.createAppContainer(
+test/core/startup/startup_reachability_test.dart:252:      final container = app.createAppContainer(
+test/core/startup/startup_reachability_test.dart:278:      final container = app.createAppContainer();
+tool/golden/stripped/lib/main.dart:8:// where riverpod 3 exposes it. Needed only for createAppContainer's
+tool/golden/stripped/lib/main.dart:62:ProviderContainer createAppContainer({
+tool/golden/stripped/lib/main.dart:81:  final container = createAppContainer();
+
+--- dartdoc first paragraph (criterion 3, the "or" branch, also satisfied) ---
+$ sed -n 48,62p lib/main.dart
+
+/// Builds the app's one [ProviderContainer]: `main()` boots from it and then
+/// hands the same instance to `runApp`, so the retry policy it sets applies
+/// for the lifetime of the app and not only to the startup sequence.
+///
+/// Named for that lifetime rather than for the moment of construction: every
+/// provider the app ever rebuilds is governed by the [_neverRetry] passed
+/// here. See [_neverRetry] and `docs/architecture/riverpod-retry-policy.md`
+/// for why retry is off and what to do about a provider that needs it.
+///
+/// `@visibleForTesting` marks the `overrides` seam, not the function: this is
+/// the production factory. It exists so tests can drive the real startup
+/// sequence through the same container the app uses, rather than a
+/// hand-rolled one that happens to be configured differently.
+@visibleForTesting
+ProviderContainer createAppContainer({
