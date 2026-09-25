@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -15,6 +16,53 @@ class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
 class FakeUserModel extends Fake implements UserModel {}
+
+/// Counts its own teardown call, so a step that follows a *failing* step can
+/// be asserted to have run rather than merely to have been wired up.
+///
+/// Optionally throws, to cover the mirror case: the last step failing must
+/// still be reported to the caller.
+class _RecordingHttpCache implements IHttpResponseCache {
+  _RecordingHttpCache({this.thrown});
+
+  /// Thrown by [clearCache] after the call is counted, when non-null.
+  final Object? thrown;
+
+  int clearCalls = 0;
+
+  @override
+  Future<void> clearCache() async {
+    clearCalls++;
+    final failure = thrown;
+    if (failure != null) {
+      // Typed `Object` on purpose: the point of these cases is that the
+      // teardown must survive an `Error` as well as an `Exception`, so the
+      // lint's premise does not hold here.
+      // ignore: only_throw_errors
+      throw failure;
+    }
+  }
+}
+
+/// One injected teardown failure: what to throw and what the caller should be
+/// told about it.
+typedef _ThrownCase = ({String label, Object thrown, String expectedMessage});
+
+/// `on Exception` was half the defect (#168): an [Error] thrown by a teardown
+/// step escaped raw *and* skipped the step after it, so every independence
+/// assertion has to be made for both.
+final _thrownCases = <_ThrownCase>[
+  (
+    label: 'an Exception',
+    thrown: const CacheException('Keychain locked'),
+    expectedMessage: 'Keychain locked',
+  ),
+  (
+    label: 'an Error',
+    thrown: StateError('prefs plugin missing'),
+    expectedMessage: 'prefs plugin missing',
+  ),
+];
 
 void main() {
   group('AuthRepositoryImpl', () {
@@ -321,6 +369,151 @@ void main() {
         expect(result.isFailure, isTrue);
         expect(result.failureOrNull, isA<CacheFailure>());
         expect(result.failureOrNull?.message, 'Keychain locked');
+      });
+
+      // Regression for koniz-dev/flutter-starter#168 criteria 1 and 3.
+      //
+      // The two local teardown steps used to share one `try`, so the first to
+      // throw skipped the second: every `http_cache_*` body survived a logout
+      // the user had explicitly asked for. `AuthInterceptor._logoutUser()`
+      // guards each of its steps separately; these pin the explicit path to
+      // the same rule.
+      //
+      // Counterfactual, actually run
+      // (docs/verification/issue-168/counterfactual.log): against the chained
+      // pre-fix body both cases below fail on `httpCache.clearCalls`, which is
+      // 0 rather than 1.
+      group('local teardown steps are independent (#168)', () {
+        for (final failure in _thrownCases) {
+          test(
+            'a local teardown throwing ${failure.label} must not skip the '
+            'HTTP cache',
+            () async {
+              // Arrange
+              final httpCache = _RecordingHttpCache();
+              final repositoryWithCache = AuthRepositoryImpl(
+                remoteDataSource: mockRemoteDataSource,
+                localDataSource: mockLocalDataSource,
+                httpCache: httpCache,
+              );
+              when(
+                () => mockRemoteDataSource.logout(),
+              ).thenAnswer((_) async => {});
+              when(
+                () => mockLocalDataSource.clearCache(),
+              ).thenThrow(failure.thrown);
+
+              // Act
+              final result = await repositoryWithCache.logout();
+
+              // Assert - the step after the failing one still ran, exactly
+              // once.
+              expect(
+                httpCache.clearCalls,
+                1,
+                reason:
+                    'cached bodies must not outlive a logout just because '
+                    'the step before this one threw',
+              );
+              // ...and the caller is still told the teardown failed.
+              expect(result.isFailure, isTrue);
+              expect(
+                result.failureOrNull?.message,
+                contains(failure.expectedMessage),
+              );
+            },
+          );
+
+          test(
+            'an HTTP cache throwing ${failure.label} is still reported after '
+            'a clean local teardown',
+            () async {
+              // Arrange - the mirror case: the *last* step failing must not be
+              // swallowed into a Success.
+              final httpCache = _RecordingHttpCache(thrown: failure.thrown);
+              final repositoryWithCache = AuthRepositoryImpl(
+                remoteDataSource: mockRemoteDataSource,
+                localDataSource: mockLocalDataSource,
+                httpCache: httpCache,
+              );
+              when(
+                () => mockRemoteDataSource.logout(),
+              ).thenAnswer((_) async => {});
+              when(
+                () => mockLocalDataSource.clearCache(),
+              ).thenAnswer((_) async => {});
+
+              // Act
+              final result = await repositoryWithCache.logout();
+
+              // Assert
+              verify(() => mockLocalDataSource.clearCache()).called(1);
+              expect(httpCache.clearCalls, 1);
+              expect(result.isFailure, isTrue);
+              expect(
+                result.failureOrNull?.message,
+                contains(failure.expectedMessage),
+              );
+            },
+          );
+        }
+
+        test(
+          'when both local steps fail the first failure is the one reported',
+          () async {
+            // Arrange
+            final httpCache = _RecordingHttpCache(
+              thrown: StateError('cache backend unavailable'),
+            );
+            final repositoryWithCache = AuthRepositoryImpl(
+              remoteDataSource: mockRemoteDataSource,
+              localDataSource: mockLocalDataSource,
+              httpCache: httpCache,
+            );
+            when(
+              () => mockRemoteDataSource.logout(),
+            ).thenAnswer((_) async => {});
+            when(
+              () => mockLocalDataSource.clearCache(),
+            ).thenThrow(const CacheException('Keychain locked'));
+
+            // Act
+            final result = await repositoryWithCache.logout();
+
+            // Assert - both steps ran; the first failure is what surfaces.
+            expect(httpCache.clearCalls, 1);
+            expect(result.failureOrNull, isA<CacheFailure>());
+            expect(result.failureOrNull?.message, 'Keychain locked');
+          },
+        );
+
+        test(
+          'a local teardown failure outranks a remote failure',
+          () async {
+            // Arrange - pins the documented precedence now that the local
+            // branch no longer returns early.
+            final httpCache = _RecordingHttpCache();
+            final repositoryWithCache = AuthRepositoryImpl(
+              remoteDataSource: mockRemoteDataSource,
+              localDataSource: mockLocalDataSource,
+              httpCache: httpCache,
+            );
+            when(
+              () => mockRemoteDataSource.logout(),
+            ).thenThrow(const NetworkException('Network error'));
+            when(
+              () => mockLocalDataSource.clearCache(),
+            ).thenThrow(const CacheException('Keychain locked'));
+
+            // Act
+            final result = await repositoryWithCache.logout();
+
+            // Assert
+            expect(httpCache.clearCalls, 1);
+            expect(result.failureOrNull, isA<CacheFailure>());
+            expect(result.failureOrNull?.message, 'Keychain locked');
+          },
+        );
       });
     });
 

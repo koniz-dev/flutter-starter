@@ -1,0 +1,270 @@
+Counterfactual for koniz-dev/flutter-starter#168
+================================================
+
+What was run
+------------
+The new tests from this change, executed against the *pre-fix* library code.
+Both production files were reverted to origin/main (a55674d) while the three
+test files kept their new content:
+
+    git checkout origin/main -- \
+      lib/features/auth/data/repositories/auth_repository_impl.dart \
+      lib/features/auth/data/datasources/auth_local_datasource.dart
+
+    flutter test \
+      test/features/auth/data/repositories/auth_repository_impl_test.dart \
+      test/features/auth/data/datasources/auth_local_datasource_test.dart \
+      test/core/network/forced_logout_cache_test.dart --timeout=5m
+
+Result: exit 1, "00:00 +70 -10: Some tests failed."
+
+10 of the 12 new assertions fail without the fix. The two that pass without it
+are the mirror-case guards ("an HTTP cache throwing ... is still reported after
+a clean local teardown"), which exercise a chain whose first step succeeds and
+so were never affected by the coupling - they exist to stop the fix from
+swallowing a last-step failure into a Success, not to demonstrate the defect.
+
+The failures are the defect itself, in four shapes:
+
+  * `httpCache.clearCalls` is 0 where 1 is required - the explicit logout
+    skipped the HTTP response cache entirely because the local teardown threw.
+  * both tokens still readable after `clearCache()` - `clearAllTokens()` never
+    ran because the user-blob removal threw.
+  * a bare `StateError` escaping `clearCache()` instead of the declared
+    `CacheException` - the `on Exception` half of the defect.
+  * the #114 equivalence assertion reporting the two paths' device states as
+    unequal.
+
+Full output follows.
+
+------------------------------------------------------------------------------
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +14 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +15 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state
+00:00 +16 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state
+00:00 +17 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should return null when token does not exist
+00:00 +18 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168)
+00:00 +19 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168)
+00:00 +20 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168)
+00:00 +21 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168)
+00:00 +21 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) a local teardown throwing an Exception must not skip the HTTP cache [E]
+  Expected: <1>
+    Actual: <0>
+  cached bodies must not outlive a logout just because the step before this one threw
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 406:15  main.<fn>.<fn>.<fn>.<fn>
+  
+00:00 +22 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168)
+00:00 +22 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) an HTTP cache throwing an Exception is still reported after a clean local teardown
+00:00 +23 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should retrieve cached user from regular storage
+00:00 +24 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) a local teardown throwing an Error must not skip the HTTP cache
+00:00 +24 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should return null when user does not exist
+00:00 +25 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Data Separation should store tokens in secure storage and user data in regular storage
+00:00 +26 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Clear Cache should clear all cached data from both storages
+00:00 +26 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) a local teardown throwing an Error must not skip the HTTP cache [E]
+  Expected: <1>
+    Actual: <0>
+  cached bodies must not outlive a logout just because the step before this one threw
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 406:15  main.<fn>.<fn>.<fn>.<fn>
+  
+00:00 +27 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Clear Cache should clear all cached data from both storages
+00:00 +28 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) when both local steps fail the first failure is the one reported
+00:00 +28 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when token caching fails
+00:00 +29 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when secure storage write fails
+00:00 +29 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168) [E]
+  Expected: {
+              'keyValueStore': {
+                'http_cache_http://localhost:3000/v1/public/config_{}': '{"motd":"cached-before-logout"}',
+                'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/config_{}': '<write time>',
+                'http_cache_index': ['http_cache_http://localhost:3000/v1/public/config_{}'],
+                'user_data': '{"id":"user-1","email":"user@example.com","name":null,"avatar_url":null}'
+              },
+              'accessToken': 'access-token',
+              'refreshToken': 'refresh-token'
+            }
+    Actual: {
+              'keyValueStore': {
+                'user_data': '{"id":"user-1","email":"user@example.com","name":null,"avatar_url":null}'
+              },
+              'accessToken': null,
+              'refreshToken': null
+            }
+     Which: at location ['keyValueStore'] is {
+              'user_data': '{"id":"user-1","email":"user@example.com","name":null,"avatar_url":null}'
+            } which has different length and is missing map key 'http_cache_http://localhost:3000/v1/public/config_{}'
+  a failing teardown step must leave the same device state on both paths - the steps after it run either way
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/core/network/forced_logout_cache_test.dart 559:11  main.<fn>.<fn>
+  
+00:00 +29 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) when both local steps fail the first failure is the one reported [E]
+  Expected: <1>
+    Actual: <0>
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 479:13  main.<fn>.<fn>.<fn>.<fn>
+  
+00:00 +30 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) a local teardown failure outranks a remote failure
+00:00 +30 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Error (#168)
+00:00 +31 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Error (#168)
+00:00 +31 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent (#168) a local teardown failure outranks a remote failure [E]
+  Expected: <1>
+    Actual: <0>
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/auth_repository_impl_test.dart 507:13  main.<fn>.<fn>.<fn>.<fn>
+  
+00:00 +32 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Error (#168)
+00:00 +32 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return User when a token and a cached user exist
+00:00 +33 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when cacheRefreshToken fails
+00:00 +34 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when no cached user
+00:00 +35 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when clearCache fails
+00:00 +36 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when clearCache fails
+00:00 +37 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the stored token is empty
+00:00 +37 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Error (#168) [E]
+  Expected: {
+              'keyValueStore': {
+                'http_cache_http://localhost:3000/v1/public/config_{}': '{"motd":"cached-before-logout"}',
+                'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/config_{}': '<write time>',
+                'http_cache_index': ['http_cache_http://localhost:3000/v1/public/config_{}'],
+                'user_data': '{"id":"user-1","email":"user@example.com","name":null,"avatar_url":null}'
+              },
+              'accessToken': 'access-token',
+              'refreshToken': 'refresh-token'
+            }
+    Actual: {
+              'keyValueStore': {
+                'user_data': '{"id":"user-1","email":"user@example.com","name":null,"avatar_url":null}'
+              },
+              'accessToken': null,
+              'refreshToken': null
+            }
+     Which: at location ['keyValueStore'] is {
+              'user_data': '{"id":"user-1","email":"user@example.com","name":null,"avatar_url":null}'
+            } which has different length and is missing map key 'http_cache_http://localhost:3000/v1/public/config_{}'
+  a failing teardown step must leave the same device state on both paths - the steps after it run either way
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/core/network/forced_logout_cache_test.dart 559:11  main.<fn>.<fn>
+  
+00:00 +38 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle empty token
+00:00 +39 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +40 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +41 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +42 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +43 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler
+00:00 +44 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle very long token
+00:00 +45 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return true when a token and a cached user exist
+00:00 +46 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the cache dependency is optional (#114 criterion 5) an AuthInterceptor with no cache attached still forces a clean logout
+00:00 +47 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the cache dependency is optional (#114 criterion 5) an AuthInterceptor with no cache attached still forces a clean logout
+00:00 +48 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the cache dependency is optional (#114 criterion 5) an AuthInterceptor with no cache attached still forces a clean logout
+00:00 +49 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the token is gone but the user blob survives
+00:00 +50 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle user with minimal fields
+00:00 +51 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the stored token is empty
+00:00 +52 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle multiple cache operations
+00:00 +53 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should agree with getCurrentUser on every storage state
+00:00 +54 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should agree with getCurrentUser on every storage state
+00:00 +55 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getToken when token does not exist
+00:00 +56 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should propagate a token store failure
+00:00 +57 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getRefreshToken when refresh token does not exist
+00:00 +58 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return new token when refresh succeeds
+00:00 +59 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getCachedUser when user does not exist
+00:00 +60 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return UnknownFailure when no refresh token available
+00:00 +61 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Exception must still clear the tokens
+00:00 +62 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Exception must still clear the tokens
+00:00 +63 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Exception must still clear the tokens
+00:00 +63 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should cache refresh token when provided
+00:00 +64 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases login should handle generic Exception
+00:00 +65 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should handle generic Exception
+00:00 +66 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases logout should handle generic Exception
+00:00 +67 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases getCurrentUser should handle generic Exception
+00:00 +68 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases isAuthenticated should handle generic Exception
+00:00 +69 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases refreshToken should handle generic Exception
+00:00 +70 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (tearDownAll)
+00:00 +70 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Exception must still clear the tokens [E]
+  Expected: <1>
+    Actual: <0>
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/datasources/auth_local_datasource_test.dart 763:11  main.<fn>.<fn>
+  
+00:00 +70 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Error must still clear the tokens
+00:00 +70 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Error must still clear the tokens [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: threw StateError:<Bad state: prefs plugin missing>
+            stack test/features/auth/data/datasources/auth_local_datasource_test.dart 33:7                  _FailableKeyValueStore.remove
+                  package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart 136:28  AuthLocalDataSourceImpl.clearCache
+                  test/features/auth/data/datasources/auth_local_datasource_test.dart 754:24                main.<fn>.<fn>
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                                           expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                                         expectLater
+                  test/features/auth/data/datasources/auth_local_datasource_test.dart 753:17                main.<fn>.<fn>
+                  
+            which is not an instance of 'CacheException'
+  best-effort is about the other steps running, not about reporting success
+  
+  package:matcher                                                             expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+  test/features/auth/data/datasources/auth_local_datasource_test.dart 753:17  main.<fn>.<fn>
+  
+00:00 +70 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a token clear throwing an Error is reported as a CacheException
+00:00 +70 -9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a token clear throwing an Error is reported as a CacheException [E]
+  Expected: throws <Instance of 'CacheException'> with `message`: contains 'keychain locked'
+    Actual: <Instance of 'Future<void>'>
+     Which: threw StateError:<Bad state: keychain locked>
+            stack test/features/auth/data/datasources/auth_local_datasource_test.dart 144:5                 _FailingTokenStore.clearAllTokens
+                  package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart 138:24  AuthLocalDataSourceImpl.clearCache
+                  ===== asynchronous gap ===========================
+                  package:matcher                                                                           expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8                                         expectLater
+                  test/features/auth/data/datasources/auth_local_datasource_test.dart 794:15                main.<fn>.<fn>
+                  
+            which is not an instance of 'CacheException'
+  
+  package:matcher                                                             expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                           expectLater
+  test/features/auth/data/datasources/auth_local_datasource_test.dart 794:15  main.<fn>.<fn>
+  
+00:00 +70 -9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) when both steps fail the first failure is the one reported
+00:00 +70 -10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) when both steps fail the first failure is the one reported [E]
+  Expected: <1>
+    Actual: <0>
+  
+  package:matcher                                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18                         expect
+  test/features/auth/data/datasources/auth_local_datasource_test.dart 838:9  main.<fn>.<fn>
+  
+00:00 +70 -10: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Error (#168)
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168)
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a token clear throwing an Error is reported as a CacheException
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac93d9da11dbf5057/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently (#168) a user-blob removal throwing an Error must still clear the tokens
+  ... and 6 more
