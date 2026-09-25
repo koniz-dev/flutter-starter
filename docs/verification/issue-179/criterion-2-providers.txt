@@ -1,0 +1,22 @@
+$ grep -n "keyValueStoreProvider\|storageServiceProvider" <the two provider files>
+lib/features/tasks/di/tasks_providers.dart:19:  final keyValueStore = ref.watch(keyValueStoreProvider);
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:18:  final keyValueStore = ref.watch(keyValueStoreProvider);
+
+--- provider bodies ---
+/// Provider for [TasksLocalDataSource] instance
+final tasksLocalDataSourceProvider = Provider<TasksLocalDataSource>((ref) {
+  final keyValueStore = ref.watch(keyValueStoreProvider);
+  return TasksLocalDataSourceImpl(storageService: keyValueStore);
+});
+...
+@riverpod
+FeatureFlagsLocalDataSource featureFlagsLocalDataSource(Ref ref) {
+  final keyValueStore = ref.watch(keyValueStoreProvider);
+  return FeatureFlagsLocalDataSourceImpl(storageService: keyValueStore);
+}
+
+--- keyValueStoreProvider is the same instance as storageServiceProvider ---
+/// Backward-compat alias: non-sensitive key/value store.
+final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
+  return ref.watch(storageServiceProvider);
+});
