@@ -4,6 +4,7 @@ import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/json_helper.dart';
 
 /// Cache configuration for HTTP responses
@@ -51,6 +52,42 @@ class CacheConfig {
 /// rooted or jailbroken device and included in unencrypted device backups.
 /// That is acceptable only because nothing authenticated ever lands there. Do
 /// not relax the credential check without moving to encrypted storage.
+///
+/// ## How an entry is aged
+///
+/// Each body is stored beside a timestamp written with
+/// [DateFormatter.formatIso8601], so it is always UTC and always carries the
+/// `Z` designator, and read back with [DateFormatter.parseIso8601]. Age is
+/// then the difference between two absolute instants, which is what
+/// `maxAge`/`maxStale` are comparing against.
+///
+/// The wall-clock pair ([DateFormatter.formatDateTime] /
+/// [DateFormatter.parseDateTime]) must not be used here: it writes no
+/// timezone marker, so the reader has to assume its own current offset. That
+/// is exactly the defect koniz-dev/flutter-starter#188 fixed - a bare
+/// `DateTime.now().toIso8601String()` on a local `DateTime` emits neither `Z`
+/// nor an offset, so after a flight or a DST transition every entry written
+/// before the change was aged out by the offset, evicting fresh entries in
+/// one direction and serving stale ones past `maxStale` in the other.
+///
+/// Two kinds of already-stored string survive the change:
+///
+/// - **Offset-less legacy entries** keep being read as local wall clock,
+///   which is what `DateTime.parse` did for them before, so no entry on disk
+///   jumps at upgrade time. They are as wrong as they always were and no
+///   more, and they drain on their own: the first refetch after `maxAge`
+///   rewrites the timestamp in the new form. No migration ships, for the
+///   reason given in #146 - the offset in force at write time was never
+///   recorded, so a migration would have to assume the device's current
+///   offset, which is the same assumption the read path already makes at the
+///   same moment.
+/// - **Unparseable or out-of-range strings** are discarded rather than
+///   guessed at. `DateTime.parse` rolls `2024-02-30` over to 1 March and so
+///   answers a plausible-looking age for a corrupt entry;
+///   [DateFormatter.parseIso8601] returns null instead, and the entry is
+///   removed and reported as a miss. A cache entry is disposable by
+///   construction, so the whole cost of being wrong here is one network
+///   request.
 ///
 /// ## Lifetime
 ///
@@ -217,8 +254,18 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       final timestampStr = await _storageService.getString(timestampKey);
       if (timestampStr == null) return null;
 
-      final timestamp = DateTime.parse(timestampStr);
-      final now = DateTime.now();
+      // Absolute instants on both sides: the stored string names one
+      // unambiguously, so the age does not move when the device's offset
+      // does. An offset-less legacy string is still read as local wall
+      // clock, exactly as DateTime.parse read it before.
+      final timestamp = DateFormatter.parseIso8601(timestampStr);
+      if (timestamp == null) {
+        // Corrupt or out-of-range timestamp: there is no age to compute, so
+        // drop the entry and report a miss rather than serve it on a guess.
+        await _evictEntry(cacheKey, timestampKey);
+        return null;
+      }
+      final now = DateTime.now().toUtc();
       final age = now.difference(timestamp);
 
       // Check if cache is still valid
@@ -226,9 +273,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
         // Cache expired, check if stale cache is acceptable
         if (age > _cacheConfig.maxStale) {
           // Too stale, remove cache
-          await _storageService.remove(cacheKey);
-          await _storageService.remove(timestampKey);
-          await _removeFromIndex(cacheKey);
+          await _evictEntry(cacheKey, timestampKey);
           return null;
         }
         // Stale but acceptable (can be used with warning in production)
@@ -261,7 +306,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       final timestampKey = '$_timestampKeyPrefix$cacheKey';
       await _storageService.setString(
         timestampKey,
-        DateTime.now().toIso8601String(),
+        DateFormatter.formatIso8601(DateTime.now()),
       );
 
       await _addToIndex(cacheKey);
@@ -270,6 +315,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
         debugPrint('Cache write error: $e');
       }
     }
+  }
+
+  /// Removes a cached body, its timestamp and its index entry.
+  Future<void> _evictEntry(String cacheKey, String timestampKey) async {
+    await _storageService.remove(cacheKey);
+    await _storageService.remove(timestampKey);
+    await _removeFromIndex(cacheKey);
   }
 
   Future<List<String>> _readIndex() async {

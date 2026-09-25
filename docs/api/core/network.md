@@ -656,12 +656,15 @@ In `StorageService`, i.e. **`shared_preferences`** - `/data/data/<pkg>/shared_pr
 
 Keys are `http_cache_<uri>_<queryParameters>` for the body and `http_cache_timestamp_<body key>` for the write time, plus `http_cache_index`, a `StringList` of every body key currently written.
 
+The write time is stored through `DateFormatter.formatIso8601`, so it is UTC and always carries the `Z` designator, and read back through `DateFormatter.parseIso8601`. Age is then the distance between two absolute instants and does not move when the device's UTC offset does - before koniz-dev/flutter-starter#188 it was a bare local `DateTime.now().toIso8601String()`, which writes no designator at all, so a flight or a DST transition aged every earlier entry out by the offset. An offset-less entry already on the device is still read as local wall clock, exactly as before, and is rewritten in the new form on the first refetch.
+
 Do not relax the credential check without first moving the store to `SecureStorageService`.
 
 ### Lifetime
 
 - `maxAge` (default 1 hour): entries newer than this are served directly.
 - `maxStale` (default 7 days): older entries are still served, then removed once past this.
+- A stored timestamp that does not parse, or whose calendar date is out of range such as `2024-02-30`, has no age: the entry is removed and the read reported as a miss rather than aged on a guess. The whole cost is one network request.
 - `CacheInterceptor.clearCache()` walks `http_cache_index` and removes every body, every timestamp and the index itself.
 
 `clearCache()` is reachable as `apiClient.responseCache` (typed `IHttpResponseCache`, so callers do not depend on dio). **Both** logout paths call it, so cached bodies do not outlive a session whichever way the session ends:
