@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_starter/features/tasks/data/models/task_model.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -226,8 +228,15 @@ void main() {
         expect(json['title'], 'Test Task');
         expect(json['description'], 'Test Description');
         expect(json['is_completed'], isTrue);
-        expect(json['created_at'], '2023-01-01T00:00:00.000');
-        expect(json['updated_at'], '2023-01-02T00:00:00.000');
+        // Timestamps are written in UTC with the `Z` designator, so the
+        // expected text depends on the host zone - hence the computed
+        // expectation rather than a literal. See the 'Timezone-safe
+        // timestamps' group below.
+        expect(json['created_at'], DateTime(2023).toUtc().toIso8601String());
+        expect(
+          json['updated_at'],
+          DateTime(2023, 1, 2).toUtc().toIso8601String(),
+        );
       });
 
       test('should handle very long title and description', () {
@@ -421,6 +430,232 @@ void main() {
 
         // Assert
         expect(json['description'], isNull);
+      });
+    });
+
+    // Regression cover for koniz-dev/flutter-starter#146: toJson() used to
+    // call toIso8601String() on a local DateTime, writing no `Z` and no
+    // numeric offset, so the stored instant depended on the reader's zone.
+    //
+    // These assertions are deliberately host-timezone-agnostic so they hold
+    // on a UTC CI runner as well as on a developer machine. The one that
+    // reads the host offset ('toJson converts the wall clock...') is trivially
+    // true at UTC+00:00 and is the load-bearing one elsewhere; run the file
+    // under `TZ=Asia/Bangkok` to exercise it.
+    group('Timezone-safe timestamps', () {
+      Map<String, dynamic> jsonWith(String createdAt, String updatedAt) => {
+        'id': 'task-1',
+        'title': 'Test Task',
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+      };
+
+      TaskModel modelWith(DateTime createdAt, DateTime updatedAt) => TaskModel(
+        id: 'task-1',
+        title: 'Test Task',
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+
+      test('toJson writes a designator for a local DateTime', () {
+        // Arrange
+        final model = modelWith(
+          DateTime(2024, 1, 15, 14, 30, 45),
+          DateTime(2024, 1, 16, 9, 5),
+        );
+
+        // Act - through a real encode/decode, which is what reaches storage.
+        final decoded =
+            jsonDecode(jsonEncode(model.toJson())) as Map<String, dynamic>;
+
+        // Assert
+        expect(decoded['created_at'], endsWith('Z'));
+        expect(decoded['updated_at'], endsWith('Z'));
+      });
+
+      test('toJson writes a designator for a UTC DateTime', () {
+        // Arrange
+        final model = modelWith(
+          DateTime.utc(2024, 1, 15, 7, 30, 45),
+          DateTime.utc(2024, 1, 16, 2, 5),
+        );
+
+        // Act
+        final decoded =
+            jsonDecode(jsonEncode(model.toJson())) as Map<String, dynamic>;
+
+        // Assert
+        expect(decoded['created_at'], endsWith('Z'));
+        expect(decoded['updated_at'], endsWith('Z'));
+      });
+
+      test('toJson converts the wall clock by the host UTC offset', () {
+        // Arrange
+        final local = DateTime(2024, 1, 15, 14, 30, 45);
+
+        // Act
+        final written = DateTime.parse(
+          modelWith(local, local).toJson()['created_at']! as String,
+        );
+
+        // Assert - the digits written are the UTC ones, not the local ones.
+        // At UTC+07:00 that is 07:30:45Z for a 14:30:45 local timestamp.
+        expect(written.isUtc, isTrue);
+        expect(
+          written.difference(DateTime.utc(2024, 1, 15, 14, 30, 45)),
+          -local.timeZoneOffset,
+          reason: 'host offset is ${local.timeZoneOffset}; written=$written',
+        );
+      });
+
+      test('a round trip preserves the instant', () {
+        // Arrange
+        final originals = <DateTime>[
+          DateTime(2024, 1, 15, 14, 30, 45),
+          DateTime.utc(2024, 1, 15, 7, 30, 45),
+          DateTime(2024, 6, 30, 23, 59, 59, 999),
+          DateTime.now(),
+        ];
+
+        for (final original in originals) {
+          // Act
+          final restored = TaskModel.fromJson(
+            modelWith(original, original).toJson(),
+          );
+
+          // Assert
+          expect(
+            restored.createdAt.isAtSameMomentAs(original),
+            isTrue,
+            reason:
+                '$original round-tripped to ${restored.createdAt} '
+                'at offset ${original.timeZoneOffset}',
+          );
+          expect(restored.updatedAt.isAtSameMomentAs(original), isTrue);
+        }
+      });
+
+      test('a stored Z timestamp names one instant in every zone', () {
+        // Arrange - a row written by any device, read by any other.
+        final json = jsonWith(
+          '2024-01-15T07:30:45.000Z',
+          '2024-01-15T07:30:45.000Z',
+        );
+
+        // Act
+        final restored = TaskModel.fromJson(json);
+
+        // Assert - independent of the host zone, unlike the legacy shape.
+        expect(
+          restored.createdAt.toUtc(),
+          DateTime.utc(2024, 1, 15, 7, 30, 45),
+        );
+        expect(
+          restored.updatedAt.toUtc(),
+          DateTime.utc(2024, 1, 15, 7, 30, 45),
+        );
+      });
+
+      test('a stored numeric offset is honoured', () {
+        // Arrange
+        final json = jsonWith(
+          '2024-01-15T14:30:45.000+07:00',
+          '2024-01-15T14:30:45.000+07:00',
+        );
+
+        // Act
+        final restored = TaskModel.fromJson(json);
+
+        // Assert
+        expect(
+          restored.createdAt.toUtc(),
+          DateTime.utc(2024, 1, 15, 7, 30, 45),
+        );
+      });
+
+      test('a legacy offset-less row is read as local wall clock', () {
+        // Arrange - the shape every row written before #146 has on disk.
+        final json = jsonWith(
+          '2026-09-19T14:30:00.000',
+          '2026-09-19T14:30:00.000',
+        );
+
+        // Act
+        final restored = TaskModel.fromJson(json);
+
+        // Assert - identical to what the old DateTime.parse call produced,
+        // so no row already on disk shifts. No migration converts these.
+        expect(restored.createdAt, DateTime(2026, 9, 19, 14, 30));
+        expect(restored.createdAt.isUtc, isFalse);
+        expect(
+          restored.createdAt.isAtSameMomentAs(
+            DateTime.parse('2026-09-19T14:30:00.000'),
+          ),
+          isTrue,
+        );
+      });
+
+      test('a legacy row gains a designator when it is next written', () {
+        // Arrange
+        final legacy = jsonWith(
+          '2026-09-19T14:30:00.000',
+          '2026-09-19T14:30:00.000',
+        );
+
+        // Act - the data source rewrites the whole list on any mutation,
+        // which is how legacy rows drain without a migration.
+        final rewritten = TaskModel.fromJson(legacy).toJson();
+
+        // Assert
+        expect(rewritten['created_at'], endsWith('Z'));
+        expect(
+          DateTime.parse(
+            rewritten['created_at']! as String,
+          ).isAtSameMomentAs(DateTime(2026, 9, 19, 14, 30)),
+          isTrue,
+        );
+      });
+
+      test('an out-of-range calendar date is rejected, not rolled over', () {
+        // Arrange - DateTime.parse silently answers 1 March for this.
+        expect(DateTime.parse('2024-02-30T00:00:00Z').month, 3);
+        expect(DateTime.parse('2024-02-30T00:00:00Z').day, 1);
+
+        // Act & Assert
+        expect(
+          () => TaskModel.fromJson(
+            jsonWith('2024-02-30T00:00:00Z', '2024-01-15T00:00:00Z'),
+          ),
+          throwsFormatException,
+        );
+        expect(
+          () => TaskModel.fromJson(
+            jsonWith('2024-01-15T00:00:00Z', '2024-13-01T00:00:00Z'),
+          ),
+          throwsFormatException,
+        );
+      });
+
+      test('an unparseable or absent timestamp is rejected', () {
+        // Act & Assert
+        expect(
+          () => TaskModel.fromJson(jsonWith('not-a-date', 'not-a-date')),
+          throwsFormatException,
+        );
+        expect(
+          () =>
+              TaskModel.fromJson(const {'id': 'task-1', 'title': 'Test Task'}),
+          throwsFormatException,
+        );
+        expect(
+          () => TaskModel.fromJson(const {
+            'id': 'task-1',
+            'title': 'Test Task',
+            'created_at': 1705300245,
+            'updated_at': 1705300245,
+          }),
+          throwsFormatException,
+        );
       });
     });
   });
