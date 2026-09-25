@@ -6,6 +6,7 @@ import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -31,8 +32,10 @@ class AuthInterceptor extends Interceptor {
     required Future<Result<String>> Function() refreshToken,
     Dio Function()? retryDioFactory,
     IKeyValueStore? keyValueStore,
+    ISessionTerminationSink? sessionSink,
   }) : _retryDioFactory = retryDioFactory,
        _keyValueStore = keyValueStore,
+       _sessionSink = sessionSink,
        _tokenStore =
            tokenStore ??
            (secureStorageService != null
@@ -59,6 +62,26 @@ class AuthInterceptor extends Interceptor {
   /// construct this interceptor by hand keep compiling; the app wires it in
   /// `lib/features/auth/di/auth_providers.dart`.
   final IKeyValueStore? _keyValueStore;
+
+  /// The running app's session state, if wired.
+  ///
+  /// Clearing storage is not enough on its own: the app that is *already
+  /// running* holds the session in memory, and nothing in this layer is
+  /// allowed to know what holds it. A forced logout that only emptied storage
+  /// left the authenticated shell on screen, backed by credentials that no
+  /// longer existed, until the next cold start
+  /// (koniz-dev/flutter-starter#127).
+  ///
+  /// A constructor dependency rather than an `attach...` call, unlike
+  /// [_responseCache]: the sink is resolvable when `authInterceptorProvider`
+  /// builds this interceptor, because it defers reading the notifier until
+  /// something actually terminates a session.
+  ///
+  /// Optional for the same reason [_keyValueStore] is: hand-built call sites
+  /// (and every test that drives this interceptor standalone) keep compiling,
+  /// and a missing sink degrades to exactly the pre-#127 behaviour rather than
+  /// to a crash.
+  final ISessionTerminationSink? _sessionSink;
 
   /// Locally persisted HTTP response cache, if wired.
   ///
@@ -389,6 +412,13 @@ class AuthInterceptor extends Interceptor {
   /// ended outlive it on the path the user does not control
   /// (koniz-dev/flutter-starter#114).
   ///
+  /// The last step tells the **running app**. Storage is what the next launch
+  /// reads; the in-memory session is what this launch renders, and until #127
+  /// nothing dropped it, so the authenticated shell stayed up with no
+  /// credentials behind it. The app is told *after* storage is emptied, so any
+  /// listener reacting to the state change (the router guard, a screen
+  /// refetching) already sees a device with no session on it.
+  ///
   /// Each step is guarded separately and no step is reachable only through
   /// another: cleanup must never stop a handler from being completed, and a
   /// failure - or absence - of one step must not skip the rest.
@@ -411,15 +441,31 @@ class AuthInterceptor extends Interceptor {
     }
 
     // Drop cached response bodies: they are local session state too.
+    //
+    // Guarded rather than early-returned. An `if (x == null) return;` here
+    // reads harmlessly while this is the last step and silently skips every
+    // step added after it - which is exactly the bug #114 had to fix.
     final responseCache = _responseCache;
-    if (responseCache == null) {
-      return;
+    if (responseCache != null) {
+      try {
+        await responseCache.clearCache();
+      } on Object catch (_) {
+        // Same reason again. A cache that cannot be emptied must not strand
+        // the 401 that triggered this logout.
+      }
     }
-    try {
-      await responseCache.clearCache();
-    } on Object catch (_) {
-      // Same reason again. A cache that cannot be emptied must not strand the
-      // 401 that triggered this logout.
+
+    // Tell the running app its session is over, so the UI stops presenting it.
+    final sessionSink = _sessionSink;
+    if (sessionSink != null) {
+      try {
+        sessionSink.onSessionTerminated();
+      } on Object catch (_) {
+        // Deliberately swallowed, and load-bearing: a background request can
+        // 401 after the app's ProviderContainer is gone, and resolving a
+        // disposed provider throws. There is no in-memory session left to
+        // clear in that case, and the request's handler must still complete.
+      }
     }
   }
 }

@@ -12,6 +12,7 @@ import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart
 import 'package:flutter_starter/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 
 // ============================================================================
 // Auth Data Source Providers
@@ -79,6 +80,11 @@ final Provider<AuthInterceptor> authInterceptorProvider =
         // A forced logout on a failed refresh has to drop the cached user too,
         // or the app keeps presenting a session it has no token for.
         keyValueStore: ref.watch(keyValueStoreProvider),
+        // ...and has to drop the *in-memory* session as well, or the running
+        // app keeps presenting one until it is restarted (#127). The feature
+        // implements the contract and hands it down; `lib/core/network` never
+        // learns that a Riverpod notifier is what it just cleared.
+        sessionSink: RiverpodSessionTerminationSink(ref),
       );
       // Releases the single 401-replay client and its connection pool.
       ref.onDispose(interceptor.dispose);
