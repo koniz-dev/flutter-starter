@@ -1,4 +1,6 @@
-// Compatibility facade keeps legacy API signatures and formatting for now.
+// Transport facade. Its public request surface is typed entirely on
+// `lib/core/contracts/network_contracts.dart`, so a caller can hold an
+// ApiClient without importing `package:dio` (koniz-dev/flutter-starter#176).
 // ignore_for_file: directives_ordering
 
 import 'package:dio/dio.dart';
@@ -136,7 +138,16 @@ class ApiClient {
   late final INetworkClient _networkClient;
   late final CacheInterceptor _cacheInterceptor;
 
-  /// Getter for the underlying Dio instance
+  /// Escape hatch onto the underlying Dio instance.
+  ///
+  /// Deliberately kept, and deliberately not on any request path. Since #176
+  /// no verb on this class accepts or returns a dio type, so reaching for
+  /// `.dio` is an explicit opt-out of [INetworkClient] rather than something
+  /// an ordinary `post()` forces on the caller. Use it for transport-level
+  /// concerns only - swapping [Dio.httpClientAdapter], inspecting
+  /// [Dio.interceptors], reading [BaseOptions]. Typing a data source on what
+  /// it returns puts `package:dio` back in the feature layer, which is the
+  /// leak #176 closed.
   Dio get dio => _dio;
 
   /// Getter for transport-agnostic network contract.
@@ -152,20 +163,20 @@ class ApiClient {
   ///
   /// [path] - The endpoint path
   /// [queryParameters] - Optional query parameters
-  /// [options] - Optional request options
-  /// Returns a [Future] that completes with a [Response]
+  /// [headers] - Optional per-request headers
+  /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
-  Future<Response<dynamic>> get(
+  Future<NetworkResponse<dynamic>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Map<String, String>? headers,
   }) async {
-    return _sendWithCompatibility(
+    return _send(
       NetworkRequest(
         path: path,
         method: NetworkMethod.get,
         queryParameters: queryParameters ?? const <String, dynamic>{},
-        headers: _headersFromOptions(options),
+        headers: headers ?? const <String, String>{},
       ),
     );
   }
@@ -175,22 +186,22 @@ class ApiClient {
   /// [path] - The endpoint path
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
-  /// [options] - Optional request options
-  /// Returns a [Future] that completes with a [Response]
+  /// [headers] - Optional per-request headers
+  /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
-  Future<Response<dynamic>> post(
+  Future<NetworkResponse<dynamic>> post(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Map<String, String>? headers,
   }) async {
-    return _sendWithCompatibility(
+    return _send(
       NetworkRequest(
         path: path,
         method: NetworkMethod.post,
         body: data,
         queryParameters: queryParameters ?? const <String, dynamic>{},
-        headers: _headersFromOptions(options),
+        headers: headers ?? const <String, String>{},
       ),
     );
   }
@@ -200,22 +211,22 @@ class ApiClient {
   /// [path] - The endpoint path
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
-  /// [options] - Optional request options
-  /// Returns a [Future] that completes with a [Response]
+  /// [headers] - Optional per-request headers
+  /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
-  Future<Response<dynamic>> put(
+  Future<NetworkResponse<dynamic>> put(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Map<String, String>? headers,
   }) async {
-    return _sendWithCompatibility(
+    return _send(
       NetworkRequest(
         path: path,
         method: NetworkMethod.put,
         body: data,
         queryParameters: queryParameters ?? const <String, dynamic>{},
-        headers: _headersFromOptions(options),
+        headers: headers ?? const <String, String>{},
       ),
     );
   }
@@ -225,53 +236,35 @@ class ApiClient {
   /// [path] - The endpoint path
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
-  /// [options] - Optional request options
-  /// Returns a [Future] that completes with a [Response]
+  /// [headers] - Optional per-request headers
+  /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
-  Future<Response<dynamic>> delete(
+  Future<NetworkResponse<dynamic>> delete(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    Map<String, String>? headers,
   }) async {
-    return _sendWithCompatibility(
+    return _send(
       NetworkRequest(
         path: path,
         method: NetworkMethod.delete,
         body: data,
         queryParameters: queryParameters ?? const <String, dynamic>{},
-        headers: _headersFromOptions(options),
+        headers: headers ?? const <String, String>{},
       ),
     );
   }
 
-  Future<Response<dynamic>> _sendWithCompatibility(
+  Future<NetworkResponse<dynamic>> _send(
     NetworkRequest request,
   ) async {
     try {
-      final networkResponse = await _networkClient.send(request);
-      return Response<dynamic>(
-        requestOptions: RequestOptions(
-          path: request.path,
-          method: request.method.name,
-        ),
-        data: networkResponse.data,
-        statusCode: networkResponse.statusCode,
-        headers: Headers.fromMap(networkResponse.headers),
-      );
+      return await _networkClient.send(request);
     } on AppException {
       rethrow;
     } on Exception catch (e) {
       throw NetworkException(e.toString());
     }
-  }
-
-  Map<String, String> _headersFromOptions(Options? options) {
-    if (options?.headers == null) {
-      return const <String, String>{};
-    }
-    return options!.headers!.map(
-      (key, value) => MapEntry(key, value.toString()),
-    );
   }
 }

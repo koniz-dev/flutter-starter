@@ -428,9 +428,7 @@ void main() {
           apiClient.post(
             '/orders',
             data: {'amount': 1},
-            options: Options(
-              headers: {RetryInterceptor.idempotencyKeyHeader: 'key-1'},
-            ),
+            headers: {RetryInterceptor.idempotencyKeyHeader: 'key-1'},
           ),
           throwsA(isA<ServerException>()),
         );

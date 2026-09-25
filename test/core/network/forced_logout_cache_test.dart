@@ -333,10 +333,10 @@ void main() {
   ///
   /// `.timeout` makes a handler that is never completed fail fast instead of
   /// hanging until the suite-level timeout.
-  Future<void> drive401(_World world, {Options? options}) async {
+  Future<void> drive401(_World world, {Map<String, String>? headers}) async {
     await expectLater(
       world.apiClient
-          .get('/users/me', options: options)
+          .get('/users/me', headers: headers)
           .timeout(const Duration(seconds: 10)),
       throwsA(isA<AppException>()),
       reason: 'the 401 must still surface to the caller',
@@ -396,10 +396,7 @@ void main() {
               fail('the early logout branch must not attempt a refresh'),
         );
 
-        await drive401(
-          world,
-          options: Options(headers: <String, dynamic>{'X-Retry-Count': '1'}),
-        );
+        await drive401(world, headers: <String, String>{'X-Retry-Count': '1'});
 
         expect(world.storage.cachedBodyKeys, isEmpty);
         expect(

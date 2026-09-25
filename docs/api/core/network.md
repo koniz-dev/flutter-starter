@@ -30,6 +30,38 @@ Feature code that needs the full interceptor stack (auth, retry, logging, etc.)
 should inject `ApiClient` via `apiClientProvider` or the typed alias
 `networkClientProvider` (same instance).
 
+### Where dio is allowed to appear
+
+Since koniz-dev/flutter-starter#176 the request surface of `ApiClient` is typed
+entirely on `lib/core/contracts/network_contracts.dart`: every verb returns
+`NetworkResponse<dynamic>` and takes `Map<String, String>? headers` rather than
+dio's `Options`. A data source can therefore hold an `ApiClient` without
+importing `package:dio`, which is what makes `INetworkClient` genuinely
+swappable - before #176 the sample auth data source was typed on
+`dio.Response` and swapping the transport meant editing every data source.
+
+The rule the tree follows, checkable with one command:
+
+```bash
+grep -rn "package:dio" lib | grep -v "^lib/core/network/"
+# -> lib/core/errors/dio_exception_mapper.dart:1
+```
+
+`package:dio` may be imported only by code whose job *is* dio - everything under
+`lib/core/network/` (the adapter and the interceptors, which implement dio's own
+`Interceptor` API) plus the one designated mapper,
+`lib/core/errors/dio_exception_mapper.dart`, which exists solely to translate
+`DioException` into a domain exception. Rewriting that mapper without the import
+is impossible; it would only move the import somewhere less obvious. Nothing
+under `lib/features/` may import it.
+
+`ApiClient.dio` is **kept** as a deliberate escape hatch for transport-level
+work - swapping `httpClientAdapter` in a test, inspecting `interceptors`,
+reading `BaseOptions`. It is no longer on any request path, so using it is an
+explicit opt-out of the contract rather than something an ordinary `post()`
+forces on the caller. Typing a data source on what it returns puts
+`package:dio` back in the feature layer, which is the leak #176 closed.
+
 ### Constructor
 
 <!-- signature: lib/core/network/api_client.dart ApiClient -->
@@ -86,10 +118,10 @@ and fails the Docs check if they differ. See
 /// Parameters:
 /// - [path]: The endpoint path (relative to base URL)
 /// - [queryParameters]: Optional query parameters
-/// - [options]: Optional request options
+/// - [headers]: Optional per-request headers
 /// 
 /// Returns:
-/// - [Future<Response<dynamic>>]: Dio response object
+/// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
 /// 
 /// Throws:
 /// - [ServerException]: If server returns error status code
@@ -100,10 +132,10 @@ and fails the Docs check if they differ. See
 /// final response = await apiClient.get('/users', queryParameters: {'page': 1});
 /// final data = response.data;
 /// ```
-Future<Response<dynamic>> get(
+Future<NetworkResponse<dynamic>> get(
   String path, {
   Map<String, dynamic>? queryParameters,
-  Options? options,
+  Map<String, String>? headers,
 });
 ```
 
@@ -116,10 +148,10 @@ Future<Response<dynamic>> get(
 /// - [path]: The endpoint path (relative to base URL)
 /// - [data]: Optional request body data
 /// - [queryParameters]: Optional query parameters
-/// - [options]: Optional request options
+/// - [headers]: Optional per-request headers
 /// 
 /// Returns:
-/// - [Future<Response<dynamic>>]: Dio response object
+/// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
 /// 
 /// Throws:
 /// - [ServerException]: If server returns error status code
@@ -132,11 +164,11 @@ Future<Response<dynamic>> get(
 ///   data: {'name': 'John', 'email': 'john@example.com'},
 /// );
 /// ```
-Future<Response<dynamic>> post(
+Future<NetworkResponse<dynamic>> post(
   String path, {
   dynamic data,
   Map<String, dynamic>? queryParameters,
-  Options? options,
+  Map<String, String>? headers,
 });
 ```
 
@@ -149,10 +181,10 @@ Future<Response<dynamic>> post(
 /// - [path]: The endpoint path (relative to base URL)
 /// - [data]: Optional request body data
 /// - [queryParameters]: Optional query parameters
-/// - [options]: Optional request options
+/// - [headers]: Optional per-request headers
 /// 
 /// Returns:
-/// - [Future<Response<dynamic>>]: Dio response object
+/// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
 /// 
 /// Throws:
 /// - [ServerException]: If server returns error status code
@@ -165,11 +197,11 @@ Future<Response<dynamic>> post(
 ///   data: {'name': 'Jane'},
 /// );
 /// ```
-Future<Response<dynamic>> put(
+Future<NetworkResponse<dynamic>> put(
   String path, {
   dynamic data,
   Map<String, dynamic>? queryParameters,
-  Options? options,
+  Map<String, String>? headers,
 });
 ```
 
@@ -182,10 +214,10 @@ Future<Response<dynamic>> put(
 /// - [path]: The endpoint path (relative to base URL)
 /// - [data]: Optional request body data
 /// - [queryParameters]: Optional query parameters
-/// - [options]: Optional request options
+/// - [headers]: Optional per-request headers
 /// 
 /// Returns:
-/// - [Future<Response<dynamic>>]: Dio response object
+/// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
 /// 
 /// Throws:
 /// - [ServerException]: If server returns error status code
@@ -195,11 +227,11 @@ Future<Response<dynamic>> put(
 /// ```dart
 /// await apiClient.delete('/users/123');
 /// ```
-Future<Response<dynamic>> delete(
+Future<NetworkResponse<dynamic>> delete(
   String path, {
   dynamic data,
   Map<String, dynamic>? queryParameters,
-  Options? options,
+  Map<String, String>? headers,
 });
 ```
 
@@ -573,7 +605,7 @@ Two equivalent per-request opt-ins, both **off by default**:
 await apiClient.post(
   '/orders',
   data: {'amount': 1},
-  options: Options(headers: {'Idempotency-Key': orderUuid}),
+  headers: {'Idempotency-Key': orderUuid},
 );
 
 // 2. extra['retry'] - for code holding a raw Dio instance.
@@ -864,15 +896,12 @@ try {
 }
 ```
 
-### Custom Request Options
+### Custom Request Headers
 
 ```dart
 final response = await apiClient.get(
   '/users',
-  options: Options(
-    headers: {'Custom-Header': 'value'},
-    responseType: ResponseType.json,
-  ),
+  headers: {'Custom-Header': 'value'},
 );
 ```
 

@@ -178,12 +178,7 @@ void main() {
 
         await expectLater(
           session.apiClient
-              .get(
-                '/users/me',
-                options: Options(
-                  headers: <String, dynamic>{'X-Retry-Count': '1'},
-                ),
-              )
+              .get('/users/me', headers: <String, String>{'X-Retry-Count': '1'})
               .timeout(const Duration(seconds: 10)),
           throwsA(isA<AppException>()),
         );
