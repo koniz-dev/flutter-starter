@@ -1,0 +1,6 @@
+Running build hooks...Running build hooks...links: checked 640 relative link(s) in 103 file(s); 0 broken
+emoji: scanned 70 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+
+OK: documentation checks passed.
+check_docs exit=0
