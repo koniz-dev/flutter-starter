@@ -1,0 +1,60 @@
+Issue #138 - the asset-bundling guard misses declared directory entries
+Verified on main at ef94605 ("fix(security): walk declared asset directories in
+the bundling guard (#150)").
+
+Nothing visual changed, so this was run with `--no-goldens` (as #79 did) and
+there are no PNGs in this directory. No criterion rests on a screenshot.
+
+Criterion -> artifact
+---------------------
+1. The guard walks every declared directory and fails on a .env inside it.
+   criterion-1-4-counterfactual.log, steps 2-3: the same tree, same pubspec.
+   The guard as it stood at cf18772 (before this change) prints
+   "OK: no unacknowledged env file in the Flutter asset list" and exits 0 with
+   assets/config/.env present; the guard at ef94605 exits 1 and names
+   "pubspec.yaml:175 - assets/config/.env (via "assets/config/")".
+   Unit level: guard-tests.log, "catches a .env the asset list never names -
+   the gap this closes", which asserts the list scan returns empty for the same
+   fixture.
+
+2. The inline env-asset-ack: exception still applies.
+   criterion-2-3-ack-and-scope.log sections A and B. A file entry behaves
+   exactly as #79 left it (exit 0 plus a reminder). For a file inside a
+   directory the ack goes on the directory entry and must name the file:
+   B1 shows .env.web acknowledged and .env.production still failing from the
+   same comment; B2 shows exit 0 once only the acknowledged file remains; B3
+   shows the same tree failing without the marker.
+
+3. Scope beyond env files, and the boundary, stated in the tool header.
+   criterion-2-3-ack-and-scope.log section C: upload.p12, server.pem,
+   secrets.json and google-services.json are flagged with their reason;
+   app_config.json, logo.png, pinned_root.crt and apple_dist.cer are not.
+   Section D quotes the header comment that states the rule and the two things
+   it cannot catch.
+
+4. Demonstrated failing with a file placed in assets/config/, passing clean.
+   criterion-1-4-counterfactual.log end to end: step 1 places the file and
+   shows `git status` does not mention it (.env is gitignored, pubspec
+   untouched); step 3 fails the guard; step 4 fails the `flutter test` layer,
+   i.e. the CI Quality gate; step 5 removes it and both pass again.
+
+5. ./scripts/dev/audit_template.sh exits 0.
+   criterion-5-audit_template.log: "audit_template.sh exit=0", 2660 tests
+   passed. Also format.log / analyze.log / tests.log from
+   ./scripts/test/run_acceptance.sh 138 --no-goldens, all "exit: 0".
+
+Known limits, unchanged by this issue
+-------------------------------------
+* The walk sees the tree at the moment it runs. A file dropped in afterwards
+  ships until something runs the check again.
+* In CI the walk is weaker still: a gitignored .env never reaches the runner,
+  so the run that catches this case is the local one (audit_template.sh, the
+  pre-push hook, or a release checklist step).
+* The guard is still not on the release-build path - scripts/ci/build_all.sh
+  and the deploy workflows can build a tree it never ran against. That is
+  koniz-dev/flutter-starter#135, deliberately not fixed here. Directory paths
+  now resolve relative to the pubspec's own directory, so #135 can point the
+  guard at another tree without changing it.
+* Matching is by file name only. A secret inside an innocuously named file
+  (assets/config/app_config.json holding an API key) is not detected, and that
+  is the accepted cost of not firing on ordinary configuration.
