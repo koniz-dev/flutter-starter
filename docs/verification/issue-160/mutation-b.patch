@@ -1,0 +1,13 @@
+diff --git a/lib/core/localization/localization_service.dart b/lib/core/localization/localization_service.dart
+index 7e993e9..8891458 100644
+--- a/lib/core/localization/localization_service.dart
++++ b/lib/core/localization/localization_service.dart
+@@ -90,6 +90,8 @@ class LocalizationService {
+ 
+   /// Get current locale from storage or return default
+   Future<Locale> getCurrentLocale() async {
++    throw StateError('MUTATION B: getCurrentLocale blew up');
++    // ignore: dead_code
+     try {
+       final languageCode = await _storageService.getString(_languageKey);
+       if (languageCode == null) {

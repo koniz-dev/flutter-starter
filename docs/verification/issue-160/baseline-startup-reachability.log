@@ -1,0 +1,98 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a0716a940d613a892/test/core/startup/startup_reachability_test.dart
+00:00 +0: startup container surfaces failures instead of hanging (#101) a real migration failure reaches the awaiting caller within 5s
+00:00 +1: startup container surfaces failures instead of hanging (#101) a downgrade refusal reaches the awaiting caller within 5s
+00:00 +2: startup container surfaces failures instead of hanging (#101) a plain Exception from storage init is not retried away
+00:00 +3: startup container surfaces failures instead of hanging (#101) a session restoration failure is not retried away
+00:00 +4: startup container surfaces failures instead of hanging (#101) a healthy startup still completes normally
+00:00 +5: startup container surfaces failures instead of hanging (#101) the default container still hangs - the opt-out is load-bearing
+00:03 +6: main() renders StartupFailureApp end to end (#101) a failed version stamp boots into the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: test
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+═══════════════════════════════════════════════════════════
+00:06 +7: main() renders StartupFailureApp end to end (#101) a downgrade refusal boots into the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: test
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+═══════════════════════════════════════════════════════════
+00:06 +8: main() boots MyApp end to end on a healthy startup (#160) a healthy startup hands MyApp to runApp, not the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: test
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+═══════════════════════════════════════════════════════════
+00:07 +9: All tests passed!
