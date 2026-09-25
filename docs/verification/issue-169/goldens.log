@@ -1,0 +1,81 @@
+$ flutter test --run-skipped --tags golden test/acceptance
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/home_screen_acceptance_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/home_screen_acceptance_test.dart: HomeScreen acceptance renders the home content surface and welcome heading
+00:04 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/forced_logout_acceptance_test.dart: a forced logout replaces the authenticated shell with login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/forced_logout_acceptance_test.dart: a forced logout replaces the authenticated shell with login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:09 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:09 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/forced_logout_acceptance_test.dart: a forced logout replaces the authenticated shell with login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:14 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+00:15 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/list_view_states_acceptance_test.dart: OptimizedListView state acceptance an empty list that loaded fine shows the empty state
+00:16 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/list_view_states_acceptance_test.dart: OptimizedListView state acceptance an empty list that failed shows the error and a retry
+00:18 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:25 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+00:25 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+00:28 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/startup_failure_acceptance_test.dart: StartupFailureApp acceptance paints a recovery screen instead of an empty window
+00:28 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with empty storage the app opens on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:28 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with empty storage the app opens on login
+00:32 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#85) a cached user with no token opens on login, not home
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:35 +11: All tests passed!
+exit: 0

@@ -1,0 +1,88 @@
+Criterion 6: ./scripts/dev/audit_template.sh exits 0, on merged main (28db2f5).
+
+Run in full and recorded separately from run_acceptance.sh because the two are
+not the same gate: audit_template.sh also runs the env asset guard
+(tool/check_env_assets.dart), which run_acceptance.sh does not.
+
+Head and tail of the run; the elided middle is per-test logging output from the
+app's own LoggingService, reproducible by re-running the command.
+
+$ ./scripts/dev/audit_template.sh --timeout=5m
+exit: 0
+
+SUMMARY
+  ==> env asset guard
+  OK: no unacknowledged secrets file in the Flutter asset list, and none
+      inside a declared asset directory.
+  ==> format (lib test integration_test tool examples)
+  Formatted 361 files (0 changed) in 2.39 seconds.
+  ==> flutter analyze
+  No issues found! (ran in 6.8s)
+  ==> flutter test
+  03:49 +2714 ~8: All tests passed!
+
+FULL OUTPUT (head 40 / tail 20)
+
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 361 files (0 changed) in 2.39 seconds.
+==> flutter analyze
+Analyzing agent-a22f35f3592100129...                            
+No issues found! (ran in 6.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: findDeclaredSecretAssets flags a bare .env in the flutter asset list
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+
+[... middle elided ...]
+
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:49 +2709 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:49 +2710 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:49 +2711 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/main_test.dart: HomeScreen should create HomeScreen widget
+03:49 +2712 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/main_test.dart: HomeScreen should display welcome message
+03:49 +2713 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/main_test.dart: HomeScreen should have app bar with title
+03:49 +2714 ~8: All tests passed!
