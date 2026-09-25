@@ -129,15 +129,45 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     }
   }
 
+  /// Drops every piece of local session state.
+  ///
+  /// The two stores are torn down **independently**. Chaining them as
+  /// sequential awaits inside one `try` meant a throwing
+  /// [IKeyValueStore.remove] - a `MissingPluginException` on a stripped build,
+  /// a `PlatformException` from a corrupt prefs file - skipped
+  /// [ITokenStore.clearAllTokens] and left the access token *and* the refresh
+  /// token in the Keychain/Keystore after an explicit logout
+  /// (koniz-dev/flutter-starter#168).
+  ///
+  /// Both guards catch `on Object`, not `on Exception`, matching
+  /// `AuthInterceptor._logoutUser()`. The narrower clause let an [Error]
+  /// escape this method raw, past the `CacheException` contract its caller
+  /// reads, and skip the step after it just the same.
+  ///
+  /// The failure is still reported - best-effort is about the *other steps*
+  /// running, not about the caller being told everything worked. When both
+  /// steps fail the first one is reported.
   @override
   Future<void> clearCache() async {
+    Object? firstError;
+
+    // Clear user data from regular storage
     try {
-      // Clear user data from regular storage
       await storageService.remove(AppConstants.userDataKey);
-      // Clear tokens from secure storage
+    } on Object catch (e) {
+      firstError = e;
+    }
+
+    // Clear tokens from secure storage. Guarded on its own: this is the step
+    // that must run even when the one above did not.
+    try {
       await tokenStore.clearAllTokens();
-    } on Exception catch (e) {
-      throw CacheException('Failed to clear cache: $e');
+    } on Object catch (e) {
+      firstError ??= e;
+    }
+
+    if (firstError != null) {
+      throw CacheException('Failed to clear cache: $firstError');
     }
   }
 }

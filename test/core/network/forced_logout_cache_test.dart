@@ -199,6 +199,36 @@ class _ScriptedAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
+/// An [_InMemoryStorage] whose removal of the cached user blob always throws.
+///
+/// One failure injectable into *both* logout paths: the forced path removes
+/// that key directly in `AuthInterceptor._logoutUser()`, the explicit path
+/// removes it inside `AuthLocalDataSourceImpl.clearCache()`. Every other key -
+/// including every `http_cache_*` entry, which `CacheInterceptor.clearCache()`
+/// removes one at a time - is untouched, so the only difference the comparison
+/// can report is a step one path skipped and the other did not
+/// (koniz-dev/flutter-starter#168).
+class _BlobRemovalFailsStorage extends _InMemoryStorage {
+  _BlobRemovalFailsStorage(this.thrown);
+
+  /// Thrown on the user-blob key only. Exercised with an `Exception` and an
+  /// `Error`, because `clearCache()`'s old `on Exception` clause handled only
+  /// one of the two.
+  final Object thrown;
+
+  @override
+  Future<bool> remove(String key) async {
+    if (key == AppConstants.userDataKey) {
+      // Typed `Object` on purpose: both logout paths have to survive an
+      // `Error` here as well as an `Exception`, so the lint's premise does
+      // not hold.
+      // ignore: only_throw_errors
+      throw thrown;
+    }
+    return super.remove(key);
+  }
+}
+
 /// A response cache whose `clearCache()` always fails.
 class _FailingResponseCache implements IHttpResponseCache {
   int clearCalls = 0;
@@ -284,8 +314,9 @@ void main() {
   Future<_World> seedSignedInWorld({
     Future<Result<String>> Function()? refreshToken,
     List<_Reply>? replies,
+    _InMemoryStorage? storageOverride,
   }) async {
-    final storage = _InMemoryStorage();
+    final storage = storageOverride ?? _InMemoryStorage();
     final tokens = _InMemoryTokenStore();
     final adapter = _ScriptedAdapter(
       replies ??
@@ -300,8 +331,27 @@ void main() {
       authInterceptor: AuthInterceptor(
         tokenStore: tokens,
         refreshToken: refreshToken ?? () async => _refreshUnavailable,
-        // Wired exactly as `authInterceptorProvider` wires it, so the
+        // Wired with the two dependencies that write to the device, so the
         // cached user blob is part of the state under comparison.
+        //
+        // This is *not* the full `authInterceptorProvider` wiring, and saying
+        // so used to be wrong (koniz-dev/flutter-starter#168). Two
+        // constructor arguments are deliberately omitted:
+        //
+        // - `sessionSink:` (#127). The in-memory session is real state, but
+        //   `AuthRepositoryImpl.logout()` - the explicit path this file
+        //   compares against - holds no `ISessionTerminationSink` at all; on
+        //   that path `AuthNotifier` drops the session itself, a layer above
+        //   anything `_World` models. Putting the sink in `_World.state`
+        //   would therefore compare a concern only one of the two paths owns
+        //   here, and would report a difference that is an artifact of where
+        //   the boundary sits rather than of a logout step being skipped.
+        //   `test/core/network/forced_logout_session_test.dart` covers the
+        //   sink on the forced path, with its own counterfactual.
+        // - `sessionGeneration:` (#169). Production shares one counter
+        //   between the interceptor and the repository; here each gets its
+        //   own default. It orders concurrent credential *writes* and leaves
+        //   no trace in the persisted state this file snapshots.
         keyValueStore: storage,
       ),
     )..dio.httpClientAdapter = adapter;
@@ -456,6 +506,90 @@ void main() {
         });
       },
     );
+
+    // koniz-dev/flutter-starter#168 criterion 4. The happy-path comparison
+    // above never exercises a teardown step that throws, which is exactly
+    // where the two paths had diverged: `_logoutUser()` guards each step
+    // separately, while the explicit path chained them inside one `try`, so
+    // the first throw skipped everything after it.
+    //
+    // Counterfactual, actually run
+    // (docs/verification/issue-168/counterfactual.log): against the pre-fix
+    // chained bodies both cases below fail, reporting the surviving tokens and
+    // `http_cache_*` keys as the difference between the two paths.
+    for (final failure in <({String label, Object thrown})>[
+      (label: 'an Exception', thrown: const CacheException('prefs locked')),
+      (label: 'an Error', thrown: StateError('prefs plugin missing')),
+    ]) {
+      test(
+        'the two paths stay equivalent when the user-blob removal throws '
+        '${failure.label} (#168)',
+        () async {
+          // The same injected failure on both sides, so any difference in the
+          // final snapshots is again attributable to the logout path alone.
+          final explicitWorld = await seedSignedInWorld(
+            storageOverride: _BlobRemovalFailsStorage(failure.thrown),
+          );
+          final forcedWorld = await seedSignedInWorld(
+            storageOverride: _BlobRemovalFailsStorage(failure.thrown),
+          );
+
+          expect(
+            forcedWorld.state,
+            equals(explicitWorld.state),
+            reason: 'the two worlds must start identical',
+          );
+          final seeded = explicitWorld.state;
+
+          // Path A: the user taps "log out". The teardown fails, and says so.
+          final repository = AuthRepositoryImpl(
+            remoteDataSource: _StubRemoteDataSource(),
+            localDataSource: explicitWorld.local,
+            httpCache: explicitWorld.apiClient.responseCache,
+          );
+          final result = await repository.logout();
+          expect(
+            result.isFailure,
+            isTrue,
+            reason:
+                'a teardown step that failed must not be reported as a '
+                'clean logout',
+          );
+
+          // Path B: the session expires and a 401 forces the logout.
+          await drive401(forcedWorld);
+
+          // The assertion this criterion exists for.
+          expect(
+            forcedWorld.state,
+            equals(explicitWorld.state),
+            reason:
+                'a failing teardown step must leave the same device state on '
+                'both paths - the steps after it run either way',
+          );
+
+          // And that shared state is a torn-down session apart from the one
+          // key whose removal was rigged to fail, rather than two matching
+          // but wrong states.
+          expect(explicitWorld.state, isNot(equals(seeded)));
+          expect(explicitWorld.tokens.accessToken, isNull);
+          expect(explicitWorld.tokens.refreshToken, isNull);
+          expect(
+            explicitWorld.storage.values.keys.where(
+              (k) => k.startsWith('http_cache_'),
+            ),
+            isEmpty,
+            reason: 'the HTTP cache is the step the explicit path used to skip',
+          );
+          expect(
+            explicitWorld.storage.values.keys,
+            <String>[AppConstants.userDataKey],
+            reason:
+                'only the key whose removal was rigged to throw may survive',
+          );
+        },
+      );
+    }
   });
 
   group('cache clearing is best-effort (#114 criterion 4)', () {

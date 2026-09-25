@@ -103,6 +103,12 @@ class AuthRepositoryImpl implements AuthRepository {
   /// a live refresh token on the device whenever the server was unreachable, a
   /// 500, or had no `/auth/logout` route at all.
   ///
+  /// The teardown's own steps are independent of each other for the same
+  /// reason: each is guarded separately and a failure - or absence - of one
+  /// must not skip the rest (#168). Making them unconditional relative to the
+  /// *remote* call but still coupled to *each other* left the same outcome
+  /// reachable one layer down.
+  ///
   /// The returned [Result] still reports a remote failure, so a caller can
   /// never mistake an unreachable server for a clean server-side sign-out. If
   /// the local teardown *also* fails, that failure is the one returned: a
@@ -127,16 +133,44 @@ class AuthRepositoryImpl implements AuthRepository {
       remoteError = e;
     }
 
+    // Every teardown step below is guarded on its own, and no step is
+    // reachable only through another - the same discipline
+    // `AuthInterceptor._logoutUser()` has always applied to the forced path.
+    // Chaining these two as sequential awaits inside one `try` meant a
+    // throwing `clearCache()` skipped the HTTP cache entirely, leaving every
+    // `http_cache_*` body in plaintext shared_preferences on a device whose
+    // user had just asked to be signed out
+    // (koniz-dev/flutter-starter#168).
+    //
+    // The first failure is the one reported: it is the step whose state the
+    // caller most needs to know survived, and reporting later ones would hide
+    // it. Nothing here returns early - a `return` inside a teardown sequence
+    // is what #114 and #127 each had to remove.
+    Object? localError;
+
     try {
       await localDataSource.clearCache();
-      // Cached HTTP bodies are local session state too - drop them with the
-      // rest of it, or the next sign-in can be served the previous user's
-      // responses (#77).
-      await httpCache?.clearCache();
     } on Object catch (e) {
-      return ResultFailure(_asFailure(e));
+      localError = e;
     }
 
+    // Cached HTTP bodies are local session state too - drop them with the
+    // rest of it, or the next sign-in can be served the previous user's
+    // responses (#77).
+    final cache = httpCache;
+    if (cache != null) {
+      try {
+        await cache.clearCache();
+      } on Object catch (e) {
+        localError ??= e;
+      }
+    }
+
+    // A session still sitting on the device outranks an unreachable server,
+    // so a local failure is reported in preference to a remote one.
+    if (localError != null) {
+      return ResultFailure(_asFailure(localError));
+    }
     if (remoteError != null) {
       return ResultFailure(_asFailure(remoteError));
     }

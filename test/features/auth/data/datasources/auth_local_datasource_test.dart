@@ -1,11 +1,155 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// An [IKeyValueStore] whose [remove] can be made to throw, so the teardown
+/// step that follows it can be observed to run anyway.
+///
+/// Deliberately a real in-memory store rather than a mock: the assertions are
+/// about what is left on the device, not about which methods were called.
+class _FailableKeyValueStore implements IKeyValueStore {
+  _FailableKeyValueStore({this.removeThrows});
+
+  /// Thrown by [remove] when non-null. Stands in for a
+  /// `MissingPluginException` on a stripped build or a `PlatformException`
+  /// from a corrupt prefs file.
+  final Object? removeThrows;
+
+  final Map<String, Object?> values = <String, Object?>{};
+
+  int removeCalls = 0;
+
+  @override
+  Future<bool> remove(String key) async {
+    removeCalls++;
+    final thrown = removeThrows;
+    if (thrown != null) {
+      // Typed `Object` on purpose: `clearCache()` has to survive an `Error`
+      // as well as an `Exception`, which is what the old `on Exception`
+      // clause did not, so the lint's premise does not hold here.
+      // ignore: only_throw_errors
+      throw thrown;
+    }
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
+
+  @override
+  Future<bool> containsKey(String key) async => values.containsKey(key);
+
+  @override
+  Future<String?> getString(String key) async => values[key] as String?;
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<int?> getInt(String key) async => values[key] as int?;
+
+  @override
+  Future<bool> setInt(String key, int value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool?> getBool(String key) async => values[key] as bool?;
+
+  @override
+  Future<bool> setBool(String key, {required bool value}) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<double?> getDouble(String key) async => values[key] as double?;
+
+  @override
+  Future<bool> setDouble(String key, double value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<List<String>?> getStringList(String key) async =>
+      values[key] as List<String>?;
+
+  @override
+  Future<bool> setStringList(String key, List<String> value) async {
+    values[key] = value;
+    return true;
+  }
+}
+
+/// A real in-memory token store, so "the tokens are gone" is asserted by
+/// reading them back rather than by a `verify()`.
+class _InMemoryTokenStore implements ITokenStore {
+  String? accessToken;
+  String? refreshToken;
+
+  int clearAllCalls = 0;
+
+  @override
+  Future<void> clearAccessToken() async => accessToken = null;
+
+  @override
+  Future<void> clearAllTokens() async {
+    clearAllCalls++;
+    accessToken = null;
+    refreshToken = null;
+  }
+
+  @override
+  Future<void> clearRefreshToken() async => refreshToken = null;
+
+  @override
+  Future<String?> getAccessToken() async => accessToken;
+
+  @override
+  Future<String?> getRefreshToken() async => refreshToken;
+
+  @override
+  Future<bool> setAccessToken(String token) async {
+    accessToken = token;
+    return true;
+  }
+
+  @override
+  Future<bool> setRefreshToken(String token) async {
+    refreshToken = token;
+    return true;
+  }
+}
+
+/// A token store whose [clearAllTokens] always throws.
+class _FailingTokenStore extends _InMemoryTokenStore {
+  _FailingTokenStore(this.thrown);
+
+  final Object thrown;
+
+  @override
+  Future<void> clearAllTokens() async {
+    clearAllCalls++;
+    // Same reason as `_FailableKeyValueStore.remove`.
+    // ignore: only_throw_errors
+    throw thrown;
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -573,5 +717,132 @@ void main() {
         expect(user, isNull);
       });
     });
+  });
+
+  // Regression for koniz-dev/flutter-starter#168 criteria 2 and 3.
+  //
+  // `clearCache()` used to run both stores' teardown inside one `try`, so a
+  // throwing `storageService.remove()` skipped `tokenStore.clearAllTokens()`
+  // and left the access token *and* the refresh token in the Keychain /
+  // Keystore after an explicit logout. The `on Exception` clause was the other
+  // half of it: an `Error` escaped the declared `CacheException` contract raw
+  // and skipped the same step.
+  //
+  // A sibling group rather than a nested one: these drive real in-memory
+  // stores directly, so they need none of the method-channel harness above.
+  //
+  // Counterfactual, actually run
+  // (docs/verification/issue-168/counterfactual.log).
+  group('clearCache tears its two stores down independently (#168)', () {
+    for (final failure in <({String label, Object thrown})>[
+      (
+        label: 'an Exception',
+        thrown: PlatformException(code: 'STORAGE_ERROR'),
+      ),
+      (label: 'an Error', thrown: StateError('prefs plugin missing')),
+    ]) {
+      test(
+        'a user-blob removal throwing ${failure.label} must still clear the '
+        'tokens',
+        () async {
+          // Arrange - a signed-in device whose prefs removal is broken.
+          final store = _FailableKeyValueStore(removeThrows: failure.thrown);
+          final tokens = _InMemoryTokenStore()
+            ..accessToken = 'access-token'
+            ..refreshToken = 'refresh-token';
+          final dataSource = AuthLocalDataSourceImpl(
+            storageService: store,
+            tokenStore: tokens,
+          );
+
+          // Act & Assert - the caller is still told the teardown failed...
+          await expectLater(
+            dataSource.clearCache(),
+            throwsA(isA<CacheException>()),
+            reason:
+                'best-effort is about the other steps running, not about '
+                'reporting success',
+          );
+
+          // ...and the step after the failing one ran anyway.
+          expect(store.removeCalls, 1);
+          expect(tokens.clearAllCalls, 1);
+          expect(
+            await dataSource.getToken(),
+            isNull,
+            reason:
+                'an access token must not survive an explicit logout because '
+                'the prefs removal before it threw',
+          );
+          expect(
+            await dataSource.getRefreshToken(),
+            isNull,
+            reason: 'a live refresh token is the more serious half of this',
+          );
+        },
+      );
+    }
+
+    test(
+      'a token clear throwing an Error is reported as a CacheException',
+      () async {
+        // Arrange - the mirror case, and the other half of the `on Exception`
+        // defect: the last step failing must not escape the declared contract.
+        final store = _FailableKeyValueStore()
+          ..values[AppConstants.userDataKey] = '{"id":"1"}';
+        final tokens = _FailingTokenStore(StateError('keychain locked'));
+        final dataSource = AuthLocalDataSourceImpl(
+          storageService: store,
+          tokenStore: tokens,
+        );
+
+        // Act & Assert
+        await expectLater(
+          dataSource.clearCache(),
+          throwsA(
+            isA<CacheException>().having(
+              (e) => e.message,
+              'message',
+              contains('keychain locked'),
+            ),
+          ),
+        );
+
+        // The step before it still took effect.
+        expect(store.values.containsKey(AppConstants.userDataKey), isFalse);
+        expect(tokens.clearAllCalls, 1);
+      },
+    );
+
+    test(
+      'when both steps fail the first failure is the one reported',
+      () async {
+        // Arrange
+        final store = _FailableKeyValueStore(
+          removeThrows: const CacheException('prefs unavailable'),
+        );
+        final tokens = _FailingTokenStore(StateError('keychain locked'));
+        final dataSource = AuthLocalDataSourceImpl(
+          storageService: store,
+          tokenStore: tokens,
+        );
+
+        // Act & Assert
+        await expectLater(
+          dataSource.clearCache(),
+          throwsA(
+            isA<CacheException>().having(
+              (e) => e.message,
+              'message',
+              contains('prefs unavailable'),
+            ),
+          ),
+        );
+
+        // Both were attempted regardless.
+        expect(store.removeCalls, 1);
+        expect(tokens.clearAllCalls, 1);
+      },
+    );
   });
 }
