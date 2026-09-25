@@ -1,0 +1,225 @@
+guard BEFORE the fix: main at 75c8d1d (parent of the merge commit)
+guard AFTER  the fix: e56c93b tool/check_env_assets.dart
+
+================================================================
+CASE: criterion 1+2: ack names .env.example, a real .env sits next to it
+----------------------------------------------------------------
+pubspec.yaml:
+    name: fixture_c2
+    
+    flutter:
+      uses-material-design: true
+      assets:
+        - .env.example
+        - assets/config/ # env-asset-ack: .env.example, publishable placeholders only
+files in assets/config/:
+    .env
+    .env.example
+
+--- before ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+--- after ---
+SECURITY: a secrets file is bundled as a Flutter asset.
+
+  pubspec.yaml:7  - assets/config/.env (via "assets/config/")  [environment file]
+
+Flutter asset lists are not build-mode scoped, so this file ships in the
+release APK, the release IPA and the web build, not just in debug. Anyone can
+unzip the app bundle to read it, and on web it is served over HTTP at
+/assets/<path> and listed in AssetManifest.json. A declared *directory* bundles
+everything directly inside it, with no pubspec entry per file.
+
+Use instead:
+  * native (all build modes): --dart-define-from-file=.env, or individual
+    --dart-define flags. Nothing is bundled as a readable file.
+  * web: there is no dart-define path, and a web client cannot hold a secret.
+    Serve secrets from your backend and keep only publishable values in the
+    bundle.
+  * key and signing material: keep it out of the tree the app is built from.
+    Nothing an app bundle contains is private.
+
+If the file genuinely holds no secrets and must ship (a web build needing
+runtime config), say so inline and this check will pass:
+
+    - .env # env-asset-ack: web build, contains no secrets
+
+For a file inside a declared directory, put the acknowledgement on the
+directory entry and name the file, so it covers that file and not the whole
+directory:
+
+    - assets/config/ # env-asset-ack: app_config.env, .env.web - publishable only
+
+The names are a comma-separated list of bare file names, each matched exactly
+against the file name and never as a substring, ending at the first entry that
+is not a file name; free prose may follow after a semicolon or a spaced dash.
+So `.env.example` does not cover `.env`, and prose that merely mentions a file
+does not acknowledge it.
+
+See docs/guides/configuration.md ("Never ship a secret in the bundle").
+
+exit=1
+
+================================================================
+CASE: criterion 3: a genuine ack naming the offending file itself
+----------------------------------------------------------------
+pubspec.yaml:
+    name: fixture_c3a
+    
+    flutter:
+      uses-material-design: true
+      assets:
+        - .env.example
+        - assets/config/ # env-asset-ack: .env.web, publishable values only
+files in assets/config/:
+    .env.web
+
+--- before ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+--- after ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+================================================================
+CASE: criterion 3: an ack naming several files as a list
+----------------------------------------------------------------
+pubspec.yaml:
+    name: fixture_c3b
+    
+    flutter:
+      uses-material-design: true
+      assets:
+        - .env.example
+        - assets/config/ # env-asset-ack: .env.web, .env.staging, publishable values only
+files in assets/config/:
+    .env.staging
+    .env.web
+
+--- before ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.staging" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+--- after ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.staging" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+================================================================
+CASE: criterion 3: trailing prose after a dash, no comma
+----------------------------------------------------------------
+pubspec.yaml:
+    name: fixture_c3c
+    
+    flutter:
+      uses-material-design: true
+      assets:
+        - .env.example
+        - assets/config/ # env-asset-ack: .env.web - publishable values only
+files in assets/config/:
+    .env.web
+
+--- before ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+--- after ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+================================================================
+CASE: criterion 4: prose that mentions .env while denying it exists
+----------------------------------------------------------------
+pubspec.yaml:
+    name: fixture_c4
+    
+    flutter:
+      uses-material-design: true
+      assets:
+        - .env.example
+        - assets/config/ # env-asset-ack: .env.web only; there is no .env here
+files in assets/config/:
+    .env
+    .env.web
+
+--- before ---
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+check_env_assets: pubspec.yaml:7 bundles "assets/config/.env.web" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+--- after ---
+SECURITY: a secrets file is bundled as a Flutter asset.
+
+  pubspec.yaml:7  - assets/config/.env (via "assets/config/")  [environment file]
+  pubspec.yaml:7  - assets/config/.env.web (via "assets/config/")  [environment file]
+
+Flutter asset lists are not build-mode scoped, so this file ships in the
+release APK, the release IPA and the web build, not just in debug. Anyone can
+unzip the app bundle to read it, and on web it is served over HTTP at
+/assets/<path> and listed in AssetManifest.json. A declared *directory* bundles
+everything directly inside it, with no pubspec entry per file.
+
+Use instead:
+  * native (all build modes): --dart-define-from-file=.env, or individual
+    --dart-define flags. Nothing is bundled as a readable file.
+  * web: there is no dart-define path, and a web client cannot hold a secret.
+    Serve secrets from your backend and keep only publishable values in the
+    bundle.
+  * key and signing material: keep it out of the tree the app is built from.
+    Nothing an app bundle contains is private.
+
+If the file genuinely holds no secrets and must ship (a web build needing
+runtime config), say so inline and this check will pass:
+
+    - .env # env-asset-ack: web build, contains no secrets
+
+For a file inside a declared directory, put the acknowledgement on the
+directory entry and name the file, so it covers that file and not the whole
+directory:
+
+    - assets/config/ # env-asset-ack: app_config.env, .env.web - publishable only
+
+The names are a comma-separated list of bare file names, each matched exactly
+against the file name and never as a substring, ending at the first entry that
+is not a file name; free prose may follow after a semicolon or a spaced dash.
+So `.env.example` does not cover `.env`, and prose that merely mentions a file
+does not acknowledge it.
+
+See docs/guides/configuration.md ("Never ship a secret in the bundle").
+
+exit=1
+
+================================================================
+CASE: stale ack: the named file is not in the directory
+----------------------------------------------------------------
+pubspec.yaml:
+    name: fixture_stale
+    
+    flutter:
+      uses-material-design: true
+      assets:
+        - .env.example
+        - assets/config/ # env-asset-ack: .env.web, publishable values only
+files in assets/config/:
+    .gitkeep
+
+--- before ---
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+--- after ---
+check_env_assets: note: pubspec.yaml:7 acknowledges ".env.web" in "assets/config/", which holds no such file. Drop the name if the file is gone; keep it if your deployment writes the file later.
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
