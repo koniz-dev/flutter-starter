@@ -229,10 +229,11 @@ See [API Integration](../../api/examples/api-integration.md) for more patterns.
    }
    ```
 
-2. **Add Navigation** (when routing is implemented):
+2. **Add Navigation**: register the screen in `lib/core/routing/` (see
+   `app_routes.dart` and `routes_registry.dart`), then navigate by location:
    ```dart
-   // Navigate to screen
-   context.navigateTo(const MyScreen());
+   // Navigate to screen (go_router; see NavigationExtensions)
+   context.pushRoute('/my-screen');
    ```
 
 3. **Handle State**:

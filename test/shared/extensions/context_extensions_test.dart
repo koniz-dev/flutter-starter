@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/extensions/context_extensions.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   group('ContextExtensions', () {
@@ -249,70 +250,51 @@ void main() {
       expect(find.text('Success'), findsOneWidget);
     });
 
-    testWidgets('should navigate to route', (tester) async {
-      // Arrange
-      const targetWidget = Scaffold(body: Text('Target Screen'));
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) {
-                return ElevatedButton(
-                  onPressed: () => context.navigateTo<void>(targetWidget),
-                  child: const Text('Navigate'),
-                );
-              },
-            ),
-          ),
-        ),
-      );
-
-      // Act
-      await tester.tap(find.text('Navigate'));
-      // Use timeout to prevent hanging
-      await tester.pumpAndSettle(const Duration(seconds: 5));
-
-      // Assert
-      expect(find.text('Target Screen'), findsOneWidget);
-    });
-
-    testWidgets('should pop route', (tester) async {
-      // Arrange
-      await tester.pumpWidget(
-        MaterialApp(
-          initialRoute: '/',
-          routes: {
-            '/': (context) => Scaffold(
-              body: ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/second'),
-                child: const Text('Go to Second'),
+    testWidgets(
+      'context.pop() is unambiguous when go_router is also imported',
+      (tester) async {
+        // Regression guard for the ambiguous_extension_member_access error that
+        // a `pop` member on ContextExtensions reintroduces. This file imports
+        // both go_router and context_extensions, so `context.pop()` below only
+        // compiles while ContextExtensions has no `pop`.
+        final router = GoRouter(
+          initialLocation: '/',
+          routes: [
+            GoRoute(
+              path: '/',
+              builder: (context, state) => Scaffold(
+                body: ElevatedButton(
+                  onPressed: () => context.push<void>('/second'),
+                  child: const Text('Go to Second'),
+                ),
               ),
             ),
-            '/second': (context) => Scaffold(
-              body: Builder(
-                builder: (context) {
-                  return ElevatedButton(
-                    onPressed: () => context.pop<void>(),
-                    child: const Text('Pop'),
-                  );
-                },
+            GoRoute(
+              path: '/second',
+              builder: (context, state) => Scaffold(
+                body: ElevatedButton(
+                  onPressed: () => context.pop(),
+                  child: const Text('Pop'),
+                ),
               ),
             ),
-          },
-        ),
-      );
+          ],
+        );
+        addTearDown(router.dispose);
 
-      // Act
-      await tester.tap(find.text('Go to Second'));
-      // Use timeout to prevent hanging
-      await tester.pumpAndSettle(const Duration(seconds: 5));
-      await tester.tap(find.text('Pop'));
-      // Use timeout to prevent hanging
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+        await tester.pumpWidget(MaterialApp.router(routerConfig: router));
 
-      // Assert
-      expect(find.text('Go to Second'), findsOneWidget);
-    });
+        // Act
+        await tester.tap(find.text('Go to Second'));
+        await tester.pumpAndSettle(const Duration(seconds: 5));
+        expect(find.text('Pop'), findsOneWidget);
+
+        await tester.tap(find.text('Pop'));
+        await tester.pumpAndSettle(const Duration(seconds: 5));
+
+        // Assert: go_router's pop ran, not a Navigator-based one.
+        expect(find.text('Go to Second'), findsOneWidget);
+      },
+    );
   });
 }

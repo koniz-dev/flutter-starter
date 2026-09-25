@@ -211,10 +211,12 @@ context.showSnackBar('Operation successful');
 context.showErrorSnackBar('Operation failed');
 context.showSuccessSnackBar('Success!');
 
-// Navigation
-context.navigateTo(NextScreen());
-context.navigateToReplacement(HomeScreen());
-context.pop();
+// Navigation is NOT part of ContextExtensions: this app routes with go_router,
+// so the helpers live in NavigationExtensions
+// (lib/core/routing/navigation_extensions.dart).
+context.goToHome();
+context.pushRoute('/tasks');
+context.popRoute();
 ```
 
 ### String Extensions

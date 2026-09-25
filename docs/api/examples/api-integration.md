@@ -227,6 +227,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/shared/extensions/context_extensions.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -260,7 +261,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     result.when(
       success: (user) {
         context.showSuccessSnackBar('Welcome back, ${user.name}!');
-        context.navigateToReplacement(const HomeScreen());
+        context.goToHome();
       },
       failureCallback: (failure) {
         String errorMessage;

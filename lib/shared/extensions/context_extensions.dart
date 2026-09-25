@@ -4,15 +4,17 @@ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 /// BuildContext extension methods
 ///
 /// This extension provides convenient methods for common BuildContext
-/// operations including navigation, theming, and UI feedback.
+/// operations: theming, screen-size queries, and UI feedback.
 ///
-/// **Navigation Approach:**
-/// This extension provides Navigator-based helpers for generic UI flows.
-/// For route-based navigation, use `GoRouter` directly in your widgets.
+/// **Navigation is deliberately absent.** This app routes with `go_router`, so
+/// navigation lives in `lib/core/routing/`, not here. Beyond being a second
+/// answer to the same question, a `pop` member on this extension would share
+/// both its name and its receiver with `go_router`'s `GoRouterHelper.pop`,
+/// making `context.pop()` an `ambiguous_extension_member_access` error in any
+/// file that imports both.
 ///
 /// **Usage:**
 /// ```dart
-/// context.navigateTo(RegisterScreen());
 /// context.showSnackBar('Operation successful');
 /// ```
 extension ContextExtensions on BuildContext {
@@ -76,22 +78,5 @@ extension ContextExtensions on BuildContext {
         duration: duration ?? const Duration(seconds: 3),
       ),
     );
-  }
-
-  /// Navigate to a route
-  Future<T?> navigateTo<T>(Widget route) {
-    return Navigator.of(this).push<T>(MaterialPageRoute(builder: (_) => route));
-  }
-
-  /// Navigate and replace current route
-  Future<T?> navigateToReplacement<T>(Widget route) {
-    return Navigator.of(
-      this,
-    ).pushReplacement<T, void>(MaterialPageRoute(builder: (_) => route));
-  }
-
-  /// Pop current route
-  void pop<T>([T? result]) {
-    Navigator.of(this).pop(result);
   }
 }
