@@ -54,11 +54,50 @@ Read it with:
 ```bash
 ./scripts/bootstrap-issue-labels.sh --list-epics          # slugs only
 ./scripts/bootstrap-issue-labels.sh --dry-run             # slugs + descriptions
+./scripts/bootstrap-issue-labels.sh --list-map            # epic:slug<TAB>path pairs
 ```
 
 Exactly one per issue. If a change genuinely spans two epics, it is too big:
 split it. If no epic fits, that is a taxonomy gap and a human decision - say so
 rather than forcing the nearest label.
+
+#### Which epic owns a path
+
+Each `EPICS` entry carries the paths it claims, and `--list-map` prints them.
+Look up the diff:
+
+```bash
+./scripts/bootstrap-issue-labels.sh --list-map | grep -E '\slib/core/di$'
+```
+
+Every tracked path maps to **exactly one** epic, and
+[`tool/check_epic_coverage.dart`](../tool/check_epic_coverage.dart) fails the
+build if that stops being true - if a surface is claimed by no epic, by two, or
+if an epic claims a path that is no longer in the tree. It runs under
+`flutter test` via
+[`test/tooling/epic_coverage_test.dart`](../test/tooling/epic_coverage_test.dart),
+so adding a directory means adding it to the `EPICS` table in the same change.
+
+The guard exists because the gap was not cosmetic. Before
+koniz-dev/flutter-starter#118, half of `lib/core/` and every native surface was
+unclaimed, which four times over either forced an issue under a near-miss label
+or left verified work unfileable. Since the "never two implementers in the same
+`epic:*`" rule keys on the label, a near-miss silently widens or breaks the
+concurrency lock.
+
+#### Relabelling after a taxonomy change
+
+Adding or re-cutting an epic can leave existing issues on a label that is no
+longer the best fit. The rule:
+
+- **Open issues: relabel**, and comment saying which label it had and why it
+  moved. The epic on an open issue is live - it drives the concurrency lock and
+  the queue - so a wrong one has consequences today.
+- **Closed issues: leave them.** The label on a closed issue is a record of what
+  the taxonomy said when the work shipped. Relabelling rewrites that record,
+  notifies everyone subscribed, and changes nothing: no lock, no queue and no
+  selector reads a closed issue's epic. Where it matters for history, say so in
+  a comment on the taxonomy issue instead of editing the closed one.
 
 ### Priority
 

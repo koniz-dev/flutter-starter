@@ -57,11 +57,17 @@ const kAllowedImportViolations = <String, Set<String>>{
   // seeded-and-deleted.
   'go_router_outside_routing': <String>{},
 
-  // Refs koniz-dev/flutter-starter#118: the `core/di` <-> `features/*/di`
-  // cycle. These three are deliberately NOT scheduled for a fix - no epic in
-  // `./scripts/bootstrap-issue-labels.sh --list-epics` covers `lib/core/di/`,
-  // and breaking the cycle is a sweep across all three slices, not a child
-  // issue. They are allowlisted so that they cannot get worse.
+  // The `core/di` <-> `features/*/di` cycle and its two relatives.
+  //
+  // These were allowlisted as permanently unfixable: no epic in
+  // `./scripts/bootstrap-issue-labels.sh --list-epics` covered `lib/core/di/`,
+  // so the fix could not be filed against an accurate label. That is no longer
+  // true - koniz-dev/flutter-starter#118 added `epic:core-di`, and the cycle
+  // is now koniz-dev/flutter-starter#221, which deletes the first line below.
+  // The other two are fileable under `epic:feature-flags` and
+  // `epic:core-routing` respectively and have no issue yet.
+  //
+  // Until then they are allowlisted so that they cannot get worse.
   'core_imports_feature': <String>{
     'lib/core/di/providers.dart',
     'lib/core/feature_flags/feature_flags_manager.dart',

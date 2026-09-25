@@ -35,6 +35,31 @@ never sees. It is deliberately
 **not** part of `scripts/dev/audit_template.sh`: that script gates code changes,
 and a broken doc link should not block an unrelated `lib/` fix.
 
+## `check_epic_coverage.dart`
+
+Taxonomy guard: every tracked surface maps to **exactly one** `epic:*` label.
+
+The mapping is not duplicated here or in the tool. `scripts/bootstrap-issue-labels.sh`
+is the single source of truth for the epic list *and* for the paths each epic
+claims; the tool reads it with `--list-map` and compares it against the tracked
+tree. Three fatal directions: a surface no epic claims, a surface two epics
+claim, and a claimed path that is not in the tree.
+
+```bash
+dart run tool/check_epic_coverage.dart
+./scripts/bootstrap-issue-labels.sh --list-map   # the mapping it checks against
+```
+
+Runs under `flutter test` via `test/tooling/epic_coverage_test.dart`, alongside
+counterfactual tests that prove the checker can fail. Added by
+koniz-dev/flutter-starter#118, where half of `lib/core/` and every native
+surface had no epic - which is not cosmetic, because the "never two implementers
+in the same `epic:*`" rule keys on that label.
+
+It reads paths from version control rather than from the filesystem, so
+`strip_sample_features.dart` deleting the sample slices does not make the
+sample epics look stale under **Strip smoke**.
+
 ## `strip_sample_features.dart`
 
 Removes sample **`tasks`** and **`feature_flags`** modules (and related tests), deletes `lib/core/feature_flags/feature_flags_manager.dart` when present, and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.

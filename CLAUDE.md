@@ -91,6 +91,13 @@ GitHub issues are the single source of truth. Full spec:
 list anywhere else - humans, sessions, and any issue-filing integration read it
 from that script so the three cannot drift.
 
+The same script also owns the **path -> epic** map:
+`./scripts/bootstrap-issue-labels.sh --list-map` answers "which epic owns this
+diff". Every tracked path maps to exactly one epic, enforced by
+[`tool/check_epic_coverage.dart`](tool/check_epic_coverage.dart) under
+`flutter test`. If no epic fits a change, that is a taxonomy gap: file it,
+do not force the nearest label - the parallelism rule below keys on that label.
+
 ## Acceptance verification
 
 Run `./scripts/test/run_acceptance.sh <issue-number>`. It runs the format check,
