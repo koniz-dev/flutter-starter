@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
-import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/json_helper.dart';
 import 'package:flutter_starter/features/tasks/data/models/task_model.dart';
 
@@ -41,8 +41,8 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
   /// Creates a [TasksLocalDataSourceImpl] with the given [storageService]
   TasksLocalDataSourceImpl({required this.storageService});
 
-  /// Storage service for persisting tasks
-  final StorageService storageService;
+  /// Key-value store for persisting tasks
+  final IKeyValueStore storageService;
 
   /// Storage key for tasks list
   static const String _tasksKey = 'tasks_data';

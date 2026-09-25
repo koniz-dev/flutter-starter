@@ -16,8 +16,8 @@ import 'package:flutter_starter/features/tasks/domain/usecases/update_task_useca
 
 /// Provider for [TasksLocalDataSource] instance
 final tasksLocalDataSourceProvider = Provider<TasksLocalDataSource>((ref) {
-  final storageService = ref.watch(storageServiceProvider);
-  return TasksLocalDataSourceImpl(storageService: storageService);
+  final keyValueStore = ref.watch(keyValueStoreProvider);
+  return TasksLocalDataSourceImpl(storageService: keyValueStore);
 });
 
 // ============================================================================

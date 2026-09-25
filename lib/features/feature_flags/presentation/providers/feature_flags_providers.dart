@@ -15,8 +15,8 @@ part 'feature_flags_providers.g.dart';
 
 @riverpod
 FeatureFlagsLocalDataSource featureFlagsLocalDataSource(Ref ref) {
-  final storageService = ref.watch(storageServiceProvider);
-  return FeatureFlagsLocalDataSourceImpl(storageService: storageService);
+  final keyValueStore = ref.watch(keyValueStoreProvider);
+  return FeatureFlagsLocalDataSourceImpl(storageService: keyValueStore);
 }
 
 @riverpod

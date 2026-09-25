@@ -122,3 +122,74 @@ class InMemoryTokenStore implements ITokenStore {
     return true;
   }
 }
+
+/// A real [IKeyValueStore] backed by a map.
+///
+/// Unlike [InMemoryStorage] this implements **only** the contract, not the
+/// concrete `StorageService`. A data source that accepts one of these is
+/// provably decoupled from SharedPreferences: the seam is real, not nominal.
+class InMemoryKeyValueStore implements IKeyValueStore {
+  /// Everything currently persisted, for direct assertion.
+  final Map<String, Object?> values = {};
+
+  @override
+  Future<bool> clear() async {
+    values.clear();
+    return true;
+  }
+
+  @override
+  Future<bool> containsKey(String key) async => values.containsKey(key);
+
+  @override
+  Future<bool> remove(String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  Future<String?> getString(String key) async => values[key] as String?;
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<int?> getInt(String key) async => values[key] as int?;
+
+  @override
+  Future<bool> setInt(String key, int value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool?> getBool(String key) async => values[key] as bool?;
+
+  @override
+  Future<bool> setBool(String key, {required bool value}) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<double?> getDouble(String key) async => values[key] as double?;
+
+  @override
+  Future<bool> setDouble(String key, double value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<List<String>?> getStringList(String key) async =>
+      values[key] as List<String>?;
+
+  @override
+  Future<bool> setStringList(String key, List<String> value) async {
+    values[key] = List<String>.from(value);
+    return true;
+  }
+}

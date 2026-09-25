@@ -1,4 +1,4 @@
-import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 
 /// Local data source for feature flags
 ///
@@ -24,10 +24,10 @@ abstract class FeatureFlagsLocalDataSource {
 class FeatureFlagsLocalDataSourceImpl implements FeatureFlagsLocalDataSource {
   /// Creates a [FeatureFlagsLocalDataSourceImpl] with the given
   /// [storageService]
-  FeatureFlagsLocalDataSourceImpl({required StorageService storageService})
+  FeatureFlagsLocalDataSourceImpl({required IKeyValueStore storageService})
     : _storageService = storageService;
 
-  final StorageService _storageService;
+  final IKeyValueStore _storageService;
   static const String _prefix = 'feature_flag_override_';
 
   @override
