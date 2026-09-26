@@ -75,6 +75,31 @@ ios/fastlane/README.md
 *.certSigningRequest
 *.keystore
 *.jks
+# Private key material in its commonest raw forms (koniz-dev/flutter-starter#164).
+# An exported signing key, a service-account key, a TLS key and an SSH key all
+# land as a .pem or a .key; .pfx is the same PKCS#12 container as the .p12
+# above, under its Windows name. tool/check_env_assets.dart already refuses to
+# let any of them be declared as a Flutter asset
+# (koniz-dev/flutter-starter#138), so git should not track one either. That
+# guard's `secretAssetExtensions` set and this block are now the same list of
+# private formats, which is the point: one policy, two enforcement points.
+*.pem
+*.key
+*.pfx
+
+# NOT ignored, on purpose: *.crt and *.der.
+# A certificate is the public half of a key pair. Certificate pinning
+# legitimately ships one inside the app, so ignoring them would break a
+# supported setup for no gain. koniz-dev/flutter-starter#138 decided this - see
+# the "Public certificates" note at the top of tool/check_env_assets.dart,
+# which leaves .cer, .crt and .der out of its secret set for the same reason -
+# and koniz-dev/flutter-starter#164 kept it. If you are here to "fix the
+# inconsistency", this is the reason not to.
+#
+# `*.cer` is the one asymmetry, and it is deliberate too: it predates both
+# issues, arriving in dbee1c6 with the Apple signing block above, where a .cer
+# turns up as one step of a private-key workflow rather than as a pinning
+# asset. It stays ignored. Ship a pinned certificate as .crt or .der.
 
 # ios/Podfile and macos/Podfile are deliberately COMMITTED, not ignored:
 # `flutter pub get` regenerates them when absent, which made them permanent

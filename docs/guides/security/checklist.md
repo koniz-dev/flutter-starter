@@ -40,6 +40,23 @@ them.
       Use `--dart-define-from-file=.env` on native; on web, keep secrets on the
       server. See
       [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
+- [ ] **Confirm no private key material is tracked (shipped)** - the same policy
+      as the `.env` item above, enforced one step earlier. `.gitignore` ignores
+      `*.pem`, `*.key`, `*.pfx`, `*.p12`, `*.p8`, `*.jks`, `*.keystore`,
+      `*.mobileprovision`, `*.provisionprofile`, `*.cer` and
+      `*.certSigningRequest`, so git will not track one by accident; and
+      `tool/check_env_assets.dart` refuses to let the private ones
+      (`secretAssetExtensions`: `.pem`, `.key`, `.pfx`, `.p12`, `.p8`, `.jks`,
+      `.keystore`, `.mobileprovision`, `.provisionprofile`) be declared as a
+      Flutter asset
+      ([#138](https://github.com/koniz-dev/flutter-starter/issues/138),
+      [#164](https://github.com/koniz-dev/flutter-starter/issues/164)). Run
+      `git ls-files | grep -iE '\.(pem|key|pfx|p12|p8|jks|keystore)$'` before a
+      release; it must print nothing. A file that is already tracked stays
+      tracked - `.gitignore` does not retroactively untrack it - so if that
+      command prints anything, `git rm --cached` it and rotate the key, because
+      it is in the history. `*.crt` and `*.der` are deliberately trackable: a
+      certificate is the public half, and pinning may legitimately ship one.
 - [ ] **Enable code obfuscation for release builds**
 - [ ] **Configure proper Android release signing** (remove debug signing)
 - [ ] Add production build guards (prevent debug code in production)
