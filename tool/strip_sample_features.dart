@@ -169,10 +169,14 @@ void main(List<String> args) {
     if (removeFeatureFlags)
       'package:flutter_starter/core/feature_flags/feature_flags_manager.dart',
   ];
+
+  _deleteDocsProbes(root, needles);
+
   final violations = _collectStrippedViolations(root, needles);
   if (violations.isNotEmpty) {
     stderr.writeln(
-      'Strip finished but forbidden references remain in app/test code:\n'
+      'Strip finished but forbidden references remain in code the analyzer '
+      'reads:\n'
       '${violations.join('\n')}\n'
       'Fix imports or excludes before committing.',
     );
@@ -315,8 +319,67 @@ void _patchProvidersTest(String path) {
   File(path).writeAsStringSync('${lines.join('\n')}\n');
 }
 
-/// Scans Dart sources under lib/test/integration_test/examples for stripped
-/// module imports that would no longer resolve.
+/// Deletes evidence probes under `docs/verification/` that import a stripped
+/// module.
+///
+/// `analysis_options.yaml` does not exclude `docs/`, so a `.dart` file
+/// committed as acceptance evidence is analyzed like any other source - a
+/// property `CLAUDE.md` states on purpose. The strip therefore has to account
+/// for it: on koniz-dev/flutter-starter#171 the probe at
+/// `docs/verification/issue-146/timestamp_probe.dart` imported
+/// `features/tasks/data/models/task_model.dart`, the strip exited 0, and both
+/// tasks-removing variants of `strip-smoke.yml` then failed two steps later in
+/// `flutter analyze` with `uri_does_not_exist`.
+///
+/// Deleting is the right verb rather than rewriting or warning. The script
+/// already deletes `docs/features/tasks.md` for the same reason: a tree with
+/// the tasks sample stripped out has no use for this repository's evidence
+/// about the tasks sample, and a fork running the strip wants a buildable
+/// starter, not an archive. Every deletion is printed, so nothing vanishes
+/// silently, and only `.dart` files that actually name a stripped module are
+/// touched - the surrounding `README.md` and logs are left alone.
+///
+/// Scoped to `docs/verification/` on purpose, not to all of `docs/`. That
+/// subtree is per-issue acceptance evidence and nothing imports it, so
+/// deleting from it is safe. A Dart file anywhere else under `docs/` is
+/// something a human wrote to be read; the strip must not quietly delete it,
+/// so it falls through to `_collectStrippedViolations` and fails the run
+/// loudly instead.
+void _deleteDocsProbes(Directory repoRoot, List<String> needles) {
+  if (needles.isEmpty) {
+    return;
+  }
+  final docs = Directory(p.join(repoRoot.path, 'docs', 'verification'));
+  if (!docs.existsSync()) {
+    return;
+  }
+  for (final entity in docs.listSync(recursive: true, followLinks: false)) {
+    if (entity is! File || !entity.path.endsWith('.dart')) {
+      continue;
+    }
+    final text = entity.readAsStringSync();
+    final hit = needles.where(text.contains).toList();
+    if (hit.isEmpty) {
+      continue;
+    }
+    entity.deleteSync();
+    stdout.writeln(
+      'Deleted ${p.relative(entity.path, from: repoRoot.path)}: an evidence '
+      'probe importing a stripped module (${hit.join(', ')}). '
+      'docs/ is analyzed, so leaving it would break flutter analyze.',
+    );
+  }
+}
+
+/// Scans every Dart source the analyzer reads for stripped module imports that
+/// would no longer resolve.
+///
+/// `docs` is in the list because `analysis_options.yaml` does not exclude it,
+/// so `flutter analyze` reads `docs/**/*.dart` too. `_deleteDocsProbes` has
+/// already removed the offending files under `docs/verification/`; this scan
+/// is what catches the rest of `docs/`, and it fails the run loudly and
+/// locally rather than leaving CI to discover it two steps later, which is
+/// what happened on koniz-dev/flutter-starter#171.
 List<String> _collectStrippedViolations(
   Directory repoRoot,
   List<String> needles,
@@ -327,6 +390,7 @@ List<String> _collectStrippedViolations(
     Directory(p.join(repoRoot.path, 'test')),
     Directory(p.join(repoRoot.path, 'integration_test')),
     Directory(p.join(repoRoot.path, 'examples')),
+    Directory(p.join(repoRoot.path, 'docs')),
   ];
 
   for (final dir in roots) {
