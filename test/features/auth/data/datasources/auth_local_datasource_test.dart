@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
@@ -227,7 +228,7 @@ void main() {
       await storageService.init();
       dataSource = AuthLocalDataSourceImpl(
         storageService: storageService,
-        secureStorageService: secureStorageService,
+        tokenStore: SecureTokenStore(secureStorageService),
       );
     });
 
@@ -501,7 +502,7 @@ void main() {
 
         final testDataSource = AuthLocalDataSourceImpl(
           storageService: storageService,
-          secureStorageService: secureStorageService,
+          tokenStore: SecureTokenStore(secureStorageService),
         );
 
         const user = UserModel(
@@ -618,7 +619,7 @@ void main() {
         await testStorageService.init();
         final testDataSource = AuthLocalDataSourceImpl(
           storageService: testStorageService,
-          secureStorageService: secureStorageService,
+          tokenStore: SecureTokenStore(secureStorageService),
         );
 
         // Restore the handler however the assertion goes, so tearDown does

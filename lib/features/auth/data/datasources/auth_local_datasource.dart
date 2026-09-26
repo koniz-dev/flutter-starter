@@ -1,8 +1,6 @@
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
-import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
-import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/utils/json_helper.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 
@@ -33,22 +31,24 @@ abstract class AuthLocalDataSource {
 /// Implementation of local data source
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   /// Creates an [AuthLocalDataSourceImpl] with the given [storageService] and
-  /// [secureStorageService]
+  /// [tokenStore]
   ///
   /// [storageService] - Used for non-sensitive data (user data)
   /// [tokenStore] - Used for sensitive data (tokens)
+  ///
+  /// Both parameters are contracts, and deliberately so: this file names no
+  /// concrete storage type at all. A nullable secure-storage escape hatch
+  /// stood beside [tokenStore] until koniz-dev/flutter-starter#196 removed
+  /// it - it was the last concrete type named here, it taught two ways to
+  /// build the same object, and it turned a missing argument into a runtime
+  /// `ArgumentError` where the analyzer can now say so at compile time.
+  ///
+  /// A call site that passed one wraps it: `tokenStore: SecureTokenStore(x)`.
+  /// See the `#196` entry in `CHANGELOG.md`.
   AuthLocalDataSourceImpl({
     required this.storageService,
-    ITokenStore? tokenStore,
-    SecureStorageService? secureStorageService,
-  }) : tokenStore =
-           tokenStore ??
-           (secureStorageService != null
-               ? SecureTokenStore(secureStorageService)
-               : throw ArgumentError(
-                   'Either tokenStore or secureStorageService must '
-                   'be provided.',
-                 ));
+    required this.tokenStore,
+  });
 
   /// Storage service for non-sensitive data (user data, preferences)
   final IKeyValueStore storageService;
