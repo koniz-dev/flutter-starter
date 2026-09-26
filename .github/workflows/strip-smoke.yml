@@ -12,6 +12,14 @@
 # unstripped sources it is meant to replace. Applying each variant and running
 # `flutter analyze` afterwards checks the goldens in the only state where the
 # answer means anything.
+#
+# NO `paths-ignore`, deliberately (koniz-dev/flutter-starter#167, same shape as
+# #117 for `ci.yml`). These three jobs are listed by #58 as safe to mark
+# required, and `paths-ignore` suppresses the whole workflow run, so a required
+# check would never report and every pull request would sit on "Expected -
+# waiting for status to be reported" forever. The filter lives INSIDE each job
+# instead, in "Decide the strip scope": the job always runs and always reports,
+# and a docs-only pull request never installs the Flutter toolchain.
 name: Strip smoke
 
 on:
@@ -44,27 +52,163 @@ jobs:
           - variant: feature-flags-removed
             flags: '--remove-feature-flags'
     steps:
+      # fetch-depth: 0 because the scope step diffs base..head. A shallow clone
+      # has neither end of that range.
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # WHICH PATHS TRIGGER A FULL STRIP RUN
+      #
+      # The rule is a deny-list, not an allow-list: **everything triggers a full
+      # run except** `**/*.md` and `docs/**`, and a `.dart` file under `docs/`
+      # triggers one anyway. That direction is deliberate. `tool/golden/**`
+      # mirrors `lib/`, so the set of paths that can break a strip variant is
+      # too wide to enumerate safely, and a path nobody thought of must run the
+      # matrix rather than skip it.
+      #
+      # Stated as the trigger set, with why each entry is in it:
+      #
+      #   lib/**                  - the tree being stripped; `strip_sample_features.dart`
+      #                             deletes and rewrites files here.
+      #   tool/**                 - the strip script itself, and `tool/golden/**`,
+      #                             the replacement sources it copies over `lib/`.
+      #                             A stale golden is the exact #50 failure this
+      #                             matrix exists to catch.
+      #   test/**                 - the stripped tree still has to pass `flutter test`,
+      #                             and strip deletes the sample features' tests.
+      #   integration_test/**     - stripped alongside `test/`; a leftover import
+      #                             of a removed feature fails analyze.
+      #   examples/**             - analyzed with the package.
+      #   pubspec.yaml,
+      #   pubspec.lock,
+      #   analysis_options.yaml   - change what `flutter pub get`/`analyze` do to
+      #                             the stripped tree.
+      #   .github/workflows/**    - including this file; a change to the gate must
+      #                             prove itself through the gate.
+      #   bricks/**, android/**,
+      #   ios/**, and everything
+      #   else not listed above   - not obviously inert, so it runs. Fail safe.
+      #   docs/**/*.dart          - `analysis_options.yaml` does not exclude
+      #                             `docs/`, so an evidence probe committed there
+      #                             is analyzed like any other file.
+      #
+      # Inert, and only these: `**/*.md` (no step reads markdown) and `docs/**`
+      # that is not `.dart` (evidence PNGs and logs). Every acceptance-evidence
+      # pull request this repository produces is exactly that, and used to cost
+      # about seven billed minutes across the three variants.
+      #
+      # Anything the step cannot resolve a diff for - workflow_dispatch, a brand
+      # new branch, a force push that dropped `before` - fails SAFE and runs the
+      # full matrix.
+      - name: Decide the strip scope
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.event.after }}
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          set -euo pipefail
+
+          have() { git rev-parse -q --verify "$1^{commit}" >/dev/null 2>&1; }
+
+          range=''
+          case "$EVENT_NAME" in
+            pull_request)
+              # Three dots: compare head against the merge base, so commits that
+              # landed on main after this branch started are not counted as this
+              # pull request's changes.
+              if have "$PR_BASE_SHA" && have "$PR_HEAD_SHA"; then
+                range="$PR_BASE_SHA...$PR_HEAD_SHA"
+              fi
+              ;;
+            push)
+              if have "$PUSH_BEFORE" && have "$PUSH_AFTER"; then
+                range="$PUSH_BEFORE..$PUSH_AFTER"
+              fi
+              ;;
+          esac
+
+          if [ -z "$range" ]; then
+            run=true
+            verdict="Could not resolve a diff range for a '$EVENT_NAME' event. Running the full strip matrix."
+            changed=''
+          else
+            changed="$(git diff --name-only "$range")"
+            relevant="$(
+              {
+                printf '%s\n' "$changed" | grep -Ev '^(docs/.*|.*\.md)$' || true
+                printf '%s\n' "$changed" | grep -E '^docs/.*\.dart$' || true
+              } | grep -v '^$' | sort -u || true
+            )"
+            if [ -n "$relevant" ]; then
+              run=true
+              verdict="$(printf '%s\n' "$relevant" | wc -l | tr -d ' ') changed path(s) can affect a stripped tree. Running strip, analyze and test."
+            else
+              run=false
+              verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed."
+            fi
+          fi
+
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+          # A reviewer seeing a green check needs to know which of the two
+          # greens it is, so say it in the job summary and in the log.
+          if [ "$run" = true ]; then
+            headline="RAN IN FULL"
+          else
+            headline="SKIPPED (docs-only)"
+          fi
+          echo "Strip smoke [$VARIANT]: $headline - $verdict"
+
+          {
+            echo "### Strip smoke scope - \`$VARIANT\`"
+            echo
+            echo "**$headline**"
+            echo
+            echo "- event: \`$EVENT_NAME\`"
+            echo "- range: \`${range:-unresolved}\`"
+            echo "- strip, analyze and test run: \`$run\`"
+            echo
+            echo "$verdict"
+            echo
+            echo "<details><summary>Changed paths</summary>"
+            echo
+            echo '```'
+            if [ -n "$changed" ]; then printf '%s\n' "$changed"; else echo "(none)"; fi
+            echo '```'
+            echo
+            echo "</details>"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Setup Flutter
+        if: steps.scope.outputs.run == 'true'
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
       - name: Install dependencies (full starter)
+        if: steps.scope.outputs.run == 'true'
         run: flutter pub get
 
       - name: Apply strip
+        if: steps.scope.outputs.run == 'true'
         run: dart run tool/strip_sample_features.dart --apply ${{ matrix.flags }}
 
       - name: Install dependencies (after strip)
+        if: steps.scope.outputs.run == 'true'
         run: flutter pub get
 
       - name: Analyze stripped tree
+        if: steps.scope.outputs.run == 'true'
         run: flutter analyze
 
       - name: Run tests (stripped tree)
+        if: steps.scope.outputs.run == 'true'
         timeout-minutes: 15
         run: flutter test --timeout=5m

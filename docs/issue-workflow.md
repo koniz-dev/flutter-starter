@@ -878,7 +878,7 @@ The generic pattern was adjusted in four places. Each is a deliberate deviation.
    | [`ci.yml`](../.github/workflows/ci.yml) | Quality gate | every PR; format, analyze and test are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
    | [`docs-check.yml`](../.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, or itself |
    | [`issue-refs.yml`](../.github/workflows/issue-refs.yml) | Issue refs | every PR, unconditionally |
-   | [`strip-smoke.yml`](../.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test, three of them | every PR, unconditionally |
+   | [`strip-smoke.yml`](../.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test, three of them | every PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed |
 
    A PR showing zero checks is the registration race described in step 5 of
    [section 4](#4-the-per-issue-agent-loop), never a path exclusion.
@@ -888,7 +888,10 @@ The generic pattern was adjusted in four places. Each is a deliberate deviation.
    a docs-only PR and so could never be a required status check. The filter now
    lives in the job's "Decide the gate scope" step: the job always reports, and
    a docs-only run finishes in seconds because the Flutter toolchain is never
-   installed.
+   installed. koniz-dev/flutter-starter#167 gave `strip-smoke.yml` the same
+   shape in its "Decide the strip scope" step - it never had a `paths-ignore`,
+   and its three-variant matrix was costing roughly seven billed minutes on
+   every acceptance-evidence pull request.
 
    **What a green Quality gate means on a docs-only PR:** not that format,
    analyze and test passed, but that they did not run, because every changed

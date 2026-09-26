@@ -171,20 +171,22 @@ jobs** - five checks minimum:
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, or the workflow itself |
 | [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
-| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR, no path filter |
+| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed |
 
-`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117. The filter
-moved into the job's "Decide the gate scope" step, so the check always posts a
-conclusion and can be a required status check. A PR reporting zero checks is the
+`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117, and
+`strip-smoke.yml` never had one. Both now filter inside the job - "Decide the
+gate scope" and "Decide the strip scope" (koniz-dev/flutter-starter#167) - so
+the checks always post a conclusion and can be required status checks, while a
+docs-only PR installs no Flutter toolchain in any of the four jobs. A PR reporting zero checks is the
 registration race, never a path exclusion. Poll until
 `gh pr checks --json name --jq 'length'` is non-zero before
 `gh pr checks --watch`; merging on the "no checks reported" reading skips the
 gate entirely.
 
-**Read a green Quality gate carefully on a docs-only PR.** It does not mean
-format, analyze and test passed - it means they did not run, because no changed
-path could have affected them. The job summary states which of the two happened
-and lists every changed path. The skip set is `**/*.md` anywhere plus `docs/**`,
+**Read a green Quality gate or Strip check carefully on a docs-only PR.** It
+does not mean format, analyze and test passed - it means they did not run,
+because no changed path could have affected them. Each job summary states which
+of the two happened and lists every changed path. The skip set is `**/*.md` anywhere plus `docs/**`,
 minus `.dart`: `analysis_options.yaml` does not exclude `docs/`, so a committed
 evidence probe such as `docs/verification/issue-48/aot_probe.dart` is analyzed
 like any other source and forces the full gate.
