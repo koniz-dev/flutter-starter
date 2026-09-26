@@ -327,12 +327,13 @@ The migration system includes comprehensive tests:
 
 - `test/core/storage/migration/storage_migration_test.dart` - Tests migration base class
 - `test/core/storage/migration/migration_executor_test.dart` - Tests executor
-- `test/core/storage/migration/storage_migration_service_test.dart` - Tests service
+- `test/core/storage/storage_migration_service_test.dart` - Tests service
 
 Run tests with:
 
 ```bash
-flutter test test/core/storage/migration/
+flutter test test/core/storage/migration/ \
+  test/core/storage/storage_migration_service_test.dart
 ```
 
 ## Example: Complete Migration

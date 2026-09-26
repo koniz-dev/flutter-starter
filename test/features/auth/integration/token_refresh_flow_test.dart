@@ -8,8 +8,8 @@ import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../helpers/mock_factories.dart';
-import '../../helpers/test_fixtures.dart';
+import '../../../helpers/mock_factories.dart';
+import '../../../helpers/test_fixtures.dart';
 
 /// Fake transport for the 401 replay client, so the flow never leaves the
 /// process: the replay used to build a real Dio against `AppConfig.baseUrl`.
