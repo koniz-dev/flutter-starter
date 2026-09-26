@@ -9,8 +9,34 @@ if ! command -v flutter >/dev/null 2>&1; then
   exit 0
 fi
 
+# Git exports its own environment into every hook process. In a plain clone
+# that is harmless - the probe in koniz-dev/flutter-starter#140 shows only
+# GIT_INDEX_FILE (relative), GIT_PREFIX, GIT_EXEC_PATH and the author fields.
+# In a worktree, and under `git --git-dir=...`, git also exports an absolute
+# GIT_DIR, and that one is poison here: `flutter` shells out to git to work out
+# which SDK it is, and an inherited GIT_DIR makes that lookup read THIS
+# repository instead of the SDK. The SDK then reports a version derived from
+# this project's tags - or, in the reporter's worktree, `0.0.0-unknown`, which
+# fails the `environment: sdk:` constraint in pubspec.yaml and rejects the
+# commit while `flutter analyze` run by hand in the same tree is clean.
+#
+# So run every Flutter and Dart command with the git variables removed. The
+# hook itself never calls git, so nothing else needs them. This resolves the
+# SDK rather than detecting the breakage and explaining it: there is no reason
+# to teach the hook a good error message for a state it can simply not be in.
+no_git_env=(
+  env
+  -u GIT_DIR
+  -u GIT_WORK_TREE
+  -u GIT_INDEX_FILE
+  -u GIT_COMMON_DIR
+  -u GIT_OBJECT_DIRECTORY
+  -u GIT_ALTERNATE_OBJECT_DIRECTORIES
+  -u GIT_PREFIX
+)
+
 echo "📝 Checking code formatting..."
-if ! dart format --set-exit-if-changed lib test integration_test tool examples; then
+if ! "${no_git_env[@]}" dart format --set-exit-if-changed lib test integration_test tool examples; then
   echo "❌ Code formatting check failed."
   echo "   Fix: ./scripts/dev/format_dart.sh"
   echo "   Or: dart format lib test integration_test tool examples"
@@ -18,7 +44,7 @@ if ! dart format --set-exit-if-changed lib test integration_test tool examples; 
 fi
 
 echo "🔍 Running flutter analyze..."
-if ! flutter analyze; then
+if ! "${no_git_env[@]}" flutter analyze; then
   echo "❌ flutter analyze failed."
   exit 1
 fi
