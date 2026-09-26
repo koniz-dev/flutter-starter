@@ -1,0 +1,135 @@
+==============================================================
+1. What git puts in a hook's environment, in a NORMAL clone
+==============================================================
+cwd=/Users/nguyenanhkiet/Playground/flutter-starter
+GIT_AUTHOR_DATE=@1790405877 +0700
+GIT_AUTHOR_EMAIL=kietna.work@gmail.com
+GIT_AUTHOR_NAME=koniz-dev
+GIT_EDITOR=:
+GIT_EXEC_PATH=/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core
+GIT_INDEX_FILE=.git/index
+GIT_PREFIX=
+
+GIT_DIR is absent. That is why the hook works in a normal clone.
+A worktree is the case where git exports an absolute GIT_DIR, because the
+worktree's .git is a file pointing at <main>/.git/worktrees/<name>.
+
+==============================================================
+2. The leak, at the git level (instant, no Flutter involved)
+==============================================================
+$ git -C $FLUTTER_ROOT describe --tags
+3.47.0
+
+$ GIT_DIR=/Users/nguyenanhkiet/Playground/flutter-starter/.git git -C $FLUTTER_ROOT describe --tags
+fatal: No tags can describe 'bedbeeb5f9cc6528f2c8876e6e5cee647f86bf35'.
+Try --always, or create some tags.
+
+An exported GIT_DIR overrides even an explicit -C. Flutter resolves its
+own version through exactly this call, so inside a hook it reads THIS
+repository's history and calls the answer the SDK version.
+
+==============================================================
+3. The leak, at the Flutter level
+==============================================================
+$ flutter --version
+Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 4cf2416426 (7 weeks ago) • 2026-08-11 11:53:49 -0700
+
+$ GIT_DIR=/Users/nguyenanhkiet/Playground/flutter-starter/.git flutter --version     # what the hook sees in a worktree
+Flutter 3.49.0-0.1.pre • channel [user-branch] • https://github.com/koniz-dev/flutter-starter.git
+Framework • revision bedbeeb5f9 (30 seconds ago) • 2026-09-26 14:05:28 +0700
+
+$ flutter --version                        # restoring the SDK's own stamp
+Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 4cf2416426 (7 weeks ago) • 2026-08-11 11:53:49 -0700
+
+==============================================================
+4. BEFORE vs AFTER, at the hook level, under a worktree-shaped env
+==============================================================
+PATH is shimmed so 'flutter' and 'dart' just report the environment they
+were handed and exit 0. Nothing else about the hooks is changed.
+
+--- origin/main's .githooks/pre-commit, with GIT_DIR exported:
+Running pre-commit checks...
+📝 Checking code formatting...
+  [shim] dart format invoked with GIT_DIR=/Users/nguyenanhkiet/Playground/flutter-starter/.git
+🔍 Running flutter analyze...
+  [shim] flutter analyze invoked with GIT_DIR=/Users/nguyenanhkiet/Playground/flutter-starter/.git GIT_INDEX_FILE=/Users/nguyenanhkiet/Playground/flutter-starter/.git/index GIT_WORK_TREE=(unset)
+✅ Pre-commit checks passed.
+exit: 0
+
+--- this branch's .githooks/pre-commit, same environment:
+Running pre-commit checks...
+📝 Checking code formatting...
+  [shim] dart format invoked with GIT_DIR=(unset)
+🔍 Running flutter analyze...
+  [shim] flutter analyze invoked with GIT_DIR=(unset) GIT_INDEX_FILE=(unset) GIT_WORK_TREE=(unset)
+✅ Pre-commit checks passed.
+exit: 0
+
+--- this branch's .githooks/pre-push, same environment:
+Running pre-push checks...
+🧱 Running flutter test (compact reporter, 15m timeout)...
+  [shim] flutter test --reporter compact --timeout 15m invoked with GIT_DIR=(unset) GIT_INDEX_FILE=(unset) GIT_WORK_TREE=(unset)
+✅ Pre-push checks passed.
+exit: 0
+
+==============================================================
+5. Criterion 2 - the hook still rejects code that fails analyze
+==============================================================
+--- lib/probe_140.dart:
+// Deliberate type error for koniz-dev/flutter-starter#140 criterion 2.
+int probe140 = 'not an int';
+
+a) normal-clone environment, real Flutter, broken tree:
+
+   info • Missing documentation for a public member. Try adding documentation for the member • lib/probe_140.dart:2:5 • public_member_api_docs
+  error • A value of type 'String' can't be assigned to a variable of type 'int'. Try changing the type of the variable, or casting the right-hand type to 'int' • lib/probe_140.dart:2:16 • invalid_assignment
+
+2 issues found. (ran in 4.6s)
+❌ flutter analyze failed.
+exit: 1
+
+b) worktree-shaped environment (GIT_DIR exported), real Flutter, broken tree:
+
+   info • Missing documentation for a public member. Try adding documentation for the member • lib/probe_140.dart:2:5 • public_member_api_docs
+  error • A value of type 'String' can't be assigned to a variable of type 'int'. Try changing the type of the variable, or casting the right-hand type to 'int' • lib/probe_140.dart:2:16 • invalid_assignment
+
+2 issues found. (ran in 3.1s)
+❌ flutter analyze failed.
+exit: 1
+
+c) normal-clone environment, real Flutter, clean tree:
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.8s)
+✅ Pre-commit checks passed.
+exit: 0
+
+d) worktree-shaped environment, real Flutter, clean tree:
+🔍 Running flutter analyze...
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.0s)
+✅ Pre-commit checks passed.
+exit: 0
+
+==============================================================
+6. Criterion 4 - .githooks/commit-msg, re-derived on current main
+==============================================================
+$ grep -nE 'flutter|dart |command -v' .githooks/commit-msg
+(no output above = the hook never invokes the Flutter or Dart toolchain)
+
+$ commands the hook actually runs:
+echo exit grep head 
+
+--- unaffected, demonstrated: a good and a bad subject, under a
+--- worktree-shaped environment.
+$ GIT_DIR=... .githooks/commit-msg msg-good.txt
+exit: 0
+$ GIT_DIR=... .githooks/commit-msg msg-bad.txt
+❌ Commit message does not follow Conventional Commits.
+
+   Format: <type>(<optional-scope>)<optional-!>: <subject>
+exit: 1
+
+$ git status --porcelain   # tree left clean by this run

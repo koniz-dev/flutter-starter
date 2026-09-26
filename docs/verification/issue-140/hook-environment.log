@@ -1,0 +1,40 @@
+How the hook environment differs, measured on this machine.
+Both probes installed a temporary .git/hooks/pre-commit that did nothing but
+dump its own environment, ran one --allow-empty commit, and were removed.
+
+== A. ordinary commit: git commit --allow-empty -m ... ==
+cwd=/Users/nguyenanhkiet/Playground/flutter-starter
+GIT_AUTHOR_DATE=@1790405877 +0700
+GIT_AUTHOR_EMAIL=kietna.work@gmail.com
+GIT_AUTHOR_NAME=koniz-dev
+GIT_EDITOR=:
+GIT_EXEC_PATH=/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core
+GIT_INDEX_FILE=.git/index
+GIT_PREFIX=
+
+GIT_DIR: absent. GIT_INDEX_FILE: relative. Nothing here can mislead the
+Flutter SDK, which is why the hook has always worked in a plain clone.
+
+== B. commit whose git directory is not the default $PWD/.git: ==
+   git --git-dir="$PWD/.git" --work-tree="$PWD" commit --allow-empty -m ...
+cwd=/Users/nguyenanhkiet/Playground/flutter-starter
+GIT_AUTHOR_DATE=@1790406289 +0700
+GIT_AUTHOR_EMAIL=kietna.work@gmail.com
+GIT_AUTHOR_NAME=koniz-dev
+GIT_DIR=/Users/nguyenanhkiet/Playground/flutter-starter/.git
+GIT_EDITOR=:
+GIT_EXEC_PATH=/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core
+GIT_INDEX_FILE=/Users/nguyenanhkiet/Playground/flutter-starter/.git/index
+GIT_PREFIX=
+GIT_WORK_TREE=.
+
+GIT_DIR: absolute, exported. GIT_WORK_TREE and an absolute GIT_INDEX_FILE
+appear too. This is the shape a worktree hook runs in - a worktree's .git
+is a file pointing at <main>/.git/worktrees/<name>, so git has to export
+the resolved directory the same way.
+
+This probe is how far this session could go without creating a worktree,
+which it is instructed not to do on this repository. It establishes the
+mechanism (git exports an absolute GIT_DIR once the git directory is not
+the default) but not the literal worktree transcript criterion 1 asks for.
+That one criterion is routed to status:needs-uat.
