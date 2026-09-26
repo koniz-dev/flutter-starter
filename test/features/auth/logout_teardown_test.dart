@@ -15,6 +15,7 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datas
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';

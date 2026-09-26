@@ -35,6 +35,7 @@ import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
@@ -103,6 +104,12 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
+        // Same seam wiring `createAppContainer()` applies in production:
+        // core declares the 401-refresh ports and the auth slice fills
+        // them (koniz-dev/flutter-starter#221). Without this the
+        // interceptor can neither refresh nor reach the in-memory
+        // session, and these tests would pass vacuously.
+        ...authModuleOverrides,
         storageServiceProvider.overrideWithValue(storage),
         tokenStoreProvider.overrideWithValue(tokens),
       ],
@@ -200,6 +207,12 @@ void main() {
         // one refactor away from a CircularDependencyError at boot.
         final container = ProviderContainer(
           overrides: [
+            // Same seam wiring `createAppContainer()` applies in production:
+            // core declares the 401-refresh ports and the auth slice fills
+            // them (koniz-dev/flutter-starter#221). Without this the
+            // interceptor can neither refresh nor reach the in-memory
+            // session, and these tests would pass vacuously.
+            ...authModuleOverrides,
             storageServiceProvider.overrideWithValue(InMemoryStorage()),
             tokenStoreProvider.overrideWithValue(InMemoryTokenStore()),
           ],
@@ -271,6 +284,12 @@ void main() {
       final tokens = InMemoryTokenStore();
       final container = ProviderContainer(
         overrides: [
+          // Same seam wiring `createAppContainer()` applies in production:
+          // core declares the 401-refresh ports and the auth slice fills
+          // them (koniz-dev/flutter-starter#221). Without this the
+          // interceptor can neither refresh nor reach the in-memory
+          // session, and these tests would pass vacuously.
+          ...authModuleOverrides,
           storageServiceProvider.overrideWithValue(storage),
           tokenStoreProvider.overrideWithValue(tokens),
         ],

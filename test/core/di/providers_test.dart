@@ -9,6 +9,7 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_version.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/is_authenticated_usecase.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_starter/features/auth/domain/usecases/logout_usecase.dar
 import 'package:flutter_starter/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
 import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
+import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/delete_task_usecase.dart';

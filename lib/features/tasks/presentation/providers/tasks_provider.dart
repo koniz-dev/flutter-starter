@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

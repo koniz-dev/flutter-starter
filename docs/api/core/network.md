@@ -350,9 +350,12 @@ from the initializer list. `tokenStore` wins when both are given.
 **`refreshToken` is the only required parameter, and it is a callback, not a
 repository.** That is deliberate: `AuthRepository` depends on `ApiClient`, which
 depends on this interceptor, so holding a repository here would close a
-dependency cycle at bootstrap. `authInterceptorProvider` passes
-`() => ref.read(authRepositoryProvider).refreshToken()`, resolving the
-repository lazily at call time.
+dependency cycle at bootstrap. `authInterceptorProvider` - which lives in
+`lib/core/di/providers.dart` since koniz-dev/flutter-starter#221 - passes
+`() => ref.read(tokenRefresherProvider)()`, resolving the callback lazily at
+call time. `tokenRefresherProvider` is a seam core declares and the auth slice
+fills from `authModuleOverrides`, which is how the *file-level* cycle between
+`lib/core/di/` and `lib/features/auth/di/` was removed as well.
 
 Note that `always_put_required_named_parameters_first` is suppressed at the top
 of the source file, so the required parameter sits third. The order above is the
@@ -457,7 +460,7 @@ When the refresh fails, there is no refresh token, or the retry is already exhau
 
 The cache reference is supplied by `ApiClient._createDio` through `authInterceptor.attachResponseCache(...)`, because the cache is a `CacheInterceptor` the client builds itself and so does not exist when `authInterceptorProvider` constructs the interceptor. It is optional: an interceptor nobody attaches a cache to simply skips that step, exactly as `httpCache` is optional on `AuthRepositoryImpl`.
 
-A fourth step then tells the **running app**. Clearing storage only fixes the next launch; the session this launch is rendering lives in memory, in `AuthNotifier`. The interceptor reaches it through `ISessionTerminationSink` (`lib/core/contracts/state_boundary_contracts.dart`), implemented by `RiverpodSessionTerminationSink` in the auth feature and handed down by `authInterceptorProvider`, so nothing in `lib/core/network` imports the feature that owns the session. The sink resolves the notifier lazily, at the moment a session is terminated rather than at construction, which is what keeps the edge notifier -> use case -> repository -> remote data source -> `ApiClient` -> interceptor from closing into a cycle. It is optional for the same reason the cache is.
+A fourth step then tells the **running app**. Clearing storage only fixes the next launch; the session this launch is rendering lives in memory, in `AuthNotifier`. The interceptor reaches it through `ISessionTerminationSink` (`lib/core/contracts/state_boundary_contracts.dart`), implemented by `RiverpodSessionTerminationSink` in the auth feature, which reaches the interceptor through `sessionTerminationSinkProvider` - the second seam `authModuleOverrides` fills - so neither `lib/core/network` nor `lib/core/di` imports the feature that owns the session. The sink resolves the notifier lazily, at the moment a session is terminated rather than at construction, which is what keeps the edge notifier -> use case -> repository -> remote data source -> `ApiClient` -> interceptor from closing into a cycle. It is optional for the same reason the cache is.
 
 The app is **not** navigated anywhere from here. The interceptor only drops the session; the existing guard in `lib/core/routing/app_router.dart` reacts to the state change through its `refreshListenable` and performs the redirect to `/login`. Keeping navigation in one place is what lets the guard's deep-link round trip and its "no `/login` flash while the session restores" behaviour keep working.
 

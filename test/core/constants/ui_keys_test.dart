@@ -11,7 +11,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
-import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.dart';
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';

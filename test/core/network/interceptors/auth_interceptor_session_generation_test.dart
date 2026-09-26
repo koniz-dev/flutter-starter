@@ -49,6 +49,7 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datas
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -521,6 +522,10 @@ void main() {
         final tokens = InMemoryTokenStore();
         final container = ProviderContainer(
           overrides: [
+            // The production seam wiring (koniz-dev/flutter-starter#221):
+            // without it the interceptor's refresh never reaches the real
+            // repository and this test would prove less than it reads.
+            ...authModuleOverrides,
             storageServiceProvider.overrideWithValue(storage),
             tokenStoreProvider.overrideWithValue(tokens),
           ],
