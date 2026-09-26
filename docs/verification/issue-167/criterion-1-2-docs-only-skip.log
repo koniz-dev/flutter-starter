@@ -1,0 +1,112 @@
+$ gh pr checks 232     # this pull request: docs-only (docs/verification/issue-167/**, .md and .log)
+Docs check	pass	35s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223507721/job/108353062902	
+Issue refs	pass	6s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223507713/job/108353062816	
+Quality gate	pass	5s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223507720/job/108353062697	
+Strip both-samples-removed + analyze + test	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223507715/job/108353062844	
+Strip feature-flags-removed + analyze + test	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223507715/job/108353062817	
+Strip tasks-removed + analyze + test	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223507715/job/108353062873	
+
+$ gh pr diff 232 --name-only
+docs/verification/issue-167/README.md
+docs/verification/issue-167/analyze.log
+docs/verification/issue-167/criterion-3-full-run-and-red-variant.log
+docs/verification/issue-167/criterion-4-path-filter-probe.log
+docs/verification/issue-167/format.log
+docs/verification/issue-167/tests.log
+
+$ gh run view --job 108353062844 --log    # Strip both-samples-removed
+-- steps that produced log output (Setup Flutter / Apply strip / analyze / test must be absent):
+Set up job
+Checkout code
+Decide the strip scope
+Post Checkout code
+Complete job
+-- scope step output:
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2184323Z Strip smoke [both-samples-removed]: SKIPPED (docs-only) - Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2193218Z ### Strip smoke scope - `both-samples-removed`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2193505Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2193649Z **SKIPPED (docs-only)**
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2193898Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2194095Z - event: `pull_request`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2194859Z - range: `fe27a5bd5934ee5a98ee8a2461163b27123690f9...6c1f8729597b4aee5c2d756053df8b2d21803fad`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2195727Z - strip, analyze and test run: `false`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2196170Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2197136Z Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2197706Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2197868Z <details><summary>Changed paths</summary>
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2198086Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2198199Z ```
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2198484Z docs/verification/issue-167/README.md
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2198838Z docs/verification/issue-167/analyze.log
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2199278Z docs/verification/issue-167/criterion-3-full-run-and-red-variant.log
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2199784Z docs/verification/issue-167/criterion-4-path-filter-probe.log
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2200203Z docs/verification/issue-167/format.log
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2200548Z docs/verification/issue-167/tests.log
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2201039Z ```
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2201172Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.2201298Z </details>
+
+$ gh run view --job 108353062873 --log    # Strip tasks-removed
+-- steps that produced log output (Setup Flutter / Apply strip / analyze / test must be absent):
+Set up job
+Checkout code
+Decide the strip scope
+Post Checkout code
+Complete job
+-- scope step output:
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3048944Z Strip smoke [tasks-removed]: SKIPPED (docs-only) - Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3055121Z ### Strip smoke scope - `tasks-removed`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3055990Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3056491Z **SKIPPED (docs-only)**
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3057300Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3057780Z - event: `pull_request`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3060163Z - range: `fe27a5bd5934ee5a98ee8a2461163b27123690f9...6c1f8729597b4aee5c2d756053df8b2d21803fad`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3062659Z - strip, analyze and test run: `false`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3063684Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3065545Z Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3067581Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3067991Z <details><summary>Changed paths</summary>
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3068704Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3069013Z ```
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3069815Z docs/verification/issue-167/README.md
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3070860Z docs/verification/issue-167/analyze.log
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3072224Z docs/verification/issue-167/criterion-3-full-run-and-red-variant.log
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3073961Z docs/verification/issue-167/criterion-4-path-filter-probe.log
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3075263Z docs/verification/issue-167/format.log
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3076325Z docs/verification/issue-167/tests.log
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3077479Z ```
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3077903Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:36.3078220Z </details>
+
+$ gh run view --job 108353062817 --log    # Strip feature-flags-removed
+-- steps that produced log output (Setup Flutter / Apply strip / analyze / test must be absent):
+Set up job
+Checkout code
+Decide the strip scope
+Post Checkout code
+Complete job
+-- scope step output:
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8756514Z Strip smoke [feature-flags-removed]: SKIPPED (docs-only) - Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8765868Z ### Strip smoke scope - `feature-flags-removed`
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8766700Z 
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8767379Z **SKIPPED (docs-only)**
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8768167Z 
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8768876Z - event: `pull_request`
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8771486Z - range: `fe27a5bd5934ee5a98ee8a2461163b27123690f9...6c1f8729597b4aee5c2d756053df8b2d21803fad`
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8773030Z - strip, analyze and test run: `false`
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8773587Z 
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8774727Z Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8775897Z 
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8776336Z <details><summary>Changed paths</summary>
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8776876Z 
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8777236Z ```
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8778048Z docs/verification/issue-167/README.md
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8778997Z docs/verification/issue-167/analyze.log
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8780096Z docs/verification/issue-167/criterion-3-full-run-and-red-variant.log
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8781650Z docs/verification/issue-167/criterion-4-path-filter-probe.log
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8782724Z docs/verification/issue-167/format.log
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8783668Z docs/verification/issue-167/tests.log
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8784775Z ```
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8785183Z 
+Strip feature-flags-removed + analyze + test	Decide the strip scope	2026-09-26T06:21:35.8785543Z </details>
+

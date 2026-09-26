@@ -25,7 +25,13 @@ and no PNG is present in this directory. No criterion rests on a golden.
 
 ## Criterion 1 - a docs-only PR installs no Flutter toolchain in any Strip job
 
-`criterion-1-2-docs-only-skip.log`. The pull request that carried this evidence
+`criterion-1-2-docs-only-skip.log`. It was captured from this pull request's own
+first run (head `6c1f872`, run 36223507715) and then committed on top, which is
+the only ordering available: a log of a run can only exist after the run. The
+second push adds one `.log` and one `.md`, so the diff stays docs-only and the
+re-run takes the same path.
+
+The pull request that carried this evidence
 directory is docs-only (`docs/verification/issue-167/**`, all `.md` and `.log`).
 Each of the three Strip jobs printed
 
@@ -38,8 +44,13 @@ installed.
 
 and the job log contains no `Setup Flutter`, `Apply strip`, `Analyze stripped
 tree` or `Run tests (stripped tree)` step output - every one of them is gated on
-`steps.scope.outputs.run == 'true'`. The elapsed time per Strip job dropped from
-roughly 2m30s to seconds; the log records the actual numbers.
+`steps.scope.outputs.run == 'true'`. The log lists the steps that produced
+output in each job, and it reads exactly `Set up job`, `Checkout code`, `Decide
+the strip scope`, `Post Checkout code`, `Complete job`.
+
+Each Strip check finished in **4s**, against 2m24s-2m46s for the same three jobs
+on the two full runs in this evidence set. That is the ~7 billed minutes per
+evidence pull request the issue measured, now down to about 12 seconds.
 
 ## Criterion 2 - the three Strip checks still report a conclusion
 
