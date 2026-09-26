@@ -408,6 +408,32 @@ test(auth): add login use case tests
 > qualified `owner/repo#N` form so the reference survives being quoted elsewhere.
 > See [docs/issue-workflow.md](docs/issue-workflow.md).
 
+### Git hooks
+
+Hooks are **not** installed by a clone. Install them once:
+
+```bash
+./scripts/dev/setup_git_hooks.sh      # or setup_git_hooks.ps1 on Windows
+```
+
+That copies `.githooks/*` into `.git/hooks/`: `pre-commit` runs the scoped
+`dart format` check and `flutter analyze`, `commit-msg` enforces the format
+above, and `pre-push` runs `flutter test`. Skip them for one command with
+`git commit --no-verify` / `git push --no-verify` — which switches off *every*
+hook, not just the one in your way.
+
+**They are expected to work inside a `git worktree`.** `.git/hooks/` is shared
+by every worktree of a repository, so installing once covers all of them, and
+`pre-commit` and `pre-push` now scrub `GIT_DIR` and its siblings out of the
+environment before calling `flutter` or `dart`. Without that, git's exported
+`GIT_DIR` makes the Flutter SDK resolve its own version against *this*
+repository instead of the SDK, which reported
+`The current Flutter SDK version is 0.0.0-unknown` and rejected commits that
+were clean when the same command was run by hand
+([#140](https://github.com/koniz-dev/flutter-starter/issues/140)). If you ever
+see a hook report an SDK version that is not the one `flutter --version` prints
+outside the hook, that is the symptom, and it is a bug worth filing.
+
 ---
 
 ## Testing Guidelines
