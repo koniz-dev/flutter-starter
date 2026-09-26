@@ -32,3 +32,7 @@ class RouteQueryParams {
   /// deep link survives the login round trip.
   static const String redirect = 'redirect';
 }
+
+// Deliberate analyze error for koniz-dev/flutter-starter#167 criterion 3.
+// This branch is a demonstration and is never merged.
+const brokenGoldenProbeForIssue167 = undefinedSymbolForIssue167;
