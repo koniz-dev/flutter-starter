@@ -76,6 +76,7 @@ code it described changed.
 so a stripped tree does not fail `test/docs/doc_symbols_test.dart` over a
 feature that is no longer there.
 
+<!-- strip:process-only start -->
 ## `check_epic_coverage.dart`
 
 Taxonomy guard: every tracked surface maps to **exactly one** `epic:*` label.
@@ -100,6 +101,7 @@ in the same `epic:*`" rule keys on that label.
 It reads paths from version control rather than from the filesystem, so
 `strip_sample_features.dart` deleting the sample slices does not make the
 sample epics look stale under **Strip smoke**.
+<!-- strip:process-only end -->
 
 ## `strip_sample_features.dart`
 
@@ -113,6 +115,29 @@ flutter pub get
 flutter analyze
 flutter test
 ```
+
+### Process-only artifacts
+
+Every variant also removes what serves **this repository's issue loop** rather
+than the app a fork ships: `docs/verification/` (the acceptance-evidence
+archive, by far the largest thing in `docs/`), `docs/issue-workflow.md`,
+`.claude/agents/`, `scripts/bootstrap-issue-labels.sh`,
+`tool/check_epic_coverage.dart` with `test/tooling/epic_coverage_test.dart`,
+and `scripts/dev/check_issue_refs.sh` with `.github/workflows/issue-refs.yml`.
+The last two pairs would actively break a fork: the epic guard shells out to a
+labels script that no longer exists, and the refs check rejects any commit that
+does not name *this* tracker.
+
+Sections of files a fork keeps are marked in place with
+`<!-- strip:process-only start -->` / `<!-- strip:process-only end -->` (see
+`CLAUDE.md`, `CONTRIBUTING.md` and this file) rather than listed in the script,
+so the two cannot drift. Unbalanced markers are a hard error, reported before
+anything is deleted.
+
+Kept deliberately, because they protect the adopter's app rather than this
+repository's workflow: `check_env_assets.dart`, `check_docs.dart`,
+`doc_signatures.dart`, `doc_symbols.dart`, `ci.yml`, `strip-smoke.yml`, the git
+hooks, and `scripts/test/run_acceptance.sh`.
 
 ### Golden tree
 

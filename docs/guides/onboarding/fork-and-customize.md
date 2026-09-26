@@ -79,6 +79,16 @@ Naming both samples is the same request as naming neither, so
 
 All three variants are exercised by [`strip-smoke.yml`](../../../.github/workflows/strip-smoke.yml), which applies each one and then runs `flutter analyze` and `flutter test` over the result.
 
+Every variant also removes the machinery that serves the upstream repository's
+own issue loop rather than your app: the acceptance-evidence archive under
+`docs/verification/`, `docs/issue-workflow.md`, `.claude/agents/`,
+`scripts/bootstrap-issue-labels.sh`, the epic-coverage guard and its test, and
+the commit-reference check with its workflow (it requires `Refs` pointing at the
+upstream tracker, so it would reject your commits). The guards that protect your
+app - env-asset, docs, signature and symbol checks, the CI workflows and the git
+hooks - all stay. See [`tool/README.md`](../../../tool/README.md) for the full
+list and the reasoning.
+
 Then delete or adjust any remaining docs under `docs/features/` that referenced removed modules.
 
 ## 5. Remove auth sample (advanced)
