@@ -1,0 +1,119 @@
+$ # Criterion 2: every consumer symbol the ADR cites, against the merged tree
+
+$ grep -rn "INetworkClient" lib
+lib/core/contracts/network_contracts.dart:55:abstract class INetworkClient {
+lib/core/network/api_client.dart:138:  late final INetworkClient _networkClient;
+lib/core/network/api_client.dart:145:  /// `.dio` is an explicit opt-out of [INetworkClient] rather than something
+lib/core/network/api_client.dart:154:  INetworkClient get networkClient => _networkClient;
+lib/core/network/adapters/dio_network_client.dart:4:/// Dio adapter for [INetworkClient].
+lib/core/network/adapters/dio_network_client.dart:5:class DioNetworkClient implements INetworkClient {
+
+$ grep -rn "IKeyValueStore" lib
+lib/core/di/providers.dart:38:final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
+lib/core/contracts/storage_contracts.dart:5:abstract class IKeyValueStore {
+lib/core/network/interceptors/auth_interceptor.dart:35:    IKeyValueStore? keyValueStore,
+lib/core/network/interceptors/auth_interceptor.dart:67:  final IKeyValueStore? _keyValueStore;
+lib/core/storage/storage_service.dart:47:class StorageService implements IStorageService, IKeyValueStore {
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:27:  FeatureFlagsLocalDataSourceImpl({required IKeyValueStore storageService})
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:30:  final IKeyValueStore _storageService;
+lib/features/tasks/data/datasources/tasks_local_datasource.dart:45:  final IKeyValueStore storageService;
+lib/features/auth/di/auth_providers.dart:28:/// - [IKeyValueStore] for user data (non-sensitive)
+lib/features/auth/data/datasources/auth_local_datasource.dart:54:  final IKeyValueStore storageService;
+lib/features/auth/data/datasources/auth_local_datasource.dart:136:  /// [IKeyValueStore.remove] - a `MissingPluginException` on a stripped build,
+lib/features/auth/data/repositories/auth_repository_impl.dart:195:  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
+
+$ grep -rn "ITokenStore" lib
+lib/core/di/providers.dart:43:final tokenStoreProvider = Provider<ITokenStore>((ref) {
+lib/core/contracts/storage_contracts.dart:27:abstract class ITokenStore {
+lib/core/network/interceptors/cache_interceptor.dart:34:/// the cache - on read and on write - the interceptor asks the [ITokenStore]
+lib/core/network/interceptors/cache_interceptor.dart:108:    ITokenStore? tokenStore,
+lib/core/network/interceptors/cache_interceptor.dart:115:  final ITokenStore? _tokenStore;
+lib/core/network/interceptors/auth_interceptor.dart:31:    ITokenStore? tokenStore,
+lib/core/network/interceptors/auth_interceptor.dart:52:  final ITokenStore _tokenStore;
+lib/core/network/interceptors/auth_interceptor.dart:59:  ITokenStore get tokenStore => _tokenStore;
+lib/core/storage/adapters/secure_token_store.dart:6:class SecureTokenStore implements ITokenStore {
+lib/features/auth/di/auth_providers.dart:27:/// - [ITokenStore] for tokens (secure)
+lib/features/auth/data/datasources/auth_local_datasource.dart:57:  final ITokenStore tokenStore;
+lib/features/auth/data/datasources/auth_local_datasource.dart:138:  /// [ITokenStore.clearAllTokens] and left the access token *and* the refresh
+lib/features/auth/data/repositories/auth_repository_impl.dart:195:  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
+lib/features/auth/data/repositories/auth_repository_impl.dart:226:  /// is not decidable here: [ITokenStore] holds opaque strings with no expiry
+lib/features/auth/presentation/providers/auth_provider.dart:208:  /// 1. **Expiry is not locally observable.** `ITokenStore` persists opaque
+
+$ grep -rn "IHttpResponseCache" lib
+lib/core/contracts/network_contracts.dart:63:abstract class IHttpResponseCache {
+lib/core/network/api_client.dart:160:  IHttpResponseCache get responseCache => _cacheInterceptor;
+lib/core/network/interceptors/cache_interceptor.dart:95:/// [IHttpResponseCache], so an anonymous response cached before sign-in
+lib/core/network/interceptors/cache_interceptor.dart:97:class CacheInterceptor extends Interceptor implements IHttpResponseCache {
+lib/core/network/interceptors/auth_interceptor.dart:118:  IHttpResponseCache? _responseCache;
+lib/core/network/interceptors/auth_interceptor.dart:130:  void attachResponseCache(IHttpResponseCache cache) => _responseCache = cache;
+lib/features/auth/data/repositories/auth_repository_impl.dart:35:  final IHttpResponseCache? httpCache;
+
+$ grep -rn "ISessionTerminationSink" lib
+lib/core/di/providers.dart:156:final Provider<ISessionTerminationSink?> sessionTerminationSinkProvider =
+lib/core/di/providers.dart:157:    Provider<ISessionTerminationSink?>((ref) => null);
+lib/core/contracts/state_boundary_contracts.dart:36:abstract class ISessionTerminationSink {
+lib/core/network/interceptors/auth_interceptor.dart:36:    ISessionTerminationSink? sessionSink,
+lib/core/network/interceptors/auth_interceptor.dart:87:  final ISessionTerminationSink? _sessionSink;
+lib/features/auth/presentation/providers/auth_provider.dart:277:class RiverpodSessionTerminationSink implements ISessionTerminationSink {
+
+$ grep -rn "AppDesignTokens" lib
+lib/core/contracts/design_tokens_contracts.dart:7:abstract class AppDesignTokens {
+lib/shared/design_system/tokens/default_design_tokens.dart:9:class DefaultDesignTokens implements AppDesignTokens {
+
+$ grep -rn "IAuthController" lib
+lib/core/contracts/state_boundary_contracts.dart:15:abstract class IAuthController {
+lib/features/auth/presentation/providers/auth_provider.dart:48:class AuthNotifier extends _$AuthNotifier implements IAuthController {
+lib/features/auth/presentation/providers/auth_provider.dart:289:final authControllerProvider = Provider<IAuthController>((ref) {
+
+$ grep -rn "AppNavigator" lib
+(no output)
+
+$ grep -rn "ITasksController" lib
+(no output)
+
+$ # Criterion 3: slice shape per axis
+auth: di=yes usecases=6 models=yes routing=yes
+tasks: di=yes usecases=6 models=yes routing=yes
+feature_flags: di=no usecases=0 models=no routing=yes
+
+$ ls lib/features/*/di/ lib/features/feature_flags/presentation/providers/
+lib/features/auth/di/:
+auth_providers.dart
+
+lib/features/feature_flags/presentation/providers/:
+feature_flags_providers.dart
+feature_flags_providers.g.dart
+
+lib/features/tasks/di/:
+tasks_providers.dart
+
+$ # Criterion 4a: ApiClient Dio surface
+151:  Dio get dio => _dio;
+169:  Future<NetworkResponse<dynamic>> get(
+192:  Future<NetworkResponse<dynamic>> post(
+217:  Future<NetworkResponse<dynamic>> put(
+242:  Future<NetworkResponse<dynamic>> delete(
+259:  Future<NetworkResponse<dynamic>> _send(
+
+$ # Criterion 5: ADR index
+15:- `0005-state-boundary.md` - **Superseded by 0006.** Controller boundaries to
+17:- `0006-contract-status-and-slice-shape.md` - A verdict for every boundary
+19:  `auth` as the canonical feature slice shape. Supersedes 0005.
+
+$ grep -n "open question" docs/architecture/contracts-map.md
+31:That is no longer an open question.
+(grep exit 0 - 1 means no match)
+
+$ grep -n "0006" docs/architecture/contracts-map.md docs/architecture/adr/0005-state-boundary.md
+docs/architecture/contracts-map.md:32:[adr/0006-contract-status-and-slice-shape.md](adr/0006-contract-status-and-slice-shape.md)
+docs/architecture/adr/0005-state-boundary.md:4:  [0006-contract-status-and-slice-shape.md](0006-contract-status-and-slice-shape.md)
+docs/architecture/adr/0005-state-boundary.md:8:> **Read 0006 first.** Both contracts this ADR proposed are gone or going:
+docs/architecture/adr/0005-state-boundary.md:9:> `ITasksController` was deleted by koniz-dev/flutter-starter#180, and 0006
+docs/architecture/adr/0005-state-boundary.md:43:[0006](0006-contract-status-and-slice-shape.md) (koniz-dev/flutter-starter#183):
+
+$ # Criterion 6
+$ git diff --name-only c4a724d~1 c4a724d
+docs/architecture/adr/0005-state-boundary.md
+docs/architecture/adr/0006-contract-status-and-slice-shape.md
+docs/architecture/adr/README.md
+docs/architecture/contracts-map.md
