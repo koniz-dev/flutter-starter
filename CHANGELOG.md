@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+
+- **BREAKING - Auth**: `AuthLocalDataSourceImpl` no longer accepts
+  `SecureStorageService? secureStorageService`. `ITokenStore tokenStore` is now
+  a required parameter, and the `ArgumentError` thrown when neither was supplied
+  is gone with it - the analyzer reports the missing argument instead.
+  (koniz-dev/flutter-starter#196)
+
+  **What an adopter has to change.** Only code that constructed the data source
+  with the secure-storage form. Nothing in this repository's `lib/` did;
+  `lib/features/auth/di/auth_providers.dart` has always passed `tokenStore:`.
+  If you have:
+
+  ```dart
+  AuthLocalDataSourceImpl(
+    storageService: storageService,
+    secureStorageService: secureStorageService,
+  );
+  ```
+
+  wrap the service in the adapter the constructor used to build for you:
+
+  ```dart
+  AuthLocalDataSourceImpl(
+    storageService: storageService,
+    tokenStore: SecureTokenStore(secureStorageService),
+  );
+  ```
+
+  `SecureTokenStore` is `lib/core/storage/adapters/secure_token_store.dart` and
+  is unchanged. Behaviour is identical - the old constructor built exactly this
+  object. Any other `ITokenStore` implementation works too, which is the point
+  of the parameter being typed on the contract.
+
 ## [1.0.0+1] - Enterprise Starter V2.0 Upgrade
 
 ### Added
