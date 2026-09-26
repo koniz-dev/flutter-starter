@@ -1,0 +1,33 @@
+$ grep -n "still open" docs/architecture/design-decisions.md
+(grep exit: 1  -> 1 means no match)
+
+$ grep -n "147" docs/architecture/design-decisions.md
+1249:   sample was filed separately as koniz-dev/flutter-starter#147, under
+1269:| `DateFormatter` | yes, both pairs | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in `TaskModel` (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
+1283:**Decided, not open.** koniz-dev/flutter-starter#147 wired `DateFormatter` and
+
+$ grep -nE "Review by [0-9]{4}-[0-9]{2}-[0-9]{2}" docs/architecture/design-decisions.md
+1333:**Review by 2027-03-31.** That clock covers every row of the Call-site status
+
+$ # criterion 4: the call-site loop
+PaginationHelper: lib/core/utils/pagination_helper.dart 
+Debouncer: lib/core/utils/debouncer.dart 
+Throttler: lib/core/utils/debouncer.dart 
+LazyLoader: lib/core/utils/lazy_loader.dart 
+ProviderDisposal: lib/core/utils/provider_disposal.dart 
+DateFormatter: lib/core/network/interceptors/cache_interceptor.dart lib/core/utils/date_formatter.dart lib/features/tasks/data/models/task_model.dart lib/features/tasks/presentation/screens/task_detail_screen.dart lib/features/tasks/presentation/screens/tasks_list_screen.dart 
+PerformanceUtils: lib/core/performance/performance_utils.dart 
+
+$ # the Call-site status table as it stands on main
+| Utility | Exercised by a running screen? | Where |
+|---|---|---|
+| `DateFormatter` | yes, both pairs | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in `TaskModel` (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
+| `PaginationHelper` | no | - |
+| `Debouncer` / `Throttler` | no | - |
+| `LazyLoader` | no | - |
+| `ProviderDisposal` | no | - |
+| `PerformanceUtils` and the three performance mixins | no | - |
+
+$ dart run tool/check_docs.dart
+
+OK: documentation checks passed.
