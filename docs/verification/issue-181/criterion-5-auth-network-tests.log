@@ -1,0 +1,21 @@
+$ flutter test test/features/auth/ test/core/network/
+
+00:03 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl refreshToken should return new AuthResponseModel when refresh succeeds
+00:04 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return new token when refresh succeeds
+00:04 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return UnknownFailure when no refresh token available
+00:04 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return failure when refresh fails
+00:04 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should cache refresh token only if provided
+00:04 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases refreshToken should handle generic Exception
+00:08 +188: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should not change state on success
+00:08 +189: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should logout on refresh token expiry
+00:08 +190: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should clear the session when the code says the refresh token died
+00:08 +191: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should keep the session when an unrelated failure mentions refresh
+00:08 +192: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should keep the session when a newer session ended the refresh
+00:08 +207: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should handle refreshToken with non-refresh failure
+00:20 +475: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session (#127 criterion 1) a 401 whose refresh fails clears AuthState.user
+00:20 +476: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session (#127 criterion 1) the retry-exhausted logout branch clears AuthState.user too
+00:21 +479: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: the router reacts without a restart (#127 criterion 2) a forced logout moves the running app to /login
+00:21 +500: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: the router reacts without a restart (#127 criterion 2) a forced logout moves the running app to /login
+00:22 +501: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: a forced logout with nobody listening is harmless (#127 c4) a 401 after the container is disposed does not throw
+00:40 +544: All tests passed!
+exit=0

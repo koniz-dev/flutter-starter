@@ -1,0 +1,23 @@
+$ grep -n "contains('refresh')" lib/features/auth/presentation/providers/auth_provider.dart
+exit=1
+
+$ grep -rn "\.message" lib/features/auth/presentation/providers/auth_provider.dart
+lib/features/auth/presentation/providers/auth_provider.dart:68:        state = state.copyWith(isLoading: false, error: failure.message);
+lib/features/auth/presentation/providers/auth_provider.dart:86:        state = state.copyWith(isLoading: false, error: failure.message);
+lib/features/auth/presentation/providers/auth_provider.dart:111:        state = AuthState(error: failure.message);
+lib/features/auth/presentation/providers/auth_provider.dart:148:        // Structured state only. `failure.message` is server-supplied and
+lib/features/auth/presentation/providers/auth_provider.dart:175:        state = state.copyWith(isLoading: false, error: failure.message);
+
+$ sed -n '/failureCallback: (failure) async/,/^      },$/p' lib/features/auth/presentation/providers/auth_provider.dart
+      failureCallback: (failure) async {
+        // Structured state only. `failure.message` is server-supplied and
+        // localisable, so matching on it fired on any error phrased "please
+        // refresh and try again" - including the one this repository raises
+        // when a *newer* session ended the refresh in flight, whose message
+        // reads "Session ended while the token refresh was in flight"
+        // (koniz-dev/flutter-starter#181). The data layer sets this code on
+        // every round trip that means the refresh token is dead.
+        if (failure.code == AuthErrorCodes.refreshTokenExpired) {
+          await logout();
+        }
+      },
