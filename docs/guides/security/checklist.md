@@ -35,8 +35,13 @@ them.
       a `.env` in `pubspec.yaml` ships in the release APK, the release IPA and
       the web build - and so does anything sitting inside a declared directory
       such as `assets/config/`, with no pubspec entry naming it. The check reads
-      the tree as it is when it runs, and nothing runs it on the release-build
-      path yet ([#135](https://github.com/koniz-dev/flutter-starter/issues/135)).
+      the tree as it is when it runs. It is now also on the release-build path:
+      `scripts/ci/build_all.sh` runs it before the first build, and
+      `deploy-android.yml`, `deploy-ios.yml` and every job of `deploy-web.yml`
+      run it as a **Guard against a bundled secrets file** step before theirs
+      ([#135](https://github.com/koniz-dev/flutter-starter/issues/135)). Running
+      it by hand is still the habit to keep: those paths cover the artifact, not
+      the tree you are about to hand to them.
       Use `--dart-define-from-file=.env` on native; on web, keep secrets on the
       server. See
       [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
