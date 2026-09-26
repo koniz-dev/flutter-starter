@@ -1,6 +1,6 @@
 // Documentation integrity checker.
 //
-// Three checks, all of which have silently rotted in this repository before:
+// Four checks, all of which have silently rotted in this repository before:
 //
 //   1. Relative links and heading anchors under `docs/` resolve.
 //   2. No emoji in `docs/`, `CLAUDE.md`, or `.claude/` (the stated convention
@@ -9,27 +9,37 @@
 //   3. Documented constructor signatures match their source, for every
 //      fenced block carrying a `<!-- signature: <path> <Name> -->` directive
 //      (see `tool/doc_signatures.dart`).
+//   4. Every identifier asserted with a `<!-- symbol: <path> <name> -->`
+//      directive is actually declared in that file
+//      (see `tool/doc_symbols.dart`). Check 3 is the strong form and needs a
+//      signature block; this is the weak, broad one, and it is the one that
+//      would have caught `contracts-map.md` citing a provider that never
+//      existed (koniz-dev/flutter-starter#206).
 //
 // Usage:
 //   dart run tool/check_docs.dart               # all checks
 //   dart run tool/check_docs.dart --links       # links and anchors only
 //   dart run tool/check_docs.dart --emoji       # emoji only
 //   dart run tool/check_docs.dart --signatures  # constructor signatures only
+//   dart run tool/check_docs.dart --symbols     # symbol existence only
 //
 // Exits 0 when clean, 1 when anything is broken.
 
 import 'dart:io';
 
 import 'doc_signatures.dart';
+import 'doc_symbols.dart';
 
 void main(List<String> args) {
   final linksOnly = args.contains('--links');
   final emojiOnly = args.contains('--emoji');
   final signaturesOnly = args.contains('--signatures');
-  final anyFilter = linksOnly || emojiOnly || signaturesOnly;
+  final symbolsOnly = args.contains('--symbols');
+  final anyFilter = linksOnly || emojiOnly || signaturesOnly || symbolsOnly;
   final runLinks = !anyFilter || linksOnly;
   final runEmoji = !anyFilter || emojiOnly;
   final runSignatures = !anyFilter || signaturesOnly;
+  final runSymbols = !anyFilter || symbolsOnly;
 
   final root = Directory.current;
   var failures = 0;
@@ -42,6 +52,9 @@ void main(List<String> args) {
   }
   if (runSignatures) {
     failures += checkSignatures(root);
+  }
+  if (runSymbols) {
+    failures += checkSymbols(root);
   }
 
   if (failures > 0) {

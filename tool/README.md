@@ -18,22 +18,63 @@ Documentation integrity checker. Three checks, all of which had silently rotted:
   `required` markers and defaults. Added after koniz-dev/flutter-starter#89,
   where `docs/api/core/network.md` documented an `AuthInterceptor` parameter
   that never existed while missing three that did.
+- **Symbol existence** (`doc_symbols.dart`): every
+  `<!-- symbol: <source path> <identifier> -->` directive must name an
+  identifier that file actually declares. Added after
+  koniz-dev/flutter-starter#206, where `docs/architecture/contracts-map.md` -
+  the document an adopter follows to swap an implementation - cited
+  `tasksControllerProvider` and `FirebaseFeatureFlagsRemoteDataSource`, neither
+  of which has ever existed anywhere in the repository.
 
 ```bash
 dart run tool/check_docs.dart               # all checks
 dart run tool/check_docs.dart --links       # links and anchors only
 dart run tool/check_docs.dart --emoji       # emoji only
 dart run tool/check_docs.dart --signatures  # constructor signatures only
+dart run tool/check_docs.dart --symbols     # symbol existence only
 ```
 
 Exits 1 and prints `file:line` for every problem. CI runs it as **Docs check**
 (`.github/workflows/docs-check.yml`) on any PR touching markdown - exactly the
-set of changes the Quality gate treats as inert and skips. The signature check
-additionally runs under `flutter test` (`test/docs/doc_signatures_test.dart`),
-because a constructor gaining a parameter is a `lib/` change that Docs check
-never sees. It is deliberately
+set of changes the Quality gate treats as inert and skips. The signature and
+symbol checks additionally run under `flutter test`
+(`test/docs/doc_signatures_test.dart`, `test/docs/doc_symbols_test.dart`),
+because a constructor gaining a parameter, or an identifier being deleted from
+`lib/`, is a `lib/` change that Docs check never sees. It is deliberately
 **not** part of `scripts/dev/audit_template.sh`: that script gates code changes,
 and a broken doc link should not block an unrelated `lib/` fix.
+
+### The `symbol:` directive
+
+```markdown
+<!-- symbol: lib/core/di/providers.dart apiClientProvider -->
+```
+
+One directive per asserted identifier. It takes no fenced block and says
+nothing about the shape of the declaration - only that the name is declared in
+that file. Accepted forms: `class` in every modifier spelling, `mixin`, `enum`,
+`extension`, `extension type`, `typedef`, a top-level
+`final`/`const`/`late`/`var`, and a top-level function.
+
+Two properties worth knowing:
+
+- **Generated output counts.** `goRouterProvider`, `authProvider` and
+  `featureFlagsRemoteDataSourceProvider` exist only in a `.g.dart`, so a
+  checker that skipped generated files would skip the identifiers an adopter is
+  most likely to get wrong. Name the `.g.dart` path.
+- **Inline code spans are not scanned, deliberately.** The swap map's cells mix
+  identifiers, paths and prose; a heuristic would either miss the phantom or
+  drown the author in false positives. The directive is verbose and exact,
+  which is the right trade for a document whose whole job is being exact.
+
+Directives inside a fenced block are ignored, so this section does not check
+itself. `docs/verification/` is skipped too: an evidence file is a frozen
+record of a past run, and a directive in one would start failing the day the
+code it described changed.
+
+`strip_sample_features.dart` deletes any directive naming a path it removed,
+so a stripped tree does not fail `test/docs/doc_symbols_test.dart` over a
+feature that is no longer there.
 
 ## `check_epic_coverage.dart`
 
