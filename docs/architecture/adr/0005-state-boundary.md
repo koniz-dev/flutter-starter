@@ -1,7 +1,15 @@
 # ADR 0005: State Boundary Hardening
 
-- Status: Proposed
+- Status: **Superseded** by
+  [0006-contract-status-and-slice-shape.md](0006-contract-status-and-slice-shape.md)
+  (2026-09-26)
 - Date: 2026-03-27
+
+> **Read 0006 first.** Both contracts this ADR proposed are gone or going:
+> `ITasksController` was deleted by koniz-dev/flutter-starter#180, and 0006
+> decides to remove `IAuthController` too. This document is kept as the
+> reasoning that was tried, not as a description of the tree. The Context below
+> is still accurate; the Decision is not what the repository does.
 
 ## Context
 Riverpod is currently both DI and UI state engine. Feature presentation logic directly depends on Riverpod notifier/provider APIs, increasing migration cost and coupling.
@@ -31,8 +39,10 @@ reversed rather than completed: `TasksNotifier` had never implemented
 `ITasksController`, the two had drifted in both directions, and
 koniz-dev/flutter-starter#180 deleted the contract instead of manufacturing an
 implementor and a consumer for it. Whether `IAuthController` should be wired up
-or deleted in turn is still open - see koniz-dev/flutter-starter#64 and
-koniz-dev/flutter-starter#183. Do not read this ADR as a description of how the
+or deleted in turn was answered by
+[0006](0006-contract-status-and-slice-shape.md) (koniz-dev/flutter-starter#183):
+**remove it**, with `AuthStateSnapshot`, `ControllerStateSnapshot` and
+`authControllerProvider`. Do not read this ADR as a description of how the
 sample features are wired today; the current wiring is in
 [contracts-map.md](../contracts-map.md).
 

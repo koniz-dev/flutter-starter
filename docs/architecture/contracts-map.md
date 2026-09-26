@@ -26,9 +26,17 @@ For feature and core code that only need types:
 **Read the Status column before you plan a swap.** Two of the rows below are not
 load-bearing today: `AppDesignTokens` and `IAuthController` are declared and
 implemented but no production code consumes them. For those two, following the
-"To replace" column changes nothing at runtime until a consumer exists. Whether
-they should be wired up or deleted is an open question, not a settled one - see
-koniz-dev/flutter-starter#64 and its children.
+"To replace" column changes nothing at runtime until a consumer exists.
+
+That is no longer an open question.
+[adr/0006-contract-status-and-slice-shape.md](adr/0006-contract-status-and-slice-shape.md)
+(koniz-dev/flutter-starter#183) gives each a verdict: **`AppDesignTokens` is to
+be wired** - type `AppTheme._tokens` on the abstraction - and
+**`IAuthController` is to be removed**, with `AuthStateSnapshot`,
+`ControllerStateSnapshot` and `authControllerProvider`. Both rows stay here
+describing the tree as it is until those changes land; the ADR says what they
+are becoming. Neither is filed yet, and the ADR names the epic and the exact
+edit for each.
 
 Two rows that used to sit here were answered by deletion rather than by wiring.
 `AppNavigator` went in koniz-dev/flutter-starter#177 - the contract, its adapter
