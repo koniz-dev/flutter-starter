@@ -1,0 +1,74 @@
+HEAD: 73c84cfc21e on main
+Every run below is ./scripts/ci/build_all.sh development, with only its own
+milestone lines kept (toolchain and pub output elided by grep).
+
+This machine has no Android SDK, so every run that gets past the guard
+stops at the Android build with '[!] No Android SDK found' - a pre-existing
+property of the environment, identical before and after this change, and
+the reason no run here reaches an artifact.
+
+================================================================
+A-before. origin/main's build_all.sh, with '- .env' declared
+================================================================
+Building for environment: development
+Cleaning previous builds...
+✓ Cleaned
+Building Android...
+[!] No Android SDK found. Try setting the ANDROID_HOME environment variable.
+exit: 1
+artifacts: ls: build/app/outputs: No such file or directory ls: build/web: No such file or directory 
+
+================================================================
+A-after. this branch's build_all.sh, same pubspec  [criterion 3, failing half]
+================================================================
+Building for environment: development
+Cleaning previous builds...
+✓ Cleaned
+Checking for bundled secrets files...
+Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+  pubspec.yaml:174  - .env  [environment file]
+For a file inside a declared directory, put the acknowledgement on the
+✗ Refusing to build: a secrets file would be bundled as a Flutter asset.
+exit: 1
+artifacts: ls: build/app/outputs: No such file or directory ls: build/web: No such file or directory 
+
+================================================================
+B. acknowledged inline  [criterion 4]
+================================================================
+$ sed -n '/^  assets:/,+2p' pubspec.yaml
+  assets:
+    - .env.example
+    - .env # env-asset-ack: web build, contains no secrets
+
+$ dart run tool/check_env_assets.dart
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit: 0
+
+Building for environment: development
+Cleaning previous builds...
+✓ Cleaned
+Checking for bundled secrets files...
+Running build hooks...Running build hooks...check_env_assets: pubspec.yaml:174 bundles ".env" with an acknowledgement. It ships in every build mode and is public - keep secrets out of it.
+✓ No unacknowledged secrets file in the asset list
+Building Android...
+[!] No Android SDK found. Try setting the ANDROID_HOME environment variable.
+exit: 1
+artifacts: ls: build/app/outputs: No such file or directory ls: build/web: No such file or directory 
+
+================================================================
+C. the committed pubspec, unchanged  [criterion 3, passing half]
+================================================================
+$ git status --porcelain pubspec.yaml
+(no output = unchanged)
+
+Building for environment: development
+Cleaning previous builds...
+✓ Cleaned
+Checking for bundled secrets files...
+✓ No unacknowledged secrets file in the asset list
+Building Android...
+[!] No Android SDK found. Try setting the ANDROID_HOME environment variable.
+exit: 1
+artifacts: ls: build/app/outputs: No such file or directory ls: build/web: No such file or directory 
+
+$ git status --porcelain pubspec.yaml   # restored
