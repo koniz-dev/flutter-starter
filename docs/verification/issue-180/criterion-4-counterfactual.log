@@ -1,0 +1,71 @@
+# Counterfactual for criterion 4 - is the widget test load-bearing?
+# main @ 5c7603e
+
+The criterion-4 widget test claims the stamp MOVED into UpdateTaskUseCase
+rather than disappearing when task_detail_screen.dart stopped minting one.
+A test that only asserts 'the screen has no DateTime.now()' would pass just
+as well if the stamp were lost entirely. So: break the use case and re-run.
+
+## Step 1 - remove the restamp from UpdateTaskUseCase (simulating the stamp being lost)
+$ git diff --no-color -- lib/features/tasks/domain/usecases/update_task_usecase.dart
+diff --git a/lib/features/tasks/domain/usecases/update_task_usecase.dart b/lib/features/tasks/domain/usecases/update_task_usecase.dart
+index a0a064c..1a7e177 100644
+--- a/lib/features/tasks/domain/usecases/update_task_usecase.dart
++++ b/lib/features/tasks/domain/usecases/update_task_usecase.dart
+@@ -12,7 +12,7 @@ class UpdateTaskUseCase {
+ 
+   /// Executes updating a task
+   Future<Result<Task>> call(Task task) async {
+-    final updatedTask = task.touch();
++    final updatedTask = task; // COUNTERFACTUAL: restamp removed
+     return repository.updateTask(updatedTask);
+   }
+ }
+
+## Step 2 - the criterion-4 widget test must now FAIL
+$ flutter test test/features/tasks/presentation/screens/task_detail_screen_test.dart --plain-name "persists an advanced updatedAt without the screen minting one"
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: TaskDetailScreen editing existing task persists an advanced updatedAt without the screen minting one
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: <false>
+updatedAt must advance: 2024-01-02 00:00:00.000 vs 2024-01-02 00:00:00.000
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart:480:11)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart line 480
+The test description was:
+  persists an advanced updatedAt without the screen minting one
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -1: TaskDetailScreen editing existing task persists an advanced updatedAt without the screen minting one [E]
+  Test failed. See exception logs above.
+  The test description was: persists an advanced updatedAt without the screen minting one
+  
+00:02 +0 -1: (tearDownAll)
+00:02 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task persists an advanced updatedAt without the screen minting one
+exit=1  (non-zero = the test is load-bearing = what we want to see here)
+
+## Step 3 - restore and confirm green again
+$ git diff --stat -- lib/features/tasks/domain/usecases/update_task_usecase.dart
+(empty = restored)
+$ flutter test test/features/tasks/presentation/screens/task_detail_screen_test.dart --plain-name "persists an advanced updatedAt without the screen minting one"
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: TaskDetailScreen editing existing task persists an advanced updatedAt without the screen minting one
+00:01 +1: (tearDownAll)
+00:01 +1: All tests passed!
+exit=0

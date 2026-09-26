@@ -1,0 +1,50 @@
+# Criterion 7 - flutter test test/features/tasks/ exits 0, no behavioural assertion weakened
+# main @ 5c7603e
+# App logger noise (navigation-observer boxes) filtered out; test lines verbatim.
+
+$ flutter test test/features/tasks/ --reporter compact
+00:16 +319: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving              
+00:16 +319: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: (tearDownAll)                                                   
+00:16 +319: All tests passed!                                                                                                                                                                          
+exit=0
+
+--- What changed under test/features/tasks/ in the merged commit ---
+$ git show 5c7603e --numstat --format= -- test/features/tasks/
+0	119	test/features/tasks/data/repositories/tasks_repository_impl_test.dart
+115	0	test/features/tasks/domain/entities/task_test.dart
+76	0	test/features/tasks/presentation/providers/tasks_provider_test.dart
+76	0	test/features/tasks/presentation/screens/task_detail_screen_test.dart
+
+--- Removed: every one is a deleteCompletedTasks case (criterion 6 deleted the code) ---
+$ git show 5c7603e -- test/features/tasks/ | grep -E "^-" | grep -oE "'should [^']+'"
+  'should delete completed tasks successfully'
+  'should return CacheFailure when mutateTasks throws exception'
+  'should handle generic Exception in deleteCompletedTasks'
+  'should handle deleteCompletedTasks when all tasks are completed'
+  'should handle deleteCompletedTasks when no tasks are completed'
+  'should handle deleteCompletedTasks with empty tasks list'
+
+# The second of those - 'should return CacheFailure when mutateTasks throws exception' -
+# is the deleteCompletedTasks group's copy; an identically named case survives in the
+# toggleTaskCompletion group, which is why the name still appears on main:
+$ grep -n "should return CacheFailure when mutateTasks throws exception" test/features/tasks/data/repositories/tasks_repository_impl_test.dart
+319:        'should return CacheFailure when mutateTasks throws exception',
+
+--- Added ---
+$ git show 5c7603e -- test/features/tasks/ | grep -E "^\+" | grep -oE "'[a-z][^']+'" (test names only)
+  test('defaults the stamp to now, which is after a past updatedAt'
+  test('flips isCompleted and advances updatedAt past the input'
+  test('flips a completed task back and still advances updatedAt'
+  test('keeps a null description null'
+  test('returns the task the use case resolved'
+  test('passes a failure through untouched'
+  test('leaves the shared list snapshot alone'
+  (multi-line) 'stamps updatedAt with the given instant and changes nothing else',
+  (multi-line) 'persists an advanced updatedAt without the screen minting one',
+
+--- No assertion was relaxed: the atomicity guarantees from koniz-dev/flutter-starter#61 are still asserted ---
+$ grep -n "verifyNever\|mutateTasks(any())).called(1)" test/features/tasks/data/repositories/tasks_repository_impl_test.dart | head -20
+295:        verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
+296:        verifyNever(() => mockLocalDataSource.getTaskById(any()));
+297:        verifyNever(() => mockLocalDataSource.saveTask(any()));
+569:          verify(() => mockLocalDataSource.mutateTasks(any())).called(1);
