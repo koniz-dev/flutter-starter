@@ -7,6 +7,7 @@ import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 
@@ -255,8 +256,13 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final refreshToken = await localDataSource.getRefreshToken();
       if (refreshToken == null) {
+        // No credential to revive the session with, which is the same thing to
+        // a caller as a rejected one: only a fresh sign-in gets back in.
         return const ResultFailure(
-          UnknownFailure('No refresh token available'),
+          UnknownFailure(
+            'No refresh token available',
+            code: AuthErrorCodes.refreshTokenExpired,
+          ),
         );
       }
 
@@ -265,7 +271,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return const ResultFailure(
           UnknownFailure(
             'Session ended while the token refresh was in flight',
-            code: 'SESSION_TERMINATED',
+            code: AuthErrorCodes.sessionTerminated,
           ),
         );
       }
@@ -275,9 +281,39 @@ class AuthRepositoryImpl implements AuthRepository {
       }
       return Success(authResponse.token);
     } on AppException catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
+      return ResultFailure(_mapRefreshFailure(e));
     } on Exception catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     }
+  }
+
+  /// Maps a failed refresh round trip, tagging the cases that mean the refresh
+  /// token itself is dead with [AuthErrorCodes.refreshTokenExpired].
+  ///
+  /// Exactly two exception shapes mean that: a 401 from the refresh endpoint -
+  /// the server rejecting the very token it was handed - and an
+  /// [AuthException], which a custom data source raises for the same reason.
+  /// Everything else (a timeout, a 502, a decode error) is transport trouble
+  /// and must leave the session alone.
+  ///
+  /// The tag is set *here*, in the layer that knows what the round trip meant,
+  /// because the caller cannot tell. Before koniz-dev/flutter-starter#181 the
+  /// decision was made a layer up by substring-matching `failure.message`,
+  /// which fired on unrelated errors and still missed this one: the default
+  /// message for a 401 is "Unauthorized. Please login again." and contains no
+  /// "refresh" at all.
+  Failure _mapRefreshFailure(AppException exception) {
+    final rejected =
+        exception is AuthException ||
+        (exception is ServerException && exception.statusCode == 401);
+    if (!rejected) {
+      return ExceptionToFailureMapper.map(exception);
+    }
+    // Built rather than copied: `Failure.copyWith` falls back to the existing
+    // code (`code ?? this.code`) and so cannot replace one the server sent.
+    return AuthFailure(
+      exception.message,
+      code: AuthErrorCodes.refreshTokenExpired,
+    );
   }
 }
