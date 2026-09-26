@@ -73,11 +73,17 @@ configuration mechanism there is. That is allowed - for values you would be
 happy to publish, because publishing them is exactly what it does.
 
 `tool/check_env_assets.dart` fails when a secrets file would be bundled. It
-runs in two places:
+runs in four places:
 
-- `./scripts/dev/audit_template.sh`, as its own step; and
+- `./scripts/dev/audit_template.sh`, as its own step;
 - `test/tooling/check_env_assets_test.dart`, so `flutter test` - and therefore
-  the CI **Quality gate** - fails on a commit that adds one.
+  the CI **Quality gate** - fails on a commit that adds one;
+- `scripts/ci/build_all.sh`, after `flutter pub get` and before the first
+  build, so a local tree that never reached CI cannot produce an artifact; and
+- `deploy-android.yml`, `deploy-ios.yml` and all three jobs of
+  `deploy-web.yml`, as a **Guard against a bundled secrets file** step placed
+  after every step that writes into the working tree and before the build
+  (koniz-dev/flutter-starter#135).
 
 It checks the two ways a file gets bundled:
 
@@ -170,11 +176,14 @@ The guard then passes and prints a reminder on stderr instead of failing. An
 environment variable would not have that property, which is why the escape hatch
 is a comment in the repository rather than a flag on the command line.
 
-Two things it cannot do. It sees the tree **at the moment it runs**, so a file
-created after the check still ships; and it is not on the release-build path -
-`scripts/ci/build_all.sh` and the deploy workflows can build a tree the guard
-never ran against (koniz-dev/flutter-starter#135). Run it before a release, as
-below.
+One thing it cannot do: it sees the tree **at the moment it runs**, so a file
+created after the check still ships. That is why the release-build copies of it
+sit as late as they can - after `flutter pub get` in `scripts/ci/build_all.sh`,
+and after the keystore and certificate steps in the deploy workflows - rather
+than at the top of the job.
+
+`scripts/ci/release.sh` has no build step of its own and refuses to run with a
+dirty working tree, so it reaches a build only through one of the paths above.
 
 Before any release, and as the release-checklist line for this:
 `dart run tool/check_env_assets.dart` exits 0, and any acknowledged entry it

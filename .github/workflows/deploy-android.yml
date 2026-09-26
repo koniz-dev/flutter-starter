@@ -81,6 +81,19 @@ jobs:
             echo "environment=production" >> $GITHUB_OUTPUT
           fi
 
+      # Runs on the tree that is about to be built, which is the whole point:
+      # koniz-dev/flutter-starter#135. The guard already runs in
+      # scripts/dev/audit_template.sh and, via
+      # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
+      # of those is this path. A Flutter asset list is not build-mode scoped, so
+      # a `.env` declared here ships inside the artifact this job publishes, and
+      # a tree that never reached CI (a local pubspec edit, a file written by an
+      # earlier step) was never checked at all. It sits after every step that
+      # writes into the working tree and before the build, so it sees what the
+      # build will see.
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
       # - name: Build App Bundle
       #   env:
       #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}

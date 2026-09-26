@@ -72,6 +72,33 @@ flutter pub get
 echo -e "${GREEN}✓ Cleaned${NC}"
 echo ""
 
+# Refuse to build a tree that would ship a secrets file.
+#
+# koniz-dev/flutter-starter#135. The guard already runs in
+# scripts/dev/audit_template.sh and, through
+# test/tooling/check_env_assets_test.dart, in `flutter test` - but neither of
+# those is this path, and this path is the one that produces an artifact. A
+# Flutter asset list is not build-mode scoped, so `- .env` under
+# `flutter: assets:` ships in the release APK, the release IPA and, worst,
+# the web build, where it is served unauthenticated at /assets/.env. The
+# common case is a developer who adds that line locally and never commits it:
+# CI never sees the edit, so the `flutter test` guard never fires.
+#
+# It runs after `flutter pub get` because `dart run` needs
+# .dart_tool/package_config.json, which `flutter clean` has just deleted, and
+# before every build so a failure costs nothing and leaves no artifact behind.
+# `set -e` at the top of this script turns its non-zero exit into an abort;
+# the explicit `if` is here to say so out loud rather than leaning on it.
+echo -e "${YELLOW}Checking for bundled secrets files...${NC}"
+if ! dart run tool/check_env_assets.dart; then
+    echo -e "${RED}✗ Refusing to build: a secrets file would be bundled as a Flutter asset.${NC}"
+    echo "  Remove the entry from pubspec.yaml, or acknowledge it inline -"
+    echo "  see docs/guides/configuration.md, 'The deliberate exception, and the guard'."
+    exit 1
+fi
+echo -e "${GREEN}✓ No unacknowledged secrets file in the asset list${NC}"
+echo ""
+
 # Build Android
 #
 # No --flavor anywhere below. ENVIRONMENT here is a --dart-define value read by
