@@ -1,0 +1,79 @@
+$ git show 44efa6828cb -- test/features/auth/data/datasources/auth_local_datasource_test.dart
+commit 44efa6828cbbf48135df2eb8a078c22bab2a7e20
+Author: Nguyễn Anh Kiệt <84920219+koniz-dev@users.noreply.github.com>
+Date:   Sat Sep 26 16:04:47 2026 +0700
+
+    refactor(auth)!: require tokenStore on AuthLocalDataSourceImpl (#244)
+    
+    BREAKING CHANGE: `AuthLocalDataSourceImpl` no longer accepts
+    `SecureStorageService? secureStorageService`; `ITokenStore tokenStore` is
+    required. Adopters who passed the secure-storage form wrap it:
+    `tokenStore: SecureTokenStore(secureStorageService)`. Behaviour is
+    identical - the constructor built exactly that object. See CHANGELOG.md.
+    
+    The fallback was the last concrete storage type this file named, it taught
+    two ways to build the same object, and it deferred a missing-argument error
+    from the analyzer to a runtime `ArgumentError`. It was also the sole reason
+    koniz-dev/flutter-starter#179's criterion 1, written as the literal
+    `grep -rn "StorageService" lib/features`, still matched a
+    `*_local_datasource.dart`.
+    
+    No production call site used it: `auth_providers.dart` has always passed
+    `tokenStore:`. Three test call sites did and now wrap the service. No test
+    existed for the `ArgumentError`, so none was deleted.
+    
+    Refs koniz-dev/flutter-starter#196
+    Refs koniz-dev/flutter-starter#179
+    
+    Co-authored-by: Claude Opus 5 (1M context) <noreply@anthropic.com>
+
+diff --git a/test/features/auth/data/datasources/auth_local_datasource_test.dart b/test/features/auth/data/datasources/auth_local_datasource_test.dart
+index 39b26241974..37739a879a9 100644
+--- a/test/features/auth/data/datasources/auth_local_datasource_test.dart
++++ b/test/features/auth/data/datasources/auth_local_datasource_test.dart
+@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
+ import 'package:flutter_starter/core/constants/app_constants.dart';
+ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+ import 'package:flutter_starter/core/errors/exceptions.dart';
++import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
+ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+ import 'package:flutter_starter/core/storage/storage_service.dart';
+ import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+@@ -227,7 +228,7 @@ void main() {
+       await storageService.init();
+       dataSource = AuthLocalDataSourceImpl(
+         storageService: storageService,
+-        secureStorageService: secureStorageService,
++        tokenStore: SecureTokenStore(secureStorageService),
+       );
+     });
+ 
+@@ -501,7 +502,7 @@ void main() {
+ 
+         final testDataSource = AuthLocalDataSourceImpl(
+           storageService: storageService,
+-          secureStorageService: secureStorageService,
++          tokenStore: SecureTokenStore(secureStorageService),
+         );
+ 
+         const user = UserModel(
+@@ -618,7 +619,7 @@ void main() {
+         await testStorageService.init();
+         final testDataSource = AuthLocalDataSourceImpl(
+           storageService: testStorageService,
+-          secureStorageService: secureStorageService,
++          tokenStore: SecureTokenStore(secureStorageService),
+         );
+ 
+         // Restore the handler however the assertion goes, so tearDown does
+
+$ git show --stat 44efa6828cb -- test/features/auth/data/datasources/auth_local_datasource_test.dart
+
+ .../features/auth/data/datasources/auth_local_datasource_test.dart | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+$ grep -rn "ArgumentError" test/features/auth/   # no test existed for the removed branch
+exit=1  (1 = none, so none was deleted)
+
+$ flutter test test/features/auth/data/datasources/auth_local_datasource_test.dart
+00:00 +31: All tests passed!
