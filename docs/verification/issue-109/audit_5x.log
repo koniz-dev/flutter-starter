@@ -1,0 +1,7 @@
+=== audit_template.sh, 5 consecutive runs ===
+run 1: exit=0 | 01:48 +2812 ~8: All tests passed!
+run 2: exit=0 | 01:47 +2812 ~8: All tests passed!
+run 3: exit=0 | 01:54 +2812 ~8: All tests passed!
+run 4: exit=0 | 01:48 +2812 ~8: All tests passed!
+run 5: exit=0 | 01:50 +2812 ~8: All tests passed!
+DONE

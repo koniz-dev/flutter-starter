@@ -1,0 +1,183 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 91.0.0 (108.0.0 available)
+  analyzer 8.4.0 (14.4.0 available)
+  analyzer_buffer 0.1.11 (0.3.4 available)
+  analyzer_plugin 0.13.10 (0.14.17 available)
+  archive 4.0.9 (4.3.0 available)
+  async 2.13.0 (2.13.1 available)
+  build 4.0.5 (4.0.11 available)
+  build_config 1.3.0 (1.3.3 available)
+  build_daemon 4.1.1 (4.1.6 available)
+  build_runner 2.13.1 (2.16.1 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.1.0 available)
+  code_builder 4.11.1 (4.12.0 available)
+  coverage 1.15.0 (1.15.1 available)
+  cupertino_icons 1.0.8 (1.0.9 available)
+  custom_lint_core 0.8.1 (0.8.2 available)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  dart_style 3.1.3 (3.1.13 available)
+  dio 5.9.2 (5.11.1 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  equatable 2.0.8 (3.0.0 available)
+  flutter_dotenv 6.0.0 (6.0.1 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_native_splash 2.4.7 (2.4.8 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_riverpod 3.0.3 (3.4.3 available)
+  flutter_secure_storage 10.0.0 (11.2.0 available)
+  flutter_secure_storage_darwin 0.2.0 (0.4.3 available)
+  flutter_secure_storage_linux 3.0.0 (3.0.3 available)
+  flutter_secure_storage_platform_interface 2.0.1 (2.1.1 available)
+  flutter_secure_storage_web 2.1.0 (2.1.1 available)
+  flutter_secure_storage_windows 4.1.0 (4.2.2 available)
+  freerasp 6.12.0 (8.2.2 available)
+  freezed 3.2.3 (4.0.2 available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 17.1.0 (18.0.1 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  image 4.8.0 (4.10.1 available)
+  io 1.0.5 (1.1.0 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  json_serializable 6.11.2 (6.14.1 available)
+  logger 2.7.0 (2.8.0 available)
+  mason 0.1.2 (0.1.3 available)
+  mason_logger 0.3.5 (0.3.6 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mockito 5.6.4 (5.8.1 available)
+  mocktail 1.0.4 (1.0.5 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.5 available)
+  objective_c 9.3.0 (9.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  patrol 3.20.0 (4.10.0 available)
+  patrol_finders 2.9.0 (3.6.0 available)
+  patrol_log 0.5.0 (0.10.1 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.2 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.6.0 available)
+  riverpod 3.0.3 (3.4.3 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  riverpod_annotation 3.0.3 (4.0.7 available)
+  riverpod_generator 3.0.3 (4.0.9 available)
+  shared_preferences 2.5.4 (2.5.5 available)
+  shared_preferences_android 2.4.21 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_gen 4.2.2 (4.3.0 available)
+  source_helper 1.3.8 (1.3.13 available)
+  source_maps 0.10.13 (0.10.14 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test 1.31.1 (1.32.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  test_core 0.6.18 (0.6.20 available)
+  uuid 4.5.3 (4.6.0 available)
+  very_good_analysis 10.1.0 (11.0.0 available)
+  vm_service 15.0.2 (15.3.0 available)
+  webdriver 3.1.0 (3.2.0 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/log_output_test.dart
+00:00 +0: FileLogOutput should initialize log file
+00:00 +1: FileLogOutput should write log output to file
+00:00 +2: FileLogOutput should handle multiple log entries
+00:00 +3: FileLogOutput should handle different log levels
+00:00 +4: FileLogOutput should rotate logs when file size exceeds maxFileSize
+00:01 +5: FileLogOutput should respect maxFiles limit
+00:02 +6: FileLogOutput should get all log files
+00:03 +7: FileLogOutput should clear all log files
+00:03 +8: FileLogOutput should handle custom fileName
+00:03 +9: FileLogOutput should handle output when sink is null
+00:03 +10: FileLogOutput should handle file write errors gracefully
+00:03 +11: FileLogOutput should handle initialization errors gracefully
+00:03 +12: FileLogOutput should handle exception in output when sink throws
+00:03 +13: FileLogOutput should destroy and close sink
+00:03 +14: FileLogOutput should handle output with multiple lines
+00:04 +15: FileLogOutput should handle empty output event
+00:04 +16: FileLogOutput should handle very large log messages
+00:04 +17: FileLogOutput should handle rotation with different file names
+00:05 +18: FileLogOutput should handle getLogFiles when directory does not exist
+00:05 +19: FileLogOutput should handle clearLogs when directory does not exist
+00:05 +20: FileLogOutput should handle rotation when file does not exist yet
+00:05 +21: FileLogOutput should handle concurrent output calls
+00:06 +22: FileLogOutput should handle destroy when sink is null
+00:06 +23: FileLogOutput should handle destroy multiple times
+00:06 +24: FileLogOutput FileLogOutput - Edge Cases should handle default constructor values
+00:06 +25: FileLogOutput FileLogOutput - Edge Cases should handle custom maxFileSize
+00:06 +26: FileLogOutput FileLogOutput - Edge Cases should handle custom maxFiles
+00:06 +27: FileLogOutput FileLogOutput - Edge Cases should handle custom fileName
+00:06 +28: FileLogOutput CustomLogOutput should output lines for each event line
+00:06 +29: FileLogOutput CustomLogOutput should handle empty event lines
+00:06 +30: FileLogOutput JsonLogFormatter emits an offset-bearing UTC timestamp
+00:06 +31: FileLogOutput JsonLogFormatter should format log event as JSON
+00:06 +32: FileLogOutput JsonLogFormatter should include error in JSON when present
+00:06 +33: FileLogOutput JsonLogFormatter should include stackTrace in JSON when present
+00:06 +34: FileLogOutput JsonLogFormatter should handle null error and stackTrace
+00:06 +35: FileLogOutput JsonLogFormatter should format different log levels
+00:06 +36: FileLogOutput JsonLogFormatter should include ISO8601 timestamp
+00:06 +37: FileLogOutput JsonLogFormatter should handle event with both error and stackTrace
+00:06 +38: FileLogOutput FileLogOutput - Additional Edge Cases should handle getLogFiles when directory exists but empty
+00:06 +39: FileLogOutput FileLogOutput - Additional Edge Cases should handle rotation when maxFiles is 1
+00:07 +40: FileLogOutput FileLogOutput - Additional Edge Cases should handle output with empty lines list
+00:07 +41: FileLogOutput FileLogOutput - Additional Edge Cases should handle getLogFiles with files not matching fileName
+00:07 +42: FileLogOutput FileLogOutput - Additional Edge Cases should handle rotation when file size equals maxFileSize
+00:07 +43: FileLogOutput FileLogOutput - Additional Edge Cases should handle getLogFiles when exception occurs
+00:07 +44: FileLogOutput FileLogOutput - Additional Edge Cases should handle clearLogs when directory does not exist
+00:07 +45: FileLogOutput FileLogOutput - Additional Edge Cases should handle exception in clearLogs gracefully
+00:07 +46: FileLogOutput FileLogOutput - Additional Edge Cases should handle multiple rotations in sequence
+00:09 +47: FileLogOutput FileLogOutput - Additional Edge Cases should handle output with multiple lines
+00:09 +48: FileLogOutput FileLogOutput - Additional Edge Cases should handle rotation with maxFiles = 0
+00:09 +49: FileLogOutput FileLogOutput - Additional Edge Cases should handle destroy when sink is already closed
+00:09 +50: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle very long messages
+00:09 +51: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle special characters in message
+00:09 +52: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle empty message
+00:09 +53: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle unicode characters in message
+00:09 +54: FileLogOutput FileLogOutput - Exception Handling Coverage should handle _checkAndRotate when _logFile is null
+00:09 +55: FileLogOutput FileLogOutput - Exception Handling Coverage should handle _checkAndRotate when _logDirectory is null
+00:09 +56: FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _initializeLogFile gracefully
+00:09 +57: FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in output method gracefully
+00:09 +58: FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _checkAndRotate gracefully
+00:10 +59: FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _rotateLogs gracefully
+00:10 +60: FileLogOutput FileLogOutput - Exception Handling Coverage should handle _rotateLogs when _logDirectory is null
+00:10 +61: FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation when file size exactly equals maxFileSize
+00:11 +62: FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation with maxFiles = 1
+00:11 +63: FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation when old files do not exist
+00:12 +64: FileLogOutput FileLogOutput - Exception Handling Coverage should create directory when it does not exist during init
+00:12 +65: FileLogOutput FileLogOutput - Exception Handling Coverage should write and flush output correctly
+00:12 +66: FileLogOutput FileLogOutput - Exception Handling Coverage should trigger rotation check after output
+00:13 +67: FileLogOutput FileLogOutput - Exception Handling Coverage should rotate when file size equals maxFileSize
+00:14 +68: FileLogOutput FileLogOutput - Exception Handling Coverage should handle rotation with existing rotated files
+00:16 +69: FileLogOutput FileLogOutput - Exception Handling Coverage should delete existing file before renaming during rotation
+00:19 +70: FileLogOutput FileLogOutput - Exception Handling Coverage should rename current log to .1 during rotation
+00:20 +71: FileLogOutput FileLogOutput - Exception Handling Coverage should reinitialize log file after rotation
+00:21 +72: FileLogOutput FileLogOutput - Exception Handling Coverage should handle file size check in _checkAndRotate
+00:22 +73: FileLogOutput FileLogOutput - Exception Handling Coverage should handle getLogFiles directory listing
+00:23 +74: FileLogOutput FileLogOutput - Exception Handling Coverage should filter files by fileName in getLogFiles
+00:23 +75: FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _checkAndRotate when fileSize check fails
+00:23 +76: FileLogOutput FileLogOutput - Exception Handling Coverage should handle exception in _rotateLogs gracefully
+00:24 +77: FileLogOutput FileLogOutput - Exception Handling Coverage should return early in _checkAndRotate when _logFile is null
+00:24 +78: FileLogOutput FileLogOutput - Exception Handling Coverage should return early in _checkAndRotate when _logDirectory is null
+00:24 +79: FileLogOutput FileLogOutput - Exception Handling Coverage should return early in _rotateLogs when _logDirectory is null
+00:24 +80: FileLogOutput sink lifecycle (real temp directory) lines emitted before init resolves are not dropped
+00:24 +81: FileLogOutput sink lifecycle (real temp directory) the pending buffer is bounded
+00:24 +82: FileLogOutput sink lifecycle (real temp directory) a log emitted during rotation does not throw, and is kept
+00:26 +83: FileLogOutput sink lifecycle (real temp directory) two concurrent rotations do not discard a generation
+00:26 +84: FileLogOutput sink lifecycle (real temp directory) clearLogs closes the sink it replaces
+00:26 +85: All tests passed!
