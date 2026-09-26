@@ -35,3 +35,43 @@ $ gh pr view 256 --json mergeable,mergeStateStatus
 Quality gate is green in seconds because #117 skips the expensive steps
 inside the job when no changed path can affect them. It REPORTS, which is
 what branch protection needs; it does not claim the code was tested.
+
+---
+
+## Addendum 2026-09-26: enforce_admins turned OFF at the owner's request
+
+Section 2 above is no longer true of the live repository, and is kept as the
+record of what was verified when protection was first applied.
+
+The owner works solo, so requiring every change - including their own one-line
+fixes - to go through a pull request cost more than it bought. `enforce_admins`
+protects a branch from *other* people with write access; there are none here.
+
+    $ gh api -X DELETE repos/koniz-dev/flutter-starter/branches/main/protection/enforce_admins
+
+Verified by a real push rather than by reading the API back:
+
+    $ git commit --allow-empty -m "chore: verify admin can push directly ..."
+    $ git push origin HEAD:main
+    To https://github.com/koniz-dev/flutter-starter.git
+       07f23c82b92..19b4b474a93  HEAD -> main
+
+That empty commit is left on `main` deliberately: it is the proof, it carries a
+`Refs` trailer explaining itself, and removing it would need a force push,
+which is still disabled.
+
+### What is still enforced
+
+    enforce_admins:     false   <- changed
+    contexts:           Quality gate, Issue refs, and the three Strip variants
+    approvals required: 0
+    allow_force_pushes: false
+    allow_deletions:    false
+
+So the part that actually guards quality is intact: **a pull request whose
+checks are red still cannot be merged**, by anyone. What changed is only that
+the owner may push straight to `main` without opening a pull request first.
+
+Criterion 5 of #58 remains satisfied - it asked that `main` be protected with
+Quality gate required, and it is. `enforce_admins` was never named by the
+criterion; it came from the payload drafted on the issue.
