@@ -1,0 +1,36 @@
+### Counterfactual B: unbalanced <!-- strip:process-only --> markers
+-- pre-state: markers in CLAUDE.md
+32:<!-- strip:process-only start -->
+101:<!-- strip:process-only end -->
+105:<!-- strip:process-only start -->
+137:<!-- strip:process-only end -->
+181:<!-- strip:process-only start -->
+366:<!-- strip:process-only end -->
+
+-- edit: delete the END marker at CLAUDE.md:101 (leaves its start at :32 unclosed)
+32:<!-- strip:process-only start -->
+104:<!-- strip:process-only start -->
+136:<!-- strip:process-only end -->
+180:<!-- strip:process-only start -->
+365:<!-- strip:process-only end -->
+
+-- sentinel BEFORE running strip:
+   docs/verification: PRESENT
+   tool/check_epic_coverage.dart: PRESENT
+   .claude/agents: PRESENT
+   docs/issue-workflow.md: PRESENT
+   docs/verification file count: 1003
+
+-- run: dart run tool/strip_sample_features.dart --apply
+Process-only markers are unbalanced; nothing was deleted:
+  CLAUDE.md:104: start marker inside the region opened at line 32
+EXIT = 2
+
+-- sentinel AFTER the failed run (must be unchanged: nothing deleted):
+   docs/verification: PRESENT
+   tool/check_epic_coverage.dart: PRESENT
+   .claude/agents: PRESENT
+   docs/issue-workflow.md: PRESENT
+   docs/verification file count: 1003
+   lib/features/tasks still present: yes
+   lib/features/feature_flags still present: yes

@@ -1,0 +1,19 @@
+### Criterion 2: the kept guards still RUN on the stripped (--apply) tree, not merely exist
+
+--- dart run tool/check_docs.dart   (drives doc_signatures.dart + doc_symbols.dart, which are libraries with no main())
+links: checked 506 relative link(s) in 66 file(s); 0 broken
+emoji: scanned 67 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+symbols: checked 9 directive(s); 0 unresolved
+OK: documentation checks passed.
+EXIT check_docs = 0
+
+--- dart run tool/check_env_assets.dart
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+EXIT check_env_assets = 0
+
+--- the two doc libraries are exercised through check_docs (they have no entrypoint of their own):
+11://      (see `tool/doc_signatures.dart`).
+14://      (see `tool/doc_symbols.dart`). Check 3 is the strong form and needs a
+30:import 'doc_signatures.dart';
+31:import 'doc_symbols.dart';
