@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';

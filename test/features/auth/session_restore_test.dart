@@ -12,6 +12,7 @@ import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';

@@ -15,6 +15,7 @@ import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
@@ -62,7 +63,14 @@ Duration? _neverRetry(int retryCount, Object error) => null;
 ProviderContainer createAppContainer({
   List<Override> overrides = const <Override>[],
 }) {
-  return ProviderContainer(retry: _neverRetry, overrides: overrides);
+  // `authModuleOverrides` first, so a caller-supplied override of the same
+  // provider still wins: this is the composition root, and it is the only
+  // place that knows both that core declares the 401-refresh seams and that
+  // the auth slice fills them (koniz-dev/flutter-starter#221).
+  return ProviderContainer(
+    retry: _neverRetry,
+    overrides: <Override>[...authModuleOverrides, ...overrides],
+  );
 }
 
 // Returns a Future so callers can await startup. `void main() async` would

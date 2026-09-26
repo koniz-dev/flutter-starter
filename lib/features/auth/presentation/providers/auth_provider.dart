@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
-import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

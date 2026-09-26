@@ -152,11 +152,9 @@ void main(List<String> args) {
     _copyGoldenFile(goldenPath, root.path, relative);
   }
 
-  _patchProviders(
-    p.join(root.path, 'lib/core/di/providers.dart'),
-    removeTasks: removeTasks,
-    removeFeatureFlags: removeFeatureFlags,
-  );
+  // `lib/core/di/providers.dart` needs no patching: it names no feature at
+  // all since koniz-dev/flutter-starter#221 removed the three
+  // backward-compatibility re-exports this step used to strip.
   if (removeTasks) {
     _patchTestFixtures(p.join(root.path, 'test/helpers/test_fixtures.dart'));
     _patchMockFactories(p.join(root.path, 'test/helpers/mock_factories.dart'));
@@ -244,28 +242,6 @@ void _deleteDir(Directory dir) {
   if (dir.existsSync()) {
     dir.deleteSync(recursive: true);
   }
-}
-
-void _patchProviders(
-  String path, {
-  required bool removeTasks,
-  required bool removeFeatureFlags,
-}) {
-  final file = File(path);
-  var s = file.readAsStringSync().replaceAll('\r\n', '\n');
-  if (removeTasks) {
-    s = s.replaceAll(
-      "export 'package:flutter_starter/features/tasks/di/tasks_providers.dart';\n",
-      '',
-    );
-  }
-  if (removeFeatureFlags) {
-    s = s.replaceAll(
-      "export 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';\n",
-      '',
-    );
-  }
-  file.writeAsStringSync(s);
 }
 
 void _patchTestFixtures(String path) {

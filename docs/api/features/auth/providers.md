@@ -4,7 +4,23 @@ Riverpod providers for authentication dependency injection.
 
 ## Overview
 
-Authentication providers live in `lib/features/auth/di/auth_providers.dart` and are **re-exported** from `lib/core/di/providers.dart` for a single import surface.
+Authentication providers live in `lib/features/auth/di/auth_providers.dart`. Import that file directly - `lib/core/di/providers.dart` re-exported it until koniz-dev/flutter-starter#221, and no longer does: core naming a feature was half of an import cycle, and the re-export was the other half.
+
+`authInterceptorProvider` moved the other way, into `lib/core/di/providers.dart`, because `apiClientProvider` installs it. The two things it needs from this feature arrive as overrides:
+
+```dart
+/// Plugs this slice into the authentication seams core declares.
+final List<Override> authModuleOverrides = <Override>[
+  tokenRefresherProvider.overrideWith(
+    (ref) => () => ref.read(authRepositoryProvider).refreshToken(),
+  ),
+  sessionTerminationSinkProvider.overrideWith(
+    RiverpodSessionTerminationSink.new,
+  ),
+];
+```
+
+`createAppContainer()` in `lib/main.dart` applies them, so an app built the normal way needs no extra wiring. A **test** that builds its own `ProviderContainer` and drives a real 401 through `apiClientProvider` must pass `...authModuleOverrides` itself; without them the container still resolves every provider, it just cannot refresh a session or clear the in-memory one.
 
 ---
 

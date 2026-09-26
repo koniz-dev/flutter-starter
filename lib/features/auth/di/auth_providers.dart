@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// `Override` is not in flutter_riverpod.dart's export list; misc.dart is where
+// riverpod 3 keeps it. Same import main.dart uses.
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/session/session_providers.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -70,35 +72,34 @@ final Provider<AuthRepository> authRepositoryProvider =
     });
 
 // ============================================================================
-// Auth Interceptor Provider
+// Core seam adapters
 // ============================================================================
 
-/// Provider for [AuthInterceptor] instance
+/// Plugs this slice into the authentication seams `lib/core/di/providers.dart`
+/// declares, and is the only wiring the app needs to add for the 401 refresh
+/// flow to work.
 ///
-/// Handles authentication token injection and automatic token refresh on
-/// 401 errors. Uses ref.read to break circular dependency.
-final Provider<AuthInterceptor> authInterceptorProvider =
-    Provider<AuthInterceptor>((ref) {
-      final tokenStore = ref.watch(tokenStoreProvider);
-      final interceptor = AuthInterceptor(
-        tokenStore: tokenStore,
-        refreshToken: () => ref.read(authRepositoryProvider).refreshToken(),
-        // A forced logout on a failed refresh has to drop the cached user too,
-        // or the app keeps presenting a session it has no token for.
-        keyValueStore: ref.watch(keyValueStoreProvider),
-        // ...and has to drop the *in-memory* session as well, or the running
-        // app keeps presenting one until it is restarted (#127). The feature
-        // implements the contract and hands it down; `lib/core/network` never
-        // learns that a Riverpod notifier is what it just cleared.
-        sessionSink: RiverpodSessionTerminationSink(ref),
-        // Shared with `authRepositoryProvider` above, so a logout raised on
-        // either side is visible to a refresh in flight on the other (#169).
-        sessionGeneration: ref.watch(sessionGenerationProvider),
-      );
-      // Releases the single 401-replay client and its connection pool.
-      ref.onDispose(interceptor.dispose);
-      return interceptor;
-    });
+/// Core declares [tokenRefresherProvider] and [sessionTerminationSinkProvider]
+/// with degraded defaults because `apiClientProvider` must be resolvable
+/// without naming a feature; this list is where the real implementations
+/// arrive. `createAppContainer()` in `lib/main.dart` applies it, and any test
+/// that drives a real 401 through `apiClientProvider` must too.
+///
+/// This replaced `authInterceptorProvider` living here, which was the single
+/// symbol closing the `lib/core/di/` <-> `lib/features/auth/di/` import cycle
+/// (koniz-dev/flutter-starter#221). Dependency direction now runs one way:
+/// feature -> core.
+final List<Override> authModuleOverrides = <Override>[
+  tokenRefresherProvider.overrideWith(
+    (ref) =>
+        () => ref.read(authRepositoryProvider).refreshToken(),
+  ),
+  // The feature implements the contract and hands it down; `lib/core/network`
+  // never learns that a Riverpod notifier is what it just cleared (#127).
+  sessionTerminationSinkProvider.overrideWith(
+    RiverpodSessionTerminationSink.new,
+  ),
+];
 
 // ============================================================================
 // Auth Use Case Providers
