@@ -1,0 +1,25 @@
+### Criterion 4, paired demonstration on the real repository (unstripped, HEAD=8b80f2d)
+
+-- ./scripts/dev/audit_template.sh  (format + analyze + test)
+No issues found! (ran in 4.0s)
+01:54 +2812 ~8: All tests passed!
+EXIT audit_template.sh = 0   (see audit-main.log)
+
+-- strip-smoke.yml 'Assert process-only artifacts are gone', same tree, verbatim step:
+still present after strip: .claude
+still present after strip: .github/workflows/issue-refs.yml
+still present after strip: docs/issue-workflow.md
+still present after strip: docs/verification
+still present after strip: scripts/bootstrap-issue-labels.sh
+still present after strip: scripts/dev/check_issue_refs.sh
+still present after strip: test/tooling/epic_coverage_test.dart
+still present after strip: tool/check_epic_coverage.dart
+./CONTRIBUTING.md
+./CLAUDE.md
+./tool/README.md
+a process-only marker survived the strip
+9 process-only artifact(s) survived the strip.
+EXIT assertion = 1
+
+Conclusion: format/analyze/test call this tree clean; only the assertion step
+detects that the process-only removals did not happen.
