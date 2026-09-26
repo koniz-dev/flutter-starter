@@ -8,6 +8,7 @@ import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/delete_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/toggle_task_completion_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
@@ -17,6 +18,8 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../helpers/test_fixtures.dart';
 
 class MockGetAllTasksUseCase extends Mock implements GetAllTasksUseCase {}
+
+class MockGetTaskByIdUseCase extends Mock implements GetTaskByIdUseCase {}
 
 class MockCreateTaskUseCase extends Mock implements CreateTaskUseCase {}
 
@@ -35,6 +38,7 @@ void main() {
   group('TasksNotifier', () {
     late ProviderContainer container;
     late MockGetAllTasksUseCase mockGetAllTasksUseCase;
+    late MockGetTaskByIdUseCase mockGetTaskByIdUseCase;
     late MockCreateTaskUseCase mockCreateTaskUseCase;
     late MockUpdateTaskUseCase mockUpdateTaskUseCase;
     late MockDeleteTaskUseCase mockDeleteTaskUseCase;
@@ -42,6 +46,7 @@ void main() {
 
     setUp(() {
       mockGetAllTasksUseCase = MockGetAllTasksUseCase();
+      mockGetTaskByIdUseCase = MockGetTaskByIdUseCase();
       mockCreateTaskUseCase = MockCreateTaskUseCase();
       mockUpdateTaskUseCase = MockUpdateTaskUseCase();
       mockDeleteTaskUseCase = MockDeleteTaskUseCase();
@@ -56,6 +61,9 @@ void main() {
       container = ProviderContainer(
         overrides: [
           getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          getTaskByIdUseCaseProvider.overrideWithValue(
+            mockGetTaskByIdUseCase,
+          ),
           createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
           updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
           deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
@@ -161,6 +169,74 @@ void main() {
         final state = container.read(tasksNotifierProvider);
         expect(state.error, 'Failed to load tasks');
         expect(state.isLoading, isFalse);
+      });
+    });
+
+    // koniz-dev/flutter-starter#180: the detail screen loads its task through
+    // this method instead of reading `getTaskByIdUseCaseProvider` itself, so
+    // both tasks screens reach their data through the same boundary.
+    group('taskById', () {
+      test('returns the task the use case resolved', () async {
+        // Arrange
+        final task = createTask(id: 'task-1', title: 'Loaded');
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer((_) async => Success<Task?>(task));
+
+        // Act
+        final result = await container
+            .read(tasksProvider.notifier)
+            .taskById('task-1');
+
+        // Assert
+        result.when(
+          success: (loaded) => expect(loaded, task),
+          failureCallback: (_) => fail('Expected success'),
+        );
+        verify(() => mockGetTaskByIdUseCase('task-1')).called(1);
+      });
+
+      test('passes a failure through untouched', () async {
+        // Arrange
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer(
+          (_) async => const ResultFailure<Task?>(
+            CacheFailure('Storage error'),
+          ),
+        );
+
+        // Act
+        final result = await container
+            .read(tasksProvider.notifier)
+            .taskById('task-1');
+
+        // Assert
+        result.when(
+          success: (_) => fail('Expected failure'),
+          failureCallback: (failure) =>
+              expect(failure.message, 'Storage error'),
+        );
+      });
+
+      test('leaves the shared list snapshot alone', () async {
+        // Arrange
+        final listed = createTask(id: 'listed');
+        when(
+          () => mockGetAllTasksUseCase(),
+        ).thenAnswer((_) async => Success<List<Task>>([listed]));
+        final notifier = container.read(tasksProvider.notifier);
+        await notifier.refresh();
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer((_) async => Success<Task?>(createTask(id: 'other')));
+
+        // Act
+        await notifier.taskById('other');
+
+        // Assert - a per-screen read must not rewrite the list every screen
+        // watching this provider renders from.
+        expect(container.read(tasksProvider).tasks, [listed]);
       });
     });
 

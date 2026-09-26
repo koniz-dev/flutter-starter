@@ -11,12 +11,6 @@ abstract class AuthStateSnapshot implements ControllerStateSnapshot {
   bool get isAuthenticated;
 }
 
-/// Generic tasks state snapshot contract.
-abstract class TasksStateSnapshot implements ControllerStateSnapshot {
-  bool get isLoading;
-  String? get error;
-}
-
 /// State boundary for authentication orchestration.
 abstract class IAuthController {
   AuthStateSnapshot get snapshot;
@@ -47,14 +41,4 @@ abstract class ISessionTerminationSink {
   /// and in particular must not call a logout endpoint, which would post with
   /// credentials that no longer exist.
   void onSessionTerminated();
-}
-
-/// State boundary for tasks orchestration.
-abstract class ITasksController {
-  TasksStateSnapshot get snapshot;
-  Future<void> loadTasks();
-  Future<void> createTask({required String title, String? description});
-  Future<void> toggleTaskCompletion(String taskId);
-  Future<void> deleteTask(String taskId);
-  Future<void> clearError();
 }

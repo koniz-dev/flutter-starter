@@ -2,7 +2,7 @@
 
 This document is the **single map** from **contracts** to **default adapters**, **providers to override**, and **optional modules**.
 
-Every symbol and line number below was checked against `lib/` at `48ba708`. Line
+Every symbol and line number below was checked against `lib/` at `0e397bf`. Line
 numbers drift; the symbol names are the durable part, and
 `grep -rn "<symbol>" lib` is the check.
 
@@ -19,43 +19,50 @@ For feature and core code that only need types:
 | HTTP transport | `lib/core/contracts/network_contracts.dart` (`INetworkClient`, `IHttpResponseCache`, `NetworkRequest`, `NetworkResponse`) |
 | Storage | `lib/core/contracts/storage_contracts.dart` (`IKeyValueStore`, `ITokenStore`) |
 | Design tokens | `lib/core/contracts/design_tokens_contracts.dart` (`AppDesignTokens`) |
-| Presentation controllers | `lib/core/contracts/state_boundary_contracts.dart` (`IAuthController`, `ITasksController`, `ISessionTerminationSink`, and the `*StateSnapshot` marker types) |
+| Presentation controllers | `lib/core/contracts/state_boundary_contracts.dart` (`IAuthController`, `ISessionTerminationSink`, and the `*StateSnapshot` marker types) |
 
 ## Swap map (default wiring)
 
-**Read the Status column before you plan a swap.** Three of the rows below are
-not load-bearing today: `AppDesignTokens` and `IAuthController` are declared and
-implemented but no production code consumes them, and `ITasksController` has no
-implementor at all. For those three, following the "To replace" column changes
-nothing at runtime until a consumer exists. Whether they should be wired up or
-deleted is an open question, not a settled one - see
-koniz-dev/flutter-starter#64 and its children. The fourth such row,
-`AppNavigator`, was answered in koniz-dev/flutter-starter#177: the contract, its
-adapter and its provider were deleted, and navigation is the `Navigation` row
-below.
+**Read the Status column before you plan a swap.** Two of the rows below are not
+load-bearing today: `AppDesignTokens` and `IAuthController` are declared and
+implemented but no production code consumes them. For those two, following the
+"To replace" column changes nothing at runtime until a consumer exists. Whether
+they should be wired up or deleted is an open question, not a settled one - see
+koniz-dev/flutter-starter#64 and its children.
+
+Two rows that used to sit here were answered by deletion rather than by wiring.
+`AppNavigator` went in koniz-dev/flutter-starter#177 - the contract, its adapter
+and its provider are gone, and navigation is the `Navigation` row below.
+`ITasksController` went in koniz-dev/flutter-starter#180, which removed it and
+`TasksStateSnapshot` from `state_boundary_contracts.dart`: it had no implementor
+and no consumer, and it had drifted from `TasksNotifier` in both directions - it
+declared `loadTasks()` and `clearError()` the notifier never had, and lacked the
+`updateTask` the notifier does have. Neither has a row below, which is the
+point: a contract that only this file mentions is the defect, not the
+documentation of one.
 
 | Status | Means |
 | --- | --- |
 | **Live** | Production code in `lib/` is typed on the contract and runs against it. Swapping the implementation changes behavior. |
 | **No production consumer** | An implementation exists, and for some rows a provider binds it to the contract, but nothing in `lib/` reads that binding. Tests may. Swapping the implementation changes nothing until a consumer exists. |
-| **No implementor** | The contract is declared and nothing anywhere implements it. |
+| **No implementor** | The contract is declared and nothing anywhere implements it. **No contract is in this state today** - `ITasksController` was the last one and was deleted by koniz-dev/flutter-starter#180. The row stays so the state has a name if it recurs. |
 
 | Contract / surface | Status | Default implementation | Wired in / consumed by | To replace |
 | --- | --- | --- | --- | --- |
 | `INetworkClient` | **Live** | `DioNetworkClient` (`lib/core/network/adapters/dio_network_client.dart:5`) | Field typed on the contract in `ApiClient` (`lib/core/network/api_client.dart:138`), bound to `DioNetworkClient` at `:54`; every `ApiClient` verb method routes through `_send` (`:259`), which calls `_networkClient.send` at `:263`. The public `networkClient` getter (`:154`) has no readers. | No provider binds it: edit `ApiClient`, or supply your own `AuthRemoteDataSource` |
 | `ApiClient` (concrete class, not a contract) | **Live** | Dio + interceptors | `apiClientProvider` (`lib/core/di/providers.dart:107`); `networkClientProvider` (`:35`) is a typed alias of the same instance, read at `lib/features/auth/di/auth_providers.dart:41` | Override `apiClientProvider`, or replace feature datasources if you drop Dio |
-| `IHttpResponseCache` | **Live** | `CacheInterceptor` (`lib/core/network/interceptors/cache_interceptor.dart:60`) | Exposed as `ApiClient.responseCache` (`lib/core/network/api_client.dart:160`); held by `AuthInterceptor` (`lib/core/network/interceptors/auth_interceptor.dart:118`) and by `AuthRepositoryImpl` (`lib/features/auth/data/repositories/auth_repository_impl.dart:34`), wired at `lib/features/auth/di/auth_providers.dart:63` | Implement the contract and pass it where `CacheInterceptor` is constructed |
+| `IHttpResponseCache` | **Live** | `CacheInterceptor` (`lib/core/network/interceptors/cache_interceptor.dart:97`) | Exposed as `ApiClient.responseCache` (`lib/core/network/api_client.dart:160`); held by `AuthInterceptor` (`lib/core/network/interceptors/auth_interceptor.dart:118`) and by `AuthRepositoryImpl` (`lib/features/auth/data/repositories/auth_repository_impl.dart:34`), wired at `lib/features/auth/di/auth_providers.dart:63` | Implement the contract and pass it where `CacheInterceptor` is constructed |
 | `IKeyValueStore` | **Live** | `StorageService` (`lib/core/storage/storage_service.dart:47`) | `keyValueStoreProvider` (`lib/core/di/providers.dart:23`), read at `lib/features/auth/di/auth_providers.dart:28` and `:88`, `lib/features/tasks/di/tasks_providers.dart:19`, `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:18`; fields typed on the contract at `lib/features/auth/data/datasources/auth_local_datasource.dart:54`, `lib/features/tasks/data/datasources/tasks_local_datasource.dart:45`, `lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:30` | Provider override to your store |
 | `ITokenStore` | **Live** | `SecureTokenStore` (`lib/core/storage/adapters/secure_token_store.dart:6`) | `tokenStoreProvider` (`lib/core/di/providers.dart:28`), read at `lib/features/auth/di/auth_providers.dart:29` and `:82`; fields typed on the contract at `lib/core/network/interceptors/auth_interceptor.dart:52` and `lib/features/auth/data/datasources/auth_local_datasource.dart:57` | Provider override |
 | `ISessionTerminationSink` | **Live** | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart:272`) | Passed to `AuthInterceptor` at `lib/features/auth/di/auth_providers.dart:93`; held at `lib/core/network/interceptors/auth_interceptor.dart:87` and invoked on forced logout at `:534` | Implement the contract and pass it in the same place |
-| Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart:25`) over `go_router` | Every screen that navigates: `lib/features/auth/presentation/screens/login_screen.dart:115`, `register_screen.dart:139`, `lib/features/tasks/presentation/screens/tasks_list_screen.dart:253` and `:283`, `task_detail_screen.dart:114` and `:156`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart:15`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |
+| Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart:25`) over `go_router` | Every screen that navigates: `lib/features/auth/presentation/screens/login_screen.dart:115`, `register_screen.dart:139`, `lib/features/tasks/presentation/screens/tasks_list_screen.dart:253` and `:283`, `task_detail_screen.dart:118` and `:160`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart:15`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |
 | `AppDesignTokens` | **No production consumer** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart:9`) | Nowhere, and there is no provider. `AppTheme` binds the **concrete** class at compile time: `static const _tokens = DefaultDesignTokens();` (`lib/shared/theme/app_theme.dart:7`). Nothing in `lib/` is typed on `AppDesignTokens`. | Edit `lib/shared/theme/app_theme.dart` to construct your own token class (and update the theme building that reads `_tokens`). There is no override point. |
 | `IAuthController` | **No production consumer** | `AuthNotifier` (`lib/features/auth/presentation/providers/auth_provider.dart:47`) | `authControllerProvider` (`lib/features/auth/presentation/providers/auth_provider.dart:284`) binds it, but that identifier has **zero readers** in `lib/` and `test/` - the UI reads the generated `authProvider` directly. | Rebinding `authControllerProvider` to your orchestrator has no effect until something reads it |
-| `ITasksController` | **No implementor** | none | Nowhere. `TasksNotifier` (`lib/features/tasks/presentation/providers/tasks_provider.dart:55`) does **not** implement this contract, and the tasks provider is `tasksProvider` (alias `tasksNotifierProvider`, `:195`). | Implement the contract on `TasksNotifier` first; there is nothing to rebind today |
 
-Until koniz-dev/flutter-starter#182 the `ITasksController` row named a controller
-provider that has never existed anywhere in the tree - the name is deliberately
-not repeated here, so that grepping for it stays a clean test. **If you add or
+Until koniz-dev/flutter-starter#182 there was an `ITasksController` row naming a
+controller provider that has never existed anywhere in the tree - the name is
+deliberately not repeated here, so that grepping for it stays a clean test.
+koniz-dev/flutter-starter#180 then deleted the contract itself. **If you add or
 edit a row, `grep -rn "<symbol>" lib` every symbol you put in it.** A symbol whose
 only occurrence in the repository is this file is the tell.
 
@@ -67,7 +74,7 @@ only occurrence in the repository is this file is the tell.
 | Storage | `lib/core/storage/adapters/` |
 | Routing | None. Navigation is a `BuildContext` extension, not a contract plus adapter; `go_router` stays inside `lib/core/routing/` |
 | Theme | Prefer tokens in `lib/shared/design_system/` + `lib/shared/theme/app_theme.dart` |
-| State | Notifiers under `lib/features/*/presentation/providers/` implementing controller contracts |
+| State | Notifiers under `lib/features/*/presentation/providers/`; one implements a controller contract (`AuthNotifier`), the tasks slice deliberately does not - see koniz-dev/flutter-starter#180 |
 
 ## Optional modules
 

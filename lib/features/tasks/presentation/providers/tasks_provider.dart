@@ -100,6 +100,20 @@ class TasksNotifier extends _$TasksNotifier {
     await _loadTasks();
   }
 
+  /// Loads the single task with [id] through this notifier.
+  ///
+  /// The detail screen needs one task rather than the whole list, but it must
+  /// not reach past the notifier into `getTaskByIdUseCaseProvider`: that is the
+  /// presentation boundary `tasks_list_screen.dart` already respects, and two
+  /// screens in one slice answering it differently is what
+  /// koniz-dev/flutter-starter#180 removed. The result is returned rather than
+  /// written to [state] because a single opened task is a per-screen concern -
+  /// folding it into the shared snapshot would make every list rebuild on it.
+  Future<Result<Task?>> taskById(String id) {
+    final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
+    return getTaskByIdUseCase(id);
+  }
+
   /// Creates a new task with [title] and optional [description]
   Future<void> createTask({required String title, String? description}) async {
     state = state.copyWith(isLoading: true, clearError: true);

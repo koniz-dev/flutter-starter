@@ -10,6 +10,7 @@ import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/create_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
 import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
@@ -29,6 +30,8 @@ class MockCreateTaskUseCase extends Mock implements CreateTaskUseCase {}
 class MockUpdateTaskUseCase extends Mock implements UpdateTaskUseCase {}
 
 class MockGetAllTasksUseCase extends Mock implements GetAllTasksUseCase {}
+
+class MockTasksRepository extends Mock implements TasksRepository {}
 
 Widget createTestWidget({required Widget child, dynamic overrides}) {
   // Create a simple GoRouter for navigation (needed for context.pop())
@@ -412,6 +415,79 @@ void main() {
         // Assert
         verify(() => mockUpdateTaskUseCase(any())).called(1);
       });
+
+      // koniz-dev/flutter-starter#180: the screen no longer stamps `updatedAt`.
+      // This drives the real `UpdateTaskUseCase` over a fake repository, so the
+      // timestamp asserted is the one production code actually persists - a
+      // mocked use case would pass whether or not the stamp survived the move.
+      testWidgets(
+        'persists an advanced updatedAt without the screen minting one',
+        (tester) async {
+          // Arrange
+          final originalTask = createTask(
+            id: 'task-1',
+            title: 'Original Title',
+            description: 'Original Description',
+            createdAt: DateTime(2024),
+            updatedAt: DateTime(2024, 1, 2),
+          );
+          final mockRepository = MockTasksRepository();
+          when(() => mockRepository.updateTask(any())).thenAnswer(
+            (invocation) async =>
+                Success(invocation.positionalArguments.first as Task),
+          );
+          when(
+            () => mockGetTaskByIdUseCase(any<String>()),
+          ).thenAnswer((_) async => Success(originalTask));
+
+          await tester.pumpWidget(
+            createWidgetWithOverrides(
+              const TaskDetailScreen(taskId: 'task-1'),
+              [
+                getTaskByIdUseCaseProvider.overrideWithValue(
+                  mockGetTaskByIdUseCase,
+                ),
+                createTaskUseCaseProvider.overrideWithValue(
+                  mockCreateTaskUseCase,
+                ),
+                updateTaskUseCaseProvider.overrideWithValue(
+                  UpdateTaskUseCase(mockRepository),
+                ),
+                getAllTasksUseCaseProvider.overrideWithValue(
+                  mockGetAllTasksUseCase,
+                ),
+              ],
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          // Act
+          await tester.enterText(
+            find.byType(TextFormField).first,
+            'Updated Title',
+          );
+          await tester.pump();
+          await tester.tap(find.byIcon(Icons.save));
+          await tester.pumpAndSettle(const Duration(seconds: 5));
+
+          // Assert
+          final persisted =
+              verify(
+                    () => mockRepository.updateTask(captureAny()),
+                  ).captured.single
+                  as Task;
+          expect(persisted.title, 'Updated Title');
+          expect(
+            persisted.updatedAt.isAfter(originalTask.updatedAt),
+            isTrue,
+            reason:
+                'updatedAt must advance: ${persisted.updatedAt} vs '
+                '${originalTask.updatedAt}',
+          );
+          expect(persisted.createdAt, originalTask.createdAt);
+          expect(persisted.id, originalTask.id);
+        },
+      );
 
       testWidgets('should validate title when updating task', (tester) async {
         // Arrange

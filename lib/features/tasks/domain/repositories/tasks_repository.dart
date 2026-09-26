@@ -18,9 +18,6 @@ abstract class TasksRepository {
   /// Delete a task by [id]
   Future<Result<void>> deleteTask(String id);
 
-  /// Delete all completed tasks
-  Future<Result<void>> deleteCompletedTasks();
-
   /// Toggle task completion status
   Future<Result<Task>> toggleTaskCompletion(String id);
 }

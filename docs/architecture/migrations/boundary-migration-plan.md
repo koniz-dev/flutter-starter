@@ -60,7 +60,9 @@ Rollback strategy:
 ## Phase D: State boundary migration
 
 ### D1 - Controller interfaces
-- Define `IAuthController` and `ITasksController`.
+- Define `IAuthController`. (`ITasksController` was defined and then deleted
+  unimplemented by koniz-dev/flutter-starter#180; the tasks slice keeps its
+  boundary as `TasksNotifier`'s own public API.)
 - Keep Riverpod notifiers as adapter implementations.
 
 ### D2 - Feature migration

@@ -12,7 +12,7 @@ class UpdateTaskUseCase {
 
   /// Executes updating a task
   Future<Result<Task>> call(Task task) async {
-    final updatedTask = task.copyWith(updatedAt: DateTime.now());
+    final updatedTask = task.touch();
     return repository.updateTask(updatedTask);
   }
 }
