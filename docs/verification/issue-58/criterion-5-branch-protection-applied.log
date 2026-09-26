@@ -1,0 +1,37 @@
+# Criterion 5 - branch protection applied and verified
+
+Applied 2026-09-26T12:56:47Z by the orchestrating session, after #117 (a45857b) made
+Quality gate report on every PR.
+
+## 1. Protection is on, with the five contexts
+
+$ gh api repos/koniz-dev/flutter-starter/branches/main/protection
+{"allow_deletions":false,"allow_force_pushes":false,"approvals_required":0,"contexts":["Quality gate","Issue refs","Strip both-samples-removed + analyze + test","Strip feature-flags-removed + analyze + test","Strip tasks-removed + analyze + test"],"enforce_admins":true,"strict":false}
+
+Docs check is deliberately NOT required: it still filters at the workflow
+level, so it never reports on a code-only PR. Requiring it would recreate
+the deadlock #117 removed, in the other direction.
+
+## 2. A direct push to main is rejected
+
+$ git commit --allow-empty && git push origin HEAD:main
+remote: error: GH006: Protected branch update failed for refs/heads/main.
+ ! [remote rejected]  HEAD -> main (protected branch hook declined)
+(probe commit discarded afterwards; main unchanged)
+
+## 3. A docs-only PR is Mergeable - the case that was impossible before #117
+
+Throwaway PR #256, single file under docs/:
+  Docs check                                     pass   33s
+  Issue refs                                     pass   6s
+  Quality gate                                   pass   6s
+  Strip both-samples-removed + analyze + test    pass   6s
+  Strip feature-flags-removed + analyze + test   pass   5s
+  Strip tasks-removed + analyze + test           pass   5s
+
+$ gh pr view 256 --json mergeable,mergeStateStatus
+  MERGEABLE / CLEAN
+
+Quality gate is green in seconds because #117 skips the expensive steps
+inside the job when no changed path can affect them. It REPORTS, which is
+what branch protection needs; it does not claim the code was tested.
