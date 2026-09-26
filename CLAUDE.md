@@ -29,6 +29,7 @@ Code generation (Freezed, json_serializable, Riverpod) is committed. Regenerate
 with `flutter pub run build_runner build --delete-conflicting-outputs` only when
 you touch an annotated source.
 
+<!-- strip:process-only start -->
 ## Workflow
 
 GitHub issues are the single source of truth. Full spec:
@@ -97,8 +98,23 @@ diff". Every tracked path maps to exactly one epic, enforced by
 [`tool/check_epic_coverage.dart`](tool/check_epic_coverage.dart) under
 `flutter test`. If no epic fits a change, that is a taxonomy gap: file it,
 do not force the nearest label - the parallelism rule below keys on that label.
+<!-- strip:process-only end -->
 
 ## Acceptance verification
+
+<!-- strip:process-only start -->
+### Scope test: would an adopter notice?
+
+This is a starter template, not an app that ships. A criterion proves the
+**mechanism** is correct; it is not there to prove the *product* runs. So before
+writing one, ask: **would an adopter notice if this were missing?** If answering
+it needs a physical device, a custom CA, an Apple certificate, a reachable
+backend or store credentials, that answer belongs to the adopter's app, not to
+this repository - prove the mechanism at tier 1 or tier 2 here and hand the
+residual over. Precedent: koniz-dev/flutter-starter#48, #59, #62 and #108 each
+sat blocked for months of calendar time on exactly that (a real device, a custom
+CA, an Apple cert, on-device storage inspection) after the mechanism had already
+been proven, and all four closed with the residual assigned to the adopter.
 
 Run `./scripts/test/run_acceptance.sh <issue-number>`. It runs the format check,
 `flutter analyze`, `flutter test`, and the golden-tagged acceptance tests, tees
@@ -118,6 +134,7 @@ Three tiers exist here:
   runner opts in with `--run-skipped --tags golden`. Goldens are **evidence, not
   a CI gate** - a golden regression will not fail CI, by design.
 - **Tier 3 - not drivable here.** Route to `status:needs-uat`.
+<!-- strip:process-only end -->
 
 ### What this tooling cannot verify
 
@@ -160,6 +177,8 @@ make the loop worthless.
   reachable API exists here.
 - **Coverage thresholds.** [`coverage.yml`](.github/workflows/coverage.yml) is
   manual plus weekly, not per-PR.
+
+<!-- strip:process-only start -->
 ### Which checks a PR gets
 
 Four workflows run on PRs. Only one of them still filters at the workflow
@@ -344,6 +363,7 @@ reading them.
   issue bodies.
 - Only one session at a time may hold a `status:in-progress` claim on a given
   issue. The claim-then-re-read step in step 7 above is what enforces this.
+<!-- strip:process-only end -->
 
 ## Conventions
 

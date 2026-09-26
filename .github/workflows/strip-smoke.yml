@@ -200,6 +200,45 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         run: dart run tool/strip_sample_features.dart --apply ${{ matrix.flags }}
 
+      # `flutter analyze` and `flutter test` only prove the stripped tree still
+      # builds. They would stay green if the process-only removals silently
+      # stopped happening, which is the whole point of the strip for an
+      # adopter, so assert the absence directly. Keep this list in step with
+      # `_processOnlyPaths` in tool/strip_sample_features.dart.
+      - name: Assert process-only artifacts are gone
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          leftovers=0
+          for path in \
+            .claude \
+            .github/workflows/issue-refs.yml \
+            docs/issue-workflow.md \
+            docs/verification \
+            scripts/bootstrap-issue-labels.sh \
+            scripts/dev/check_issue_refs.sh \
+            test/tooling/epic_coverage_test.dart \
+            tool/check_epic_coverage.dart
+          do
+            if [ -e "$path" ]; then
+              echo "still present after strip: $path"
+              leftovers=$((leftovers + 1))
+            fi
+          done
+          # Whole-line match only: tool/README.md documents the marker syntax
+          # inline, and that sentence is meant to survive.
+          marker='^[[:space:]]*<!-- strip:process-only (start|end) -->[[:space:]]*$'
+          if grep -rlE "$marker" --include='*.md' . ; then
+            echo "a process-only marker survived the strip"
+            leftovers=$((leftovers + 1))
+          fi
+          if [ "$leftovers" -ne 0 ]; then
+            echo "$leftovers process-only artifact(s) survived the strip."
+            exit 1
+          fi
+          echo "All process-only artifacts were removed."
+
       - name: Install dependencies (after strip)
         if: steps.scope.outputs.run == 'true'
         run: flutter pub get

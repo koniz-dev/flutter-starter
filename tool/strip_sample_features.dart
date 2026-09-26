@@ -1,6 +1,11 @@
 // Removes sample `tasks` and `feature_flags` feature modules and rewires
 // the app using golden files under tool/golden/<variant>/.
 //
+// Every variant also removes this repository's own process machinery - the
+// issue loop, its evidence archive and the guards that only make sense against
+// this tracker. See `_processOnlyPaths` for the list and the reasoning per
+// entry.
+//
 // Usage (from repository root):
 //   dart run tool/strip_sample_features.dart --apply                       both
 //   dart run tool/strip_sample_features.dart --apply --remove-tasks
@@ -57,6 +62,69 @@ const _goldenOverrides = <String, List<String>>{
   ],
 };
 
+/// Paths that exist to run **this repository's** issue loop rather than to
+/// serve an adopter's app. Every variant removes all of them.
+///
+/// The test for each entry is the one question an adopter can answer: *would
+/// they notice if this were missing?* A guard that protects the shipped app
+/// stays; a guard that enforces this tracker's conventions goes. Reasoning per
+/// entry:
+///
+///   * `docs/verification/` - 31 MB of acceptance evidence about issues closed
+///     in this repository. An adopter inherits an archive of work they never
+///     saw, and `scripts/test/run_acceptance.sh` recreates the directory for
+///     their own issues.
+///   * `docs/issue-workflow.md` and `.claude/agents/` - the agent protocol and
+///     the four role definitions that drive it. Process, not product.
+///   * `scripts/bootstrap-issue-labels.sh` - creates this repository's labels
+///     and owns its path -> epic map. A fork has neither.
+///   * `tool/check_epic_coverage.dart` and `test/tooling/epic_coverage_test.dart`
+///     - assert every tracked surface maps to exactly one `epic:*` label. The
+///     tool shells out to the bootstrap script, so keeping the test after
+///     removing that script would fail `flutter test` on the first run.
+///   * `scripts/dev/check_issue_refs.sh` and `.github/workflows/issue-refs.yml`
+///     - require `Refs koniz-dev/flutter-starter#N` in every commit. An
+///     adopter's commits reference their own tracker, so the check would
+///     reject every pull request they open.
+///
+/// Deliberately NOT here, because each protects the adopter's app rather than
+/// this repository's workflow: `tool/check_env_assets.dart` (stops secrets
+/// shipping in the bundle), `tool/doc_signatures.dart`, `tool/doc_symbols.dart`
+/// and `tool/check_docs.dart` (stop docs drifting from code), `ci.yml`,
+/// `strip-smoke.yml`, the git hooks, and `scripts/test/run_acceptance.sh`
+/// (a format/analyze/test/golden harness that takes whatever issue number the
+/// adopter's own tracker gave them).
+const _processOnlyPaths = <String>[
+  '.claude/agents',
+  '.github/workflows/issue-refs.yml',
+  'docs/issue-workflow.md',
+  'docs/verification',
+  'scripts/bootstrap-issue-labels.sh',
+  'scripts/dev/check_issue_refs.sh',
+  'test/tooling/epic_coverage_test.dart',
+  'tool/check_epic_coverage.dart',
+];
+
+/// Directories to delete once emptied by [_processOnlyPaths].
+const _processOnlyPrunedDirs = <String>['.claude'];
+
+/// Markers around a block of prose that documents the removed process only.
+///
+/// Whole files are cheap to delete; a section inside a file an adopter keeps is
+/// not, and hand-written path lists rot. These are HTML comments, so they are
+/// invisible in rendered markdown and ignored by `tool/check_docs.dart`.
+const _processMarkerStart = '<!-- strip:process-only start -->';
+const _processMarkerEnd = '<!-- strip:process-only end -->';
+
+/// Directory names never walked when looking for markdown.
+const _markdownWalkSkips = <String>{
+  '.dart_tool',
+  '.git',
+  '.idea',
+  'build',
+  'node_modules',
+};
+
 void main(List<String> args) {
   if (!args.contains('--apply')) {
     stderr.writeln(
@@ -64,7 +132,9 @@ void main(List<String> args) {
       '[--remove-tasks] [--remove-feature-flags]\n'
       'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
       'and core FeatureFlagsManager. Rewires entrypoints from '
-      'tool/golden/<variant>/. Keeps auth sample.',
+      'tool/golden/<variant>/. Keeps auth sample. Every variant also removes '
+      "this repository's process-only artifacts (docs/verification/, the issue "
+      'workflow, .claude/agents/ and the issue-loop guards).',
     );
     exitCode = 1;
     return;
@@ -110,6 +180,24 @@ void main(List<String> args) {
     exitCode = 2;
     return;
   }
+
+  // Same discipline as the golden tree: an unbalanced marker pair is found
+  // before anything is deleted, so a bad edit leaves the working tree intact.
+  final markerProblems = _validateProcessMarkers(root);
+  if (markerProblems.isNotEmpty) {
+    stderr.writeln(
+      'Process-only markers are unbalanced; nothing was deleted:\n'
+      '${markerProblems.join('\n')}',
+    );
+    exitCode = 2;
+    return;
+  }
+
+  // Process artifacts go first: `docs/verification/` is by far the largest
+  // thing removed, and deleting it up front means the later passes over
+  // `docs/` have thousands of evidence files fewer to read.
+  _removeProcessArtifacts(root);
+  _stripProcessMarkdownRegions(root);
 
   if (removeTasks) {
     _deleteDir(Directory(p.join(root.path, 'lib/features/tasks')));
@@ -241,6 +329,160 @@ void _copyGoldenFile(
 void _deleteDir(Directory dir) {
   if (dir.existsSync()) {
     dir.deleteSync(recursive: true);
+  }
+}
+
+/// Deletes every entry in [_processOnlyPaths], then prunes the directories
+/// those deletions emptied.
+///
+/// A missing entry is skipped rather than reported: a fork that already deleted
+/// its own copy of one of these is not an error.
+void _removeProcessArtifacts(Directory repoRoot) {
+  for (final relative in _processOnlyPaths) {
+    final path = p.join(repoRoot.path, relative);
+    final dir = Directory(path);
+    final file = File(path);
+    if (dir.existsSync()) {
+      dir.deleteSync(recursive: true);
+    } else if (file.existsSync()) {
+      file.deleteSync();
+    } else {
+      continue;
+    }
+    stdout.writeln(
+      "Removed $relative: it serves this repository's issue loop, not the "
+      'app a fork ships.',
+    );
+  }
+
+  for (final relative in _processOnlyPrunedDirs) {
+    final dir = Directory(p.join(repoRoot.path, relative));
+    if (dir.existsSync() && dir.listSync().isEmpty) {
+      dir.deleteSync();
+      stdout.writeln('Removed $relative: emptied by the removals above.');
+    }
+  }
+}
+
+/// Every markdown file that could carry a process-only marker.
+///
+/// `docs/verification/` is skipped: the whole tree is deleted anyway, and its
+/// files quote captured terminal output, so a marker-shaped string inside one
+/// is a transcript rather than an instruction.
+List<File> _markdownFiles(Directory repoRoot) {
+  final found = <File>[];
+
+  void walk(Directory dir) {
+    if (!dir.existsSync()) {
+      return;
+    }
+    for (final entity in dir.listSync(followLinks: false)) {
+      final relative = p.split(p.relative(entity.path, from: repoRoot.path));
+      if (entity is Directory) {
+        if (_markdownWalkSkips.contains(relative.last)) {
+          continue;
+        }
+        if (relative.length == 2 &&
+            relative[0] == 'docs' &&
+            relative[1] == 'verification') {
+          continue;
+        }
+        walk(entity);
+      } else if (entity is File && entity.path.endsWith('.md')) {
+        found.add(entity);
+      }
+    }
+  }
+
+  walk(repoRoot);
+  return found;
+}
+
+/// Reports markers that do not pair up, before anything has been deleted.
+///
+/// An unclosed start marker would silently swallow the rest of a file an
+/// adopter keeps - `CONTRIBUTING.md` from its issue callout to its last line,
+/// say - and the only signal would be a shorter file nobody diffed.
+List<String> _validateProcessMarkers(Directory repoRoot) {
+  final problems = <String>[];
+  for (final file in _markdownFiles(repoRoot)) {
+    final relative = p.relative(file.path, from: repoRoot.path);
+    var openedAt = 0;
+    var lineNumber = 0;
+    for (final line in file.readAsLinesSync()) {
+      lineNumber++;
+      final trimmed = line.trim();
+      if (trimmed == _processMarkerStart) {
+        if (openedAt != 0) {
+          problems.add(
+            '  $relative:$lineNumber: start marker inside the region opened '
+            'at line $openedAt',
+          );
+        }
+        openedAt = lineNumber;
+      } else if (trimmed == _processMarkerEnd) {
+        if (openedAt == 0) {
+          problems.add('  $relative:$lineNumber: end marker with no start');
+        }
+        openedAt = 0;
+      }
+    }
+    if (openedAt != 0) {
+      problems.add('  $relative:$openedAt: start marker is never closed');
+    }
+  }
+  return problems;
+}
+
+/// Removes every `<!-- strip:process-only ... -->` region from markdown files
+/// the strip keeps.
+///
+/// Used where deleting the whole file would be wrong: `CLAUDE.md` still
+/// describes the codebase after the issue loop is gone, `CONTRIBUTING.md` still
+/// describes how to open a pull request, and `tool/README.md` still documents
+/// the tools that survive. Only the marked block goes; the surrounding prose is
+/// the file's own.
+void _stripProcessMarkdownRegions(Directory repoRoot) {
+  for (final file in _markdownFiles(repoRoot)) {
+    final kept = <String>[];
+    var dropping = false;
+    var justClosed = false;
+    var dropped = 0;
+
+    for (final line in file.readAsLinesSync()) {
+      final trimmed = line.trim();
+      if (trimmed == _processMarkerStart) {
+        dropping = true;
+        continue;
+      }
+      if (trimmed == _processMarkerEnd) {
+        dropping = false;
+        justClosed = true;
+        dropped++;
+        continue;
+      }
+      if (dropping) {
+        continue;
+      }
+      // A region is normally surrounded by blank lines; keeping both would
+      // leave a double blank where the section used to be.
+      if (justClosed) {
+        justClosed = false;
+        if (trimmed.isEmpty && (kept.isEmpty || kept.last.trim().isEmpty)) {
+          continue;
+        }
+      }
+      kept.add(line);
+    }
+
+    if (dropped == 0) {
+      continue;
+    }
+    file.writeAsStringSync('${kept.join('\n')}\n');
+    stdout.writeln(
+      'Dropped $dropped process-only section(s) from '
+      '${p.relative(file.path, from: repoRoot.path)}.',
+    );
   }
 }
 

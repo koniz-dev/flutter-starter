@@ -116,11 +116,13 @@ Users prefer dark mode for better battery life and eye comfort, especially in lo
 
 Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests.
 
+<!-- strip:process-only start -->
 > Issues are the single source of truth for what gets worked on, in what order,
 > and when it counts as done. Before picking something up, read
 > [docs/issue-workflow.md](docs/issue-workflow.md) — it defines the label state
 > machine, the acceptance-criteria requirement, and why commits link to issues
 > rather than closing them.
+<!-- strip:process-only end -->
 
 
 1. Fork the repository
@@ -399,6 +401,7 @@ test(auth): add login use case tests
 - Keep subject line under 50 characters
 - Capitalize first letter of subject
 - No period at end of subject
+  <!-- strip:process-only start -->
 - Reference issues in the footer as `Refs koniz-dev/flutter-starter#123`
 
 > **Do not use `Closes`, `Fixes`, or `Resolves`.** GitHub auto-closes an issue
@@ -407,6 +410,7 @@ test(auth): add login use case tests
 > removes the verification gate the workflow exists to enforce. Use the fully
 > qualified `owner/repo#N` form so the reference survives being quoted elsewhere.
 > See [docs/issue-workflow.md](docs/issue-workflow.md).
+<!-- strip:process-only end -->
 
 ### Git hooks
 
