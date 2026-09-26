@@ -1,0 +1,61 @@
+$ grep -rn "REFRESH_TOKEN_EXPIRED\|refreshTokenExpired" lib
+lib/features/auth/data/repositories/auth_repository_impl.dart:264:            code: AuthErrorCodes.refreshTokenExpired,
+lib/features/auth/data/repositories/auth_repository_impl.dart:291:  /// token itself is dead with [AuthErrorCodes.refreshTokenExpired].
+lib/features/auth/data/repositories/auth_repository_impl.dart:316:      code: AuthErrorCodes.refreshTokenExpired,
+lib/features/auth/domain/auth_error_codes.dart:7:/// "this session cannot be revived" sets [refreshTokenExpired] explicitly, and
+lib/features/auth/domain/auth_error_codes.dart:18:  static const String refreshTokenExpired = 'REFRESH_TOKEN_EXPIRED';
+lib/features/auth/presentation/providers/auth_provider.dart:155:        if (failure.code == AuthErrorCodes.refreshTokenExpired) {
+
+$ sed -n "/Future<Result<String>> refreshToken/,/^  }$/p" lib/features/auth/data/repositories/auth_repository_impl.dart
+  Future<Result<String>> refreshToken() async {
+    // Read before the round trip; checked immediately before each write.
+    final generation = sessionGeneration.current;
+    try {
+      final refreshToken = await localDataSource.getRefreshToken();
+      if (refreshToken == null) {
+        // No credential to revive the session with, which is the same thing to
+        // a caller as a rejected one: only a fresh sign-in gets back in.
+        return const ResultFailure(
+          UnknownFailure(
+            'No refresh token available',
+            code: AuthErrorCodes.refreshTokenExpired,
+          ),
+        );
+      }
+
+      final authResponse = await remoteDataSource.refreshToken(refreshToken);
+      if (!sessionGeneration.isCurrent(generation)) {
+        return const ResultFailure(
+          UnknownFailure(
+            'Session ended while the token refresh was in flight',
+            code: AuthErrorCodes.sessionTerminated,
+          ),
+        );
+      }
+      await localDataSource.cacheToken(authResponse.token);
+      if (authResponse.refreshToken != null) {
+        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
+      }
+      return Success(authResponse.token);
+    } on AppException catch (e) {
+      return ResultFailure(_mapRefreshFailure(e));
+    } on Exception catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
+    }
+  }
+
+$ sed -n "/Failure _mapRefreshFailure/,/^  }$/p" lib/features/auth/data/repositories/auth_repository_impl.dart
+  Failure _mapRefreshFailure(AppException exception) {
+    final rejected =
+        exception is AuthException ||
+        (exception is ServerException && exception.statusCode == 401);
+    if (!rejected) {
+      return ExceptionToFailureMapper.map(exception);
+    }
+    // Built rather than copied: `Failure.copyWith` falls back to the existing
+    // code (`code ?? this.code`) and so cannot replace one the server sent.
+    return AuthFailure(
+      exception.message,
+      code: AuthErrorCodes.refreshTokenExpired,
+    );
+  }
