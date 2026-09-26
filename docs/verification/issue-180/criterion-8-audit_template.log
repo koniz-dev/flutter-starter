@@ -1,0 +1,22 @@
+# Criterion 8 - ./scripts/dev/audit_template.sh exits 0
+# main @ 5c7603e
+# App logger noise filtered; the head, the gate banners and the tail are verbatim.
+
+$ ./scripts/dev/audit_template.sh
+==> env asset guard
+==> format (lib test integration_test tool examples)
+Formatted 365 files (0 changed) in 1.24 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.3s)
+==> flutter test
+01:46 +2794 ~8: All tests passed!
+
+[full output: 5082 lines, reproducible by re-running the command above]
+
+01:46 +2790 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+01:46 +2791 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:46 +2792 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+01:46 +2793 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+01:46 +2794 ~8: All tests passed!
+exit=0

@@ -1,0 +1,252 @@
+# Criteria 3, 4, 5, 6 - static evidence
+# Run from the repository root on main @ 5c7603e
+# Produced OUTSIDE the working tree and copied in, so no grep matches its own output.
+
+=== Criterion 3: the completion-toggle rule lives in exactly ONE layer ===
+
+# Every DateTime.now() in the whole tasks slice:
+$ grep -rn "DateTime.now()" lib/features/tasks/
+lib/features/tasks/domain/usecases/create_task_usecase.dart:26:    final micros = DateTime.now().microsecondsSinceEpoch;
+lib/features/tasks/domain/usecases/create_task_usecase.dart:37:    final now = DateTime.now();
+lib/features/tasks/domain/entities/task.dart:71:  Task touch({DateTime? at}) => copyWith(updatedAt: at ?? DateTime.now());
+exit=0
+
+# Two sites remain, and neither is a *modification* stamp:
+#   - Task.touch          : the single mint point for a modification stamp (domain/)
+#   - CreateTaskUseCase   : mints createdAt+updatedAt together for a NEW entity
+
+$ sed -n "55,85p" lib/features/tasks/domain/entities/task.dart
+          : description as String?,
+      isCompleted: isCompleted ?? this.isCompleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  /// Returns a copy of this task whose [updatedAt] is [at], defaulting to now.
+  ///
+  /// Every modification of a task restamps [updatedAt]; that is an invariant of
+  /// the entity, so the stamp is minted here rather than by whichever caller
+  /// happens to be performing the modification. Before
+  /// koniz-dev/flutter-starter#180 three callers minted their own - the update
+  /// use case, `TasksRepositoryImpl.toggleTaskCompletion` in `data/`, and
+  /// `task_detail_screen.dart` in widget code - so the slice taught three
+  /// different answers about where the rule lives.
+  Task touch({DateTime? at}) => copyWith(updatedAt: at ?? DateTime.now());
+
+  /// Returns a copy of this task with [isCompleted] flipped and [updatedAt]
+  /// restamped through [touch].
+  ///
+  /// Completing a task is a modification like any other, so both halves of the
+  /// rule belong together and in `domain/`. `TasksRepositoryImpl` applies this
+  /// inside its atomic mutation rather than restating it.
+  Task toggleCompletion({DateTime? at}) =>
+      copyWith(isCompleted: !isCompleted).touch(at: at);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Task &&
+
+# The data layer no longer hand-copies TaskModel fields to express the rule:
+$ sed -n "78,110p" lib/features/tasks/data/repositories/tasks_repository_impl.dart
+  }
+
+  @override
+  Future<Result<Task>> toggleTaskCompletion(String id) async {
+    try {
+      // What the flip *is* belongs to the entity: `Task.toggleCompletion`
+      // flips the flag and restamps `updatedAt`. This layer only decides
+      // *when* it is applied - inside the atomic mutation, so two overlapping
+      // toggles of the same task cannot both read the same starting value.
+      TaskModel? updatedTaskModel;
+      await localDataSource.mutateTasks((current) {
+        final index = current.indexWhere((task) => task.id == id);
+        if (index < 0) return current;
+
+        final updated = TaskModel.fromEntity(current[index].toggleCompletion());
+        updatedTaskModel = updated;
+        return [...current]..[index] = updated;
+      });
+
+      final updated = updatedTaskModel;
+      if (updated == null) {
+        return const ResultFailure(CacheFailure('Task not found'));
+      }
+      return Success(updated.toEntity());
+    } on AppException catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
+    } on Exception catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
+    }
+  }
+}
+
+# Before this change (parent commit 0e397bf), the same method hand-copied six fields:
+$ git show 0e397bf:lib/features/tasks/data/repositories/tasks_repository_impl.dart | sed -n "95,120p"
+
+  @override
+  Future<Result<Task>> toggleTaskCompletion(String id) async {
+    try {
+      // The flip is computed inside the atomic mutation, so two overlapping
+      // toggles of the same task cannot both read the same starting value.
+      TaskModel? updatedTaskModel;
+      await localDataSource.mutateTasks((current) {
+        final index = current.indexWhere((task) => task.id == id);
+        if (index < 0) return current;
+
+        final taskModel = current[index];
+        final updated = TaskModel(
+          id: taskModel.id,
+          title: taskModel.title,
+          description: taskModel.description,
+          isCompleted: !taskModel.isCompleted,
+          createdAt: taskModel.createdAt,
+          updatedAt: DateTime.now(),
+        );
+        updatedTaskModel = updated;
+        return [...current]..[index] = updated;
+      });
+
+      final updated = updatedTaskModel;
+      if (updated == null) {
+
+# The use case is a pass-through onto that one layer:
+$ cat lib/features/tasks/domain/usecases/update_task_usecase.dart
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
+
+/// Use case for updating a task
+class UpdateTaskUseCase {
+  /// Creates an [UpdateTaskUseCase] with the given [repository]
+  UpdateTaskUseCase(this.repository);
+
+  /// Tasks repository for updating tasks
+  final TasksRepository repository;
+
+  /// Executes updating a task
+  Future<Result<Task>> call(Task task) async {
+    final updatedTask = task.touch();
+    return repository.updateTask(updatedTask);
+  }
+}
+
+
+=== Criterion 4: the widget code stamps nothing ===
+$ grep -n "DateTime.now()" lib/features/tasks/presentation/screens/task_detail_screen.dart
+exit=1  (1 = no match = PASS)
+
+# Before this change the screen minted its own stamp:
+$ git show 0e397bf:lib/features/tasks/presentation/screens/task_detail_screen.dart | grep -n "DateTime.now()"
+103:        updatedAt: DateTime.now(),
+exit=0  (0 = it was there = the defect this criterion targets)
+
+$ sed -n "96,116p" lib/features/tasks/presentation/screens/task_detail_screen.dart
+
+    final tasksNotifier = ref.read(tasksNotifierProvider.notifier);
+    final title = _titleController.text.trim();
+    final description = _descriptionController.text.trim();
+
+    if (_task != null) {
+      // Update existing task. No `updatedAt` here: `UpdateTaskUseCase` restamps
+      // it through `Task.touch`, exactly as the create path below delegates its
+      // timestamps to `CreateTaskUseCase`.
+      final updatedTask = _task!.copyWith(
+        title: title,
+        description: description.isEmpty ? null : description,
+      );
+      await tasksNotifier.updateTask(updatedTask);
+    } else {
+      // Create new task
+      await tasksNotifier.createTask(
+        title: title,
+        description: description.isEmpty ? null : description,
+      );
+    }
+
+
+=== Criterion 5: the detail screen loads through TasksNotifier, not the use-case provider ===
+$ grep -n "getTaskByIdUseCaseProvider\|core/di/providers.dart" lib/features/tasks/presentation/screens/task_detail_screen.dart
+exit=1  (1 = neither appears = PASS)
+
+$ sed -n "1,12p;50,75p" lib/features/tasks/presentation/screens/task_detail_screen.dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+import 'package:flutter_starter/core/utils/date_formatter.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
+
+/// Task detail/edit screen
+  }
+
+  Future<void> _loadTask() async {
+    if (widget.taskId == null) return;
+
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    // Through the notifier, not straight to the use-case provider in
+    // `core/di`: the list screen already reaches its data only through
+    // `TasksNotifier`, and this screen no longer disagrees with it.
+    final result = await ref
+        .read(tasksNotifierProvider.notifier)
+        .taskById(widget.taskId!);
+
+    // The screen can be popped while the load is in flight; both controllers
+    // are disposed by then, so neither setState nor a controller write is
+    // safe past this point.
+    if (!mounted) return;
+
+    result.when(
+      success: (task) {
+        setState(() {
+          _task = task;
+
+# The boundary method the screen now calls:
+$ sed -n "100,120p" lib/features/tasks/presentation/providers/tasks_provider.dart
+    await _loadTasks();
+  }
+
+  /// Loads the single task with [id] through this notifier.
+  ///
+  /// The detail screen needs one task rather than the whole list, but it must
+  /// not reach past the notifier into `getTaskByIdUseCaseProvider`: that is the
+  /// presentation boundary `tasks_list_screen.dart` already respects, and two
+  /// screens in one slice answering it differently is what
+  /// koniz-dev/flutter-starter#180 removed. The result is returned rather than
+  /// written to [state] because a single opened task is a per-screen concern -
+  /// folding it into the shared snapshot would make every list rebuild on it.
+  Future<Result<Task?>> taskById(String id) {
+    final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
+    return getTaskByIdUseCase(id);
+  }
+
+  /// Creates a new task with [title] and optional [description]
+  Future<void> createTask({required String title, String? description}) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+
+
+# GetTaskByIdUseCase did not die - it moved up one layer:
+$ grep -rn "getTaskByIdUseCaseProvider" lib/
+lib/features/tasks/di/tasks_providers.dart:44:final getTaskByIdUseCaseProvider = Provider<GetTaskByIdUseCase>((ref) {
+lib/features/tasks/presentation/providers/tasks_provider.dart:106:  /// not reach past the notifier into `getTaskByIdUseCaseProvider`: that is the
+lib/features/tasks/presentation/providers/tasks_provider.dart:113:    final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
+
+
+=== Criterion 6: deleteCompletedTasks is gone from contract, implementation and tests ===
+$ grep -rn "deleteCompletedTasks" lib/ test/ tool/ integration_test/
+exit=1  (1 = no match anywhere = PASS)
+
+# Before this change it existed in the contract, the impl and 6 tests:
+$ git show 0e397bf --stat >/dev/null; git grep -c "deleteCompletedTasks" 0e397bf -- lib test
+0e397bf:lib/features/tasks/data/repositories/tasks_repository_impl.dart:1
+0e397bf:lib/features/tasks/domain/repositories/tasks_repository.dart:1
+0e397bf:test/features/tasks/data/repositories/tasks_repository_impl_test.dart:11
