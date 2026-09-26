@@ -62,9 +62,35 @@ documentation of one.
 Until koniz-dev/flutter-starter#182 there was an `ITasksController` row naming a
 controller provider that has never existed anywhere in the tree - the name is
 deliberately not repeated here, so that grepping for it stays a clean test.
-koniz-dev/flutter-starter#180 then deleted the contract itself. **If you add or
-edit a row, `grep -rn "<symbol>" lib` every symbol you put in it.** A symbol whose
-only occurrence in the repository is this file is the tell.
+koniz-dev/flutter-starter#180 then deleted the contract itself.
+
+That is no longer left to a reviewer. Every provider identifier named in the
+tables above and below carries a `<!-- symbol: <path> <name> -->` directive,
+checked by `tool/doc_symbols.dart` from both `dart run tool/check_docs.dart`
+(Docs check, which fires when this file changes) and `test/docs/doc_symbols_test.dart`
+(Quality gate, which fires when `lib/` changes). The directives are HTML
+comments, so they are invisible in the rendered page; they live here rather
+than inline in the cells so the tables stay readable. **If you add or edit a
+row, add a directive for every identifier you put in it** - a symbol whose only
+occurrence in the repository is this file is the tell, and the directive is what
+turns that from a convention into a gate.
+
+<!-- symbol: lib/core/di/providers.dart apiClientProvider -->
+<!-- symbol: lib/core/di/providers.dart networkClientProvider -->
+<!-- symbol: lib/core/di/providers.dart keyValueStoreProvider -->
+<!-- symbol: lib/core/di/providers.dart tokenStoreProvider -->
+<!-- symbol: lib/core/logging/logging_providers.dart loggingServiceProvider -->
+<!-- symbol: lib/core/routing/app_router.g.dart goRouterProvider -->
+<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart authControllerProvider -->
+<!-- symbol: lib/features/auth/presentation/providers/auth_provider.g.dart authProvider -->
+<!-- symbol: lib/core/security/rasp_providers.dart raspServiceProvider -->
+<!-- symbol: lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart featureFlagsRemoteDataSourceProvider -->
+
+Two of those paths end in `.g.dart` on purpose. `goRouterProvider`,
+`authProvider` and `featureFlagsRemoteDataSourceProvider` are generated from
+`@riverpod` annotations and exist nowhere else, so a checker that skipped
+generated output would skip exactly the identifiers an adopter is most likely
+to mistype.
 
 ## Adapter directories (convention)
 

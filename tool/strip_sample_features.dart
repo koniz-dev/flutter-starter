@@ -172,6 +172,18 @@ void main(List<String> args) {
 
   _deleteDocsProbes(root, needles);
 
+  // Documentation asserts identifiers with
+  // `<!-- symbol: <path> <name> -->` (koniz-dev/flutter-starter#206), and
+  // `test/docs/doc_symbols_test.dart` fails the run when one does not resolve.
+  // A directive naming a file this strip just deleted would therefore turn
+  // every stripped variant red in `flutter test`, so the directives go with
+  // the files.
+  _deleteSymbolDirectives(root, [
+    if (removeTasks) 'lib/features/tasks/',
+    if (removeFeatureFlags) 'lib/features/feature_flags/',
+    if (removeFeatureFlags) 'lib/core/feature_flags/',
+  ]);
+
   final violations = _collectStrippedViolations(root, needles);
   if (violations.isNotEmpty) {
     stderr.writeln(
@@ -367,6 +379,55 @@ void _deleteDocsProbes(Directory repoRoot, List<String> needles) {
       'Deleted ${p.relative(entity.path, from: repoRoot.path)}: an evidence '
       'probe importing a stripped module (${hit.join(', ')}). '
       'docs/ is analyzed, so leaving it would break flutter analyze.',
+    );
+  }
+}
+
+/// Regex for one `<!-- symbol: <path> <name> -->` directive line.
+final RegExp _symbolDirectivePattern = RegExp(
+  r'^\s*<!--\s*symbol:\s*(\S+)\s+\S+\s*-->\s*$',
+);
+
+/// Drops `<!-- symbol: ... -->` directives that name a path under [prefixes].
+///
+/// The directives are checked by `tool/doc_symbols.dart` from both
+/// `tool/check_docs.dart` and `test/docs/doc_symbols_test.dart`. The second of
+/// those runs under `flutter test`, which every strip variant runs in
+/// `strip-smoke.yml`, so a directive pointing into a deleted feature would
+/// fail a stripped tree. Only the directive line is removed; the prose around
+/// it is a human's to rewrite, and a wrong sentence in a stripped fork is a
+/// smaller problem than a red build.
+void _deleteSymbolDirectives(Directory repoRoot, List<String> prefixes) {
+  if (prefixes.isEmpty) {
+    return;
+  }
+  final docs = Directory(p.join(repoRoot.path, 'docs'));
+  if (!docs.existsSync()) {
+    return;
+  }
+  for (final entity in docs.listSync(recursive: true, followLinks: false)) {
+    if (entity is! File || !entity.path.endsWith('.md')) {
+      continue;
+    }
+    final lines = entity.readAsLinesSync();
+    final kept = <String>[];
+    var dropped = 0;
+    for (final line in lines) {
+      final match = _symbolDirectivePattern.firstMatch(line);
+      if (match != null &&
+          prefixes.any((prefix) => match.group(1)!.startsWith(prefix))) {
+        dropped++;
+        continue;
+      }
+      kept.add(line);
+    }
+    if (dropped == 0) {
+      continue;
+    }
+    entity.writeAsStringSync('${kept.join('\n')}\n');
+    stdout.writeln(
+      'Dropped $dropped symbol directive(s) naming a stripped path from '
+      '${p.relative(entity.path, from: repoRoot.path)}.',
     );
   }
 }
