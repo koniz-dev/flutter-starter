@@ -21,7 +21,7 @@ written, so the issue goes to `status:blocked` rather than closed.
 | 3 | Each task row renders a date produced by `DateFormatter`, asserted with `find.text()` | **PASS** | `criterion-3-date-tests.log` (4 tests pass), `criterion-3-negative-probe.log` (the same 4 fail against the pre-change `lib/`) |
 | 4 | `grep -rl PaginationHelper lib/` and `grep -rl Debouncer lib/` each return a path outside `lib/core/utils/` | **FAIL** | `criterion-4-grep.log` - both return only their own source file |
 | 5 | Design-decisions section records which utilities are exercised and which are uncalled | **PASS (partial)** | `docs/architecture/design-decisions.md`, new "Call-site status" table. Records today's facts and flags the pagination/debouncer question as open. |
-| 6 | `./scripts/dev/audit_template.sh` exits 0 | **PASS** | `format.log`, `analyze.log`, `tests.log` (2708 passed, 8 skipped) |
+| 6 | `./scripts/dev/audit_template.sh` exits 0 | **PASS** | `format.log`, `analyze.log`, `tests.log` (2728 passed, 8 skipped) |
 
 ## What criterion 3 actually proves
 
