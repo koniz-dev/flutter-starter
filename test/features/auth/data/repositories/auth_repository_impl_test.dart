@@ -8,6 +8,7 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datas
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -172,6 +173,78 @@ void main() {
         expect(failure, isA<NetworkFailure>());
         expect(failure?.message, 'Network error');
       });
+
+      // koniz-dev/flutter-starter#181: the forced-logout decision now reads
+      // `failure.code` alone, so the layer that knows what the round trip
+      // meant has to say so. These three pin which outcomes carry the tag.
+      test(
+        'should tag a missing refresh token as REFRESH_TOKEN_EXPIRED',
+        () async {
+          // Arrange
+          when(
+            () => mockLocalDataSource.getRefreshToken(),
+          ).thenAnswer((_) async => null);
+
+          // Act
+          final result = await repository.refreshToken();
+
+          // Assert
+          expect(
+            result.failureOrNull?.code,
+            AuthErrorCodes.refreshTokenExpired,
+          );
+        },
+      );
+
+      test(
+        'should tag a 401 from the refresh endpoint as REFRESH_TOKEN_EXPIRED',
+        () async {
+          // Arrange: the default 401 message carries no "refresh" substring,
+          // so the pre-#181 message match never reached this case at all.
+          when(
+            () => mockLocalDataSource.getRefreshToken(),
+          ).thenAnswer((_) async => 'refresh_token');
+          when(() => mockRemoteDataSource.refreshToken(any())).thenThrow(
+            const ServerException(
+              'Unauthorized. Please login again.',
+              statusCode: 401,
+            ),
+          );
+
+          // Act
+          final result = await repository.refreshToken();
+
+          // Assert
+          final failure = result.failureOrNull;
+          expect(failure, isA<AuthFailure>());
+          expect(failure?.code, AuthErrorCodes.refreshTokenExpired);
+          expect(failure?.message, 'Unauthorized. Please login again.');
+        },
+      );
+
+      test(
+        'should not tag a transport failure as REFRESH_TOKEN_EXPIRED',
+        () async {
+          // Arrange
+          when(
+            () => mockLocalDataSource.getRefreshToken(),
+          ).thenAnswer((_) async => 'refresh_token');
+          when(() => mockRemoteDataSource.refreshToken(any())).thenThrow(
+            const ServerException(
+              'Service unavailable. Please try again later.',
+              statusCode: 503,
+            ),
+          );
+
+          // Act
+          final result = await repository.refreshToken();
+
+          // Assert
+          final failure = result.failureOrNull;
+          expect(failure, isA<ServerFailure>());
+          expect(failure?.code, isNot(AuthErrorCodes.refreshTokenExpired));
+        },
+      );
 
       test('should cache refresh token only if provided', () async {
         // Arrange

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -144,10 +145,14 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
         // The token is stored in secure storage by the repository
       },
       failureCallback: (failure) async {
-        // Refresh failed, might need to logout
-        // Check if it's a refresh token expiry error
-        if (failure.code == 'REFRESH_TOKEN_EXPIRED' ||
-            failure.message.toLowerCase().contains('refresh')) {
+        // Structured state only. `failure.message` is server-supplied and
+        // localisable, so matching on it fired on any error phrased "please
+        // refresh and try again" - including the one this repository raises
+        // when a *newer* session ended the refresh in flight, whose message
+        // reads "Session ended while the token refresh was in flight"
+        // (koniz-dev/flutter-starter#181). The data layer sets this code on
+        // every round trip that means the refresh token is dead.
+        if (failure.code == AuthErrorCodes.refreshTokenExpired) {
           await logout();
         }
       },

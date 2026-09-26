@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/is_authenticated_usecase.dart';
@@ -299,7 +300,7 @@ void main() {
         // Arrange
         const failure = AuthFailure(
           'Refresh token expired',
-          code: 'REFRESH_TOKEN_EXPIRED',
+          code: AuthErrorCodes.refreshTokenExpired,
         );
         when(
           () => mockRefreshTokenUseCase(),
@@ -317,6 +318,133 @@ void main() {
         verify(() => mockRefreshTokenUseCase()).called(1);
         verify(() => mockLogoutUseCase()).called(1);
       });
+
+      test(
+        'should clear the session when the code says the refresh token died',
+        () async {
+          // Arrange: a real signed-in session, so "cleared" is observable
+          // rather than vacuously true on the initial state.
+          const user = User(
+            id: '1',
+            email: 'test@example.com',
+            name: 'Test User',
+          );
+          when(
+            () => mockLoginUseCase(any(), any()),
+          ).thenAnswer((_) async => const Success(user));
+          when(
+            () => mockRefreshTokenUseCase(),
+          ).thenAnswer(
+            (_) async => const ResultFailure(
+              AuthFailure(
+                'Unauthorized. Please login again.',
+                code: AuthErrorCodes.refreshTokenExpired,
+              ),
+            ),
+          );
+          when(
+            () => mockLogoutUseCase(),
+          ).thenAnswer((_) async => const Success(null));
+
+          final notifier = container.read(authNotifierProvider.notifier);
+          await notifier.login('test@example.com', 'password123');
+          expect(container.read(authNotifierProvider).user, isNotNull);
+
+          // Act
+          await notifier.refreshToken();
+
+          // Assert
+          verify(() => mockLogoutUseCase()).called(1);
+          final state = container.read(authNotifierProvider);
+          expect(state.user, isNull);
+          expect(state.isLoading, isFalse);
+          expect(notifier.snapshot.isAuthenticated, isFalse);
+        },
+      );
+
+      // koniz-dev/flutter-starter#181. The forced-logout decision used to read
+      // `failure.message.toLowerCase().contains('refresh')`, so any error
+      // phrased "please refresh and try again" - in any language that happens
+      // to contain the substring - signed the user out. Fails on the
+      // pre-#181 notifier.
+      test(
+        'should keep the session when an unrelated failure mentions refresh',
+        () async {
+          // Arrange
+          const user = User(
+            id: '1',
+            email: 'test@example.com',
+            name: 'Test User',
+          );
+          when(
+            () => mockLoginUseCase(any(), any()),
+          ).thenAnswer((_) async => const Success(user));
+          when(() => mockRefreshTokenUseCase()).thenAnswer(
+            (_) async => const ResultFailure(
+              NetworkFailure(
+                'Please refresh and try again',
+                code: 'CONNECTION_ERROR',
+              ),
+            ),
+          );
+          when(
+            () => mockLogoutUseCase(),
+          ).thenAnswer((_) async => const Success(null));
+
+          final notifier = container.read(authNotifierProvider.notifier);
+          await notifier.login('test@example.com', 'password123');
+
+          // Act
+          await notifier.refreshToken();
+
+          // Assert
+          verifyNever(() => mockLogoutUseCase());
+          final state = container.read(authNotifierProvider);
+          expect(state.user, isNotNull);
+          expect(notifier.snapshot.isAuthenticated, isTrue);
+        },
+      );
+
+      // The same defect with teeth: the repository's own
+      // "Session ended while the token refresh was in flight" failure (#169)
+      // contains "refresh", so the substring match forced a logout on the
+      // session that had *replaced* this one - the exact damage the session
+      // generation guard exists to prevent, inflicted from the other side.
+      test(
+        'should keep the session when a newer session ended the refresh',
+        () async {
+          // Arrange
+          const user = User(
+            id: '1',
+            email: 'test@example.com',
+            name: 'Test User',
+          );
+          when(
+            () => mockLoginUseCase(any(), any()),
+          ).thenAnswer((_) async => const Success(user));
+          when(() => mockRefreshTokenUseCase()).thenAnswer(
+            (_) async => const ResultFailure(
+              UnknownFailure(
+                'Session ended while the token refresh was in flight',
+                code: AuthErrorCodes.sessionTerminated,
+              ),
+            ),
+          );
+          when(
+            () => mockLogoutUseCase(),
+          ).thenAnswer((_) async => const Success(null));
+
+          final notifier = container.read(authNotifierProvider.notifier);
+          await notifier.login('test@example.com', 'password123');
+
+          // Act
+          await notifier.refreshToken();
+
+          // Assert
+          verifyNever(() => mockLogoutUseCase());
+          expect(container.read(authNotifierProvider).user, isNotNull);
+        },
+      );
     });
 
     group('getCurrentUser', () {
@@ -550,7 +678,13 @@ void main() {
         expect(state.user, isNull);
       });
 
-      test('should handle refreshToken with refresh in message', () async {
+      // Expectation deliberately inverted by koniz-dev/flutter-starter#181.
+      // This test used to assert that a *message* reading "Refresh token
+      // invalid" was enough to force a logout - it codified the substring
+      // match. An untagged failure now leaves the session alone; the data
+      // layer sets `code` on every outcome that warrants a logout, and a
+      // failure arriving without one is by definition not one of them.
+      test('should not logout on an untagged failure naming refresh', () async {
         // Arrange
         const failure = AuthFailure('Refresh token invalid');
         when(
@@ -567,7 +701,7 @@ void main() {
 
         // Assert
         verify(() => mockRefreshTokenUseCase()).called(1);
-        verify(() => mockLogoutUseCase()).called(1);
+        verifyNever(() => mockLogoutUseCase());
       });
 
       test('should handle refreshToken with non-refresh failure', () async {
