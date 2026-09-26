@@ -1,0 +1,21 @@
+=== log_output_test.dart, 20 consecutive runs ===
+run 1: exit=0 | 00:26 +85: All tests passed!
+run 2: exit=0 | 00:26 +85: All tests passed!
+run 3: exit=0 | 00:26 +85: All tests passed!
+run 4: exit=0 | 00:26 +85: All tests passed!
+run 5: exit=0 | 00:26 +85: All tests passed!
+run 6: exit=0 | 00:26 +85: All tests passed!
+run 7: exit=0 | 00:26 +85: All tests passed!
+run 8: exit=0 | 00:26 +85: All tests passed!
+run 9: exit=0 | 00:26 +85: All tests passed!
+run 10: exit=0 | 00:26 +85: All tests passed!
+run 11: exit=0 | 00:26 +85: All tests passed!
+run 12: exit=0 | 00:26 +85: All tests passed!
+run 13: exit=0 | 00:26 +85: All tests passed!
+run 14: exit=0 | 00:26 +85: All tests passed!
+run 15: exit=0 | 00:26 +85: All tests passed!
+run 16: exit=0 | 00:26 +85: All tests passed!
+run 17: exit=0 | 00:26 +85: All tests passed!
+run 18: exit=0 | 00:26 +85: All tests passed!
+run 19: exit=0 | 00:26 +85: All tests passed!
+run 20: exit=0 | 00:26 +85: All tests passed!
