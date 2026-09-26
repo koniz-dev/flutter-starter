@@ -1,0 +1,29 @@
+$ dart run tool/strip_sample_features.dart --apply 
+Running build hooks...Running build hooks...Dropped 1 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ flutter analyze
+No issues found! (ran in 5.9s)
+
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ flutter analyze
+No issues found! (ran in 5.1s)
+
+$ dart run tool/strip_sample_features.dart --apply --remove-feature-flags
+Running build hooks...Running build hooks...Dropped 1 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ flutter analyze
+No issues found! (ran in 5.3s)
+
+$ flutter test   # fully stripped tree (both samples removed)
+01:35 +2296 ~8: All tests passed!
+
+# Run the way strip-smoke.yml runs it: strip applied inside a git checkout,
+# so `tool/check_epic_coverage.dart` (which reads `git ls-files`) still sees
+# the index entries for the deleted sample paths, exactly as CI does. Run in
+# a plain rsync'd copy with no `.git`, that check reports
+# `Bad state: listing tracked files failed (exit 128)` - an artefact of the
+# reproduction, not of this change.
+#
+# The three Strip jobs on PR #242 are the authoritative run:
+#   https://github.com/koniz-dev/flutter-starter/actions/runs/36230468902
