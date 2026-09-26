@@ -1222,11 +1222,13 @@ Rejected alternatives:
 - **Delete them.** Removes the defect surface, and removes the reason an
   adopter would pick a starter over `flutter create`. It is also a breaking
   change for anyone already on the template.
-- **Wire them into the sample features.** This is the strongest option for
+- **Wire them into the sample features.** This was the strongest option for
   `PaginationHelper` and `Debouncer` - a paginated, debounce-searched tasks
-  list would exercise both for real. It belongs to `epic:feature-tasks`,
-  not to the `lib/core/` change that fixed the defects, so it is tracked
-  separately rather than smuggled in.
+  list would exercise both for real - and it was **tried and rejected**. It
+  belonged to `epic:feature-tasks` rather than to the `lib/core/` change that
+  fixed the defects, so it was tracked separately; the outcome is recorded in
+  "The tasks sample is not the host" below, and `DateFormatter` is the one
+  utility that survived it.
 
 ### What was done
 
@@ -1244,13 +1246,23 @@ Rejected alternatives:
    `// ignore: argument_type_not_assignable` comments in `lib/`, which
    suppress a compile-time **error** rather than a lint.
 4. Wiring `PaginationHelper`, `Debouncer` and `DateFormatter` into the tasks
-   sample is filed separately as koniz-dev/flutter-starter#147, under
-   `epic:feature-tasks`.
+   sample was filed separately as koniz-dev/flutter-starter#147, under
+   `epic:feature-tasks`. That issue wired `DateFormatter` and **rejected** the
+   tasks sample as a host for the other two - see "The tasks sample is not the
+   host" below.
 
 ### Call-site status
 
 Re-run the loop above rather than trusting this table; it is a snapshot, and
 the point of the section is that a stale one is how the problem started.
+
+**The invariant, and it runs in both directions.** For every row marked "no",
+the loop must return **only** the `lib/core/` file that declares that utility.
+For every row marked "yes", it must return **at least one** path outside
+`lib/core/`. A "no" row that grows an outside path means the table is stale;
+a "yes" row that stops having one means a call site was deleted and the row
+now overstates the tree. Either direction is a defect in this section, not in
+the tree - fix the row in the same change that moves the call site.
 
 | Utility | Exercised by a running screen? | Where |
 |---|---|---|
@@ -1266,24 +1278,67 @@ hand-rolled `padLeft` chain while `DateFormatter` sat unused one directory
 away - the duplication the "keep them as building blocks" decision is supposed
 to prevent. That call site is now the utility.
 
-`PaginationHelper` and `Debouncer` remain uncalled, and whether the tasks
-sample is the right home for them is **still open** - see the analysis on
-koniz-dev/flutter-starter#147. In short: the tasks sample persists every task
-in a single local JSON blob that `getAllTasks()` reads in full, so a
-`loadPage` callback would re-read the whole list to hand back a slice of it,
-and the list screen partitions tasks into Incomplete and Completed sections
-that a paged window cannot fill correctly. The sample also has no search or
-filter field, so a debounced one would have to be invented for the debouncer
-to have somewhere to live. Neither objection is a verdict on the utilities
-themselves; both say the tasks sample may be the wrong host.
+### The tasks sample is not the host for `PaginationHelper` or `Debouncer`
 
-The "when to reconsider" clock below applies to every row still marked "no".
+**Decided, not open.** koniz-dev/flutter-starter#147 wired `DateFormatter` and
+dropped the other two halves of its own proposal; koniz-dev/flutter-starter#210
+recorded that outcome here. Both utilities stay **adopter-only**. This is a
+verdict on the *host*, not on the utilities: nothing below says a debouncer or
+a pagination helper is a bad thing to ship, only that bolting one onto this
+sample would teach the wrong lesson and cost real behaviour.
+
+Why `PaginationHelper` does not belong in the tasks sample:
+
+1. `TasksLocalDataSourceImpl._readTasks()` reads the whole `tasks_data` blob and
+   `getAllTasks()` returns all of it. Neither the datasource nor
+   `TasksRepositoryImpl.getAllTasks()` has a paged read, so a
+   `PaginationHelper.loadPage(page)` callback would re-read the entire list to
+   hand back a slice: N pages would mean N full reads where there is one today.
+2. The list screen partitions `state.tasks` into Completed and Incomplete with
+   two `where()` calls over the full list. A paged window holds only a prefix,
+   so the Completed section would fill in as the user scrolled. There is also
+   no sort anywhere in `lib/features/tasks/` - rows render in blob-insertion
+   order, so a completed task simply sits wherever it was written, which may be
+   past the window.
+3. All four mutations end in `_loadTasks()`, which reloads everything behind the
+   `_loadToken` staleness guard. Under pagination each would have to reset to
+   page 1 or re-fetch every loaded page, and interact with that guard.
+4. `PaginationConfig.pageSize` defaults to 20, and the only production path that
+   creates a task is the FAB dialog, one at a time. Page 2 is unreachable
+   outside a seeded test.
+
+No other list screen exists in `lib/`, so "re-home it somewhere that genuinely
+pages" would mean inventing a paged feature - a worse version of the problem,
+not a fix for it.
+
+Why `Debouncer` does not belong there either:
+
+1. There is no search or filter field on the tasks screen, so one would have to
+   be invented for the debouncer to live on - and it would filter
+   `state.tasks`, a list already fully in memory, making the debounced work a
+   synchronous `where()`. A starter's sample is read as advice, and a timer in
+   front of sub-frame work teaches "debounce everything" rather than "debounce
+   expensive or remote work".
+2. The fair counter-argument - that adopters swap the local datasource for an
+   API and will need exactly this shape - is already served by the worked
+   `TextField.onChanged` example in `Debouncer`'s own dartdoc, which is the
+   adopter-facing artefact.
 
 ### When to reconsider
 
-If a utility is still uncalled by the sample features two releases from now
-and no adopter has reported using it, delete it. "Provided for adopters" is
-only a defence while somebody could plausibly be the adopter.
+If a utility is still uncalled by the sample features two releases from now and
+no adopter has reported using it, delete it. "Provided for adopters" is only a
+defence while somebody could plausibly be the adopter.
+
+**Review by 2027-03-31.** That clock covers every row of the Call-site status
+table marked "no": `PaginationHelper`, `Debouncer` / `Throttler`, `LazyLoader`,
+`ProviderDisposal`, and `PerformanceUtils` with the three performance mixins.
+The date replaces "two releases from now", which nobody could evaluate without
+the release history. Whoever runs the review re-runs the loop at the top of
+this section, writes the verdict per row into the table, and sets the next
+`Review by` date. A verdict of "delete" for `PaginationHelper` has an issue
+waiting for it: koniz-dev/flutter-starter#223, which closes as *not planned* if
+the verdict is "keep".
 
 ---
 
