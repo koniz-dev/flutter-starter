@@ -1,0 +1,95 @@
+# Criterion 1 - hooks inside a git worktree
+
+Run by the orchestrating session on 2026-09-26, macOS 24.6.0, Flutter stable
+3.47.0, from a real `git worktree add`-created worktree outside `.claude/`.
+
+Criterion 1 asks for two transcripts: the failing case BEFORE the fix, and the
+passing case AFTER. Only the second could be produced. The first is recorded
+here as NOT REPRODUCIBLE on this machine, with the measurements that explain
+why, rather than being manufactured.
+
+## Setup
+
+    $ ./scripts/dev/setup_git_hooks.sh      # copies into .git/hooks/, does not set core.hooksPath
+    $ git worktree add -b probe/140-hook-check <scratch>/wt140 origin/main
+    $ cd <scratch>/wt140 && flutter pub get
+
+## 1. The hook really does receive GIT_DIR
+
+A throwaway hook dumping its environment, invoked by a plain `git commit`
+from inside the worktree:
+
+    PROBE GIT_DIR=[/Users/nguyenanhkiet/Playground/flutter-starter/.git/worktrees/wt140]
+    PROBE GIT_WORK_TREE=[<unset>]
+    PROBE GIT_INDEX_FILE=[/Users/nguyenanhkiet/Playground/flutter-starter/.git/worktrees/wt140/index]
+
+So the precondition the fix defends against is present.
+
+## 2. That GIT_DIR really does make Flutter misread itself
+
+    $ flutter --version | head -1
+    Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+
+    $ GIT_DIR=$(git rev-parse --git-dir) flutter --version | head -1
+    Flutter 3.49.0-0.1.pre • channel [user-branch] • https://github.com/koniz-dev/flutter-starter.git
+
+Flutter shells out to git to identify itself, and an inherited GIT_DIR makes
+that lookup read THIS repository. It reports the project's own remote and
+branch as the SDK's. The mechanism in the issue is real and is measured here.
+
+## 3. AFTER the fix: a commit inside the worktree succeeds - PASS
+
+    $ git commit -m "chore: probe that hooks run inside a git worktree"
+    Running pre-commit checks...
+    📝 Checking code formatting...
+    Formatted 367 files (0 changed) in 1.27 seconds.
+    🔍 Running flutter analyze...
+    Analyzing wt140...
+    No issues found! (ran in 2.8s)
+    ✅ Pre-commit checks passed.
+    [probe/140-hook-check a489fa5] chore: probe that hooks run inside a git worktree
+
+`commit-msg` also ran and was exercised: an earlier attempt using the subject
+`probe:` was rejected for not being a Conventional Commit type, which is
+criterion 4's hook behaving correctly inside a worktree.
+
+## 4. BEFORE the fix: NOT REPRODUCIBLE - documented deviation
+
+The pre-fix hook was restored verbatim from `c7f5713` (the commit before the
+#140 fix; `grep -c GIT_DIR` on it returns 0) and the same commit re-attempted
+in the same worktree:
+
+    Got dependencies!
+    Analyzing wt140...
+    No issues found! (ran in 7.1s)
+    ✅ Pre-commit checks passed.
+    [probe/140-hook-check 7a601a5] chore: probe before-fix hook in a worktree
+
+It passed. No failing transcript exists to commit, and none was fabricated.
+
+### Why it does not fail here, precisely
+
+The misread version is `3.49.0-0.1.pre`, which still satisfies
+`environment: sdk: ^3.8.0` in `pubspec.yaml`. Nothing rejects it.
+
+The `0.0.0-unknown` symptom the issue reports needs `git describe` to fail
+outright, which happens when GIT_DIR points at the repository's main `.git`
+(no tag describes its HEAD) rather than at a worktree's git dir. A plain
+`git commit` from inside a worktree exports the latter.
+
+So the reported failure depends on which GIT_DIR value is inherited and on tag
+reachability - not on being in a worktree as such.
+
+### Why the fix is still correct
+
+It removes a dependency on luck. Today the misread yields a version that
+happens to satisfy the constraint; a different SDK checkout, tag state or
+constraint turns the same misread into a blocked commit. The hooks now run
+Flutter with GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE, GIT_COMMON_DIR,
+GIT_OBJECT_DIRECTORY, GIT_ALTERNATE_OBJECT_DIRECTORIES and GIT_PREFIX unset,
+so the lookup cannot read this repository at all.
+
+## Cleanup
+
+Worktree removed, `probe/140-hook-check` deleted, the fixed hook restored and
+re-verified (3 GIT_DIR references present). Main checkout clean.
