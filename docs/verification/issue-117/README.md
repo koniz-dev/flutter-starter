@@ -164,7 +164,7 @@ evidence pull requests on "Expected - waiting for status to be reported".
 `./scripts/dev/audit_template.sh` and `./scripts/test/run_acceptance.sh 117
 --no-goldens` both exited 0 locally: `format.log` (`dart format` reports no
 changes), `analyze.log` (`No issues found!`), `tests.log` (`All tests passed!`,
-2650 tests, 8 skipped). `--no-goldens` because the diff touches nothing under
+2673 tests, 8 skipped). `--no-goldens` because the diff touches nothing under
 `lib/`, so no golden could have moved.
 
 `dart run tool/check_docs.dart` also passes: 552 relative links checked, 0

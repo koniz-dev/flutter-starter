@@ -9,7 +9,7 @@ Commit under test: `8fe402e` (PR #133, squash-merged to `main`).
 | `reachability-prefix-repro.log` | The **contrast run**. Same suite, with only `retry: _neverRetry` reverted on the startup container. 6 of 8 fail: four provider reads throw `TimeoutException after 0:00:05` having never completed, both end-to-end cases report `main() did not return within 20s`. |
 | `reachability-postfix.log` | The same suite on the merged fix: 8 passed in 4 s. |
 | `criterion3-grep.txt` | `grep -n "ProviderContainer(" lib/main.dart` plus the surrounding comment naming this issue. |
-| `tests.log` | Full `flutter test` on merged `main`: 2494 passed, 6 skipped (golden-tagged). |
+| `tests.log` | Full `flutter test` on merged `main`: 2645 passed, 7 skipped (golden-tagged). |
 | `analyze.log`, `format.log` | `flutter analyze` clean; `dart format` check clean. |
 | `goldens.log` | The golden-tagged acceptance run. |
 | `goldens-checksums.txt` | Every copied PNG is byte-identical to its `test/acceptance/goldens/` original. |
