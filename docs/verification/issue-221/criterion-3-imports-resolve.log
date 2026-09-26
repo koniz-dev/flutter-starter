@@ -1,0 +1,22 @@
+$ grep -rn "^import .*core/di/providers.dart" lib   # who still imports the core DI module
+lib/main.dart:13:import 'package:flutter_starter/core/di/providers.dart';
+lib/core/localization/localization_providers.dart:3:import 'package:flutter_starter/core/di/providers.dart';
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:4:import 'package:flutter_starter/core/di/providers.dart';
+lib/features/tasks/di/tasks_providers.dart:2:import 'package:flutter_starter/core/di/providers.dart';
+lib/features/auth/di/auth_providers.dart:6:import 'package:flutter_starter/core/di/providers.dart';
+
+$ grep -rn "^import .*features/auth/di/auth_providers.dart" lib   # direct imports that replaced the re-export
+lib/main.dart:18:import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+lib/features/auth/presentation/providers/auth_provider.dart:4:import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+
+$ grep -rn "^import .*features/tasks/di/tasks_providers.dart" lib
+lib/features/tasks/presentation/providers/tasks_provider.dart:4:import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
+
+# Note: lib/core/di/providers.dart mentions the auth DI path twice, at :9
+# (header comment) and :144 (the failure message naming the missing
+# override). Neither is a directive, and neither matches the criterion-1
+# grep, which looks for the package URI prefix "flutter_starter/features/".
+
+$ flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.8s)
