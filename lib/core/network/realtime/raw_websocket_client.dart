@@ -17,31 +17,41 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   @override
   bool get isConnected => _channel != null;
 
+  /// Opens the connection and completes only once the WebSocket handshake
+  /// has succeeded.
+  ///
+  /// If the server is unreachable or the handshake fails, the returned future
+  /// completes with the underlying error (typically a
+  /// `WebSocketChannelException`), [isConnected] stays `false`, and nothing is
+  /// emitted on [stream]. No error escapes as an unhandled async error.
   @override
   Future<void> connect(String url) async {
     if (isConnected) disconnect();
 
+    _logger.d('Connecting to WebSocket at: $url');
+    final channel = WebSocketChannel.connect(Uri.parse(url));
     try {
-      _logger.d('Connecting to WebSocket at: $url');
-      _channel = WebSocketChannel.connect(Uri.parse(url));
-
-      _channel!.stream.listen(
-        _streamController.add,
-        onError: (Object error) {
-          _logger.e('WebSocket Error: $error');
-          _streamController.addError(error);
-          disconnect();
-        },
-        onDone: () {
-          _logger.d('WebSocket connection closed.');
-          disconnect();
-        },
-        cancelOnError: false,
-      );
+      await channel.ready;
     } catch (e) {
-      _logger.e('Failed to initiate WebSocket connection: $e');
+      _logger.e('Failed to open WebSocket connection: $e');
+      channel.sink.close().ignore();
       rethrow;
     }
+
+    _channel = channel;
+    channel.stream.listen(
+      _streamController.add,
+      onError: (Object error) {
+        _logger.e('WebSocket Error: $error');
+        _streamController.addError(error);
+        disconnect();
+      },
+      onDone: () {
+        _logger.d('WebSocket connection closed.');
+        disconnect();
+      },
+      cancelOnError: false,
+    );
   }
 
   @override
