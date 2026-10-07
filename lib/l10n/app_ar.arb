@@ -127,6 +127,11 @@
   "hoursAgo": "{count, plural, zero{الآن} one{منذ ساعة واحدة} two{منذ ساعتين} few{منذ {count} ساعات} many{منذ {count} ساعة} other{منذ {count} ساعة}}",
   "daysAgo": "{count, plural, zero{اليوم} one{منذ يوم واحد} two{منذ يومين} few{منذ {count} أيام} many{منذ {count} يومًا} other{منذ {count} يوم}}",
   "monthsAgo": "{count, plural, zero{هذا الشهر} one{منذ شهر واحد} two{منذ شهرين} few{منذ {count} أشهر} many{منذ {count} شهرًا} other{منذ {count} شهر}}",
-  "yearsAgo": "{count, plural, zero{هذا العام} one{منذ سنة واحدة} two{منذ سنتين} few{منذ {count} سنوات} many{منذ {count} سنة} other{منذ {count} سنة}}"
+  "yearsAgo": "{count, plural, zero{هذا العام} one{منذ سنة واحدة} two{منذ سنتين} few{منذ {count} سنوات} many{منذ {count} سنة} other{منذ {count} سنة}}",
+  "minutesFromNow": "{count, plural, zero{الآن} one{بعد دقيقة واحدة} two{بعد دقيقتين} few{بعد {count} دقائق} many{بعد {count} دقيقة} other{بعد {count} دقيقة}}",
+  "hoursFromNow": "{count, plural, zero{الآن} one{بعد ساعة واحدة} two{بعد ساعتين} few{بعد {count} ساعات} many{بعد {count} ساعة} other{بعد {count} ساعة}}",
+  "daysFromNow": "{count, plural, zero{اليوم} one{بعد يوم واحد} two{بعد يومين} few{بعد {count} أيام} many{بعد {count} يومًا} other{بعد {count} يوم}}",
+  "monthsFromNow": "{count, plural, zero{هذا الشهر} one{بعد شهر واحد} two{بعد شهرين} few{بعد {count} أشهر} many{بعد {count} شهرًا} other{بعد {count} شهر}}",
+  "yearsFromNow": "{count, plural, zero{هذا العام} one{بعد سنة واحدة} two{بعد سنتين} few{بعد {count} سنوات} many{بعد {count} سنة} other{بعد {count} سنة}}"
 }
 

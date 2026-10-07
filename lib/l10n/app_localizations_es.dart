@@ -334,4 +334,61 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String minutesFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'En $count minutos',
+      one: 'En 1 minuto',
+      zero: 'Ahora mismo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hoursFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'En $count horas',
+      one: 'En 1 hora',
+      zero: 'Ahora mismo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'En $count días',
+      one: 'En 1 día',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'En $count meses',
+      one: 'En 1 mes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'En $count años',
+      one: 'En 1 año',
+    );
+    return '$_temp0';
+  }
 }

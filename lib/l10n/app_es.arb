@@ -127,6 +127,11 @@
   "hoursAgo": "{count, plural, =0{Ahora mismo} =1{Hace 1 hora} other{Hace {count} horas}}",
   "daysAgo": "{count, plural, =1{Hace 1 día} other{Hace {count} días}}",
   "monthsAgo": "{count, plural, =1{Hace 1 mes} other{Hace {count} meses}}",
-  "yearsAgo": "{count, plural, =1{Hace 1 año} other{Hace {count} años}}"
+  "yearsAgo": "{count, plural, =1{Hace 1 año} other{Hace {count} años}}",
+  "minutesFromNow": "{count, plural, =0{Ahora mismo} =1{En 1 minuto} other{En {count} minutos}}",
+  "hoursFromNow": "{count, plural, =0{Ahora mismo} =1{En 1 hora} other{En {count} horas}}",
+  "daysFromNow": "{count, plural, =1{En 1 día} other{En {count} días}}",
+  "monthsFromNow": "{count, plural, =1{En 1 mes} other{En {count} meses}}",
+  "yearsFromNow": "{count, plural, =1{En 1 año} other{En {count} años}}"
 }
 

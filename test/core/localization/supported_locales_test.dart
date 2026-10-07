@@ -69,7 +69,15 @@ void main() {
               as Map<String, dynamic>;
     });
 
-    for (final key in ['itemCount', 'minutesAgo']) {
+    for (final key in [
+      'itemCount',
+      'minutesAgo',
+      'minutesFromNow',
+      'hoursFromNow',
+      'daysFromNow',
+      'monthsFromNow',
+      'yearsFromNow',
+    ]) {
       test('$key declares zero/one/two/few/many/other', () {
         final pattern = arb[key]! as String;
         for (final category in [

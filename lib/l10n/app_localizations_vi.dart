@@ -324,4 +324,56 @@ class AppLocalizationsVi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String minutesFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count phút nữa',
+      zero: 'Vừa xong',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hoursFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giờ nữa',
+      zero: 'Vừa xong',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ngày nữa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tháng nữa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count năm nữa',
+    );
+    return '$_temp0';
+  }
 }

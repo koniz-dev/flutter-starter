@@ -156,23 +156,50 @@ class LocalizedFormatters {
     return NumberFormat.compact(locale: locale.toString()).format(number);
   }
 
-  /// Format relative time (e.g., "2 hours ago", "in 3 days")
+  /// Format relative time, in the past or the future.
+  ///
+  /// With `en` and a reference time `now`:
+  /// - `now.subtract(Duration(hours: 2))` -> `"2 hours ago"`
+  /// - `now.add(Duration(hours: 2))` -> `"in 2 hours"`
+  /// - `now.add(Duration(days: 3))` -> `"in 3 days"`
+  /// - anything less than a minute either side of `now` -> `"Just now"`
+  ///
+  /// Each unit is truncated, not rounded, in both directions: 1 day and 23
+  /// hours ahead reads `"in 1 day"`, exactly as 1 day and 23 hours back reads
+  /// `"1 day ago"`. Months are 30 days and years are 365 days.
   ///
   /// [dateTime] - The DateTime to format
   /// [locale] - The locale to use for formatting
+  /// [now] - The reference time; defaults to `DateTime.now()`. Pass it when
+  ///   the result must be deterministic, e.g. in tests, since a target built
+  ///   from `DateTime.now()` is already slightly in the past by the time this
+  ///   reads the clock again.
   ///
-  /// The strings come from the ARB files in `lib/l10n/`, so the result is
-  /// genuinely translated. The previous implementation passed an interpolated
-  /// (non-literal) string to `Intl.message`, which is never extracted, so it
-  /// returned its English argument verbatim for every locale.
+  /// The strings come from the ARB files in `lib/l10n/` (`*Ago` for the past,
+  /// `*FromNow` for the future), so the result is genuinely translated.
   static String formatRelativeTime(
     DateTime dateTime, {
     required Locale locale,
+    DateTime? now,
   }) {
     final l10n = _lookup(locale);
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    final reference = now ?? DateTime.now();
+    final ahead = dateTime.difference(reference);
 
+    if (ahead.inMinutes > 0) {
+      if (ahead.inDays > 365) {
+        return l10n.yearsFromNow((ahead.inDays / 365).floor());
+      } else if (ahead.inDays > 30) {
+        return l10n.monthsFromNow((ahead.inDays / 30).floor());
+      } else if (ahead.inDays > 0) {
+        return l10n.daysFromNow(ahead.inDays);
+      } else if (ahead.inHours > 0) {
+        return l10n.hoursFromNow(ahead.inHours);
+      }
+      return l10n.minutesFromNow(ahead.inMinutes);
+    }
+
+    final difference = reference.difference(dateTime);
     if (difference.inDays > 365) {
       return l10n.yearsAgo((difference.inDays / 365).floor());
     } else if (difference.inDays > 30) {
@@ -182,7 +209,8 @@ class LocalizedFormatters {
     } else if (difference.inHours > 0) {
       return l10n.hoursAgo(difference.inHours);
     } else {
-      // `minutesAgo` renders 0 as "just now" in every locale.
+      // `minutesAgo` renders 0 as "just now" in every locale, which is also
+      // where anything under a minute ahead of [reference] lands.
       return l10n.minutesAgo(difference.inMinutes.clamp(0, 59));
     }
   }

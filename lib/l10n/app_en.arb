@@ -395,6 +395,51 @@
         "type": "int"
       }
     }
+  },
+  "minutesFromNow": "{count, plural, =0{Just now} =1{in 1 minute} other{in {count} minutes}}",
+  "@minutesFromNow": {
+    "description": "Pluralized minutes from now (future relative time)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursFromNow": "{count, plural, =0{Just now} =1{in 1 hour} other{in {count} hours}}",
+  "@hoursFromNow": {
+    "description": "Pluralized hours from now (future relative time)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysFromNow": "{count, plural, =1{in 1 day} other{in {count} days}}",
+  "@daysFromNow": {
+    "description": "Pluralized days from now (future relative time)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monthsFromNow": "{count, plural, =1{in 1 month} other{in {count} months}}",
+  "@monthsFromNow": {
+    "description": "Pluralized months from now (future relative time)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yearsFromNow": "{count, plural, =1{in 1 year} other{in {count} years}}",
+  "@yearsFromNow": {
+    "description": "Pluralized years from now (future relative time)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
 

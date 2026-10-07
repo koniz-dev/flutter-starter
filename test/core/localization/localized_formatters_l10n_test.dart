@@ -75,6 +75,35 @@ void main() {
       );
     });
 
+    // koniz-dev/flutter-starter#263: the future phrasing is translated too.
+    test('future dates use the localized *FromNow strings', () {
+      final ref = DateTime.now();
+      String format(Duration d, String code) =>
+          LocalizedFormatters.formatRelativeTime(
+            ref.add(d),
+            locale: Locale(code),
+            now: ref,
+          );
+
+      expect(format(const Duration(hours: 2), 'es'), 'En 2 horas');
+      expect(format(const Duration(days: 3), 'es'), 'En 3 días');
+      expect(format(const Duration(hours: 2), 'vi'), '2 giờ nữa');
+      expect(format(const Duration(days: 3), 'vi'), '3 ngày nữa');
+      // Arabic: 2 takes the dual form, 3 the "few" form.
+      expect(format(const Duration(hours: 2), 'ar'), 'بعد ساعتين');
+      expect(format(const Duration(days: 3), 'ar'), 'بعد 3 أيام');
+
+      for (final code in ['es', 'vi', 'ar']) {
+        final l10n = lookupAppLocalizations(Locale(code));
+        expect(format(const Duration(days: 3), code), l10n.daysFromNow(3));
+        expect(format(const Duration(days: 3), code), isNot(contains('in ')));
+        expect(
+          format(const Duration(days: 3), code),
+          isNot(l10n.minutesAgo(0)),
+        );
+      }
+    });
+
     test('an unsupported locale falls back to the default, not a crash', () {
       expect(
         () => LocalizedFormatters.formatRelativeTime(
