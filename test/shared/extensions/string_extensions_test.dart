@@ -1,3 +1,4 @@
+import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/shared/extensions/string_extensions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -17,6 +18,27 @@ void main() {
         expect('user@'.isValidEmail, isFalse);
         expect('user@example'.isValidEmail, isFalse);
         expect('user @example.com'.isValidEmail, isFalse);
+      });
+
+      // koniz-dev/flutter-starter#261: the extension must agree with
+      // Validators.isValidEmail on the koniz-dev/flutter-starter#63 cases.
+      test('agrees with Validators.isValidEmail on the #63 case table', () {
+        const cases = <String, bool>{
+          'user@example..com': false,
+          'user@-example.com': false,
+          '.user@example.com': false,
+          'user.@example.com': false,
+          'user..name@example.com': false,
+          'josé@example.com': true,
+        };
+        for (final entry in cases.entries) {
+          expect(entry.key.isValidEmail, entry.value, reason: entry.key);
+          expect(
+            entry.key.isValidEmail,
+            Validators.isValidEmail(entry.key),
+            reason: entry.key,
+          );
+        }
       });
     });
 
