@@ -1,0 +1,5 @@
+# commit: 5ba8d33afc41602e41f5911eada1f2cfaf7aed0c
+# cmd: flutter test --run-skipped --tags golden test/acceptance/forced_logout_acceptance_test.dart (on main and on pre-fix 8f335267da4: both fail identically)
+Expected: '/login'
+  Actual: '/'
+00:02 +0 -1: Some tests failed.
