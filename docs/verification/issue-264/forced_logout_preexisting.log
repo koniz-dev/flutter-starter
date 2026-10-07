@@ -1,0 +1,5 @@
+# commit: d7496e5cf6a3a321acbe30c0461a73b46c78a0dd (post-change main) - see goldens.log lines 142-143 for the failure there
+# cmd: flutter test --run-skipped --tags golden test/acceptance/forced_logout_acceptance_test.dart, run on a git-archive export of pre-change commit d439ed3:
+Expected: '/login'
+  Actual: '/'
+00:01 +0 -1: Some tests failed.

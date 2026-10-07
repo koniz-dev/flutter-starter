@@ -1,0 +1,6 @@
+# Criterion 1 - run on main @ d7496e5cf6a
+$ grep -rnE "'[A-Z][A-Za-z ]{3,}" lib/features/feature_flags/presentation --include='*.dart' | grep -v '\.g\.dart' | grep -vE "^[^:]+:[0-9]+:(import|part) "
+pipeline exit: 1 (1 = no matches)
+
+# Same grep on the pre-change commit d439ed3 (for contrast), line count:
+      36
