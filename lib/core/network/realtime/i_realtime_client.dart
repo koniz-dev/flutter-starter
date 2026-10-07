@@ -6,7 +6,23 @@ abstract class IRealtimeClient {
   /// Connection state
   bool get isConnected;
 
-  /// Connect to a given websocket or socket url
+  /// Connect to a given websocket or socket url.
+  ///
+  /// Error contract every implementation must meet:
+  ///
+  /// - If the connection cannot be established (unreachable host, refused
+  ///   port, failed handshake), the returned future completes with that
+  ///   error. It must not complete normally for a connection that never
+  ///   opened.
+  /// - When the future completes with an error, [isConnected] is already
+  ///   `false` on the next line - callers need no delay to observe it.
+  /// - A connection failure must surface only through the returned future;
+  ///   it must never escape as an unhandled asynchronous error.
+  /// - Errors on an already-open connection are delivered on [stream], after
+  ///   which [isConnected] becomes `false`.
+  ///
+  /// When the future completes normally, [isConnected] is `true` unless the
+  /// implementation never connects at all (for example a no-op client).
   Future<void> connect(String url);
 
   /// Disconnect and cleanup resources
