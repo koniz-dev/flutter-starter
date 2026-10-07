@@ -14,6 +14,13 @@ abstract class IRealtimeClient {
   ///   port, failed handshake), the returned future completes with that
   ///   error. It must not complete normally for a connection that never
   ///   opened.
+  /// - The attempt is bounded: an implementation must fail with a
+  ///   `TimeoutException` after a finite, documented connect timeout rather
+  ///   than wait for the operating system's TCP timeout.
+  /// - Calling [disconnect], or [connect] again, while an attempt is still
+  ///   in flight cancels it: the cancelled future completes with an error
+  ///   and its connection is closed, never adopted. At most one connection
+  ///   is open at a time.
   /// - When the future completes with an error, [isConnected] is already
   ///   `false` on the next line - callers need no delay to observe it.
   /// - A connection failure must surface only through the returned future;
