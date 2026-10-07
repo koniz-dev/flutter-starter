@@ -323,6 +323,76 @@
   "hoursFromNow": "{count, plural, =0{Vừa xong} other{{count} giờ nữa}}",
   "daysFromNow": "{count, plural, other{{count} ngày nữa}}",
   "monthsFromNow": "{count, plural, other{{count} tháng nữa}}",
-  "yearsFromNow": "{count, plural, other{{count} năm nữa}}"
+  "yearsFromNow": "{count, plural, other{{count} năm nữa}}",
+  "featureFlagsRefreshTooltip": "Làm mới cờ",
+  "featureFlagsClearAllTooltip": "Xóa tất cả ghi đè",
+  "featureFlagsClearAllTitle": "Xóa tất cả ghi đè",
+  "featureFlagsClearAllMessage": "Bạn có chắc muốn xóa tất cả ghi đè cục bộ?",
+  "featureFlagsClear": "Xóa",
+  "featureFlagsAllOverridesCleared": "Đã xóa tất cả ghi đè cục bộ",
+  "featureFlagsErrorMessage": "Lỗi: {error}",
+  "@featureFlagsErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsEmpty": "Không tìm thấy cờ tính năng nào",
+  "featureFlagsNoDescription": "Không có mô tả",
+  "featureFlagsCategoryOther": "Khác",
+  "featureFlagsUpdatedAt": "Cập nhật: {time}",
+  "@featureFlagsUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagEnabled": "Đã bật {flagKey}",
+  "@featureFlagsFlagEnabled": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagDisabled": "Đã tắt {flagKey}",
+  "@featureFlagsFlagDisabled": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsOverrideCleared": "Đã xóa ghi đè cho {flagKey}",
+  "@featureFlagsOverrideCleared": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsExamplesTitle": "Ví dụ Feature Flags",
+  "featureFlagsOpenDebugMenu": "Mở menu gỡ lỗi",
+  "featureFlagsExample1Title": "Ví dụ 1: FeatureFlagBuilder",
+  "featureFlagsExample1Body": "Ví dụ này cho thấy cách dùng FeatureFlagBuilder để hiển thị widget có điều kiện.",
+  "featureFlagsNewFeatureEnabled": "Tính năng mới đang BẬT",
+  "featureFlagsNewFeatureDisabled": "Tính năng mới đang TẮT",
+  "featureFlagsExample2Title": "Ví dụ 2: FeatureFlagWidget",
+  "featureFlagsExample2Body": "Ví dụ này cho thấy cách dùng FeatureFlagWidget cho các trường hợp ẩn/hiện đơn giản.",
+  "featureFlagsPremiumAvailable": "Có tính năng cao cấp",
+  "featureFlagsExample3Title": "Ví dụ 3: Truy cập provider trực tiếp",
+  "featureFlagsExample3Body": "Ví dụ này cho thấy cách truy cập cờ tính năng trực tiếp từ provider cho logic phức tạp.",
+  "featureFlagsDarkMode": "Chế độ tối",
+  "featureFlagsDarkModeIsEnabled": "Chế độ tối đang bật",
+  "featureFlagsDarkModeIsDisabled": "Chế độ tối đang tắt",
+  "featureFlagsDarkModeEnabled": "Đã bật chế độ tối",
+  "featureFlagsDarkModeDisabled": "Đã tắt chế độ tối",
+  "featureFlagsExample4Title": "Ví dụ 4: Điều hướng có điều kiện",
+  "featureFlagsExample4Body": "Ví dụ này cho thấy cách hiển thị tùy chọn điều hướng có điều kiện dựa trên cờ tính năng.",
+  "featureFlagsNavigatingToAnalytics": "Đang chuyển đến Analytics...",
+  "featureFlagsViewAnalytics": "Xem Analytics",
+  "featureFlagsAnalyticsUnavailable": "Analytics không khả dụng"
 }
 

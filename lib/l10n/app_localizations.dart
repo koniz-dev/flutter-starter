@@ -635,6 +635,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{in 1 year} other{in {count} years}}'**
   String yearsFromNow(int count);
+
+  /// Tooltip for the refresh action on the feature flags debug screen
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh flags'**
+  String get featureFlagsRefreshTooltip;
+
+  /// Tooltip for the clear-all-overrides action on the feature flags debug screen
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all overrides'**
+  String get featureFlagsClearAllTooltip;
+
+  /// Title of the dialog confirming that all local feature flag overrides will be cleared
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All Overrides'**
+  String get featureFlagsClearAllTitle;
+
+  /// Body of the dialog confirming that all local feature flag overrides will be cleared
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all local overrides?'**
+  String get featureFlagsClearAllMessage;
+
+  /// Confirm button of the clear-all-overrides dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get featureFlagsClear;
+
+  /// Snackbar shown after all local feature flag overrides were cleared
+  ///
+  /// In en, this message translates to:
+  /// **'All local overrides cleared'**
+  String get featureFlagsAllOverridesCleared;
+
+  /// Error line on the feature flags screens; {error} is the raw error
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String featureFlagsErrorMessage(String error);
+
+  /// Shown on the feature flags debug screen when no flags exist
+  ///
+  /// In en, this message translates to:
+  /// **'No feature flags found'**
+  String get featureFlagsEmpty;
+
+  /// Fallback description for a feature flag without one
+  ///
+  /// In en, this message translates to:
+  /// **'No description'**
+  String get featureFlagsNoDescription;
+
+  /// Category heading for feature flags without a category
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get featureFlagsCategoryOther;
+
+  /// Last-updated time of a feature flag; {time} is HH:mm
+  ///
+  /// In en, this message translates to:
+  /// **'Updated: {time}'**
+  String featureFlagsUpdatedAt(String time);
+
+  /// Snackbar after a flag override was switched on; {flagKey} is the flag key
+  ///
+  /// In en, this message translates to:
+  /// **'{flagKey} enabled'**
+  String featureFlagsFlagEnabled(String flagKey);
+
+  /// Snackbar after a flag override was switched off; {flagKey} is the flag key
+  ///
+  /// In en, this message translates to:
+  /// **'{flagKey} disabled'**
+  String featureFlagsFlagDisabled(String flagKey);
+
+  /// Snackbar after a single flag override was cleared; {flagKey} is the flag key
+  ///
+  /// In en, this message translates to:
+  /// **'Override cleared for {flagKey}'**
+  String featureFlagsOverrideCleared(String flagKey);
+
+  /// App bar title of the feature flags example screen
+  ///
+  /// In en, this message translates to:
+  /// **'Feature Flags Examples'**
+  String get featureFlagsExamplesTitle;
+
+  /// Tooltip for opening the feature flags debug screen
+  ///
+  /// In en, this message translates to:
+  /// **'Open Debug Menu'**
+  String get featureFlagsOpenDebugMenu;
+
+  /// Section title; FeatureFlagBuilder is a class name and stays untranslated
+  ///
+  /// In en, this message translates to:
+  /// **'Example 1: FeatureFlagBuilder'**
+  String get featureFlagsExample1Title;
+
+  /// Explanation for example 1
+  ///
+  /// In en, this message translates to:
+  /// **'This example shows how to use FeatureFlagBuilder to conditionally render widgets.'**
+  String get featureFlagsExample1Body;
+
+  /// Shown when the new-feature flag is on
+  ///
+  /// In en, this message translates to:
+  /// **'New Feature is ENABLED'**
+  String get featureFlagsNewFeatureEnabled;
+
+  /// Shown when the new-feature flag is off
+  ///
+  /// In en, this message translates to:
+  /// **'New Feature is DISABLED'**
+  String get featureFlagsNewFeatureDisabled;
+
+  /// Section title; FeatureFlagWidget is a class name and stays untranslated
+  ///
+  /// In en, this message translates to:
+  /// **'Example 2: FeatureFlagWidget'**
+  String get featureFlagsExample2Title;
+
+  /// Explanation for example 2
+  ///
+  /// In en, this message translates to:
+  /// **'This example shows how to use FeatureFlagWidget for simple show/hide scenarios.'**
+  String get featureFlagsExample2Body;
+
+  /// Shown when the premium-features flag is on
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Features Available'**
+  String get featureFlagsPremiumAvailable;
+
+  /// Section title for example 3
+  ///
+  /// In en, this message translates to:
+  /// **'Example 3: Direct Provider Access'**
+  String get featureFlagsExample3Title;
+
+  /// Explanation for example 3
+  ///
+  /// In en, this message translates to:
+  /// **'This example shows how to access feature flags directly from providers for complex logic.'**
+  String get featureFlagsExample3Body;
+
+  /// Label of the dark mode switch in example 3
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get featureFlagsDarkMode;
+
+  /// Subtitle when the dark mode flag is on
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode is enabled'**
+  String get featureFlagsDarkModeIsEnabled;
+
+  /// Subtitle when the dark mode flag is off
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode is disabled'**
+  String get featureFlagsDarkModeIsDisabled;
+
+  /// Snackbar after the dark mode switch was turned on
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode enabled'**
+  String get featureFlagsDarkModeEnabled;
+
+  /// Snackbar after the dark mode switch was turned off
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode disabled'**
+  String get featureFlagsDarkModeDisabled;
+
+  /// Section title for example 4
+  ///
+  /// In en, this message translates to:
+  /// **'Example 4: Conditional Navigation'**
+  String get featureFlagsExample4Title;
+
+  /// Explanation for example 4
+  ///
+  /// In en, this message translates to:
+  /// **'This example shows how to conditionally show navigation options based on feature flags.'**
+  String get featureFlagsExample4Body;
+
+  /// Snackbar shown when the analytics button is pressed
+  ///
+  /// In en, this message translates to:
+  /// **'Navigating to Analytics...'**
+  String get featureFlagsNavigatingToAnalytics;
+
+  /// Button label shown when the analytics flag is on
+  ///
+  /// In en, this message translates to:
+  /// **'View Analytics'**
+  String get featureFlagsViewAnalytics;
+
+  /// Disabled button label shown when the analytics flag is off
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics Unavailable'**
+  String get featureFlagsAnalyticsUnavailable;
 }
 
 class _AppLocalizationsDelegate

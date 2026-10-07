@@ -132,6 +132,76 @@
   "hoursFromNow": "{count, plural, =0{Ahora mismo} =1{En 1 hora} other{En {count} horas}}",
   "daysFromNow": "{count, plural, =1{En 1 día} other{En {count} días}}",
   "monthsFromNow": "{count, plural, =1{En 1 mes} other{En {count} meses}}",
-  "yearsFromNow": "{count, plural, =1{En 1 año} other{En {count} años}}"
+  "yearsFromNow": "{count, plural, =1{En 1 año} other{En {count} años}}",
+  "featureFlagsRefreshTooltip": "Actualizar flags",
+  "featureFlagsClearAllTooltip": "Borrar todas las anulaciones",
+  "featureFlagsClearAllTitle": "Borrar todas las anulaciones",
+  "featureFlagsClearAllMessage": "¿Seguro que quieres borrar todas las anulaciones locales?",
+  "featureFlagsClear": "Borrar",
+  "featureFlagsAllOverridesCleared": "Se borraron todas las anulaciones locales",
+  "featureFlagsErrorMessage": "Error: {error}",
+  "@featureFlagsErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsEmpty": "No se encontraron feature flags",
+  "featureFlagsNoDescription": "Sin descripción",
+  "featureFlagsCategoryOther": "Otros",
+  "featureFlagsUpdatedAt": "Actualizado: {time}",
+  "@featureFlagsUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagEnabled": "{flagKey} activado",
+  "@featureFlagsFlagEnabled": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagDisabled": "{flagKey} desactivado",
+  "@featureFlagsFlagDisabled": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsOverrideCleared": "Anulación borrada para {flagKey}",
+  "@featureFlagsOverrideCleared": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsExamplesTitle": "Ejemplos de Feature Flags",
+  "featureFlagsOpenDebugMenu": "Abrir menú de depuración",
+  "featureFlagsExample1Title": "Ejemplo 1: FeatureFlagBuilder",
+  "featureFlagsExample1Body": "Este ejemplo muestra cómo usar FeatureFlagBuilder para renderizar widgets de forma condicional.",
+  "featureFlagsNewFeatureEnabled": "La nueva función está ACTIVADA",
+  "featureFlagsNewFeatureDisabled": "La nueva función está DESACTIVADA",
+  "featureFlagsExample2Title": "Ejemplo 2: FeatureFlagWidget",
+  "featureFlagsExample2Body": "Este ejemplo muestra cómo usar FeatureFlagWidget para casos simples de mostrar u ocultar.",
+  "featureFlagsPremiumAvailable": "Funciones premium disponibles",
+  "featureFlagsExample3Title": "Ejemplo 3: Acceso directo al provider",
+  "featureFlagsExample3Body": "Este ejemplo muestra cómo acceder a los feature flags directamente desde los providers para lógica compleja.",
+  "featureFlagsDarkMode": "Modo oscuro",
+  "featureFlagsDarkModeIsEnabled": "El modo oscuro está activado",
+  "featureFlagsDarkModeIsDisabled": "El modo oscuro está desactivado",
+  "featureFlagsDarkModeEnabled": "Modo oscuro activado",
+  "featureFlagsDarkModeDisabled": "Modo oscuro desactivado",
+  "featureFlagsExample4Title": "Ejemplo 4: Navegación condicional",
+  "featureFlagsExample4Body": "Este ejemplo muestra cómo mostrar opciones de navegación de forma condicional según los feature flags.",
+  "featureFlagsNavigatingToAnalytics": "Navegando a Analytics...",
+  "featureFlagsViewAnalytics": "Ver Analytics",
+  "featureFlagsAnalyticsUnavailable": "Analytics no disponible"
 }
 

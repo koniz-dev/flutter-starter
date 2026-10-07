@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/feature_flags/feature_flags_manager.dart';
+import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
 
@@ -21,10 +22,11 @@ class _FeatureFlagsDebugScreenState
   @override
   Widget build(BuildContext context) {
     final allFlagsAsync = ref.watch(allFeatureFlagsProvider);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feature Flags Debug'),
+        title: Text(l10n.featureFlagsDebug),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -32,7 +34,7 @@ class _FeatureFlagsDebugScreenState
               ref.invalidate(allFeatureFlagsProvider);
               await ref.read(featureFlagsManagerProvider).refresh();
             },
-            tooltip: 'Refresh flags',
+            tooltip: l10n.featureFlagsRefreshTooltip,
           ),
           IconButton(
             icon: const Icon(Icons.clear_all),
@@ -43,18 +45,16 @@ class _FeatureFlagsDebugScreenState
               final confirmed = await showDialog<bool>(
                 context: navigatorContext,
                 builder: (context) => AlertDialog(
-                  title: const Text('Clear All Overrides'),
-                  content: const Text(
-                    'Are you sure you want to clear all local overrides?',
-                  ),
+                  title: Text(l10n.featureFlagsClearAllTitle),
+                  content: Text(l10n.featureFlagsClearAllMessage),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context, false),
-                      child: const Text('Cancel'),
+                      child: Text(l10n.cancel),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(context, true),
-                      child: const Text('Clear'),
+                      child: Text(l10n.featureFlagsClear),
                     ),
                   ],
                 ),
@@ -69,11 +69,11 @@ class _FeatureFlagsDebugScreenState
                 if (!mounted) return;
                 ref.invalidate(allFeatureFlagsProvider);
                 messenger.showSnackBar(
-                  const SnackBar(content: Text('All local overrides cleared')),
+                  SnackBar(content: Text(l10n.featureFlagsAllOverridesCleared)),
                 );
               }
             },
-            tooltip: 'Clear all overrides',
+            tooltip: l10n.featureFlagsClearAllTooltip,
           ),
         ],
       ),
@@ -84,13 +84,13 @@ class _FeatureFlagsDebugScreenState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Error: $error'),
+              Text(l10n.featureFlagsErrorMessage(error.toString())),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   ref.invalidate(allFeatureFlagsProvider);
                 },
-                child: const Text('Retry'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -100,8 +100,9 @@ class _FeatureFlagsDebugScreenState
   }
 
   Widget _buildFlagsList(Map<String, FeatureFlag?> flags) {
+    final l10n = context.l10n;
     if (flags.isEmpty) {
-      return const Center(child: Text('No feature flags found'));
+      return Center(child: Text(l10n.featureFlagsEmpty));
     }
 
     // Group flags by category
@@ -117,7 +118,7 @@ class _FeatureFlagsDebugScreenState
           FeatureFlagKey(
             value: flag.key,
             defaultValue: false,
-            description: flag.description ?? 'No description',
+            description: flag.description ?? l10n.featureFlagsNoDescription,
           );
 
       if (flagKey.category != null && flagKey.category!.isNotEmpty) {
@@ -135,7 +136,10 @@ class _FeatureFlagsDebugScreenState
         ),
         // Show uncategorized flags
         if (uncategorizedFlags.isNotEmpty)
-          _buildCategorySection('Other', uncategorizedFlags),
+          _buildCategorySection(
+            l10n.featureFlagsCategoryOther,
+            uncategorizedFlags,
+          ),
       ],
     );
   }
@@ -151,12 +155,13 @@ class _FeatureFlagsDebugScreenState
   }
 
   Widget _buildFlagTile(FeatureFlag flag) {
+    final l10n = context.l10n;
     final flagKey =
         FeatureFlags.all.where((key) => key.value == flag.key).firstOrNull ??
         FeatureFlagKey(
           value: flag.key,
           defaultValue: false,
-          description: flag.description ?? 'No description',
+          description: flag.description ?? l10n.featureFlagsNoDescription,
         );
 
     return ListTile(
@@ -176,7 +181,7 @@ class _FeatureFlagsDebugScreenState
               const SizedBox(width: 8),
               if (flag.lastUpdated != null)
                 Text(
-                  'Updated: ${_formatDate(flag.lastUpdated!)}',
+                  l10n.featureFlagsUpdatedAt(_formatDate(flag.lastUpdated!)),
                   style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                 ),
             ],
@@ -195,7 +200,11 @@ class _FeatureFlagsDebugScreenState
           ref.invalidate(allFeatureFlagsProvider);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${flag.key} ${value ? "enabled" : "disabled"}'),
+              content: Text(
+                value
+                    ? l10n.featureFlagsFlagEnabled(flag.key)
+                    : l10n.featureFlagsFlagDisabled(flag.key),
+              ),
               duration: const Duration(seconds: 1),
             ),
           );
@@ -209,7 +218,7 @@ class _FeatureFlagsDebugScreenState
         if (!mounted) return;
         ref.invalidate(allFeatureFlagsProvider);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Override cleared for ${flag.key}')),
+          SnackBar(content: Text(l10n.featureFlagsOverrideCleared(flag.key))),
         );
       },
     );

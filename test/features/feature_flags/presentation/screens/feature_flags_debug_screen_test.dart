@@ -43,6 +43,7 @@ void main() {
 
     Widget createTestWidget({
       required AsyncValue<Map<String, FeatureFlag?>> flagsValue,
+      Locale locale = const Locale('en'),
     }) {
       return ProviderScope(
         overrides: [
@@ -55,15 +56,16 @@ void main() {
           ),
           featureFlagsManagerProvider.overrideWithValue(mockManager),
         ],
-        child: const MaterialApp(
-          localizationsDelegates: [
+        child: MaterialApp(
+          locale: locale,
+          localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: FeatureFlagsDebugScreen(),
+          home: const FeatureFlagsDebugScreen(),
         ),
       );
     }
@@ -76,6 +78,63 @@ void main() {
       // Assert
       expect(find.text('Feature Flags Debug'), findsOneWidget);
       expect(find.byType(AppBar), findsOneWidget);
+    });
+
+    testWidgets('renders its strings from the es ARB, not hardcoded English', (
+      tester,
+    ) async {
+      // Arrange - koniz-dev/flutter-starter#264: the screen must read the
+      // l10n pipeline, so under `es` every visible string is the es value.
+      final flag = FeatureFlag(
+        key: 'test_flag',
+        value: true,
+        source: FeatureFlagSource.remoteConfig,
+        lastUpdated: DateTime(2024, 1, 1, 12, 30),
+      );
+      await tester.pumpWidget(
+        createTestWidget(
+          flagsValue: AsyncValue.data(<String, FeatureFlag?>{
+            'test_flag': flag,
+          }),
+          locale: const Locale('es'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Assert - app bar title and uncategorized section heading.
+      expect(find.text('Depuración de Feature Flags'), findsOneWidget);
+      expect(find.text('Feature Flags Debug'), findsNothing);
+      expect(find.text('Otros'), findsOneWidget);
+      expect(find.text('Other'), findsNothing);
+
+      // Act - expand the section to reach the flag tile.
+      await tester.tap(find.byType(ExpansionTile));
+      await tester.pumpAndSettle();
+
+      // Assert - placeholder message keeps the dynamic value.
+      expect(find.text('Actualizado: 12:30'), findsOneWidget);
+
+      // Act - open the clear-all dialog.
+      await tester.tap(find.byIcon(Icons.clear_all));
+      await tester.pumpAndSettle();
+
+      // Assert - dialog title, reused `cancel` key and new `clear` key.
+      expect(find.text('Borrar todas las anulaciones'), findsOneWidget);
+      expect(find.text('Cancelar'), findsOneWidget);
+      expect(find.text('Borrar'), findsOneWidget);
+      expect(find.text('Cancel'), findsNothing);
+    });
+
+    testWidgets('should display empty message under es', (tester) async {
+      await tester.pumpWidget(
+        createTestWidget(
+          flagsValue: const AsyncValue.data(<String, FeatureFlag?>{}),
+          locale: const Locale('es'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('No se encontraron feature flags'), findsOneWidget);
     });
 
     testWidgets('should display loading indicator when loading', (

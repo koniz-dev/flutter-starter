@@ -420,4 +420,126 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get featureFlagsRefreshTooltip => 'تحديث الأعلام';
+
+  @override
+  String get featureFlagsClearAllTooltip => 'مسح كل التجاوزات';
+
+  @override
+  String get featureFlagsClearAllTitle => 'مسح كل التجاوزات';
+
+  @override
+  String get featureFlagsClearAllMessage =>
+      'هل أنت متأكد أنك تريد مسح كل التجاوزات المحلية؟';
+
+  @override
+  String get featureFlagsClear => 'مسح';
+
+  @override
+  String get featureFlagsAllOverridesCleared => 'تم مسح كل التجاوزات المحلية';
+
+  @override
+  String featureFlagsErrorMessage(String error) {
+    return 'خطأ: $error';
+  }
+
+  @override
+  String get featureFlagsEmpty => 'لم يتم العثور على أعلام ميزات';
+
+  @override
+  String get featureFlagsNoDescription => 'لا يوجد وصف';
+
+  @override
+  String get featureFlagsCategoryOther => 'أخرى';
+
+  @override
+  String featureFlagsUpdatedAt(String time) {
+    return 'آخر تحديث: $time';
+  }
+
+  @override
+  String featureFlagsFlagEnabled(String flagKey) {
+    return 'تم تفعيل $flagKey';
+  }
+
+  @override
+  String featureFlagsFlagDisabled(String flagKey) {
+    return 'تم تعطيل $flagKey';
+  }
+
+  @override
+  String featureFlagsOverrideCleared(String flagKey) {
+    return 'تم مسح التجاوز لـ $flagKey';
+  }
+
+  @override
+  String get featureFlagsExamplesTitle => 'أمثلة Feature Flags';
+
+  @override
+  String get featureFlagsOpenDebugMenu => 'فتح قائمة التصحيح';
+
+  @override
+  String get featureFlagsExample1Title => 'المثال 1: FeatureFlagBuilder';
+
+  @override
+  String get featureFlagsExample1Body =>
+      'يوضح هذا المثال كيفية استخدام FeatureFlagBuilder لعرض الواجهات بشكل مشروط.';
+
+  @override
+  String get featureFlagsNewFeatureEnabled => 'الميزة الجديدة مفعّلة';
+
+  @override
+  String get featureFlagsNewFeatureDisabled => 'الميزة الجديدة معطّلة';
+
+  @override
+  String get featureFlagsExample2Title => 'المثال 2: FeatureFlagWidget';
+
+  @override
+  String get featureFlagsExample2Body =>
+      'يوضح هذا المثال كيفية استخدام FeatureFlagWidget لحالات الإظهار والإخفاء البسيطة.';
+
+  @override
+  String get featureFlagsPremiumAvailable => 'الميزات المميزة متاحة';
+
+  @override
+  String get featureFlagsExample3Title =>
+      'المثال 3: الوصول المباشر إلى المزوّد';
+
+  @override
+  String get featureFlagsExample3Body =>
+      'يوضح هذا المثال كيفية الوصول إلى أعلام الميزات مباشرة من المزوّدين للمنطق المعقد.';
+
+  @override
+  String get featureFlagsDarkMode => 'الوضع الداكن';
+
+  @override
+  String get featureFlagsDarkModeIsEnabled => 'الوضع الداكن مفعّل';
+
+  @override
+  String get featureFlagsDarkModeIsDisabled => 'الوضع الداكن معطّل';
+
+  @override
+  String get featureFlagsDarkModeEnabled => 'تم تفعيل الوضع الداكن';
+
+  @override
+  String get featureFlagsDarkModeDisabled => 'تم تعطيل الوضع الداكن';
+
+  @override
+  String get featureFlagsExample4Title => 'المثال 4: التنقل المشروط';
+
+  @override
+  String get featureFlagsExample4Body =>
+      'يوضح هذا المثال كيفية إظهار خيارات التنقل بشكل مشروط بناءً على أعلام الميزات.';
+
+  @override
+  String get featureFlagsNavigatingToAnalytics =>
+      'جارٍ الانتقال إلى التحليلات...';
+
+  @override
+  String get featureFlagsViewAnalytics => 'عرض التحليلات';
+
+  @override
+  String get featureFlagsAnalyticsUnavailable => 'التحليلات غير متاحة';
 }
