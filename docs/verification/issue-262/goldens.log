@@ -101,7 +101,7 @@ Got dependencies!
 Try `flutter pub outdated` for more information.
 00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/home_screen_acceptance_test.dart
 00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/home_screen_acceptance_test.dart: HomeScreen acceptance renders the home content surface and welcome heading
-00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+00:01 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
@@ -116,7 +116,13 @@ Try `flutter pub outdated` for more information.
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
-00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/forced_logout_acceptance_test.dart: a forced logout replaces the authenticated shell with login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:02 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/forced_logout_acceptance_test.dart: a forced logout replaces the authenticated shell with login
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
 │ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
@@ -124,12 +130,6 @@ Try `flutter pub outdated` for more information.
 │ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 00:02 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
-┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
-│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
-├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
-│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}
-└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
@@ -164,11 +164,11 @@ The test description was:
   Test failed. See exception logs above.
   The test description was: a forced logout replaces the authenticated shell with login
   
-00:02 +2 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/list_view_states_acceptance_test.dart: OptimizedListView state acceptance an empty list that loaded fine shows the empty state
-00:03 +3 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/theme_contrast_acceptance_test.dart: theme contrast acceptance light theme renders every text style with visible ink
+00:03 +2 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/list_view_states_acceptance_test.dart: OptimizedListView state acceptance an empty list that loaded fine shows the empty state
+00:04 +3 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/theme_contrast_acceptance_test.dart: theme contrast acceptance light theme renders every text style with visible ink
 00:04 +4 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/theme_contrast_acceptance_test.dart: theme contrast acceptance light theme renders every text style with visible ink
-00:04 +5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
-00:04 +6 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+00:05 +5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+00:05 +6 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
@@ -183,7 +183,7 @@ The test description was:
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-00:06 +8 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with empty storage the app opens on login
+00:07 +8 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with empty storage the app opens on login
 00:07 +9 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#85) a cached user with no token opens on login, not home
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)

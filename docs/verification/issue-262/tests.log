@@ -59,66 +59,66 @@ Downloading packages...
   native_toolchain_c 0.17.6 (0.19.5 available)
   objective_c 9.3.0 (9.6.2 available)
 
-[... 2155 lines elided by scripts/test/run_acceptance.sh.
+[... 2242 lines elided by scripts/test/run_acceptance.sh.
      Full output is reproducible by re-running the command above. ...]
 
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2804 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should use light theme by default                                                                           
+02:31 +2808 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should use light theme by default                                                                           
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2805 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should have dark theme configured                                                                           
+02:31 +2809 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should have dark theme configured                                                                           
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2806 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure router correctly                                                                           
+02:31 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure router correctly                                                                           
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2807 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure localization delegates                                                                     
+02:31 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure localization delegates                                                                     
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2808 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure supported locales                                                                          
+02:31 +2812 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure supported locales                                                                          
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2809 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should use locale from provider                                                                             
+02:31 +2813 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should use locale from provider                                                                             
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure text direction from provider                                                               
+02:31 +2814 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure text direction from provider                                                               
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should wrap content in RepaintBoundary                                                                      
+02:31 +2815 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should wrap content in RepaintBoundary                                                                      
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 │ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
 │ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
 ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 │ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
 └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-02:07 +2815 ~8: 8 skipped tests.                                                                                                                                                                       
-02:07 +2815 ~8: All other tests passed!                                                                                                                                                                
+02:32 +2819 ~8: 8 skipped tests.                                                                                                                                                                       
+02:32 +2819 ~8: All other tests passed!                                                                                                                                                                
 exit: 0
