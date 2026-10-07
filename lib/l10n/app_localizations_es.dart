@@ -391,4 +391,128 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get featureFlagsRefreshTooltip => 'Actualizar flags';
+
+  @override
+  String get featureFlagsClearAllTooltip => 'Borrar todas las anulaciones';
+
+  @override
+  String get featureFlagsClearAllTitle => 'Borrar todas las anulaciones';
+
+  @override
+  String get featureFlagsClearAllMessage =>
+      '¿Seguro que quieres borrar todas las anulaciones locales?';
+
+  @override
+  String get featureFlagsClear => 'Borrar';
+
+  @override
+  String get featureFlagsAllOverridesCleared =>
+      'Se borraron todas las anulaciones locales';
+
+  @override
+  String featureFlagsErrorMessage(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get featureFlagsEmpty => 'No se encontraron feature flags';
+
+  @override
+  String get featureFlagsNoDescription => 'Sin descripción';
+
+  @override
+  String get featureFlagsCategoryOther => 'Otros';
+
+  @override
+  String featureFlagsUpdatedAt(String time) {
+    return 'Actualizado: $time';
+  }
+
+  @override
+  String featureFlagsFlagEnabled(String flagKey) {
+    return '$flagKey activado';
+  }
+
+  @override
+  String featureFlagsFlagDisabled(String flagKey) {
+    return '$flagKey desactivado';
+  }
+
+  @override
+  String featureFlagsOverrideCleared(String flagKey) {
+    return 'Anulación borrada para $flagKey';
+  }
+
+  @override
+  String get featureFlagsExamplesTitle => 'Ejemplos de Feature Flags';
+
+  @override
+  String get featureFlagsOpenDebugMenu => 'Abrir menú de depuración';
+
+  @override
+  String get featureFlagsExample1Title => 'Ejemplo 1: FeatureFlagBuilder';
+
+  @override
+  String get featureFlagsExample1Body =>
+      'Este ejemplo muestra cómo usar FeatureFlagBuilder para renderizar widgets de forma condicional.';
+
+  @override
+  String get featureFlagsNewFeatureEnabled => 'La nueva función está ACTIVADA';
+
+  @override
+  String get featureFlagsNewFeatureDisabled =>
+      'La nueva función está DESACTIVADA';
+
+  @override
+  String get featureFlagsExample2Title => 'Ejemplo 2: FeatureFlagWidget';
+
+  @override
+  String get featureFlagsExample2Body =>
+      'Este ejemplo muestra cómo usar FeatureFlagWidget para casos simples de mostrar u ocultar.';
+
+  @override
+  String get featureFlagsPremiumAvailable => 'Funciones premium disponibles';
+
+  @override
+  String get featureFlagsExample3Title =>
+      'Ejemplo 3: Acceso directo al provider';
+
+  @override
+  String get featureFlagsExample3Body =>
+      'Este ejemplo muestra cómo acceder a los feature flags directamente desde los providers para lógica compleja.';
+
+  @override
+  String get featureFlagsDarkMode => 'Modo oscuro';
+
+  @override
+  String get featureFlagsDarkModeIsEnabled => 'El modo oscuro está activado';
+
+  @override
+  String get featureFlagsDarkModeIsDisabled =>
+      'El modo oscuro está desactivado';
+
+  @override
+  String get featureFlagsDarkModeEnabled => 'Modo oscuro activado';
+
+  @override
+  String get featureFlagsDarkModeDisabled => 'Modo oscuro desactivado';
+
+  @override
+  String get featureFlagsExample4Title => 'Ejemplo 4: Navegación condicional';
+
+  @override
+  String get featureFlagsExample4Body =>
+      'Este ejemplo muestra cómo mostrar opciones de navegación de forma condicional según los feature flags.';
+
+  @override
+  String get featureFlagsNavigatingToAnalytics => 'Navegando a Analytics...';
+
+  @override
+  String get featureFlagsViewAnalytics => 'Ver Analytics';
+
+  @override
+  String get featureFlagsAnalyticsUnavailable => 'Analytics no disponible';
 }

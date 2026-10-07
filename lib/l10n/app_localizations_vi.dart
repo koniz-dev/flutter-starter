@@ -376,4 +376,126 @@ class AppLocalizationsVi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get featureFlagsRefreshTooltip => 'Làm mới cờ';
+
+  @override
+  String get featureFlagsClearAllTooltip => 'Xóa tất cả ghi đè';
+
+  @override
+  String get featureFlagsClearAllTitle => 'Xóa tất cả ghi đè';
+
+  @override
+  String get featureFlagsClearAllMessage =>
+      'Bạn có chắc muốn xóa tất cả ghi đè cục bộ?';
+
+  @override
+  String get featureFlagsClear => 'Xóa';
+
+  @override
+  String get featureFlagsAllOverridesCleared => 'Đã xóa tất cả ghi đè cục bộ';
+
+  @override
+  String featureFlagsErrorMessage(String error) {
+    return 'Lỗi: $error';
+  }
+
+  @override
+  String get featureFlagsEmpty => 'Không tìm thấy cờ tính năng nào';
+
+  @override
+  String get featureFlagsNoDescription => 'Không có mô tả';
+
+  @override
+  String get featureFlagsCategoryOther => 'Khác';
+
+  @override
+  String featureFlagsUpdatedAt(String time) {
+    return 'Cập nhật: $time';
+  }
+
+  @override
+  String featureFlagsFlagEnabled(String flagKey) {
+    return 'Đã bật $flagKey';
+  }
+
+  @override
+  String featureFlagsFlagDisabled(String flagKey) {
+    return 'Đã tắt $flagKey';
+  }
+
+  @override
+  String featureFlagsOverrideCleared(String flagKey) {
+    return 'Đã xóa ghi đè cho $flagKey';
+  }
+
+  @override
+  String get featureFlagsExamplesTitle => 'Ví dụ Feature Flags';
+
+  @override
+  String get featureFlagsOpenDebugMenu => 'Mở menu gỡ lỗi';
+
+  @override
+  String get featureFlagsExample1Title => 'Ví dụ 1: FeatureFlagBuilder';
+
+  @override
+  String get featureFlagsExample1Body =>
+      'Ví dụ này cho thấy cách dùng FeatureFlagBuilder để hiển thị widget có điều kiện.';
+
+  @override
+  String get featureFlagsNewFeatureEnabled => 'Tính năng mới đang BẬT';
+
+  @override
+  String get featureFlagsNewFeatureDisabled => 'Tính năng mới đang TẮT';
+
+  @override
+  String get featureFlagsExample2Title => 'Ví dụ 2: FeatureFlagWidget';
+
+  @override
+  String get featureFlagsExample2Body =>
+      'Ví dụ này cho thấy cách dùng FeatureFlagWidget cho các trường hợp ẩn/hiện đơn giản.';
+
+  @override
+  String get featureFlagsPremiumAvailable => 'Có tính năng cao cấp';
+
+  @override
+  String get featureFlagsExample3Title =>
+      'Ví dụ 3: Truy cập provider trực tiếp';
+
+  @override
+  String get featureFlagsExample3Body =>
+      'Ví dụ này cho thấy cách truy cập cờ tính năng trực tiếp từ provider cho logic phức tạp.';
+
+  @override
+  String get featureFlagsDarkMode => 'Chế độ tối';
+
+  @override
+  String get featureFlagsDarkModeIsEnabled => 'Chế độ tối đang bật';
+
+  @override
+  String get featureFlagsDarkModeIsDisabled => 'Chế độ tối đang tắt';
+
+  @override
+  String get featureFlagsDarkModeEnabled => 'Đã bật chế độ tối';
+
+  @override
+  String get featureFlagsDarkModeDisabled => 'Đã tắt chế độ tối';
+
+  @override
+  String get featureFlagsExample4Title => 'Ví dụ 4: Điều hướng có điều kiện';
+
+  @override
+  String get featureFlagsExample4Body =>
+      'Ví dụ này cho thấy cách hiển thị tùy chọn điều hướng có điều kiện dựa trên cờ tính năng.';
+
+  @override
+  String get featureFlagsNavigatingToAnalytics =>
+      'Đang chuyển đến Analytics...';
+
+  @override
+  String get featureFlagsViewAnalytics => 'Xem Analytics';
+
+  @override
+  String get featureFlagsAnalyticsUnavailable => 'Analytics không khả dụng';
 }

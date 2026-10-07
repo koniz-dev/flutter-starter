@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/feature_flags/feature_flags_manager.dart';
+import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/widgets/feature_flag_builder.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Example screen demonstrating feature flags usage
 ///
@@ -14,9 +16,10 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feature Flags Examples'),
+        title: Text(l10n.featureFlagsExamplesTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -28,7 +31,7 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                 ),
               );
             },
-            tooltip: 'Open Debug Menu',
+            tooltip: l10n.featureFlagsOpenDebugMenu,
           ),
         ],
       ),
@@ -37,26 +40,26 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
         children: [
           _buildSection(
             context,
-            'Example 1: FeatureFlagBuilder',
-            _buildExample1(),
+            l10n.featureFlagsExample1Title,
+            _buildExample1(l10n),
           ),
           const SizedBox(height: 24),
           _buildSection(
             context,
-            'Example 2: FeatureFlagWidget',
-            _buildExample2(),
+            l10n.featureFlagsExample2Title,
+            _buildExample2(l10n),
           ),
           const SizedBox(height: 24),
           _buildSection(
             context,
-            'Example 3: Direct Provider Access',
-            _buildExample3(ref),
+            l10n.featureFlagsExample3Title,
+            _buildExample3(ref, l10n),
           ),
           const SizedBox(height: 24),
           _buildSection(
             context,
-            'Example 4: Conditional Navigation',
-            _buildExample4(ref),
+            l10n.featureFlagsExample4Title,
+            _buildExample4(ref, l10n),
           ),
         ],
       ),
@@ -80,17 +83,14 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
   }
 
   /// Example 1: Using FeatureFlagBuilder with different builders
-  Widget _buildExample1() {
+  Widget _buildExample1(AppLocalizations l10n) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'This example shows how to use FeatureFlagBuilder to '
-              'conditionally render widgets.',
-            ),
+            Text(l10n.featureFlagsExample1Body),
             const SizedBox(height: 16),
             FeatureFlagBuilder(
               flag: FeatureFlags.newFeature,
@@ -100,11 +100,11 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                   color: Colors.green.shade100,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.check_circle, color: Colors.green),
-                    SizedBox(width: 8),
-                    Text('New Feature is ENABLED'),
+                    const Icon(Icons.check_circle, color: Colors.green),
+                    const SizedBox(width: 8),
+                    Text(l10n.featureFlagsNewFeatureEnabled),
                   ],
                 ),
               ),
@@ -114,11 +114,11 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.cancel, color: Colors.grey),
-                    SizedBox(width: 8),
-                    Text('New Feature is DISABLED'),
+                    const Icon(Icons.cancel, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Text(l10n.featureFlagsNewFeatureDisabled),
                   ],
                 ),
               ),
@@ -130,16 +130,14 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
   }
 
   /// Example 2: Using FeatureFlagWidget (simpler API)
-  Widget _buildExample2() {
+  Widget _buildExample2(AppLocalizations l10n) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'This example shows how to use FeatureFlagWidget for simple show/hide scenarios.',
-            ),
+            Text(l10n.featureFlagsExample2Body),
             const SizedBox(height: 16),
             FeatureFlagWidget(
               flag: FeatureFlags.premiumFeatures,
@@ -150,11 +148,11 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                   color: Colors.amber.shade100,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.star, color: Colors.amber),
-                    SizedBox(width: 8),
-                    Text('Premium Features Available'),
+                    const Icon(Icons.star, color: Colors.amber),
+                    const SizedBox(width: 8),
+                    Text(l10n.featureFlagsPremiumAvailable),
                   ],
                 ),
               ),
@@ -166,7 +164,7 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
   }
 
   /// Example 3: Direct provider access for complex logic
-  Widget _buildExample3(WidgetRef ref) {
+  Widget _buildExample3(WidgetRef ref, AppLocalizations l10n) {
     final isEnabled = ref.watch(
       isFeatureEnabledProvider(FeatureFlags.darkMode),
     );
@@ -177,16 +175,15 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'This example shows how to access feature flags directly from '
-              'providers for complex logic.',
-            ),
+            Text(l10n.featureFlagsExample3Body),
             const SizedBox(height: 16),
             isEnabled.when(
               data: (enabled) => SwitchListTile(
-                title: const Text('Dark Mode'),
+                title: Text(l10n.featureFlagsDarkMode),
                 subtitle: Text(
-                  enabled ? 'Dark mode is enabled' : 'Dark mode is disabled',
+                  enabled
+                      ? l10n.featureFlagsDarkModeIsEnabled
+                      : l10n.featureFlagsDarkModeIsDisabled,
                 ),
                 value: enabled,
                 onChanged: (value) {
@@ -194,14 +191,17 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                   ScaffoldMessenger.of(ref.context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Dark mode ${value ? "enabled" : "disabled"}',
+                        value
+                            ? l10n.featureFlagsDarkModeEnabled
+                            : l10n.featureFlagsDarkModeDisabled,
                       ),
                     ),
                   );
                 },
               ),
               loading: () => const CircularProgressIndicator(),
-              error: (error, stack) => Text('Error: $error'),
+              error: (error, stack) =>
+                  Text(l10n.featureFlagsErrorMessage(error.toString())),
             ),
           ],
         ),
@@ -210,17 +210,14 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
   }
 
   /// Example 4: Conditional navigation based on feature flags
-  Widget _buildExample4(WidgetRef ref) {
+  Widget _buildExample4(WidgetRef ref, AppLocalizations l10n) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'This example shows how to conditionally show navigation options '
-              'based on feature flags.',
-            ),
+            Text(l10n.featureFlagsExample4Body),
             const SizedBox(height: 16),
             FeatureFlagBuilder(
               flag: FeatureFlags.analytics,
@@ -228,16 +225,18 @@ class FeatureFlagsExampleScreen extends ConsumerWidget {
                 onPressed: () {
                   // Navigate to analytics screen
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Navigating to Analytics...')),
+                    SnackBar(
+                      content: Text(l10n.featureFlagsNavigatingToAnalytics),
+                    ),
                   );
                 },
                 icon: const Icon(Icons.analytics),
-                label: const Text('View Analytics'),
+                label: Text(l10n.featureFlagsViewAnalytics),
               ),
               disabledBuilder: (context) => OutlinedButton.icon(
                 onPressed: null,
                 icon: const Icon(Icons.analytics_outlined),
-                label: const Text('Analytics Unavailable'),
+                label: Text(l10n.featureFlagsAnalyticsUnavailable),
               ),
             ),
           ],

@@ -440,6 +440,171 @@
         "type": "int"
       }
     }
+  },
+  "featureFlagsRefreshTooltip": "Refresh flags",
+  "@featureFlagsRefreshTooltip": {
+    "description": "Tooltip for the refresh action on the feature flags debug screen"
+  },
+  "featureFlagsClearAllTooltip": "Clear all overrides",
+  "@featureFlagsClearAllTooltip": {
+    "description": "Tooltip for the clear-all-overrides action on the feature flags debug screen"
+  },
+  "featureFlagsClearAllTitle": "Clear All Overrides",
+  "@featureFlagsClearAllTitle": {
+    "description": "Title of the dialog confirming that all local feature flag overrides will be cleared"
+  },
+  "featureFlagsClearAllMessage": "Are you sure you want to clear all local overrides?",
+  "@featureFlagsClearAllMessage": {
+    "description": "Body of the dialog confirming that all local feature flag overrides will be cleared"
+  },
+  "featureFlagsClear": "Clear",
+  "@featureFlagsClear": {
+    "description": "Confirm button of the clear-all-overrides dialog"
+  },
+  "featureFlagsAllOverridesCleared": "All local overrides cleared",
+  "@featureFlagsAllOverridesCleared": {
+    "description": "Snackbar shown after all local feature flag overrides were cleared"
+  },
+  "featureFlagsErrorMessage": "Error: {error}",
+  "@featureFlagsErrorMessage": {
+    "description": "Error line on the feature flags screens; {error} is the raw error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsEmpty": "No feature flags found",
+  "@featureFlagsEmpty": {
+    "description": "Shown on the feature flags debug screen when no flags exist"
+  },
+  "featureFlagsNoDescription": "No description",
+  "@featureFlagsNoDescription": {
+    "description": "Fallback description for a feature flag without one"
+  },
+  "featureFlagsCategoryOther": "Other",
+  "@featureFlagsCategoryOther": {
+    "description": "Category heading for feature flags without a category"
+  },
+  "featureFlagsUpdatedAt": "Updated: {time}",
+  "@featureFlagsUpdatedAt": {
+    "description": "Last-updated time of a feature flag; {time} is HH:mm",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagEnabled": "{flagKey} enabled",
+  "@featureFlagsFlagEnabled": {
+    "description": "Snackbar after a flag override was switched on; {flagKey} is the flag key",
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagDisabled": "{flagKey} disabled",
+  "@featureFlagsFlagDisabled": {
+    "description": "Snackbar after a flag override was switched off; {flagKey} is the flag key",
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsOverrideCleared": "Override cleared for {flagKey}",
+  "@featureFlagsOverrideCleared": {
+    "description": "Snackbar after a single flag override was cleared; {flagKey} is the flag key",
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsExamplesTitle": "Feature Flags Examples",
+  "@featureFlagsExamplesTitle": {
+    "description": "App bar title of the feature flags example screen"
+  },
+  "featureFlagsOpenDebugMenu": "Open Debug Menu",
+  "@featureFlagsOpenDebugMenu": {
+    "description": "Tooltip for opening the feature flags debug screen"
+  },
+  "featureFlagsExample1Title": "Example 1: FeatureFlagBuilder",
+  "@featureFlagsExample1Title": {
+    "description": "Section title; FeatureFlagBuilder is a class name and stays untranslated"
+  },
+  "featureFlagsExample1Body": "This example shows how to use FeatureFlagBuilder to conditionally render widgets.",
+  "@featureFlagsExample1Body": {
+    "description": "Explanation for example 1"
+  },
+  "featureFlagsNewFeatureEnabled": "New Feature is ENABLED",
+  "@featureFlagsNewFeatureEnabled": {
+    "description": "Shown when the new-feature flag is on"
+  },
+  "featureFlagsNewFeatureDisabled": "New Feature is DISABLED",
+  "@featureFlagsNewFeatureDisabled": {
+    "description": "Shown when the new-feature flag is off"
+  },
+  "featureFlagsExample2Title": "Example 2: FeatureFlagWidget",
+  "@featureFlagsExample2Title": {
+    "description": "Section title; FeatureFlagWidget is a class name and stays untranslated"
+  },
+  "featureFlagsExample2Body": "This example shows how to use FeatureFlagWidget for simple show/hide scenarios.",
+  "@featureFlagsExample2Body": {
+    "description": "Explanation for example 2"
+  },
+  "featureFlagsPremiumAvailable": "Premium Features Available",
+  "@featureFlagsPremiumAvailable": {
+    "description": "Shown when the premium-features flag is on"
+  },
+  "featureFlagsExample3Title": "Example 3: Direct Provider Access",
+  "@featureFlagsExample3Title": {
+    "description": "Section title for example 3"
+  },
+  "featureFlagsExample3Body": "This example shows how to access feature flags directly from providers for complex logic.",
+  "@featureFlagsExample3Body": {
+    "description": "Explanation for example 3"
+  },
+  "featureFlagsDarkMode": "Dark Mode",
+  "@featureFlagsDarkMode": {
+    "description": "Label of the dark mode switch in example 3"
+  },
+  "featureFlagsDarkModeIsEnabled": "Dark mode is enabled",
+  "@featureFlagsDarkModeIsEnabled": {
+    "description": "Subtitle when the dark mode flag is on"
+  },
+  "featureFlagsDarkModeIsDisabled": "Dark mode is disabled",
+  "@featureFlagsDarkModeIsDisabled": {
+    "description": "Subtitle when the dark mode flag is off"
+  },
+  "featureFlagsDarkModeEnabled": "Dark mode enabled",
+  "@featureFlagsDarkModeEnabled": {
+    "description": "Snackbar after the dark mode switch was turned on"
+  },
+  "featureFlagsDarkModeDisabled": "Dark mode disabled",
+  "@featureFlagsDarkModeDisabled": {
+    "description": "Snackbar after the dark mode switch was turned off"
+  },
+  "featureFlagsExample4Title": "Example 4: Conditional Navigation",
+  "@featureFlagsExample4Title": {
+    "description": "Section title for example 4"
+  },
+  "featureFlagsExample4Body": "This example shows how to conditionally show navigation options based on feature flags.",
+  "@featureFlagsExample4Body": {
+    "description": "Explanation for example 4"
+  },
+  "featureFlagsNavigatingToAnalytics": "Navigating to Analytics...",
+  "@featureFlagsNavigatingToAnalytics": {
+    "description": "Snackbar shown when the analytics button is pressed"
+  },
+  "featureFlagsViewAnalytics": "View Analytics",
+  "@featureFlagsViewAnalytics": {
+    "description": "Button label shown when the analytics flag is on"
+  },
+  "featureFlagsAnalyticsUnavailable": "Analytics Unavailable",
+  "@featureFlagsAnalyticsUnavailable": {
+    "description": "Disabled button label shown when the analytics flag is off"
   }
 }
 

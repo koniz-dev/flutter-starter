@@ -132,6 +132,76 @@
   "hoursFromNow": "{count, plural, zero{الآن} one{بعد ساعة واحدة} two{بعد ساعتين} few{بعد {count} ساعات} many{بعد {count} ساعة} other{بعد {count} ساعة}}",
   "daysFromNow": "{count, plural, zero{اليوم} one{بعد يوم واحد} two{بعد يومين} few{بعد {count} أيام} many{بعد {count} يومًا} other{بعد {count} يوم}}",
   "monthsFromNow": "{count, plural, zero{هذا الشهر} one{بعد شهر واحد} two{بعد شهرين} few{بعد {count} أشهر} many{بعد {count} شهرًا} other{بعد {count} شهر}}",
-  "yearsFromNow": "{count, plural, zero{هذا العام} one{بعد سنة واحدة} two{بعد سنتين} few{بعد {count} سنوات} many{بعد {count} سنة} other{بعد {count} سنة}}"
+  "yearsFromNow": "{count, plural, zero{هذا العام} one{بعد سنة واحدة} two{بعد سنتين} few{بعد {count} سنوات} many{بعد {count} سنة} other{بعد {count} سنة}}",
+  "featureFlagsRefreshTooltip": "تحديث الأعلام",
+  "featureFlagsClearAllTooltip": "مسح كل التجاوزات",
+  "featureFlagsClearAllTitle": "مسح كل التجاوزات",
+  "featureFlagsClearAllMessage": "هل أنت متأكد أنك تريد مسح كل التجاوزات المحلية؟",
+  "featureFlagsClear": "مسح",
+  "featureFlagsAllOverridesCleared": "تم مسح كل التجاوزات المحلية",
+  "featureFlagsErrorMessage": "خطأ: {error}",
+  "@featureFlagsErrorMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsEmpty": "لم يتم العثور على أعلام ميزات",
+  "featureFlagsNoDescription": "لا يوجد وصف",
+  "featureFlagsCategoryOther": "أخرى",
+  "featureFlagsUpdatedAt": "آخر تحديث: {time}",
+  "@featureFlagsUpdatedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagEnabled": "تم تفعيل {flagKey}",
+  "@featureFlagsFlagEnabled": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsFlagDisabled": "تم تعطيل {flagKey}",
+  "@featureFlagsFlagDisabled": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsOverrideCleared": "تم مسح التجاوز لـ {flagKey}",
+  "@featureFlagsOverrideCleared": {
+    "placeholders": {
+      "flagKey": {
+        "type": "String"
+      }
+    }
+  },
+  "featureFlagsExamplesTitle": "أمثلة Feature Flags",
+  "featureFlagsOpenDebugMenu": "فتح قائمة التصحيح",
+  "featureFlagsExample1Title": "المثال 1: FeatureFlagBuilder",
+  "featureFlagsExample1Body": "يوضح هذا المثال كيفية استخدام FeatureFlagBuilder لعرض الواجهات بشكل مشروط.",
+  "featureFlagsNewFeatureEnabled": "الميزة الجديدة مفعّلة",
+  "featureFlagsNewFeatureDisabled": "الميزة الجديدة معطّلة",
+  "featureFlagsExample2Title": "المثال 2: FeatureFlagWidget",
+  "featureFlagsExample2Body": "يوضح هذا المثال كيفية استخدام FeatureFlagWidget لحالات الإظهار والإخفاء البسيطة.",
+  "featureFlagsPremiumAvailable": "الميزات المميزة متاحة",
+  "featureFlagsExample3Title": "المثال 3: الوصول المباشر إلى المزوّد",
+  "featureFlagsExample3Body": "يوضح هذا المثال كيفية الوصول إلى أعلام الميزات مباشرة من المزوّدين للمنطق المعقد.",
+  "featureFlagsDarkMode": "الوضع الداكن",
+  "featureFlagsDarkModeIsEnabled": "الوضع الداكن مفعّل",
+  "featureFlagsDarkModeIsDisabled": "الوضع الداكن معطّل",
+  "featureFlagsDarkModeEnabled": "تم تفعيل الوضع الداكن",
+  "featureFlagsDarkModeDisabled": "تم تعطيل الوضع الداكن",
+  "featureFlagsExample4Title": "المثال 4: التنقل المشروط",
+  "featureFlagsExample4Body": "يوضح هذا المثال كيفية إظهار خيارات التنقل بشكل مشروط بناءً على أعلام الميزات.",
+  "featureFlagsNavigatingToAnalytics": "جارٍ الانتقال إلى التحليلات...",
+  "featureFlagsViewAnalytics": "عرض التحليلات",
+  "featureFlagsAnalyticsUnavailable": "التحليلات غير متاحة"
 }
 
