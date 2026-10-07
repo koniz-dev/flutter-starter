@@ -1,0 +1,8 @@
+# The follow-up tests from 030046a627c run against the 5ba8d33afc4 implementation
+# (only a no-op connectTimeout constructor parameter added so the file compiles).
+# Each [E] line is a test that catches the regression the security pass found.
+00:30 +7 -4: Some tests failed.
+connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error [E]
+connect against an in-process server closing the superseded socket does not close the current one [E]
+connect against an in-process server disconnect() before the handshake finishes cancels the attempt and the server sees the socket closed [E]
+connect against an in-process server two overlapping connect() calls leave exactly one open socket [E]
