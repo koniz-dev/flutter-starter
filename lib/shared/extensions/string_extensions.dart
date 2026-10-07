@@ -1,18 +1,17 @@
+import 'package:flutter_starter/core/utils/validators.dart';
+
 /// String extension methods
 extension StringExtensions on String {
-  /// Check if string is a valid email
-  bool get isValidEmail {
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
-    return emailRegex.hasMatch(this);
-  }
+  /// Check if string is a valid email.
+  ///
+  /// Delegates to [Validators.isValidEmail] so the template ships exactly one
+  /// email-validation behavior; this getter is only the ergonomic spelling.
+  bool get isValidEmail => Validators.isValidEmail(this);
 
-  /// Check if string is a valid phone number
-  bool get isValidPhone {
-    final phoneRegex = RegExp(r'^\+?[1-9]\d{1,14}$');
-    return phoneRegex.hasMatch(this);
-  }
+  /// Check if string is a valid phone number.
+  ///
+  /// Delegates to [Validators.isValidPhone].
+  bool get isValidPhone => Validators.isValidPhone(this);
 
   /// Capitalize first letter
   String get capitalize {
