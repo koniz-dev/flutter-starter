@@ -345,4 +345,79 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String minutesFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'بعد $count دقيقة',
+      many: 'بعد $count دقيقة',
+      few: 'بعد $count دقائق',
+      two: 'بعد دقيقتين',
+      one: 'بعد دقيقة واحدة',
+      zero: 'الآن',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hoursFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'بعد $count ساعة',
+      many: 'بعد $count ساعة',
+      few: 'بعد $count ساعات',
+      two: 'بعد ساعتين',
+      one: 'بعد ساعة واحدة',
+      zero: 'الآن',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String daysFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'بعد $count يوم',
+      many: 'بعد $count يومًا',
+      few: 'بعد $count أيام',
+      two: 'بعد يومين',
+      one: 'بعد يوم واحد',
+      zero: 'اليوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String monthsFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'بعد $count شهر',
+      many: 'بعد $count شهرًا',
+      few: 'بعد $count أشهر',
+      two: 'بعد شهرين',
+      one: 'بعد شهر واحد',
+      zero: 'هذا الشهر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsFromNow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'بعد $count سنة',
+      many: 'بعد $count سنة',
+      few: 'بعد $count سنوات',
+      two: 'بعد سنتين',
+      one: 'بعد سنة واحدة',
+      zero: 'هذا العام',
+    );
+    return '$_temp0';
+  }
 }

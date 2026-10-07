@@ -605,6 +605,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 year ago} other{{count} years ago}}'**
   String yearsAgo(int count);
+
+  /// Pluralized minutes from now (future relative time)
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Just now} =1{in 1 minute} other{in {count} minutes}}'**
+  String minutesFromNow(int count);
+
+  /// Pluralized hours from now (future relative time)
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Just now} =1{in 1 hour} other{in {count} hours}}'**
+  String hoursFromNow(int count);
+
+  /// Pluralized days from now (future relative time)
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in 1 day} other{in {count} days}}'**
+  String daysFromNow(int count);
+
+  /// Pluralized months from now (future relative time)
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in 1 month} other{in {count} months}}'**
+  String monthsFromNow(int count);
+
+  /// Pluralized years from now (future relative time)
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{in 1 year} other{in {count} years}}'**
+  String yearsFromNow(int count);
 }
 
 class _AppLocalizationsDelegate

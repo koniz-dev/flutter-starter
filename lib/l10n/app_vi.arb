@@ -318,6 +318,11 @@
   "hoursAgo": "{count, plural, =0{Vừa xong} other{{count} giờ trước}}",
   "daysAgo": "{count, plural, other{{count} ngày trước}}",
   "monthsAgo": "{count, plural, other{{count} tháng trước}}",
-  "yearsAgo": "{count, plural, other{{count} năm trước}}"
+  "yearsAgo": "{count, plural, other{{count} năm trước}}",
+  "minutesFromNow": "{count, plural, =0{Vừa xong} other{{count} phút nữa}}",
+  "hoursFromNow": "{count, plural, =0{Vừa xong} other{{count} giờ nữa}}",
+  "daysFromNow": "{count, plural, other{{count} ngày nữa}}",
+  "monthsFromNow": "{count, plural, other{{count} tháng nữa}}",
+  "yearsFromNow": "{count, plural, other{{count} năm nữa}}"
 }
 

@@ -258,6 +258,81 @@ void main() {
       });
     });
 
+    // koniz-dev/flutter-starter#263: future dates used to fall through to
+    // "Just now". Each case pins the reference time with `now:` so a slow
+    // test run cannot push the target across a unit boundary.
+    group('formatRelativeTime in the future', () {
+      const en = Locale('en');
+
+      test('reproduces the doc comment examples', () {
+        final now = DateTime.now();
+        String format(DateTime t) =>
+            LocalizedFormatters.formatRelativeTime(t, locale: en, now: now);
+
+        expect(format(now.subtract(const Duration(hours: 2))), '2 hours ago');
+        expect(format(now.add(const Duration(hours: 2))), 'in 2 hours');
+        expect(format(now.add(const Duration(days: 3))), 'in 3 days');
+        expect(format(now.add(const Duration(seconds: 30))), 'Just now');
+        expect(format(now.subtract(const Duration(seconds: 30))), 'Just now');
+        expect(
+          format(now.add(const Duration(days: 1, hours: 23))),
+          'in 1 day',
+        );
+      });
+
+      test('Duration(hours: 2) ahead reads "in 2 hours"', () {
+        final now = DateTime.now();
+        expect(
+          LocalizedFormatters.formatRelativeTime(
+            now.add(const Duration(hours: 2)),
+            locale: en,
+            now: now,
+          ),
+          'in 2 hours',
+        );
+      });
+
+      test('Duration(days: 3) ahead reads "in 3 days"', () {
+        final now = DateTime.now();
+        expect(
+          LocalizedFormatters.formatRelativeTime(
+            now.add(const Duration(days: 3)),
+            locale: en,
+            now: now,
+          ),
+          'in 3 days',
+        );
+      });
+
+      test('every future unit is covered', () {
+        final now = DateTime.now();
+        String format(Duration d) => LocalizedFormatters.formatRelativeTime(
+          now.add(d),
+          locale: en,
+          now: now,
+        );
+
+        expect(format(const Duration(minutes: 1)), 'in 1 minute');
+        expect(format(const Duration(minutes: 5)), 'in 5 minutes');
+        expect(format(const Duration(hours: 1)), 'in 1 hour');
+        expect(format(const Duration(days: 1)), 'in 1 day');
+        expect(format(const Duration(days: 60)), 'in 2 months');
+        expect(format(const Duration(days: 400)), 'in 1 year');
+        expect(format(const Duration(days: 800)), 'in 2 years');
+      });
+
+      test('without a reference time a future date is not "Just now"', () {
+        final formatted = LocalizedFormatters.formatRelativeTime(
+          DateTime.now().add(const Duration(days: 3)),
+          locale: en,
+        );
+
+        expect(formatted, isNot('Just now'));
+        expect(formatted, startsWith('in '));
+        expect(formatted, endsWith(' days'));
+      });
+    });
+
     group('different locales', () {
       test('should format with Vietnamese locale', () async {
         await initializeDateFormatting('vi');
