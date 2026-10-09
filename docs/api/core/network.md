@@ -467,6 +467,19 @@ logged by `ApiLoggingInterceptor` and mapped by `ErrorInterceptor` exactly like
 any other failing status: the caller gets a `ServerException` with
 `statusCode: 401` and the server's message and code.
 
+Forwarded, but never re-sent. Before handing an error on, `AuthInterceptor`
+marks it `extra['retry'] = false` (`RetryInterceptor.retryExtraKey`), so
+`RetryInterceptor` passes it through. Every exit that forwards has already
+ended or abandoned the session, and a failed replay carries the bearer token
+minted for that session: re-sending it put an ended session's credential on
+the wire and returned a success to the caller
+(koniz-dev/flutter-starter#286).
+
+**On a re-send with no token stored:** `onRequest` removes an `Authorization`
+header it wrote on an earlier attempt, so a `RetryInterceptor` retry that runs
+after a logout goes out without the ended session's token. A header the caller
+attached itself is left alone.
+
 **Forced logout (the 401 path):**
 
 When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three persisted things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out". A fourth step then notifies `sessionSink`, so the running app drops the in-memory session too rather than presenting a signed-in UI backed by storage that is now empty.

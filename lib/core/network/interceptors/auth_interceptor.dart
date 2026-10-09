@@ -9,6 +9,7 @@ import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
+import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
 import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
@@ -231,6 +232,10 @@ class AuthInterceptor extends Interceptor {
   final List<_PendingRequest> _pendingRequests = [];
 
   /// Endpoints that should not trigger token refresh
+  /// `RequestOptions.extra` key recording that the `Authorization` header was
+  /// written by [onRequest] rather than attached by the caller.
+  static const String _injectedAuthorizationKey = 'auth_interceptor_injected';
+
   static const List<String> _excludedEndpoints = [
     ApiEndpoints.login,
     ApiEndpoints.register,
@@ -248,6 +253,15 @@ class AuthInterceptor extends Interceptor {
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
+      options.extra[_injectedAuthorizationKey] = true;
+    } else if (options.extra.remove(_injectedAuthorizationKey) == true) {
+      // A re-send of a request this interceptor already authorised - a
+      // `RetryInterceptor` attempt copies the earlier attempt's headers - and
+      // the session has ended since. Leaving the header would put the ended
+      // session's bearer token on the wire (koniz-dev/flutter-starter#286).
+      // Only a header this interceptor wrote is removed; one the caller
+      // attached itself is theirs to keep.
+      options.headers.remove('Authorization');
     }
 
     super.onRequest(options, handler);
@@ -382,7 +396,18 @@ class AuthInterceptor extends Interceptor {
   /// itself - exactly like any other failing status. Every failure exit in
   /// this class goes through here; a bare `handler.reject(...)` would
   /// reintroduce the bug on that one path.
+  ///
+  /// Forwarded, but **never re-sent**. The error is marked with
+  /// [RetryInterceptor.retryExtraKey] `= false` before it moves on, so
+  /// `RetryInterceptor` passes it through instead of replaying it. Every exit
+  /// that reaches here has already ended the request's session or given up on
+  /// it, and a failed replay's options carry the bearer token minted for the
+  /// session that was just torn down: re-sending it put that token on the wire
+  /// after the forced logout and handed the caller a success
+  /// (koniz-dev/flutter-starter#286). Before #276 the early `reject` made the
+  /// same guarantee by accident; this states it on purpose.
   void _reject(ErrorInterceptorHandler handler, DioException error) {
+    error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
     handler.next(error);
   }
 
