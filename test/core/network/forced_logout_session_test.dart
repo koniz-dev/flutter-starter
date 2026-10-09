@@ -144,7 +144,9 @@ void main() {
   Future<void> drive401(ApiClient apiClient) async {
     await expectLater(
       apiClient.get('/users/me').timeout(const Duration(seconds: 10)),
-      throwsA(isA<AppException>()),
+      throwsA(
+        isA<ServerException>().having((e) => e.statusCode, 'statusCode', 401),
+      ),
       reason: 'the 401 must still surface to the caller that made the request',
     );
   }
@@ -187,7 +189,13 @@ void main() {
           session.apiClient
               .get('/users/me', headers: <String, String>{'X-Retry-Count': '1'})
               .timeout(const Duration(seconds: 10)),
-          throwsA(isA<AppException>()),
+          throwsA(
+            isA<ServerException>().having(
+              (e) => e.statusCode,
+              'statusCode',
+              401,
+            ),
+          ),
         );
 
         expect(session.authState.user, isNull);

@@ -454,6 +454,19 @@ completed. `_drainPendingRequests` now rejects every queued handler explicitly,
 and clearing `_isRefreshing` before the drain means a 401 arriving during the
 drain starts a fresh refresh rather than queueing behind a finished one.
 
+**What the caller receives when a 401 is given up on:**
+
+Every exit above that "rejects" the request - the retry-exhausted branch, a
+failed refresh, a refresh made stale by a logout, and a queued request drained
+without a token - fails it with `handler.next(...)`, not `handler.reject(...)`.
+In dio's error chain `reject` skips every interceptor registered after this
+one, so `ErrorInterceptor` never mapped the 401 and the caller received
+`NetworkException("Instance of 'NetworkError'")`, a connectivity failure with
+an unreadable message (koniz-dev/flutter-starter#276). With `next`, the 401 is
+logged by `ApiLoggingInterceptor` and mapped by `ErrorInterceptor` exactly like
+any other failing status: the caller gets a `ServerException` with
+`statusCode: 401` and the server's message and code.
+
 **Forced logout (the 401 path):**
 
 When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three persisted things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out". A fourth step then notifies `sessionSink`, so the running app drops the in-memory session too rather than presenting a signed-in UI backed by storage that is now empty.

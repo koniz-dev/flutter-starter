@@ -144,4 +144,35 @@ void main() {
       },
     );
   });
+
+  // koniz-dev/flutter-starter#276: ApiClient._send wraps an unexpected
+  // Exception as NetworkException(e.toString()), so this string is what a
+  // user would read. It used to be "Instance of 'NetworkError'".
+  group('NetworkError.toString', () {
+    test('carries the code, the status and the message', () {
+      const error = NetworkError(
+        message: 'Network request failed',
+        code: 'unknown',
+        statusCode: 401,
+      );
+      expect(
+        error.toString(),
+        'NetworkError(code: unknown, statusCode: 401): Network request failed',
+      );
+    });
+
+    test('omits the parts it does not have', () {
+      expect(
+        const NetworkError(message: 'offline').toString(),
+        'NetworkError: offline',
+      );
+    });
+
+    test('never falls back to the default Object.toString', () {
+      expect(
+        const NetworkError(message: 'x', code: 'c').toString(),
+        isNot(contains('Instance of')),
+      );
+    });
+  });
 }

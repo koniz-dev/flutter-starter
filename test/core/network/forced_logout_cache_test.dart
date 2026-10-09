@@ -388,7 +388,9 @@ void main() {
       world.apiClient
           .get('/users/me', headers: headers)
           .timeout(const Duration(seconds: 10)),
-      throwsA(isA<AppException>()),
+      throwsA(
+        isA<ServerException>().having((e) => e.statusCode, 'statusCode', 401),
+      ),
       reason: 'the 401 must still surface to the caller',
     );
   }

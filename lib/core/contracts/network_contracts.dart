@@ -49,6 +49,21 @@ class NetworkError implements Exception {
   final String? code;
   final int? statusCode;
   final Object? cause;
+
+  /// Carries the message, code and status, so wrapping this in another
+  /// exception never degrades to `Instance of 'NetworkError'`
+  /// (koniz-dev/flutter-starter#276).
+  @override
+  String toString() {
+    final details = <String>[
+      if (code != null) 'code: $code',
+      if (statusCode != null) 'statusCode: $statusCode',
+    ];
+    final label = details.isEmpty
+        ? 'NetworkError'
+        : 'NetworkError(${details.join(', ')})';
+    return '$label: $message';
+  }
 }
 
 /// Transport-agnostic network client contract.

@@ -169,7 +169,7 @@ void main() {
             () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
           ).thenAnswer((_) async => true);
           when(() => handler.resolve(any())).thenReturn(null);
-          when(() => handler.reject(any())).thenReturn(null);
+          when(() => handler.next(any())).thenReturn(null);
 
           await interceptor.onError(dioException, handler);
 
@@ -181,7 +181,7 @@ void main() {
           // request was resolved, not rejected.
           expect(retryAdapter.hits, 1);
           verify(() => handler.resolve(any())).called(1);
-          verifyNever(() => handler.reject(any()));
+          verifyNever(() => handler.next(any()));
         },
       );
 
@@ -197,7 +197,7 @@ void main() {
         when(
           () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
         ).thenAnswer((_) async => true);
-        when(() => handler.reject(any())).thenReturn(null);
+        when(() => handler.next(any())).thenReturn(null);
 
         await interceptor.onError(dioException, handler);
 
@@ -206,7 +206,7 @@ void main() {
         verify(
           () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
         ).called(1);
-        verify(() => handler.reject(any())).called(1);
+        verify(() => handler.next(any())).called(1);
       });
 
       test('should prevent infinite retry loop', () async {
@@ -227,13 +227,13 @@ void main() {
         when(
           () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
         ).thenAnswer((_) async => true);
-        when(() => handler.reject(any())).thenReturn(null);
+        when(() => handler.next(any())).thenReturn(null);
 
         await interceptor.onError(retryException, handler);
 
         verifyNever(() => mockAuthRepository.refreshToken());
         verify(() => mockSecureStorage.remove(AppConstants.tokenKey)).called(1);
-        verify(() => handler.reject(retryException)).called(1);
+        verify(() => handler.next(retryException)).called(1);
       });
 
       test('should queue requests during refresh', () async {
@@ -256,9 +256,9 @@ void main() {
           () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
         ).thenAnswer((_) async => true);
         when(() => handler1.resolve(any())).thenReturn(null);
-        when(() => handler1.reject(any())).thenReturn(null);
+        when(() => handler1.next(any())).thenReturn(null);
         when(() => handler2.resolve(any())).thenReturn(null);
-        when(() => handler2.reject(any())).thenReturn(null);
+        when(() => handler2.next(any())).thenReturn(null);
 
         // Start first request (will trigger refresh)
         final future1 = interceptor.onError(dioException, handler1);
@@ -276,8 +276,8 @@ void main() {
         expect(retryAdapter.hits, 2);
         verify(() => handler1.resolve(any())).called(1);
         verify(() => handler2.resolve(any())).called(1);
-        verifyNever(() => handler1.reject(any()));
-        verifyNever(() => handler2.reject(any()));
+        verifyNever(() => handler1.next(any()));
+        verifyNever(() => handler2.next(any()));
       });
 
       test('should handle exception during refresh', () async {
@@ -290,12 +290,12 @@ void main() {
         when(
           () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
         ).thenAnswer((_) async => true);
-        when(() => handler.reject(any())).thenReturn(null);
+        when(() => handler.next(any())).thenReturn(null);
 
         await interceptor.onError(dioException, handler);
 
         verify(() => mockSecureStorage.remove(AppConstants.tokenKey)).called(1);
-        verify(() => handler.reject(any())).called(1);
+        verify(() => handler.next(any())).called(1);
       });
     });
 
@@ -472,7 +472,7 @@ void main() {
         when(
           () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
         ).thenAnswer((_) async => true);
-        when(() => handler.reject(any())).thenReturn(null);
+        when(() => handler.next(any())).thenReturn(null);
       });
 
       test('clears the cached user as well as the tokens', () async {
@@ -492,7 +492,7 @@ void main() {
         verify(
           () => keyValueStore.remove(AppConstants.userDataKey),
         ).called(1);
-        verify(() => handler.reject(any())).called(1);
+        verify(() => handler.next(any())).called(1);
       });
 
       test(
@@ -509,7 +509,7 @@ void main() {
 
           await interceptorWithUserStore.onError(dioException, handler);
 
-          verify(() => handler.reject(any())).called(1);
+          verify(() => handler.next(any())).called(1);
         },
       );
     });
