@@ -6,17 +6,21 @@
 // be registered FIRST, and because dio runs onError handlers in registration
 // order, its handler.reject(...) terminated the chain before any of those ran.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -190,6 +194,77 @@ class _RecordingPerformanceService implements IPerformanceService {
     Map<String, String>? attributes,
   }) => operation();
 }
+
+/// A [LoggingService] that records every `error` call and prints nothing.
+class _RecordingLoggingService extends LoggingService {
+  _RecordingLoggingService() : super(enableLogging: false);
+
+  final List<String> errors = [];
+
+  @override
+  void error(
+    String message, {
+    Map<String, dynamic>? context,
+    Object? error,
+    StackTrace? stackTrace,
+  }) => errors.add(message);
+}
+
+/// An [AuthInterceptor] that announces when its 401 handling has processed a
+/// given number of errors.
+///
+/// Same structural rendezvous as the one in
+/// `interceptors/auth_interceptor_refresh_queue_test.dart`: `super.onError`
+/// starts the refresh or queues the request before its first `await`, so
+/// awaiting [seen] means "N 401s have been parked", not "N ms have passed".
+class _CountingAuthInterceptor extends AuthInterceptor {
+  _CountingAuthInterceptor({required super.refreshToken, super.tokenStore});
+
+  int errorsSeen = 0;
+
+  final Map<int, Completer<void>> _marks = {};
+
+  Future<void> seen(int count) {
+    if (errorsSeen >= count) {
+      return Future<void>.value();
+    }
+    return (_marks[count] ??= Completer<void>()).future;
+  }
+
+  @override
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) {
+    final handled = super.onError(err, handler);
+    errorsSeen++;
+    final mark = _marks[errorsSeen];
+    if (mark != null && !mark.isCompleted) {
+      mark.complete();
+    }
+    return handled;
+  }
+}
+
+/// Matches the domain exception a 401 must surface as: the same
+/// [ServerException] `ErrorInterceptor` produces for any other failing
+/// status, carrying the server's message - never a `NetworkException` and
+/// never `Instance of 'NetworkError'`.
+final Matcher _isMapped401 = isA<ServerException>()
+    .having((e) => e.statusCode, 'statusCode', 401)
+    .having((e) => e.message, 'message', 'Unauthorized')
+    .having((e) => e.code, 'code', 'TOKEN_EXPIRED');
+
+/// Awaits [future] and returns what it threw, or null.
+Future<Object?> _thrownBy(Future<Object?> future) async {
+  try {
+    await future;
+    return null;
+  } on Object catch (e) {
+    return e;
+  }
+}
+
+const ResultFailure<String> _refreshRejected = ResultFailure<String>(
+  AuthFailure('Refresh token expired', code: 'REFRESH_TOKEN_EXPIRED'),
+);
 
 void main() {
   group('ApiClient interceptor chain', () {
@@ -438,4 +513,189 @@ void main() {
       timeout: const Timeout(Duration(minutes: 2)),
     );
   });
+
+  // koniz-dev/flutter-starter#276. AuthInterceptor used to end the error chain
+  // whenever it gave up on a 401, so ErrorInterceptor never mapped it and the
+  // caller got NetworkException("Instance of 'NetworkError'"). Every exit
+  // below is one of the paths that used to do that.
+  group(
+    'a 401 AuthInterceptor gives up on is mapped like any other status',
+    () {
+      late _MockStorageService storageService;
+      late _MockSecureStorageService secureStorageService;
+      late _InMemoryTokenStore tokenStore;
+
+      setUp(() {
+        storageService = _MockStorageService();
+        secureStorageService = _MockSecureStorageService();
+        tokenStore = _InMemoryTokenStore();
+        // A forced logout empties the response cache, which walks its index.
+        when(
+          () => storageService.getStringList(any()),
+        ).thenAnswer((_) async => null);
+        when(() => storageService.remove(any())).thenAnswer((_) async => true);
+      });
+
+      _Reply unauthorized() => _json(401, {
+        'message': 'Unauthorized',
+        'code': 'TOKEN_EXPIRED',
+      });
+
+      ApiClient buildClient(
+        AuthInterceptor authInterceptor,
+        _CountingAdapter adapter, {
+        LoggingService? loggingService,
+      }) {
+        return ApiClient(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+          authInterceptor: authInterceptor,
+          loggingService: loggingService,
+        )..dio.httpClientAdapter = adapter;
+      }
+
+      test('criterion 1: a 401 whose refresh fails', () async {
+        final adapter = _CountingAdapter([unauthorized()]);
+        final apiClient = buildClient(
+          AuthInterceptor(
+            tokenStore: tokenStore,
+            refreshToken: () async => _refreshRejected,
+          ),
+          adapter,
+        );
+
+        final thrown = await _thrownBy(
+          apiClient.post('/tasks', data: {'title': 'x'}),
+        );
+
+        expect(thrown, _isMapped401);
+        expect(thrown.toString(), isNot(contains('Instance of')));
+        expect(adapter.hits, 1);
+        // The forced logout itself still happened.
+        expect(tokenStore.accessToken, isNull);
+      });
+
+      test(
+        'criterion 2: the retry-exhausted branch (X-Retry-Count: 1)',
+        () async {
+          final adapter = _CountingAdapter([unauthorized()]);
+          var refreshCalls = 0;
+          final apiClient = buildClient(
+            AuthInterceptor(
+              tokenStore: tokenStore,
+              refreshToken: () async {
+                refreshCalls++;
+                return const Success('unused');
+              },
+            ),
+            adapter,
+          );
+
+          final thrown = await _thrownBy(
+            apiClient.post(
+              '/tasks',
+              data: {'title': 'x'},
+              headers: {'X-Retry-Count': '1'},
+            ),
+          );
+
+          expect(thrown, _isMapped401);
+          expect(
+            refreshCalls,
+            0,
+            reason: 'this branch logs out without a refresh',
+          );
+        },
+      );
+
+      test(
+        'criterion 2: the stale-generation branch (session ended mid-refresh)',
+        () async {
+          final adapter = _CountingAdapter([unauthorized()]);
+          final generation = SessionGeneration();
+          final apiClient = buildClient(
+            AuthInterceptor(
+              tokenStore: tokenStore,
+              sessionGeneration: generation,
+              refreshToken: () async {
+                // A logout lands while the refresh is in flight.
+                generation.invalidate();
+                return const Success('fresh-access-token');
+              },
+            ),
+            adapter,
+          );
+
+          final thrown = await _thrownBy(
+            apiClient.post('/tasks', data: {'title': 'x'}),
+          );
+
+          expect(thrown, _isMapped401);
+          expect(adapter.hits, 1, reason: 'a stale refresh must not replay');
+          expect(
+            tokenStore.accessToken,
+            isNot('fresh-access-token'),
+            reason: 'a stale refresh must not persist its token',
+          );
+        },
+      );
+
+      test(
+        'criterion 2: a request queued behind a refresh that then fails',
+        () async {
+          final adapter = _CountingAdapter([unauthorized()]);
+          final refreshStarted = Completer<void>();
+          final releaseRefresh = Completer<void>();
+          final interceptor = _CountingAuthInterceptor(
+            tokenStore: tokenStore,
+            refreshToken: () async {
+              refreshStarted.complete();
+              await releaseRefresh.future;
+              return _refreshRejected;
+            },
+          );
+          final apiClient = buildClient(interceptor, adapter);
+
+          final first = _thrownBy(apiClient.post('/tasks', data: {'n': 1}));
+          await refreshStarted.future.timeout(const Duration(seconds: 5));
+          final queued = _thrownBy(apiClient.post('/tasks', data: {'n': 2}));
+          await interceptor.seen(2).timeout(const Duration(seconds: 5));
+          releaseRefresh.complete();
+
+          expect(await first, _isMapped401);
+          expect(
+            await queued,
+            _isMapped401,
+            reason:
+                'the queued request is rejected by the drain, not the refresh',
+          );
+          expect(adapter.hits, 2);
+        },
+      );
+
+      test(
+        'criterion 3: the failed-refresh 401 is logged exactly once',
+        () async {
+          final adapter = _CountingAdapter([unauthorized()]);
+          final logging = _RecordingLoggingService();
+          final apiClient = buildClient(
+            AuthInterceptor(
+              tokenStore: tokenStore,
+              refreshToken: () async => _refreshRejected,
+            ),
+            adapter,
+            loggingService: logging,
+          );
+
+          await _thrownBy(apiClient.post('/tasks', data: {'title': 'x'}));
+
+          expect(
+            logging.errors.where((m) => m.startsWith('API Error')),
+            hasLength(1),
+          );
+          expect(logging.errors.single, contains('/tasks'));
+        },
+      );
+    },
+  );
 }

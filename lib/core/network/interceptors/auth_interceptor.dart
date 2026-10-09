@@ -295,7 +295,7 @@ class AuthInterceptor extends Interceptor {
     if (retryCount == '1') {
       // Already retried once, logout user
       await _logoutUser();
-      return handler.reject(err);
+      return _reject(handler, err);
     }
 
     // If refresh is already in progress, queue this request
@@ -328,7 +328,7 @@ class AuthInterceptor extends Interceptor {
         //
         // refreshedToken stays null, so the `finally` drain rejects every
         // queued request rather than replaying it with a dead token.
-        handler.reject(err);
+        _reject(handler, err);
         return;
       }
 
@@ -337,7 +337,7 @@ class AuthInterceptor extends Interceptor {
       if (newToken == null) {
         // Refresh failed (or returned nothing usable), logout user
         await _logoutUser();
-        handler.reject(err);
+        _reject(handler, err);
         return;
       }
 
@@ -355,13 +355,35 @@ class AuthInterceptor extends Interceptor {
     on Object catch (e) {
       refreshedToken = null;
       await _logoutUser();
-      handler.reject(_asDioException(err, e));
+      _reject(handler, _asDioException(err, e));
     } finally {
       // Reset before draining: a 401 arriving during the drain must be able
       // to start a fresh refresh rather than queue behind a finished one.
       _isRefreshing = false;
       await _drainPendingRequests(refreshedToken, generation);
     }
+  }
+
+  /// Fails the request with [error] **without ending the error chain**.
+  ///
+  /// In dio's error chain, `handler.reject(...)` stops it outright: every
+  /// interceptor registered after this one is skipped (`dio_mixin.dart` only
+  /// runs the next error callback for a `next` or `rejectCallFollowing`
+  /// state, and `ErrorInterceptorHandler` offers no way to request the
+  /// latter). `ApiClient` registers `RetryInterceptor`, `ApiLoggingInterceptor`
+  /// and, last, `ErrorInterceptor` after this one, so a rejected 401 reached
+  /// the caller with no domain error inside. `DioNetworkClient` and
+  /// `ApiClient._send` then turned it into `NetworkException("Instance of
+  /// 'NetworkError'")`: a 401 reported as a connectivity failure, with an
+  /// unreadable message, and never logged (koniz-dev/flutter-starter#276).
+  ///
+  /// `next` hands the error on instead, so a 401 this interceptor gives up on
+  /// is logged and then mapped by `ErrorInterceptor` - which ends the chain
+  /// itself - exactly like any other failing status. Every failure exit in
+  /// this class goes through here; a bare `handler.reject(...)` would
+  /// reintroduce the bug on that one path.
+  void _reject(ErrorInterceptorHandler handler, DioException error) {
+    handler.next(error);
   }
 
   /// Wraps a non-Dio failure so the caller still gets a [DioException].
@@ -448,7 +470,7 @@ class AuthInterceptor extends Interceptor {
 
     for (final pending in requests) {
       if (newToken == null || !_sessionGeneration.isCurrent(generation)) {
-        pending.handler.reject(pending.error);
+        _reject(pending.handler, pending.error);
         continue;
       }
 
@@ -457,7 +479,7 @@ class AuthInterceptor extends Interceptor {
         pending.handler.resolve(retryResponse);
       } on Object catch (e) {
         // If retry fails, reject the pending request
-        pending.handler.reject(_asDioException(pending.error, e));
+        _reject(pending.handler, _asDioException(pending.error, e));
       }
     }
   }
