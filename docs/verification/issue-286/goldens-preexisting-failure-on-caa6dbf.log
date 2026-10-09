@@ -1,0 +1,4 @@
+Expected: '/login'
+  Actual: '/'
+00:02 +0 -1: a forced logout replaces the authenticated shell with login [E]
+00:02 +0 -1: Some tests failed.

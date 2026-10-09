@@ -1,0 +1,15 @@
+# The same group run against main@53fc427's auth_interceptor.dart (the
+# regression), before the fix. Captured during development on 2026-10-09.
+00:01 +0 -1: nothing is sent after a forced logout criteria 1-3: a replay failing with 503 is not re-sent [E]
+  Expected: <Instance of 'AppException'>
+    Actual: <null>
+00:02 +0 -2: nothing is sent after a forced logout criteria 1-3: a replay failing with DioExceptionType.receiveTimeout is not re-sent [E]
+  Expected: <Instance of 'AppException'>
+    Actual: <null>
+00:03 +0 -3: nothing is sent after a forced logout criteria 1-3: a replay failing with DioExceptionType.connectionError is not re-sent [E]
+  Expected: <Instance of 'AppException'>
+    Actual: <null>
+00:05 +0 -4: nothing is sent after a forced logout criterion 4: a retry made after the token is gone carries no Authorization header from the earlier attempt [E]
+  Expected: null
+    Actual: 'Bearer expired-access-token'
+00:05 +1 -4: Some tests failed.
