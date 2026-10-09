@@ -266,6 +266,48 @@ const ResultFailure<String> _refreshRejected = ResultFailure<String>(
   AuthFailure('Refresh token expired', code: 'REFRESH_TOKEN_EXPIRED'),
 );
 
+/// Transport that records every request it receives and replies from a script.
+///
+/// Each script entry is either an HTTP status (int) or a [DioExceptionType] to
+/// throw. The last entry repeats once the script is exhausted. [onHit] runs
+/// before the reply, with the 1-based hit number.
+class _RecordingAdapter implements HttpClientAdapter {
+  _RecordingAdapter(this._script, {this.onHit});
+
+  final List<Object> _script;
+  final Future<void> Function(int hit)? onHit;
+
+  /// The `Authorization` header of every request that reached the transport.
+  final List<String?> authorizations = [];
+
+  int get hits => authorizations.length;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    authorizations.add(options.headers['Authorization'] as String?);
+    await onHit?.call(hits);
+    final step =
+        _script[hits <= _script.length ? hits - 1 : _script.length - 1];
+    if (step is DioExceptionType) {
+      throw DioException(requestOptions: options, type: step);
+    }
+    return ResponseBody.fromString(
+      jsonEncode({'hit': hits}),
+      step as int,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
 void main() {
   group('ApiClient interceptor chain', () {
     late _MockStorageService storageService;
@@ -698,4 +740,130 @@ void main() {
       );
     },
   );
+
+  // koniz-dev/flutter-starter#286. Once AuthInterceptor forwarded its failures
+  // down the chain (#276), a replay that failed transiently after a successful
+  // refresh reached RetryInterceptor, which re-sent it - carrying the bearer
+  // token minted for the session the forced logout had just ended - and handed
+  // the caller a success.
+  group('nothing is sent after a forced logout', () {
+    late _MockStorageService storageService;
+    late _MockSecureStorageService secureStorageService;
+    late _InMemoryTokenStore tokenStore;
+    late SessionGeneration generation;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      secureStorageService = _MockSecureStorageService();
+      tokenStore = _InMemoryTokenStore();
+      generation = SessionGeneration();
+      when(() => storageService.getString(any())).thenAnswer((_) async => null);
+      // An anonymous 200 is cached once the token is gone.
+      when(
+        () => storageService.setString(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.setStringList(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.getStringList(any()),
+      ).thenAnswer((_) async => null);
+      when(() => storageService.remove(any())).thenAnswer((_) async => true);
+    });
+
+    ApiClient buildClient(_RecordingAdapter adapter) {
+      return ApiClient(
+        storageService: storageService,
+        secureStorageService: secureStorageService,
+        authInterceptor: AuthInterceptor(
+          tokenStore: tokenStore,
+          sessionGeneration: generation,
+          refreshToken: () async => const Success('fresh-access-token'),
+        ),
+      )..dio.httpClientAdapter = adapter;
+    }
+
+    // Criterion 1 is the 503 case; criterion 3 adds the two transport
+    // failures. Each replay failure is one RetryInterceptor treats as
+    // transient for a GET, so before the fix every one of them was re-sent.
+    for (final replayFailure in <Object>[
+      503,
+      DioExceptionType.receiveTimeout,
+      DioExceptionType.connectionError,
+    ]) {
+      test(
+        'criteria 1-3: a replay failing with $replayFailure is not re-sent',
+        () async {
+          final adapter = _RecordingAdapter([401, replayFailure, 200]);
+          final apiClient = buildClient(adapter);
+          final before = generation.current;
+
+          final thrown = await _thrownBy(apiClient.get('/tasks'));
+
+          expect(
+            thrown,
+            isA<AppException>(),
+            reason: 'the caller must fail, not receive the re-sent response',
+          );
+          expect(
+            adapter.hits,
+            2,
+            reason: 'original + replay only; nothing after the forced logout',
+          );
+          expect(adapter.authorizations, [
+            'Bearer expired-access-token',
+            'Bearer fresh-access-token',
+          ]);
+          // Criterion 2: the session really was ended, and nothing reached
+          // the transport after that point (both hits above precede it).
+          expect(generation.isCurrent(before), isFalse);
+          expect(tokenStore.accessToken, isNull);
+        },
+        timeout: const Timeout(Duration(minutes: 1)),
+      );
+    }
+
+    test(
+      'criterion 4: a retry made after the token is gone carries no '
+      'Authorization header from the earlier attempt',
+      () async {
+        // 503 on a GET is retried. The session ends between the first attempt
+        // and the retry - the logout lands during the backoff.
+        final adapter = _RecordingAdapter(
+          [503, 200],
+          onHit: (hit) async {
+            if (hit == 1) await tokenStore.clearAllTokens();
+          },
+        );
+        final apiClient = buildClient(adapter);
+
+        await apiClient.get('/public/feed');
+
+        expect(adapter.hits, 2);
+        expect(adapter.authorizations.first, 'Bearer expired-access-token');
+        expect(
+          adapter.authorizations.last,
+          isNull,
+          reason: 'the header the first attempt carried must be removed',
+        );
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
+    );
+
+    test(
+      'criterion 4: an Authorization header the caller attached is kept',
+      () async {
+        tokenStore.accessToken = null;
+        final adapter = _RecordingAdapter([200]);
+        final apiClient = buildClient(adapter);
+
+        await apiClient.get(
+          '/partner/feed',
+          headers: {'Authorization': 'Basic caller-supplied'},
+        );
+
+        expect(adapter.authorizations, ['Basic caller-supplied']);
+      },
+    );
+  });
 }
