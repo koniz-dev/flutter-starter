@@ -1,0 +1,28 @@
+# New and tightened tests run against caa6dbf's auth_interceptor.dart and
+# network_contracts.dart (before #285), captured during development.
+# 24 failures; every one passes with the fix.
+test/core/network/adapters/dio_network_client_test.dart: NetworkError.toString carries the code, the status and the message [E]
+test/core/network/adapters/dio_network_client_test.dart: NetworkError.toString omits the parts it does not have [E]
+test/core/network/adapters/dio_network_client_test.dart: NetworkError.toString never falls back to the default Object.toString [E]
+test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session (#127 criterion 1) a 401 whose refresh fails clears AuthState.user [E]
+test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session (#127 criterion 1) the retry-exhausted logout branch clears AuthState.user too [E]
+test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 1: a 401 whose refresh fails clears the cache [E]
+test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 2: the same holds when there is no refresh token at all [E]
+test/core/network/forced_logout_cache_test.dart: forced logout empties the HTTP response cache (#114) criterion 2 (second call site): the retry-exhausted early logout at auth_interceptor.dart clears the cache before rejecting [E]
+test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) explicit logout() and forced _logoutUser() leave identical device state [E]
+test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Exception (#168) [E]
+test/core/network/forced_logout_cache_test.dart: the two logout paths are equivalent (#114 criterion 3) the two paths stay equivalent when the user-blob removal throws an Error (#168) [E]
+test/core/network/forced_logout_cache_test.dart: cache clearing is best-effort (#114 criterion 4) a throwing clearCache() still completes the handler [E]
+test/core/network/forced_logout_session_test.dart: the router reacts without a restart (#127 criterion 2) a forced logout moves the running app to /login [E]
+test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should logout user when refresh fails [E]
+test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should prevent infinite retry loop [E]
+test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should handle exception during refresh [E]
+test/core/network/forced_logout_session_test.dart: a forced logout with nobody listening is harmless (#127 c4) a 401 after the container is disposed does not throw [E]
+test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor forced logout cleanup clears the cached user as well as the tokens [E]
+test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor forced logout cleanup still completes the handler when clearing the user throws [E]
+test/core/network/api_client_interceptor_chain_test.dart: a 401 AuthInterceptor gives up on is mapped like any other status criterion 1: a 401 whose refresh fails [E]
+test/core/network/api_client_interceptor_chain_test.dart: a 401 AuthInterceptor gives up on is mapped like any other status criterion 2: the retry-exhausted branch (X-Retry-Count: 1) [E]
+test/core/network/api_client_interceptor_chain_test.dart: a 401 AuthInterceptor gives up on is mapped like any other status criterion 2: the stale-generation branch (session ended mid-refresh) [E]
+test/core/network/api_client_interceptor_chain_test.dart: a 401 AuthInterceptor gives up on is mapped like any other status criterion 2: a request queued behind a refresh that then fails [E]
+test/core/network/api_client_interceptor_chain_test.dart: a 401 AuthInterceptor gives up on is mapped like any other status criterion 3: the failed-refresh 401 is logged exactly once [E]
+00:23 +41 -24: Some tests failed.
