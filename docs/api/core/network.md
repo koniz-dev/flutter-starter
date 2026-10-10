@@ -480,6 +480,21 @@ header it wrote on an earlier attempt, so a `RetryInterceptor` retry that runs
 after a logout goes out without the ended session's token. A header the caller
 attached itself is left alone.
 
+**On a re-send after the session changed:** the first send of a request records
+the `SessionGeneration` it went out under (`extra['auth_session_generation']`).
+If a re-send finds that generation no longer current - a sign-out, or a
+sign-out and a different user's sign-in, landed during `RetryInterceptor`'s
+backoff - `onRequest` rejects it before reading the token store, as a
+`DioExceptionType.cancel` with `extra['retry'] = false`. The caller gets a
+`NetworkException` with code `REQUEST_CANCELLED`, and nothing reaches the wire.
+Without this, the re-send was authorised with the token stored *now*, so a
+request the old session made ran as the new user and the new user's response
+went to the old session's caller (koniz-dev/flutter-starter#289). A retry inside
+one session, including after a token refresh, keeps its generation and is sent
+as before. This covers re-sends through the chain only. The 401 replay goes
+through the separate replay client and never re-enters `onRequest`; its session
+checks live in `_handle401Error` (see koniz-dev/flutter-starter#290).
+
 **Forced logout (the 401 path):**
 
 When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three persisted things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out". A fourth step then notifies `sessionSink`, so the running app drops the in-memory session too rather than presenting a signed-in UI backed by storage that is now empty.
