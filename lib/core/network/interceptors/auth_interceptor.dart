@@ -231,11 +231,15 @@ class AuthInterceptor extends Interceptor {
   /// Queue of pending requests waiting for token refresh to complete
   final List<_PendingRequest> _pendingRequests = [];
 
-  /// Endpoints that should not trigger token refresh
   /// `RequestOptions.extra` key recording that the `Authorization` header was
   /// written by [onRequest] rather than attached by the caller.
   static const String _injectedAuthorizationKey = 'auth_interceptor_injected';
 
+  /// `RequestOptions.extra` key recording the [SessionGeneration] a request
+  /// was first sent under. See [onRequest].
+  static const String _issuedUnderGenerationKey = 'auth_session_generation';
+
+  /// Endpoints that should not trigger token refresh
   static const List<String> _excludedEndpoints = [
     ApiEndpoints.login,
     ApiEndpoints.register,
@@ -248,6 +252,28 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // A re-send - a `RetryInterceptor` attempt runs the whole chain again with
+    // the earlier attempt's `extra` - of a request first sent under a session
+    // that has since ended. Authorising it with the token stored now would
+    // send it as whoever signed in during the backoff, and hand that user's
+    // response to the ended session's caller (koniz-dev/flutter-starter#289).
+    // The first send stamps the generation; only a re-send can find it stale.
+    final issuedUnder = options.extra.putIfAbsent(
+      _issuedUnderGenerationKey,
+      () => _sessionGeneration.current,
+    );
+    if (issuedUnder is int && !_sessionGeneration.isCurrent(issuedUnder)) {
+      options.extra[RetryInterceptor.retryExtraKey] = false;
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          type: DioExceptionType.cancel,
+          message: 'The session this request was sent under has ended.',
+        ),
+        true,
+      );
+    }
+
     // Get token from secure storage
     final token = await _tokenStore.getAccessToken();
 

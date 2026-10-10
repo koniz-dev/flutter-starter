@@ -262,6 +262,13 @@ Future<Object?> _thrownBy(Future<Object?> future) async {
   }
 }
 
+/// What a re-send refused because its session ended reaches the caller as.
+final Matcher _isEndedSessionCancel = isA<NetworkException>().having(
+  (e) => e.code,
+  'code',
+  'REQUEST_CANCELLED',
+);
+
 const ResultFailure<String> _refreshRejected = ResultFailure<String>(
   AuthFailure('Refresh token expired', code: 'REFRESH_TOKEN_EXPIRED'),
 );
@@ -864,6 +871,110 @@ void main() {
 
         expect(adapter.authorizations, ['Basic caller-supplied']);
       },
+    );
+  });
+
+  group('a retry is never sent under a different session', () {
+    late _MockStorageService storageService;
+    late _MockSecureStorageService secureStorageService;
+    late _InMemoryTokenStore tokenStore;
+    late SessionGeneration generation;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      secureStorageService = _MockSecureStorageService();
+      tokenStore = _InMemoryTokenStore()..accessToken = 'USER-A';
+      generation = SessionGeneration();
+      when(() => storageService.getString(any())).thenAnswer((_) async => null);
+      when(
+        () => storageService.setString(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.setStringList(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.getStringList(any()),
+      ).thenAnswer((_) async => null);
+      when(() => storageService.remove(any())).thenAnswer((_) async => true);
+    });
+
+    ApiClient buildClient(_RecordingAdapter adapter) {
+      return ApiClient(
+        storageService: storageService,
+        secureStorageService: secureStorageService,
+        authInterceptor: AuthInterceptor(
+          tokenStore: tokenStore,
+          sessionGeneration: generation,
+          refreshToken: () async => const Success('unused'),
+        ),
+      )..dio.httpClientAdapter = adapter;
+    }
+
+    /// User A signs out and user B signs in while the first attempt is
+    /// failing, i.e. before RetryInterceptor's backoff even starts.
+    Future<void> switchToUserB(int hit) async {
+      if (hit != 1) return;
+      generation.invalidate();
+      await tokenStore.clearAllTokens();
+      tokenStore.accessToken = 'USER-B';
+    }
+
+    test(
+      'criterion 1: a GET that failed under session A is not re-sent with '
+      "session B's token",
+      () async {
+        final adapter = _RecordingAdapter([503, 200], onHit: switchToUserB);
+        final apiClient = buildClient(adapter);
+
+        final thrown = await _thrownBy(apiClient.get('/me'));
+
+        expect(
+          thrown,
+          _isEndedSessionCancel,
+          reason: "session A's caller must not receive session B's data",
+        );
+        expect(adapter.authorizations, ['Bearer USER-A']);
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
+    );
+
+    test(
+      'criterion 2: a POST opted into replay with an Idempotency-Key is not '
+      "re-sent with session B's token",
+      () async {
+        final adapter = _RecordingAdapter([503, 200], onHit: switchToUserB);
+        final apiClient = buildClient(adapter);
+
+        final thrown = await _thrownBy(
+          apiClient.post(
+            '/orders',
+            data: {'sku': 'a-1'},
+            headers: {RetryInterceptor.idempotencyKeyHeader: 'order-1'},
+          ),
+        );
+
+        expect(
+          thrown,
+          _isEndedSessionCancel,
+          reason: "a write session A started must not commit on B's account",
+        );
+        expect(adapter.authorizations, ['Bearer USER-A']);
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
+    );
+
+    test(
+      'criterion 3: a retry within one session is still sent',
+      () async {
+        final adapter = _RecordingAdapter([503, 200]);
+        final apiClient = buildClient(adapter);
+
+        final response = await apiClient.get('/me');
+
+        expect(response.statusCode, 200);
+        expect(adapter.authorizations, ['Bearer USER-A', 'Bearer USER-A']);
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
     );
   });
 }
