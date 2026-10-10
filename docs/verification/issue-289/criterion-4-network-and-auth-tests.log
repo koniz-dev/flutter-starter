@@ -1,0 +1,1166 @@
+$ flutter test test/core/network test/features/auth
+# on 6b4d9ead449 (9 changed paths)
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 91.0.0 (109.0.0 available)
+  analyzer 8.4.0 (14.5.0 available)
+  analyzer_buffer 0.1.11 (0.3.4 available)
+  analyzer_plugin 0.13.10 (0.14.18 available)
+  archive 4.0.9 (4.4.0 available)
+  async 2.13.0 (2.13.1 available)
+  build 4.0.5 (4.0.11 available)
+  build_config 1.3.0 (1.3.3 available)
+  build_daemon 4.1.1 (4.1.6 available)
+  build_runner 2.13.1 (2.16.2 available)
+  built_collection 5.1.1 (5.1.2 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.1.0 available)
+  code_builder 4.11.1 (4.12.0 available)
+  coverage 1.15.0 (1.15.1 available)
+  cupertino_icons 1.0.8 (2.0.0 available)
+  custom_lint_core 0.8.1 (0.8.2 available)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  dart_style 3.1.3 (3.1.13 available)
+  dio 5.9.2 (5.11.1 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  equatable 2.0.8 (3.0.0 available)
+  flutter_dotenv 6.0.0 (6.0.1 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_native_splash 2.4.7 (2.4.8 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_riverpod 3.0.3 (3.4.3 available)
+  flutter_secure_storage 10.0.0 (11.2.0 available)
+  flutter_secure_storage_darwin 0.2.0 (0.4.3 available)
+  flutter_secure_storage_linux 3.0.0 (3.0.3 available)
+  flutter_secure_storage_platform_interface 2.0.1 (2.1.1 available)
+  flutter_secure_storage_web 2.1.0 (2.1.1 available)
+  flutter_secure_storage_windows 4.1.0 (4.2.2 available)
+  freerasp 6.12.0 (8.2.4 available)
+  freezed 3.2.3 (4.0.2 available)
+  frontend_server_client 4.0.0 (4.1.0 available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 17.1.0 (18.0.2 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  image 4.8.0 (4.10.1 available)
+  io 1.0.5 (1.1.0 available)
+  json_annotation 4.9.0 (4.12.0 available)
+  json_serializable 6.11.2 (6.14.1 available)
+  logger 2.7.0 (2.8.0 available)
+  mason 0.1.2 (0.1.3 available)
+  mason_logger 0.3.5 (0.3.6 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mockito 5.6.4 (5.8.1 available)
+  mocktail 1.0.4 (1.0.5 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.5 available)
+  objective_c 9.3.0 (9.6.2 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  patrol 3.20.0 (4.10.0 available)
+  patrol_finders 2.9.0 (3.6.0 available)
+  patrol_log 0.5.0 (0.10.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.2 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.6.0 available)
+  riverpod 3.0.3 (3.4.3 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  riverpod_annotation 3.0.3 (4.0.7 available)
+  riverpod_generator 3.0.3 (4.0.9 available)
+  shared_preferences 2.5.4 (2.5.6 available)
+  shared_preferences_android 2.4.21 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  source_gen 4.2.2 (4.3.0 available)
+  source_helper 1.3.8 (1.3.13 available)
+  source_maps 0.10.13 (0.10.14 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test 1.31.1 (1.33.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  test_core 0.6.18 (0.6.21 available)
+  uuid 4.5.3 (4.6.0 available)
+  very_good_analysis 10.1.0 (11.0.0 available)
+  vm_service 15.0.2 (15.3.0 available)
+  webdriver 3.1.0 (3.2.0 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+94 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/error_interceptor_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/error_interceptor_test.dart: ErrorInterceptor should convert DioException to domain exception
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp carries a Z designator
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/error_interceptor_test.dart: ErrorInterceptor Edge Cases should preserve response in rejected exception
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp is the write instant, not shifted by the host offset
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp is the write instant, not shifted by the host offset
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp is the write instant, not shifted by the host offset
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 1 - the written timestamp names an instant stored timestamp is the write instant, not shifted by the host offset
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/error_interceptor_test.dart: ErrorInterceptor Status Code Handling should handle 400 Bad Request
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_timestamp_test.dart: CacheInterceptor timestamps (host UTC offset 7:00:00.000000) criterion 2 - an N-minute-old entry ages as N minutes in either string form both forms are evicted when N exceeds maxStale
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return cached response when available and valid
+00:00 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should not cache non-GET requests
+00:00 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should bypass cache when cache-control header is no-cache
+00:00 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should bypass cache when cache-control header is no-store
+00:00 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should bypass cache when authorization header is present
+00:00 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should bypass cache when cookie header is present
+00:00 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return null when cache is not found
+00:00 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should return null when timestamp is not found
+00:00 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should remove expired cache when too stale
+00:00 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onRequest should use stale cache when within maxStale
+00:00 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should cache successful GET response
+00:00 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should not cache non-GET responses
+00:00 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should not cache non-200 responses
+00:00 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should not cache when cache is disabled
+00:00 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should handle cache write errors gracefully
+Cache write error: Exception: Storage error
+00:00 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor onResponse should include query parameters in cache key
+00:00 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _shouldBypassCache should bypass cache for no-cache header
+00:00 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _shouldBypassCache should bypass cache for no-store header
+00:00 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _shouldBypassCache should bypass cache for authorization header
+00:00 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _shouldBypassCache should bypass cache for cookie header
+00:00 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor _getCacheKey should generate cache key from URI and query parameters
+00:00 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor clearCache should handle clear cache without errors
+00:00 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor clearCache should remove every indexed entry, its timestamp and the index itself
+00:00 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor clearCache should be a no-op when nothing was cached
+00:00 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor credential-aware bypass (#77) does not write a response to storage while the token store holds an access token, even though the request has no Authorization header
+00:00 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor credential-aware bypass (#77) does not read from storage while a credential exists
+00:00 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor credential-aware bypass (#77) still caches while signed out
+00:00 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_interceptor_test.dart: CacheInterceptor credential-aware bypass (#77) fails closed when the token store throws
+Cache credential check error: Bad state: keychain down
+00:01 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor (setUpAll)
+00:01 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onRequest should add Authorization header when token exists
+00:01 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onRequest should not add Authorization header when token is null
+00:01 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onRequest should not add Authorization header when token is empty
+00:01 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should exclude auth endpoints from token refresh
+00:01 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should trigger token refresh on 401 for non-auth endpoints
+00:01 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should logout user when refresh fails
+00:01 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should prevent infinite retry loop
+00:01 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should queue requests during refresh
+00:01 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - 401 Handling should handle exception during refresh
+00:01 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - Non-401 Errors should pass through non-401 errors
+00:01 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - Non-401 Errors should pass through 400 errors
+00:01 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - Non-401 Errors should pass through 403 errors
+00:01 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor onError - Non-401 Errors should pass through errors without response
+00:01 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor Edge Cases should handle multiple excluded endpoints
+00:01 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor Edge Cases should handle token with special characters
+00:01 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor Edge Cases should handle very long token
+00:01 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor Edge Cases should handle whitespace-only token
+00:01 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor forced logout cleanup clears the cached user as well as the tokens
+00:01 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor forced logout cleanup still completes the handler when clearing the user throws
+00:01 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_test.dart: AuthInterceptor (tearDownAll)
+00:02 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: (setUpAll)
+00:02 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:02 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: the real provider graph shares one SessionGeneration a forced logout raised inside AuthInterceptor advances the counter AuthRepositoryImpl checks
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.[0m
+[38;5;196m│ The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"[0m
+[38;5;196m│ Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[0m
+[38;5;196m│ In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.[0m
+[38;5;196m│ [0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)[0m
+[38;5;196m│ #1   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:14:35)[0m
+[38;5;196m│ #2   ApiClient._send (package:flutter_starter/core/network/api_client.dart:263:35)[0m
+[38;5;196m│ #3   ApiClient.get (package:flutter_starter/core/network/api_client.dart:174:12)[0m
+[38;5;196m│ #4   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart:559:21)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +111: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +112: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should retry transient errors and resolve on success
+00:02 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:02 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:02 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:02 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:02 +117: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:02 +118: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:02 +119: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +120: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +121: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +122: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +124: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +125: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +126: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +127: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +128: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +129: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +130: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +131: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +132: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +133: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +134: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +135: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +136: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +137: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +138: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +139: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +140: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +141: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +142: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +143: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +144: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +145: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +146: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +147: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +148: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor should reject when retry attempt fails too
+00:03 +149: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate GET is replayed on a 5xx
+00:03 +150: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate HEAD is replayed on a 5xx
+00:03 +151: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate OPTIONS is replayed on a 5xx
+00:03 +152: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is not replayed on receiveTimeout
+00:03 +153: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is not replayed on connectionError
+00:03 +154: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +155: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +156: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +157: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +158: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +159: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +160: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +161: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +162: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +163: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +164: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +165: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +166: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +167: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +168: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +169: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +170: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +171: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +172: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +173: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +174: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +175: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +176: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +177: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +178: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +179: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +180: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +181: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate POST is replayed on connectionTimeout
+00:04 +182: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _estimateResponseSize should estimate size for string data
+00:04 +183: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate PUT is not replayed on receiveTimeout
+00:04 +184: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _estimateResponseSize should estimate size for list data
+00:04 +185: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/performance_interceptor_test.dart: PerformanceInterceptor _estimateResponseSize should estimate size for list data
+00:04 +186: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate PUT is replayed on connectionTimeout
+00:04 +187: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate PUT is replayed on connectionTimeout
+00:04 +188: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate PATCH is not replayed on receiveTimeout
+00:04 +189: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate PATCH is not replayed on connectionError
+00:04 +190: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate PATCH is replayed on connectionTimeout
+00:04 +191: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is not replayed on receiveTimeout
+00:04 +192: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is not replayed on connectionError
+00:04 +193: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is replayed on connectionTimeout
+00:05 +194: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is replayed on connectionTimeout
+00:05 +195: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is replayed on connectionTimeout
+00:05 +196: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is replayed on connectionTimeout
+00:05 +197: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/retry_interceptor_test.dart: RetryInterceptor idempotency gate DELETE is replayed on connectionTimeout
+00:05 +198: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:05 +199: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:05 +200: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:05 +201: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:05 +202: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +203: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +204: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +205: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +206: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +207: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +208: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +208: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl disconnect closes channel and sets isConnected to false
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:41:14)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:06 +209: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +209: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl send does nothing if not connected
+[38;5;208m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;208m│ #0   RawWebSocketClientImpl.send (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:100:15)[0m
+[38;5;208m│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:47:27)[0m
+[38;5;208m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;208m│ ⚠️ Cannot send data. WebSocket is not connected.[0m
+[38;5;208m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:06 +210: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +210: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a refused port completes with an error, isConnected is false on the next line, and no error escapes the zone
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure>.attempt (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:77:30)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61270
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:64:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Failed to open WebSocket connection: WebSocketChannelException: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 61271[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:06 +211: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +211: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a refused port send after a failed connect is a no-op
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:106:34)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61272
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:64:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Failed to open WebSocket connection: WebSocketChannelException: SocketException: Connection refused (OS Error: Connection refused, errno = 61), address = 127.0.0.1, port = 61273[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;208m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;208m│ #0   RawWebSocketClientImpl.send (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:100:15)[0m
+[38;5;208m│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:108:29)[0m
+[38;5;208m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;208m│ ⚠️ Cannot send data. WebSocket is not connected.[0m
+[38;5;208m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:06 +212: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +212: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server connects, sends to the server, and receives on stream
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:147:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61274
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:140:16)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:06 +213: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:06 +213: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server disconnect() before the handshake finishes cancels the attempt and the server sees the socket closed
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:163:34)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61277
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:164:18)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:71:15)
+│ #1   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection to ws://127.0.0.1:61277 was superseded; closing it.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +214: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +215: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +215: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient connect completes without error
+NoOpRealtimeClient: Simulated connection to ws://localhost:8080
+00:07 +216: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +216: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient isConnected remains false after connect
+NoOpRealtimeClient: Simulated connection to ws://localhost:8080
+00:07 +217: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +217: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient disconnect completes without error
+NoOpRealtimeClient: Simulated disconnection
+00:07 +218: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +218: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient send completes without error
+NoOpRealtimeClient: Simulated send -> {type: message, data: hello}
+00:07 +219: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +219: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient send with string data completes without error
+NoOpRealtimeClient: Simulated send -> test message
+00:07 +220: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +220: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient send with null data completes without error
+NoOpRealtimeClient: Simulated send -> null
+00:07 +221: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +222: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +222: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server disconnect() before the handshake finishes cancels the attempt and the server sees the socket closed
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:140:16)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +223: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +224: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server two overlapping connect() calls leave exactly one open socket
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:183:32)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61279
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient multiple operations in sequence work
+NoOpRealtimeClient: Simulated connection to ws://localhost
+NoOpRealtimeClient: Simulated send -> hello
+00:07 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server two overlapping connect() calls leave exactly one open socket
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:55:42)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient multiple operations in sequence work
+NoOpRealtimeClient: Simulated send -> world
+NoOpRealtimeClient: Simulated disconnection
+00:07 +226: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +226: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server two overlapping connect() calls leave exactly one open socket
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:184:33)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61279
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +226: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient stream emits no events on send
+NoOpRealtimeClient: Simulated send -> test
+00:07 +227: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +227: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server two overlapping connect() calls leave exactly one open socket
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:71:15)
+│ #1   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection to ws://127.0.0.1:61279 was superseded; closing it.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:140:16)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +228: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +228: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against an in-process server closing the superseded socket does not close the current one
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:202:32)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61283
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:55:42)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:203:33)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61283
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:71:15)
+│ #1   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection to ws://127.0.0.1:61283 was superseded; closing it.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:117:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:140:16)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +229: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:07 +229: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:58:13)
+│ #1   main.<anonymous closure>.<anonymous closure>.<anonymous closure>.attempt (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart:257:29)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:61286
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:64:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Failed to open WebSocket connection: TimeoutException after 0:00:00.300000: Future not completed[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:08 +229: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +230: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +231: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +232: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +233: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +234: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +235: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:08 +236: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +237: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +238: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +239: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +240: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +241: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +242: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +243: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +244: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:09 +245: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +246: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +247: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +248: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +249: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +250: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +251: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +252: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +253: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +254: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +255: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +256: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +257: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +258: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +259: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +260: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +261: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +262: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +263: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +264: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +265: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +266: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:10 +267: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:11 +267: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session (#127 criterion 1) a 401 whose refresh fails clears AuthState.user
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.[0m
+[38;5;196m│ The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"[0m
+[38;5;196m│ Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[0m
+[38;5;196m│ In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.[0m
+[38;5;196m│ [0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)[0m
+[38;5;196m│ #1   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:14:35)[0m
+[38;5;196m│ #2   ApiClient._send (package:flutter_starter/core/network/api_client.dart:263:35)[0m
+[38;5;196m│ #3   ApiClient.get (package:flutter_starter/core/network/api_client.dart:174:12)[0m
+[38;5;196m│ #4   main.drive401 (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:146:17)[0m
+[38;5;196m│ #5   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:158:13)[0m
+[38;5;196m│ #6   <asynchronous suspension>[0m
+[38;5;196m│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:11 +268: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:11 +268: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: forced logout drops the in-memory session (#127 criterion 1) the retry-exhausted logout branch clears AuthState.user too
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","X-Retry-Count":"1","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.[0m
+[38;5;196m│ The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"[0m
+[38;5;196m│ Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[0m
+[38;5;196m│ In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.[0m
+[38;5;196m│ [0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)[0m
+[38;5;196m│ #1   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:14:35)[0m
+[38;5;196m│ #2   ApiClient._send (package:flutter_starter/core/network/api_client.dart:263:35)[0m
+[38;5;196m│ #3   ApiClient.get (package:flutter_starter/core/network/api_client.dart:174:12)[0m
+[38;5;196m│ #4   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:190:16)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:11 +269: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:11 +270: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +271: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +272: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +273: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +274: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +275: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +276: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +277: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +278: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:12 +278: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: the router reacts without a restart (#127 criterion 2) a forced logout moves the running app to /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.[0m
+[38;5;196m│ The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"[0m
+[38;5;196m│ Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status[0m
+[38;5;196m│ In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.[0m
+[38;5;196m│ [0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)[0m
+[38;5;196m│ #1   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:14:35)[0m
+[38;5;196m│ #2   ApiClient._send (package:flutter_starter/core/network/api_client.dart:263:35)[0m
+[38;5;196m│ #3   ApiClient.get (package:flutter_starter/core/network/api_client.dart:174:12)[0m
+[38;5;196m│ #4   main.drive401 (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:146:17)[0m
+[38;5;196m│ #5   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:274:35)[0m
+[38;5;196m│ #6   AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2308:17)[0m
+[38;5;196m│ #7   _rootRun (dart:async/zone_root.dart:35:13)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:13 +279: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +280: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +281: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +282: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +283: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +283: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects a certificate whose fingerprint is not pinned
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:13 +284: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +284: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects every certificate when the pin list is empty
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:13 +285: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +285: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:13 +286: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +287: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +288: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +289: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +290: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +291: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:13 +291: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: a forced logout with nobody listening is harmless (#127 c4) a 401 after the container is disposed does not throw
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ DioException [bad response]: null[0m
+[38;5;196m│ Error: Cannot use the Ref of Provider<AuthInterceptor>#268af after it has been disposed. This typically happens if:[0m
+[38;5;196m│ - A provider rebuilt, but the previous "build" was still pending and is still performing operations.[0m
+[38;5;196m│   You should therefore either use `ref.onDispose` to cancel pending work, or[0m
+[38;5;196m│   check `ref.mounted` after async gaps or anything that could invalidate the provider.[0m
+[38;5;196m│ - You tried to use Ref inside `onDispose` or other life-cycles.[0m
+[38;5;196m│   This is not supported, as the provider is already being disposed.[0m
+[38;5;196m│ [0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)[0m
+[38;5;196m│ #1   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:14:35)[0m
+[38;5;196m│ #2   ApiClient._send (package:flutter_starter/core/network/api_client.dart:263:35)[0m
+[38;5;196m│ #3   ApiClient.get (package:flutter_starter/core/network/api_client.dart:174:12)[0m
+[38;5;196m│ #4   main.drive401 (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:146:17)[0m
+[38;5;196m│ #5   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:317:35)[0m
+[38;5;196m│ #6   AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2308:17)[0m
+[38;5;196m│ #7   _rootRun (dart:async/zone_root.dart:35:13)[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:13 +292: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart: a forced logout with nobody listening is harmless (#127 c4) a 401 after the container is disposed does not throw
+00:13 +293: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain refreshes the token once on 401 and replays the original request
+00:13 +294: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain stops the performance trace when a request fails
+00:13 +295: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST that fails with 503 reaches the transport once
+00:13 +296: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency POST failing with 503 reaches the transport once
+00:13 +297: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency POST failing with 500 reaches the transport once
+00:13 +298: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency POST failing with sendTimeout reaches the transport once
+00:13 +299: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency POST failing with receiveTimeout reaches the transport once
+00:13 +300: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PUT failing with 503 reaches the transport once
+00:13 +301: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PUT failing with 500 reaches the transport once
+00:13 +302: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PUT failing with sendTimeout reaches the transport once
+00:13 +303: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PUT failing with receiveTimeout reaches the transport once
+00:13 +304: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PATCH failing with 503 reaches the transport once
+00:13 +305: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PATCH failing with 500 reaches the transport once
+00:13 +306: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PATCH failing with sendTimeout reaches the transport once
+00:13 +307: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency PATCH failing with receiveTimeout reaches the transport once
+00:13 +308: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency DELETE failing with 503 reaches the transport once
+00:13 +309: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency DELETE failing with 500 reaches the transport once
+00:13 +310: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency DELETE failing with sendTimeout reaches the transport once
+00:13 +311: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency DELETE failing with receiveTimeout reaches the transport once
+00:13 +312: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:15 +313: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:15 +314: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:15 +315: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:15 +316: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:16 +317: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:16 +318: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +319: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +320: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +321: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +322: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +323: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +323: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:17 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:17 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +325: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +325: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start session restore (#51) restore in flight does not flash /login, then lands on /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +326: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +326: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start session restore (#51) restore held open for a user with no session ends on /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +327: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +327: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start session restore (#51) corrupt cached JSON lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start session restore (#51) storage throwing lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/logout_teardown_test.dart: a failed logout still redirects to /login (#52) router leaves home for login after the remote call fails
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +329: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +329: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with no token lands on /login, not /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +330: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +330: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with an empty token lands on /login
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +331: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +331: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) an unreadable token store lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:18 +332: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:18 +332: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a token store throwing an Error lands on /login without throwing
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:19 +333: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:19 +333: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with a readable token still lands on /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:19 +334: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:19 +334: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) bounce to /login carries the destination, and returns to it
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:19 +335: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:19 +336: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:19 +336: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) an off-site redirect target is ignored
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:19 +337: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:20 +338: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:20 +339: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:20 +340: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:20 +341: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:20 +342: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency a POST is still replayed on connectionTimeout, which proves the request never reached the server
+00:21 +343: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +344: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +345: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +346: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +347: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +348: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +349: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +350: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +351: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +352: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +353: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +354: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +355: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +356: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +357: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +358: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +359: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +360: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +361: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +362: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +363: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +364: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +365: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +366: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +367: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +368: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +369: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +370: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +371: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +372: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +373: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +374: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +375: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +376: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +377: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +378: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +379: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +380: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +381: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +382: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +383: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +384: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +385: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +386: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:21 +387: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +388: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +389: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +390: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +391: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +392: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +393: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +394: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +395: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +396: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +397: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +398: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +399: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +400: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +401: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +402: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +403: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +404: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +405: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +406: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +407: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +408: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +409: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +410: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +411: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +412: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +413: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +414: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +415: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +416: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +417: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +418: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +419: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +420: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +421: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +422: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +423: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +424: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +425: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +426: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +427: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +428: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +429: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +430: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +431: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +432: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +433: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +434: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +435: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +436: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +437: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +438: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +439: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:22 +440: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +441: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +442: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +443: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +444: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +445: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +446: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +447: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +448: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +449: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +450: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +451: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +452: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +453: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:23 +454: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +455: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +456: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +457: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +458: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +459: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +460: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:24 +461: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:25 +462: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:25 +463: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:25 +464: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:25 +465: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:25 +466: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:25 +467: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +468: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +469: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +470: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +471: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +472: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +473: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +474: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +475: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +476: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +477: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +478: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +479: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +480: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +481: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +482: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +483: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +484: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +485: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +486: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +487: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +488: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +489: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +490: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +491: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +492: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +493: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +494: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +495: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:26 +496: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +497: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +498: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +499: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +500: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +501: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +502: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +503: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +504: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +505: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +506: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +507: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +508: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +509: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +510: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +511: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +512: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +513: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +514: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +515: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +516: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +517: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +518: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +519: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +520: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +521: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +522: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +523: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +524: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +525: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +526: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:27 +527: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: ApiClient retry idempotency an Idempotency-Key header opts a POST back into retry through the ApiClient facade
+00:28 +528: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:28 +529: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:28 +530: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:28 +531: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should display email and password fields
+00:28 +532: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:28 +533: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:28 +534: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:28 +535: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:28 +536: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:28 +537: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +538: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +539: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +540: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +541: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +542: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +543: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +544: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:29 +545: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:30 +546: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should show loading indicator during login
+00:30 +547: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +548: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +549: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +550: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +551: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +552: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +553: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:30 +554: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should call register use case with correct parameters
+00:31 +555: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 2: a POST opted into replay with an Idempotency-Key is not re-sent with session B's token
+00:31 +556: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 2: a POST opted into replay with an Idempotency-Key is not re-sent with session B's token
+00:31 +557: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 2: a POST opted into replay with an Idempotency-Key is not re-sent with session B's token
+00:31 +558: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 2: a POST opted into replay with an Idempotency-Key is not re-sent with session B's token
+00:32 +559: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should display button text
+00:32 +560: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +561: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +562: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +563: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +564: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +565: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +566: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +567: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +568: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:32 +569: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:33 +570: All tests passed!
+exit: 0
