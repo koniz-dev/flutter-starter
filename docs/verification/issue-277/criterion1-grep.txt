@@ -1,0 +1,7 @@
+## Criterion 1
+$ grep -rn "CERTIFICATE_FINGERPRINTS" docs README.md .github lib .env.example | grep -v docs/verification
+pipeline exit: 1 (1 = grep -v printed nothing, i.e. no match outside docs/verification)
+
+$ grep -n "dart-define=.*FINGERPRINTS" docs/guides/security/implementation.md
+160:  --dart-define=API_SSL_FINGERPRINTS="$API_SSL_FINGERPRINTS"
+203:            --dart-define=API_SSL_FINGERPRINTS="${{ secrets.API_SSL_FINGERPRINTS }}"
