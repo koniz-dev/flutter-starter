@@ -49,7 +49,7 @@ class FreeRaspServiceImpl implements IRaspService {
           _threatController.add(SecurityThreat.unofficialStore),
     );
 
-    Talsec.instance.attachListener(callback);
+    await Talsec.instance.attachListener(callback);
     await Talsec.instance.start(config);
   }
 }
