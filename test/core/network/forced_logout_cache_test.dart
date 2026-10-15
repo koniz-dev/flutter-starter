@@ -26,6 +26,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
@@ -39,6 +40,7 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datas
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -229,6 +231,14 @@ class _BlobRemovalFailsStorage extends _InMemoryStorage {
   }
 }
 
+/// Counts how often a forced logout told the running app its session ended.
+class _CountingSessionSink implements ISessionTerminationSink {
+  int calls = 0;
+
+  @override
+  void onSessionTerminated() => calls++;
+}
+
 /// A response cache whose `clearCache()` always fails.
 class _FailingResponseCache implements IHttpResponseCache {
   int clearCalls = 0;
@@ -315,6 +325,7 @@ void main() {
     Future<Result<String>> Function()? refreshToken,
     List<_Reply>? replies,
     _InMemoryStorage? storageOverride,
+    ISessionTerminationSink? sessionSink,
   }) async {
     final storage = storageOverride ?? _InMemoryStorage();
     final tokens = _InMemoryTokenStore();
@@ -353,6 +364,7 @@ void main() {
         //   own default. It orders concurrent credential *writes* and leaves
         //   no trace in the persisted state this file snapshots.
         keyValueStore: storage,
+        sessionSink: sessionSink,
       ),
     )..dio.httpClientAdapter = adapter;
 
@@ -643,6 +655,102 @@ void main() {
         );
         expect(tokens.accessToken, isNull);
         expect(tokens.refreshToken, isNull);
+      },
+    );
+  });
+
+  // koniz-dev/flutter-starter#303. AuthInterceptor treated every failed
+  // refresh as fatal, so one 401 that coincided with a timeout or a 503 on
+  // the refresh endpoint wiped the tokens, the cached user and the HTTP cache
+  // and signed the user out - although AuthRepositoryImpl tags exactly the
+  // failures that mean the refresh token is dead, and leaves transport
+  // trouble untagged so the session survives it.
+  group('a transient refresh failure leaves the session alone (#303)', () {
+    for (final (label, failure) in const [
+      (
+        'criterion 1: a RECEIVE_TIMEOUT',
+        NetworkFailure('Receive timeout', code: 'RECEIVE_TIMEOUT'),
+      ),
+      (
+        'criterion 2: a 503',
+        ServerFailure('Service unavailable. Please try again later.'),
+      ),
+    ]) {
+      test(
+        '$label leaves tokens, user blob, HTTP cache and session intact',
+        () async {
+          final sink = _CountingSessionSink();
+          final world = await seedSignedInWorld(
+            refreshToken: () async => ResultFailure<String>(failure),
+            sessionSink: sink,
+          );
+          final before = world.state;
+
+          final thrown = await world.apiClient
+              .get('/users/me')
+              .then<Object?>((_) => null, onError: (Object e) => e)
+              .timeout(const Duration(seconds: 10));
+
+          expect(world.state, before, reason: 'nothing was torn down');
+          expect(world.tokens.accessToken, 'access-token');
+          expect(world.tokens.refreshToken, 'refresh-token');
+          expect(world.storage.cachedBodyKeys, hasLength(1));
+          expect(
+            world.storage.values.containsKey(AppConstants.userDataKey),
+            isTrue,
+          );
+          expect(sink.calls, 0, reason: 'the in-memory session stays up');
+          expect(
+            thrown,
+            isA<NetworkException>().having(
+              (e) => e.message,
+              'message',
+              contains(failure.message),
+            ),
+            reason: 'the caller fails, with the refresh failure as the cause',
+          );
+        },
+      );
+    }
+
+    test(
+      'criterion 3: a failure tagged REFRESH_TOKEN_EXPIRED still forces the '
+      'full teardown',
+      () async {
+        final sink = _CountingSessionSink();
+        final world = await seedSignedInWorld(
+          refreshToken: () async => const ResultFailure<String>(
+            AuthFailure(
+              'Unauthorized. Please login again.',
+              code: AuthErrorCodes.refreshTokenExpired,
+            ),
+          ),
+          sessionSink: sink,
+        );
+
+        await drive401(world);
+
+        expect(world.tokens.accessToken, isNull);
+        expect(world.tokens.refreshToken, isNull);
+        expect(world.storage.cachedBodyKeys, isEmpty);
+        expect(
+          world.storage.values.containsKey(AppConstants.userDataKey),
+          isFalse,
+        );
+        expect(sink.calls, 1);
+      },
+    );
+
+    test(
+      'the code core matches on is the one the auth slice sets',
+      () {
+        // Core may not import the feature (koniz-dev/flutter-starter#221), so
+        // AuthInterceptor carries its own copy of the code. This pins the two
+        // together: renaming one without the other fails here.
+        expect(
+          AuthInterceptor.refreshTokenExpiredCode,
+          AuthErrorCodes.refreshTokenExpired,
+        );
       },
     );
   });
