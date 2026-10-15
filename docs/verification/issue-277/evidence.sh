@@ -40,9 +40,9 @@ for k in $(echo "$section" | grep -oE -- '--dart-define=[A-Z0-9_]+' | cut -d= -f
   if echo "$known" | grep -qx "$k"; then echo "  OK      $k"; else echo "  UNKNOWN $k"; fail=1; fi
 done
 echo; echo "result: $([ $fail = 0 ] && echo PASS || echo FAIL)"
-echo; echo "## Control: the same check on the section as it was on origin/main"
+echo; echo "## Control: the same check on the section as it was on da78f40, the parent of the fix"
 fail=0
-for k in $(git show origin/main:docs/guides/security/implementation.md | awk '/^### 2\. Code Obfuscation/{f=1} /^### 3\./{f=0} f' | grep -oE -- '--dart-define=[A-Z0-9_]+' | cut -d= -f2 | sort -u); do
+for k in $(git show da78f40:docs/guides/security/implementation.md | awk '/^### 2\. Code Obfuscation/{f=1} /^### 3\./{f=0} f' | grep -oE -- '--dart-define=[A-Z0-9_]+' | cut -d= -f2 | sort -u); do
   if echo "$known" | grep -qx "$k"; then echo "  OK      $k"; else echo "  UNKNOWN $k"; fail=1; fi
 done
 echo; echo "control result: $([ $fail = 0 ] && echo PASS || echo FAIL) (expected FAIL)"

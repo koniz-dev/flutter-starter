@@ -23,7 +23,7 @@ Reproduce every log with `bash docs/verification/issue-277/evidence.sh <scratch-
 | Criterion | Artifact | Result |
 |---|---|---|
 | 1. No `CERTIFICATE_FINGERPRINTS` outside `docs/verification`; fingerprints use `API_SSL_FINGERPRINTS` | `criterion1-grep.txt` | PASS: the pipeline exits 1 (no match). Lines 160 and 203 use `API_SSL_FINGERPRINTS`. |
-| 2. Every `--dart-define` key in the section is in `DartDefines.values` | `criterion2-define-keys.txt` | PASS: `ENVIRONMENT`, `BASE_URL` and `API_SSL_FINGERPRINTS` are all OK. The control run against `origin/main` FAILs on `CERTIFICATE_FINGERPRINTS`. |
+| 2. Every `--dart-define` key in the section is in `DartDefines.values` | `criterion2-define-keys.txt` | PASS: `ENVIRONMENT`, `BASE_URL` and `API_SSL_FINGERPRINTS` are all OK. The control run against `da78f40` (pre-fix) FAILs on `CERTIFICATE_FINGERPRINTS`. |
 | 3. `BASE_URL` comes from the environment argument | `criterion3-build-script-run.txt` | PASS: the script was extracted verbatim from the guide, shellcheck reports nothing, and it ran against the stub. `production` gets `https://api.example.com`. `staging` (appbundle and ios) gets `https://api-staging.example.com`. An exported `BASE_URL` wins. Unset fingerprints, `prod` and `web` each exit 1. |
 | 4. The Step 3 reference exists | `criterion4-step3-link.txt` | PASS: `ls` of both deployment guides exits 0, and no reference to `build-and-deploy.md` remains. |
 | 5. Gates | `format.log`, `analyze.log`, `tests.log`, `check_docs.log`; Docs check on the PR | PASS: format reports 0 changed, analyze reports no issues, and the test log shows 2849 passed with 8 skipped. `check_docs` reports OK. See below for goldens. |
