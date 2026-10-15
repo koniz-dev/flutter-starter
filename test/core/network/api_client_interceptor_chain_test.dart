@@ -115,6 +115,22 @@ class _InMemoryTokenStore implements ITokenStore {
   }
 }
 
+/// Token store whose `setAccessToken` blocks until [release] completes.
+///
+/// [writeStarted] completes when the write begins, so a test can act inside
+/// the window between the refresh succeeding and the token being stored.
+class _GatedTokenStore extends _InMemoryTokenStore {
+  final Completer<void> writeStarted = Completer<void>();
+  final Completer<void> release = Completer<void>();
+
+  @override
+  Future<bool> setAccessToken(String token) async {
+    if (!writeStarted.isCompleted) writeStarted.complete();
+    await release.future;
+    return super.setAccessToken(token);
+  }
+}
+
 class _RecordingTrace implements IPerformanceTrace {
   bool started = false;
   bool stopped = false;
@@ -977,4 +993,99 @@ void main() {
       timeout: const Timeout(Duration(minutes: 1)),
     );
   });
+
+  // koniz-dev/flutter-starter#290. The head request's replay - the one whose
+  // 401 started the refresh - was the only replay that did not re-check the
+  // session after `await setAccessToken`, so a logout landing during that
+  // secure-storage write still put the fresh token on the wire.
+  group(
+    'the 401 head replay re-checks the session after storing the token',
+    () {
+      late _MockStorageService storageService;
+      late _MockSecureStorageService secureStorageService;
+      late _GatedTokenStore tokenStore;
+      late SessionGeneration generation;
+
+      setUp(() {
+        storageService = _MockStorageService();
+        secureStorageService = _MockSecureStorageService();
+        tokenStore = _GatedTokenStore();
+        generation = SessionGeneration();
+        when(
+          () => storageService.getString(any()),
+        ).thenAnswer((_) async => null);
+        when(
+          () => storageService.setString(any(), any()),
+        ).thenAnswer((_) async => true);
+        when(
+          () => storageService.setStringList(any(), any()),
+        ).thenAnswer((_) async => true);
+        when(
+          () => storageService.getStringList(any()),
+        ).thenAnswer((_) async => null);
+        when(() => storageService.remove(any())).thenAnswer((_) async => true);
+      });
+
+      ApiClient buildClient(_RecordingAdapter adapter) {
+        return ApiClient(
+          storageService: storageService,
+          secureStorageService: secureStorageService,
+          authInterceptor: AuthInterceptor(
+            tokenStore: tokenStore,
+            sessionGeneration: generation,
+            refreshToken: () async => const Success('fresh-access-token'),
+          ),
+        )..dio.httpClientAdapter = adapter;
+      }
+
+      test(
+        'criterion 1: a logout during the token write stops the replay',
+        () async {
+          final adapter = _RecordingAdapter([401, 200]);
+          final apiClient = buildClient(adapter);
+
+          final call = _thrownBy(apiClient.get('/me'));
+          await tokenStore.writeStarted.future;
+          // What AuthRepositoryImpl.logout() does first, synchronously.
+          generation.invalidate();
+          tokenStore.release.complete();
+
+          expect(
+            await call,
+            isA<AppException>(),
+            reason: 'the caller of an ended session must fail, not succeed',
+          );
+          expect(
+            adapter.authorizations,
+            ['Bearer expired-access-token'],
+            reason: 'the replay must never reach the transport',
+          );
+        },
+        timeout: const Timeout(Duration(minutes: 1)),
+      );
+
+      test(
+        'criterion 2: with no session change the replay carries the new token',
+        () async {
+          final adapter = _RecordingAdapter([401, 200]);
+          final apiClient = buildClient(adapter);
+          final before = generation.current;
+
+          final call = apiClient.get('/me');
+          await tokenStore.writeStarted.future;
+          tokenStore.release.complete();
+          final response = await call;
+
+          expect(response.statusCode, 200);
+          expect(adapter.authorizations, [
+            'Bearer expired-access-token',
+            'Bearer fresh-access-token',
+          ]);
+          expect(generation.isCurrent(before), isTrue);
+          expect(tokenStore.accessToken, 'fresh-access-token');
+        },
+        timeout: const Timeout(Duration(minutes: 1)),
+      );
+    },
+  );
 }

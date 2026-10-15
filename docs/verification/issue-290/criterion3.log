@@ -1,0 +1,3 @@
+$ flutter test test/core/network test/features/auth
+00:34 +572: All tests passed!
+exit: 0
