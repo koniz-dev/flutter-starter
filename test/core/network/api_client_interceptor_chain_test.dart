@@ -131,6 +131,38 @@ class _GatedTokenStore extends _InMemoryTokenStore {
   }
 }
 
+/// Token store that switches the session to user B during one specific read.
+///
+/// Only reads made by `AuthInterceptor.onRequest` count - `CacheInterceptor`
+/// reads the same store first. The caller is identified from the synchronous
+/// stack, which still holds `onRequest`'s frame when the read starts. On the
+/// [switchOnAuthRead]-th such read the shared generation is advanced (what
+/// `logout()` and `login()` do first) and user B's token is returned, as if
+/// the switch had landed while the platform read was in flight.
+class _SessionSwitchingTokenStore extends _InMemoryTokenStore {
+  _SessionSwitchingTokenStore(this._generation, this.switchOnAuthRead) {
+    accessToken = 'USER-A';
+  }
+
+  final SessionGeneration _generation;
+  final int switchOnAuthRead;
+
+  /// Reads made by `AuthInterceptor.onRequest` so far.
+  int authReads = 0;
+
+  @override
+  Future<String?> getAccessToken() async {
+    if (StackTrace.current.toString().contains('AuthInterceptor.onRequest')) {
+      authReads++;
+      if (authReads == switchOnAuthRead) {
+        _generation.invalidate();
+        accessToken = 'USER-B';
+      }
+    }
+    return accessToken;
+  }
+}
+
 class _RecordingTrace implements IPerformanceTrace {
   bool started = false;
   bool stopped = false;
@@ -1088,4 +1120,96 @@ void main() {
       );
     },
   );
+
+  // koniz-dev/flutter-starter#295. onRequest checked the request's generation
+  // before `await getAccessToken()` and not after it, so a session switch that
+  // landed during that platform read still sent the request - first send or
+  // re-send - with the new user's bearer token.
+  group('a session switch during the token read stops the request', () {
+    late _MockStorageService storageService;
+    late _MockSecureStorageService secureStorageService;
+    late SessionGeneration generation;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      secureStorageService = _MockSecureStorageService();
+      generation = SessionGeneration();
+      when(() => storageService.getString(any())).thenAnswer((_) async => null);
+      when(
+        () => storageService.setString(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.setStringList(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.getStringList(any()),
+      ).thenAnswer((_) async => null);
+      when(() => storageService.remove(any())).thenAnswer((_) async => true);
+    });
+
+    ApiClient buildClient(ITokenStore tokenStore, _RecordingAdapter adapter) {
+      return ApiClient(
+        storageService: storageService,
+        secureStorageService: secureStorageService,
+        authInterceptor: AuthInterceptor(
+          tokenStore: tokenStore,
+          sessionGeneration: generation,
+          refreshToken: () async => const Success('unused'),
+        ),
+      )..dio.httpClientAdapter = adapter;
+    }
+
+    test(
+      "criterion 1: a switch during the first send's read sends nothing",
+      () async {
+        final tokenStore = _SessionSwitchingTokenStore(generation, 1);
+        final adapter = _RecordingAdapter([200]);
+        final apiClient = buildClient(tokenStore, adapter);
+
+        final thrown = await _thrownBy(apiClient.get('/me'));
+
+        expect(tokenStore.authReads, 1, reason: 'the switch must have fired');
+        expect(
+          thrown,
+          _isEndedSessionCancel,
+          reason: "session A's caller must not receive session B's data",
+        );
+        expect(adapter.authorizations, isEmpty);
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
+    );
+
+    test(
+      "criterion 2: a switch during a re-send's read sends only the first "
+      'attempt',
+      () async {
+        final tokenStore = _SessionSwitchingTokenStore(generation, 2);
+        final adapter = _RecordingAdapter([503, 200]);
+        final apiClient = buildClient(tokenStore, adapter);
+
+        final thrown = await _thrownBy(apiClient.get('/me'));
+
+        expect(tokenStore.authReads, 2, reason: 'the switch must have fired');
+        expect(thrown, _isEndedSessionCancel);
+        expect(adapter.authorizations, ['Bearer USER-A']);
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
+    );
+
+    test(
+      'criterion 3: with no switch the stored token is sent',
+      () async {
+        final tokenStore = _SessionSwitchingTokenStore(generation, 0);
+        final adapter = _RecordingAdapter([503, 200]);
+        final apiClient = buildClient(tokenStore, adapter);
+
+        final response = await apiClient.get('/me');
+
+        expect(response.statusCode, 200);
+        expect(tokenStore.authReads, 2);
+        expect(adapter.authorizations, ['Bearer USER-A', 'Bearer USER-A']);
+      },
+      timeout: const Timeout(Duration(minutes: 1)),
+    );
+  });
 }
