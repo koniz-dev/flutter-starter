@@ -8,6 +8,7 @@ import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
 import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -235,6 +236,13 @@ class AuthInterceptor extends Interceptor {
   /// written by [onRequest] rather than attached by the caller.
   static const String _injectedAuthorizationKey = 'auth_interceptor_injected';
 
+  /// The failure code a refresher sets when the refresh token itself is dead.
+  ///
+  /// The same string as `AuthErrorCodes.refreshTokenExpired`, which core
+  /// cannot import (koniz-dev/flutter-starter#221); a test pins the two
+  /// together. See [_endsSession].
+  static const String refreshTokenExpiredCode = 'REFRESH_TOKEN_EXPIRED';
+
   /// `RequestOptions.extra` key recording the [SessionGeneration] a request
   /// was first sent under. See [onRequest].
   static const String _issuedUnderGenerationKey = 'auth_session_generation';
@@ -396,6 +404,19 @@ class AuthInterceptor extends Interceptor {
 
       final newToken = result.isSuccess ? result.dataOrNull : null;
 
+      if (result case ResultFailure(
+        :final failure,
+      ) when !_endsSession(failure)) {
+        // Transport trouble on the refresh endpoint, not a dead refresh token:
+        // the session is still good, so nothing is torn down and nothing is
+        // replayed. The caller fails with the refresh failure as the cause
+        // rather than with this 401, whose "please login again" would be
+        // false (koniz-dev/flutter-starter#303). refreshedToken stays null,
+        // so the `finally` drain rejects every queued request too.
+        _reject(handler, _refreshFailedTransiently(err, failure));
+        return;
+      }
+
       if (newToken == null) {
         // Refresh failed (or returned nothing usable), logout user
         await _logoutUser();
@@ -468,6 +489,49 @@ class AuthInterceptor extends Interceptor {
   void _reject(ErrorInterceptorHandler handler, DioException error) {
     error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
     handler.next(error);
+  }
+
+  /// Whether a failed refresh means the session is over.
+  ///
+  /// Fails closed. Only two shapes are known to be transport trouble rather
+  /// than a dead credential, and only those leave the session alone:
+  ///
+  /// - a [NetworkFailure], meaning a timeout, connection error or bad
+  ///   certificate on the refresh call;
+  /// - an untagged [ServerFailure]. `AuthRepositoryImpl` tags the statuses
+  ///   that mean the refresh token is dead (400, 401 and 403) with
+  ///   [refreshTokenExpiredCode], so what is left is 408, 429 and 5xx
+  ///   (koniz-dev/flutter-starter#384).
+  ///
+  /// Everything else ends the session:
+  ///
+  /// - the [refreshTokenExpiredCode] tag, on any failure type;
+  /// - core's own `NO_TOKEN_REFRESHER`;
+  /// - an untagged auth, unknown or other failure from a custom refresher.
+  ///
+  /// The last case matters: an unrecognised failure is not given the benefit
+  /// of the doubt, because a session that can never refresh would otherwise
+  /// stay up indefinitely.
+  static bool _endsSession(Failure failure) {
+    if (failure.code == refreshTokenExpiredCode) return true;
+    return failure is! NetworkFailure && failure is! ServerFailure;
+  }
+
+  /// The error a request fails with when its refresh failed transiently.
+  ///
+  /// `DioExceptionType.unknown` with the failure's message, so
+  /// `ErrorInterceptor` maps it to a `NetworkException` that says the session
+  /// could not be refreshed. The original 401 would map to a
+  /// `ServerException` telling the user to sign in again, when the session is
+  /// still good.
+  DioException _refreshFailedTransiently(DioException original, Failure f) {
+    return DioException(
+      requestOptions: original.requestOptions,
+      error: f,
+      message:
+          'Could not refresh the session (${f.code ?? f.runtimeType}): '
+          '${f.message}',
+    );
   }
 
   /// Wraps a non-Dio failure so the caller still gets a [DioException].

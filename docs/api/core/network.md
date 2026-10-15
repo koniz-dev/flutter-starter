@@ -501,7 +501,18 @@ and never re-enters `onRequest`, so its session checks live in `_handle401Error`
 
 **Forced logout (the 401 path):**
 
-When the refresh fails, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself. That teardown clears the **same three persisted things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out". A fourth step then notifies `sessionSink`, so the running app drops the in-memory session too rather than presenting a signed-in UI backed by storage that is now empty.
+When the refresh says the session is over, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself.
+
+Which refresh failures end the session (koniz-dev/flutter-starter#303):
+
+| Refresh result | Session | Caller gets |
+|---|---|---|
+| Any failure with code `REFRESH_TOKEN_EXPIRED`. `AuthRepositoryImpl` sets it for a 400, 401 or 403 from the refresh endpoint, and when no refresh token is stored (#384). | Ends: forced logout | The original 401, as a `ServerException` |
+| `NetworkFailure`: a timeout, connection error or bad certificate on the refresh call | **Kept**, with no teardown | `NetworkException` "Could not refresh the session (...)" |
+| Untagged `ServerFailure`: 408, 429 or 5xx | **Kept**, with no teardown | `NetworkException` "Could not refresh the session (...)" |
+| Anything else: `NO_TOKEN_REFRESHER`, or an untagged auth or unknown failure from a custom refresher | Ends: forced logout | The original 401 |
+
+The rule fails closed. Only failures known to be transport trouble keep the session, because a session that can never refresh would otherwise stay up indefinitely. A custom refresher should therefore tag a dead refresh token with `REFRESH_TOKEN_EXPIRED`, and return its transport failures as `NetworkFailure` or `ServerFailure`. When the session is kept, queued requests are rejected rather than replayed, and the next 401 starts a fresh refresh. That teardown clears the **same three persisted things** `AuthRepositoryImpl.logout()` clears - the tokens, the cached user blob, and the HTTP response cache (see [CacheInterceptor](#cacheinterceptor)) - so a session that ends by token expiry leaves the device in the same state as one the user ended by tapping "log out". A fourth step then notifies `sessionSink`, so the running app drops the in-memory session too rather than presenting a signed-in UI backed by storage that is now empty.
 
 The cache reference is supplied by `ApiClient._createDio` through `authInterceptor.attachResponseCache(...)`, because the cache is a `CacheInterceptor` the client builds itself and so does not exist when `authInterceptorProvider` constructs the interceptor. It is optional: an interceptor nobody attaches a cache to simply skips that step, exactly as `httpCache` is optional on `AuthRepositoryImpl`.
 
