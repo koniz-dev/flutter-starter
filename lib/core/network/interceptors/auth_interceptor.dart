@@ -257,25 +257,22 @@ class AuthInterceptor extends Interceptor {
     // that has since ended. Authorising it with the token stored now would
     // send it as whoever signed in during the backoff, and hand that user's
     // response to the ended session's caller (koniz-dev/flutter-starter#289).
-    // The first send stamps the generation; only a re-send can find it stale.
+    // The first send stamps the generation, so only a re-send can find it
+    // stale here; the check after the token read covers both.
     final issuedUnder = options.extra.putIfAbsent(
       _issuedUnderGenerationKey,
       () => _sessionGeneration.current,
     );
-    if (issuedUnder is int && !_sessionGeneration.isCurrent(issuedUnder)) {
-      options.extra[RetryInterceptor.retryExtraKey] = false;
-      return handler.reject(
-        DioException(
-          requestOptions: options,
-          type: DioExceptionType.cancel,
-          message: 'The session this request was sent under has ended.',
-        ),
-        true,
-      );
-    }
+    if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
 
     // Get token from secure storage
     final token = await _tokenStore.getAccessToken();
+
+    // Checked again because the read above is a platform call: a sign-out and
+    // a different user's sign-in landing while it was pending return *their*
+    // token, and sending it would run this session's request - first send or
+    // re-send - as the new user (koniz-dev/flutter-starter#295).
+    if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -291,6 +288,31 @@ class AuthInterceptor extends Interceptor {
     }
 
     super.onRequest(options, handler);
+  }
+
+  /// Rejects [options] when the session it was [issuedUnder] has ended.
+  ///
+  /// Returns true when it rejected, so the caller stops. The rejection is a
+  /// `DioExceptionType.cancel` marked with [RetryInterceptor.retryExtraKey]
+  /// `= false`, so it is not re-sent either.
+  bool _rejectIfSessionEnded(
+    Object? issuedUnder,
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
+    if (issuedUnder is! int || _sessionGeneration.isCurrent(issuedUnder)) {
+      return false;
+    }
+    options.extra[RetryInterceptor.retryExtraKey] = false;
+    handler.reject(
+      DioException(
+        requestOptions: options,
+        type: DioExceptionType.cancel,
+        message: 'The session this request was sent under has ended.',
+      ),
+      true,
+    );
+    return true;
   }
 
   @override

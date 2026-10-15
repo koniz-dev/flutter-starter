@@ -491,9 +491,13 @@ Without this, the re-send was authorised with the token stored *now*, so a
 request the old session made ran as the new user and the new user's response
 went to the old session's caller (koniz-dev/flutter-starter#289). A retry inside
 one session, including after a token refresh, keeps its generation and is sent
-as before. This covers re-sends through the chain only. The 401 replay goes
-through the separate replay client and never re-enters `onRequest`; its session
-checks live in `_handle401Error` (see koniz-dev/flutter-starter#290).
+as before. The same check runs again **after** the token read, on every send,
+first or re-send. That read is a platform call, so a sign-out and a different
+user's sign-in can land while it is pending and return the new user's token.
+Before koniz-dev/flutter-starter#295 that token was sent. Both checks cover sends
+through the chain only. The 401 replay goes through the separate replay client
+and never re-enters `onRequest`, so its session checks live in `_handle401Error`
+(see koniz-dev/flutter-starter#290).
 
 **Forced logout (the 401 path):**
 

@@ -1,0 +1,7 @@
+$ flutter test test/core/network/api_client_interceptor_chain_test.dart --plain-name "during the token read" -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart
+00:00 +0: a session switch during the token read stops the request criterion 1: a switch during the first send's read sends nothing
+00:00 +1: a session switch during the token read stops the request criterion 2: a switch during a re-send's read sends only the first attempt
+00:01 +2: a session switch during the token read stops the request criterion 3: with no switch the stored token is sent
+00:02 +3: All tests passed!
+exit: 0
