@@ -1,0 +1,16 @@
+# Local JDK 25 attempt on this branch (Android Studio JBR 25.0.3), before the NDK ran out of disk.
+# It gets past the Gradle/Java check and the Kotlin DSL, then stops installing NDK 28.2 with 'No space left on device'.
+# The machine had under 1 GB free. The JDK 25 build itself is proven on CI: criterion2-jdk25-ci.log
+
+94 packages have newer versions incompatible with dependency constraints.
+Running Gradle task 'assembleDebug'...                          
+Checking the license for package NDK (Side by side) 28.2.13676358 in /Users/nguyenanhkiet/Library/Android/sdk/licenses
+License for package NDK (Side by side) 28.2.13676358 accepted.
+Preparing "Install NDK (Side by side) 28.2.13676358 v.28.2.13676358".
+Warning: An error occurred while preparing SDK package NDK (Side by side) 28.2.13676358: No space left on device.:
+java.io.IOException: No space left on device
+"Install NDK (Side by side) 28.2.13676358 v.28.2.13676358" failed.
+      ndk;28.2.13676358 NDK (Side by side) 28.2.13676358
+BUILD FAILED in 1m 42s
+Running Gradle task 'assembleDebug'...                            102.8s
+Gradle task assembleDebug failed with exit code 1

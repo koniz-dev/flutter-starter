@@ -57,10 +57,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.flutter_starter"
@@ -145,6 +141,14 @@ if (releaseKeystore == null && !allowUnsignedRelease) {
                 """.trimIndent(),
             )
         }
+    }
+}
+
+// Kotlin 2.4 removed `android { kotlinOptions { ... } }`; this is the
+// replacement `flutter create` writes (Flutter 3.47).
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
