@@ -1,0 +1,124 @@
+$ flutter test --timeout=5m --reporter compact
+
+00:16 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/di/provider_graph_acyclic_test.dart: the runtime graph survived breaking the import cycle (#221) AuthRepositoryImpl and the interceptor share one SessionGeneration
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:16 +136: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/di/provider_graph_acyclic_test.dart: the runtime graph survived breaking the import cycle (#221) AuthRepositoryImpl and the interceptor share one SessionGeneration
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.
+│ The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+00:16 +137: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/di/provider_graph_acyclic_test.dart: the runtime graph survived breaking the import cycle (#221) AuthRepositoryImpl and the interceptor share one SessionGeneration
+│ Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+│ In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+│ 
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)
+00:16 +138: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/di/provider_graph_acyclic_test.dart: the runtime graph survived breaking the import cycle (#221) AuthRepositoryImpl and the interceptor share one SessionGeneration
+│ #1   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:14:35)
+│ #2   ApiClient._send (package:flutter_starter/core/network/api_client.dart:263:35)
+│ #3   ApiClient.get (package:flutter_starter/core/network/api_client.dart:174:12)
+│ #4   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/di/provider_graph_acyclic_test.dart:123:21)
+│ #5   <asynchronous suspension>
+│ #6   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+│ #7   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:16 +156: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/app_config_test.dart: AppConfig Debug utilities should have printConfig method                                            
+═══════════════════════════════════════════════════════════
+00:16 +157: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/app_config_test.dart: AppConfig Debug utilities should have printConfig method                                            
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+
+[... 2285 lines elided by scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2860 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should use light theme by default                                                                           
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2861 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should have dark theme configured                                                                           
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2862 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure router correctly                                                                           
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2863 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure localization delegates                                                                     
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2864 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure supported locales                                                                          
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2865 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should use locale from provider                                                                             
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2866 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure text direction from provider                                                               
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:42 +2867 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should wrap content in RepaintBoundary                                                                      
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:43 +2871 ~8: 8 skipped tests.                                                                                                                                                                       
+05:43 +2871 ~8: All other tests passed!                                                                                                                                                                
+exit: 0
