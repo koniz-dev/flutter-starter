@@ -117,40 +117,56 @@ values out of the repository so a rotation does not require a code change.
 Create a build script:
 
 ```bash
-# scripts/ci/build_release.sh
 #!/bin/bash
+# scripts/ci/build_release.sh
+set -euo pipefail
 
 ENVIRONMENT=${1:-production}
 BUILD_TYPE=${2:-apk}  # apk, appbundle, ios
 
+# Each environment gets its own API host. Export BASE_URL to override it.
+case "$ENVIRONMENT" in
+  production) BASE_URL=${BASE_URL:-https://api.example.com} ;;
+  staging)    BASE_URL=${BASE_URL:-https://api-staging.example.com} ;;
+  *)
+    echo "Unknown environment '$ENVIRONMENT' (expected production or staging)" >&2
+    exit 1
+    ;;
+esac
+
+# Pinning is on by default in staging and production. With an empty list,
+# SslPinning returns no adapter and the release falls back to the system
+# trust store, so refuse to build instead of shipping unpinned.
+if [ -z "${API_SSL_FINGERPRINTS:-}" ]; then
+  echo "API_SSL_FINGERPRINTS is empty: refusing to build an unpinned release" >&2
+  exit 1
+fi
+
+case "$BUILD_TYPE" in
+  apk|appbundle|ios) ;;
+  *)
+    echo "Unknown build type '$BUILD_TYPE' (expected apk, appbundle or ios)" >&2
+    exit 1
+    ;;
+esac
+
 echo "Building $BUILD_TYPE for $ENVIRONMENT with obfuscation..."
 
-if [ "$BUILD_TYPE" = "apk" ]; then
-  flutter build apk --release \
-    --obfuscate \
-    --split-debug-info=./build/debug-info \
-    --dart-define=ENVIRONMENT=$ENVIRONMENT \
-    --dart-define=BASE_URL=https://api.example.com \
-    --dart-define=CERTIFICATE_FINGERPRINTS="$CERTIFICATE_FINGERPRINTS"
-elif [ "$BUILD_TYPE" = "appbundle" ]; then
-  flutter build appbundle --release \
-    --obfuscate \
-    --split-debug-info=./build/debug-info \
-    --dart-define=ENVIRONMENT=$ENVIRONMENT \
-    --dart-define=BASE_URL=https://api.example.com \
-    --dart-define=CERTIFICATE_FINGERPRINTS="$CERTIFICATE_FINGERPRINTS"
-elif [ "$BUILD_TYPE" = "ios" ]; then
-  flutter build ios --release \
-    --obfuscate \
-    --split-debug-info=./build/debug-info \
-    --dart-define=ENVIRONMENT=$ENVIRONMENT \
-    --dart-define=BASE_URL=https://api.example.com \
-    --dart-define=CERTIFICATE_FINGERPRINTS="$CERTIFICATE_FINGERPRINTS"
-fi
+flutter build "$BUILD_TYPE" --release \
+  --obfuscate \
+  --split-debug-info=./build/debug-info \
+  --dart-define=ENVIRONMENT="$ENVIRONMENT" \
+  --dart-define=BASE_URL="$BASE_URL" \
+  --dart-define=API_SSL_FINGERPRINTS="$API_SSL_FINGERPRINTS"
 
 echo "Build complete. Debug info saved to ./build/debug-info/"
 echo " IMPORTANT: Store debug-info files securely for crash symbolication!"
 ```
+
+Only keys listed in `DartDefines.values` (`lib/core/config/dart_defines.dart`)
+reach the app through `--dart-define`; any other key is dropped at compile
+time without an error. The fingerprint key is `API_SSL_FINGERPRINTS`, a
+comma-separated list of SHA-256 fingerprints, as in section 1.
 
 Make it executable:
 ```bash
@@ -184,7 +200,7 @@ jobs:
             --split-debug-info=./build/debug-info \
             --dart-define=ENVIRONMENT=production \
             --dart-define=BASE_URL=${{ secrets.BASE_URL }} \
-            --dart-define=CERTIFICATE_FINGERPRINTS="${{ secrets.CERTIFICATE_FINGERPRINTS }}"
+            --dart-define=API_SSL_FINGERPRINTS="${{ secrets.API_SSL_FINGERPRINTS }}"
       
       - name: Upload Debug Info
         uses: actions/upload-artifact@v3
@@ -202,7 +218,9 @@ jobs:
 
 #### Step 3: Update Documentation
 
-Add to `docs/guides/build-and-deploy.md`:
+Add to your platform deployment guides,
+[`docs/deployment/android-deployment.md`](../../deployment/android-deployment.md)
+and [`docs/deployment/ios-deployment.md`](../../deployment/ios-deployment.md):
 
 ```markdown
 ## Production Builds

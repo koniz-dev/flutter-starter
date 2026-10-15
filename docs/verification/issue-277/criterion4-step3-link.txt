@@ -1,0 +1,13 @@
+## Criterion 4
+219:#### Step 3: Update Documentation
+220-
+221-Add to your platform deployment guides,
+222-[`docs/deployment/android-deployment.md`](../../deployment/android-deployment.md)
+
+$ ls docs/deployment/android-deployment.md docs/deployment/ios-deployment.md
+docs/deployment/android-deployment.md
+docs/deployment/ios-deployment.md
+exit: 0
+
+$ grep -rn "build-and-deploy.md" docs README.md | grep -v docs/verification
+pipeline exit: 1 (1 = no remaining reference)
