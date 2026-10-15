@@ -1,0 +1,6 @@
+$ flutter test test/core/network/api_client_interceptor_chain_test.dart --plain-name "head replay" -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart
+00:00 +0: the 401 head replay re-checks the session after storing the token criterion 1: a logout during the token write stops the replay
+00:00 +1: the 401 head replay re-checks the session after storing the token criterion 2: with no session change the replay carries the new token
+00:00 +2: All tests passed!
+exit: 0

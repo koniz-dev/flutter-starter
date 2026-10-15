@@ -383,6 +383,17 @@ class AuthInterceptor extends Interceptor {
 
       // Update token in secure storage
       await _tokenStore.setAccessToken(newToken);
+
+      // Checked again because the write above is a platform call: a logout or
+      // sign-in landing while it was pending makes the replay belong to a
+      // session that has ended, and sending it would put the fresh token on
+      // the wire after the user signed out (koniz-dev/flutter-starter#290).
+      // Same exit as the check above, for the same reasons: no replay, no
+      // _logoutUser(), and the `finally` drain rejects every queued request.
+      if (!_sessionGeneration.isCurrent(generation)) {
+        _reject(handler, err);
+        return;
+      }
       refreshedToken = newToken;
 
       // Retry original request with new token

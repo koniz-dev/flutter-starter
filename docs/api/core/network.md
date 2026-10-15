@@ -555,6 +555,15 @@ logout landing part-way through stops the remaining replays too. Rejection
 still completes every handler, so the guarantee from point 5 above is
 unaffected.
 
+The request whose 401 started the refresh is checked the same way, and a second
+time **after** `setAccessToken` returns. That write is a platform call, so a
+logout or sign-in can land while it is pending. Once the generation is stale,
+the request fails with its original 401 and is not replayed, and no
+`_logoutUser()` runs, for the reason given above. Before
+koniz-dev/flutter-starter#290 this request was the only replay with no check
+after the write, so it went on the wire with the freshly minted token after the
+user had signed out, and its caller received a success.
+
 The guard does not wedge anything. Each refresh reads the generation afresh, so
 the first 401 after a successful `login()` refreshes normally.
 
