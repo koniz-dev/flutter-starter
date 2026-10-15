@@ -33,7 +33,7 @@ DartDefines.values keys:
 
 result: PASS
 
-## Control: the same check on the section as it was on origin/main
+## Control: the same check on the section as it was on da78f40, the parent of the fix
   OK      BASE_URL
   UNKNOWN CERTIFICATE_FINGERPRINTS
   OK      ENVIRONMENT
