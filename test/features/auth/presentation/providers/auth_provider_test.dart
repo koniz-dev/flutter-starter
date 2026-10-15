@@ -1,6 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
@@ -13,6 +17,10 @@ import 'package:flutter_starter/features/auth/domain/usecases/register_usecase.d
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
+class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
 class MockLoginUseCase extends Mock implements LoginUseCase {}
 
@@ -797,6 +805,47 @@ void main() {
         final finalState = container.read(authNotifierProvider);
         expect(finalState.isLoading, isFalse);
       });
+    });
+  });
+
+  // koniz-dev/flutter-starter#384, criterion 3. Driven through the real
+  // RefreshTokenUseCase and AuthRepositoryImpl rather than a stubbed failure,
+  // so the test proves the 400 the server sends is what reaches the notifier
+  // as REFRESH_TOKEN_EXPIRED.
+  group('a refresh rejected with 400 invalid_grant', () {
+    test('logs the user out', () async {
+      final remote = MockAuthRemoteDataSource();
+      final local = MockAuthLocalDataSource();
+      final logoutUseCase = MockLogoutUseCase();
+      when(local.getRefreshToken).thenAnswer((_) async => 'refresh_token');
+      when(() => remote.refreshToken(any())).thenThrow(
+        const ServerException(
+          'invalid_grant',
+          statusCode: 400,
+          code: 'invalid_grant',
+        ),
+      );
+      when(logoutUseCase.call).thenAnswer((_) async => const Success(null));
+
+      final container = ProviderContainer(
+        overrides: [
+          refreshTokenUseCaseProvider.overrideWithValue(
+            RefreshTokenUseCase(
+              AuthRepositoryImpl(
+                remoteDataSource: remote,
+                localDataSource: local,
+              ),
+            ),
+          ),
+          logoutUseCaseProvider.overrideWithValue(logoutUseCase),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await container.read(authNotifierProvider.notifier).refreshToken();
+
+      verify(() => remote.refreshToken('refresh_token')).called(1);
+      verify(logoutUseCase.call).called(1);
     });
   });
 }

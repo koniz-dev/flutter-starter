@@ -1,0 +1,5 @@
+$ flutter test test/features/auth/presentation/providers/auth_provider_test.dart --plain-name "400 invalid_grant" -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart
+00:00 +0: a refresh rejected with 400 invalid_grant logs the user out
+00:00 +1: All tests passed!
+exit: 0

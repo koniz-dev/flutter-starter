@@ -287,14 +287,31 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  /// HTTP statuses from the refresh endpoint that mean the refresh token is
+  /// dead. See [_mapRefreshFailure].
+  static const Set<int> _deadRefreshTokenStatuses = {400, 401, 403};
+
   /// Maps a failed refresh round trip, tagging the cases that mean the refresh
   /// token itself is dead with [AuthErrorCodes.refreshTokenExpired].
   ///
-  /// Exactly two exception shapes mean that: a 401 from the refresh endpoint -
-  /// the server rejecting the very token it was handed - and an
-  /// [AuthException], which a custom data source raises for the same reason.
-  /// Everything else (a timeout, a 502, a decode error) is transport trouble
-  /// and must leave the session alone.
+  /// Two exception shapes mean that. The first is an [AuthException], which a
+  /// custom data source raises for exactly this reason. The second is a
+  /// [ServerException] whose status is in [_deadRefreshTokenStatuses]: the
+  /// server rejecting the very token it was handed.
+  ///
+  /// - **401** is what this starter's sample backend sends.
+  /// - **400** is what an OAuth 2.0 server sends: RFC 6749 section 5.2 answers
+  ///   a revoked or expired refresh token with `400 invalid_grant`.
+  /// - **403** is what many servers send for a token they refuse.
+  ///
+  /// Tagging only 401 left the other two indistinguishable from a 503, so a
+  /// dead refresh token never ended the session
+  /// (koniz-dev/flutter-starter#384).
+  ///
+  /// Everything else is transport trouble and must leave the session alone:
+  /// a timeout, a connection error, any 5xx, and the two 4xx statuses that
+  /// mean "try again later" rather than "never" - 408 Request Timeout and
+  /// 429 Too Many Requests.
   ///
   /// The tag is set *here*, in the layer that knows what the round trip meant,
   /// because the caller cannot tell. Before koniz-dev/flutter-starter#181 the
@@ -305,7 +322,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Failure _mapRefreshFailure(AppException exception) {
     final rejected =
         exception is AuthException ||
-        (exception is ServerException && exception.statusCode == 401);
+        (exception is ServerException &&
+            _deadRefreshTokenStatuses.contains(exception.statusCode));
     if (!rejected) {
       return ExceptionToFailureMapper.map(exception);
     }

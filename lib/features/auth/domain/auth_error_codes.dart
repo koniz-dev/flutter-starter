@@ -11,7 +11,8 @@ class AuthErrorCodes {
 
   /// The stored refresh token can no longer produce an access token.
   ///
-  /// Set when the refresh endpoint rejects the token with 401, and when there
+  /// Set when the refresh endpoint rejects the token with 400, 401 or 403
+  /// (see `AuthRepositoryImpl._mapRefreshFailure`), and when there
   /// is no refresh token on the device at all - both mean the same thing to a
   /// caller, that only a fresh sign-in can restore the session. This is the
   /// only code that forces a logout.

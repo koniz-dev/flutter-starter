@@ -246,6 +246,77 @@ void main() {
         },
       );
 
+      // koniz-dev/flutter-starter#384. RFC 6749 section 5.2 answers a revoked
+      // or expired refresh token with 400 invalid_grant, and many servers use
+      // 403; both arrived as an untagged ServerFailure, indistinguishable from
+      // a 503, so a dead refresh token never ended the session.
+      for (final status in const [400, 401, 403]) {
+        test(
+          'criterion 1: a $status from the refresh endpoint is tagged '
+          'REFRESH_TOKEN_EXPIRED',
+          () async {
+            when(
+              () => mockLocalDataSource.getRefreshToken(),
+            ).thenAnswer((_) async => 'refresh_token');
+            when(() => mockRemoteDataSource.refreshToken(any())).thenThrow(
+              ServerException(
+                'refresh rejected',
+                statusCode: status,
+                code: status == 400 ? 'invalid_grant' : null,
+              ),
+            );
+
+            final result = await repository.refreshToken();
+
+            expect(
+              result.failureOrNull?.code,
+              AuthErrorCodes.refreshTokenExpired,
+            );
+          },
+        );
+      }
+
+      for (final status in const [408, 429, 500, 502, 503, 504]) {
+        test(
+          'criterion 2: a $status from the refresh endpoint is not tagged',
+          () async {
+            when(
+              () => mockLocalDataSource.getRefreshToken(),
+            ).thenAnswer((_) async => 'refresh_token');
+            when(() => mockRemoteDataSource.refreshToken(any())).thenThrow(
+              ServerException('server trouble', statusCode: status),
+            );
+
+            final result = await repository.refreshToken();
+
+            expect(result.failureOrNull, isA<ServerFailure>());
+            expect(
+              result.failureOrNull?.code,
+              isNot(AuthErrorCodes.refreshTokenExpired),
+            );
+          },
+        );
+      }
+
+      for (final code in const ['RECEIVE_TIMEOUT', 'CONNECTION_ERROR']) {
+        test(
+          'criterion 2: a NetworkException ($code) is not tagged',
+          () async {
+            when(
+              () => mockLocalDataSource.getRefreshToken(),
+            ).thenAnswer((_) async => 'refresh_token');
+            when(
+              () => mockRemoteDataSource.refreshToken(any()),
+            ).thenThrow(NetworkException('transport', code: code));
+
+            final result = await repository.refreshToken();
+
+            expect(result.failureOrNull, isA<NetworkFailure>());
+            expect(result.failureOrNull?.code, code);
+          },
+        );
+      }
+
       test('should cache refresh token only if provided', () async {
         // Arrange
         const userModel = UserModel(id: '1', email: 'test@example.com');
