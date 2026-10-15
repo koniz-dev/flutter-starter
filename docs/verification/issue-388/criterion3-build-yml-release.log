@@ -1,0 +1,23 @@
+# build.yml workflow_dispatch platform=android on tmp/388-with-329 (bc18409 + a0adedc, the #329 toolchain cherry-picked)
+# https://github.com/koniz-dev/flutter-starter/actions/runs/38775610398
+conclusion: success
+headSha: a0adedc1924742e0bd43cd0e3427a89fbcfc7a85
+job: Build Android -> success
+job: Build Web -> skipped
+job: Build iOS (no codesign) -> skipped
+
+2026-10-15T17:14:33.0340851Z   java-version: 17
+2026-10-15T17:14:33.5563587Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T17:14:45.7906172Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T17:14:50.6946930Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T17:16:40.2291970Z Running Gradle task 'assembleRelease'...                        
+2026-10-15T17:18:10.2258147Z WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): freerasp, patrol, shared_preferences_android
+2026-10-15T17:21:49.4877298Z Running Gradle task 'assembleRelease'...                          418.0s
+2026-10-15T17:21:50.7358312Z ✓ Built build/app/outputs/flutter-apk/app-release.apk (118.0MB)
+2026-10-15T17:21:50.8302141Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T17:21:51.7392679Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+
+# The same dispatch on fix/329-android-toolchain alone (freerasp 6.12.0): https://github.com/koniz-dev/flutter-starter/actions/runs/38772175320 -> failure
+2026-10-15T16:53:25.2208787Z * What went wrong:
+2026-10-15T16:53:25.2209377Z Execution failed for task ':freerasp:exportReleaseConsumerProguardFiles'.
+2026-10-15T16:53:25.2210689Z > Global keep option -flattenpackagehierarchy was specified as a consumerProguardFile in /home/runner/.pub-cache/hosted/pub.dev/freerasp-6.12.0/android/consumer-rules.pro. It should not be us

@@ -430,10 +430,10 @@ packages:
     dependency: "direct main"
     description:
       name: freerasp
-      sha256: "76a3fb6f8e3fdd7d83e224866998523e7fb79d5779321983e484a6cfbf4b01b5"
+      sha256: df65286effe38e221a87ef79ade780eb23b78317875967a4a791fc94c6bcb5b0
       url: "https://pub.dev"
     source: hosted
-    version: "6.12.0"
+    version: "8.2.4"
   freezed:
     dependency: "direct dev"
     description:

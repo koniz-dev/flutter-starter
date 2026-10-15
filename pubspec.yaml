@@ -35,7 +35,7 @@ dependencies:
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
   flutter_secure_storage: ^10.0.0
   # Security (optional) - FreeRASP concrete implementation
-  freerasp: ^6.1.1
+  freerasp: ^8.2.4
 
   # Code Generation - Runtime annotations for Freezed immutable classes
   freezed_annotation: ^3.1.0
