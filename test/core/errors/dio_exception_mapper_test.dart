@@ -742,5 +742,114 @@ void main() {
         expect(result.message, contains('SSL certificate error'));
       });
     });
+
+    // koniz-dev/flutter-starter#305: body fields were cast with `as String?`,
+    // so a list `message` or a numeric `code` threw a TypeError inside
+    // ErrorInterceptor and the 400 reached the caller as a network error.
+    group('bodies with non-String fields (#305)', () {
+      DioException badResponse(int status, Object? body) => DioException(
+        requestOptions: requestOptions,
+        type: DioExceptionType.badResponse,
+        response: Response<Object?>(
+          requestOptions: requestOptions,
+          statusCode: status,
+          data: body,
+        ),
+      );
+
+      test('criterion 1: a NestJS-style list message maps to a 400 with the '
+          'items joined', () {
+        final result = DioExceptionMapper.map(
+          badResponse(400, <String, dynamic>{
+            'statusCode': 400,
+            'message': ['email must be an email', 'password is too short'],
+            'error': 'Bad Request',
+          }),
+        );
+
+        expect(
+          result,
+          isA<ServerException>().having((e) => e.statusCode, 'statusCode', 400),
+        );
+        expect(
+          result.message,
+          'email must be an email; password is too short',
+        );
+      });
+
+      test('criterion 2: an int or num code is kept as text', () {
+        expect(
+          DioExceptionMapper.map(
+            badResponse(400, <String, dynamic>{
+              'code': 1001,
+              'message': 'Invalid',
+            }),
+          ).code,
+          '1001',
+        );
+        expect(
+          DioExceptionMapper.map(
+            badResponse(400, <String, dynamic>{'error_code': 42.5}),
+          ).code,
+          '42.5',
+        );
+      });
+
+      test('criterion 3: non-String values in any message or code field never '
+          'throw', () {
+        final odd = <Object?>[
+          7,
+          true,
+          ['a', 3],
+          <String, dynamic>{'nested': 1},
+          null,
+        ];
+        for (final value in odd) {
+          for (final field in [
+            'message',
+            'error',
+            'error_message',
+            'msg',
+            'code',
+            'error_code',
+            'errorCode',
+          ]) {
+            final body = <String, dynamic>{field: value};
+            expect(
+              () => DioExceptionMapper.map(badResponse(422, body)),
+              returnsNormally,
+              reason: '$field: $value',
+            );
+            expect(
+              DioExceptionMapper.map(badResponse(422, body)),
+              isA<ServerException>(),
+              reason: '$field: $value',
+            );
+          }
+        }
+      });
+
+      test(
+        'criterion 4: a nested error.code is read alongside error.message',
+        () {
+          final result = DioExceptionMapper.map(
+            badResponse(409, <String, dynamic>{
+              'error': {'message': 'x', 'code': 'E1'},
+            }),
+          );
+
+          expect(result.message, 'x');
+          expect(result.code, 'E1');
+        },
+      );
+
+      test('an empty list message falls back to the status message', () {
+        final result = DioExceptionMapper.map(
+          badResponse(400, <String, dynamic>{'message': <String>[]}),
+        );
+
+        expect(result.message, 'Bad request. Please check your input.');
+      });
+    });
   });
 }

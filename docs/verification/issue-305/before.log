@@ -1,0 +1,65 @@
+# lib/core/errors at main fe623bf41e9 (before the fix)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 1: a NestJS-style list message maps to a 400 with the items joined
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a 400 with a non-String body field (#305) a list message surfaces as ServerException(400), not as a NetworkException
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 1: a NestJS-style list message maps to a 400 with the items joined [E]
+  type 'List<String>' is not a subtype of type 'String?' in type cast
+  package:flutter_starter/core/errors/dio_exception_mapper.dart 106:29  DioExceptionMapper._extractErrorMessage
+  package:flutter_starter/core/errors/dio_exception_mapper.dart 35:11   DioExceptionMapper.map
+  test/core/errors/dio_exception_mapper_test.dart 762:43                main.<fn>.<fn>.<fn>
+  
+00:00 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a 400 with a non-String body field (#305) a list message surfaces as ServerException(400), not as a NetworkException
+00:00 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 2: an int or num code is kept as text [E]
+  type 'int' is not a subtype of type 'String?' in type cast
+  package:flutter_starter/core/errors/dio_exception_mapper.dart 134:27  DioExceptionMapper._extractErrorCode
+  package:flutter_starter/core/errors/dio_exception_mapper.dart 37:17   DioExceptionMapper.map
+  test/core/errors/dio_exception_mapper_test.dart 782:30                main.<fn>.<fn>.<fn>
+  
+00:00 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a 400 with a non-String body field (#305) a list message surfaces as ServerException(400), not as a NetworkException
+00:00 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 3: non-String values in any message or code field never throw [E]
+  Expected: return normally
+    Actual: <Closure: () => AppException>
+     Which: threw _TypeError:<type 'int' is not a subtype of type 'String?' in type cast>
+  message: 7
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/core/errors/dio_exception_mapper_test.dart 818:13  main.<fn>.<fn>.<fn>
+  
+00:00 +0 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a 400 with a non-String body field (#305) a list message surfaces as ServerException(400), not as a NetworkException
+00:00 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 4: a nested error.code is read alongside error.message [E]
+  Expected: 'E1'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/core/errors/dio_exception_mapper_test.dart 842:11  main.<fn>.<fn>.<fn>
+  
+00:00 +0 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) an empty list message falls back to the status message
+00:00 +0 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) an empty list message falls back to the status message [E]
+  type 'List<String>' is not a subtype of type 'String?' in type cast
+  package:flutter_starter/core/errors/dio_exception_mapper.dart 106:29  DioExceptionMapper._extractErrorMessage
+  package:flutter_starter/core/errors/dio_exception_mapper.dart 35:11   DioExceptionMapper.map
+  test/core/errors/dio_exception_mapper_test.dart 847:43                main.<fn>.<fn>.<fn>
+  
+00:00 +0 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart: a 400 with a non-String body field (#305) a list message surfaces as ServerException(400), not as a NetworkException [E]
+  Expected: <Instance of 'ServerException'> with `statusCode`: <400> and `message`: 'email must be an email'
+    Actual: NetworkException:<NetworkException: NetworkError(code: unknown): Network request failed>
+     Which: is not an instance of 'ServerException'
+  
+  package:matcher                                                  expect
+  package:flutter_test/src/widget_tester.dart 473:18               expect
+  test/core/network/api_client_interceptor_chain_test.dart 1244:7  main.<fn>.<fn>
+  
+00:00 +0 -6: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) an empty list message falls back to the status message
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 1: a NestJS-style list message maps to a 400 with the items joined
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 2: an int or num code is kept as text
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/errors/dio_exception_mapper_test.dart: DioExceptionMapper bodies with non-String fields (#305) criterion 3: non-String values in any message or code field never throw
+  ... and 2 more
