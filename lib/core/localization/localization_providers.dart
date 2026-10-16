@@ -31,7 +31,9 @@ class LocaleNotifier extends Notifier<Locale> {
         state = locale;
       });
     });
-    return LocalizationService.defaultLocale;
+    // Until storage answers, follow the device rather than assuming
+    // English (koniz-dev/flutter-starter#324).
+    return LocalizationService.deviceLocale();
   }
 
   /// Gets the current locale

@@ -22,6 +22,7 @@ The internationalization system supports:
 - **Pluralization**: ICU message format for plural forms
 - **Formatting**: Date, time, number, and currency formatting
 - **Persistent Preferences**: Language selection saved to storage
+- **Device Language by Default**: With no stored choice, the app uses the first language in the device's preference list that it ships, and English when none matches (`LocalizationService.deviceLocale`, koniz-dev/flutter-starter#324). A stored choice always wins. Note that the example v1->v2 storage migration still seeds `language=en` on a fresh install until koniz-dev/flutter-starter#417 lands, so a fresh install opens in English until then
 - **Runtime Switching**: Change language without app restart
 
 ## Setup
