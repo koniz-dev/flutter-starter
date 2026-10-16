@@ -198,10 +198,45 @@ class MigrationExecutor {
     return finalVersion;
   }
 
+  /// Reads the version stamp, telling a missing stamp from a failed read.
+  ///
+  /// A storage implementing [IStrictStringRead] reports a failed read by
+  /// throwing; any other is read through [IStorageService.getString].
+  Future<String?> _readVersionStamp() {
+    final store = storage;
+    return store is IStrictStringRead
+        ? (store as IStrictStringRead).getStringOrThrow(
+            StorageVersion.versionKey,
+          )
+        : store.getString(StorageVersion.versionKey);
+  }
+
   /// Get the current storage version
+  ///
+  /// Only a stamp that is *known* to be absent - the read succeeded and found
+  /// nothing - means a fresh install. A read that fails throws
+  /// [MigrationExecutionException] **before anything is written**: treating
+  /// it as a fresh install re-ran every migration over migrated data and
+  /// stamped v1 over the real version, so the next healthy launch ran the
+  /// chain a second time (koniz-dev/flutter-starter#297).
   Future<int> _getCurrentVersion() async {
+    final String? versionString;
     try {
-      final versionString = await storage.getString(StorageVersion.versionKey);
+      versionString = await _readVersionStamp();
+    } on Object catch (e, stackTrace) {
+      loggingService.error(
+        'Error reading storage version; not migrating',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      throw MigrationExecutionException(
+        'The storage version could not be read, so no migration ran and '
+        'nothing was written. The next launch will try again.',
+        originalException: e,
+      );
+    }
+
+    try {
       if (versionString == null) {
         // First install - set initial version
         await storage.setString(
@@ -225,12 +260,14 @@ class MigrationExecutor {
       }
       return version;
     } on Exception catch (e, stackTrace) {
+      // The read worked; only stamping the initial or reset version failed.
+      // Migrating from v1 is still correct here, and the post-run check
+      // reports a stamp that did not stick.
       loggingService.error(
-        'Error reading storage version',
+        'Error writing the initial storage version',
         error: e,
         stackTrace: stackTrace,
       );
-      // On error, assume initial version
       return StorageVersion.initial;
     }
   }

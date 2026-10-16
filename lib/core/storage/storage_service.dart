@@ -43,6 +43,31 @@ abstract class IStorageService {
   Future<bool> containsKey(String key);
 }
 
+/// A storage that can tell "no value" apart from "could not read".
+///
+/// [IStorageService.getString] returns `null` for both: `SecureStorageService`
+/// swallows a failed Keychain or Keystore read, by design, so that a feature
+/// asking for an optional value does not crash. The migration executor cannot
+/// work that way. Reading "no version" as a fresh install made it re-run every
+/// migration over already migrated data and overwrite the stamp with v1
+/// whenever a read failed while writes still worked
+/// (koniz-dev/flutter-starter#297).
+///
+/// Implement it on a storage whose [IStorageService.getString] hides read
+/// failures. A storage whose reads already throw, such as [StorageService]
+/// over SharedPreferences, needs nothing: the executor treats a throwing
+/// `getString` the same way.
+// A one-method interface on purpose: callers test for it with `is`, which a
+// top-level function cannot offer.
+// ignore: one_member_abstracts
+abstract interface class IStrictStringRead {
+  /// The value stored under [key], or `null` when there is none.
+  ///
+  /// Unlike [IStorageService.getString], a failed read **throws** rather than
+  /// returning `null`.
+  Future<String?> getStringOrThrow(String key);
+}
+
 /// Implementation of storage service using SharedPreferences
 class StorageService implements IStorageService, IKeyValueStore {
   SharedPreferences? _prefs;

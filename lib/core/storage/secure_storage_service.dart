@@ -11,7 +11,7 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 ///
 /// Platform-specific configuration:
 /// - iOS: Uses Keychain with first unlock accessibility
-class SecureStorageService implements IStorageService {
+class SecureStorageService implements IStorageService, IStrictStringRead {
   /// Creates a [SecureStorageService] instance with platform-specific options
   SecureStorageService()
     : _storage = const FlutterSecureStorage(
@@ -31,6 +31,14 @@ class SecureStorageService implements IStorageService {
       return null;
     }
   }
+
+  /// Reads [key] and lets a Keychain or Keystore failure propagate.
+  ///
+  /// [getString] returns `null` on such a failure, which is the same answer
+  /// as a missing key. The storage migration must not confuse the two - see
+  /// [IStrictStringRead].
+  @override
+  Future<String?> getStringOrThrow(String key) => _storage.read(key: key);
 
   @override
   Future<bool> setString(String key, String value) async {
