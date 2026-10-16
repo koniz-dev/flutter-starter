@@ -845,6 +845,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Analytics Unavailable'**
   String get featureFlagsAnalyticsUnavailable;
+
+  /// Failure message shown to the user. Used when a request times out
+  ///
+  /// In en, this message translates to:
+  /// **'The server took too long to respond. Please try again.'**
+  String get failureTimeout;
+
+  /// Failure message shown to the user. Used when the server cannot be reached
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t reach the server. Check your connection and try again.'**
+  String get failureNoConnection;
+
+  /// Failure message shown to the user. Used when TLS verification or certificate pinning rejects the server
+  ///
+  /// In en, this message translates to:
+  /// **'The connection isn\'t secure, so it was stopped.'**
+  String get failureInsecureConnection;
+
+  /// Failure message shown to the user. Used when a request was cancelled
+  ///
+  /// In en, this message translates to:
+  /// **'The request was cancelled.'**
+  String get failureCancelled;
+
+  /// Failure message shown to the user. Used when the server's response cannot be parsed
+  ///
+  /// In en, this message translates to:
+  /// **'The server sent a response this app couldn\'t read.'**
+  String get failureUnreadableResponse;
+
+  /// Failure message shown to the user. Used for an authentication failure
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not signed in, or your session has ended. Please sign in again.'**
+  String get failureAuth;
+
+  /// Failure message shown to the user. Used for a permission failure
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to do that.'**
+  String get failurePermission;
+
+  /// Failure message shown to the user. Used when the requested item does not exist
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find what you were looking for.'**
+  String get failureNotFound;
+
+  /// Failure message shown to the user. Used for a validation failure
+  ///
+  /// In en, this message translates to:
+  /// **'Some of the information isn\'t valid. Please check it and try again.'**
+  String get failureValidation;
+
+  /// Failure message shown to the user. Used when on-device storage fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read or save data on this device.'**
+  String get failureStorage;
+
+  /// Failure message shown to the user. Used for a server-side failure
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on the server. Please try again later.'**
+  String get failureServer;
+
+  /// Failure message shown to the user. Used for any other failure
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get failureUnknown;
 }
 
 class _AppLocalizationsDelegate

@@ -503,4 +503,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get featureFlagsAnalyticsUnavailable => 'Analytics Unavailable';
+
+  @override
+  String get failureTimeout =>
+      'The server took too long to respond. Please try again.';
+
+  @override
+  String get failureNoConnection =>
+      'Can\'t reach the server. Check your connection and try again.';
+
+  @override
+  String get failureInsecureConnection =>
+      'The connection isn\'t secure, so it was stopped.';
+
+  @override
+  String get failureCancelled => 'The request was cancelled.';
+
+  @override
+  String get failureUnreadableResponse =>
+      'The server sent a response this app couldn\'t read.';
+
+  @override
+  String get failureAuth =>
+      'You\'re not signed in, or your session has ended. Please sign in again.';
+
+  @override
+  String get failurePermission => 'You don\'t have permission to do that.';
+
+  @override
+  String get failureNotFound => 'We couldn\'t find what you were looking for.';
+
+  @override
+  String get failureValidation =>
+      'Some of the information isn\'t valid. Please check it and try again.';
+
+  @override
+  String get failureStorage => 'Couldn\'t read or save data on this device.';
+
+  @override
+  String get failureServer =>
+      'Something went wrong on the server. Please try again later.';
+
+  @override
+  String get failureUnknown => 'Something went wrong. Please try again.';
 }

@@ -498,4 +498,46 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get featureFlagsAnalyticsUnavailable => 'Analytics không khả dụng';
+
+  @override
+  String get failureTimeout => 'Máy chủ phản hồi quá lâu. Vui lòng thử lại.';
+
+  @override
+  String get failureNoConnection =>
+      'Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại.';
+
+  @override
+  String get failureInsecureConnection =>
+      'Kết nối không an toàn nên đã bị dừng.';
+
+  @override
+  String get failureCancelled => 'Yêu cầu đã bị hủy.';
+
+  @override
+  String get failureUnreadableResponse =>
+      'Máy chủ gửi về phản hồi mà ứng dụng không đọc được.';
+
+  @override
+  String get failureAuth =>
+      'Bạn chưa đăng nhập hoặc phiên đã hết hạn. Vui lòng đăng nhập lại.';
+
+  @override
+  String get failurePermission => 'Bạn không có quyền thực hiện thao tác này.';
+
+  @override
+  String get failureNotFound => 'Không tìm thấy nội dung bạn cần.';
+
+  @override
+  String get failureValidation =>
+      'Một số thông tin không hợp lệ. Vui lòng kiểm tra và thử lại.';
+
+  @override
+  String get failureStorage =>
+      'Không thể đọc hoặc lưu dữ liệu trên thiết bị này.';
+
+  @override
+  String get failureServer => 'Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.';
+
+  @override
+  String get failureUnknown => 'Đã xảy ra lỗi. Vui lòng thử lại.';
 }
