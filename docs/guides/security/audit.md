@@ -44,9 +44,10 @@ This audit covers:
 
 #### MEDIUM: Bearer tokens in logs
 
-`ApiLoggingInterceptor` redacts the `Authorization` header, but the redaction
-is partial for other shapes. Covered once, under
-[Log sanitization is partial](#medium-log-sanitization-is-partial).
+`ApiLoggingInterceptor` redacts the `Authorization` header and every key in its
+fixed sensitive set, but a token under a key name outside that set is still
+logged. Covered once, under
+[Log sanitization covers a fixed key and header set](#medium-log-sanitization-covers-a-fixed-key-and-header-set).
 
 #### MEDIUM: Token Expiration Handling
 
@@ -82,20 +83,24 @@ is partial for other shapes. Covered once, under
 
 `ApiClient` installs an `IOHttpClientAdapter` whose `badCertificateCallback`
 SHA-256s the presented certificate's DER bytes and compares it against the
-configured pin set (`lib/core/network/api_client.dart:75-101`). The
+configured pin set (`SslPinning.createAdapter()` in
+`lib/core/network/ssl_pinning.dart`). The
 `HttpClient` is built with an empty `SecurityContext()`, so every connection is
 routed through that callback rather than the platform trust store. Settings
 come from `AppConfig.enableSslPinning` and `AppConfig.apiSslFingerprints`
-(`lib/core/config/app_config.dart:110-141`), which read `ENABLE_SSL_PINNING`
+(`lib/core/config/app_config.dart`), which read `ENABLE_SSL_PINNING`
 and `API_SSL_FINGERPRINTS` from the environment (`.env.example:34-39`).
 
+<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
+
 **What you still have to do:** supply your server's fingerprints. Pinning is
-enabled by default in staging and production, but the guard at
-`api_client.dart:76` also requires a non-empty fingerprint list, so with
-`API_SSL_FINGERPRINTS` unset - which is how `.env.example` ships - the adapter
-is never installed and traffic is **not** pinned. Nothing warns you. That
-fail-open behaviour is tracked separately in
-[#84](https://github.com/koniz-dev/flutter-starter/issues/84).
+enabled by default in staging and production, but it also needs a non-empty
+fingerprint list. With `API_SSL_FINGERPRINTS` unset, which is how
+`.env.example` ships, the adapter is never installed and traffic is **not**
+pinned. That case is logged as `SSL PINNING MISCONFIGURED` and asserts in debug
+builds. The silent fail-open was fixed in
+[#84](https://github.com/koniz-dev/flutter-starter/issues/84), but a release
+build still runs unpinned.
 
 **Risk while unconfigured:** attackers could intercept and modify network
 traffic using a certificate the platform trust store accepts.
@@ -103,22 +108,23 @@ traffic using a certificate the platform trust store accepts.
 **Recommendation:** Extract your fingerprints and set both variables. See
 [Security Implementation Guide](./implementation.md#1-ssl-certificate-pinning).
 
-#### MEDIUM: Log sanitization is partial
+#### MEDIUM: Log sanitization covers a fixed key and header set
 
-**Status:** Implemented with known gaps.
+**Status:** Implemented.
 
 `ApiLoggingInterceptor` redacts a fixed header set and recursively redacts
 sensitive JSON keys via `_sanitizeHeaders` / `_sanitizeJson`
 (`lib/core/network/interceptors/api_logging_interceptor.dart`). It is a no-op
 entirely when `AppConfig.enableHttpLogging` is false.
 
-The gaps that remain are enumerated in
-[#78](https://github.com/koniz-dev/flutter-starter/issues/78): string request
-bodies bypass `_sanitizeJson`, query parameters are never sanitized, and
-`proxy-authorization` is not in the header set.
+The gaps listed in
+[#78](https://github.com/koniz-dev/flutter-starter/issues/78) are closed:
+string bodies go through `_sanitizeStringBody`, query parameters through
+`_sanitizeMap`, and `proxy-authorization` is in the header set.
 
-**Recommendation:** Track #78, and extend the key and header lists to cover
-your own payload shapes. See
+**Recommendation:** Extend the key and header lists to cover your own payload
+shapes. Redaction matches key names, so a token under an unexpected key is
+still logged. See
 [Security Implementation Guide](./implementation.md#3-log-sanitization).
 
 ## 3. Code Security
@@ -231,7 +237,7 @@ See [Security Checklist](./checklist.md) for a comprehensive checklist of all se
 1. SSL pinning fingerprints (the code is shipped; supply `API_SSL_FINGERPRINTS`)
 2. Code Obfuscation
 3. Release Signing
-4. Log sanitization gaps (see [#78](https://github.com/koniz-dev/flutter-starter/issues/78))
+4. Log sanitization coverage for your own header names and payload keys
 5. Security Headers
 
 ### Phase 2: High Priority (Week 2-3)
