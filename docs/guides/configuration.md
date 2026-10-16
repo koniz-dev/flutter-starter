@@ -67,10 +67,17 @@ build, on any platform.
 
 ### The deliberate exception, and the guard
 
-Web is the awkward case: `EnvConfig` guards every dart-define read with
-`if (!kIsWeb)`, so on web an asset-backed `.env` is the *only* runtime
-configuration mechanism there is. That is allowed - for values you would be
-happy to publish, because publishing them is exactly what it does.
+An asset-backed `.env` is never needed to configure a build: `--dart-define`
+and `--dart-define-from-file` work on every target, Flutter web included. A
+bundled `.env` is still allowed, for values you would be happy to publish,
+because publishing them is exactly what it does. The usual reason is runtime
+configuration that must change without a rebuild.
+
+Until koniz-dev/flutter-starter#278 this section called web the exception.
+`EnvConfig` used to skip every dart-define read behind `if (!kIsWeb)`, which
+left a bundled `.env` as the only way to configure a web build. That guard was
+never a platform limitation: dart2js resolves the const `DartDefines` table the
+same way the native compilers do, and the guard is gone.
 
 `tool/check_env_assets.dart` fails when a secrets file would be bundled. It
 runs in four places:
@@ -221,7 +228,7 @@ value reaches the app.
 | Mechanism | Precondition | Debug | Release / profile (AOT) | Flutter web |
 |---|---|---|---|---|
 | `.env` file | The file must be declared in the `assets:` list of `pubspec.yaml` - which ships it to every user. `flutter_dotenv` reads it through `rootBundle`, not the filesystem. | Yes | Yes | Yes |
-| `--dart-define` / `--dart-define-from-file` | The key must be declared in `lib/core/config/dart_defines.dart`. | Yes | Yes | **No** |
+| `--dart-define` / `--dart-define-from-file` | The key must be declared in `lib/core/config/dart_defines.dart`. | Yes | Yes | Yes |
 | Defaults | None. | Yes | Yes | Yes |
 
 Two consequences worth stating plainly:
@@ -233,9 +240,12 @@ Two consequences worth stating plainly:
   `EnvConfig.isInitialized` stays `false`. Declaring it publishes it, so on
   native use `--dart-define-from-file=.env` instead and leave the asset list
   alone.
-- **`--dart-define` is unavailable on Flutter web.** Every dart-define read in
-  `EnvConfig` is guarded by `if (!kIsWeb)`, so on web the chain is `.env` →
-  defaults only, and everything in it is public.
+- **`--dart-define` works on Flutter web too**, with the same key table.
+  Everything compiled into a web build is still public: `main.dart.js` is
+  downloaded by every visitor, and a define is a string literal inside it.
+  That is no different from native, where it is a string in the binary. The
+  rule from [Never ship a secret in the bundle](#never-ship-a-secret-in-the-bundle)
+  applies unchanged.
 
 ### Why the dart-define keys are declared in a table
 
@@ -296,13 +306,13 @@ flutter run --dart-define-from-file=.env
 
 `flutter_dotenv` can only read an asset, so an undeclared `.env` is never
 loaded through `EnvConfig`'s dotenv layer - but the dart-define layer picks the
-same file up without bundling it, on every native target and in every build
-mode. Adding `- .env` to `pubspec.yaml` would ship your values to every user;
+same file up without bundling it, on every target, web included, and in every
+build mode. Adding `- .env` to `pubspec.yaml` would ship your values to every user;
 see [Never ship a secret in the bundle](#never-ship-a-secret-in-the-bundle).
 
-On Flutter web there is no dart-define path. Configure web builds with
-publishable values only, and fetch anything private from your backend at run
-time.
+On Flutter web the same flags work, but a web build is public by
+construction. Pass publishable values only, and fetch anything private from
+your backend at run time.
 
 ### 2. Configure your environment variables
 
@@ -336,7 +346,7 @@ passed this way must exist in `lib/core/config/dart_defines.dart`.
 
 ### Staging Build (using `--dart-define`)
 
-For CI/CD or when you don't want to use `.env` files, you can inject values into the build directly. This works for native targets in every build mode; on Flutter web the flags are ignored by `EnvConfig`, and any key you pass must exist in `lib/core/config/dart_defines.dart`:
+For CI/CD or when you don't want to use `.env` files, you can inject values into the build directly. This works on every target, Flutter web included, in every build mode. Any key you pass must exist in `lib/core/config/dart_defines.dart`:
 
 ```bash
 flutter run \
@@ -462,7 +472,7 @@ print(config);
 ### Troubleshooting missing configuration
 - Ensure `EnvConfig.load()` is called in `main()` before `runApp()`.
 - **`.env` values ignored?** Expected: `.env` is not an asset, on purpose. Pass `--dart-define-from-file=.env` instead, and check the keys exist in `lib/core/config/dart_defines.dart`. Declaring `.env` under `flutter: assets:` would make `flutter_dotenv` find it - and publish it in every build; `dart run tool/check_env_assets.dart` fails if you do.
-- **`--dart-define` value ignored?** Check that the key exists in `lib/core/config/dart_defines.dart`, and that you are not on Flutter web (where dart-defines are skipped by the `kIsWeb` guard). `--dart-define` values are baked in at compile time: change one and you must rebuild, not hot reload.
+- **`--dart-define` value ignored?** Check that the key exists in `lib/core/config/dart_defines.dart`. A key missing from that table is ignored on every platform, web included. `--dart-define` values are baked in at compile time: change one and you must rebuild, not hot reload.
 - Hot reload doesn't reload system-level environment variables - do a full app restart.
 - Run `flutter pub get` after pulling dependencies or updating flags to rebuild the configuration tree.
 - Run `AppConfig.printConfig()` to inspect parsed fallback maps logic.
