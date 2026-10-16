@@ -1,0 +1,16 @@
+# main a00b4ce7700, before the fix
+# probe = device_locale_test.dart minus the deviceLocale() unit test, which needs the new API
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/zz_main_probe_test.dart
+00:00 +0: criterion 1: an empty preference follows the device a vi_VN device renders the home screen in Vietnamese
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Chào mừng đến với Flutter Starter với Clean
+   Which: means none were found but one was expected
+00:01 +0 -1: criterion 1: an empty preference follows the device a vi_VN device renders the home screen in Vietnamese [E]
+00:01 +0 -1: criterion 1: an empty preference follows the device the first supported language in the device list wins
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "¡Bienvenido a Flutter Starter con
+   Which: means none were found but one was expected
+00:01 +0 -2: criterion 1: an empty preference follows the device the first supported language in the device list wins [E]
+00:01 +0 -2: criterion 2: a stored preference still wins stored es on a vi device renders Spanish
+00:01 +1 -2: criterion 3: an unsupported device language falls back a ja_JP device renders the fallback, English
+00:01 +2 -2: Some tests failed.

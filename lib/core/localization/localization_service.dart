@@ -80,6 +80,28 @@ class LocalizationService {
   /// Default locale
   static Locale get defaultLocale => SupportedLocale.fallback.locale;
 
+  /// The supported locale that best matches the device's language list.
+  ///
+  /// Walks [preferred], or the platform's preferred locales, in order and
+  /// returns the first whose language this app ships; [defaultLocale] when
+  /// none matches. Used whenever the user has stored no choice, so a device
+  /// set to Vietnamese opens in Vietnamese rather than always in
+  /// [defaultLocale] (koniz-dev/flutter-starter#324).
+  static Locale deviceLocale([List<Locale>? preferred]) {
+    for (final locale in preferred ?? _platformLocales) {
+      final supported = SupportedLocale.fromLanguageCode(locale.languageCode);
+      if (supported != null) return supported.locale;
+    }
+    return defaultLocale;
+  }
+
+  /// The platform's preferred locales, read through the binding so that a
+  /// test's `platformDispatcher.localesTestValue` applies.
+  ///
+  /// `ensureInitialized` returns the existing binding when there is one.
+  static List<Locale> get _platformLocales =>
+      WidgetsFlutterBinding.ensureInitialized().platformDispatcher.locales;
+
   /// List of supported locales
   ///
   /// Derived from [SupportedLocale] so there is one list to maintain, not two.
@@ -88,19 +110,17 @@ class LocalizationService {
       supportedLocale.locale,
   ];
 
-  /// Get current locale from storage or return default
+  /// The stored language choice, or the [deviceLocale] when there is none
+  ///
+  /// A stored choice always wins over the device. A stored value the app
+  /// does not support, or a storage error, also falls back to the device.
   Future<Locale> getCurrentLocale() async {
     try {
       final languageCode = await _storageService.getString(_languageKey);
-      if (languageCode == null) {
-        return defaultLocale;
-      }
-
       final supportedLocale = SupportedLocale.fromLanguageCode(languageCode);
-      return supportedLocale?.locale ?? defaultLocale;
+      return supportedLocale?.locale ?? deviceLocale();
     } on Exception {
-      // If there's an error, return default locale
-      return defaultLocale;
+      return deviceLocale();
     }
   }
 
