@@ -2,6 +2,10 @@
 
 # Release automation script for Flutter Starter
 # Usage: ./scripts/ci/release.sh [major|minor|patch]
+#
+# The changelog covers commits since the last tag reachable from HEAD. For the
+# first release, when there is no such tag, set RELEASE_CHANGELOG_SINCE=<ref>;
+# generate_changelog.sh refuses otherwise rather than listing every commit.
 
 set -e
 
@@ -58,16 +62,40 @@ fi
 echo -e "${GREEN}✓ Analysis passed${NC}"
 echo ""
 
+# Steps 3 and 4 change pubspec.yaml and CHANGELOG.md, and the two land together
+# or not at all. The tree was clean when we started (checked above), so undoing
+# means restoring both files to HEAD - and deleting CHANGELOG.md if step 4 was
+# what created it. Before koniz-dev/flutter-starter#282 a failed step 4 left a
+# bumped pubspec.yaml with no changelog, no branch, no commit and no tag.
+rollback_release_files() {
+    git checkout -- pubspec.yaml
+    if git ls-files --error-unmatch CHANGELOG.md >/dev/null 2>&1; then
+        git checkout -- CHANGELOG.md
+    else
+        rm -f CHANGELOG.md
+    fi
+    echo -e "${YELLOW}Rolled back pubspec.yaml and CHANGELOG.md; the tree is as" \
+        "it was before the release started.${NC}"
+}
+
 # Step 3: Bump version
 echo -e "${YELLOW}Step 3: Bumping version...${NC}"
-./scripts/ci/bump_version.sh $BUMP_TYPE
+if ! ./scripts/ci/bump_version.sh "$BUMP_TYPE"; then
+    echo -e "${RED}Version bump failed. Aborting release.${NC}"
+    rollback_release_files
+    exit 1
+fi
 NEW_VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
 echo -e "${GREEN}✓ Version bumped to $NEW_VERSION${NC}"
 echo ""
 
 # Step 4: Generate changelog
 echo -e "${YELLOW}Step 4: Generating changelog...${NC}"
-./scripts/ci/generate_changelog.sh $NEW_VERSION
+if ! ./scripts/ci/generate_changelog.sh "$NEW_VERSION" ${RELEASE_CHANGELOG_SINCE:+--since "$RELEASE_CHANGELOG_SINCE"}; then
+    echo -e "${RED}Changelog generation failed. Aborting release.${NC}"
+    rollback_release_files
+    exit 1
+fi
 echo -e "${GREEN}✓ Changelog generated${NC}"
 echo ""
 

@@ -1,0 +1,57 @@
+# Runs scripts/test/release_scripts_test.sh on a GNU and a BSD userland.
+#
+# scripts/ci/generate_changelog.sh used to branch on $OSTYPE between GNU and
+# BSD `sed -i`, and the BSD branch aborted every macOS release half-done while
+# CI - Linux only - never noticed (koniz-dev/flutter-starter#282). The script
+# no longer uses `sed -i`, and this job keeps it that way: the same fixture
+# tests run on ubuntu-latest and on macos-latest, whose /bin/bash is 3.2.
+#
+# Not a PR check: it runs on pushes to main that touch the release scripts,
+# and on demand (Actions -> Release scripts -> Run workflow, or
+# `gh workflow run release-scripts.yml --ref <branch>`) to verify a branch
+# before merging. Needs no Flutter toolchain.
+name: Release scripts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/ci/generate_changelog.sh'
+      - 'scripts/ci/release.sh'
+      - 'scripts/ci/bump_version.sh'
+      - 'scripts/test/release_scripts_test.sh'
+      - '.github/workflows/release-scripts.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: release-scripts-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  release-scripts:
+    name: release scripts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Show the userland under test
+        shell: bash
+        run: |
+          uname -a
+          bash --version | head -1
+          /bin/bash --version | head -1
+          (sed --version 2>/dev/null || echo "BSD sed") | head -1
+          (awk --version 2>/dev/null || awk -W version 2>/dev/null || echo "BSD awk") | head -1
+
+      # Explicitly /bin/bash: on macOS that is bash 3.2, the shell an adopter
+      # running ./scripts/ci/release.sh actually gets.
+      - name: Run the release-script tests
+        run: /bin/bash scripts/test/release_scripts_test.sh

@@ -1,0 +1,22 @@
+# main 411ac17 in a fresh shallow clone, macOS 15.8.1 (BSD sed), main's generate_changelog.sh
+$ ./scripts/ci/generate_changelog.sh 1.0.1 ; echo exit=$?
+Warning: No previous tag found. Using all commits.
+sed: 3: "1a\
+## [1.0.1] - 2026-1 ...": invalid command code e
+exit=1
+$ git status --short
+
+# same clone, the branch's generate_changelog.sh
+$ ./scripts/ci/generate_changelog.sh 1.0.1 ; echo exit=$?
+Error: no tag is reachable from HEAD, so there is no previous release to start from.
+Pass the range explicitly, e.g.:
+  ./scripts/ci/generate_changelog.sh 1.0.1 --since <ref>
+Taking every commit in the history would put all of them in one release section.
+exit=1
+$ ./scripts/ci/generate_changelog.sh 1.0.1 --since HEAD~5 ; echo exit=$?
+
+Review CHANGELOG.md and commit if satisfied.
+exit=0
+8:## [Unreleased]
+44:## [1.0.1] - 2026-10-16
+57:## [1.0.0+1] - Enterprise Starter V2.0 Upgrade
