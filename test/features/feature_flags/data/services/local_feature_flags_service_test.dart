@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/features/feature_flags/data/services/local_feature_flags_service.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
@@ -164,6 +166,59 @@ void main() {
         expect(definition.debugDefault, isNull);
         expect(definition.releaseDefault, isNull);
         expect(definition.description, isNull);
+      });
+    });
+
+    group('no unreachable environment source (#279)', () {
+      // koniz-dev/flutter-starter#279. getLocalFlag used to consult
+      // EnvConfig.has('FEATURE_<KEY>') first. Since #48, EnvConfig reads a
+      // dart-define only through the const DartDefines table, and a key
+      // built at run time from the flag name is never in it, so
+      // --dart-define=FEATURE_...=true was discarded in every build. The
+      // level is gone rather than kept as a promise the code cannot keep.
+      const supplied = String.fromEnvironment(
+        'FEATURE_ENABLE_EXPERIMENTAL_FEATURES',
+      );
+
+      test(
+        'a supplied FEATURE_ define is not presented as a flag source',
+        () {
+          final flag = LocalFeatureFlagsService.instance.getLocalFlag(
+            'enable_experimental_features',
+            compileTimeDefault: false,
+          );
+
+          expect(flag!.source, FeatureFlagSource.compileTime);
+          expect(flag.value, isFalse);
+        },
+        skip: supplied.isEmpty
+            ? 'run with --dart-define=FEATURE_ENABLE_EXPERIMENTAL_FEATURES=true'
+            : null,
+      );
+
+      test('the service never reads EnvConfig or a FEATURE_ key', () {
+        final source =
+            File(
+                  'lib/features/feature_flags/data/services/'
+                  'local_feature_flags_service.dart',
+                )
+                .readAsStringSync()
+                // The class doc explains the removed level; only code counts.
+                .split('\n')
+                .where((line) => !line.trimLeft().startsWith('//'))
+                .join('\n');
+
+        expect(source, isNot(contains('EnvConfig')));
+        expect(source, isNot(contains("'FEATURE_")));
+        expect(source, isNot(contains('FeatureFlagSource.environment')));
+      });
+
+      test('no shipped flag description points at a FEATURE_ variable', () {
+        final flags = LocalFeatureFlagsService.instance.getAllLocalFlags();
+
+        for (final flag in flags.values) {
+          expect(flag.description ?? '', isNot(contains('FEATURE_')));
+        }
       });
     });
   });

@@ -1,0 +1,157 @@
+# lib/ at main 1a00c5c54bf (before the fix), define supplied
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart
+00:00 +0: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:00 +1: LocalFeatureFlagsService getLocalFlag should return flag with debug default in debug mode
+00:00 +2: LocalFeatureFlagsService getLocalFlag should return flag with release default in release mode
+00:00 +3: LocalFeatureFlagsService getLocalFlag should return null when no defaults provided
+00:00 +4: LocalFeatureFlagsService getLocalFlag should prioritize build mode over compile-time default
+00:00 +5: LocalFeatureFlagsService getAllLocalFlags should return map of local flags
+00:00 +6: LocalFeatureFlagsService getAllLocalFlags should include debug menu flag
+00:00 +7: LocalFeatureFlagsService getAllLocalFlags should include experimental features flag
+00:00 +8: LocalFeatureFlagsService getAllLocalFlags should skip flags that return null from getLocalFlag
+00:00 +9: LocalFeatureFlagsService getAllLocalFlags should return empty map when no flag definitions exist
+00:00 +10: LocalFeatureFlagsService LocalFlagDefinition should create definition with all properties
+00:00 +11: LocalFeatureFlagsService LocalFlagDefinition should create definition with minimal properties
+00:00 +12: LocalFeatureFlagsService no unreachable environment source (#279) a supplied FEATURE_ define is not presented as a flag source
+00:00 +13: LocalFeatureFlagsService no unreachable environment source (#279) the service never reads EnvConfig or a FEATURE_ key
+00:00 +13 -1: LocalFeatureFlagsService no unreachable environment source (#279) the service never reads EnvConfig or a FEATURE_ key [E]
+  Expected: not contains 'EnvConfig'
+    Actual: 'import \'package:flutter/foundation.dart\';\n'
+              'import \'package:flutter_starter/core/config/env_config.dart\';\n'
+              'import \'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart\';\n'
+              '\n'
+              'class LocalFeatureFlagsService {\n'
+              '  LocalFeatureFlagsService._();\n'
+              '\n'
+              '  static final LocalFeatureFlagsService instance = LocalFeatureFlagsService._();\n'
+              '\n'
+              '  FeatureFlag? getLocalFlag(\n'
+              '    String key, {\n'
+              '    bool? compileTimeDefault,\n'
+              '    bool? debugDefault,\n'
+              '    bool? releaseDefault,\n'
+              '    String? description,\n'
+              '  }) {\n'
+              '    final envKey = \'FEATURE_${key.toUpperCase()}\';\n'
+              '    if (EnvConfig.has(envKey)) {\n'
+              '      return FeatureFlag(\n'
+              '        key: key,\n'
+              '        value: EnvConfig.getBool(envKey),\n'
+              '        source: FeatureFlagSource.environment,\n'
+              '        description: description,\n'
+              '        defaultValue: compileTimeDefault ?? debugDefault ?? releaseDefault,\n'
+              '      );\n'
+              '    }\n'
+              '\n'
+              '    if (kDebugMode && debugDefault != null) {\n'
+              '      return FeatureFlag(\n'
+              '        key: key,\n'
+              '        value: debugDefault,\n'
+              '        source: FeatureFlagSource.buildMode,\n'
+              '        description: description,\n'
+              '        defaultValue: debugDefault,\n'
+              '      );\n'
+              '    }\n'
+              '\n'
+              '    if (kReleaseMode && releaseDefault != null) {\n'
+              '      return FeatureFlag(\n'
+              '        key: key,\n'
+              '        value: releaseDefault,\n'
+              '        source: FeatureFlagSource.buildMode,\n'
+              '        description: description,\n'
+              '        defaultValue: releaseDefault,\n'
+              '      );\n'
+              '    }\n'
+              '\n'
+              '    if (compileTimeDefault != null) {\n'
+              '      return FeatureFlag(\n'
+              '        key: key,\n'
+              '        value: compileTimeDefault,\n'
+              '        source: FeatureFlagSource.compileTime,\n'
+              '        description: description,\n'
+              '        defaultValue: compileTimeDefault,\n'
+              '      );\n'
+              '    }\n'
+              '\n'
+              '    return null;\n'
+              '  }\n'
+              '\n'
+              '  Map<String, FeatureFlag> getAllLocalFlags() {\n'
+              '    final flags = <String, FeatureFlag>{};\n'
+              '\n'
+              '    for (final flagDef in _localFlagDefinitions) {\n'
+              '      final flag = getLocalFlag(\n'
+              '        flagDef.key,\n'
+              '        compileTimeDefault: flagDef.compileTimeDefault,\n'
+              '        debugDefault: flagDef.debugDefault,\n'
+              '        releaseDefault: flagDef.releaseDefault,\n'
+              '        description: flagDef.description,\n'
+              '      );\n'
+              '      if (flag != null) {\n'
+              '        flags[flag.key] = flag;\n'
+              '      }\n'
+              '    }\n'
+              '\n'
+              '    return flags;\n'
+              '  }\n'
+              '\n'
+              '  static final List<LocalFlagDefinition> _localFlagDefinitions = [\n'
+              '    const LocalFlagDefinition(\n'
+              '      key: \'enable_debug_menu\',\n'
+              '      compileTimeDefault: false,\n'
+              '      debugDefault: true,\n'
+              '      releaseDefault: false,\n'
+              '      description: \'Enable debug menu for development\',\n'
+              '    ),\n'
+              '    const LocalFlagDefinition(\n'
+              '      key: \'enable_experimental_features\',\n'
+              '      compileTimeDefault: false,\n'
+              '      description:\n'
+              '          \'Enable experimental features \'\n'
+              '          \'(set via FEATURE_ENABLE_EXPERIMENTAL_FEATURES)\',\n'
+              '    ),\n'
+              '  ];\n'
+              '}\n'
+              '\n'
+              'class LocalFlagDefinition {\n'
+              '  const LocalFlagDefinition({\n'
+              '    required this.key,\n'
+              '    this.compileTimeDefault,\n'
+              '    this.debugDefault,\n'
+              '    this.releaseDefault,\n'
+              '    this.description,\n'
+              '  });\n'
+              '\n'
+              '  final String key;\n'
+              '\n'
+              '  final bool? compileTimeDefault;\n'
+              '\n'
+              '  final bool? debugDefault;\n'
+              '\n'
+              '  final bool? releaseDefault;\n'
+              '\n'
+              '  final String? description;\n'
+              '}\n'
+              ''
+  
+  package:matcher                                                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18                                     expect
+  test/features/feature_flags/data/services/local_feature_flags_service_test.dart 211:9  main.<fn>.<fn>.<fn>
+  
+00:00 +13 -1: LocalFeatureFlagsService no unreachable environment source (#279) no shipped flag description points at a FEATURE_ variable
+00:00 +13 -2: LocalFeatureFlagsService no unreachable environment source (#279) no shipped flag description points at a FEATURE_ variable [E]
+  Expected: not contains 'FEATURE_'
+    Actual: 'Enable experimental features (set via FEATURE_ENABLE_EXPERIMENTAL_FEATURES)'
+  
+  package:matcher                                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                                      expect
+  test/features/feature_flags/data/services/local_feature_flags_service_test.dart 220:11  main.<fn>.<fn>.<fn>
+  
+00:00 +13 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source (#279) no shipped flag description points at a FEATURE_ variable
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source (#279) the service never reads EnvConfig or a FEATURE_ key

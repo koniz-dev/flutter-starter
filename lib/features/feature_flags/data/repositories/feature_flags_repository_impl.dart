@@ -51,7 +51,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
         );
       }
 
-      // Priority 3: Local flags (environment, build mode, compile-time)
+      // Priority 3: Local flags (build mode, compile-time)
       final localFlag = LocalFeatureFlagsService.instance.getLocalFlag(key);
       if (localFlag != null) {
         return Success(localFlag);
