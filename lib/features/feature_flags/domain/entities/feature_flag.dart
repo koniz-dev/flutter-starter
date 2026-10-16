@@ -75,7 +75,11 @@ enum FeatureFlagSource {
   /// Compile-time constant (const bool)
   compileTime,
 
-  /// Environment variable (.env or --dart-define)
+  /// Environment variable.
+  ///
+  /// No shipped source produces this since koniz-dev/flutter-starter#279:
+  /// `LocalFeatureFlagsService` no longer reads `FEATURE_<KEY>`. Kept so a
+  /// custom source you add can still report it.
   environment,
 
   /// Debug/Release mode based

@@ -1,10 +1,23 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
 
 /// Service for managing local feature flags
 ///
-/// Handles compile-time, environment-based, and build mode flags.
+/// Handles compile-time and build-mode flags. A remote source and the debug
+/// screen's local overrides sit above these; see the feature-flags guide.
+///
+/// There is deliberately **no environment level** (koniz-dev/flutter-starter#279).
+/// It used to come first, reading `EnvConfig.has('FEATURE_<KEY>')`, but
+/// `EnvConfig` reads a `--dart-define` only through the const `DartDefines`
+/// table (#48), and a key built at run time from the flag name is never in
+/// that table. So `--dart-define=FEATURE_...=true` was discarded in every
+/// build, and the level could fire only from a `.env` bundled as an asset,
+/// which `docs/guides/configuration.md` tells you not to ship. A promise the
+/// code cannot keep was removed rather than kept.
+///
+/// To flip a local flag per build, give its definition a literal
+/// `bool.fromEnvironment('FEATURE_<KEY>')` default, which every compiler
+/// resolves, or use the remote source.
 class LocalFeatureFlagsService {
   LocalFeatureFlagsService._();
 
@@ -14,9 +27,8 @@ class LocalFeatureFlagsService {
   /// Get a feature flag value from local sources
   ///
   /// Priority order:
-  /// 1. Environment variable (FEATURE_&lt;KEY&gt;)
-  /// 2. Build mode (debug/release)
-  /// 3. Compile-time constant
+  /// 1. Build mode (debug/release)
+  /// 2. Compile-time constant
   ///
   /// Returns null if the flag is not found in local sources.
   FeatureFlag? getLocalFlag(
@@ -26,19 +38,7 @@ class LocalFeatureFlagsService {
     bool? releaseDefault,
     String? description,
   }) {
-    // Priority 1: Environment variable
-    final envKey = 'FEATURE_${key.toUpperCase()}';
-    if (EnvConfig.has(envKey)) {
-      return FeatureFlag(
-        key: key,
-        value: EnvConfig.getBool(envKey),
-        source: FeatureFlagSource.environment,
-        description: description,
-        defaultValue: compileTimeDefault ?? debugDefault ?? releaseDefault,
-      );
-    }
-
-    // Priority 2: Build mode based
+    // Priority 1: Build mode based
     if (kDebugMode && debugDefault != null) {
       return FeatureFlag(
         key: key,
@@ -59,7 +59,7 @@ class LocalFeatureFlagsService {
       );
     }
 
-    // Priority 3: Compile-time constant
+    // Priority 2: Compile-time constant
     if (compileTimeDefault != null) {
       return FeatureFlag(
         key: key,
@@ -100,7 +100,7 @@ class LocalFeatureFlagsService {
   /// Local flag definitions
   ///
   /// Define your local feature flags here. These are compile-time or
-  /// environment-based flags that don't require remote configuration.
+  /// build-mode flags that don't require remote configuration.
   static final List<LocalFlagDefinition> _localFlagDefinitions = [
     // Example: A feature that's only enabled in debug mode
     const LocalFlagDefinition(
@@ -110,13 +110,12 @@ class LocalFeatureFlagsService {
       releaseDefault: false,
       description: 'Enable debug menu for development',
     ),
-    // Example: A feature controlled by environment variable
+    // Example: A feature that is off unless the remote source or a local
+    // override turns it on
     const LocalFlagDefinition(
       key: 'enable_experimental_features',
       compileTimeDefault: false,
-      description:
-          'Enable experimental features '
-          '(set via FEATURE_ENABLE_EXPERIMENTAL_FEATURES)',
+      description: 'Enable experimental features',
     ),
   ];
 }

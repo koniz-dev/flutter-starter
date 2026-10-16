@@ -247,6 +247,36 @@ Two consequences worth stating plainly:
   rule from [Never ship a secret in the bundle](#never-ship-a-secret-in-the-bundle)
   applies unchanged.
 
+### Feature flags
+
+**No build mechanism sets a `FEATURE_*` variable.** Neither `.env` nor
+`--dart-define` nor `--dart-define-from-file` reaches a local feature flag, on
+any target and in any build mode. `LocalFeatureFlagsService` used to promise
+an "environment" level, `FEATURE_<KEY>`, as its top priority. It looked the key
+up through `EnvConfig`, and a key built at run time from the flag name is never
+in the `DartDefines` table, so the define was discarded everywhere. The level
+was removed in koniz-dev/flutter-starter#279 rather than left as a source that
+cannot fire.
+
+What does decide a local flag, highest first:
+
+1. A local override, written by the feature-flags debug screen.
+2. The remote source, if you replace the shipped no-op one.
+3. The definition's `debugDefault` or `releaseDefault` for the current build
+   mode.
+4. The definition's `compileTimeDefault`.
+
+To flip a flag per build anyway, make its default a literal compile-time read.
+That is the same const mechanism the table uses, so it works on every target in
+the table above:
+
+```dart
+const LocalFlagDefinition(
+  key: 'enable_experimental_features',
+  compileTimeDefault: bool.fromEnvironment('FEATURE_ENABLE_EXPERIMENTAL_FEATURES'),
+),
+```
+
 ### Why the dart-define keys are declared in a table
 
 `String.fromEnvironment` is a **const** constructor. The Dart SDK only
