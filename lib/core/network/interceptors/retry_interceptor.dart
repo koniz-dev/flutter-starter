@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/network/request_body_replay.dart';
 
 /// Interceptor to automatically retry failed network requests
 ///
@@ -101,6 +102,19 @@ class RetryInterceptor extends Interceptor {
     final extra = err.requestOptions.extra;
     var retryCount = extra['retry_count'] as int? ?? 0;
 
+    // A body that can be read only once cannot be sent again. Not retrying
+    // leaves the caller with the real failure rather than a StateError from
+    // the replay (koniz-dev/flutter-starter#284).
+    if (!RequestBodyReplay.canReplay(err.requestOptions.data)) {
+      if (_shouldRetry(err) && retryCount < maxRetries) {
+        loggingService?.debug(
+          'Not retrying [${err.requestOptions.path}]: '
+          '${RequestBodyReplay.reason(err.requestOptions.data)}',
+        );
+      }
+      return super.onError(err, handler);
+    }
+
     if (_shouldRetry(err) && retryCount < maxRetries) {
       retryCount++;
       err.requestOptions.extra['retry_count'] = retryCount;
@@ -119,7 +133,8 @@ class RetryInterceptor extends Interceptor {
 
         final response = await dio.request<dynamic>(
           options.path,
-          data: options.data,
+          // A FormData is finalized by its first send; send a clone.
+          data: RequestBodyReplay.bodyFor(options.data),
           queryParameters: options.queryParameters,
           cancelToken: options.cancelToken,
           options: Options(
