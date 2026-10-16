@@ -715,6 +715,40 @@ Use the same `container` for `UncontrolledProviderScope` / `runApp` so the overr
 
 There is **no** `device_security.dart` in this starter; wire threat handling in your own module if you need blocking UI or forced logout.
 
+#### What the adapter forwards
+
+`FreeRaspServiceImpl` forwards **every** detection the pinned freerasp (8.2.4) reports. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Until koniz-dev/flutter-starter#390 only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
+
+| freeRASP callback | `SecurityThreat` | Platforms | Kind |
+|---|---|---|---|
+| `onAppIntegrity` | `tampered` | both | attack |
+| `onObfuscationIssues` | `tampered` | both | build posture |
+| `onDebug` | `debugger` | both | attack |
+| `onHooks` | `privilegedAccess` | both | attack |
+| `onPrivilegedAccess` | `privilegedAccess` | both | attack |
+| `onSimulator` | `emulator` | both | attack |
+| `onUnofficialStore` | `unofficialStore` | both | attack |
+| `onDeviceBinding` | `unknown` | both | attack |
+| `onDeviceID` | `unknown` | iOS | informational |
+| `onSecureHardwareNotAvailable` | `unknown` | both | device posture |
+| `onMalware` | `malware` | Android | attack |
+| `onBootloader` | `unlockedBootloader` | Android | attack |
+| `onAutomation` | `automation` | Android | attack |
+| `onMultiInstance` | `multiInstance` | Android | attack |
+| `onTimeSpoofing` | `timeSpoofing` | both | attack |
+| `onLocationSpoofing` | `locationSpoofing` | Android | attack |
+| `onScreenshot` | `screenshot` | both | user action |
+| `onScreenRecording` | `screenRecording` | both | user action |
+| `onPasscode` | `passcodeNotSet` | both | device posture |
+| `onDevMode` | `developerMode` | Android | device posture |
+| `onADBEnabled` | `adbEnabled` | Android | device posture |
+| `onSystemVPN` | `systemVpn` | both | device posture |
+| `onUnsecureWiFi` | `unsecureWiFi` | Android | device posture |
+
+"Kind" is guidance for your policy, not something the adapter acts on. A **device posture** or **user action** signal fires on many legitimate devices: a developer phone has developer options and ADB on, and a corporate phone runs a system VPN. Forcing a logout on those locks out real users. Log them or warn, and save blocking for the **attack** rows.
+
+`test/core/security/infrastructure/freerasp_service_impl_test.dart` drives each of freeRASP's `Threat` values through its mocked platform channel and fails if one is neither forwarded as this table says nor listed as deliberately ignored. A freerasp upgrade that adds a detection therefore fails `flutter test` until someone maps it, and the exhaustive `switch` in `FreeRaspServiceImpl.securityThreatFor` stops compiling first. A new `Threat` gets a row here, too.
+
 ### 8. Session management (blueprint)
 
 Not in this repo. Full template (session timer + lifecycle sketch): **[Security blueprints → Session management](./blueprints.md#session-management)**.
