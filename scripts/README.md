@@ -20,8 +20,8 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 |--------|---------|
 | [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`. No `--flavor`: this project has no Gradle product flavors and configures itself through `--dart-define`. |
 | [`bump_version.sh`](ci/bump_version.sh) | Bump `version:` in `pubspec.yaml`. Handles both `1.0.0` and `1.0.0+1`, validates before writing, and leaves the file untouched on any error. |
-| [`generate_changelog.sh`](ci/generate_changelog.sh) | Build a CHANGELOG section from the commit log. |
-| [`release.sh`](ci/release.sh) | Test, analyze, bump, changelog, branch, tag. |
+| [`generate_changelog.sh`](ci/generate_changelog.sh) | Build a CHANGELOG section from the commits since the last reachable tag, or since `--since <ref>`. Inserts it below `## [Unreleased]`, and refuses rather than dumping the whole history when no tag is reachable. No `sed -i`, so it behaves the same on GNU and BSD userlands. |
+| [`release.sh`](ci/release.sh) | Test, analyze, bump, changelog, branch, tag. If the bump or the changelog step fails it restores `pubspec.yaml` and `CHANGELOG.md`, so the tree is left as it started. For a first release with no tag, set `RELEASE_CHANGELOG_SINCE=<ref>`. |
 | [`verify_apk_signer.sh`](ci/verify_apk_signer.sh) | Assert an APK is signed by a non-debug key. Matches the `certificate DN:` *value*, not apksigner's scheme label (`Signer #1`, `V2 Signer:`, `V3 Signer:`, ...), and requires `Number of signers` >= 1. Used by the `Print APK signer certificate` step in [`build.yml`](../.github/workflows/build.yml). |
 
 ## `scripts/test/`
@@ -31,6 +31,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | [`test_coverage.sh`](test/test_coverage.sh) | Coverage reports (HTML, thresholds). |
 | [`calculate_layer_coverage.sh`](test/calculate_layer_coverage.sh) | Layer breakdown (used by CI). |
 | [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests. |
+| [`release_scripts_test.sh`](test/release_scripts_test.sh) | Fixture-repo tests for `generate_changelog.sh` and `release.sh`. Needs no Flutter. Run in CI on Ubuntu and macOS by [`release-scripts.yml`](../.github/workflows/release-scripts.yml). |
 
 ## Conventions
 

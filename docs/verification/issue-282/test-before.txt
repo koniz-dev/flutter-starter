@@ -1,0 +1,32 @@
+# scripts/ci at main 411ac17fdd7 (before the fix), macOS 15.8.1, GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin24)
+ok    generate_changelog.sh 1.2.3 exits 0
+FAIL  heading order: expected '## [Unreleased]|## [1.2.3]|## [1.0.0+1]|', got '## [1.2.3]|## [Unreleased]|## [1.0.0+1]|'
+FAIL  commits after the tag are listed
+ok    commits before the tag are not listed
+ok    the Unreleased section is kept intact
+FAIL  with no tag it refuses and names --since (exit 0: [1;33mWarning: No previous tag found. Using all commits.[0m
+[0;32mChangelog generated successfully![0m
+  [1;33mVersion:[0m 2.0.0
+  [1;33mDate:[0m 2026-10-16
+
+Review CHANGELOG.md and commit if satisfied.)
+FAIL  a refused run leaves CHANGELOG.md untouched
+FAIL  --since <ref> lists exactly the commits in <ref>..HEAD (exit 0: [1;33mWarning: No previous tag found. Using all commits.[0m
+[0;32mChangelog generated successfully![0m
+  [1;33mVersion:[0m 2.0.0
+  [1;33mDate:[0m 2026-10-16
+
+Review CHANGELOG.md and commit if satisfied.)
+FAIL  a missing CHANGELOG.md is created with the section (exit 0: [0;32mGenerating changelog from v0.1.0 to HEAD[0m
+[1;33mCreating CHANGELOG.md[0m
+[0;32mChangelog generated successfully![0m
+  [1;33mVersion:[0m 0.2.0
+  [1;33mDate:[0m 2026-10-16
+
+Review CHANGELOG.md and commit if satisfied.)
+ok    release.sh fails when the changelog step fails
+FAIL  after the failure git status --short is empty, got:  M pubspec.yaml
+ok    no release branch or tag was created
+
+7 release-script test(s) failed.
+exit=1
