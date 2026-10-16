@@ -16,7 +16,10 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// `Override` is exported from misc.dart, not from flutter_riverpod.dart.
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,10 +41,17 @@ const Size kAcceptanceSurface = Size(1200, 800);
 ///
 /// Unlike `test/helpers/pump_app.dart` this applies [AppTheme] rather than
 /// `ThemeData.light()`, so colours in the captured PNG match the shipped app.
+///
+/// The scope applies [authModuleOverrides] before [overrides], exactly as
+/// `createAppContainer` in lib/main.dart does, so a screen under test sees the
+/// providers production wires. Without them core's session seams stay empty
+/// and a forced logout never reaches the router (koniz-dev/flutter-starter#288).
+/// test/tooling/acceptance_container_test.dart enforces this for every file
+/// under test/acceptance/.
 Future<void> pumpAcceptance(
   WidgetTester tester,
   Widget widget, {
-  dynamic overrides,
+  List<Override> overrides = const <Override>[],
   Size surface = kAcceptanceSurface,
   ThemeData? theme,
 }) async {
@@ -50,11 +60,7 @@ Future<void> pumpAcceptance(
 
   await tester.pumpWidget(
     ProviderScope(
-      // `Override` is not exported by flutter_riverpod (see
-      // test/helpers/pump_app.dart, which uses the same workaround). When
-      // `overrides` is supplied it is already a List<Override>.
-      // ignore: argument_type_not_assignable
-      overrides: overrides ?? <Never>[],
+      overrides: <Override>[...authModuleOverrides, ...overrides],
       child: MaterialApp(
         theme: theme ?? AppTheme.lightTheme,
         localizationsDelegates: const [

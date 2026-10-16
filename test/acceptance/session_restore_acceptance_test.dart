@@ -14,6 +14,7 @@ import 'package:flutter_starter/features/auth/presentation/providers/auth_provid
 import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
+import 'package:flutter_starter/main.dart' show createAppContainer;
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -64,7 +65,10 @@ Future<GoRouter> _pumpColdStart(
   await tester.binding.setSurfaceSize(kAcceptanceSurface);
   addTearDown(() => tester.binding.setSurfaceSize(null));
 
-  final container = ProviderContainer(
+  // Built through createAppContainer, as lib/main.dart builds it, so the auth
+  // slice's authModuleOverrides fill core's session seams
+  // (koniz-dev/flutter-starter#288).
+  final container = createAppContainer(
     overrides: [
       authLocalDataSourceProvider.overrideWithValue(localDataSource),
     ],
