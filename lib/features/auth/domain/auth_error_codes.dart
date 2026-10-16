@@ -6,9 +6,12 @@
 /// when it should fire (koniz-dev/flutter-starter#181). Every path that means
 /// "this session cannot be revived" sets [refreshTokenExpired] explicitly, and
 /// the presentation layer reads only that.
-class AuthErrorCodes {
-  AuthErrorCodes._();
-
+///
+/// `abstract final` makes this a pure namespace - it cannot be instantiated,
+/// extended or implemented - without a private constructor. A `_()`
+/// constructor is a line no test can execute, and the domain layer's coverage
+/// gate is 100% (koniz-dev/flutter-starter#331).
+abstract final class AuthErrorCodes {
   /// The stored refresh token can no longer produce an access token.
   ///
   /// Set when the refresh endpoint rejects the token with 400, 401 or 403
