@@ -1,0 +1,6 @@
+# after the fix: flutter test test/core/logging/file_log_open_failure_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/file_log_open_failure_test.dart
+00:00 +0: an unwritable logs directory produces no uncaught zone error
+VF uncaught=[] isWritable=false
+00:00 +1: a writable directory still opens and writes
+00:01 +2: All tests passed!
