@@ -23,6 +23,7 @@ on:
       - 'tool/check_docs.dart'
       - 'tool/doc_signatures.dart'
       - 'tool/doc_symbols.dart'
+      - 'tool/doc_env_runs.dart'
       - '.github/workflows/docs-check.yml'
   pull_request:
     branches: [ main ]
@@ -31,6 +32,7 @@ on:
       - 'tool/check_docs.dart'
       - 'tool/doc_signatures.dart'
       - 'tool/doc_symbols.dart'
+      - 'tool/doc_env_runs.dart'
       - '.github/workflows/docs-check.yml'
   workflow_dispatch:
 

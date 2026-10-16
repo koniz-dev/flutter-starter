@@ -1,0 +1,7 @@
+$ dart run tool/check_docs.dart --env-runs   # rule added, README/CONTRIBUTING unchanged
+CONTRIBUTING.md:193: `flutter run` follows `cp .env.example .env` without --dart-define-from-file=.env, so the copied .env is never read
+README.md:95: `flutter run` follows `cp .env.example .env` without --dart-define-from-file=.env, so the copied .env is never read
+env runs: scanned 69 file(s); 2 run(s) ignoring the copied .env
+
+2 problem(s) found.
+exit=1

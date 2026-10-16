@@ -4,7 +4,7 @@ Maintenance utilities run with `dart run` from the **repository root**.
 
 ## `check_docs.dart`
 
-Documentation integrity checker. Three checks, all of which had silently rotted:
+Documentation integrity checker. Five checks, all of which had silently rotted:
 
 - **Links and anchors** under `docs/`: every relative path resolves, and every
   `#fragment` matches a heading slug in the target file (GitHub's slug rules,
@@ -25,6 +25,13 @@ Documentation integrity checker. Three checks, all of which had silently rotted:
   the document an adopter follows to swap an implementation - cited
   `tasksControllerProvider` and `FirebaseFeatureFlagsRemoteDataSource`, neither
   of which has ever existed anywhere in the repository.
+- **`.env` setup runs** (`doc_env_runs.dart`): in `README.md`,
+  `CONTRIBUTING.md` and `docs/`, the first `flutter run` or `flutter build`
+  after a `cp .env.example .env` line must pass `--dart-define-from-file`
+  (or explicit `--dart-define=` flags). `.env` is not an asset, so a plain run
+  ignores the file it just told the reader to fill in. Added after
+  koniz-dev/flutter-starter#355, where README's Quick Start and CONTRIBUTING
+  did exactly that (rule: koniz-dev/flutter-starter#434).
 
 ```bash
 dart run tool/check_docs.dart               # all checks
@@ -32,13 +39,15 @@ dart run tool/check_docs.dart --links       # links and anchors only
 dart run tool/check_docs.dart --emoji       # emoji only
 dart run tool/check_docs.dart --signatures  # constructor signatures only
 dart run tool/check_docs.dart --symbols     # symbol existence only
+dart run tool/check_docs.dart --env-runs    # .env setup runs only
 ```
 
 Exits 1 and prints `file:line` for every problem. CI runs it as **Docs check**
 (`.github/workflows/docs-check.yml`) on any PR touching markdown - exactly the
 set of changes the Quality gate treats as inert and skips. The signature and
 symbol checks additionally run under `flutter test`
-(`test/docs/doc_signatures_test.dart`, `test/docs/doc_symbols_test.dart`),
+(`test/docs/doc_signatures_test.dart`, `test/docs/doc_symbols_test.dart`), as
+does the `.env` rule (`test/docs/doc_env_runs_test.dart`, with fixtures),
 because a constructor gaining a parameter, or an identifier being deleted from
 `lib/`, is a `lib/` change that Docs check never sees. It is deliberately
 **not** part of `scripts/dev/audit_template.sh`: that script gates code changes,
