@@ -91,6 +91,16 @@ class FileLogOutput extends LogOutput {
   /// go to [_pendingLines] and are written when it settles.
   Future<void>? _flushInFlight;
 
+  /// Set when the log file could not be opened or its sink failed.
+  bool _openFailed = false;
+
+  /// Whether lines are currently reaching the log file.
+  ///
+  /// False before [init] completes, after a failed open (for example an
+  /// unwritable logs directory), and after the sink fails; lines are then
+  /// buffered, up to [maxPendingLines], instead of written.
+  bool get isWritable => _sink != null && !_openFailed;
+
   /// Number of lines currently buffered because no sink is open.
   ///
   /// Exposed for tests and diagnostics.
@@ -125,15 +135,43 @@ class FileLogOutput extends LogOutput {
       }
 
       // Get the current log file
-      _logFile = File(path.join(_logDirectory!, fileName));
-      _sink = _logFile!.openWrite(mode: FileMode.append);
+      final file = _logFile = File(path.join(_logDirectory!, fileName));
+      // openWrite returns its sink at once and opens the file later, so a
+      // failed open never reached this try: it escaped as an uncaught async
+      // error (koniz-dev/flutter-starter#421). Opening once with an await
+      // surfaces it here instead, and _watch covers a failure after that.
+      await (await file.open(mode: FileMode.append)).close();
+      final sink = file.openWrite(mode: FileMode.append);
+      _watch(sink);
+      _sink = sink;
+      _openFailed = false;
       _flushPending();
     } on Object {
+      _openFailed = true;
       // If file initialization fails, silently continue without file logging.
       // This ensures the app doesn't crash if the file system is unavailable.
       // Caught as Object rather than Exception because a missing plugin or a
       // closed sink surfaces as an Error, not an Exception.
     }
+  }
+
+  /// Handles [sink] failing after it was opened.
+  ///
+  /// An [IOSink] reports a failed open or write through [IOSink.done]; left
+  /// unlistened, that is an uncaught async error. The sink is dropped so
+  /// later lines are buffered rather than written into a dead sink.
+  void _watch(IOSink sink) {
+    unawaited(
+      sink.done.then<void>(
+        (_) {},
+        onError: (Object _) {
+          if (identical(_sink, sink)) {
+            _sink = null;
+            _openFailed = true;
+          }
+        },
+      ),
+    );
   }
 
   /// Buffer [lines] until a sink is available, dropping the oldest first.
