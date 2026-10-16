@@ -441,9 +441,28 @@ class AuthInterceptor extends Interceptor {
       }
       refreshedToken = newToken;
 
-      // Retry original request with new token
-      final retryResponse = await _retryRequest(err, newToken);
-      handler.resolve(retryResponse);
+      // Retry original request with new token.
+      //
+      // Its own `try`, because a failed replay is not a failed refresh. The
+      // token is fresh and stored, so a transient replay failure (a 503, a
+      // timeout) fails this one request and nothing else: the session stays,
+      // and the `finally` drain still replays the queued requests with the
+      // fresh token, exactly as a failed *queued* replay does. Sharing the
+      // outer catch used to log the user out and reject every queued request
+      // over a single 503 (koniz-dev/flutter-starter#304).
+      //
+      // A replay answered 401 is the one exception: the server refused a token
+      // it just issued, so the session really is unusable.
+      try {
+        final retryResponse = await _retryRequest(err, newToken);
+        handler.resolve(retryResponse);
+      } on Object catch (e) {
+        if (e is DioException && e.response?.statusCode == 401) {
+          refreshedToken = null;
+          await _logoutUser();
+        }
+        _reject(handler, _asDioException(err, e));
+      }
     }
     // Catches Error as well as Exception on purpose: a TypeError thrown while
     // parsing a malformed refresh response used to escape, leaving

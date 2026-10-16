@@ -1,0 +1,9 @@
+# branch (after the fix)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/head_replay_failure_test.dart
+00:00 +0: criterion 1: refresh OK, head replay 503 - the caller gets the 503, the fresh token is kept, the session sink is not called
+00:00 +1: criterion 2: a request queued behind the same refresh is still replayed with the fresh token and resolves
+00:00 +2: criterion 3: a head replay that itself returns 401 still forces the logout
+00:00 +3: All tests passed!
