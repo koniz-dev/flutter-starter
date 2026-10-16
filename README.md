@@ -92,8 +92,11 @@ _(Open `.env` and fill out backend specifics before compiling)_
 
 ### 5. Running
 ```bash
-flutter run
+flutter run --dart-define-from-file=.env
 ```
+`.env` is not a Flutter asset (so it never ships in a release bundle); the
+`--dart-define-from-file` flag is how the app reads it. Plain `flutter run`
+ignores the file and runs on built-in defaults.
 
 ### 6. E2E tests (Patrol, optional)
 

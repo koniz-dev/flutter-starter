@@ -115,7 +115,10 @@ flutter analyze
 ### Development Mode
 
 ```bash
-# Run on connected device/emulator
+# Run on connected device/emulator, reading the .env from step 3
+flutter run --dart-define-from-file=.env
+
+# Without a .env: built-in development defaults
 flutter run
 
 # Run on specific device

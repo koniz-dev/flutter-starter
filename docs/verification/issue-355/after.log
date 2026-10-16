@@ -1,0 +1,12 @@
+$ git show origin/main:README.md | grep -n -A12 'cp .env.example .env' | grep 'flutter run'   # before
+95-flutter run
+$ grep -n -A12 'cp .env.example .env' README.md | grep 'flutter run'   # after
+95-flutter run --dart-define-from-file=.env
+98-`--dart-define-from-file` flag is how the app reads it. Plain `flutter run`
+
+$ git show origin/main:CONTRIBUTING.md | grep -n -A12 'cp .env.example .env' | grep 'flutter run'   # before
+193-   flutter run
+$ grep -n -A12 'cp .env.example .env' CONTRIBUTING.md | grep 'flutter run'   # after
+193-   flutter run --dart-define-from-file=.env
+195-   Plain `flutter run` ignores `.env` (it is not an asset) and runs on the
+
