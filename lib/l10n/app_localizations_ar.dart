@@ -542,4 +542,45 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get featureFlagsAnalyticsUnavailable => 'التحليلات غير متاحة';
+
+  @override
+  String get failureTimeout =>
+      'استغرق الخادم وقتًا طويلاً للرد. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get failureNoConnection =>
+      'تعذّر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get failureInsecureConnection => 'الاتصال غير آمن، لذلك تم إيقافه.';
+
+  @override
+  String get failureCancelled => 'تم إلغاء الطلب.';
+
+  @override
+  String get failureUnreadableResponse =>
+      'أرسل الخادم استجابة لم يتمكن هذا التطبيق من قراءتها.';
+
+  @override
+  String get failureAuth =>
+      'لم تسجّل الدخول أو انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get failurePermission => 'ليس لديك إذن للقيام بذلك.';
+
+  @override
+  String get failureNotFound => 'لم نتمكن من العثور على ما تبحث عنه.';
+
+  @override
+  String get failureValidation =>
+      'بعض المعلومات غير صالحة. يرجى التحقق منها والمحاولة مرة أخرى.';
+
+  @override
+  String get failureStorage => 'تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.';
+
+  @override
+  String get failureServer => 'حدث خطأ في الخادم. يرجى المحاولة لاحقًا.';
+
+  @override
+  String get failureUnknown => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
 }

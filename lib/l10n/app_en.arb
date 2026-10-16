@@ -605,6 +605,53 @@
   "featureFlagsAnalyticsUnavailable": "Analytics Unavailable",
   "@featureFlagsAnalyticsUnavailable": {
     "description": "Disabled button label shown when the analytics flag is off"
+  },
+  "failureTimeout": "The server took too long to respond. Please try again.",
+  "@failureTimeout": {
+    "description": "Failure message shown to the user. Used when a request times out"
+  },
+  "failureNoConnection": "Can't reach the server. Check your connection and try again.",
+  "@failureNoConnection": {
+    "description": "Failure message shown to the user. Used when the server cannot be reached"
+  },
+  "failureInsecureConnection": "The connection isn't secure, so it was stopped.",
+  "@failureInsecureConnection": {
+    "description": "Failure message shown to the user. Used when TLS verification or certificate pinning rejects the server"
+  },
+  "failureCancelled": "The request was cancelled.",
+  "@failureCancelled": {
+    "description": "Failure message shown to the user. Used when a request was cancelled"
+  },
+  "failureUnreadableResponse": "The server sent a response this app couldn't read.",
+  "@failureUnreadableResponse": {
+    "description": "Failure message shown to the user. Used when the server's response cannot be parsed"
+  },
+  "failureAuth": "You're not signed in, or your session has ended. Please sign in again.",
+  "@failureAuth": {
+    "description": "Failure message shown to the user. Used for an authentication failure"
+  },
+  "failurePermission": "You don't have permission to do that.",
+  "@failurePermission": {
+    "description": "Failure message shown to the user. Used for a permission failure"
+  },
+  "failureNotFound": "We couldn't find what you were looking for.",
+  "@failureNotFound": {
+    "description": "Failure message shown to the user. Used when the requested item does not exist"
+  },
+  "failureValidation": "Some of the information isn't valid. Please check it and try again.",
+  "@failureValidation": {
+    "description": "Failure message shown to the user. Used for a validation failure"
+  },
+  "failureStorage": "Couldn't read or save data on this device.",
+  "@failureStorage": {
+    "description": "Failure message shown to the user. Used when on-device storage fails"
+  },
+  "failureServer": "Something went wrong on the server. Please try again later.",
+  "@failureServer": {
+    "description": "Failure message shown to the user. Used for a server-side failure"
+  },
+  "failureUnknown": "Something went wrong. Please try again.",
+  "@failureUnknown": {
+    "description": "Failure message shown to the user. Used for any other failure"
   }
 }
-

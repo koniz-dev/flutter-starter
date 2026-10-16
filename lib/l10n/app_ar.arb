@@ -202,6 +202,17 @@
   "featureFlagsExample4Body": "يوضح هذا المثال كيفية إظهار خيارات التنقل بشكل مشروط بناءً على أعلام الميزات.",
   "featureFlagsNavigatingToAnalytics": "جارٍ الانتقال إلى التحليلات...",
   "featureFlagsViewAnalytics": "عرض التحليلات",
-  "featureFlagsAnalyticsUnavailable": "التحليلات غير متاحة"
+  "featureFlagsAnalyticsUnavailable": "التحليلات غير متاحة",
+  "failureTimeout": "استغرق الخادم وقتًا طويلاً للرد. يرجى المحاولة مرة أخرى.",
+  "failureNoConnection": "تعذّر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.",
+  "failureInsecureConnection": "الاتصال غير آمن، لذلك تم إيقافه.",
+  "failureCancelled": "تم إلغاء الطلب.",
+  "failureUnreadableResponse": "أرسل الخادم استجابة لم يتمكن هذا التطبيق من قراءتها.",
+  "failureAuth": "لم تسجّل الدخول أو انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
+  "failurePermission": "ليس لديك إذن للقيام بذلك.",
+  "failureNotFound": "لم نتمكن من العثور على ما تبحث عنه.",
+  "failureValidation": "بعض المعلومات غير صالحة. يرجى التحقق منها والمحاولة مرة أخرى.",
+  "failureStorage": "تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.",
+  "failureServer": "حدث خطأ في الخادم. يرجى المحاولة لاحقًا.",
+  "failureUnknown": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
 }
-

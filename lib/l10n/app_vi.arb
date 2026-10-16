@@ -393,6 +393,17 @@
   "featureFlagsExample4Body": "Ví dụ này cho thấy cách hiển thị tùy chọn điều hướng có điều kiện dựa trên cờ tính năng.",
   "featureFlagsNavigatingToAnalytics": "Đang chuyển đến Analytics...",
   "featureFlagsViewAnalytics": "Xem Analytics",
-  "featureFlagsAnalyticsUnavailable": "Analytics không khả dụng"
+  "featureFlagsAnalyticsUnavailable": "Analytics không khả dụng",
+  "failureTimeout": "Máy chủ phản hồi quá lâu. Vui lòng thử lại.",
+  "failureNoConnection": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại.",
+  "failureInsecureConnection": "Kết nối không an toàn nên đã bị dừng.",
+  "failureCancelled": "Yêu cầu đã bị hủy.",
+  "failureUnreadableResponse": "Máy chủ gửi về phản hồi mà ứng dụng không đọc được.",
+  "failureAuth": "Bạn chưa đăng nhập hoặc phiên đã hết hạn. Vui lòng đăng nhập lại.",
+  "failurePermission": "Bạn không có quyền thực hiện thao tác này.",
+  "failureNotFound": "Không tìm thấy nội dung bạn cần.",
+  "failureValidation": "Một số thông tin không hợp lệ. Vui lòng kiểm tra và thử lại.",
+  "failureStorage": "Không thể đọc hoặc lưu dữ liệu trên thiết bị này.",
+  "failureServer": "Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.",
+  "failureUnknown": "Đã xảy ra lỗi. Vui lòng thử lại."
 }
-

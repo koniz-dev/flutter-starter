@@ -202,6 +202,17 @@
   "featureFlagsExample4Body": "Este ejemplo muestra cómo mostrar opciones de navegación de forma condicional según los feature flags.",
   "featureFlagsNavigatingToAnalytics": "Navegando a Analytics...",
   "featureFlagsViewAnalytics": "Ver Analytics",
-  "featureFlagsAnalyticsUnavailable": "Analytics no disponible"
+  "featureFlagsAnalyticsUnavailable": "Analytics no disponible",
+  "failureTimeout": "El servidor tardó demasiado en responder. Inténtalo de nuevo.",
+  "failureNoConnection": "No se puede conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+  "failureInsecureConnection": "La conexión no es segura, así que se ha detenido.",
+  "failureCancelled": "La solicitud se canceló.",
+  "failureUnreadableResponse": "El servidor envió una respuesta que esta aplicación no pudo leer.",
+  "failureAuth": "No has iniciado sesión o tu sesión ha terminado. Vuelve a iniciar sesión.",
+  "failurePermission": "No tienes permiso para hacer eso.",
+  "failureNotFound": "No encontramos lo que buscabas.",
+  "failureValidation": "Parte de la información no es válida. Revísala e inténtalo de nuevo.",
+  "failureStorage": "No se pudieron leer ni guardar datos en este dispositivo.",
+  "failureServer": "Algo salió mal en el servidor. Inténtalo de nuevo más tarde.",
+  "failureUnknown": "Algo salió mal. Inténtalo de nuevo."
 }
-

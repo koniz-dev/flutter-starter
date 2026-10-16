@@ -515,4 +515,48 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get featureFlagsAnalyticsUnavailable => 'Analytics no disponible';
+
+  @override
+  String get failureTimeout =>
+      'El servidor tardó demasiado en responder. Inténtalo de nuevo.';
+
+  @override
+  String get failureNoConnection =>
+      'No se puede conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get failureInsecureConnection =>
+      'La conexión no es segura, así que se ha detenido.';
+
+  @override
+  String get failureCancelled => 'La solicitud se canceló.';
+
+  @override
+  String get failureUnreadableResponse =>
+      'El servidor envió una respuesta que esta aplicación no pudo leer.';
+
+  @override
+  String get failureAuth =>
+      'No has iniciado sesión o tu sesión ha terminado. Vuelve a iniciar sesión.';
+
+  @override
+  String get failurePermission => 'No tienes permiso para hacer eso.';
+
+  @override
+  String get failureNotFound => 'No encontramos lo que buscabas.';
+
+  @override
+  String get failureValidation =>
+      'Parte de la información no es válida. Revísala e inténtalo de nuevo.';
+
+  @override
+  String get failureStorage =>
+      'No se pudieron leer ni guardar datos en este dispositivo.';
+
+  @override
+  String get failureServer =>
+      'Algo salió mal en el servidor. Inténtalo de nuevo más tarde.';
+
+  @override
+  String get failureUnknown => 'Algo salió mal. Inténtalo de nuevo.';
 }
