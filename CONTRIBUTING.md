@@ -190,8 +190,10 @@ naming a package such as `path_provider_foundation`. Trust the lockfile.
 
 5. **Run the app**
    ```bash
-   flutter run
+   flutter run --dart-define-from-file=.env
    ```
+   Plain `flutter run` ignores `.env` (it is not an asset) and runs on the
+   built-in defaults.
 
 6. **Run tests**
    ```bash
