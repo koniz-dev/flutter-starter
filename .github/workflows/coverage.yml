@@ -46,7 +46,21 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    
+
+    # The coverage targets, in one place (koniz-dev/flutter-starter#331). The
+    # enforcement step, the job summary and the PR comment all read these, so
+    # the table can no longer promise a target the gate does not enforce.
+    #
+    # Domain is 100%: keep it there by writing namespace classes as
+    # `abstract final class X { static const ... }` rather than with a private
+    # `X._()` constructor, which no test can cover.
+    env:
+      COVERAGE_MIN_TOTAL: 80
+      COVERAGE_MIN_DOMAIN: 100
+      COVERAGE_MIN_DATA: 90
+      COVERAGE_MIN_PRESENTATION: 80
+      COVERAGE_MIN_CORE: 80
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -136,6 +150,22 @@ jobs:
           echo "Per-layer coverage percentages are reported by the"
           echo "'Calculate coverage by layer (architecture gates)' step above."
 
+      # Written before enforcement, so a failing gate still shows the table.
+      - name: Write coverage summary
+        if: always() && steps.layer_coverage.outcome == 'success'
+        run: |
+          {
+            echo "## Coverage Analysis"
+            echo ""
+            echo "| Layer | Coverage | Target |"
+            echo "|-------|----------|--------|"
+            echo "| Total | ${{ steps.metrics.outputs.overall }}% | ${COVERAGE_MIN_TOTAL}% |"
+            echo "| Domain | ${{ steps.layer_coverage.outputs.domain }}% | ${COVERAGE_MIN_DOMAIN}% |"
+            echo "| Data | ${{ steps.layer_coverage.outputs.data }}% | ${COVERAGE_MIN_DATA}% |"
+            echo "| Presentation | ${{ steps.layer_coverage.outputs.presentation }}% | ${COVERAGE_MIN_PRESENTATION}% |"
+            echo "| Core | ${{ steps.layer_coverage.outputs.core }}% | ${COVERAGE_MIN_CORE}% |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Enforce coverage thresholds
         run: |
           OVERALL=${{ steps.metrics.outputs.overall }}
@@ -159,11 +189,11 @@ jobs:
             fi
           }
 
-          check_threshold "Total Coverage" "$OVERALL" 80 || exit 1
-          check_threshold "Domain Layer" "$DOMAIN_COV" 100 || FAILED=1
-          check_threshold "Data Layer" "$DATA_COV" 90 || FAILED=1
-          check_threshold "Presentation Layer" "$PRESENTATION_COV" 80 || FAILED=1
-          check_threshold "Core Layer" "$CORE_COV" 80 || FAILED=1
+          check_threshold "Total Coverage" "$OVERALL" "$COVERAGE_MIN_TOTAL" || exit 1
+          check_threshold "Domain Layer" "$DOMAIN_COV" "$COVERAGE_MIN_DOMAIN" || FAILED=1
+          check_threshold "Data Layer" "$DATA_COV" "$COVERAGE_MIN_DATA" || FAILED=1
+          check_threshold "Presentation Layer" "$PRESENTATION_COV" "$COVERAGE_MIN_PRESENTATION" || FAILED=1
+          check_threshold "Core Layer" "$CORE_COV" "$COVERAGE_MIN_CORE" || FAILED=1
 
           if [ $FAILED -eq 1 ]; then
             echo "⚠️ One or more architectural layers did not meet coverage targets."
@@ -207,6 +237,7 @@ jobs:
           # No token needed for public repositories
       
       - name: Generate coverage badge
+        id: badge
         run: |
           COVERAGE=${{ steps.metrics.outputs.overall }}
           COLOR="red"
@@ -222,6 +253,9 @@ jobs:
           
           echo "color=$COLOR" >> $GITHUB_OUTPUT
       
+      # Runs only once a `pull_request:` trigger is enabled above - this
+      # workflow ships with schedule and workflow_dispatch only, so on this
+      # repository the job summary is where the table appears.
       - name: Comment coverage summary
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         uses: marocchino/sticky-pull-request-comment@v2
@@ -231,15 +265,15 @@ jobs:
             ## 📊 Coverage Analysis
             
             ### Overall Coverage
-            **${{ steps.metrics.outputs.overall }}%** ${{ steps.metrics.outputs.overall >= 80 && '✅' || '⚠️' }}
-            
+            **${{ steps.metrics.outputs.overall }}%** ${{ steps.metrics.outputs.overall >= env.COVERAGE_MIN_TOTAL && '✅' || '⚠️' }} (badge colour: ${{ steps.badge.outputs.color }})
+
             ### Coverage by Layer
-            | Layer | Files | Target |
-            |-------|-------|--------|
-            | Domain | ${{ steps.metrics.outputs.domain_files }} | 100% |
-            | Data | ${{ steps.metrics.outputs.data_files }} | 90%+ |
-            | Presentation | ${{ steps.metrics.outputs.presentation_files }} | 80%+ |
-            | Core | ${{ steps.metrics.outputs.core_files }} | 90%+ |
+            | Layer | Coverage | Target |
+            |-------|----------|--------|
+            | Domain | ${{ steps.layer_coverage.outputs.domain }}% | ${{ env.COVERAGE_MIN_DOMAIN }}% |
+            | Data | ${{ steps.layer_coverage.outputs.data }}% | ${{ env.COVERAGE_MIN_DATA }}% |
+            | Presentation | ${{ steps.layer_coverage.outputs.presentation }}% | ${{ env.COVERAGE_MIN_PRESENTATION }}% |
+            | Core | ${{ steps.layer_coverage.outputs.core }}% | ${{ env.COVERAGE_MIN_CORE }}% |
             
             📈 View detailed report: [Codecov](https://codecov.io/gh/${{ github.repository }})
             
