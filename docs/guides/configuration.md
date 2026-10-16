@@ -473,7 +473,7 @@ print(config);
 | `API_CONNECT_TIMEOUT` | int | `10` | API connect timeout in seconds |
 | `API_RECEIVE_TIMEOUT` | int | `30` | API receive timeout in seconds |
 | `API_SEND_TIMEOUT` | int | `30` | API send timeout in seconds |
-| `ENABLE_LOGGING` | bool | Environment-aware | Enable logging (default: true in dev/staging) |
+| `ENABLE_LOGGING` | bool | `true` | Master switch for `LoggingService`; `false` turns every output off. See [Where logs go](#where-logs-go) |
 | `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableAnalytics`, but the starter ships no analytics, so nothing reads it. Gate your analytics SDK on it (default: true in staging/prod) |
 | `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableCrashReporting`, but the starter ships no crash reporter, so nothing reads it. Gate your crash reporter on it (default: true in staging/prod) |
 | `ENABLE_PERFORMANCE_MONITORING` | bool | Environment-aware | Enable performance monitoring |
@@ -495,8 +495,27 @@ the row is updated.
 - Staging: `https://api-staging.example.com`
 - Production: `https://api.example.com`
 
+### Where logs go
+
+With `ENABLE_LOGGING` unset, `LoggingService` writes to:
+
+| Build | Console | `logs/app.log` (app documents directory) | Level, format |
+|---|---|---|---|
+| Any debug build | yes | production only | debug and up, pretty; production: info and up, JSON |
+| Production release | no | yes | info and up, JSON |
+| Staging or development release | yes, as the platform log | no | debug and up, pretty |
+
+Production used to default `ENABLE_LOGGING` to `false`, so the file output it
+was meant to use never ran and every production error was dropped
+(koniz-dev/flutter-starter#320). A release build with no file output also had
+no console, because the console output is added only under `kDebugMode`. The
+console is now the fallback whenever no other output is configured.
+
+The file holds whatever you log, on the device, unencrypted. Keep secrets and
+personal data out of log messages and contexts.
+
 **Feature Flag defaults:**
-- Logging: Enabled in `development` and `staging`
+- Logging: Enabled in every environment; see [Where logs go](#where-logs-go)
 - Analytics/Crash/Performance: Enabled in `staging` and `production`
 - Debug Features: Enabled in `development` only
 - HTTP Logging: Enabled in `development` only

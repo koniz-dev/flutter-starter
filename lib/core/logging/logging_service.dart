@@ -33,13 +33,16 @@ class LoggingService {
   /// production)
   /// [enableRemoteLogging] - Whether to log to remote services
   /// (default: false)
+  /// [debugMode] - Stands in for `kDebugMode`, for tests
   LoggingService({
     bool? enableLogging,
     bool? enableFileLogging,
     bool? enableRemoteLogging,
+    @visibleForTesting bool? debugMode,
   }) : _enableLogging = enableLogging ?? AppConfig.enableLogging,
        _enableFileLogging = enableFileLogging ?? AppConfig.isProduction,
-       _enableRemoteLogging = enableRemoteLogging ?? false {
+       _enableRemoteLogging = enableRemoteLogging ?? false,
+       _debugMode = debugMode ?? kDebugMode {
     _initializeLogger();
   }
 
@@ -51,6 +54,14 @@ class LoggingService {
 
   /// Whether remote logging is enabled
   final bool _enableRemoteLogging;
+
+  /// Whether this is a debug build (`kDebugMode` unless a test says so)
+  final bool _debugMode;
+
+  /// The outputs the logger writes to; empty only when logging is disabled.
+  @visibleForTesting
+  List<LogOutput> get outputs => List.unmodifiable(_outputs);
+  final List<LogOutput> _outputs = [];
 
   /// Internal logger instance
   late final Logger _logger;
@@ -66,10 +77,10 @@ class LoggingService {
       return;
     }
 
-    final outputs = <LogOutput>[];
+    final outputs = _outputs;
 
     // Console output (always enabled in debug mode)
-    if (kDebugMode) {
+    if (_debugMode) {
       outputs.add(ConsoleOutput());
     }
 
@@ -87,6 +98,14 @@ class LoggingService {
     if (_enableRemoteLogging) {
       // Add remote logging output here
       // Example: outputs.add(RemoteLogOutput(...));
+    }
+
+    // A release build with no file output - staging by default - would
+    // otherwise have no output at all and drop every line while logging is
+    // on (koniz-dev/flutter-starter#320). The console reaches the platform
+    // log (logcat, the unified log), which is better than nothing.
+    if (outputs.isEmpty) {
+      outputs.add(ConsoleOutput());
     }
 
     // Use MultiOutput if multiple outputs are configured
