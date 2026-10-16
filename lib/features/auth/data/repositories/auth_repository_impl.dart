@@ -47,6 +47,19 @@ class AuthRepositoryImpl implements AuthRepository {
   /// cannot see terminations raised by the interceptor.
   final SessionGeneration sessionGeneration;
 
+  /// What a login or register body the app cannot parse fails with.
+  ///
+  /// The generated `fromJson` casts with `as String`, so an int user id or a
+  /// missing `token` throws a `TypeError` - an [Error], which the
+  /// `on Exception` clauses never caught. It escaped the `Result` contract
+  /// and left the login screen loading forever
+  /// (koniz-dev/flutter-starter#306). Nothing has been cached at that point:
+  /// parsing happens before the first write.
+  static const _unreadableResponse = ServerFailure(
+    'The server sent a response this app could not read.',
+    code: 'INVALID_AUTH_RESPONSE',
+  );
+
   @override
   Future<Result<User>> login(String email, String password) async {
     // A different credential set is about to land. Any refresh already in
@@ -64,6 +77,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
+    } on Object catch (_) {
+      return const ResultFailure(_unreadableResponse);
     }
   }
 
@@ -91,6 +106,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
+    } on Object catch (_) {
+      return const ResultFailure(_unreadableResponse);
     }
   }
 
