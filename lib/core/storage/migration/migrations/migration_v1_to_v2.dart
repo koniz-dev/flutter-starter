@@ -67,10 +67,17 @@ class MigrationV1ToV2 extends StorageMigration {
     }
 
     // Example 4: Add default values for new keys
-    // Only set if key doesn't exist
-    final hasLanguage = await storage.containsKey('language');
-    if (!hasLanguage) {
-      await storage.setString('language', 'en');
+    // Only set if key doesn't exist.
+    //
+    // Seed only keys whose absence means "not set up yet", never a user
+    // choice. This used to seed `language = 'en'`: a fresh install is stamped
+    // v1, so it ran on every first launch, and `language` is the key
+    // LocalizationService reads as the user's pick - so the device language
+    // lost to an English preference nobody had made
+    // (koniz-dev/flutter-starter#417).
+    final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
+    if (!hasSyncInterval) {
+      await storage.setInt('sync_interval_minutes', 15);
     }
 
     // Example 5: Clean up deprecated keys

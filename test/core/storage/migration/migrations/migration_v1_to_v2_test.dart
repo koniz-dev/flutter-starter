@@ -147,7 +147,7 @@ void main() {
         expect(await storage.getStringList('user_tags'), isEmpty);
       });
 
-      test('should add default language if not exists', () async {
+      test('should add a default for a new key if not exists', () async {
         // Arrange
         await storage.setString(StorageVersion.versionKey, '1');
 
@@ -155,21 +155,30 @@ void main() {
         await migration.migrate(storage);
 
         // Assert
-        final language = await storage.getString('language');
-        expect(language, 'en');
+        expect(await storage.getInt('sync_interval_minutes'), 15);
       });
 
-      test('should not overwrite existing language', () async {
+      test('should not overwrite an existing value', () async {
         // Arrange
         await storage.setString(StorageVersion.versionKey, '1');
-        await storage.setString('language', 'vi');
+        await storage.setInt('sync_interval_minutes', 60);
 
         // Act
         await migration.migrate(storage);
 
         // Assert
-        final language = await storage.getString('language');
-        expect(language, 'vi');
+        expect(await storage.getInt('sync_interval_minutes'), 60);
+      });
+
+      test('should not seed a language choice (#417)', () async {
+        // Arrange
+        await storage.setString(StorageVersion.versionKey, '1');
+
+        // Act
+        await migration.migrate(storage);
+
+        // Assert
+        expect(await storage.containsKey('language'), isFalse);
       });
 
       test('should remove deprecated keys', () async {
@@ -311,7 +320,7 @@ void main() {
         expect(await storage.getString('theme_mode'), 'dark');
         expect(await storage.getStringList('user_tags'), ['tag1', 'tag2']);
         expect(await storage.containsKey('old_setting_1'), isFalse);
-        expect(await storage.getString('language'), 'en');
+        expect(await storage.containsKey('language'), isFalse);
       });
 
       test('should handle tags with extra spaces', () async {
@@ -361,7 +370,7 @@ void main() {
         expect(await storage.getString('username'), 'testuser');
         expect(await storage.getString('theme_mode'), 'dark');
         expect(await storage.getStringList('user_tags'), ['tag1', 'tag2']);
-        expect(await storage.getString('language'), 'en');
+        expect(await storage.containsKey('language'), isFalse);
       });
 
       test('migrate recovers a store left mid-migration', () async {
