@@ -1,0 +1,9 @@
+# branch, --platform chrome (after the fix)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_web_test.dart
+00:00 +0: createAdapter builds no IO adapter on web
+00:00 +1: a misconfigured policy does not assert on web either
+00:00 +2: ApiClient with pinning requested keeps the browser transport, and a request reaches it
+00:00 +3: All tests passed!

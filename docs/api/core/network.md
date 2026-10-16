@@ -83,7 +83,7 @@ ApiClient({
 | `authInterceptor` | yes | Token injection and 401 refresh |
 | `loggingService` | no | **Passing it is what installs `ApiLoggingInterceptor`.** Omit it and there is no HTTP logging at all, whatever `ENABLE_HTTP_LOGGING` says |
 | `performanceService` | no | **Passing it is what installs `PerformanceInterceptor`.** Omit it and no HTTP trace is ever started |
-| `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` |
+| `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` . **Ignored on Flutter web**, where the browser owns TLS: `createAdapter()` returns `null` and Dio keeps its browser transport (koniz-dev/flutter-starter#307) |
 
 The two optional services are installed conditionally in `ApiClient._createDio`
 (`if (loggingService != null)` / `if (performanceService != null)`), so their
