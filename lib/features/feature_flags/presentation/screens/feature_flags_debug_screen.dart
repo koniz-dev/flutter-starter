@@ -19,6 +19,18 @@ class FeatureFlagsDebugScreen extends ConsumerStatefulWidget {
 
 class _FeatureFlagsDebugScreenState
     extends ConsumerState<FeatureFlagsDebugScreen> {
+  /// Re-reads every flag provider after a value may have changed.
+  ///
+  /// Invalidating only [allFeatureFlagsProvider] refreshed this screen and
+  /// left every widget listening to [isFeatureEnabledProvider] or
+  /// [featureFlagProvider] on the old value (koniz-dev/flutter-starter#318).
+  void _flagsChanged() {
+    ref
+      ..invalidate(allFeatureFlagsProvider)
+      ..invalidate(isFeatureEnabledProvider)
+      ..invalidate(featureFlagProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     final allFlagsAsync = ref.watch(allFeatureFlagsProvider);
@@ -31,8 +43,9 @@ class _FeatureFlagsDebugScreenState
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () async {
-              ref.invalidate(allFeatureFlagsProvider);
               await ref.read(featureFlagsManagerProvider).refresh();
+              if (!mounted) return;
+              _flagsChanged();
             },
             tooltip: l10n.featureFlagsRefreshTooltip,
           ),
@@ -67,7 +80,7 @@ class _FeatureFlagsDebugScreenState
                 // The screen can be popped while the await above is in
                 // flight; `ref` is unusable past disposal, so guard first.
                 if (!mounted) return;
-                ref.invalidate(allFeatureFlagsProvider);
+                _flagsChanged();
                 messenger.showSnackBar(
                   SnackBar(content: Text(l10n.featureFlagsAllOverridesCleared)),
                 );
@@ -197,7 +210,7 @@ class _FeatureFlagsDebugScreenState
           // The screen can be popped while the await above is in flight;
           // `ref` is unusable past disposal, so guard first.
           if (!mounted) return;
-          ref.invalidate(allFeatureFlagsProvider);
+          _flagsChanged();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -216,7 +229,7 @@ class _FeatureFlagsDebugScreenState
         // The screen can be popped while the await above is in flight;
         // `ref` is unusable past disposal, so guard first.
         if (!mounted) return;
-        ref.invalidate(allFeatureFlagsProvider);
+        _flagsChanged();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.featureFlagsOverrideCleared(flag.key))),
         );

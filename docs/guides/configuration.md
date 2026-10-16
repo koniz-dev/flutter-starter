@@ -265,6 +265,14 @@ What does decide a local flag, highest first:
 3. The definition's `debugDefault` or `releaseDefault` for the current build
    mode.
 4. The definition's `compileTimeDefault`.
+5. The flag's `FeatureFlagKey.defaultValue` in `FeatureFlags`, when nothing
+   above sets it.
+
+`FeatureFlagsManager.isEnabled`, `isFeatureEnabledProvider` and the debug
+screen all resolve a flag through this one order, so they cannot disagree
+about it (koniz-dev/flutter-starter#318). The debug screen lists every
+`FeatureFlags.all` key, including keys at level 5. A toggle there refreshes
+every provider that reads a flag, not only the screen's own list.
 
 To flip a flag per build anyway, make its default a literal compile-time read.
 That is the same const mechanism the table uses, so it works on every target in
