@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:mason/mason.dart';
@@ -45,6 +46,7 @@ Future<void> run(HookContext context) async {
   }
 
   await _renameDartPackage(rootPath, packageName, logger);
+  await _applyDisplayNameToDart(rootPath, appDisplayName, logger);
   await _patchAndroidGradle(rootPath, applicationId);
   await _patchAndroidManifest(rootPath, appDisplayName);
   await _relocateMainActivity(rootPath, applicationId, logger);
@@ -60,9 +62,130 @@ Future<void> run(HookContext context) async {
     logger: logger,
   );
 
-  logger.alert(
-    'Setup complete. Next: flutter pub get && flutter analyze && flutter test',
+  // Last, because it needs the renamed package resolved and the regenerated
+  // localizations in place. Without it the tree analyzed clean before the
+  // rename and red after it (koniz-dev/flutter-starter#283).
+  await _repairRenamedSources(rootPath, logger);
+
+  logger.alert('Setup complete. Next: flutter analyze && flutter test');
+}
+
+/// Every directory whose `.dart` sources [_renameDartPackage] rewrites.
+///
+/// `docs/` is here because `analysis_options.yaml` does not exclude it (see
+/// CLAUDE.md), so a committed probe such as
+/// `docs/verification/issue-121/diagnosis_probe_test.dart` is analyzed like any
+/// other source; left importing `package:flutter_starter/` it fails analysis
+/// with `uri_does_not_exist` once the package is renamed.
+const _renamedDirectories = <String>[
+  'lib',
+  'test',
+  'integration_test',
+  'tool',
+  'examples',
+  'docs',
+];
+
+/// Re-resolves the renamed package, regenerates localizations, and repairs
+/// the import order the rename broke.
+///
+/// `package:flutter_starter/` happened to sort between `flutter_riverpod` and
+/// `flutter_test`. Almost any other name does not, so a string replace leaves
+/// nearly every multi-import file violating `directives_ordering` - 175 of
+/// them for `acme_shop`, and as many for the default `my_app`.
+/// `dart fix --code=directives_ordering`, run over the repository root,
+/// reorders exactly those blocks, and `dart format` then normalises the
+/// directories the rename touched so the format gate stays green.
+Future<void> _repairRenamedSources(String rootPath, Logger logger) async {
+  final dirs = _renamedDirectories
+      .where((d) => Directory('$rootPath/$d').existsSync())
+      .toList();
+
+  await _run('flutter', ['pub', 'get'], rootPath, logger);
+  await _run('flutter', ['gen-l10n'], rootPath, logger);
+  // `dart fix` takes a single path. The root covers every analyzed file -
+  // the directories above, and nothing `analysis_options.yaml` excludes.
+  await _run(
+    'dart',
+    ['fix', '--apply', '--code=directives_ordering', '.'],
+    rootPath,
+    logger,
   );
+  await _run('dart', ['format', ...dirs], rootPath, logger);
+  logger.info('Re-sorted imports and reformatted ${dirs.join(', ')}');
+}
+
+Future<void> _run(
+  String executable,
+  List<String> args,
+  String workingDirectory,
+  Logger logger,
+) async {
+  final result = await Process.run(
+    executable,
+    args,
+    workingDirectory: workingDirectory,
+    runInShell: Platform.isWindows,
+  );
+  if (result.exitCode != 0) {
+    logger
+      ..err(result.stdout.toString())
+      ..err(result.stderr.toString());
+    throw Exception(
+      '`$executable ${args.join(' ')}` failed with exit ${result.exitCode}',
+    );
+  }
+}
+
+/// Puts [displayName] where the Dart side shows the app's name.
+///
+/// Only the exact template name is replaced: the whole-string `'Flutter
+/// Starter'` literal (in `MaterialApp.title`, `StartupFailureApp`,
+/// `AppConstants.appName`, and the tests that assert them) and the `appTitle`
+/// entry of every ARB file. Sentences that merely mention the template, such
+/// as `welcome`, are left alone. The generated `app_localizations*.dart` are
+/// rebuilt from the ARB files by `flutter gen-l10n` in
+/// [_repairRenamedSources].
+Future<void> _applyDisplayNameToDart(
+  String rootPath,
+  String displayName,
+  Logger logger,
+) async {
+  const templateName = 'Flutter Starter';
+  final dartLiteral = _dartSingleQuoted(displayName);
+  final arbEntry = RegExp(r'"appTitle"\s*:\s*"Flutter Starter"');
+  final arbValue = '"appTitle": ${jsonEncode(displayName)}';
+
+  var changed = 0;
+  for (final dirName in ['lib', 'test', 'integration_test']) {
+    final dir = Directory('$rootPath/$dirName');
+    if (!dir.existsSync()) continue;
+    await for (final entity in dir.list(recursive: true, followLinks: false)) {
+      if (entity is! File) continue;
+      final path = entity.path;
+      final isDart = path.endsWith('.dart');
+      final isArb = path.endsWith('.arb');
+      if (!isDart && !isArb) continue;
+      final text = await entity.readAsString();
+      final updated = isDart
+          ? text.replaceAll("'$templateName'", dartLiteral)
+          : text.replaceAll(arbEntry, arbValue);
+      if (updated != text) {
+        await entity.writeAsString(updated);
+        changed++;
+      }
+    }
+  }
+  logger.info('Applied "$displayName" to $changed Dart/ARB file(s)');
+}
+
+/// [value] as a single-quoted Dart string literal.
+String _dartSingleQuoted(String value) {
+  final escaped = value
+      .replaceAll(r'\', r'\\')
+      .replaceAll("'", r"\'")
+      .replaceAll(r'$', r'\$');
+  return "'$escaped'";
 }
 
 Future<void> _renameDartPackage(
@@ -75,13 +198,8 @@ Future<void> _renameDartPackage(
   // `examples/` is analysed and formatted with the rest (see CLAUDE.md), and
   // `.dart.template` files are real sources an adopter renames into place.
   // Both carry package: imports that used to be left pointing at the template.
-  for (final dirName in [
-    'lib',
-    'test',
-    'integration_test',
-    'tool',
-    'examples',
-  ]) {
+  // `docs/` is in the list for the reason given on [_renamedDirectories].
+  for (final dirName in _renamedDirectories) {
     final dir = Directory('$rootPath/$dirName');
     if (!dir.existsSync()) continue;
     await for (final entity in dir.list(recursive: true, followLinks: false)) {

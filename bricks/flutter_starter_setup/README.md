@@ -18,24 +18,63 @@ mason make flutter_starter_setup
 
 Answer the prompts. The brick adds a root-level `_mason_hook_only.md` (Mason requires a `__brick__` file); delete it after generation if you do not want it in the repo.
 
-Then:
+The hook finishes with `flutter pub get`, `flutter gen-l10n`,
+`dart fix --apply --code=directives_ordering` and `dart format` (see
+"Repairing what the rename breaks" below), so the next step is just:
 
 ```bash
-flutter pub get
 flutter analyze
 flutter test
 ```
 
+Both should be as clean on the renamed tree as they were before. If
+`flutter analyze` reports anything the template did not, that is a bug in this
+brick (koniz-dev/flutter-starter#283).
+
 ## What gets rewritten
 
-`hooks/post_gen.dart` replaces `package:flutter_starter/` → `package:<package_name>/` in **`.dart` files** under:
+`hooks/post_gen.dart` replaces `package:flutter_starter/` → `package:<package_name>/` in **`.dart` and `.dart.template` files** under:
 
 - `lib/`
 - `test/`
 - `integration_test/`
 - `tool/`
+- `examples/`
+- `docs/` - only `.dart` files, such as committed verification probes. The analyzer reads them, because `analysis_options.yaml` does not exclude `docs/`.
 
 It does **not** edit Markdown under `docs/` (code samples there may still say `flutter_starter` until you search/replace manually).
+
+### Repairing what the rename breaks
+
+A string replace of the package name leaves every import block where it was.
+`package:flutter_starter/` happened to sort between `flutter_riverpod` and
+`flutter_test`, and almost any other name does not, so `very_good_analysis`'s
+`directives_ordering` used to fire on about 175 files after a rename - and
+`.githooks/pre-commit` runs `flutter analyze`, so the rename could not even be
+committed. The hook therefore runs, in the repository root:
+
+1. `flutter pub get` - resolves the renamed package;
+2. `flutter gen-l10n` - rebuilds `lib/l10n/app_localizations*.dart` from the
+   updated ARB files;
+3. `dart fix --apply --code=directives_ordering .` - re-sorts exactly the
+   import blocks the rename disturbed, and applies no other fix;
+4. `dart format` over the same directories.
+
+### The display name on the Dart side
+
+`app_display_name` replaces the exact template name, never a sentence that
+mentions it:
+
+| File | What changes |
+| --- | --- |
+| `lib/main.dart` | `MaterialApp(title:)` |
+| `lib/core/startup/startup_failure_app.dart` | `MaterialApp(title:)` |
+| `lib/core/constants/app_constants.dart` | `AppConstants.appName` |
+| `lib/l10n/app_*.arb` | `appTitle` in every locale, then regenerated |
+| `test/`, `integration_test/` | the whole-string `'Flutter Starter'` literals that assert the above |
+
+The `welcome` sentence ("Welcome to Flutter Starter with Clean
+Architecture!") is left as it is in each locale; reword it yourself.
 
 It also rewrites the template identifiers in these non-Dart files:
 
@@ -66,7 +105,7 @@ copyright line) becomes everything in `application_id` before its last segment.
 | `package_name` | `pubspec.yaml` `name` and `package:` imports |
 | `application_id` | Android `namespace` + `applicationId` + Kotlin package |
 | `ios_bundle_id` | Replaces `com.example.flutterStarter` in the iOS and macOS `project.pbxproj`, `ios/ExportOptions.plist`, and both fastlane iOS configs |
-| `app_display_name` | `android:label` in `AndroidManifest.xml`, `patrol.app_name`, and every `Flutter Starter` literal in the Apple/fastlane configs |
+| `app_display_name` | `android:label` in `AndroidManifest.xml`, `patrol.app_name`, every `Flutter Starter` literal in the Apple/fastlane configs, and the Dart-side name listed above |
 | `include_tasks_sample` | If false, removes the sample tasks (CRUD) module |
 | `include_feature_flags_sample` | If false, removes the sample feature flags module |
 | `strip_sample_features` | Legacy switch; if true, removes both tasks + feature_flags (see tool script) |
@@ -76,6 +115,11 @@ copyright line) becomes everything in `application_id` before its last segment.
 Use the manual steps in [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md). Afterwards you may delete **`bricks/`** and **`mason.yaml`** if you want a slimmer tree.
 
 ## Developing this brick
+
+CI cover: the `setup-brick` job of
+[`scripts-smoke.yml`](../../.github/workflows/scripts-smoke.yml) runs this brick
+with non-default answers and then `flutter analyze` and `flutter test`. It is
+manual, like the rest of that workflow. Run it after touching the hook.
 
 After changing `hooks/post_gen.dart` or `hooks/pubspec.yaml`:
 
