@@ -1,0 +1,23 @@
+# Mutations of lib/core/security/infrastructure/freerasp_service_impl.dart; each must fail the #390 tests.
+== M1 the 13 callbacks the starter used to leave null are removed again (the original bug)
+Some tests failed.
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.adbEnabled sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.automation sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.bootloader sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.devMode sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.locationSpoofing sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.multiInstance sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.passcode sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.screenRecording sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.screenshot sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.systemVPN sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.timeSpoofing sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.unsecureWiFi sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) malware, delivered outside the Threat stream, is forwarded [E]
+== M2 one callback wired to the wrong Threat (onScreenshot reports screenRecording)
+Some tests failed.
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.screenshot sent by freeRASP reaches a listener [E]
+== M3 bootloader mapped to unknown instead of unlockedBootloader
+Some tests failed.
+every freeRASP detection is forwarded or deliberately ignored (#390) Threat.bootloader sent by freeRASP reaches a listener [E]
+every freeRASP detection is forwarded or deliberately ignored (#390) securityThreatFor maps every Threat as documented [E]
