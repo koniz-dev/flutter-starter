@@ -17,6 +17,12 @@
 //   1. It is **named** in the asset list      -> findDeclaredSecretAssets
 //   2. It sits inside a **directory** entry   -> findBundledDirectorySecrets
 //
+// Both read the list through `parseAssetDeclarations`, a real YAML parse, so
+// every spelling Flutter accepts counts: `- .env`, the map form `- path: .env`
+// (which `flavors:` and `transformers:` need), a flow list `[.env.example,
+// .env]`, and `deferred-components:` asset lists
+// (koniz-dev/flutter-starter#330).
+//
 // A directory entry such as `- assets/config/` bundles every file directly
 // inside it, so a `.env` dropped in there ships without any pubspec diff at
 // all. `.env` is also gitignored, so review and secret scanners never see it
@@ -56,6 +62,10 @@
 // directory does not hold is reported as a note on stderr and does not fail the
 // run; see that function for why.
 //
+// On a map-form entry the acknowledgement goes on the `path:` line. In a flow
+// list several entries share one comment, so there it must name each file it
+// covers, exactly as on a directory.
+//
 // The acknowledgement has to be committed next to the entry, which is the
 // opposite of shipping silently. An environment variable would not be.
 //
@@ -80,9 +90,13 @@
 // pointing this at another checkout checks that checkout's files.
 //
 // Exits 0 when clean, 1 when an unacknowledged secrets file is bundled, 2 when
-// the pubspec cannot be read.
+// the pubspec cannot be read or its asset list is in a shape this check cannot
+// read for certain - it fails closed rather than report a list it never read.
 
 import 'dart:io';
+import 'dart:io' as io show stderr, stdout;
+
+import 'package:yaml/yaml.dart';
 
 /// The one env file that is safe to ship: placeholders only.
 const String allowedEnvAsset = '.env.example';
@@ -219,13 +233,15 @@ String? secretAssetReason(String fileName) {
   return null;
 }
 
-/// One `- path` line in the `flutter: assets:` list.
+/// One entry in a Flutter asset list: `- path`, `- path: path`, or one item
+/// of a flow list.
 class AssetDeclaration {
   /// Creates a declaration of [path] written on [line] (1-based).
   const AssetDeclaration({
     required this.path,
     required this.line,
     required this.comment,
+    this.sharesLine = false,
   });
 
   /// The asset path exactly as written in the pubspec, minus quotes.
@@ -237,6 +253,10 @@ class AssetDeclaration {
   /// The trailing comment on that line, including the `#`, or `''`.
   final String comment;
 
+  /// Whether another asset entry is written on the same line, as in a flow
+  /// list such as `assets: [.env.example, .env]`.
+  final bool sharesLine;
+
   /// Whether Flutter treats this entry as a directory rather than a file.
   bool get isDirectory => path.endsWith('/');
 
@@ -246,9 +266,13 @@ class AssetDeclaration {
 
   /// Whether the entry carries an inline acknowledgement covering [fileName].
   ///
-  /// A **file** entry acknowledges itself: the entry already names exactly one
-  /// file, so the comment cannot widen what it covers and does not have to
-  /// repeat the name.
+  /// A **file** entry alone on its line acknowledges itself: the entry already
+  /// names exactly one file, so the comment cannot widen what it covers and
+  /// does not have to repeat the name.
+  ///
+  /// A file entry that [sharesLine] with others shares the comment too, so it
+  /// has to be named in it, exactly like a file in a directory: otherwise one
+  /// comment on `[.env.example, .env]` would cover both.
   ///
   /// A **directory** entry has to name the file, and the name is compared
   /// **exactly** (case-insensitively), never as a substring. Every env file
@@ -260,7 +284,7 @@ class AssetDeclaration {
     if (marker < 0) {
       return false;
     }
-    if (!isDirectory) {
+    if (!isDirectory && !sharesLine) {
       return true;
     }
     final target = fileName.toLowerCase();
@@ -369,80 +393,183 @@ List<StaleAcknowledgement> findStaleAcknowledgements(
   return stale;
 }
 
-/// Every `- path` entry under `flutter: assets:` in [pubspecYaml].
+/// Raised when the pubspec, or the part of it that lists assets, is not
+/// something this check can read with certainty.
 ///
-/// This is a deliberately small hand-rolled scan rather than a YAML parse: the
-/// inline acknowledgement lives in a comment, and a YAML parser throws comments
-/// away.
+/// The check fails **closed** on it: `main` exits 2 rather than reporting a
+/// clean tree it never actually read. A guard that shrugs at a shape it does
+/// not recognise is how map-form and flow-style entries shipped a `.env` past
+/// it (koniz-dev/flutter-starter#330).
+class AssetListFormatException implements Exception {
+  /// Creates the exception for [message], about the pubspec's 1-based [line].
+  const AssetListFormatException(this.message, {this.line});
+
+  /// What could not be read.
+  final String message;
+
+  /// 1-based line in the pubspec, or `null` when the problem has no one line.
+  final int? line;
+
+  @override
+  String toString() => line == null ? message : 'line $line: $message';
+}
+
+/// Every asset entry Flutter bundles from [pubspecYaml], in written order.
+///
+/// Two passes, because neither alone is enough:
+///
+///   1. **Structure** comes from a real YAML parse, so every spelling Flutter
+///      accepts is seen: block lists (`- .env`), flow lists
+///      (`assets: [.env.example, .env]`) and map-form entries
+///      (`- path: .env`, the form `flavors:` and `transformers:` need).
+///      `deferred-components:` asset lists are read too - they bundle files
+///      just the same.
+///   2. **Comments** come from the raw text at each path's source span, because
+///      a YAML parser throws comments away and the acknowledgement lives in
+///      one. The comment is the one on the line where the path itself is
+///      written: for a map-form entry, the `path:` line.
+///
+/// Throws [AssetListFormatException] for anything it cannot read for certain:
+/// invalid YAML, an asset list that is not a list, or an entry that is not a
+/// path string or a map with one. Guessing there would be failing open.
 List<AssetDeclaration> parseAssetDeclarations(String pubspecYaml) {
-  final declarations = <AssetDeclaration>[];
+  final YamlNode document;
+  try {
+    document = loadYamlNode(pubspecYaml);
+  } on YamlException catch (e) {
+    throw AssetListFormatException(
+      'not valid YAML: ${e.message}',
+      line: e.span == null ? null : e.span!.start.line + 1,
+    );
+  }
+
+  if (document.value == null) {
+    return const <AssetDeclaration>[];
+  }
+  if (document is! YamlMap) {
+    throw _formatError(document, 'the pubspec is not a YAML map');
+  }
+
+  final flutter = document.nodes['flutter'];
+  if (flutter == null || flutter.value == null) {
+    return const <AssetDeclaration>[];
+  }
+  if (flutter is! YamlMap) {
+    throw _formatError(flutter, '`flutter:` is not a map');
+  }
+
   final lines = pubspecYaml.split('\n');
+  final declarations = <AssetDeclaration>[
+    ..._readAssetList(flutter.nodes['assets'], 'flutter: assets:', lines),
+  ];
 
-  var inFlutterSection = false;
-  var assetsIndent = -1;
-
-  for (var i = 0; i < lines.length; i++) {
-    final raw = lines[i];
-    final trimmed = raw.trim();
-
-    if (trimmed.isEmpty || trimmed.startsWith('#')) {
-      continue;
+  final deferred = flutter.nodes['deferred-components'];
+  if (deferred != null && deferred.value != null) {
+    if (deferred is! YamlList) {
+      throw _formatError(deferred, '`deferred-components:` is not a list');
     }
-
-    final indent = raw.length - raw.trimLeft().length;
-
-    // A new top-level key ends both the flutter section and any assets list.
-    if (indent == 0) {
-      inFlutterSection = RegExp(r'^flutter:\s*(#.*)?$').hasMatch(trimmed);
-      assetsIndent = -1;
-      continue;
-    }
-
-    if (!inFlutterSection) {
-      continue;
-    }
-
-    if (assetsIndent >= 0) {
-      final isListEntry = trimmed.startsWith('-');
-      if (!isListEntry || indent <= assetsIndent) {
-        // Dedented or switched to another key: the list is over.
-        assetsIndent = -1;
-      } else {
-        final declaration = _asDeclaration(raw, i + 1);
-        if (declaration != null) {
-          declarations.add(declaration);
-        }
-        continue;
+    for (final component in deferred.nodes) {
+      if (component is! YamlMap) {
+        throw _formatError(component, 'a deferred component is not a map');
       }
-    }
-
-    if (RegExp(r'^assets:\s*(#.*)?$').hasMatch(trimmed)) {
-      assetsIndent = indent;
+      declarations.addAll(
+        _readAssetList(
+          component.nodes['assets'],
+          'deferred-components: assets:',
+          lines,
+        ),
+      );
     }
   }
 
+  // An entry that shares its line with another entry (a flow list) does not
+  // acknowledge itself: one comment would otherwise silence every file in
+  // `[.env.example, .env, .env.prod] # env-asset-ack: ...` at once.
+  final perLine = <int, int>{};
+  for (final d in declarations) {
+    perLine[d.line] = (perLine[d.line] ?? 0) + 1;
+  }
+  return <AssetDeclaration>[
+    for (final d in declarations)
+      AssetDeclaration(
+        path: d.path,
+        line: d.line,
+        comment: d.comment,
+        sharesLine: perLine[d.line]! > 1,
+      ),
+  ];
+}
+
+/// The entries of one `assets:` list, or none when [node] is absent or empty.
+List<AssetDeclaration> _readAssetList(
+  YamlNode? node,
+  String where,
+  List<String> lines,
+) {
+  if (node == null || node.value == null) {
+    return const <AssetDeclaration>[];
+  }
+  if (node is! YamlList) {
+    throw _formatError(node, '`$where` is not a list');
+  }
+
+  final declarations = <AssetDeclaration>[];
+  for (final entry in node.nodes) {
+    var pathNode = entry;
+    if (entry is YamlMap) {
+      final path = entry.nodes['path'];
+      if (path == null) {
+        throw _formatError(entry, 'a map-form `$where` entry has no `path:`');
+      }
+      pathNode = path;
+    }
+
+    final value = pathNode.value;
+    if (pathNode is! YamlScalar || value is! String || value.trim().isEmpty) {
+      throw _formatError(
+        pathNode,
+        'a `$where` entry is not a path string: ${pathNode.span.text}',
+      );
+    }
+
+    final endLine = pathNode.span.end.line;
+    declarations.add(
+      AssetDeclaration(
+        path: value.trim(),
+        line: pathNode.span.start.line + 1,
+        comment: endLine < lines.length
+            ? _trailingComment(lines[endLine], pathNode.span.end.column)
+            : '',
+      ),
+    );
+  }
   return declarations;
 }
 
-/// Reads one `- path` line into an [AssetDeclaration].
-AssetDeclaration? _asDeclaration(String rawLine, int lineNumber) {
-  var value = rawLine.trim().substring(1).trim();
-
-  // Split off a trailing comment, which is where the acknowledgement lives.
-  var comment = '';
-  final hash = value.indexOf('#');
-  if (hash >= 0) {
-    comment = value.substring(hash);
-    value = value.substring(0, hash).trim();
+/// The YAML comment on [line] after column [from], including the `#`, or `''`.
+///
+/// A `#` starts a comment only after whitespace and outside quotes, which is
+/// the YAML rule, so `- "a#b"` or a later quoted flow entry cannot open one.
+String _trailingComment(String line, int from) {
+  String? quote;
+  for (var i = from; i < line.length; i++) {
+    final char = line[i];
+    if (quote != null) {
+      if (char == quote) {
+        quote = null;
+      }
+    } else if (char == '"' || char == "'") {
+      quote = char;
+    } else if (char == '#' &&
+        (i == 0 || line[i - 1] == ' ' || line[i - 1] == '\t')) {
+      return line.substring(i).trimRight();
+    }
   }
-
-  value = value.replaceAll('"', '').replaceAll("'", '').trim();
-  if (value.isEmpty) {
-    return null;
-  }
-
-  return AssetDeclaration(path: value, line: lineNumber, comment: comment);
+  return '';
 }
+
+AssetListFormatException _formatError(YamlNode node, String message) =>
+    AssetListFormatException(message, line: node.span.start.line + 1);
 
 /// Secrets files **named** in the asset list of [pubspecYaml].
 ///
@@ -524,20 +651,36 @@ List<BundledSecretAsset> findBundledDirectorySecrets(
   return findings;
 }
 
-void main(List<String> args) {
+void main(List<String> args) => exit(run(args));
+
+/// The whole check, minus the process exit, so a test can assert the exit
+/// code `main` would return. Writes to [out] and [err], which default to
+/// stdout and stderr.
+int run(List<String> args, {StringSink? out, StringSink? err}) {
+  final stdout = out ?? io.stdout;
+  final stderr = err ?? io.stderr;
   final path = args.isEmpty ? 'pubspec.yaml' : args.first;
   final file = File(path);
   if (!file.existsSync()) {
     stderr.writeln('check_env_assets: cannot read $path');
-    exit(2);
+    return 2;
   }
 
   final pubspec = file.readAsStringSync();
   final root = file.parent.path;
-  final findings = <BundledSecretAsset>[
-    ...findDeclaredSecretAssets(pubspec),
-    ...findBundledDirectorySecrets(pubspec, projectRoot: root),
-  ];
+  final List<BundledSecretAsset> findings;
+  try {
+    findings = <BundledSecretAsset>[
+      ...findDeclaredSecretAssets(pubspec),
+      ...findBundledDirectorySecrets(pubspec, projectRoot: root),
+    ];
+  } on AssetListFormatException catch (e) {
+    stderr.writeln(
+      'check_env_assets: cannot read the asset list in $path ($e). Refusing '
+      'to report it clean: fix the pubspec so `flutter pub get` accepts it.',
+    );
+    return 2;
+  }
   final unacknowledged = findings.where((f) => !f.acknowledged).toList();
 
   // Advisories go to stderr, and none of them is load-bearing. The only thing
@@ -568,7 +711,7 @@ void main(List<String> args) {
       'OK: no unacknowledged secrets file in the Flutter asset list, and none '
       'inside a declared asset directory.',
     );
-    return;
+    return 0;
   }
 
   stderr.writeln('SECURITY: a secrets file is bundled as a Flutter asset.\n');
@@ -613,5 +756,5 @@ does not acknowledge it.
 
 See docs/guides/configuration.md ("Never ship a secret in the bundle").''')
     ..writeln();
-  exit(1);
+  return 1;
 }
