@@ -170,19 +170,22 @@ class AppConfig {
   /// This flag controls general application logging (e.g., debug messages,
   /// info logs, error logs). Use this for application-level logging.
   ///
-  /// Default behavior:
-  /// - Development: `true`
-  /// - Staging: `true`
-  /// - Production: `false`
+  /// Default: `true` in every environment.
   ///
-  /// Can be overridden via .env: `ENABLE_LOGGING=false`
+  /// Production used to default to `false`, which turned `LoggingService`
+  /// into a no-op and dropped the info-and-above JSON lines its file output
+  /// exists to keep (koniz-dev/flutter-starter#320). What each environment
+  /// logs, and where, is decided by `LoggingService`, not by this switch.
+  ///
+  /// Can be overridden via .env or a dart-define: `ENABLE_LOGGING=false`
+  /// turns every output off.
   ///
   /// See also: [enableHttpLogging] for HTTP request/response logging
   static bool get enableLogging {
     if (EnvConfig.has('ENABLE_LOGGING')) {
       return EnvConfig.getBool('ENABLE_LOGGING');
     }
-    return isDevelopment || isStaging;
+    return true;
   }
 
   /// Enable analytics

@@ -25,7 +25,8 @@ Main service for handling all application logs.
 - **Environment Aware**:
   - Dev: Pretty printing to console.
   - Prod: JSON formatting for easier ingestion by log aggregators.
-- **Togglable**: Respects `ENABLE_LOGGING` flag from environment config.
+- **Togglable**: `ENABLE_LOGGING=false` turns every output off. It defaults to `true` in every environment.
+- **Outputs**: the console in debug builds, `logs/app.log` in production, and the console as a fallback in any build that would otherwise have no output. The per-build table is in [Where logs go](../../guides/configuration.md#where-logs-go).
 
 ### Usage
 

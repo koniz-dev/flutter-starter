@@ -1,0 +1,15 @@
+# main b43457afada, before the fix
+# criterion 1 only (criterion 2 needs the new debugMode/outputs seam, which main lacks)
+## flutter test --dart-define=ENVIRONMENT=production
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/zz_prod_probe_test.dart
+00:00 +0: criterion 1: the default LoggingService in this environment ENABLE_LOGGING is unset, so the environment default applies
+00:00 +0 -1: criterion 1: the default LoggingService in this environment ENABLE_LOGGING is unset, so the environment default applies [E]
+  Expected: true
+    Actual: <false>
+00:00 +0 -1: criterion 1: the default LoggingService in this environment error() reaches logs/app.log in production (production)
+VP environment=production enableLogging=false app.log=17B
+00:03 +0 -2: criterion 1: the default LoggingService in this environment error() reaches logs/app.log in production (production) [E]
+  Expected: contains 'boom-320'
+    Actual: '<no logs/app.log>'
+     Which: does not contain 'boom-320'
+00:03 +0 -2: Some tests failed.
