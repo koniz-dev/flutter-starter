@@ -1,0 +1,5 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt356/test/docs/feature_di_docs_test.dart
+00:00 +0: coreDiInstructionLines flags each instruction form the guides used before #356
+00:00 +1: coreDiInstructionLines allows a line that says not to
+00:00 +2: no document tells adopters to put feature providers in core DI
+00:00 +3: All tests passed!

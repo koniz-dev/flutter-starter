@@ -30,40 +30,31 @@ ls lib/core/
 
 If you don't need authentication:
 
+There is no strip flag for auth: the router guard, the composition root and
+the route tree all reference it. Deleting the directory breaks exactly these
+files, so update them in the same change:
+
 ```bash
-# Remove feature directory
-rm -rf lib/features/auth
-
-# Remove related providers from lib/core/di/providers.dart
-# Remove auth-related imports and providers
-
-# Remove auth-related tests
-rm -rf test/features/auth
+rm -rf lib/features/auth test/features/auth
 ```
 
-**Update `lib/core/di/providers.dart`:**
-```dart
-// Remove these providers:
-// - authRepositoryProvider
-// - loginUseCaseProvider
-// - logoutUseCaseProvider
-// - authProvider
-```
+- `lib/core/routing/app_router.dart` - the redirect guard reads
+  `authNotifierProvider`; rewrite or remove the login redirect.
+- `lib/core/routing/routes_registry.dart` - drop `buildAuthRoutes`.
+- `lib/main.dart` - drop `authModuleOverrides` and the session-restore wiring.
+
+Auth's providers live in `lib/features/auth/di/auth_providers.dart` and go with
+the directory; `lib/core/di/providers.dart` holds no feature providers.
 
 #### Remove Feature Flags
 
 If you don't need feature flags:
 
+Use the strip tool rather than deleting by hand - it also rewrites the files
+that reference the slice:
+
 ```bash
-# Remove feature directory
-rm -rf lib/features/feature_flags
-rm -rf lib/core/feature_flags
-
-# Remove from pubspec.yaml
-# Remove firebase_remote_config dependency (if only used for feature flags)
-
-# Remove providers
-# Remove from lib/core/di/providers.dart
+dart run tool/strip_sample_features.dart --apply --remove-feature-flags
 ```
 
 **Update `pubspec.yaml`:**
@@ -333,7 +324,7 @@ class MyRepositoryImpl implements MyRepository {
 ```dart
 // lib/features/my_feature/presentation/providers/my_feature_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/features/my_feature/di/my_feature_providers.dart';
 import 'package:flutter_starter/features/my_feature/domain/entities/my_entity.dart';
 import 'package:flutter_starter/features/my_feature/domain/usecases/get_items_usecase.dart';
 
@@ -411,7 +402,8 @@ class MyFeatureScreen extends ConsumerWidget {
 
 ### Step 5: Add Providers
 
-Add providers to `lib/core/di/providers.dart`:
+Add providers to `lib/features/my_feature/di/my_feature_providers.dart` (never
+`lib/core/di/providers.dart` - `core` may not import `features`):
 
 ```dart
 // My Feature Providers
