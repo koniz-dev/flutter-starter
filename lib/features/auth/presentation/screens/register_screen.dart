@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
+import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
+import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Registration screen for new user signup
 class RegisterScreen extends ConsumerStatefulWidget {
   /// Creates a [RegisterScreen] widget
-  const RegisterScreen({super.key});
+  const RegisterScreen({super.key, this.redirect});
+
+  /// The deep link the router guard parked on this route, if any, carried
+  /// on to the other auth screen (koniz-dev/flutter-starter#348).
+  final String? redirect;
 
   @override
   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
@@ -139,7 +145,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         if (context.canPopRoute()) {
                           context.popRoute<void>();
                         } else {
-                          context.goToLogin();
+                          context.replaceRoute(
+                            authLocationKeepingRedirect(
+                              AppRoutes.login,
+                              widget.redirect,
+                            ),
+                          );
                         }
                       },
                 child: Text(l10n.alreadyHaveAccount),

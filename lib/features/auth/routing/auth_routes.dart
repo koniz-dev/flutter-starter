@@ -10,12 +10,16 @@ List<RouteBase> buildAuthRoutes(Ref ref) {
     GoRoute(
       path: AppRoutes.login,
       name: AppRoutes.loginName,
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => LoginScreen(
+        redirect: state.uri.queryParameters[RouteQueryParams.redirect],
+      ),
     ),
     GoRoute(
       path: AppRoutes.register,
       name: AppRoutes.registerName,
-      builder: (context, state) => const RegisterScreen(),
+      builder: (context, state) => RegisterScreen(
+        redirect: state.uri.queryParameters[RouteQueryParams.redirect],
+      ),
     ),
   ];
 }
