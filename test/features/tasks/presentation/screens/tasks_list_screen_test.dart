@@ -742,6 +742,43 @@ void main() {
         ),
       );
     });
+
+    // koniz-dev/flutter-starter#345: the validator checked the raw text, so a
+    // whitespace-only title passed and was saved as "".
+    testWidgets('rejects a whitespace-only title in add task dialog', (
+      tester,
+    ) async {
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => const Success<List<Task>>([]));
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
+        ]),
+      );
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.enterText(find.byType(TextFormField).first, '   ');
+      await tester.tap(find.text('Add'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Please enter a task title'), findsOneWidget);
+      expect(find.byType(AlertDialog), findsOneWidget);
+      verifyNever(
+        () => mockCreateTaskUseCase(
+          title: any(named: 'title'),
+          description: any(named: 'description'),
+        ),
+      );
+    });
   });
   group('TasksListScreen mutation races and refresh', () {
     late MockGetAllTasksUseCase mockGetAllTasksUseCase;

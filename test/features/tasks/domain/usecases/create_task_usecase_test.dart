@@ -154,26 +154,21 @@ void main() {
       verify(() => mockRepository.createTask(any())).called(1);
     });
 
-    test('should create task with empty title', () async {
-      // Arrange
-      const title = '';
-      Task? createdTask;
-      when(() => mockRepository.createTask(any())).thenAnswer((
-        invocation,
-      ) async {
-        createdTask = invocation.positionalArguments[0] as Task;
-        return Success(createdTask!);
-      });
+    // koniz-dev/flutter-starter#345: a blank title is a domain error, not a
+    // task with an empty name.
+    for (final title in ['', '   ', '\t\n']) {
+      test(
+        'rejects the blank title ${title.codeUnits} without saving',
+        () async {
+          final result = await useCase(title: title, description: 'd');
 
-      // Act
-      final result = await useCase(title: title);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-      expect(createdTask, isNotNull);
-      expect(createdTask!.title, isEmpty);
-      verify(() => mockRepository.createTask(any())).called(1);
-    });
+          expect(result.isFailure, isTrue);
+          expect(result.failureOrNull, isA<ValidationFailure>());
+          expect(result.failureOrNull?.code, 'TASK_TITLE_REQUIRED');
+          verifyNever(() => mockRepository.createTask(any()));
+        },
+      );
+    }
 
     test('should create task with very long title', () async {
       // Arrange

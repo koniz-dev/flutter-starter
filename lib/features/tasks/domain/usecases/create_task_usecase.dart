@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/domain/repositories/tasks_repository.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/task_title_rule.dart';
 
 /// Use case for creating a task
 class CreateTaskUseCase {
@@ -29,11 +31,16 @@ class CreateTaskUseCase {
     return '$micros-$sequence-$suffix';
   }
 
-  /// Executes creating a task with [title] and optional [description]
+  /// Executes creating a task with [title] and optional [description].
+  ///
+  /// A blank [title] returns a [ValidationFailure] without reaching the
+  /// repository.
   Future<Result<Task>> call({
     required String title,
     String? description,
   }) async {
+    final invalid = validateTaskTitle(title);
+    if (invalid != null) return ResultFailure(invalid);
     final now = DateTime.now();
     final task = Task(
       id: generateId(),

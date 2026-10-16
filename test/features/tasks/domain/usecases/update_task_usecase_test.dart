@@ -163,31 +163,21 @@ void main() {
       expect(task.updatedAt.isAfter(originalTask.updatedAt), isTrue);
     });
 
-    test('should update task with empty title', () async {
-      final testDate = DateTime(2024);
-      final originalTask = createTask(
-        id: 'task-1',
-        title: '',
-        updatedAt: testDate,
+    // koniz-dev/flutter-starter#345: the detail screen could save a blank
+    // title through this use case.
+    for (final title in ['', '   ', '\t\n']) {
+      test(
+        'rejects the blank title ${title.codeUnits} without saving',
+        () async {
+          final result = await useCase(createTask(id: 'task-1', title: title));
+
+          expect(result.isFailure, isTrue);
+          expect(result.failureOrNull, isA<ValidationFailure>());
+          expect(result.failureOrNull?.code, 'TASK_TITLE_REQUIRED');
+          verifyNever(() => mockRepository.updateTask(any()));
+        },
       );
-      Task? updatedTask;
-      when(() => mockRepository.updateTask(any())).thenAnswer((
-        invocation,
-      ) async {
-        updatedTask = invocation.positionalArguments[0] as Task;
-        return Success(updatedTask!);
-      });
-
-      // Act
-      final result = await useCase(originalTask);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-      expect(updatedTask, isNotNull);
-      final task = updatedTask!;
-      expect(task.title, isEmpty);
-      expect(task.updatedAt.isAfter(originalTask.updatedAt), isTrue);
-    });
+    }
 
     test('should update task with very long title', () async {
       final testDate = DateTime(2024);
