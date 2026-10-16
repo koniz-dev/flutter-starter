@@ -11,9 +11,8 @@ them.
 ## Critical (Must Fix Before Production)
 
 ### Authentication & Authorization
-- [ ] Confirm the logging interceptor redaction **(shipped, partial)** covers
-      your header names and payload shapes - see
-      [#78](https://github.com/koniz-dev/flutter-starter/issues/78)
+- [ ] Confirm the logging interceptor redaction **(shipped)** covers your
+      header names and payload shapes - it matches a fixed key and header set
 - [ ] Implement token expiration checking
 - [ ] Add session timeout mechanism
 - [ ] Test token refresh flow thoroughly
@@ -21,10 +20,10 @@ them.
 ### Data Protection
 - [ ] **Configure SSL certificate pinning (shipped)** - set
       `API_SSL_FINGERPRINTS` and `ENABLE_SSL_PINNING` in your environment.
-      The adapter is implemented at `lib/core/network/api_client.dart:75-101`;
-      with no fingerprints it silently does nothing
-      ([#84](https://github.com/koniz-dev/flutter-starter/issues/84))
-- [ ] Close the remaining log-sanitization gaps (string bodies, query parameters)
+      The adapter is built by `SslPinning.createAdapter()`; with no
+      fingerprints it pins nothing, logs `SSL PINNING MISCONFIGURED` and
+      asserts in debug builds
+      <!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
 - [ ] Encrypt sensitive data at rest (if required)
 - [ ] Remove sensitive data from crash reports
 

@@ -98,20 +98,21 @@ ENABLE_SSL_PINNING=true
 
 #### Step 3: Verify it is actually on
 
-This is the step people skip. `api_client.dart:76` requires **both**
-`enableSslPinning` and a non-empty fingerprint list:
+Pinning is decided by `SslPinning.createAdapter()` in
+`lib/core/network/ssl_pinning.dart`, which `ApiClient` calls when it builds its
+transport. It installs the pinned adapter only when `ENABLE_SSL_PINNING` is on
+**and** `API_SSL_FINGERPRINTS` is non-empty.
 
-```dart
-if (AppConfig.enableSslPinning && AppConfig.apiSslFingerprints.isNotEmpty) {
-```
+<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
 
-With `ENABLE_SSL_PINNING=true` and no fingerprints, the adapter is never
-installed, the app talks to anything the platform trust store accepts, and
-**nothing is logged**. Confirm both values before you believe you are pinned;
-`AppConfig.printConfig()` prints `SSL Pinning Enabled` and
-`SSL Fingerprints Configured` (`app_config.dart:280-281`) and you have to read
-them together. Tracked as
-[#84](https://github.com/koniz-dev/flutter-starter/issues/84).
+Requesting pinning with no fingerprints does not fail quietly:
+`createAdapter()` logs `SSL PINNING MISCONFIGURED: ...` and trips an assertion
+in debug builds. A release build still runs unpinned, so the log line is all
+you get there. `AppConfig.printConfig()` prints `SSL Pinning Requested`,
+`SSL Pinning Effective` and `SSL Fingerprints Configured`, and adds a
+`!! SSL PINNING MISCONFIGURED` line in that case. `Effective: true` is the only
+reading that means traffic is pinned. Pinning never applies on Flutter web,
+where the browser owns TLS.
 
 Then point a proxy (Charles, Proxyman, Burp) at the app: with pinning active
 the request must fail, not succeed.

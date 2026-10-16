@@ -38,14 +38,18 @@ improvements still needed before production.
 - Automatic token refresh mechanism
 - Proper environment variable management
 - HTTPS support in production
-- **SSL certificate pinning is implemented** (`lib/core/network/api_client.dart:75-101`),
+- **SSL certificate pinning is implemented** (`lib/core/network/ssl_pinning.dart`),
   enabled by default in staging and production
+
+<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
+
 - Good architecture foundation
 
 ### Critical / high-attention items
 
-- SSL pinning ships but is inert until you set `API_SSL_FINGERPRINTS`; it
-  fails open with no warning ([#84](https://github.com/koniz-dev/flutter-starter/issues/84))
+- SSL pinning ships but is inert until you set `API_SSL_FINGERPRINTS`. A
+  missing fingerprint list is logged and asserts in debug builds, but a release
+  build still runs unpinned
 - No code obfuscation in release (when you ship production)
 - Debug signing or missing release keystore for store builds
 - Verify **`ApiLoggingInterceptor`** redaction covers your tokens/payloads — see [audit](./audit.md)
