@@ -1,9 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/dart_defines.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// Skip reason for the groups that read source files through dart:io, which
+/// a browser does not have. Everything else in this file runs on web too.
+const String? _readsSourceFiles = kIsWeb
+    ? 'reads source files through dart:io; run on the VM'
+    : null;
 
 /// Strips `//` and `///` comment lines so prose that mentions
 /// `String.fromEnvironment` is not mistaken for a call site.
@@ -130,19 +137,22 @@ void main() {
       );
     });
 
-    test('every dart-define read is guarded by kIsWeb', () {
-      // Criterion 4: the mechanism is unavailable on Flutter web, and the docs
-      // say so. This asserts the code still matches that claim.
+    test('no dart-define read is skipped on web', () {
+      // koniz-dev/flutter-starter#278. dart2js resolves the const table like
+      // every other compiler, so web needs no guard. Until #278 every read
+      // here sat behind `if (!kIsWeb)` and a web build discarded each
+      // --dart-define it was given.
       final source = _stripLineComments(
         File('lib/core/config/env_config.dart').readAsStringSync(),
       );
-      final guards = RegExp(r'if \(!kIsWeb\) \{').allMatches(source).length;
-      final lookups = RegExp(
-        r'DartDefines\.lookup\(',
-      ).allMatches(source).length;
-      expect(guards, lookups);
+      expect(source, isNot(contains('kIsWeb')));
+      expect(
+        RegExp(r'DartDefines\.lookup\(').allMatches(source).length,
+        5,
+        reason: 'get, getBool, getInt, getDouble and has each consult it',
+      );
     });
-  });
+  }, skip: _readsSourceFiles);
 
   group('key coverage', () {
     test('every .env.example key has a DartDefines entry', () {
@@ -175,13 +185,20 @@ void main() {
       expect(keysRead, isNotEmpty, reason: 'scanner found no call sites');
       expect(keysRead.difference(DartDefines.values.keys.toSet()), isEmpty);
     });
-  });
+  }, skip: _readsSourceFiles);
 
   group('end-to-end with a supplied --dart-define', () {
     // Only exercised when the suite is run as
     //   flutter test --dart-define=BASE_URL=https://api.example.com
     // Skipped otherwise, because the value is baked in at compile time and
     // cannot be injected from inside the test.
+    //
+    // Also run it on web (#278):
+    //   flutter test --platform chrome \
+    //     --dart-define=BASE_URL=https://api.example.com \
+    //     test/core/config/dart_defines_test.dart
+    // The source-scanning groups above read files with dart:io and are
+    // skipped there.
     final suppliedBaseUrl = DartDefines.lookup('BASE_URL');
     final skipReason = suppliedBaseUrl.isEmpty
         ? 'run with --dart-define=BASE_URL=<url> to exercise this'
@@ -195,6 +212,31 @@ void main() {
         expect(AppConfig.baseUrl, isNot('http://localhost:3000'));
       },
       skip: skipReason,
+    );
+
+    // With pinning requested through dart-defines, web must not report
+    // itself as pinned: the browser owns TLS (#307), and since #278 the
+    // defines do reach a web build. Run as
+    //   flutter test [--platform chrome] --dart-define=ENABLE_SSL_PINNING=true \
+    //     --dart-define=API_SSL_FINGERPRINTS=<sha256> \
+    //     test/core/config/dart_defines_test.dart
+    final pinningSupplied =
+        DartDefines.lookup('ENABLE_SSL_PINNING').isNotEmpty &&
+        DartDefines.lookup('API_SSL_FINGERPRINTS').isNotEmpty;
+
+    test(
+      'pinning defines reach AppConfig, and web never reports pinning '
+      'effective',
+      () {
+        expect(AppConfig.enableSslPinning, isTrue);
+        expect(AppConfig.apiSslFingerprints, isNotEmpty);
+        expect(AppConfig.sslPinningEffective, !kIsWeb);
+        expect(AppConfig.sslPinningMisconfigured, isFalse);
+      },
+      skip: pinningSupplied
+          ? null
+          : 'run with --dart-define=ENABLE_SSL_PINNING=true and '
+                'API_SSL_FINGERPRINTS=<sha256> to exercise this',
     );
   });
 }

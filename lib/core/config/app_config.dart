@@ -144,14 +144,22 @@ class AppConfig {
   /// [enableSslPinning] is only the request. With no entries in
   /// [apiSslFingerprints] there is nothing to pin against, so the transport
   /// falls back to the system trust store and pinning is *not* in effect.
+  ///
+  /// Never in effect on Flutter web, where the browser owns TLS and
+  /// `SslPinning` installs no adapter (koniz-dev/flutter-starter#307). This
+  /// mirrors `SslPinning.isEffective`, so `getDebugInfo` cannot report a web
+  /// build as pinned once `--dart-define` reaches web (#278).
   static bool get sslPinningEffective =>
-      enableSslPinning && apiSslFingerprints.isNotEmpty;
+      !kIsWeb && enableSslPinning && apiSslFingerprints.isNotEmpty;
 
   /// Whether pinning is requested but unenforceable (no fingerprints).
   ///
   /// This is a misconfiguration: the app believes it is pinned and is not.
+  ///
+  /// Never on web either: pinning does not apply there, so an empty list
+  /// misconfigures nothing.
   static bool get sslPinningMisconfigured =>
-      enableSslPinning && apiSslFingerprints.isEmpty;
+      !kIsWeb && enableSslPinning && apiSslFingerprints.isEmpty;
 
   // ==========================================================================
   // Feature Flags

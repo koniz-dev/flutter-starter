@@ -1,19 +1,19 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_starter/core/config/dart_defines.dart';
 
 /// Environment configuration loader with fallback chain:
 /// 1. .env file (for local development; requires the file to be declared as a
 ///    Flutter asset - see `docs/guides/configuration.md`)
-/// 2. --dart-define flags (native builds only, and only for the keys listed in
-///    [DartDefines.values]; unavailable on Flutter web because every read here
-///    is guarded by `if (!kIsWeb)`)
+/// 2. --dart-define flags, on every platform including Flutter web, for the
+///    keys listed in [DartDefines.values]
 /// 3. Default values
 ///
 /// Dart-define reads go through the compile-time [DartDefines] table rather
 /// than `String.fromEnvironment(key)`. A runtime-keyed `String.fromEnvironment`
 /// call is not const and therefore always returns `''` in AOT (release and
-/// profile) builds.
+/// profile) builds, and dart2js does not support it at all. The const table
+/// is resolved by every compiler, dart2js included, which is why web needs no
+/// special case (koniz-dev/flutter-starter#278).
 ///
 /// Usage:
 /// ```dart
@@ -92,12 +92,10 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags (native only)
-    if (!kIsWeb) {
-      final dartDefineValue = DartDefines.lookup(key);
-      if (dartDefineValue.isNotEmpty) {
-        return dartDefineValue;
-      }
+    // Priority 2: Check --dart-define flags
+    final dartDefineValue = DartDefines.lookup(key);
+    if (dartDefineValue.isNotEmpty) {
+      return dartDefineValue;
     }
 
     // Priority 3: Return default value
@@ -118,16 +116,14 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags (native only)
-    if (!kIsWeb) {
-      final dartDefineValue = DartDefines.lookup(key);
-      if (dartDefineValue.isNotEmpty) {
-        final lowerValue = dartDefineValue.toLowerCase().trim();
-        return lowerValue == 'true' ||
-            lowerValue == '1' ||
-            lowerValue == 'yes' ||
-            lowerValue == 'on';
-      }
+    // Priority 2: Check --dart-define flags
+    final dartDefineValue = DartDefines.lookup(key);
+    if (dartDefineValue.isNotEmpty) {
+      final lowerValue = dartDefineValue.toLowerCase().trim();
+      return lowerValue == 'true' ||
+          lowerValue == '1' ||
+          lowerValue == 'yes' ||
+          lowerValue == 'on';
     }
 
     // Priority 3: Return default value
@@ -147,12 +143,10 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags (native only)
-    if (!kIsWeb) {
-      final dartDefineValue = DartDefines.lookup(key);
-      if (dartDefineValue.isNotEmpty) {
-        return int.tryParse(dartDefineValue) ?? defaultValue;
-      }
+    // Priority 2: Check --dart-define flags
+    final dartDefineValue = DartDefines.lookup(key);
+    if (dartDefineValue.isNotEmpty) {
+      return int.tryParse(dartDefineValue) ?? defaultValue;
     }
 
     // Priority 3: Return default value
@@ -172,12 +166,10 @@ class EnvConfig {
       }
     }
 
-    // Priority 2: Check --dart-define flags (native only)
-    if (!kIsWeb) {
-      final dartDefineValue = DartDefines.lookup(key);
-      if (dartDefineValue.isNotEmpty) {
-        return double.tryParse(dartDefineValue) ?? defaultValue;
-      }
+    // Priority 2: Check --dart-define flags
+    final dartDefineValue = DartDefines.lookup(key);
+    if (dartDefineValue.isNotEmpty) {
+      return double.tryParse(dartDefineValue) ?? defaultValue;
     }
 
     // Priority 3: Return default value
@@ -199,12 +191,8 @@ class EnvConfig {
         // Variable not found in .env
       }
     }
-    // Check --dart-define flags (native only)
-    if (!kIsWeb) {
-      return DartDefines.lookup(key).isNotEmpty;
-    }
-
-    return false;
+    // Check --dart-define flags
+    return DartDefines.lookup(key).isNotEmpty;
   }
 
   /// Get all environment variables as a map
