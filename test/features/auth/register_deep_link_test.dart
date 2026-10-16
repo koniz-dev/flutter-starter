@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -20,6 +22,15 @@ import '../../helpers/pump_app.dart';
 class _MockRegisterUseCase extends Mock implements RegisterUseCase {}
 
 const _newUser = User(id: 'new', email: 'new@example.com', name: 'New');
+
+/// The shared link a new user opens: `/tasks/42` as the issue states it, or a
+/// route every strip variant keeps once `strip_sample_features.dart` has
+/// removed the tasks slice (no `/tasks/:id` route exists to land on then).
+final _deepLink = Directory('lib/features/tasks').existsSync()
+    ? '/tasks/42'
+    : '/?from=shared-link';
+
+String _encoded(String link) => Uri.encodeQueryComponent(link);
 
 void main() {
   late _MockRegisterUseCase registerUseCase;
@@ -63,18 +74,24 @@ void main() {
   testWidgets('criteria 1-2: the register link keeps redirect, and signing '
       'up lands on the deep link', (tester) async {
     final router = await pumpRouter(tester);
-    router.go('/tasks/42');
+    router.go(_deepLink);
     await tester.pumpAndSettle();
-    expect(location(router).toString(), '/login?redirect=%2Ftasks%2F42');
+    expect(
+      location(router).toString(),
+      '/login?redirect=${_encoded(_deepLink)}',
+    );
 
     await tapText(tester, "Don't have an account? Register");
 
     expect(find.byType(RegisterScreen), findsOneWidget);
-    expect(location(router).toString(), '/register?redirect=%2Ftasks%2F42');
+    expect(
+      location(router).toString(),
+      '/register?redirect=${_encoded(_deepLink)}',
+    );
 
     await register(tester);
 
-    expect(location(router).toString(), '/tasks/42');
+    expect(location(router).toString(), _deepLink);
   });
 
   testWidgets('criterion 3: "Already have an account?" keeps redirect too', (
@@ -83,13 +100,16 @@ void main() {
     final router = await pumpRouter(tester);
     // Arrive on /register directly (no back stack), as a shared register
     // link would.
-    router.go('${AppRoutes.register}?redirect=%2Ftasks%2F42');
+    router.go('${AppRoutes.register}?redirect=${_encoded(_deepLink)}');
     await tester.pumpAndSettle();
 
     await tapText(tester, 'Already have an account? Login');
 
     expect(find.byType(LoginScreen), findsOneWidget);
-    expect(location(router).toString(), '/login?redirect=%2Ftasks%2F42');
+    expect(
+      location(router).toString(),
+      '/login?redirect=${_encoded(_deepLink)}',
+    );
   });
 
   testWidgets('criterion 4: an off-site redirect through register lands on /', (
