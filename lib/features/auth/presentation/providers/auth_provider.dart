@@ -58,7 +58,19 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
     state = state.copyWith(isLoading: true, error: null);
 
     final loginUseCase = ref.read(loginUseCaseProvider);
-    final result = await loginUseCase(email, password);
+    final Result<User> result;
+    try {
+      result = await loginUseCase(email, password);
+    } on Object catch (_) {
+      // The use case is meant to return a Result, never throw. If one
+      // escapes anyway, the screen must not stay loading forever
+      // (koniz-dev/flutter-starter#306).
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Something went wrong. Please try again.',
+      );
+      return;
+    }
 
     result.when(
       success: (user) {
@@ -76,7 +88,19 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
     state = state.copyWith(isLoading: true, error: null);
 
     final registerUseCase = ref.read(registerUseCaseProvider);
-    final result = await registerUseCase(email, password, name);
+    final Result<User> result;
+    try {
+      result = await registerUseCase(email, password, name);
+    } on Object catch (_) {
+      // The use case is meant to return a Result, never throw. If one
+      // escapes anyway, the screen must not stay loading forever
+      // (koniz-dev/flutter-starter#306).
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Something went wrong. Please try again.',
+      );
+      return;
+    }
 
     result.when(
       success: (user) {
