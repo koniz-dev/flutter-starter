@@ -60,9 +60,26 @@ Main coverage script with options:
 # Set minimum threshold
 ./scripts/test/test_coverage.sh --min=85
 
-# Exclude paths from coverage
+# Exclude paths from coverage (repeatable; drops every file whose path contains it)
 ./scripts/test/test_coverage.sh --exclude=lib/generated
+
+# Per-layer breakdown and the files below 60%, without re-running the tests
+./scripts/test/test_coverage.sh --no-test --analyze
 ```
+
+Every figure is computed from `coverage/lcov.filtered.info`, a copy of
+`coverage/lcov.info` with the files `coverage.yml` removes before it gates
+(`*.g.dart`, `*.freezed.dart`, `*.config.dart`, `generated/`, `l10n/`,
+`main.dart`, tests) plus any `--exclude` paths. The per-layer lines come from
+`calculate_layer_coverage.sh --pattern=<regex>`, the same counter the CI gate
+uses, so the layer percentages match CI's exactly. The overall percentage
+counts executable lines the same way; CI's overall figure comes from
+`lcov --summary` and can differ from it in the first decimal.
+
+`scripts/test/test_coverage.ps1` (Windows) only runs `flutter test --coverage`
+and prints how to render the HTML report. It does not support `--html`,
+`--min`, `--exclude`, `--analyze` or `--no-test`; use the bash script under
+Git Bash or WSL for those.
 
 #### calculate_layer_coverage.sh
 

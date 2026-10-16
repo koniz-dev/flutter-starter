@@ -11,11 +11,18 @@ set -e
 # They used to be mixed on stdout, and .github/workflows/coverage.yml appended
 # every line with `while IFS='=' read -r key value`, so prose such as
 # "Summary of coverage by layer" became a step-output key. See issue #39.
+#
+# A third mode serves scripts/test/test_coverage.sh --analyze, so the local
+# report counts lines exactly the way CI's gate does instead of reimplementing
+# the parse (koniz-dev/flutter-starter#332):
+#   --pattern=<regex> print "<covered> <total>" for files whose path matches
 GITHUB_OUTPUT_MODE=0
 LCOV_FILE=""
+PATTERN=""
 for arg in "$@"; do
   case "$arg" in
     --github-output) GITHUB_OUTPUT_MODE=1 ;;
+    --pattern=*) PATTERN="${arg#*=}" ;;
     -h|--help) sed -n '2,4p' "$0"; exit 0 ;;
     *) LCOV_FILE="$arg" ;;
   esac
@@ -27,13 +34,15 @@ if [ ! -f "$LCOV_FILE" ]; then
   exit 1
 fi
 
-# Function to calculate coverage for a path pattern
+# Function to calculate coverage for a path pattern.
+# Prints the percentage, or with a second argument "counts", "<covered> <total>".
 calculate_layer_coverage() {
   local pattern=$1
+  local format=${2:-percent}
 
   # Use awk to extract coverage for files matching the pattern
   # Track current file and accumulate coverage data
-  awk -v pattern="$pattern" '
+  awk -v pattern="$pattern" -v format="$format" '
     BEGIN {
       total=0
       covered=0
@@ -70,6 +79,10 @@ calculate_layer_coverage() {
     }
 
     END {
+      if (format == "counts") {
+        printf "%d %d", covered, total
+        exit
+      }
       if (total > 0) {
         printf "%.1f", (covered / total) * 100
       } else {
@@ -78,6 +91,12 @@ calculate_layer_coverage() {
     }
   ' "$LCOV_FILE"
 }
+
+if [ -n "$PATTERN" ]; then
+  calculate_layer_coverage "$PATTERN" counts
+  echo ""
+  exit 0
+fi
 
 # Calculate coverage for each layer
 # Patterns match file paths containing these segments
