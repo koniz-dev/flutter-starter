@@ -56,7 +56,7 @@ After recording, reference it here:
 ![Mason demo](docs/assets/mason-generate-feature.gif)
 ```
 
-See [bricks/README.md](bricks/README.md) and [bricks/flutter_starter_setup/README.md](bricks/flutter_starter_setup/README.md). If you rename everything by hand and do not need Mason, you can remove **`bricks/`** and **`mason.yaml`**. To drop sample `tasks` and `feature_flags` without Mason: `dart run tool/strip_sample_features.dart --apply`.
+See [bricks/README.md](bricks/README.md) and [bricks/flutter_starter_setup/README.md](bricks/flutter_starter_setup/README.md). If you rename everything by hand and do not need Mason, you can remove **`bricks/`** and **`mason.yaml`** once you have run `dart run tool/strip_sample_features.dart --apply` (any variant, or `--process-only` to keep both samples): until then the upstream epic-coverage guard fails `flutter test` on their absence. To drop sample `tasks` and `feature_flags` without Mason: `dart run tool/strip_sample_features.dart --apply`.
 
 ---
 
