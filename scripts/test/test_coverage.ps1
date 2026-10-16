@@ -1,5 +1,9 @@
 # test_coverage.ps1
 # Test coverage script for Windows (PowerShell)
+#
+# Runs the tests with coverage only. It takes none of test_coverage.sh's
+# options (--html, --min, --exclude, --analyze, --no-test); use that script
+# under Git Bash or WSL for them (see docs/guides/testing/test-coverage.md).
 
 $ErrorActionPreference = "Stop"
 

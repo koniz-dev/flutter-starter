@@ -83,10 +83,37 @@ fi
 echo -e "${GREEN}✓ Tests completed${NC}"
 echo ""
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LAYER_SCRIPT="$SCRIPT_DIR/calculate_layer_coverage.sh"
+FILTERED="coverage/lcov.filtered.info"
+
+# Every number below is computed from a filtered copy of lcov.info, never the
+# raw file (koniz-dev/flutter-starter#332). The default exclusions are the ones
+# .github/workflows/coverage.yml removes before it gates, so a local run and
+# CI agree; each --exclude=<path> drops every file whose path contains it.
+# --exclude used to be parsed into EXCLUDE_PATHS and never read.
+# Passed through the environment: BSD awk (macOS) rejects a newline inside a
+# -v value, and one path per line is the separator a path cannot contain.
+COVERAGE_EXCLUDES=$(printf '%s\n' "${EXCLUDE_PATHS[@]}") awk '
+  BEGIN { n = split(ENVIRON["COVERAGE_EXCLUDES"], ex, "\n") }
+  /^SF:/ {
+    path = substr($0, 4)
+    skip = (path ~ /\.g\.dart$/ || path ~ /\.freezed\.dart$/ ||
+            path ~ /\.config\.dart$/ || path ~ /\/generated\// ||
+            path ~ /\/l10n\// || path ~ /(^|\/)main\.dart$/ ||
+            path ~ /(^|\/)test\// || path ~ /_test\.dart$/)
+    for (i = 1; i <= n; i++) {
+      if (ex[i] != "" && index(path, ex[i]) > 0) skip = 1
+    }
+  }
+  !skip { print }
+  /^end_of_record/ { skip = 0 }
+' coverage/lcov.info > "$FILTERED"
+
 # Generate HTML report if requested
 if [ "$GENERATE_HTML" = true ]; then
   echo -e "${YELLOW}Generating HTML coverage report...${NC}"
-  
+
   # Check if lcov is installed
   if ! command -v genhtml &> /dev/null; then
     echo -e "${YELLOW}Warning: genhtml not found. Installing lcov...${NC}"
@@ -99,16 +126,16 @@ if [ "$GENERATE_HTML" = true ]; then
       exit 1
     fi
   fi
-  
+
   # Create HTML report directory
   mkdir -p coverage/html
-  
-  # Generate HTML report
-  genhtml coverage/lcov.info -o coverage/html --no-function-coverage
-  
+
+  # Generate HTML report from the same filtered data the numbers use
+  genhtml "$FILTERED" -o coverage/html --no-function-coverage
+
   echo -e "${GREEN}✓ HTML report generated at coverage/html/index.html${NC}"
   echo ""
-  
+
   # Open HTML report if requested
   if [ "$OPEN_HTML" = true ]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -124,85 +151,40 @@ fi
 # Calculate coverage percentage
 echo -e "${YELLOW}Calculating coverage...${NC}"
 
-# Function to calculate coverage from lcov.info directly
-calculate_coverage() {
-  local TOTAL_LINES=0
-  local COVERED_LINES=0
-  
-  while IFS= read -r line; do
-    if [[ $line =~ ^DA: ]]; then
-      TOTAL_LINES=$((TOTAL_LINES + 1))
-      # Extract execution count (number after comma)
-      exec_count=$(echo "$line" | cut -d',' -f2)
-      if [ "$exec_count" -gt 0 ] 2>/dev/null; then
-        COVERED_LINES=$((COVERED_LINES + 1))
-      fi
-    fi
-  done < coverage/lcov.info
-  
-  if [ "$TOTAL_LINES" -gt 0 ]; then
-    COVERAGE_PERCENT=$(awk "BEGIN {printf \"%.2f\", ($COVERED_LINES / $TOTAL_LINES) * 100}")
-    echo "$COVERAGE_PERCENT|$TOTAL_LINES|$COVERED_LINES"
-  else
-    echo "0|0|0"
-  fi
-}
-
-# Try to use lcov command if available (more accurate), otherwise parse directly
-if command -v lcov &> /dev/null; then
-  COVERAGE_SUMMARY=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1)
-  COVERAGE_PERCENT=$(echo "$COVERAGE_SUMMARY" | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//')
-  
-  # If lcov summary parsing failed, use direct calculation
-  if [ -z "$COVERAGE_PERCENT" ]; then
-    RESULT=$(calculate_coverage)
-    COVERAGE_PERCENT=$(echo "$RESULT" | cut -d'|' -f1)
-    TOTAL_LINES=$(echo "$RESULT" | cut -d'|' -f2)
-    COVERED_LINES=$(echo "$RESULT" | cut -d'|' -f3)
-  else
-    # Extract total and covered from lcov summary if possible
-    TOTAL_LINES=$(echo "$COVERAGE_SUMMARY" | grep -oP '\d+(?=\s+lines)' | head -1 || echo "")
-    COVERED_LINES=$(echo "$COVERAGE_SUMMARY" | grep -oP '\d+(?=\s+of)' | head -1 || echo "")
-  fi
+# The same per-record line count CI uses: every file, all layers.
+read -r COVERED_LINES TOTAL_LINES <<< "$(bash "$LAYER_SCRIPT" --pattern='.' "$FILTERED")"
+if [ "$TOTAL_LINES" -gt 0 ]; then
+  COVERAGE_PERCENT=$(awk "BEGIN {printf \"%.2f\", ($COVERED_LINES / $TOTAL_LINES) * 100}")
 else
-  # Parse directly from lcov.info
-  RESULT=$(calculate_coverage)
-  COVERAGE_PERCENT=$(echo "$RESULT" | cut -d'|' -f1)
-  TOTAL_LINES=$(echo "$RESULT" | cut -d'|' -f2)
-  COVERED_LINES=$(echo "$RESULT" | cut -d'|' -f3)
+  COVERAGE_PERCENT=0
 fi
 
-# Display coverage statistics
-if [ -n "$TOTAL_LINES" ] && [ "$TOTAL_LINES" != "0" ]; then
-  echo -e "${BLUE}Coverage Statistics:${NC}"
-  echo -e "  Total lines: ${TOTAL_LINES}"
-  echo -e "  Covered lines: ${COVERED_LINES}"
-  echo -e "  Coverage: ${COVERAGE_PERCENT}%"
-  echo ""
-else
-  echo -e "${BLUE}Coverage: ${COVERAGE_PERCENT}%${NC}"
-  echo ""
-fi
-  
+echo -e "${BLUE}Coverage Statistics:${NC}"
+echo -e "  Total lines: ${TOTAL_LINES}"
+echo -e "  Covered lines: ${COVERED_LINES}"
+echo -e "  Coverage: ${COVERAGE_PERCENT}%"
+echo ""
+
 # Analyze coverage by layer if requested (run before threshold check)
 if [ "$ANALYZE_COVERAGE" = true ]; then
   echo ""
   echo -e "${BLUE}=== Coverage Analysis by Layer ===${NC}"
   echo ""
-  
-  # Function to calculate coverage for a path
+
+  # Coverage for files whose path matches the regex [pattern], counted by
+  # calculate_layer_coverage.sh - the script CI gates on - one lcov record at
+  # a time. The old `grep -A 1000` counted the thousand lines after every
+  # matching file, so other files spilled into each layer.
   calculate_path_coverage() {
-    local path=$1
+    local pattern=$1
     local name=$2
-    
-    # Extract coverage data for the path
-    local total_lines=$(grep "^SF:.*$path" coverage/lcov.info -A 1000 | grep "^DA:" | wc -l || echo "0")
-    local covered_lines=$(grep "^SF:.*$path" coverage/lcov.info -A 1000 | grep "^DA:" | grep -v ",0$" | wc -l || echo "0")
-    
+    local covered_lines total_lines
+    read -r covered_lines total_lines <<< "$(bash "$LAYER_SCRIPT" --pattern="$pattern" "$FILTERED")"
+
     if [ "$total_lines" -gt 0 ]; then
       local percent=$(awk "BEGIN {printf \"%.1f\", ($covered_lines / $total_lines) * 100}")
       echo -e "${CYAN}$name:${NC} $covered_lines/$total_lines lines ($percent%)"
-      
+
       # Color code based on coverage
       if (( $(echo "$percent >= 80" | bc -l) )); then
         echo -e "  ${GREEN}✓ Good coverage${NC}"
@@ -215,71 +197,58 @@ if [ "$ANALYZE_COVERAGE" = true ]; then
       echo -e "${CYAN}$name:${NC} No coverage data"
     fi
   }
-  
-  # Domain Layer
+
+  # Layer patterns match calculate_layer_coverage.sh's own.
   echo -e "${YELLOW}Domain Layer:${NC}"
-  calculate_path_coverage "lib/features/.*/domain" "  Overall"
-  calculate_path_coverage "lib/features/.*/domain/usecases" "  Use Cases"
-  calculate_path_coverage "lib/features/.*/domain/entities" "  Entities"
-  calculate_path_coverage "lib/features/.*/domain/repositories" "  Repository Interfaces"
+  calculate_path_coverage "/features/.*/domain/" "  Overall"
+  calculate_path_coverage "/features/.*/domain/usecases/" "  Use Cases"
+  calculate_path_coverage "/features/.*/domain/entities/" "  Entities"
+  calculate_path_coverage "/features/.*/domain/repositories/" "  Repository Interfaces"
   echo ""
-  
-  # Data Layer
+
   echo -e "${YELLOW}Data Layer:${NC}"
-  calculate_path_coverage "lib/features/.*/data" "  Overall"
-  calculate_path_coverage "lib/features/.*/data/repositories" "  Repository Implementations"
-  calculate_path_coverage "lib/features/.*/data/datasources" "  Data Sources"
-  calculate_path_coverage "lib/features/.*/data/models" "  Models"
+  calculate_path_coverage "/features/.*/data/" "  Overall"
+  calculate_path_coverage "/features/.*/data/repositories/" "  Repository Implementations"
+  calculate_path_coverage "/features/.*/data/datasources/" "  Data Sources"
+  calculate_path_coverage "/features/.*/data/models/" "  Models"
   echo ""
-  
-  # Presentation Layer
+
   echo -e "${YELLOW}Presentation Layer:${NC}"
-  calculate_path_coverage "lib/features/.*/presentation" "  Overall"
-  calculate_path_coverage "lib/features/.*/presentation/providers" "  Providers"
-  calculate_path_coverage "lib/features/.*/presentation/screens" "  Screens"
-  calculate_path_coverage "lib/features/.*/presentation/widgets" "  Widgets"
+  calculate_path_coverage "/features/.*/presentation/" "  Overall"
+  calculate_path_coverage "/features/.*/presentation/providers/" "  Providers"
+  calculate_path_coverage "/features/.*/presentation/screens/" "  Screens"
+  calculate_path_coverage "/features/.*/presentation/widgets/" "  Widgets"
   echo ""
-  
-  # Core Layer
+
   echo -e "${YELLOW}Core Layer:${NC}"
-  calculate_path_coverage "lib/core" "  Overall"
-  calculate_path_coverage "lib/core/network" "  Network"
-  calculate_path_coverage "lib/core/storage" "  Storage"
-  calculate_path_coverage "lib/core/config" "  Config"
-  calculate_path_coverage "lib/core/utils" "  Utils"
-  calculate_path_coverage "lib/core/errors" "  Errors"
-  calculate_path_coverage "lib/core/performance" "  Performance"
+  calculate_path_coverage "/core/" "  Overall"
+  calculate_path_coverage "/core/network/" "  Network"
+  calculate_path_coverage "/core/storage/" "  Storage"
+  calculate_path_coverage "/core/config/" "  Config"
+  calculate_path_coverage "/core/utils/" "  Utils"
+  calculate_path_coverage "/core/errors/" "  Errors"
+  calculate_path_coverage "/core/performance/" "  Performance"
   echo ""
-  
-  # Shared Layer
+
   echo -e "${YELLOW}Shared Layer:${NC}"
-  calculate_path_coverage "lib/shared" "  Overall"
+  calculate_path_coverage "/shared/" "  Overall"
   echo ""
-  
-  # Find files with low coverage
+
+  # One line per file, counted within its own record.
   echo -e "${BLUE}=== Files with Low Coverage (< 60%) ===${NC}"
   echo ""
-  
-  # This is a simplified check - in practice, you'd want more sophisticated parsing
-  grep "^SF:" coverage/lcov.info | while read -r file_line; do
-    file_path=$(echo "$file_line" | sed 's/^SF://')
-    
-    # Get coverage for this file
-    file_start=$(grep -n "^SF:$file_path" coverage/lcov.info | cut -d: -f1)
-    if [ -n "$file_start" ]; then
-      # Extract DA lines for this file (until next SF or end)
-      total=$(sed -n "${file_start},\$p" coverage/lcov.info | grep "^DA:" | head -100 | wc -l)
-      covered=$(sed -n "${file_start},\$p" coverage/lcov.info | grep "^DA:" | head -100 | grep -v ",0$" | wc -l)
-      
-      if [ "$total" -gt 0 ]; then
-        percent=$(awk "BEGIN {printf \"%.1f\", ($covered / $total) * 100}")
-        if (( $(echo "$percent < 60" | bc -l) )); then
-          echo -e "${RED}$file_path: $percent%${NC}"
-        fi
-      fi
-    fi
-  done | head -20
-  
+  awk '
+    /^SF:/ { file = substr($0, 4); total = 0; covered = 0 }
+    /^DA:/ { total++; split($0, p, ","); if (p[2] != "0") covered++ }
+    /^end_of_record/ {
+      if (total > 0 && covered / total < 0.6) {
+        printf "%s: %.1f%%\n", file, (covered / total) * 100
+      }
+    }
+  ' "$FILTERED" | head -20 | while IFS= read -r low; do
+    echo -e "${RED}${low}${NC}"
+  done
+
   echo ""
 fi
 

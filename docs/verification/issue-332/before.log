@@ -1,0 +1,135 @@
+# main e79b4770f20, before the fix: flutter test test/tooling/test_coverage_script_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart
+00:00 +0: criterion 2: --exclude removes files without it, generated code still drops out by default
+00:00 +0 -1: criterion 2: --exclude removes files without it, generated code still drops out by default [E]
+  Expected: contains 'Coverage: 25.00%'
+    Actual: 'Skipping tests (using existing coverage data)\n'
+              '\n'
+              '✓ Tests completed\n'
+              '\n'
+              'Calculating coverage...\n'
+              'Coverage Statistics:\n'
+              '  Total lines: 11\n'
+              '  Covered lines: 2\n'
+              '  Coverage: 18.18%\n'
+              '\n'
+              '✗ Coverage 18.18% is below minimum threshold of 80%\n'
+              '\n'
+              'Coverage report complete!\n'
+              ''
+     Which: does not contain 'Coverage: 25.00%'
+  Skipping tests (using existing coverage data)
+  
+  ✓ Tests completed
+  
+  Calculating coverage...
+  Coverage Statistics:
+    Total lines: 11
+    Covered lines: 2
+    Coverage: 18.18%
+  
+  ✗ Coverage 18.18% is below minimum threshold of 80%
+  
+  Coverage report complete!
+  
+  
+  
+00:00 +0 -1: criterion 2: --exclude removes files --exclude=lib/generated gives 2/6 = 33.33%
+00:00 +0 -2: criterion 2: --exclude removes files --exclude=lib/generated gives 2/6 = 33.33% [E]
+  Expected: contains 'Coverage: 33.33%'
+    Actual: 'Skipping tests (using existing coverage data)\n'
+              '\n'
+              '✓ Tests completed\n'
+              '\n'
+              'Calculating coverage...\n'
+              'Coverage Statistics:\n'
+              '  Total lines: 11\n'
+              '  Covered lines: 2\n'
+              '  Coverage: 18.18%\n'
+              '\n'
+              '✗ Coverage 18.18% is below minimum threshold of 80%\n'
+              '\n'
+              'Coverage report complete!\n'
+              ''
+     Which: does not contain 'Coverage: 33.33%'
+  Skipping tests (using existing coverage data)
+  
+  ✓ Tests completed
+  
+  Calculating coverage...
+  Coverage Statistics:
+    Total lines: 11
+    Covered lines: 2
+    Coverage: 18.18%
+  
+  ✗ Coverage 18.18% is below minimum threshold of 80%
+  
+  Coverage report complete!
+  
+  
+  
+00:00 +0 -2: criterion 2: --exclude removes files excluding the data file too gives 100%
+00:00 +0 -3: criterion 2: --exclude removes files excluding the data file too gives 100% [E]
+  Expected: contains 'Coverage: 100.00%'
+    Actual: 'Skipping tests (using existing coverage data)\n'
+              '\n'
+              '✓ Tests completed\n'
+              '\n'
+              'Calculating coverage...\n'
+              'Coverage Statistics:\n'
+              '  Total lines: 11\n'
+              '  Covered lines: 2\n'
+              '  Coverage: 18.18%\n'
+              '\n'
+              '✗ Coverage 18.18% is below minimum threshold of 60%\n'
+              '\n'
+              'Coverage report complete!\n'
+              ''
+     Which: does not contain 'Coverage: 100.00%'
+  Skipping tests (using existing coverage data)
+  
+  ✓ Tests completed
+  
+  Calculating coverage...
+  Coverage Statistics:
+    Total lines: 11
+    Covered lines: 2
+    Coverage: 18.18%
+  
+  ✗ Coverage 18.18% is below minimum threshold of 60%
+  
+  Coverage report complete!
+  
+  
+  
+00:00 +0 -3: criterion 1: --analyze agrees with calculate_layer_coverage.sh per-layer counts are per file, not spilled
+00:00 +0 -4: criterion 1: --analyze agrees with calculate_layer_coverage.sh per-layer counts are per file, not spilled [E]
+  Expected: '2 2'
+    Actual: ''
+     Which: is different. Both strings start the same, but the actual value is missing the following trailing characters: 2 2
+  
+  
+00:00 +0 -4: criterion 1: --analyze agrees with calculate_layer_coverage.sh the low-coverage list names the right file
+00:01 +0 -5: criterion 1: --analyze agrees with calculate_layer_coverage.sh the low-coverage list names the right file [E]
+  Expected: not contains 'domain/a.dart'
+    Actual: ' (< 60%) ===\n'
+              '\n'
+              'lib/features/auth/domain/a.dart: 18.2%\n'
+              'lib/features/auth/data/b.dart: 0.0%\n'
+              'lib/generated/x.dart: 0.0%\n'
+              'lib/features/auth/data/b.g.dart: 0.0%\n'
+              '\n'
+              '✗ Coverage 18.18% is below minimum threshold of 80%\n'
+              '\n'
+              'Coverage report complete!\n'
+              ''
+  
+  
+00:01 +0 -5: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 1: --analyze agrees with calculate_layer_coverage.sh per-layer counts are per file, not spilled
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 1: --analyze agrees with calculate_layer_coverage.sh the low-coverage list names the right file
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 2: --exclude removes files --exclude=lib/generated gives 2/6 = 33.33%
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 2: --exclude removes files excluding the data file too gives 100%
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart: criterion 2: --exclude removes files without it, generated code still drops out by default
