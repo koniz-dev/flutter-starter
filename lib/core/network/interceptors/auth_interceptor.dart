@@ -8,9 +8,11 @@ import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
 import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
+import 'package:flutter_starter/core/network/request_body_replay.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
 import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
@@ -548,11 +550,28 @@ class AuthInterceptor extends Interceptor {
   }
 
   /// Retries the original request with a new token
+  ///
+  /// The body goes through [RequestBodyReplay]: a [FormData] is sent as a
+  /// clone, because dio finalizes the original on the first send, and a body
+  /// that cannot be read twice fails the replay with a [DioException] naming
+  /// the reason (koniz-dev/flutter-starter#284).
   Future<Response<dynamic>> _retryRequest(
     DioException err,
     String newToken,
   ) async {
     final requestOptions = err.requestOptions;
+
+    if (!RequestBodyReplay.canReplay(requestOptions.data)) {
+      final reason = RequestBodyReplay.reason(requestOptions.data);
+      throw DioException(
+        requestOptions: requestOptions,
+        message: reason,
+        error: NetworkException(
+          reason,
+          code: RequestBodyReplay.notReplayableCode,
+        ),
+      );
+    }
 
     // Create new request options with updated headers
     final newOptions = requestOptions.copyWith(
@@ -567,7 +586,7 @@ class AuthInterceptor extends Interceptor {
     // certificate pinning - matches the original request.
     return retryDio().request(
       newOptions.path,
-      data: newOptions.data,
+      data: RequestBodyReplay.bodyFor(newOptions.data),
       queryParameters: newOptions.queryParameters,
       // Cancelling the original request must abort the replay too.
       cancelToken: requestOptions.cancelToken,

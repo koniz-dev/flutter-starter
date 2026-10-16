@@ -699,6 +699,24 @@ attempts a `GET` does.
 
 ---
 
+### Which request bodies survive a replay
+
+Two interceptors send a request a second time: `AuthInterceptor` after a
+successful 401 refresh, and `RetryInterceptor` after a transient failure. Both
+take the body from `RequestBodyReplay` (`lib/core/network/request_body_replay.dart`)
+rather than reusing the original object (koniz-dev/flutter-starter#284):
+
+| Body | On a replay |
+|---|---|
+| `null`, `String`, `Map`, `List`, `Uint8List` | Sent again unchanged. dio encodes these afresh on every send. |
+| `FormData` (multipart upload) | Sent as `FormData.clone()`, with the same boundary and each file re-read from its source. dio finalizes a `FormData` on its first send, so reusing it threw `StateError: The FormData has already been finalized`, and every upload made with an expired access token failed even though the refresh succeeded. |
+| `Stream` | **Not replayable**: a stream can be read once. The 401 replay fails with a `NetworkException` whose message says the body can be read only once. `RetryInterceptor` does not retry, so the caller gets the original failure, for example the connection timeout. Before, it re-sent the drained stream. |
+
+A `MultipartFile` built with the deprecated `MultipartFile(stream, length)`
+constructor wraps a single stream, so even its clone fails on send. Use
+`MultipartFile.fromBytes`, `fromString`, `fromFile`, or `fromStream` with a
+factory that returns a new stream on each call.
+
 ## CacheInterceptor
 
 Caches HTTP response bodies in local storage so a repeat request can be served without a round trip.
