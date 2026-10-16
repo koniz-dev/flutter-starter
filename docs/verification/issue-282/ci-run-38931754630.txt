@@ -1,0 +1,52 @@
+# Release scripts workflow, run 38931754630 (https://github.com/koniz-dev/flutter-starter/actions/runs/38931754630)
+# triggered by a push to throwaway branch tmp/282-ci-probe, whose only extra commit added that branch to the push trigger; deleted afterwards
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5184076Z ^[[36;1muname -a^[[0m
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5184911Z ^[[36;1mbash --version | head -1^[[0m
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5185913Z ^[[36;1m/bin/bash --version | head -1^[[0m
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5187168Z ^[[36;1m(sed --version 2>/dev/null || echo "BSD sed") | head -1^[[0m
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5188849Z ^[[36;1m(awk --version 2>/dev/null || awk -W version 2>/dev/null || echo "BSD awk") | head -1^[[0m
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5560957Z Linux runnervm8k3b6 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5572238Z GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5583661Z GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5597879Z sed (GNU sed) 4.9
+release scripts (ubuntu-latest)	Show the userland under test	2026-10-16T16:24:58.5618138Z GNU Awk 5.2.1, API 3.2, PMA Avon 8-g1, (GNU MPFR 4.2.1, GNU MP 6.3.0)
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.5690822Z ^[[36;1m/bin/bash scripts/test/release_scripts_test.sh^[[0m
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6325459Z ok    generate_changelog.sh 1.2.3 exits 0
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6351046Z ok    the new section sits below Unreleased and above 1.0.0+1
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6372229Z ok    commits after the tag are listed
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6383134Z ok    commits before the tag are not listed
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6394527Z ok    the Unreleased section is kept intact
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6649146Z ok    with no tag it refuses and names --since
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6659418Z ok    a refused run leaves CHANGELOG.md untouched
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.6855995Z ok    --since <ref> lists exactly the commits in <ref>..HEAD
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.7314036Z ok    a missing CHANGELOG.md is created with the section
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.7913300Z ok    release.sh fails when the changelog step fails
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.7915436Z ok    after the failure git status --short is empty
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.7942379Z ok    no release branch or tag was created
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.7943652Z 
+release scripts (ubuntu-latest)	Run the release-script tests	2026-10-16T16:24:58.7944155Z All release-script tests passed.
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.7862770Z ^[[36;1muname -a^[[0m
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.7864360Z ^[[36;1mbash --version | head -1^[[0m
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.7865660Z ^[[36;1m/bin/bash --version | head -1^[[0m
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.7867170Z ^[[36;1m(sed --version 2>/dev/null || echo "BSD sed") | head -1^[[0m
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.7868520Z ^[[36;1m(awk --version 2>/dev/null || awk -W version 2>/dev/null || echo "BSD awk") | head -1^[[0m
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.8964780Z Darwin sat12-bq165-22286bff-e502-40f6-8f09-f199083dda96-467EF7D865D1.local 25.6.0 Darwin Kernel Version 25.6.0: Fri Jul 31 19:16:43 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_VMAPPLE arm64
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.9041920Z GNU bash, version 3.2.57(1)-release (arm64-apple-darwin25)
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.9087910Z GNU bash, version 3.2.57(1)-release (arm64-apple-darwin25)
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.9141000Z BSD sed
+release scripts (macos-latest)	Show the userland under test	2026-10-16T16:25:08.9218640Z awk version 20200816
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:08.9316500Z ^[[36;1m/bin/bash scripts/test/release_scripts_test.sh^[[0m
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.3211330Z ok    generate_changelog.sh 1.2.3 exits 0
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.3341510Z ok    the new section sits below Unreleased and above 1.0.0+1
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.3432000Z ok    commits after the tag are listed
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.3499780Z ok    commits before the tag are not listed
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.3566500Z ok    the Unreleased section is kept intact
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.4935800Z ok    with no tag it refuses and names --since
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.5003410Z ok    a refused run leaves CHANGELOG.md untouched
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.6009260Z ok    --since <ref> lists exactly the commits in <ref>..HEAD
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:09.8666470Z ok    a missing CHANGELOG.md is created with the section
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:10.1727910Z ok    release.sh fails when the changelog step fails
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:10.1728640Z ok    after the failure git status --short is empty
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:10.2002850Z ok    no release branch or tag was created
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:10.2012840Z 
+release scripts (macos-latest)	Run the release-script tests	2026-10-16T16:25:10.2051910Z All release-script tests passed.
