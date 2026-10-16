@@ -1,0 +1,528 @@
+# lib/ at main e50e0450a87 (before the fix), new web test, --platform chrome
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_web_test.dart
+00:00 +0: createAdapter builds no IO adapter on web
+00:00 +0 -1: createAdapter builds no IO adapter on web [E]
+  Expected: null
+    Actual: <Instance of 'IOHttpClientAdapter'>
+  
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
+  package:matcher                                                                                          expect$
+  package:flutter_test/src/widget_tester.dart 473:18                                                       expect$
+  ssl_pinning_web_test.dart 91:5                                                                           <fn>
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 720:5                                         [_completeWithValue]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 499:7                complete
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 566:12               _asyncReturn
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 543:9                                         <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 702:7                                                runGuarded
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 743:23                                               <fn>
+  http://localhost:56261/dart-sdk/lib/async/schedule_microtask.dart 40:34                                  _microtaskLoop
+  http://localhost:56261/dart-sdk/lib/async/schedule_microtask.dart 49:5                                   _startMicrotaskLoop
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 183:69               <fn>
+  ===== asynchronous gap ===========================
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 849:35                                               registerBinaryCallback
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 642:23               _wrapJsFunctionForAsync
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 711:7                                         [_complete]
+  http://localhost:56261/dart-sdk/lib/async/future.dart 265:13                                             <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 27:47                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 702:7                                                runGuarded
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 743:23                                               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 726:23                                               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/isolate_helper.dart 47:11           internalCallback
+  ===== asynchronous gap ===========================
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 849:35                                               registerBinaryCallback
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 642:23               _wrapJsFunctionForAsync
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         [_onRun]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 710:7                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 56:13                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 710:7                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  package:stream_channel                                                                                   <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/internal/async_cast.dart 95:5                                        [_onData]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  package:stream_channel                                                                                   add
+  package:flutter_test/src/_test_selector_web.dart 77:15                                                   <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 218:27    _callDartFunctionFast1
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 78:15     ret
+  
+00:00 +0 -1: a misconfigured policy does not assert on web either
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:00 +0 -2: a misconfigured policy does not assert on web either [E]
+  Expected: return normally
+    Actual: <Closure: () => HttpClientAdapter? from: (...args) => context[property](...args)>
+     Which: threw AssertionErrorImpl:<Assertion failed: file:///Users/nguyenanhkiet/Playground/flutter-starter/lib/core/network/ssl_pinning.dart:61:14
+            false
+            "SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.">
+  
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
+  package:matcher                                                                                          expect$
+  package:flutter_test/src/widget_tester.dart 473:18                                                       expect$
+  ssl_pinning_web_test.dart 104:5                                                                          <fn>
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 720:5                                         [_completeWithValue]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 499:7                complete
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 566:12               _asyncReturn
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 543:9                                         <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 702:7                                                runGuarded
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 743:23                                               <fn>
+  http://localhost:56261/dart-sdk/lib/async/schedule_microtask.dart 40:34                                  _microtaskLoop
+  http://localhost:56261/dart-sdk/lib/async/schedule_microtask.dart 49:5                                   _startMicrotaskLoop
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 183:69               <fn>
+  ===== asynchronous gap ===========================
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 849:35                                               registerBinaryCallback
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 642:23               _wrapJsFunctionForAsync
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 711:7                                         [_complete]
+  http://localhost:56261/dart-sdk/lib/async/future.dart 265:13                                             <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 27:47                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 702:7                                                runGuarded
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 743:23                                               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 726:23                                               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/isolate_helper.dart 47:11           internalCallback
+  ===== asynchronous gap ===========================
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 849:35                                               registerBinaryCallback
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 642:23               _wrapJsFunctionForAsync
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         [_onRun]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 710:7                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 56:13                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 710:7                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  package:stream_channel                                                                                   <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/internal/async_cast.dart 95:5                                        [_onData]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  package:stream_channel                                                                                   add
+  package:flutter_test/src/_test_selector_web.dart 77:15                                                   <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 218:27    _callDartFunctionFast1
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 78:15     ret
+  
+00:00 +0 -2: ApiClient with pinning requested keeps the browser transport, and a request reaches it
+00:00 +0 -3: ApiClient with pinning requested keeps the browser transport, and a request reaches it [E]
+  Expected: not <Instance of 'IOHttpClientAdapter'>
+    Actual: <Instance of 'IOHttpClientAdapter'>
+  dart:io transport cannot run in a browser
+  
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
+  package:matcher                                                                                          expect$
+  package:flutter_test/src/widget_tester.dart 473:18                                                       expect$
+  ssl_pinning_web_test.dart 120:5                                                                          <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 537:3                _asyncStartSync
+  ssl_pinning_web_test.dart 131:44                                                                         <fn>
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 720:5                                         [_completeWithValue]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 499:7                complete
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 566:12               _asyncReturn
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 543:9                                         <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 702:7                                                runGuarded
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 743:23                                               <fn>
+  http://localhost:56261/dart-sdk/lib/async/schedule_microtask.dart 40:34                                  _microtaskLoop
+  http://localhost:56261/dart-sdk/lib/async/schedule_microtask.dart 49:5                                   _startMicrotaskLoop
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 183:69               <fn>
+  ===== asynchronous gap ===========================
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 849:35                                               registerBinaryCallback
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 642:23               _wrapJsFunctionForAsync
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 618:19               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 643:23               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 589:19               <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 222:18                                        handleValue
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 948:44                                        handleValueCallback
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 977:13                                        _propagateToListeners
+  http://localhost:56261/dart-sdk/lib/async/future_impl.dart 711:7                                         [_complete]
+  http://localhost:56261/dart-sdk/lib/async/future.dart 265:13                                             <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 27:47                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 702:7                                                runGuarded
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 743:23                                               <fn>
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 726:23                                               <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/isolate_helper.dart 47:11           internalCallback
+  ===== asynchronous gap ===========================
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 849:35                                               registerBinaryCallback
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 642:23               _wrapJsFunctionForAsync
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:stack_trace                                                                                      <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         [_onRun]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 35:13                                           _rootRun
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 810:35                                               run
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 164:63                                           _runZoned
+  http://localhost:56261/dart-sdk/lib/async/zone_api.dart 91:10                                            runZoned
+  package:test_api                                                                                         <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 48:47                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 710:7                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone_root.dart 56:13                                           _rootRunUnary
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 816:35                                               runUnary
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 710:7                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  package:stream_channel                                                                                   <fn>
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/internal/async_cast.dart 95:5                                        [_onData]
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
+  http://localhost:56261/dart-sdk/lib/async/zone.dart 963:9                                                runUnaryGuarded
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 381:5                                         [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_impl.dart 312:7                                         [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 798:5                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 832:7                                   [_sendData]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 663:7                                   [_add]
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 618:5                                   add
+  http://localhost:56261/dart-sdk/lib/async/stream_controller.dart 898:5                                   add
+  package:stream_channel                                                                                   add
+  package:flutter_test/src/_test_selector_web.dart 77:15                                                   <fn>
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 218:27    _callDartFunctionFast1
+  http://localhost:56261/dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 78:15     ret
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  test/core/network/ssl_pinning_web_test.dart: ApiClient with pinning requested keeps the browser transport, and a request reaches it
+  test/core/network/ssl_pinning_web_test.dart: a misconfigured policy does not assert on web either
+  test/core/network/ssl_pinning_web_test.dart: createAdapter builds no IO adapter on web

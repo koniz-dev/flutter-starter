@@ -50,6 +50,17 @@ accepts the connection only if that digest is in the configured pin set
 with an empty `SecurityContext()`, so the platform trust store is bypassed and
 every certificate goes through the callback.
 
+**Not on web.** A browser owns TLS. There is no `SecurityContext` and no
+`HttpClient`, and the page never sees the server certificate, so an app cannot
+pin on Flutter web. There, `SslPinning.createAdapter()` returns `null` and
+`isEffective` is `false` whatever `ENABLE_SSL_PINNING` and
+`API_SSL_FINGERPRINTS` say, so the web build uses the browser's own transport
+and trust store. Until koniz-dev/flutter-starter#307 it installed the dart:io
+adapter anyway, and every web request failed with
+`Unsupported operation: SecurityContext constructor`. If a web client needs
+stronger guarantees, enforce them on the server side, for example with HSTS
+and Certificate Transparency monitoring. There is no app-side substitute.
+
 The pin set and the on/off switch come from `AppConfig`
 (`lib/core/config/app_config.dart:110-141`):
 

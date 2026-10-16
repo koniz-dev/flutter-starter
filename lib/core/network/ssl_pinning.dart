@@ -13,6 +13,12 @@ import 'package:flutter_starter/core/config/app_config.dart';
 /// that distinction explicit ([isEffective] vs [enabled]) and refuses to fail
 /// quietly: [createAdapter] logs and asserts when pinning is requested but
 /// unenforceable.
+///
+/// Pinning does not apply on Flutter **web**. The browser owns TLS: there is
+/// no `SecurityContext` and no `HttpClient`, so an app cannot see, let alone
+/// pin, the server certificate. On web [createAdapter] returns `null` and
+/// Dio keeps its browser transport, and [isEffective] is `false` whatever the
+/// configuration says (koniz-dev/flutter-starter#307).
 @immutable
 class SslPinning {
   /// Creates a policy from an explicit flag and fingerprint list.
@@ -33,8 +39,9 @@ class SslPinning {
 
   /// Whether pinning is actually enforced on the socket.
   ///
-  /// Requesting pinning without fingerprints enforces nothing.
-  bool get isEffective => enabled && fingerprints.isNotEmpty;
+  /// Requesting pinning without fingerprints enforces nothing, and nothing is
+  /// ever enforced on web.
+  bool get isEffective => !kIsWeb && enabled && fingerprints.isNotEmpty;
 
   /// Whether pinning was requested but cannot be enforced.
   bool get isMisconfigured => enabled && fingerprints.isEmpty;
@@ -51,8 +58,13 @@ class SslPinning {
   ///
   /// When [isMisconfigured], this logs an error and trips an assertion in
   /// debug builds rather than degrading to an unpinned client in silence.
+  ///
+  /// Always `null` on web, before any of that: an [IOHttpClientAdapter] there
+  /// throws `Unsupported operation: SecurityContext constructor` on the first
+  /// request, so a web build configured with the mobile fingerprints would
+  /// send nothing at all.
   HttpClientAdapter? createAdapter() {
-    if (!enabled) {
+    if (kIsWeb || !enabled) {
       return null;
     }
 
