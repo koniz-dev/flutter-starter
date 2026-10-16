@@ -59,6 +59,16 @@ void main() {
     return file.existsSync() ? file.readAsStringSync() : '<no logs/app.log>';
   }
 
+  /// Waits until the file output has created logs/app.log, so its init()
+  /// cannot outlive the test and race tearDown's directory deletion.
+  Future<void> fileOutputOpened() async {
+    final file = File('${documents.path}/logs/app.log');
+    for (var i = 0; i < 100 && !file.existsSync(); i++) {
+      await Future<void>.delayed(const Duration(milliseconds: 30));
+    }
+    expect(file.existsSync(), isTrue, reason: 'the file output never opened');
+  }
+
   group('criterion 1: the default LoggingService in this environment', () {
     test('ENABLE_LOGGING is unset, so the environment default applies', () {
       expect(EnvConfig.isInitialized, isFalse);
@@ -100,7 +110,7 @@ void main() {
   group('criterion 2: outputs are never empty outside kDebugMode', () {
     for (final file in [true, false]) {
       for (final remote in [true, false]) {
-        test('file=$file remote=$remote', () {
+        test('file=$file remote=$remote', () async {
           final service = LoggingService(
             enableLogging: true,
             enableFileLogging: file,
@@ -114,6 +124,11 @@ void main() {
             expect(service.outputs.whereType<FileLogOutput>(), hasLength(1));
             // A production release: the file only, as the guide's table says.
             expect(service.outputs.whereType<ConsoleOutput>(), isEmpty);
+            // LoggingService starts FileLogOutput.init() unawaited. Ending the
+            // test before it has opened logs/app.log let tearDown delete the
+            // directory underneath it, and the open then failed after the
+            // test had completed (koniz-dev/flutter-starter#418).
+            await fileOutputOpened();
           } else {
             // A staging release build: no file and no debug console, so
             // the console is the fallback rather than nothing.
