@@ -1,7 +1,7 @@
 # Verifies every `tool/strip_sample_features.dart` variant leaves an
 # analyzable, testable tree.
 #
-# All three variants run, not just the default one. Until #50 only the bare
+# All four variants run, not just the default one. Until #50 only the bare
 # `--apply` was exercised, so `--remove-tasks` and `--remove-feature-flags`
 # shipped goldens that imported a routing layout refactored away months
 # earlier and no job ever noticed.
@@ -51,6 +51,10 @@ jobs:
             flags: '--remove-tasks'
           - variant: feature-flags-removed
             flags: '--remove-feature-flags'
+          # Both samples kept, only the process-only artifacts removed
+          # (koniz-dev/flutter-starter#333).
+          - variant: process-only
+            flags: '--process-only'
     steps:
       # fetch-depth: 0 because the scope step diffs base..head. A shallow clone
       # has neither end of that range.
@@ -238,6 +242,25 @@ jobs:
             exit 1
           fi
           echo "All process-only artifacts were removed."
+
+      # The process-only variant is the one an adopter keeping both samples
+      # uses. Exercise the two documented actions that turned `flutter test`
+      # red while the epic-coverage guard was still there (#333): generating
+      # and committing a feature slice, and removing bricks/ and mason.yaml
+      # as the README allows.
+      - name: Generate a feature slice and drop the bricks (process-only)
+        if: steps.scope.outputs.run == 'true' && matrix.variant == 'process-only'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d lib/features/tasks && test -d lib/features/feature_flags
+          ./scripts/dev/create_feature.sh profile
+          git add lib/features/profile test/features/profile
+          git rm -rq bricks mason.yaml
+          # No `| head` here: under pipefail its early exit SIGPIPEs the
+          # writer and fails the step with exit 141.
+          printf 'features: %s\n' "$(cd lib/features && echo *)"
+          test ! -e bricks && test ! -e mason.yaml
 
       - name: Install dependencies (after strip)
         if: steps.scope.outputs.run == 'true'

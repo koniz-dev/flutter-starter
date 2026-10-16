@@ -116,6 +116,12 @@ flutter analyze
 flutter test
 ```
 
+`--process-only` keeps both samples and removes only the process-only
+artifacts below. It is the mode for a fork that keeps `tasks` and
+`feature_flags` but will generate its own slices or drop `bricks/`
+(koniz-dev/flutter-starter#333). It cannot be combined with
+`--remove-tasks` or `--remove-feature-flags`.
+
 ### Process-only artifacts
 
 Every variant also removes what serves **this repository's issue loop** rather

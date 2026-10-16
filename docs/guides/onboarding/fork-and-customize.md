@@ -77,7 +77,20 @@ dart run tool/strip_sample_features.dart --apply --feature-flags-only
 Naming both samples is the same request as naming neither, so
 `--apply --tasks-only --feature-flags-only` behaves exactly like a bare `--apply`.
 
-All three variants are exercised by [`strip-smoke.yml`](../../../.github/workflows/strip-smoke.yml), which applies each one and then runs `flutter analyze` and `flutter test` over the result.
+To keep **both** samples and remove only the process-only machinery described
+below, use:
+
+```bash
+dart run tool/strip_sample_features.dart --apply --process-only
+```
+
+Run it before you generate a feature slice (`./scripts/dev/create_feature.sh`
+or `mason make feature_clean`) or delete `bricks/` and `mason.yaml`. Until the
+epic-coverage guard is gone, both actions turn `flutter test` red: it requires
+every tracked path to map to one of the upstream repository's `epic:*` labels
+(koniz-dev/flutter-starter#333).
+
+All four variants are exercised by [`strip-smoke.yml`](../../../.github/workflows/strip-smoke.yml), which applies each one and then runs `flutter analyze` and `flutter test` over the result.
 
 Every variant also removes the machinery that serves the upstream repository's
 own issue loop rather than your app: the acceptance-evidence archive under

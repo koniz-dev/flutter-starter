@@ -1,0 +1,14 @@
+# main f48edd165f0, before the fix (scratch worktree)
+## ./scripts/dev/create_feature.sh profile && git add, then flutter test test/tooling/epic_coverage_test.dart
+00:00 +4: checkEpicCoverage counterfactuals flags a directory no epic claims
+    no epic claims  lib/features/profile
+00:00 +10 -1: Some tests failed.
+
+## git rm -rq bricks mason.yaml && dart run tool/check_epic_coverage.dart
+  claimed but absent from the tree  epic:tooling-ci -> bricks
+  claimed but absent from the tree  epic:tooling-ci -> mason.yaml
+exit=
+
+## the strip tool has no keep-both-samples mode: --process-only is ignored and both samples go
+auth
+home

@@ -129,7 +129,9 @@ void main(List<String> args) {
   if (!args.contains('--apply')) {
     stderr.writeln(
       'Usage: dart run tool/strip_sample_features.dart --apply '
-      '[--remove-tasks] [--remove-feature-flags]\n'
+      '[--remove-tasks] [--remove-feature-flags] | --process-only\n'
+      '--process-only keeps both samples and removes only the process-only '
+      'artifacts listed below.\n'
       'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
       'and core FeatureFlagsManager. Rewires entrypoints from '
       'tool/golden/<variant>/. Keeps auth sample. Every variant also removes '
@@ -145,6 +147,39 @@ void main(List<String> args) {
   final featureFlagsFlag =
       args.contains('--feature-flags-only') ||
       args.contains('--remove-feature-flags');
+
+  // Keeps both samples and removes only the process-only artifacts. Without
+  // it every variant also dropped at least one sample, so an adopter keeping
+  // both had no supported way to shed the epic-coverage guard - and that
+  // guard turns `flutter test` red the moment they generate a feature slice
+  // or delete bricks/ (koniz-dev/flutter-starter#333).
+  final processOnly = args.contains('--process-only');
+  if (processOnly && (tasksFlag || featureFlagsFlag)) {
+    stderr.writeln(
+      '--process-only keeps both samples; it cannot be combined with '
+      '--remove-tasks or --remove-feature-flags. Nothing was deleted.',
+    );
+    exitCode = 1;
+    return;
+  }
+  if (processOnly) {
+    final markerProblems = _validateProcessMarkers(Directory.current);
+    if (markerProblems.isNotEmpty) {
+      stderr.writeln(
+        'Process-only markers are unbalanced; nothing was deleted:\n'
+        '${markerProblems.join('\n')}',
+      );
+      exitCode = 2;
+      return;
+    }
+    _removeProcessArtifacts(Directory.current);
+    _stripProcessMarkdownRegions(Directory.current);
+    stdout.writeln(
+      'Process-only strip complete; both samples kept. '
+      'Run: flutter pub get && flutter analyze && flutter test',
+    );
+    return;
+  }
 
   // Naming both samples is the same request as naming neither: remove both.
   // This used to fall through to `removeBoth == false`, which deleted both
