@@ -29,6 +29,9 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
   bool _isLoading = true;
   String? _error;
 
+  /// Why the last save failed, shown above the form until the next attempt.
+  String? _saveError;
+
   @override
   void initState() {
     super.initState();
@@ -98,6 +101,9 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
 
+    setState(() => _saveError = null);
+
+    final Result<Task> result;
     if (_task != null) {
       // Update existing task. No `updatedAt` here: `UpdateTaskUseCase` restamps
       // it through `Task.touch`, exactly as the create path below delegates its
@@ -106,16 +112,27 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         title: title,
         description: description.isEmpty ? null : description,
       );
-      await tasksNotifier.updateTask(updatedTask);
+      result = await tasksNotifier.updateTask(updatedTask);
     } else {
       // Create new task
-      await tasksNotifier.createTask(
+      result = await tasksNotifier.createTask(
         title: title,
         description: description.isEmpty ? null : description,
       );
     }
 
-    if (mounted && context.canPopRoute()) {
+    if (!mounted) return;
+
+    // A failed save keeps the editor open with the user's text intact and
+    // says why here, rather than popping to a list that shows the error
+    // behind the closed screen (koniz-dev/flutter-starter#346).
+    final failure = result.failureOrNull;
+    if (failure != null) {
+      setState(() => _saveError = failure.message);
+      return;
+    }
+
+    if (context.canPopRoute()) {
       context.popRoute<void>();
     }
   }
@@ -194,6 +211,13 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            if (_saveError != null) ...[
+              Text(
+                _saveError!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              const SizedBox(height: 16),
+            ],
             TextFormField(
               controller: _titleController,
               decoration: InputDecoration(

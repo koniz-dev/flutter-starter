@@ -654,6 +654,44 @@ void main() {
         ).called(1);
       });
 
+      // koniz-dev/flutter-starter#346: a failed create used to be dropped on
+      // the floor - the screen popped (or, here, just sat silently) and the
+      // failure only reached the list behind it.
+      testWidgets('a failed create keeps the typed text and shows the error', (
+        tester,
+      ) async {
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer(
+          (_) async => const ResultFailure(CacheFailure('disk full')),
+        );
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(const TaskDetailScreen(), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextFormField).first, 'New Task');
+        await tester.tap(find.byIcon(Icons.save));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(TaskDetailScreen), findsOneWidget);
+        expect(find.text('New Task'), findsOneWidget);
+        expect(find.text('disk full'), findsOneWidget);
+      });
+
       testWidgets('should handle cancel button in create mode', (tester) async {
         // Arrange
         await tester.pumpWidget(
