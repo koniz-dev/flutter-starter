@@ -474,13 +474,19 @@ print(config);
 | `API_RECEIVE_TIMEOUT` | int | `30` | API receive timeout in seconds |
 | `API_SEND_TIMEOUT` | int | `30` | API send timeout in seconds |
 | `ENABLE_LOGGING` | bool | Environment-aware | Enable logging (default: true in dev/staging) |
-| `ENABLE_ANALYTICS` | bool | Environment-aware | Enable analytics (default: true in staging/prod) |
-| `ENABLE_CRASH_REPORTING` | bool | Environment-aware | Enable crash reporting (default: true in staging/prod) |
+| `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableAnalytics`, but the starter ships no analytics, so nothing reads it. Gate your analytics SDK on it (default: true in staging/prod) |
+| `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableCrashReporting`, but the starter ships no crash reporter, so nothing reads it. Gate your crash reporter on it (default: true in staging/prod) |
 | `ENABLE_PERFORMANCE_MONITORING` | bool | Environment-aware | Enable performance monitoring |
-| `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Enable debug features (default: true in dev) |
+| `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Registers the `/feature-flags-debug` route; without it the route does not exist (default: true in dev only) |
 | `ENABLE_HTTP_LOGGING` | bool | Environment-aware | Enable HTTP loggers (default: true in dev) |
 | `APP_VERSION` | String | `1.0.0` | App version |
 | `APP_BUILD_NUMBER` | String | `1` | App build number |
+
+`test/core/config/enable_toggles_have_readers_test.dart` keeps the
+`ENABLE_*` rows honest. A row marked **Reserved** must have no reader
+outside `lib/core/config/`, and every other row must have one. Wiring a
+reserved toggle, or adding a toggle nothing reads, fails that test until
+the row is updated.
 
 ### Fallback Defaults
 
