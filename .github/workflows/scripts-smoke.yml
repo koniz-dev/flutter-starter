@@ -9,9 +9,15 @@
 # (koniz-dev/flutter-starter#57). Neither failure was reachable from `ci.yml`,
 # which never leaves the Ubuntu Dart/Flutter toolchain.
 #
+# setup-brick runs `mason make flutter_starter_setup` with non-default answers
+# and then `flutter analyze` and `flutter test` on the renamed tree. It gives
+# the rename path the cover strip-smoke.yml gives the strip path: the rename
+# used to leave ~190 analyzer findings behind on a tree that was clean before
+# it (koniz-dev/flutter-starter#283).
+#
 # Manual by design: an Android release build plus a Windows Flutter setup is
 # far too expensive to put on every push. Run it after touching
-# scripts/ci/build_all.sh or either create_feature script.
+# scripts/ci/build_all.sh, either create_feature script, or the setup brick.
 name: Scripts smoke
 
 on:
@@ -26,6 +32,7 @@ on:
           - all
           - build-all
           - scaffold-parity
+          - setup-brick
       environment:
         description: 'Argument passed to scripts/ci/build_all.sh'
         required: true
@@ -134,3 +141,64 @@ jobs:
             lib/features/smoke_feature test/features/smoke_feature
           flutter analyze
           flutter test test/features/smoke_feature
+
+  setup-brick:
+    if: inputs.job == 'all' || inputs.job == 'setup-brick'
+    name: mason make flutter_starter_setup (acme_shop) + analyze + test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Mason CLI
+        run: dart pub global activate mason_cli
+
+      # Non-default answers on purpose: the default `my_app` happens to need
+      # the same repairs, but a name that sorts elsewhere than
+      # `flutter_starter` and a display name with a space are what an
+      # adopter actually types.
+      - name: Run the setup brick
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          mason get
+          mason make flutter_starter_setup \
+            --package_name acme_shop \
+            --application_id com.acme.shop \
+            --ios_bundle_id com.acme.shop \
+            --app_display_name "Acme Shop" \
+            --strip_sample_features false \
+            --include_tasks_sample true \
+            --include_feature_flags_sample true \
+            --on-conflict overwrite
+
+      - name: Nothing still names the template package or title
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -rl "package:flutter_starter/" lib test integration_test tool examples docs \
+              --include='*.dart' --include='*.dart.template'; then
+            echo "files above still import package:flutter_starter/" >&2
+            exit 1
+          fi
+          if grep -rn "'Flutter Starter'\|\"appTitle\": \"Flutter Starter\"" lib test integration_test \
+              --include='*.dart' --include='*.arb'; then
+            echo "the template title survived the rename" >&2
+            exit 1
+          fi
+
+      - name: Analyze and test the renamed tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          dart format --set-exit-if-changed --output=none \
+            lib test integration_test tool examples
+          flutter analyze
+          flutter test --timeout=5m
