@@ -156,11 +156,17 @@ Future<String?> _readLegacyString(IStorageService storage, String key) async {
 ### Adding Default Values
 
 ```dart
-final hasLanguage = await storage.containsKey('language');
-if (!hasLanguage) {
-  await storage.setString('language', 'en');
+final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
+if (!hasSyncInterval) {
+  await storage.setInt('sync_interval_minutes', 15);
 }
 ```
+
+Seed only keys whose absence means "not set up yet", never a user choice.
+A fresh install runs every migration from v1, so a seeded preference is
+indistinguishable from one the user made. Seeding `language = 'en'` here
+used to override the device language on every first launch
+(koniz-dev/flutter-starter#417).
 
 ### Cleaning Up Deprecated Keys
 
@@ -368,9 +374,9 @@ class MigrationV1ToV2 extends StorageMigration {
       await storage.remove('theme');
     }
 
-    // 3. Add defaults
-    if (!await storage.containsKey('language')) {
-      await storage.setString('language', 'en');
+    // 3. Add defaults (never for a user choice; see "Adding Default Values")
+    if (!await storage.containsKey('sync_interval_minutes')) {
+      await storage.setInt('sync_interval_minutes', 15);
     }
 
     // 4. Clean up deprecated keys
