@@ -104,77 +104,36 @@ class EnvConfig {
 
   /// Get environment variable as boolean
   ///
-  /// Returns true for: 'true', '1', 'yes', 'on' (case-insensitive)
-  /// Returns false otherwise or if not found
+  /// Follows the same priority order as [get]: `.env`, then
+  /// `--dart-define`, then [defaultValue] when neither has the key.
+  ///
+  /// Returns true for: 'true', '1', 'yes', 'on' (case-insensitive, trimmed),
+  /// and false for any other value that is present.
+  ///
+  /// The typed getters used to ask dotenv with `fallback: defaultValue`,
+  /// which returns the fallback for a missing key instead of throwing, so a
+  /// `.env` without the key hid its `--dart-define`; dotenv also rejected
+  /// `yes` and `on` (koniz-dev/flutter-starter#322). They now parse the
+  /// string [get] resolves.
   static bool getBool(String key, {bool defaultValue = false}) {
-    // Priority 1: Check .env file (if loaded)
-    if (_isInitialized) {
-      try {
-        return dotenv.getBool(key, fallback: defaultValue);
-      } on Exception {
-        // Variable not found in .env, continue to next priority
-      }
-    }
-
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = DartDefines.lookup(key);
-    if (dartDefineValue.isNotEmpty) {
-      final lowerValue = dartDefineValue.toLowerCase().trim();
-      return lowerValue == 'true' ||
-          lowerValue == '1' ||
-          lowerValue == 'yes' ||
-          lowerValue == 'on';
-    }
-
-    // Priority 3: Return default value
-    return defaultValue;
+    final value = get(key).trim().toLowerCase();
+    if (value.isEmpty) return defaultValue;
+    return const {'true', '1', 'yes', 'on'}.contains(value);
   }
 
   /// Get environment variable as integer
   ///
-  /// Returns parsed integer value or defaultValue if not found or invalid
-  static int getInt(String key, {int defaultValue = 0}) {
-    // Priority 1: Check .env file (if loaded)
-    if (_isInitialized) {
-      try {
-        return dotenv.getInt(key, fallback: defaultValue);
-      } on Exception {
-        // Variable not found in .env, continue to next priority
-      }
-    }
-
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = DartDefines.lookup(key);
-    if (dartDefineValue.isNotEmpty) {
-      return int.tryParse(dartDefineValue) ?? defaultValue;
-    }
-
-    // Priority 3: Return default value
-    return defaultValue;
-  }
+  /// Same priority order as [get]. Returns [defaultValue] when neither source
+  /// has the key or the value is not an integer.
+  static int getInt(String key, {int defaultValue = 0}) =>
+      int.tryParse(get(key).trim()) ?? defaultValue;
 
   /// Get environment variable as double
   ///
-  /// Returns parsed double value or defaultValue if not found or invalid
-  static double getDouble(String key, {double defaultValue = 0.0}) {
-    // Priority 1: Check .env file (if loaded)
-    if (_isInitialized) {
-      try {
-        return dotenv.getDouble(key, fallback: defaultValue);
-      } on Exception {
-        // Variable not found in .env, continue to next priority
-      }
-    }
-
-    // Priority 2: Check --dart-define flags
-    final dartDefineValue = DartDefines.lookup(key);
-    if (dartDefineValue.isNotEmpty) {
-      return double.tryParse(dartDefineValue) ?? defaultValue;
-    }
-
-    // Priority 3: Return default value
-    return defaultValue;
-  }
+  /// Same priority order as [get]. Returns [defaultValue] when neither source
+  /// has the key or the value is not a number.
+  static double getDouble(String key, {double defaultValue = 0.0}) =>
+      double.tryParse(get(key).trim()) ?? defaultValue;
 
   /// Check if an environment variable exists
   ///

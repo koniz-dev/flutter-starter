@@ -148,9 +148,19 @@ void main() {
       expect(source, isNot(contains('kIsWeb')));
       expect(
         RegExp(r'DartDefines\.lookup\(').allMatches(source).length,
-        5,
-        reason: 'get, getBool, getInt, getDouble and has each consult it',
+        2,
+        reason: 'get and has each consult it',
       );
+      // The typed getters parse what get() resolves, so they inherit its
+      // dart-define fallback rather than each carrying their own
+      // (koniz-dev/flutter-starter#322).
+      for (final getter in ['getBool', 'getInt', 'getDouble']) {
+        final body = RegExp(
+          'static \\w+ $getter\\([^)]*\\)[^;{]*(\\{[^}]*\\}|=>[^;]*;)',
+        ).firstMatch(source)?.group(0);
+        expect(body, isNotNull, reason: '$getter not found');
+        expect(body, contains('get(key)'), reason: getter);
+      }
     });
   }, skip: _readsSourceFiles);
 

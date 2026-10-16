@@ -1,0 +1,24 @@
+# after the fix
+## flutter test test/core/config/env_typed_getters_test.dart --dart-define=ENABLE_SSL_PINNING=true --dart-define=API_CONNECT_TIMEOUT=60 --dart-define=API_TIMEOUT=2.5
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/env_typed_getters_test.dart
+00:00 +0: criterion 1: a .env without the key falls through to the define getBool
+00:00 +1: criterion 1: a .env without the key falls through to the define getInt
+00:00 +2: criterion 1: a .env without the key falls through to the define getDouble
+00:00 +3: criterion 1: a .env without the key falls through to the define a key in neither source still gets the default
+00:00 +4: the .env still wins when it has the key over the define
+00:00 +5: criterion 2: .env booleans parse the way the doc says "true" is true
+00:00 +6: criterion 2: .env booleans parse the way the doc says "TRUE" is true
+00:00 +7: criterion 2: .env booleans parse the way the doc says "1" is true
+00:00 +8: criterion 2: .env booleans parse the way the doc says "yes" is true
+00:00 +9: criterion 2: .env booleans parse the way the doc says "Yes" is true
+00:00 +10: criterion 2: .env booleans parse the way the doc says "on" is true
+00:00 +11: criterion 2: .env booleans parse the way the doc says "ON" is true
+00:00 +12: criterion 2: .env booleans parse the way the doc says "false" is false
+00:00 +13: criterion 2: .env booleans parse the way the doc says "0" is false
+00:00 +14: criterion 2: .env booleans parse the way the doc says "no" is false
+00:00 +15: criterion 2: .env booleans parse the way the doc says "off" is false
+00:00 +16: criterion 2: .env booleans parse the way the doc says "nonsense" is false
+00:00 +17: (tearDownAll)
+00:00 +17: All tests passed!
+## flutter test test/core/config/env_typed_getters_test.dart (no defines: the 3 define-path tests skip, as in CI)
+00:00 +14 ~3: All tests passed!

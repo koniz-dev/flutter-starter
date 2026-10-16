@@ -1,0 +1,2 @@
+# flutter test test/core/config
+00:01 +174 ~5: All tests passed!
