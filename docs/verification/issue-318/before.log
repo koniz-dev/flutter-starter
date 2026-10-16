@@ -1,0 +1,29 @@
+# flutter test test/features/feature_flags/feature_flag_layers_agree_test.dart on main b4054d7c3e1 (before the fix)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart
+00:00 +0: criterion 1: getFlag and getAllFlags agree for enable_debug_menu
+00:00 +0 -1: criterion 1: getFlag and getAllFlags agree for enable_debug_menu [E]
+  Expected: not null
+    Actual: <null>
+00:00 +0 -1: criterion 1: getFlag and getAllFlags agree for every local definition
+00:00 +0 -2: criterion 1: getFlag and getAllFlags agree for every local definition [E]
+  Expected: <true>
+    Actual: <null>
+00:00 +0 -2: criterion 1: getFlag and getAllFlags agree the manager reads the debug-mode value
+00:00 +0 -3: criterion 1: getFlag and getAllFlags agree the manager reads the debug-mode value [E]
+  Expected: true
+    Actual: <false>
+00:00 +0 -3: criterion 2: allFeatureFlagsProvider lists every key every FeatureFlags.all key is present
+00:00 +0 -4: criterion 2: allFeatureFlagsProvider lists every key every FeatureFlags.all key is present [E]
+  Expected: contains 'enable_new_feature'
+    Actual: _CompactKeysIterable<String>:[
+     Which: does not contain 'enable_new_feature'
+00:00 +0 -4: criterion 2: allFeatureFlagsProvider lists every key a key no source sets is at its FeatureFlagKey default
+00:00 +0 -5: criterion 2: allFeatureFlagsProvider lists every key a key no source sets is at its FeatureFlagKey default [E]
+00:00 +0 -5: criterion 2: allFeatureFlagsProvider lists every key a stored override still wins over the default
+00:00 +1 -5: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:01 +1 -6: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider [E]
+00:01 +1 -6: criterion 3: the debug screen refreshes listened flags clearing the override reaches it too
+Expected: false
+  Actual: <true>
+00:02 +1 -7: criterion 3: the debug screen refreshes listened flags clearing the override reaches it too [E]
+00:02 +1 -7: Some tests failed.

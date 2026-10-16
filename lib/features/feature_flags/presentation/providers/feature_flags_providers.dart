@@ -59,12 +59,28 @@ Future<FeatureFlag?> featureFlag(Ref ref, FeatureFlagKey key) async {
   return manager.getFlag(key);
 }
 
+/// Every flag the repository knows, plus every [FeatureFlags.all] key.
+///
+/// A [FeatureFlags.all] key no source sets appears at its
+/// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
+/// falls back to - so the debug screen can show and toggle the flags the app
+/// actually gates on (koniz-dev/flutter-starter#318).
 @riverpod
 Future<Map<String, FeatureFlag?>> allFeatureFlags(Ref ref) async {
   final repository = ref.watch(featureFlagsRepositoryProvider);
   final result = await repository.getAllFlags();
   return result.when(
-    success: (flags) => flags,
+    success: (flags) => <String, FeatureFlag?>{
+      for (final key in FeatureFlags.all)
+        key.value: FeatureFlag(
+          key: key.value,
+          value: key.defaultValue,
+          source: FeatureFlagSource.compileTime,
+          description: key.description,
+          defaultValue: key.defaultValue,
+        ),
+      ...flags,
+    },
     failureCallback: (_) => <String, FeatureFlag?>{},
   );
 }

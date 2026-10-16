@@ -1,0 +1,11 @@
+# flutter test test/features/feature_flags/feature_flag_layers_agree_test.dart (after the fix)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart
+00:00 +0: criterion 1: getFlag and getAllFlags agree for enable_debug_menu
+00:00 +1: criterion 1: getFlag and getAllFlags agree for every local definition
+00:00 +2: criterion 1: getFlag and getAllFlags agree the manager reads the debug-mode value
+00:00 +3: criterion 2: allFeatureFlagsProvider lists every key every FeatureFlags.all key is present
+00:00 +4: criterion 2: allFeatureFlagsProvider lists every key a key no source sets is at its FeatureFlagKey default
+00:00 +5: criterion 2: allFeatureFlagsProvider lists every key a stored override still wins over the default
+00:00 +6: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:01 +7: criterion 3: the debug screen refreshes listened flags clearing the override reaches it too
+00:02 +8: All tests passed!

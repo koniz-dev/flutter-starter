@@ -1,0 +1,2 @@
+# flutter test test/features/feature_flags test/core/feature_flags (after the fix)
+00:08 +199 ~1: All tests passed!

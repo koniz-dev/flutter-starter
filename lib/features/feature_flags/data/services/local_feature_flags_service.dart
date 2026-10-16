@@ -73,6 +73,22 @@ class LocalFeatureFlagsService {
     return null;
   }
 
+  /// The local flag for [key], resolved through its definition.
+  ///
+  /// This is the lookup the repository's `getFlag` uses, so one flag reads
+  /// the same there as in [getAllLocalFlags]. Calling [getLocalFlag] with
+  /// the key alone passes no defaults and always returns null
+  /// (koniz-dev/flutter-starter#318).
+  ///
+  /// Returns null if [key] has no local definition, or if its definition
+  /// sets no default for this build.
+  FeatureFlag? getDefinedFlag(String key) {
+    for (final flagDef in _localFlagDefinitions) {
+      if (flagDef.key == key) return _resolve(flagDef);
+    }
+    return null;
+  }
+
   /// Get all local feature flags
   ///
   /// Returns a map of all flags defined locally.
@@ -82,13 +98,7 @@ class LocalFeatureFlagsService {
     // Add flags from local definitions
     // You can extend this to read from a configuration file
     for (final flagDef in _localFlagDefinitions) {
-      final flag = getLocalFlag(
-        flagDef.key,
-        compileTimeDefault: flagDef.compileTimeDefault,
-        debugDefault: flagDef.debugDefault,
-        releaseDefault: flagDef.releaseDefault,
-        description: flagDef.description,
-      );
+      final flag = _resolve(flagDef);
       if (flag != null) {
         flags[flag.key] = flag;
       }
@@ -96,6 +106,14 @@ class LocalFeatureFlagsService {
 
     return flags;
   }
+
+  FeatureFlag? _resolve(LocalFlagDefinition flagDef) => getLocalFlag(
+    flagDef.key,
+    compileTimeDefault: flagDef.compileTimeDefault,
+    debugDefault: flagDef.debugDefault,
+    releaseDefault: flagDef.releaseDefault,
+    description: flagDef.description,
+  );
 
   /// Local flag definitions
   ///

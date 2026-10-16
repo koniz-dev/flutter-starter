@@ -56,7 +56,7 @@ final class FeatureFlagsLocalDataSourceProvider
 }
 
 String _$featureFlagsLocalDataSourceHash() =>
-    r'aa73de633fe231d845337fa574953d51da9524c2';
+    r'b434d71945023fb007a5e780a33cfdf867591c3a';
 
 @ProviderFor(featureFlagsRemoteDataSource)
 const featureFlagsRemoteDataSourceProvider =
@@ -382,8 +382,22 @@ final class FeatureFlagFamily extends $Family
   String toString() => r'featureFlagProvider';
 }
 
+/// Every flag the repository knows, plus every [FeatureFlags.all] key.
+///
+/// A [FeatureFlags.all] key no source sets appears at its
+/// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
+/// falls back to - so the debug screen can show and toggle the flags the app
+/// actually gates on (koniz-dev/flutter-starter#318).
+
 @ProviderFor(allFeatureFlags)
 const allFeatureFlagsProvider = AllFeatureFlagsProvider._();
+
+/// Every flag the repository knows, plus every [FeatureFlags.all] key.
+///
+/// A [FeatureFlags.all] key no source sets appears at its
+/// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
+/// falls back to - so the debug screen can show and toggle the flags the app
+/// actually gates on (koniz-dev/flutter-starter#318).
 
 final class AllFeatureFlagsProvider
     extends
@@ -395,6 +409,12 @@ final class AllFeatureFlagsProvider
     with
         $FutureModifier<Map<String, FeatureFlag?>>,
         $FutureProvider<Map<String, FeatureFlag?>> {
+  /// Every flag the repository knows, plus every [FeatureFlags.all] key.
+  ///
+  /// A [FeatureFlags.all] key no source sets appears at its
+  /// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
+  /// falls back to - so the debug screen can show and toggle the flags the app
+  /// actually gates on (koniz-dev/flutter-starter#318).
   const AllFeatureFlagsProvider._()
     : super(
         from: null,
@@ -421,4 +441,4 @@ final class AllFeatureFlagsProvider
   }
 }
 
-String _$allFeatureFlagsHash() => r'5320b309e0aabc695ee07aefc75bf98002fbc6a9';
+String _$allFeatureFlagsHash() => r'485d8ad25e26706753ad10d01881bb0fe1e492e6';
