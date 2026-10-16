@@ -87,12 +87,25 @@ runs in four places:
 
 It checks the two ways a file gets bundled:
 
-1. **Named in the list** - `- .env` and friends.
+1. **Named in the list** - `- .env` and friends, in every spelling Flutter
+   accepts: a block list entry, the map form `- path: .env` that `flavors:`
+   and `transformers:` need, a flow list `assets: [.env.example, .env]`, and
+   the asset lists under `deferred-components:`.
 2. **Inside a declared directory** - this repository declares `assets/images/`
    and `assets/config/`, and a directory entry bundles every file directly
    inside it. A `.env` dropped into `assets/config/` ships with an *empty*
    pubspec diff, so nothing in review would catch it; `.env` is gitignored, so
-   no secret scanner sees it either. The guard walks those directories.
+   no secret scanner sees it either. The guard walks those directories,
+   whether they are declared as `- assets/config/` or `- path: assets/config/`.
+
+The list is read with a real YAML parse, and only the acknowledgement comment
+is read from the raw text. Until koniz-dev/flutter-starter#330 a hand-written
+line scan read block-style `- <path>` lines only, so the map and flow forms
+exited 0 while `flutter build bundle` copied the `.env` into the artifact. Now
+anything the parse cannot read for certain - invalid YAML, an `assets:` that is
+not a list, a map entry with no `path:`, an entry that is not a path string -
+**exits 2**. The guard fails closed: it never reports a list clean that it did
+not read.
 
 What counts as a secrets file, by name only - nothing reads file contents:
 
@@ -170,7 +183,18 @@ file it names is not present, and any file that is present is matched exactly
 or reported. Delete the name when the file is gone for good.
 
 An acknowledgement on a **file** entry does not have to name anything: the entry
-already names exactly one file, so the comment cannot widen what it covers.
+already names exactly one file, so the comment cannot widen what it covers. For
+a map-form entry, put it on the `path:` line:
+
+```yaml
+    - path: .env # env-asset-ack: web build, contains no secrets
+      flavors: [web]
+```
+
+A comment on another line of the same entry (the `flavors:` line, say) covers
+nothing. In a **flow list** several entries share one line and one comment, so
+there the comment must name each file it covers, exactly as on a directory:
+`assets: [.env.example, .env] # env-asset-ack: .env - web build`.
 
 The guard then passes and prints a reminder on stderr instead of failing. An
 environment variable would not have that property, which is why the escape hatch

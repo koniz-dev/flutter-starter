@@ -557,6 +557,226 @@ flutter:
     });
   });
 
+  group('every asset spelling Flutter accepts (#330)', () {
+    // koniz-dev/flutter-starter#330. The guard used to read only block-style
+    // `- <path>` lines, so each pubspec below exited 0 while
+    // `flutter build bundle` copied the `.env` into build/flutter_assets/.
+    // These drive `run`, which is `main` minus the process exit.
+    late Directory root;
+
+    setUp(() {
+      root = Directory.systemTemp.createTempSync('check_env_assets_330_');
+    });
+
+    tearDown(() {
+      root.deleteSync(recursive: true);
+    });
+
+    /// Writes [pubspec] and every one of [files] (path -> contents) under the
+    /// scratch root, runs the check on it and returns the exit code, with the
+    /// report captured in [stderrOf].
+    final stderrOf = StringBuffer();
+    int check(String pubspec, {Map<String, String> files = const {}}) {
+      stderrOf.clear();
+      files.forEach((path, contents) {
+        File('${root.path}/$path')
+          ..parent.createSync(recursive: true)
+          ..writeAsStringSync(contents);
+      });
+      final file = File('${root.path}/pubspec.yaml')
+        ..writeAsStringSync(pubspec);
+      return run(<String>[file.path], out: StringBuffer(), err: stderrOf);
+    }
+
+    const secret = {'.env': 'SECRET=1\n'};
+
+    test('a map-form `- path: .env` entry fails the check', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - .env.example
+    - path: .env
+''';
+
+      expect(check(pubspec, files: secret), 1);
+      expect(stderrOf.toString(), contains('pubspec.yaml:4  - .env'));
+    });
+
+    test('a map-form directory with a .env inside fails the check', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - path: assets/config/
+''';
+
+      expect(check(pubspec, files: {'assets/config/.env': 'SECRET=1\n'}), 1);
+      expect(
+        stderrOf.toString(),
+        contains('assets/config/.env (via "assets/config/")'),
+      );
+    });
+
+    test('a flow-style `assets: [.env]` list fails the check', () {
+      expect(check('flutter:\n  assets: [.env]\n', files: secret), 1);
+      expect(
+        check('flutter:\n  assets: [.env.example, .env]\n', files: secret),
+        1,
+      );
+    });
+
+    test(
+      'a map-form entry whose `path:` is not its first key still counts',
+      () {
+        const pubspec = '''
+flutter:
+  assets:
+    - flavors: [web]
+      path: .env
+''';
+
+        expect(check(pubspec, files: secret), 1);
+        expect(stderrOf.toString(), contains('pubspec.yaml:4  - .env'));
+      },
+    );
+
+    test('a deferred component asset list is checked too', () {
+      const pubspec = '''
+flutter:
+  deferred-components:
+    - name: box
+      assets:
+        - .env
+''';
+
+      expect(check(pubspec, files: secret), 1);
+    });
+
+    test('the acknowledgement works on a map-form `path:` line', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - path: .env # env-asset-ack: web build, contains no secrets
+      flavors: [web]
+''';
+
+      expect(check(pubspec, files: secret), 0);
+      final finding = findDeclaredSecretAssets(pubspec).single;
+      expect(finding.entry, '.env');
+      expect(finding.acknowledged, isTrue);
+    });
+
+    test('the acknowledgement on a map-form directory names its file', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - path: assets/config/ # env-asset-ack: .env.web - publishable only
+''';
+
+      expect(check(pubspec, files: {'assets/config/.env.web': ''}), 0);
+      expect(
+        check(
+          pubspec,
+          files: {'assets/config/.env.web': '', 'assets/config/.env': ''},
+        ),
+        1,
+        reason: 'the comment names .env.web, not .env',
+      );
+    });
+
+    test(
+      'an acknowledgement on the wrong line of a map entry covers nothing',
+      () {
+        const pubspec = '''
+flutter:
+  assets:
+    - path: .env
+      flavors: [web] # env-asset-ack: web build, contains no secrets
+''';
+
+        expect(check(pubspec, files: secret), 1);
+      },
+    );
+
+    test('one comment on a flow list does not cover every file in it', () {
+      // A file entry alone on its line acknowledges itself. In a flow list
+      // the comment is shared, so it has to name each file it covers.
+      expect(
+        check(
+          'flutter:\n'
+          '  assets: [.env.example, .env] # env-asset-ack: web build\n',
+          files: secret,
+        ),
+        1,
+      );
+      expect(
+        check(
+          'flutter:\n'
+          '  assets: [.env.example, .env] # env-asset-ack: .env - web build\n',
+          files: secret,
+        ),
+        0,
+      );
+    });
+
+    test('a quoted path holding a `#` does not open a comment', () {
+      const pubspec = '''
+flutter:
+  assets:
+    - "notes #env-asset-ack: x.txt"
+    - .env
+''';
+
+      final declarations = parseAssetDeclarations(pubspec);
+
+      expect(declarations.first.path, 'notes #env-asset-ack: x.txt');
+      expect(declarations.first.comment, isEmpty);
+      expect(check(pubspec, files: secret), 1);
+    });
+
+    group('fails closed on what it cannot read', () {
+      const unreadable = <String, String>{
+        'invalid YAML': 'flutter:\n  assets:\n    - .env\n   bad: [\n',
+        'assets is a string': 'flutter:\n  assets: .env\n',
+        'map entry without path': 'flutter:\n  assets:\n    - flavors: [x]\n',
+        'entry is not a string': 'flutter:\n  assets:\n    - 42\n',
+        'empty entry': 'flutter:\n  assets:\n    -\n',
+        'flutter is a list': 'flutter:\n  - assets\n',
+      };
+
+      unreadable.forEach((name, pubspec) {
+        test('$name: exit 2, never 0', () {
+          expect(
+            () => parseAssetDeclarations(pubspec),
+            throwsA(isA<AssetListFormatException>()),
+          );
+          expect(check(pubspec, files: secret), 2);
+          expect(stderrOf.toString(), contains('cannot read the asset list'));
+        });
+      });
+
+      test('a pubspec with no flutter section is still clean', () {
+        expect(check('name: plain_dart\n'), 0);
+        expect(check(''), 0);
+      });
+    });
+
+    test('`main` itself exits 1 on a map-form .env', () async {
+      // `run` is what `main` returns; this pins the wiring between the two
+      // through the same command CI and the deploy workflows use.
+      File('${root.path}/.env').writeAsStringSync('SECRET=1\n');
+      final pubspec = File('${root.path}/pubspec.yaml')
+        ..writeAsStringSync('flutter:\n  assets:\n    - path: .env\n');
+
+      final result = await Process.run('dart', <String>[
+        'run',
+        'tool/check_env_assets.dart',
+        pubspec.path,
+      ]);
+
+      expect(result.exitCode, 1, reason: '${result.stderr}');
+    });
+  });
+
   test("this repository's pubspec.yaml bundles no secrets file", () {
     // The guard that matters: `flutter test` runs in CI, so a commit that adds
     // `- .env` to the asset list - or drops one into assets/config/ - turns the
