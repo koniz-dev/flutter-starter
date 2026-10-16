@@ -315,8 +315,9 @@ The configuration system consists of three classes:
 
 2. **`EnvConfig`** (`lib/core/config/env_config.dart`): Low-level environment variable loader
    - Loads from `.env` files using `flutter_dotenv` (asset-backed)
-   - Reads `--dart-define` values through `DartDefines`, on native builds only
-   - Provides fallback chain: `.env` → `--dart-define` → defaults
+   - Reads `--dart-define` values through `DartDefines`, on every target including web (koniz-dev/flutter-starter#278)
+   - Provides fallback chain: `.env` → `--dart-define` → defaults, per key: a `.env` that lacks a key does not hide that key's `--dart-define`. `getBool`, `getInt` and `getDouble` parse the string `get` resolves, so they follow the same chain (koniz-dev/flutter-starter#322)
+   - `getBool` is true for `true`, `1`, `yes` and `on` (case-insensitive) and false for any other value that is present
 
 3. **`AppConfig`** (`lib/core/config/app_config.dart`): High-level application configuration
    - Uses `EnvConfig` to extract robust application state properties.
