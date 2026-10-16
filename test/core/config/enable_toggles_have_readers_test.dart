@@ -19,6 +19,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 const _guide = 'docs/guides/configuration.md';
 
+/// Toggles whose only reader lives in a sample feature that
+/// `tool/strip_sample_features.dart` can delete.
+///
+/// In a tree stripped of that feature the toggle is legitimately unread, so
+/// its row is skipped there rather than failing every stripped variant.
+const _readerFeature = <String, String>{
+  'ENABLE_DEBUG_FEATURES': 'lib/features/feature_flags',
+};
+
 /// `ENABLE_CRASH_REPORTING` -> `enableCrashReporting`.
 String _getterFor(String key) {
   final words = key.toLowerCase().split('_');
@@ -74,6 +83,9 @@ void main() {
         ? 'marked reserved, and nothing reads it'
         : 'has a reader of AppConfig.$getter';
 
+    final feature = _readerFeature[key];
+    final stripped = feature != null && !Directory(feature).existsSync();
+
     test(
       '$key: $claim',
       () {
@@ -97,6 +109,7 @@ void main() {
           );
         }
       },
+      skip: stripped ? '$feature was stripped, and with it every reader' : null,
     );
   }
 }
