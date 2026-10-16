@@ -1,0 +1,14 @@
+# local replay of the new strip-smoke 'process-only' job on 63cb015e450 (scratch worktree)
+## a combined flag is refused before anything is deleted
+Running build hooks...Running build hooks...--process-only keeps both samples; it cannot be combined with --remove-tasks or --remove-feature-flags. Nothing was deleted.
+tasks still present: yes
+## dart run tool/strip_sample_features.dart --apply --process-only
+Process-only strip complete; both samples kept. Run: flutter pub get && flutter analyze && flutter test
+lib/features: auth feature_flags home tasks 
+process-only artifacts left: 0
+## create_feature.sh profile, git add; git rm bricks mason.yaml
+lib/features: auth feature_flags home profile tasks   bricks present: no
+## flutter analyze
+No issues found! (ran in 3.5s)
+## flutter test --timeout=5m
+01:58 +3033 ~13: All tests passed!
