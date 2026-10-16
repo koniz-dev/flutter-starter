@@ -259,7 +259,7 @@ jobs:
           git rm -rq bricks mason.yaml
           # No `| head` here: under pipefail its early exit SIGPIPEs the
           # writer and fails the step with exit 141.
-          echo "features: $(ls lib/features | tr '\n' ' ')"
+          printf 'features: %s\n' "$(cd lib/features && echo *)"
           test ! -e bricks && test ! -e mason.yaml
 
       - name: Install dependencies (after strip)
