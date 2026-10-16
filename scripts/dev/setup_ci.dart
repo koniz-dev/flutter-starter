@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 // Enables the commented-out `push:` / `pull_request:` triggers in
 // `.github/workflows/*.yml`.
 //
@@ -7,6 +8,15 @@
 //   dart scripts/dev/setup_ci.dart --yes        # no prompt
 //   dart scripts/dev/setup_ci.dart --dry-run    # show the diff, write nothing
 //   dart scripts/dev/setup_ci.dart --dir <path> # target another directory
+//   dart scripts/dev/setup_ci.dart --deploy-trigger=tags    # deploy-* on tags
+//   dart scripts/dev/setup_ci.dart --deploy-trigger=branch  # deploy-* on main
+//
+// The deploy workflows document tag-push and main-branch-push deploys as
+// ALTERNATIVES, but their commented `push:` block lists both. Uncommenting the
+// whole block enabled both at once, so every push to main deployed, as
+// production (koniz-dev/flutter-starter#334). Without --deploy-trigger the
+// deploy-* workflows are left manual-only; with it, exactly the chosen option
+// is enabled and the other stays commented.
 //
 // Why this is line-based and block-scoped rather than a whole-file regex:
 //
@@ -37,9 +47,33 @@ import 'dart:io';
 
 const _triggerKeys = {'push:', 'pull_request:'};
 
+/// Which of the deploy workflows' documented push options to enable.
+enum DeployTrigger {
+  /// Deploy when a version tag is pushed (`push: tags:`).
+  tags,
+
+  /// Deploy on every push to main (`push: branches:`).
+  branch,
+}
+
 void main(List<String> args) {
   final dryRun = args.contains('--dry-run');
   final assumeYes = args.contains('--yes') || dryRun;
+
+  DeployTrigger? deployTrigger;
+  for (final arg in args.where((a) => a.startsWith('--deploy-trigger='))) {
+    final value = arg.substring('--deploy-trigger='.length);
+    deployTrigger = DeployTrigger.values
+        .where((t) => t.name == value)
+        .firstOrNull;
+    if (deployTrigger == null) {
+      print(
+        'Error: --deploy-trigger must be "tags" or "branch", got "$value".',
+      );
+      exitCode = 64;
+      return;
+    }
+  }
 
   var dirPath = '.github/workflows';
   final dirFlag = args.indexOf('--dir');
@@ -60,11 +94,18 @@ void main(List<String> args) {
     }
   }
 
-  exitCode = enableCi(dirPath, dryRun: dryRun);
+  exitCode = enableCi(dirPath, dryRun: dryRun, deployTrigger: deployTrigger);
 }
 
 /// Returns 0 on success, 1 when the directory does not exist.
-int enableCi(String dirPath, {bool dryRun = false}) {
+///
+/// `deploy-*` workflows get only [deployTrigger]'s push option, or no push
+/// trigger at all when it is null.
+int enableCi(
+  String dirPath, {
+  bool dryRun = false,
+  DeployTrigger? deployTrigger,
+}) {
   final dir = Directory(dirPath);
   if (!dir.existsSync()) {
     print('Error: $dirPath not found. Run this script from the project root.');
@@ -83,7 +124,18 @@ int enableCi(String dirPath, {bool dryRun = false}) {
   for (final file in files) {
     final name = file.uri.pathSegments.last;
     final original = file.readAsStringSync();
-    final result = enableTriggers(original);
+    final isDeploy = name.startsWith('deploy-');
+    if (isDeploy && deployTrigger == null) {
+      print(
+        '  deploy workflow left manual-only: $name '
+        '(pass --deploy-trigger=tags or --deploy-trigger=branch)',
+      );
+      continue;
+    }
+    final result = enableTriggers(
+      original,
+      deployTrigger: isDeploy ? deployTrigger : null,
+    );
 
     if (result.enabled.isEmpty) {
       print('  no commented triggers in `on:`, unchanged: $name');
@@ -133,9 +185,16 @@ class TriggerResult {
 }
 
 /// Uncomments `push:` / `pull_request:` blocks inside the top-level `on:` key.
-TriggerResult enableTriggers(String content) {
+///
+/// With [deployTrigger], only that option's sub-block under `push:` is
+/// uncommented: `tags:` (and its list) for [DeployTrigger.tags], `branches:`
+/// for [DeployTrigger.branch]. The other option stays commented.
+TriggerResult enableTriggers(String content, {DeployTrigger? deployTrigger}) {
   final lines = content.split('\n');
   final enabled = <String>[];
+  // Indent of a `tags:` / `branches:` child that belongs to the option NOT
+  // chosen; it and everything nested under it stay commented.
+  int? skipIndent;
 
   final start = _onBlockStart(lines);
   if (start == -1) {
@@ -163,10 +222,23 @@ TriggerResult enableTriggers(String content) {
 
     if (isTrigger) {
       blockIndent = indent;
+      skipIndent = null;
     } else if (blockIndent == null || indent <= blockIndent) {
       // Not a trigger key and not nested under one: leave it commented.
       blockIndent = null;
       continue;
+    } else if (deployTrigger != null) {
+      if (skipIndent != null && indent > skipIndent) continue;
+      skipIndent = null;
+      final option = body.startsWith('tags:')
+          ? DeployTrigger.tags
+          : body.startsWith('branches:')
+          ? DeployTrigger.branch
+          : null;
+      if (option != null && option != deployTrigger) {
+        skipIndent = indent;
+        continue;
+      }
     }
 
     lines[i] = uncommented;

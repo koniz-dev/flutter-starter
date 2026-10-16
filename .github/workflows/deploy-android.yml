@@ -4,7 +4,11 @@ name: Deploy Android
 # Workflow Triggers Configuration
 # ========================================================================
 # This is a starter template, so triggers are commented out by default.
-# Uncomment and configure according to your deployment strategy:
+# Uncomment and configure according to your deployment strategy, or run
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=tags    (Option 1)
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=branch  (Option 2)
+# Options 1 and 2 are alternatives: enabling both deploys on every push to
+# main as well as on tags.
 #
 # Option 1: Deploy on version tags
 #   push:
@@ -115,7 +119,9 @@ jobs:
       #   with:
       #     serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
       #     packageName: com.example.flutter_starter
-      #     releaseFiles: build/app/outputs/bundle/${ENV}Release/app-${ENV}-release.aab
+      #     # Flavorless layout (#34). `${ENV}` is a shell variable and is NOT
+      #     # expanded inside `with:`, so the path is literal.
+      #     releaseFiles: build/app/outputs/bundle/release/app-release.aab
       #     track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
       #     status: completed
       #     inAppUpdatePriority: 2
@@ -126,3 +132,7 @@ jobs:
         with:
           name: android-bundle
           path: build/app/outputs/bundle/**/*.aab
+          # A run that built nothing must fail, not go green with zero
+          # artifacts while the build steps above are still commented out
+          # (koniz-dev/flutter-starter#334).
+          if-no-files-found: error

@@ -4,7 +4,11 @@ name: Deploy iOS
 # Workflow Triggers Configuration
 # ========================================================================
 # This is a starter template, so triggers are commented out by default.
-# Uncomment and configure according to your deployment strategy:
+# Uncomment and configure according to your deployment strategy, or run
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=tags    (Option 1)
+#   dart scripts/dev/setup_ci.dart --deploy-trigger=branch  (Option 2)
+# Options 1 and 2 are alternatives: enabling both deploys on every push to
+# main as well as on tags.
 #
 # Option 1: Deploy on version tags
 #   push:
@@ -157,3 +161,6 @@ jobs:
         with:
           name: ios-ipa
           path: build/ios/ipa/*.ipa
+          # A run that built nothing must fail, not go green with zero
+          # artifacts (koniz-dev/flutter-starter#334).
+          if-no-files-found: error
