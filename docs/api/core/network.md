@@ -439,6 +439,13 @@ test-only, that is a `epic:core-network` decision and belongs in its own issue.
      while the refresh was in flight - see
      [Refreshing across a logout](#refreshing-across-a-logout), which is
      checked before any of that happens.
+     If the **replay** then fails, only this request fails: a transient
+     failure (a 503, a timeout) reaches the caller mapped like any other, and
+     the fresh token and the session are kept, so the queued requests in
+     point 5 are still replayed. Only a replay answered **401**, meaning the
+     server refused a token it just issued, logs the session out
+     (koniz-dev/flutter-starter#304). Before, any replay failure logged out
+     and rejected every queued request.
    - **Failure** (a `Result` failure, a null token, or anything thrown -
      `Error` as well as `Exception`): the session is logged out and the
      handler is rejected.

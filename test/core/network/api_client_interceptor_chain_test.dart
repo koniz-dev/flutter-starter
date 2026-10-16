@@ -841,13 +841,19 @@ void main() {
     // Criterion 1 is the 503 case; criterion 3 adds the two transport
     // failures. Each replay failure is one RetryInterceptor treats as
     // transient for a GET, so before the fix every one of them was re-sent.
+    //
+    // Since koniz-dev/flutter-starter#304 a transient replay failure no
+    // longer ends the session either: the refresh succeeded, so the fresh
+    // token is kept and only this request fails. What #286 guards - nothing
+    // re-sent after the replay - is unchanged.
     for (final replayFailure in <Object>[
       503,
       DioExceptionType.receiveTimeout,
       DioExceptionType.connectionError,
     ]) {
       test(
-        'criteria 1-3: a replay failing with $replayFailure is not re-sent',
+        'criteria 1-3: a replay failing with $replayFailure is not re-sent, '
+        'and the session is kept',
         () async {
           final adapter = _RecordingAdapter([401, replayFailure, 200]);
           final apiClient = buildClient(adapter);
@@ -863,16 +869,15 @@ void main() {
           expect(
             adapter.hits,
             2,
-            reason: 'original + replay only; nothing after the forced logout',
+            reason: 'original + replay only; the failed replay is not re-sent',
           );
           expect(adapter.authorizations, [
             'Bearer expired-access-token',
             'Bearer fresh-access-token',
           ]);
-          // Criterion 2: the session really was ended, and nothing reached
-          // the transport after that point (both hits above precede it).
-          expect(generation.isCurrent(before), isFalse);
-          expect(tokenStore.accessToken, isNull);
+          // #304: a transient replay failure is not a dead session.
+          expect(generation.isCurrent(before), isTrue);
+          expect(tokenStore.accessToken, 'fresh-access-token');
         },
         timeout: const Timeout(Duration(minutes: 1)),
       );

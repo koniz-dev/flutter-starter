@@ -1,0 +1,26 @@
+# lib/core/network at main 44667861aeb (before the fix)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/head_replay_failure_test.dart
+00:00 +0: criterion 1: refresh OK, head replay 503 - the caller gets the 503, the fresh token is kept, the session sink is not called
+00:00 +0 -1: criterion 1: refresh OK, head replay 503 - the caller gets the 503, the fresh token is kept, the session sink is not called [E]
+  Expected: 'fresh'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/core/network/head_replay_failure_test.dart 180:5  main.<fn>
+  
+00:00 +0 -1: criterion 2: a request queued behind the same refresh is still replayed with the fresh token and resolves
+00:00 +0 -2: criterion 2: a request queued behind the same refresh is still replayed with the fresh token and resolves [E]
+  ServerException: status 401
+  package:flutter_starter/core/network/adapters/dio_network_client.dart 34:9  DioNetworkClient.send
+  
+00:00 +0 -2: criterion 3: a head replay that itself returns 401 still forces the logout
+00:00 +1 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/head_replay_failure_test.dart: criterion 1: refresh OK, head replay 503 - the caller gets the 503, the fresh token is kept, the session sink is not called
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/head_replay_failure_test.dart: criterion 2: a request queued behind the same refresh is still replayed with the fresh token and resolves
