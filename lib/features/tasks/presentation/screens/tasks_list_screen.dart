@@ -375,8 +375,10 @@ class _AddTaskDialogContentState extends State<_AddTaskDialogContent> {
                   labelText: widget.l10n.taskTitle,
                   border: const OutlineInputBorder(),
                 ),
+                // Trimmed, because the title is saved trimmed: a
+                // whitespace-only title must not pass and save as "".
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return widget.l10n.taskTitleRequired;
                   }
                   return null;

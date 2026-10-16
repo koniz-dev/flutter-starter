@@ -521,6 +521,38 @@ void main() {
         verifyNever(() => mockUpdateTaskUseCase(any()));
       });
 
+      // koniz-dev/flutter-starter#345: a whitespace-only title used to pass
+      // the raw-text validator and be saved as "".
+      testWidgets('rejects a whitespace-only title when updating task', (
+        tester,
+      ) async {
+        final task = createTask(id: 'task-1', title: 'Original Title');
+        when(
+          () => mockGetTaskByIdUseCase(any<String>()),
+        ).thenAnswer((_) async => Success(task));
+
+        await tester.pumpWidget(
+          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
+            getTaskByIdUseCaseProvider.overrideWithValue(
+              mockGetTaskByIdUseCase,
+            ),
+            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
+            getAllTasksUseCaseProvider.overrideWithValue(
+              mockGetAllTasksUseCase,
+            ),
+          ]),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextFormField).first, '   ');
+        await tester.tap(find.byIcon(Icons.save));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Please enter a task title'), findsOneWidget);
+        verifyNever(() => mockUpdateTaskUseCase(any()));
+      });
+
       testWidgets('should handle update task failure', (tester) async {
         // Arrange
         final task = createTask(id: 'task-1');

@@ -201,8 +201,10 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.title),
               ),
+              // Trimmed, because the title is saved trimmed: a
+              // whitespace-only title must not pass and save as "".
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value == null || value.trim().isEmpty) {
                   return l10n.taskTitleRequired;
                 }
                 return null;
