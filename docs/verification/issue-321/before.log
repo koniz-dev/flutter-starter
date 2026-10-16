@@ -1,0 +1,23 @@
+# main b8fd49e2e5d, before the fix
+# probe = unknown_environment_test.dart minus every line that uses the new API (environmentMisconfigured, knownEnvironments)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/zz_env_probe_test.dart
+00:00 +0: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=prod
+VP ENVIRONMENT=prod -> environment=prod baseUrl=http://localhost:3000 pinning=false
+00:00 +1: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=qa
+VP ENVIRONMENT=qa -> environment=qa baseUrl=http://localhost:3000 pinning=false
+00:00 +2: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=Production-EU
+VP ENVIRONMENT=Production-EU -> environment=production-eu baseUrl=http://localhost:3000 pinning=false
+00:00 +3: criterion 2: the value is trimmed before comparison "production " (trailing space) is production
+00:00 +3 -1: criterion 2: the value is trimmed before comparison "production " (trailing space) is production [E]
+  Expected: 'production'
+    Actual: 'production '
+     Which: is different. Both strings start the same, but the actual value also has the following trailing characters:  
+00:00 +3 -1: criterion 2: the value is trimmed before comparison " Staging" (leading space, capital) is staging
+00:00 +3 -2: criterion 2: the value is trimmed before comparison " Staging" (leading space, capital) is staging [E]
+  Expected: 'staging'
+    Actual: ' staging'
+     Which: is different.
+            Expected: staging
+              Actual:  staging
+00:00 +3 -2: (tearDownAll)
+00:00 +3 -2: Some tests failed.

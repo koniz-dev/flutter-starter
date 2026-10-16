@@ -23,14 +23,40 @@ class AppConfig {
   // Environment Detection
   // ==========================================================================
 
+  /// The environment names the rest of [AppConfig] recognises.
+  ///
+  /// Adding an environment means adding it here and to every switch on
+  /// [environment] (`baseUrl`, the `is*` getters); until then it is reported
+  /// by [environmentMisconfigured].
+  static const List<String> knownEnvironments = [
+    'development',
+    'staging',
+    'production',
+  ];
+
   /// Current environment name (development, staging, production)
+  ///
+  /// Trimmed and lower-cased, so `Production ` is `production`.
   ///
   /// Can be set via:
   /// - .env file: `ENVIRONMENT=production`
   /// - --dart-define: `--dart-define=ENVIRONMENT=production`
   /// - Default: `development`
-  static String get environment =>
-      EnvConfig.get('ENVIRONMENT', defaultValue: 'development').toLowerCase();
+  static String get environment => EnvConfig.get(
+    'ENVIRONMENT',
+    defaultValue: 'development',
+  ).trim().toLowerCase();
+
+  /// Whether [environment] is none of [knownEnvironments].
+  ///
+  /// This is a misconfiguration, and a dangerous one: [isDevelopment],
+  /// [isStaging] and [isProduction] are then all false, so [baseUrl] falls
+  /// back to the development `http://localhost:3000` and [enableSslPinning]
+  /// is off. `ENVIRONMENT=prod` used to do exactly that with no warning
+  /// (koniz-dev/flutter-starter#321). [printConfig] reports it, and it is in
+  /// [getDebugInfo].
+  static bool get environmentMisconfigured =>
+      !knownEnvironments.contains(environment);
 
   /// Returns true if the current environment is development
   static bool get isDevelopment => environment == 'development';
@@ -293,6 +319,13 @@ class AppConfig {
       debugPrint('📱 App Configuration');
       debugPrint('═══════════════════════════════════════════════════════════');
       debugPrint('Environment: $environment');
+      if (environmentMisconfigured) {
+        debugPrint(
+          '  !! ENVIRONMENT MISCONFIGURED: "$environment" is not one of '
+          '${knownEnvironments.join(', ')} - the base URL falls back to '
+          'localhost and SSL pinning is off',
+        );
+      }
       debugPrint('Debug Mode: $isDebugMode');
       debugPrint('Release Mode: $isReleaseMode');
       debugPrint('');
@@ -333,6 +366,7 @@ class AppConfig {
   static Map<String, dynamic> getDebugInfo() {
     return {
       'environment': environment,
+      'environmentMisconfigured': environmentMisconfigured,
       'isDevelopment': isDevelopment,
       'isStaging': isStaging,
       'isProduction': isProduction,

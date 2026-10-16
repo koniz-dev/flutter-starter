@@ -467,7 +467,7 @@ print(config);
 
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
-| `ENVIRONMENT` | String | `development` | Environment name: `development`, `staging`, or `production` |
+| `ENVIRONMENT` | String | `development` | Environment name: `development`, `staging`, or `production`, trimmed and case-insensitive. Any other value sets `AppConfig.environmentMisconfigured` and falls back to the development base URL with no SSL pinning; `printConfig` warns about it. Add a new environment to `AppConfig.knownEnvironments` |
 | `BASE_URL` | String | Environment-aware | API base URL |
 | `API_TIMEOUT` | int | `30` | API timeout in seconds |
 | `API_CONNECT_TIMEOUT` | int | `10` | API connect timeout in seconds |
