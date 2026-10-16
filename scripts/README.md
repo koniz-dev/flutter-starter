@@ -12,7 +12,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
 | [`create_feature.sh`](dev/create_feature.sh) | Scaffold a feature slice under `lib/features/<name>/` plus its mirrored test under `test/features/<name>/`. Output passes `flutter analyze` and `dart format --set-exit-if-changed` as generated. |
 | [`create_feature.ps1`](dev/create_feature.ps1) | Windows equivalent of `create_feature.sh`. Writes byte-identical files (LF, UTF-8 without BOM); the parity is checked by the `scaffold-parity` job in [`scripts-smoke.yml`](../.github/workflows/scripts-smoke.yml). |
-| [`setup_ci.dart`](dev/setup_ci.dart) | Uncomment the `push:` / `pull_request:` triggers inside each workflow's top-level `on:` block. `--dry-run` shows what it would change; `--yes` skips the prompt. |
+| [`setup_ci.dart`](dev/setup_ci.dart) | Uncomment the `push:` / `pull_request:` triggers inside each workflow's top-level `on:` block. `--dry-run` shows what it would change; `--yes` skips the prompt. The `deploy-*` workflows stay manual-only unless you pass `--deploy-trigger=tags` (deploy on version tags) or `--deploy-trigger=branch` (deploy on every push to main); exactly that one option is enabled. |
 
 ## `scripts/ci/`
 
