@@ -391,6 +391,59 @@ void main() {
       });
     });
 
+    // koniz-dev/flutter-starter#346: the detail screen needs to know whether
+    // its save landed, so the mutations return the use case's result.
+    group('mutation results', () {
+      test('createTask reports a failure to its caller', () async {
+        const failure = CacheFailure('disk full');
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer((_) async => const ResultFailure(failure));
+
+        final result = await container
+            .read(tasksNotifierProvider.notifier)
+            .createTask(title: 'New Task');
+
+        expect(result.failureOrNull, failure);
+      });
+
+      test('updateTask reports a failure to its caller', () async {
+        const failure = CacheFailure('disk full');
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) async => const ResultFailure(failure));
+
+        final result = await container
+            .read(tasksNotifierProvider.notifier)
+            .updateTask(createTask(id: 'task-1'));
+
+        expect(result.failureOrNull, failure);
+      });
+
+      test('createTask and updateTask report success', () async {
+        final task = createTask(id: 'task-1');
+        when(
+          () => mockCreateTaskUseCase(
+            title: any(named: 'title'),
+            description: any(named: 'description'),
+          ),
+        ).thenAnswer((_) async => Success(task));
+        when(
+          () => mockUpdateTaskUseCase(any()),
+        ).thenAnswer((_) async => Success(task));
+        final notifier = container.read(tasksNotifierProvider.notifier);
+
+        final created = await notifier.createTask(title: 'New Task');
+        final updated = await notifier.updateTask(task);
+
+        expect(created.isSuccess, isTrue);
+        expect(updated.isSuccess, isTrue);
+      });
+    });
+
     group('deleteTask', () {
       test('should delete task and reload list', () async {
         // Arrange

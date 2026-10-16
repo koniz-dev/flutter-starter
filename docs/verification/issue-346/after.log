@@ -1,0 +1,520 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/di/tasks_providers_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/di/tasks_providers_test.dart: tasks_providers (smoke) should build tasks providers with default DI
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getAllTasks should return list of tasks when storage has data
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getAllTasks should return empty list when storage is empty
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getAllTasks should return empty list when storage has empty string
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getAllTasks should return empty list when JSON decode fails
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getAllTasks should throw CacheException when storage throws exception
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getTaskById should return task when found
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getTaskById should return null when task not found
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl getTaskById should throw CacheException when getAllTasks throws
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl saveTask should save new task
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl Edge cases should handle large number of tasks
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/datasources/tasks_local_datasource_test.dart: TasksLocalDataSourceImpl Edge cases should handle saveTasks when JsonHelper.encode returns null
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+00:01 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:01 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTaskDetail renders the detail screen for the id
+00:02 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl deleteTask should delete task successfully
+00:02 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/models/task_model_test.dart: TaskModel should convert TaskModel to entity
+00:02 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app pushNamedRoute resolves the detail route by path parameter
+00:02 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app an empty task id falls back to the list, not the detail
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app popUntilRoute unwinds a detail screen back to the list
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart: ToggleTaskCompletionUseCase should create instance with repository
+00:03 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: (setUpAll)
+00:03 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: (setUpAll)
+00:03 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart: ToggleTaskCompletionUseCase should toggle task completion successfully
+00:03 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title and description
+00:03 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title and description
+00:03 +110: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title and description
+00:03 +111: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title and description
+00:03 +112: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title and description
+00:03 +113: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title and description
+00:03 +114: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart: ToggleTaskCompletionUseCase should handle different failure types
+00:03 +115: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with title only
+00:03 +116: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart: ToggleTaskCompletionUseCase should handle task with special characters in id
+00:03 +117: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart: ToggleTaskCompletionUseCase should toggle task multiple times
+00:03 +118: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with generated id and timestamps
+00:03 +119: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart: ToggleTaskCompletionUseCase should preserve task properties when toggling
+00:03 +120: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should return failure when repository fails
+00:03 +121: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should delegate to repository with correct task
+00:03 +122: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase rejects the blank title [] without saving
+00:03 +123: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase rejects the blank title [32, 32, 32] without saving
+00:03 +124: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase rejects the blank title [9, 10] without saving
+00:03 +125: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with very long title
+00:03 +126: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with very long description
+00:03 +127: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with special characters in title
+00:03 +128: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with unicode characters
+00:03 +129: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should handle different failure types
+00:03 +130: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create 100 tasks with unique ids and no delay
+00:03 +131: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create unique ids for concurrent creations
+00:03 +132: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: CreateTaskUseCase should create task with createdAt and updatedAt equal
+00:03 +133: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/create_task_usecase_test.dart: (tearDownAll)
+00:03 +133: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should create instance with repository
+00:03 +134: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should have repository property
+00:03 +135: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should delete task successfully
+00:03 +136: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should return failure when repository fails
+00:03 +137: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should delegate to repository with correct id
+00:03 +138: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should handle deleting non-existent task
+00:03 +139: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should handle empty task id
+00:03 +140: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should handle task id with special characters
+00:03 +141: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should handle different failure types
+00:03 +142: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should handle very long task id
+00:03 +143: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should handle numeric task id
+00:03 +144: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/delete_task_usecase_test.dart: DeleteTaskUseCase should delete multiple tasks sequentially
+00:04 +145: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_all_tasks_usecase_test.dart: GetAllTasksUseCase should create instance with repository
+00:04 +146: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_all_tasks_usecase_test.dart: GetAllTasksUseCase should have repository property
+00:04 +147: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_all_tasks_usecase_test.dart: GetAllTasksUseCase should return list of tasks when repository succeeds
+00:04 +148: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: (setUpAll)
+00:04 +149: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: (setUpAll)
+00:04 +150: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: (setUpAll)
+00:04 +151: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: (setUpAll)
+00:04 +151: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +152: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +153: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +154: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +155: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +156: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +157: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should create instance with repository
+00:04 +158: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with new updatedAt timestamp
+00:04 +159: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with new updatedAt timestamp
+00:04 +160: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with new updatedAt timestamp
+00:04 +161: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with new updatedAt timestamp
+00:04 +162: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return task when repository succeeds
+00:04 +163: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return task when repository succeeds
+00:04 +164: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return task when repository succeeds
+00:04 +165: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should delegate to repository with correct task
+00:04 +166: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return null when task not found
+00:04 +167: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with null description
+00:04 +168: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return failure when repository fails
+00:04 +169: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase rejects the blank title [] without saving
+00:04 +170: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should delegate to repository with correct id
+00:04 +171: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase rejects the blank title [32, 32, 32] without saving
+00:04 +172: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should handle empty task id
+00:04 +173: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase rejects the blank title [9, 10] without saving
+00:04 +174: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should handle task id with special characters
+00:04 +175: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with very long title
+00:04 +176: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should handle very long task id
+00:04 +177: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should handle task with same createdAt and updatedAt
+00:04 +178: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should handle different failure types
+00:04 +179: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should handle different failure types
+00:04 +180: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return task with all properties
+00:04 +181: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task with all fields changed
+00:04 +182: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart: GetTaskByIdUseCase should return task with null description
+00:04 +183: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task multiple times with increasing timestamps
+00:04 +184: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: UpdateTaskUseCase should update task multiple times with increasing timestamps
+00:04 +185: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/usecases/update_task_usecase_test.dart: (tearDownAll)
+00:05 +185: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task should create task with required fields
+00:05 +186: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task should create task with all fields
+00:05 +187: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task should create task with default isCompleted
+00:05 +188: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should return new task with same values when no changes
+00:05 +189: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should update id
+00:05 +190: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should update title
+00:05 +191: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should update description
+00:05 +192: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should keep original description when the argument is omitted
+00:05 +193: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should clear the description when null is passed explicitly
+00:05 +194: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart: Task copyWith should update isCompleted
+00:05 +195: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +196: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +197: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +198: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +199: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +200: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +201: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +202: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +203: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +204: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +205: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:05 +205: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +206: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +207: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +208: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +209: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +210: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +211: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +212: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +213: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: (setUpAll)
+00:05 +213: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +214: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +215: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +216: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +217: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +218: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +219: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +220: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +221: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +222: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +223: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +224: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +225: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +226: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +227: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +228: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +229: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +230: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +231: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +232: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +233: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:05 +234: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +235: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +236: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +237: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +238: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +239: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +240: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:06 +241: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:07 +242: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen creating new task should display form for new task
+00:07 +243: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +244: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +245: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +246: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +247: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +248: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +249: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +250: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +251: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +252: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +253: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +254: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +255: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +256: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:07 +257: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display loading indicator when loading
+00:08 +258: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier toggleTaskCompletion should toggle task completion and reload list
+00:08 +259: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier toggleTaskCompletion should toggle task completion and reload list
+00:08 +260: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier toggleTaskCompletion should toggle task completion and reload list
+00:08 +261: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display tasks list
+00:08 +262: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display tasks list
+00:08 +263: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display tasks list
+00:08 +264: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should display tasks list
+00:08 +265: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should clear error on successful operation after failure
+00:08 +266: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should clear error on successful operation after failure
+00:08 +267: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should clear error on successful operation after failure
+00:08 +268: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should clear error on successful operation after failure
+00:08 +269: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should clear error on successful operation after failure
+00:08 +270: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:08 +271: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:08 +272: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:08 +273: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:08 +274: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:08 +275: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should show add task dialog when FAB is tapped
+00:08 +276: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle empty tasks list
+00:09 +277: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle empty tasks list
+00:09 +278: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:09 +279: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:09 +280: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:09 +281: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:09 +282: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task when form is submitted
+00:09 +283: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with description
+00:09 +284: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should show loading indicator in AppBar when saving
+00:09 +285: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should toggle task completion when checkbox is tapped
+00:09 +286: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with null description
+00:09 +287: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with null description
+00:09 +288: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with null description
+00:09 +289: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with null description
+00:09 +290: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle createTask with null description
+00:09 +291: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle pull-to-refresh
+00:09 +292: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask with null description
+00:09 +293: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask with null description
+00:09 +294: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask with null description
+00:09 +295: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should handle error retry button
+00:09 +296: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:10 +297: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:10 +298: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:10 +299: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:10 +300: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle multiple rapid operations
+00:10 +301: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen should create task with description in dialog
+00:10 +302: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask loading state
+00:10 +303: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask loading state
+00:10 +304: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart: TasksNotifier edge cases should handle updateTask loading state
+00:10 +305: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:10 +306: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:10 +307: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:10 +308: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:10 +309: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:10 +310: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +311: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +312: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +313: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:11 +314: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +315: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +316: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +317: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +318: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +319: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +320: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +321: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +322: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +323: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +325: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +326: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +327: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+00:11 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: task detail returns to the tasks list after saving
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:12 +329: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a failed update stays on the detail screen with the edit
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:12 +330: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a successful retry after a failure still pops to the list
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:13 +331: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: (tearDownAll)
+00:13 +331: All tests passed!

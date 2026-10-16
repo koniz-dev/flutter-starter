@@ -114,8 +114,15 @@ class TasksNotifier extends _$TasksNotifier {
     return getTaskByIdUseCase(id);
   }
 
-  /// Creates a new task with [title] and optional [description]
-  Future<void> createTask({required String title, String? description}) async {
+  /// Creates a new task with [title] and optional [description].
+  ///
+  /// Returns the use case's result so a caller can tell a failed save from a
+  /// successful one; the failure is also recorded in `state.error`
+  /// (koniz-dev/flutter-starter#346).
+  Future<Result<Task>> createTask({
+    required String title,
+    String? description,
+  }) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     final createTaskUseCase = ref.read(createTaskUseCaseProvider);
@@ -124,7 +131,7 @@ class TasksNotifier extends _$TasksNotifier {
       description: description,
     );
 
-    if (!ref.mounted) return;
+    if (!ref.mounted) return result;
 
     await result.when(
       // Await the reload so the caller only resumes once `state.tasks`
@@ -136,16 +143,19 @@ class TasksNotifier extends _$TasksNotifier {
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
+    return result;
   }
 
-  /// Updates an existing [task]
-  Future<void> updateTask(Task task) async {
+  /// Updates an existing [task].
+  ///
+  /// Returns the use case's result, as [createTask] does.
+  Future<Result<Task>> updateTask(Task task) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
     final updateTaskUseCase = ref.read(updateTaskUseCaseProvider);
     final result = await updateTaskUseCase(task);
 
-    if (!ref.mounted) return;
+    if (!ref.mounted) return result;
 
     await result.when(
       success: (_) => _loadTasks(),
@@ -153,6 +163,7 @@ class TasksNotifier extends _$TasksNotifier {
         state = state.copyWith(isLoading: false, error: failure.message);
       },
     );
+    return result;
   }
 
   /// Deletes a task by [id]
