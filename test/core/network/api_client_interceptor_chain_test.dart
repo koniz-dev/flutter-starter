@@ -1217,4 +1217,37 @@ void main() {
       timeout: const Timeout(Duration(minutes: 1)),
     );
   });
+
+  group('a 400 with a non-String body field (#305)', () {
+    test('a list message surfaces as ServerException(400), not as a '
+        'NetworkException', () async {
+      final adapter = _CountingAdapter([
+        _json(400, {
+          'statusCode': 400,
+          'message': ['email must be an email'],
+          'error': 'Bad Request',
+        }),
+      ]);
+      final apiClient = ApiClient(
+        storageService: _MockStorageService(),
+        secureStorageService: _MockSecureStorageService(),
+        authInterceptor: AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async => const Success('unused'),
+        ),
+      )..dio.httpClientAdapter = adapter;
+
+      final thrown = await _thrownBy(
+        apiClient.post('/users', data: {'email': 'nope'}),
+      );
+
+      expect(
+        thrown,
+        isA<ServerException>()
+            .having((e) => e.statusCode, 'statusCode', 400)
+            .having((e) => e.message, 'message', 'email must be an email'),
+      );
+      expect(thrown, isNot(isA<NetworkException>()));
+    });
+  });
 }

@@ -95,18 +95,18 @@ class DioExceptionMapper {
         final error = data['error'];
         if (error is Map<String, dynamic>) {
           final nestedMessage =
-              error['message'] as String? ?? error['error'] as String?;
-          if (nestedMessage != null && nestedMessage.isNotEmpty) {
+              _messageText(error['message']) ?? _messageText(error['error']);
+          if (nestedMessage != null) {
             return nestedMessage;
           }
         }
 
         // Try common error message fields
         final message =
-            data['message'] as String? ??
-            (error is String ? error : null) ??
-            data['error_message'] as String? ??
-            data['msg'] as String?;
+            _messageText(data['message']) ??
+            _messageText(error is Map ? null : error) ??
+            _messageText(data['error_message']) ??
+            _messageText(data['msg']);
 
         if (message != null && message.isNotEmpty) {
           return message;
@@ -130,13 +130,49 @@ class DioExceptionMapper {
 
     final data = response.data;
     if (data is Map<String, dynamic>) {
-      // Try common error code fields
-      return data['code'] as String? ??
-          data['error_code'] as String? ??
-          data['errorCode'] as String?;
+      final error = data['error'];
+      // Try common error code fields, then the nested error object
+      return _codeText(data['code']) ??
+          _codeText(data['error_code']) ??
+          _codeText(data['errorCode']) ??
+          (error is Map<String, dynamic>
+              ? _codeText(error['code']) ?? _codeText(error['error_code'])
+              : null);
     }
 
     return null;
+  }
+
+  /// A readable message from one body field, or null when it holds none.
+  ///
+  /// Never throws: a body is whatever the server sent. The fields used to be
+  /// read with `as String?`, so NestJS's default validation body - whose
+  /// `message` is a list - threw a `TypeError` inside `ErrorInterceptor`, and
+  /// the caller got `NetworkError(code: unknown)` instead of the 400
+  /// (koniz-dev/flutter-starter#305). A list is joined with `; `, numbers
+  /// and booleans are printed, and anything else (a map) is skipped.
+  static String? _messageText(Object? value) {
+    final text = switch (value) {
+      final String s => s.trim(),
+      final List<Object?> items =>
+        items.map(_messageText).whereType<String>().join('; '),
+      final num n => '$n',
+      final bool b => '$b',
+      _ => null,
+    };
+    return text == null || text.isEmpty ? null : text;
+  }
+
+  /// An error code from one body field: a String as is, a number printed.
+  ///
+  /// `{"code": 1001}` used to throw for the same reason as a list message.
+  static String? _codeText(Object? value) {
+    final text = switch (value) {
+      final String s => s.trim(),
+      final num n => '$n',
+      _ => null,
+    };
+    return text == null || text.isEmpty ? null : text;
   }
 
   /// Gets default error message based on HTTP status code
