@@ -1,6 +1,6 @@
 // Documentation integrity checker.
 //
-// Four checks, all of which have silently rotted in this repository before:
+// Five checks, all of which have silently rotted in this repository before:
 //
 //   1. Relative links and heading anchors under `docs/` resolve.
 //   2. No emoji in `docs/`, `CLAUDE.md`, or `.claude/` (the stated convention
@@ -15,6 +15,10 @@
 //      signature block; this is the weak, broad one, and it is the one that
 //      would have caught `contracts-map.md` citing a provider that never
 //      existed (koniz-dev/flutter-starter#206).
+//   5. Setup steps that `cp .env.example .env` then run `flutter run` or
+//      `flutter build` pass `--dart-define-from-file`, in README.md,
+//      CONTRIBUTING.md and `docs/` (see `tool/doc_env_runs.dart`,
+//      koniz-dev/flutter-starter#355).
 //
 // Usage:
 //   dart run tool/check_docs.dart               # all checks
@@ -22,11 +26,13 @@
 //   dart run tool/check_docs.dart --emoji       # emoji only
 //   dart run tool/check_docs.dart --signatures  # constructor signatures only
 //   dart run tool/check_docs.dart --symbols     # symbol existence only
+//   dart run tool/check_docs.dart --env-runs    # .env setup runs only
 //
 // Exits 0 when clean, 1 when anything is broken.
 
 import 'dart:io';
 
+import 'doc_env_runs.dart';
 import 'doc_signatures.dart';
 import 'doc_symbols.dart';
 
@@ -35,11 +41,14 @@ void main(List<String> args) {
   final emojiOnly = args.contains('--emoji');
   final signaturesOnly = args.contains('--signatures');
   final symbolsOnly = args.contains('--symbols');
-  final anyFilter = linksOnly || emojiOnly || signaturesOnly || symbolsOnly;
+  final envRunsOnly = args.contains('--env-runs');
+  final anyFilter =
+      linksOnly || emojiOnly || signaturesOnly || symbolsOnly || envRunsOnly;
   final runLinks = !anyFilter || linksOnly;
   final runEmoji = !anyFilter || emojiOnly;
   final runSignatures = !anyFilter || signaturesOnly;
   final runSymbols = !anyFilter || symbolsOnly;
+  final runEnvRuns = !anyFilter || envRunsOnly;
 
   final root = Directory.current;
   var failures = 0;
@@ -55,6 +64,9 @@ void main(List<String> args) {
   }
   if (runSymbols) {
     failures += checkSymbols(root);
+  }
+  if (runEnvRuns) {
+    failures += checkEnvRuns(root);
   }
 
   if (failures > 0) {
@@ -228,10 +240,7 @@ Set<String> _anchorsOf(String source) {
 /// underscore as emphasis, so `## Routing: go_router` anchors as
 /// `routing-go_router`, not `routing-gorouter`.
 String _plainText(String heading) => heading
-    .replaceAllMapped(
-      RegExp(r'!?\[([^\]]*)\]\([^)]*\)'),
-      (m) => m.group(1)!,
-    )
+    .replaceAllMapped(RegExp(r'!?\[([^\]]*)\]\([^)]*\)'), (m) => m.group(1)!)
     .replaceAll('`', '')
     .replaceAll(RegExp('[*~]'), '')
     .trim();
