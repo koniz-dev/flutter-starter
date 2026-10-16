@@ -257,7 +257,10 @@ jobs:
           ./scripts/dev/create_feature.sh profile
           git add lib/features/profile test/features/profile
           git rm -rq bricks mason.yaml
-          git status --short | head -20
+          # No `| head` here: under pipefail its early exit SIGPIPEs the
+          # writer and fails the step with exit 141.
+          echo "features: $(ls lib/features | tr '\n' ' ')"
+          test ! -e bricks && test ! -e mason.yaml
 
       - name: Install dependencies (after strip)
         if: steps.scope.outputs.run == 'true'
