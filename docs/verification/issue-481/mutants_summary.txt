@@ -1,0 +1,13 @@
+--- docs/verification/issue-481/mutant_added_param.log
+docs/api/core/errors.md:97: ServerFailure does not match lib/core/errors/failures.dart
+docs/api/core/errors.md:97:   param 4: doc `(missing)` vs source `{this.retryAfter}`
+--- docs/verification/issue-481/mutant_dropped_param.log
+docs/api/core/errors.md:97: ServerFailure does not match lib/core/errors/failures.dart
+docs/api/core/errors.md:97:   param 3: doc `{int? statusCode}` vs source `(not in source)`
+--- docs/verification/issue-481/mutant_made_required.log
+docs/api/core/errors.md:97: ServerFailure does not match lib/core/errors/failures.dart
+docs/api/core/errors.md:97:   param 3: doc `{int? statusCode}` vs source `{required this.statusCode}`
+--- docs/verification/issue-481/mutant_named_to_optional.log
+docs/api/core/errors.md:97: ServerFailure does not match lib/core/errors/failures.dart
+docs/api/core/errors.md:97:   param 2: doc `{String? code}` vs source `[super.code]`
+docs/api/core/errors.md:97:   param 3: doc `{int? statusCode}` vs source `[this.statusCode]`

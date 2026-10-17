@@ -1,0 +1,6 @@
+docs/api/core/errors.md:97: ServerFailure does not match lib/core/errors/failures.dart
+docs/api/core/errors.md:97:   param 2: doc `{String? code}` vs source `[super.code]`
+docs/api/core/errors.md:97:   param 3: doc `{int? statusCode}` vs source `[this.statusCode]`
+signatures: checked 13 documented constructor(s); 3 mismatched
+
+3 problem(s) found.

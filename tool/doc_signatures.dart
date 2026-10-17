@@ -16,11 +16,22 @@
 //     });
 //     ```
 //
-// The named-parameter list inside the documented `ApiClient({ ... })` must
-// then match the one in the constructor of the same name in that source file,
-// parameter for parameter, in order, including types, `required` markers and
-// default values. Comments and surrounding prose are ignored, so a block may
+// The parameter list of the documented `ApiClient(...)` must then match the
+// one in the constructor of the same name in that source file, parameter for
+// parameter, in order. Positional, optional-positional (`[...]`) and named
+// (`{...}`) parameters are all compared, and the declaration may sit on one
+// line or many. Comments and surrounding prose are ignored, so a block may
 // keep its `///` explanation.
+//
+// Two parameters match when (koniz-dev/flutter-starter#481):
+//
+//   * neither is a super- or field-formal (`super.code`, `this.statusCode`):
+//     their texts are equal - type, `required` marker and default value;
+//   * either one is: they are of the same kind and have the same name, the
+//     same `required` marker and the same default value. Types are not
+//     compared. Docs write the reader-facing type (`String? code`) where the
+//     source says `super.code`, and resolving the type behind a formal would
+//     need the analyzer; the name and optionality are what a caller copies.
 //
 // Deliberately textual rather than semantic: it catches a parameter that was
 // *added* to the source and never documented, which is the drift that actually
@@ -172,56 +183,51 @@ List<SignatureProblem> _checkOne(
     ];
   }
 
-  final documented = namedParameters(block, directive.className);
+  final documented = parameters(block, directive.className);
   if (documented == null) {
     return [
       SignatureProblem(
         location,
-        'the fenced block has no `${directive.className}({` declaration '
-        'opening a named-parameter list',
+        'the fenced block has no `${directive.className}(` declaration',
       ),
     ];
   }
 
-  final actual = namedParameters(
-    source.readAsStringSync(),
-    directive.className,
-  );
+  final actual = parameters(source.readAsStringSync(), directive.className);
   if (actual == null) {
     return [
       SignatureProblem(
         location,
-        'no `${directive.className}({` constructor found in '
+        'no `${directive.className}(` constructor found in '
         '${directive.sourcePath}',
       ),
     ];
   }
 
-  if (_listEquals(documented, actual)) {
-    return const [];
+  final max = documented.length > actual.length
+      ? documented.length
+      : actual.length;
+  final mismatches = <SignatureProblem>[];
+  for (var i = 0; i < max; i++) {
+    final doc = i < documented.length ? documented[i] : null;
+    final src = i < actual.length ? actual[i] : null;
+    if (doc != null && src != null && doc.matches(src)) continue;
+    mismatches.add(
+      SignatureProblem(
+        location,
+        '  param ${i + 1}: doc `${doc ?? '(missing)'}` vs source '
+        '`${src ?? '(not in source)'}`',
+      ),
+    );
   }
-
-  final problems = <SignatureProblem>[
+  if (mismatches.isEmpty) return const [];
+  return [
     SignatureProblem(
       location,
       '${directive.className} does not match ${directive.sourcePath}',
     ),
+    ...mismatches,
   ];
-  final max = documented.length > actual.length
-      ? documented.length
-      : actual.length;
-  for (var i = 0; i < max; i++) {
-    final doc = i < documented.length ? documented[i] : '(missing)';
-    final src = i < actual.length ? actual[i] : '(not in source)';
-    if (doc == src) continue;
-    problems.add(
-      SignatureProblem(
-        location,
-        '  param ${i + 1}: doc `$doc` vs source `$src`',
-      ),
-    );
-  }
-  return problems;
 }
 
 /// Returns the contents of the first fenced code block at or after
@@ -247,48 +253,177 @@ String? _fencedBlockAfter(List<String> lines, int directiveIndex) {
   return null;
 }
 
-/// Extracts the named parameters of `name({ ... })` from [text].
-///
-/// Returns one normalized entry per parameter (whitespace collapsed, trailing
-/// comma dropped, comments removed), or null when no such declaration exists.
-///
-/// The declaration must open with `name({` at the end of a line and close with
-/// a line starting `})`, which is what `dart format` produces for every
-/// multi-line named-parameter constructor in this repository. A one-line
-/// constructor is not matched on purpose: it would be reported as missing
-/// rather than silently passing.
-List<String>? namedParameters(String text, String name) {
-  const prefixes = ['', 'const ', 'factory '];
-  final openings = prefixes.map((p) => '$p$name({').toSet();
-  final lines = text.split('\n');
+/// How a parameter is passed.
+enum ParameterKind {
+  /// Required positional.
+  positional,
 
-  var start = -1;
-  for (var i = 0; i < lines.length; i++) {
-    if (openings.contains(lines[i].trim())) {
-      start = i + 1;
-      break;
-    }
+  /// Inside `[...]`.
+  optionalPositional,
+
+  /// Inside `{...}`.
+  named,
+}
+
+/// One parameter of a constructor's parameter list.
+class DocParameter {
+  /// Parses one parameter's [text] (whitespace already collapsed).
+  factory DocParameter.parse(String text, ParameterKind kind) {
+    final equals = _topLevelEquals(text);
+    var head = (equals < 0 ? text : text.substring(0, equals)).trim();
+    final defaultValue = equals < 0 ? null : text.substring(equals + 1).trim();
+    final isRequired = head.startsWith('required ');
+    if (isRequired) head = head.substring('required '.length).trim();
+    final formal = RegExp(r'(?:^|\s)(?:super|this)\.(\w+)$').firstMatch(head);
+    final name =
+        formal?.group(1) ?? RegExp(r'(\w+)$').firstMatch(head)?.group(1);
+    return DocParameter._(
+      text: text,
+      kind: kind,
+      name: name ?? head,
+      isRequired: isRequired,
+      defaultValue: defaultValue,
+      isFormal: formal != null,
+    );
   }
+
+  const DocParameter._({
+    required this.text,
+    required this.kind,
+    required this.name,
+    required this.isRequired,
+    required this.defaultValue,
+    required this.isFormal,
+  });
+
+  /// The parameter as written, whitespace collapsed.
+  final String text;
+
+  /// Positional, optional positional or named.
+  final ParameterKind kind;
+
+  /// The parameter's name, with any `super.` / `this.` dropped.
+  final String name;
+
+  /// Whether it is marked `required`.
+  final bool isRequired;
+
+  /// The default value's text, or null when it has none.
+  final String? defaultValue;
+
+  /// Whether it is a super- or field-formal (`super.code`, `this.code`).
+  final bool isFormal;
+
+  /// Whether a documented parameter and a source parameter agree, by the rule
+  /// in this file's header.
+  bool matches(DocParameter other) {
+    if (kind != other.kind) return false;
+    if (!isFormal && !other.isFormal) return text == other.text;
+    return name == other.name &&
+        isRequired == other.isRequired &&
+        defaultValue == other.defaultValue;
+  }
+
+  @override
+  String toString() => kind == ParameterKind.positional
+      ? text
+      : kind == ParameterKind.named
+      ? '{$text}'
+      : '[$text]';
+}
+
+/// Extracts the parameters of the constructor `name(...)` from [text].
+///
+/// The declaration is the first line that starts - after indentation, and an
+/// optional `const ` or `factory ` - with `name(`; its list runs to the
+/// matching `)`, on that line or any later one. Returns one entry per
+/// parameter (whitespace collapsed, trailing comma dropped, comments
+/// removed), or null when no such declaration exists or it never closes.
+List<DocParameter>? parameters(String text, String name) {
+  final opening = RegExp('^\\s*(?:const |factory )?${RegExp.escape(name)}\\(');
+  final lines = text.split('\n');
+  final start = lines.indexWhere(opening.hasMatch);
   if (start < 0) return null;
 
-  final buffer = StringBuffer();
-  var closed = false;
-  for (var i = start; i < lines.length; i++) {
-    final line = lines[i];
-    if (RegExp(r'^\s*\}\)').hasMatch(line)) {
-      closed = true;
-      break;
-    }
-    buffer
-      ..write(_stripLineComment(line))
-      ..write(' ');
-  }
-  if (!closed) return null;
+  final rest = [
+    lines[start].substring(opening.firstMatch(lines[start])!.end),
+    ...lines.skip(start + 1),
+  ].map(_stripLineComment).join(' ');
 
-  return _splitTopLevel(buffer.toString())
-      .map((p) => p.replaceAll(RegExp(r'\s+'), ' ').trim())
-      .where((p) => p.isNotEmpty)
-      .toList();
+  final list = _untilClose(rest);
+  if (list == null) return null;
+
+  final params = <DocParameter>[];
+  void add(String part, ParameterKind kind) {
+    for (final raw in _splitTopLevel(part)) {
+      final normalized = raw.replaceAll(RegExp(r'\s+'), ' ').trim();
+      if (normalized.isNotEmpty) {
+        params.add(DocParameter.parse(normalized, kind));
+      }
+    }
+  }
+
+  final group = _topLevelGroupStart(list);
+  if (group < 0) {
+    add(list, ParameterKind.positional);
+  } else {
+    add(list.substring(0, group), ParameterKind.positional);
+    final inner = _untilClose(list.substring(group + 1));
+    if (inner == null) return null;
+    add(
+      inner,
+      list[group] == '{'
+          ? ParameterKind.named
+          : ParameterKind.optionalPositional,
+    );
+  }
+  return params;
+}
+
+/// The text before the bracket that closes the one already open at its
+/// start, or null when it never closes.
+String? _untilClose(String text) {
+  var depth = 0;
+  for (var i = 0; i < text.length; i++) {
+    final ch = text[i];
+    if ('([{<'.contains(ch)) depth++;
+    if (')]}>'.contains(ch)) {
+      if (depth == 0) return text.substring(0, i);
+      depth--;
+    }
+  }
+  return null;
+}
+
+/// Index of a `{` or `[` opening a named or optional group at depth 0, or -1.
+int _topLevelGroupStart(String list) {
+  var depth = 0;
+  for (var i = 0; i < list.length; i++) {
+    final ch = list[i];
+    if ((ch == '{' || ch == '[') && depth == 0) return i;
+    if ('([{<'.contains(ch)) depth++;
+    if (')]}>'.contains(ch)) depth--;
+  }
+  return -1;
+}
+
+/// Index of the `=` introducing a default value, ignoring `=>`, `==`, `<=`
+/// and `>=` and anything nested, or -1.
+int _topLevelEquals(String text) {
+  var depth = 0;
+  for (var i = 0; i < text.length; i++) {
+    final ch = text[i];
+    if ('([{<'.contains(ch)) depth++;
+    if (')]}>'.contains(ch)) depth--;
+    if (ch != '=' || depth != 0) continue;
+    final next = i + 1 < text.length ? text[i + 1] : '';
+    final prev = i > 0 ? text[i - 1] : '';
+    if (next == '>' || next == '=' || '=!<>'.contains(prev) && prev != '') {
+      continue;
+    }
+    return i;
+  }
+  return -1;
 }
 
 String _stripLineComment(String line) {
@@ -314,14 +449,6 @@ List<String> _splitTopLevel(String text) {
   }
   parts.add(current.toString());
   return parts;
-}
-
-bool _listEquals(List<String> a, List<String> b) {
-  if (a.length != b.length) return false;
-  for (var i = 0; i < a.length; i++) {
-    if (a[i] != b[i]) return false;
-  }
-  return true;
 }
 
 String _rel(Directory root, String path) => path.startsWith('${root.path}/')

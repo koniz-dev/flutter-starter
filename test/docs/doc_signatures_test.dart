@@ -135,6 +135,9 @@ void main() {
   });
 
   group('doc_signatures parser', () {
+    List<String>? texts(String source, String name) =>
+        parameters(source, name)?.map((p) => p.toString()).toList();
+
     test('reads a multi-line named parameter list', () {
       const source = '''
 class Sample {
@@ -146,18 +149,76 @@ class Sample {
   }) : _a = a;
 }
 ''';
-      expect(namedParameters(source, 'Sample'), [
-        'required String a',
-        'int? b = 3',
-        'Future<Result<String>> Function() c',
+      expect(texts(source, 'Sample'), [
+        '{required String a}',
+        '{int? b = 3}',
+        '{Future<Result<String>> Function() c}',
       ]);
     });
 
-    test('returns null when the constructor is absent or one-line', () {
-      expect(namedParameters('class A {}', 'A'), isNull);
+    test('reads a one-line positional-then-named list (#481)', () {
+      const source = '''
+class ServerFailure extends Failure {
+  const ServerFailure(super.message, {super.code, this.statusCode});
+}
+''';
+      final params = parameters(source, 'ServerFailure')!;
+      expect(params.map((p) => p.toString()), [
+        'super.message',
+        '{super.code}',
+        '{this.statusCode}',
+      ]);
+      expect(params.map((p) => p.name), ['message', 'code', 'statusCode']);
+      expect(params.every((p) => p.isFormal), isTrue);
+    });
+
+    test('reads optional positional parameters', () {
+      expect(texts('  Range(int start, [int end = 0]);', 'Range'), [
+        'int start',
+        '[int end = 0]',
+      ]);
+    });
+
+    test('returns null when the constructor is absent or never closes', () {
+      expect(parameters('class A {}', 'A'), isNull);
+      expect(parameters('  A(int b,', 'A'), isNull);
+    });
+
+    test('a call that is not at the start of a line is not a declaration', () {
+      expect(parameters("  final f = A('x');", 'A'), isNull);
+    });
+  });
+
+  group('doc_signatures matching rule (#481)', () {
+    DocParameter one(String source) => parameters(source, 'X')!.single;
+
+    test('a formal matches a typed parameter of the same name and kind', () {
       expect(
-        namedParameters('class A { A({required int b}); }', 'A'),
-        isNull,
+        one('X({String? code});').matches(one('X({super.code});')),
+        isTrue,
+      );
+      expect(one('X(String m);').matches(one('X(super.m);')), isTrue);
+    });
+
+    test('a formal with another name, kind, required or default does not', () {
+      final source = one('X({super.code});');
+      expect(one('X({String? kode});').matches(source), isFalse);
+      expect(one('X(String code);').matches(source), isFalse);
+      expect(one('X({required String code});').matches(source), isFalse);
+      expect(one("X({String code = 'a'});").matches(source), isFalse);
+    });
+
+    test('two typed parameters still compare as text', () {
+      expect(one('X({int? a});').matches(one('X({int? a});')), isTrue);
+      expect(one('X({int? a});').matches(one('X({num? a});')), isFalse);
+    });
+
+    test('=> and == in a default do not split it', () {
+      final p = one('X({bool Function() f = _isEq});');
+      expect(p.name, 'f');
+      expect(
+        one('X({int a = b == c ? 1 : 2});').defaultValue,
+        'b == c ? 1 : 2',
       );
     });
   });

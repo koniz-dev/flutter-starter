@@ -94,6 +94,7 @@ final result = ResultFailure<User>(failure);
 Represents API/server errors whose status has no typed failure of its own (5xx, 400, 408, 429 and so on). `statusCode` is part of its equality, so a 404 and a 500 with the same message are not equal - and a 404 is a `NotFoundFailure` anyway.
 
 <!-- symbol: lib/core/errors/failures.dart ServerFailure -->
+<!-- signature: lib/core/errors/failures.dart ServerFailure -->
 ```dart
 const ServerFailure(String message, {String? code, int? statusCode});
 ```
@@ -107,6 +108,7 @@ final failure = ServerFailure('Internal server error', code: '500');
 
 Represents network connectivity issues.
 
+<!-- signature: lib/core/errors/failures.dart NetworkFailure -->
 ```dart
 const NetworkFailure(String message, {String? code});
 ```
@@ -120,6 +122,7 @@ final failure = NetworkFailure('No internet connection');
 
 Represents local storage errors.
 
+<!-- signature: lib/core/errors/failures.dart CacheFailure -->
 ```dart
 const CacheFailure(String message, {String? code});
 ```
@@ -133,6 +136,7 @@ final failure = CacheFailure('Failed to save data', code: 'STORAGE_ERROR');
 
 Represents authentication/authorization errors.
 
+<!-- signature: lib/core/errors/failures.dart AuthFailure -->
 ```dart
 const AuthFailure(String message, {String? code});
 ```
@@ -146,6 +150,7 @@ final failure = AuthFailure('Invalid credentials', code: '401');
 
 Represents input validation errors.
 
+<!-- signature: lib/core/errors/failures.dart ValidationFailure -->
 ```dart
 const ValidationFailure(String message, {String? code});
 ```
@@ -159,6 +164,7 @@ final failure = ValidationFailure('Email is required', code: 'VALIDATION_ERROR')
 
 Represents permission denied errors.
 
+<!-- signature: lib/core/errors/failures.dart PermissionFailure -->
 ```dart
 const PermissionFailure(String message, {String? code});
 ```
@@ -172,6 +178,7 @@ final failure = PermissionFailure('Camera permission denied');
 
 Represents a resource that does not exist. An HTTP 404 maps here.
 
+<!-- signature: lib/core/errors/failures.dart NotFoundFailure -->
 ```dart
 const NotFoundFailure(String message, {String? code});
 ```
@@ -185,6 +192,7 @@ final failure = NotFoundFailure('Task not found');
 
 Represents unclassified errors.
 
+<!-- signature: lib/core/errors/failures.dart UnknownFailure -->
 ```dart
 const UnknownFailure(String message, {String? code});
 ```
