@@ -5,6 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'pump_app.dart';
@@ -29,12 +31,33 @@ void main() {
       expect(response.user.email, 'test@example.com');
     });
 
+    test('createCacheException carries its message', () {
+      final exception = createCacheException(message: 'disk full');
+
+      expect(exception, isA<CacheException>());
+      expect(exception.message, 'disk full');
+    });
+
     test('createServerException defaults to a 500', () {
       final exception = createServerException();
 
       expect(exception, isA<ServerException>());
       expect(exception.statusCode, 500);
       expect(exception.code, 'SERVER_ERROR');
+    });
+  });
+
+  // Used across feature tests too, but covered here so a strip variant that
+  // deletes those tests still calls them (the scan in
+  // test/tooling/test_helpers_used_test.dart runs in every variant).
+  group('result assertions', () {
+    test('expectResultSuccess passes on a Success with that data', () {
+      expectResultSuccess(const Success(3), 3);
+    });
+
+    test('expectResultFailure passes on that failure', () {
+      const failure = ServerFailure('boom');
+      expectResultFailure(const ResultFailure<int>(failure), failure);
     });
   });
 
