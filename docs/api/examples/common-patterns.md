@@ -155,7 +155,8 @@ import 'package:flutter_starter/core/config/app_config.dart';
 
 void setupServices() {
   final baseUrl = AppConfig.baseUrl;
-  final timeout = AppConfig.apiTimeout;
+  // No need to read AppConfig.apiTimeout: ApiClient already applies it to
+  // every request as an end-to-end deadline.
   
   if (AppConfig.enableLogging) {
     logger.info('App started with base URL: $baseUrl');
