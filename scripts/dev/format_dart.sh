@@ -20,7 +20,9 @@ if [[ "${1:-}" == "--print-paths" ]]; then
   exit 0
 fi
 if [[ "${1:-}" == "--check" ]]; then
-  dart format --set-exit-if-changed "${paths[@]}"
+  # --output=none: a check reports, it does not rewrite. Without it `dart
+  # format` reformats the tree *and* exits 1 (koniz-dev/flutter-starter#341).
+  dart format --output=none --set-exit-if-changed "${paths[@]}"
 else
   dart format "${paths[@]}"
 fi

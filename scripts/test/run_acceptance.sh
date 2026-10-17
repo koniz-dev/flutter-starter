@@ -92,7 +92,9 @@ run() {
   fi
 }
 
-run format   "format check"   dart format --set-exit-if-changed lib test integration_test tool examples
+# Through format_dart.sh, the one owner of the scope, whose --check only
+# reports (koniz-dev/flutter-starter#341).
+run format   "format check"   "$ROOT/scripts/dev/format_dart.sh" --check
 run analyze  "flutter analyze" flutter analyze
 run tests    "flutter test (unit + widget, goldens skipped)" \
   flutter test --timeout=5m --reporter compact
