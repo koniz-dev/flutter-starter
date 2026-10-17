@@ -1,0 +1,17 @@
+# tasks_session_reset_test.dart against main's lib/ (no session reset)
+00:00 +0 -1: criterion 1: after logout and a sign-in as B, tasksProvider holds no task of A's [E]
+  Expected: empty
+    Actual: ['A\'s private task']
+00:00 +0 -2: criterion 2: logout leaves no tasks_data key in storage [E]
+  Expected: not contains 'tasks_data'
+    Actual: {
+00:00 +0 -3: criterion 3: a forced logout from the interceptor gives the same result [E]
+  Expected: not contains 'tasks_data'
+    Actual: {
+00:00 +0 -4: A's stored tasks are wiped even if the tasks screen was never opened in the session that ended [E]
+  Expected: not contains 'tasks_data'
+    Actual: {
+00:00 +0 -5: tasks created in the new session are kept [E]
+  Expected: ['B\'s task']
+    Actual: ['A\'s private task', 'B\'s task']
+00:00 +0 -5: Some tests failed.
