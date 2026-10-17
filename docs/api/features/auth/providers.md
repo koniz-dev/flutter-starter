@@ -225,17 +225,30 @@ final result = await authRepository.getCurrentUser();
 
 ## Dependency Graph
 
+As built in `lib/features/auth/di/auth_providers.dart`:
+
 ```
 authRepositoryProvider
   ├── authRemoteDataSourceProvider
-  │     └── apiClientProvider
-  └── authLocalDataSourceProvider
-        ├── storageServiceProvider
-        └── secureStorageServiceProvider
+  │     └── networkClientProvider   (read, to break the ApiClient cycle)
+  ├── authLocalDataSourceProvider
+  │     ├── keyValueStoreProvider
+  │     └── tokenStoreProvider
+  ├── networkClientProvider         (read, for its responseCache)
+  └── sessionGenerationProvider
 
-loginUseCaseProvider
+loginUseCaseProvider (and every other auth use case provider)
   └── authRepositoryProvider
 ```
+
+<!-- symbol: lib/features/auth/di/auth_providers.dart authRepositoryProvider -->
+<!-- symbol: lib/features/auth/di/auth_providers.dart authRemoteDataSourceProvider -->
+<!-- symbol: lib/features/auth/di/auth_providers.dart authLocalDataSourceProvider -->
+<!-- symbol: lib/features/auth/di/auth_providers.dart loginUseCaseProvider -->
+<!-- symbol: lib/core/di/providers.dart networkClientProvider -->
+<!-- symbol: lib/core/di/providers.dart keyValueStoreProvider -->
+<!-- symbol: lib/core/di/providers.dart tokenStoreProvider -->
+<!-- symbol: lib/core/session/session_providers.dart sessionGenerationProvider -->
 
 ---
 

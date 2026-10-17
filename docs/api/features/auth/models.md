@@ -70,10 +70,12 @@ factory UserModel.fromJson(Map<String, dynamic> json);
 
 /// Convert UserModel to JSON
 Map<String, dynamic> toJson();
-
-/// Convert UserModel to User entity
-User toEntity();
 ```
+
+There is no `toEntity()`: `UserModel` *extends* `User`, so a `UserModel` already
+is a `User` and is passed to the domain layer as one, with no conversion.
+(`TaskModel`, which does not extend its entity, is the model with a
+`toEntity()`.)
 
 ### Usage
 
@@ -85,8 +87,8 @@ final userModel = UserModel.fromJson(json);
 // To JSON
 final json = userModel.toJson();
 
-// To entity
-final user = userModel.toEntity();
+// As the entity - no conversion: a UserModel is a User
+final User user = userModel;
 ```
 
 ---

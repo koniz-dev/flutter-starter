@@ -261,9 +261,14 @@ final map = {'users': [{'name': 'John'}, {'name': 'Jane'}]};
 final users = JsonHelper.getListOf<User>(
   map,
   'users',
-  (json) => User.fromJson(json as Map<String, dynamic>),
+  // The entity has no fromJson; the data-layer model parses JSON, and a
+  // UserModel is a User.
+  (json) => UserModel.fromJson(json as Map<String, dynamic>),
 );
 ```
+
+<!-- symbol: lib/features/auth/data/models/user_model.dart UserModel -->
+<!-- symbol: lib/core/utils/json_helper.dart JsonHelper -->
 
 ---
 
