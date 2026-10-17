@@ -285,5 +285,6 @@ jobs:
         run: |
           set -euo pipefail
           ./scripts/dev/create_feature.sh probe
-          # Infos are tolerated here: the scaffold's import order is #442.
-          flutter analyze --no-fatal-infos lib/features/probe test/features/probe
+          # No --no-fatal-infos: the scaffold sorts its imports for the renamed
+          # package (koniz-dev/flutter-starter#442).
+          flutter analyze lib/features/probe test/features/probe

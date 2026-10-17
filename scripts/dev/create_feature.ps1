@@ -296,12 +296,18 @@ void main() {
 "@
 
 
-# The formatter, not this script, decides where long generated lines wrap, so
-# the result satisfies `dart format --set-exit-if-changed` for any name length.
+# The templates write imports in the order that is sorted for the package name
+# `flutter_starter`. After a rename (`my_app` sorts after `flutter_test`) that
+# order trips `directives_ordering`, so the analyzer, not this script, sorts
+# them (koniz-dev/flutter-starter#442). The formatter, likewise, decides where
+# long generated lines wrap, so the result satisfies
+# `dart format --set-exit-if-changed` for any name length.
 if (Get-Command dart -ErrorAction SilentlyContinue) {
+    dart fix --apply --code=directives_ordering $BaseDir | Out-Null
+    dart fix --apply --code=directives_ordering $TestDir | Out-Null
     dart format $BaseDir $TestDir | Out-Null
 } else {
-    Write-Warning "dart not on PATH; run 'dart format $BaseDir $TestDir'"
+    Write-Warning "dart not on PATH; run 'dart fix --apply --code=directives_ordering' and 'dart format' on $BaseDir $TestDir"
 }
 
 Write-Host "Feature $FeatureName created:"
