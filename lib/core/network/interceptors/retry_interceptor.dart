@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/request_body_replay.dart';
 
 /// Interceptor to automatically retry failed network requests
@@ -108,7 +109,8 @@ class RetryInterceptor extends Interceptor {
     if (!RequestBodyReplay.canReplay(err.requestOptions.data)) {
       if (_shouldRetry(err) && retryCount < maxRetries) {
         loggingService?.debug(
-          'Not retrying [${err.requestOptions.path}]: '
+          'Not retrying '
+          '[${ApiLoggingInterceptor.redactPath(err.requestOptions.path)}]: '
           '${RequestBodyReplay.reason(err.requestOptions.data)}',
         );
       }
@@ -122,7 +124,8 @@ class RetryInterceptor extends Interceptor {
       final delay = _getDelay(retryCount);
 
       loggingService?.debug(
-        'Retrying request [${err.requestOptions.path}] '
+        'Retrying request '
+        '[${ApiLoggingInterceptor.redactPath(err.requestOptions.path)}] '
         '(attempt $retryCount of $maxRetries) in ${delay.inMilliseconds}ms',
       );
 

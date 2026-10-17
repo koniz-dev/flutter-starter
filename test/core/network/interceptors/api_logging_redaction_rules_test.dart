@@ -37,6 +37,7 @@ const _fragmentKeys = <String, String>{
   'signature': 'signature',
   'pincode': 'pin_code',
   'otpcode': 'otp_code',
+  'jwt': 'jwt',
 };
 
 const _exactKeys = <String, String>{
@@ -86,10 +87,10 @@ void main() {
     }
 
     test('the table covers both rule sets with no duplicates', () {
-      // 14 fragment rules + 6 exact rules, as declared in
+      // 15 fragment rules + 6 exact rules, as declared in
       // api_logging_interceptor.dart; growing either set without a row here
       // leaves the new rule unpinned.
-      expect(_fragmentKeys, hasLength(14));
+      expect(_fragmentKeys, hasLength(15));
       expect(_exactKeys, hasLength(6));
       expect(
         {..._fragmentKeys.values, ..._exactKeys.values},
