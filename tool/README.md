@@ -17,8 +17,11 @@ Documentation integrity checker. Seven checks, all of which had silently rotted:
   so is `docs/verification/`, whose files quote captured tool output verbatim.
 - **Constructor signatures** (`doc_signatures.dart`): any fenced block preceded
   by `<!-- signature: <source path> <ConstructorName> -->` must list exactly the
-  named parameters that constructor declares, in order, with the same types,
-  `required` markers and defaults. Added after koniz-dev/flutter-starter#89,
+  parameters that constructor declares - positional, `[optional]` and
+  `{named}`, on one line or many - in order, with the same types, `required`
+  markers and defaults. A super- or field-formal (`super.code`) is compared by
+  kind, name, `required` and default only, since docs write the reader-facing
+  type (koniz-dev/flutter-starter#481). Added after koniz-dev/flutter-starter#89,
   where `docs/api/core/network.md` documented an `AuthInterceptor` parameter
   that never existed while missing three that did.
 - **Symbol existence** (`doc_symbols.dart`): every

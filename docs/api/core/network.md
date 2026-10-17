@@ -1017,10 +1017,11 @@ comment of the form:
 ```
 
 `tool/check_docs.dart` reads those directives (implementation in
-`tool/doc_signatures.dart`), extracts the named-parameter list from the block
-and from the constructor of that name in that source file, and fails when they
+`tool/doc_signatures.dart`), extracts the parameter list from the block and
+from the constructor of that name in that source file, and fails when they
 differ - parameter for parameter, in order, including types, `required` markers
-and default values.
+and default values. A super- or field-formal parameter (`super.code`) is
+compared by kind, name, `required` and default only.
 
 **Both drift directions are covered, by two different gates**, because neither
 gate alone sees both:
