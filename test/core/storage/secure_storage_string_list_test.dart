@@ -93,6 +93,18 @@ void main() {
         completion(['[urgent]', 'home']),
       );
     });
+
+    // koniz-dev/flutter-starter#471: the residual ambiguity decodeStringList
+    // documents and accepts. Pinned so the doc stays true: if this ever
+    // reads as legacy, the encoding changed and the doc must say how.
+    test('the documented residual: legacy text that is itself a JSON array '
+        'of strings reads as JSON', () async {
+      backing['k'] = '["x"]';
+      expect(await SecureStorageService().getStringList('k'), ['x']);
+
+      backing['k'] = '["a","b"]';
+      expect(await SecureStorageService().getStringList('k'), ['a', 'b']);
+    });
   });
 
   group('criterion 3: MigrationV1ToV2 over secure storage', () {

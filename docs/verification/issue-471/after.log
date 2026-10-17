@@ -1,0 +1,34 @@
+# the residual, stated in lib/core/storage/string_list_encoding.dart (criterion 1)
+8:/// decode, with one accepted residual ambiguity - see [decodeStringList].
+9-library;
+10-
+11-import 'dart:convert';
+12-
+13-/// Encodes [list] as a JSON array.
+14-String encodeStringList(List<String> list) => jsonEncode(list);
+15-
+16-/// [raw] decoded as a JSON array of strings, or `null` when it is not one.
+17-///
+18-/// This is how a reader tells a value written by [encodeStringList] apart
+19-/// from a plain string - for example a migration that must not split an
+20-/// already-migrated list a second time.
+21-List<String>? decodeEncodedStringList(String raw) {
+22-  if (!raw.startsWith('[')) return null;
+23-  try {
+--
+37:/// **One residual ambiguity, accepted** (koniz-dev/flutter-starter#471). JSON
+38-/// is tried first, so a legacy value whose comma-joined text is *itself* a
+39-/// JSON array of strings decodes as JSON: `['["x"]']`, written before #281 as
+
+# test/core/storage/secure_storage_string_list_test.dart: the pin plus every #281 round-trip (criterion 2's 'still passes')
+00:00 +0: criterion 1: any list round-trips ["a,b","c"]
+00:00 +1: criterion 1: any list round-trips [""]
+00:00 +2: criterion 1: any list round-trips []
+00:00 +3: criterion 1: any list round-trips ["line\nbreak","say \"hi\"","back\\slash"]
+00:00 +4: criterion 2: a list in the legacy comma form still reads 'a,b,c' reads as three elements
+00:00 +5: criterion 2: a list in the legacy comma form still reads '' reads as the empty list
+00:00 +6: criterion 2: a list in the legacy comma form still reads a legacy value starting with '[' that is not JSON stays legacy
+00:00 +7: criterion 2: a list in the legacy comma form still reads the documented residual: legacy text that is itself a JSON array of strings reads as JSON
+00:00 +8: criterion 3: MigrationV1ToV2 over secure storage a user_tags list with a comma inside one tag survives as one element
+00:00 +9: criterion 3: MigrationV1ToV2 over secure storage a legacy comma-separated user_tags string still migrates
+00:00 +10: All tests passed!
