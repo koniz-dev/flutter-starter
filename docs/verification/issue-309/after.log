@@ -1,0 +1,11 @@
+00:00 +0: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 401 -> AuthFailure
+00:00 +1: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 403 -> PermissionFailure
+00:00 +2: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 404 -> NotFoundFailure
+00:00 +3: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 422 -> ValidationFailure
+00:00 +4: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures any other status stays a ServerFailure and keeps its status
+00:00 +5: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures a 500 and a 503 with the same message are no longer equal
+00:00 +6: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures copyWith keeps the status
+00:00 +7: test/core/errors/http_status_failures_test.dart: criterion 3: every failure type docs/api/core/errors.md documents is reachable from a real producer
+00:00 +8: test/features/auth/data/repositories/login_rejected_credentials_test.dart: criterion 2: a 401 from login is an AuthFailure
+00:00 +9: test/features/auth/data/repositories/login_rejected_credentials_test.dart: a 500 from login is still a ServerFailure carrying the status, so the two are told apart by type
+00:01 +10: All tests passed!
