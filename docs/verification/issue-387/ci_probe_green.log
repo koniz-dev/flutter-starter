@@ -1,0 +1,10 @@
+# Probe PR #465 (touches android/gradle.properties only), head a7158a45184296d9d9058b535e46ef365a263b46
+# job: https://github.com/koniz-dev/flutter-starter/actions/runs/39015747260/job/117347386064 - conclusion SUCCESS
+Check Gradle, AGP and Kotlin against Flutter's floor	Gradle: 9.3.1 (floor 9.1.0)
+Check Gradle, AGP and Kotlin against Flutter's floor	Android Gradle Plugin: 9.1.0 (floor 9.0.1)
+Check Gradle, AGP and Kotlin against Flutter's floor	Kotlin: 2.4.0 (floor 2.3.20)
+Check Gradle, AGP and Kotlin against Flutter's floor	OK: the Android toolchain meets every floor.
+Build debug APK	openjdk version "25.0.4.1" 2026-08-18 LTS
+Build debug APK	✓ Built build/app/outputs/flutter-apk/app-debug.apk
+# grep -ci 'will soon be dropped' over the build output (excluding the step's own script echo):
+0

@@ -1,6 +1,18 @@
 name: Build (Manual)
 
+# Manual builds for every platform, plus one automatic job: on a PR that
+# touches android/ (or this toolchain gate), `android-jdk25` checks the
+# Gradle/AGP/Kotlin floors and builds a debug APK on JDK 25 - the JDK bundled
+# with current Android Studio, which CI's Java 17 never exercised while the
+# project could not build on it (koniz-dev/flutter-starter#329, #387). The
+# manual jobs keep their `inputs.platform` guards, which are false on a PR.
 on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'android/**'
+      - 'tool/check_android_toolchain.dart'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
     inputs:
       platform:
@@ -41,6 +53,50 @@ permissions:
   contents: read
 
 jobs:
+  android-jdk25:
+    if: >-
+      github.event_name == 'pull_request' ||
+      inputs.platform == 'all' || inputs.platform == 'android'
+    name: Android on JDK 25 (toolchain floor + debug build)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Fails, naming the version, when Gradle, AGP or Kotlin is below the
+      # floor stated once in tool/check_android_toolchain.dart.
+      - name: Check Gradle, AGP and Kotlin against Flutter's floor
+        run: dart run tool/check_android_toolchain.dart
+
+      # Flutter only warns when a version is on its way out; a warning here
+      # means the floor above is behind Flutter's, so it fails too.
+      - name: Build debug APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          java -version 2>&1 | head -1
+          flutter build apk --debug 2>&1 | tee build-apk.log
+          if grep -qi 'will soon be dropped' build-apk.log; then
+            echo "::error::Flutter warned that a toolchain version will soon be dropped; raise it and the floor in tool/check_android_toolchain.dart"
+            exit 1
+          fi
+
   build-android:
     if: inputs.platform == 'all' || inputs.platform == 'android'
     name: Build Android
