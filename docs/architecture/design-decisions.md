@@ -793,13 +793,15 @@ class ApiClient {
     ));
     
     // Add interceptors. ErrorInterceptor goes LAST: it rejects, and dio
-    // runs error handlers in registration order.
+    // runs error handlers in registration order. PerformanceInterceptor
+    // comes after Auth and Retry, so a trace records how the request
+    // finally ended - a refreshed 401 is the replay's 200.
     dio.interceptors.addAll([
-      PerformanceInterceptor(),     // Track performance
       CacheInterceptor(),           // Cache responses
       AuthInterceptor(),            // Add auth tokens, refresh on 401
       RetryInterceptor(),           // Retry transient failures
       ApiLoggingInterceptor(),      // Log requests/responses
+      PerformanceInterceptor(),     // Track performance
       ErrorInterceptor(),           // Convert to domain exceptions
     ]);
     
