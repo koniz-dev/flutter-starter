@@ -220,6 +220,7 @@ final class ${FeaturePascal}Notifier extends Notifier<AsyncValue<${FeaturePascal
 Write-GeneratedFile "lib/features/$($FeatureName)/presentation/screens/$($FeatureName)_screen.dart" @"
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/features/${FeatureName}/presentation/providers/${FeatureName}_provider.dart';
 
 /// Screen showing a single ${FeaturePascal}.
@@ -235,13 +236,14 @@ class ${FeaturePascal}Screen extends ConsumerWidget {
     final state = ref.watch(${FeatureCamel}StateProvider);
 
     return Scaffold(
+      // l10n-literal-ok: generated placeholder - add an ARB key for the title
       appBar: AppBar(title: const Text('${FeaturePascal}')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: state.when(
           data: (entity) => Text(entity?.id ?? 'Not loaded'),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Text('Error: `$error'),
+          error: (error, _) => Text('`${context.l10n.error}: `$error'),
         ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,0 +1,25 @@
+# generator_probe.sh run from this branch, with #515's guard
+=== sh: lib/features/profile/presentation/screens/profile_screen.dart
+3:import 'package:flutter_starter/core/localization/localization_extensions.dart';
+19:      // l10n-literal-ok: generated placeholder - add an ARB key for the title
+20:      appBar: AppBar(title: const Text('Profile')),
+24:          data: (entity) => Text(entity?.id ?? 'Not loaded'),
+26:          error: (error, _) => Text('${context.l10n.error}: $error'),
+--- flutter analyze lib/features/profile
+No issues found! (ran in 2.6s)
+--- text_literal_guard_test.dart
+00:00 +7: All tests passed!
+
+=== mason: lib/features/profile/presentation/screens/profile_screen.dart
+3:import 'package:flutter_starter/core/localization/localization_extensions.dart';
+19:      // l10n-literal-ok: generated placeholder - add an ARB key for the title
+20:      appBar: AppBar(title: const Text('Profile')),
+24:          data: (entity) => Text(entity?.id ?? 'Not loaded'),
+26:          error: (error, _) => Text('${context.l10n.error}: $error'),
+--- flutter analyze lib/features/profile
+No issues found! (ran in 4.7s)
+--- text_literal_guard_test.dart
+00:00 +7: All tests passed!
+
+=== diff create_feature.sh vs feature_clean screen (empty = identical)
+(identical)
