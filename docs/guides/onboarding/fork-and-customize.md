@@ -68,11 +68,11 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
 
    `git grep -n 'package:flutter_starter/' -- '*.dart' '*.sh' '*.ps1'` should
    then list only `bricks/flutter_starter_setup/` (the setup brick's own rename
-   source - delete `bricks/` if you never use Mason) and shell probes under
+   source - remove it with `--remove-bricks`, below, if you never use Mason) and shell probes under
    `docs/verification/`, which nothing executes.
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
 
-**If you never use Mason:** after renaming, you may delete **`bricks/`** and **`mason.yaml`** to keep a smaller repo.
+**If you never use Mason:** after renaming, remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks`, or add `--remove-bricks` to whichever strip you run. It also drops the passages in the docs that link into them; deleting the two by hand leaves those links dangling and fails the Docs check (koniz-dev/flutter-starter#588).
 
 ## 2. Android application id and namespace
 
@@ -123,7 +123,7 @@ dart run tool/strip_sample_features.dart --apply --process-only
 ```
 
 Run it before you generate a feature slice (`./scripts/dev/create_feature.sh`
-or `mason make feature_clean`) or delete `bricks/` and `mason.yaml`. Until the
+or `mason make feature_clean`) or remove `bricks/` and `mason.yaml`. Until the
 epic-coverage guard is gone, both actions turn `flutter test` red: it requires
 every tracked path to map to one of the upstream repository's `epic:*` labels
 (koniz-dev/flutter-starter#333).

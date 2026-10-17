@@ -247,7 +247,9 @@ jobs:
       # uses. Exercise the two documented actions that turned `flutter test`
       # red while the epic-coverage guard was still there (#333): generating
       # and committing a feature slice, and removing bricks/ and mason.yaml
-      # as the README allows.
+      # the way the README says to: --remove-bricks, which also drops the
+      # docs that link into them, so the links must still resolve
+      # (koniz-dev/flutter-starter#588).
       - name: Generate a feature slice and drop the bricks (process-only)
         if: steps.scope.outputs.run == 'true' && matrix.variant == 'process-only'
         shell: bash
@@ -256,11 +258,12 @@ jobs:
           test -d lib/features/tasks && test -d lib/features/feature_flags
           ./scripts/dev/create_feature.sh profile
           git add lib/features/profile test/features/profile
-          git rm -rq bricks mason.yaml
+          dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks
           # No `| head` here: under pipefail its early exit SIGPIPEs the
           # writer and fails the step with exit 141.
           printf 'features: %s\n' "$(cd lib/features && echo *)"
           test ! -e bricks && test ! -e mason.yaml
+          dart run tool/check_docs.dart --links
 
       - name: Install dependencies (after strip)
         if: steps.scope.outputs.run == 'true'

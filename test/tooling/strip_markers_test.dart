@@ -19,11 +19,12 @@ void main() {
     ..parent.createSync(recursive: true)
     ..writeAsStringSync(body);
 
-  ProcessResult strip() => Process.runSync('dart', [
+  ProcessResult strip({bool removeBricks = false}) => Process.runSync('dart', [
     'run',
     tool,
     '--apply',
     '--process-only',
+    if (removeBricks) '--remove-bricks',
   ], workingDirectory: fixture.path);
 
   test('an unclosed sample marker aborts before anything is deleted', () {
@@ -70,5 +71,51 @@ flags prose
     expect(out, contains('tasks row'));
     expect(out, contains('flags prose'));
     expect(out, contains('kept row'));
+  });
+
+  group('--remove-bricks (koniz-dev/flutter-starter#588)', () {
+    const body = '''
+# Doc
+
+<!-- strip:bricks start -->
+See [bricks](bricks/README.md).
+<!-- strip:bricks end -->
+
+| a | b |
+| - | - |
+| bricks row | [x](bricks/) <!-- strip:bricks line --> |
+| kept row | z |
+''';
+
+    void seedBricks() {
+      File('${fixture.path}/bricks/README.md')
+        ..parent.createSync(recursive: true)
+        ..writeAsStringSync('# Bricks\n');
+      File('${fixture.path}/mason.yaml').writeAsStringSync('bricks:\n');
+    }
+
+    test('deletes bricks/ and mason.yaml, and the prose linking to them', () {
+      seedBricks();
+      final file = doc(body);
+
+      final result = strip(removeBricks: true);
+
+      expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+      expect(Directory('${fixture.path}/bricks').existsSync(), isFalse);
+      expect(File('${fixture.path}/mason.yaml').existsSync(), isFalse);
+      final out = file.readAsStringSync();
+      expect(out, isNot(contains('bricks')));
+      expect(out, contains('kept row'));
+    });
+
+    test('without the flag, bricks and their prose stay', () {
+      seedBricks();
+      final file = doc(body);
+
+      expect(strip().exitCode, 0);
+      expect(Directory('${fixture.path}/bricks').existsSync(), isTrue);
+      expect(File('${fixture.path}/mason.yaml').existsSync(), isTrue);
+      expect(file.readAsStringSync(), body);
+    });
   });
 }

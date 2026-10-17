@@ -119,7 +119,7 @@ Navigate through the folders to dive deeper into the project modules:
 Top-level folders outside `lib/`:
 
 - **`tool/`** — One-off maintenance scripts (for example `strip_sample_features.dart`); not shipped with the app.
-- **`bricks/`** — Mason brick(s) for rename / optional strip; not app runtime code. Index: [bricks/README.md](../bricks/README.md).
+- **`bricks/`** — Mason brick(s) for rename / optional strip; not app runtime code. Index: [bricks/README.md](../bricks/README.md). <!-- strip:bricks line -->
 - **`test/`** — Unit, widget, and integration tests (mirrors `lib/` where it helps).
 
 ```

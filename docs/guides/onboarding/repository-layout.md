@@ -13,7 +13,7 @@ This document describes **template-owned directories** only. Flutter **platform*
 | [`scripts/`](../../../scripts/) | Shell automation: `dev/` (hooks, format, features), `test/` (coverage, E2E). Index: [scripts/README.md](../../../scripts/README.md). |
 | [`tool/`](../../../tool/) | Dart maintenance scripts (e.g. strip sample features). |
 | [`examples/`](../../../examples/) | Non-shipping Dart snippets; see [`examples/README.md`](../../../examples/README.md). |
-| [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). Safe to delete **`bricks/`** + **`mason.yaml`** if you rename manually and do not use Mason. |
+| [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). If you rename manually and do not use Mason, remove both with `dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks`. <!-- strip:bricks line --> |
 | [`.github/workflows/`](../../../.github/workflows/) | CI, optional manual E2E, deploy templates. |
 | [`.githooks/`](../../../.githooks/) | Canonical hook scripts in repo; [`setup_git_hooks.sh`](../../../scripts/dev/setup_git_hooks.sh) copies them to `.git/hooks/`. |
 
