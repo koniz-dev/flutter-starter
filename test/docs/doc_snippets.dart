@@ -24,10 +24,13 @@ List<String> importingDartBlocks(String markdown) {
 /// relative `../../helpers/...` import reaches `test/helpers/`. The
 /// directory is deleted afterwards.
 List<String> analyzeSnippets(String name, List<String> blocks) {
+  final package = currentPackageName();
   final dir = Directory('test/docs/_${name}_snippets')..createSync();
   try {
     for (var i = 0; i < blocks.length; i++) {
-      File('${dir.path}/snippet_$i.dart').writeAsStringSync(blocks[i]);
+      File(
+        '${dir.path}/snippet_$i.dart',
+      ).writeAsStringSync(forPackage(blocks[i], package));
     }
     final result = Process.runSync('dart', [
       'analyze',
@@ -42,3 +45,27 @@ List<String> analyzeSnippets(String name, List<String> blocks) {
     dir.deleteSync(recursive: true);
   }
 }
+
+/// The template's own package name, spelled so that neither rename path
+/// (`mason make flutter_starter_setup`, fork-and-customize Option B) rewrites
+/// it: both replace every literal `package:flutter_starter/` in `.dart` files,
+/// which would turn the rewrite below into a no-op in exactly the forks it is
+/// for.
+const String templatePackage =
+    'flutter'
+    '_starter';
+
+/// The `name:` in `pubspec.yaml`.
+String currentPackageName() => RegExp(
+  r'^name:\s*(\S+)',
+  multiLine: true,
+).firstMatch(File('pubspec.yaml').readAsStringSync())!.group(1)!;
+
+/// [block] with `package:<template name>/` imports pointed at [package].
+///
+/// The docs keep the template's package name - neither rename path rewrites
+/// Markdown, and fork-and-customize makes updating it optional - so in a
+/// renamed fork every snippet would otherwise import a package that no longer
+/// exists and turn `flutter test` red (koniz-dev/flutter-starter#603).
+String forPackage(String block, String package) =>
+    block.replaceAll('package:$templatePackage/', 'package:$package/');
