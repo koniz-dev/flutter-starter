@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
@@ -74,7 +75,7 @@ class TasksListScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                state.error!,
+                state.failure?.localizedMessage(l10n) ?? state.error!,
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
@@ -155,6 +156,7 @@ class TasksListScreen extends ConsumerWidget {
 
   Widget _buildErrorBanner(BuildContext context, TasksState state) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: colorScheme.errorContainer,
@@ -166,7 +168,7 @@ class TasksListScreen extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                state.error!,
+                state.failure?.localizedMessage(l10n) ?? state.error!,
                 style: TextStyle(color: colorScheme.onErrorContainer),
               ),
             ),

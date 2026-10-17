@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
@@ -9,12 +10,13 @@ part 'tasks_provider.g.dart';
 
 /// Tasks state
 class TasksState {
-  /// Creates a [TasksState] with the given [tasks], [isLoading], [error] and
-  /// [pendingTaskIds]
+  /// Creates a [TasksState] with the given [tasks], [isLoading], [error],
+  /// [failure] and [pendingTaskIds]
   const TasksState({
     this.tasks = const [],
     this.isLoading = false,
     this.error,
+    this.failure,
     this.pendingTaskIds = const {},
   });
 
@@ -24,8 +26,16 @@ class TasksState {
   /// Whether a task operation is in progress
   final bool isLoading;
 
-  /// Error message if operation failed, null otherwise
+  /// Error message if operation failed, null otherwise.
+  ///
+  /// This is [Failure.message]: English text built for logs. Screens render
+  /// [failure] through `localizedMessage` instead
+  /// (koniz-dev/flutter-starter#415).
   final String? error;
+
+  /// The failure behind [error], kept so a screen can show it in the user's
+  /// language.
+  final Failure? failure;
 
   /// Ids of tasks with a mutation currently in flight.
   ///
@@ -38,6 +48,7 @@ class TasksState {
     List<Task>? tasks,
     bool? isLoading,
     String? error,
+    Failure? failure,
     bool clearError = false,
     Set<String>? pendingTaskIds,
   }) {
@@ -45,6 +56,7 @@ class TasksState {
       tasks: tasks ?? this.tasks,
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
+      failure: clearError ? null : (failure ?? this.failure),
       pendingTaskIds: pendingTaskIds ?? this.pendingTaskIds,
     );
   }
@@ -90,7 +102,11 @@ class TasksNotifier extends _$TasksNotifier {
         );
       },
       failureCallback: (failure) {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
   }
@@ -140,7 +156,11 @@ class TasksNotifier extends _$TasksNotifier {
       failureCallback: (failure) async {
         // Keep the already-loaded tasks: a failed mutation reports an error,
         // it does not empty the list.
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
     return result;
@@ -160,7 +180,11 @@ class TasksNotifier extends _$TasksNotifier {
     await result.when(
       success: (_) => _loadTasks(),
       failureCallback: (failure) async {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
     return result;
@@ -180,7 +204,11 @@ class TasksNotifier extends _$TasksNotifier {
     await result.when(
       success: (_) => _loadTasks(),
       failureCallback: (failure) async {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
   }
@@ -203,7 +231,11 @@ class TasksNotifier extends _$TasksNotifier {
     await result.when(
       success: (_) => _loadTasks(),
       failureCallback: (failure) async {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
   }

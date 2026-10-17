@@ -1,0 +1,118 @@
+Upgrading analysis_options.yaml to exclude build and platform directories.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: criterion 2: the list error is the vi string for the code
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Không thể kết nối tới máy chủ. Hãy kiểm tra
+kết nối và thử lại.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart:78:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart line 78
+The test description was:
+  criterion 2: the list error is the vi string for the code
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:06 +0 -1: criterion 2: the list error is the vi string for the code [E]
+  Test failed. See exception logs above.
+  The test description was: criterion 2: the list error is the vi string for the code
+  
+00:06 +0 -1: criterion 2: the detail load error is the vi string
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Không thể kết nối tới máy chủ. Hãy kiểm tra
+kết nối và thử lại.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart:88:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart line 88
+The test description was:
+  criterion 2: the detail load error is the vi string
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:06 +0 -2: criterion 2: the detail load error is the vi string [E]
+  Test failed. See exception logs above.
+  The test description was: criterion 2: the detail load error is the vi string
+  
+00:06 +0 -2: a missing task reads as the vi not-found string
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Không tìm thấy nội dung bạn cần.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart:102:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart line 102
+The test description was:
+  a missing task reads as the vi not-found string
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:07 +0 -3: a missing task reads as the vi not-found string [E]
+  Test failed. See exception logs above.
+  The test description was: a missing task reads as the vi not-found string
+  
+00:07 +0 -3: a failed save on the detail screen is the vi string
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Không thể kết nối tới máy chủ. Hãy kiểm tra
+kết nối và thử lại.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart:123:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart line 123
+The test description was:
+  a failed save on the detail screen is the vi string
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:09 +0 -4: a failed save on the detail screen is the vi string [E]
+  Test failed. See exception logs above.
+  The test description was: a failed save on the detail screen is the vi string
+  
+00:09 +0 -4: (tearDownAll)
+00:09 +0 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart: a failed save on the detail screen is the vi string
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart: a missing task reads as the vi not-found string
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart: criterion 2: the detail load error is the vi string
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_localized_error_test.dart: criterion 2: the list error is the vi string for the code

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -27,10 +29,13 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
   late final GlobalKey<FormState> _formKey;
   Task? _task;
   bool _isLoading = true;
-  String? _error;
+
+  /// Why the task could not be shown, rendered in the user's language
+  /// (koniz-dev/flutter-starter#415).
+  Failure? _error;
 
   /// Why the last save failed, shown above the form until the next attempt.
-  String? _saveError;
+  Failure? _saveError;
 
   @override
   void initState() {
@@ -81,14 +86,14 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
             _titleController.text = task.title;
             _descriptionController.text = task.description ?? '';
           } else {
-            _error = 'Task not found';
+            _error = const NotFoundFailure('Task not found');
           }
         });
       },
       failureCallback: (failure) {
         setState(() {
           _isLoading = false;
-          _error = failure.message;
+          _error = failure;
         });
       },
     );
@@ -128,7 +133,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     // behind the closed screen (koniz-dev/flutter-starter#346).
     final failure = result.failureOrNull;
     if (failure != null) {
-      setState(() => _saveError = failure.message);
+      setState(() => _saveError = failure);
       return;
     }
 
@@ -165,7 +170,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                _error!,
+                _error!.localizedMessage(l10n),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
@@ -213,7 +218,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
           children: [
             if (_saveError != null) ...[
               Text(
-                _saveError!,
+                _saveError!.localizedMessage(l10n),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
               const SizedBox(height: 16),
