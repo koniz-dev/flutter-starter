@@ -63,13 +63,29 @@ abstract class Failure extends Equatable {
 }
 
 /// Server failure thrown when API requests fail
+///
+/// 401, 403, 404 and 422 responses become [AuthFailure],
+/// [PermissionFailure], [NotFoundFailure] and [ValidationFailure] instead;
+/// see `ExceptionToFailureMapper`. Everything else lands here with its
+/// [statusCode], so a 404 and a 500 with the same message are not equal.
 class ServerFailure extends Failure {
-  /// Creates a [ServerFailure] with the given [message] and optional [code]
-  const ServerFailure(super.message, {super.code});
+  /// Creates a [ServerFailure] with the given [message], optional [code] and
+  /// optional HTTP [statusCode]
+  const ServerFailure(super.message, {super.code, this.statusCode});
+
+  /// HTTP status code of the response that failed, when there was one.
+  final int? statusCode;
+
+  @override
+  List<Object?> get props => [message, code, statusCode];
 
   @override
   Failure copyWith({String? message, String? code}) {
-    return ServerFailure(message ?? this.message, code: code ?? this.code);
+    return ServerFailure(
+      message ?? this.message,
+      code: code ?? this.code,
+      statusCode: statusCode,
+    );
   }
 }
 

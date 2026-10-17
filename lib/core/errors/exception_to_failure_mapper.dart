@@ -6,7 +6,10 @@ class ExceptionToFailureMapper {
   /// Converts a domain exception to an appropriate typed failure
   ///
   /// Maps different exception types to their corresponding failure types:
-  /// - ServerException → ServerFailure
+  /// - ServerException → by HTTP status (koniz-dev/flutter-starter#309):
+  ///   401 → AuthFailure, 403 → PermissionFailure, 404 → NotFoundFailure,
+  ///   422 → ValidationFailure, anything else → ServerFailure carrying the
+  ///   status code
   /// - NetworkException → NetworkFailure
   /// - CacheException → CacheFailure
   /// - AuthException → AuthFailure
@@ -18,10 +21,14 @@ class ExceptionToFailureMapper {
   /// - anything else → UnknownFailure describing the exception
   static Failure map(Exception exception) {
     return switch (exception) {
-      ServerException(:final message, :final code) => ServerFailure(
-        message,
-        code: code,
-      ),
+      ServerException(:final message, :final code, :final statusCode) =>
+        switch (statusCode) {
+          401 => AuthFailure(message, code: code),
+          403 => PermissionFailure(message, code: code),
+          404 => NotFoundFailure(message, code: code),
+          422 => ValidationFailure(message, code: code),
+          _ => ServerFailure(message, code: code, statusCode: statusCode),
+        },
       NetworkException(:final message, :final code) => NetworkFailure(
         message,
         code: code,
