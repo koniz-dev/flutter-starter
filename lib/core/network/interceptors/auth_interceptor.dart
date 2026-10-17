@@ -421,14 +421,13 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    // Prevent infinite retry loop
-    final requestOptions = err.requestOptions;
-    final retryCount = requestOptions.headers['X-Retry-Count'] as String?;
-    if (retryCount == '1') {
-      // Already retried once, logout user
-      await _logoutUser();
-      return _reject(handler, err);
-    }
+    // No retry-count check: the replay goes through `retryDio()`, which has
+    // no `AuthInterceptor`, so a replay answered 401 cannot re-enter this
+    // method - it surfaces from `_retryRequest` below and logs out there. The
+    // `X-Retry-Count: 1` header that used to guard this could never be seen on
+    // a replay, so the branch only ever fired for a caller that set the header
+    // itself, logging it out without trying a refresh, and the header went to
+    // the server on every replay (koniz-dev/flutter-starter#315).
 
     // If refresh is already in progress, queue this request
     if (_isRefreshing) {
@@ -657,7 +656,6 @@ class AuthInterceptor extends Interceptor {
       headers: {
         ...requestOptions.headers,
         'Authorization': 'Bearer $newToken',
-        'X-Retry-Count': '1',
       },
     );
 
@@ -756,10 +754,9 @@ class AuthInterceptor extends Interceptor {
   /// failure - or absence - of one step must not skip the rest.
   ///
   /// The generation is advanced *first*, synchronously, ahead of every
-  /// `await` below. A concurrent refresh - the `retryCount == '1'` branch
-  /// forces a logout while another `_handle401Error` may still be waiting on
-  /// one - is then already stale by the time it reaches its own check, rather
-  /// than racing the teardown it is about to undo
+  /// `await` below, so anything still in flight for the ending session - a
+  /// refresh, a token write - is already stale by the time it reaches its own
+  /// check, rather than racing the teardown it is about to undo
   /// (koniz-dev/flutter-starter#169).
   Future<void> _logoutUser() async {
     // Nothing in flight may write a credential for the session being ended.

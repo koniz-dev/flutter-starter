@@ -369,9 +369,14 @@ void main() {
       },
     );
 
+    // Criterion 4 used to drive the `X-Retry-Count: 1` branch, which forced a
+    // logout while another refresh was in flight. That branch is gone
+    // (koniz-dev/flutter-starter#315): a caller-sent header now queues behind
+    // the in-flight refresh like any other 401, and the interceptor's
+    // remaining forced logouts all run inside the refresh's own flow.
     test(
-      'criterion 4: the retryCount == 1 forced logout survives a refresh '
-      'already in flight',
+      'criterion 4: a 401 carrying X-Retry-Count: 1 queues behind the '
+      'in-flight refresh and is replayed, not logged out',
       () async {
         final gate = holdRefreshOpen();
 
@@ -379,34 +384,22 @@ void main() {
         final first = _settle(dio.get<dynamic>('/profile'));
         await _within(gate.started.future);
 
-        // A second request arrives already carrying X-Retry-Count: 1, so its
-        // 401 takes the "already retried once" branch and forces a logout
-        // through `_logoutUser()` rather than through the repository.
-        final secondError = await _within(
-          _settle(
-            dio.get<dynamic>(
-              '/tasks',
-              options: Options(headers: {'X-Retry-Count': '1'}),
-            ),
+        final second = _settle(
+          dio.get<dynamic>(
+            '/tasks',
+            options: Options(headers: {'X-Retry-Count': '1'}),
           ),
         );
-        expect(secondError, isA<DioException>());
-        expect(tokens.accessToken, isNull);
-        expect(tokens.refreshToken, isNull);
-        // The forced logout cleared the cached user blob too, as before.
-        expect(storage.values[AppConstants.userDataKey], isNull);
+        await _within(interceptor.seen(2));
+        expect(tokens.accessToken, 'live-access', reason: 'no logout');
 
-        // Now the refresh that was already in flight comes back.
         gate.release.complete();
-        await _within(first);
 
-        expect(
-          tokens.accessToken,
-          isNull,
-          reason: 'the forced logout was overwritten by the in-flight refresh',
-        );
-        expect(tokens.refreshToken, isNull);
-        expect(retryAdapter.hits, 0);
+        expect(await _within(first), isNull);
+        expect(await _within(second), isNull);
+        expect(remote.refreshCalls, 1);
+        expect(tokens.accessToken, 'NEW-access-1');
+        expect(retryAdapter.hits, 2);
       },
     );
 
