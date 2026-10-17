@@ -66,9 +66,12 @@ class SymbolProblem {
   String toString() => '$location: $message';
 }
 
-/// Directive syntax: `<!-- symbol: <source path> <identifier> -->`.
+/// Directive syntax: `<!-- symbol: <source path> <identifier> -->`, where
+/// the identifier is a top-level name or `Type.member`
+/// (koniz-dev/flutter-starter#554).
 final RegExp _directivePattern = RegExp(
-  r'^\s*<!--\s*symbol:\s*(\S+)\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*-->\s*$',
+  r'^\s*<!--\s*symbol:\s*(\S+)\s+'
+  r'([A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)?)\s*-->\s*$',
 );
 
 final RegExp _fencePattern = RegExp(r'^\s*(`{3,}|~{3,})');
@@ -175,7 +178,7 @@ SymbolCheckResult collectSymbolProblems(Directory root) {
         );
         continue;
       }
-      if (!declaresSymbol(source.readAsStringSync(), directive.symbol)) {
+      if (!_resolves(source.readAsStringSync(), directive.symbol)) {
         problems.add(
           SymbolProblem(
             location,
@@ -188,6 +191,91 @@ SymbolCheckResult collectSymbolProblems(Directory root) {
   }
 
   return SymbolCheckResult(directives, problems);
+}
+
+/// Whether [source] declares [symbol]: a top-level name, or `Type.member`.
+bool _resolves(String source, String symbol) {
+  final dot = symbol.indexOf('.');
+  if (dot < 0) return declaresSymbol(source, symbol);
+  return declaresMember(
+    source,
+    symbol.substring(0, dot),
+    symbol.substring(dot + 1),
+  );
+}
+
+/// Whether the class, mixin, enum or extension [type] in [source] declares
+/// [member] directly: a named or factory constructor (`Type.member(`), a
+/// method, a getter or setter, or a field (koniz-dev/flutter-starter#554).
+///
+/// Only the type's own body is searched, and only at its top level - a call
+/// such as `return toJson();` inside a method body is not a declaration.
+/// Inherited and mixed-in members do not count: the directive asserts where
+/// the member is written. Textual like [declaresSymbol], and for the same
+/// reason.
+bool declaresMember(String source, String type, String member) {
+  final t = RegExp.escape(type);
+  final header = RegExp(
+    r'^\s*(?:abstract\s+|base\s+|interface\s+|final\s+|sealed\s+|mixin\s+)*'
+    '(?:class|mixin|enum|extension(?:\\s+type)?)\\s+$t'
+    r'\b[^{]*\{',
+    multiLine: true,
+  ).firstMatch(source);
+  if (header == null) return false;
+
+  // The body, from after the opening brace to its matching close. Strings
+  // and comments are skipped so a brace inside one does not count.
+  final bodyStart = header.end;
+  var depth = 1;
+  var i = bodyStart;
+  final topLevel = StringBuffer();
+  while (i < source.length && depth > 0) {
+    final c = source[i];
+    if (source.startsWith('//', i)) {
+      final end = source.indexOf('\n', i);
+      i = end < 0 ? source.length : end;
+      continue;
+    }
+    if (source.startsWith('/*', i)) {
+      final end = source.indexOf('*/', i + 2);
+      i = end < 0 ? source.length : end + 2;
+      continue;
+    }
+    if (c == "'" || c == '"') {
+      final quote = source.startsWith(c * 3, i) ? c * 3 : c;
+      var j = i + quote.length;
+      while (j < source.length && !source.startsWith(quote, j)) {
+        j += source[j] == r'\' ? 2 : 1;
+      }
+      i = j + quote.length;
+      if (depth == 1) topLevel.write('""');
+      continue;
+    }
+    if (c == '{' || c == '(' || c == '[') depth++;
+    if (c == '}' || c == ')' || c == ']') depth--;
+    // Keep only what sits directly in the body; a nested block contributes
+    // its opening bracket, so `name(` and `name {` still read as declared.
+    if (depth == 1 || (depth == 2 && (c == '(' || c == '{' || c == '['))) {
+      topLevel.write(c);
+    } else if (c == '\n') {
+      topLevel.write('\n');
+    }
+    i++;
+  }
+
+  final m = RegExp.escape(member);
+  final body = topLevel.toString();
+  return [
+    // Named or factory constructor: `Type.member(`.
+    RegExp('\\b$t\\.$m\\s*\\('),
+    // Method, getter, setter or field, at the body's top level.
+    RegExp(
+      r'(?:^|[;}\s])(?:get\s+|set\s+)?'
+      '$m'
+      r'\s*(?:<[^>]*>\s*)?(?:\(|=|;|=>|\{|,)',
+      multiLine: true,
+    ),
+  ].any((p) => p.hasMatch(body));
 }
 
 /// Whether [source] declares a top-level or type-level [name].
