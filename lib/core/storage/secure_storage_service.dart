@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/storage/string_list_encoding.dart';
@@ -10,8 +11,11 @@ import 'package:flutter_starter/core/storage/string_list_encoding.dart';
 /// - API keys
 /// - Other sensitive information
 ///
-/// Platform-specific configuration:
-/// - iOS: Uses Keychain with first unlock accessibility
+/// Platform-specific configuration (koniz-dev/flutter-starter#571):
+/// - iOS and macOS: Keychain items are `first_unlock_this_device` - readable
+///   after the first unlock since boot, and never migrated to a backup or a
+///   new device. macOS used to get the plugin's default, `unlocked`, because
+///   only the iOS options were passed. See [iosOptions] and [macOsOptions].
 ///
 /// String lists are stored as a JSON array (see `string_list_encoding.dart`),
 /// so any element round-trips - including one holding a comma, and `['']`.
@@ -21,12 +25,29 @@ class SecureStorageService implements IStorageService, IStrictStringRead {
   /// Creates a [SecureStorageService] instance with platform-specific options
   SecureStorageService()
     : _storage = const FlutterSecureStorage(
-        iOptions: IOSOptions(
-          accessibility: KeychainAccessibility.first_unlock_this_device,
-        ),
+        iOptions: iosOptions,
+        mOptions: macOsOptions,
       );
 
+  /// The Keychain options passed on iOS.
+  ///
+  /// Named so a test can check them: the plugin sends them only when
+  /// `dart:io`'s `Platform.isIOS` is true, so a host `flutter test` never sees
+  /// them on the method channel (koniz-dev/flutter-starter#374).
+  static const IOSOptions iosOptions = IOSOptions(
+    accessibility: KeychainAccessibility.first_unlock_this_device,
+  );
+
+  /// The Keychain options passed on macOS; the same accessibility as iOS.
+  static const MacOsOptions macOsOptions = MacOsOptions(
+    accessibility: KeychainAccessibility.first_unlock_this_device,
+  );
+
   final FlutterSecureStorage _storage;
+
+  /// The plugin instance, so a test can read the options it was built with.
+  @visibleForTesting
+  FlutterSecureStorage get plugin => _storage;
 
   @override
   Future<String?> getString(String key) async {
