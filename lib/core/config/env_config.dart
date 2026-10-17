@@ -2,10 +2,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_starter/core/config/dart_defines.dart';
 
 /// Environment configuration loader with fallback chain:
-/// 1. .env file (for local development; requires the file to be declared as a
-///    Flutter asset - see `docs/guides/configuration.md`)
+/// 1. A loaded .env file - see [load]; normally there is none
 /// 2. --dart-define flags, on every platform including Flutter web, for the
-///    keys listed in [DartDefines.values]
+///    keys listed in [DartDefines.values]. This is how `.env` reaches a build:
+///    `flutter run --dart-define-from-file=.env`, with nothing bundled
 /// 3. Default values
 ///
 /// Dart-define reads go through the compile-time [DartDefines] table rather
@@ -32,8 +32,13 @@ class EnvConfig {
   /// The .env file is optional. If it doesn't exist, the system will fall back
   /// to --dart-define flags or default values.
   ///
-  /// Note: For .env to be loaded, it must be added to pubspec.yaml assets
-  /// after creating it from .env.example
+  /// [load] reads from the asset bundle, so it only finds a file that is
+  /// bundled into the app - and a bundled `.env` ships, readable, inside every
+  /// release build and over HTTP on web, which `tool/check_env_assets.dart`
+  /// refuses. Pass `.env` as a build input instead:
+  /// `--dart-define-from-file=.env`, the second step of the fallback chain
+  /// on [EnvConfig]. See "Never ship a secret in the bundle" in
+  /// `docs/guides/configuration.md` (koniz-dev/flutter-starter#546).
   ///
   /// Example:
   /// ```dart
