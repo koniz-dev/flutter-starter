@@ -1,0 +1,36 @@
+# scripts-smoke manual-rename: real dispatch runs
+
+## Green: ci/441-manual-rename-smoke (the documented procedure)
+https://github.com/koniz-dev/flutter-starter/actions/runs/39007416981
+conclusion: success
+  Set up job = success
+  Checkout code = success
+  Setup Flutter = success
+  Apply Option B steps 1-3 as documented = success
+  The renamed tree analyzes clean = success
+  A feature scaffolded after the rename compiles = success
+  Post Setup Flutter = success
+  Post Checkout code = success
+  Complete job = success
+
+## Red: ci/441-regression-probe (examples/ dropped from the documented rename command; branch deleted after the run)
+https://github.com/koniz-dev/flutter-starter/actions/runs/39007960541
+conclusion: failure
+  Set up job = success
+  Checkout code = success
+  Setup Flutter = success
+  Apply Option B steps 1-3 as documented = success
+  The renamed tree analyzes clean = failure
+  A feature scaffolded after the rename compiles = skipped
+  Post Setup Flutter = success
+  Post Checkout code = success
+  Complete job = success
+
+Failing step output:
+  
+  Because my_app depends on flutter_starter any which doesn't support null safety, version solving failed.
+  
+  The lower bound of "sdk: '>=2.7.0 <3.0.0'" must be 2.12.0 or higher to enable null safety.
+  For details, see https://dart.dev/null-safety
+  Failed to update packages.
+  ##[error]Process completed with exit code 1.
