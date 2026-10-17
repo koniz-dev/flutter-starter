@@ -1,0 +1,17 @@
+# docs/guides/security/implementation.md reverted to ad32939570f^ (before the #277 fix), all else at HEAD
+$ dart run tool/check_docs.dart --dart-defines
+docs/guides/security/implementation.md:134: --dart-define key `CERTIFICATE_FINGERPRINTS` is not in DartDefines.values, so the app never reads it
+docs/guides/security/implementation.md:141: --dart-define key `CERTIFICATE_FINGERPRINTS` is not in DartDefines.values, so the app never reads it
+docs/guides/security/implementation.md:148: --dart-define key `CERTIFICATE_FINGERPRINTS` is not in DartDefines.values, so the app never reads it
+docs/guides/security/implementation.md:187: --dart-define key `CERTIFICATE_FINGERPRINTS` is not in DartDefines.values, so the app never reads it
+dart-defines: scanned 68 file(s) against 16 known key(s); 4 unknown
+
+4 problem(s) found.
+exit=1
+
+# docs/guides/security/implementation.md restored to HEAD
+$ dart run tool/check_docs.dart --dart-defines
+dart-defines: scanned 68 file(s) against 16 known key(s); 0 unknown
+
+OK: documentation checks passed.
+exit=0

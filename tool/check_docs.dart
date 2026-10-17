@@ -1,6 +1,6 @@
 // Documentation integrity checker.
 //
-// Five checks, all of which have silently rotted in this repository before:
+// Six checks, all of which have silently rotted in this repository before:
 //
 //   1. Relative links and heading anchors under `docs/` resolve.
 //   2. No emoji in `docs/`, `CLAUDE.md`, or `.claude/` (the stated convention
@@ -19,6 +19,10 @@
 //      `flutter build` pass `--dart-define-from-file`, in README.md,
 //      CONTRIBUTING.md and `docs/` (see `tool/doc_env_runs.dart`,
 //      koniz-dev/flutter-starter#355).
+//   6. Every `--dart-define` key in a fenced block of README.md or `docs/` is
+//      a key of `DartDefines.values`, so no guide passes a flag the app never
+//      reads (see `tool/doc_dart_defines.dart`,
+//      koniz-dev/flutter-starter#379).
 //
 // Usage:
 //   dart run tool/check_docs.dart               # all checks
@@ -27,11 +31,13 @@
 //   dart run tool/check_docs.dart --signatures  # constructor signatures only
 //   dart run tool/check_docs.dart --symbols     # symbol existence only
 //   dart run tool/check_docs.dart --env-runs    # .env setup runs only
+//   dart run tool/check_docs.dart --dart-defines  # --dart-define keys only
 //
 // Exits 0 when clean, 1 when anything is broken.
 
 import 'dart:io';
 
+import 'doc_dart_defines.dart';
 import 'doc_env_runs.dart';
 import 'doc_signatures.dart';
 import 'doc_symbols.dart';
@@ -42,13 +48,20 @@ void main(List<String> args) {
   final signaturesOnly = args.contains('--signatures');
   final symbolsOnly = args.contains('--symbols');
   final envRunsOnly = args.contains('--env-runs');
+  final dartDefinesOnly = args.contains('--dart-defines');
   final anyFilter =
-      linksOnly || emojiOnly || signaturesOnly || symbolsOnly || envRunsOnly;
+      linksOnly ||
+      emojiOnly ||
+      signaturesOnly ||
+      symbolsOnly ||
+      envRunsOnly ||
+      dartDefinesOnly;
   final runLinks = !anyFilter || linksOnly;
   final runEmoji = !anyFilter || emojiOnly;
   final runSignatures = !anyFilter || signaturesOnly;
   final runSymbols = !anyFilter || symbolsOnly;
   final runEnvRuns = !anyFilter || envRunsOnly;
+  final runDartDefines = !anyFilter || dartDefinesOnly;
 
   final root = Directory.current;
   var failures = 0;
@@ -67,6 +80,9 @@ void main(List<String> args) {
   }
   if (runEnvRuns) {
     failures += checkEnvRuns(root);
+  }
+  if (runDartDefines) {
+    failures += checkDartDefines(root);
   }
 
   if (failures > 0) {
