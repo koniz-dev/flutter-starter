@@ -99,6 +99,20 @@ Future<void> main() async {
   // just failed to prepare, and an unguarded throw from either is the same
   // black window by another route.
   try {
+    // An ENVIRONMENT outside AppConfig.knownEnvironments (a typo like `prod`)
+    // makes isDevelopment, isStaging and isProduction all false: the base URL
+    // falls back to localhost and SSL pinning is off. printConfig() only warns
+    // in debug, so a release build booted silently on that config. Refuse to
+    // start instead, through the same failure screen as any other startup
+    // error (koniz-dev/flutter-starter#412).
+    if (AppConfig.environmentMisconfigured) {
+      throw StateError(
+        'ENVIRONMENT "${AppConfig.environment}" is not one of '
+        '${AppConfig.knownEnvironments.join(', ')}. Refusing to start: the '
+        'base URL would fall back to localhost and SSL pinning would be off.',
+      );
+    }
+
     // Storage initialization runs the schema migrations. It is the one startup
     // step that can fail with the user's local data on the line.
     await container.read(storageInitializationProvider.future);
