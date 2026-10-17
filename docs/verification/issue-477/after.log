@@ -1,0 +1,3 @@
+00:00 +0: criterion 1: the replayed 200 is logged as a response
+00:00 +1: criterion 2: no logged entry carries the fresh access token
+00:00 +2: All tests passed!
