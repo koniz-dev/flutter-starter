@@ -1,0 +1,39 @@
+# test/shared/accessibility/single_button_node_test.dart against main's lib/shared/accessibility/accessibility_widgets.dart
+# (criterion 3 passes on main too: labeledTapTargetGuideline accepts the inner, labelled node; it is a regression pin)
+00:00 +0: AccessibleButton criterion 1: one button node, carrying the label and the tap
+Expected: an object with length of <1>
+            SemanticsNode:SemanticsNode#4(Rect.fromLTRB(340.8, 276.0, 459.3, 324.0), flags:
+[isButton, hasEnabledState, isEnabled], label: "Retry", textDirection: ltr),
+            SemanticsNode:SemanticsNode#5(Rect.fromLTRB(0.0, 0.0, 118.5, 48.0), actions: [focus,
+tap], flags: [isButton, hasEnabledState, isEnabled, isFocusable], label: "Retry", textDirection:
+   Which: has length of <2>
+00:02 +0 -1: AccessibleButton criterion 1: one button node, carrying the label and the tap [E]
+00:02 +0 -1: AccessibleButton criterion 2: disabled is reflected in the single node
+Expected: an object with length of <1>
+            SemanticsNode:SemanticsNode#4(Rect.fromLTRB(340.8, 276.0, 459.3, 324.0), flags:
+[isButton, hasEnabledState], label: "Retry, Disabled", textDirection: ltr),
+            SemanticsNode:SemanticsNode#5(Rect.fromLTRB(0.0, 0.0, 118.5, 48.0), flags: [isButton,
+hasEnabledState], label: "Retry", textDirection: ltr)
+   Which: has length of <2>
+00:02 +0 -2: AccessibleButton criterion 2: disabled is reflected in the single node [E]
+Expected: an object with length of <1>
+            SemanticsNode:SemanticsNode#4(Rect.fromLTRB(366.0, 276.0, 434.0, 324.0), flags:
+[isButton, hasEnabledState], label: "Loading, Retry", textDirection: ltr),
+            SemanticsNode:SemanticsNode#5(Rect.fromLTRB(0.0, 0.0, 68.0, 48.0), flags: [isButton,
+   Which: has length of <2>
+00:02 +0 -3: AccessibleIconButton criterion 1: one button node, carrying the label and the tap
+Expected: an object with length of <1>
+            SemanticsNode:SemanticsNode#4(Rect.fromLTRB(376.0, 276.0, 424.0, 324.0), flags:
+[isButton, hasEnabledState, isEnabled], label: "Select language", textDirection: ltr),
+            SemanticsNode:SemanticsNode#5(Rect.fromLTRB(0.0, 0.0, 48.0, 48.0), actions: [focus,
+   Which: has length of <2>
+00:02 +0 -4: AccessibleIconButton criterion 1: one button node, carrying the label and the tap [E]
+00:02 +0 -4: AccessibleIconButton criterion 2: disabled is reflected in the single node
+Expected: an object with length of <1>
+            SemanticsNode:SemanticsNode#4(Rect.fromLTRB(376.0, 276.0, 424.0, 324.0), flags:
+[isButton, hasEnabledState], label: "Select language", textDirection: ltr),
+            SemanticsNode:SemanticsNode#5(Rect.fromLTRB(0.0, 0.0, 48.0, 48.0), flags: [isButton,
+   Which: has length of <2>
+00:02 +0 -5: AccessibleIconButton criterion 2: disabled is reflected in the single node [E]
+00:02 +0 -5: criterion 3: HomeScreen meets labeledTapTargetGuideline
+00:03 +1 -5: Some tests failed.

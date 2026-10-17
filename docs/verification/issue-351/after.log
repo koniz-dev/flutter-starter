@@ -1,0 +1,10 @@
+# the same test on this branch
+00:00 +0: AccessibleButton criterion 1: one button node, carrying the label and the tap
+00:00 +1: AccessibleButton criterion 2: disabled is reflected in the single node
+00:01 +3: AccessibleIconButton criterion 1: one button node, carrying the label and the tap
+00:01 +4: AccessibleIconButton criterion 2: disabled is reflected in the single node
+00:01 +5: criterion 3: HomeScreen meets labeledTapTargetGuideline
+00:01 +6: All tests passed!
+
+# flutter test test/shared test/features/auth test/features/home
+00:56 +592: All tests passed!
