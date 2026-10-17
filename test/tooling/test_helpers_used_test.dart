@@ -52,9 +52,12 @@ void main() {
     ];
     final unused = <String>[];
     for (final library in libraries) {
+      // Comments do not count as a use: a helper named only in a comment
+      // explaining its removal is still unused.
       final corpus = [
         for (final f in elsewhere)
-          if (f.path != library.path) f.readAsStringSync(),
+          if (f.path != library.path)
+            f.readAsStringSync().replaceAll(RegExp(r'//[^\n]*'), ''),
       ].join('\n');
       for (final name in _publicDeclarations(library.readAsStringSync())) {
         if (!RegExp('\\b${RegExp.escape(name)}\\b').hasMatch(corpus)) {
