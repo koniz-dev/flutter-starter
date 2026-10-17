@@ -1,0 +1,3 @@
+00:00 +0: criterion 1: after a failed start, a second call attempts the start again and fails again instead of returning normally
+00:00 +1: criterion 2: concurrent calls start protection once
+00:00 +2: All tests passed!
