@@ -1,0 +1,10 @@
+# test/tooling/assertionless_test_guard_test.dart with main's test/features/tasks/presentation/screens/task_detail_screen_test.dart and test/core/utils/provider_disposal_test.dart
+  test/core/utils/provider_disposal_test.dart:30
+  test/features/tasks/presentation/screens/task_detail_screen_test.dart:740
+  test/tooling/assertionless_test_guard_test.dart 116:5  main.<fn>
+00:00 +0 -1: Some tests failed.
+00:00 +0 -1: criterion 2: every test and testWidgets body asserts something [E]
+00:00 +0: criterion 2: every test and testWidgets body asserts something
+
+# main's 'should handle cancel button in edit mode': expect/verify calls in its body
+0
