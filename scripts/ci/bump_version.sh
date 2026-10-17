@@ -131,14 +131,27 @@ cleanup() { rm -f "$TMP_FILE"; }
 trap cleanup EXIT
 cp -p "$PUBSPEC" "$TMP_FILE"
 
-# Only the first top-level `version:` line is rewritten; awk keeps every other
-# byte, including the trailing comment placement, exactly as it was.
+# Only the first top-level `version:` line is rewritten, and only its value: a
+# trailing comment on it - and a CRLF file's CR - is carried over as written
+# (koniz-dev/flutter-starter#342). awk keeps every other line byte for byte.
 awk -v new="version: $NEW_VERSION" '
-    !done && /^version:/ { print new; done = 1; next }
+    !done && /^version:/ {
+        suffix = ""
+        if (match($0, /[ \t]+#.*$/)) {
+            suffix = substr($0, RSTART)
+        } else if ($0 ~ /\r$/) {
+            suffix = "\r"
+        }
+        print new suffix
+        done = 1
+        next
+    }
     { print }
 ' "$PUBSPEC" > "$TMP_FILE"
 
-grep -qx "version: $NEW_VERSION" "$TMP_FILE" \
+# `.` and `+` are regex metacharacters, and every version has dots.
+NEW_VERSION_RE="$(printf '%s' "$NEW_VERSION" | sed 's/[.+]/\\&/g')"
+grep -qE "^version: ${NEW_VERSION_RE}([[:space:]]|$)" "$TMP_FILE" \
     || die "rewrite produced no 'version: $NEW_VERSION' line; $PUBSPEC left untouched"
 
 mv "$TMP_FILE" "$PUBSPEC"
