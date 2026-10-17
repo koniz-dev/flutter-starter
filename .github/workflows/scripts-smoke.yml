@@ -72,6 +72,30 @@ jobs:
           channel: 'stable'
           cache: true
 
+      # build_all.sh builds *release* Android artifacts, and
+      # android/app/build.gradle.kts refuses to sign a release with the debug
+      # keystore (#132). Same throwaway key and key.properties recipe as
+      # build.yml (koniz-dev/flutter-starter#344); the artifacts are NOT
+      # distributable - the key exists only for this runner's lifetime.
+      # `flutter clean` in build_all.sh does not touch android/key.properties.
+      - name: Generate throwaway release keystore
+        shell: bash
+        run: |
+          set -euo pipefail
+          keytool -genkeypair -v \
+            -keystore android/ci-throwaway-keystore.jks \
+            -storetype JKS \
+            -storepass ci-throwaway -keypass ci-throwaway \
+            -alias ci-throwaway \
+            -keyalg RSA -keysize 2048 -validity 30 \
+            -dname "CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US"
+          {
+            echo "storeFile=ci-throwaway-keystore.jks"
+            echo "storePassword=ci-throwaway"
+            echo "keyAlias=ci-throwaway"
+            echo "keyPassword=ci-throwaway"
+          } > android/key.properties
+
       # No `flutter pub get` step: build_all.sh runs `flutter clean` and
       # `flutter pub get` itself, and the point is to exercise the script
       # exactly as an adopter would.
