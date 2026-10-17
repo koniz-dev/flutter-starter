@@ -7,24 +7,36 @@ import 'package:flutter_starter/core/utils/result.dart';
 /// This mixin provides convenient methods for tracking use case operations
 /// with performance monitoring.
 ///
-/// Usage:
+/// Usage - override [performanceService] with a real service, or the mixin
+/// traces nothing (its default is `null`):
+///
 /// ```dart
+/// // compile
+/// import 'package:flutter_starter/core/performance/i_performance_service.dart';
+/// import 'package:flutter_starter/core/performance/performance_usecase_mixin.dart';
+/// import 'package:flutter_starter/core/utils/result.dart';
+///
+/// abstract class ItemsRepository {
+///   Future<Result<List<String>>> getItems();
+/// }
+///
 /// class GetItemsUseCase with PerformanceUseCaseMixin {
 ///   GetItemsUseCase({
 ///     required this.repository,
-///     PerformanceService? performanceService,
+///     IPerformanceService? performanceService,
 ///   }) : _performanceService = performanceService;
 ///
-///   final Repository repository;
-///   final PerformanceService? _performanceService;
+///   final ItemsRepository repository;
+///   final IPerformanceService? _performanceService;
 ///
+///   // The override that makes tracing happen.
 ///   @override
-///   PerformanceService? get performanceService => _performanceService;
+///   IPerformanceService? get performanceService => _performanceService;
 ///
-///   Future<Result<List<Item>>> call() async {
+///   Future<Result<List<String>>> call() {
 ///     return measureUseCaseOperation(
 ///       operationName: 'get_items',
-///       operation: () => repository.getItems(),
+///       operation: repository.getItems,
 ///     );
 ///   }
 /// }
