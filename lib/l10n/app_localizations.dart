@@ -882,6 +882,12 @@ abstract class AppLocalizations {
   /// **'You\'re not signed in, or your session has ended. Please sign in again.'**
   String get failureAuth;
 
+  /// Failure message shown when sign-in or registration is rejected because the email and password do not match an account
+  ///
+  /// In en, this message translates to:
+  /// **'That email and password don\'t match. Check them and try again.'**
+  String get failureInvalidCredentials;
+
   /// Failure message shown to the user. Used for a permission failure
   ///
   /// In en, this message translates to:

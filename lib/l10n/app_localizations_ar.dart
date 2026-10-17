@@ -566,6 +566,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'لم تسجّل الدخول أو انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.';
 
   @override
+  String get failureInvalidCredentials =>
+      'البريد الإلكتروني وكلمة المرور غير متطابقين. تحقّق منهما وحاول مرة أخرى.';
+
+  @override
   String get failurePermission => 'ليس لديك إذن للقيام بذلك.';
 
   @override

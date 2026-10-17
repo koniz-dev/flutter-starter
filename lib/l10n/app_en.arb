@@ -630,6 +630,10 @@
   "@failureAuth": {
     "description": "Failure message shown to the user. Used for an authentication failure"
   },
+  "failureInvalidCredentials": "That email and password don't match. Check them and try again.",
+  "@failureInvalidCredentials": {
+    "description": "Failure message shown when sign-in or registration is rejected because the email and password do not match an account"
+  },
   "failurePermission": "You don't have permission to do that.",
   "@failurePermission": {
     "description": "Failure message shown to the user. Used for a permission failure"

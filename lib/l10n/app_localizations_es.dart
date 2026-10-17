@@ -540,6 +540,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'No has iniciado sesión o tu sesión ha terminado. Vuelve a iniciar sesión.';
 
   @override
+  String get failureInvalidCredentials =>
+      'El correo y la contraseña no coinciden. Revísalos e inténtalo de nuevo.';
+
+  @override
   String get failurePermission => 'No tienes permiso para hacer eso.';
 
   @override
