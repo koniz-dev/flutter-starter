@@ -44,7 +44,7 @@ List<String> _unsignedReleaseBuilds(String path, String source) {
     }
     final code = line.trimLeft();
     // Comments and display names are not commands.
-    if (code.startsWith('#') || RegExp(r'^(?:- )?name:').hasMatch(code)) {
+    if (code.startsWith('#') || RegExp('^(?:- )?name:').hasMatch(code)) {
       continue;
     }
     if (code.contains('android/key.properties')) keyed = true;
