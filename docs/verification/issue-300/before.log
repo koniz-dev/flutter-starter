@@ -1,0 +1,447 @@
+# scripts/test/pre_commit_hook_test.sh with HOOK_UNDER_TEST = main's .githooks/pre-commit
+--- hook output without pub get (exit 1) ---
+Running pre-commit checks...
+📝 Checking code formatting...
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/accessibility/accessibility_constants.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/core/accessibility/accessibility_helpers.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/config/app_config.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/constants/api_endpoints.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/contracts/contracts.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/di/providers.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/errors/dio_exception_mapper.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/feature_flags/feature_flags_manager.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/localization/failure_localizations.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/logging/crashlytics_output_template.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/network/adapters/dio_network_client.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/network/api_client.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/core/network/api_client.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/network/interceptors/api_logging_interceptor.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/core/network/interceptors/auth_interceptor.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/network/realtime/i_realtime_client.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/core/network/realtime/noop_realtime_client.dart
+Formatted lib/core/network/realtime/raw_websocket_client.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/performance/i_performance_service.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/routing/app_router.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/security/i_rasp_service.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/security/infrastructure/freerasp_service_impl.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/session/session_generation.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/startup/startup_failure_app.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/storage/adapters/secure_token_store.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/storage/isar_database_template.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/storage/migration/migration_executor.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/storage/migration/migrations/migration_v1_to_v2.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/core/utils/date_formatter.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/core/utils/debouncer.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/data/datasources/auth_local_datasource.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/data/models/auth_response_model.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/data/repositories/auth_repository_impl.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/di/auth_providers.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/domain/auth_error_codes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/domain/entities/user.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/domain/repositories/auth_repository.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/domain/usecases/get_current_user_usecase.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/presentation/auth_redirect.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/presentation/providers/auth_provider.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/presentation/screens/login_screen.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/presentation/widgets/auth_button.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/auth/routing/auth_routes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/data/services/local_feature_flags_service.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/domain/entities/feature_flag.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/domain/repositories/feature_flags_repository.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/presentation/examples/feature_flags_example_screen.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/features/feature_flags/presentation/examples/feature_flags_example_screen.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/presentation/providers/feature_flags_providers.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/presentation/widgets/feature_flag_builder.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/feature_flags/routing/feature_flags_routes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/home/presentation/screens/home_screen.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/home/routing/home_routes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/data/datasources/tasks_local_datasource.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/data/models/task_model.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/data/repositories/tasks_repository_impl.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/di/tasks_providers.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/domain/entities/task.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/features/tasks/domain/entities/task.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/domain/repositories/tasks_repository.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/domain/usecases/create_task_usecase.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/presentation/providers/tasks_provider.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/features/tasks/presentation/providers/tasks_provider.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/presentation/screens/task_detail_screen.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/features/tasks/presentation/screens/task_detail_screen.dart
+Formatted lib/features/tasks/presentation/screens/tasks_list_screen.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/features/tasks/routing/tasks_routes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/l10n/app_localizations.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted lib/l10n/app_localizations_ar.dart
+Formatted lib/l10n/app_localizations_en.dart
+Formatted lib/l10n/app_localizations_es.dart
+Formatted lib/l10n/app_localizations_vi.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/main.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/shared/accessibility/accessibility_widgets.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/shared/design_system/tokens/app_colors.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/shared/design_system/widgetbook_template.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/shared/extensions/context_extensions.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/shared/theme/app_theme.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "lib/shared/widgets/error_widget.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/acceptance/acceptance_helpers.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/acceptance/session_restore_acceptance_test.dart
+Formatted test/acceptance/startup_failure_acceptance_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/accessibility/accessibility_helpers_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/config/app_config_getters_used_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/config/app_config_test.dart
+Formatted test/core/config/dart_defines_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/constants/api_endpoints_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/di/provider_graph_acyclic_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/di/provider_graph_acyclic_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/errors/dio_exception_mapper_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/errors/dio_exception_mapper_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/feature_flags/feature_flags_manager_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/feature_flags/feature_flags_manager_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/localization/device_locale_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/localization/device_locale_test.dart
+Formatted test/core/localization/failure_localizations_test.dart
+Formatted test/core/localization/localization_providers_test.dart
+Formatted test/core/localization/localization_service_test.dart
+Formatted test/core/localization/localized_formatters_test.dart
+Formatted test/core/localization/supported_locales_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/logging/crashlytics_output_template_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/logging/crashlytics_output_template_test.dart
+Formatted test/core/logging/file_log_open_failure_test.dart
+Formatted test/core/logging/log_output_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/network/adapters/dio_network_client_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/network/adapters/dio_network_client_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/network/api_client_cache_policy_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/network/api_client_cache_policy_test.dart
+Formatted test/core/network/api_client_interceptor_chain_test.dart
+Formatted test/core/network/forced_logout_cache_test.dart
+Formatted test/core/network/forced_logout_session_test.dart
+Formatted test/core/network/head_replay_failure_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/network/interceptors/api_logging_interceptor_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/network/interceptors/api_logging_redaction_rules_test.dart
+Formatted test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+Formatted test/core/network/interceptors/auth_interceptor_session_generation_test.dart
+Formatted test/core/network/interceptors/auth_interceptor_test.dart
+Formatted test/core/network/interceptors/cache_interceptor_test.dart
+Formatted test/core/network/interceptors/cache_interceptor_timestamp_test.dart
+Formatted test/core/network/interceptors/performance_interceptor_test.dart
+Formatted test/core/network/interceptors/retry_interceptor_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/network/realtime/noop_realtime_client_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/network/realtime/raw_websocket_client_test.dart
+Formatted test/core/network/ssl_pinning_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/performance/noop_performance_service_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/performance/performance_repository_mixin_test.dart
+Formatted test/core/performance/performance_screen_mixin_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/routing/app_router_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/routing/app_router_test.dart
+Formatted test/core/routing/navigation_extensions_test.dart
+Formatted test/core/routing/navigation_logging_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/security/infrastructure/freerasp_service_impl_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/security/rasp_providers_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/session/session_epoch_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/session/session_epoch_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/startup/startup_failure_app_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/storage/adapters/secure_token_delete_failure_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/storage/adapters/secure_token_delete_failure_test.dart
+Formatted test/core/storage/adapters/secure_token_store_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/storage/isar_database_template_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/storage/migration/fresh_install_no_language_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/storage/migration/migrations/migration_v1_to_v2_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/core/utils/date_formatter_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/core/utils/json_helper_test.dart
+Formatted test/core/utils/lazy_loader_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/docs/doc_dart_defines_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/docs/doc_dart_defines_test.dart
+Formatted test/docs/doc_env_runs_test.dart
+Formatted test/docs/doc_signatures_test.dart
+Formatted test/docs/doc_symbols_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/data/datasources/auth_local_datasource_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/data/datasources/auth_local_datasource_test.dart
+Formatted test/features/auth/data/datasources/auth_remote_datasource_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/data/models/auth_response_model_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/data/repositories/auth_repository_impl_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/data/repositories/auth_repository_impl_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/di/auth_providers_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/domain/entities/user_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/domain/usecases/get_current_user_usecase_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/domain/usecases/get_current_user_usecase_test.dart
+Formatted test/features/auth/domain/usecases/is_authenticated_usecase_test.dart
+Formatted test/features/auth/domain/usecases/login_usecase_test.dart
+Formatted test/features/auth/domain/usecases/logout_usecase_test.dart
+Formatted test/features/auth/domain/usecases/refresh_token_usecase_test.dart
+Formatted test/features/auth/domain/usecases/register_usecase_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/integration/auth_flow_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/integration/token_refresh_flow_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/logout_teardown_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/logout_teardown_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/presentation/providers/auth_provider_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/presentation/providers/auth_provider_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/presentation/screens/auth_forms_keyboard_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/presentation/screens/auth_localized_error_test.dart
+Formatted test/features/auth/presentation/screens/login_screen_test.dart
+Formatted test/features/auth/presentation/screens/register_screen_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/presentation/widgets/auth_button_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/presentation/widgets/auth_button_test.dart
+Formatted test/features/auth/register_deep_link_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/auth/routing/auth_routes_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/auth/routing/auth_routes_test.dart
+Formatted test/features/auth/session_restore_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/data/datasources/feature_flags_local_datasource_keyvalue_seam_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/data/services/local_feature_flags_service_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/domain/entities/feature_flag_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/feature_flag_layers_agree_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/feature_flags/feature_flag_layers_agree_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/home/presentation/screens/home_screen_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/home/routing/home_routes_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/home/routing/home_routes_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/data/datasources/tasks_local_datasource_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/data/models/task_model_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/data/models/task_model_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/data/repositories/tasks_repository_impl_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/data/repositories/tasks_repository_impl_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/data/tasks_mutation_concurrency_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/data/tasks_mutation_concurrency_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/di/tasks_providers_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/domain/entities/task_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/domain/usecases/create_task_usecase_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/domain/usecases/create_task_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/delete_task_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/get_all_tasks_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/update_task_usecase_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/presentation/providers/tasks_provider_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/presentation/providers/tasks_provider_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/presentation/screens/task_detail_navigation_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/presentation/screens/task_detail_navigation_test.dart
+Formatted test/features/tasks/presentation/screens/task_detail_screen_test.dart
+Formatted test/features/tasks/presentation/screens/tasks_list_screen_test.dart
+Formatted test/features/tasks/presentation/screens/tasks_localized_error_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/features/tasks/routing/tasks_routes_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/features/tasks/routing/tasks_routes_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/helpers/in_memory_stores.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/main_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/shared/accessibility/accessibility_test_helpers.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/shared/accessibility/focus_manager_shadowing_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/shared/design_system/tokens/app_colors_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/shared/extensions/context_extensions_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/shared/localized_strings_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/shared/localized_strings_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/shared/theme/app_theme_font_family_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/shared/widgets/error_widget_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/shared/widgets/language_switcher_test.dart
+Formatted test/shared/widgets/optimized_list_view_error_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "test/tooling/acceptance_container_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted test/tooling/check_env_assets_test.dart
+Formatted test/tooling/claude_md_checks_table_test.dart
+Formatted test/tooling/epic_coverage_test.dart
+Formatted test/tooling/import_rules_test.dart
+Formatted test/tooling/test_coverage_script_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "integration_test/app_e2e_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted integration_test/app_e2e_test.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/check_android_toolchain.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted tool/check_epic_coverage.dart
+Formatted tool/doc_symbols.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/golden/no_feature_flags/lib/core/routing/app_routes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/golden/no_tasks/lib/core/routing/app_routes.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/golden/stripped/integration_test/app_e2e_test.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/golden/stripped/lib/core/routing/app_router.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/golden/stripped/lib/features/home/presentation/screens/home_screen.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "tool/golden/stripped/lib/main.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "examples/performance_examples.dart":
+Failed to resolve package URI "package:very_good_analysis/analysis_options.yaml" in include at "/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.4T3s0fQRTZ/clone/analysis_options.yaml".
+Formatted 410 files (114 changed) in 1.20 seconds.
+❌ Code formatting check failed.
+   Fix: ./scripts/dev/format_dart.sh
+   Or: dart format lib test integration_test tool examples
+---
+ok    without pub get the hook exits non-zero
+FAIL  without pub get the hook does not mention flutter pub get
+FAIL  without pub get the hook left 114 changed path(s)
+ M integration_test/app_e2e_test.dart
+ M lib/core/accessibility/accessibility_helpers.dart
+ M lib/core/network/api_client.dart
+ M lib/core/network/interceptors/auth_interceptor.dart
+ M lib/core/network/realtime/noop_realtime_client.dart
+ M lib/core/network/realtime/raw_websocket_client.dart
+ M lib/core/utils/debouncer.dart
+ M lib/features/feature_flags/presentation/examples/feature_flags_example_screen.dart
+ M lib/features/tasks/domain/entities/task.dart
+ M lib/features/tasks/presentation/providers/tasks_provider.dart
+FAIL  with dependencies resolved the hook exited 1 on a clean tree
+Formatted test/features/tasks/data/tasks_mutation_concurrency_test.dart
+Formatted test/features/tasks/domain/usecases/create_task_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/delete_task_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/get_all_tasks_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/get_task_by_id_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/toggle_task_completion_usecase_test.dart
+Formatted test/features/tasks/domain/usecases/update_task_usecase_test.dart
+Formatted test/features/tasks/presentation/providers/tasks_provider_test.dart
+Formatted test/features/tasks/presentation/screens/task_detail_screen_test.dart
+Formatted test/features/tasks/presentation/screens/tasks_list_screen_test.dart
+Formatted test/features/tasks/presentation/screens/tasks_localized_error_test.dart
+Formatted test/features/tasks/routing/tasks_routes_test.dart
+Formatted test/shared/localized_strings_test.dart
+Formatted test/shared/widgets/language_switcher_test.dart
+Formatted test/tooling/claude_md_checks_table_test.dart
+Formatted test/tooling/import_rules_test.dart
+Formatted 410 files (63 changed) in 1.39 seconds.
+❌ Code formatting check failed.
+   Fix: ./scripts/dev/format_dart.sh
+   Or: dart format lib test integration_test tool examples
+ok    with dependencies resolved the hook fails on a real format violation
+
+3 case(s) failed.
+exit=1
