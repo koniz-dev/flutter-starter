@@ -135,6 +135,49 @@ final refreshToken = authResponse.refreshToken;
 
 ---
 
+## Wire format
+
+The auth slice speaks **snake_case** on the wire, in both directions. Your
+backend must send and accept exactly these keys
+(koniz-dev/flutter-starter#312). Paths are relative to `BASE_URL` plus the
+`/v1` API version (`ApiEndpoints`):
+
+| Call | Endpoint | Request body | Response body |
+|---|---|---|---|
+| Login | `POST /auth/login` | `email`, `password` | `user`, `token`, `refresh_token` |
+| Register | `POST /auth/register` | `email`, `password`, `name` | `user`, `token`, `refresh_token` |
+| Refresh | `POST /auth/refresh` | `refresh_token` | `user`, `token`, `refresh_token` |
+| Logout | `POST /auth/logout` | none | ignored |
+
+The `user` object is `id`, `email`, and the optional `name` and `avatar_url`.
+`refresh_token` is optional in a response. When it is missing, no refresh token
+is stored and the first access-token expiry ends the session.
+
+```json
+{
+  "user": {
+    "id": "u-1",
+    "email": "user@example.com",
+    "name": "Jane",
+    "avatar_url": "https://example.com/jane.png"
+  },
+  "token": "<access token>",
+  "refresh_token": "<refresh token>"
+}
+```
+
+A backend that uses another convention (for example camelCase `refreshToken`)
+must be adapted in the models' `@JsonKey` names or in
+`AuthRemoteDataSourceImpl`. Otherwise its refresh token parses as `null` and is
+never stored. `test/features/auth/data/auth_wire_format_test.dart` pins every
+key above.
+
+<!-- symbol: lib/features/auth/data/models/auth_response_model.dart AuthResponseModel -->
+<!-- symbol: lib/features/auth/data/models/user_model.dart UserModel -->
+<!-- symbol: lib/features/auth/data/datasources/auth_remote_datasource.dart AuthRemoteDataSourceImpl -->
+
+---
+
 ## Related APIs
 
 - [Repositories](repositories.md) - Uses these models
