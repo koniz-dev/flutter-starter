@@ -1,0 +1,17 @@
+# dart run tool/check_docs.dart on this branch
+
+OK: documentation checks passed.
+exit=0
+
+# mutant: the symbol directive names RequestCancelation (misspelt)
+symbols: checked 26 directive(s); 1 unresolved
+env runs: scanned 69 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 68 file(s) against 16 known key(s); 0 unknown
+1 problem(s) found.
+
+# grep on this branch
+216:#### PATCH Request
+242:Future<NetworkResponse<dynamic>> patch(
+287:#### Cancelling a request
+311:  `NetworkException` whose `code` is `REQUEST_CANCELLED`.
+597:`NetworkException` with code `REQUEST_CANCELLED`, and nothing reaches the wire.
