@@ -247,6 +247,7 @@ Two consequences worth stating plainly:
   rule from [Never ship a secret in the bundle](#never-ship-a-secret-in-the-bundle)
   applies unchanged.
 
+<!-- strip:feature-flags start -->
 ### Feature flags
 
 **No build mechanism sets a `FEATURE_*` variable.** Neither `.env` nor
@@ -284,6 +285,7 @@ const LocalFlagDefinition(
   compileTimeDefault: bool.fromEnvironment('FEATURE_ENABLE_EXPERIMENTAL_FEATURES'),
 ),
 ```
+<!-- strip:feature-flags end -->
 
 ### Why the dart-define keys are declared in a table
 
@@ -478,7 +480,7 @@ print(config);
 | `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableAnalytics`, but the starter ships no analytics, so nothing reads it. Gate your analytics SDK on it (default: true in staging/prod) |
 | `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableCrashReporting`, but the starter ships no crash reporter, so nothing reads it. Gate your crash reporter on it (default: true in staging/prod) |
 | `ENABLE_PERFORMANCE_MONITORING` | bool | Environment-aware | Enable performance monitoring |
-| `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Registers the `/feature-flags-debug` route; without it the route does not exist (default: true in dev only) |
+| `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Gates debug-only routes - in this starter, the feature-flags sample's debug screen, which does not exist without it. In a tree without that sample nothing reads it (default: true in dev only) |
 | `ENABLE_HTTP_LOGGING` | bool | Environment-aware | Enable HTTP loggers (default: true in dev) |
 
 The app version and build number are not configuration keys: they come from

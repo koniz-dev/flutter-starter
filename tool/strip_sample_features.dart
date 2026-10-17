@@ -107,13 +107,29 @@ const _processOnlyPaths = <String>[
 /// Directories to delete once emptied by [_processOnlyPaths].
 const _processOnlyPrunedDirs = <String>['.claude'];
 
-/// Markers around a block of prose that documents the removed process only.
+/// Tags of the markdown markers this strip understands.
 ///
 /// Whole files are cheap to delete; a section inside a file an adopter keeps is
-/// not, and hand-written path lists rot. These are HTML comments, so they are
-/// invisible in rendered markdown and ignored by `tool/check_docs.dart`.
-const _processMarkerStart = '<!-- strip:process-only start -->';
-const _processMarkerEnd = '<!-- strip:process-only end -->';
+/// not, and hand-written path lists rot. So prose that documents something a
+/// strip removes is marked in place, with an HTML comment that is invisible in
+/// rendered markdown and ignored by `tool/check_docs.dart`:
+///
+///   * a block, between `<!-- strip:<tag> start -->` and
+///     `<!-- strip:<tag> end -->` lines;
+///   * a single line - a table row, say, where a marker line would end the
+///     table - carrying `<!-- strip:<tag> line -->` anywhere on it.
+///
+/// `process-only` regions go in every variant. `feature-flags` and `tasks`
+/// regions go with their sample (koniz-dev/flutter-starter#409), and stay,
+/// invisible, while the sample is kept.
+const _processTag = 'process-only';
+const _featureFlagsTag = 'feature-flags';
+const _tasksTag = 'tasks';
+const _markerTags = <String>[_processTag, _featureFlagsTag, _tasksTag];
+
+String _markerStart(String tag) => '<!-- strip:$tag start -->';
+String _markerEnd(String tag) => '<!-- strip:$tag end -->';
+String _markerLine(String tag) => '<!-- strip:$tag line -->';
 
 /// Directory names never walked when looking for markdown.
 const _markdownWalkSkips = <String>{
@@ -162,17 +178,17 @@ void main(List<String> args) {
     return;
   }
   if (processOnly) {
-    final markerProblems = _validateProcessMarkers(Directory.current);
+    final markerProblems = _validateMarkers(Directory.current);
     if (markerProblems.isNotEmpty) {
       stderr.writeln(
-        'Process-only markers are unbalanced; nothing was deleted:\n'
+        'Strip markers are unbalanced; nothing was deleted:\n'
         '${markerProblems.join('\n')}',
       );
       exitCode = 2;
       return;
     }
     _removeProcessArtifacts(Directory.current);
-    _stripProcessMarkdownRegions(Directory.current);
+    _stripMarkdownRegions(Directory.current, const [_processTag]);
     stdout.writeln(
       'Process-only strip complete; both samples kept. '
       'Run: flutter pub get && flutter analyze && flutter test',
@@ -217,10 +233,10 @@ void main(List<String> args) {
 
   // Same discipline as the golden tree: an unbalanced marker pair is found
   // before anything is deleted, so a bad edit leaves the working tree intact.
-  final markerProblems = _validateProcessMarkers(root);
+  final markerProblems = _validateMarkers(root);
   if (markerProblems.isNotEmpty) {
     stderr.writeln(
-      'Process-only markers are unbalanced; nothing was deleted:\n'
+      'Strip markers are unbalanced; nothing was deleted:\n'
       '${markerProblems.join('\n')}',
     );
     exitCode = 2;
@@ -231,7 +247,11 @@ void main(List<String> args) {
   // thing removed, and deleting it up front means the later passes over
   // `docs/` have thousands of evidence files fewer to read.
   _removeProcessArtifacts(root);
-  _stripProcessMarkdownRegions(root);
+  _stripMarkdownRegions(root, [
+    _processTag,
+    if (removeFeatureFlags) _featureFlagsTag,
+    if (removeTasks) _tasksTag,
+  ]);
 
   if (removeTasks) {
     _deleteDir(Directory(p.join(root.path, 'lib/features/tasks')));
@@ -398,7 +418,7 @@ void _removeProcessArtifacts(Directory repoRoot) {
   }
 }
 
-/// Every markdown file that could carry a process-only marker.
+/// Every markdown file that could carry a strip marker.
 ///
 /// `docs/verification/` is skipped: the whole tree is deleted anyway, and its
 /// files quote captured terminal output, so a marker-shaped string inside one
@@ -436,47 +456,59 @@ List<File> _markdownFiles(Directory repoRoot) {
 ///
 /// An unclosed start marker would silently swallow the rest of a file an
 /// adopter keeps - `CONTRIBUTING.md` from its issue callout to its last line,
-/// say - and the only signal would be a shorter file nobody diffed.
-List<String> _validateProcessMarkers(Directory repoRoot) {
+/// say - and the only signal would be a shorter file nobody diffed. Every tag
+/// is checked in every variant, so a bad feature marker fails even a strip
+/// that would have kept that region.
+List<String> _validateMarkers(Directory repoRoot) {
   final problems = <String>[];
   for (final file in _markdownFiles(repoRoot)) {
     final relative = p.relative(file.path, from: repoRoot.path);
-    var openedAt = 0;
+    final openedAt = <String, int>{};
     var lineNumber = 0;
     for (final line in file.readAsLinesSync()) {
       lineNumber++;
       final trimmed = line.trim();
-      if (trimmed == _processMarkerStart) {
-        if (openedAt != 0) {
+      for (final tag in _markerTags) {
+        if (trimmed == _markerStart(tag)) {
+          if (openedAt.isNotEmpty) {
+            problems.add(
+              '  $relative:$lineNumber: $tag start marker inside the region '
+              'opened at line ${openedAt.values.first}',
+            );
+          }
+          openedAt[tag] = lineNumber;
+        } else if (trimmed == _markerEnd(tag)) {
+          if (!openedAt.containsKey(tag)) {
+            problems.add(
+              '  $relative:$lineNumber: $tag end marker with no start',
+            );
+          }
+          openedAt.remove(tag);
+        } else if (openedAt.isNotEmpty && line.contains(_markerLine(tag))) {
           problems.add(
-            '  $relative:$lineNumber: start marker inside the region opened '
-            'at line $openedAt',
+            '  $relative:$lineNumber: $tag line marker inside the region '
+            'opened at line ${openedAt.values.first}',
           );
         }
-        openedAt = lineNumber;
-      } else if (trimmed == _processMarkerEnd) {
-        if (openedAt == 0) {
-          problems.add('  $relative:$lineNumber: end marker with no start');
-        }
-        openedAt = 0;
       }
     }
-    if (openedAt != 0) {
-      problems.add('  $relative:$openedAt: start marker is never closed');
-    }
+    openedAt.forEach((tag, at) {
+      problems.add('  $relative:$at: $tag start marker is never closed');
+    });
   }
   return problems;
 }
 
-/// Removes every `<!-- strip:process-only ... -->` region from markdown files
+/// Removes every region and marked line for [tags] from the markdown files
 /// the strip keeps.
 ///
 /// Used where deleting the whole file would be wrong: `CLAUDE.md` still
 /// describes the codebase after the issue loop is gone, `CONTRIBUTING.md` still
-/// describes how to open a pull request, and `tool/README.md` still documents
-/// the tools that survive. Only the marked block goes; the surrounding prose is
-/// the file's own.
-void _stripProcessMarkdownRegions(Directory repoRoot) {
+/// describes how to open a pull request, `tool/README.md` still documents
+/// the tools that survive, and `docs/guides/configuration.md` still documents
+/// configuration once the feature-flags sample is gone. Only the marked prose
+/// goes; the surrounding prose is the file's own.
+void _stripMarkdownRegions(Directory repoRoot, List<String> tags) {
   for (final file in _markdownFiles(repoRoot)) {
     final kept = <String>[];
     var dropping = false;
@@ -485,17 +517,21 @@ void _stripProcessMarkdownRegions(Directory repoRoot) {
 
     for (final line in file.readAsLinesSync()) {
       final trimmed = line.trim();
-      if (trimmed == _processMarkerStart) {
+      if (tags.any((tag) => trimmed == _markerStart(tag))) {
         dropping = true;
         continue;
       }
-      if (trimmed == _processMarkerEnd) {
+      if (tags.any((tag) => trimmed == _markerEnd(tag))) {
         dropping = false;
         justClosed = true;
         dropped++;
         continue;
       }
       if (dropping) {
+        continue;
+      }
+      if (tags.any((tag) => line.contains(_markerLine(tag)))) {
+        dropped++;
         continue;
       }
       // A region is normally surrounded by blank lines; keeping both would
@@ -514,7 +550,7 @@ void _stripProcessMarkdownRegions(Directory repoRoot) {
     }
     file.writeAsStringSync('${kept.join('\n')}\n');
     stdout.writeln(
-      'Dropped $dropped process-only section(s) from '
+      'Dropped $dropped marked section(s) or line(s) from '
       '${p.relative(file.path, from: repoRoot.path)}.',
     );
   }

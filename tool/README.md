@@ -171,6 +171,16 @@ Sections of files a fork keeps are marked in place with
 so the two cannot drift. Unbalanced markers are a hard error, reported before
 anything is deleted.
 
+The samples use the same mechanism. Prose about the feature-flags sample in a
+file the strip keeps sits between `<!-- strip:feature-flags start -->` and
+`<!-- strip:feature-flags end -->`, and the tasks sample uses
+`strip:tasks`. Each block goes only when its sample does. For a single line,
+such as a table row where a marker line would end the table, put
+`<!-- strip:<tag> line -->` anywhere on the line.
+`test/tooling/strip_sample_prose_test.dart` fails if a kept markdown file
+names a sample's symbol outside such a marker, in the full tree and in every
+strip variant (koniz-dev/flutter-starter#409).
+
 Kept deliberately, because they protect the adopter's app rather than this
 repository's workflow: `check_env_assets.dart`, `check_docs.dart`,
 `doc_signatures.dart`, `doc_symbols.dart`, `ci.yml`, `strip-smoke.yml`, the git
