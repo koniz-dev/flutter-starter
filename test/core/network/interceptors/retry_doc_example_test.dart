@@ -57,7 +57,7 @@ void main() {
   final parameters = _postParameters(File(_apiClient).readAsStringSync());
 
   test('the signature parse sees ApiClient.post', () {
-    expect(parameters, {'data', 'queryParameters', 'headers'});
+    expect(parameters, {'data', 'queryParameters', 'headers', 'cancellation'});
   });
 
   test('criterion 2: the documented apiClient.post call uses only real '

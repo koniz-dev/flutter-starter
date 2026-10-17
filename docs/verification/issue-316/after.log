@@ -1,0 +1,11 @@
+# test/core/network/api_client_patch_and_cancel_test.dart on this branch
+00:00 +0: criterion 1: patch sends a PATCH through the full chain
+00:00 +1: criterion 2: cancellation every verb accepts the handle; cancelled up front, nothing is sent
+00:00 +2: criterion 2: cancellation cancelling an in-flight request completes the caller with a cancellation
+00:00 +3: criterion 2: cancellation a cancel during the retry backoff stops the re-send reaching the transport
+00:00 +4: criterion 2: cancellation a cancel during a 401 refresh stops the replay reaching the transport
+00:00 +5: criterion 2: cancellation a handle that is never cancelled changes nothing
+00:00 +6: All tests passed!
+
+# flutter test test/core/network
+00:39 +412: All tests passed!

@@ -1,0 +1,6 @@
+# on origin/main: ApiClient's verbs, and any cancellation parameter
+182:  Future<NetworkResponse<dynamic>> get(
+205:  Future<NetworkResponse<dynamic>> post(
+230:  Future<NetworkResponse<dynamic>> put(
+255:  Future<NetworkResponse<dynamic>> delete(
+cancellation/cancelToken mentions in main's api_client.dart: 0
