@@ -1,0 +1,48 @@
+# Runs scripts/test/pre_commit_hook_test.sh: the real .githooks/pre-commit in
+# a fresh clone, before and after `flutter pub get`.
+#
+# Before dependencies resolve, `dart format` used to rewrite ~100 untouched
+# files and then fail the commit; nothing noticed, because every machine and
+# every CI job that runs the hook has already run `pub get`
+# (koniz-dev/flutter-starter#300). A fresh clone is the only state that shows
+# it, so this job makes one.
+#
+# Not a PR check: it runs on pushes to main that touch the hooks or this test,
+# and on demand (Actions -> Git hooks -> Run workflow, or
+# `gh workflow run git-hooks.yml --ref <branch>`) to verify a branch before
+# merging.
+name: Git hooks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.githooks/**'
+      - 'scripts/test/pre_commit_hook_test.sh'
+      - '.github/workflows/git-hooks.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: git-hooks-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pre-commit:
+    name: pre-commit hook in a fresh clone
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Run the pre-commit hook tests
+        run: bash scripts/test/pre_commit_hook_test.sh
