@@ -40,12 +40,21 @@ throw AuthException('Invalid credentials', code: '401');
 
 Exceptions are automatically converted to Failures by `ExceptionToFailureMapper`:
 
-- `ServerException` → `ServerFailure`
+- `ServerException` → by HTTP status:
+  - 401 → `AuthFailure`
+  - 403 → `PermissionFailure`
+  - 404 → `NotFoundFailure`
+  - 422 → `ValidationFailure`
+  - any other status → `ServerFailure`, carrying the `statusCode`
 - `NetworkException` → `NetworkFailure`
 - `CacheException` → `CacheFailure`
 - `ValidationException` → `ValidationFailure`
 - `AuthException` → `AuthFailure`
+- `PermissionException` → `PermissionFailure`
+- `NotFoundException` → `NotFoundFailure`
 - Other exceptions → `UnknownFailure`
+
+So a UI can tell a rejected login (401, `AuthFailure`) from a missing record (404, `NotFoundFailure`) or a server fault (`ServerFailure`) by type, without matching on message text.
 
 ---
 
@@ -82,10 +91,11 @@ final result = ResultFailure<User>(failure);
 
 #### `ServerFailure`
 
-Represents API/server errors.
+Represents API/server errors whose status has no typed failure of its own (5xx, 400, 408, 429 and so on). `statusCode` is part of its equality, so a 404 and a 500 with the same message are not equal - and a 404 is a `NotFoundFailure` anyway.
 
+<!-- symbol: lib/core/errors/failures.dart ServerFailure -->
 ```dart
-const ServerFailure(String message, {String? code});
+const ServerFailure(String message, {String? code, int? statusCode});
 ```
 
 **Example:**
@@ -156,6 +166,19 @@ const PermissionFailure(String message, {String? code});
 **Example:**
 ```dart
 final failure = PermissionFailure('Camera permission denied');
+```
+
+#### `NotFoundFailure`
+
+Represents a resource that does not exist. An HTTP 404 maps here.
+
+```dart
+const NotFoundFailure(String message, {String? code});
+```
+
+**Example:**
+```dart
+final failure = NotFoundFailure('Task not found');
 ```
 
 #### `UnknownFailure`

@@ -1,0 +1,22 @@
+# after
+00:00 +0: test/docs/errors_doc_server_failure_test.dart: the ServerFailure constructor in errors.md has the real parameters
+00:00 +1: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 401 -> AuthFailure
+00:00 +2: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 403 -> PermissionFailure
+00:00 +3: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 404 -> NotFoundFailure
+00:00 +4: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 422 -> ValidationFailure
+00:00 +5: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures any other status stays a ServerFailure and keeps its status
+00:00 +6: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures a 500 and a 503 with the same message are no longer equal
+00:00 +7: test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures copyWith keeps the status
+00:00 +8: test/core/errors/http_status_failures_test.dart: criterion 3: every failure type docs/api/core/errors.md documents is reachable from a real producer
+00:00 +9: All tests passed!
+
+$ dart run tool/check_docs.dart
+links: checked 743 relative link(s) in 140 file(s); 0 broken
+emoji: scanned 72 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+symbols: checked 20 directive(s); 0 unresolved
+env runs: scanned 69 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 68 file(s) against 16 known key(s); 0 unknown
+
+OK: documentation checks passed.
+exit=0
