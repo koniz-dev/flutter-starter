@@ -2,7 +2,10 @@
 //
 // Seven checks, all of which have silently rotted in this repository before:
 //
-//   1. Relative links and heading anchors under `docs/` resolve.
+//   1. Relative links and heading anchors resolve, without leaving the
+//      repository, in README.md, CONTRIBUTING.md, CHANGELOG.md and the
+//      markdown under `docs/`, `test/`, `scripts/`, `tool/`, `bricks/`,
+//      `examples/`, `integration_test/` and `fastlane/`.
 //   2. No emoji in `docs/`, `CLAUDE.md`, or `.claude/` (the stated convention
 //      in CLAUDE.md; `README.md` and `CONTRIBUTING.md` are deliberately
 //      exempt because they predate it).
@@ -114,13 +117,7 @@ int _checkLinks(Directory root) {
     return 1;
   }
 
-  final files =
-      docs
-          .listSync(recursive: true)
-          .whereType<File>()
-          .where((f) => f.path.endsWith('.md'))
-          .toList()
-        ..sort((a, b) => a.path.compareTo(b.path));
+  final files = _linkScanFiles(root);
 
   final anchorCache = <String, Set<String>>{};
   var broken = 0;
@@ -146,6 +143,16 @@ int _checkLinks(Directory root) {
         resolved = file.path;
       } else {
         resolved = _normalize('${_dirname(file.path)}/${_decode(pathPart)}');
+        // A link that leaves the checkout can resolve on one machine and
+        // nowhere else - test/README.md had four (koniz-dev/flutter-starter#573).
+        if (resolved != root.path && !resolved.startsWith('${root.path}/')) {
+          broken++;
+          stderr.writeln(
+            '${_rel(root, file.path)}:${link.line}: escapes the repository '
+            '-> $target',
+          );
+          continue;
+        }
         final asFile = File(resolved);
         final asDir = Directory(resolved);
         if (!asFile.existsSync() && !asDir.existsSync()) {
@@ -178,6 +185,42 @@ int _checkLinks(Directory root) {
     '$broken broken',
   );
   return broken;
+}
+
+/// Root-level markdown files whose links are checked.
+const List<String> _linkScanRootFiles = [
+  'README.md',
+  'CONTRIBUTING.md',
+  'CHANGELOG.md',
+];
+
+/// Directories whose markdown, at any depth, has its links checked.
+const List<String> _linkScanDirs = [
+  'docs',
+  'test',
+  'scripts',
+  'tool',
+  'bricks',
+  'examples',
+  'integration_test',
+  'fastlane',
+];
+
+List<File> _linkScanFiles(Directory root) {
+  final files = <File>[
+    for (final name in _linkScanRootFiles) File('${root.path}/$name'),
+  ].where((f) => f.existsSync()).toList();
+  for (final name in _linkScanDirs) {
+    final dir = Directory('${root.path}/$name');
+    if (!dir.existsSync()) continue;
+    files.addAll(
+      dir
+          .listSync(recursive: true)
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.md')),
+    );
+  }
+  return files..sort((a, b) => a.path.compareTo(b.path));
 }
 
 class _Link {

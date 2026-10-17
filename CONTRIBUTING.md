@@ -288,7 +288,10 @@ docs, so the **Docs check** workflow is what gates them:
 dart run tool/check_docs.dart
 ```
 
-It verifies every relative link and heading anchor under `docs/` resolves, and
+It verifies every relative link and heading anchor resolves without leaving the
+repository - in `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md` and the markdown
+under `docs/`, `test/`, `scripts/`, `tool/`, `bricks/`, `examples/`,
+`integration_test/` and `fastlane/` - and
 that `docs/`, `CLAUDE.md` and `.claude/` stay emoji-free.
 
 ### GitHub branch protection (recommended)
