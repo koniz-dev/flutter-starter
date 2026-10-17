@@ -269,149 +269,53 @@ flutter symbolize -i <crash-file> -d ./build/debug-info/
 
 ### 3. Log Sanitization
 
-#### Step 1: Create Log Sanitizer
+Redaction already ships. Do not write a second sanitizer: a parallel policy
+drifts from the one the logs actually go through.
 
-```dart
-// lib/core/utils/log_sanitizer.dart
-import 'dart:convert';
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor -->
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._sensitiveHeaderKeys -->
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._sensitiveKeyFragments -->
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._sensitiveKeysExact -->
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._isSensitiveKey -->
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor.redactPath -->
 
-/// Utility for sanitizing sensitive data from logs
-class LogSanitizer {
-  LogSanitizer._();
+#### What ships
 
-  /// List of keys that contain sensitive data
-  static const List<String> _sensitiveKeys = [
-    'password',
-    'token',
-    'access_token',
-    'refresh_token',
-    'authorization',
-    'auth',
-    'api_key',
-    'apikey',
-    'secret',
-    'credit_card',
-    'card_number',
-    'cvv',
-    'ssn',
-    'social_security_number',
-    'email', // Optional: may want to redact emails too
-  ];
+`ApiLoggingInterceptor` (`lib/core/network/interceptors/api_logging_interceptor.dart`)
+logs every request, response and error through `LoggingService`. It is installed
+only when `ApiClient` is given a `LoggingService`, and logs nothing while
+`AppConfig.enableHttpLogging` is false. Before anything reaches a sink it
+replaces secrets with `***REDACTED***`:
 
-  /// Sensitive endpoint patterns
-  static const List<String> _sensitiveEndpoints = [
-    '/login',
-    '/register',
-    '/password',
-    '/auth',
-    '/token',
-  ];
+| What | Rule |
+|---|---|
+| Headers | Exact, case-insensitive names in `_sensitiveHeaderKeys` (`authorization`, `cookie`, `x-api-key`, ...), then the key rules below as a second pass |
+| Body, query and header keys | A key is normalised (lowercase, alphanumerics only, so `access_token`, `accessToken` and `X-Access-Token` all become `accesstoken`). It is redacted if it **contains** an entry of `_sensitiveKeyFragments` (`password`, `token`, `secret`, `jwt`, ...) or **equals** one in `_sensitiveKeysExact` (`pin`, `otp`, `cvv`, `session`, ...). Exact entries are the ones too short to be fragments: `pin` is inside `shipping` |
+| Bodies | JSON maps and lists are walked recursively. A `String` body is decoded first; one that is not a JSON object or array (form-encoded, plain text, a bare scalar) is redacted wholesale. `FormData`, streams and other unwalkable values are redacted wholesale |
+| Paths | `redactPath` applies the key rules to a query string embedded in the path (`/verify?token=...`) |
 
-  /// Sanitize a map by redacting sensitive keys
-  static Map<String, dynamic> sanitizeMap(Map<String, dynamic> data) {
-    final sanitized = <String, dynamic>{};
-    
-    for (final entry in data.entries) {
-      final key = entry.key.toLowerCase();
-      final isSensitive = _sensitiveKeys.any(
-        (sensitiveKey) => key.contains(sensitiveKey.toLowerCase()),
-      );
-      
-      if (isSensitive) {
-        sanitized[entry.key] = '***REDACTED***';
-      } else if (entry.value is Map) {
-        sanitized[entry.key] = sanitizeMap(entry.value as Map<String, dynamic>);
-      } else if (entry.value is List) {
-        sanitized[entry.key] = _sanitizeList(entry.value as List);
-      } else {
-        sanitized[entry.key] = entry.value;
-      }
-    }
-    
-    return sanitized;
-  }
+Redaction is decided by **key name only**, never by the shape of a value. A
+secret carried under a key name none of the sets matches is logged.
 
-  /// Sanitize a list
-  static List<dynamic> _sanitizeList(List<dynamic> list) {
-    return list.map((item) {
-      if (item is Map) {
-        return sanitizeMap(item as Map<String, dynamic>);
-      } else if (item is List) {
-        return _sanitizeList(item);
-      }
-      return item;
-    }).toList();
-  }
+#### Extending it
 
-  /// Sanitize headers
-  static Map<String, dynamic> sanitizeHeaders(Map<String, dynamic> headers) {
-    final sanitized = Map<String, dynamic>.from(headers);
-    
-    for (final key in _sensitiveKeys) {
-      if (sanitized.containsKey(key)) {
-        sanitized[key] = '***REDACTED***';
-      }
-      // Case-insensitive check
-      final headerKey = sanitized.keys.firstWhere(
-        (k) => k.toLowerCase() == key.toLowerCase(),
-        orElse: () => '',
-      );
-      if (headerKey.isNotEmpty) {
-        sanitized[headerKey] = '***REDACTED***';
-      }
-    }
-    
-    // Special handling for Authorization header
-    if (sanitized.containsKey('Authorization')) {
-      final auth = sanitized['Authorization'] as String?;
-      if (auth != null && auth.startsWith('Bearer ')) {
-        sanitized['Authorization'] = 'Bearer ***REDACTED***';
-      }
-    }
-    
-    return sanitized;
-  }
+Add the name to the matching set in `api_logging_interceptor.dart`:
 
-  /// Check if an endpoint is sensitive
-  static bool isSensitiveEndpoint(String path) {
-    return _sensitiveEndpoints.any(
-      (endpoint) => path.toLowerCase().contains(endpoint.toLowerCase()),
-    );
-  }
+- a non-standard credential header: `_sensitiveHeaderKeys` (lowercase), unless
+  the key rules already catch it;
+- a field name that should match anywhere inside a key: `_sensitiveKeyFragments`
+  (normalised form: lowercase, no separators);
+- a short name that would cause false positives as a fragment:
+  `_sensitiveKeysExact`.
 
-  /// Sanitize request/response data for sensitive endpoints
-  static dynamic sanitizeData(dynamic data, String? path) {
-    if (path != null && isSensitiveEndpoint(path)) {
-      return '***REDACTED (sensitive endpoint)***';
-    }
-    
-    if (data is Map) {
-      return sanitizeMap(data as Map<String, dynamic>);
-    } else if (data is List) {
-      return _sanitizeList(data);
-    } else if (data is String) {
-      // Check if string contains JSON
-      try {
-        final json = jsonDecode(data);
-        if (json is Map) {
-          return jsonEncode(sanitizeMap(json as Map<String, dynamic>));
-        }
-      } catch (_) {
-        // Not JSON, return as is
-      }
-    }
-    
-    return data;
-  }
-}
-```
+Then add a row for it to
+`test/core/network/interceptors/api_logging_redaction_rules_test.dart`. That
+file maps each rule to one key only that rule matches, and asserts how many
+rules each set has, so a set that grows without a test row fails it.
 
-#### Step 2: API logging (`ApiLoggingInterceptor`)
-
-The starter already ships **`ApiLoggingInterceptor`** in `lib/core/network/interceptors/api_logging_interceptor.dart`. It uses **`LoggingService`** (not `debugPrint`) and applies built-in redaction for common sensitive headers and JSON keys when `AppConfig.enableHttpLogging` is true.
-
-- Extend **`_sanitizeHeaders`** / **`_sanitizeJson`** in that file for custom token header names or payload fields.
-- Reuse **`LogSanitizer`** from Step 1 where you want one shared policy for logs outside this interceptor.
+Logs written outside this interceptor (`LoggingService.info(..., context: ...)`
+from your own code) are **not** redacted. Keep credentials out of them at the
+call site.
 
 ---
 
@@ -791,16 +695,33 @@ void main() {
 
 ### Test Log Sanitization
 
+The redaction rules are pinned by
+`test/core/network/interceptors/api_logging_redaction_rules_test.dart`. This is
+its response-side case, verbatim:
+
+<!-- test-excerpt: test/core/network/interceptors/api_logging_redaction_rules_test.dart -->
 ```dart
-// test/core/utils/log_sanitizer_test.dart
-void main() {
-  test('should redact sensitive keys', () {
-    final data = {'password': 'secret123', 'username': 'user'};
-    final sanitized = LogSanitizer.sanitizeMap(data);
-    expect(sanitized['password'], '***REDACTED***');
-    expect(sanitized['username'], 'user');
+  test('criterion 2: onResponse never logs an access_token value', () {
+    Map<String, dynamic>? context;
+    when(
+      () => logging.info(any(), context: any(named: 'context')),
+    ).thenAnswer((invocation) {
+      context = invocation.namedArguments[#context] as Map<String, dynamic>?;
+    });
+
+    interceptor.onResponse(
+      Response<dynamic>(
+        requestOptions: RequestOptions(path: '/auth/login', method: 'POST'),
+        statusCode: 200,
+        data: {'access_token': 'T0KEN-VALUE', 'user': 'u'},
+      ),
+      _ResponseHandler(),
+    );
+
+    expect(context, isNotNull);
+    expect(context.toString(), isNot(contains('T0KEN-VALUE')));
+    expect((context!['body'] as Map)['access_token'], _redacted);
   });
-}
 ```
 
 ---

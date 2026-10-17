@@ -113,7 +113,9 @@ traffic using a certificate the platform trust store accepts.
 **Status:** Implemented.
 
 `ApiLoggingInterceptor` redacts a fixed header set and recursively redacts
-sensitive JSON keys via `_sanitizeHeaders` / `_sanitizeJson`
+sensitive keys via `_sanitizeHeaders`, `_sanitizeBody` and `_sanitizeMap`,
+matched against `_sensitiveHeaderKeys`, `_sensitiveKeyFragments` and
+`_sensitiveKeysExact`
 (`lib/core/network/interceptors/api_logging_interceptor.dart`). It is a no-op
 entirely when `AppConfig.enableHttpLogging` is false.
 
