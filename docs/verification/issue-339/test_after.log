@@ -1,0 +1,4 @@
+# test/tooling/launcher_icons_config_test.dart on this branch
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt339/test/tooling/launcher_icons_config_test.dart
+00:00 +0: flutter_launcher_icons.yaml flattens alpha whenever it generates iOS icons
+00:00 +1: All tests passed!
