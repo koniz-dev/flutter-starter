@@ -29,8 +29,12 @@ class DateFormatter {
   static final DateFormat _dateTimeFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
   static final DateFormat _timeFormat = DateFormat('HH:mm:ss');
 
-  /// Leading `yyyy-MM-dd` of an ISO-8601 string.
-  static final RegExp _iso8601Date = RegExp(r'^(\d{4})-(\d{2})-(\d{2})');
+  /// The leading date and optional time fields of an ISO-8601 string, in the
+  /// extended (`2026-02-30T25:00`) or basic (`20260230T2500`) form.
+  static final RegExp _iso8601Fields = RegExp(
+    r'^([+-]\d{6}|\d{4})-?(\d{2})-?(\d{2})'
+    r'(?:[T ](\d{2})(?::?(\d{2})(?::?(\d{2}))?)?)?',
+  );
 
   /// Format date to string as `yyyy-MM-dd`, in the wall clock of [date].
   ///
@@ -94,14 +98,16 @@ class DateFormatter {
   /// timezone designator is read as local time and then converted, matching
   /// [DateTime.parse].
   ///
-  /// Returns null when the string does not parse, or when its calendar date
-  /// is out of range. [DateTime.parse] rolls `2024-02-30` over to 1 March;
-  /// this method returns null instead.
+  /// Returns null when the string does not parse, or when a date or time
+  /// field is out of range. [DateTime.parse] rolls `2024-02-30` over to
+  /// 1 March and `T25:61` into the next day; this method returns null
+  /// instead, in the extended and the basic form alike
+  /// (koniz-dev/flutter-starter#63, #325).
   static DateTime? parseIso8601(String value) {
     final parsed = DateTime.tryParse(value);
     if (parsed == null) return null;
 
-    final match = _iso8601Date.firstMatch(value);
+    final match = _iso8601Fields.firstMatch(value);
     if (match != null) {
       final year = int.parse(match.group(1)!);
       final month = int.parse(match.group(2)!);
@@ -110,6 +116,19 @@ class DateFormatter {
       // construction means the input field was out of range.
       final probe = DateTime.utc(year, month, day);
       if (probe.year != year || probe.month != month || probe.day != day) {
+        return null;
+      }
+      int? field(int group) {
+        final text = match.group(group);
+        return text == null ? null : int.parse(text);
+      }
+
+      final hour = field(4);
+      final minute = field(5);
+      final second = field(6);
+      if ((hour != null && hour > 23) ||
+          (minute != null && minute > 59) ||
+          (second != null && second > 59)) {
         return null;
       }
     }
