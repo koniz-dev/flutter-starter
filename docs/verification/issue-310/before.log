@@ -1,0 +1,17 @@
+# cache_freshness_test.dart criterion 1 against main's CacheInterceptor (this branch's ApiClient, so it compiles)
+00:00 +0 -1: criterion 1: an entry older than maxAge goes back to the network a stale entry is refetched, and the fresh answer is served and cached [E]
+  Expected: <2>
+    Actual: <1>
+00:00 +0 -2: criterion 1: an entry older than maxAge goes back to the network a stale entry is served when the refetch fails with DioExceptionType.connectionError [E]
+  Expected: <2>
+    Actual: <1>
+00:00 +0 -3: criterion 1: an entry older than maxAge goes back to the network a stale entry is served when the refetch fails with DioExceptionType.receiveTimeout [E]
+  Expected: <2>
+    Actual: <1>
+00:00 +0 -4: criterion 1: an entry older than maxAge goes back to the network a stale entry is served when the refetch fails with 503 [E]
+  Expected: <2>
+    Actual: <1>
+00:00 +0 -5: criterion 1: an entry older than maxAge goes back to the network a 4xx from the refetch is the answer, not the stale entry [E]
+  Expected: throws <Instance of 'ServerException'> with `s`: <404>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+00:08 +2 -5: Some tests failed.

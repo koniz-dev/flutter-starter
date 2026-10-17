@@ -16,10 +16,17 @@ class CacheConfig {
     this.enableCache = true,
   });
 
-  /// Maximum age for cached responses
+  /// How long a cached response is served without asking the network.
+  ///
+  /// Past this age the request goes to the network; the cached response is
+  /// only a fallback for when that fetch fails (see [maxStale]).
   final Duration maxAge;
 
-  /// Maximum stale time for cached responses
+  /// How long a cached response may still stand in for a failed fetch.
+  ///
+  /// Between [maxAge] and this age, an entry is served only if the network
+  /// request fails for transport reasons - a connection error, a timeout, or
+  /// a 5xx. Past it the entry is evicted.
   final Duration maxStale;
 
   /// Whether caching is enabled
@@ -28,6 +35,16 @@ class CacheConfig {
 
 /// Interceptor for caching HTTP responses.
 ///
+/// ## Freshness
+///
+/// An entry younger than [CacheConfig.maxAge] is served without a network
+/// request. An older one - up to [CacheConfig.maxStale] - is stale: the
+/// request goes to the network, and the stale entry is served only if that
+/// fetch fails for transport reasons (connection error, timeout or 5xx). A
+/// 4xx is the server's answer and is passed through. A successful refetch
+/// replaces the entry. `maxAge` used to have no effect: a stale entry was
+/// served straight from the cache for up to seven days with no network
+/// attempt at all (koniz-dev/flutter-starter#310).
 /// ## What is cached
 ///
 /// Only **unauthenticated** `GET` responses with status 200. Before touching
@@ -133,6 +150,10 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   /// Headers that should not be cached
   static const List<String> _noCacheHeaders = ['authorization', 'cookie'];
 
+  /// `RequestOptions.extra` key carrying a stale entry while its refetch is
+  /// in flight; see [onError].
+  static const String _staleFallbackKey = 'http_cache_stale_fallback';
+
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -154,7 +175,6 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     final cachedData = await _getCachedResponse(cacheKey);
 
     if (cachedData != null) {
-      // Return cached response
       final headers = cachedData['headers'] as Map<String, List<String>>?;
       final cachedResponse = Response<dynamic>(
         data: cachedData['data'],
@@ -163,10 +183,42 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
         headers: Headers.fromMap(headers ?? <String, List<String>>{}),
       );
 
-      return handler.resolve(cachedResponse);
+      // Fresh: answer from the cache. Stale: refetch, keeping the entry as
+      // the fallback onError serves if the network fails.
+      if (cachedData['stale'] != true) {
+        return handler.resolve(cachedResponse);
+      }
+      options.extra[_staleFallbackKey] = cachedResponse;
     }
 
     super.onRequest(options, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    final stale = err.requestOptions.extra.remove(_staleFallbackKey);
+    if (stale is Response<dynamic> && _isTransportFailure(err)) {
+      return handler.resolve(stale);
+    }
+    super.onError(err, handler);
+  }
+
+  /// Whether [err] means the network could not answer, as opposed to the
+  /// server answering with an error of its own.
+  static bool _isTransportFailure(DioException err) {
+    switch (err.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.connectionError:
+        return true;
+      case DioExceptionType.badResponse:
+        return (err.response?.statusCode ?? 0) >= 500;
+      case DioExceptionType.badCertificate:
+      case DioExceptionType.cancel:
+      case DioExceptionType.unknown:
+        return false;
+    }
   }
 
   @override
@@ -268,21 +320,22 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       final now = DateTime.now().toUtc();
       final age = now.difference(timestamp);
 
-      // Check if cache is still valid
-      if (age > _cacheConfig.maxAge) {
-        // Cache expired, check if stale cache is acceptable
-        if (age > _cacheConfig.maxStale) {
-          // Too stale, remove cache
-          await _evictEntry(cacheKey, timestampKey);
-          return null;
-        }
-        // Stale but acceptable (can be used with warning in production)
+      // Fresh first: an entry inside maxAge is served whatever maxStale says.
+      final stale = age > _cacheConfig.maxAge;
+      if (stale && age > _cacheConfig.maxStale) {
+        // Too stale even as a fallback.
+        await _evictEntry(cacheKey, timestampKey);
+        return null;
       }
 
       final decodedData = JsonHelper.decode(cachedData);
       // Headers are not cached separately, return empty headers
       // In production, you might want to cache headers separately
-      return {'data': decodedData, 'headers': <String, List<String>>{}};
+      return {
+        'data': decodedData,
+        'headers': <String, List<String>>{},
+        'stale': stale,
+      };
     } on Exception catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache read error: $e');

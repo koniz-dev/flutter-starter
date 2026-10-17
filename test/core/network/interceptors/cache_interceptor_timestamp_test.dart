@@ -279,7 +279,7 @@ void main() {
             expect(await readIsServed(buildInterceptor()), isTrue);
           });
 
-          test('both forms are served, not deleted, while N is between maxAge '
+          test('both forms are kept, not deleted, while N is between maxAge '
               'and maxStale', () async {
             final writtenAt = DateTime.now().subtract(
               const Duration(minutes: 15),
@@ -290,7 +290,16 @@ void main() {
               writtenAt.toIso8601String(),
             ]) {
               seedEntry(timestamp);
-              expect(await readIsServed(buildInterceptor()), isTrue);
+              // Stale since #310: not served directly but refetched, with
+              // the entry kept as the fallback for a failed fetch.
+              final request = _getRequest();
+              final handler = _CapturingRequestHandler();
+              await buildInterceptor().onRequest(request, handler);
+              expect(handler.servedFromCache, isFalse);
+              expect(
+                request.extra['http_cache_stale_fallback'],
+                isA<Response<dynamic>>(),
+              );
               expect(storage.values.containsKey(_cacheKey), isTrue);
             }
           });
