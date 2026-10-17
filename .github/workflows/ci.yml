@@ -157,6 +157,24 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         run: flutter pub get
 
+      # Generated code is committed, so it must match its sources: a provider
+      # edited without re-running build_runner left stale hashes that the
+      # next adopter to regenerate got as an unrelated diff
+      # (koniz-dev/flutter-starter#337). `git status --porcelain` rather than
+      # `git diff` so a new, untracked output fails too.
+      - name: Check generated code is up to date
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          dart run build_runner build -d
+          drift="$(git status --porcelain -- '*.g.dart' '*.freezed.dart')"
+          if [ -n "$drift" ]; then
+            echo "::error::build_runner rewrote committed generated files. Run 'dart run build_runner build -d' and commit the result:"
+            echo "$drift"
+            git diff -- '*.g.dart' '*.freezed.dart'
+            exit 1
+          fi
+          echo "Generated code matches its sources."
+
       - name: Verify formatting
         if: steps.scope.outputs.run == 'true'
         run: dart format --set-exit-if-changed lib test integration_test tool examples
