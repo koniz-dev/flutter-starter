@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Identifies which sign-in the credentials on this device belong to.
 ///
 /// A token refresh is a read-modify-write that spans a full network round
@@ -44,8 +46,27 @@
 /// [isCurrent] are all synchronous and cannot interleave with each other. The
 /// window this guards is an `await`, not a preemption, which is why an
 /// ordinary `int` is sufficient and no lock is involved.
+///
+/// ## Observing a session change
+///
+/// Every [invalidate] also notifies the listeners added with [addListener].
+/// That is how per-user state outside the auth slice - which may not import
+/// it - learns the user changed and resets (koniz-dev/flutter-starter#452).
+/// Most callers should listen through `sessionEpochProvider` rather than here.
+///
+/// A plain listener list rather than a `ChangeNotifier`, on purpose: there is
+/// no disposed state. A forced logout can land after the provider container
+/// that owned this instance is gone (#127), and it must then notify nobody
+/// rather than trip a use-after-dispose assertion.
 class SessionGeneration {
   int _current = 0;
+  final List<void Function()> _listeners = [];
+
+  /// Calls [listener] after every [invalidate].
+  void addListener(void Function() listener) => _listeners.add(listener);
+
+  /// Stops calling [listener].
+  void removeListener(void Function() listener) => _listeners.remove(listener);
 
   /// The generation a credential write must still belong to in order to land.
   ///
@@ -59,8 +80,21 @@ class SessionGeneration {
   /// Synchronous and idempotent in effect: calling it twice simply skips two
   /// generations. Call it *before* the `await`s that perform the teardown, so
   /// a refresh resolving part-way through the teardown is already stale.
+  ///
+  /// Never throws. The logout paths call it unguarded right before clearing
+  /// the stored tokens, so a listener that throws must not skip that teardown:
+  /// each listener's error goes to the current zone's uncaught-error handler
+  /// and the remaining listeners still run.
   void invalidate() {
     _current++;
+    // A copy, so a listener that removes itself does not skip its neighbour.
+    for (final listener in List.of(_listeners)) {
+      try {
+        listener();
+      } on Object catch (error, stackTrace) {
+        Zone.current.handleUncaughtError(error, stackTrace);
+      }
+    }
   }
 
   /// Whether [generation] is still the live one.
