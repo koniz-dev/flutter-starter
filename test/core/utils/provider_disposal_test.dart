@@ -40,7 +40,8 @@ void main() {
         ),
       );
 
-      // Should not throw
+      // no-assertion-ok: must not throw - the test fails if disposal's error
+      // escapes the pump.
       await tester.pumpWidget(const SizedBox.shrink());
     });
 
