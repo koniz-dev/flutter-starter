@@ -116,6 +116,17 @@ class _InMemoryTokenStore implements ITokenStore {
   }
 }
 
+/// Token store whose access-token read throws, via [fail], as a keystore that
+/// is unavailable does.
+class _ThrowingTokenStore extends _InMemoryTokenStore {
+  _ThrowingTokenStore(this.fail);
+
+  final Never Function() fail;
+
+  @override
+  Future<String?> getAccessToken() async => fail();
+}
+
 /// Token store whose `setAccessToken` blocks until [release] completes.
 ///
 /// [writeStarted] completes when the write begins, so a test can act inside
@@ -1426,5 +1437,67 @@ void main() {
       );
       expect(thrown, isNot(isA<NetworkException>()));
     });
+  });
+
+  // koniz-dev/flutter-starter#314. onRequest awaited the token read without a
+  // guard, and dio does not await an async interceptor callback: a throwing
+  // store called neither `next` nor `reject`, so the caller's future never
+  // completed and the exception escaped as an uncaught zone error.
+  group('a throwing token store fails the request instead of stranding it', () {
+    final throwers = <String, Never Function()>{
+      'an Exception': () => throw Exception('keystore unavailable'),
+      'an Error': () => throw StateError('keystore unavailable'),
+    };
+    for (final MapEntry(key: label, value: fail) in throwers.entries) {
+      test(
+        'criteria 1-2: $label completes the call within 1s with no uncaught '
+        'zone error',
+        () async {
+          final adapter = _CountingAdapter([
+            _json(200, {'ok': true}),
+          ]);
+          final uncaught = <Object>[];
+          final outcome = Completer<Object?>();
+
+          runZonedGuarded(
+            () {
+              final apiClient = ApiClient(
+                storageService: _MockStorageService(),
+                secureStorageService: _MockSecureStorageService(),
+                authInterceptor: AuthInterceptor(
+                  tokenStore: _ThrowingTokenStore(fail),
+                  refreshToken: () async => const Success('unused'),
+                ),
+              )..dio.httpClientAdapter = adapter;
+              unawaited(
+                _thrownBy(
+                  apiClient.get('/me').timeout(const Duration(seconds: 1)),
+                ).then(outcome.complete),
+              );
+            },
+            (e, _) => uncaught.add(e),
+          );
+
+          final thrown = await outcome.future;
+
+          expect(
+            thrown,
+            isNot(isA<TimeoutException>()),
+            reason: 'the call must complete, not hang',
+          );
+          expect(
+            thrown,
+            isA<NetworkException>().having(
+              (e) => e.message,
+              'message',
+              contains('Could not read the access token'),
+            ),
+            reason: 'the call must fail, naming the token read',
+          );
+          expect(uncaught, isEmpty);
+          expect(adapter.hits, 0, reason: 'nothing is sent without the read');
+        },
+      );
+    }
   });
 }

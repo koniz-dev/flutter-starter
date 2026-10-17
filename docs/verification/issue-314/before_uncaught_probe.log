@@ -1,0 +1,11 @@
+# probe: the #314 tests against main's lib/core/network/interceptors/auth_interceptor.dart, with the 'must not hang' expectation
+# replaced by expecting the hang, so the uncaught-zone-error check (criterion 2) runs
+00:00 +0: a throwing token store fails the request instead of stranding it criteria 1-2: an Exception completes the call within 1s with no uncaught zone error
+00:01 +0 -1: a throwing token store fails the request instead of stranding it criteria 1-2: an Exception completes the call within 1s with no uncaught zone error [E]
+  Expected: empty
+    Actual: [_Exception:Exception: keystore unavailable]
+00:01 +0 -1: a throwing token store fails the request instead of stranding it criteria 1-2: an Error completes the call within 1s with no uncaught zone error
+00:02 +0 -2: a throwing token store fails the request instead of stranding it criteria 1-2: an Error completes the call within 1s with no uncaught zone error [E]
+  Expected: empty
+    Actual: [StateError:Bad state: keystore unavailable]
+00:02 +0 -2: Some tests failed.
