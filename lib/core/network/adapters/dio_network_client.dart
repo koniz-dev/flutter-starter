@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/network/request_cancellation.dart';
 
 /// Dio adapter for [INetworkClient].
 class DioNetworkClient implements INetworkClient {
@@ -19,10 +20,29 @@ class DioNetworkClient implements INetworkClient {
   final Dio _dio;
   final Duration? _deadline;
 
+  /// Sends [request]; [cancellation], when given, cancels it on demand.
+  ///
+  /// The [INetworkClient] contract has no cancellation parameter, so it is an
+  /// optional extra here, used by `ApiClient` (koniz-dev/flutter-starter#316).
+  /// One dio [CancelToken] backs both the caller's cancellation and the
+  /// deadline, and every re-send of the request - a retry, a 401 replay -
+  /// carries it.
   @override
-  Future<NetworkResponse<dynamic>> send(NetworkRequest request) async {
+  Future<NetworkResponse<dynamic>> send(
+    NetworkRequest request, {
+    RequestCancellation? cancellation,
+  }) async {
     final deadline = _deadline;
     final cancelToken = CancelToken();
+    if (cancellation != null) {
+      unawaited(
+        cancellation.whenCancelled.then((reason) {
+          if (!cancelToken.isCancelled) {
+            cancelToken.cancel(reason ?? 'Cancelled by the caller');
+          }
+        }),
+      );
+    }
     final pending = _send(request, cancelToken);
     if (deadline == null) return pending;
     return pending.timeout(

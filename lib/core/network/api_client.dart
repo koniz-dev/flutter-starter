@@ -10,6 +10,7 @@ import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/adapters/dio_network_client.dart';
+import 'package:flutter_starter/core/network/request_cancellation.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
@@ -148,7 +149,7 @@ class ApiClient {
   }
 
   final Dio _dio;
-  late final INetworkClient _networkClient;
+  late final DioNetworkClient _networkClient;
   late final CacheInterceptor _cacheInterceptor;
 
   /// Escape hatch onto the underlying Dio instance.
@@ -177,14 +178,17 @@ class ApiClient {
   /// [path] - The endpoint path
   /// [queryParameters] - Optional query parameters
   /// [headers] - Optional per-request headers
+  /// [cancellation] - Optional handle that cancels the request
   /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<NetworkResponse<dynamic>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
+    RequestCancellation? cancellation,
   }) async {
     return _send(
+      cancellation: cancellation,
       NetworkRequest(
         path: path,
         method: NetworkMethod.get,
@@ -200,6 +204,7 @@ class ApiClient {
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
   /// [headers] - Optional per-request headers
+  /// [cancellation] - Optional handle that cancels the request
   /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<NetworkResponse<dynamic>> post(
@@ -207,8 +212,10 @@ class ApiClient {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
+    RequestCancellation? cancellation,
   }) async {
     return _send(
+      cancellation: cancellation,
       NetworkRequest(
         path: path,
         method: NetworkMethod.post,
@@ -225,6 +232,7 @@ class ApiClient {
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
   /// [headers] - Optional per-request headers
+  /// [cancellation] - Optional handle that cancels the request
   /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<NetworkResponse<dynamic>> put(
@@ -232,11 +240,41 @@ class ApiClient {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
+    RequestCancellation? cancellation,
   }) async {
     return _send(
+      cancellation: cancellation,
       NetworkRequest(
         path: path,
         method: NetworkMethod.put,
+        body: data,
+        queryParameters: queryParameters ?? const <String, dynamic>{},
+        headers: headers ?? const <String, String>{},
+      ),
+    );
+  }
+
+  /// PATCH request
+  ///
+  /// [path] - The endpoint path
+  /// [data] - Optional request body data
+  /// [queryParameters] - Optional query parameters
+  /// [headers] - Optional per-request headers
+  /// [cancellation] - Optional handle that cancels the request
+  /// Returns a [Future] that completes with a [NetworkResponse]
+  /// Throws domain exceptions (ServerException, NetworkException, etc.)
+  Future<NetworkResponse<dynamic>> patch(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    RequestCancellation? cancellation,
+  }) async {
+    return _send(
+      cancellation: cancellation,
+      NetworkRequest(
+        path: path,
+        method: NetworkMethod.patch,
         body: data,
         queryParameters: queryParameters ?? const <String, dynamic>{},
         headers: headers ?? const <String, String>{},
@@ -250,6 +288,7 @@ class ApiClient {
   /// [data] - Optional request body data
   /// [queryParameters] - Optional query parameters
   /// [headers] - Optional per-request headers
+  /// [cancellation] - Optional handle that cancels the request
   /// Returns a [Future] that completes with a [NetworkResponse]
   /// Throws domain exceptions (ServerException, NetworkException, etc.)
   Future<NetworkResponse<dynamic>> delete(
@@ -257,8 +296,10 @@ class ApiClient {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
+    RequestCancellation? cancellation,
   }) async {
     return _send(
+      cancellation: cancellation,
       NetworkRequest(
         path: path,
         method: NetworkMethod.delete,
@@ -270,10 +311,11 @@ class ApiClient {
   }
 
   Future<NetworkResponse<dynamic>> _send(
-    NetworkRequest request,
-  ) async {
+    NetworkRequest request, {
+    RequestCancellation? cancellation,
+  }) async {
     try {
-      return await _networkClient.send(request);
+      return await _networkClient.send(request, cancellation: cancellation);
     } on AppException {
       rethrow;
     } on Exception catch (e) {
