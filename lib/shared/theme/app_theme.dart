@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:flutter_starter/shared/design_system/tokens/default_design_tokens.dart';
 
 /// Application theme configuration
@@ -75,16 +76,20 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.dark(
-        primary: _tokens.primary,
+        // Lighter than the light theme's: these are read as text on the dark
+        // surfaces, where the light theme's primary and error fall below
+        // 4.5:1 (koniz-dev/flutter-starter#350). Filled buttons keep
+        // _tokens.primary through elevatedButtonTheme below.
+        primary: AppColors.primaryOnDark,
         secondary: _tokens.secondary,
         surface: _darkSurface,
-        error: _tokens.error,
-        onPrimary: _tokens.textOnPrimary,
+        error: AppColors.errorOnDark,
+        onPrimary: _darkBackground,
         onSecondary: _tokens.textOnPrimary,
         // Set from tokens rather than inheriting the Material dark baseline,
         // which knows nothing about this palette.
         onSurface: _tokens.textOnPrimary,
-        onError: _tokens.textOnPrimary,
+        onError: _darkBackground,
       ),
       scaffoldBackgroundColor: _darkBackground,
       textTheme: TextTheme(
@@ -129,7 +134,7 @@ class AppTheme {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: _tokens.error),
+          borderSide: const BorderSide(color: AppColors.errorOnDark),
         ),
       ),
     );
