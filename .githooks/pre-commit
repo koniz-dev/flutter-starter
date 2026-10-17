@@ -35,6 +35,17 @@ no_git_env=(
   -u GIT_PREFIX
 )
 
+# Without resolved dependencies `dart format` cannot read the
+# very_good_analysis include in analysis_options.yaml, formats with the wrong
+# settings, and rewrites ~100 untouched files in place before failing
+# (koniz-dev/flutter-starter#300). Refuse before anything runs.
+if [ ! -f .dart_tool/package_config.json ]; then
+  echo "❌ Dependencies are not resolved (.dart_tool/package_config.json is missing)."
+  echo "   Run: flutter pub get"
+  echo "   Nothing was formatted or changed."
+  exit 1
+fi
+
 echo "📝 Checking code formatting..."
 if ! "${no_git_env[@]}" dart format --set-exit-if-changed lib test integration_test tool examples; then
   echo "❌ Code formatting check failed."
