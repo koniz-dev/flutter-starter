@@ -853,7 +853,7 @@ reduce to `accesstoken`. It is then matched:
 
 | Rule | Entries | Example match |
 |---|---|---|
-| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode` | `refresh_token`, `client_secret` |
+| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode`, `jwt` | `refresh_token`, `client_secret`, `jwt`, `id_jwt` |
 | Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid` | `pin`, but not `shipping` |
 
 The exact-match list exists because these names are too short to use as
@@ -872,6 +872,15 @@ lowercase `authorization`.
 **Query parameters** go through exactly the same key rule as bodies. They used
 to be logged raw while the body of the same request was sanitized, which leaked
 password-reset tokens, `?access_token=` values and `?api_key=` credentials.
+
+A query string **embedded in the request path** is redacted the same way.
+`ApiClient` takes a path, so `get('/verify?token=X')` is a normal call, and that
+path used to be logged verbatim (koniz-dev/flutter-starter#313).
+`ApiLoggingInterceptor.redactPath` replaces the value of every sensitive key in
+it and keeps the rest of the path exactly as written. It applies to the
+request, response and error entries and to `RetryInterceptor`'s retry lines.
+
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor -->
 
 One named residual: an OAuth **`code`** query parameter is *not* redacted. It is
 a credential, but `code` is also one of the most common non-secret field names
