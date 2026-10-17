@@ -1,0 +1,5 @@
+00:00 +0: the signature parse sees ApiClient.post
+00:00 +1: criterion 2: the documented apiClient.post call uses only real parameters
+00:00 +2: criterion 1: the example sends the key through headers:
+00:00 +3: the check rejects the pre-#296 example
+00:00 +4: All tests passed!
