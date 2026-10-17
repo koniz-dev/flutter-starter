@@ -292,8 +292,27 @@ class AuthInterceptor extends Interceptor {
     );
     if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
 
-    // Get token from secure storage
-    final token = await _tokenStore.getAccessToken();
+    // Get token from secure storage. dio does not await this callback, so a
+    // store that throws - `ITokenStore` is a public seam, and an `Error` gets
+    // past the default store's own guard - would call neither `next` nor
+    // `reject`: the caller's future would never complete, and the exception
+    // would surface as an uncaught zone error (koniz-dev/flutter-starter#314).
+    final String? token;
+    try {
+      token = await _tokenStore.getAccessToken();
+    } on Object catch (error, stackTrace) {
+      options.extra[RetryInterceptor.retryExtraKey] = false;
+      handler.reject(
+        DioException(
+          requestOptions: options,
+          error: error,
+          stackTrace: stackTrace,
+          message: 'Could not read the access token.',
+        ),
+        true,
+      );
+      return;
+    }
 
     // Checked again because the read above is a platform call: a sign-out and
     // a different user's sign-in landing while it was pending return *their*
