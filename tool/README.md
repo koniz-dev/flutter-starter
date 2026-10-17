@@ -6,7 +6,10 @@ Maintenance utilities run with `dart run` from the **repository root**.
 
 Documentation integrity checker. Seven checks, all of which had silently rotted:
 
-- **Links and anchors** under `docs/`: every relative path resolves, and every
+- **Links and anchors** in `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md` and
+  the markdown under `docs/`, `test/`, `scripts/`, `tool/`, `bricks/`,
+  `examples/`, `integration_test/` and `fastlane/`: every relative path
+  resolves inside the repository, and every
   `#fragment` matches a heading slug in the target file (GitHub's slug rules,
   including duplicate `-1` suffixes).
 - **Emoji** in `docs/`, `CLAUDE.md` and `.claude/`, per the convention stated in

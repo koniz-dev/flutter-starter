@@ -1,0 +1,44 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt573/test/docs/check_docs_link_scope_test.dart
+00:00 +0: criterion 2: a test/README.md link escaping the repo fails
+00:00 +0 -1: criterion 2: a test/README.md link escaping the repo fails [E]
+  Expected: <1>
+    Actual: <0>
+  links: checked 0 relative link(s) in 1 file(s); 0 broken
+  
+  OK: documentation checks passed.
+  Running build hooks...Running build hooks...
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/check_docs_link_scope_test.dart 42:5      main.<fn>
+  
+00:00 +0 -1: criterion 2: the fixed link inside the repo passes
+00:01 +0 -2: criterion 2: the fixed link inside the repo passes [E]
+  Expected: contains 'in 2 file(s); 0 broken'
+    Actual: 'links: checked 0 relative link(s) in 1 file(s); 0 broken\n'
+              '\n'
+              'OK: documentation checks passed.\n'
+              ''
+     Which: does not contain 'in 2 file(s); 0 broken'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/check_docs_link_scope_test.dart 55:5      main.<fn>
+  
+00:01 +0 -2: criterion 1: root files and every listed directory are scanned
+00:02 +0 -3: criterion 1: root files and every listed directory are scanned [E]
+  Expected: <1>
+    Actual: <0>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/check_docs_link_scope_test.dart 79:5      main.<fn>
+  
+00:02 +0 -3: criterion 2: the repository itself passes
+00:03 +1 -3: criterion 3: the Docs check workflow triggers on every scanned file
+00:03 +2 -3: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt573/test/docs/check_docs_link_scope_test.dart: criterion 1: root files and every listed directory are scanned
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt573/test/docs/check_docs_link_scope_test.dart: criterion 2: a test/README.md link escaping the repo fails
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt573/test/docs/check_docs_link_scope_test.dart: criterion 2: the fixed link inside the repo passes
