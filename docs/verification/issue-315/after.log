@@ -1,0 +1,17 @@
+# the same group on this branch
+00:00 +0: X-Retry-Count is neither a logout trigger nor sent on a replay criterion 1: a 401 on a caller request carrying X-Retry-Count: 1 refreshes and replays instead of logging out
+00:00 +1: X-Retry-Count is neither a logout trigger nor sent on a replay criterion 2: the replay does not add X-Retry-Count
+00:00 +2: All tests passed!
+
+# criterion 3: flutter test test/core/network
+00:39 +407: All tests passed!
+
+# no X-Retry-Count left in lib/ or test/ outside comments and the #315 tests
+test/core/network/api_client_interceptor_chain_test.dart:1505:  group('X-Retry-Count is neither a logout trigger nor sent on a replay', () {
+test/core/network/api_client_interceptor_chain_test.dart:1552:    test('criterion 1: a 401 on a caller request carrying X-Retry-Count: 1 '
+test/core/network/api_client_interceptor_chain_test.dart:1558:        headers: {'X-Retry-Count': '1'},
+test/core/network/api_client_interceptor_chain_test.dart:1566:    test('criterion 2: the replay does not add X-Retry-Count', () async {
+test/core/network/interceptors/auth_interceptor_session_generation_test.dart:378:      'criterion 4: a 401 carrying X-Retry-Count: 1 queues behind the '
+test/core/network/interceptors/auth_interceptor_session_generation_test.dart:390:            options: Options(headers: {'X-Retry-Count': '1'}),
+test/core/network/interceptors/auth_interceptor_test.dart:217:        'a caller-sent X-Retry-Count header does not skip the refresh',
+test/core/network/interceptors/auth_interceptor_test.dart:224:            headers: {...requestOptions.headers, 'X-Retry-Count': '1'},
