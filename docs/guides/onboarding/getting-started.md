@@ -183,6 +183,8 @@ ENABLE_ANALYTICS=false
 ENABLE_CRASH_REPORTING=false
 ```
 
+> **Android emulator:** `localhost` there is the emulator itself, not your machine. A backend running on your machine is reached at `http://10.0.2.2:<port>` (for example `BASE_URL=http://10.0.2.2:3000`). The iOS Simulator, desktop and web builds use `localhost` as shown.
+
 ### Using `--dart-define` Flags
 
 ```bash
