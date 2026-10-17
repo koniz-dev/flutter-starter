@@ -1,0 +1,19 @@
+# Probe PR #465 second commit ae30619b0ab: android/gradle/wrapper/gradle-wrapper.properties set to gradle-8.14-all.zip
+# run: https://github.com/koniz-dev/flutter-starter/actions/runs/39016182505 - job 117348651940 conclusion FAILURE
+step: Set up job -> success
+step: Checkout code -> success
+step: Setup Flutter -> success
+step: Setup Java -> success
+step: Install dependencies -> success
+step: Check Gradle, AGP and Kotlin against Flutter's floor -> failure
+step: Build debug APK -> skipped
+step: Post Setup Java -> success
+step: Post Setup Flutter -> success
+step: Post Checkout code -> success
+step: Complete job -> success
+Check Gradle, AGP and Kotlin against Flutter's floor	Gradle: 8.14 (floor 9.1.0)
+Check Gradle, AGP and Kotlin against Flutter's floor	Android Gradle Plugin: 9.1.0 (floor 9.0.1)
+Check Gradle, AGP and Kotlin against Flutter's floor	Kotlin: 2.4.0 (floor 2.3.20)
+Check Gradle, AGP and Kotlin against Flutter's floor	Gradle 8.14 is below the floor 9.1.0 that Flutter stable supports
+Check Gradle, AGP and Kotlin against Flutter's floor	1 toolchain problem(s).
+Check Gradle, AGP and Kotlin against Flutter's floor	##[error]Process completed with exit code 1.
