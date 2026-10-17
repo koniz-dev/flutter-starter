@@ -522,6 +522,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Bạn chưa đăng nhập hoặc phiên đã hết hạn. Vui lòng đăng nhập lại.';
 
   @override
+  String get failureInvalidCredentials =>
+      'Email hoặc mật khẩu không đúng. Vui lòng kiểm tra và thử lại.';
+
+  @override
   String get failurePermission => 'Bạn không có quyền thực hiện thao tác này.';
 
   @override

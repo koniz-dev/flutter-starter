@@ -1,6 +1,17 @@
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 
+/// Failure codes the app itself sets and [FailureLocalizations] renders.
+///
+/// Feature code tags a [Failure] with one of these instead of repeating the
+/// string, so the tag and the message it selects cannot drift apart.
+abstract final class FailureCodes {
+  /// Sign-in or registration was rejected because the email and password do
+  /// not match an account - not an expired session, which plain
+  /// [AuthFailure] means (koniz-dev/flutter-starter#445, #479).
+  static const String invalidCredentials = 'INVALID_CREDENTIALS';
+}
+
 /// The text a screen shows for a [Failure], in the user's language.
 ///
 /// [Failure.message] is built for logs, not people: `DioExceptionMapper`
@@ -22,6 +33,8 @@ extension FailureLocalizations on Failure {
   /// This failure's user-facing message in the language of [l10n].
   String localizedMessage(AppLocalizations l10n) {
     switch (code) {
+      case FailureCodes.invalidCredentials:
+        return l10n.failureInvalidCredentials;
       case 'CONNECTION_TIMEOUT':
       case 'SEND_TIMEOUT':
       case 'RECEIVE_TIMEOUT':

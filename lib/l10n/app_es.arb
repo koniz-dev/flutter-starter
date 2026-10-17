@@ -209,6 +209,7 @@
   "failureCancelled": "La solicitud se canceló.",
   "failureUnreadableResponse": "El servidor envió una respuesta que esta aplicación no pudo leer.",
   "failureAuth": "No has iniciado sesión o tu sesión ha terminado. Vuelve a iniciar sesión.",
+  "failureInvalidCredentials": "El correo y la contraseña no coinciden. Revísalos e inténtalo de nuevo.",
   "failurePermission": "No tienes permiso para hacer eso.",
   "failureNotFound": "No encontramos lo que buscabas.",
   "failureValidation": "Parte de la información no es válida. Revísala e inténtalo de nuevo.",

@@ -528,6 +528,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'You\'re not signed in, or your session has ended. Please sign in again.';
 
   @override
+  String get failureInvalidCredentials =>
+      'That email and password don\'t match. Check them and try again.';
+
+  @override
   String get failurePermission => 'You don\'t have permission to do that.';
 
   @override
