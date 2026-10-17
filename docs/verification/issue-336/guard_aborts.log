@@ -1,0 +1,46 @@
+# the guard step's command (dart run tool/check_env_assets.dart) with '- .env' added under flutter: assets:
+177:  assets:
+178-    - .env
+Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+
+  pubspec.yaml:178  - .env  [environment file]
+
+Flutter asset lists are not build-mode scoped, so this file ships in the
+release APK, the release IPA and the web build, not just in debug. Anyone can
+unzip the app bundle to read it, and on web it is served over HTTP at
+/assets/<path> and listed in AssetManifest.json. A declared *directory* bundles
+everything directly inside it, with no pubspec entry per file.
+
+Use instead:
+  * native (all build modes): --dart-define-from-file=.env, or individual
+    --dart-define flags. Nothing is bundled as a readable file.
+  * web: there is no dart-define path, and a web client cannot hold a secret.
+    Serve secrets from your backend and keep only publishable values in the
+    bundle.
+  * key and signing material: keep it out of the tree the app is built from.
+    Nothing an app bundle contains is private.
+
+If the file genuinely holds no secrets and must ship (a web build needing
+runtime config), say so inline and this check will pass:
+
+    - .env # env-asset-ack: web build, contains no secrets
+
+For a file inside a declared directory, put the acknowledgement on the
+directory entry and name the file, so it covers that file and not the whole
+directory:
+
+    - assets/config/ # env-asset-ack: app_config.env, .env.web - publishable only
+
+The names are a comma-separated list of bare file names, each matched exactly
+against the file name and never as a substring, ending at the first entry that
+is not a file name; free prose may follow after a semicolon or a spaced dash.
+So `.env.example` does not cover `.env`, and prose that merely mentions a file
+does not acknowledge it.
+
+See docs/guides/configuration.md ("Never ship a secret in the bundle").
+
+exit=1  (non-zero: GitHub Actions fails the step, so no later build step runs)
+
+# pubspec.yaml restored
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
