@@ -1,0 +1,81 @@
+# docs/verification/issue-507/lane_abort_probe.sh, fastlane 2.241.1 (installed into a scratch GEM_HOME), flutter stubbed on PATH
+=== android build_apk, with '- .env' declared
+--- Step: cd .. && dart run tool/check_env_assets.dart ---
+$ cd .. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+ => 92:	    sh("cd .. && dart run tool/check_env_assets.dart")
+| 💥   | cd .. && dart run tool/check_env_assets.dart | 3           |
+fastlane finished with errors
+[!] Exit status of command 'cd .. && dart run tool/check_env_assets.dart' was 1 instead of 0.
+exit=1
+=== android build_apk, clean tree
+--- Step: cd .. && dart run tool/check_env_assets.dart ---
+$ cd .. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+▸ FAKE flutter build apk --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com
+ => 103:	    UI.user_error!("APK not found at #{apk_path}") unless File.exist?(apk_path)
+| 2    | cd .. && dart run tool/check_env_assets.dart                  | 1           |
+fastlane finished with errors
+[!] APK not found at ../build/app/outputs/flutter-apk/app-release.apk
+exit=1
+
+=== android build_bundle, with '- .env' declared
+--- Step: cd .. && dart run tool/check_env_assets.dart ---
+$ cd .. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+ => 61:	    sh("cd .. && dart run tool/check_env_assets.dart")
+| 💥   | cd .. && dart run tool/check_env_assets.dart | 1           |
+fastlane finished with errors
+[!] Exit status of command 'cd .. && dart run tool/check_env_assets.dart' was 1 instead of 0.
+exit=1
+=== android build_bundle, clean tree
+--- Step: cd .. && dart run tool/check_env_assets.dart ---
+$ cd .. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+▸ FAKE flutter build appbundle --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com
+ => 76:	    UI.user_error!("App Bundle not found at #{bundle_path}") unless File.exist?(bundle_path)
+| 2    | cd .. && dart run tool/check_env_assets.dart                  | 1           |
+fastlane finished with errors
+[!] App Bundle not found at ../build/app/outputs/bundle/release/app-release.aab
+exit=1
+
+=== ios build_adhoc, with '- .env' declared
+--- Step: cd ../.. && dart run tool/check_env_assets.dart ---
+$ cd ../.. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+ => 93:	    sh("cd #{REPO_ROOT} && dart run tool/check_env_assets.dart")
+| 💥   | cd ../.. && dart run tool/check_env_assets.dart | 1           |
+fastlane finished with errors
+[!] Exit status of command 'cd ../.. && dart run tool/check_env_assets.dart' was 1 instead of 0.
+exit=1
+=== ios build_adhoc, clean tree
+--- Step: cd ../.. && dart run tool/check_env_assets.dart ---
+$ cd ../.. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+▸ FAKE flutter build ipa --release --export-method ad-hoc --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com
+ => 105:	    UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
+| 2    | cd ../.. && dart run tool/check_env_assets.dart               | 1           |
+fastlane finished with errors
+[!] IPA not found at ../../build/ios/ipa/Runner.ipa
+exit=1
+
+=== ios build_appstore, with '- .env' declared
+--- Step: cd ../.. && dart run tool/check_env_assets.dart ---
+$ cd ../.. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+ => 61:	    sh("cd #{REPO_ROOT} && dart run tool/check_env_assets.dart")
+| 💥   | cd ../.. && dart run tool/check_env_assets.dart | 1           |
+fastlane finished with errors
+[!] Exit status of command 'cd ../.. && dart run tool/check_env_assets.dart' was 1 instead of 0.
+exit=1
+=== ios build_appstore, clean tree
+--- Step: cd ../.. && dart run tool/check_env_assets.dart ---
+$ cd ../.. && dart run tool/check_env_assets.dart
+▸ Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+▸ FAKE flutter build ipa --release --export-method app-store --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com
+ => 77:	    UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
+| 2    | cd ../.. && dart run tool/check_env_assets.dart               | 1           |
+fastlane finished with errors
+[!] IPA not found at ../../build/ios/ipa/Runner.ipa
+exit=1
+
