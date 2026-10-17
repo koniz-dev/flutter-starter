@@ -1,0 +1,10 @@
+# the guard step's command with '- .env' added under flutter: assets:
+SECURITY: a secrets file is bundled as a Flutter asset.
+
+  pubspec.yaml:178  - .env  [environment file]
+
+exit=
+
+# pubspec.yaml restored
+OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=
