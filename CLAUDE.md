@@ -181,16 +181,19 @@ make the loop worthless.
 <!-- strip:process-only start -->
 ### Which checks a PR gets
 
-Four workflows run on PRs. Only one of them still filters at the workflow
-level, so **every PR reports Quality gate, Issue refs and the three Strip
-jobs** - five checks minimum:
+Five workflows run on PRs. Two of them filter at the workflow level, so
+**every PR reports Quality gate, Issue refs and the Strip jobs** - the
+minimum - and Docs check and the JDK 25 Android job join only when their paths
+change. `test/tooling/claude_md_checks_table_test.dart` fails if this table and
+the workflows' `pull_request` triggers drift apart:
 
 | Workflow | Check name(s) | Runs when |
 |---|---|---|
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
-| [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, or the workflow itself |
+| [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, `tool/doc_symbols.dart`, `tool/doc_env_runs.dart`, `tool/doc_dart_defines.dart`, `lib/core/config/dart_defines.dart`, or the workflow itself (`.github/workflows/docs-check.yml`) |
 | [`issue-refs.yml`](.github/workflows/issue-refs.yml) | Issue refs | **every** PR, no path filter |
-| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x3) | **every** PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed |
+| [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
+| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x4) | **every** PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed |
 
 `ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117, and
 `strip-smoke.yml` never had one. Both now filter inside the job - "Decide the
