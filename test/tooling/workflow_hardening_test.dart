@@ -30,7 +30,9 @@ void main() {
         ..sort((a, b) => a.path.compareTo(b.path));
 
   test('the scan sees the workflows', () {
-    expect(workflows.length, greaterThanOrEqualTo(13));
+    // Not an exact count: the strip variants remove workflows of their own.
+    expect(workflows, isNotEmpty);
+    expect(workflows.map((f) => f.uri.pathSegments.last), contains('ci.yml'));
   });
 
   for (final workflow in workflows) {
