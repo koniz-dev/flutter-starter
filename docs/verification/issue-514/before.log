@@ -1,0 +1,14 @@
+# test/features/tasks/presentation/screens/task_not_found_test.dart against main's lib/features/tasks/presentation/screens/task_detail_screen.dart
+00:00 +0: (setUpAll)
+00:00 +0: under es criteria 1-2: not-found is the es message and offers Back, not Retry
+Expected: no matching candidates
+  Actual: _TextWidgetFinder:<Found 1 widget with text "Reintentar": [
+   Which: means one was found but none were expected
+00:01 +0 -1: under es criteria 1-2: not-found is the es message and offers Back, not Retry [E]
+00:01 +0 -1: under es criterion 3: a load failure still offers Retry, and Retry reloads
+00:01 +1 -1: criterion 2: Back leaves the detail route on the app's router opened from the list, Back pops to the list
+00:02 +1 -2: criterion 2: Back leaves the detail route on the app's router opened from the list, Back pops to the list [E]
+00:02 +1 -2: criterion 2: Back leaves the detail route on the app's router deep-linked, with nothing to pop, Back goes to the list
+00:02 +1 -3: criterion 2: Back leaves the detail route on the app's router deep-linked, with nothing to pop, Back goes to the list [E]
+00:02 +1 -3: (tearDownAll)
+00:02 +1 -3: Some tests failed.

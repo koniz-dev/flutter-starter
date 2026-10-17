@@ -293,7 +293,10 @@ void main() {
           find.text(lookupAppLocalizations(const Locale('en')).failureNotFound),
           findsOneWidget,
         );
-        expect(find.text('Retry'), findsOneWidget);
+        // Retrying a lookup for a missing task cannot help, so not-found
+        // offers Back instead (koniz-dev/flutter-starter#514).
+        expect(find.text('Retry'), findsNothing);
+        expect(find.text('Back'), findsOneWidget);
       });
 
       testWidgets('should display error when loading fails', (tester) async {
