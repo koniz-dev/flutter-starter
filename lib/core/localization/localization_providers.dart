@@ -39,9 +39,13 @@ class LocaleNotifier extends Notifier<Locale> {
   /// Gets the current locale
   Locale get locale => state;
 
-  /// Sets the current locale
+  /// Sets the current locale for the running app.
   ///
-  /// Updates the app's locale state and persists the preference to storage.
+  /// In memory only: nothing is written to storage, so the choice is gone on
+  /// the next launch. To keep it, persist it as well with
+  /// [LocalizationService.setCurrentLocale] - which writes the preference this
+  /// notifier reads back at startup through [currentLocaleProvider]
+  /// (koniz-dev/flutter-starter#545).
   set locale(Locale locale) {
     state = locale;
   }
