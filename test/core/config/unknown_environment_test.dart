@@ -46,26 +46,10 @@ void main() {
         .setMockMessageHandler(_assetChannel, null);
   });
 
-  // Runs first, before any .env is loaded, so it sees the dart-define path:
-  // run the file with --dart-define=ENVIRONMENT=prod or ="production " to
-  // exercise it.
-  test('the compile-time define alone is trimmed and checked the same way '
-      '(${AppConfig.environment})', () {
-    expect(EnvConfig.isInitialized, isFalse);
-    final raw = EnvConfig.get('ENVIRONMENT', defaultValue: 'development');
-
-    expect(AppConfig.environment, raw.trim().toLowerCase());
-    expect(
-      AppConfig.environmentMisconfigured,
-      !AppConfig.knownEnvironments.contains(raw.trim().toLowerCase()),
-    );
-    // ignore: avoid_print - the line is the evidence for the define path
-    print(
-      'VP define=${jsonEncode(raw)} environment=${AppConfig.environment} '
-      'misconfigured=${AppConfig.environmentMisconfigured} '
-      'baseUrl=${AppConfig.baseUrl}',
-    );
-  });
+  // The dart-define path (no .env loaded) is checked in
+  // environment_define_path_test.dart: every test here loads a .env, so a
+  // case needing none could only pass while it happened to run first
+  // (koniz-dev/flutter-starter#602).
 
   group('criterion 1: an unknown ENVIRONMENT is surfaced', () {
     for (final value in ['prod', 'qa', 'Production-EU']) {
