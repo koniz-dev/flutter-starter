@@ -1,0 +1,11 @@
+# test/features/home/presentation/screens/home_hint_localized_test.dart against main's lib/features/home/presentation/screens/home_screen.dart
+00:00 +0: criteria 1-2 (es): the hint is the localized string, not the English literal
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Añade pantallas en lib/features/.": []>
+00:01 +0 -1: criteria 1-2 (es): the hint is the localized string, not the English literal [E]
+00:01 +0 -1: criteria 1-2 (vi): the hint is the localized string, not the English literal
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Thêm màn hình trong lib/features/.": []>
+00:01 +0 -2: criteria 1-2 (vi): the hint is the localized string, not the English literal [E]
+00:01 +0 -2: under en the hint keeps its wording
+00:01 +1 -2: Some tests failed.
