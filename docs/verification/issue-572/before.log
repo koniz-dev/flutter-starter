@@ -1,0 +1,10 @@
+# test/docs/testing_guide_trees_test.dart against main's guides
+00:00 +0: criteria 1-2: docs/guides/testing/testing-summary.md lists exactly the top-level test/ directories
+00:00 +0 -1: criteria 1-2: docs/guides/testing/testing-summary.md lists exactly the top-level test/ directories [E]
+  Expected: Set:['tooling', 'core', 'features', 'shared', 'docs', 'acceptance', 'helpers']
+    Actual: Set:['helpers', 'core', 'features', 'shared', 'integration', 'integration_test']
+00:00 +0 -1: criteria 1-2: docs/guides/testing/guide.md lists exactly the top-level test/ directories
+00:00 +0 -2: criteria 1-2: docs/guides/testing/guide.md lists exactly the top-level test/ directories [E]
+  Expected: Set:['tooling', 'core', 'features', 'shared', 'docs', 'acceptance', 'helpers']
+    Actual: Set:['helpers', 'core', 'features', 'shared', 'integration']
+00:00 +0 -2: Some tests failed.

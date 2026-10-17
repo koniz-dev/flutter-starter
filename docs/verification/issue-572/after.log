@@ -1,0 +1,4 @@
+# the same test on this branch
+00:00 +0: criteria 1-2: docs/guides/testing/testing-summary.md lists exactly the top-level test/ directories
+00:00 +1: criteria 1-2: docs/guides/testing/guide.md lists exactly the top-level test/ directories
+00:00 +2: All tests passed!

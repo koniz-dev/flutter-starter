@@ -58,12 +58,15 @@ dart pub global activate patrol_cli 3.11.0
 
 ```
 test/
-├── helpers/          # Test utilities
+├── acceptance/      # Golden-tagged acceptance tests
 ├── core/            # Core layer tests
+├── docs/            # Checks that the documentation matches the code
 ├── features/        # Feature layer tests
+├── helpers/         # Test utilities
 ├── shared/          # Shared components
-├── integration/     # Standard integration tests
-└── integration_test/# E2E Patrol tests (e.g. auth_flow_test.dart)
+└── tooling/         # Checks on scripts, workflows and tooling
+
+integration_test/    # At the repository root, not under test/: Patrol E2E
 ```
 
 ## Key Files
