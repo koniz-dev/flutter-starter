@@ -56,7 +56,7 @@ void main() {
 
         // Assert
         expect(json['token'], 'access-token-123');
-        expect(json['refreshToken'], 'refresh-token-123');
+        expect(json['refresh_token'], 'refresh-token-123');
         expect(json['user'], isA<Map<String, dynamic>>());
         final userJson = json['user'] as Map<String, dynamic>;
         expect(userJson['id'], 'user-123');
@@ -73,7 +73,7 @@ void main() {
 
         // Assert
         expect(json['token'], 'access-token-123');
-        expect(json['refreshToken'], isNull);
+        expect(json['refresh_token'], isNull);
         expect(json['user'], isA<Map<String, dynamic>>());
       });
 
@@ -86,7 +86,7 @@ void main() {
             'name': 'Test User',
           },
           'token': 'access-token-123',
-          'refreshToken': 'refresh-token-123',
+          'refresh_token': 'refresh-token-123',
         };
 
         // Act
