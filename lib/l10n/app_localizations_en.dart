@@ -550,4 +550,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failureUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get homeAddScreensHint => 'Add screens under lib/features/.';
 }
