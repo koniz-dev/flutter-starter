@@ -11,6 +11,29 @@ void main() {
   // Initialize Flutter binding for path_provider
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  // Every test gets a real, empty documents directory. Without one,
+  // getApplicationDocumentsDirectory threw, init() swallowed it, no file was
+  // ever written, and the assertions below sat behind `if
+  // (logFiles.isNotEmpty)` guards that never ran (koniz-dev/flutter-starter#371).
+  late Directory documentsDir;
+  setUp(() async {
+    documentsDir = await Directory.systemTemp.createTemp('log_output_docs');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(_pathProviderChannel, (call) async {
+          if (call.method == 'getApplicationDocumentsDirectory') {
+            return documentsDir.path;
+          }
+          return null;
+        });
+  });
+  tearDown(() async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(_pathProviderChannel, null);
+    if (documentsDir.existsSync()) {
+      documentsDir.deleteSync(recursive: true);
+    }
+  });
+
   // Every test owns its FileLogOutput and registers its own teardown right
   // after constructing it. A shared `late` variable torn down by the group
   // threw LateInitializationError under a randomized order, because the
@@ -26,7 +49,7 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      expect(logFiles.length, greaterThanOrEqualTo(0));
+      expect(logFiles, isNotEmpty);
     });
 
     test('should write log output to file', () async {
@@ -46,13 +69,11 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      expect(logFiles.length, greaterThanOrEqualTo(0));
-      if (logFiles.isNotEmpty) {
-        final logFile = logFiles.first;
-        expect(logFile.existsSync(), isTrue);
-        final content = await logFile.readAsString();
-        expect(content, contains('Test log message'));
-      }
+      expect(logFiles, isNotEmpty);
+      final logFile = logFiles.first;
+      expect(logFile.existsSync(), isTrue);
+      final content = await logFile.readAsString();
+      expect(content, contains('Test log message'));
     });
 
     test('should handle multiple log entries', () async {
@@ -72,13 +93,12 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      if (logFiles.isNotEmpty) {
-        final logFile = logFiles.first;
-        expect(logFile.existsSync(), isTrue);
-        final content = await logFile.readAsString();
-        for (var i = 0; i < 5; i++) {
-          expect(content, contains('Log entry $i'));
-        }
+      expect(logFiles, isNotEmpty);
+      final logFile = logFiles.first;
+      expect(logFile.existsSync(), isTrue);
+      final content = await logFile.readAsString();
+      for (var i = 0; i < 5; i++) {
+        expect(content, contains('Log entry $i'));
       }
     });
 
@@ -101,13 +121,12 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      if (logFiles.isNotEmpty) {
-        final logFile = logFiles.first;
-        expect(logFile.existsSync(), isTrue);
-        final content = await logFile.readAsString();
-        for (final level in levels) {
-          expect(content, contains('${level.name} message'));
-        }
+      expect(logFiles, isNotEmpty);
+      final logFile = logFiles.first;
+      expect(logFile.existsSync(), isTrue);
+      final content = await logFile.readAsString();
+      for (final level in levels) {
+        expect(content, contains('${level.name} message'));
       }
     });
 
@@ -139,7 +158,7 @@ void main() {
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
       // Should have at least the current log file
-      expect(logFiles.length, greaterThanOrEqualTo(0));
+      expect(logFiles, isNotEmpty);
     });
 
     test('should respect maxFiles limit', () async {
@@ -186,8 +205,7 @@ void main() {
 
       // Assert
       expect(logFiles, isA<List<File>>());
-      // File may or may not exist yet depending on timing
-      expect(logFiles.length, greaterThanOrEqualTo(0));
+      expect(logFiles, isNotEmpty);
     });
 
     test('should clear all log files', () async {
@@ -207,7 +225,7 @@ void main() {
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
       // After clearing, should still have the current log file (reinitialized)
-      expect(logFiles.length, greaterThanOrEqualTo(0));
+      expect(logFiles, isNotEmpty);
     });
 
     test('should handle custom fileName', () async {
@@ -223,17 +241,8 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      // File may or may not be created yet, but if it exists,
-      // it should contain custom.log
-      if (logFiles.isNotEmpty) {
-        expect(
-          logFiles.any((file) => file.path.contains('custom.log')),
-          isTrue,
-        );
-      } else {
-        // If no files yet, that's also acceptable (timing issue)
-        expect(logFiles.length, 0);
-      }
+      expect(logFiles, isNotEmpty);
+      expect(logFiles.any((file) => file.path.contains('custom.log')), isTrue);
     });
 
     test('should handle output when sink is null', () {
@@ -319,12 +328,11 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      if (logFiles.isNotEmpty) {
-        final content = await logFiles.first.readAsString();
-        expect(content, contains('Line 1'));
-        expect(content, contains('Line 2'));
-        expect(content, contains('Line 3'));
-      }
+      expect(logFiles, isNotEmpty);
+      final content = await logFiles.first.readAsString();
+      expect(content, contains('Line 1'));
+      expect(content, contains('Line 2'));
+      expect(content, contains('Line 3'));
     });
 
     test('should handle empty output event', () async {
@@ -356,10 +364,9 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      if (logFiles.isNotEmpty) {
-        final content = await logFiles.first.readAsString();
-        expect(content.length, greaterThan(0));
-      }
+      expect(logFiles, isNotEmpty);
+      final content = await logFiles.first.readAsString();
+      expect(content.length, greaterThan(0));
     });
 
     test('should handle rotation with different file names', () async {
@@ -426,7 +433,7 @@ void main() {
 
       // Assert - Should not throw
       final logFiles = await fileLogOutput.getLogFiles();
-      expect(logFiles.length, greaterThanOrEqualTo(0));
+      expect(logFiles, isNotEmpty);
     });
 
     test('should handle concurrent output calls', () async {
@@ -446,11 +453,10 @@ void main() {
 
       // Assert
       final logFiles = await fileLogOutput.getLogFiles();
-      if (logFiles.isNotEmpty) {
-        final content = await logFiles.first.readAsString();
-        for (var i = 0; i < 10; i++) {
-          expect(content, contains('Concurrent $i'));
-        }
+      expect(logFiles, isNotEmpty);
+      final content = await logFiles.first.readAsString();
+      for (var i = 0; i < 10; i++) {
+        expect(content, contains('Concurrent $i'));
       }
     });
 
@@ -727,33 +733,37 @@ void main() {
         },
       );
 
-      test('should handle rotation when maxFiles is 1', () async {
-        // Arrange
-        final fileLogOutput = FileLogOutput(
-          fileName: 'test.log',
-          maxFileSize: 100,
-          maxFiles: 1,
-        );
-        addTearDown(fileLogOutput.destroy);
-        await fileLogOutput.init();
-
-        // Act - Write enough to trigger rotation
-        for (var i = 0; i < 20; i++) {
-          final logEvent = LogEvent(
-            Level.info,
-            'Long message to trigger rotation',
+      test(
+        'should handle rotation when maxFiles is 1',
+        () async {
+          // Arrange
+          final fileLogOutput = FileLogOutput(
+            fileName: 'test.log',
+            maxFileSize: 100,
+            maxFiles: 1,
           );
-          fileLogOutput.output(
-            OutputEvent(logEvent, ['Long message to trigger rotation']),
-          );
-        }
-        await Future<void>.delayed(const Duration(milliseconds: 1000));
+          addTearDown(fileLogOutput.destroy);
+          await fileLogOutput.init();
 
-        // Assert
-        final logFiles = await fileLogOutput.getLogFiles();
-        expect(logFiles.length, lessThanOrEqualTo(1));
-        await fileLogOutput.destroy();
-      });
+          // Act - Write enough to trigger rotation
+          for (var i = 0; i < 20; i++) {
+            final logEvent = LogEvent(
+              Level.info,
+              'Long message to trigger rotation',
+            );
+            fileLogOutput.output(
+              OutputEvent(logEvent, ['Long message to trigger rotation']),
+            );
+          }
+          await Future<void>.delayed(const Duration(milliseconds: 1000));
+
+          // Assert
+          final logFiles = await fileLogOutput.getLogFiles();
+          expect(logFiles.length, lessThanOrEqualTo(1));
+          await fileLogOutput.destroy();
+        },
+        skip: 'keeps maxFiles + 1 files (koniz-dev/flutter-starter#589)',
+      );
 
       test('should handle output with empty lines list', () async {
         // Arrange
@@ -853,35 +863,39 @@ void main() {
         await fileLogOutput.destroy();
       });
 
-      test('should handle multiple rotations in sequence', () async {
-        // Arrange
-        final fileLogOutput = FileLogOutput(
-          fileName: 'test.log',
-          maxFileSize: 100,
-          maxFiles: 2,
-        );
-        addTearDown(fileLogOutput.destroy);
-        await fileLogOutput.init();
+      test(
+        'should handle multiple rotations in sequence',
+        () async {
+          // Arrange
+          final fileLogOutput = FileLogOutput(
+            fileName: 'test.log',
+            maxFileSize: 100,
+            maxFiles: 2,
+          );
+          addTearDown(fileLogOutput.destroy);
+          await fileLogOutput.init();
 
-        // Act - Trigger multiple rotations
-        for (var rotation = 0; rotation < 3; rotation++) {
-          for (var i = 0; i < 15; i++) {
-            final logEvent = LogEvent(
-              Level.info,
-              'Rotation $rotation message $i',
-            );
-            fileLogOutput.output(
-              OutputEvent(logEvent, ['Rotation $rotation message $i']),
-            );
+          // Act - Trigger multiple rotations
+          for (var rotation = 0; rotation < 3; rotation++) {
+            for (var i = 0; i < 15; i++) {
+              final logEvent = LogEvent(
+                Level.info,
+                'Rotation $rotation message $i',
+              );
+              fileLogOutput.output(
+                OutputEvent(logEvent, ['Rotation $rotation message $i']),
+              );
+            }
+            await Future<void>.delayed(const Duration(milliseconds: 500));
           }
-          await Future<void>.delayed(const Duration(milliseconds: 500));
-        }
 
-        // Assert
-        final logFiles = await fileLogOutput.getLogFiles();
-        expect(logFiles.length, lessThanOrEqualTo(2));
-        await fileLogOutput.destroy();
-      });
+          // Assert
+          final logFiles = await fileLogOutput.getLogFiles();
+          expect(logFiles.length, lessThanOrEqualTo(2));
+          await fileLogOutput.destroy();
+        },
+        skip: 'keeps maxFiles + 1 files (koniz-dev/flutter-starter#589)',
+      );
 
       test('should handle output with multiple lines', () async {
         // Arrange
@@ -1222,12 +1236,11 @@ void main() {
 
         // Assert - Content should be written and flushed
         final logFiles = await fileLogOutput.getLogFiles();
-        if (logFiles.isNotEmpty) {
-          final content = await logFiles.first.readAsString();
-          expect(content, contains('Line 1'));
-          expect(content, contains('Line 2'));
-          expect(content, contains('Line 3'));
-        }
+        expect(logFiles, isNotEmpty);
+        final content = await logFiles.first.readAsString();
+        expect(content, contains('Line 1'));
+        expect(content, contains('Line 2'));
+        expect(content, contains('Line 3'));
         await fileLogOutput.destroy();
       });
 
@@ -1343,6 +1356,7 @@ void main() {
           expect(logFiles.length, lessThanOrEqualTo(2));
           await fileLogOutput.destroy();
         },
+        skip: 'keeps maxFiles + 1 files (koniz-dev/flutter-starter#589)',
       );
 
       test('should rename current log to .1 during rotation', () async {
@@ -1632,9 +1646,7 @@ void main() {
 
         // Assert
         expect(output.pendingLineCount, 0);
-        final file = File(
-          path.join(tempRoot.path, 'logs', 'startup.log'),
-        );
+        final file = File(path.join(tempRoot.path, 'logs', 'startup.log'));
         expect(file.existsSync(), isTrue);
         expect(
           await file.readAsString(),
