@@ -1,0 +1,11 @@
+# secure_storage_string_list_test.dart against main's SecureStorageService and MigrationV1ToV2
+00:00 +0 -1: criterion 1: any list round-trips ["a,b","c"] [E]
+  Expected: ['a,b', 'c']
+    Actual: ['a', 'b', 'c']
+00:00 +0 -2: criterion 1: any list round-trips [""] [E]
+  Expected: ['']
+    Actual: []
+00:00 +5 -3: criterion 3: MigrationV1ToV2 over secure storage a user_tags list with a comma inside one tag survives as one element [E]
+  Expected: ['a,b', 'c']
+    Actual: ['a', 'b', 'c']
+00:00 +6 -3: Some tests failed.

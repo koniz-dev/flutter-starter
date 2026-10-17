@@ -1,5 +1,6 @@
 import 'package:flutter_starter/core/storage/migration/storage_migration.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/storage/string_list_encoding.dart';
 
 /// Example migration from version 1 to version 2
 ///
@@ -59,7 +60,11 @@ class MigrationV1ToV2 extends StorageMigration {
     // cannot start. Prefer renaming the key (examples 1 and 2) when the type
     // changes; keep this shape only if you also keep the guard.
     final oldTags = await _readLegacyString(storage, 'user_tags');
-    if (oldTags != null) {
+    // On a string-only backend (secure storage) an already-migrated list
+    // reads back through getString as its stored encoding. Splitting that on
+    // commas would fragment it, so a value that is already an encoded list is
+    // left alone (koniz-dev/flutter-starter#281).
+    if (oldTags != null && decodeEncodedStringList(oldTags) == null) {
       final tagsList = oldTags.isEmpty
           ? <String>[]
           : oldTags.split(',').map((e) => e.trim()).toList();

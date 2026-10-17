@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/storage/string_list_encoding.dart';
 
 /// Secure storage service implementation using flutter_secure_storage
 ///
@@ -11,6 +12,11 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 ///
 /// Platform-specific configuration:
 /// - iOS: Uses Keychain with first unlock accessibility
+///
+/// String lists are stored as a JSON array (see `string_list_encoding.dart`),
+/// so any element round-trips - including one holding a comma, and `['']`.
+/// A list written before koniz-dev/flutter-starter#281 in the old
+/// comma-joined form still reads back, split on commas as it was written.
 class SecureStorageService implements IStorageService, IStrictStringRead {
   /// Creates a [SecureStorageService] instance with platform-specific options
   SecureStorageService()
@@ -119,10 +125,7 @@ class SecureStorageService implements IStorageService, IStrictStringRead {
     try {
       final value = await _storage.read(key: key);
       if (value == null) return null;
-      // Store as comma-separated values
-      // Handle empty string case (empty list stored as empty string)
-      if (value.isEmpty) return <String>[];
-      return value.split(',');
+      return decodeStringList(value);
     } on Exception {
       return null;
     }
@@ -131,8 +134,7 @@ class SecureStorageService implements IStorageService, IStrictStringRead {
   @override
   Future<bool> setStringList(String key, List<String> value) async {
     try {
-      // Store as comma-separated values
-      await _storage.write(key: key, value: value.join(','));
+      await _storage.write(key: key, value: encodeStringList(value));
       return true;
     } on Exception {
       return false;
