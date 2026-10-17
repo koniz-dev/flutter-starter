@@ -1,0 +1,6 @@
+# test/tooling/text_literal_guard_test.dart with lib/features/home/presentation/screens/home_screen.dart as of ee56d648895c4dd7ee09af6eedeabd006bedb194 (before #513 / PR #522)
+00:00 +0: criterion 1: no string literal is passed to Text( in presentation code
+00:00 +0 -1: criterion 1: no string literal is passed to Text( in presentation code [E]
+              'lib/features/home/presentation/screens/home_screen.dart:36: Text(\'Add screens under lib/features/.…'
+  lib/features/home/presentation/screens/home_screen.dart:36: Text('Add screens under lib/features/.…
+00:00 +0 -1: Some tests failed.

@@ -1,0 +1,9 @@
+# test/tooling/text_literal_guard_test.dart on this branch (main after #522)
+00:00 +0: criterion 1: no string literal is passed to Text( in presentation code
+00:00 +1: criterion 2: the scan itself catches a planted single-line literal
+00:00 +2: criterion 2: the scan itself catches a planted multi-line literal, naming its line
+00:00 +3: criterion 2: the scan itself catches words around an interpolation
+00:00 +4: criterion 2: the scan itself passes a localized call and punctuation around a localized label
+00:00 +5: criterion 2: the scan itself honours the allow-list comment on the line or the line above
+00:00 +6: criterion 2: the scan itself scopes to presentation code and shared widgets
+00:00 +7: All tests passed!
