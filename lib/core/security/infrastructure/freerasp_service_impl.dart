@@ -15,7 +15,16 @@ import 'package:freerasp/freerasp.dart';
 /// others, never reached a listener.
 class FreeRaspServiceImpl implements IRaspService {
   final _threatController = StreamController<SecurityThreat>.broadcast();
-  bool _initialized = false;
+
+  /// Set only once a start has *succeeded*. It used to be set before the
+  /// start was even attempted, so a start that threw - as the shipped
+  /// placeholder config does on Android - turned every later call into a
+  /// silent no-op that protected nothing (koniz-dev/flutter-starter#317).
+  bool _started = false;
+
+  /// The start in flight, shared by concurrent callers so protection is
+  /// started once; cleared when it settles, so a failed start can be retried.
+  Future<void>? _starting;
 
   @override
   Stream<SecurityThreat> get onThreatDetected => _threatController.stream;
@@ -56,12 +65,19 @@ class FreeRaspServiceImpl implements IRaspService {
       _threatController.add(securityThreatFor(threat));
 
   @override
-  Future<void> startProtection() async {
-    if (_initialized) return;
-    _initialized = true;
+  Future<void> startProtection() {
+    if (_started) return Future<void>.value();
+    return _starting ??= _start()
+        .then((_) => _started = true)
+        .whenComplete(() => _starting = null);
+  }
 
-    // Use a placeholder config.
-    // Developers should replace these with their actual production hashes.
+  Future<void> _start() async {
+    // PLACEHOLDER - REPLACE BEFORE ENABLING RASP. None of these values
+    // identify a real app: freeRASP rejects the Android signing hash below,
+    // so startProtection() throws on Android until it is replaced. See
+    // docs/guides/security/implementation.md ("Edit the placeholder
+    // TalsecConfig").
     final config = TalsecConfig(
       androidConfig: AndroidConfig(
         packageName: 'com.example.flutter_starter',
