@@ -350,8 +350,7 @@ class AuthInterceptor extends Interceptor {
     // Handle 401 Unauthorized - refresh token or logout
     if (err.response?.statusCode == 401) {
       // Check if this endpoint should be excluded from token refresh
-      final path = err.requestOptions.path;
-      if (_shouldExcludeEndpoint(path)) {
+      if (_shouldExcludeEndpoint(err.requestOptions)) {
         return super.onError(err, handler);
       }
 
@@ -361,9 +360,34 @@ class AuthInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 
-  /// Checks if the endpoint should be excluded from token refresh
-  bool _shouldExcludeEndpoint(String path) {
-    return _excludedEndpoints.any((endpoint) => path.contains(endpoint));
+  /// Whether [options] targets one of the auth endpoints themselves, whose
+  /// 401 means the credentials were refused rather than that a token expired.
+  ///
+  /// An exact match on the endpoint path, not `contains`: a route that merely
+  /// contains `/auth/login` - `/users/auth/login-history` - is an ordinary
+  /// authenticated route and must refresh like any other
+  /// (koniz-dev/flutter-starter#299). The query string is ignored, and an
+  /// absolute URL is reduced to its path below the base URL's.
+  bool _shouldExcludeEndpoint(RequestOptions options) {
+    return _excludedEndpoints.contains(_endpointPath(options));
+  }
+
+  /// The endpoint [options] targets, relative to the base URL, with a leading
+  /// slash and no query string or trailing slash.
+  static String _endpointPath(RequestOptions options) {
+    final target = Uri.parse(options.path);
+    var path = target.path;
+    if (target.hasScheme) {
+      final basePath = Uri.parse(options.baseUrl).path;
+      if (basePath.isNotEmpty && path.startsWith(basePath)) {
+        path = path.substring(basePath.length);
+      }
+    }
+    if (!path.startsWith('/')) path = '/$path';
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.substring(0, path.length - 1);
+    }
+    return path;
   }
 
   /// Handles 401 Unauthorized errors by attempting token refresh

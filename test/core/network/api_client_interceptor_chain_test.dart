@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/constants/api_endpoints.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
@@ -593,6 +594,77 @@ void main() {
       expect(trace.getMetric(PerformanceMetrics.success), isNull);
       expect(trace.getAttribute(PerformanceAttributes.httpStatusCode), '401');
     });
+  });
+
+  // koniz-dev/flutter-starter#299: AuthInterceptor skipped the refresh for any
+  // path that merely *contained* an auth endpoint, so an adopter route such as
+  // /users/auth/login-history answered 401 with "please login again" while
+  // every other route refreshed transparently.
+  group('which 401s trigger a refresh (#299)', () {
+    late _MockStorageService storageService;
+    late _MockSecureStorageService secureStorageService;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      secureStorageService = _MockSecureStorageService();
+    });
+
+    ({ApiClient client, _RecordingAdapter adapter, int Function() refreshes})
+    build(List<Object> script) {
+      var refreshCalls = 0;
+      final adapter = _RecordingAdapter(script);
+      final client = ApiClient(
+        storageService: storageService,
+        secureStorageService: secureStorageService,
+        authInterceptor: AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async {
+            refreshCalls++;
+            return const Success('fresh-access-token');
+          },
+        ),
+      )..dio.httpClientAdapter = adapter;
+      return (client: client, adapter: adapter, refreshes: () => refreshCalls);
+    }
+
+    for (final path in const [
+      '/users/auth/login-history',
+      '/admin/auth/logout-sessions',
+      '/auth/refresh-settings',
+    ]) {
+      test('criterion 1: $path refreshes once and the replay reaches the '
+          'caller', () async {
+        final h = build([401, 200]);
+
+        final response = await h.client.post(path, data: {'x': 1});
+
+        expect(h.refreshes(), 1);
+        expect(h.adapter.hits, 2);
+        expect(response.statusCode, 200);
+      });
+    }
+
+    for (final path in [
+      ApiEndpoints.login,
+      ApiEndpoints.register,
+      ApiEndpoints.refreshToken,
+      ApiEndpoints.logout,
+      '${ApiEndpoints.login}?source=app',
+      '${ApiEndpoints.logout}/',
+    ]) {
+      test('criterion 2: a 401 from $path does not refresh', () async {
+        final h = build([401]);
+
+        await expectLater(
+          h.client.post(path, data: {'x': 1}),
+          throwsA(
+            isA<ServerException>().having((e) => e.statusCode, 'status', 401),
+          ),
+        );
+        expect(h.refreshes(), 0);
+        expect(h.adapter.hits, 1);
+      });
+    }
   });
 
   // Regression cover for koniz-dev/flutter-starter#88: retry became reachable
