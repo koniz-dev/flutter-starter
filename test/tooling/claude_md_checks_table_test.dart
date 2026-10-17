@@ -126,7 +126,7 @@ void main() {
       final missing = <String>[
         for (final name in prWorkflows)
           for (final path in _pullRequestPaths(workflows[name]!))
-            if (!rows[name]!.contains('`$path`')) '$name: $path',
+            if (!(rows[name] ?? '').contains('`$path`')) '$name: $path',
       ];
       expect(missing, isEmpty, reason: 'CLAUDE.md rows omit: $missing');
     },
