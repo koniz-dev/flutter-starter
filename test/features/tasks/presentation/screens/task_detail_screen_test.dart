@@ -289,7 +289,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Assert
-        expect(find.text('Task not found'), findsOneWidget);
+        expect(
+          find.text(lookupAppLocalizations(const Locale('en')).failureNotFound),
+          findsOneWidget,
+        );
         expect(find.text('Retry'), findsOneWidget);
       });
 
@@ -317,7 +320,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Assert
-        expect(find.text('Failed to load task'), findsOneWidget);
+        expect(
+          find.text(lookupAppLocalizations(const Locale('en')).failureStorage),
+          findsOneWidget,
+        );
         expect(find.text('Retry'), findsOneWidget);
       });
 
@@ -689,7 +695,10 @@ void main() {
 
         expect(find.byType(TaskDetailScreen), findsOneWidget);
         expect(find.text('New Task'), findsOneWidget);
-        expect(find.text('disk full'), findsOneWidget);
+        expect(
+          find.text(lookupAppLocalizations(const Locale('en')).failureStorage),
+          findsOneWidget,
+        );
       });
 
       testWidgets('should handle cancel button in create mode', (tester) async {

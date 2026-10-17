@@ -12,6 +12,7 @@ import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_us
 import 'package:flutter_starter/features/tasks/domain/usecases/update_task_usecase.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_screen.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
@@ -158,7 +159,9 @@ void main() {
       expect(
         find.descendant(
           of: find.byType(TaskDetailScreen),
-          matching: find.text('disk full'),
+          matching: find.text(
+            lookupAppLocalizations(const Locale('en')).failureStorage,
+          ),
         ),
         findsOneWidget,
       );

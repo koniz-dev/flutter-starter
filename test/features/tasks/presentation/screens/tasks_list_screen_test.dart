@@ -181,7 +181,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text('Failed to load tasks'), findsOneWidget);
+      expect(
+        find.text(lookupAppLocalizations(const Locale('en')).failureStorage),
+        findsOneWidget,
+      );
       expect(find.text('Retry'), findsOneWidget);
     });
 
@@ -866,7 +869,10 @@ void main() {
 
       // Assert - the error is reported, and all three tasks are still there
       // instead of being replaced by a full-screen error icon.
-      expect(find.text('Storage error'), findsOneWidget);
+      expect(
+        find.text(lookupAppLocalizations(const Locale('en')).failureStorage),
+        findsOneWidget,
+      );
       expect(find.byType(ListView), findsOneWidget);
       expect(find.text('Task 0'), findsOneWidget);
       expect(find.text('Task 1'), findsOneWidget);
@@ -899,7 +905,10 @@ void main() {
             const ResultFailure<List<Task>>(CacheFailure('Storage error')),
       );
       await pumpScreen(tester);
-      expect(find.text('Storage error'), findsOneWidget);
+      expect(
+        find.text(lookupAppLocalizations(const Locale('en')).failureStorage),
+        findsOneWidget,
+      );
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
 
       // Act
