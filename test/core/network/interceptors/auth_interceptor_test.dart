@@ -209,32 +209,45 @@ void main() {
         verify(() => handler.next(any())).called(1);
       });
 
-      test('should prevent infinite retry loop', () async {
-        final retryRequestOptions = requestOptions.copyWith(
-          headers: {...requestOptions.headers, 'X-Retry-Count': '1'},
-        );
-        final retryException = DioException(
-          requestOptions: retryRequestOptions,
-          response: Response(
+      // koniz-dev/flutter-starter#315: the header used to skip the refresh and
+      // log the caller out. Loop protection is structural now - the replay
+      // goes through a Dio without this interceptor - so the header means
+      // nothing here.
+      test(
+        'a caller-sent X-Retry-Count header does not skip the refresh',
+        () async {
+          const failure = AuthFailure('Refresh token expired');
+          when(
+            () => mockAuthRepository.refreshToken(),
+          ).thenAnswer((_) async => const ResultFailure(failure));
+          final retryRequestOptions = requestOptions.copyWith(
+            headers: {...requestOptions.headers, 'X-Retry-Count': '1'},
+          );
+          final retryException = DioException(
             requestOptions: retryRequestOptions,
-            statusCode: 401,
-          ),
-        );
+            response: Response(
+              requestOptions: retryRequestOptions,
+              statusCode: 401,
+            ),
+          );
 
-        when(
-          () => mockSecureStorage.remove(AppConstants.tokenKey),
-        ).thenAnswer((_) async => true);
-        when(
-          () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
-        ).thenAnswer((_) async => true);
-        when(() => handler.next(any())).thenReturn(null);
+          when(
+            () => mockSecureStorage.remove(AppConstants.tokenKey),
+          ).thenAnswer((_) async => true);
+          when(
+            () => mockSecureStorage.remove(AppConstants.refreshTokenKey),
+          ).thenAnswer((_) async => true);
+          when(() => handler.next(any())).thenReturn(null);
 
-        await interceptor.onError(retryException, handler);
+          await interceptor.onError(retryException, handler);
 
-        verifyNever(() => mockAuthRepository.refreshToken());
-        verify(() => mockSecureStorage.remove(AppConstants.tokenKey)).called(1);
-        verify(() => handler.next(retryException)).called(1);
-      });
+          verify(() => mockAuthRepository.refreshToken()).called(1);
+          verify(
+            () => mockSecureStorage.remove(AppConstants.tokenKey),
+          ).called(1);
+          verify(() => handler.next(retryException)).called(1);
+        },
+      );
 
       test('should queue requests during refresh', () async {
         const newToken = 'new_token';

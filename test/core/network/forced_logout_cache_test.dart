@@ -450,17 +450,23 @@ void main() {
     );
 
     test(
-      'criterion 2 (second call site): the retry-exhausted early logout at '
-      'auth_interceptor.dart clears the cache before rejecting',
+      'criterion 2 (second call site): a replay the server refuses with 401 '
+      'clears the cache before rejecting',
       () async {
-        // A request already carrying X-Retry-Count: 1 takes the early
-        // `_logoutUser()` branch, which returns before the refresh attempt.
+        // The refresh succeeds, and the server then refuses the token it just
+        // issued: the replay's 401 is the other `_logoutUser()` call site.
+        // (It replaced the X-Retry-Count branch, removed in
+        // koniz-dev/flutter-starter#315.)
         final world = await seedSignedInWorld(
-          refreshToken: () async =>
-              fail('the early logout branch must not attempt a refresh'),
+          refreshToken: () async => const Success('fresh-access-token'),
+          replies: const [
+            _Reply(200, {'motd': 'cached-before-logout'}),
+            _Reply(401, {'error': 'token expired'}),
+            _Reply(401, {'error': 'token refused'}),
+          ],
         );
 
-        await drive401(world, headers: <String, String>{'X-Retry-Count': '1'});
+        await drive401(world);
 
         expect(world.storage.cachedBodyKeys, isEmpty);
         expect(

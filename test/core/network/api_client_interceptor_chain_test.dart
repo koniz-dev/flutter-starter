@@ -860,8 +860,10 @@ void main() {
         expect(tokenStore.accessToken, isNull);
       });
 
+      // This exit replaced the X-Retry-Count branch, removed in
+      // koniz-dev/flutter-starter#315.
       test(
-        'criterion 2: the retry-exhausted branch (X-Retry-Count: 1)',
+        'criterion 2: a replay the server refuses with 401',
         () async {
           final adapter = _CountingAdapter([unauthorized()]);
           var refreshCalls = 0;
@@ -870,26 +872,20 @@ void main() {
               tokenStore: tokenStore,
               refreshToken: () async {
                 refreshCalls++;
-                return const Success('unused');
+                return const Success('fresh-token');
               },
             ),
             adapter,
           );
 
           final thrown = await _thrownBy(
-            apiClient.post(
-              '/tasks',
-              data: {'title': 'x'},
-              headers: {'X-Retry-Count': '1'},
-            ),
+            apiClient.post('/tasks', data: {'title': 'x'}),
           );
 
           expect(thrown, _isMapped401);
-          expect(
-            refreshCalls,
-            0,
-            reason: 'this branch logs out without a refresh',
-          );
+          expect(refreshCalls, 1);
+          expect(adapter.hits, 2, reason: 'the request, then its replay');
+          expect(tokenStore.accessToken, isNull, reason: 'logged out');
         },
       );
 
@@ -1499,5 +1495,86 @@ void main() {
         },
       );
     }
+  });
+
+  // koniz-dev/flutter-starter#315. AuthInterceptor logged out, without a
+  // refresh, any 401 on a request carrying `X-Retry-Count: 1` - a header its
+  // own replay set but, going through a Dio without this interceptor, could
+  // never bring back to it. So only a caller that set the header reached the
+  // branch, and every replay sent the header to the server.
+  group('X-Retry-Count is neither a logout trigger nor sent on a replay', () {
+    late _MockStorageService storageService;
+    late List<Map<String, dynamic>> sentHeaders;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      when(() => storageService.getString(any())).thenAnswer((_) async => null);
+      when(
+        () => storageService.setString(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.setStringList(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => storageService.getStringList(any()),
+      ).thenAnswer((_) async => null);
+      when(() => storageService.remove(any())).thenAnswer((_) async => true);
+      sentHeaders = [];
+    });
+
+    _Reply recorded(_Reply reply) => (options) {
+      sentHeaders.add(Map.of(options.headers));
+      return reply(options);
+    };
+
+    ({ApiClient client, _CountingAdapter adapter, List<int> refreshes})
+    build() {
+      final tokenStore = _InMemoryTokenStore();
+      final refreshes = <int>[];
+      final adapter = _CountingAdapter([
+        recorded(_json(401, {'message': 'Unauthorized'})),
+        recorded(_json(200, {'ok': true})),
+      ]);
+      final client = ApiClient(
+        storageService: storageService,
+        secureStorageService: _MockSecureStorageService(),
+        authInterceptor: AuthInterceptor(
+          tokenStore: tokenStore,
+          refreshToken: () async {
+            refreshes.add(refreshes.length + 1);
+            return const Success('fresh-token');
+          },
+        ),
+      )..dio.httpClientAdapter = adapter;
+      return (client: client, adapter: adapter, refreshes: refreshes);
+    }
+
+    test('criterion 1: a 401 on a caller request carrying X-Retry-Count: 1 '
+        'refreshes and replays instead of logging out', () async {
+      final (:client, :adapter, :refreshes) = build();
+
+      final response = await client.get(
+        '/me',
+        headers: {'X-Retry-Count': '1'},
+      );
+
+      expect(response.statusCode, 200);
+      expect(refreshes, [1], reason: 'the refresh was attempted');
+      expect(adapter.hits, 2);
+    });
+
+    test('criterion 2: the replay does not add X-Retry-Count', () async {
+      final (:client, :adapter, refreshes: _) = build();
+
+      final response = await client.get('/me');
+
+      expect(response.statusCode, 200);
+      expect(adapter.hits, 2);
+      expect(sentHeaders.last['Authorization'], 'Bearer fresh-token');
+      expect(
+        sentHeaders.map((h) => h.keys.map((k) => k.toLowerCase())),
+        everyElement(isNot(contains('x-retry-count'))),
+      );
+    });
   });
 }

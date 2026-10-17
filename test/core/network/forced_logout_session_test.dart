@@ -176,32 +176,6 @@ void main() {
       );
       expect(session.adapter.hits, 1);
     });
-
-    test(
-      'the retry-exhausted logout branch clears AuthState.user too',
-      () async {
-        // A request already carrying X-Retry-Count: 1 takes the early
-        // `_logoutUser()` branch in AuthInterceptor, which returns before any
-        // refresh is attempted. Both call sites must end the session.
-        final session = await signedInSession();
-
-        await expectLater(
-          session.apiClient
-              .get('/users/me', headers: <String, String>{'X-Retry-Count': '1'})
-              .timeout(const Duration(seconds: 10)),
-          throwsA(
-            isA<ServerException>().having(
-              (e) => e.statusCode,
-              'statusCode',
-              401,
-            ),
-          ),
-        );
-
-        expect(session.authState.user, isNull);
-        expect(session.tokens.accessToken, isNull);
-      },
-    );
   });
 
   group('no DI cycle is introduced (#127 criterion 3)', () {
