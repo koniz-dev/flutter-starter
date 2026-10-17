@@ -94,11 +94,16 @@ flutter analyze
 
 ## Breaking Changes by Version
 
-### Version 2.0.0 (Hypothetical Future Version)
+### Already current: Riverpod 3 and `failureCallback:`
+
+Both changes below are **already in this starter** - `pubspec.yaml` depends on
+`flutter_riverpod: ^3.0.3`, and `Result.when` in
+`lib/core/utils/result.dart` takes `failureCallback:`. They are kept here for
+anyone carrying code from an older copy of the template.
 
 #### Riverpod 3.0 Migration
 
-**Breaking Change:** Riverpod updated from 2.x to 3.0
+**Change:** Riverpod 2.x to 3.0
 
 **Before:**
 ```dart
@@ -120,12 +125,11 @@ final counterProvider = NotifierProvider<CounterNotifier, int>(
 3. Update `build()` method signature
 4. Replace `ref.read(provider.notifier)` with `ref.read(provider.notifier)`
 
-**Script:** none ships today. If this release existed, it would provide
-`scripts/dev/migration/migrate_riverpod_3.0.dart`.
+**Script:** none ships; the steps above are manual.
 
 #### Result Pattern Update
 
-**Breaking Change:** `Result<T>` pattern updated
+**Change:** `Result.when`'s failure parameter is `failureCallback:`
 
 **Before:**
 ```dart
@@ -147,8 +151,7 @@ result.when(
 1. Find all `result.when(` occurrences
 2. Replace `failure:` with `failureCallback:`
 
-**Script:** none ships today. If this release existed, it would provide
-`scripts/dev/migration/migrate_result_pattern.dart`.
+**Script:** none ships; the steps above are manual.
 
 ### Version 1.1.0 (Hypothetical Future Version)
 

@@ -90,9 +90,11 @@ mason get
 - Brick constraints not met (check `environment.mason` in `bricks/**/brick.yaml`).
 - You renamed the repo/package and expected Mason to rewrite Markdown automatically (it doesn’t; docs may still show `flutter_starter` until you update them).
 
-### 4. Provider Not Found Errors
+### 5. Provider Not Found Errors
 
-**Problem**: `ProviderNotFoundException` when accessing providers.
+**Problem**: `Bad state: No ProviderScope found` (a `StateError` from Riverpod)
+when a widget reads a provider. (`ProviderNotFoundException` is
+`package:provider`'s error, not Riverpod's.)
 
 **Solutions:**
 1. Ensure widget is wrapped in `ProviderScope` or `UncontrolledProviderScope`
@@ -106,7 +108,7 @@ mason get
 - Prefer `ProviderContainer(overrides: [...])` + `container.read(...)` for unit tests.
 - For routing tests, validate current location via `GoRouter.routeInformationProvider.value.uri.path` to avoid brittle widget-finder assertions.
 
-### 5. Network/API Errors
+### 6. Network/API Errors
 
 **Problem**: API calls failing or timing out.
 
@@ -117,7 +119,7 @@ mason get
 4. Review interceptor logs (if HTTP logging enabled)
 5. Verify authentication tokens are valid
 
-### 6. Storage Errors
+### 7. Storage Errors
 
 **Problem**: Storage operations failing.
 
@@ -127,7 +129,7 @@ mason get
 3. Verify storage keys are correct
 4. For secure storage, check platform-specific setup
 
-### 7. Test Failures
+### 8. Test Failures
 
 **Problem**: Tests failing after changes.
 
@@ -157,7 +159,7 @@ flutter test
 **If `git push` fails with “failed to push some refs” but the real reason is tests:**
 - Your repo likely has a pre-push hook that runs `flutter test`. Scroll up in the terminal output: the first failing test is the root cause.
 
-### 8. Import Errors
+### 9. Import Errors
 
 **Problem**: Cannot find imports or "file not found" errors.
 
@@ -168,7 +170,7 @@ flutter test
 4. Check file paths are correct
 5. Verify `analysis_options.yaml` settings
 
-### 9. Hot Reload Not Working
+### 10. Hot Reload Not Working
 
 **Problem**: Changes not reflected after hot reload.
 
@@ -180,7 +182,7 @@ flutter test
 2. Use hot restart (`R` in terminal) instead
 3. If still not working, do a full restart
 
-### 10. GoRouter redirects / “stuck on login” / unexpected navigation
+### 11. GoRouter redirects / “stuck on login” / unexpected navigation
 
 **Problem**: Navigation keeps redirecting (e.g. always to `/login`) or routes don’t match expected paths.
 
@@ -189,7 +191,7 @@ flutter test
 2. Check the auth state provider used by router redirect logic (typically `authNotifierProvider`).
 3. In tests, use `MaterialApp.router(routerConfig: router)` and assert `router.routeInformationProvider.value.uri.path`.
 
-### 11. iOS CocoaPods issues
+### 12. iOS CocoaPods issues
 
 **Problem**: iOS build fails with Pod / Xcode errors.
 
