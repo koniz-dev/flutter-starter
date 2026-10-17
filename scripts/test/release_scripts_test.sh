@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 MD
     printf 'name: fixture\nversion: 1.0.0+1\n' > "$dir/pubspec.yaml"
     (
-        cd "$dir"
+        cd "$dir" || exit 1
         git init -q -b main
         git_q add -A
         git_q commit -q -m "chore: initial import"

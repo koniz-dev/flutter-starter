@@ -182,7 +182,8 @@ if [ "$ANALYZE_COVERAGE" = true ]; then
     read -r covered_lines total_lines <<< "$(bash "$LAYER_SCRIPT" --pattern="$pattern" "$FILTERED")"
 
     if [ "$total_lines" -gt 0 ]; then
-      local percent=$(awk "BEGIN {printf \"%.1f\", ($covered_lines / $total_lines) * 100}")
+      local percent
+      percent=$(awk "BEGIN {printf \"%.1f\", ($covered_lines / $total_lines) * 100}")
       echo -e "${CYAN}$name:${NC} $covered_lines/$total_lines lines ($percent%)"
 
       # Color code based on coverage
