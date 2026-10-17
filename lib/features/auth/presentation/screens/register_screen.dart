@@ -6,6 +6,7 @@ import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
 import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/features/auth/presentation/widgets/auth_form_body.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Registration screen for new user signup
@@ -54,8 +55,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.register)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: AuthFormBody(
         child: Form(
           key: _formKey,
           child: Column(
