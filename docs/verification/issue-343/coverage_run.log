@@ -1,0 +1,23 @@
+# coverage.yml dispatched on ci/343-workflow-permissions (codecov-action v7 with files:, sticky-pull-request-comment v3, upload-artifact v7, checkout v7)
+# https://github.com/koniz-dev/flutter-starter/actions/runs/39041497066
+conclusion: success
+head: a8f161bb061fabdbbd5a2971003ae7c90d1139f8
+job: Coverage Analysis -> success
+  success Set up job
+  success Checkout code
+  success Setup Flutter
+  success Install dependencies
+  success Run tests with coverage
+  success Install lcov
+  success Remove generated files from coverage
+  success Generate coverage report
+  success Calculate coverage by layer (architecture gates)
+  success Calculate coverage metrics
+  success Write coverage summary
+  success Enforce coverage thresholds
+  success Upload to Codecov (Public)
+  success Generate coverage badge
+  skipped Comment coverage summary
+  success Post Setup Flutter
+  success Post Checkout code
+  success Complete job
