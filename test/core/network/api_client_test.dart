@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
@@ -11,8 +15,11 @@ import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../helpers/in_memory_stores.dart';
 
 class MockStorageService extends Mock implements StorageService {}
 
@@ -53,6 +60,35 @@ class MockLoggingService extends Mock implements LoggingService {}
 
 class MockPerformanceService extends Mock implements IPerformanceService {}
 
+/// Transport that records every request and answers with [statusCode].
+class _RecordingAdapter implements HttpClientAdapter {
+  _RecordingAdapter({this.statusCode = 200});
+
+  final int statusCode;
+
+  /// Every request that reached the transport, in order.
+  final List<RequestOptions> sent = [];
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    sent.add(options);
+    return ResponseBody.fromString(
+      jsonEncode({'ok': statusCode < 400}),
+      statusCode,
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
 void main() {
   group('ApiClient', () {
     late StorageService storageService;
@@ -73,7 +109,6 @@ void main() {
 
     test('should create Dio instance with correct configuration', () {
       // Assert
-      expect(apiClient.dio, isNotNull);
       expect(apiClient.dio.options.baseUrl, isNotEmpty);
       expect(apiClient.dio.options.connectTimeout, isNotNull);
       expect(apiClient.dio.options.receiveTimeout, isNotNull);
@@ -86,80 +121,6 @@ void main() {
       expect(apiClient.dio.interceptors, isNotEmpty);
       // ErrorInterceptor terminates the error chain, so it must be last.
       expect(apiClient.dio.interceptors.last, isA<ErrorInterceptor>());
-    });
-
-    group('GET requests', () {
-      test('should have Dio instance configured for GET requests', () {
-        // Assert
-        // Verify API client is properly initialized for GET requests
-        expect(apiClient.dio, isNotNull);
-        expect(apiClient.dio.options.baseUrl, isNotEmpty);
-      });
-
-      test('should have error handling for GET requests', () {
-        // Assert
-        // Verify API client is properly initialized with error handling
-        expect(apiClient.dio, isNotNull);
-      });
-    });
-
-    group('POST requests', () {
-      test('should have Dio instance configured for POST requests', () {
-        // Assert
-        // Verify API client is properly initialized for POST requests
-        expect(apiClient.dio, isNotNull);
-        expect(apiClient.dio.options.baseUrl, isNotEmpty);
-      });
-
-      test('should handle POST request with query parameters', () {
-        // Assert
-        // Verify API client supports query parameters
-        expect(apiClient.dio, isNotNull);
-      });
-    });
-
-    group('PUT requests', () {
-      test('should have Dio instance configured for PUT requests', () {
-        // Assert
-        // Verify API client is properly initialized for PUT requests
-        expect(apiClient.dio, isNotNull);
-        expect(apiClient.dio.options.baseUrl, isNotEmpty);
-      });
-    });
-
-    group('DELETE requests', () {
-      test('should have Dio instance configured for DELETE requests', () {
-        // Assert
-        // Verify API client is properly initialized for DELETE requests
-        expect(apiClient.dio, isNotNull);
-        expect(apiClient.dio.options.baseUrl, isNotEmpty);
-      });
-    });
-
-    group('Error handling', () {
-      test('should extract AppException from DioException.error', () {
-        // This test verifies that when DioException.error contains
-        // an AppException, it is properly extracted and rethrown
-        expect(apiClient.dio, isNotNull);
-      });
-
-      test('should rethrow DioException when error is not AppException', () {
-        // This test verifies that when DioException.error is not
-        // an AppException, the DioException is rethrown
-        expect(apiClient.dio, isNotNull);
-      });
-    });
-
-    group('Request options', () {
-      test('should support custom request options', () {
-        // Verify API client supports custom Options
-        expect(apiClient.dio, isNotNull);
-      });
-
-      test('should support query parameters', () {
-        // Verify API client supports query parameters
-        expect(apiClient.dio, isNotNull);
-      });
     });
 
     group('Dio Configuration', () {
@@ -237,86 +198,97 @@ void main() {
           secureStorageService: secureStorageService,
           authInterceptor: authInterceptor,
         );
-        expect(apiClient2.dio, isNotNull);
         expect(apiClient2.dio.options.baseUrl, apiClient.dio.options.baseUrl);
       });
 
       test('should expose dio getter', () {
         expect(apiClient.dio, isA<Dio>());
-        expect(apiClient.dio, isNotNull);
       });
     });
+  });
 
-    group('Constructor with optional services', () {
-      test('should create ApiClient with performanceService', () {
-        // Arrange
-        final performanceService = MockPerformanceService();
+  // koniz-dev/flutter-starter#369: the groups these replace only asserted that
+  // the non-nullable `dio` was non-null, so they could not fail. Each test
+  // below sends a real request through the real interceptor chain and asserts
+  // on what reached the transport.
+  group('ApiClient requests reach the transport', () {
+    late _RecordingAdapter adapter;
 
-        // Act
-        final apiClientWithPerformance = ApiClient(
-          storageService: storageService,
-          secureStorageService: secureStorageService,
-          authInterceptor: authInterceptor,
-          performanceService: performanceService,
-        );
+    ApiClient buildClient({int statusCode = 200}) {
+      adapter = _RecordingAdapter(statusCode: statusCode);
+      return ApiClient(
+        storageService: InMemoryStorage(),
+        secureStorageService: MockSecureStorageService(),
+        authInterceptor: AuthInterceptor(
+          tokenStore: InMemoryTokenStore(),
+          refreshToken: () async => const Success('unused'),
+        ),
+      )..dio.httpClientAdapter = adapter;
+    }
 
-        // Assert
-        expect(apiClientWithPerformance.dio, isNotNull);
-        expect(apiClientWithPerformance.dio.interceptors, isNotEmpty);
-        // PerformanceInterceptor should be added when
-        // performanceService is provided
-        expect(
-          apiClientWithPerformance.dio.interceptors.length,
-          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
-        );
-      });
+    RequestOptions onlyRequest() {
+      expect(adapter.sent, hasLength(1));
+      return adapter.sent.single;
+    }
 
-      test('should create ApiClient with loggingService', () {
-        // Arrange
-        final loggingService = MockLoggingService();
+    test('get sends GET with its path, query and headers', () async {
+      final response = await buildClient().get(
+        '/users',
+        queryParameters: {'page': 2},
+        headers: {'X-Trace': 't-1'},
+      );
 
-        // Act
-        final apiClientWithLogging = ApiClient(
-          storageService: storageService,
-          secureStorageService: secureStorageService,
-          authInterceptor: authInterceptor,
-          loggingService: loggingService,
-        );
+      final sent = onlyRequest();
+      expect(sent.method, 'GET');
+      expect(sent.path, '/users');
+      expect(sent.queryParameters, {'page': 2});
+      expect(sent.headers['X-Trace'], 't-1');
+      expect(response.statusCode, 200);
+      expect(response.data, {'ok': true});
+    });
 
-        // Assert
-        expect(apiClientWithLogging.dio, isNotNull);
-        expect(apiClientWithLogging.dio.interceptors, isNotEmpty);
-        // ApiLoggingInterceptor should be added when loggingService is provided
-        expect(
-          apiClientWithLogging.dio.interceptors.length,
-          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
-        );
-      });
+    test('post sends POST with its body and query', () async {
+      await buildClient().post(
+        '/tasks',
+        data: {'title': 'Write tests'},
+        queryParameters: {'notify': true},
+      );
 
-      test('should create ApiClient with both performanceService and '
-          'loggingService', () {
-        // Arrange
-        final performanceService = MockPerformanceService();
-        final loggingService = MockLoggingService();
+      final sent = onlyRequest();
+      expect(sent.method, 'POST');
+      expect(sent.path, '/tasks');
+      expect(sent.data, {'title': 'Write tests'});
+      expect(sent.queryParameters, {'notify': true});
+    });
 
-        // Act
-        final apiClientWithBoth = ApiClient(
-          storageService: storageService,
-          secureStorageService: secureStorageService,
-          authInterceptor: authInterceptor,
-          performanceService: performanceService,
-          loggingService: loggingService,
-        );
+    test('put sends PUT with its body', () async {
+      await buildClient().put('/tasks/1', data: {'title': 'Renamed'});
 
-        // Assert
-        expect(apiClientWithBoth.dio, isNotNull);
-        expect(apiClientWithBoth.dio.interceptors, isNotEmpty);
-        // Both interceptors should be added
-        expect(
-          apiClientWithBoth.dio.interceptors.length,
-          greaterThanOrEqualTo(apiClient.dio.interceptors.length),
-        );
-      });
+      final sent = onlyRequest();
+      expect(sent.method, 'PUT');
+      expect(sent.path, '/tasks/1');
+      expect(sent.data, {'title': 'Renamed'});
+    });
+
+    test('delete sends DELETE with its query', () async {
+      await buildClient().delete('/tasks/1', queryParameters: {'hard': true});
+
+      final sent = onlyRequest();
+      expect(sent.method, 'DELETE');
+      expect(sent.path, '/tasks/1');
+      expect(sent.queryParameters, {'hard': true});
+    });
+
+    test('a 4xx surfaces as a ServerException carrying the status code, '
+        'never as a DioException', () async {
+      final client = buildClient(statusCode: 404);
+
+      await expectLater(
+        client.get('/missing'),
+        throwsA(
+          isA<ServerException>().having((e) => e.statusCode, 'statusCode', 404),
+        ),
+      );
     });
   });
 }
