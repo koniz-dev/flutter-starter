@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
@@ -381,36 +383,75 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     return await _storageService.getStringList(_indexKey) ?? <String>[];
   }
 
-  Future<void> _addToIndex(String cacheKey) async {
-    final index = await _readIndex();
-    if (index.contains(cacheKey)) return;
-    await _storageService.setStringList(_indexKey, [...index, cacheKey]);
+  /// Tail of the index mutation queue.
+  ///
+  /// Every read-modify-write of the index chains onto this, so two cached
+  /// GETs completing together cannot both read the same old index and let
+  /// the last write drop the other's key - which left that body out of
+  /// [clearCache] and so alive past a logout (koniz-dev/flutter-starter#311).
+  ///
+  /// Null while idle, so an idle interceptor never makes a caller wait on a
+  /// future created earlier, possibly in another zone (a completed future
+  /// delivers through its own zone's microtask queue, which a widget test's
+  /// fake clock does not drain from inside `runAsync`).
+  Future<void>? _indexQueue;
+
+  /// Runs [update] only after every previously queued index update settled.
+  /// A failed update does not wedge the queue.
+  Future<void> _serializedIndexUpdate(Future<void> Function() update) async {
+    final previous = _indexQueue;
+    final done = Completer<void>();
+    _indexQueue = done.future;
+    try {
+      if (previous != null) {
+        await previous;
+      }
+      await update();
+    } finally {
+      done.complete();
+      if (identical(_indexQueue, done.future)) _indexQueue = null;
+    }
   }
 
-  Future<void> _removeFromIndex(String cacheKey) async {
-    final index = await _readIndex();
-    if (!index.contains(cacheKey)) return;
-    final remaining = index.where((key) => key != cacheKey).toList();
-    if (remaining.isEmpty) {
-      await _storageService.remove(_indexKey);
-      return;
-    }
-    await _storageService.setStringList(_indexKey, remaining);
+  Future<void> _addToIndex(String cacheKey) {
+    return _serializedIndexUpdate(() async {
+      final index = await _readIndex();
+      if (index.contains(cacheKey)) return;
+      await _storageService.setStringList(_indexKey, [...index, cacheKey]);
+    });
+  }
+
+  Future<void> _removeFromIndex(String cacheKey) {
+    return _serializedIndexUpdate(() async {
+      final index = await _readIndex();
+      if (!index.contains(cacheKey)) return;
+      final remaining = index.where((key) => key != cacheKey).toList();
+      if (remaining.isEmpty) {
+        await _storageService.remove(_indexKey);
+        return;
+      }
+      await _storageService.setStringList(_indexKey, remaining);
+    });
   }
 
   /// Clears every cached response.
   ///
   /// Walks the key index written by [_cacheResponse] and removes each body,
   /// its timestamp, and finally the index itself.
+  ///
+  /// Queued behind any index update in flight, so a key added just before
+  /// the clear is in the index it walks.
   @override
   Future<void> clearCache() async {
     try {
-      final index = await _readIndex();
-      for (final cacheKey in index) {
-        await _storageService.remove(cacheKey);
-        await _storageService.remove('$_timestampKeyPrefix$cacheKey');
-      }
-      await _storageService.remove(_indexKey);
+      await _serializedIndexUpdate(() async {
+        final index = await _readIndex();
+        for (final cacheKey in index) {
+          await _storageService.remove(cacheKey);
+          await _storageService.remove('$_timestampKeyPrefix$cacheKey');
+        }
+        await _storageService.remove(_indexKey);
+      });
     } on Exception catch (e) {
       if (AppConfig.isDebugMode) {
         debugPrint('Cache clear error: $e');
