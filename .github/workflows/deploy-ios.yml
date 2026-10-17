@@ -39,6 +39,21 @@ on:
           - staging
           - production
 
+# Least privilege (koniz-dev/flutter-starter#343): the deploy steps talk to
+# their store or host with their own secrets, not GITHUB_TOKEN, so the token
+# only needs to read the repository. When you enable a step that comments on
+# PRs or creates GitHub deployments with GITHUB_TOKEN - the Firebase
+# `repoToken` or Vercel `github-token` examples below - grant that scope on
+# that job (for example `pull-requests: write`), not here.
+permissions:
+  contents: read
+
+# One deploy per environment at a time, and never cancelled part-way: a
+# half-finished store upload or hosting release is worse than a queued one.
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.environment || github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy to App Store
@@ -46,7 +61,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -157,7 +172,7 @@ jobs:
       #       --api_issuer ${APP_STORE_CONNECT_ISSUER_ID}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ios-ipa
           path: build/ios/ipa/*.ipa

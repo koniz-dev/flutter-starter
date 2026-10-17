@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
       
@@ -218,9 +218,9 @@ jobs:
       # PRIVATE REPOSITORY: Upload to Codecov (requires token)
       # Comment out the block below if your repository is PUBLIC
       # - name: Upload to Codecov (Private)
-      #   uses: codecov/codecov-action@v4
+      #   uses: codecov/codecov-action@v7
       #   with:
-      #     file: ./coverage/lcov.info
+      #     files: ./coverage/lcov.info
       #     flags: unittests
       #     name: codecov-umbrella
       #     fail_ci_if_error: false
@@ -228,9 +228,9 @@ jobs:
       
       # PUBLIC REPOSITORY: Upload to Codecov (no token needed)
       - name: Upload to Codecov (Public)
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
-          file: ./coverage/lcov.info
+          files: ./coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -258,7 +258,7 @@ jobs:
       # repository the job summary is where the table appears.
       - name: Comment coverage summary
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           recreate: true
           message: |
