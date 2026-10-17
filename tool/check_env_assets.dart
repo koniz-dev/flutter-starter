@@ -37,12 +37,12 @@
 // (`.cer`, `.crt`, `.der`) are likewise not flagged: a certificate is public by
 // design and a pinning setup may legitimately ship one.
 //
-// Deliberate exception. A Flutter **web** build has no `--dart-define` path in
-// this app (`EnvConfig` guards every dart-define read with `!kIsWeb`), so a web
-// deployment that needs runtime configuration has no mechanism other than an
-// asset-backed `.env`. That is allowed - but only for values you would publish,
-// because a web client cannot hold a secret at all. To take that path,
-// acknowledge it inline so it shows up in review:
+// Deliberate exception. `--dart-define-from-file` configures a build on every
+// target, Flutter web included (koniz-dev/flutter-starter#278, #398). A bundled
+// `.env` remains an option only for configuration that must change *without a
+// rebuild* - an asset can be swapped at deploy time - and only for values you
+// would publish, because whatever the app bundles, its users can read. To take
+// that path, acknowledge it inline so it shows up in review:
 //
 //   assets:
 //     - .env.example
@@ -728,17 +728,18 @@ unzip the app bundle to read it, and on web it is served over HTTP at
 /assets/<path> and listed in AssetManifest.json. A declared *directory* bundles
 everything directly inside it, with no pubspec entry per file.
 
-Use instead:
-  * native (all build modes): --dart-define-from-file=.env, or individual
-    --dart-define flags. Nothing is bundled as a readable file.
-  * web: there is no dart-define path, and a web client cannot hold a secret.
-    Serve secrets from your backend and keep only publishable values in the
-    bundle.
+Use instead, on every target (Android, iOS, desktop and web alike):
+  * --dart-define-from-file=.env, or individual --dart-define flags. Nothing
+    is bundled as a readable file. These are build configuration, not a
+    secret store: the values are recoverable from the binary, and on web
+    from the downloaded JavaScript.
+  * secrets: serve them from your backend at run time and keep only
+    publishable values in the app.
   * key and signing material: keep it out of the tree the app is built from.
     Nothing an app bundle contains is private.
 
-If the file genuinely holds no secrets and must ship (a web build needing
-runtime config), say so inline and this check will pass:
+If the file genuinely holds no secrets and must ship (publishable config that
+has to change without a rebuild), say so inline and this check will pass:
 
     - .env # $ackMarker web build, contains no secrets
 

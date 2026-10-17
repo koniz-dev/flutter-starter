@@ -590,6 +590,19 @@ flutter:
 
     const secret = {'.env': 'SECRET=1\n'};
 
+    // koniz-dev/flutter-starter#398: the advice used to tell web adopters
+    // there was no dart-define path, steering them away from the fix.
+    test('criterion 2: the failure advice does not claim web lacks '
+        'dart-defines', () {
+      expect(check('flutter:\n  assets:\n    - .env\n', files: secret), 1);
+      final report = stderrOf.toString();
+
+      expect(report, contains('--dart-define-from-file'));
+      expect(report, contains('web'));
+      expect(report, isNot(contains('no dart-define path')));
+      expect(report, isNot(contains('kIsWeb')));
+    });
+
     test('a map-form `- path: .env` entry fails the check', () {
       const pubspec = '''
 flutter:
@@ -797,8 +810,8 @@ flutter:
           'A Flutter asset declaration is not build-mode scoped. Anything '
           'listed under flutter: assets: - including every file inside a '
           'declared directory - ships in the release APK, the release IPA and '
-          'the web build. Use --dart-define-from-file on native; on web, keep '
-          'secrets on the server. See docs/guides/configuration.md.',
+          'the web build. Use --dart-define-from-file on every target, and '
+          'keep secrets on the server. See docs/guides/configuration.md.',
     );
   });
 }

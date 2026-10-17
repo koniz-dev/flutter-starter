@@ -154,10 +154,10 @@ flutter:
   # compiled into the binary and recoverable from it, so they are build
   # configuration, not a secret store.
   #
-  # Flutter web has no dart-define path here (EnvConfig guards every
-  # dart-define read with !kIsWeb) and a web client cannot hold a secret at
-  # all - the whole bundle is downloaded by the user. Serve secrets from your
-  # backend; keep only publishable values in the bundle.
+  # The same works on Flutter web - EnvConfig reads the DartDefines table on
+  # every target (koniz-dev/flutter-starter#278, #398) - but a web client
+  # cannot hold a secret at all: the whole bundle is downloaded by the user.
+  # Serve secrets from your backend; keep only publishable values in the app.
   #
   # `dart run tool/check_env_assets.dart` and
   # test/tooling/check_env_assets_test.dart fail if an env file other than
