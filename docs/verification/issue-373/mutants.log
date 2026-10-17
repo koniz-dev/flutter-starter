@@ -1,0 +1,15 @@
+=== mutant: themes
+--- main's test/main_test.dart
+00:02 +14: All tests passed!
+--- this branch's test/main_test.dart
+00:02 +3 -1: MyApp criterion 1: theme is AppTheme.lightTheme [E]
+00:02 +3 -2: MyApp criterion 1: darkTheme is AppTheme.darkTheme [E]
+00:03 +12 -2: Some tests failed.
+
+=== mutant: locale
+--- main's test/main_test.dart
+00:03 +14: All tests passed!
+--- this branch's test/main_test.dart
+00:02 +13 -1: Some tests failed.
+00:02 +8 -1: MyApp criterion 2: MaterialApp.locale follows localeStateProvider [E]
+
