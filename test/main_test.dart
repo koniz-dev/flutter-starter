@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/main.dart';
+import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// A locale notifier pinned to a non-English, non-default locale.
+class _FixedLocale extends LocaleNotifier {
+  static const pinned = Locale('vi');
+
+  @override
+  Locale build() => pinned;
+}
 
 void main() {
   // Regression guard for #40. On a real device `pumpAndSettle` never returns,
@@ -48,6 +58,7 @@ void main() {
 
     testWidgets('should build MaterialApp with correct title', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
@@ -62,28 +73,35 @@ void main() {
       expect(materialApp.title, 'Flutter Starter');
     });
 
-    testWidgets('should use light theme by default', (tester) async {
+    // koniz-dev/flutter-starter#373: these used to check only that a theme
+    // existed, so swapping the light and dark themes still passed.
+    testWidgets('criterion 1: theme is AppTheme.lightTheme', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(materialApp.theme, isNotNull);
+      expect(materialApp.theme, AppTheme.lightTheme);
+      expect(materialApp.theme!.brightness, Brightness.light);
     });
 
-    testWidgets('should have dark theme configured', (tester) async {
+    testWidgets('criterion 1: darkTheme is AppTheme.darkTheme', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(materialApp.darkTheme, isNotNull);
+      expect(materialApp.darkTheme, AppTheme.darkTheme);
+      expect(materialApp.darkTheme!.brightness, Brightness.dark);
     });
 
     testWidgets('should configure router correctly', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
@@ -96,6 +114,7 @@ void main() {
 
     testWidgets('should configure localization delegates', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
@@ -107,6 +126,7 @@ void main() {
 
     testWidgets('should configure supported locales', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
@@ -116,8 +136,15 @@ void main() {
       expect(materialApp.supportedLocales.length, greaterThan(0));
     });
 
-    testWidgets('should use locale from provider', (tester) async {
-      final container = ProviderContainer();
+    // #373: this used to check only that a locale existed, so hard-coding
+    // `locale: const Locale('en')` in main.dart still passed.
+    testWidgets('criterion 2: MaterialApp.locale follows localeStateProvider', (
+      tester,
+    ) async {
+      final container = ProviderContainer(
+        overrides: [localeStateProvider.overrideWith(_FixedLocale.new)],
+      );
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
@@ -125,13 +152,14 @@ void main() {
       await tester.pump();
 
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
-      expect(materialApp.locale, isNotNull);
+      expect(materialApp.locale, _FixedLocale.pinned);
     });
 
     testWidgets('should configure text direction from provider', (
       tester,
     ) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
@@ -145,6 +173,7 @@ void main() {
 
     testWidgets('should wrap content in RepaintBoundary', (tester) async {
       final container = ProviderContainer();
+      addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(container: container, child: const MyApp()),
       );
