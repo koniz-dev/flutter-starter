@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
@@ -387,14 +389,28 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   /// GETs completing together cannot both read the same old index and let
   /// the last write drop the other's key - which left that body out of
   /// [clearCache] and so alive past a logout (koniz-dev/flutter-starter#311).
-  /// Errors are absorbed here so one failed update does not wedge the queue.
-  Future<void> _indexQueue = Future<void>.value();
+  ///
+  /// Null while idle, so an idle interceptor never makes a caller wait on a
+  /// future created earlier, possibly in another zone (a completed future
+  /// delivers through its own zone's microtask queue, which a widget test's
+  /// fake clock does not drain from inside `runAsync`).
+  Future<void>? _indexQueue;
 
   /// Runs [update] only after every previously queued index update settled.
-  Future<void> _serializedIndexUpdate(Future<void> Function() update) {
-    final result = _indexQueue.then((_) => update());
-    _indexQueue = result.then<void>((_) {}, onError: (Object _) {});
-    return result;
+  /// A failed update does not wedge the queue.
+  Future<void> _serializedIndexUpdate(Future<void> Function() update) async {
+    final previous = _indexQueue;
+    final done = Completer<void>();
+    _indexQueue = done.future;
+    try {
+      if (previous != null) {
+        await previous;
+      }
+      await update();
+    } finally {
+      done.complete();
+      if (identical(_indexQueue, done.future)) _indexQueue = null;
+    }
   }
 
   Future<void> _addToIndex(String cacheKey) {
