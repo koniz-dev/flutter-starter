@@ -3,6 +3,7 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
@@ -60,6 +61,22 @@ class AuthRepositoryImpl implements AuthRepository {
     code: 'INVALID_AUTH_RESPONSE',
   );
 
+  /// Maps a failed sign-in or registration.
+  ///
+  /// An [AuthFailure] here is the server rejecting the credentials the user
+  /// just typed - a 401 from the login endpoint - not a session that ended.
+  /// It is tagged [FailureCodes.invalidCredentials] so the screen says so
+  /// instead of rendering `failureAuth`, "your session has ended"
+  /// (koniz-dev/flutter-starter#445).
+  static Failure _signInFailure(Exception exception) {
+    final failure = ExceptionToFailureMapper.map(exception);
+    if (failure is! AuthFailure) return failure;
+    return AuthFailure(
+      failure.message,
+      code: FailureCodes.invalidCredentials,
+    );
+  }
+
   @override
   Future<Result<User>> login(String email, String password) async {
     // A different credential set is about to land. Any refresh already in
@@ -73,10 +90,8 @@ class AuthRepositoryImpl implements AuthRepository {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
       return Success(authResponse.user);
-    } on AppException catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
+      return ResultFailure(_signInFailure(e));
     } on Object catch (_) {
       return const ResultFailure(_unreadableResponse);
     }
@@ -102,10 +117,8 @@ class AuthRepositoryImpl implements AuthRepository {
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
       return Success(authResponse.user);
-    } on AppException catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
     } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
+      return ResultFailure(_signInFailure(e));
     } on Object catch (_) {
       return const ResultFailure(_unreadableResponse);
     }
