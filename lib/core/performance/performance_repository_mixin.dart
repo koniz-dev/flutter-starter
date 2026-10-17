@@ -7,23 +7,39 @@ import 'package:flutter_starter/core/utils/result.dart';
 /// This mixin provides convenient methods for tracking repository operations
 /// with performance monitoring.
 ///
-/// Usage:
-/// ```dart
-/// class MyRepositoryImpl
-///     implements MyRepository with PerformanceRepositoryMixin {
-///   MyRepositoryImpl({
-///     required PerformanceService performanceService,
-///   }) : _performanceService = performanceService;
+/// Usage - override [performanceService] with a real service, or the mixin
+/// traces nothing (its default is `null`). A class takes a mixin with `with`
+/// before `implements`:
 ///
-///   final PerformanceService _performanceService;
+/// ```dart
+/// // compile
+/// import 'package:flutter_starter/core/performance/i_performance_service.dart';
+/// import 'package:flutter_starter/core/performance/performance_repository_mixin.dart';
+/// import 'package:flutter_starter/core/utils/result.dart';
+///
+/// abstract class ItemsRepository {
+///   Future<Result<List<String>>> getItems();
+/// }
+///
+/// class ItemsRepositoryImpl
+///     with PerformanceRepositoryMixin
+///     implements ItemsRepository {
+///   ItemsRepositoryImpl({required IPerformanceService performanceService})
+///     : _performanceService = performanceService;
+///
+///   final IPerformanceService _performanceService;
+///
+///   // The override that makes tracing happen.
+///   @override
+///   IPerformanceService get performanceService => _performanceService;
 ///
 ///   @override
-///   Future<Result<List<Item>>> getItems() async {
+///   Future<Result<List<String>>> getItems() {
 ///     return measureRepositoryOperation(
 ///       operationName: 'get_items',
 ///       operation: () async {
 ///         // Your repository logic
-///         return Success(items);
+///         return const Success(<String>['item']);
 ///       },
 ///     );
 ///   }
