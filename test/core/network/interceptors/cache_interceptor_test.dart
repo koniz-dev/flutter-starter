@@ -281,7 +281,8 @@ void main() {
         verify(() => mockStorageService.remove(timestampKey)).called(1);
       });
 
-      test('should use stale cache when within maxStale', () async {
+      test('should keep a stale entry within maxStale as the fallback for a '
+          'refetch, not serve it (#310)', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
@@ -301,7 +302,11 @@ void main() {
         await interceptor.onRequest(requestOptions, handler);
 
         // Assert
-        expect(handler.resolvedResponse, isNotNull);
+        expect(handler.resolvedResponse, isNull);
+        expect(
+          requestOptions.extra['http_cache_stale_fallback'],
+          isA<Response<dynamic>>(),
+        );
         verifyNever(() => mockStorageService.remove(any()));
       });
     });

@@ -36,6 +36,8 @@ class ApiClient {
   /// request tracking
   /// [sslPinning] - Certificate pinning policy; defaults to
   /// [SslPinning.fromConfig] (`ENABLE_SSL_PINNING` / `API_SSL_FINGERPRINTS`)
+  /// [cacheConfig] - `CacheInterceptor` freshness policy; defaults to
+  /// [CacheConfig]'s one hour fresh, seven days as a fallback
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
@@ -43,6 +45,7 @@ class ApiClient {
     LoggingService? loggingService,
     IPerformanceService? performanceService,
     SslPinning? sslPinning,
+    CacheConfig? cacheConfig,
   }) : _dio = _createDio(
          storageService,
          secureStorageService,
@@ -50,6 +53,7 @@ class ApiClient {
          loggingService,
          performanceService,
          sslPinning ?? SslPinning.fromConfig(),
+         cacheConfig,
        ) {
     _networkClient = DioNetworkClient(
       _dio,
@@ -65,6 +69,7 @@ class ApiClient {
     LoggingService? loggingService,
     IPerformanceService? performanceService,
     SslPinning sslPinning,
+    CacheConfig? cacheConfig,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -100,6 +105,7 @@ class ApiClient {
     final cacheInterceptor = CacheInterceptor(
       storageService: storageService,
       tokenStore: authInterceptor.tokenStore,
+      cacheConfig: cacheConfig,
     );
 
     // A forced logout (401 whose refresh fails) has to empty the same cache
