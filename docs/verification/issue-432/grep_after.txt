@@ -1,0 +1,2 @@
+$ git grep -n "_sanitizeJson\|LogSanitizer" HEAD -- docs ":!docs/verification"
+exit=1 (1 = no matches)
