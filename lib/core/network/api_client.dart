@@ -117,21 +117,24 @@ class ApiClient {
     // LAST - registering it first silently disabled retry, 401 token refresh,
     // performance trace teardown and error logging.
     //
-    // PerformanceInterceptor should be early to track all requests
     // CacheInterceptor should be early to intercept requests before network
     // AuthInterceptor handles token injection and 401 refresh
     // RetryInterceptor retries transient failures (timeouts, 5xx)
     // ApiLoggingInterceptor logs the raw DioException before it is mapped
     // (omitted if loggingService is null)
+    // PerformanceInterceptor sits after Auth and Retry so its trace records
+    // how the request finally ended - a refreshed-and-replayed 401 is the
+    // replay's 200, not a failed 401 (koniz-dev/flutter-starter#298)
+    // (omitted if performanceService is null)
     // ErrorInterceptor converts whatever survives into a domain exception
     dio.interceptors.addAll([
-      if (performanceService != null)
-        PerformanceInterceptor(performanceService: performanceService),
       cacheInterceptor,
       authInterceptor,
       RetryInterceptor(dio: dio, loggingService: loggingService),
       if (loggingService != null)
         ApiLoggingInterceptor(loggingService: loggingService),
+      if (performanceService != null)
+        PerformanceInterceptor(performanceService: performanceService),
       ErrorInterceptor(),
     ]);
 

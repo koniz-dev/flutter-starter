@@ -506,8 +506,11 @@ void main() {
           when(() => mockTrace.putAttribute(any(), any())).thenReturn(null);
           when(() => mockTrace.stopSync()).thenReturn(null);
 
-          // Act
-          interceptor.onError(dioException, handler);
+          // Act - a fresh interceptor each time: one interceptor stops a
+          // given trace at most once (#298), and this loop reuses the trace.
+          PerformanceInterceptor(
+            performanceService: mockPerformanceService,
+          ).onError(dioException, handler);
 
           // Assert
           verify(

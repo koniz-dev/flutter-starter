@@ -490,6 +490,111 @@ void main() {
     });
   });
 
+  // koniz-dev/flutter-starter#298: a 401 that was refreshed and replayed
+  // successfully was traced as a failed 401. PerformanceInterceptor used to
+  // run first and stop the trace in its onError before AuthInterceptor
+  // recovered, and the replay's 200 is resolved from onError, which ends the
+  // host chain. The real replay client is used here (no retryDioFactory), so
+  // the replay borrows the host transport and its PerformanceInterceptor.
+  group('the performance trace of a refreshed request (#298)', () {
+    late _MockStorageService storageService;
+    late _MockSecureStorageService secureStorageService;
+    late _RecordingPerformanceService performance;
+
+    setUp(() {
+      storageService = _MockStorageService();
+      secureStorageService = _MockSecureStorageService();
+      performance = _RecordingPerformanceService();
+    });
+
+    ApiClient clientWith(
+      AuthInterceptor authInterceptor,
+      _RecordingAdapter adapter,
+    ) => ApiClient(
+      storageService: storageService,
+      secureStorageService: secureStorageService,
+      authInterceptor: authInterceptor,
+      performanceService: performance,
+    )..dio.httpClientAdapter = adapter;
+
+    void expectSucceeded(_RecordingTrace trace) {
+      expect(trace.started, isTrue);
+      expect(trace.stopped, isTrue);
+      expect(trace.getMetric(PerformanceMetrics.success), 1);
+      expect(trace.getMetric(PerformanceMetrics.error), isNull);
+      expect(trace.getAttribute(PerformanceAttributes.httpStatusCode), '200');
+    }
+
+    test('criterion 1: [401, 200] with a successful refresh ends as a 200 '
+        'success, and no trace records a failure', () async {
+      final adapter = _RecordingAdapter([401, 200]);
+      final client = clientWith(
+        AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async => const Success('fresh-access-token'),
+        ),
+        adapter,
+      );
+
+      final response = await client.post('/tasks', data: {'title': 'x'});
+
+      expect(response.statusCode, 200);
+      expect(adapter.hits, 2);
+      expect(performance.traces, hasLength(1));
+      expectSucceeded(performance.traces.single);
+    });
+
+    test('criterion 2: a request queued behind the in-flight refresh and '
+        'drained also ends as a 200 success', () async {
+      final release = Completer<void>();
+      final adapter = _RecordingAdapter([401, 401, 200]);
+      final auth = _CountingAuthInterceptor(
+        tokenStore: _InMemoryTokenStore(),
+        refreshToken: () async {
+          await release.future;
+          return const Success('fresh-access-token');
+        },
+      );
+      final client = clientWith(auth, adapter);
+
+      final first = client.post('/tasks', data: {'title': 'a'});
+      final second = client.post('/tasks', data: {'title': 'b'});
+      // Structural: both 401s are parked, the second one queued.
+      await auth.seen(2);
+      release.complete();
+
+      final responses = await Future.wait([first, second]);
+
+      expect(responses.map((r) => r.statusCode), [200, 200]);
+      expect(performance.traces, hasLength(2));
+      performance.traces.forEach(expectSucceeded);
+    });
+
+    test('criterion 3: a 401 whose refresh fails is still traced as a 401 '
+        'error', () async {
+      final adapter = _RecordingAdapter([401]);
+      final client = clientWith(
+        AuthInterceptor(
+          tokenStore: _InMemoryTokenStore(),
+          refreshToken: () async => _refreshRejected,
+        ),
+        adapter,
+      );
+
+      await expectLater(
+        client.post('/tasks', data: {'title': 'x'}),
+        throwsA(isA<ServerException>()),
+      );
+
+      expect(performance.traces, hasLength(1));
+      final trace = performance.traces.single;
+      expect(trace.stopped, isTrue);
+      expect(trace.getMetric(PerformanceMetrics.error), 1);
+      expect(trace.getMetric(PerformanceMetrics.success), isNull);
+      expect(trace.getAttribute(PerformanceAttributes.httpStatusCode), '401');
+    });
+  });
+
   // Regression cover for koniz-dev/flutter-starter#88: retry became reachable
   // for every method in #46, so a failing POST was replayed 4 times against a
   // degraded backend. Only safe methods are replayed now.
