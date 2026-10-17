@@ -121,6 +121,7 @@ and fails the Docs check if they differ. See
 /// - [path]: The endpoint path (relative to base URL)
 /// - [queryParameters]: Optional query parameters
 /// - [headers]: Optional per-request headers
+/// - [cancellation]: Optional handle that cancels the request
 /// 
 /// Returns:
 /// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
@@ -138,6 +139,7 @@ Future<NetworkResponse<dynamic>> get(
   String path, {
   Map<String, dynamic>? queryParameters,
   Map<String, String>? headers,
+  RequestCancellation? cancellation,
 });
 ```
 
@@ -151,6 +153,7 @@ Future<NetworkResponse<dynamic>> get(
 /// - [data]: Optional request body data
 /// - [queryParameters]: Optional query parameters
 /// - [headers]: Optional per-request headers
+/// - [cancellation]: Optional handle that cancels the request
 /// 
 /// Returns:
 /// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
@@ -171,6 +174,7 @@ Future<NetworkResponse<dynamic>> post(
   dynamic data,
   Map<String, dynamic>? queryParameters,
   Map<String, String>? headers,
+  RequestCancellation? cancellation,
 });
 ```
 
@@ -184,6 +188,7 @@ Future<NetworkResponse<dynamic>> post(
 /// - [data]: Optional request body data
 /// - [queryParameters]: Optional query parameters
 /// - [headers]: Optional per-request headers
+/// - [cancellation]: Optional handle that cancels the request
 /// 
 /// Returns:
 /// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
@@ -204,8 +209,48 @@ Future<NetworkResponse<dynamic>> put(
   dynamic data,
   Map<String, dynamic>? queryParameters,
   Map<String, String>? headers,
+  RequestCancellation? cancellation,
 });
 ```
+
+#### PATCH Request
+
+```dart
+/// PATCH request
+/// 
+/// Parameters:
+/// - [path]: The endpoint path (relative to base URL)
+/// - [data]: Optional request body data - the fields to change
+/// - [queryParameters]: Optional query parameters
+/// - [headers]: Optional per-request headers
+/// - [cancellation]: Optional handle that cancels the request
+/// 
+/// Returns:
+/// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
+/// 
+/// Throws:
+/// - [ServerException]: If server returns error status code
+/// - [NetworkException]: If network connection fails
+/// 
+/// Example:
+/// ```dart
+/// final response = await apiClient.patch(
+///   '/users/123',
+///   data: {'name': 'Jane'},
+/// );
+/// ```
+Future<NetworkResponse<dynamic>> patch(
+  String path, {
+  dynamic data,
+  Map<String, dynamic>? queryParameters,
+  Map<String, String>? headers,
+  RequestCancellation? cancellation,
+});
+```
+
+Like `put`, `post` and `delete`, a PATCH is not retried on a transient failure
+unless it opts in - see
+[Which methods are retried, and why](#which-methods-are-retried-and-why).
 
 #### DELETE Request
 
@@ -217,6 +262,7 @@ Future<NetworkResponse<dynamic>> put(
 /// - [data]: Optional request body data
 /// - [queryParameters]: Optional query parameters
 /// - [headers]: Optional per-request headers
+/// - [cancellation]: Optional handle that cancels the request
 /// 
 /// Returns:
 /// - [Future<NetworkResponse<dynamic>>]: transport-agnostic response
@@ -234,8 +280,46 @@ Future<NetworkResponse<dynamic>> delete(
   dynamic data,
   Map<String, dynamic>? queryParameters,
   Map<String, String>? headers,
+  RequestCancellation? cancellation,
 });
 ```
+
+#### Cancelling a request
+
+<!-- symbol: lib/core/network/request_cancellation.dart RequestCancellation -->
+
+Every verb takes an optional `cancellation:`, a `RequestCancellation`. It is a
+plain Dart handle - no dio type crosses into the feature layer (#176) - that
+the client bridges to the request's dio `CancelToken`
+(koniz-dev/flutter-starter#316). Cancel it when the result is no longer
+wanted: a screen disposed, a search superseded by the next keystroke.
+
+```dart
+final cancellation = RequestCancellation();
+
+final pending = apiClient.get(
+  '/search',
+  queryParameters: {'q': query},
+  cancellation: cancellation,
+);
+
+// Later - in dispose(), or when the next query starts:
+cancellation.cancel();
+```
+
+- **What the caller gets.** The pending future fails with a
+  `NetworkException` whose `code` is `REQUEST_CANCELLED`.
+- **What stops.** Nothing more reaches the transport for that request. A
+  `RetryInterceptor` re-send waiting out its backoff, and the replay after a
+  401 refresh, both carry the same token, so a cancel during either stops it
+  before it is sent. The refresh itself is not abandoned: other requests may
+  be queued behind it.
+- **Sharing.** One handle may be passed to several requests; cancelling it
+  cancels them all. `isCancelled` reports whether `cancel()` has been called,
+  and `whenCancelled` completes when it is. Cancelling twice, or after the
+  requests finished, does nothing.
+- **Cancelled before it starts.** A request given a handle that is already
+  cancelled is never sent.
 
 ### Configuration
 
