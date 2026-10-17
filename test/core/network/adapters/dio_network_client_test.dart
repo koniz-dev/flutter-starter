@@ -9,6 +9,7 @@ class _MockDio extends Mock implements Dio {}
 void main() {
   setUpAll(() {
     registerFallbackValue(Options());
+    registerFallbackValue(CancelToken());
   });
 
   group('DioNetworkClient', () {
@@ -49,6 +50,7 @@ void main() {
               named: 'queryParameters',
             ),
             options: any<Options>(named: 'options'),
+            cancelToken: any<CancelToken?>(named: 'cancelToken'),
           ),
         ).thenAnswer((inv) async {
           final path = inv.positionalArguments[0] as String;
@@ -97,6 +99,7 @@ void main() {
               named: 'queryParameters',
             ),
             options: any<Options>(named: 'options'),
+            cancelToken: any<CancelToken?>(named: 'cancelToken'),
           ),
         ).thenThrow(dioException);
 
@@ -126,6 +129,7 @@ void main() {
               named: 'queryParameters',
             ),
             options: any<Options>(named: 'options'),
+            cancelToken: any<CancelToken?>(named: 'cancelToken'),
           ),
         ).thenThrow(dioException);
 
