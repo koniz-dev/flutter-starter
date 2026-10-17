@@ -184,12 +184,14 @@ safe to make:
   `sessionRestorationProvider` (both startup-only) and `currentLocaleProvider`
   (whose service catches `Exception` and falls back to the default locale, so
   only an `Error` can escape - and `defaultRetry` never retried `Error`s).
-- There is no `AsyncNotifier` in the tree. `AuthNotifier.build()` and
-  `TasksNotifier.build()` are synchronous; their I/O runs in methods that assign
-  state from a `Result`, which `retry` does not govern.
+- There is no `AsyncNotifier` in the tree. `AuthNotifier.build()` is
+  synchronous, as is the tasks sample's notifier; their I/O runs in methods that
+  assign state from a `Result`, which `retry` does not govern.
+<!-- strip:feature-flags start -->
 - The feature-flag providers are the only ones feeding an `AsyncValue` error
   branch in a widget, and their remote data source is
   `NoOpFeatureFlagsRemoteDataSource`.
+<!-- strip:feature-flags end -->
 
 The first network-backed `FutureProvider` or the first `AsyncNotifier` added to
 this template changes that. That contributor inherits this policy without

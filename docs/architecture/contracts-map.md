@@ -43,7 +43,7 @@ Two rows that used to sit here were answered by deletion rather than by wiring.
 and its provider are gone, and navigation is the `Navigation` row below.
 `ITasksController` went in koniz-dev/flutter-starter#180, which removed it and
 `TasksStateSnapshot` from `state_boundary_contracts.dart`: it had no implementor
-and no consumer, and it had drifted from `TasksNotifier` in both directions - it
+and no consumer, and it had drifted from the tasks slice's notifier in both directions - it
 declared `loadTasks()` and `clearError()` the notifier never had, and lacked the
 `updateTask` the notifier does have. Neither has a row below, which is the
 point: a contract that only this file mentions is the defect, not the
@@ -140,7 +140,7 @@ to mistype.
 
 | Module | Default | Concrete / notes | Override or template |
 | --- | --- | --- | --- |
-| Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@riverpod featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` |
+| Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@riverpod featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` <!-- strip:feature-flags line --> |
 | RASP | `NoOpRaspService` | `freerasp` (when you wire it) | `raspServiceProvider` in `lib/core/security/rasp_providers.dart` |
 | Firebase Performance | No-op via performance providers | Firebase SDK | `lib/core/performance/performance_providers.dart` (see comments there) |
 | Crashlytics logging | Template output | `lib/core/logging/crashlytics_output_template.dart` | Wire into logging pipeline when needed |

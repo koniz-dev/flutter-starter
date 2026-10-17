@@ -1268,7 +1268,7 @@ the tree - fix the row in the same change that moves the call site.
 
 | Utility | Exercised by a running screen? | Where |
 |---|---|---|
-| `DateFormatter` | yes, both pairs | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in `TaskModel` (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
+| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
 | `PaginationHelper` | no | - |
 | `Debouncer` / `Throttler` | no | - |
 | `LazyLoader` | no | - |
@@ -1280,6 +1280,7 @@ hand-rolled `padLeft` chain while `DateFormatter` sat unused one directory
 away - the duplication the "keep them as building blocks" decision is supposed
 to prevent. That call site is now the utility.
 
+<!-- strip:tasks start -->
 ### The tasks sample is not the host for `PaginationHelper` or `Debouncer`
 
 **Decided, not open.** koniz-dev/flutter-starter#147 wired `DateFormatter` and
@@ -1325,6 +1326,7 @@ Why `Debouncer` does not belong there either:
    API and will need exactly this shape - is already served by the worked
    `TextField.onChanged` example in `Debouncer`'s own dartdoc, which is the
    adopter-facing artefact.
+<!-- strip:tasks end -->
 
 ### When to reconsider
 

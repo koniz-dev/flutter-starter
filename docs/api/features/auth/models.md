@@ -74,8 +74,11 @@ Map<String, dynamic> toJson();
 
 There is no `toEntity()`: `UserModel` *extends* `User`, so a `UserModel` already
 is a `User` and is passed to the domain layer as one, with no conversion.
+
+<!-- strip:tasks start -->
 (`TaskModel`, which does not extend its entity, is the model with a
 `toEntity()`.)
+<!-- strip:tasks end -->
 
 ### Usage
 

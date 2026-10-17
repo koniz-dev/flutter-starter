@@ -1,0 +1,36 @@
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks
+Removed .github/workflows/issue-refs.yml: it serves this repository's issue loop, not the app a fork ships.
+Removed docs/issue-workflow.md: it serves this repository's issue loop, not the app a fork ships.
+Removed docs/verification: it serves this repository's issue loop, not the app a fork ships.
+Removed scripts/bootstrap-issue-labels.sh: it serves this repository's issue loop, not the app a fork ships.
+Removed scripts/dev/check_issue_refs.sh: it serves this repository's issue loop, not the app a fork ships.
+Removed test/tooling/epic_coverage_test.dart: it serves this repository's issue loop, not the app a fork ships.
+Removed tool/check_epic_coverage.dart: it serves this repository's issue loop, not the app a fork ships.
+Removed .claude: emptied by the removals above.
+Dropped 1 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 2 marked section(s) or line(s) from CONTRIBUTING.md.
+Dropped 3 marked section(s) or line(s) from CLAUDE.md.
+Dropped 1 marked section(s) or line(s) from tool/README.md.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+$ ls lib/features
+auth
+feature_flags
+home
+$ grep -n 'LocalFeatureFlagsService|feature-flags-debug|FeatureFlagsManager' docs/guides/configuration.md
+255:any target and in any build mode. `LocalFeatureFlagsService` used to promise
+272:`FeatureFlagsManager.isEnabled`, `isFeatureEnabledProvider` and the debug
+grep exit=0
+$ grep -rn 'strip:(feature-flags|tasks)' on kept markdown (excluding tool/README.md, which documents the syntax)
+docs/architecture/riverpod-retry-policy.md:190:<!-- strip:feature-flags start -->
+docs/architecture/riverpod-retry-policy.md:194:<!-- strip:feature-flags end -->
+docs/architecture/contracts-map.md:143:| Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@riverpod featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` <!-- strip:feature-flags line --> |
+docs/guides/configuration.md:250:<!-- strip:feature-flags start -->
+docs/guides/configuration.md:288:<!-- strip:feature-flags end -->
+tool/README.md:148:file the strip keeps sits between `<!-- strip:feature-flags start -->` and
+tool/README.md:149:`<!-- strip:feature-flags end -->`, and the tasks sample uses
+grep exit=0
+$ flutter test test/tooling/strip_sample_prose_test.dart
+00:00 +0: criteria 2-3: kept markdown names no feature-flags symbol outside a strip:feature-flags marker
+00:00 +1: criteria 2-3: kept markdown names no tasks symbol outside a strip:tasks marker
+00:00 +2: All tests passed!
