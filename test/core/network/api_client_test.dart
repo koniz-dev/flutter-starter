@@ -181,11 +181,13 @@ void main() {
             interceptors[0].runtimeType.toString(),
             'ImplyContentTypeInterceptor',
           );
-          expect(interceptors[1], isA<PerformanceInterceptor>());
-          expect(interceptors[2], isA<CacheInterceptor>());
-          expect(interceptors[3], same(authInterceptor));
-          expect(interceptors[4], isA<RetryInterceptor>());
-          expect(interceptors[5], isA<ApiLoggingInterceptor>());
+          // PerformanceInterceptor after Auth and Retry, so a trace records
+          // how the request finally ended (#298).
+          expect(interceptors[1], isA<CacheInterceptor>());
+          expect(interceptors[2], same(authInterceptor));
+          expect(interceptors[3], isA<RetryInterceptor>());
+          expect(interceptors[4], isA<ApiLoggingInterceptor>());
+          expect(interceptors[5], isA<PerformanceInterceptor>());
           expect(interceptors[6], isA<ErrorInterceptor>());
         },
       );

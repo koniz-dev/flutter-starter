@@ -11,6 +11,7 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
+import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/network/request_body_replay.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -209,6 +210,14 @@ class AuthInterceptor extends Interceptor {
       // Borrow the host transport so pinning applies to the replay too.
       dio.httpClientAdapter = SharedTransportAdapter(
         () => host.httpClientAdapter,
+      );
+      // And the host's performance tracing. A successful replay is resolved
+      // from onError, which in dio ends the host chain: no interceptor there
+      // sees the replay's response, so without this the request's trace
+      // either recorded the 401 or was never stopped
+      // (koniz-dev/flutter-starter#298).
+      dio.interceptors.addAll(
+        host.interceptors.whereType<PerformanceInterceptor>(),
       );
     } else {
       // Not attached to a client (standalone use): pin the replay directly.
@@ -624,6 +633,10 @@ class AuthInterceptor extends Interceptor {
         validateStatus: newOptions.validateStatus,
         receiveTimeout: newOptions.receiveTimeout,
         sendTimeout: newOptions.sendTimeout,
+        // The original's per-request metadata travels with the replay - its
+        // performance trace among it, which the replay client's borrowed
+        // PerformanceInterceptor finishes with the replay's outcome (#298).
+        extra: Map<String, dynamic>.of(newOptions.extra),
       ),
     );
   }

@@ -13,6 +13,14 @@ import 'package:flutter_starter/core/performance/performance_attributes.dart';
 ///
 /// The interceptor respects the ENABLE_PERFORMANCE_MONITORING flag through
 /// the [IPerformanceService].
+///
+/// One trace per logical request. `ApiClient` registers this interceptor just
+/// before `ErrorInterceptor`, after `AuthInterceptor` and `RetryInterceptor`,
+/// so the trace records how the request finally ended: a 401 that was
+/// refreshed and replayed records the replay's 200, not the 401
+/// (koniz-dev/flutter-starter#298). A retry re-enters the chain with the same
+/// request options and keeps the trace already running, and each trace is
+/// stopped at most once.
 class PerformanceInterceptor extends Interceptor {
   /// Creates a [PerformanceInterceptor] with the given [performanceService]
   PerformanceInterceptor({required IPerformanceService performanceService})
@@ -20,8 +28,19 @@ class PerformanceInterceptor extends Interceptor {
 
   final IPerformanceService _performanceService;
 
+  /// Traces already stopped, so a request that reaches [onError] twice (a
+  /// retry nested inside a retry) records its outcome once.
+  final Expando<bool> _stopped = Expando<bool>('performance_trace_stopped');
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // A retry of a request already being traced: keep its trace.
+    final running = _getTrace(options);
+    if (running != null && _stopped[running] != true) {
+      super.onRequest(options, handler);
+      return;
+    }
+
     // Store trace in request options for use in onResponse/onError
     final trace = _performanceService.startHttpTrace(
       options.method,
@@ -46,7 +65,7 @@ class PerformanceInterceptor extends Interceptor {
     ResponseInterceptorHandler handler,
   ) {
     final trace = _getTrace(response.requestOptions);
-    if (trace != null) {
+    if (trace != null && _stopped[trace] != true) {
       // Record response metrics
       final statusCode = response.statusCode ?? 0;
       trace.putAttribute(
@@ -75,7 +94,7 @@ class PerformanceInterceptor extends Interceptor {
       }
 
       // Stop the trace
-      trace.stopSync();
+      _stop(trace);
     }
 
     super.onResponse(response, handler);
@@ -84,7 +103,7 @@ class PerformanceInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final trace = _getTrace(err.requestOptions);
-    if (trace != null) {
+    if (trace != null && _stopped[trace] != true) {
       // Record error metrics
       trace
         ..putMetric(PerformanceMetrics.error, 1)
@@ -99,10 +118,15 @@ class PerformanceInterceptor extends Interceptor {
       }
 
       // Stop the trace
-      trace.stopSync();
+      _stop(trace);
     }
 
     super.onError(err, handler);
+  }
+
+  void _stop(IPerformanceTrace trace) {
+    _stopped[trace] = true;
+    trace.stopSync();
   }
 
   /// Get the performance trace from request options
