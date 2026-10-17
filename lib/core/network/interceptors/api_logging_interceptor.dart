@@ -30,7 +30,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     final context = <String, dynamic>{
       'method': options.method,
-      'path': options.path,
+      'path': redactPath(options.path),
       'baseUrl': options.baseUrl,
       'headers': _sanitizeHeaders(options.headers),
       if (options.queryParameters.isNotEmpty)
@@ -39,7 +39,7 @@ class ApiLoggingInterceptor extends Interceptor {
     };
 
     _loggingService.debug(
-      'API Request: ${options.method} ${options.path}',
+      'API Request: ${options.method} ${redactPath(options.path)}',
       context: context,
     );
 
@@ -58,7 +58,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     final context = <String, dynamic>{
       'statusCode': response.statusCode,
-      'path': response.requestOptions.path,
+      'path': redactPath(response.requestOptions.path),
       'headers': _sanitizeHeaders(response.headers.map),
       if (response.data != null) 'body': _sanitizeBody(response.data),
     };
@@ -66,12 +66,14 @@ class ApiLoggingInterceptor extends Interceptor {
     // Log as warning for error status codes, info for success
     if (response.statusCode! >= 400) {
       _loggingService.warning(
-        'API Response: ${response.statusCode} ${response.requestOptions.path}',
+        'API Response: ${response.statusCode} '
+        '${redactPath(response.requestOptions.path)}',
         context: context,
       );
     } else {
       _loggingService.info(
-        'API Response: ${response.statusCode} ${response.requestOptions.path}',
+        'API Response: ${response.statusCode} '
+        '${redactPath(response.requestOptions.path)}',
         context: context,
       );
     }
@@ -88,7 +90,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     final context = <String, dynamic>{
       'type': err.type.toString(),
-      'path': err.requestOptions.path,
+      'path': redactPath(err.requestOptions.path),
       'method': err.requestOptions.method,
       'statusCode': err.response?.statusCode,
       if (err.response?.data != null)
@@ -98,7 +100,7 @@ class ApiLoggingInterceptor extends Interceptor {
     };
 
     _loggingService.error(
-      'API Error: ${err.type} ${err.requestOptions.path}',
+      'API Error: ${err.type} ${redactPath(err.requestOptions.path)}',
       context: context,
       error: err,
       stackTrace: err.stackTrace,
@@ -154,6 +156,8 @@ class ApiLoggingInterceptor extends Interceptor {
     'signature',
     'pincode',
     'otpcode',
+    // Strapi returns its session token as `jwt` (koniz-dev/flutter-starter#313).
+    'jwt',
   };
 
   /// Keys that must match the normalised key *exactly*.
@@ -169,6 +173,31 @@ class ApiLoggingInterceptor extends Interceptor {
     'session',
     'sessionid',
   };
+
+  /// [path] with every query parameter embedded in it that names a secret
+  /// redacted, by the same key rules as `queryParameters`.
+  ///
+  /// `ApiClient` takes a path, so `get('/verify?token=X')` is a normal call,
+  /// and that path used to be logged verbatim in the request, response and
+  /// error entries (koniz-dev/flutter-starter#313). Everything except the
+  /// redacted values is kept exactly as written.
+  static String redactPath(String path) {
+    final queryStart = path.indexOf('?');
+    if (queryStart < 0) return path;
+    final fragmentStart = path.indexOf('#', queryStart);
+    final queryEnd = fragmentStart < 0 ? path.length : fragmentStart;
+    final query = path.substring(queryStart + 1, queryEnd).split('&').map((
+      pair,
+    ) {
+      final equals = pair.indexOf('=');
+      if (equals < 0) return pair;
+      final rawKey = pair.substring(0, equals);
+      final key = Uri.decodeQueryComponent(rawKey);
+      return _isSensitiveKey(key) ? '$rawKey=$_redacted' : pair;
+    });
+    return '${path.substring(0, queryStart + 1)}${query.join('&')}'
+        '${path.substring(queryEnd)}';
+  }
 
   /// Reduce a key to a comparable form: lowercase, alphanumerics only.
   static String _normalizeKey(String key) =>
