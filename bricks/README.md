@@ -21,7 +21,7 @@ Then `flutter pub get && flutter analyze && flutter test`.
 
 ## If you do not use Mason
 
-You can delete the whole **`bricks/`** folder and **`mason.yaml`** after you finish renaming manually (see [Fork and customize](../docs/guides/onboarding/fork-and-customize.md)). That shrinks the tree; CI still formats any remaining `bricks/` path only if the folder exists.
+You can remove the whole **`bricks/`** folder and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks` after you finish renaming manually (see [Fork and customize](../docs/guides/onboarding/fork-and-customize.md)). That shrinks the tree; CI still formats any remaining `bricks/` path only if the folder exists.
 
 ## Developing or changing a brick
 

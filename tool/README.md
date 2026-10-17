@@ -153,6 +153,11 @@ artifacts below. It is the mode for a fork that keeps `tasks` and
 (koniz-dev/flutter-starter#333). It cannot be combined with
 `--remove-tasks` or `--remove-feature-flags`.
 
+`--remove-bricks` can be added to any mode. It deletes `bricks/` and
+`mason.yaml` and drops the `strip:bricks` passages that link into them, so the
+links that are left still resolve (koniz-dev/flutter-starter#588). Deleting the
+two by hand leaves those links dangling, and `check_docs --links` fails.
+
 ### Process-only artifacts
 
 Every variant also removes what serves **this repository's issue loop** rather
@@ -192,7 +197,8 @@ Edit **`tool/golden/stripped/`** when the stripped baseline should change (e.g. 
 
 CI runs **Strip smoke** (`.github/workflows/strip-smoke.yml`): apply strip on a fresh checkout, then `flutter analyze` and `flutter test`.
 
-See also [Fork and customize](../docs/guides/onboarding/fork-and-customize.md), [Contracts map](../docs/architecture/contracts-map.md) (stripped vs full starter), and the Mason brick under [`bricks/`](../bricks/).
+See also [Fork and customize](../docs/guides/onboarding/fork-and-customize.md) and [Contracts map](../docs/architecture/contracts-map.md) (stripped vs full starter).
+The Mason brick is under [`bricks/`](../bricks/). <!-- strip:bricks line -->
 
 ## After stripping
 

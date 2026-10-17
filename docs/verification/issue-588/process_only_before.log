@@ -1,0 +1,16 @@
+# origin/main: strip-smoke process-only sequence
+Process-only strip complete; both samples kept. Run: flutter pub get && flutter analyze && flutter test
+$ git rm -rq bricks mason.yaml
+bricks/ and mason.yaml are gone
+$ dart run tool/check_docs.dart --links
+README.md:59: missing path -> bricks/README.md
+README.md:59: missing path -> bricks/flutter_starter_setup/README.md
+docs/README.md:122: missing path -> ../bricks/README.md
+docs/guides/onboarding/repository-layout.md:16: missing path -> ../../../bricks/
+docs/guides/onboarding/repository-layout.md:16: missing path -> ../../../bricks/README.md
+docs/guides/onboarding/repository-layout.md:16: missing path -> ../../../mason.yaml
+tool/README.md:168: missing path -> ../bricks/
+links: checked 592 relative link(s) in 75 file(s); 7 broken
+
+7 problem(s) found.
+check_docs exit=1

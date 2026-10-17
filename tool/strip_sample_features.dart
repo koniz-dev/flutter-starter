@@ -10,6 +10,10 @@
 //   dart run tool/strip_sample_features.dart --apply                       both
 //   dart run tool/strip_sample_features.dart --apply --remove-tasks
 //   dart run tool/strip_sample_features.dart --apply --remove-feature-flags
+//   dart run tool/strip_sample_features.dart --apply --process-only
+//
+// Add --remove-bricks to any of them to also delete bricks/ and mason.yaml,
+// with the documentation that links into them.
 //
 // Then:
 //   flutter pub get && flutter analyze && flutter test
@@ -121,11 +125,21 @@ const _processOnlyPrunedDirs = <String>['.claude'];
 ///
 /// `process-only` regions go in every variant. `feature-flags` and `tasks`
 /// regions go with their sample (koniz-dev/flutter-starter#409), and stay,
-/// invisible, while the sample is kept.
+/// invisible, while the sample is kept. `bricks` regions go with `bricks/`
+/// and `mason.yaml` under `--remove-bricks` (koniz-dev/flutter-starter#588).
 const _processTag = 'process-only';
 const _featureFlagsTag = 'feature-flags';
 const _tasksTag = 'tasks';
-const _markerTags = <String>[_processTag, _featureFlagsTag, _tasksTag];
+const _bricksTag = 'bricks';
+const _markerTags = <String>[
+  _processTag,
+  _featureFlagsTag,
+  _tasksTag,
+  _bricksTag,
+];
+
+/// What `--remove-bricks` deletes: the Mason bricks and their registry.
+const _brickPaths = <String>['bricks', 'mason.yaml'];
 
 String _markerStart(String tag) => '<!-- strip:$tag start -->';
 String _markerEnd(String tag) => '<!-- strip:$tag end -->';
@@ -144,14 +158,16 @@ void main(List<String> args) {
   if (!args.contains('--apply')) {
     stderr.writeln(
       'Usage: dart run tool/strip_sample_features.dart --apply '
-      '[--remove-tasks] [--remove-feature-flags] | --process-only\n'
+      '[--remove-tasks] [--remove-feature-flags] | --process-only '
+      '[--remove-bricks]\n'
       '--process-only keeps both samples and removes only the process-only '
       'artifacts listed below.\n'
       'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
       'and core FeatureFlagsManager. Rewires entrypoints from '
       'tool/golden/<variant>/. Keeps auth sample. Every variant also removes '
       "this repository's process-only artifacts (docs/verification/, the issue "
-      'workflow, .claude/agents/ and the issue-loop guards).',
+      'workflow, .claude/agents/ and the issue-loop guards). --remove-bricks '
+      'also deletes bricks/ and mason.yaml, and the docs that link into them.',
     );
     exitCode = 1;
     return;
@@ -169,6 +185,10 @@ void main(List<String> args) {
   // guard turns `flutter test` red the moment they generate a feature slice
   // or delete bricks/ (koniz-dev/flutter-starter#333).
   final processOnly = args.contains('--process-only');
+  // Deleting bricks/ by hand left seven links dangling in docs a fork keeps,
+  // so the documented way to drop them is this flag, which takes their
+  // `strip:bricks` prose along (koniz-dev/flutter-starter#588).
+  final removeBricks = args.contains('--remove-bricks');
   if (processOnly && (tasksFlag || featureFlagsFlag)) {
     stderr.writeln(
       '--process-only keeps both samples; it cannot be combined with '
@@ -188,7 +208,11 @@ void main(List<String> args) {
       return;
     }
     _removeProcessArtifacts(Directory.current);
-    _stripMarkdownRegions(Directory.current, const [_processTag]);
+    if (removeBricks) _removeBricks(Directory.current);
+    _stripMarkdownRegions(Directory.current, [
+      _processTag,
+      if (removeBricks) _bricksTag,
+    ]);
     stdout.writeln(
       'Process-only strip complete; both samples kept. '
       'Run: flutter pub get && flutter analyze && flutter test',
@@ -247,8 +271,10 @@ void main(List<String> args) {
   // thing removed, and deleting it up front means the later passes over
   // `docs/` have thousands of evidence files fewer to read.
   _removeProcessArtifacts(root);
+  if (removeBricks) _removeBricks(root);
   _stripMarkdownRegions(root, [
     _processTag,
+    if (removeBricks) _bricksTag,
     if (removeFeatureFlags) _featureFlagsTag,
     if (removeTasks) _tasksTag,
   ]);
@@ -415,6 +441,21 @@ void _removeProcessArtifacts(Directory repoRoot) {
       dir.deleteSync();
       stdout.writeln('Removed $relative: emptied by the removals above.');
     }
+  }
+}
+
+/// Deletes [_brickPaths]. A path already gone - a second run - is skipped.
+void _removeBricks(Directory repoRoot) {
+  for (final relative in _brickPaths) {
+    final path = p.join(repoRoot.path, relative);
+    if (FileSystemEntity.isDirectorySync(path)) {
+      Directory(path).deleteSync(recursive: true);
+    } else if (FileSystemEntity.isFileSync(path)) {
+      File(path).deleteSync();
+    } else {
+      continue;
+    }
+    stdout.writeln('Removed $relative (--remove-bricks).');
   }
 }
 
