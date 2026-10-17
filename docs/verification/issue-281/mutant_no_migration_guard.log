@@ -1,0 +1,7 @@
+# mutant: MigrationV1ToV2 without the already-encoded guard (JSON encoding kept)
+-    if (oldTags != null && decodeEncodedStringList(oldTags) == null) {
++    if (oldTags != null) {
+00:00 +7 -1: criterion 3: MigrationV1ToV2 over secure storage a user_tags list with a comma inside one tag survives as one element [E]
+  Expected: ['a,b', 'c']
+    Actual: ['["a', 'b"', '"c"]']
+00:00 +8 -1: Some tests failed.
