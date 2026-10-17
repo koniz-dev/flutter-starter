@@ -436,43 +436,51 @@ test-only, that is a `epic:core-network` decision and belongs in its own issue.
 
 1. Excluded endpoints (see the list below) are passed straight through - no
    refresh is attempted.
-2. A request already carrying `X-Retry-Count: 1` has been replayed once
-   already: the session is logged out and this request is rejected.
-3. If a refresh is already in flight, the request is queued in
+2. If a refresh is already in flight, the request is queued in
    `_pendingRequests` and this handler returns.
-4. Otherwise the `refreshToken` callback runs.
+3. Otherwise the `refreshToken` callback runs.
    - **Success:** the new token is written to the token store, the original
      request is replayed through `retryDio()` with
-     `Authorization: Bearer <new token>` and `X-Retry-Count: 1`, and the
-     handler resolves with the replayed response. Unless the session ended
+     `Authorization: Bearer <new token>`, and the handler resolves with the
+     replayed response. Unless the session ended
      while the refresh was in flight - see
      [Refreshing across a logout](#refreshing-across-a-logout), which is
      checked before any of that happens.
      If the **replay** then fails, only this request fails: a transient
      failure (a 503, a timeout) reaches the caller mapped like any other, and
      the fresh token and the session are kept, so the queued requests in
-     point 5 are still replayed. Only a replay answered **401**, meaning the
+     point 4 are still replayed. Only a replay answered **401**, meaning the
      server refused a token it just issued, logs the session out
      (koniz-dev/flutter-starter#304). Before, any replay failure logged out
      and rejected every queued request.
    - **Failure** (a `Result` failure, a null token, or anything thrown -
      `Error` as well as `Exception`): the session is logged out and the
      handler is rejected.
-5. **Every queued handler is then completed, on both paths.** `finally` clears
+4. **Every queued handler is then completed, on both paths.** `finally` clears
    the in-flight flag first, then drains `_pendingRequests`: with a fresh token
    each queued request is replayed and resolved (rejected if its replay
    fails), and without one each is rejected with its own original error.
 
-Point 5 is the part this document used to get wrong. It said "rejects request",
+Point 4 is the part this document used to get wrong. It said "rejects request",
 singular, and until the drain was fixed that was accurate - a concurrent 401
 whose refresh failed left its caller awaiting a future that was never
 completed. `_drainPendingRequests` now rejects every queued handler explicitly,
 and clearing `_isRefreshing` before the drain means a 401 arriving during the
 drain starts a fresh refresh rather than queueing behind a finished one.
 
+**Why a replay cannot loop.** The replay goes through `retryDio()`, a
+separate Dio that borrows the transport but not this interceptor, so a replay
+answered 401 never re-enters `_handle401Error`: it fails inside point 3's
+replay handling, which logs the session out. No request header is involved.
+There used to be one - the replay set `X-Retry-Count: 1`, and a request
+arriving with it was logged out without a refresh - but the replay could never
+bring that header back here, so only a caller that set it by hand ever reached
+the branch, and every replay sent the header to the server. It was removed in
+koniz-dev/flutter-starter#315.
+
 **What the caller receives when a 401 is given up on:**
 
-Every exit above that "rejects" the request - the retry-exhausted branch, a
+Every exit above that "rejects" the request - a replay the server refuses, a
 failed refresh, a refresh made stale by a logout, and a queued request drained
 without a token - fails it with `handler.next(...)`, not `handler.reject(...)`.
 In dio's error chain `reject` skips every interceptor registered after this
@@ -583,7 +591,7 @@ Queued requests are **rejected, not replayed**, once the generation they were
 queued under is stale. Replaying would put `Authorization: Bearer ...` on the
 wire for a user who has signed out; the check sits inside the drain loop, so a
 logout landing part-way through stops the remaining replays too. Rejection
-still completes every handler, so the guarantee from point 5 above is
+still completes every handler, so the guarantee from point 4 above is
 unaffected.
 
 The request whose 401 started the refresh is checked the same way, and a second
