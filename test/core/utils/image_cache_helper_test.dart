@@ -72,7 +72,7 @@ void main() {
         expect(count, 0);
       });
 
-      testWidgets('should handle multiple URLs', (tester) async {
+      testWidgets('counts only the URLs that loaded', (tester) async {
         await tester.pumpWidget(const MaterialApp(home: Scaffold()));
 
         final urls = [
@@ -82,8 +82,9 @@ void main() {
 
         final count = await ImageCacheHelper.preloadImages(urls);
 
-        expect(count, greaterThanOrEqualTo(0));
-        expect(count, lessThanOrEqualTo(urls.length));
+        // flutter test answers every HTTP request with 400, so both preloads
+        // fail and none may be counted (koniz-dev/flutter-starter#371).
+        expect(count, 0);
       });
     });
 

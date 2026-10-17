@@ -1,0 +1,15 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt371/test/core/logging/log_output_test.dart
+00:00 +0: FileLogOutput should write log output to file
+00:00 +0 -1: FileLogOutput should write log output to file [E]
+  Expected: contains 'Test log message'
+    Actual: ''
+     Which: does not contain 'Test log message'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/logging/log_output_test.dart 76:7         main.<fn>.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt371/test/core/logging/log_output_test.dart: FileLogOutput should write log output to file
