@@ -239,7 +239,13 @@ Future<NetworkResponse<dynamic>> delete(
 
 The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
-- Timeouts from `AppConfig` (connect, receive, send)
+- Timeouts from `AppConfig`, at two levels:
+  - **Per attempt** - `API_CONNECT_TIMEOUT`, `API_RECEIVE_TIMEOUT` and `API_SEND_TIMEOUT` become Dio's `connectTimeout`, `receiveTimeout` and `sendTimeout` in `ApiClient._createDio`. Each bounds one phase of one attempt; the 401 replay client borrows the same values.
+  - **Per request, end to end** - `API_TIMEOUT` is the deadline `DioNetworkClient.send` applies to the whole call, retry backoff and a 401 refresh-and-replay included. When it passes, the request is cancelled and a `NetworkException` with code `RECEIVE_TIMEOUT` surfaces (shown to the user as a timeout). Without it a request that keeps retrying would have no upper bound.
+
+<!-- symbol: lib/core/network/api_client.dart ApiClient -->
+<!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
+
 - Interceptors (order matters; see `ApiClient._createDio`): optional `PerformanceInterceptor`, `CacheInterceptor` (its bypass decision is order-independent - see [CacheInterceptor](#cacheinterceptor)), `AuthInterceptor`, `RetryInterceptor` (safe methods only by default - see [RetryInterceptor](#retryinterceptor)), optional `ApiLoggingInterceptor` when a `LoggingService` is provided, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
 
 ---

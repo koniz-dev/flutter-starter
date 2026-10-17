@@ -470,10 +470,10 @@ print(config);
 |----------|------|---------|-------------|
 | `ENVIRONMENT` | String | `development` | Environment name: `development`, `staging`, or `production`, trimmed and case-insensitive. Any other value sets `AppConfig.environmentMisconfigured` and falls back to the development base URL with no SSL pinning; `printConfig` warns about it. Add a new environment to `AppConfig.knownEnvironments` |
 | `BASE_URL` | String | Environment-aware | API base URL |
-| `API_TIMEOUT` | int | `30` | API timeout in seconds |
-| `API_CONNECT_TIMEOUT` | int | `10` | API connect timeout in seconds |
-| `API_RECEIVE_TIMEOUT` | int | `30` | API receive timeout in seconds |
-| `API_SEND_TIMEOUT` | int | `30` | API send timeout in seconds |
+| `API_TIMEOUT` | int | `30` | End-to-end deadline per request, in seconds: the whole call, retries and a 401 refresh-and-replay included. When it passes the request is cancelled and fails as a timeout. Applied by `DioNetworkClient.send` |
+| `API_CONNECT_TIMEOUT` | int | `10` | Dio connect timeout per attempt, in seconds |
+| `API_RECEIVE_TIMEOUT` | int | `30` | Dio receive timeout per attempt, in seconds |
+| `API_SEND_TIMEOUT` | int | `30` | Dio send timeout per attempt, in seconds - bounds uploading the request body |
 | `ENABLE_LOGGING` | bool | `true` | Master switch for `LoggingService`; `false` turns every output off. See [Where logs go](#where-logs-go) |
 | `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableAnalytics`, but the starter ships no analytics, so nothing reads it. Gate your analytics SDK on it (default: true in staging/prod) |
 | `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableCrashReporting`, but the starter ships no crash reporter, so nothing reads it. Gate your crash reporter on it (default: true in staging/prod) |
@@ -482,6 +482,9 @@ print(config);
 | `ENABLE_HTTP_LOGGING` | bool | Environment-aware | Enable HTTP loggers (default: true in dev) |
 | `APP_VERSION` | String | `1.0.0` | App version |
 | `APP_BUILD_NUMBER` | String | `1` | App build number |
+
+<!-- symbol: lib/core/network/api_client.dart ApiClient -->
+<!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
 
 `test/core/config/enable_toggles_have_readers_test.dart` keeps the
 `ENABLE_*` rows honest. A row marked **Reserved** must have no reader

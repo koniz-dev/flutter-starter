@@ -166,10 +166,12 @@ The project supports multiple configuration methods with a fallback chain:
 |----------|------|---------|-------------|
 | `ENVIRONMENT` | String | `development` | Environment: `development`, `staging`, or `production` |
 | `BASE_URL` | String | Environment-aware | API base URL |
-| `API_TIMEOUT` | int | `30` | API timeout in seconds |
+| `API_TIMEOUT` | int | `30` | End-to-end deadline per request, in seconds, retries included (see [configuration](../configuration.md#environment-variables)) |
 | `ENABLE_LOGGING` | bool | Environment-aware | Enable logging |
 | `ENABLE_ANALYTICS` | bool | Environment-aware | Enable analytics |
 | `ENABLE_CRASH_REPORTING` | bool | Environment-aware | Enable crash reporting |
+
+<!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
 
 ### Example `.env` File
 
