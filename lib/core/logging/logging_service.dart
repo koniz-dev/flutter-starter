@@ -34,15 +34,20 @@ class LoggingService {
   /// [enableRemoteLogging] - Whether to log to remote services
   /// (default: false)
   /// [debugMode] - Stands in for `kDebugMode`, for tests
+  /// [output] - Replaces every built-in output, so a test can observe the
+  /// level and formatted lines each call produces
+  /// (koniz-dev/flutter-starter#576)
   LoggingService({
     bool? enableLogging,
     bool? enableFileLogging,
     bool? enableRemoteLogging,
     @visibleForTesting bool? debugMode,
+    @visibleForTesting LogOutput? output,
   }) : _enableLogging = enableLogging ?? AppConfig.enableLogging,
        _enableFileLogging = enableFileLogging ?? AppConfig.isProduction,
        _enableRemoteLogging = enableRemoteLogging ?? false,
-       _debugMode = debugMode ?? kDebugMode {
+       _debugMode = debugMode ?? kDebugMode,
+       _injectedOutput = output {
     _initializeLogger();
   }
 
@@ -57,6 +62,7 @@ class LoggingService {
 
   /// Whether this is a debug build (`kDebugMode` unless a test says so)
   final bool _debugMode;
+  final LogOutput? _injectedOutput;
 
   /// The outputs the logger writes to; empty only when logging is disabled.
   @visibleForTesting
@@ -78,6 +84,17 @@ class LoggingService {
     }
 
     final outputs = _outputs;
+
+    final injected = _injectedOutput;
+    if (injected != null) {
+      outputs.add(injected);
+      _logger = Logger(
+        printer: _printer(),
+        output: injected,
+        level: _getLogLevel(),
+      );
+      return;
+    }
 
     // Console output (always enabled in debug mode)
     if (_debugMode) {
@@ -111,13 +128,17 @@ class LoggingService {
     // Use MultiOutput if multiple outputs are configured
     final output = outputs.length == 1 ? outputs.first : MultiOutput(outputs);
 
-    // Choose printer based on environment
-    final printer = AppConfig.isProduction
-        ? JsonLogFormatter() // JSON for production
-        : PrettyPrinter();
-
-    _logger = Logger(printer: printer, output: output, level: _getLogLevel());
+    _logger = Logger(
+      printer: _printer(),
+      output: output,
+      level: _getLogLevel(),
+    );
   }
+
+  /// Choose printer based on environment
+  LogPrinter _printer() => AppConfig.isProduction
+      ? JsonLogFormatter() // JSON for production
+      : PrettyPrinter();
 
   /// Get the appropriate log level based on environment
   Level _getLogLevel() {
