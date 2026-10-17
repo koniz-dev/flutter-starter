@@ -87,15 +87,10 @@ void main() {
     expect(result.stderr, isNot(contains('lib/x.md')));
   });
 
-  test('criterion 2: the repository itself passes', () {
-    final result = Process.runSync('dart', [
-      'run',
-      checker,
-      '--links',
-    ]);
-
-    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
-  });
+  // "The repository itself passes" is the Docs check's job on main, not a
+  // unit test's: strip-smoke's process-only job deletes bricks/ and
+  // mason.yaml, which leaves links dangling in that tree
+  // (koniz-dev/flutter-starter#588).
 
   test(
     'criterion 3: the Docs check workflow triggers on every scanned file',
