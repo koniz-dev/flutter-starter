@@ -1,0 +1,6 @@
+# the same test on this branch
+00:00 +0: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+00:10 +1: criterion 1: lib/core/performance/performance_usecase_mixin.dart has a compiled example that overrides performanceService
+00:10 +2: criterion 1: lib/core/performance/performance_repository_mixin.dart has a compiled example that overrides performanceService
+00:10 +3: the extractor reads a marked block and skips unmarked ones
+00:10 +4: All tests passed!
