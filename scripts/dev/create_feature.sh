@@ -301,12 +301,18 @@ void main() {
 EOF
 
 
-# The formatter, not this script, decides where long generated lines wrap, so
-# the result satisfies `dart format --set-exit-if-changed` for any name length.
+# The templates write imports in the order that is sorted for the package name
+# `flutter_starter`. After a rename (`my_app` sorts after `flutter_test`) that
+# order trips `directives_ordering`, so the analyzer, not this script, sorts
+# them (koniz-dev/flutter-starter#442). The formatter, likewise, decides where
+# long generated lines wrap, so the result satisfies
+# `dart format --set-exit-if-changed` for any name length.
 if command -v dart >/dev/null 2>&1; then
+    dart fix --apply --code=directives_ordering "$BASE_DIR" > /dev/null
+    dart fix --apply --code=directives_ordering "$TEST_DIR" > /dev/null
     dart format "$BASE_DIR" "$TEST_DIR" > /dev/null
 else
-    echo "Warning: dart not on PATH; run 'dart format $BASE_DIR $TEST_DIR'" >&2
+    echo "Warning: dart not on PATH; run 'dart fix --apply --code=directives_ordering' and 'dart format' on $BASE_DIR $TEST_DIR" >&2
 fi
 
 echo "Feature $FEATURE_NAME created:"
