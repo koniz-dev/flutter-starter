@@ -1,0 +1,9 @@
+# criterion 1 grep on origin/main
+pubspec.yaml:157:  # Flutter web has no dart-define path here (EnvConfig guards every
+pubspec.yaml:158:  # dart-define read with !kIsWeb) and a web client cannot hold a secret at
+tool/check_env_assets.dart:40:// Deliberate exception. A Flutter **web** build has no `--dart-define` path in
+tool/check_env_assets.dart:41:// this app (`EnvConfig` guards every dart-define read with `!kIsWeb`), so a web
+tool/check_env_assets.dart:734:  * web: there is no dart-define path, and a web client cannot hold a secret.
+
+# criterion 1 grep on this branch
+(none)

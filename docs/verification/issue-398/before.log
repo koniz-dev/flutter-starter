@@ -1,0 +1,6 @@
+# test/tooling/check_env_assets_test.dart against main's tool/check_env_assets.dart
+00:00 +0: every asset spelling Flutter accepts (#330) criterion 2: the failure advice does not claim web lacks dart-defines
+00:00 +0 -1: every asset spelling Flutter accepts (#330) criterion 2: the failure advice does not claim web lacks dart-defines [E]
+  Expected: not contains 'no dart-define path'
+    Actual: 'SECURITY: a secrets file is bundled as a Flutter asset.\n'
+00:00 +0 -1: Some tests failed.
