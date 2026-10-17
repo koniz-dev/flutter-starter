@@ -5,6 +5,9 @@
 // Flutter asset, but only the deploy workflows ran it; build.yml uploads a
 // release APK and a web build without it. This reads every workflow job by
 // job and fails when a `flutter build` line comes before the guard in its job.
+//
+// The two Fastfiles build release artifacts too, so they get the same check
+// lane by lane (koniz-dev/flutter-starter#507).
 
 import 'dart:io';
 
@@ -35,6 +38,32 @@ List<String> _unguardedBuilds(File workflow) {
     if (code.contains(_guard)) guarded = true;
     if (RegExp(r'\bflutter build\b').hasMatch(code) && !guarded) {
       problems.add('${workflow.path}:${i + 1}: $code');
+    }
+  }
+  return problems;
+}
+
+final RegExp _laneHeader = RegExp(r'^\s*(?:private_)?lane\s+:\w+');
+
+/// The Fastfiles that build release artifacts.
+const _fastfiles = ['fastlane/Fastfile', 'ios/fastlane/Fastfile'];
+
+/// `file:line` for each `flutter build` that runs before the guard in its
+/// fastlane lane.
+List<String> _unguardedLaneBuilds(File fastfile) {
+  final problems = <String>[];
+  var guarded = false;
+  final lines = fastfile.readAsLinesSync();
+  for (var i = 0; i < lines.length; i++) {
+    final code = lines[i].trimLeft();
+    if (code.startsWith('#')) continue;
+    if (_laneHeader.hasMatch(code)) {
+      guarded = false;
+      continue;
+    }
+    if (code.contains(_guard)) guarded = true;
+    if (RegExp(r'\bflutter build\b').hasMatch(code) && !guarded) {
+      problems.add('${fastfile.path}:${i + 1}: $code');
     }
   }
   return problems;
@@ -86,5 +115,44 @@ jobs:
     final problems = _unguardedBuilds(fixture);
     expect(problems, hasLength(1));
     expect(problems.single, contains('flutter build web'));
+  });
+
+  group('the Fastfiles (#507)', () {
+    for (final path in _fastfiles) {
+      test('criterion 2: every flutter build in $path follows the guard in '
+          'its lane', () {
+        final fastfile = File(path);
+        final problems = _unguardedLaneBuilds(fastfile);
+
+        expect(problems, isEmpty, reason: problems.join('\n'));
+        expect(
+          RegExp(r'\bflutter build\b').allMatches(fastfile.readAsStringSync()),
+          hasLength(2),
+          reason: 'the scan must see both build lanes',
+        );
+      });
+    }
+
+    test('the lane scan catches an unguarded lane', () {
+      final fixture = File('${Directory.systemTemp.path}/unguarded_Fastfile')
+        ..writeAsStringSync('''
+platform :android do
+  lane :safe do
+    sh("cd .. && $_guard")
+    sh("cd .. && flutter build apk")
+  end
+
+  lane :unsafe do
+    # sh("cd .. && flutter build ipa")   <- a comment, ignored
+    sh("cd .. && flutter build appbundle")
+  end
+end
+''');
+      addTearDown(fixture.deleteSync);
+
+      final problems = _unguardedLaneBuilds(fixture);
+      expect(problems, hasLength(1));
+      expect(problems.single, contains('flutter build appbundle'));
+    });
   });
 }
