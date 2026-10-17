@@ -30,8 +30,46 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
 **Option B — Manual**
 
 1. Change `name:` in `pubspec.yaml`.
-2. Replace every import `package:flutter_starter/` with `package:<your_package>/` under `lib/`, `test/`, `integration_test/`, and `tool/` (Dart files).
-3. Run `flutter pub get` and fix any missed imports.
+2. Replace every `package:flutter_starter/` with `package:<your_package>/` in
+   all of these - not only `lib/`, `test/`, `integration_test/` and `tool/`:
+   - `examples/` - `flutter analyze` covers it, so a missed file keeps analyze
+     red after the rename.
+   - `scripts/dev/create_feature.sh` and `scripts/dev/create_feature.ps1` -
+     they write the import lines of every feature you scaffold, so a missed
+     script produces features that do not compile.
+   - `bricks/feature_clean/__brick__/` - the same, for `mason make feature_clean`.
+   - `docs/**/*.dart` - evidence probes under `docs/verification/` are analyzed
+     too. Alternatively, run the sample strip (section 4) first: every variant
+     deletes `docs/verification/`.
+
+   One command for all of them (`perl` behaves the same on macOS and Linux):
+
+   ```bash
+   NEW=your_package
+   git grep -lz 'package:flutter_starter/' -- lib test integration_test tool \
+     examples bricks/feature_clean scripts/dev/create_feature.sh \
+     scripts/dev/create_feature.ps1 'docs/*.dart' \
+     | xargs -0 perl -pi -e "s#package:flutter_starter/#package:${NEW}/#g"
+   ```
+3. Run `flutter pub get`, then re-sort the imports - your package name sorts
+   differently from `flutter_starter`, so roughly 200 files gain a
+   `directives_ordering` info - and analyze:
+
+   ```bash
+   flutter pub get
+   dart fix --apply --code=directives_ordering
+   flutter analyze   # must exit 0
+   ```
+
+   Finish step 2 completely first. If any `package:flutter_starter/` import is
+   left, `dart fix` also applies `depend_on_referenced_packages` and adds
+   `flutter_starter: any` to `pubspec.yaml` - an unrelated pub.dev package -
+   after which `flutter pub get` fails version solving.
+
+   `git grep -n 'package:flutter_starter/' -- '*.dart' '*.sh' '*.ps1'` should
+   then list only `bricks/flutter_starter_setup/` (the setup brick's own rename
+   source - delete `bricks/` if you never use Mason) and shell probes under
+   `docs/verification/`, which nothing executes.
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
 
 **If you never use Mason:** after renaming, you may delete **`bricks/`** and **`mason.yaml`** to keep a smaller repo.
@@ -102,7 +140,9 @@ app - env-asset, docs, signature and symbol checks, the CI workflows and the git
 hooks - all stay. See [`tool/README.md`](../../../tool/README.md) for the full
 list and the reasoning.
 
-Then delete or adjust any remaining docs under `docs/features/` that referenced removed modules.
+Then search the kept guides for the removed modules (for example
+`git grep -n -i "feature.flag" docs/guides`) and adjust what you find; the strip
+does not rewrite prose (koniz-dev/flutter-starter#409).
 
 ## 5. Remove auth sample (advanced)
 
