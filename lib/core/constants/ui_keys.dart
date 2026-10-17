@@ -21,8 +21,8 @@ abstract final class UiKeys {
   // the tasks screens do not key their controls.
   //
   // They are kept because they are the agreed selector names for a fork that
-  // does add a tasks entry point, and because
-  // `tool/golden/no_feature_flags/` wires `openTasks` in its own `HomeScreen`.
+  // does add a tasks entry point. Nothing in `tool/golden/` attaches them
+  // either.
   // A fork must attach the key before writing a selector against it: Patrol
   // matches on the widget tree, so an unattached key silently finds nothing.
 
