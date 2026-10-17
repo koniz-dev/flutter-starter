@@ -44,7 +44,7 @@ final class TasksNotifierProvider
   }
 }
 
-String _$tasksNotifierHash() => r'9e7d7d38f4f425c77ca0ff3b9033ae4d09147d84';
+String _$tasksNotifierHash() => r'f2e16636743316ced494f502f1df380f939b27ba';
 
 /// Tasks provider (Riverpod Generator).
 
