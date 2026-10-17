@@ -561,7 +561,7 @@ flutter test
 flutter test --coverage
 
 # Run specific test file
-flutter test test/features/auth/domain/usecases/login_test.dart
+flutter test test/features/auth/domain/usecases/login_usecase_test.dart
 ```
 
 ---
@@ -591,7 +591,7 @@ flutter test test/features/auth/domain/usecases/login_test.dart
 /// final result = await loginUseCase('email@example.com', 'password');
 /// result.when(
 ///   success: (user) => print('Logged in: ${user.email}'),
-///   failure: (error) => print('Error: $error'),
+///   failureCallback: (error) => print('Error: $error'),
 /// );
 /// ```
 Future<Result<User>> call(String email, String password) async {
