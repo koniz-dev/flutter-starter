@@ -161,91 +161,105 @@ echo -e "${GREEN}✓ Web build completed${NC}"
 echo ""
 
 # Analyze build size if requested
+#
+# koniz-dev/flutter-starter#335: production builds only an App Bundle, but this
+# used to report only an APK, so production reported nothing; the comparison
+# bundle was built without the environment's --dart-define values, so it was not
+# the configured app; and the advice claimed an ABI split nothing performs.
 if [ "$ANALYZE_SIZE" = true ]; then
   echo ""
   echo "🔍 Build Size Analysis"
   echo "================================"
   echo ""
-  
-  # Get APK size
+
   APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
+  BUNDLE_PATH="build/app/outputs/bundle/release/app-release.aab"
+
+  # Production built the bundle above; any other environment gets one built
+  # for comparison - with the same defines, so it is the same app.
+  if [ "$ENVIRONMENT" != "production" ] || [ ! -f "$BUNDLE_PATH" ]; then
+    echo "📦 Building App Bundle (recommended for Play Store)..."
+    flutter build appbundle \
+        --release \
+        --dart-define=ENVIRONMENT=$ENVIRONMENT \
+        --dart-define=BASE_URL=$BASE_URL
+  fi
+
+  size_bytes() {
+    stat -f%z "$1" 2>/dev/null || stat -c%s "$1" 2>/dev/null
+  }
+
+  APK_SIZE=""
+  BUNDLE_SIZE=""
+  LARGEST_BYTES=0
   if [ -f "$APK_PATH" ]; then
     APK_SIZE=$(du -h "$APK_PATH" | cut -f1)
-    APK_SIZE_BYTES=$(stat -f%z "$APK_PATH" 2>/dev/null || stat -c%s "$APK_PATH" 2>/dev/null)
-    
-    echo -e "${GREEN}✅ Build completed successfully${NC}"
+    LARGEST_BYTES=$(size_bytes "$APK_PATH")
     echo "📱 APK Size: $APK_SIZE"
+  fi
+  if [ -f "$BUNDLE_PATH" ]; then
+    BUNDLE_SIZE=$(du -h "$BUNDLE_PATH" | cut -f1)
+    BUNDLE_BYTES=$(size_bytes "$BUNDLE_PATH")
+    if [ "$BUNDLE_BYTES" -gt "$LARGEST_BYTES" ]; then
+      LARGEST_BYTES=$BUNDLE_BYTES
+    fi
+    echo "📱 App Bundle Size: $BUNDLE_SIZE"
+  fi
+
+  if [ -z "$APK_SIZE" ] && [ -z "$BUNDLE_SIZE" ]; then
+    echo -e "${YELLOW}⚠️  No Android artifact found to analyze.${NC}"
+  else
     echo ""
-    
+
     # Analyze dependencies
     echo "📊 Analyzing dependencies..."
     flutter pub deps > /tmp/flutter_deps.txt
-    
+
     # Count dependencies
     DEP_COUNT=$(grep -c "├" /tmp/flutter_deps.txt || echo "0")
     echo "   Total dependencies: $DEP_COUNT"
     echo ""
-    
-    # Check for unused dependencies (basic check)
-    echo "🔍 Checking for potential optimizations..."
-    echo ""
-    
+
     # Analyze assets
     if [ -d "assets" ]; then
       ASSET_SIZE=$(du -sh assets 2>/dev/null | cut -f1 || echo "0")
       echo "   Assets size: $ASSET_SIZE"
     fi
-    
+
     # Provide recommendations
     echo ""
     echo "💡 Optimization Recommendations:"
     echo "================================"
     echo ""
-    
-    # Check APK size thresholds
-    if [ "$APK_SIZE_BYTES" -gt 50000000 ]; then  # 50MB
-      echo -e "${YELLOW}⚠️  APK is larger than 50MB. Consider:${NC}"
-      echo "   - Using App Bundle instead of APK"
-      echo "   - Splitting by ABI (already done)"
+
+    if [ "$LARGEST_BYTES" -gt 50000000 ]; then  # 50MB
+      echo -e "${YELLOW}⚠️  The Android build is larger than 50MB. Consider:${NC}"
+      echo "   - Using the App Bundle instead of an APK"
+      echo "   - Splitting APKs by ABI: flutter build apk --split-per-abi"
       echo "   - Removing unused assets"
       echo "   - Compressing images"
-    elif [ "$APK_SIZE_BYTES" -gt 25000000 ]; then  # 25MB
-      echo -e "${YELLOW}⚠️  APK is larger than 25MB. Consider:${NC}"
+    elif [ "$LARGEST_BYTES" -gt 25000000 ]; then  # 25MB
+      echo -e "${YELLOW}⚠️  The Android build is larger than 25MB. Consider:${NC}"
       echo "   - Removing unused dependencies"
       echo "   - Optimizing images"
       echo "   - Using deferred imports for large features"
     else
-      echo -e "${GREEN}✅ APK size is reasonable${NC}"
+      echo -e "${GREEN}✅ Android build size is reasonable${NC}"
     fi
-    
+
     echo ""
     echo "📋 Additional Analysis:"
     echo "   - Run 'flutter pub deps' to see dependency tree"
     echo "   - Run 'flutter analyze' to check for unused code"
-    echo "   - Use 'flutter build appbundle' for Play Store (smaller size)"
     echo "   - Check 'pubspec.yaml' for unused dependencies"
     echo ""
-    
-    # Build app bundle for comparison (if not already built)
-    if [ "$ENVIRONMENT" != "production" ] || [ ! -f "build/app/outputs/bundle/release/app-release.aab" ]; then
-      echo "📦 Building App Bundle (recommended for Play Store)..."
-      flutter build appbundle --release
-    fi
-    
-    BUNDLE_PATH="build/app/outputs/bundle/release/app-release.aab"
-    if [ -f "$BUNDLE_PATH" ]; then
-      BUNDLE_SIZE=$(du -h "$BUNDLE_PATH" | cut -f1)
-      echo -e "${GREEN}✅ App Bundle created${NC}"
-      echo "📱 App Bundle Size: $BUNDLE_SIZE"
-      echo ""
-      echo "💡 App Bundle is typically 20-30% smaller than APK"
-    fi
-    
-    echo ""
+
     echo "📊 Build Size Summary:"
     echo "================================"
-    echo "APK Size: $APK_SIZE"
-    if [ -f "$BUNDLE_PATH" ]; then
+    if [ -n "$APK_SIZE" ]; then
+      echo "APK Size: $APK_SIZE"
+    fi
+    if [ -n "$BUNDLE_SIZE" ]; then
       echo "App Bundle Size: $BUNDLE_SIZE"
     fi
     echo "Dependencies: $DEP_COUNT"
