@@ -4,7 +4,11 @@ import 'package:flutter_starter/core/config/app_config.dart';
 ///
 /// Contains only application constants that are not configuration.
 /// For configuration values (timeouts, URLs, etc.), use [AppConfig].
-/// For app version, use [AppConfig.appVersion].
+///
+/// The app version and build number are not configuration: they come from
+/// `pubspec.yaml`'s `version:`, which the build stamps into the platform
+/// bundle. Read them at runtime from the platform - for example with
+/// `package_info_plus`, if you add it - rather than from an environment key.
 class AppConstants {
   AppConstants._();
 
