@@ -4,6 +4,7 @@
 // ignore_for_file: directives_ordering
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/constants/api_endpoints.dart';
@@ -39,6 +40,9 @@ class ApiClient {
   /// [SslPinning.fromConfig] (`ENABLE_SSL_PINNING` / `API_SSL_FINGERPRINTS`)
   /// [cacheConfig] - `CacheInterceptor` freshness policy; defaults to
   /// [CacheConfig]'s one hour fresh, seven days as a fallback
+  /// [retryInitialDelay] and [retryMaxJitter] - Override
+  /// [RetryInterceptor]'s backoff, so a test that walks the retry path does
+  /// not sleep through it (koniz-dev/flutter-starter#577)
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
@@ -47,6 +51,8 @@ class ApiClient {
     IPerformanceService? performanceService,
     SslPinning? sslPinning,
     CacheConfig? cacheConfig,
+    @visibleForTesting Duration? retryInitialDelay,
+    @visibleForTesting Duration? retryMaxJitter,
   }) : _dio = _createDio(
          storageService,
          secureStorageService,
@@ -55,6 +61,8 @@ class ApiClient {
          performanceService,
          sslPinning ?? SslPinning.fromConfig(),
          cacheConfig,
+         retryInitialDelay,
+         retryMaxJitter,
        ) {
     _networkClient = DioNetworkClient(
       _dio,
@@ -71,6 +79,8 @@ class ApiClient {
     IPerformanceService? performanceService,
     SslPinning sslPinning,
     CacheConfig? cacheConfig,
+    Duration? retryInitialDelay,
+    Duration? retryMaxJitter,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -137,7 +147,12 @@ class ApiClient {
     dio.interceptors.addAll([
       cacheInterceptor,
       authInterceptor,
-      RetryInterceptor(dio: dio, loggingService: loggingService),
+      RetryInterceptor(
+        dio: dio,
+        loggingService: loggingService,
+        initialExecutionDelay: retryInitialDelay ?? const Duration(seconds: 1),
+        maxJitter: retryMaxJitter ?? const Duration(milliseconds: 500),
+      ),
       if (loggingService != null)
         ApiLoggingInterceptor(loggingService: loggingService),
       if (performanceService != null)

@@ -60,6 +60,7 @@ class RetryInterceptor extends Interceptor {
     this.loggingService,
     this.maxRetries = 3,
     this.initialExecutionDelay = const Duration(seconds: 1),
+    this.maxJitter = const Duration(milliseconds: 500),
   });
 
   /// HTTP methods replayed automatically on any transient error.
@@ -92,6 +93,11 @@ class RetryInterceptor extends Interceptor {
 
   /// Initial delay before the first retry (will exponentially backoff)
   final Duration initialExecutionDelay;
+
+  /// Upper bound (exclusive) of the random delay added to every retry, so
+  /// clients that failed together do not retry in lockstep.
+  /// [Duration.zero] disables it.
+  final Duration maxJitter;
 
   final Random _rnd = Random();
 
@@ -228,7 +234,9 @@ class RetryInterceptor extends Interceptor {
   }
 
   Duration _getDelay(int retryCount) {
-    final jitter = Duration(milliseconds: _rnd.nextInt(500));
+    final jitter = maxJitter > Duration.zero
+        ? Duration(microseconds: _rnd.nextInt(maxJitter.inMicroseconds))
+        : Duration.zero;
     final delay = Duration(
       milliseconds:
           initialExecutionDelay.inMilliseconds * pow(2, retryCount - 1).toInt(),

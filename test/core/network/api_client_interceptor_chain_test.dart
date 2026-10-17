@@ -414,6 +414,8 @@ void main() {
           storageService: storageService,
           secureStorageService: secureStorageService,
           authInterceptor: authInterceptor,
+          retryInitialDelay: Duration.zero,
+          retryMaxJitter: Duration.zero,
         )..dio.httpClientAdapter = adapter;
 
         Object? thrown;
@@ -457,6 +459,8 @@ void main() {
           storageService: storageService,
           secureStorageService: secureStorageService,
           authInterceptor: authInterceptor,
+          retryInitialDelay: Duration.zero,
+          retryMaxJitter: Duration.zero,
         )..dio.httpClientAdapter = adapter;
 
         final response = await apiClient.post('/tasks', data: {'title': 'x'});
@@ -485,6 +489,8 @@ void main() {
         secureStorageService: secureStorageService,
         authInterceptor: authInterceptor,
         performanceService: performanceService,
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
 
       await expectLater(
@@ -527,6 +533,8 @@ void main() {
       secureStorageService: secureStorageService,
       authInterceptor: authInterceptor,
       performanceService: performance,
+      retryInitialDelay: Duration.zero,
+      retryMaxJitter: Duration.zero,
     )..dio.httpClientAdapter = adapter;
 
     void expectSucceeded(_RecordingTrace trace) {
@@ -634,6 +642,8 @@ void main() {
             return const Success('fresh-access-token');
           },
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
       return (client: client, adapter: adapter, refreshes: () => refreshCalls);
     }
@@ -698,6 +708,8 @@ void main() {
           tokenStore: _InMemoryTokenStore(),
           refreshToken: () async => const Success('unused'),
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
     }
 
@@ -836,6 +848,8 @@ void main() {
           secureStorageService: secureStorageService,
           authInterceptor: authInterceptor,
           loggingService: loggingService,
+          retryInitialDelay: Duration.zero,
+          retryMaxJitter: Duration.zero,
         )..dio.httpClientAdapter = adapter;
       }
 
@@ -1019,6 +1033,8 @@ void main() {
           sessionGeneration: generation,
           refreshToken: () async => const Success('fresh-access-token'),
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
     }
 
@@ -1144,6 +1160,8 @@ void main() {
           sessionGeneration: generation,
           refreshToken: () async => const Success('unused'),
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
     }
 
@@ -1256,6 +1274,8 @@ void main() {
             sessionGeneration: generation,
             refreshToken: () async => const Success('fresh-access-token'),
           ),
+          retryInitialDelay: Duration.zero,
+          retryMaxJitter: Duration.zero,
         )..dio.httpClientAdapter = adapter;
       }
 
@@ -1345,6 +1365,8 @@ void main() {
           sessionGeneration: generation,
           refreshToken: () async => const Success('unused'),
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
     }
 
@@ -1419,6 +1441,8 @@ void main() {
           tokenStore: _InMemoryTokenStore(),
           refreshToken: () async => const Success('unused'),
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
 
       final thrown = await _thrownBy(
@@ -1464,6 +1488,8 @@ void main() {
                   tokenStore: _ThrowingTokenStore(fail),
                   refreshToken: () async => const Success('unused'),
                 ),
+                retryInitialDelay: Duration.zero,
+                retryMaxJitter: Duration.zero,
               )..dio.httpClientAdapter = adapter;
               unawaited(
                 _thrownBy(
@@ -1545,6 +1571,8 @@ void main() {
             return const Success('fresh-token');
           },
         ),
+        retryInitialDelay: Duration.zero,
+        retryMaxJitter: Duration.zero,
       )..dio.httpClientAdapter = adapter;
       return (client: client, adapter: adapter, refreshes: refreshes);
     }
