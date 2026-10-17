@@ -764,8 +764,9 @@ Do not relax the credential check without first moving the store to `SecureStora
 
 ### Lifetime
 
-- `maxAge` (default 1 hour): entries newer than this are served directly.
-- `maxStale` (default 7 days): older entries are still served, then removed once past this.
+- `maxAge` (default 1 hour): an entry younger than this is served without a network request.
+- Past `maxAge` the entry is **stale**: the request goes to the network, and the entry is kept only as a fallback. It is served only if that fetch fails for transport reasons - a connection error, a timeout, or a 5xx. A 4xx is the server's answer and reaches the caller, and a successful refetch replaces the entry. Before koniz-dev/flutter-starter#310 a stale entry was served straight from the cache, with no network attempt, for up to `maxStale`.
+- `maxStale` (default 7 days): past this an entry is removed, even as a fallback.
 - A stored timestamp that does not parse, or whose calendar date is out of range such as `2024-02-30`, has no age: the entry is removed and the read reported as a miss rather than aged on a guess. The whole cost is one network request.
 - `CacheInterceptor.clearCache()` walks `http_cache_index` and removes every body, every timestamp and the index itself.
 
@@ -798,10 +799,14 @@ const CacheConfig({
 
 ### Configuration
 
+Pass a `CacheConfig` through `ApiClient`, which forwards it to the
+`CacheInterceptor` it builds:
+
 ```dart
-CacheInterceptor(
+ApiClient(
   storageService: storageService,
-  tokenStore: authInterceptor.tokenStore,
+  secureStorageService: secureStorageService,
+  authInterceptor: authInterceptor,
   cacheConfig: const CacheConfig(
     maxAge: Duration(minutes: 5),
     maxStale: Duration(hours: 12),
@@ -809,6 +814,8 @@ CacheInterceptor(
   ),
 );
 ```
+
+<!-- symbol: lib/core/network/api_client.dart ApiClient -->
 
 `enableCache: false` disables the interceptor entirely. Omitting `tokenStore` leaves only the header check, which cannot see a credential `AuthInterceptor` has not written yet - production wiring in `ApiClient._createDio` always passes it.
 
