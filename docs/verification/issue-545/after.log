@@ -1,0 +1,18 @@
+# origin/main: the setter's doc
+44:  /// Updates the app's locale state and persists the preference to storage.
+
+# this branch: the setter's doc
+(no 'persists the preference')
+  /// Sets the current locale for the running app.
+  ///
+  /// In memory only: nothing is written to storage, so the choice is gone on
+  /// the next launch. To keep it, persist it as well with
+  /// [LocalizationService.setCurrentLocale] - which writes the preference this
+  /// notifier reads back at startup through [currentLocaleProvider]
+  /// (koniz-dev/flutter-starter#545).
+  set locale(Locale locale) {
+
+# test/core/localization/locale_setter_test.dart (the setter writes nothing; setCurrentLocale persists and startup reads it back)
+00:00 +0: criterion 1: the setter changes the locale and writes nothing
+00:00 +1: criterion 2: persisting is setCurrentLocale, and startup reads it back
+00:00 +2: All tests passed!
