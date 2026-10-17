@@ -410,9 +410,5 @@
   "homeAddScreensHint": "Thêm màn hình trong lib/features/.",
   "@homeAddScreensHint": {
     "description": "Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated"
-  },
-  "taskNotFound": "Không tìm thấy nhiệm vụ",
-  "@taskNotFound": {
-    "description": "Shown on the task detail screen when the task does not exist"
   }
 }

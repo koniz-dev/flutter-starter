@@ -216,6 +216,5 @@
   "failureStorage": "تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.",
   "failureServer": "حدث خطأ في الخادم. يرجى المحاولة لاحقًا.",
   "failureUnknown": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
-  "homeAddScreensHint": "أضف الشاشات ضمن lib/features/.",
-  "taskNotFound": "المهمة غير موجودة"
+  "homeAddScreensHint": "أضف الشاشات ضمن lib/features/."
 }

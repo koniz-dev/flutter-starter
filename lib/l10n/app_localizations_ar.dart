@@ -590,7 +590,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeAddScreensHint => 'أضف الشاشات ضمن lib/features/.';
-
-  @override
-  String get taskNotFound => 'المهمة غير موجودة';
 }

@@ -1,0 +1,15 @@
+# on origin/main: occurrences of the key in each ARB file
+app_en.arb: 0
+app_es.arb: 0
+app_vi.arb: 0
+app_ar.arb: 0
+
+# on origin/main: the literal HomeScreen renders
+origin/main:lib/features/home/presentation/screens/home_screen.dart:37:                'Add screens under lib/features/.',
+
+# 'Task not found' on origin/main: only a Failure.message; the screen renders
+# _error!.localizedMessage(l10n), and NotFoundFailure maps to failureNotFound (#448)
+origin/main:lib/core/localization/failure_localizations.dart:57:      NotFoundFailure() => l10n.failureNotFound,
+origin/main:lib/features/tasks/data/repositories/tasks_repository_impl.dart:99:        return const ResultFailure(CacheFailure('Task not found'));
+origin/main:lib/features/tasks/presentation/screens/task_detail_screen.dart:89:            _error = const NotFoundFailure('Task not found');
+origin/main:lib/features/tasks/presentation/screens/task_detail_screen.dart:173:                _error!.localizedMessage(l10n),

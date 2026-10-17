@@ -216,6 +216,5 @@
   "failureStorage": "No se pudieron leer ni guardar datos en este dispositivo.",
   "failureServer": "Algo salió mal en el servidor. Inténtalo de nuevo más tarde.",
   "failureUnknown": "Algo salió mal. Inténtalo de nuevo.",
-  "homeAddScreensHint": "Añade pantallas en lib/features/.",
-  "taskNotFound": "Tarea no encontrada"
+  "homeAddScreensHint": "Añade pantallas en lib/features/."
 }

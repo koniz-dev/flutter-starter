@@ -566,7 +566,4 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeAddScreensHint => 'Añade pantallas en lib/features/.';
-
-  @override
-  String get taskNotFound => 'Tarea no encontrada';
 }
