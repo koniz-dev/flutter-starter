@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/logging/logging_providers.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/session/session_providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
 import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -82,18 +85,84 @@ class TasksState {
 /// Read once at startup by the tasks routes, which the app router builds
 /// eagerly, so the listener exists even if the tasks screen was never opened
 /// during the session that is ending.
+///
+/// A failed delete must not hand the previous user's tasks to the next one,
+/// so the wipe falls back, and as a last resort holds the list empty - see
+/// [TasksSessionWipe] (koniz-dev/flutter-starter#458).
 final tasksSessionResetProvider = Provider<void>((ref) {
   ref.listen<int>(sessionEpochProvider, (_, _) {
-    final pendingDelete = ref
-        .read(tasksLocalDataSourceProvider)
-        .deleteAllTasks();
+    final wipe = ref.read(tasksSessionWipeProvider);
     unawaited(
-      pendingDelete.whenComplete(() {
+      wipe.run().whenComplete(() {
         if (ref.mounted) ref.invalidate(tasksProvider);
       }),
     );
   });
 });
+
+/// Removes the stored tasks of a session that has ended, and remembers when it
+/// could not (koniz-dev/flutter-starter#458).
+///
+/// [run] never throws. In order:
+///
+/// 1. `deleteAllTasks()` removes the `tasks_data` key.
+/// 2. If that fails, the key is overwritten with an empty list instead
+///    (`saveTasks([])`): a different storage call, so a failing `remove` does
+///    not doom it.
+/// 3. If that fails too, [pending] stays true, and [TasksNotifier] holds the
+///    list empty instead of loading - the blob may still be the previous
+///    user's - retrying [run] on each load until a wipe succeeds.
+///
+/// Every failure is logged; none is dropped into the zone's uncaught-error
+/// handler, which is where the bare `deleteAllTasks()` future used to send it.
+class TasksSessionWipe {
+  /// Creates a wipe over a tasks data source that reports failures to a
+  /// logger.
+  TasksSessionWipe(this._dataSource, this._logger);
+
+  final TasksLocalDataSource _dataSource;
+  final LoggingService _logger;
+
+  /// Whether the last [run] failed to clear the stored tasks either way.
+  bool get pending => _pending;
+  bool _pending = false;
+
+  /// Clears the stored tasks; see the class doc for the fallbacks.
+  Future<void> run() async {
+    try {
+      await _dataSource.deleteAllTasks();
+      _pending = false;
+      return;
+    } on Object catch (error, stackTrace) {
+      _logger.error(
+        "Tasks: could not delete the previous session's tasks; overwriting "
+        'them with an empty list instead',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+    try {
+      await _dataSource.saveTasks(const []);
+      _pending = false;
+    } on Object catch (error, stackTrace) {
+      _pending = true;
+      _logger.error(
+        "Tasks: could not overwrite the previous session's tasks either; "
+        'holding the task list empty until a wipe succeeds',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+}
+
+/// The app's single [TasksSessionWipe].
+final tasksSessionWipeProvider = Provider<TasksSessionWipe>(
+  (ref) => TasksSessionWipe(
+    ref.watch(tasksLocalDataSourceProvider),
+    ref.watch(loggingServiceProvider),
+  ),
+);
 
 /// Tasks provider (Riverpod Generator).
 @Riverpod(keepAlive: true)
@@ -119,6 +188,23 @@ class TasksNotifier extends _$TasksNotifier {
     if (!ref.mounted) return;
     final token = ++_loadToken;
     state = state.copyWith(isLoading: true, clearError: true);
+
+    // The previous session's tasks could not be wiped: what is stored may be
+    // theirs, so retry the wipe and load nothing until it succeeds
+    // (koniz-dev/flutter-starter#458).
+    final wipe = ref.read(tasksSessionWipeProvider);
+    if (wipe.pending) {
+      await wipe.run();
+      if (!ref.mounted || token != _loadToken) return;
+      if (wipe.pending) {
+        state = state.copyWith(
+          tasks: const [],
+          isLoading: false,
+          clearError: true,
+        );
+        return;
+      }
+    }
 
     final getAllTasksUseCase = ref.read(getAllTasksUseCaseProvider);
     final result = await getAllTasksUseCase();
