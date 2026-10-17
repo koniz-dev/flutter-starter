@@ -480,8 +480,10 @@ print(config);
 | `ENABLE_PERFORMANCE_MONITORING` | bool | Environment-aware | Enable performance monitoring |
 | `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Registers the `/feature-flags-debug` route; without it the route does not exist (default: true in dev only) |
 | `ENABLE_HTTP_LOGGING` | bool | Environment-aware | Enable HTTP loggers (default: true in dev) |
-| `APP_VERSION` | String | `1.0.0` | App version |
-| `APP_BUILD_NUMBER` | String | `1` | App build number |
+
+The app version and build number are not configuration keys: they come from
+`pubspec.yaml`'s `version:`, which the build stamps into the platform bundle,
+and are read from the platform at runtime (koniz-dev/flutter-starter#467).
 
 <!-- symbol: lib/core/network/api_client.dart ApiClient -->
 <!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
