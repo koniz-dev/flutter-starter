@@ -51,6 +51,14 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
   IPerformanceTrace? _screenTrace;
   IPerformanceService? _performanceService;
 
+  /// When the screen trace started, read from [performanceClock].
+  DateTime? _traceStartedAt;
+
+  /// The clock screen load time is measured with.
+  ///
+  /// Override it to inject a controllable clock in tests.
+  DateTime Function() get performanceClock => DateTime.now;
+
   /// The name of the screen for performance tracking
   /// Override this to provide a custom screen name
   String get screenName {
@@ -110,6 +118,7 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
         );
       }
       _screenTrace!.startSync();
+      _traceStartedAt = performanceClock();
     }
   }
 
@@ -123,9 +132,17 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// Mark screen as loaded (call this when screen data is ready)
+  ///
+  /// Records `screen_load_time` as the milliseconds since the trace started.
+  /// It used to record the constant 1 whatever the screen took, so every
+  /// screen read as loading in 1 ms (koniz-dev/flutter-starter#326).
   void markScreenLoaded() {
-    if (_screenTrace != null) {
-      _screenTrace!.putMetric(PerformanceMetrics.screenLoadTime, 1);
+    final startedAt = _traceStartedAt;
+    if (_screenTrace != null && startedAt != null) {
+      _screenTrace!.putMetric(
+        PerformanceMetrics.screenLoadTime,
+        performanceClock().difference(startedAt).inMilliseconds,
+      );
     }
   }
 

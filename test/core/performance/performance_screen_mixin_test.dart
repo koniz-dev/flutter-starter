@@ -66,7 +66,8 @@ void main() {
       verify(() => mockTrace.stopSync()).called(1);
     });
 
-    testWidgets('should mark screen as loaded', (tester) async {
+    testWidgets('records the milliseconds elapsed since the trace started '
+        '(#326)', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: _TestScreenWithMixin(
@@ -75,12 +76,37 @@ void main() {
         ),
       );
 
-      tester
-          .state<_TestScreenWithMixinState>(find.byType(_TestScreenWithMixin))
-          .markScreenLoaded();
+      final state = tester.state<_TestScreenWithMixinState>(
+        find.byType(_TestScreenWithMixin),
+      );
+      state.now = state.now.add(const Duration(milliseconds: 750));
+      state.markScreenLoaded();
 
       verify(
+        () => mockTrace.putMetric(PerformanceMetrics.screenLoadTime, 750),
+      ).called(1);
+      verifyNever(
         () => mockTrace.putMetric(PerformanceMetrics.screenLoadTime, 1),
+      );
+    });
+
+    testWidgets('a second screen measures its own load time', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: _TestScreenWithMixin(
+            performanceService: mockPerformanceService,
+          ),
+        ),
+      );
+
+      final state = tester.state<_TestScreenWithMixinState>(
+        find.byType(_TestScreenWithMixin),
+      );
+      state.now = state.now.add(const Duration(milliseconds: 42));
+      state.markScreenLoaded();
+
+      verify(
+        () => mockTrace.putMetric(PerformanceMetrics.screenLoadTime, 42),
       ).called(1);
     });
 
@@ -325,6 +351,13 @@ class _TestScreenWithMixin extends StatefulWidget {
 
 class _TestScreenWithMixinState extends State<_TestScreenWithMixin>
     with PerformanceScreenMixin {
+  /// The injected clock's current time; a test advances it.
+  DateTime now = DateTime.utc(2026);
+
+  @override
+  DateTime Function() get performanceClock =>
+      () => now;
+
   @override
   IPerformanceService? get performanceService => widget.performanceService;
 
