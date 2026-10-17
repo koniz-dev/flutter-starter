@@ -189,4 +189,54 @@ final realProvider = Provider<int>((ref) => 1);
       },
     );
   });
+
+  // koniz-dev/flutter-starter#554: a directive can name `Type.member`.
+  group('declaresMember', () {
+    final userModel = File(
+      'lib/features/auth/data/models/user_model.dart',
+    ).readAsStringSync();
+
+    test('criterion 2: UserModel.fromJson and UserModel.toJson resolve', () {
+      expect(declaresMember(userModel, 'UserModel', 'fromJson'), isTrue);
+      expect(declaresMember(userModel, 'UserModel', 'toJson'), isTrue);
+    });
+
+    test('criterion 2: UserModel.toEntity does not', () {
+      expect(declaresMember(userModel, 'UserModel', 'toEntity'), isFalse);
+    });
+
+    test('reads each member form, at the type body top level only', () {
+      const source = '''
+class Box {
+  Box(this.size);
+  Box.empty() : size = 0;
+  factory Box.of(int n) => Box(n);
+  final int size;
+  static const max = 9;
+  int get area => size * size;
+  set label(String v) {}
+  void grow() {
+    shrink();
+  }
+}
+''';
+      for (final member in const [
+        'empty',
+        'of',
+        'size',
+        'max',
+        'area',
+        'label',
+        'grow',
+      ]) {
+        expect(declaresMember(source, 'Box', member), isTrue, reason: member);
+      }
+      expect(
+        declaresMember(source, 'Box', 'shrink'),
+        isFalse,
+        reason: 'a call inside a method body is not a declaration',
+      );
+      expect(declaresMember(source, 'Crate', 'size'), isFalse);
+    });
+  });
 }
