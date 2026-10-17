@@ -25,6 +25,14 @@ const Map<String, String> _knownUnread = {
   'appBuildNumber': '#467',
 };
 
+/// Knobs whose only readers live in a sample feature that
+/// `tool/strip_sample_features.dart` can delete. In a tree stripped of that
+/// feature the knob is legitimately unread, so it is not scanned there - the
+/// same rule `enable_toggles_have_readers_test.dart` applies.
+const Map<String, String> _readOnlyByStrippableFeature = {
+  'enableDebugFeatures': 'lib/features/feature_flags',
+};
+
 /// Every `static <Type> get <name>` declared on AppConfig.
 final RegExp _getter = RegExp(r'static\s+[\w<>?, ]+\s+get\s+(\w+)\s*(?:=>|\{)');
 
@@ -60,6 +68,11 @@ void main() {
   bool isRead(String name) =>
       RegExp('AppConfig\\.$name\\b').hasMatch(consumers);
 
+  bool readerStripped(String name) {
+    final feature = _readOnlyByStrippableFeature[name];
+    return feature != null && !Directory(feature).existsSync();
+  }
+
   test('the scan sees the environment-backed getters', () {
     // Guards the parsing: if the declaration style changes, this fails
     // instead of the scans below passing vacuously.
@@ -70,7 +83,10 @@ void main() {
   test('every AppConfig knob is read outside lib/core/config/', () {
     final unread = [
       for (final name in knobs.toList()..sort())
-        if (!isRead(name) && !_knownUnread.containsKey(name)) name,
+        if (!isRead(name) &&
+            !_knownUnread.containsKey(name) &&
+            !readerStripped(name))
+          name,
     ];
 
     expect(
