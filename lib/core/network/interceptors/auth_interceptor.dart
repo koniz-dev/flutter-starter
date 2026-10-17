@@ -11,6 +11,7 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
 import 'package:flutter_starter/core/network/request_body_replay.dart';
@@ -211,13 +212,17 @@ class AuthInterceptor extends Interceptor {
       dio.httpClientAdapter = SharedTransportAdapter(
         () => host.httpClientAdapter,
       );
-      // And the host's performance tracing. A successful replay is resolved
-      // from onError, which in dio ends the host chain: no interceptor there
-      // sees the replay's response, so without this the request's trace
-      // either recorded the 401 or was never stopped
-      // (koniz-dev/flutter-starter#298).
+      // And the host's logging and performance tracing, in the host's
+      // order. A successful replay is resolved from onError, which in dio
+      // ends the host chain: no interceptor there sees the replay's
+      // response, so without these the replayed response was never logged
+      // (koniz-dev/flutter-starter#477) and the request's trace recorded the
+      // 401 or was never stopped (#298). ApiLoggingInterceptor redacts the
+      // replay's fresh Authorization header like any other.
       dio.interceptors.addAll(
-        host.interceptors.whereType<PerformanceInterceptor>(),
+        host.interceptors.where(
+          (i) => i is ApiLoggingInterceptor || i is PerformanceInterceptor,
+        ),
       );
     } else {
       // Not attached to a client (standalone use): pin the replay directly.
