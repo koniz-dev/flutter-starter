@@ -275,17 +275,11 @@ class AppConfig {
   // Additional Configuration
   // ==========================================================================
 
-  /// App version (from pubspec.yaml or environment)
-  ///
-  /// Can be set via .env: `APP_VERSION=1.0.0`
-  static String get appVersion =>
-      EnvConfig.get('APP_VERSION', defaultValue: '1.0.0');
-
-  /// App build number
-  ///
-  /// Can be set via .env: `APP_BUILD_NUMBER=1`
-  static String get appBuildNumber =>
-      EnvConfig.get('APP_BUILD_NUMBER', defaultValue: '1');
+  // No app version or build number here: they are not configuration. They
+  // come from pubspec.yaml's `version:`, which the build stamps into the
+  // platform bundle; read them from the platform at runtime. The
+  // APP_VERSION / APP_BUILD_NUMBER keys this class used to parse were read
+  // by nothing (koniz-dev/flutter-starter#467).
 
   /// Enable HTTP request/response logging
   ///
@@ -352,10 +346,6 @@ class AppConfig {
       debugPrint('  Performance Monitoring: $enablePerformanceMonitoring');
       debugPrint('  Debug Features: $enableDebugFeatures');
       debugPrint('  HTTP Logging: $enableHttpLogging');
-      debugPrint('');
-      debugPrint('📦 App Info:');
-      debugPrint('  Version: $appVersion');
-      debugPrint('  Build Number: $appBuildNumber');
       debugPrint('═══════════════════════════════════════════════════════════');
     }
   }
@@ -389,8 +379,6 @@ class AppConfig {
       'enablePerformanceMonitoring': enablePerformanceMonitoring,
       'enableDebugFeatures': enableDebugFeatures,
       'enableHttpLogging': enableHttpLogging,
-      'appVersion': appVersion,
-      'appBuildNumber': appBuildNumber,
       'envConfigInitialized': EnvConfig.isInitialized,
     };
   }
