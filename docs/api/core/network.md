@@ -74,6 +74,8 @@ ApiClient({
   IPerformanceService? performanceService,
   SslPinning? sslPinning,
   CacheConfig? cacheConfig,
+  @visibleForTesting Duration? retryInitialDelay,
+  @visibleForTesting Duration? retryMaxJitter,
 });
 ```
 
@@ -86,6 +88,7 @@ ApiClient({
 | `performanceService` | no | **Passing it is what installs `PerformanceInterceptor`.** Omit it and no HTTP trace is ever started |
 | `cacheConfig` | no | `CacheInterceptor`'s freshness policy (`maxAge`, `maxStale`, `enableCache`); defaults to `CacheConfig()` |
 | `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` . **Ignored on Flutter web**, where the browser owns TLS: `createAdapter()` returns `null` and Dio keeps its browser transport (koniz-dev/flutter-starter#307) |
+| `retryInitialDelay`, `retryMaxJitter` | no | Test-only overrides of `RetryInterceptor`'s backoff (defaults 1s and 500ms). Pass `Duration.zero` for both so a test that walks the retry path does not sleep through it (koniz-dev/flutter-starter#577) |
 
 The two optional services are installed conditionally in `ApiClient._createDio`
 (`if (loggingService != null)` / `if (performanceService != null)`), so their
@@ -736,6 +739,7 @@ RetryInterceptor({
   this.loggingService,
   this.maxRetries = 3,
   this.initialExecutionDelay = const Duration(seconds: 1),
+  this.maxJitter = const Duration(milliseconds: 500),
 });
 ```
 
@@ -745,10 +749,11 @@ RetryInterceptor({
 |---|---|
 | Methods retried | `GET`, `HEAD`, `OPTIONS` only |
 | Attempts | 1 original + `maxRetries` replays, `maxRetries = 3` |
-| Backoff | `initialExecutionDelay` (1s) doubled per attempt, plus 0-500ms jitter, so roughly 1s, 2s, 4s |
+| Backoff | `initialExecutionDelay` (1s) doubled per attempt, plus jitter in `[0, maxJitter)` (500ms), so roughly 1s, 2s, 4s |
 | Error types retried | `connectionTimeout`, `sendTimeout`, `receiveTimeout`, `connectionError`, and any `badResponse` with a 5xx status |
 
-`ApiClient._createDio` constructs the interceptor with these defaults.
+`ApiClient._createDio` constructs the interceptor with these defaults, unless
+a test passes `retryInitialDelay` / `retryMaxJitter`.
 
 ### Which methods are retried, and why
 

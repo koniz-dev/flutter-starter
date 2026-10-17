@@ -71,6 +71,9 @@ dev_dependencies:
   # Code Generation - Build system for generating code from annotations
   build_runner: ^2.10.3
 
+  # Testing - drives timers on a virtual clock (already pinned by flutter_test)
+  fake_async: ^1.3.3
+
   # Branding & UI configuration tools
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.1
