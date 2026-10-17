@@ -14,6 +14,8 @@ import 'package:flutter_test/flutter_test.dart';
 const _files = [
   'docs/guides/onboarding/getting-started.md',
   'docs/guides/configuration.md',
+  // The BASE_URL comment (koniz-dev/flutter-starter#493).
+  '.env.example',
 ];
 
 void main() {
