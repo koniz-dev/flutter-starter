@@ -36,7 +36,7 @@ jobs:
       # fetch-depth: 0 because the check walks base..head. A shallow clone has
       # neither end of that range.
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 

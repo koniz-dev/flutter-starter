@@ -40,7 +40,7 @@ jobs:
       # has neither end of that range. Costs a second or two on this repository
       # and is what keeps the skip decision honest.
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 

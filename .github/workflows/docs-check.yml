@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # `tool/check_docs.dart` imports only `dart:io`, but it lives inside a
       # package, so `dart run` still resolves `pubspec.yaml` and would trigger
