@@ -1,0 +1,4 @@
+# mutants against main's api_client_test.dart ALONE (the issue's first reproduction)
+SURVIVED  _send throws UnimplementedError first
+SURVIVED  put() sends NetworkMethod.patch
+SURVIVED  delete() sends NetworkMethod.post

@@ -1,0 +1,4 @@
+# mutants with the #369 api_client_test.dart ALONE
+KILLED    _send throws UnimplementedError first
+KILLED    put() sends NetworkMethod.patch
+KILLED    delete() sends NetworkMethod.post
