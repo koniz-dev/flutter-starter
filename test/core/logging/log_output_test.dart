@@ -733,37 +733,33 @@ void main() {
         },
       );
 
-      test(
-        'should handle rotation when maxFiles is 1',
-        () async {
-          // Arrange
-          final fileLogOutput = FileLogOutput(
-            fileName: 'test.log',
-            maxFileSize: 100,
-            maxFiles: 1,
+      test('should handle rotation when maxFiles is 1', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 100,
+          maxFiles: 1,
+        );
+        addTearDown(fileLogOutput.destroy);
+        await fileLogOutput.init();
+
+        // Act - Write enough to trigger rotation
+        for (var i = 0; i < 20; i++) {
+          final logEvent = LogEvent(
+            Level.info,
+            'Long message to trigger rotation',
           );
-          addTearDown(fileLogOutput.destroy);
-          await fileLogOutput.init();
+          fileLogOutput.output(
+            OutputEvent(logEvent, ['Long message to trigger rotation']),
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 1000));
 
-          // Act - Write enough to trigger rotation
-          for (var i = 0; i < 20; i++) {
-            final logEvent = LogEvent(
-              Level.info,
-              'Long message to trigger rotation',
-            );
-            fileLogOutput.output(
-              OutputEvent(logEvent, ['Long message to trigger rotation']),
-            );
-          }
-          await Future<void>.delayed(const Duration(milliseconds: 1000));
-
-          // Assert
-          final logFiles = await fileLogOutput.getLogFiles();
-          expect(logFiles.length, lessThanOrEqualTo(1));
-          await fileLogOutput.destroy();
-        },
-        skip: 'keeps maxFiles + 1 files (koniz-dev/flutter-starter#589)',
-      );
+        // Assert
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(1));
+        await fileLogOutput.destroy();
+      });
 
       test('should handle output with empty lines list', () async {
         // Arrange
@@ -863,39 +859,35 @@ void main() {
         await fileLogOutput.destroy();
       });
 
-      test(
-        'should handle multiple rotations in sequence',
-        () async {
-          // Arrange
-          final fileLogOutput = FileLogOutput(
-            fileName: 'test.log',
-            maxFileSize: 100,
-            maxFiles: 2,
-          );
-          addTearDown(fileLogOutput.destroy);
-          await fileLogOutput.init();
+      test('should handle multiple rotations in sequence', () async {
+        // Arrange
+        final fileLogOutput = FileLogOutput(
+          fileName: 'test.log',
+          maxFileSize: 100,
+          maxFiles: 2,
+        );
+        addTearDown(fileLogOutput.destroy);
+        await fileLogOutput.init();
 
-          // Act - Trigger multiple rotations
-          for (var rotation = 0; rotation < 3; rotation++) {
-            for (var i = 0; i < 15; i++) {
-              final logEvent = LogEvent(
-                Level.info,
-                'Rotation $rotation message $i',
-              );
-              fileLogOutput.output(
-                OutputEvent(logEvent, ['Rotation $rotation message $i']),
-              );
-            }
-            await Future<void>.delayed(const Duration(milliseconds: 500));
+        // Act - Trigger multiple rotations
+        for (var rotation = 0; rotation < 3; rotation++) {
+          for (var i = 0; i < 15; i++) {
+            final logEvent = LogEvent(
+              Level.info,
+              'Rotation $rotation message $i',
+            );
+            fileLogOutput.output(
+              OutputEvent(logEvent, ['Rotation $rotation message $i']),
+            );
           }
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+        }
 
-          // Assert
-          final logFiles = await fileLogOutput.getLogFiles();
-          expect(logFiles.length, lessThanOrEqualTo(2));
-          await fileLogOutput.destroy();
-        },
-        skip: 'keeps maxFiles + 1 files (koniz-dev/flutter-starter#589)',
-      );
+        // Assert
+        final logFiles = await fileLogOutput.getLogFiles();
+        expect(logFiles.length, lessThanOrEqualTo(2));
+        await fileLogOutput.destroy();
+      });
 
       test('should handle output with multiple lines', () async {
         // Arrange
@@ -1356,7 +1348,6 @@ void main() {
           expect(logFiles.length, lessThanOrEqualTo(2));
           await fileLogOutput.destroy();
         },
-        skip: 'keeps maxFiles + 1 files (koniz-dev/flutter-starter#589)',
       );
 
       test('should rename current log to .1 during rotation', () async {
@@ -1672,8 +1663,15 @@ void main() {
       test(
         'a log emitted during rotation does not throw, and is kept',
         () async {
-          // Arrange - a tiny maxFileSize so a write crosses the threshold.
-          final output = FileLogOutput(fileName: 'rotate.log', maxFileSize: 64);
+          // Arrange - a tiny maxFileSize so a write crosses the threshold,
+          // and enough generations that retention never drops a line: this
+          // test is about the rotation window, not the cap
+          // (koniz-dev/flutter-starter#589).
+          final output = FileLogOutput(
+            fileName: 'rotate.log',
+            maxFileSize: 64,
+            maxFiles: 50,
+          );
           addTearDown(output.destroy);
           await output.init();
 
