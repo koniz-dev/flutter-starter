@@ -25,8 +25,8 @@ class MigrationExecutor {
   ///
   /// [storage] - The storage service to migrate
   /// [loggingService] - Service for logging migration activities
-  /// [migrations] - List of migrations to execute
-  /// (should be ordered by version)
+  /// [migrations] - List of migrations to execute, in any order: each step
+  /// is found by its `fromVersion`, so list order never decides what runs
   ///
   /// [targetVersion] defaults to [StorageVersion.current] and exists so tests
   /// can exercise chains longer than the one this build ships.
@@ -35,11 +35,7 @@ class MigrationExecutor {
     required this.loggingService,
     required this.migrations,
     this.targetVersion = StorageVersion.current,
-  }) {
-    // Sort migrations by fromVersion to ensure correct execution order
-    _sortedMigrations = List<StorageMigration>.from(migrations)
-      ..sort((a, b) => a.fromVersion.compareTo(b.fromVersion));
-  }
+  });
 
   /// The storage service to migrate
   final IStorageService storage;
@@ -52,9 +48,6 @@ class MigrationExecutor {
 
   /// Version the storage must end up at
   final int targetVersion;
-
-  /// Sorted list of migrations (by fromVersion)
-  late final List<StorageMigration> _sortedMigrations;
 
   /// Execute all applicable migrations
   ///
@@ -73,7 +66,7 @@ class MigrationExecutor {
       context: {
         'current_version': currentVersion,
         'target_version': targetVersion,
-        'migrations_count': _sortedMigrations.length,
+        'migrations_count': migrations.length,
       },
     );
 
@@ -333,7 +326,10 @@ class MigrationExecutor {
 
   /// The first registered migration starting at [fromVersion], or null.
   StorageMigration? _migrationFrom(int fromVersion) {
-    for (final migration in _sortedMigrations) {
+    // Order comes from this lookup, not from the list: `_planMigrations`
+    // asks for the step that starts at each version in turn
+    // (koniz-dev/flutter-starter#565).
+    for (final migration in migrations) {
       if (migration.fromVersion == fromVersion &&
           migration.toVersion > fromVersion) {
         return migration;
