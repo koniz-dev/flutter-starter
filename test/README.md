@@ -2,17 +2,19 @@
 
 This directory contains the comprehensive test suite for the Flutter Starter project.
 
-> 📖 **Testing docs:** [Testing summary](../../docs/guides/testing/testing-summary.md) · [Testing guide](../../docs/guides/testing/guide.md)
+> 📖 **Testing docs:** [Testing summary](../docs/guides/testing/testing-summary.md) · [Testing guide](../docs/guides/testing/guide.md)
 
 ## Structure
 
 ```
 test/
-├── helpers/          # Test utilities and helpers
+├── acceptance/       # Golden-tagged acceptance tests (see run_acceptance.sh)
 ├── core/             # Core layer tests
+├── docs/             # Checks that the documentation matches the code
 ├── features/         # Feature layer tests (auth, home, tasks, feature_flags, …)
+├── helpers/          # Test utilities and helpers
 ├── shared/           # Shared widgets, theme, extensions
-└── integration/      # In-repo integration tests (not Patrol — see integration_test/)
+└── tooling/          # Checks on scripts, workflows and repository tooling
 ```
 
 Patrol E2E lives in [`integration_test/`](../integration_test/README.md).
@@ -81,7 +83,7 @@ Widget testing helpers:
 
 ## Coverage Goals
 
-Aligned with [coverage workflow gates](../../.github/workflows/coverage.yml) (see [testing-summary](../../docs/guides/testing/testing-summary.md)):
+Aligned with [coverage workflow gates](../.github/workflows/coverage.yml) (see [testing-summary](../docs/guides/testing/testing-summary.md)):
 
 - **Domain:** 100%
 - **Data:** 90%+
