@@ -14,13 +14,22 @@
 // `flutter analyze` red. The file skips when there is no brick, and when the
 // setup brick has already renamed the package - that rename rewrites this
 // file's own `package:` literals, so nothing is left to check.
+//
+// The subprocess cold-compiles the hook and `package:mason`, which takes tens
+// of seconds on a loaded machine, so it runs exactly once, in `setUpAll`, and
+// every test inspects that one result (koniz-dev/flutter-starter#446). The
+// file-level timeout covers that one cold compile.
+@Timeout(Duration(minutes: 3))
+library;
 
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
 const _old = 'package:flutter_starter/';
+const _new = 'package:acme_shop/';
 const _hookPath = 'bricks/flutter_starter_setup/hooks/post_gen.dart';
+final _tags = RegExp(r'\{\{[^}]+\}\}');
 
 String? _skipReason() {
   if (!File(_hookPath).existsSync() ||
@@ -35,34 +44,11 @@ String? _skipReason() {
   return null;
 }
 
-/// Runs the hook's `rewriteFeatureBrickImports(root, packageName)` in a
-/// subprocess and returns its result.
-Future<int> _rewrite(String root, String packageName) async {
-  final hook = File(_hookPath).absolute.uri;
-  final script = File('$root/run_hook.dart')
-    ..writeAsStringSync(
-      "import '$hook' as hook;\n"
-      'Future<void> main(List<String> args) async =>\n'
-      '    print(await hook.rewriteFeatureBrickImports(args[0], args[1]));\n',
-    );
-  final packages = File('.dart_tool/package_config.json').absolute.path;
-  final result = await Process.run('dart', [
-    '--packages=$packages',
-    script.path,
-    root,
-    packageName,
-  ]);
-  expect(result.exitCode, 0, reason: '${result.stdout}\n${result.stderr}');
-  return int.parse((result.stdout as String).trim());
-}
-
-List<File> _files(Directory dir) => dir
-    .listSync(recursive: true)
-    .whereType<File>()
-    .where((f) => !f.path.endsWith('run_hook.dart'))
-    .toList();
-
-int _sum(int a, int b) => a + b;
+/// Files under [dir], keyed by their path relative to it.
+Map<String, String> _contents(Directory dir) => {
+  for (final f in dir.listSync(recursive: true).whereType<File>())
+    f.path.substring(dir.path.length + 1): f.readAsStringSync(),
+};
 
 void main() {
   final skip = _skipReason();
@@ -72,68 +58,76 @@ void main() {
   }
 
   late Directory root;
-  late Directory brick;
+  late Map<String, String> before;
+  late Map<String, String> after;
+  late int rewritten;
 
-  setUp(() {
+  setUpAll(() async {
     root = Directory.systemTemp.createTempSync('setup_brick_rename_');
-    brick = Directory('${root.path}/bricks/feature_clean')
-      ..createSync(recursive: true);
-    for (final file in _files(Directory('bricks/feature_clean'))) {
-      final relative = file.path.substring('bricks/feature_clean/'.length);
+    final source = Directory('bricks/feature_clean');
+    before = _contents(source);
+    final brick = Directory('${root.path}/bricks/feature_clean');
+    before.forEach((relative, text) {
       File('${brick.path}/$relative')
         ..createSync(recursive: true)
-        ..writeAsBytesSync(file.readAsBytesSync());
+        ..writeAsStringSync(text);
+    });
+
+    final hook = File(_hookPath).absolute.uri;
+    final script = File('${root.path}/run_hook.dart')
+      ..writeAsStringSync(
+        "import '$hook' as hook;\n"
+        'Future<void> main(List<String> args) async =>\n'
+        '    print(await hook.rewriteFeatureBrickImports(args[0], args[1]));\n',
+      );
+    final packages = File('.dart_tool/package_config.json').absolute.path;
+    final result = await Process.run('dart', [
+      '--packages=$packages',
+      script.path,
+      root.path,
+      'acme_shop',
+    ]);
+    final stdout = (result.stdout as String).trim();
+    final parsed = int.tryParse(stdout);
+    if (result.exitCode != 0 || parsed == null) {
+      fail(
+        'hook subprocess failed: exit ${result.exitCode}\n'
+        'stdout: $stdout\nstderr: ${result.stderr}',
+      );
     }
+    rewritten = parsed;
+    after = _contents(brick);
   });
 
-  tearDown(() => root.deleteSync(recursive: true));
+  tearDownAll(() {
+    if (root.existsSync()) root.deleteSync(recursive: true);
+  });
 
   test('the feature_clean templates import the template package today', () {
     // Guards the test against passing vacuously if the brick changes shape.
-    final carrying = _files(
-      brick,
-    ).where((f) => f.readAsStringSync().contains(_old));
-    expect(carrying, isNotEmpty);
+    expect(before.values.where((t) => t.contains(_old)), isNotEmpty);
   });
 
   test('criterion 1-2: the rewrite leaves no package:flutter_starter/ under '
-      'bricks/feature_clean', () async {
-    final before = _files(
-      brick,
-    ).where((f) => f.readAsStringSync().contains(_old)).length;
-
-    final rewritten = await _rewrite(root.path, 'acme_shop');
-
-    expect(rewritten, before);
-    final leftovers = [
-      for (final f in _files(brick))
-        if (f.readAsStringSync().contains(_old)) f.path,
-    ];
-    expect(leftovers, isEmpty);
-    expect(
-      _files(
-        brick,
-      ).where((f) => f.readAsStringSync().contains('package:acme_shop/')),
-      hasLength(before),
-    );
+      'bricks/feature_clean', () {
+    final carrying = before.values.where((t) => t.contains(_old)).length;
+    expect(rewritten, carrying);
+    expect([
+      for (final e in after.entries)
+        if (e.value.contains(_old)) e.key,
+    ], isEmpty);
+    expect(after.values.where((t) => t.contains(_new)), hasLength(carrying));
   });
 
-  test('mustache tags and filenames survive the rewrite', () async {
-    final names = _files(brick).map((f) => f.path).toSet();
-    final tags = RegExp(r'\{\{[^}]+\}\}');
-    final tagCount = _files(
-      brick,
-    ).map((f) => tags.allMatches(f.readAsStringSync()).length).fold(0, _sum);
-
-    await _rewrite(root.path, 'acme_shop');
-
-    expect(_files(brick).map((f) => f.path).toSet(), names);
-    expect(
-      _files(
-        brick,
-      ).map((f) => tags.allMatches(f.readAsStringSync()).length).fold(0, _sum),
-      tagCount,
-    );
+  test('mustache tags and filenames survive the rewrite', () {
+    expect(after.keys.toSet(), before.keys.toSet());
+    for (final relative in before.keys) {
+      expect(
+        _tags.allMatches(after[relative]!).length,
+        _tags.allMatches(before[relative]!).length,
+        reason: relative,
+      );
+    }
   });
 
   test('the setup hook calls the rewrite when it renames the package', () {
