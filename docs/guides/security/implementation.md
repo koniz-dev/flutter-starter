@@ -200,10 +200,12 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          # Floating stable, as this repository's own workflows do: a pinned
+          # version can fall below pubspec.yaml's `sdk:` constraint.
+          channel: 'stable'
       
       - name: Build APK
         run: |
@@ -215,14 +217,14 @@ jobs:
             --dart-define=API_SSL_FINGERPRINTS="${{ secrets.API_SSL_FINGERPRINTS }}"
       
       - name: Upload Debug Info
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: debug-info
           path: build/debug-info/
           retention-days: 365
       
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk

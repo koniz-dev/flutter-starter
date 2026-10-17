@@ -1,0 +1,14 @@
+# test/docs/doc_workflow_examples_test.dart against main's docs/guides/security/implementation.md
+              'docs/guides/security/implementation.md:203: actions/checkout@v3, workflows use v7',
+              'docs/guides/security/implementation.md:218: actions/upload-artifact@v3, workflows use v7',
+              'docs/guides/security/implementation.md:225: actions/upload-artifact@v3, workflows use v7'
+    Actual: ['docs/guides/security/implementation.md:206: flutter-version: \'3.24.0\'']
+  docs/guides/security/implementation.md:203: actions/checkout@v3, workflows use v7
+  docs/guides/security/implementation.md:206: flutter-version: '3.24.0'
+  docs/guides/security/implementation.md:218: actions/upload-artifact@v3, workflows use v7
+  docs/guides/security/implementation.md:225: actions/upload-artifact@v3, workflows use v7
+00:00 +0 -1: criterion 1: documented actions use the majors the workflows use [E]
+00:00 +0 -1: criterion 1: no documented workflow pins flutter-version
+00:00 +0 -2: Some tests failed.
+00:00 +0 -2: criterion 1: no documented workflow pins flutter-version [E]
+00:00 +0: criterion 1: documented actions use the majors the workflows use
