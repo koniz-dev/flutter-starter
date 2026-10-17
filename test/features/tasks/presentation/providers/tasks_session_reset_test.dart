@@ -23,6 +23,7 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
 import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../helpers/in_memory_stores.dart';
 
@@ -87,7 +88,9 @@ class _GatedStorage extends InMemoryStorage {
 }
 
 /// What the app router does at startup: build the tasks routes.
-final _tasksRoutesProvider = Provider((ref) => buildTasksRoutes(ref));
+final Provider<List<RouteBase>> _tasksRoutesProvider = Provider(
+  buildTasksRoutes,
+);
 
 void main() {
   late _GatedStorage storage;
@@ -95,6 +98,7 @@ void main() {
 
   setUp(() {
     storage = _GatedStorage();
+    // Startup: the router builds the tasks routes before anyone signs in.
     container = ProviderContainer(
       overrides: [
         ...authModuleOverrides,
@@ -102,9 +106,7 @@ void main() {
         tokenStoreProvider.overrideWithValue(InMemoryTokenStore()),
         authRemoteDataSourceProvider.overrideWithValue(_Remote()),
       ],
-    );
-    // Startup: the router builds the tasks routes before anyone signs in.
-    container.read(_tasksRoutesProvider);
+    )..read(_tasksRoutesProvider);
   });
 
   tearDown(() => container.dispose());
@@ -197,7 +199,7 @@ void main() {
     expect(await tasksSeenByNextUser(), isEmpty);
   });
 
-  test('a list on screen during the logout does not reload A\'s tasks while '
+  test("a list on screen during the logout does not reload A's tasks while "
       'the stored blob is still being deleted', () async {
     await userACreatesATask();
     // The list screen is open, so a rebuilt notifier reloads at once.
