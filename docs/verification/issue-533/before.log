@@ -1,0 +1,25 @@
+# generator_probe.sh run from a checkout of origin/main, with #515's guard
+=== sh: lib/features/profile/presentation/screens/profile_screen.dart
+18:      appBar: AppBar(title: const Text('Profile')),
+22:          data: (entity) => Text(entity?.id ?? 'Not loaded'),
+24:          error: (error, _) => Text('Error: $error'),
+--- flutter analyze lib/features/profile
+No issues found! (ran in 3.0s)
+--- text_literal_guard_test.dart
+  lib/features/profile/presentation/screens/profile_screen.dart:18: Text('Profile…
+  lib/features/profile/presentation/screens/profile_screen.dart:24: Text('Error: $error…
+00:00 +6 -1: Some tests failed.
+
+=== mason: lib/features/profile/presentation/screens/profile_screen.dart
+18:      appBar: AppBar(title: const Text('Profile')),
+22:          data: (entity) => Text(entity?.id ?? 'Not loaded'),
+24:          error: (error, _) => Text('Error: $error'),
+--- flutter analyze lib/features/profile
+No issues found! (ran in 2.3s)
+--- text_literal_guard_test.dart
+  lib/features/profile/presentation/screens/profile_screen.dart:18: Text('Profile…
+  lib/features/profile/presentation/screens/profile_screen.dart:24: Text('Error: $error…
+00:00 +6 -1: Some tests failed.
+
+=== diff create_feature.sh vs feature_clean screen (empty = identical)
+(identical)
