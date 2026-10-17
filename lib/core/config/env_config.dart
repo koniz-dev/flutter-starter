@@ -37,9 +37,8 @@ class EnvConfig {
   /// release build and over HTTP on web, which `tool/check_env_assets.dart`
   /// refuses. Pass `.env` as a build input instead:
   /// `--dart-define-from-file=.env`, the second step of the fallback chain
-  /// on [EnvConfig]. See "Never
-  /// ship a secret in the bundle" in `docs/guides/configuration.md`
-  /// (koniz-dev/flutter-starter#546).
+  /// on [EnvConfig]. See "Never ship a secret in the bundle" in
+  /// `docs/guides/configuration.md` (koniz-dev/flutter-starter#546).
   ///
   /// Example:
   /// ```dart
