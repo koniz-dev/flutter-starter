@@ -9,6 +9,7 @@ import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'in_memory_stores.dart';
 import 'pump_app.dart';
 import 'test_fixtures.dart';
 import 'test_helpers.dart';
@@ -58,6 +59,22 @@ void main() {
     test('expectResultFailure passes on that failure', () {
       const failure = ServerFailure('boom');
       expectResultFailure(const ResultFailure<int>(failure), failure);
+    });
+  });
+
+  group('in-memory stores', () {
+    test('InMemoryKeyValueStore round-trips, removes and clears', () async {
+      final store = InMemoryKeyValueStore();
+
+      expect(await store.setString('k', 'v'), isTrue);
+      expect(await store.getString('k'), 'v');
+      expect(await store.containsKey('k'), isTrue);
+      expect(await store.remove('k'), isTrue);
+      expect(await store.getString('k'), isNull);
+
+      await store.setString('a', '1');
+      await store.clear();
+      expect(await store.containsKey('a'), isFalse);
     });
   });
 
