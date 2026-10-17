@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
@@ -21,8 +22,16 @@ abstract class AuthState with _$AuthState {
     /// Whether an authentication operation is in progress
     @Default(false) bool isLoading,
 
-    /// Error message if authentication failed, null otherwise
+    /// Error message if authentication failed, null otherwise.
+    ///
+    /// This is [Failure.message]: English text built for logs, not for
+    /// people. Screens render [failure] through `localizedMessage` instead
+    /// (koniz-dev/flutter-starter#414).
     String? error,
+
+    /// The failure behind [error], kept so a screen can show it in the
+    /// user's language.
+    Failure? failure,
   }) = _AuthState;
 }
 
@@ -43,6 +52,11 @@ class RiverpodAuthStateSnapshot implements AuthStateSnapshot {
   bool get isAuthenticated => _state.user != null;
 }
 
+/// What a use case that threw (instead of returning a `Result`) reports.
+const _unexpectedFailure = UnknownFailure(
+  'Something went wrong. Please try again.',
+);
+
 /// Authentication provider (Riverpod 3.0 - using Notifier)
 @Riverpod(keepAlive: true)
 class AuthNotifier extends _$AuthNotifier implements IAuthController {
@@ -55,7 +69,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// Attempts to login with the given [email] and [password]
   @override
   Future<void> login(String email, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, failure: null);
 
     final loginUseCase = ref.read(loginUseCaseProvider);
     final Result<User> result;
@@ -67,17 +81,27 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       // (koniz-dev/flutter-starter#306).
       state = state.copyWith(
         isLoading: false,
-        error: 'Something went wrong. Please try again.',
+        error: _unexpectedFailure.message,
+        failure: _unexpectedFailure,
       );
       return;
     }
 
     result.when(
       success: (user) {
-        state = state.copyWith(user: user, isLoading: false, error: null);
+        state = state.copyWith(
+          user: user,
+          isLoading: false,
+          error: null,
+          failure: null,
+        );
       },
       failureCallback: (failure) {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
   }
@@ -85,7 +109,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// Attempts to register a new user with [email], [password], and [name]
   @override
   Future<void> register(String email, String password, String name) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, failure: null);
 
     final registerUseCase = ref.read(registerUseCaseProvider);
     final Result<User> result;
@@ -97,17 +121,27 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       // (koniz-dev/flutter-starter#306).
       state = state.copyWith(
         isLoading: false,
-        error: 'Something went wrong. Please try again.',
+        error: _unexpectedFailure.message,
+        failure: _unexpectedFailure,
       );
       return;
     }
 
     result.when(
       success: (user) {
-        state = state.copyWith(user: user, isLoading: false, error: null);
+        state = state.copyWith(
+          user: user,
+          isLoading: false,
+          error: null,
+          failure: null,
+        );
       },
       failureCallback: (failure) {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
   }
@@ -122,7 +156,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// surfaced, so the user learns the server was not reached.
   @override
   Future<void> logout() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, failure: null);
 
     final logoutUseCase = ref.read(logoutUseCaseProvider);
     final result = await logoutUseCase();
@@ -132,7 +166,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
         state = const AuthState();
       },
       failureCallback: (failure) {
-        state = AuthState(error: failure.message);
+        state = AuthState(error: failure.message, failure: failure);
       },
     );
   }
@@ -186,17 +220,26 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// Gets the current authenticated user
   @override
   Future<void> getCurrentUser() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: null, failure: null);
 
     final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
     final result = await getCurrentUserUseCase();
 
     result.when(
       success: (user) {
-        state = state.copyWith(user: user, isLoading: false, error: null);
+        state = state.copyWith(
+          user: user,
+          isLoading: false,
+          error: null,
+          failure: null,
+        );
       },
       failureCallback: (failure) {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
       },
     );
   }
@@ -257,7 +300,12 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       result.when(
         success: (user) {
           if (user != null) {
-            state = state.copyWith(user: user, isLoading: false, error: null);
+            state = state.copyWith(
+              user: user,
+              isLoading: false,
+              error: null,
+              failure: null,
+            );
           }
         },
         failureCallback: (_) {},

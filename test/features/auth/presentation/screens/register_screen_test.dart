@@ -192,7 +192,12 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // Assert
-      expect(find.text('Registration failed'), findsOneWidget);
+      // The failure's localized text, never its log message (#414).
+      expect(
+        find.text(lookupAppLocalizations(const Locale('en')).failureAuth),
+        findsOneWidget,
+      );
+      expect(find.text('Registration failed'), findsNothing);
     });
 
     testWidgets('should navigate back to login when back button is tapped', (

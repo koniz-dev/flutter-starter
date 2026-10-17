@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
+import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
@@ -119,7 +120,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Text(
-                    authState.error!,
+                    // The failure in the user's language, never the log
+                    // text in `error` (koniz-dev/flutter-starter#414).
+                    authState.failure?.localizedMessage(l10n) ??
+                        authState.error!,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.error,
                     ),

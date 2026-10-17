@@ -1,0 +1,4 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart
+00:00 +0: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+00:01 +1: RegisterScreen in vi renders it the same way
+00:02 +2: All tests passed!
