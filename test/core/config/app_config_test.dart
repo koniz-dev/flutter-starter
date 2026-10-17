@@ -115,20 +115,6 @@ void main() {
       });
     });
 
-    group('App info', () {
-      test('should have appVersion property', () {
-        // Assert
-        expect(AppConfig.appVersion, isNotEmpty);
-        expect(AppConfig.appVersion, isA<String>());
-      });
-
-      test('should have appBuildNumber property', () {
-        // Assert
-        expect(AppConfig.appBuildNumber, isNotEmpty);
-        expect(AppConfig.appBuildNumber, isA<String>());
-      });
-    });
-
     group('Debug utilities', () {
       test('should have printConfig method', () {
         // Act & Assert
@@ -144,7 +130,6 @@ void main() {
         expect(debugInfo['environment'], isA<String>());
         expect(debugInfo['baseUrl'], isA<String>());
         expect(debugInfo['enableLogging'], isA<bool>());
-        expect(debugInfo['appVersion'], isA<String>());
       });
 
       test('getDebugInfo should contain all configuration values', () {
@@ -161,7 +146,6 @@ void main() {
         expect(debugInfo.containsKey('baseUrl'), isTrue);
         expect(debugInfo.containsKey('apiTimeout'), isTrue);
         expect(debugInfo.containsKey('enableLogging'), isTrue);
-        expect(debugInfo.containsKey('appVersion'), isTrue);
       });
 
       test('getDebugInfo should contain all timeout values', () {
@@ -211,9 +195,12 @@ void main() {
         );
       });
 
-      test('getDebugInfo should contain app info', () {
+      // The version and build number are not configuration: they come from
+      // pubspec.yaml's `version:` via the platform (#467).
+      test('getDebugInfo reports no app version or build number', () {
         final debugInfo = AppConfig.getDebugInfo();
-        expect(debugInfo.containsKey('appBuildNumber'), isTrue);
+        expect(debugInfo.containsKey('appVersion'), isFalse);
+        expect(debugInfo.containsKey('appBuildNumber'), isFalse);
         expect(debugInfo.containsKey('envConfigInitialized'), isTrue);
       });
     });
@@ -322,22 +309,7 @@ void main() {
         expect(debugInfo['baseUrl'], isA<String>());
         expect(debugInfo['apiTimeout'], isA<int>());
         expect(debugInfo['enableLogging'], isA<bool>());
-        expect(debugInfo['appVersion'], isA<String>());
-        expect(debugInfo['appBuildNumber'], isA<String>());
         expect(debugInfo['envConfigInitialized'], isA<bool>());
-      });
-
-      test('appVersion should have valid format', () {
-        final version = AppConfig.appVersion;
-        expect(version, isNotEmpty);
-        // Should be in semantic version format (x.y.z or similar)
-        expect(version, matches(RegExp(r'[\d.]+')));
-      });
-
-      test('appBuildNumber should be numeric string', () {
-        final buildNumber = AppConfig.appBuildNumber;
-        expect(buildNumber, isNotEmpty);
-        expect(int.tryParse(buildNumber), isNotNull);
       });
 
       test('all timeout values should be positive', () {

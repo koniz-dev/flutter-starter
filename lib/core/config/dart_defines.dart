@@ -60,10 +60,6 @@ class DartDefines {
     ),
     'ENABLE_DEBUG_FEATURES': String.fromEnvironment('ENABLE_DEBUG_FEATURES'),
     'ENABLE_HTTP_LOGGING': String.fromEnvironment('ENABLE_HTTP_LOGGING'),
-
-    // App information
-    'APP_VERSION': String.fromEnvironment('APP_VERSION'),
-    'APP_BUILD_NUMBER': String.fromEnvironment('APP_BUILD_NUMBER'),
   };
 
   /// The value supplied for [key] via `--dart-define`, or `''`.

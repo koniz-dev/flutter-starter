@@ -20,9 +20,6 @@ const Map<String, String> _knownUnread = {
   // Documented as "Reserved, not wired" by koniz-dev/flutter-starter#319.
   'enableAnalytics': '#319',
   'enableCrashReporting': '#319',
-  // koniz-dev/flutter-starter#467.
-  'appVersion': '#467',
-  'appBuildNumber': '#467',
 };
 
 /// Knobs whose only readers live in a sample feature that
