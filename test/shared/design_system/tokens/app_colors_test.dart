@@ -52,7 +52,7 @@ void main() {
     test('Status colors hold their documented values', () {
       expect(AppColors.success, const Color(0xFF1E7E34));
       expect(AppColors.warning, const Color(0xFFFFC107));
-      expect(AppColors.error, const Color(0xFFDC3545));
+      expect(AppColors.error, const Color(0xFFC82333));
       expect(AppColors.info, const Color(0xFF117A8B));
     });
   });

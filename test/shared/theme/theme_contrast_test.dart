@@ -89,7 +89,28 @@ void main() {
       'onError on error',
       light.colorScheme.onError,
       light.colorScheme.error,
-      ratio: 4.53,
+      ratio: 5.61,
+    ),
+    // Text pairs (koniz-dev/flutter-starter#350): validation errors and the
+    // auth error render colorScheme.error as text, TextButton labels and
+    // section headers render colorScheme.primary as text.
+    _Pair(
+      'error as text on background',
+      light.colorScheme.error,
+      light.scaffoldBackgroundColor,
+      ratio: 5.32,
+    ),
+    _Pair(
+      'error as text on surface',
+      light.colorScheme.error,
+      light.colorScheme.surface,
+      ratio: 5.61,
+    ),
+    _Pair(
+      'primary as text on background',
+      light.colorScheme.primary,
+      light.scaffoldBackgroundColor,
+      ratio: 4.95,
     ),
     _Pair(
       'displayLarge on background',
@@ -152,7 +173,7 @@ void main() {
       'onPrimary on primary',
       dark.colorScheme.onPrimary,
       dark.colorScheme.primary,
-      ratio: 5.22,
+      ratio: 7.14,
     ),
     _Pair(
       'onSecondary on secondary',
@@ -170,7 +191,27 @@ void main() {
       'onError on error',
       dark.colorScheme.onError,
       dark.colorScheme.error,
-      ratio: 4.53,
+      ratio: 6.75,
+    ),
+    // Text pairs (#350). Before the fix: error 4.14 on the background and
+    // 3.68 on the surface, primary 3.59 on the background.
+    _Pair(
+      'error as text on background',
+      dark.colorScheme.error,
+      dark.scaffoldBackgroundColor,
+      ratio: 6.75,
+    ),
+    _Pair(
+      'error as text on surface',
+      dark.colorScheme.error,
+      dark.colorScheme.surface,
+      ratio: 6.01,
+    ),
+    _Pair(
+      'primary as text on background',
+      dark.colorScheme.primary,
+      dark.scaffoldBackgroundColor,
+      ratio: 7.14,
     ),
     _Pair(
       'displayLarge on background',
