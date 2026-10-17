@@ -1,0 +1,26 @@
+=== mutant: guard
+--- main's tests (test/core/storage/migration minus the new file)
+00:08 +71: All tests passed!
+--- with migration_executor_guards_test.dart
+Some tests failed.
+criterion 1: a migration that skips the version stamp fails the run [E]
+
+=== mutant: sort
+# EQUIVALENT MUTANT - cannot be killed. _planMigrations chains steps by
+# _migrationFrom(nextVersion), an exact fromVersion lookup, so list order never
+# affects which migration runs or when (a stable sort keeps duplicates in input
+# order too). The out-of-order test below passes with and without the sort
+# because the guarantee comes from the lookup. Dead sort filed as #565.
+--- main's tests (test/core/storage/migration minus the new file)
+00:06 +71: All tests passed!
+--- with migration_executor_guards_test.dart
+00:00 +4: All tests passed!
+
+=== mutant: reset
+--- main's tests (test/core/storage/migration minus the new file)
+00:06 +71: All tests passed!
+--- with migration_executor_guards_test.dart
+Some tests failed.
+criterion 3: a stored version of -1 is reset to the initial version [E]
+criterion 3: a stored version of 0 is reset to the initial version [E]
+
