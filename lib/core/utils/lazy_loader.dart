@@ -43,6 +43,13 @@ class LazyLoader<K, T> {
   /// Map of currently loading futures to prevent duplicate loads
   final Map<K, Future<T>> _loadingFutures;
 
+  /// Advanced by [clearCache]; a load that finishes under an older value
+  /// does not write to the cache.
+  int _generation = 0;
+
+  /// Keys [evict]ed while their load was in flight.
+  final Set<K> _evictedWhileLoading = <K>{};
+
   /// Load a resource by key
   ///
   /// Returns cached value if available, otherwise loads it
@@ -60,11 +67,17 @@ class LazyLoader<K, T> {
     }
 
     // Start loading
+    final generation = _generation;
+    _evictedWhileLoading.remove(key);
     final future = () async {
       try {
         final value = await _loader(key);
-        // Cache the result
-        if (cacheEnabled) {
+        // Cache the result - unless the cache was cleared, or this key
+        // evicted, while the load was in flight: writing it back would undo
+        // that (koniz-dev/flutter-starter#328).
+        final discarded =
+            generation != _generation || _evictedWhileLoading.remove(key);
+        if (cacheEnabled && !discarded) {
           _cache[key] = value;
           // Evict oldest entries if cache is full
           if (_cache.length > maxCacheSize) {
@@ -85,9 +98,14 @@ class LazyLoader<K, T> {
   }
 
   /// Preload a resource without waiting for it
+  ///
+  /// A failed preload is dropped, not left as an uncaught zone error - which
+  /// a zone that rethrows turns into a crash, and a crash reporter files as
+  /// one (koniz-dev/flutter-starter#328). Nothing is cached for the key, so a
+  /// later [load] retries and surfaces the error to a caller who awaits it.
   void preload(K key) {
     if (!_cache.containsKey(key) && !_loadingFutures.containsKey(key)) {
-      unawaited(load(key));
+      unawaited(load(key).then<void>((_) {}, onError: (Object _) {}));
     }
   }
 
@@ -96,14 +114,16 @@ class LazyLoader<K, T> {
     keys.forEach(preload);
   }
 
-  /// Clear the cache
+  /// Clear the cache, including what loads in flight would have written
   void clearCache() {
     _cache.clear();
+    _generation++;
   }
 
-  /// Remove a specific item from cache
+  /// Remove a specific item from cache, including a load in flight for it
   void evict(K key) {
     _cache.remove(key);
+    if (_loadingFutures.containsKey(key)) _evictedWhileLoading.add(key);
   }
 
   /// Get cache size
