@@ -61,24 +61,27 @@ Tests mirror the source code structure:
 
 ```
 test/
-├── helpers/                    # Test utilities
-│   ├── test_helpers.dart      # Common test helpers
-│   ├── test_fixtures.dart     # Test data factories
-│   └── pump_app.dart          # Widget test helpers
+├── acceptance/                 # Golden-tagged acceptance tests
 ├── core/                       # Core layer tests
 │   ├── config/
 │   ├── network/
 │   ├── storage/
 │   ├── utils/
 │   └── performance/
+├── docs/                       # Checks that the documentation matches the code
 ├── features/                   # Feature layer tests
 │   └── auth/
 │       ├── data/
 │       ├── domain/
 │       └── presentation/
+├── helpers/                    # Test utilities
+│   ├── test_helpers.dart      # Common test helpers
+│   ├── test_fixtures.dart     # Test data factories
+│   └── pump_app.dart          # Widget test helpers
 ├── shared/                     # Shared components tests
-└── integration/                # Integration tests
-    └── auth/
+└── tooling/                    # Checks on scripts, workflows and tooling
+
+integration_test/               # At the repository root, not under test/: Patrol E2E
 ```
 
 ## Writing Tests
