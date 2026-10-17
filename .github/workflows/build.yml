@@ -79,6 +79,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # The bundled-secrets guard, before any build: a `.env` declared as a
+      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+      # #336).
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
       # Fails, naming the version, when Gradle, AGP or Kotlin is below the
       # floor stated once in tool/check_android_toolchain.dart.
       - name: Check Gradle, AGP and Kotlin against Flutter's floor
@@ -120,6 +126,12 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      # The bundled-secrets guard, before any build: a `.env` declared as a
+      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+      # #336).
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
 
       # `flutter build apk` defaults to --release, and android/app/build.gradle.kts
       # now refuses to sign a release with the debug keystore. This job is a
@@ -195,6 +207,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # The bundled-secrets guard, before any build: a `.env` declared as a
+      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+      # #336).
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
+
       - name: Install CocoaPods
         run: |
           cd ios
@@ -231,6 +249,12 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      # The bundled-secrets guard, before any build: a `.env` declared as a
+      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+      # #336).
+      - name: Guard against a bundled secrets file
+        run: dart run tool/check_env_assets.dart
 
       - name: Build Web
         shell: bash
