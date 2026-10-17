@@ -95,38 +95,16 @@ class LocalizedFormatters {
       ).format(amount);
     }
 
-    // `name` is what makes intl apply the currency's own minor-unit count -
-    // without it every currency inherited the locale's default of 2, so JPY,
-    // KRW and VND (all zero-decimal) were formatted with cents.
-    return NumberFormat.currency(
+    // `name` makes intl apply the currency's own minor-unit count and its own
+    // symbol for the locale. A hand-written symbol table used to override
+    // the symbol and fell back to the bare ISO code for anything it lacked,
+    // so VND - the currency of the app's own vi locale - printed as
+    // `150.000 VND` instead of `150.000 ₫` (koniz-dev/flutter-starter#327).
+    return NumberFormat.simpleCurrency(
       locale: locale.toString(),
       name: currencyCode,
-      symbol: _getCurrencySymbol(currencyCode, locale),
       decimalDigits: decimalDigits,
     ).format(amount);
-  }
-
-  /// Get currency symbol for currency code
-  static String _getCurrencySymbol(String currencyCode, Locale locale) {
-    // Common currency symbols
-    const symbols = {
-      'USD': r'$',
-      'EUR': '€',
-      'GBP': '£',
-      'JPY': '¥',
-      'CNY': '¥',
-      'INR': '₹',
-      'AUD': r'A$',
-      'CAD': r'C$',
-      'CHF': 'CHF',
-      'SGD': r'S$',
-      'HKD': r'HK$',
-      'SAR': 'ر.س',
-      'AED': 'د.إ',
-      'EGP': 'E£',
-    };
-
-    return symbols[currencyCode] ?? currencyCode;
   }
 
   /// Format percentage to localized string
