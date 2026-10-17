@@ -737,42 +737,76 @@ void main() {
         );
       });
 
+      // koniz-dev/flutter-starter#377: this test used to assert nothing - it
+      // tapped back only if a back button happened to exist, and the shared
+      // single-route harness never gives it one. It now opens the detail from
+      // a list route, so Back always exists, and asserts the outcome.
       testWidgets('should handle cancel button in edit mode', (tester) async {
         // Arrange
         final task = createTask(id: 'task-1');
         when(
           () => mockGetTaskByIdUseCase(any<String>()),
         ).thenAnswer((_) async => Success(task));
+        const listMarker = Key('tasks-list-placeholder');
+        final router = GoRouter(
+          initialLocation: AppRoutes.tasks,
+          routes: [
+            GoRoute(
+              path: AppRoutes.tasks,
+              builder: (context, state) =>
+                  const Scaffold(key: listMarker, body: SizedBox()),
+            ),
+            GoRoute(
+              path: '${AppRoutes.tasks}/:id',
+              builder: (context, state) =>
+                  TaskDetailScreen(taskId: state.pathParameters['id']),
+            ),
+          ],
+        );
+        addTearDown(router.dispose);
 
         await tester.pumpWidget(
-          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
-            getTaskByIdUseCaseProvider.overrideWithValue(
-              mockGetTaskByIdUseCase,
+          ProviderScope(
+            overrides: [
+              getTaskByIdUseCaseProvider.overrideWithValue(
+                mockGetTaskByIdUseCase,
+              ),
+              createTaskUseCaseProvider.overrideWithValue(
+                mockCreateTaskUseCase,
+              ),
+              updateTaskUseCaseProvider.overrideWithValue(
+                mockUpdateTaskUseCase,
+              ),
+              getAllTasksUseCaseProvider.overrideWithValue(
+                mockGetAllTasksUseCase,
+              ),
+            ],
+            child: MaterialApp.router(
+              routerConfig: router,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: LocalizationService.supportedLocales,
             ),
-            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
-            getAllTasksUseCaseProvider.overrideWithValue(
-              mockGetAllTasksUseCase,
-            ),
-          ]),
+          ),
         );
-
+        unawaited(router.push('${AppRoutes.tasks}/task-1'));
         await tester.pumpAndSettle();
+        expect(find.byType(TaskDetailScreen), findsOneWidget);
 
         // Act - Modify task and then cancel
         await tester.enterText(find.byType(TextFormField).first, 'Modified');
         await tester.pump();
-        final backButton = find.byIcon(Icons.arrow_back);
-        if (backButton.evaluate().isNotEmpty) {
-          await tester.tap(backButton);
-          await tester.pumpAndSettle();
-        }
+        await tester.tap(find.byType(BackButton));
+        await tester.pumpAndSettle();
 
-        // Assert - Should not update task
-        // (navigation happens, but update not called)
-        // Note: This depends on implementation
-        // - if back button navigates immediately,
-        // update might not be called
+        // Assert - the edit is discarded and the route popped
+        verifyNever(() => mockUpdateTaskUseCase(any()));
+        expect(find.byType(TaskDetailScreen), findsNothing);
+        expect(find.byKey(listMarker), findsOneWidget);
       });
 
       testWidgets('should display task details card with all fields', (
