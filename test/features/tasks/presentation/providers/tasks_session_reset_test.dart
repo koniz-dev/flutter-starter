@@ -7,6 +7,7 @@
 // session change solely through sessionEpochProvider, because it may not
 // import auth (#452).
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -73,15 +74,27 @@ class _UnauthorizedAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
+/// Storage whose removal of `tasks_data` can be held open, to widen the
+/// window between the session ending and the stored tasks being gone.
+class _GatedStorage extends InMemoryStorage {
+  Completer<void>? tasksRemoval;
+
+  @override
+  Future<bool> remove(String key) async {
+    if (key == _tasksKey) await tasksRemoval?.future;
+    return super.remove(key);
+  }
+}
+
 /// What the app router does at startup: build the tasks routes.
 final _tasksRoutesProvider = Provider((ref) => buildTasksRoutes(ref));
 
 void main() {
-  late InMemoryStorage storage;
+  late _GatedStorage storage;
   late ProviderContainer container;
 
   setUp(() {
-    storage = InMemoryStorage();
+    storage = _GatedStorage();
     container = ProviderContainer(
       overrides: [
         ...authModuleOverrides,
@@ -182,6 +195,21 @@ void main() {
 
     expect(storage.values, isNot(contains(_tasksKey)));
     expect(await tasksSeenByNextUser(), isEmpty);
+  });
+
+  test('a list on screen during the logout does not reload A\'s tasks while '
+      'the stored blob is still being deleted', () async {
+    await userACreatesATask();
+    // The list screen is open, so a rebuilt notifier reloads at once.
+    container.listen(tasksProvider, (_, _) {});
+    storage.tasksRemoval = Completer<void>();
+
+    await logout();
+    storage.tasksRemoval!.complete();
+    await pumpEventQueue();
+
+    expect(storage.values, isNot(contains(_tasksKey)));
+    expect(container.read(tasksProvider).tasks, isEmpty);
   });
 
   test('tasks created in the new session are kept', () async {
