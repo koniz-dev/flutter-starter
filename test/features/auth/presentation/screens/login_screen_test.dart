@@ -176,7 +176,12 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // Assert
-      expect(find.text('Invalid credentials'), findsOneWidget);
+      // The failure's localized text, never its log message (#414).
+      expect(
+        find.text(lookupAppLocalizations(const Locale('en')).failureAuth),
+        findsOneWidget,
+      );
+      expect(find.text('Invalid credentials'), findsNothing);
     });
 
     testWidgets('should show loading indicator during login', (tester) async {
