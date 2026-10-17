@@ -22,7 +22,7 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-cd "$ROOT"
+cd "$ROOT" || exit 1
 
 ISSUE="${1:-}"
 if [[ -z "$ISSUE" || ! "$ISSUE" =~ ^[0-9]+$ ]]; then
