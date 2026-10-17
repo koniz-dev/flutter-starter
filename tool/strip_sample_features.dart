@@ -48,7 +48,6 @@ const _goldenOverrides = <String, List<String>>{
     'lib/main.dart',
     'lib/features/home/presentation/screens/home_screen.dart',
     'integration_test/app_e2e_test.dart',
-    'integration_test/auth_flow_test.dart',
   ],
   'no_tasks': [
     'lib/core/routing/app_routes.dart',
