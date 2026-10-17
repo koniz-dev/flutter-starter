@@ -63,6 +63,11 @@ void main() {
       expect(data.label, contains('Retry'));
       expect(data.hasAction(SemanticsAction.tap), isTrue);
       expect(data.flagsCollection.isEnabled, Tristate.isTrue);
+      expect(
+        data.flagsCollection.isFocused,
+        isNot(Tristate.none),
+        reason: 'the Material node it replaces was focusable',
+      );
 
       _owner(tester).performAction(
         nodes.single.id,

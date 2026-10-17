@@ -1,6 +1,6 @@
-# the same test on this branch
+# test/shared/accessibility/single_button_node_test.dart on this branch
 00:00 +0: AccessibleButton criterion 1: one button node, carrying the label and the tap
-00:00 +1: AccessibleButton criterion 2: disabled is reflected in the single node
+00:01 +1: AccessibleButton criterion 2: disabled is reflected in the single node
 00:01 +3: AccessibleIconButton criterion 1: one button node, carrying the label and the tap
 00:01 +4: AccessibleIconButton criterion 2: disabled is reflected in the single node
 00:01 +5: criterion 3: HomeScreen meets labeledTapTargetGuideline

@@ -95,7 +95,8 @@ class AccessibleButton extends StatelessWidget {
     // node, so wrapping it in a second `Semantics(button: true)` gave a screen
     // reader two focus stops, the outer one with no tap action
     // (koniz-dev/flutter-starter#351). This node replaces the button's: it
-    // carries the effective label, the enabled state and the tap.
+    // carries the effective label, the enabled state, focusability and the
+    // tap.
     return Semantics(
       container: true,
       excludeSemantics: true,
@@ -103,6 +104,7 @@ class AccessibleButton extends StatelessWidget {
       hint: semanticHint,
       button: true,
       enabled: active,
+      focusable: active,
       onTap: active ? onPressed : null,
       child: AccessibilityHelpers.ensureMinTouchTarget(button),
     );
@@ -168,6 +170,7 @@ class AccessibleIconButton extends StatelessWidget {
       hint: semanticHint,
       button: true,
       enabled: isEnabled,
+      focusable: isEnabled,
       onTap: isEnabled ? onPressed : null,
       child: AccessibilityHelpers.ensureMinTouchTarget(button),
     );
