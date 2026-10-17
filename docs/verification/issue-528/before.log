@@ -1,0 +1,14 @@
+# on origin/main: dart run build_runner build -d rewrites these (diff from a regenerated main checkout)
+diff --git a/lib/features/tasks/presentation/providers/tasks_provider.g.dart b/lib/features/tasks/presentation/providers/tasks_provider.g.dart
+index 7e3b7175d1f..6c668f1b5b4 100644
+--- a/lib/features/tasks/presentation/providers/tasks_provider.g.dart
++++ b/lib/features/tasks/presentation/providers/tasks_provider.g.dart
+@@ -44,7 +44,7 @@ final class TasksNotifierProvider
+   }
+ }
+ 
+-String _$tasksNotifierHash() => r'b438dbd4387edb79136d65e435da3a54632644fc';
++String _$tasksNotifierHash() => r'9e7d7d38f4f425c77ca0ff3b9033ae4d09147d84';
+ 
+ /// Tasks provider (Riverpod Generator).
+ 
