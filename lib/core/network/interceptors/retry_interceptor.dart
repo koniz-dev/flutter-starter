@@ -45,7 +45,7 @@ import 'package:flutter_starter/core/network/request_body_replay.dart';
 /// apiClient.post(
 ///   '/orders',
 ///   data: body,
-///   options: Options(headers: {'Idempotency-Key': key}),
+///   headers: {RetryInterceptor.idempotencyKeyHeader: key},
 /// );
 /// ```
 ///
