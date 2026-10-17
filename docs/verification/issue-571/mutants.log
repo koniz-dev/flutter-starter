@@ -1,0 +1,16 @@
+=== mutant: iOS accessibility first_unlock_this_device -> first_unlock
+criterion 1: iOS Keychain items are first_unlock_this_device [E]
+  Expected: 'first_unlock_this_device'
+    Actual: 'first_unlock'
+Some tests failed.
+
+=== mutant: macOS options dropped (plugin default)
+criterion 2: macOS Keychain items are first_unlock_this_device too [E]
+  Expected: 'first_unlock_this_device'
+    Actual: 'unlocked'
+            Expected: first_unlo ...
+              Actual: unlocked
+Some tests failed.
+
+=== this branch
+00:13 +199: All tests passed!
