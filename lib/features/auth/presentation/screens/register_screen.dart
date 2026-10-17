@@ -146,6 +146,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 onPressed: authState.isLoading
                     ? null
                     : () {
+                        ref.read(authNotifierProvider.notifier).clearError();
                         if (context.canPopRoute()) {
                           context.popRoute<void>();
                         } else {

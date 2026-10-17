@@ -122,12 +122,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               TextButton(
                 onPressed: authState.isLoading
                     ? null
-                    : () => context.replaceRoute(
-                        authLocationKeepingRedirect(
-                          AppRoutes.register,
-                          widget.redirect,
-                        ),
-                      ),
+                    : () {
+                        ref.read(authNotifierProvider.notifier).clearError();
+                        context.replaceRoute(
+                          authLocationKeepingRedirect(
+                            AppRoutes.register,
+                            widget.redirect,
+                          ),
+                        );
+                      },
                 child: Text(l10n.dontHaveAccount),
               ),
             ],

@@ -188,6 +188,20 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
     state = const AuthState();
   }
 
+  /// Drops the last sign-in or registration error.
+  ///
+  /// Both auth screens render this one keepAlive state, so an error raised on
+  /// the login screen was still showing when the user moved to registration,
+  /// and the other way round (koniz-dev/flutter-starter#347). Each screen
+  /// clears it as the user follows its link to the other one.
+  ///
+  /// Not cleared when a screen merely appears: a failed logout lands on the
+  /// login screen with its error on purpose (#52), and that must stay.
+  void clearError() {
+    if (state.error == null && state.failure == null) return;
+    state = state.copyWith(error: null, failure: null);
+  }
+
   /// Refreshes the authentication token
   ///
   /// This is typically called automatically by the AuthInterceptor,
