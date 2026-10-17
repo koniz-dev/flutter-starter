@@ -280,7 +280,12 @@ class ProductRepositoryImpl implements ProductRepository {
 
 ## Step 3: Create Providers
 
-Add providers to `lib/core/di/providers.dart`.
+Add providers to the feature's own DI file,
+`lib/features/product/di/product_providers.dart` - the same
+`lib/features/<feature>/di/<feature>_providers.dart` path that
+`./scripts/dev/create_feature.sh` and `mason make feature_clean` generate.
+Feature providers never go in `lib/core/di/providers.dart`: `core` must not
+import `features`, and `test/tooling/import_rules_test.dart` fails if it does.
 
 ```dart
 // Product Feature Providers

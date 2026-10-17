@@ -96,7 +96,9 @@ mason get
 
 **Solutions:**
 1. Ensure widget is wrapped in `ProviderScope` or `UncontrolledProviderScope`
-2. Check provider is defined in `lib/core/di/providers.dart`
+2. Check the provider is declared where its layer puts it: a feature's in
+   `lib/features/<feature>/di/<feature>_providers.dart`, a core service's in
+   `lib/core/di/`
 3. Verify provider name is correct (case-sensitive)
 4. Ensure provider is registered before use
 

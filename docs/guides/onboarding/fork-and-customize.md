@@ -109,8 +109,8 @@ Then delete or adjust any remaining docs under `docs/features/` that referenced 
 There is no one-click script for removing `auth` (router redirects, DI, and tests are tightly coupled). If you drop auth:
 
 - Rewrite `goRouterProvider` redirect rules in `lib/core/routing/app_router.dart`.
-- Remove `lib/features/auth`, related providers in `lib/core/di/providers.dart`, and auth tests.
-- Update `main.dart` if you remove storage or init that only served auth.
+- Remove `lib/features/auth` (its providers live in `lib/features/auth/di/` and go with it), `buildAuthRoutes` in `lib/core/routing/routes_registry.dart`, and auth tests.
+- Update `main.dart`: drop `authModuleOverrides`, and any storage or init that only served auth.
 
 Use [contracts-map.md](../../architecture/contracts-map.md) to keep `ITokenStore` / `IKeyValueStore` if you still need tokens for APIs.
 

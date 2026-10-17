@@ -103,7 +103,10 @@ Follow these steps to add a complete feature following clean architecture:
 
 ### Step 3: Create Providers
 
-Add to `lib/core/di/providers.dart`:
+Add to the feature's DI file, `lib/features/product/di/product_providers.dart`
+(the `lib/features/<feature>/di/<feature>_providers.dart` path
+`create_feature.sh` generates). Not `lib/core/di/providers.dart`: `core` may
+not import `features` (`test/tooling/import_rules_test.dart`).
 
 ```dart
 // Data source provider
