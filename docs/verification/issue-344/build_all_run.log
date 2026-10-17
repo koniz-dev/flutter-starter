@@ -1,0 +1,22 @@
+# Scripts smoke, job=build-all, environment=production, dispatched on ci/344-build-all-signing
+# https://github.com/koniz-dev/flutter-starter/actions/runs/39046464049
+conclusion: success
+head: e1bb863bb4d08c64ed222f0a12a0510c3c08be28
+job: build_all.sh (production) -> success
+  success Set up job
+  success Checkout code
+  success Setup Flutter
+  success Generate throwaway release keystore
+  success Run scripts/ci/build_all.sh
+  success Show Android and Web outputs
+  success Upload logs
+  success Post Setup Flutter
+  success Post Checkout code
+  success Complete job
+
+# release artifacts named in the run log (Built ... / outputs listing)
+build_all.sh (production)	Run scripts/ci/build_all.sh	2026-10-17T15:52:58.3740683Z ✓ Built build/app/outputs/bundle/release/app-release.aab (92.6MB)
+build_all.sh (production)	Run scripts/ci/build_all.sh	2026-10-17T15:53:48.6109570Z ✓ Built build/web
+build_all.sh (production)	Show Android and Web outputs	2026-10-17T15:53:48.6924596Z build/app/outputs/bundle/release/app-release.aab
+build_all.sh (production)	Show Android and Web outputs	2026-10-17T15:53:48.6950903Z -rw-r--r--  1 runner runner    1211 Oct 17 15:53 index.html
+build_all.sh (production)	Show Android and Web outputs	2026-10-17T15:53:48.6951553Z -rw-r--r--  1 runner runner 3488357 Oct 17 15:53 main.dart.js

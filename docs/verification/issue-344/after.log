@@ -1,0 +1,4 @@
+# the same test on this branch
+00:00 +0: criterion 2: every Android release build in a workflow follows a signing key in its job
+00:00 +1: the scan catches an unsigned release build and passes a keyed one
+00:00 +2: All tests passed!
