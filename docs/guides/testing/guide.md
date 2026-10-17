@@ -125,10 +125,17 @@ test('works', () {});
 Use cases are the core business logic and should have **100% coverage**:
 
 ```dart
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
-import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+
+// `test/helpers` is not part of the package: import it relatively. This
+// path assumes the test sits two levels below test/; adjust the `../` count.
+import '../../helpers/test_helpers.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -145,29 +152,35 @@ void main() {
     test('should return User when login succeeds', () async {
       // Arrange
       const user = User(id: '1', email: 'test@example.com', name: 'Test');
-      when(() => mockRepository.login(any(), any()))
-          .thenAnswer((_) async => const Success(user));
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
 
       // Act
       final result = await loginUseCase('test@example.com', 'password');
 
       // Assert
       expectResultSuccess(result, user);
-      verify(() => mockRepository.login('test@example.com', 'password')).called(1);
+      verify(
+        () => mockRepository.login('test@example.com', 'password'),
+      ).called(1);
     });
 
     test('should return failure when login fails', () async {
       // Arrange
       const failure = AuthFailure('Invalid credentials');
-      when(() => mockRepository.login(any(), any()))
-          .thenAnswer((_) async => const ResultFailure(failure));
+      when(
+        () => mockRepository.login(any(), any()),
+      ).thenAnswer((_) async => const ResultFailure<User>(failure));
 
       // Act
       final result = await loginUseCase('test@example.com', 'wrongpassword');
 
       // Assert
       expectResultFailure(result, failure);
-      verify(() => mockRepository.login('test@example.com', 'wrongpassword')).called(1);
+      verify(
+        () => mockRepository.login('test@example.com', 'wrongpassword'),
+      ).called(1);
     });
   });
 }
@@ -178,16 +191,24 @@ void main() {
 Test repository implementations with mocked data sources:
 
 ```dart
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
+import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
 class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(const UserModel(id: '0', email: 'x@example.com'));
+  });
+
   group('AuthRepositoryImpl', () {
     late AuthRepositoryImpl repository;
     late MockAuthRemoteDataSource mockRemoteDataSource;
@@ -209,19 +230,23 @@ void main() {
         token: 'access_token',
         refreshToken: 'refresh_token',
       );
-      when(() => mockRemoteDataSource.login(any(), any()))
-          .thenAnswer((_) async => authResponse);
-      when(() => mockLocalDataSource.cacheUser(any()))
-          .thenAnswer((_) async => {});
-      when(() => mockLocalDataSource.cacheToken(any()))
-          .thenAnswer((_) async => {});
+      when(
+        () => mockRemoteDataSource.login(any(), any()),
+      ).thenAnswer((_) async => authResponse);
+      when(() => mockLocalDataSource.cacheUser(any())).thenAnswer((_) async {});
+      when(() => mockLocalDataSource.cacheToken(any())).thenAnswer((_) async {});
+      when(
+        () => mockLocalDataSource.cacheRefreshToken(any()),
+      ).thenAnswer((_) async {});
 
       // Act
       final result = await repository.login('test@example.com', 'password');
 
       // Assert
       expect(result.isSuccess, isTrue);
-      verify(() => mockRemoteDataSource.login('test@example.com', 'password')).called(1);
+      verify(
+        () => mockRemoteDataSource.login('test@example.com', 'password'),
+      ).called(1);
       verify(() => mockLocalDataSource.cacheUser(any())).called(1);
       verify(() => mockLocalDataSource.cacheToken('access_token')).called(1);
     });
@@ -234,40 +259,48 @@ void main() {
 Test Riverpod providers with provider overrides:
 
 ```dart
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockLoginUseCase extends Mock implements LoginUseCase {}
 
 void main() {
-  group('AuthProvider', () {
+  group('AuthNotifier', () {
     late MockLoginUseCase mockLoginUseCase;
 
     setUp(() {
       mockLoginUseCase = MockLoginUseCase();
     });
 
-    test('should emit loading then success when login succeeds', () async {
+    test('should hold the user once login succeeds', () async {
       // Arrange
       const user = User(id: '1', email: 'test@example.com', name: 'Test');
-      when(() => mockLoginUseCase(any(), any()))
-          .thenAnswer((_) async => const Success(user));
+      when(
+        () => mockLoginUseCase(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
 
-      // Act & Assert
       final container = ProviderContainer(
         overrides: [
           loginUseCaseProvider.overrideWithValue(mockLoginUseCase),
         ],
       );
+      addTearDown(container.dispose);
 
-      final notifier = container.read(authProvider.notifier);
-      final result = await notifier.login('test@example.com', 'password');
+      // Act - `login` returns Future<void>; the outcome lands in AuthState.
+      await container
+          .read(authNotifierProvider.notifier)
+          .login('test@example.com', 'password');
 
-      expect(result.isSuccess, isTrue);
-      container.dispose();
+      // Assert
+      final state = container.read(authNotifierProvider);
+      expect(state.user, user);
+      expect(state.isLoading, isFalse);
     });
   });
 }
@@ -278,12 +311,18 @@ void main() {
 Test widgets with Riverpod providers:
 
 ```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
-import 'package:flutter_starter/test/helpers/pump_app.dart';
+import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+// `test/helpers` is not part of the package: import it relatively. This
+// path assumes the test sits two levels below test/; adjust the `../` count.
+import '../../helpers/pump_app.dart';
 
 class MockLoginUseCase extends Mock implements LoginUseCase {}
 
@@ -306,16 +345,16 @@ void main() {
       );
 
       // Assert
-      expect(find.text('Email'), findsOneWidget);
-      expect(find.text('Password'), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
       expect(find.byType(ElevatedButton), findsOneWidget);
     });
 
     testWidgets('should call login when form is submitted', (tester) async {
       // Arrange
       const user = User(id: '1', email: 'test@example.com', name: 'Test');
-      when(() => mockLoginUseCase(any(), any()))
-          .thenAnswer((_) async => const Success(user));
+      when(
+        () => mockLoginUseCase(any(), any()),
+      ).thenAnswer((_) async => const Success(user));
 
       await pumpApp(
         tester,
@@ -326,7 +365,10 @@ void main() {
       );
 
       // Act
-      await tester.enterText(find.byType(TextFormField).first, 'test@example.com');
+      await tester.enterText(
+        find.byType(TextFormField).first,
+        'test@example.com',
+      );
       await tester.enterText(find.byType(TextFormField).last, 'password');
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
@@ -345,9 +387,12 @@ void main() {
 Use `mocktail` for creating mocks (no code generation required):
 
 ```dart
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
 class MockLoginUseCase extends Mock implements LoginUseCase {}
 ```
 
@@ -381,7 +426,9 @@ await pumpApp(
 Use test fixtures for creating test data:
 
 ```dart
-import 'package:flutter_starter/test/helpers/test_fixtures.dart';
+import '../../helpers/test_fixtures.dart';
+// `test/helpers` is not part of the package: import it relatively, with the
+// `../` count matching where your test file sits.
 
 // Create test entities
 final user = createUser(

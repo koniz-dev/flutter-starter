@@ -7,54 +7,23 @@
 // analyzes every fenced `dart` block that starts with an `import` - the
 // self-contained ones - and checks the language list against lib/l10n.
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-const _guide = 'docs/guides/features/internationalization-guide.md';
+import 'doc_snippets.dart';
 
-/// The fenced `dart` blocks of [markdown] whose first line is an import.
-List<String> _importingDartBlocks(String markdown) {
-  final blocks = <String>[];
-  final fence = RegExp(
-    r'^```dart\s*\n(.*?)^```',
-    multiLine: true,
-    dotAll: true,
-  );
-  for (final match in fence.allMatches(markdown)) {
-    final body = match.group(1)!;
-    if (body.trimLeft().startsWith('import ')) blocks.add(body);
-  }
-  return blocks;
-}
+const _guide = 'docs/guides/features/internationalization-guide.md';
 
 void main() {
   final markdown = File(_guide).readAsStringSync();
 
   test('criterion 2: every self-contained dart snippet analyzes with no '
       'error or warning', () {
-    final blocks = _importingDartBlocks(markdown);
+    final blocks = importingDartBlocks(markdown);
     expect(blocks, isNotEmpty, reason: 'the guide has importing snippets');
 
-    // Inside the project, so `package:flutter_starter/...` and its
-    // dependencies resolve; removed afterwards.
-    final dir = Directory('test/docs/_i18n_guide_snippets')..createSync();
-    addTearDown(() => dir.deleteSync(recursive: true));
-    for (var i = 0; i < blocks.length; i++) {
-      File('${dir.path}/snippet_$i.dart').writeAsStringSync(blocks[i]);
-    }
-
-    final result = Process.runSync('dart', [
-      'analyze',
-      '--format=machine',
-      dir.path,
-    ]);
-    final problems = const LineSplitter()
-        .convert('${result.stdout}${result.stderr}')
-        .where((l) => l.startsWith('ERROR|') || l.startsWith('WARNING|'))
-        .toList();
-
+    final problems = analyzeSnippets('i18n_guide', blocks);
     expect(problems, isEmpty, reason: problems.join('\n'));
   });
 
