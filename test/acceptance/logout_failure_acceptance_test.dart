@@ -170,6 +170,15 @@ void main() {
       expect(router.routeInformationProvider.value.uri.path, AppRoutes.login);
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(HomeScreen), findsNothing);
+      // The login screen renders the failure in the user's language, not the
+      // log text kept in `error` (koniz-dev/flutter-starter#414).
+      expect(
+        find.text(
+          lookupAppLocalizations(const Locale('en')).failureNoConnection,
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('No internet connection'), findsNothing);
       await captureAcceptanceGolden(
         find.byType(MaterialApp),
         'failed_logout_after_login',
