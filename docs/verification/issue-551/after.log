@@ -1,0 +1,19 @@
+# probe: dart run tool/check_docs.dart --test-paths with CONTRIBUTING.md as of 6f9c9c4688ac7e93e13b88c0c413ce1a6a2432dd (before #555 fixed it)
+Running build hooks...Running build hooks...CONTRIBUTING.md:564: `flutter test test/features/auth/domain/usecases/login_test.dart` names no file or directory
+test paths: scanned 69 file(s); 1 missing
+
+1 problem(s) found.
+exit=1
+
+# dart run tool/check_docs.dart on this branch (all seven checks)
+test paths: scanned 69 file(s); 0 missing
+
+OK: documentation checks passed.
+
+# test/docs/doc_test_paths_test.dart
+00:00 +0: criterion 2: the path CONTRIBUTING used to name fails
+00:00 +1: criterion 2: the real path passes
+00:00 +2: skips flags, flag values, placeholders and prose outside fences
+00:00 +3: joins a backslash-continued command and checks every path
+00:00 +4: checks a path with a :line suffix without the suffix
+00:00 +5: All tests passed!
