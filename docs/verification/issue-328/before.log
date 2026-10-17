@@ -1,0 +1,12 @@
+# lazy_loader_defects_test.dart against main's LazyLoader
+00:00 +0 -1: criterion 1: a failing preload records no uncaught error [E]
+  Expected: empty
+    Actual: [StateError:Bad state: offline]
+00:00 +0 -2: a failed preload leaves the key to be retried by load [E]
+00:00 +0 -3: criterion 2: clearCache() during a load is not undone when it completes [E]
+  Expected: false
+    Actual: <true>
+00:00 +0 -4: evict() during a load is not undone either [E]
+  Expected: false
+    Actual: <true>
+00:00 +1 -4: Some tests failed.

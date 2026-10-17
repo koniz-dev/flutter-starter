@@ -1,0 +1,6 @@
+00:00 +0: criterion 1: a failing preload records no uncaught error
+00:00 +1: a failed preload leaves the key to be retried by load
+00:00 +2: criterion 2: clearCache() during a load is not undone when it completes
+00:00 +3: evict() during a load is not undone either
+00:00 +4: a load that starts after clearCache() caches as normal
+00:00 +5: All tests passed!
