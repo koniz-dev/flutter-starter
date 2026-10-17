@@ -86,6 +86,37 @@ void main() {
     },
   );
 
+  // koniz-dev/flutter-starter#447: openWrite starts its own lazy open, which
+  // dart:io only observes once something is written. A directory that
+  // vanished after the probe open made that open fail unobserved - an
+  // uncaught error the try and _watch both missed.
+  test('a directory removed after the probe open produces no uncaught '
+      'zone error', () async {
+    late FileLogOutput output;
+    final errors = await uncaughtErrorsOf(() async {
+      output = FileLogOutput()
+        ..debugAfterProbeOpen = () async => logs.deleteSync(recursive: true);
+      await output.init();
+    });
+    errors.addAll(
+      await uncaughtErrorsOf(() async {
+        output.output(line('after the directory vanished'));
+      }),
+    );
+
+    // ignore: avoid_print - the evidence line for the criterion
+    print(
+      'VF447 uncaught=$errors isWritable=${output.isWritable} '
+      'pending=${output.pendingLineCount}',
+    );
+    expect(errors, isEmpty);
+    expect(output.isWritable, isFalse);
+    // The line is held for a later open, not written into a dead sink.
+    expect(output.pendingLineCount, 1);
+    // Recreated so tearDown's chmod has a directory to act on.
+    logs.createSync();
+  });
+
   test('a writable directory still opens and writes', () async {
     final output = FileLogOutput();
     final errors = await uncaughtErrorsOf(() async {

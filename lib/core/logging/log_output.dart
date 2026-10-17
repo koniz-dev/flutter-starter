@@ -68,6 +68,12 @@ class FileLogOutput extends LogOutput {
   /// Maximum number of lines buffered while no sink is open
   final int maxPendingLines;
 
+  /// Runs between the probe open and `openWrite`, for tests only: the one
+  /// point where the log directory can vanish under a sink that has not
+  /// opened yet (koniz-dev/flutter-starter#447).
+  @visibleForTesting
+  Future<void> Function()? debugAfterProbeOpen;
+
   File? _logFile;
   IOSink? _sink;
   String? _logDirectory;
@@ -141,8 +147,17 @@ class FileLogOutput extends LogOutput {
       // error (koniz-dev/flutter-starter#421). Opening once with an await
       // surfaces it here instead, and _watch covers a failure after that.
       await (await file.open(mode: FileMode.append)).close();
+      await debugAfterProbeOpen?.call();
       final sink = file.openWrite(mode: FileMode.append);
       _watch(sink);
+      // The probe above is not the sink's open: openWrite starts its own, and
+      // dart:io only observes that one once the sink is written to. If it
+      // failed first - the directory removed in between - the error escaped
+      // unobserved (koniz-dev/flutter-starter#447). An empty write attaches
+      // the sink to its file and flush() waits for that open, so a failure
+      // lands in this try.
+      sink.add(const <int>[]);
+      await sink.flush();
       _sink = sink;
       _openFailed = false;
       _flushPending();
