@@ -1,0 +1,5 @@
+# the same test on this branch
+00:00 +0: criteria 1-2 (es): the hint is the localized string, not the English literal
+00:01 +1: criteria 1-2 (vi): the hint is the localized string, not the English literal
+00:01 +2: under en the hint keeps its wording
+00:01 +3: All tests passed!
