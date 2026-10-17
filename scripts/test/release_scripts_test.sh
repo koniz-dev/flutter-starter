@@ -161,6 +161,35 @@ else
     fail "no release branch or tag was created (branch=$branch tags=$tags)"
 fi
 
+# --- bump_version.sh keeps a trailing comment (koniz-dev/flutter-starter#342)
+bump_fixture() { # pubspec-version-line -> echoes the rewritten line
+    local dir="$WORK/bump-$RANDOM"
+    mkdir -p "$dir/scripts/ci"
+    cp "$SCRIPTS"/bump_version.sh "$dir/scripts/ci/"
+    printf 'name: fixture\n%s\ndescription: x\n' "$1" > "$dir/pubspec.yaml"
+    (cd "$dir" && bash scripts/ci/bump_version.sh patch > /dev/null 2>&1) || echo "EXIT-FAILED"
+    grep '^version:' "$dir/pubspec.yaml"
+    grep -c '^description: x$' "$dir/pubspec.yaml" > /dev/null || echo "OTHER-LINE-CHANGED"
+}
+got=$(bump_fixture 'version: 1.2.3+4 # note')
+if [ "$got" = 'version: 1.2.4+5 # note' ]; then
+    pass "bump_version.sh patch keeps the version line's trailing comment"
+else
+    fail "bump_version.sh patch keeps the version line's trailing comment, got: $got"
+fi
+got=$(bump_fixture 'version: 1.2.3+4')
+if [ "$got" = 'version: 1.2.4+5' ]; then
+    pass "bump_version.sh patch on a line with no comment adds nothing"
+else
+    fail "bump_version.sh patch on a line with no comment adds nothing, got: $got"
+fi
+got=$(bump_fixture 'version: 1.2.3   # spaced  note')
+if [ "$got" = 'version: 1.2.4   # spaced  note' ]; then
+    pass "bump_version.sh keeps the comment's spacing exactly"
+else
+    fail "bump_version.sh keeps the comment's spacing exactly, got: $got"
+fi
+
 echo
 if [ "$FAILURES" -eq 0 ]; then
     echo "All release-script tests passed."
