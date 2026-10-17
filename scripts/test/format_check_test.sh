@@ -27,7 +27,11 @@ git init -q && git add -A && git -c user.email=t@t -c user.name=t commit -qm bas
 flutter pub get >/dev/null 2>&1 || dart pub get >/dev/null 2>&1
 git checkout -q -- . 2>/dev/null # drop pub-get churn so the baseline is clean
 
+# Committed in the scratch repo, so a rewrite shows in `git status` as
+# ` M` rather than hiding inside an untracked `??` line.
 printf 'void   probe( ) {}\n' > tool/zz_format_probe.dart
+git add tool/zz_format_probe.dart
+git -c user.email=t@t -c user.name=t commit -qm probe
 before="$(git status --porcelain)"
 
 ./scripts/dev/format_dart.sh --check >/dev/null 2>&1

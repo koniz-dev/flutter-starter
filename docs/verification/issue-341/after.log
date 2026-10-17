@@ -1,0 +1,9 @@
+# scripts/test/format_check_test.sh on this branch
+format_dart.sh --check: exit 1, working tree unchanged: yes
+run_acceptance.sh format gate: format_dart.sh --check
+format_dart.sh (no --check): formatted the file
+OK
+exit=0
+
+# flutter test test/tooling/format_check_readonly_test.dart
+00:18 +1: All tests passed!
