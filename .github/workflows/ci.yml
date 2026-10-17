@@ -183,7 +183,27 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         run: flutter analyze
 
-      - name: Run tests
+      # The suite runs in a fresh random order on every PR, so a test that
+      # only passes because of the tests before it fails here, not in a fork
+      # months later (koniz-dev/flutter-starter#370, #462, #602). flutter
+      # prints the seed it picked; a failure repeats it with the exact command
+      # that reproduces the order.
+      - name: Run tests (random order)
         if: steps.scope.outputs.run == 'true'
         timeout-minutes: 15
-        run: flutter test --timeout=5m
+        shell: bash
+        run: |
+          set +e
+          flutter test --timeout=5m --test-randomize-ordering-seed random \
+            2>&1 | tee "$RUNNER_TEMP/flutter-test.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          seed=$(grep -o -m1 'test-randomize-ordering-seed=[0-9]*' \
+            "$RUNNER_TEMP/flutter-test.log" | cut -d= -f2 || true)
+          echo "Test order seed: ${seed:-unknown}"
+          echo "- Test order seed: \`${seed:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$status" -ne 0 ]; then
+            echo "::error title=flutter test failed (random order seed ${seed:-unknown})::Reproduce with: flutter test --test-randomize-ordering-seed ${seed:-unknown}"
+            echo "- **Failed.** Reproduce with \`flutter test --test-randomize-ordering-seed ${seed:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit "$status"
