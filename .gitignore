@@ -31,6 +31,10 @@ migrate_working_dir/
 # Mason — hook package cache + compiled hook output (local only)
 bricks/**/hooks/.dart_tool/
 bricks/**/hooks/build/
+# `mason get` state: both record absolute paths on this machine
+# (koniz-dev/flutter-starter#340).
+.mason/
+mason-lock.json
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
