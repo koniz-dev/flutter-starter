@@ -15,6 +15,12 @@
 # used to leave ~190 analyzer findings behind on a tree that was clean before
 # it (koniz-dev/flutter-starter#283).
 #
+# manual-rename applies docs/guides/onboarding/fork-and-customize.md "Option B
+# - Manual" - the rename without Mason - and checks the tree analyzes clean and
+# still scaffolds a compiling feature. It runs the rename command it extracts
+# from that document, not a copy, so the job goes red the moment the
+# documented steps stop working (koniz-dev/flutter-starter#357, #441).
+#
 # Manual by design: an Android release build plus a Windows Flutter setup is
 # far too expensive to put on every push. Run it after touching
 # scripts/ci/build_all.sh, either create_feature script, or the setup brick.
@@ -33,6 +39,7 @@ on:
           - build-all
           - scaffold-parity
           - setup-brick
+          - manual-rename
       environment:
         description: 'Argument passed to scripts/ci/build_all.sh'
         required: true
@@ -208,3 +215,51 @@ jobs:
             lib test integration_test tool examples
           flutter analyze
           flutter test --timeout=5m
+
+  manual-rename:
+    if: inputs.job == 'all' || inputs.job == 'manual-rename'
+    name: fork-and-customize Option B (my_app) + analyze + scaffold
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # `my_app` sorts after `mocktail`, unlike `flutter_starter`, so the
+      # import re-sort in step 3 is exercised rather than a no-op.
+      - name: Apply Option B steps 1-3 as documented
+        shell: bash
+        run: |
+          set -euo pipefail
+          doc=docs/guides/onboarding/fork-and-customize.md
+          # Step 1.
+          sed -i 's/^name: flutter_starter$/name: my_app/' pubspec.yaml
+          grep -q '^name: my_app$' pubspec.yaml
+          # Step 2: the documented command itself, from NEW= to the perl line.
+          awk '/^   NEW=your_package$/{f=1} f{print} f&&/perl -pi/{exit}' "$doc" \
+            | sed 's/^   //; s/^NEW=your_package$/NEW=my_app/' > "$RUNNER_TEMP/rename.sh"
+          if ! grep -q 'perl -pi' "$RUNNER_TEMP/rename.sh"; then
+            echo "could not extract the Option B rename command from $doc" >&2
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/rename.sh"
+          bash -euo pipefail "$RUNNER_TEMP/rename.sh"
+          # Step 3.
+          flutter pub get
+          dart fix --apply --code=directives_ordering
+
+      - name: The renamed tree analyzes clean
+        run: flutter analyze
+
+      - name: A feature scaffolded after the rename compiles
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./scripts/dev/create_feature.sh probe
+          # Infos are tolerated here: the scaffold's import order is #442.
+          flutter analyze --no-fatal-infos lib/features/probe test/features/probe
