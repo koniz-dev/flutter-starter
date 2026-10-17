@@ -11,21 +11,15 @@ void main() {
   // Initialize Flutter binding for path_provider
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  // Every test owns its FileLogOutput and registers its own teardown right
+  // after constructing it. A shared `late` variable torn down by the group
+  // threw LateInitializationError under a randomized order, because the
+  // nested groups never assigned it (koniz-dev/flutter-starter#370).
   group('FileLogOutput', () {
-    late FileLogOutput fileLogOutput;
-
-    setUp(() async {
-      // Setup for each test
-    });
-
-    tearDown(() async {
-      // Clean up
-      await fileLogOutput.destroy();
-    });
-
     test('should initialize log file', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
 
       // Act
       await fileLogOutput.init();
@@ -37,7 +31,8 @@ void main() {
 
     test('should write log output to file', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       final logEvent = LogEvent(Level.info, 'Test log message');
@@ -62,7 +57,8 @@ void main() {
 
     test('should handle multiple log entries', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -88,7 +84,8 @@ void main() {
 
     test('should handle different log levels', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       final levels = [Level.debug, Level.info, Level.warning, Level.error];
@@ -116,10 +113,11 @@ void main() {
 
     test('should rotate logs when file size exceeds maxFileSize', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(
+      final fileLogOutput = FileLogOutput(
         fileName: 'test.log',
         maxFileSize: 100, // Very small for testing
       );
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Write enough data to trigger rotation
@@ -146,11 +144,12 @@ void main() {
 
     test('should respect maxFiles limit', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(
+      final fileLogOutput = FileLogOutput(
         fileName: 'test.log',
         maxFileSize: 50, // Very small
         maxFiles: 3,
       );
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Write enough to create multiple rotated files
@@ -175,7 +174,8 @@ void main() {
 
     test('should get all log files', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Write something to ensure file is created
@@ -192,7 +192,8 @@ void main() {
 
     test('should clear all log files', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Write some logs
@@ -211,7 +212,8 @@ void main() {
 
     test('should handle custom fileName', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'custom.log');
+      final fileLogOutput = FileLogOutput(fileName: 'custom.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -236,7 +238,8 @@ void main() {
 
     test('should handle output when sink is null', () {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       // Don't call init, so sink will be null
 
       // Act & Assert
@@ -249,7 +252,8 @@ void main() {
 
     test('should handle file write errors gracefully', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
       await fileLogOutput.destroy(); // Destroy to make sink null
 
@@ -263,7 +267,8 @@ void main() {
 
     test('should handle initialization errors gracefully', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
 
       // Act & Assert
       // The init method should complete even if there are errors
@@ -273,7 +278,8 @@ void main() {
 
     test('should handle exception in output when sink throws', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Output should handle exceptions gracefully
@@ -287,7 +293,8 @@ void main() {
 
     test('should destroy and close sink', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -299,7 +306,8 @@ void main() {
 
     test('should handle output with multiple lines', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -321,7 +329,8 @@ void main() {
 
     test('should handle empty output event', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -335,7 +344,8 @@ void main() {
 
     test('should handle very large log messages', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -354,11 +364,12 @@ void main() {
 
     test('should handle rotation with different file names', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(
+      final fileLogOutput = FileLogOutput(
         fileName: 'rotated.log',
         maxFileSize: 100,
         maxFiles: 2,
       );
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Write enough to trigger rotation
@@ -381,7 +392,8 @@ void main() {
 
     test('should handle getLogFiles when directory does not exist', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       // Don't call init, so _logDirectory will be null
 
       // Act
@@ -393,7 +405,8 @@ void main() {
 
     test('should handle clearLogs when directory does not exist', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       // Don't call init, so _logDirectory will be null
 
       // Act & Assert - Should not throw
@@ -402,7 +415,8 @@ void main() {
 
     test('should handle rotation when file does not exist yet', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'new.log', maxFileSize: 50);
+      final fileLogOutput = FileLogOutput(fileName: 'new.log', maxFileSize: 50);
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Write small amount (won't trigger rotation)
@@ -417,7 +431,8 @@ void main() {
 
     test('should handle concurrent output calls', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act - Multiple concurrent outputs
@@ -441,7 +456,8 @@ void main() {
 
     test('should handle destroy when sink is null', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       // Don't call init, so sink will be null
 
       // Act & Assert - Should not throw
@@ -450,7 +466,8 @@ void main() {
 
     test('should handle destroy multiple times', () async {
       // Arrange
-      fileLogOutput = FileLogOutput(fileName: 'test.log');
+      final fileLogOutput = FileLogOutput(fileName: 'test.log');
+      addTearDown(fileLogOutput.destroy);
       await fileLogOutput.init();
 
       // Act
@@ -466,6 +483,7 @@ void main() {
       test('should handle default constructor values', () {
         // Arrange & Act
         final output = FileLogOutput();
+        addTearDown(output.destroy);
 
         // Assert
         expect(output.maxFileSize, 10 * 1024 * 1024); // 10MB
@@ -476,6 +494,7 @@ void main() {
       test('should handle custom maxFileSize', () {
         // Arrange & Act
         final output = FileLogOutput(maxFileSize: 1024);
+        addTearDown(output.destroy);
 
         // Assert
         expect(output.maxFileSize, 1024);
@@ -484,6 +503,7 @@ void main() {
       test('should handle custom maxFiles', () {
         // Arrange & Act
         final output = FileLogOutput(maxFiles: 10);
+        addTearDown(output.destroy);
 
         // Assert
         expect(output.maxFiles, 10);
@@ -492,6 +512,7 @@ void main() {
       test('should handle custom fileName', () {
         // Arrange & Act
         final output = FileLogOutput(fileName: 'custom.log');
+        addTearDown(output.destroy);
 
         // Assert
         expect(output.fileName, 'custom.log');
@@ -695,6 +716,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'test.log');
+          addTearDown(fileLogOutput.destroy);
           await fileLogOutput.init();
 
           // Act
@@ -712,6 +734,7 @@ void main() {
           maxFileSize: 100,
           maxFiles: 1,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write enough to trigger rotation
@@ -735,6 +758,7 @@ void main() {
       test('should handle output with empty lines list', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act
@@ -752,6 +776,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'specific.log');
+          addTearDown(fileLogOutput.destroy);
           await fileLogOutput.init();
 
           // Act
@@ -775,6 +800,7 @@ void main() {
             maxFileSize: 200,
             maxFiles: 3,
           );
+          addTearDown(fileLogOutput.destroy);
           await fileLogOutput.init();
 
           // Act - Write exactly enough to reach maxFileSize
@@ -795,6 +821,7 @@ void main() {
       test('should handle getLogFiles when exception occurs', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act & Assert - Should return empty list on exception
@@ -807,6 +834,7 @@ void main() {
       test('should handle clearLogs when directory does not exist', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         // Don't init, so directory might not exist
 
         // Act & Assert - Should handle gracefully
@@ -816,6 +844,7 @@ void main() {
       test('should handle exception in clearLogs gracefully', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act & Assert - clearLogs should handle exceptions gracefully
@@ -831,6 +860,7 @@ void main() {
           maxFileSize: 100,
           maxFiles: 2,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Trigger multiple rotations
@@ -856,6 +886,7 @@ void main() {
       test('should handle output with multiple lines', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act
@@ -877,6 +908,7 @@ void main() {
           maxFileSize: 100,
           maxFiles: 0,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write to trigger rotation
@@ -895,6 +927,7 @@ void main() {
       test('should handle destroy when sink is already closed', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
         await fileLogOutput.destroy();
 
@@ -970,6 +1003,7 @@ void main() {
       test('should handle _checkAndRotate when _logFile is null', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         // Don't call init, so _logFile will be null
 
         // Act & Assert - Should not throw
@@ -988,6 +1022,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'test.log');
+          addTearDown(fileLogOutput.destroy);
           // Don't call init, so _logDirectory will be null
 
           // Act & Assert - Should not throw
@@ -1005,6 +1040,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'test.log');
+          addTearDown(fileLogOutput.destroy);
 
           // Act & Assert - init should complete even if there are errors
           // (it catches exceptions internally)
@@ -1016,6 +1052,7 @@ void main() {
       test('should handle exception in output method gracefully', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
         await fileLogOutput.destroy(); // Destroy to make sink null
 
@@ -1030,6 +1067,7 @@ void main() {
       test('should handle exception in _checkAndRotate gracefully', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write something to trigger _checkAndRotate
@@ -1048,6 +1086,7 @@ void main() {
           fileName: 'test.log',
           maxFileSize: 50, // Small to trigger rotation
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write enough to trigger rotation
@@ -1065,6 +1104,7 @@ void main() {
       test('should handle _rotateLogs when _logDirectory is null', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'test.log');
+        addTearDown(fileLogOutput.destroy);
         // Don't call init, so _logDirectory will be null
 
         // Act & Assert - Should not throw
@@ -1086,6 +1126,7 @@ void main() {
             fileName: 'test.log',
             maxFileSize: 100, // Small size to trigger rotation
           );
+          addTearDown(fileLogOutput.destroy);
           await fileLogOutput.init();
 
           // Act - Write exactly enough to reach maxFileSize
@@ -1109,6 +1150,7 @@ void main() {
           maxFileSize: 50,
           maxFiles: 1, // Edge case: only 1 file
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write enough to trigger rotation
@@ -1130,6 +1172,7 @@ void main() {
           maxFileSize: 50,
           maxFiles: 3,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write enough to trigger rotation
@@ -1150,6 +1193,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'new_dir_test.log');
+          addTearDown(fileLogOutput.destroy);
 
           // Act
           await fileLogOutput.init();
@@ -1164,6 +1208,7 @@ void main() {
       test('should write and flush output correctly', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'flush_test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write multiple lines
@@ -1192,6 +1237,7 @@ void main() {
           fileName: 'rotation_check_test.log',
           maxFileSize: 100,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write enough to potentially trigger rotation check
@@ -1216,6 +1262,7 @@ void main() {
           maxFileSize: 200,
           maxFiles: 3,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write exactly enough to reach maxFileSize
@@ -1242,6 +1289,7 @@ void main() {
           maxFileSize: 100,
           maxFiles: 3,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Trigger first rotation
@@ -1273,6 +1321,7 @@ void main() {
             maxFileSize: 100,
             maxFiles: 2,
           );
+          addTearDown(fileLogOutput.destroy);
           await fileLogOutput.init();
 
           // Act - Trigger multiple rotations to test delete before rename
@@ -1303,6 +1352,7 @@ void main() {
           maxFileSize: 100,
           maxFiles: 2,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Write initial content
@@ -1331,6 +1381,7 @@ void main() {
           maxFileSize: 100,
           maxFiles: 2,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Trigger rotation
@@ -1360,6 +1411,7 @@ void main() {
           maxFileSize: 150,
           maxFiles: 2,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Act - Write enough to trigger size check and rotation
@@ -1381,6 +1433,7 @@ void main() {
       test('should handle getLogFiles directory listing', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'list_test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Write some logs
@@ -1410,6 +1463,7 @@ void main() {
       test('should filter files by fileName in getLogFiles', () async {
         // Arrange
         final fileLogOutput = FileLogOutput(fileName: 'filter_test.log');
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Write some logs
@@ -1435,6 +1489,7 @@ void main() {
             fileName: 'exception_test.log',
             maxFileSize: 100,
           );
+          addTearDown(fileLogOutput.destroy);
           await fileLogOutput.init();
 
           // Write some logs to trigger rotation check
@@ -1458,6 +1513,7 @@ void main() {
           maxFileSize: 50, // Small to trigger rotation
           maxFiles: 2,
         );
+        addTearDown(fileLogOutput.destroy);
         await fileLogOutput.init();
 
         // Write enough to trigger rotation
@@ -1481,6 +1537,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'null_file_test.log');
+          addTearDown(fileLogOutput.destroy);
           // Don't call init, so _logFile will be null
 
           // Act - Output should trigger _checkAndRotate but return early
@@ -1499,6 +1556,7 @@ void main() {
         () async {
           // Arrange
           final fileLogOutput = FileLogOutput(fileName: 'null_dir_test.log');
+          addTearDown(fileLogOutput.destroy);
           // Don't call init, so _logDirectory will be null
 
           // Act - Output should trigger _checkAndRotate but return early
@@ -1519,6 +1577,7 @@ void main() {
           final fileLogOutput = FileLogOutput(
             fileName: 'null_dir_rotate_test.log',
           );
+          addTearDown(fileLogOutput.destroy);
           // Don't call init, so _logDirectory will be null
 
           // Act - Should handle gracefully (tests line 114)
@@ -1562,6 +1621,7 @@ void main() {
         // Arrange - logging_service calls init() unawaited, so this window
         // is app startup: exactly what a startup-crash investigation needs.
         final output = FileLogOutput(fileName: 'startup.log');
+        addTearDown(output.destroy);
         final pending = output.init();
 
         // Act - emit while init is still in flight.
@@ -1588,6 +1648,7 @@ void main() {
           fileName: 'bounded.log',
           maxPendingLines: 3,
         );
+        addTearDown(output.destroy);
         // No init: there is no sink, so everything buffers.
         for (var i = 0; i < 20; i++) {
           output.output(lineEvent('line $i'));
@@ -1601,6 +1662,7 @@ void main() {
         () async {
           // Arrange - a tiny maxFileSize so a write crosses the threshold.
           final output = FileLogOutput(fileName: 'rotate.log', maxFileSize: 64);
+          addTearDown(output.destroy);
           await output.init();
 
           // Act - keep writing across the rotation window. Writing to a
@@ -1653,6 +1715,7 @@ void main() {
 
       test('two concurrent rotations do not discard a generation', () async {
         final output = FileLogOutput(fileName: 'concurrent.log');
+        addTearDown(output.destroy);
         await output.init();
         output.output(lineEvent('generation one'));
         await Future<void>.delayed(const Duration(milliseconds: 150));
@@ -1685,6 +1748,7 @@ void main() {
 
       test('clearLogs closes the sink it replaces', () async {
         final output = FileLogOutput(fileName: 'clear.log');
+        addTearDown(output.destroy);
         await output.init();
         output.output(lineEvent('before clear'));
         await Future<void>.delayed(const Duration(milliseconds: 100));
