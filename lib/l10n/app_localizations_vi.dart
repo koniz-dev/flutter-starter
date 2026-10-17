@@ -544,4 +544,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get failureUnknown => 'Đã xảy ra lỗi. Vui lòng thử lại.';
+
+  @override
+  String get homeAddScreensHint => 'Thêm màn hình trong lib/features/.';
+
+  @override
+  String get taskNotFound => 'Không tìm thấy nhiệm vụ';
 }

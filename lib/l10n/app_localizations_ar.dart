@@ -587,4 +587,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get failureUnknown => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get homeAddScreensHint => 'أضف الشاشات ضمن lib/features/.';
+
+  @override
+  String get taskNotFound => 'المهمة غير موجودة';
 }

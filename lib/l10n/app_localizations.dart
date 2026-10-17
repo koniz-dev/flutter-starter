@@ -923,6 +923,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get failureUnknown;
+
+  /// Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated
+  ///
+  /// In en, this message translates to:
+  /// **'Add screens under lib/features/.'**
+  String get homeAddScreensHint;
+
+  /// Shown on the task detail screen when the task does not exist
+  ///
+  /// In en, this message translates to:
+  /// **'Task not found'**
+  String get taskNotFound;
 }
 
 class _AppLocalizationsDelegate

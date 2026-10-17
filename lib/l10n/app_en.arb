@@ -657,5 +657,13 @@
   "failureUnknown": "Something went wrong. Please try again.",
   "@failureUnknown": {
     "description": "Failure message shown to the user. Used for any other failure"
+  },
+  "homeAddScreensHint": "Add screens under lib/features/.",
+  "@homeAddScreensHint": {
+    "description": "Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated"
+  },
+  "taskNotFound": "Task not found",
+  "@taskNotFound": {
+    "description": "Shown on the task detail screen when the task does not exist"
   }
 }
