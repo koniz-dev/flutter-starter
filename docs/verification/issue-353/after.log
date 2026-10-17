@@ -1,0 +1,7 @@
+00:00 +0: criterion 1: after logout and a sign-in as B, tasksProvider holds no task of A's
+00:00 +1: criterion 2: logout leaves no tasks_data key in storage
+00:00 +2: criterion 3: a forced logout from the interceptor gives the same result
+00:00 +3: A's stored tasks are wiped even if the tasks screen was never opened in the session that ended
+00:00 +4: a list on screen during the logout does not reload A's tasks while the stored blob is still being deleted
+00:00 +5: tasks created in the new session are kept
+00:00 +6: All tests passed!

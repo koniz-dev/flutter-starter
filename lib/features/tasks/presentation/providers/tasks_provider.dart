@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/session/session_providers.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
@@ -61,6 +63,37 @@ class TasksState {
     );
   }
 }
+
+/// Wipes the tasks of the previous user whenever the session changes.
+///
+/// Tasks are stored device-wide under one `tasks_data` key, not per user, so
+/// the slice deletes them when a session ends or is replaced - logout, forced
+/// logout, login, register - rather than scoping the key: scoping would need
+/// the user id, and features may not import the auth slice that owns it
+/// (koniz-dev/flutter-starter#353). [sessionEpochProvider] is the signal that
+/// crosses that boundary.
+///
+/// The stored blob is deleted first and [tasksProvider] is invalidated only
+/// once that has finished. Reads are not queued behind the delete, so
+/// invalidating first would let the rebuilt notifier reload the previous
+/// user's tasks; invalidating also drops a load that was still in flight for
+/// the old session.
+///
+/// Read once at startup by the tasks routes, which the app router builds
+/// eagerly, so the listener exists even if the tasks screen was never opened
+/// during the session that is ending.
+final tasksSessionResetProvider = Provider<void>((ref) {
+  ref.listen<int>(sessionEpochProvider, (_, _) {
+    final pendingDelete = ref
+        .read(tasksLocalDataSourceProvider)
+        .deleteAllTasks();
+    unawaited(
+      pendingDelete.whenComplete(() {
+        if (ref.mounted) ref.invalidate(tasksProvider);
+      }),
+    );
+  });
+});
 
 /// Tasks provider (Riverpod Generator).
 @Riverpod(keepAlive: true)
