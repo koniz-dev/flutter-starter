@@ -216,6 +216,9 @@ Future<void> _renameDartPackage(
     }
   }
 
+  final brickFiles = await rewriteFeatureBrickImports(rootPath, packageName);
+  logger.info('Rewrote $brickFiles feature_clean brick template(s)');
+
   final pubspec = File('$rootPath/pubspec.yaml');
   var yaml = await pubspec.readAsString();
   yaml = yaml.replaceFirstMapped(
@@ -395,6 +398,35 @@ Future<void> _patchPatrolConfig(
 /// fastlane configuration files.
 ///
 /// Every entry is a plain literal substitution, applied longest-first so that
+/// Rewrites `package:flutter_starter/` in the `feature_clean` brick's
+/// templates to `package:<packageName>/`, returning how many files changed.
+///
+/// README and `mason-demo-script.md` document `mason make feature_clean` after
+/// setup. Left alone, every feature the brick generates imports the template
+/// package and does not resolve (koniz-dev/flutter-starter#358). The templates
+/// are deliberately not in [_renamedDirectories]: that list is also handed to
+/// `dart fix` and `dart format`, which cannot parse mustache. Only the import
+/// prefix is replaced, so mustache tags and templated filenames are untouched.
+Future<int> rewriteFeatureBrickImports(
+  String rootPath,
+  String packageName,
+) async {
+  const oldImport = 'package:flutter_starter/';
+  final dir = Directory('$rootPath/bricks/feature_clean/__brick__');
+  if (!dir.existsSync()) return 0;
+  var rewritten = 0;
+  await for (final entity in dir.list(recursive: true, followLinks: false)) {
+    if (entity is! File) continue;
+    final text = await entity.readAsString();
+    if (!text.contains(oldImport)) continue;
+    await entity.writeAsString(
+      text.replaceAll(oldImport, 'package:$packageName/'),
+    );
+    rewritten++;
+  }
+  return rewritten;
+}
+
 /// `com.example.flutter_starter` is consumed before the bare `flutter_starter`
 /// inside it.
 Future<void> _patchPlatformIdentifiers({

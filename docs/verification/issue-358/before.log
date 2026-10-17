@@ -1,0 +1,10 @@
+$ grep -n "bricks" bricks/flutter_starter_setup/hooks/post_gen.dart; echo rc=$?
+rc=1
+$ grep -rl "package:flutter_starter/" bricks/feature_clean | wc -l
+       8
+$ flutter test test/tooling/setup_brick_feature_rename_test.dart
+test/tooling/setup_brick_feature_rename_test.dart:54:34: Error: Method not found: 'rewriteFeatureBrickImports'.
+test/tooling/setup_brick_feature_rename_test.dart:80:16: Error: Method not found: 'rewriteFeatureBrickImports'.
+  Compilation failed for testPath=/Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_feature_rename_test.dart: test/tooling/setup_brick_feature_rename_test.dart:54:34: Error: Method not found: 'rewriteFeatureBrickImports'.
+  test/tooling/setup_brick_feature_rename_test.dart:80:16: Error: Method not found: 'rewriteFeatureBrickImports'.
+00:00 +0 -1: Some tests failed.

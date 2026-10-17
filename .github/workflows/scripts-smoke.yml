@@ -188,6 +188,12 @@ jobs:
             echo "files above still import package:flutter_starter/" >&2
             exit 1
           fi
+          # `mason make feature_clean` is documented after setup; its templates
+          # must name the new package too (koniz-dev/flutter-starter#358).
+          if grep -rl "package:flutter_starter/" bricks/feature_clean; then
+            echo "the feature_clean brick still imports package:flutter_starter/" >&2
+            exit 1
+          fi
           if grep -rn "'Flutter Starter'\|\"appTitle\": \"Flutter Starter\"" lib test integration_test \
               --include='*.dart' --include='*.arb'; then
             echo "the template title survived the rename" >&2
