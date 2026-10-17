@@ -1,0 +1,6 @@
+--- mutant diff (login)
+-    sessionGeneration.invalidate();
+KILLED    delete invalidate() from login()
+--- mutant diff (register)
+-    sessionGeneration.invalidate();
+KILLED    delete invalidate() from register()

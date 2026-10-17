@@ -511,6 +511,45 @@ void main() {
         expect(retryAdapter.hits, 0);
       },
     );
+
+    // koniz-dev/flutter-starter#368: the test above calls logout() first, and
+    // logout's own invalidate() hides a login() or register() that dropped
+    // theirs. These two replace the credentials with no logout at all, so the
+    // only thing standing between the stale refresh and the new tokens is the
+    // invalidate() inside the method under test.
+    for (final (name, signIn) in <(String, Future<void> Function())>[
+      ('login', () => repository.login('a@b.test', 'pw')),
+      ('register', () => repository.register('a@b.test', 'pw', 'A')),
+    ]) {
+      test(
+        'a $name with no logout first keeps the new session over a refresh '
+        'already in flight',
+        () async {
+          final gate = holdRefreshOpen();
+
+          final pending = _settle(dio.get<dynamic>('/profile'));
+          await _within(gate.started.future);
+
+          remote.onRefresh = null;
+          await signIn();
+          expect(tokens.accessToken, 'session-2-access');
+          expect(remote.logoutCalls, 0);
+
+          gate.release.complete();
+          await _within(pending);
+
+          expect(
+            tokens.accessToken,
+            'session-2-access',
+            reason:
+                'the refresh started before $name() overwrote its access '
+                'token - $name() no longer invalidates the session',
+          );
+          expect(tokens.refreshToken, 'session-2-refresh');
+          expect(retryAdapter.hits, 0);
+        },
+      );
+    }
   });
 
   group('the real provider graph shares one SessionGeneration', () {
