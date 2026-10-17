@@ -90,32 +90,11 @@ MockAuthRepository createMockAuthRepository() {
   return MockAuthRepository();
 }
 
-/// Creates a configured mock AuthRemoteDataSource
-///
-/// Returns a MockAuthRemoteDataSource instance that can be configured in tests.
-MockAuthRemoteDataSource createMockAuthRemoteDataSource() {
-  return MockAuthRemoteDataSource();
-}
-
-/// Creates a configured mock AuthLocalDataSource
-///
-/// Returns a MockAuthLocalDataSource instance that can be configured in tests.
-MockAuthLocalDataSource createMockAuthLocalDataSource() {
-  return MockAuthLocalDataSource();
-}
-
 /// Creates a configured mock ApiClient
 ///
 /// Returns a MockApiClient instance that can be configured in tests.
 MockApiClient createMockApiClient() {
   return MockApiClient();
-}
-
-/// Creates a configured mock StorageService
-///
-/// Returns a MockStorageService instance that can be configured in tests.
-MockStorageService createMockStorageService() {
-  return MockStorageService();
 }
 
 /// Creates a configured mock SecureStorageService
@@ -125,103 +104,9 @@ MockSecureStorageService createMockSecureStorageService() {
   return MockSecureStorageService();
 }
 
-/// Creates a configured mock LoginUseCase
-///
-/// Returns a MockLoginUseCase instance that can be configured in tests.
-MockLoginUseCase createMockLoginUseCase() {
-  return MockLoginUseCase();
-}
-
 /// Creates a configured mock RegisterUseCase
 ///
 /// Returns a MockRegisterUseCase instance that can be configured in tests.
 MockRegisterUseCase createMockRegisterUseCase() {
   return MockRegisterUseCase();
-}
-
-/// Creates a configured mock LogoutUseCase
-///
-/// Returns a MockLogoutUseCase instance that can be configured in tests.
-MockLogoutUseCase createMockLogoutUseCase() {
-  return MockLogoutUseCase();
-}
-
-/// Creates a configured mock RefreshTokenUseCase
-///
-/// Returns a MockRefreshTokenUseCase instance that can be configured in tests.
-MockRefreshTokenUseCase createMockRefreshTokenUseCase() {
-  return MockRefreshTokenUseCase();
-}
-
-/// Creates a configured mock GetCurrentUserUseCase
-///
-/// Returns a MockGetCurrentUserUseCase instance that can be configured in
-/// tests.
-MockGetCurrentUserUseCase createMockGetCurrentUserUseCase() {
-  return MockGetCurrentUserUseCase();
-}
-
-/// Creates a configured mock IsAuthenticatedUseCase
-///
-/// Returns a MockIsAuthenticatedUseCase instance that can be configured in
-/// tests.
-MockIsAuthenticatedUseCase createMockIsAuthenticatedUseCase() {
-  return MockIsAuthenticatedUseCase();
-}
-
-/// Creates a configured mock TasksRepository
-///
-/// Returns a MockTasksRepository instance that can be configured in tests.
-MockTasksRepository createMockTasksRepository() {
-  return MockTasksRepository();
-}
-
-/// Creates a configured mock TasksLocalDataSource
-///
-/// Returns a MockTasksLocalDataSource instance that can be configured in tests.
-MockTasksLocalDataSource createMockTasksLocalDataSource() {
-  return MockTasksLocalDataSource();
-}
-
-/// Creates a configured mock GetAllTasksUseCase
-///
-/// Returns a MockGetAllTasksUseCase instance that can be configured in tests.
-MockGetAllTasksUseCase createMockGetAllTasksUseCase() {
-  return MockGetAllTasksUseCase();
-}
-
-/// Creates a configured mock GetTaskByIdUseCase
-///
-/// Returns a MockGetTaskByIdUseCase instance that can be configured in tests.
-MockGetTaskByIdUseCase createMockGetTaskByIdUseCase() {
-  return MockGetTaskByIdUseCase();
-}
-
-/// Creates a configured mock CreateTaskUseCase
-///
-/// Returns a MockCreateTaskUseCase instance that can be configured in tests.
-MockCreateTaskUseCase createMockCreateTaskUseCase() {
-  return MockCreateTaskUseCase();
-}
-
-/// Creates a configured mock UpdateTaskUseCase
-///
-/// Returns a MockUpdateTaskUseCase instance that can be configured in tests.
-MockUpdateTaskUseCase createMockUpdateTaskUseCase() {
-  return MockUpdateTaskUseCase();
-}
-
-/// Creates a configured mock DeleteTaskUseCase
-///
-/// Returns a MockDeleteTaskUseCase instance that can be configured in tests.
-MockDeleteTaskUseCase createMockDeleteTaskUseCase() {
-  return MockDeleteTaskUseCase();
-}
-
-/// Creates a configured mock ToggleTaskCompletionUseCase
-///
-/// Returns a MockToggleTaskCompletionUseCase instance that can be configured
-/// in tests.
-MockToggleTaskCompletionUseCase createMockToggleTaskCompletionUseCase() {
-  return MockToggleTaskCompletionUseCase();
 }
