@@ -1,0 +1,12 @@
+# this branch: no sort left
+(none)
+
+# #372's out-of-order test (criterion 2) on this branch
+00:00 +0: criterion 1: a migration that skips the version stamp fails the run
+00:00 +1: criterion 2: migrations registered out of order run in fromVersion order
+00:00 +2: criterion 3: a stored version of 0 is reset to the initial version
+00:00 +3: criterion 3: a stored version of -1 is reset to the initial version
+00:00 +4: All tests passed!
+
+# flutter test test/core/storage
+00:07 +197: All tests passed!
