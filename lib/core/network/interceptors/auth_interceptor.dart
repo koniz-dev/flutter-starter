@@ -195,6 +195,9 @@ class AuthInterceptor extends Interceptor {
         receiveTimeout:
             host?.options.receiveTimeout ??
             Duration(seconds: AppConfig.apiReceiveTimeout),
+        sendTimeout:
+            host?.options.sendTimeout ??
+            Duration(seconds: AppConfig.apiSendTimeout),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

@@ -51,7 +51,10 @@ class ApiClient {
          performanceService,
          sslPinning ?? SslPinning.fromConfig(),
        ) {
-    _networkClient = DioNetworkClient(_dio);
+    _networkClient = DioNetworkClient(
+      _dio,
+      deadline: Duration(seconds: AppConfig.apiTimeout),
+    );
     _cacheInterceptor = _dio.interceptors.whereType<CacheInterceptor>().single;
   }
 
@@ -68,6 +71,7 @@ class ApiClient {
         baseUrl: AppConfig.baseUrl + ApiEndpoints.apiVersion,
         connectTimeout: Duration(seconds: AppConfig.apiConnectTimeout),
         receiveTimeout: Duration(seconds: AppConfig.apiReceiveTimeout),
+        sendTimeout: Duration(seconds: AppConfig.apiSendTimeout),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
