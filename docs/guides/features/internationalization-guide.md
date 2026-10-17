@@ -17,7 +17,7 @@ This guide provides a comprehensive overview of the internationalization system 
 ## Overview
 
 The internationalization system supports:
-- **3 Languages**: English (en), Spanish (es), Arabic (ar)
+- **4 Languages**: English (en), Spanish (es), Arabic (ar), Vietnamese (vi)
 - **RTL Support**: Automatic text direction for Arabic
 - **Pluralization**: ICU message format for plural forms
 - **Formatting**: Date, time, number, and currency formatting
@@ -61,7 +61,7 @@ After modifying ARB files, generate the localization code:
 flutter gen-l10n
 ```
 
-This command generates `AppLocalizations` class in `.dart_tool/flutter_gen/gen_l10n/`.
+This command generates the `AppLocalizations` class into `lib/l10n/` (`output-localization-file: app_localizations.dart` in `l10n.yaml`), imported as `package:flutter_starter/l10n/app_localizations.dart`. The generated files are committed.
 
 ## Text Localization
 
@@ -70,13 +70,16 @@ This command generates `AppLocalizations` class in `.dart_tool/flutter_gen/gen_l
 Access localized strings using `AppLocalizations`:
 
 ```dart
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 
 class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Text(l10n.welcome);
   }
 }
@@ -157,26 +160,30 @@ For context-specific translations, use different keys:
 Use `LocalizedFormatters` for date formatting:
 
 ```dart
-import 'package:flutter_starter/core/localization/localized_formatters.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
+import 'package:flutter_starter/core/localization/localized_formatters.dart';
 
 class MyWidget extends ConsumerWidget {
+  const MyWidget({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeStateProvider);
     final date = DateTime.now();
-    
+
     // Default format
     final formatted = LocalizedFormatters.formatDate(date, locale: locale);
-    
+
     // Custom format
     final custom = LocalizedFormatters.formatDate(
       date,
       locale: locale,
       format: 'yyyy-MM-dd',
     );
-    
-    return Text(formatted);
+
+    return Column(children: [Text(formatted), Text(custom)]);
   }
 }
 ```
@@ -267,16 +274,20 @@ assets/
 
 **Usage:**
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 
 class LocalizedImage extends ConsumerWidget {
+  const LocalizedImage({required this.imagePath, super.key});
+
   final String imagePath;
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeStateProvider);
     final languageCode = locale.languageCode;
-    
+
     return Image.asset('assets/images/$languageCode/$imagePath');
   }
 }
@@ -301,46 +312,45 @@ assets/
 The app includes a ready-to-use language switcher:
 
 ```dart
+import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 
-// As an icon button in AppBar
-AppBar(
-  actions: [
-    const LanguageSwitcher(),
-  ],
-)
+// As an icon button in an AppBar
+AppBar buildAppBar() => AppBar(actions: const [LanguageSwitcher()]);
 
 // As a menu item
-LanguageSwitcherMenuItem()
+Widget buildMenuItem() => const LanguageSwitcherMenuItem();
 
 // As a full screen
-Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => const LanguageSelectionScreen(),
-  ),
-);
+Future<void> openLanguageSelection(BuildContext context) {
+  return Navigator.push(
+    context,
+    MaterialPageRoute<void>(builder: (_) => const LanguageSelectionScreen()),
+  );
+}
 ```
 
 ### Programmatic Language Switching
 
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
-import 'package:flutter_starter/core/localization/localization_service.dart';
 
 class MyWidget extends ConsumerWidget {
+  const MyWidget({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizationService = ref.read(localizationServiceProvider);
-    
+
     return ElevatedButton(
       onPressed: () async {
-        // Switch to Spanish
-        await localizationService.setCurrentLocale(
-          const Locale('es', 'ES'),
-        );
-        ref.read(localeStateProvider.notifier).state = 
-          const Locale('es', 'ES');
+        const spanish = Locale('es', 'ES');
+        // Persist the choice, then switch the running app to it. Use the
+        // notifier's `locale` setter: its `state` is protected.
+        await localizationService.setCurrentLocale(spanish);
+        ref.read(localeStateProvider.notifier).locale = spanish;
       },
       child: const Text('Switch to Spanish'),
     );
@@ -362,17 +372,26 @@ final languageCode = locale.languageCode; // 'en', 'es', 'ar'
 RTL is automatically handled for Arabic and other RTL languages:
 
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 
 class MyWidget extends ConsumerWidget {
+  const MyWidget({required this.child, super.key});
+
+  final Widget child;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isRTL = ref.watch(isRTLProvider);
     final textDirection = ref.watch(textDirectionProvider);
-    
+
     return Directionality(
       textDirection: textDirection,
-      child: YourWidget(),
+      child: Align(
+        alignment: isRTL ? Alignment.centerRight : Alignment.centerLeft,
+        child: child,
+      ),
     );
   }
 }
@@ -481,11 +500,13 @@ Text(LocalizedFormatters.formatDate(date, locale: locale));
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 
 class LocalizedFormExample extends ConsumerStatefulWidget {
+  const LocalizedFormExample({super.key});
+
   @override
   ConsumerState<LocalizedFormExample> createState() => 
     _LocalizedFormExampleState();
@@ -549,7 +570,7 @@ class _LocalizedFormExampleState extends ConsumerState<LocalizedFormExample> {
                     setState(() => _selectedDate = date);
                   }
                 },
-                child: Text('Select Date'),
+                child: const Text('Select date'),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -574,22 +595,25 @@ class _LocalizedFormExampleState extends ConsumerState<LocalizedFormExample> {
 ### Example: Currency Display
 
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
 
 class PriceDisplay extends ConsumerWidget {
-  final double price;
-  final String currencyCode;
-
   const PriceDisplay({
     required this.price,
     required this.currencyCode,
+    super.key,
   });
+
+  final double price;
+  final String currencyCode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeStateProvider);
-    
+
     return Text(
       LocalizedFormatters.formatCurrency(
         price,
@@ -608,15 +632,18 @@ class PriceDisplay extends ConsumerWidget {
 ### Example: Pluralized Messages
 
 ```dart
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 
 class ItemList extends StatelessWidget {
+  const ItemList({required this.items, super.key});
+
   final List<String> items;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Column(
       children: [
         Text(l10n.itemCount(items.length)),
