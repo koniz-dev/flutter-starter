@@ -1,0 +1,6 @@
+# test/tooling/tool_readme_check_count_test.dart on this branch
+00:00 +0: the scan sees the wired checks
+00:00 +1: criterion 3: check_docs.dart's header states the wired count
+00:00 +2: criteria 1 and 3: tool/README.md states the count and lists each check
+00:00 +3: criterion 2: the README documents the Type.member directive form
+00:00 +4: All tests passed!
