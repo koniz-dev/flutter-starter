@@ -75,12 +75,18 @@ void main() {
   /// "uncaught exception after the test completed", failing tests that had
   /// already asserted correctly. Serving the asset removes the noise instead of
   /// teaching anyone to ignore it.
-  void installEnvAsset() {
+  ///
+  /// [contents] defaults to a *known* environment: since #412, `main()` refuses
+  /// to boot on an unknown one, so the healthy-path tests must not serve one.
+  /// The asset is evicted first because `rootBundle` caches it by key, which
+  /// would otherwise hand every later test the first test's `.env`.
+  void installEnvAsset([String contents = 'ENVIRONMENT=development\n']) {
+    rootBundle.evict('.env');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler(_assetChannel, (message) async {
           final key = utf8.decode(message!.buffer.asUint8List());
           if (key != '.env') return null;
-          final bytes = Uint8List.fromList(utf8.encode('ENVIRONMENT=test\n'));
+          final bytes = Uint8List.fromList(utf8.encode(contents));
           return ByteData.view(bytes.buffer);
         });
   }
@@ -375,6 +381,26 @@ void main() {
   // `main()` returns, and a single bounded `pumpAndSettle` afterwards settles
   // the whole app - router, Riverpod scope and localization included - in one
   // frame. The comment is replaced by the test it said was impossible.
+  // koniz-dev/flutter-starter#412: a release build with a mistyped
+  // ENVIRONMENT used to boot against the development fallbacks - localhost,
+  // no SSL pinning - with the only warning printed in debug builds.
+  group('main() refuses an unknown ENVIRONMENT (#412)', () {
+    testWidgets('ENVIRONMENT=prod boots into the failure screen, naming the '
+        'value and the known environments', (tester) async {
+      installSecureBackend(<String, String>{});
+      installEnvAsset('ENVIRONMENT=prod\n');
+
+      await bootRealMain(tester);
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expect(find.textContaining('"prod"'), findsOneWidget);
+      expect(
+        find.textContaining('development, staging, production'),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('main() boots MyApp end to end on a healthy startup (#160)', () {
     testWidgets('a healthy startup hands MyApp to runApp, not the failure '
         'screen', (tester) async {
