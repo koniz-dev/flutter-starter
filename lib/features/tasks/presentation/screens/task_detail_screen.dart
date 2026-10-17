@@ -175,16 +175,35 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (widget.taskId != null) {
-                    unawaited(_loadTask());
-                  } else if (context.canPopRoute()) {
-                    context.popRoute<void>();
-                  }
-                },
-                child: Text(l10n.retry),
-              ),
+              // Retrying a lookup for a task that does not exist cannot help,
+              // so not-found offers a way out instead
+              // (koniz-dev/flutter-starter#514). A deep link has nothing to
+              // pop back to, so it goes to the tasks list.
+              if (_error is NotFoundFailure)
+                ElevatedButton.icon(
+                  onPressed: () {
+                    if (context.canPopRoute()) {
+                      context.popRoute<void>();
+                    } else {
+                      context.goToTasks();
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: Text(
+                    MaterialLocalizations.of(context).backButtonTooltip,
+                  ),
+                )
+              else
+                ElevatedButton(
+                  onPressed: () {
+                    if (widget.taskId != null) {
+                      unawaited(_loadTask());
+                    } else if (context.canPopRoute()) {
+                      context.popRoute<void>();
+                    }
+                  },
+                  child: Text(l10n.retry),
+                ),
             ],
           ),
         ),
