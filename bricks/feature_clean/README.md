@@ -41,7 +41,16 @@ The generated slice passes this repository's own gates as-is:
 `flutter analyze` reports no issues, `dart format --set-exit-if-changed` is
 clean, and the generated test compiles and passes.
 
-Two things keep that true:
+Three things keep that true:
+
+- A `post_gen` hook (`hooks/post_gen.dart`) runs
+  `dart fix --apply --code=directives_ordering` and `dart format` on the
+  generated folders. The templates write imports in the order sorted for
+  `flutter_starter`, and both rename paths rewrite that name in them, so after
+  a rename to a name that sorts elsewhere (`my_app`, `acme_shop`) the order
+  would trip `directives_ordering` (koniz-dev/flutter-starter#594).
+  `create_feature.sh` and `.ps1` do the same (#442). scripts-smoke generates a
+  slice with this brick after each rename and analyzes it with infos fatal.
 
 - `scripts/dev/create_feature.sh`, `scripts/dev/create_feature.ps1` and this
   brick are generated from one verified source, so all three emit identical
