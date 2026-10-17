@@ -1,0 +1,4 @@
+$ git grep -n "no_feature_flags" -- lib
+exit=1 (1 = no matches)
+$ git grep -n openTasks -- tool/golden
+exit=1
