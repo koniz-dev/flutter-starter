@@ -43,7 +43,9 @@ class FileLogOutput extends LogOutput {
   /// Creates a [FileLogOutput] with the given configuration
   ///
   /// [maxFileSize] - Maximum file size in bytes before rotation (default: 10MB)
-  /// [maxFiles] - Maximum number of log files to keep (default: 5)
+  /// [maxFiles] - Maximum number of log files to keep, the current one
+  /// included (default: 5): the current file plus `maxFiles - 1` rotated
+  /// ones. Values below 1 are treated as 1
   /// [fileName] - Base name for log files (default: 'app.log')
   /// [maxPendingLines] - Maximum number of lines held while no sink is open
   /// (default: 1000). Oldest lines are discarded first once the buffer is
@@ -59,7 +61,7 @@ class FileLogOutput extends LogOutput {
   /// Maximum file size in bytes before rotation
   final int maxFileSize;
 
-  /// Maximum number of log files to keep
+  /// Maximum number of log files to keep, the current one included
   final int maxFiles;
 
   /// Base name for log files
@@ -318,27 +320,40 @@ class FileLogOutput extends LogOutput {
       _sink = null;
       await _closeSink(sink);
 
-      // Rename existing files
-      for (var i = maxFiles - 1; i > 0; i--) {
-        final oldFile = File(path.join(_logDirectory!, '$fileName.$i'));
-        final newFile = File(path.join(_logDirectory!, '$fileName.${i + 1}'));
+      // maxFiles counts the current file, so at most maxFiles - 1 rotated
+      // generations survive: `.1` (newest) to `.${keep}` (oldest). This used
+      // to shift `.1..maxFiles-1` up to `.maxFiles` and keep maxFiles + 1
+      // files (koniz-dev/flutter-starter#589).
+      final keep = (maxFiles < 1 ? 1 : maxFiles) - 1;
+      File rotated(int generation) =>
+          File(path.join(_logDirectory!, '$fileName.$generation'));
 
-        if (oldFile.existsSync()) {
-          if (newFile.existsSync()) {
-            newFile.deleteSync();
-          }
-          oldFile.renameSync(newFile.path);
+      // The oldest kept generation is about to be pushed out, and `.maxFiles`
+      // may be left over from a build that kept one more.
+      for (final generation in {if (keep > 0) keep, keep + 1}) {
+        final stale = rotated(generation);
+        if (stale.existsSync()) {
+          stale.deleteSync();
         }
       }
 
-      // Move current log to .1
+      // Shift the rest up one generation, oldest first.
+      for (var i = keep - 1; i > 0; i--) {
+        final oldFile = rotated(i);
+        if (oldFile.existsSync()) {
+          oldFile.renameSync(rotated(i + 1).path);
+        }
+      }
+
+      // The current log becomes `.1`, or is discarded when no rotated
+      // generation is kept.
       final currentLog = File(path.join(_logDirectory!, fileName));
       if (currentLog.existsSync()) {
-        final rotatedLog = File(path.join(_logDirectory!, '$fileName.1'));
-        if (rotatedLog.existsSync()) {
-          rotatedLog.deleteSync();
+        if (keep > 0) {
+          currentLog.renameSync(rotated(1).path);
+        } else {
+          currentLog.deleteSync();
         }
-        currentLog.renameSync(rotatedLog.path);
       }
     } on Object {
       // Silently handle rotation errors
