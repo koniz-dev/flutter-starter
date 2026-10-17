@@ -1,0 +1,18 @@
+$ ./scripts/dev/create_feature.sh probe
+Creating feature: probe
+Feature probe created:
+  lib/features/probe
+  test/features/probe
+Next: flutter analyze && flutter test test/features/probe
+$ flutter analyze lib/features/probe test/features/probe
+Analyzing 2 items...                                            
+
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/probe/probe_repository_impl_test.dart:5:1 • directives_ordering
+
+1 issue found. (ran in 2.9s)
+analyze exit=1
+$ dart format --set-exit-if-changed lib/features/probe test/features/probe
+Formatted 10 files (0 changed) in 0.04 seconds.
+format exit=0
+$ flutter test test/features/probe
+00:00 +2: All tests passed!
