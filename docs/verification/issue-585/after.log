@@ -1,0 +1,4 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt585/test/tooling/integration_test_readme_test.dart
+00:00 +0: every tool/golden/ path the README names exists
+00:00 +1: a test file attributed to a golden variant is in that variant
+00:00 +2: All tests passed!
