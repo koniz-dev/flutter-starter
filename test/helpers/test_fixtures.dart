@@ -54,18 +54,6 @@ UserModel createUserModel({
   );
 }
 
-/// Creates a list of test users
-List<User> createUserList({int count = 3}) {
-  return List.generate(
-    count,
-    (index) => createUser(
-      id: 'user-$index',
-      email: 'user$index@example.com',
-      name: 'User $index',
-    ),
-  );
-}
-
 // ============================================================================
 // Auth Response Fixtures
 // ============================================================================
@@ -86,14 +74,6 @@ AuthResponseModel createAuthResponse({
     token: token,
     refreshToken: refreshToken ?? 'test-refresh-token',
   );
-}
-
-/// Creates an AuthResponseModel without refresh token
-AuthResponseModel createAuthResponseWithoutRefresh({
-  UserModel? user,
-  String token = 'test-access-token',
-}) {
-  return AuthResponseModel(user: user ?? createUserModel(), token: token);
 }
 
 // ============================================================================
@@ -118,18 +98,6 @@ ServerException createServerException({
   );
 }
 
-/// Creates a test NetworkException
-///
-/// Default values:
-/// - message: 'Network error'
-/// - code: 'NETWORK_ERROR'
-NetworkException createNetworkException({
-  String message = 'Network error',
-  String? code,
-}) {
-  return NetworkException(message, code: code ?? 'NETWORK_ERROR');
-}
-
 /// Creates a test CacheException
 ///
 /// Default values:
@@ -140,30 +108,6 @@ CacheException createCacheException({
   String? code,
 }) {
   return CacheException(message, code: code ?? 'CACHE_ERROR');
-}
-
-/// Creates a test AuthException
-///
-/// Default values:
-/// - message: 'Authentication failed'
-/// - code: 'AUTH_ERROR'
-AuthException createAuthException({
-  String message = 'Authentication failed',
-  String? code,
-}) {
-  return AuthException(message, code: code ?? 'AUTH_ERROR');
-}
-
-/// Creates a test ValidationException
-///
-/// Default values:
-/// - message: 'Validation failed'
-/// - code: 'VALIDATION_ERROR'
-ValidationException createValidationException({
-  String message = 'Validation failed',
-  String? code,
-}) {
-  return ValidationException(message, code: code ?? 'VALIDATION_ERROR');
 }
 
 // ============================================================================
@@ -180,18 +124,6 @@ ServerFailure createServerFailure({
   String? code,
 }) {
   return ServerFailure(message, code: code ?? 'SERVER_ERROR');
-}
-
-/// Creates a test NetworkFailure
-///
-/// Default values:
-/// - message: 'Network error'
-/// - code: 'NETWORK_ERROR'
-NetworkFailure createNetworkFailure({
-  String message = 'Network error',
-  String? code,
-}) {
-  return NetworkFailure(message, code: code ?? 'NETWORK_ERROR');
 }
 
 /// Creates a test CacheFailure
@@ -218,36 +150,12 @@ AuthFailure createAuthFailure({
   return AuthFailure(message, code: code ?? 'AUTH_ERROR');
 }
 
-/// Creates a test ValidationFailure
-///
-/// Default values:
-/// - message: 'Validation failed'
-/// - code: 'VALIDATION_ERROR'
-ValidationFailure createValidationFailure({
-  String message = 'Validation failed',
-  String? code,
-}) {
-  return ValidationFailure(message, code: code ?? 'VALIDATION_ERROR');
-}
-
-/// Creates a test UnknownFailure
-///
-/// Default values:
-/// - message: 'Unknown error'
-/// - code: 'UNKNOWN_ERROR'
-UnknownFailure createUnknownFailure({
-  String message = 'Unknown error',
-  String? code,
-}) {
-  return UnknownFailure(message, code: code ?? 'UNKNOWN_ERROR');
-}
-
 // ============================================================================
 // JSON Fixtures
 // ============================================================================
 
 /// Creates a test user JSON map
-Map<String, dynamic> createUserJson({
+Map<String, dynamic> _userJson({
   String id = 'test-user-id',
   String email = 'test@example.com',
   String? name,
@@ -268,63 +176,10 @@ Map<String, dynamic> createAuthResponseJson({
   String? refreshToken,
 }) {
   return {
-    'user': user ?? createUserJson(),
+    'user': user ?? _userJson(),
     'token': token,
     ...?refreshToken != null ? {'refresh_token': refreshToken} : null,
   };
-}
-
-/// Creates a test error response JSON map
-Map<String, dynamic> createErrorResponseJson({
-  String message = 'Error message',
-  String? code,
-  Map<String, dynamic>? error,
-}) {
-  return {
-    'message': message,
-    ...?code != null ? {'code': code} : null,
-    ...?error != null ? {'error': error} : null,
-  };
-}
-
-// ============================================================================
-// Token Fixtures
-// ============================================================================
-
-/// Creates a test access token
-String createAccessToken({String token = 'test-access-token'}) {
-  return token;
-}
-
-/// Creates a test refresh token
-String createRefreshToken({String token = 'test-refresh-token'}) {
-  return token;
-}
-
-/// Creates a test token pair
-Map<String, String> createTokenPair({
-  String accessToken = 'test-access-token',
-  String refreshToken = 'test-refresh-token',
-}) {
-  return {'access_token': accessToken, 'refresh_token': refreshToken};
-}
-
-// ============================================================================
-// Date Fixtures
-// ============================================================================
-
-/// Creates a test DateTime
-///
-/// Default: Current time
-/// Can be customized with offset.
-DateTime createTestDateTime({Duration? offset}) {
-  return DateTime.now().add(offset ?? Duration.zero);
-}
-
-/// Creates a test date string (ISO format)
-String createTestDateString({DateTime? date}) {
-  final dateTime = date ?? DateTime.now();
-  return dateTime.toIso8601String();
 }
 
 // ============================================================================
