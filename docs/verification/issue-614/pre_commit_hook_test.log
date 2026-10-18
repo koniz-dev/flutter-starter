@@ -1,0 +1,13 @@
+--- hook output without pub get (exit 1) ---
+Running pre-commit checks...
+❌ Dependencies are not resolved (.dart_tool/package_config.json is missing).
+   Run: flutter pub get
+   Nothing was formatted or changed.
+---
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+ok    with dependencies resolved the hook fails on a real format violation
+
+All pre-commit hook cases passed.
