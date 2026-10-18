@@ -207,3 +207,24 @@ jobs:
             echo "- **Failed.** Reproduce with \`flutter test --test-randomize-ordering-seed ${seed:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
           fi
           exit "$status"
+
+      # pub get, analyze and test must leave every tracked file as committed.
+      # Flutter's own migrations (analyzer excludes, the Pods includes in the
+      # xcconfigs) and the lock as this stable resolves it are committed, so a
+      # diff here means a new stable re-pinned or re-migrated something - the
+      # same event as a new stable's lints, handled the same way: fix it on
+      # main first (koniz-dev/flutter-starter#338, #608).
+      - name: Tracked files are unchanged
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          dirty=$(git status --porcelain --untracked-files=no)
+          if [ -n "$dirty" ]; then
+            echo "$dirty"
+            git diff --stat
+            echo "::error title=pub get / analyze / test changed tracked files::Run flutter pub get on main with this stable and commit the result (usually pubspec.lock or analysis_options.yaml)."
+            echo "- **Tracked files changed by pub get / analyze / test:**" >> "$GITHUB_STEP_SUMMARY"
+            echo "$dirty" | sed 's/^/  - /' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "No tracked file changed."

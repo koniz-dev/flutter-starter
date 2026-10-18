@@ -21,6 +21,13 @@ analyzer:
     # variant and analyzes the resulting tree, which is the only state in
     # which a golden's correctness is a meaningful question.
     - tool/golden/**
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   # The lint rules applied to this project can be customized in the
