@@ -1,0 +1,9 @@
+$ flutter pub get   (on origin/main)
+$ git status --porcelain
+ M analysis_options.yaml
+ M ios/Flutter/Debug.xcconfig
+ M ios/Flutter/Release.xcconfig
+ M macos/Flutter/Flutter-Debug.xcconfig
+ M macos/Flutter/Flutter-Release.xcconfig
+ M pubspec.lock
+?? docs/verification/issue-338/

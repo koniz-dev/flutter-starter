@@ -1,0 +1,7 @@
+$ flutter pub get   (on this branch)
+$ git status --porcelain -- ios macos
+(empty = the four xcconfigs are unmodified)
+$ git status --porcelain   (whole tree)
+ M analysis_options.yaml
+ M pubspec.lock
+(analysis_options.yaml and pubspec.lock are #608's part)

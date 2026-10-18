@@ -1,0 +1,28 @@
+diff --git a/ios/Flutter/Debug.xcconfig b/ios/Flutter/Debug.xcconfig
+index 592ceee85b8..ec97fc6f302 100644
+--- a/ios/Flutter/Debug.xcconfig
++++ b/ios/Flutter/Debug.xcconfig
+@@ -1 +1,2 @@
++#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+ #include "Generated.xcconfig"
+diff --git a/ios/Flutter/Release.xcconfig b/ios/Flutter/Release.xcconfig
+index 592ceee85b8..c4855bfe200 100644
+--- a/ios/Flutter/Release.xcconfig
++++ b/ios/Flutter/Release.xcconfig
+@@ -1 +1,2 @@
++#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+ #include "Generated.xcconfig"
+diff --git a/macos/Flutter/Flutter-Debug.xcconfig b/macos/Flutter/Flutter-Debug.xcconfig
+index c2efd0b608b..4b81f9b2d20 100644
+--- a/macos/Flutter/Flutter-Debug.xcconfig
++++ b/macos/Flutter/Flutter-Debug.xcconfig
+@@ -1 +1,2 @@
++#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+ #include "ephemeral/Flutter-Generated.xcconfig"
+diff --git a/macos/Flutter/Flutter-Release.xcconfig b/macos/Flutter/Flutter-Release.xcconfig
+index c2efd0b608b..5caa9d1579e 100644
+--- a/macos/Flutter/Flutter-Release.xcconfig
++++ b/macos/Flutter/Flutter-Release.xcconfig
+@@ -1 +1,2 @@
++#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+ #include "ephemeral/Flutter-Generated.xcconfig"
