@@ -76,9 +76,10 @@ implementer is active (see Parallelism in `CLAUDE.md`).
    watching. `main` has no branch protection, so nothing stops a direct push or
    a merge over a red check except you.
 
-   Before committing, revert `flutter pub get` churn (`analysis_options.yaml`,
-   `ios/Podfile`, `macos/Podfile`, `*.xcconfig`) and stage explicitly. Never
-   `git add .`.
+   Stage explicitly. Never `git add .`. `flutter pub get` leaves the tree
+   clean on the current stable; if it dirties a tracked file, a new stable
+   changed something - fix that on `main` in its own change (CLAUDE.md,
+   "Commands"), do not revert it or fold it into this issue.
 
 7. **Verify and close, or hand off.**
 

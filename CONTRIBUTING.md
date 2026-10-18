@@ -238,11 +238,9 @@ Examples:
 
 2. **Make your changes** and commit frequently
 
-   Stage explicitly. Do **not** use `git add .`: `flutter pub get` rewrites
-   `analysis_options.yaml` and writes `ios/Podfile`, `macos/Podfile` and four
-   `*.xcconfig` files as a side effect, and `git add .` sweeps that tooling
-   churn into your commit where a reviewer has to work out whether it was
-   deliberate.
+   Stage explicitly. Do **not** use `git add .`: it sweeps in anything else
+   the working tree happens to hold, and a reviewer then has to work out
+   whether it was deliberate.
 
    ```bash
    git status                       # see exactly what changed
@@ -250,11 +248,10 @@ Examples:
    git commit -m "feat: add product listing screen"
    ```
 
-   Revert the churn before committing if it appears:
-
-   ```bash
-   git checkout -- analysis_options.yaml ios/Flutter macos/Flutter
-   ```
+   `flutter pub get` leaves the tree clean on the current stable. If it
+   changes `pubspec.lock`, `analysis_options.yaml` or an `*.xcconfig`, a new
+   Flutter stable re-pinned or re-migrated something: that belongs in its own
+   change on `main` (re-run `flutter pub get` and commit), not in your feature.
 
 3. **Keep your branch up to date**
    ```bash

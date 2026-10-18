@@ -20,10 +20,14 @@ dart format lib test integration_test tool examples
 ./scripts/test/run_acceptance.sh <N>   # acceptance gates + evidence for issue N
 ```
 
-`flutter pub get` has a side effect: it appends platform excludes to
-`analysis_options.yaml` and writes `ios/Podfile`, `macos/Podfile`, and four
-`*.xcconfig` files. Those are tooling churn, not your change. Revert them before
-committing, and always stage explicitly rather than with `git add .`.
+`flutter pub get` on the current stable leaves the tree clean: the migrations
+it used to apply (analyzer excludes, the Pods includes in four `*.xcconfig`
+files, the SDK-pinned lock entries) are committed (koniz-dev/flutter-starter#338,
+#608). If it does dirty a tracked file, a new stable re-pinned or re-migrated
+something; the Quality gate's "Tracked files are unchanged" step fails on it
+too. Fix that on `main` in its own change - re-run `flutter pub get` and commit
+the result - rather than reverting it or sweeping it into an unrelated PR.
+Always stage explicitly rather than with `git add .`.
 
 Code generation (Freezed, json_serializable, Riverpod) is committed. Regenerate
 with `flutter pub run build_runner build --delete-conflicting-outputs` only when
