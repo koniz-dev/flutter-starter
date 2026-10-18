@@ -75,8 +75,9 @@ else
 fi
 
 # --- Case 2: dependencies resolved -----------------------------------------
-# pub get's own platform churn (CLAUDE.md, "Commands") dirties the tree here;
-# this case judges only the hook's exit status, so that is harmless.
+# pub get leaves the clone clean on the current stable (#338, #608); if a new
+# stable makes it dirty a tracked file, that is not the hook's doing, and this
+# case judges only the hook's exit status anyway.
 (cd "$CLONE" && flutter pub get >/dev/null 2>&1) || fail "flutter pub get failed in the clone"
 
 run_hook
