@@ -161,6 +161,22 @@ void main() {
     HttpOverrides.global = null;
   });
 
+  // Every preload goes through the seam, never ImageCacheHelper.preloadImage:
+  // the real path starts a 10 s precache timeout that is still pending when a
+  // test ends, unless an earlier test already left the URL in the shared
+  // imageCache - so the result depended on test order
+  // (koniz-dev/flutter-starter#617). ImageCacheHelper's own tests cover the
+  // real path.
+  late List<String> preloaded;
+  setUp(() {
+    preloaded = <String>[];
+    OptimizedImage.debugPreloader = (url, {context}) async {
+      preloaded.add(url);
+      return true;
+    };
+  });
+  tearDown(() => OptimizedImage.debugPreloader = null);
+
   group('OptimizedImage', () {
     testWidgets('should display image with URL', (tester) async {
       await tester.pumpWidget(
@@ -253,8 +269,8 @@ void main() {
       );
 
       expect(find.byType(Image), findsOneWidget);
-      // Verify that preload was called (coverage for preload logic)
-      await tester.pump(); // Allow async preload to start
+      await tester.pump();
+      expect(preloaded, ['https://example.com/image.jpg']);
     });
 
     testWidgets('should not preload when imageUrl is empty', (tester) async {
@@ -265,8 +281,8 @@ void main() {
       );
 
       expect(find.byType(Image), findsOneWidget);
-      // Verify that preload is not called when imageUrl is empty
-      await tester.pump(); // Allow any async operations
+      await tester.pump();
+      expect(preloaded, isEmpty);
     });
 
     testWidgets('should not preload when preload is false', (tester) async {
@@ -279,6 +295,8 @@ void main() {
       );
 
       expect(find.byType(Image), findsOneWidget);
+      await tester.pump();
+      expect(preloaded, isEmpty);
     });
 
     testWidgets('should forward a semantic label', (tester) async {
@@ -428,7 +446,6 @@ void main() {
     testWidgets('should handle preload when imageUrl is not empty', (
       tester,
     ) async {
-      // This test ensures the preload path is covered (lines 63-65)
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -440,12 +457,12 @@ void main() {
         ),
       );
 
-      await tester.pump(); // Allow preload to start
+      await tester.pump();
       expect(find.byType(Image), findsOneWidget);
+      expect(preloaded, ['https://example.com/image.jpg']);
     });
 
     testWidgets('should not preload when preload is false', (tester) async {
-      // This test ensures the !preload path is covered
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -455,6 +472,8 @@ void main() {
       );
 
       expect(find.byType(Image), findsOneWidget);
+      await tester.pump();
+      expect(preloaded, isEmpty);
     });
   });
 }
