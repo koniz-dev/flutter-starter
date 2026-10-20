@@ -80,11 +80,11 @@ call site to gain an abstraction with one implementor and no second candidate.
 The starter would be teaching indirection for its own sake, which is the
 failure mode ADR 0003 identified for `AppNavigator` and resolved the same way.
 
-Execution belongs to `epic:feature-auth`, following the precedent of
+The change belongs with the auth slice, following the precedent of
 koniz-dev/flutter-starter#180, which removed `ITasksController` from
-`lib/core/contracts/state_boundary_contracts.dart` under `epic:feature-tasks`
-rather than splitting a four-line deletion across two epics. It is **not filed
-yet** - see "Follow-up work" below.
+`lib/core/contracts/state_boundary_contracts.dart` together with the tasks
+slice rather than splitting a four-line deletion in two. See "Follow-up work"
+below.
 
 ### Verdict: wire it (1)
 
@@ -111,9 +111,8 @@ contradicted by anything. Removing it would mean reversing ADR 0004 to save a
 7-line file. The removal verdict applied to `IAuthController` does not transfer:
 there the wiring cost was a rewrite of every auth screen's provider access.
 
-Execution belongs to `epic:design-system`
-(`./scripts/bootstrap-issue-labels.sh --list-map` maps `lib/shared` to it). It
-is **not filed yet**.
+The change belongs with the design system (`lib/shared/`). See "Follow-up
+work" below.
 
 ## Decision 2: `auth` is the canonical feature slice shape
 
@@ -151,7 +150,7 @@ but no new slice should grow them.
 `bricks/feature_clean` generates `data/{datasources,models,repositories}`,
 `di/`, `domain/{entities,repositories,usecases}` and
 `presentation/{providers,screens}` - the auth shape without `routing/`. Adding
-`routing/` to the brick is an `epic:tooling-ci` change and is **not filed yet**.
+`routing/` to the brick is a tooling change. See "Follow-up work" below.
 
 ## Decision 3: two outcomes this ADR records rather than decides
 
@@ -221,14 +220,14 @@ import `lib/features/`, and they have real consumers on both sides.
 
 ## Follow-up work this ADR creates
 
-None of these are filed. They are listed here with epic and exact change so
-that filing them is mechanical.
+Each is listed with the area it touches and the exact change, so it can be
+picked up directly.
 
-| What | Epic | Change |
+| What | Area | Change |
 |---|---|---|
-| Remove `IAuthController` | `epic:feature-auth` | Delete `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` from `lib/core/contracts/state_boundary_contracts.dart`; delete `authControllerProvider` (`auth_provider.dart:289`) and the `implements IAuthController` clause (`:48`); drop the row and the `<!-- symbol: ... authControllerProvider -->` directive from contracts-map.md |
-| Wire `AppDesignTokens` | `epic:design-system` | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart:7`); update the contracts-map.md row from "No production consumer" to "Live" |
-| Teach the brick `routing/` | `epic:tooling-ci` | Add `routing/{{feature_name}}_routes.dart` to `bricks/feature_clean/__brick__`, matching the auth slice |
+| Remove `IAuthController` | auth slice | Delete `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` from `lib/core/contracts/state_boundary_contracts.dart`; delete `authControllerProvider` (`auth_provider.dart:289`) and the `implements IAuthController` clause (`:48`); drop the row and the `<!-- symbol: ... authControllerProvider -->` directive from contracts-map.md |
+| Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart:7`); update the contracts-map.md row from "No production consumer" to "Live" |
+| Teach the brick `routing/` | tooling | Add `routing/{{feature_name}}_routes.dart` to `bricks/feature_clean/__brick__`, matching the auth slice |
 
 ## Compatibility
 

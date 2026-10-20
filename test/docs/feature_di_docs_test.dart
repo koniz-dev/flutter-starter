@@ -70,8 +70,7 @@ void main() {
       ...Directory('$root/docs')
           .listSync(recursive: true)
           .whereType<File>()
-          .where((f) => f.path.endsWith('.md'))
-          .where((f) => !f.path.contains('docs/verification/')),
+          .where((f) => f.path.endsWith('.md')),
     ].where((f) => f.existsSync());
 
     final offenders = <String>[

@@ -45,12 +45,7 @@ const _samples = [
 
 /// Not checked: archives of what happened, which name what existed then.
 bool _isHistory(String path) =>
-    path == 'CHANGELOG.md' ||
-    path.startsWith('docs/verification/') ||
-    path.startsWith('docs/architecture/adr/') ||
-    // Deleted by every strip variant (process-only).
-    path == 'docs/issue-workflow.md' ||
-    path.startsWith('.claude/agents/');
+    path == 'CHANGELOG.md' || path.startsWith('docs/architecture/adr/');
 
 final RegExp _declaration = RegExp(
   r'^(?:(?:abstract|sealed|final|base|interface)\s+)*'

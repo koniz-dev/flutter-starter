@@ -107,7 +107,6 @@ int checkSignatures(Directory root, {bool verbose = true}) {
           .listSync(recursive: true)
           .whereType<File>()
           .where((f) => f.path.endsWith('.md'))
-          .where((f) => !f.path.contains('docs/verification/'))
           .toList()
         ..sort((a, b) => a.path.compareTo(b.path));
 

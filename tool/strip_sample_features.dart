@@ -1,19 +1,15 @@
 // Removes sample `tasks` and `feature_flags` feature modules and rewires
 // the app using golden files under tool/golden/<variant>/.
 //
-// Every variant also removes this repository's own process machinery - the
-// issue loop, its evidence archive and the guards that only make sense against
-// this tracker. See `_processOnlyPaths` for the list and the reasoning per
-// entry.
-//
 // Usage (from repository root):
 //   dart run tool/strip_sample_features.dart --apply                       both
 //   dart run tool/strip_sample_features.dart --apply --remove-tasks
 //   dart run tool/strip_sample_features.dart --apply --remove-feature-flags
-//   dart run tool/strip_sample_features.dart --apply --process-only
+//   dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks
 //
 // Add --remove-bricks to any of them to also delete bricks/ and mason.yaml,
-// with the documentation that links into them.
+// with the documentation that links into them. --keep-samples removes neither
+// sample, so with --remove-bricks it drops only the Mason bricks.
 //
 // Then:
 //   flutter pub get && flutter analyze && flutter test
@@ -65,52 +61,6 @@ const _goldenOverrides = <String, List<String>>{
   ],
 };
 
-/// Paths that exist to run **this repository's** issue loop rather than to
-/// serve an adopter's app. Every variant removes all of them.
-///
-/// The test for each entry is the one question an adopter can answer: *would
-/// they notice if this were missing?* A guard that protects the shipped app
-/// stays; a guard that enforces this tracker's conventions goes. Reasoning per
-/// entry:
-///
-///   * `docs/verification/` - 31 MB of acceptance evidence about issues closed
-///     in this repository. An adopter inherits an archive of work they never
-///     saw, and `scripts/test/run_acceptance.sh` recreates the directory for
-///     their own issues.
-///   * `docs/issue-workflow.md` and `.claude/agents/` - the agent protocol and
-///     the four role definitions that drive it. Process, not product.
-///   * `scripts/bootstrap-issue-labels.sh` - creates this repository's labels
-///     and owns its path -> epic map. A fork has neither.
-///   * `tool/check_epic_coverage.dart` and `test/tooling/epic_coverage_test.dart`
-///     - assert every tracked surface maps to exactly one `epic:*` label. The
-///     tool shells out to the bootstrap script, so keeping the test after
-///     removing that script would fail `flutter test` on the first run.
-///   * `scripts/dev/check_issue_refs.sh` and `.github/workflows/issue-refs.yml`
-///     - require `Refs koniz-dev/flutter-starter#N` in every commit. An
-///     adopter's commits reference their own tracker, so the check would
-///     reject every pull request they open.
-///
-/// Deliberately NOT here, because each protects the adopter's app rather than
-/// this repository's workflow: `tool/check_env_assets.dart` (stops secrets
-/// shipping in the bundle), `tool/doc_signatures.dart`, `tool/doc_symbols.dart`
-/// and `tool/check_docs.dart` (stop docs drifting from code), `ci.yml`,
-/// `strip-smoke.yml`, the git hooks, and `scripts/test/run_acceptance.sh`
-/// (a format/analyze/test/golden harness that takes whatever issue number the
-/// adopter's own tracker gave them).
-const _processOnlyPaths = <String>[
-  '.claude/agents',
-  '.github/workflows/issue-refs.yml',
-  'docs/issue-workflow.md',
-  'docs/verification',
-  'scripts/bootstrap-issue-labels.sh',
-  'scripts/dev/check_issue_refs.sh',
-  'test/tooling/epic_coverage_test.dart',
-  'tool/check_epic_coverage.dart',
-];
-
-/// Directories to delete once emptied by [_processOnlyPaths].
-const _processOnlyPrunedDirs = <String>['.claude'];
-
 /// Tags of the markdown markers this strip understands.
 ///
 /// Whole files are cheap to delete; a section inside a file an adopter keeps is
@@ -123,16 +73,13 @@ const _processOnlyPrunedDirs = <String>['.claude'];
 ///   * a single line - a table row, say, where a marker line would end the
 ///     table - carrying `<!-- strip:<tag> line -->` anywhere on it.
 ///
-/// `process-only` regions go in every variant. `feature-flags` and `tasks`
-/// regions go with their sample (koniz-dev/flutter-starter#409), and stay,
+/// `feature-flags` and `tasks` regions go with their sample (koniz-dev/flutter-starter#409), and stay,
 /// invisible, while the sample is kept. `bricks` regions go with `bricks/`
 /// and `mason.yaml` under `--remove-bricks` (koniz-dev/flutter-starter#588).
-const _processTag = 'process-only';
 const _featureFlagsTag = 'feature-flags';
 const _tasksTag = 'tasks';
 const _bricksTag = 'bricks';
 const _markerTags = <String>[
-  _processTag,
   _featureFlagsTag,
   _tasksTag,
   _bricksTag,
@@ -158,16 +105,13 @@ void main(List<String> args) {
   if (!args.contains('--apply')) {
     stderr.writeln(
       'Usage: dart run tool/strip_sample_features.dart --apply '
-      '[--remove-tasks] [--remove-feature-flags] | --process-only '
+      '[--remove-tasks] [--remove-feature-flags] | --keep-samples '
       '[--remove-bricks]\n'
-      '--process-only keeps both samples and removes only the process-only '
-      'artifacts listed below.\n'
       'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
       'and core FeatureFlagsManager. Rewires entrypoints from '
-      'tool/golden/<variant>/. Keeps auth sample. Every variant also removes '
-      "this repository's process-only artifacts (docs/verification/, the issue "
-      'workflow, .claude/agents/ and the issue-loop guards). --remove-bricks '
-      'also deletes bricks/ and mason.yaml, and the docs that link into them.',
+      'tool/golden/<variant>/. Keeps auth sample. --keep-samples removes '
+      'neither sample. --remove-bricks also deletes bricks/ and mason.yaml, '
+      'and the docs that link into them.',
     );
     exitCode = 1;
     return;
@@ -179,25 +123,24 @@ void main(List<String> args) {
       args.contains('--feature-flags-only') ||
       args.contains('--remove-feature-flags');
 
-  // Keeps both samples and removes only the process-only artifacts. Without
-  // it every variant also dropped at least one sample, so an adopter keeping
-  // both had no supported way to shed the epic-coverage guard - and that
-  // guard turns `flutter test` red the moment they generate a feature slice
-  // or delete bricks/ (koniz-dev/flutter-starter#333).
-  final processOnly = args.contains('--process-only');
+  // Removes neither sample, so an adopter keeping both can still drop the
+  // Mason bricks (koniz-dev/flutter-starter#333, #621).
+  final keepSamples = args.contains('--keep-samples');
   // Deleting bricks/ by hand left seven links dangling in docs a fork keeps,
   // so the documented way to drop them is this flag, which takes their
   // `strip:bricks` prose along (koniz-dev/flutter-starter#588).
   final removeBricks = args.contains('--remove-bricks');
-  if (processOnly && (tasksFlag || featureFlagsFlag)) {
+  if (keepSamples && (tasksFlag || featureFlagsFlag)) {
     stderr.writeln(
-      '--process-only keeps both samples; it cannot be combined with '
+      '--keep-samples keeps both samples; it cannot be combined with '
       '--remove-tasks or --remove-feature-flags. Nothing was deleted.',
     );
     exitCode = 1;
     return;
   }
-  if (processOnly) {
+  if (keepSamples) {
+    // Validated in every mode, so a bad marker is reported even by a run that
+    // would remove nothing.
     final markerProblems = _validateMarkers(Directory.current);
     if (markerProblems.isNotEmpty) {
       stderr.writeln(
@@ -207,14 +150,17 @@ void main(List<String> args) {
       exitCode = 2;
       return;
     }
-    _removeProcessArtifacts(Directory.current);
-    if (removeBricks) _removeBricks(Directory.current);
-    _stripMarkdownRegions(Directory.current, [
-      _processTag,
-      if (removeBricks) _bricksTag,
-    ]);
+    if (!removeBricks) {
+      stdout.writeln(
+        'Nothing to remove: --keep-samples keeps both samples. Add '
+        '--remove-bricks to drop the Mason bricks.',
+      );
+      return;
+    }
+    _removeBricks(Directory.current);
+    _stripMarkdownRegions(Directory.current, const [_bricksTag]);
     stdout.writeln(
-      'Process-only strip complete; both samples kept. '
+      'Bricks removed; both samples kept. '
       'Run: flutter pub get && flutter analyze && flutter test',
     );
     return;
@@ -267,13 +213,8 @@ void main(List<String> args) {
     return;
   }
 
-  // Process artifacts go first: `docs/verification/` is by far the largest
-  // thing removed, and deleting it up front means the later passes over
-  // `docs/` have thousands of evidence files fewer to read.
-  _removeProcessArtifacts(root);
   if (removeBricks) _removeBricks(root);
   _stripMarkdownRegions(root, [
-    _processTag,
     if (removeBricks) _bricksTag,
     if (removeFeatureFlags) _featureFlagsTag,
     if (removeTasks) _tasksTag,
@@ -335,8 +276,6 @@ void main(List<String> args) {
     if (removeFeatureFlags)
       'package:flutter_starter/core/feature_flags/feature_flags_manager.dart',
   ];
-
-  _deleteDocsProbes(root, needles);
 
   // Documentation asserts identifiers with
   // `<!-- symbol: <path> <name> -->` (koniz-dev/flutter-starter#206), and
@@ -412,38 +351,6 @@ void _deleteDir(Directory dir) {
   }
 }
 
-/// Deletes every entry in [_processOnlyPaths], then prunes the directories
-/// those deletions emptied.
-///
-/// A missing entry is skipped rather than reported: a fork that already deleted
-/// its own copy of one of these is not an error.
-void _removeProcessArtifacts(Directory repoRoot) {
-  for (final relative in _processOnlyPaths) {
-    final path = p.join(repoRoot.path, relative);
-    final dir = Directory(path);
-    final file = File(path);
-    if (dir.existsSync()) {
-      dir.deleteSync(recursive: true);
-    } else if (file.existsSync()) {
-      file.deleteSync();
-    } else {
-      continue;
-    }
-    stdout.writeln(
-      "Removed $relative: it serves this repository's issue loop, not the "
-      'app a fork ships.',
-    );
-  }
-
-  for (final relative in _processOnlyPrunedDirs) {
-    final dir = Directory(p.join(repoRoot.path, relative));
-    if (dir.existsSync() && dir.listSync().isEmpty) {
-      dir.deleteSync();
-      stdout.writeln('Removed $relative: emptied by the removals above.');
-    }
-  }
-}
-
 /// Deletes [_brickPaths]. A path already gone - a second run - is skipped.
 void _removeBricks(Directory repoRoot) {
   for (final relative in _brickPaths) {
@@ -460,10 +367,6 @@ void _removeBricks(Directory repoRoot) {
 }
 
 /// Every markdown file that could carry a strip marker.
-///
-/// `docs/verification/` is skipped: the whole tree is deleted anyway, and its
-/// files quote captured terminal output, so a marker-shaped string inside one
-/// is a transcript rather than an instruction.
 List<File> _markdownFiles(Directory repoRoot) {
   final found = <File>[];
 
@@ -475,11 +378,6 @@ List<File> _markdownFiles(Directory repoRoot) {
       final relative = p.split(p.relative(entity.path, from: repoRoot.path));
       if (entity is Directory) {
         if (_markdownWalkSkips.contains(relative.last)) {
-          continue;
-        }
-        if (relative.length == 2 &&
-            relative[0] == 'docs' &&
-            relative[1] == 'verification') {
           continue;
         }
         walk(entity);
@@ -543,11 +441,10 @@ List<String> _validateMarkers(Directory repoRoot) {
 /// Removes every region and marked line for [tags] from the markdown files
 /// the strip keeps.
 ///
-/// Used where deleting the whole file would be wrong: `CLAUDE.md` still
-/// describes the codebase after the issue loop is gone, `CONTRIBUTING.md` still
-/// describes how to open a pull request, `tool/README.md` still documents
-/// the tools that survive, and `docs/guides/configuration.md` still documents
-/// configuration once the feature-flags sample is gone. Only the marked prose
+/// Used where deleting the whole file would be wrong: `README.md` still
+/// introduces the project once the bricks are gone, and
+/// `docs/guides/configuration.md` still documents configuration once the
+/// feature-flags sample is gone. Only the marked prose
 /// goes; the surrounding prose is the file's own.
 void _stripMarkdownRegions(Directory repoRoot, List<String> tags) {
   for (final file in _markdownFiles(repoRoot)) {
@@ -660,58 +557,6 @@ void _patchProvidersTest(String path) {
   File(path).writeAsStringSync('${lines.join('\n')}\n');
 }
 
-/// Deletes evidence probes under `docs/verification/` that import a stripped
-/// module.
-///
-/// `analysis_options.yaml` does not exclude `docs/`, so a `.dart` file
-/// committed as acceptance evidence is analyzed like any other source - a
-/// property `CLAUDE.md` states on purpose. The strip therefore has to account
-/// for it: on koniz-dev/flutter-starter#171 the probe at
-/// `docs/verification/issue-146/timestamp_probe.dart` imported
-/// `features/tasks/data/models/task_model.dart`, the strip exited 0, and both
-/// tasks-removing variants of `strip-smoke.yml` then failed two steps later in
-/// `flutter analyze` with `uri_does_not_exist`.
-///
-/// Deleting is the right verb rather than rewriting or warning. The script
-/// already deletes `docs/features/tasks.md` for the same reason: a tree with
-/// the tasks sample stripped out has no use for this repository's evidence
-/// about the tasks sample, and a fork running the strip wants a buildable
-/// starter, not an archive. Every deletion is printed, so nothing vanishes
-/// silently, and only `.dart` files that actually name a stripped module are
-/// touched - the surrounding `README.md` and logs are left alone.
-///
-/// Scoped to `docs/verification/` on purpose, not to all of `docs/`. That
-/// subtree is per-issue acceptance evidence and nothing imports it, so
-/// deleting from it is safe. A Dart file anywhere else under `docs/` is
-/// something a human wrote to be read; the strip must not quietly delete it,
-/// so it falls through to `_collectStrippedViolations` and fails the run
-/// loudly instead.
-void _deleteDocsProbes(Directory repoRoot, List<String> needles) {
-  if (needles.isEmpty) {
-    return;
-  }
-  final docs = Directory(p.join(repoRoot.path, 'docs', 'verification'));
-  if (!docs.existsSync()) {
-    return;
-  }
-  for (final entity in docs.listSync(recursive: true, followLinks: false)) {
-    if (entity is! File || !entity.path.endsWith('.dart')) {
-      continue;
-    }
-    final text = entity.readAsStringSync();
-    final hit = needles.where(text.contains).toList();
-    if (hit.isEmpty) {
-      continue;
-    }
-    entity.deleteSync();
-    stdout.writeln(
-      'Deleted ${p.relative(entity.path, from: repoRoot.path)}: an evidence '
-      'probe importing a stripped module (${hit.join(', ')}). '
-      'docs/ is analyzed, so leaving it would break flutter analyze.',
-    );
-  }
-}
-
 /// Regex for one `<!-- symbol: <path> <name> -->` directive line.
 final RegExp _symbolDirectivePattern = RegExp(
   r'^\s*<!--\s*symbol:\s*(\S+)\s+\S+\s*-->\s*$',
@@ -765,11 +610,9 @@ void _deleteSymbolDirectives(Directory repoRoot, List<String> prefixes) {
 /// would no longer resolve.
 ///
 /// `docs` is in the list because `analysis_options.yaml` does not exclude it,
-/// so `flutter analyze` reads `docs/**/*.dart` too. `_deleteDocsProbes` has
-/// already removed the offending files under `docs/verification/`; this scan
-/// is what catches the rest of `docs/`, and it fails the run loudly and
-/// locally rather than leaving CI to discover it two steps later, which is
-/// what happened on koniz-dev/flutter-starter#171.
+/// so `flutter analyze` reads `docs/**/*.dart` too. This scan fails the run
+/// loudly and locally rather than leaving CI to discover it two steps later,
+/// which is what happened on koniz-dev/flutter-starter#171.
 List<String> _collectStrippedViolations(
   Directory repoRoot,
   List<String> needles,

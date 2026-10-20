@@ -1,10 +1,10 @@
-/// Helpers for acceptance golden tests (see docs/issue-workflow.md).
+/// Helpers for acceptance golden tests (see CLAUDE.md, "Testing").
 ///
-/// Acceptance goldens exist to produce a committed PNG that a reviewer - human
-/// or agent - can open and inspect as evidence for an issue's
-/// `## Acceptance criteria`. They are NOT a CI gate: golden bytes depend on the
-/// host renderer, so `dart_test.yaml` skips the `golden` tag by default and
-/// ./scripts/test/run_acceptance.sh opts in explicitly.
+/// Acceptance goldens exist to produce a PNG that a reviewer - human or agent -
+/// can open and inspect to confirm what a screen looks like. They are NOT a CI
+/// gate: golden bytes depend on the host renderer, so `dart_test.yaml` skips
+/// the `golden` tag by default and
+/// `flutter test --run-skipped --tags golden test/acceptance` opts in.
 ///
 /// READ THIS BEFORE TRUSTING A GOLDEN: `flutter test` renders text with the
 /// Ahem test font, so every glyph is an opaque block. A golden proves widget
@@ -79,7 +79,8 @@ Future<void> pumpAcceptance(
 
 /// Captures [finder] to `goldens/<name>.png`, relative to the test file.
 ///
-/// Regenerate with `./scripts/test/run_acceptance.sh --update`.
+/// Regenerate with
+/// `flutter test --run-skipped --tags golden --update-goldens test/acceptance`.
 Future<void> captureAcceptanceGolden(Finder finder, String name) {
   return expectLater(finder, matchesGoldenFile('goldens/$name.png'));
 }

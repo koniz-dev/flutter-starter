@@ -88,7 +88,7 @@ void main() {
   });
 
   // "The repository itself passes" is the Docs check's job on main, not a
-  // unit test's: strip-smoke's process-only job deletes bricks/ and
+  // unit test's: strip-smoke's keep-samples job deletes bricks/ and
   // mason.yaml, which leaves links dangling in that tree
   // (koniz-dev/flutter-starter#588).
 

@@ -13,8 +13,7 @@ Documentation integrity checker. Seven checks, all of which had silently rotted:
   `#fragment` matches a heading slug in the target file (GitHub's slug rules,
   including duplicate `-1` suffixes).
 - **Emoji** in `docs/`, `CLAUDE.md` and `.claude/`, per the convention stated in
-  `CLAUDE.md`. `README.md` and `CONTRIBUTING.md` are exempt (they predate it), and
-  so is `docs/verification/`, whose files quote captured tool output verbatim.
+  `CLAUDE.md`. `README.md` and `CONTRIBUTING.md` are exempt (they predate it).
 - **Constructor signatures** (`doc_signatures.dart`): any fenced block preceded
   by `<!-- signature: <source path> <ConstructorName> -->` must list exactly the
   parameters that constructor declares - positional, `[optional]` and
@@ -102,40 +101,12 @@ Two properties worth knowing:
   which is the right trade for a document whose whole job is being exact.
 
 Directives inside a fenced block are ignored, so this section does not check
-itself. `docs/verification/` is skipped too: an evidence file is a frozen
-record of a past run, and a directive in one would start failing the day the
-code it described changed.
+itself.
 
 `strip_sample_features.dart` deletes any directive naming a path it removed,
 so a stripped tree does not fail `test/docs/doc_symbols_test.dart` over a
 feature that is no longer there.
 
-<!-- strip:process-only start -->
-## `check_epic_coverage.dart`
-
-Taxonomy guard: every tracked surface maps to **exactly one** `epic:*` label.
-
-The mapping is not duplicated here or in the tool. `scripts/bootstrap-issue-labels.sh`
-is the single source of truth for the epic list *and* for the paths each epic
-claims; the tool reads it with `--list-map` and compares it against the tracked
-tree. Three fatal directions: a surface no epic claims, a surface two epics
-claim, and a claimed path that is not in the tree.
-
-```bash
-dart run tool/check_epic_coverage.dart
-./scripts/bootstrap-issue-labels.sh --list-map   # the mapping it checks against
-```
-
-Runs under `flutter test` via `test/tooling/epic_coverage_test.dart`, alongside
-counterfactual tests that prove the checker can fail. Added by
-koniz-dev/flutter-starter#118, where half of `lib/core/` and every native
-surface had no epic - which is not cosmetic, because the "never two implementers
-in the same `epic:*`" rule keys on that label.
-
-It reads paths from version control rather than from the filesystem, so
-`strip_sample_features.dart` deleting the sample slices does not make the
-sample epics look stale under **Strip smoke**.
-<!-- strip:process-only end -->
 
 ## `strip_sample_features.dart`
 
@@ -150,37 +121,23 @@ flutter analyze
 flutter test
 ```
 
-`--process-only` keeps both samples and removes only the process-only
-artifacts below. It is the mode for a fork that keeps `tasks` and
-`feature_flags` but will generate its own slices or drop `bricks/`
-(koniz-dev/flutter-starter#333). It cannot be combined with
-`--remove-tasks` or `--remove-feature-flags`.
+`--keep-samples` removes neither sample. On its own it does nothing; with
+`--remove-bricks` it is how a fork that keeps `tasks` and `feature_flags` drops
+the Mason bricks (koniz-dev/flutter-starter#333, #621). It cannot be combined
+with `--remove-tasks` or `--remove-feature-flags`.
 
 `--remove-bricks` can be added to any mode. It deletes `bricks/` and
 `mason.yaml` and drops the `strip:bricks` passages that link into them, so the
 links that are left still resolve (koniz-dev/flutter-starter#588). Deleting the
 two by hand leaves those links dangling, and `check_docs --links` fails.
 
-### Process-only artifacts
+### Markers
 
-Every variant also removes what serves **this repository's issue loop** rather
-than the app a fork ships: `docs/verification/` (the acceptance-evidence
-archive, by far the largest thing in `docs/`), `docs/issue-workflow.md`,
-`.claude/agents/`, `scripts/bootstrap-issue-labels.sh`,
-`tool/check_epic_coverage.dart` with `test/tooling/epic_coverage_test.dart`,
-and `scripts/dev/check_issue_refs.sh` with `.github/workflows/issue-refs.yml`.
-The last two pairs would actively break a fork: the epic guard shells out to a
-labels script that no longer exists, and the refs check rejects any commit that
-does not name *this* tracker.
+Prose in a file the strip keeps that documents something the strip removes is
+marked in place rather than listed in the script, so the two cannot drift.
+Unbalanced markers are a hard error, reported before anything is deleted.
 
-Sections of files a fork keeps are marked in place with
-`<!-- strip:process-only start -->` / `<!-- strip:process-only end -->` (see
-`CLAUDE.md`, `CONTRIBUTING.md` and this file) rather than listed in the script,
-so the two cannot drift. Unbalanced markers are a hard error, reported before
-anything is deleted.
-
-The samples use the same mechanism. Prose about the feature-flags sample in a
-file the strip keeps sits between `<!-- strip:feature-flags start -->` and
+Prose about the feature-flags sample sits between `<!-- strip:feature-flags start -->` and
 `<!-- strip:feature-flags end -->`, and the tasks sample uses
 `strip:tasks`. Each block goes only when its sample does. For a single line,
 such as a table row where a marker line would end the table, put
@@ -189,10 +146,8 @@ such as a table row where a marker line would end the table, put
 names a sample's symbol outside such a marker, in the full tree and in every
 strip variant (koniz-dev/flutter-starter#409).
 
-Kept deliberately, because they protect the adopter's app rather than this
-repository's workflow: `check_env_assets.dart`, `check_docs.dart`,
-`doc_signatures.dart`, `doc_symbols.dart`, `ci.yml`, `strip-smoke.yml`, the git
-hooks, and `scripts/test/run_acceptance.sh`.
+Prose about the Mason bricks uses `strip:bricks` and goes with
+`--remove-bricks`.
 
 ### Golden tree
 

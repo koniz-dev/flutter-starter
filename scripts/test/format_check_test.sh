@@ -47,13 +47,6 @@ if [[ "$(cat tool/zz_format_probe.dart)" != 'void   probe( ) {}' ]]; then
 fi
 echo "format_dart.sh --check: exit $rc, working tree unchanged: $([[ "$before" == "$after" ]] && echo yes || echo no)"
 
-# shellcheck disable=SC2016 # the \$ is a literal in the pattern, not an expansion
-if ! grep -qE '^run format +"format check" +"\$ROOT/scripts/dev/format_dart\.sh" --check$' scripts/test/run_acceptance.sh; then
-  fail "run_acceptance.sh's format gate does not go through format_dart.sh --check"
-else
-  echo "run_acceptance.sh format gate: format_dart.sh --check"
-fi
-
 ./scripts/dev/format_dart.sh >/dev/null 2>&1
 if [[ "$(cat tool/zz_format_probe.dart)" != 'void probe() {}' ]]; then
   fail "format_dart.sh (no --check) did not format the file"

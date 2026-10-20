@@ -22,8 +22,7 @@ List<File> _docs() => [
   ...Directory('docs')
       .listSync(recursive: true)
       .whereType<File>()
-      .where((f) => f.path.endsWith('.md'))
-      .where((f) => !f.path.contains('docs/verification/')),
+      .where((f) => f.path.endsWith('.md')),
 ];
 
 /// `(line, text)` of every line inside a fenced block of [source].

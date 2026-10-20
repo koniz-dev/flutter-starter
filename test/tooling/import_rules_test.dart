@@ -59,18 +59,14 @@ const kAllowedImportViolations = <String, Set<String>>{
 
   // Two survivors of the `core/*` -> `features/*` edge.
   //
-  // All three were allowlisted as permanently unfixable: no epic in
-  // `./scripts/bootstrap-issue-labels.sh --list-epics` covered `lib/core/di/`,
-  // so the fix could not be filed against an accurate label. That stopped
-  // being true when koniz-dev/flutter-starter#118 added `epic:core-di`, and
-  // `lib/core/di/providers.dart` is **gone from this list** because
+  // There were three. `lib/core/di/providers.dart` is **gone from this list**
+  // because
   // koniz-dev/flutter-starter#221 removed the edge: core now declares the
   // 401-refresh seams and the auth slice fills them from
   // `authModuleOverrides`.
   //
-  // The two left are fileable under `epic:feature-flags` and
-  // `epic:core-routing` respectively and have no issue yet. Until then they
-  // are allowlisted so that they cannot get worse.
+  // The two left belong to the feature-flags sample and to routing. Until
+  // they are fixed they are allowlisted so that they cannot get worse.
   'core_imports_feature': <String>{
     'lib/core/feature_flags/feature_flags_manager.dart',
     'lib/core/routing/app_router.dart',

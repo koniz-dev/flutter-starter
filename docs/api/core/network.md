@@ -499,11 +499,11 @@ does work on a named parameter - a cross-library production call site draws
 `invalid_use_of_visible_for_testing_member`, verified under issue 89 and
 recorded in [`visible-for-testing-probe.log`](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-89/visible-for-testing-probe.log) on the `evidence` branch. It was
 declined for two reasons. It would edit
-`lib/core/network/interceptors/auth_interceptor.dart`, which is
-`epic:core-network`, not `epic:docs`; and it would forbid the parameter to
-forks that legitimately want to control the replay client, which is a policy
-change rather than a documentation fix. If the parameter should instead be
-test-only, that is a `epic:core-network` decision and belongs in its own issue.
+`lib/core/network/interceptors/auth_interceptor.dart`, a code change rather
+than a documentation one; and it would forbid the parameter to forks that
+legitimately want to control the replay client, which is a policy change. If
+the parameter should instead be test-only, that is a network-layer decision on
+its own.
 
 ### Features
 

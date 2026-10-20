@@ -117,7 +117,6 @@ void main() {
 
     expect(paths, containsAll(<String>['README.md', 'CONTRIBUTING.md']));
     expect(paths.where((p) => p.startsWith('docs/')), isNotEmpty);
-    expect(paths.where((p) => p.startsWith('docs/verification/')), isEmpty);
   });
 
   test('no document in the repository copies .env and then ignores it', () {

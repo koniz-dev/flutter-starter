@@ -76,17 +76,16 @@ void main() {
       if (_runsOnPullRequests(lines)) name,
   };
 
-  // The section sits in a `strip:process-only` region, so a fork stripped with
-  // --process-only has no table to check (and no issue-refs.yml either).
-  final claudeFile = File('CLAUDE.md');
-  final claude = claudeFile.existsSync() ? claudeFile.readAsStringSync() : '';
+  final claude = File('CLAUDE.md').readAsStringSync();
   final start = claude.indexOf('### Which checks a PR gets');
   final skip = start < 0
-      ? 'CLAUDE.md has no "Which checks a PR gets" section (process-only strip)'
+      ? 'CLAUDE.md has no "Which checks a PR gets" section'
       : null;
+  // The section runs to the next heading of any level.
+  final end = start < 0 ? -1 : claude.indexOf(RegExp(r'\n#{2,3} '), start + 4);
   final section = start < 0
       ? ''
-      : claude.substring(start, claude.indexOf('\n### ', start + 4));
+      : claude.substring(start, end < 0 ? claude.length : end);
   final rows = {
     for (final m in RegExp(
       r'^\| \[`([\w.-]+\.yml)`\]\(\.github/workflows/[\w.-]+\.yml\) \|(.*)$',

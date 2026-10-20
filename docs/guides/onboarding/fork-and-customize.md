@@ -68,7 +68,7 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
    source - remove it with `--remove-bricks`, below, if you never use Mason).
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
 
-**If you never use Mason:** after renaming, remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks`, or add `--remove-bricks` to whichever strip you run. It also drops the passages in the docs that link into them; deleting the two by hand leaves those links dangling and fails the Docs check (koniz-dev/flutter-starter#588).
+**If you never use Mason:** after renaming, remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run. It also drops the passages in the docs that link into them; deleting the two by hand leaves those links dangling and fails the Docs check (koniz-dev/flutter-starter#588).
 
 ## 2. Android application id and namespace
 
@@ -111,29 +111,13 @@ dart run tool/strip_sample_features.dart --apply --feature-flags-only
 Naming both samples is the same request as naming neither, so
 `--apply --tasks-only --feature-flags-only` behaves exactly like a bare `--apply`.
 
-To keep **both** samples and remove only the process-only machinery described
-below, use:
+To keep **both** samples and only drop the Mason bricks, use:
 
 ```bash
-dart run tool/strip_sample_features.dart --apply --process-only
+dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks
 ```
 
-Run it before you generate a feature slice (`./scripts/dev/create_feature.sh`
-or `mason make feature_clean`) or remove `bricks/` and `mason.yaml`. Until the
-epic-coverage guard is gone, both actions turn `flutter test` red: it requires
-every tracked path to map to one of the upstream repository's `epic:*` labels
-(koniz-dev/flutter-starter#333).
-
 All four variants are exercised by [`strip-smoke.yml`](../../../.github/workflows/strip-smoke.yml), which applies each one and then runs `flutter analyze` and `flutter test` over the result.
-
-Every variant also removes the machinery that serves the upstream repository's
-own issue loop rather than your app: `docs/issue-workflow.md`, `.claude/agents/`,
-`scripts/bootstrap-issue-labels.sh`, the epic-coverage guard and its test, and
-the commit-reference check with its workflow (it requires `Refs` pointing at the
-upstream tracker, so it would reject your commits). The guards that protect your
-app - env-asset, docs, signature and symbol checks, the CI workflows and the git
-hooks - all stay. See [`tool/README.md`](../../../tool/README.md) for the full
-list and the reasoning.
 
 Then search the kept guides for the removed modules (for example
 `git grep -n -i "feature.flag" docs/guides`) and adjust what you find; the strip

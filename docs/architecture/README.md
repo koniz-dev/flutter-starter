@@ -51,7 +51,6 @@ Notes:
 - **[Riverpod retry policy](riverpod-retry-policy.md)** - Why Riverpod auto-retry is disabled for the whole app, what still retries, and how to opt one provider back in
 - **[ADRs](adr/README.md)** - Decoupling decisions for network, storage, navigation, theme tokens, and state boundaries
 - **[Contracts Map](contracts-map.md)** - Contract files, swap table, optional modules, adapter placement
-- **[Migration Guides](migrations/README.md)** - Incremental rollout plans, quality gates, and risk controls
 
 ### Related Documentation
 

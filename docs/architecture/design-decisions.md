@@ -1227,7 +1227,7 @@ Rejected alternatives:
 - **Wire them into the sample features.** This was the strongest option for
   `PaginationHelper` and `Debouncer` - a paginated, debounce-searched tasks
   list would exercise both for real - and it was **tried and rejected**. It
-  belonged to `epic:feature-tasks` rather than to the `lib/core/` change that
+  belonged to the tasks sample rather than to the `lib/core/` change that
   fixed the defects, so it was tracked separately; the outcome is recorded in
   "The tasks sample is not the host" below, and `DateFormatter` is the one
   utility that survived it.
@@ -1248,8 +1248,7 @@ Rejected alternatives:
    `// ignore: argument_type_not_assignable` comments in `lib/`, which
    suppress a compile-time **error** rather than a lint.
 4. Wiring `PaginationHelper`, `Debouncer` and `DateFormatter` into the tasks
-   sample was filed separately as koniz-dev/flutter-starter#147, under
-   `epic:feature-tasks`. That issue wired `DateFormatter` and **rejected** the
+   sample was filed separately as koniz-dev/flutter-starter#147. That issue wired `DateFormatter` and **rejected** the
    tasks sample as a host for the other two - see "The tasks sample is not the
    host" below.
 

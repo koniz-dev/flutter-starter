@@ -16,7 +16,7 @@ List<(String, int, String, String?)> _excerpts() {
       .listSync(recursive: true)
       .whereType<File>()
       .where(
-        (f) => f.path.endsWith('.md') && !f.path.contains('docs/verification/'),
+        (f) => f.path.endsWith('.md'),
       );
   for (final file in docs) {
     final lines = file.readAsLinesSync();
