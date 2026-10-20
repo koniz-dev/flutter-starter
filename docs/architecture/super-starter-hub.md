@@ -21,7 +21,7 @@ One entry page for **what exists**, **what is optional**, and **where it is docu
 | Performance | Guides | Apply as needed | [Performance README](../guides/performance/README.md) |
 | Accessibility | Guides | Apply as needed | [Accessibility README](../guides/accessibility/README.md) |
 | Store deploy (Fastlane + Actions) | Templates (often manual) | Secrets, signing, enable triggers | [Deployment hub](../deployment/README.md), [fastlane README](../../fastlane/README.md) |
-| Local analyze / test | Yes | Tune workflows / branch protection | [Testing summary](../guides/testing/testing-summary.md), [Quality gates](migrations/quality-gates-and-risks.md), [`ci.yml`](../../.github/workflows/ci.yml) |
+| Local analyze / test | Yes | Tune workflows / branch protection | [Testing summary](../guides/testing/testing-summary.md), [`ci.yml`](../../.github/workflows/ci.yml) |
 
 ## Optional integration modules
 

@@ -29,8 +29,6 @@ Do **not** import Flutter widgets, Dio, GoRouter, or Riverpod from `domain/`. If
 | Contract locations and adapters | [contracts-map.md](contracts-map.md) |
 | All capabilities in one place | [super-starter-hub.md](super-starter-hub.md) |
 | Architectural decisions | [adr/README.md](adr/README.md) |
-| Incremental migration | [migrations/README.md](migrations/README.md) |
-| Risks and verification | [migrations/quality-gates-and-risks.md](migrations/quality-gates-and-risks.md) |
 | Fork, rename, optional strip | [Fork and customize](../guides/onboarding/fork-and-customize.md) |
 
 ## Out of scope for generated variants

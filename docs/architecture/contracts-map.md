@@ -161,4 +161,3 @@ to mistype.
 
 - [Super starter hub](super-starter-hub.md)
 - [Choose your stack](choose-your-stack.md)
-- [Quality gates and risks](migrations/quality-gates-and-risks.md)
