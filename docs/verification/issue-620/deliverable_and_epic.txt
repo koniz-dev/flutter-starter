@@ -1,0 +1,46 @@
+# deliverable gate (maintainers/scripts/check_deliverable.sh)
+## before: main 336cdc0 (after #619, before #624)
+exit=1
+upstream-only path on 336cdc0: docs/issue-workflow.md
+upstream-only path on 336cdc0: docs/architecture/migrations
+upstream-only path on 336cdc0: docs/guides/support/mason-demo-script.md
+upstream-only path on 336cdc0: .claude/agents
+upstream-only path on 336cdc0: scripts/bootstrap-issue-labels.sh
+upstream-only path on 336cdc0: scripts/dev/check_issue_refs.sh
+upstream-only path on 336cdc0: scripts/test/run_acceptance.sh
+upstream-only path on 336cdc0: .github/workflows/issue-refs.yml
+upstream-only path on 336cdc0: tool/check_epic_coverage.dart
+upstream-only path on 336cdc0: test/tooling/epic_coverage_test.dart
+vocabulary hits: 368
+
+## after: main 5fe73b2 (#624 merged)
+Deliverable: origin/main carries nothing that only serves the upstream process.
+exit=0
+
+# epic coverage, run from the maintainers branch against main
+Epic coverage OK: every tracked surface maps to one epic.
+
+# main's size
+before #619 (9b76995): 5364 files
+after #619 (336cdc0): 784 files
+after #624 (5fe73b2): 768 files
+
+# maintainers branch: 18 files, no common history with main: yes
+  README.md
+  agents/implementer.md
+  agents/planner.md
+  agents/qa.md
+  agents/security.md
+  history/architecture-migrations/README.md
+  history/architecture-migrations/boundary-migration-plan.md
+  history/architecture-migrations/network-migration-plan.md
+  history/architecture-migrations/quality-gates-and-risks.md
+  history/mason-demo-script.md
+  issue-workflow.md
+  process.md
+  scripts/bootstrap-issue-labels.sh
+  scripts/check_deliverable.sh
+  scripts/check_epic_coverage.dart
+  scripts/check_issue_refs.sh
+  scripts/install.sh
+  scripts/run_acceptance.sh
