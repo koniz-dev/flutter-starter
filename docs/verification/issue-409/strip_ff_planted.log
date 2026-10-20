@@ -1,6 +1,0 @@
-# --remove-feature-flags tree, plus one unmarked mention planted in a kept doc
-$ echo "Use \`LocalFeatureFlagsService\` here." >> docs/guides/configuration.md
-00:00 +0 -1: criteria 2-3: kept markdown names no feature-flags symbol outside a strip:feature-flags marker [E]
-    Actual: ['docs/guides/configuration.md:512: {LocalFeatureFlagsService}']
-  docs/guides/configuration.md:512: {LocalFeatureFlagsService}
-00:00 +1 -1: Some tests failed.

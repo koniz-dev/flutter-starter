@@ -7,7 +7,7 @@
          A release build happens to receive INTERNET transitively today, from an
          Android library manifest in the dependency graph rather than from any
          Flutter plugin's own manifest (see
-         docs/verification/issue-49/baseline-release-manifest.xml). Do not rely
+         evidence:docs/verification/issue-49/baseline-release-manifest.xml). Do not rely
          on that: a permission the app needs for its own traffic must not vanish
          when a dependency is dropped or bumped. -->
     <uses-permission android:name="android.permission.INTERNET"/>

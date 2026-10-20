@@ -1,8 +1,0 @@
-Upgrading analysis_options.yaml to exclude build and platform directories.
-00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt409/test/tooling/strip_sample_prose_test.dart
-00:00 +0: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt409/test/tooling/strip_sample_prose_test.dart: criteria 2-3: kept markdown names no feature-flags symbol outside a strip:feature-flags marker
-00:00 +1: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt409/test/tooling/strip_markers_test.dart: an unclosed sample marker aborts before anything is deleted
-00:00 +2: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt409/test/tooling/strip_markers_test.dart: an unclosed sample marker aborts before anything is deleted
-00:00 +3: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt409/test/tooling/strip_markers_test.dart: a sample end marker with no start aborts too
-00:01 +4: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt409/test/tooling/strip_markers_test.dart: a line marker drops only its line, and only for a stripped tag
-00:02 +5: All tests passed!

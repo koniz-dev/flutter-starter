@@ -1,2 +1,0 @@
-$ git grep -n "no_feature_flags" origin/main -- lib
-origin/main:lib/core/constants/ui_keys.dart:25:  // `tool/golden/no_feature_flags/` wires `openTasks` in its own `HomeScreen`.

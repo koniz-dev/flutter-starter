@@ -1,6 +1,0 @@
-# test/tooling/e2e_target_parity_test.dart against main's scripts/test/run_e2e_tests.sh
-00:00 +0: criterion 1: run_e2e_tests.sh and e2e-android.yml run the same target
-00:00 +0 -1: criterion 1: run_e2e_tests.sh and e2e-android.yml run the same target [E]
-  Expected: Set:['integration_test/app_e2e_test.dart']
-    Actual: Set:['integration_test/auth_flow_test.dart']
-00:00 +0 -1: Some tests failed.

@@ -1,7 +1,0 @@
-# mutants against main's suite (without the #368 tests)
---- mutant diff (login)
--    sessionGeneration.invalidate();
-SURVIVED  delete invalidate() from login()
---- mutant diff (register)
--    sessionGeneration.invalidate();
-SURVIVED  delete invalidate() from register()

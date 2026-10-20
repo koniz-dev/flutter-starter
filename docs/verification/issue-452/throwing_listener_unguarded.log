@@ -1,8 +1,0 @@
-00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt452/test/core/session/session_epoch_test.dart
-00:00 +0: a throwing listener cannot interrupt a teardown invalidate() still advances, runs the rest, and does not throw
-00:00 +0 -1: a throwing listener cannot interrupt a teardown invalidate() still advances, runs the rest, and does not throw [E]
-  Expected: true
-    Actual: <false>
-00:00 +0 -1: a throwing listener cannot interrupt a teardown forced logout still clears the tokens
-00:40 +0 -2: a throwing listener cannot interrupt a teardown forced logout still clears the tokens [E]
-00:40 +0 -2: Some tests failed.

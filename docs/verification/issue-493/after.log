@@ -1,7 +1,0 @@
-00:00 +0: docs/guides/onboarding/getting-started.md tells Android-emulator users to use 10.0.2.2
-00:00 +1: docs/guides/configuration.md tells Android-emulator users to use 10.0.2.2
-00:00 +2: .env.example tells Android-emulator users to use 10.0.2.2
-00:00 +3: All tests passed!
-
-# test/core/config
-00:02 +177 ~5: All tests passed!

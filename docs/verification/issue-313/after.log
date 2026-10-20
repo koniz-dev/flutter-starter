@@ -1,7 +1,0 @@
-00:00 +0: criterion 1: a ?token= in the path is redacted in the request entry
-00:00 +1: criterion 1: a ?token= in the path is redacted in the response entry
-00:00 +2: criterion 1: a ?token= in the path is redacted in the error entry
-00:00 +3: criterion 1: a ?token= in the path is redacted in RetryInterceptor's retry line
-00:00 +4: criterion 1: a ?token= in the path is redacted redactPath keeps everything but the secret as written
-00:00 +5: criterion 2: a response body key jwt is redacted
-00:00 +6: All tests passed!

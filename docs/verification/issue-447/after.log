@@ -1,7 +1,0 @@
-00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt447/test/core/logging/file_log_open_failure_test.dart
-00:00 +0: an unwritable logs directory produces no uncaught zone error
-VF uncaught=[] isWritable=false
-00:00 +1: a directory removed after the probe open produces no uncaught zone error
-VF447 uncaught=[] isWritable=false pending=1
-00:01 +2: a writable directory still opens and writes
-00:01 +3: All tests passed!

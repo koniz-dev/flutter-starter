@@ -733,7 +733,7 @@ void main() {
   // stores directly, so they need none of the method-channel harness above.
   //
   // Counterfactual, actually run
-  // (docs/verification/issue-168/counterfactual.log).
+  // (evidence:docs/verification/issue-168/counterfactual.log).
   group('clearCache tears its two stores down independently (#168)', () {
     for (final failure in <({String label, Object thrown})>[
       (

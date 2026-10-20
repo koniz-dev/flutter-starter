@@ -1,2 +1,0 @@
-# flutter test test/core/storage
-00:03 +176: All tests passed!

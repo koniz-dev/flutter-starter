@@ -1,7 +1,0 @@
-# alpha_probe.sh with main's flutter_launcher_icons.yaml (no remove_alpha_ios)
-logo colour type: 6  (6 = RGBA)
-WARNING: Icons with alpha channel are not allowed in the Apple App Store.
-Set "remove_alpha_ios: true" to remove it.
-✓ Successfully generated launcher icons
-iOS 1024 icon colour type: 6  (2 = RGB, 6 = RGBA)
-exit: 1

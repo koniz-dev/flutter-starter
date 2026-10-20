@@ -1,7 +1,0 @@
-# android_emulator_host_note_test.dart against main's guides
-00:00 +0 -1: docs/guides/onboarding/getting-started.md tells Android-emulator users to use 10.0.2.2 [E]
-  Expected: contains 'http://10.0.2.2:'
-00:00 +0 -2: docs/guides/configuration.md tells Android-emulator users to use 10.0.2.2 [E]
-  Expected: contains 'http://10.0.2.2:'
-              '- **`.env` values ignored?** Expected: `.env` is not an asset, on purpose. Pass `--dart-define-from-file=.env` instead, and check the keys exist in `lib/core/config/dart_defines.dart`. 
-00:00 +0 -2: Some tests failed.

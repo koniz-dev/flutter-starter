@@ -1,7 +1,0 @@
-# on this branch
-00:00 +0: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt377/test/tooling/assertionless_test_guard_test.dart: criterion 2: every test and testWidgets body asserts something
-00:08 +22: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt377/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task should handle cancel button in edit mode
-00:09 +32: All tests passed!
-
-# flutter test test/features/tasks test/core/utils test/tooling
-01:03 +877: All tests passed!

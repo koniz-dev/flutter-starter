@@ -1,7 +1,0 @@
-# Old Option B rename (lib/ test/ integration_test/ tool/ only), then the new step 3 dart fix
-$ dart fix --apply --code=directives_ordering
-209 fixes made in 209 files.
-$ git diff pubspec.yaml | grep "^[+-]  "
-+  flutter_starter: any
-$ flutter pub get
-Because my_app depends on flutter_starter any which doesn't support null safety, version solving failed.

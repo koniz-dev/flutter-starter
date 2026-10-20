@@ -1,8 +1,0 @@
-# grep -n "added to pubspec.yaml assets\|declared as a Flutter asset" lib/core/config/env_config.dart
-## origin/main
-35:  /// Note: For .env to be loaded, it must be added to pubspec.yaml assets
-## this branch
-(none)
-
-# flutter analyze lib/core/config
-No issues found! (ran in 1.3s)

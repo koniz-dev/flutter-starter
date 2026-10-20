@@ -1,8 +1,0 @@
-# the #298 tests against main's lib/core/network
-00:00 +0 -1: the performance trace of a refreshed request (#298) criterion 1: [401, 200] with a successful refresh ends as a 200 success, and no trace records a failure [E]
-  Expected: <1>
-    Actual: <null>
-00:00 +0 -2: the performance trace of a refreshed request (#298) criterion 2: a request queued behind the in-flight refresh and drained also ends as a 200 success [E]
-  Expected: <1>
-    Actual: <null>
-00:00 +1 -2: Some tests failed.

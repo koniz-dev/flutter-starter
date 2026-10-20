@@ -1,6 +1,0 @@
-# origin/main, renamed to my_app with Option B step 2
-$ flutter test test/docs/i18n_guide_snippets_test.dart test/docs/testing_guide_snippets_test.dart
-00:13 +0 -1: test/docs/i18n_guide_snippets_test.dart: criterion 2: every self-contained dart snippet analyzes with no error or warning [E]
-00:14 +2 -2: test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/guides/testing/guide.md analyzes with no error or warning [E]
-00:24 +2 -3: test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning [E]
-00:24 +3 -3: Some tests failed.

@@ -497,7 +497,7 @@ client is only pinned if you pin it yourself.
 **Why documented rather than annotated `@visibleForTesting`.** The annotation
 does work on a named parameter - a cross-library production call site draws
 `invalid_use_of_visible_for_testing_member`, verified under issue 89 and
-recorded in `docs/verification/issue-89/visible-for-testing-probe.log`. It was
+recorded in [`visible-for-testing-probe.log`](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-89/visible-for-testing-probe.log) on the `evidence` branch. It was
 declined for two reasons. It would edit
 `lib/core/network/interceptors/auth_interceptor.dart`, which is
 `epic:core-network`, not `epic:docs`; and it would forbid the parameter to

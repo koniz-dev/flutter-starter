@@ -38,9 +38,6 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
      they write the import lines of every feature you scaffold, so a missed
      script produces features that do not compile.
    - `bricks/feature_clean/__brick__/` - the same, for `mason make feature_clean`.
-   - `docs/**/*.dart` - evidence probes under `docs/verification/` are analyzed
-     too. Alternatively, run the sample strip (section 4) first: every variant
-     deletes `docs/verification/`.
 
    One command for all of them (`perl` behaves the same on macOS and Linux):
 
@@ -68,8 +65,7 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
 
    `git grep -n 'package:flutter_starter/' -- '*.dart' '*.sh' '*.ps1'` should
    then list only `bricks/flutter_starter_setup/` (the setup brick's own rename
-   source - remove it with `--remove-bricks`, below, if you never use Mason) and shell probes under
-   `docs/verification/`, which nothing executes.
+   source - remove it with `--remove-bricks`, below, if you never use Mason).
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
 
 **If you never use Mason:** after renaming, remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks`, or add `--remove-bricks` to whichever strip you run. It also drops the passages in the docs that link into them; deleting the two by hand leaves those links dangling and fails the Docs check (koniz-dev/flutter-starter#588).
@@ -131,8 +127,7 @@ every tracked path to map to one of the upstream repository's `epic:*` labels
 All four variants are exercised by [`strip-smoke.yml`](../../../.github/workflows/strip-smoke.yml), which applies each one and then runs `flutter analyze` and `flutter test` over the result.
 
 Every variant also removes the machinery that serves the upstream repository's
-own issue loop rather than your app: the acceptance-evidence archive under
-`docs/verification/`, `docs/issue-workflow.md`, `.claude/agents/`,
+own issue loop rather than your app: `docs/issue-workflow.md`, `.claude/agents/`,
 `scripts/bootstrap-issue-labels.sh`, the epic-coverage guard and its test, and
 the commit-reference check with its workflow (it requires `Refs` pointing at the
 upstream tracker, so it would reject your commits). The guards that protect your

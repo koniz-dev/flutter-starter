@@ -1,3 +1,0 @@
-# main: the same no-op mutant against main's test file (guards in place)
-00:00 +0: FileLogOutput should write log output to file
-00:00 +1: All tests passed!

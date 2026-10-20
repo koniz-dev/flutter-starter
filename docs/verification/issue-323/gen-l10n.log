@@ -1,2 +1,0 @@
-# flutter gen-l10n after staging lib/l10n; git diff --stat -- lib/l10n (empty = no diff)
-exit=0

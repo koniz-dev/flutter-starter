@@ -1,2 +1,0 @@
-# flutter test test/features/feature_flags test/core/config test/core/routing
-00:15 +380 ~3: All tests passed!

@@ -15,7 +15,7 @@
 // `StorageService`, Keychain-backed token store) plus the transport. Nothing
 // about the logout path itself is mocked.
 //
-// Counterfactual, actually run (docs/verification/issue-127/counterfactual.log):
+// Counterfactual, actually run (evidence:docs/verification/issue-127/counterfactual.log):
 // with the `sessionSink:` argument removed from `authInterceptorProvider` -
 // i.e. pre-fix wiring - 3 of these 5 tests fail, each reporting a `User` still
 // sitting in `AuthState` after the 401.

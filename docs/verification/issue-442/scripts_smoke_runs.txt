@@ -1,4 +1,0 @@
-https://github.com/koniz-dev/flutter-starter/actions/runs/39063170380 head=1981b3c conclusion=success
-  create_feature.sh == create_feature.ps1 (Windows): success
-https://github.com/koniz-dev/flutter-starter/actions/runs/39063700471 head=1981b3c conclusion=success
-  fork-and-customize Option B (my_app) + analyze + scaffold: success

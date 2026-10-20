@@ -54,8 +54,8 @@ jobs:
       #
       # `**/*.md` qualifies: no step reads markdown. `docs/**` mostly qualifies
       # - EXCEPT `docs/**/*.dart`. `analysis_options.yaml` does not exclude
-      # `docs/`, so a Dart file committed as evidence (there is one today,
-      # `docs/verification/issue-48/aot_probe.dart`) is analyzed like any other.
+      # `docs/`, so a Dart file committed under it is analyzed like any other
+      # (evidence probes did this until they moved to the `evidence` branch).
       # Treating it as inert would let a broken probe through the gate and turn
       # `main` red on somebody else's unrelated pull request. So `.dart` is
       # never inert, wherever it lives.

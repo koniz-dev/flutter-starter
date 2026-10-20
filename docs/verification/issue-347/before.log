@@ -1,8 +1,0 @@
-# auth_error_navigation_test.dart with main's login/register screens (no clearError call)
-Expected: no matching candidates
-  Actual: _TextWidgetFinder:<Found 1 widget with text "That email and password don't match. Check
-00:02 +0 -1: criterion 1: a login error does not follow the user to RegisterScreen [E]
-Expected: no matching candidates
-  Actual: _TextWidgetFinder:<Found 1 widget with text "That email and password don't match. Check
-00:03 +0 -2: criterion 2: a register error does not follow the user back to LoginScreen [E]
-00:03 +1 -2: Some tests failed.

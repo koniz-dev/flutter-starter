@@ -1,3 +1,0 @@
-# main's log_output_test.dart, seed 3899950154
-   4   LateInitializationError: Local 'fileLogOutput' has not been initialized.
-   1 00:26 +81 -4: Some tests failed.

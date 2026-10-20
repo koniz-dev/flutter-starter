@@ -1,6 +1,0 @@
-# invalid_credentials_message_test.dart against main's lib/l10n and failure_localizations.dart
-test/core/localization/invalid_credentials_message_test.dart:19:41: Error: Undefined name 'FailureCodes'.
-test/core/localization/invalid_credentials_message_test.dart:39:32: Error: Undefined name 'FailureCodes'.
-test/core/localization/invalid_credentials_message_test.dart:40:36: Error: Undefined name 'FailureCodes'.
-test/core/localization/invalid_credentials_message_test.dart:41:33: Error: Undefined name 'FailureCodes'.
-test/core/localization/invalid_credentials_message_test.dart:26:50: Error: The getter 'failureInvalidCredentials' isn't defined for the type 'AppLocalizations'.

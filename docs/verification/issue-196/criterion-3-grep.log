@@ -1,2 +1,0 @@
-$ grep -rn "StorageService" lib/features
-exit=1  (1 = no match anywhere under lib/features)

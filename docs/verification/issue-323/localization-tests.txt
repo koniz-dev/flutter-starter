@@ -1,2 +1,0 @@
-# flutter test test/core/localization
-00:01 +128: All tests passed!

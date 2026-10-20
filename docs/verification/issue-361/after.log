@@ -1,4 +1,0 @@
-# the same test on this branch
-00:00 +0: criterion 1: every relative link resolves to a file in the repo
-00:00 +1: criterion 2: the tree listing is exactly the top-level test/ directories
-00:00 +2: All tests passed!
