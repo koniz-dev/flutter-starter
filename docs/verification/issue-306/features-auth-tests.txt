@@ -1,2 +1,0 @@
-# flutter test test/features/auth (after the fix)
-00:13 +264: All tests passed!

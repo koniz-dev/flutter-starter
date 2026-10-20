@@ -1,3 +1,0 @@
-DOES NOT VERIFY
-ERROR: APK Signature Scheme v2 signature verification failed: no signers found
-ERROR: JAR signature verification failed: missing META-INF/MANIFEST.MF

@@ -1,7 +1,0 @@
-# test/tooling/acceptance_container_test.dart run against main's test/acceptance/ (before the fix) - must fail
-every acceptance test builds its container the production way [E]
-              'test/acceptance/acceptance_helpers.dart:52  builds a ProviderScope without authModuleOverrides; spread them first, as pumpAcceptance does',
-              'test/acceptance/forced_logout_acceptance_test.dart:65  builds a bare ProviderContainer; use createAppContainer(overrides: ...) from package:flutter_starter/main.dart',
-              'test/acceptance/logout_failure_acceptance_test.dart:113  builds a bare ProviderContainer; use createAppContainer(overrides: ...) from package:flutter_starter/main.dart',
-              'test/acceptance/session_restore_acceptance_test.dart:67  builds a bare ProviderContainer; use createAppContainer(overrides: ...) from package:flutter_starter/main.dart'
-Some tests failed.

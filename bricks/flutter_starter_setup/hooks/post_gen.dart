@@ -74,7 +74,7 @@ Future<void> run(HookContext context) async {
 ///
 /// `docs/` is here because `analysis_options.yaml` does not exclude it (see
 /// CLAUDE.md), so a committed probe such as
-/// `docs/verification/issue-121/diagnosis_probe_test.dart` is analyzed like any
+/// a `.dart` file under `docs/` would be analyzed like any
 /// other source; left importing `package:flutter_starter/` it fails analysis
 /// with `uri_does_not_exist` once the package is renamed.
 const _renamedDirectories = <String>[

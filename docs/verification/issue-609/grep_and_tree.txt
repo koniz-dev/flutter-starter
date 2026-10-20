@@ -1,8 +1,0 @@
-$ git grep -n 'tooling churn\|Revert them before committing' origin/main -- CLAUDE.md docs .claude
-origin/main:CLAUDE.md:25:`*.xcconfig` files. Those are tooling churn, not your change. Revert them before
-
-$ git grep -n 'tooling churn\|Revert them before committing' HEAD -- CLAUDE.md docs .claude
-exit=1 (1 = no matches)
-
-$ flutter pub get && git status --porcelain   (this branch, on top of #610/#611)
-(empty = the tree the new text describes)

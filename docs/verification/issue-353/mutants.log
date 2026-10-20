@@ -1,3 +1,0 @@
-KILLED    routes do not read tasksSessionResetProvider
-KILLED    reset skips deleteAllTasks()
-KILLED    invalidate before the delete completes

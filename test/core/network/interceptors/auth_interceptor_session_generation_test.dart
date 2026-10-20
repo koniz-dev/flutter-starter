@@ -26,7 +26,7 @@
 // fail.
 //
 // Counterfactual, actually run and recorded in
-// docs/verification/issue-169/counterfactual.log: with the three
+// evidence:docs/verification/issue-169/counterfactual.log: with the three
 // `isCurrent(...)` guards removed and nothing else changed, six of these eight
 // tests fail, the first of them reporting the security phase's own probe
 // output - `Expected: null / Actual: 'NEW-access-1'`.

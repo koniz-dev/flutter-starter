@@ -1,2 +1,0 @@
-# flutter test test/core/network (after the fix)
-00:35 +345: All tests passed!

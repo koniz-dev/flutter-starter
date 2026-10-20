@@ -14,7 +14,7 @@
 // and which the sample code here can produce today (see the seeded `/public`
 // GET below).
 //
-// Counterfactual, actually run (docs/verification/issue-114/counterfactual.log):
+// Counterfactual, actually run (evidence:docs/verification/issue-114/counterfactual.log):
 // with `attachResponseCache` never called from `ApiClient._createDio` - i.e.
 // pre-fix wiring, the interceptor holding no cache - 4 of these 6 tests fail,
 // including the equivalence test, which reports the surviving `http_cache_*`
@@ -534,7 +534,7 @@ void main() {
     // the first throw skipped everything after it.
     //
     // Counterfactual, actually run
-    // (docs/verification/issue-168/counterfactual.log): against the pre-fix
+    // (evidence:docs/verification/issue-168/counterfactual.log): against the pre-fix
     // chained bodies both cases below fail, reporting the surviving tokens and
     // `http_cache_*` keys as the difference between the two paths.
     for (final failure in <({String label, Object thrown})>[

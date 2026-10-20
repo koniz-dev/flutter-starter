@@ -1,8 +1,0 @@
-# branch fix/330-env-assets-yaml-parse (after the fix)
-case a  exit=1    assets:|    - path: .env|
-case b  exit=1    assets: [.env.example, .env]|
-case c  exit=1    assets:|    - path: assets/config/|
-case d  exit=1    assets:|    - assets/config/|
-case e  exit=0    assets:|    - path: .env # env-asset-ack: web build, contains no secrets|
-case f  exit=1    assets:|    - flavors: [web]|      path: .env|
-case g  exit=2    assets:|    - .env|   bad: [|

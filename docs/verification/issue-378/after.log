@@ -1,4 +1,0 @@
-00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt378/test/tooling/e2e_target_parity_test.dart
-00:00 +0: criterion 1: run_e2e_tests.sh and e2e-android.yml run the same target
-00:00 +1: criterion 1 (#378): the CI target is the only E2E test, in the repo and in every strip golden
-00:00 +2: All tests passed!

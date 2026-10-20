@@ -1,7 +1,0 @@
-# PR #611 Quality gate, run 39112534399 (Linux, stable 3.47.x), the job's own flutter pub get and the new step:
-   3 Got dependencies!
-   1 No tracked file changed.
-
-# The lock moved only SDK-related, first-party packages (security review of 7b33cdb):
-#   exact SDK pins: test_api 0.7.12, matcher 0.12.20 (flutter_test), material_color_utilities 0.13.0 (flutter)
-#   caret floors the SDK raised: characters, meta, vector_math, intl; transitive with test_api: test, test_core; js removed

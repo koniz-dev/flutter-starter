@@ -524,7 +524,7 @@ void main() {
       // the same rule.
       //
       // Counterfactual, actually run
-      // (docs/verification/issue-168/counterfactual.log): against the chained
+      // (evidence:docs/verification/issue-168/counterfactual.log): against the chained
       // pre-fix body both cases below fail on `httpCache.clearCalls`, which is
       // 0 rather than 1.
       group('local teardown steps are independent (#168)', () {

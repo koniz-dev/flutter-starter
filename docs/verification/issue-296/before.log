@@ -1,9 +1,0 @@
-# retry_doc_example_test.dart against main's retry_interceptor.dart
-00:00 +1 -1: criterion 2: the documented apiClient.post call uses only real parameters [E]
-  Expected: empty
-    Actual: Set:['options']
-  the example passes parameters ApiClient.post does not have
-00:00 +1 -2: criterion 1: the example sends the key through headers: [E]
-  Expected: contains 'headers: {RetryInterceptor.idempotencyKeyHeader'
-    Actual: '\n'
-00:00 +2 -2: Some tests failed.

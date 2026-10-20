@@ -1,7 +1,0 @@
-00:00 +0: compareVersions orders dotted versions numerically
-00:00 +1: criterion 2: fails on a fixture with gradle-8.14, naming it
-00:00 +2: fails on AGP and Kotlin below their floors, one message each
-00:00 +3: a version exactly at the floor passes
-00:00 +4: an unreadable version is a problem, not a pass
-00:00 +5: criterion 2: passes on the real android/ files
-00:00 +6: All tests passed!

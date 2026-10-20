@@ -1,5 +1,0 @@
-# errors_doc_server_failure_test.dart against main's docs/api/core/errors.md
-00:00 +0 -1: the ServerFailure constructor in errors.md has the real parameters [E]
-  Expected: ['code', 'statusCode']
-    Actual: ['code']
-00:00 +0 -1: Some tests failed.

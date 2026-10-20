@@ -1,4 +1,0 @@
-00:00 +0: the performance trace of a refreshed request (#298) criterion 1: [401, 200] with a successful refresh ends as a 200 success, and no trace records a failure
-00:00 +1: the performance trace of a refreshed request (#298) criterion 2: a request queued behind the in-flight refresh and drained also ends as a 200 success
-00:00 +2: the performance trace of a refreshed request (#298) criterion 3: a 401 whose refresh fails is still traced as a 401 error
-00:00 +3: All tests passed!

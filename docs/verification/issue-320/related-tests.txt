@@ -1,2 +1,0 @@
-# flutter test test/core/logging test/core/config
-00:27 +316 ~2: All tests passed!

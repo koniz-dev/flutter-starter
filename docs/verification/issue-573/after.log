@@ -1,6 +1,0 @@
-00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt573/test/docs/check_docs_link_scope_test.dart
-00:00 +0: criterion 2: a test/README.md link escaping the repo fails
-00:01 +1: criterion 2: the fixed link inside the repo passes
-00:02 +2: criterion 1: root files and every listed directory are scanned
-00:03 +3: criterion 3: the Docs check workflow triggers on every scanned file
-00:03 +4: All tests passed!

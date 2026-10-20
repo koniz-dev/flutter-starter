@@ -1,5 +1,0 @@
-mutant_no_doubling:
-the delays are 1x, 2x and 4x the initial delay, each plus jitter under 500 ms [E]
-Duration.zero removes the jitter entirely [E]
-mutant_no_send_timeout:
-a GET failing with sendTimeout is retried [E]

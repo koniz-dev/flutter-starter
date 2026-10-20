@@ -1,8 +1,0 @@
-# after the fix: flutter test test/tooling/test_coverage_script_test.dart
-00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/test_coverage_script_test.dart
-00:00 +0: criterion 2: --exclude removes files without it, generated code drops out as it does in CI
-00:00 +1: criterion 2: --exclude removes files --exclude=lib/generated gives 2/6 = 33.33%
-00:00 +2: criterion 2: --exclude removes files excluding the data file too gives 100%
-00:00 +3: criterion 1: --analyze agrees with calculate_layer_coverage.sh per-layer counts are per file, not spilled
-00:00 +4: criterion 1: --analyze agrees with calculate_layer_coverage.sh the low-coverage list names the right file
-00:00 +5: All tests passed!

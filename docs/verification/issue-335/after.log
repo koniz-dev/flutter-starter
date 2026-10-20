@@ -1,7 +1,0 @@
-00:00 +0: criterion 1: production --analyze-size reports the AAB size
-00:00 +1: a development run reports both the APK and the comparison bundle
-00:01 +2: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
-00:02 +3: criterion 2 (staging): every flutter build carries the ENVIRONMENT and BASE_URL defines
-00:02 +4: criterion 2 (development): every flutter build carries the ENVIRONMENT and BASE_URL defines
-00:03 +5: criterion 3: the script no longer claims an ABI split it never does
-00:03 +6: All tests passed!

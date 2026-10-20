@@ -1,8 +1,0 @@
-00:00 +0: criterion 2 (en): a rejected login renders failureInvalidCredentials, not failureAuth
-00:02 +1: criterion 2 (en): a rejected registration renders it too
-00:02 +2: criterion 3 (en): an expired-session AuthFailure still renders failureAuth
-00:02 +3: criterion 2 (vi): a rejected login renders failureInvalidCredentials, not failureAuth
-00:02 +4: criterion 2 (vi): a rejected registration renders it too
-00:02 +5: criterion 3 (vi): an expired-session AuthFailure still renders failureAuth
-00:02 +6: criterion 3: the refresh path tags its 401 as an expired session, not as invalid credentials
-00:02 +7: All tests passed!

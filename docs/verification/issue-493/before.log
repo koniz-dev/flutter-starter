@@ -1,4 +1,0 @@
-# android_emulator_host_note_test.dart (now covering .env.example) against main's .env.example
-00:00 +2 -1: .env.example tells Android-emulator users to use 10.0.2.2 [E]
-  Expected: contains 'http://10.0.2.2:'
-00:00 +2 -1: Some tests failed.

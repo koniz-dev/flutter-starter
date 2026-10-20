@@ -1,8 +1,0 @@
-# CI: Strip process-only + analyze + test, job 117226506796 (run 38976288628) on PR #427 head f3f8688536c
-# https://github.com/koniz-dev/flutter-starter/actions/runs/38976288628/job/117226506796
-Strip process-only + analyze + test	Apply strip	2026-10-16T22:32:38.8099923Z Process-only strip complete; both samples kept. Run: flutter pub get && flutter analyze && flutter test
-Strip process-only + analyze + test	Assert process-only artifacts are gone	2026-10-16T22:32:38.8481539Z All process-only artifacts were removed.
-Strip process-only + analyze + test	Generate a feature slice and drop the bricks (process-only)	2026-10-16T22:32:38.9267148Z Feature profile created:
-Strip process-only + analyze + test	Generate a feature slice and drop the bricks (process-only)	2026-10-16T22:32:38.9578066Z features: auth feature_flags home profile tasks
-Strip process-only + analyze + test	Analyze stripped tree	2026-10-16T22:32:50.3896675Z No issues found! (ran in 10.2s)
-Strip process-only + analyze + test	Run tests (stripped tree)	2026-10-16T22:35:02.5924544Z 🎉 3033 tests passed, 13 skipped.

@@ -1,6 +1,0 @@
-# freerasp_start_retry_test.dart against main's FreeRaspServiceImpl
-00:00 +0 -1: criterion 1: after a failed start, a second call attempts the start again and fails again instead of returning normally [E]
-  Expected: not null
-    Actual: <null>
-  a failed start must not leave the service marked started
-00:00 +1 -1: Some tests failed.

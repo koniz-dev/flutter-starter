@@ -1,8 +1,0 @@
-# freerasp 
-$ flutter test test/core/security -r expanded
-00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart
-00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/infrastructure/freerasp_service_impl_test.dart: a threat freeRASP reports reaches onThreatDetected
-00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/rasp_providers_test.dart: raspServiceProvider returns no-op service by default
-00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/security/rasp_providers_test.dart: raspServiceProvider can be overridden in ProviderContainer
-00:01 +3: All tests passed!
-exit: 0

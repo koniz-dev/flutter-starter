@@ -10,7 +10,7 @@
 // order, so on the request leg the header it looked for did not exist yet.
 // clearCache() had an empty body and no callers.
 //
-// Counterfactual, actually run (docs/verification/issue-77/counterfactual.log):
+// Counterfactual, actually run (evidence:docs/verification/issue-77/counterfactual.log):
 // with `_hasSessionCredential()` replaced by `return false` (header sniff only)
 // and `clearCache()` restored to an empty body, 4 of these 9 tests fail:
 //

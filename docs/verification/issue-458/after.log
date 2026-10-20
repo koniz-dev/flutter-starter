@@ -1,8 +1,0 @@
-# the same test on this branch
-00:00 +0: criterion 1: a failed delete falls back to an empty list, so B sees none of A's tasks, now or on a reload
-00:00 +1: criterion 1: when the fallback write fails too, the list is held empty until a wipe succeeds
-00:00 +2: criterion 2: each failure is logged, and none escapes to the zone
-00:00 +3: All tests passed!
-
-# flutter test test/features/tasks
-00:32 +348: All tests passed!

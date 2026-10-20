@@ -122,8 +122,10 @@ been proven, and all four closed with the residual assigned to the adopter.
 
 Run `./scripts/test/run_acceptance.sh <issue-number>`. It runs the format check,
 `flutter analyze`, `flutter test`, and the golden-tagged acceptance tests, tees
-every log into `docs/verification/issue-<N>/`, and copies captured PNGs there so
-the evidence directory is self-contained and committable.
+every log into `docs/verification/issue-<N>/` in the working tree, and copies
+captured PNGs there so the evidence directory is self-contained. That directory
+is **not** committed to `main`: evidence lives on the orphan `evidence` branch
+(see Evidence discipline).
 
 Three tiers exist here:
 
@@ -213,9 +215,9 @@ gate entirely.
 does not mean format, analyze and test passed - it means they did not run,
 because no changed path could have affected them. Each job summary states which
 of the two happened and lists every changed path. The skip set is `**/*.md` anywhere plus `docs/**`,
-minus `.dart`: `analysis_options.yaml` does not exclude `docs/`, so a committed
-evidence probe such as `docs/verification/issue-48/aot_probe.dart` is analyzed
-like any other source and forces the full gate.
+minus `.dart`: `analysis_options.yaml` does not exclude `docs/`, so a `.dart`
+file committed under `docs/` is analyzed like any other source and forces the
+full gate.
 
 **None of these checks gates a merge, and `main` has no branch protection.**
 `gh pr merge --squash` succeeds on a red PR, and a direct push to `main` is not
@@ -227,9 +229,17 @@ comment. Quality gate is now safe to list in
 
 ### Evidence discipline
 
-- Persist artifacts as **committed files** under `docs/verification/issue-<N>/`,
-  and commit them **before** the closing comment so links resolve. Terminal
-  scrollback is not evidence.
+- Persist artifacts as **committed files** under `docs/verification/issue-<N>/`
+  on the orphan **`evidence` branch**, never on `main`: `main` is what an
+  adopter gets from "Use this template" (koniz-dev/flutter-starter#619). Keep a
+  worktree of it (`git worktree add ../flutter-starter-evidence origin/evidence`,
+  recipe in that branch's README), copy the run's files in, commit, and push
+  **before** the closing comment, linking
+  `https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-<N>/<file>`.
+  That branch has no Flutter project, so commit and push there with
+  `--no-verify`. Code comments cite evidence as `evidence:docs/verification/...`
+  (a git revspec: `git show origin/evidence:docs/...`). Terminal scrollback is
+  not evidence.
 - **Open every screenshot yourself** and confirm it shows the asserted behavior
   before writing PASS. A zero exit from `run_acceptance.sh` is an input, not a
   verdict; the script prints that reminder on success on purpose.
@@ -308,7 +318,7 @@ What must be true before the next phase starts:
 | G1 | implementer | Issue has a `## Acceptance criteria` section with observable steps; scope fits one `epic:*`; issue is `status:in-progress` and assigned to this session (re-read confirmed) |
 | G2 | qa | Change is merged to `main`; commits carry `Refs owner/repo#N` and no `Fixes`/`Closes`/`Resolves`; `./scripts/dev/audit_template.sh` exits 0 |
 | G3 | security | G2 held and the diff touches a risk surface listed above |
-| G4 | close | Every criterion has a named artifact under `docs/verification/issue-<N>/`; every PNG was opened and inspected by the closing session; evidence is committed and pushed; a `qa` pass or the self-QA checklist has run |
+| G4 | close | Every criterion has a named artifact under `docs/verification/issue-<N>/` on the `evidence` branch; every PNG was opened and inspected by the closing session; evidence is committed and pushed; a `qa` pass or the self-QA checklist has run |
 | G5 | needs-uat | The blocking criterion is genuinely in tier 3; the comment states the human steps and what PASS means |
 
 A gate that does not hold is not a judgment call. Stop and route.

@@ -1,8 +1,0 @@
-00:00 +0: findUnknownDartDefines criterion 2: fails on CERTIFICATE_FINGERPRINTS, naming file, line and key
-00:00 +1: findUnknownDartDefines criterion 2: passes on API_SSL_FINGERPRINTS
-00:00 +2: findUnknownDartDefines reads the space-separated form too
-00:00 +3: findUnknownDartDefines checks every flag on a line
-00:00 +4: findUnknownDartDefines ignores --dart-define-from-file and prose outside fences
-00:00 +5: the keys parsed from source are exactly DartDefines.values
-00:00 +6: criterion 3: the real README.md and docs/ name only known keys
-00:00 +7: All tests passed!

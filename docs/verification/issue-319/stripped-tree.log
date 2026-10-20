@@ -1,6 +1,0 @@
-# after the CI fix: enable_toggles_have_readers_test.dart on a tree stripped with
-# dart run tool/strip_sample_features.dart --apply --remove-feature-flags (local worktree at c558e3779d7 + this change)
-ENABLE_DEBUG_FEATURES row: skipped, 'lib/features/feature_flags was stripped, and with it every reader'
-flutter test test/core/config: 00:01 +149 ~3: All tests passed!
-flutter analyze: No issues found!
-flutter test --timeout=5m: 01:51 +2754 ~10: All tests passed!

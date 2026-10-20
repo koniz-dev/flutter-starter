@@ -1,3 +1,0 @@
-# on this branch: dart run build_runner build -d (exit 0), then git status --porcelain for this issue's files
-$ git status --porcelain -- lib/features/auth/presentation/providers/auth_provider.g.dart
-(empty above = nothing rewritten)
