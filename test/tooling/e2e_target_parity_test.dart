@@ -42,7 +42,13 @@ void main() {
     };
 
     expect(e2eTests('integration_test'), ci);
-    for (final golden in Directory('tool/golden').listSync()) {
+    // After a sample strip the tool removes itself, tool/golden/ included
+    // (koniz-dev/flutter-starter#622).
+    final goldens = Directory('tool/golden');
+    for (final golden
+        in goldens.existsSync()
+            ? goldens.listSync()
+            : const <FileSystemEntity>[]) {
       final dir = Directory('${golden.path}/integration_test');
       if (!dir.existsSync()) continue;
       expect(e2eTests(dir.path), ci, reason: dir.path);

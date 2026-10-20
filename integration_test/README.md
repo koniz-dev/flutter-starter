@@ -68,9 +68,10 @@ patrol test --target integration_test/app_e2e_test.dart --dart-define=E2E_BACKEN
 
 A skipped test still appears in the summary (`⏩ Skipped: 1`), so it cannot be quietly forgotten.
 
-**There is no tasks coverage, on purpose.** `UiKeys.openTasks`, `UiKeys.tasksFab`, and `UiKeys.addTaskSubmit` are declared but attached to no widget in `lib/`: `HomeScreen` is a deliberately minimal shell with no entry point into the sample `tasks` feature. Patrol matches on the widget tree, so a selector written against an unattached key finds nothing — attach the key first if your fork adds that entry point. No strip variant wires them either: `tool/golden/` holds routing files and one E2E file, and none of them attaches these keys.
+**There is no tasks coverage, on purpose.** `UiKeys.openTasks`, `UiKeys.tasksFab`, and `UiKeys.addTaskSubmit` are declared but attached to no widget in `lib/`: `HomeScreen` is a deliberately minimal shell with no entry point into the sample `tasks` feature. Patrol matches on the widget tree, so a selector written against an unattached key finds nothing — attach the key first if your fork adds that entry point.
+No strip variant wires them either: `tool/golden/` holds routing files and one E2E file, and none of them attaches these keys. <!-- strip:strip-tool line -->
 
-**After** `dart run tool/strip_sample_features.dart --apply` (both samples removed), `tool/golden/stripped/integration_test/app_e2e_test.dart` replaces `app_e2e_test.dart` outright, so editing the copy here does not affect that variant. `--remove-tasks` and `--remove-feature-flags` keep this file as it is.
+**After** `dart run tool/strip_sample_features.dart --apply` (both samples removed), `tool/golden/stripped/integration_test/app_e2e_test.dart` replaces `app_e2e_test.dart` outright, so editing the copy here does not affect that variant. `--remove-tasks` and `--remove-feature-flags` keep this file as it is. <!-- strip:strip-tool line -->
 
 ## CI
 

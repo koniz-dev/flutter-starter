@@ -7,7 +7,7 @@ Use this after you copy or fork the template into your own app.
 1. Skim [Repository layout](repository-layout.md) to see which directories matter for your fork.
 2. Remove optional sample modules if you do not need them:
    - Prefer Mason toggles when generating a new app.
-   - Or run `dart run tool/strip_sample_features.dart --apply` (see section 4) to remove both **tasks** and **feature_flags** while keeping **auth** and core.
+   - Or run `dart run tool/strip_sample_features.dart --apply` (see section 4) to remove both **tasks** and **feature_flags** while keeping **auth** and core. <!-- strip:strip-tool line -->
 3. Read [Choose your stack](../../architecture/choose-your-stack.md) to decide what to keep vs swap (network, storage, navigation adapters).
 4. Follow sections 1–3 below to rename the package and native ids.
 
@@ -65,10 +65,11 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
 
    `git grep -n 'package:flutter_starter/' -- '*.dart' '*.sh' '*.ps1'` should
    then list only `bricks/flutter_starter_setup/` (the setup brick's own rename
-   source - remove it with `--remove-bricks`, below, if you never use Mason).
+   source).
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
 
-**If you never use Mason:** after renaming, remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run. It also drops the passages in the docs that link into them; deleting the two by hand leaves those links dangling and fails the Docs check (koniz-dev/flutter-starter#588).
+**If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**.
+Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling (koniz-dev/flutter-starter#588). <!-- strip:strip-tool line -->
 
 ## 2. Android application id and namespace
 
@@ -84,6 +85,7 @@ If you do it manually:
 
 - Set `PRODUCT_BUNDLE_IDENTIFIER` in `ios/Runner.xcodeproj/project.pbxproj` (Runner + RunnerTests targets).
 
+<!-- strip:strip-tool start -->
 ## 4. Strip sample features (optional)
 
 Removing **`tasks`** and **`feature_flags`** gives a smaller tree while keeping **`auth`** and core infrastructure.
@@ -122,6 +124,10 @@ All four variants are exercised by [`strip-smoke.yml`](../../../.github/workflow
 Then search the kept guides for the removed modules (for example
 `git grep -n -i "feature.flag" docs/guides`) and adjust what you find; the strip
 does not rewrite prose (koniz-dev/flutter-starter#409).
+
+The strip removes itself afterwards - the tool, its golden tree, its workflow
+and its tests - since it cannot run twice; `--keep-samples` keeps it.
+<!-- strip:strip-tool end -->
 
 ## 5. Remove auth sample (advanced)
 

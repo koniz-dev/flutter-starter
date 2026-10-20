@@ -112,7 +112,8 @@ copyright line) becomes everything in `application_id` before its last segment.
 
 ## Not using Mason
 
-Use the manual steps in [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md). Afterwards you may remove **`bricks/`** and **`mason.yaml`** with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks` if you want a slimmer tree; deleting them by hand leaves links to them dangling in the docs.
+Use the manual steps in [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md). Afterwards you may remove **`bricks/`** and **`mason.yaml`** if you want a slimmer tree.
+Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`; deleting them by hand leaves links to them dangling in the docs. <!-- strip:strip-tool line -->
 
 ## Developing this brick
 

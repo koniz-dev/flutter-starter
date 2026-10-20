@@ -50,12 +50,14 @@ the directory; `lib/core/di/providers.dart` holds no feature providers.
 
 If you don't need feature flags:
 
+<!-- strip:strip-tool start -->
 Use the strip tool rather than deleting by hand - it also rewrites the files
 that reference the slice:
 
 ```bash
 dart run tool/strip_sample_features.dart --apply --remove-feature-flags
 ```
+<!-- strip:strip-tool end -->
 
 **Update `pubspec.yaml`:**
 ```yaml
