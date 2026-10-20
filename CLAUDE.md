@@ -90,23 +90,25 @@ make verification worthless.
 
 ### Which checks a PR gets
 
-Four workflows run on PRs. Two of them filter at the workflow level, so
-**every PR reports Quality gate and the Strip jobs** - the minimum - and Docs
-check and the JDK 25 Android job join only when their paths change. `test/tooling/claude_md_checks_table_test.dart` fails if this table and
-the workflows' `pull_request` triggers drift apart:
+The workflows below run on PRs. **Every PR reports Quality gate** - the
+minimum - and Docs check and the JDK 25 Android job join only when their paths
+change.
+While the sample strip is in the tree, every PR also reports its Strip jobs. <!-- strip:strip-tool line -->
+`test/tooling/claude_md_checks_table_test.dart` fails if this table and the
+workflows' `pull_request` triggers drift apart:
 
 | Workflow | Check name(s) | Runs when |
 |---|---|---|
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, `tool/doc_symbols.dart`, `tool/doc_env_runs.dart`, `tool/doc_dart_defines.dart`, `tool/doc_test_paths.dart`, `lib/core/config/dart_defines.dart`, or the workflow itself (`.github/workflows/docs-check.yml`) |
 | [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
-| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x4) | **every** PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed |
+| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x4) | **every** PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed <!-- strip:strip-tool line --> |
 
-`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117, and
-`strip-smoke.yml` never had one. Both now filter inside the job - "Decide the
-gate scope" and "Decide the strip scope" (koniz-dev/flutter-starter#167) - so
-the checks always post a conclusion and can be required status checks, while a
-docs-only PR installs no Flutter toolchain in any of the four jobs. A PR reporting zero checks is the
+`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117 and filters
+inside the job instead ("Decide the gate scope", koniz-dev/flutter-starter#167),
+so the check always posts a conclusion and can be a required status check, while
+a docs-only PR installs no Flutter toolchain.
+`strip-smoke.yml` does the same ("Decide the strip scope"). <!-- strip:strip-tool line --> A PR reporting zero checks is the
 registration race, never a path exclusion. Poll until
 `gh pr checks --json name --jq 'length'` is non-zero before
 `gh pr checks --watch`; merging on the "no checks reported" reading skips the
@@ -135,8 +137,10 @@ gate always posts a conclusion, so it is safe to list in
   `./scripts/dev/setup_git_hooks.sh`.
 - Tests mirror `lib/`. New feature slices: `mason make feature_clean` or
   `./scripts/dev/create_feature.sh`.
+<!-- strip:strip-tool start -->
 - `tool/golden/` mirrors `lib/` for `strip_sample_features.dart`. Changing a
   file that has a `tool/golden/*` counterpart means updating that counterpart too,
   or [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) breaks.
+<!-- strip:strip-tool end -->
 - No emoji in `docs/`, `CLAUDE.md`, or `.claude/`. The existing `README.md` and
   `CONTRIBUTING.md` use them; leave those alone unless the issue is about them.

@@ -148,7 +148,9 @@ to mistype.
 | Isar / local DB | Template + interface | `lib/core/storage/isar_database_template.dart`, `local_database.dart` | Opt-in persistence |
 | Patrol E2E | Dev dependency | `integration_test/` | Optional flows |
 
+<!-- strip:strip-tool start -->
 **Stripped starter:** `dart run tool/strip_sample_features.dart --apply` removes the sample `tasks` and `feature_flags` modules. Rows above that reference those paths describe the **full** tree only; after strip, use `tool/golden/stripped/` as the rewired baseline.
+<!-- strip:strip-tool end -->
 
 ## Dependency direction
 

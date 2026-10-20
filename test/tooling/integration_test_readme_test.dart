@@ -13,7 +13,13 @@ import 'package:flutter_test/flutter_test.dart';
 final String _readme = File('integration_test/README.md').readAsStringSync();
 
 void main() {
-  test('every tool/golden/ path the README names exists', () {
+  // After a sample strip the tool removes itself, tool/golden/ included, and
+  // the README's lines about it go too (koniz-dev/flutter-starter#622).
+  final skip = Directory('tool/golden').existsSync()
+      ? null
+      : 'no tool/golden/: the sample strip has removed itself';
+
+  test('every tool/golden/ path the README names exists', skip: skip, () {
     final cited = {
       for (final m in RegExp(r'tool/golden/[\w./-]*').allMatches(_readme))
         m.group(0)!,

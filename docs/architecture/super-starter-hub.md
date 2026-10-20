@@ -13,7 +13,7 @@ One entry page for **what exists**, **what is optional**, and **where it is docu
 | HTTP (Dio + `INetworkClient`) | Yes | Replace `ApiClient` / feature datasources | [adr/0001-network-boundary.md](adr/0001-network-boundary.md), [Network API](../api/core/network.md) |
 | Key-value + tokens | Yes | Custom `IKeyValueStore` / `ITokenStore` | [adr/0002-storage-boundary.md](adr/0002-storage-boundary.md), [Storage API](../api/core/storage.md) |
 | Theme / design tokens | Yes | New `AppDesignTokens` + `AppTheme` | [adr/0004-theme-token-boundary.md](adr/0004-theme-token-boundary.md) |
-| Auth / tasks / flags samples | Yes | Strip via Mason or `tool/strip_sample_features.dart` | [Fork and customize](../guides/onboarding/fork-and-customize.md) |
+| Auth / tasks / flags samples | Yes | Strip via Mason or `tool/strip_sample_features.dart` | [Fork and customize](../guides/onboarding/fork-and-customize.md) <!-- strip:strip-tool line --> |
 | Testing (unit / widget) | Yes | Add suites per feature | [Testing guide](../guides/testing/guide.md), [summary](../guides/testing/testing-summary.md) |
 | E2E (Patrol) | Dev dependency | Configure devices + write flows | [Testing guide](../guides/testing/guide.md) |
 | Security hardening | Guides + optional RASP | FreeRASP override, checklist | [Security README](../guides/security/README.md) |

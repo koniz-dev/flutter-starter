@@ -73,17 +73,45 @@ const _goldenOverrides = <String, List<String>>{
 ///   * a single line - a table row, say, where a marker line would end the
 ///     table - carrying `<!-- strip:<tag> line -->` anywhere on it.
 ///
+/// `strip-tool` regions document this tool itself, and go when it removes
+/// itself after a sample strip (koniz-dev/flutter-starter#622).
 /// `feature-flags` and `tasks` regions go with their sample (koniz-dev/flutter-starter#409), and stay,
 /// invisible, while the sample is kept. `bricks` regions go with `bricks/`
 /// and `mason.yaml` under `--remove-bricks` (koniz-dev/flutter-starter#588).
 const _featureFlagsTag = 'feature-flags';
 const _tasksTag = 'tasks';
 const _bricksTag = 'bricks';
+const _stripToolTag = 'strip-tool';
 const _markerTags = <String>[
   _featureFlagsTag,
   _tasksTag,
   _bricksTag,
+  _stripToolTag,
 ];
+
+/// What exists only to run this strip. Once it has removed a sample, running it
+/// again is not supported, so after a sample strip it deletes all of it - the
+/// adopter keeps nothing whose only job was producing their tree
+/// (koniz-dev/flutter-starter#622). `--keep-samples` keeps it, because the
+/// samples can still be removed later.
+const _selfPaths = <String>[
+  'tool/strip_sample_features.dart',
+  'tool/golden',
+  '.github/workflows/strip-smoke.yml',
+  'test/tooling/strip_markers_test.dart',
+  'test/tooling/strip_sample_prose_test.dart',
+];
+
+/// The analyzer exclude for [_selfPaths]' golden tree, with its comment.
+const _goldenExcludeBlock = '''
+    # Golden tree mirrors lib/ for strip_sample_features; not part of the app.
+    # Analyzing these in place would measure them against the unstripped
+    # sources they exist to replace, so the exclusion stays. Coverage comes
+    # from .github/workflows/strip-smoke.yml instead: it applies each strip
+    # variant and analyzes the resulting tree, which is the only state in
+    # which a golden's correctness is a meaningful question.
+    - tool/golden/**
+''';
 
 /// What `--remove-bricks` deletes: the Mason bricks and their registry.
 const _brickPaths = <String>['bricks', 'mason.yaml'];
@@ -301,9 +329,55 @@ void main(List<String> args) {
     return;
   }
 
+  _removeSelf(root);
+
   stdout.writeln(
     'Strip complete. Run: flutter pub get && flutter analyze && flutter test',
   );
+}
+
+/// Deletes [_selfPaths] and the docs about this tool, then unwraps every
+/// marker left - those of a kept sample or kept bricks - keeping its text, so
+/// no `strip:` marker survives in a tree with no strip tool to read it.
+void _removeSelf(Directory root) {
+  _stripMarkdownRegions(root, const [_stripToolTag]);
+  _unwrapMarkers(root);
+
+  final options = File(p.join(root.path, 'analysis_options.yaml'));
+  if (options.existsSync()) {
+    final text = options.readAsStringSync();
+    if (text.contains(_goldenExcludeBlock)) {
+      options.writeAsStringSync(text.replaceFirst(_goldenExcludeBlock, ''));
+    }
+  }
+
+  for (final relative in _selfPaths) {
+    final path = p.join(root.path, relative);
+    if (FileSystemEntity.isDirectorySync(path)) {
+      Directory(path).deleteSync(recursive: true);
+    } else if (FileSystemEntity.isFileSync(path)) {
+      File(path).deleteSync();
+    } else {
+      continue;
+    }
+    stdout.writeln('Removed $relative: it only serves this strip.');
+  }
+}
+
+/// Removes every remaining marker but keeps the text it marked: block marker
+/// lines go, and a line marker is cut out of its line.
+void _unwrapMarkers(Directory repoRoot) {
+  final lineMarker = RegExp(r'\s*<!-- strip:[\w-]+ line -->');
+  final blockMarker = RegExp(r'^\s*<!-- strip:[\w-]+ (start|end) -->\s*$');
+  for (final file in _markdownFiles(repoRoot)) {
+    final lines = file.readAsLinesSync();
+    final kept = [
+      for (final line in lines)
+        if (!blockMarker.hasMatch(line)) line.replaceAll(lineMarker, ''),
+    ];
+    if (kept.join('\n') == lines.join('\n')) continue;
+    file.writeAsStringSync('${kept.join('\n')}\n');
+  }
 }
 
 /// Checks that `tool/golden/<variant>/` holds exactly the declared overrides.
@@ -423,10 +497,13 @@ List<String> _validateMarkers(Directory repoRoot) {
             );
           }
           openedAt.remove(tag);
-        } else if (openedAt.isNotEmpty && line.contains(_markerLine(tag))) {
+        } else if (openedAt.containsKey(tag) &&
+            line.contains(_markerLine(tag))) {
+          // A line marker of another tag inside a block is fine: each goes
+          // with its own strip. One of the same tag would be redundant.
           problems.add(
-            '  $relative:$lineNumber: $tag line marker inside the region '
-            'opened at line ${openedAt.values.first}',
+            '  $relative:$lineNumber: $tag line marker inside the $tag region '
+            'opened at line ${openedAt[tag]}',
           );
         }
       }

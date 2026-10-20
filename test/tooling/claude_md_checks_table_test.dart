@@ -11,17 +11,6 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-const _numbers = {
-  'One': 1,
-  'Two': 2,
-  'Three': 3,
-  'Four': 4,
-  'Five': 5,
-  'Six': 6,
-  'Seven': 7,
-  'Eight': 8,
-};
-
 /// The lines of [workflow]'s top-level `on:` block, comments removed.
 List<String> _onBlock(List<String> workflow) {
   final start = workflow.indexWhere((l) => l.trimRight() == 'on:');
@@ -110,14 +99,6 @@ void main() {
     },
   );
 
-  test('criterion 3: the workflow count in the prose matches', skip: skip, () {
-    final match = RegExp(
-      r'(\w+) workflows run on PRs\.',
-    ).firstMatch(section.replaceAll('\n', ' '));
-    expect(match, isNotNull);
-    expect(_numbers[match!.group(1)], prWorkflows.length);
-  });
-
   test(
     'criteria 1-2: each filtered row names every trigger path',
     skip: skip,
@@ -131,10 +112,18 @@ void main() {
     },
   );
 
-  test('the Strip row counts the strip-smoke variants', skip: skip, () {
-    final variants = workflows['strip-smoke.yml']!
-        .where((l) => l.trim().startsWith('- variant:'))
-        .length;
-    expect(rows['strip-smoke.yml'], contains('(x$variants)'));
-  });
+  test(
+    'the Strip row counts the strip-smoke variants',
+    skip:
+        skip ??
+        (workflows.containsKey('strip-smoke.yml')
+            ? null
+            : 'no strip-smoke.yml: the sample strip has removed itself'),
+    () {
+      final variants = workflows['strip-smoke.yml']!
+          .where((l) => l.trim().startsWith('- variant:'))
+          .length;
+      expect(rows['strip-smoke.yml'], contains('(x$variants)'));
+    },
+  );
 }

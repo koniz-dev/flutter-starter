@@ -226,6 +226,37 @@ jobs:
           test ! -e bricks && test ! -e mason.yaml
           dart run tool/check_docs.dart --links
 
+      # After removing a sample the strip deletes its own machinery and every
+      # strip marker, so the tree an adopter keeps holds nothing whose only job
+      # was producing it (koniz-dev/flutter-starter#622). Assert that directly:
+      # analyze and test would stay green if it silently stopped.
+      - name: The strip removed itself (sample variants)
+        if: steps.scope.outputs.run == 'true' && matrix.variant != 'keep-samples'
+        shell: bash
+        run: |
+          set -euo pipefail
+          leftovers=0
+          for path in tool/strip_sample_features.dart tool/golden \
+            .github/workflows/strip-smoke.yml \
+            test/tooling/strip_markers_test.dart \
+            test/tooling/strip_sample_prose_test.dart; do
+            if [ -e "$path" ]; then
+              echo "still present after the strip: $path"
+              leftovers=$((leftovers + 1))
+            fi
+          done
+          if grep -rnE '<!-- strip:[a-z-]+ (start|end|line) -->' --include='*.md' . ; then
+            echo "a strip marker survived"
+            leftovers=$((leftovers + 1))
+          fi
+          if grep -n 'tool/golden' analysis_options.yaml; then
+            echo "analysis_options.yaml still excludes the deleted golden tree"
+            leftovers=$((leftovers + 1))
+          fi
+          [ "$leftovers" -eq 0 ] || exit 1
+          dart run tool/check_docs.dart
+          echo "The strip removed itself and the docs still check."
+
       - name: Install dependencies (after strip)
         if: steps.scope.outputs.run == 'true'
         run: flutter pub get
