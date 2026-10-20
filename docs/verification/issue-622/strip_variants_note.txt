@@ -1,0 +1,9 @@
+strip_variants_local.log: each variant applied to a throwaway worktree of the
+branch's first commit, then the leftover, marker and golden-exclude checks,
+check_docs, flutter analyze and flutter test. Every variant left nothing behind
+and passed check_docs and analyze; flutter test failed only in
+e2e_target_parity_test, which listed tool/golden/ without checking it existed.
+The follow-up commit guards it, and a re-run of the full suite on the "both" and
+"feature-flags" stripped trees then passed (both: "All tests passed!", ff:
+"All tests passed!"). CI then ran strip-smoke on all four variants on PR #625:
+run 39466380452 printed "The strip removed itself and the docs still check."

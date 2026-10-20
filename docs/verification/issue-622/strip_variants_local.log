@@ -1,0 +1,122 @@
+### variant both: --apply 
+Dropped 1 marked section(s) or line(s) from docs/architecture/riverpod-retry-policy.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/configuration.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 3 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 2 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip markers left: 0
+golden exclude left: 0
+bricks present: yes
+check_docs exit=0 OK: documentation checks passed.
+analyze exit=0 No issues found! 
+test exit=1 the CI target is the only E2E test, in the repo and in every strip golden
+Failing tests:
+  test/tooling/e2e_target_parity_test.dart: criterion 1 (#378): the CI target is the only E2E test, in the repo and in every strip golden
+### variant tasks: --apply --remove-tasks
+Dropped 1 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 2 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip markers left: 0
+golden exclude left: 0
+bricks present: yes
+check_docs exit=0 OK: documentation checks passed.
+analyze exit=0 No issues found! 
+test exit=1 the CI target is the only E2E test, in the repo and in every strip golden
+Failing tests:
+  test/tooling/e2e_target_parity_test.dart: criterion 1 (#378): the CI target is the only E2E test, in the repo and in every strip golden
+### variant ff: --apply --remove-feature-flags
+Dropped 1 marked section(s) or line(s) from docs/architecture/riverpod-retry-policy.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/configuration.md.
+Dropped 3 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from bricks/README.md.
+Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+Dropped 2 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 2 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip markers left: 0
+golden exclude left: 0
+bricks present: yes
+check_docs exit=0 OK: documentation checks passed.
+analyze exit=0 No issues found! 
+test exit=1 the CI target is the only E2E test, in the repo and in every strip golden
+Failing tests:
+  test/tooling/e2e_target_parity_test.dart: criterion 1 (#378): the CI target is the only E2E test, in the repo and in every strip golden
+### variant both-bricks: --apply --remove-bricks
+Removed bricks (--remove-bricks).
+Removed mason.yaml (--remove-bricks).
+Dropped 1 marked section(s) or line(s) from docs/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/riverpod-retry-policy.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/configuration.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/onboarding/repository-layout.md.
+Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+Dropped 1 marked section(s) or line(s) from README.md.
+Dropped 1 marked section(s) or line(s) from tool/README.md.
+Dropped 3 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Dropped 2 marked section(s) or line(s) from integration_test/README.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+Dropped 1 marked section(s) or line(s) from README.md.
+Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+Dropped 3 marked section(s) or line(s) from tool/README.md.
+Removed tool/strip_sample_features.dart: it only serves this strip.
+Removed tool/golden: it only serves this strip.
+Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip markers left: 0
+golden exclude left: 0
+bricks present: no
+check_docs exit=0 OK: documentation checks passed.
+analyze exit=0 No issues found! 
+test exit=1 the CI target is the only E2E test, in the repo and in every strip golden
+Failing tests:
+  test/tooling/e2e_target_parity_test.dart: criterion 1 (#378): the CI target is the only E2E test, in the repo and in every strip golden
