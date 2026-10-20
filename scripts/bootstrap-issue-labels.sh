@@ -77,7 +77,7 @@ EPICS=(
   "i18n|lib/l10n, lib/core/localization, l10n.yaml: ARB catalogs and locale plumbing|lib/l10n lib/core/localization l10n.yaml"
   "testing|test/, integration_test/, coverage gates, Patrol E2E, golden acceptance|test integration_test dart_test.yaml codecov.yml"
   "tooling-ci|.github, .githooks, scripts/, tool/, bricks/, analyzer and pubspec config|.github .githooks .vscode scripts tool bricks analysis_options.yaml pubspec.yaml pubspec.lock mason.yaml .gitignore .metadata"
-  "docs|docs/, README, CONTRIBUTING, CHANGELOG, CLAUDE.md, .claude roles, examples/|docs examples .claude README.md CONTRIBUTING.md CHANGELOG.md CLAUDE.md LICENSE"
+  "docs|docs/, README, CONTRIBUTING, CHANGELOG, CLAUDE.md, examples/|docs examples README.md CONTRIBUTING.md CHANGELOG.md CLAUDE.md LICENSE"
   "platform-release|android/ ios/ macos/ linux/ windows/ web/ fastlane/: native and release surfaces|android ios macos linux windows web fastlane flutter_launcher_icons.yaml flutter_native_splash.yaml"
 )
 
