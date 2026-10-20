@@ -126,35 +126,11 @@ echo "Evidence written to $OUT/"
 ls -1 "$OUT" | sed 's/^/  /'
 echo
 
-# Silent evidence loss is the worst failure mode this workflow has: `git add` on
-# a directory skips ignored files WITHOUT erroring, so a session can believe it
-# committed evidence while every link 404s. The root .gitignore has a `*.log`
-# rule, re-included for this directory only. Verify that, loudly, every run.
-#
-# Test each file with `check-ignore -q --no-index`, which exits 0 only when the
-# path is genuinely ignored. Do NOT parse `check-ignore -v` output: it prints the
-# winning pattern even when that pattern is a NEGATION, so a correctly
-# re-included file looks identical to a blocked one. `--no-index` makes the check
-# independent of whether the file is already tracked.
-if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
-  blocked=()
-  for f in "$OUT"/*; do
-    [[ -f "$f" ]] || continue
-    if git check-ignore -q --no-index "$f" 2>/dev/null; then
-      blocked+=("$f")
-    fi
-  done
-  if (( ${#blocked[@]} )); then
-    echo "ERROR: git is ignoring evidence files, so they cannot be committed:"
-    printf '  %s\n' "${blocked[@]}"
-    echo
-    echo "Fix .gitignore (the '!docs/verification/**/*.log' negation) before"
-    echo "closing any issue against this evidence. Do NOT use 'git add -f':"
-    echo "the next session would hit the same trap."
-    exit 1
-  fi
-fi
-
+# Evidence is not committed from this tree: it lives on the orphan `evidence`
+# branch, because main is what an adopter gets from "Use this template"
+# (koniz-dev/flutter-starter#619). The root .gitignore's `*.log` rule therefore
+# keeps these logs out of main's commits on purpose; the evidence branch has no
+# .gitignore, so they commit normally there.
 
 if (( ${#FAILED[@]} )); then
   echo "RESULT: FAIL - ${#FAILED[@]} gate(s) failed:"
@@ -171,3 +147,6 @@ echo "     a golden cannot confirm wording - only layout, colour, and presence."
 echo "  2. Walk each line of the issue's '## Acceptance criteria' and state which"
 echo "     artifact proves it."
 echo "  3. Route any criterion this harness cannot drive to status:needs-uat."
+echo "  4. Copy $OUT/ into a worktree of the evidence branch, commit and push it"
+echo "     there (git worktree add ../flutter-starter-evidence origin/evidence),"
+echo "     and link blob/evidence/... - never commit it to main."
