@@ -1,0 +1,11 @@
+# criterion 1: origin/evidence vs main 9b76995
+files on origin/evidence under docs/verification: 4580
+files on main 9b76995 under docs/verification: 4580
+blob id and path listing: identical (blob_ids_main_9b76995.txt)
+merge-base main/evidence: none (orphan)
+
+# criterion 3: comment links
+before: 103 of 428 issue/PR comments carried 542 links to blob|tree/main/docs/verification (0 in issue/PR bodies)
+rewritten via PATCH: 103, failed: 0 (original bodies: comment_bodies_before_rewrite.json)
+after (re-fetched from GitHub): 0 comments with an old link
+distinct evidence links now: 489; all resolve on origin/evidence (488 as paths, 1 as issue-170/README.md plus a #heading anchor that exists)
