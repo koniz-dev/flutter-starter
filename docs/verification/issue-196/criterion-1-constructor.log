@@ -1,0 +1,31 @@
+$ sed -n "/class AuthLocalDataSourceImpl/,/^  final ITokenStore tokenStore;/p" lib/features/auth/data/datasources/auth_local_datasource.dart
+class AuthLocalDataSourceImpl implements AuthLocalDataSource {
+  /// Creates an [AuthLocalDataSourceImpl] with the given [storageService] and
+  /// [tokenStore]
+  ///
+  /// [storageService] - Used for non-sensitive data (user data)
+  /// [tokenStore] - Used for sensitive data (tokens)
+  ///
+  /// Both parameters are contracts, and deliberately so: this file names no
+  /// concrete storage type at all. A nullable secure-storage escape hatch
+  /// stood beside [tokenStore] until koniz-dev/flutter-starter#196 removed
+  /// it - it was the last concrete type named here, it taught two ways to
+  /// build the same object, and it turned a missing argument into a runtime
+  /// `ArgumentError` where the analyzer can now say so at compile time.
+  ///
+  /// A call site that passed one wraps it: `tokenStore: SecureTokenStore(x)`.
+  /// See the `#196` entry in `CHANGELOG.md`.
+  AuthLocalDataSourceImpl({
+    required this.storageService,
+    required this.tokenStore,
+  });
+
+  /// Storage service for non-sensitive data (user data, preferences)
+  final IKeyValueStore storageService;
+
+  /// Token storage for sensitive data (tokens, passwords)
+  final ITokenStore tokenStore;
+
+$ grep -n "secureStorageService\|ArgumentError" lib/features/auth/data/datasources/auth_local_datasource.dart
+44:  /// `ArgumentError` where the analyzer can now say so at compile time.
+exit=0

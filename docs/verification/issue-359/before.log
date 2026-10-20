@@ -1,0 +1,85 @@
+# test/docs/i18n_guide_snippets_test.dart against main's docs/guides/features/internationalization-guide.md (errors as file|line|code)
+00:00 +0: criterion 2: every self-contained dart snippet analyzes with no error or warning
+00:09 +0 -1: criterion 2: every self-contained dart snippet analyzes with no error or warning [E]
+  ERROR snippet_0.dart:1 URI_DOES_NOT_EXIST
+  ERROR snippet_0.dart:3 EXTENDS_NON_CLASS
+  ERROR snippet_0.dart:5 UNDEFINED_CLASS
+  ERROR snippet_0.dart:5 UNDEFINED_CLASS
+  ERROR snippet_0.dart:6 UNDEFINED_IDENTIFIER
+  ERROR snippet_0.dart:8 UNDEFINED_METHOD
+  ERROR snippet_1.dart:4 EXTENDS_NON_CLASS
+  ERROR snippet_1.dart:6 UNDEFINED_CLASS
+  ERROR snippet_1.dart:6 UNDEFINED_CLASS
+  ERROR snippet_1.dart:6 UNDEFINED_CLASS
+  ERROR snippet_1.dart:20 UNDEFINED_METHOD
+  ERROR snippet_2.dart:3 EXTENDS_NON_CLASS
+  ERROR snippet_2.dart:4 FINAL_NOT_INITIALIZED
+  ERROR snippet_2.dart:7 UNDEFINED_CLASS
+  ERROR snippet_2.dart:7 UNDEFINED_CLASS
+  ERROR snippet_2.dart:7 UNDEFINED_CLASS
+  ERROR snippet_2.dart:11 UNDEFINED_IDENTIFIER
+  ERROR snippet_3.dart:5 NAMED_PARAMETER_OUTSIDE_GROUP
+  ERROR snippet_3.dart:5 NON_CONSTANT_DEFAULT_VALUE
+  ERROR snippet_3.dart:11 MISSING_FUNCTION_BODY
+  ERROR snippet_3.dart:14 MISSING_FUNCTION_BODY
+  ERROR snippet_3.dart:14 MISSING_FUNCTION_PARAMETERS
+  ERROR snippet_3.dart:14 MISSING_FUNCTION_BODY
+  ERROR snippet_3.dart:14 EXPECTED_EXECUTABLE
+  ERROR snippet_3.dart:17 NAMED_PARAMETER_OUTSIDE_GROUP
+  ERROR snippet_3.dart:19 MISSING_FUNCTION_BODY
+  ERROR snippet_4.dart:4 EXTENDS_NON_CLASS
+  ERROR snippet_4.dart:6 UNDEFINED_CLASS
+  ERROR snippet_4.dart:6 UNDEFINED_CLASS
+  ERROR snippet_4.dart:6 UNDEFINED_CLASS
+  ERROR snippet_4.dart:9 UNDEFINED_METHOD
+  ERROR snippet_4.dart:13 CREATION_WITH_NON_TYPE
+  ERROR snippet_4.dart:16 CREATION_WITH_NON_TYPE
+  ERROR snippet_4.dart:18 CREATION_WITH_NON_TYPE
+  ERROR snippet_5.dart:3 EXTENDS_NON_CLASS
+  ERROR snippet_5.dart:5 UNDEFINED_CLASS
+  ERROR snippet_5.dart:5 UNDEFINED_CLASS
+  ERROR snippet_5.dart:5 UNDEFINED_CLASS
+  ERROR snippet_5.dart:9 UNDEFINED_METHOD
+  ERROR snippet_5.dart:11 UNDEFINED_METHOD
+  ERROR snippet_6.dart:3 URI_DOES_NOT_EXIST
+  ERROR snippet_6.dart:26 UNDEFINED_IDENTIFIER
+  ERROR snippet_7.dart:4 EXTENDS_NON_CLASS
+  ERROR snippet_7.dart:14 UNDEFINED_CLASS
+  ERROR snippet_7.dart:14 UNDEFINED_CLASS
+  ERROR snippet_7.dart:14 UNDEFINED_CLASS
+  ERROR snippet_7.dart:17 UNDEFINED_METHOD
+  ERROR snippet_7.dart:23 CREATION_WITH_NON_TYPE
+  ERROR snippet_7.dart:25 UNDEFINED_IDENTIFIER
+  ERROR snippet_8.dart:1 URI_DOES_NOT_EXIST
+  ERROR snippet_8.dart:3 EXTENDS_NON_CLASS
+  ERROR snippet_8.dart:4 FINAL_NOT_INITIALIZED
+  ERROR snippet_8.dart:7 UNDEFINED_CLASS
+  ERROR snippet_8.dart:7 UNDEFINED_CLASS
+  ERROR snippet_8.dart:8 UNDEFINED_IDENTIFIER
+  ERROR snippet_8.dart:10 UNDEFINED_METHOD
+  ERROR snippet_8.dart:12 UNDEFINED_METHOD
+  ERROR snippet_8.dart:13 UNDEFINED_METHOD
+  ERROR snippet_8.dart:13 UNDEFINED_METHOD
+  WARNING snippet_0.dart:5 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+  WARNING snippet_1.dart:6 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+  WARNING snippet_1.dart:14 UNUSED_LOCAL_VARIABLE
+  WARNING snippet_2.dart:7 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+  WARNING snippet_3.dart:4 INFERENCE_FAILURE_ON_FUNCTION_RETURN_TYPE
+  WARNING snippet_3.dart:11 INFERENCE_FAILURE_ON_FUNCTION_RETURN_TYPE
+  WARNING snippet_3.dart:14 INFERENCE_FAILURE_ON_FUNCTION_RETURN_TYPE
+  WARNING snippet_3.dart:14 INFERENCE_FAILURE_ON_FUNCTION_RETURN_TYPE
+  WARNING snippet_3.dart:15 INFERENCE_FAILURE_ON_UNTYPED_PARAMETER
+  WARNING snippet_3.dart:16 INFERENCE_FAILURE_ON_FUNCTION_RETURN_TYPE
+  WARNING snippet_3.dart:17 INFERENCE_FAILURE_ON_UNTYPED_PARAMETER
+  WARNING snippet_4.dart:6 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+  WARNING snippet_5.dart:5 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+  WARNING snippet_5.dart:6 UNUSED_LOCAL_VARIABLE
+  WARNING snippet_7.dart:14 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+  WARNING snippet_8.dart:7 OVERRIDE_ON_NON_OVERRIDING_MEMBER
+00:09 +0 -1: criterion 1: no snippet or note names flutter_gen
+00:09 +0 -2: criterion 1: no snippet or note names flutter_gen [E]
+00:09 +0 -2: criterion 3: the language list matches lib/l10n/app_*.arb
+00:09 +0 -3: criterion 3: the language list matches lib/l10n/app_*.arb [E]
+  Expected: <4>
+    Actual: <3>
+00:09 +0 -3: Some tests failed.

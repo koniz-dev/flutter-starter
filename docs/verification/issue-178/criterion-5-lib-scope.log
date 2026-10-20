@@ -1,0 +1,48 @@
+Criterion 5: no file under lib/ outside context_extensions.dart changed
+
+The criterion is written as 'git diff --name-only origin/main -- lib/'.
+That form only reads true from the feature branch before origin/main moves.
+origin/main advanced twice while this was in flight (#199 touched the two
+tasks screens), so the honest form is the diff of the fix commit itself
+and the diff against its own parent.
+
+$ git show --stat --name-only 134038d
+    `Navigator.of(this).push(MaterialPageRoute(...))` routes in a go_router app
+    and had no production caller: `navigateTo` was reached only by its own test,
+    `navigateToReplacement` and `pop` by nothing at all.
+    
+    `pop` was the sharp edge. It shares its name and its receiver with
+    go_router's `GoRouterHelper.pop`, so any file importing both got
+    `ambiguous_extension_member_access` on `context.pop()`.
+    
+    The two tests for the removed members are replaced by one that imports both
+    `package:go_router` and `context_extensions.dart` and calls `context.pop()`,
+    so re-adding a `pop` member breaks compilation instead of an adopter's build.
+    Docs that showed the removed helpers now show the routing API.
+    
+    Refs koniz-dev/flutter-starter#178
+
+docs/api/examples/api-integration.md
+docs/api/examples/common-patterns.md
+docs/guides/features/common-tasks.md
+lib/shared/extensions/context_extensions.dart
+test/shared/extensions/context_extensions_test.dart
+
+$ git diff --name-only 4a5f8f2..HEAD -- lib/
+lib/shared/extensions/context_extensions.dart
+  -> exactly one path
+
+$ git diff --name-only 4a5f8f2..HEAD
+docs/api/examples/api-integration.md
+docs/api/examples/common-patterns.md
+docs/guides/features/common-tasks.md
+lib/shared/extensions/context_extensions.dart
+test/shared/extensions/context_extensions_test.dart
+
+Everything outside lib/ is the test file for the removed members plus the
+three docs snippets that documented them.
+
+For completeness, the pre-merge check run on the feature branch before
+origin/main moved:
+  $ git diff --name-only origin/main -- lib/
+  lib/shared/extensions/context_extensions.dart

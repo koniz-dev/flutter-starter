@@ -1,0 +1,10 @@
+$ gh pr checks 154
+Docs check	pass	23s	https://github.com/koniz-dev/flutter-starter/actions/runs/36138549684/job/108082435144	
+Issue refs	pass	5s	https://github.com/koniz-dev/flutter-starter/actions/runs/36138549554/job/108082434693	
+Quality gate	pass	2m58s	https://github.com/koniz-dev/flutter-starter/actions/runs/36138549535/job/108082434736	
+Strip both-samples-removed + analyze + test	pass	2m22s	https://github.com/koniz-dev/flutter-starter/actions/runs/36138549528/job/108082434810	
+Strip feature-flags-removed + analyze + test	pass	2m38s	https://github.com/koniz-dev/flutter-starter/actions/runs/36138549528/job/108082435234	
+Strip tasks-removed + analyze + test	pass	2m43s	https://github.com/koniz-dev/flutter-starter/actions/runs/36138549528/job/108082435088	
+
+$ gh pr view 154 --json state,mergeCommit
+{"mergeCommit":"a45857b0629f1d50c8b266a5d0043ff4aa7d58b0","state":"MERGED"}

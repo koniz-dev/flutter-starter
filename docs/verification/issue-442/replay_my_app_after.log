@@ -1,0 +1,15 @@
+$ ./scripts/dev/create_feature.sh probe
+Creating feature: probe
+Feature probe created:
+  lib/features/probe
+  test/features/probe
+Next: flutter analyze && flutter test test/features/probe
+$ flutter analyze lib/features/probe test/features/probe
+Analyzing 2 items...                                            
+No issues found! (ran in 2.2s)
+analyze exit=0
+$ dart format --set-exit-if-changed lib/features/probe test/features/probe
+Formatted 10 files (0 changed) in 0.06 seconds.
+format exit=0
+$ flutter test test/features/probe
+00:00 +2: All tests passed!

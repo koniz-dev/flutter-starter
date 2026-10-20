@@ -1,0 +1,45 @@
+PASS run of the #169 regression file, on merged main (28db2f5).
+
+The same file, unchanged, that counterfactual.log records failing six of nine
+when the three isCurrent(...) guards are removed. Criterion-by-criterion:
+
+  criterion 1 + 2  "criterion 1+2: neither token is re-persisted, through the
+                    real repository refresh and the real logout"
+  criterion 1      "criterion 1: a refresh that resolves inside its own session
+                    still persists both tokens"  (the guard does not break the
+                    path it guards)
+  criterion 3      "criterion 3: queued requests are rejected, not replayed,
+                    when the session ended during the refresh"
+  criterion 4      "criterion 4: the retryCount == 1 forced logout survives a
+                    refresh already in flight"
+  criterion 5      "criterion 5: the interceptor refreshes normally again after
+                    a subsequent login"
+
+Plus three tests that are not criteria but are what make the fix trustworthy:
+
+  - "the guard does not lean on the cached user blob ..." - #85's second check
+    is no longer load-bearing.
+  - "a login completing during an old refresh keeps the new session ..." - the
+    new session's tokens are neither overwritten nor cleared.
+  - "the real provider graph shares one SessionGeneration ..." - two instances
+    would pass every other test here and still ship the bug.
+
+$ flutter test test/core/network/interceptors/auth_interceptor_session_generation_test.dart --timeout=2m --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/network/interceptors/auth_interceptor_session_generation_test.dart
+00:00 +0: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:00 +1: a logout landing during an in-flight refresh criterion 3: queued requests are rejected, not replayed, when the session ended during the refresh
+00:00 +2: a logout landing during an in-flight refresh criterion 4: the retryCount == 1 forced logout survives a refresh already in flight
+00:00 +3: a logout landing during an in-flight refresh the guard does not lean on the cached user blob: after a stale refresh there is no token, so no session can be restored
+00:00 +4: a logout landing during an in-flight refresh criterion 1: a refresh that resolves inside its own session still persists both tokens
+00:00 +5: a logout landing during an in-flight refresh criterion 5: the interceptor refreshes normally again after a subsequent login
+00:00 +6: a logout landing during an in-flight refresh a login completing during an old refresh keeps the new session: the stale refresh skips its writes rather than undoing them
+00:00 +7: the real provider graph shares one SessionGeneration a forced logout raised inside AuthInterceptor advances the counter AuthRepositoryImpl checks
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:117:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +8: SessionGeneration a generation left behind never becomes current again
+00:01 +9: All tests passed!

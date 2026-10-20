@@ -1,0 +1,16 @@
+# Criterion 6 - the change touches only docs/
+
+## Files in the merged squash commit for PR #194
+$ git show --name-only --format="%h %s" 1507cd9
+1507cd9 fix(docs): make the contracts map name symbols that exist (#194)
+
+docs/architecture/adr/0005-state-boundary.md
+docs/architecture/contracts-map.md
+
+## Working tree for the follow-up evidence PR (this branch)
+$ git status --porcelain
+ M docs/architecture/contracts-map.md
+?? docs/verification/issue-182/
+
+# Both lists are entirely under docs/. No lib/, test/, tool/, scripts/ or
+# workflow file was touched by koniz-dev/flutter-starter#182.

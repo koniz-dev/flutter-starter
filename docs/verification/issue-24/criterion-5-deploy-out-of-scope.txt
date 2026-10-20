@@ -1,0 +1,16 @@
+# Criterion 5: deploy workflows deliberately NOT dispatched
+
+deploy-android.yml, deploy-ios.yml and deploy-web.yml publish to app stores
+and a hosting target. Dispatching them to prove a Setup Flutter fix would
+risk a real release, so they were not run. The change to them is textually
+identical to the change verified in build.yml and e2e-android.yml: the same
+single line removed, no other edit.
+
+Commit: 7666a8421fbc59333bd4be85e332f9677ec5222c
+
+Diff applied to the three deploy workflows:
+-          flutter-version: 'stable'
+-          flutter-version: 'stable'
+-          flutter-version: 'stable'
+-          flutter-version: 'stable'
+-          flutter-version: 'stable'

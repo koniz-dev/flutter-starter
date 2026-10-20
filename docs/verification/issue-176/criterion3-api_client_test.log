@@ -1,0 +1,25 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aad295cebd4998b/test/core/network/api_client_test.dart
+00:00 +0: ApiClient should create Dio instance with correct configuration
+00:00 +1: ApiClient should have interceptors configured
+00:00 +2: ApiClient GET requests should have Dio instance configured for GET requests
+00:00 +3: ApiClient GET requests should have error handling for GET requests
+00:00 +4: ApiClient POST requests should have Dio instance configured for POST requests
+00:00 +5: ApiClient POST requests should handle POST request with query parameters
+00:00 +6: ApiClient PUT requests should have Dio instance configured for PUT requests
+00:00 +7: ApiClient DELETE requests should have Dio instance configured for DELETE requests
+00:00 +8: ApiClient Error handling should extract AppException from DioException.error
+00:00 +9: ApiClient Error handling should rethrow DioException when error is not AppException
+00:00 +10: ApiClient Request options should support custom request options
+00:00 +11: ApiClient Request options should support query parameters
+00:00 +12: ApiClient Dio Configuration should have baseUrl with API version
+00:00 +13: ApiClient Dio Configuration should have correct timeout values
+00:00 +14: ApiClient Dio Configuration should have correct headers
+00:00 +15: ApiClient Dio Configuration should register the concrete interceptor types in order
+00:00 +16: ApiClient Dio Configuration should register logging and performance before ErrorInterceptor
+00:00 +17: ApiClient Edge Cases should handle multiple ApiClient instances
+00:00 +18: ApiClient Edge Cases should expose dio getter
+00:00 +19: ApiClient Constructor with optional services should create ApiClient with performanceService
+00:00 +20: ApiClient Constructor with optional services should create ApiClient with loggingService
+00:00 +21: ApiClient Constructor with optional services should create ApiClient with both performanceService and loggingService
+00:00 +22: All tests passed!
+exit: 0

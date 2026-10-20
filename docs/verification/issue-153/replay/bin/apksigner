@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Stub: replays a captured apksigner transcript named by $FIXTURE.
+cat "$FIXTURE"
+exit "${FIXTURE_RC:-0}"

@@ -1,0 +1,9 @@
+$ flutter test test/core/storage/storage_logging_mixin_test.dart --reporter expanded --plain-name key-based redaction
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/storage_logging_mixin_test.dart
+00:00 +0: StorageLoggingMixin key-based redaction (#60) redacts a realistic JWT stored under auth_token
+00:00 +1: StorageLoggingMixin key-based redaction (#60) redacts a JWT on read as well as write
+00:00 +2: StorageLoggingMixin key-based redaction (#60) does not redact a harmless value mentioning a pattern
+00:00 +3: StorageLoggingMixin key-based redaction (#60) still truncates long non-sensitive values
+00:00 +4: All tests passed!
+exit: 0

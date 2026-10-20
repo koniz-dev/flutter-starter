@@ -1,0 +1,19 @@
+# origin/main: every APP_VERSION / APP_BUILD_NUMBER / appVersion / appBuildNumber outside docs/verification and tests
+.env.example:80:APP_VERSION=1.0.0
+.env.example:81:APP_BUILD_NUMBER=1
+docs/guides/configuration.md:483:| `APP_VERSION` | String | `1.0.0` | App version |
+docs/guides/configuration.md:484:| `APP_BUILD_NUMBER` | String | `1` | App build number |
+lib/core/config/app_config.dart:280:  /// Can be set via .env: `APP_VERSION=1.0.0`
+lib/core/config/app_config.dart:281:  static String get appVersion =>
+lib/core/config/app_config.dart:282:      EnvConfig.get('APP_VERSION', defaultValue: '1.0.0');
+lib/core/config/app_config.dart:286:  /// Can be set via .env: `APP_BUILD_NUMBER=1`
+lib/core/config/app_config.dart:287:  static String get appBuildNumber =>
+lib/core/config/app_config.dart:288:      EnvConfig.get('APP_BUILD_NUMBER', defaultValue: '1');
+lib/core/config/app_config.dart:357:      debugPrint('  Version: $appVersion');
+lib/core/config/app_config.dart:358:      debugPrint('  Build Number: $appBuildNumber');
+lib/core/config/app_config.dart:392:      'appVersion': appVersion,
+lib/core/config/app_config.dart:393:      'appBuildNumber': appBuildNumber,
+lib/core/config/dart_defines.dart:65:    'APP_VERSION': String.fromEnvironment('APP_VERSION'),
+lib/core/config/dart_defines.dart:66:    'APP_BUILD_NUMBER': String.fromEnvironment('APP_BUILD_NUMBER'),
+
+# origin/main: their only readers outside lib/core/config (criterion 1's 'reader with an effect')

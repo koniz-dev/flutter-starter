@@ -1,0 +1,73 @@
+$ git rev-parse --short HEAD   # the branch carrying the .gitignore change
+29005c3
+
+$ git check-ignore -v signing.pem private.key export.pfx
+.gitignore:86:*.pem	signing.pem
+.gitignore:87:*.key	private.key
+.gitignore:88:*.pfx	export.pfx
+(exit 0)
+
+$ git check-ignore -v docs/verification/issue-164/nested/signing.pem   # matches at any depth
+.gitignore:86:*.pem	docs/verification/issue-164/nested/signing.pem
+(exit 0)
+
+== criterion 3: still trackable, still ignored ==
+$ git check-ignore -v pinned.crt pinned.der   # expect NO output, exit 1
+(exit 1  -- 1 means neither is ignored, i.e. both remain trackable)
+
+$ git check-ignore -v apple.cer signing.p12 signing.p8 profile.mobileprovision profile.provisionprofile req.certSigningRequest upload.keystore upload.jks android/key.properties
+.gitignore:74:*.cer	apple.cer
+.gitignore:70:*.p12	signing.p12
+.gitignore:71:*.p8	signing.p8
+.gitignore:72:*.mobileprovision	profile.mobileprovision
+.gitignore:73:*.provisionprofile	profile.provisionprofile
+.gitignore:75:*.certSigningRequest	req.certSigningRequest
+.gitignore:76:*.keystore	upload.keystore
+.gitignore:77:*.jks	upload.jks
+android/.gitignore:12:key.properties	android/key.properties
+(exit 0  -- every pre-existing pattern still resolves to the line it always did)
+
+== criterion 2 after the change: still nothing tracked ==
+$ git ls-files | grep -E '\.(pem|key|pfx)$'
+(grep exit 1: 1 = no match)
+
+== the code-signing block as it now reads ==
+$ sed -n '64,101p' .gitignore
+
+# Code signing material - never commit any of it.
+# android/.gitignore already covers key.properties and Android keystores; these
+# patterns cover the Apple side and re-cover keystores from the repo root,
+# because .github/workflows/deploy-ios.yml's (commented) signing step writes
+# certificate.p12 into the working directory, which is the repo root.
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile
+*.cer
+*.certSigningRequest
+*.keystore
+*.jks
+# Private key material in its commonest raw forms (koniz-dev/flutter-starter#164).
+# An exported signing key, a service-account key, a TLS key and an SSH key all
+# land as a .pem or a .key; .pfx is the same PKCS#12 container as the .p12
+# above, under its Windows name. tool/check_env_assets.dart already refuses to
+# let any of them be declared as a Flutter asset
+# (koniz-dev/flutter-starter#138), so git should not track one either. That
+# guard's `secretAssetExtensions` set and this block are now the same list of
+# private formats, which is the point: one policy, two enforcement points.
+*.pem
+*.key
+*.pfx
+
+# NOT ignored, on purpose: *.crt and *.der.
+# A certificate is the public half of a key pair. Certificate pinning
+# legitimately ships one inside the app, so ignoring them would break a
+# supported setup for no gain. koniz-dev/flutter-starter#138 decided this - see
+# the "Public certificates" note at the top of tool/check_env_assets.dart,
+# which leaves .cer, .crt and .der out of its secret set for the same reason -
+# and koniz-dev/flutter-starter#164 kept it. If you are here to "fix the
+# inconsistency", this is the reason not to.
+#
+# `*.cer` is the one asymmetry, and it is deliberate too: it predates both
+# issues, arriving in dbee1c6 with the Apple signing block above, where a .cer
+# turns up as one step of a private-key workflow rather than as a pinning

@@ -1,0 +1,6 @@
+$ flutter analyze
+
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.1s)
+exit: 0

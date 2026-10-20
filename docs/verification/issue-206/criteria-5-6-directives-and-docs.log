@@ -1,0 +1,54 @@
+$ grep -n 'symbol:' docs/architecture/contracts-map.md   # criterion 5
+68:tables above and below carries a `<!-- symbol: <path> <name> -->` directive,
+78:<!-- symbol: lib/core/di/providers.dart apiClientProvider -->
+79:<!-- symbol: lib/core/di/providers.dart networkClientProvider -->
+80:<!-- symbol: lib/core/di/providers.dart keyValueStoreProvider -->
+81:<!-- symbol: lib/core/di/providers.dart tokenStoreProvider -->
+82:<!-- symbol: lib/core/logging/logging_providers.dart loggingServiceProvider -->
+83:<!-- symbol: lib/core/routing/app_router.g.dart goRouterProvider -->
+84:<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart authControllerProvider -->
+85:<!-- symbol: lib/features/auth/presentation/providers/auth_provider.g.dart authProvider -->
+86:<!-- symbol: lib/core/security/rasp_providers.dart raspServiceProvider -->
+87:<!-- symbol: lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart featureFlagsRemoteDataSourceProvider -->
+
+$ dart run tool/check_docs.dart   # criterion 5, green with them in place
+links: checked 711 relative link(s) in 118 file(s); 0 broken
+emoji: scanned 71 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+symbols: checked 10 directive(s); 0 unresolved
+
+OK: documentation checks passed.
+exit: 
+
+$ sed -n '/### The .symbol:. directive/,/does not fail/p' tool/README.md   # criterion 6
+### The `symbol:` directive
+
+```markdown
+<!-- symbol: lib/core/di/providers.dart apiClientProvider -->
+```
+
+One directive per asserted identifier. It takes no fenced block and says
+nothing about the shape of the declaration - only that the name is declared in
+that file. Accepted forms: `class` in every modifier spelling, `mixin`, `enum`,
+`extension`, `extension type`, `typedef`, a top-level
+`final`/`const`/`late`/`var`, and a top-level function.
+
+Two properties worth knowing:
+
+- **Generated output counts.** `goRouterProvider`, `authProvider` and
+  `featureFlagsRemoteDataSourceProvider` exist only in a `.g.dart`, so a
+  checker that skipped generated files would skip the identifiers an adopter is
+  most likely to get wrong. Name the `.g.dart` path.
+- **Inline code spans are not scanned, deliberately.** The swap map's cells mix
+  identifiers, paths and prose; a heuristic would either miss the phantom or
+  drown the author in false positives. The directive is verbose and exact,
+  which is the right trade for a document whose whole job is being exact.
+
+Directives inside a fenced block are ignored, so this section does not check
+itself. `docs/verification/` is skipped too: an evidence file is a frozen
+record of a past run, and a directive in one would start failing the day the
+code it described changed.
+
+`strip_sample_features.dart` deletes any directive naming a path it removed,
+so a stripped tree does not fail `test/docs/doc_symbols_test.dart` over a
+feature that is no longer there.

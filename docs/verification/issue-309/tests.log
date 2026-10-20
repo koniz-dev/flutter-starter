@@ -1,0 +1,124 @@
+$ flutter test --timeout=5m --reporter compact
+
+00:10 +147: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/core/di/provider_graph_acyclic_test.dart: the runtime graph survived breaking the import cycle (#221) AuthRepositoryImpl and the interceptor share one SessionGeneration
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:136:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:41:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.
+│ The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+│ Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+│ In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+│ 
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:364:36)
+│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:51:35)
+│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:26:21)
+│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:267:35)
+│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:178:12)
+│ #5   main.<anonymous closure>.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/core/di/provider_graph_acyclic_test.dart:123:21)
+│ #6   <asynchronous suspension>
+│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:10 +187: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/core/di/providers_test.dart: Providers storageInitializationProvider stamps both stores at the current schema version
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting regular storage migration
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:71:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:118:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:128:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:193:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 All migrations completed successfully | Context: {"final_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+
+[... 2818 lines elided by scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3162 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should use light theme by default
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3163 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should have dark theme configured
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3164 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should configure router correctly
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3165 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should configure localization delegates
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3166 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should configure supported locales
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3167 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should use locale from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3168 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3169 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt309/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +3173 ~13: 13 skipped tests.                                                                                                                                                                     
+02:12 +3173 ~13: All other tests passed!                                                                                                                                                               
+exit: 0

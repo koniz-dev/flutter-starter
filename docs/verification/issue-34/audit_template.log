@@ -1,0 +1,7 @@
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:12 +2229 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:12 +2230 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+01:12 +2231 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+01:12 +2232 ~1: All tests passed!
+exit: 0

@@ -1,0 +1,4 @@
+00:00 +0: criterion 1: a login error does not follow the user to RegisterScreen
+00:02 +1: criterion 2: a register error does not follow the user back to LoginScreen
+00:02 +2: criterion 3: a fresh submit still raises and replaces the error
+00:03 +3: All tests passed!

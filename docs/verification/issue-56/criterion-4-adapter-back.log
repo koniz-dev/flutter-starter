@@ -1,0 +1,15 @@
+$ flutter test test/core/routing/go_router_navigator_adapter_test.dart --reporter expanded
+
+[... 96 lines of `flutter pub get` version chatter elided ...]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/routing/go_router_navigator_adapter_test.dart
+00:00 +0: GoRouterNavigatorAdapter toHome should go to home route
+00:00 +1: GoRouterNavigatorAdapter toLogin should go to login route
+00:00 +2: GoRouterNavigatorAdapter toRegister should go to register route
+00:00 +3: GoRouterNavigatorAdapter toTasks should go to tasks route
+00:00 +4: GoRouterNavigatorAdapter toTaskDetail should go to task detail route
+00:00 +5: GoRouterNavigatorAdapter push should push location with extra
+00:00 +6: GoRouterNavigatorAdapter replace should pushReplacement location with extra
+00:00 +7: GoRouterNavigatorAdapter back should pop when canPop is true
+00:00 +8: GoRouterNavigatorAdapter back should go home when canPop is false
+00:00 +9: All tests passed!
+exit: 0

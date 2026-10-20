@@ -1,0 +1,16 @@
+# Criterion 2: expect(true, isTrue) is no longer the sole assertion anywhere
+
+The issue counted 24 occurrences in `test/` outside the template. All
+three matches that remain are prose inside comments explaining what was
+replaced - `grep -n` lines starting with `//` below.
+
+$ grep -rn 'expect(true, isTrue)' test/ integration_test/ | cat
+test/core/di/providers_test.dart:316:    // every one of which ended in `expect(true, isTrue)` or
+test/core/utils/provider_disposal_test.dart:77:      // `expect(true, isTrue)`. Reading a provider after the call is what
+test/core/utils/memory_helper_test.dart:99:      // cache and asserted `expect(true, isTrue)`, so it passed whether or not
+(exit 0)
+
+$ grep -rc 'expect(true, isTrue)' test/shared/performance/firebase_performance_service_test.dart.template
+test/shared/performance/firebase_performance_service_test.dart.template:0
+(exit 1)
+

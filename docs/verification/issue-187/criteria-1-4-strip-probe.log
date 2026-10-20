@@ -1,0 +1,230 @@
+Host flutter: Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+HEAD: 5d5e59e on fix/strip-scans-docs-dart
+tool/strip_sample_features.dart sha256: 1f121b6d0c740dfb8e47fab4d3fa473a2f041d08050f4a203bc600a147b2c6a6
+
+################ BEFORE - the behaviour #187 reports, using origin/main's script
+--- docs/verification/issue-000/probe.dart
+// Acceptance probe for koniz-dev/flutter-starter#187. Not committed.
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+
+void main() {}
+
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks   # pre-fix script
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+$ flutter analyze   # pre-fix
+Analyzing flutter-starter...                                    
+
+  error • Target of URI doesn't exist: 'package:flutter_starter/features/tasks/domain/entities/task.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist • docs/verification/issue-000/probe.dart:2:8 • uri_does_not_exist
+
+1 issue found. (ran in 3.1s)
+analyze exit: 1
+(tree restored clean)
+(fixed script back in place: 1f121b6d0c740dfb8e47fab4d3fa473a2f041d08050f4a203bc600a147b2c6a6)
+
+################ AFTER - the fixed script
+
+================================================================
+CASE: criterion 1 - tasks probe under docs/verification, --remove-tasks
+================================================================
+--- docs/verification/issue-000/probe.dart
+// Acceptance probe for koniz-dev/flutter-starter#187. Not committed.
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+
+void main() {}
+
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks
+Running build hooks...Running build hooks...Deleted docs/verification/issue-000/probe.dart: an evidence probe importing a stripped module (package:flutter_starter/features/tasks/). docs/ is analyzed, so leaving it would break flutter analyze.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+
+probe still on disk? NO (deleted by the strip)
+
+$ flutter analyze
+Changed 10 dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 2.7s)
+analyze exit: 0
+
+(tree restored clean)
+
+================================================================
+CASE: criterion 2 - tasks probe under docs/verification, --apply (both samples)
+================================================================
+--- docs/verification/issue-000/probe.dart
+// Acceptance probe for koniz-dev/flutter-starter#187. Not committed.
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+
+void main() {}
+
+$ dart run tool/strip_sample_features.dart --apply 
+Running build hooks...Running build hooks...Deleted docs/verification/issue-000/probe.dart: an evidence probe importing a stripped module (package:flutter_starter/features/tasks/). docs/ is analyzed, so leaving it would break flutter analyze.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+
+probe still on disk? NO (deleted by the strip)
+
+$ flutter analyze
+Changed 10 dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.0s)
+analyze exit: 0
+
+(tree restored clean)
+
+================================================================
+CASE: criterion 3a - feature_flags probe, --remove-feature-flags
+================================================================
+--- docs/verification/issue-000/probe.dart
+// Acceptance probe for koniz-dev/flutter-starter#187. Not committed.
+import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+
+void main() {}
+
+$ dart run tool/strip_sample_features.dart --apply --remove-feature-flags
+Running build hooks...Running build hooks...Deleted docs/verification/issue-000/probe.dart: an evidence probe importing a stripped module (package:flutter_starter/features/feature_flags/). docs/ is analyzed, so leaving it would break flutter analyze.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+
+probe still on disk? NO (deleted by the strip)
+
+$ flutter analyze
+Changed 10 dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.4s)
+analyze exit: 0
+
+(tree restored clean)
+
+================================================================
+CASE: criterion 3b - feature_flags probe, --apply (both samples)
+================================================================
+--- docs/verification/issue-000/probe.dart
+// Acceptance probe for koniz-dev/flutter-starter#187. Not committed.
+import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+
+void main() {}
+
+$ dart run tool/strip_sample_features.dart --apply 
+Running build hooks...Running build hooks...Deleted docs/verification/issue-000/probe.dart: an evidence probe importing a stripped module (package:flutter_starter/features/feature_flags/). docs/ is analyzed, so leaving it would break flutter analyze.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+
+probe still on disk? NO (deleted by the strip)
+
+$ flutter analyze
+Changed 10 dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.0s)
+analyze exit: 0
+
+(tree restored clean)
+
+================================================================
+CASE: backstop - a Dart file under docs/ but OUTSIDE docs/verification is never deleted; the scan fails the run
+================================================================
+--- docs/guides/probe_187.dart
+// Acceptance probe for koniz-dev/flutter-starter#187. Not committed.
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+
+void main() {}
+
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks
+Running build hooks...Running build hooks...Strip finished but forbidden references remain in code the analyzer reads:
+/Users/nguyenanhkiet/Playground/flutter-starter/docs/guides/probe_187.dart: references stripped module (package:flutter_starter/features/tasks/)
+Fix imports or excludes before committing.
+strip exit: 3
+
+probe still on disk? YES
+
+$ flutter analyze
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Analyzing flutter-starter...                                    
+
+  error • Target of URI doesn't exist: 'package:flutter_starter/features/tasks/domain/entities/task.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist • docs/guides/probe_187.dart:2:8 • uri_does_not_exist
+
+1 issue found. (ran in 3.2s)
+analyze exit: 1
+
+(tree restored clean)
+
+================================================================
+CASE: criterion 4 - clean tree, variant both-samples-removed (mirrors strip-smoke.yml)
+================================================================
+$ dart run tool/strip_sample_features.dart --apply 
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+$ flutter pub get
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+pub get exit: 0
+$ flutter analyze
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.0s)
+analyze exit: 0
+$ flutter test --timeout=5m --reporter compact
+[... 39815 chars of flutter test compact-reporter progress elided; the final status line follows ...]
+[... 127868 chars of flutter test compact-reporter progress elided; the final status line follows ...]
+01:32 +2277 ~8: All other tests passed!                                                                                                                                                                
+test exit: 0
+
+(tree restored clean)
+
+================================================================
+CASE: criterion 4 - clean tree, variant tasks-removed (mirrors strip-smoke.yml)
+================================================================
+$ dart run tool/strip_sample_features.dart --apply --remove-tasks
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+$ flutter pub get
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+pub get exit: 0
+$ flutter analyze
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 3.2s)
+analyze exit: 0
+$ flutter test --timeout=5m --reporter compact
+[... 45000 chars of flutter test compact-reporter progress elided; the final status line follows ...]
+[... 133668 chars of flutter test compact-reporter progress elided; the final status line follows ...]
+01:37 +2464 ~8: All other tests passed!                                                                                                                                                                
+test exit: 0
+
+(tree restored clean)
+
+================================================================
+CASE: criterion 4 - clean tree, variant feature-flags-removed (mirrors strip-smoke.yml)
+================================================================
+$ dart run tool/strip_sample_features.dart --apply --remove-feature-flags
+Running build hooks...Running build hooks...Strip complete. Run: flutter pub get && flutter analyze && flutter test
+strip exit: 0
+$ flutter pub get
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+pub get exit: 0
+$ flutter analyze
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.8s)
+analyze exit: 0
+$ flutter test --timeout=5m --reporter compact
+[... 37204 chars of flutter test compact-reporter progress elided; the final status line follows ...]
+[... 123868 chars of flutter test compact-reporter progress elided; the final status line follows ...]
+01:45 +2607 ~8: All other tests passed!                                                                                                                                                                
+test exit: 0
+
+(tree restored clean)

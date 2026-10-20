@@ -1,0 +1,19 @@
+# Historical record: this workflow had NEVER succeeded before this fix
+
+  failure  push  2026-08-23T13:04:06Z
+  failure  push  2026-08-23T12:34:07Z
+  failure  push  2026-08-23T12:31:15Z
+  failure  push  2026-08-23T12:26:49Z
+  failure  push  2026-08-23T12:24:40Z
+  failure  push  2026-08-23T12:20:56Z
+  failure  push  2026-04-01T12:26:23Z
+  failure  push  2026-04-01T11:09:21Z
+  failure  push  2026-04-01T10:56:23Z
+  failure  push  2026-04-01T10:32:38Z
+  failure  push  2026-04-01T09:47:19Z
+  failure  push  2026-04-01T08:27:11Z
+  failure  pull_request  2025-11-18T17:22:59Z
+  failure  push  2025-11-18T17:22:37Z
+
+First commit in the repository: 2025-11-18. Every run from then until
+2026-08-25 failed with a workflow-file (startup) error.

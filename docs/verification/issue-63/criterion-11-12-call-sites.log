@@ -1,0 +1,36 @@
+# Call-site survey on the merged change (commit 3191e91)
+
+Relevant to criterion 12 (the dead-utility decision), and to whether any
+persisted data was written through DateFormatter's lenient parse.
+
+## Performance mixins - callers outside lib/core/performance/
+$ grep -rnE "PerformanceRepositoryMixin|PerformanceUseCaseMixin|measureDataSave|measureRepositoryOperation|measureUseCaseOperation" lib/ | grep -v lib/core/performance/
+(no matches - zero call sites)
+
+## DateFormatter - callers outside its own file
+$ grep -rn DateFormatter lib/ integration_test/ | grep -v lib/core/utils/date_formatter.dart
+(no matches - zero call sites, so nothing was ever persisted through it)
+
+## How the tasks sample actually persists timestamps
+$ grep -nE "created_at|updated_at" lib/features/tasks/data/models/task_model.dart
+23:      createdAt: DateTime.parse(json['created_at'] as String),
+24:      updatedAt: DateTime.parse(json['updated_at'] as String),
+47:      'created_at': createdAt.toIso8601String(),
+48:      'updated_at': updatedAt.toIso8601String(),
+
+It calls DateTime.toIso8601String() directly, not DateFormatter, so the
+strict-parse change cannot shift or reject any stored timestamp. No
+storage migration is implied by this change.
+
+That call does emit an offset-less string for a local DateTime - the same
+class of defect as the JsonLogFormatter one - but it lives in
+epic:feature-tasks and is filed as koniz-dev/flutter-starter#146 rather than
+fixed here.
+
+## Other utilities with no call site outside their own file
+Debouncer: lib/core/utils/debouncer.dart 
+Throttler: lib/core/utils/debouncer.dart 
+PaginationHelper: lib/core/utils/pagination_helper.dart 
+LazyLoader: lib/core/utils/lazy_loader.dart 
+ProviderDisposal: lib/core/utils/provider_disposal.dart 
+PerformanceUtils: lib/core/performance/performance_utils.dart 

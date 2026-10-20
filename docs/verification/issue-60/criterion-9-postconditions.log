@@ -1,0 +1,32 @@
+$ flutter test test/core/storage/isar_database_template_test.dart test/core/storage/migration/storage_migration_service_test.dart test/core/storage/migration/migration_registry_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests should construct successfully
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests init completes
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests save completes and stores nothing (template is a no-op)
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests saveAll completes and stores nothing
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests returns empty list for getAll
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests returns null for getById
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests returns false for delete
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests clear completes
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/isar_database_template_test.dart: IsarDatabase Template Tests close completes
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should return list of migrations
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should contain MigrationV1ToV2
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should have migrations in correct order
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should have valid version transitions
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry migrations should have non-empty descriptions
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry regularStorageMigrations should return migrations list
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry regularStorageMigrations should return same as migrations by default
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry secureStorageMigrations should return migrations list
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry secureStorageMigrations should return same as migrations by default
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry chain coverage (#60) migrations span initial -> current with no gap
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry chain coverage (#60) regularStorageMigrations span initial -> current
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry chain coverage (#60) secureStorageMigrations span initial -> current
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry Edge Cases returns an independent list on each call
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart: MigrationRegistry Edge Cases should have consistent regular and secure migrations
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/storage_migration_service_test.dart: StorageMigrationService migrateAll leaves both stores stamped at the current version
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/storage_migration_service_test.dart: StorageMigrationService migrateRegular executes migrations for regular storage only
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/storage_migration_service_test.dart: StorageMigrationService migrateSecure executes migrations for secure storage only
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/storage_migration_service_test.dart: StorageMigrationService migrateSecure surfaces an unwritable secure backend
+00:00 +27: All tests passed!
+exit: 0

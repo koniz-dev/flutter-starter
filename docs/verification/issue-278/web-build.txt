@@ -1,0 +1,9 @@
+# lib/ at main c132ff9d569 (before the fix)
+flutter build web --release --dart-define=BASE_URL=https://web.probe.example -> exit 0 (✓ Built build/web)
+grep -c 'https://web.probe.example' build/web/main.dart.js -> 0
+grep -o 'https://web.probe.example' build/web/main.dart.js | wc -l -> 0
+
+# branch (after the fix)
+flutter build web --release --dart-define=BASE_URL=https://web.probe.example -> exit 0 (✓ Built build/web)
+grep -c 'https://web.probe.example' build/web/main.dart.js -> 1
+grep -o 'https://web.probe.example' build/web/main.dart.js | wc -l -> 1

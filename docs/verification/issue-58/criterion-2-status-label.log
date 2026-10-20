@@ -1,0 +1,96 @@
+Criterion 2 - one rule for the status label on close, and the closed issues match it
+
+THE RULE, in docs/issue-workflow.md (invariant 1):
+### Invariant 1 - Exactly one state per open issue
+
+A `status:*` label is only ever **swapped** for another `status:*` label. Never
+strip one on its own, and **never strip one in order to close**: closing is not
+a state transition here, it is the end of the line, and the label that was on
+the issue stays as the record of how it ended.
+
+Two consequences worth stating before they surprise someone:
+
+- `gh issue list --state closed --label status:in-progress` returns most closed
+  issues. That is correct, not a leak. Always pass `--state open` when you mean
+  the live queue - every recipe in [section 5](#5-gh-recipes) does.
+- An issue closed straight out of Backlog (never triaged, e.g. closed as
+  invalid) has no status label and never gains one. Nothing to swap.
+
+This was ambiguous until koniz-dev/flutter-starter#58: `CLAUDE.md` read as
+"closing removes the label", this document read as "closing keeps it", and the
+history split - 21 of 24 closed issues kept it, while #39 and #40 had it
+stripped two seconds before closing, spending those two seconds as open issues
+in exactly the invisible limbo the rule exists to prevent. This document wins;
+`CLAUDE.md` now defers to it, and #39 and #40 have had their final state
+restored.
+
+An open issue with no status label is invisible limbo: it will not appear in the
+`status:todo` queue, so no session will ever pick it up, and it will not appear
+in `status:in-progress`, so no human will notice it stalled. Every relabel is
+therefore a single atomic swap:
+
+```bash
+gh issue edit N --remove-label status:todo --add-label status:in-progress
+```
+
+The one legitimate no-status open issue is an untriaged Backlog issue. Triage
+converts it; nothing else should produce one.
+
+### Invariant 2 - Acceptance criteria live in the issue body
+
+THE SAME RULE, in CLAUDE.md (Workflow item 4):
+4. Exactly one state per open issue, and a `status:*` label is only ever
+   **swapped** for another one - never stripped on its own, or the issue lands
+   in invisible limbo. **Closing does not touch the label:** the last state
+   stays on the closed issue as a record, so `gh issue list --state closed
+   --label status:in-progress` is expected to return most closed issues. Always
+   pass `--state open` when you mean the live queue. The one legitimate
+   no-status issue is an untriaged Backlog issue, open or closed.
+5. Every startable issue has a `## Acceptance criteria` section (exact heading)
+
+AUDIT of every closed issue after the backfill of #39 and #40.
+Expected: exactly one status:* label, except issues closed straight out of
+Backlog (never triaged), which correctly have none.
+
+$ gh issue list --state closed --limit 100 --json number,labels,title
+#8 status=[status:in-progress] fix(tooling): documented format scope names bricks, which da
+#9 status=[status:in-progress] fix(testing): three UiKeys are defined but wired into nothin
+#10 status=[status:in-progress] docs: CONTRIBUTING tells contributors to write Closes #123, 
+#11 status=[status:in-progress] fix(tooling): flutter analyze exits 1 on clean main under cu
+#21 status=[status:in-progress] fix(tooling): coverage.yml is an invalid workflow and has ne
+#24 status=[status:in-progress] fix(tooling): flutter-version: 'stable' breaks Setup Flutter
+#25 status=[status:in-progress] fix(testing): coverage.yml counts files per layer but never 
+#28 status=[status:in-progress] fix(testing): e2e-android activates patrol_cli unpinned, whi
+#30 status=[status:in-progress] fix(testing): Patrol native Android harness is missing, so E
+#33 status=[status:in-progress] fix(testing): the shipped E2E test cannot pass without a bac
+#34 status=[status:in-progress] fix(tooling): build.yml and the deploy workflows pass --flav
+#39 status=[status:blocked] fix(tooling): coverage.yml prints per-layer FILE COUNTS besi
+#40 status=[status:in-progress] fix(performance): the widget tree never reaches an idle fram
+#46 status=[status:in-progress] fix(network): ErrorInterceptor rejects first, so retry and 4
+#47 status=[status:in-progress] fix(security): Authorization header redaction is a no-op, so
+#49 status=[status:in-progress] fix(android): release manifest has no INTERNET permission, s
+#50 status=[status:in-progress] fix(tooling): --remove-tasks and --remove-feature-flags stri
+#51 status=[status:in-progress] fix(auth): the persisted session is never restored, so every
+#54 status=[status:in-progress] docs: several guides describe behaviour the code does not ha
+#55 status=[status:in-progress] fix(design-system): light theme labelLarge is white on a nea
+#60 status=[status:in-progress] fix(storage): a missing migration path reports success, and 
+#61 status=[status:in-progress] fix(tasks): concurrent mutations lose writes, and opening a 
+#77 status=[status:in-progress] fix(security): HTTP cache stores authenticated GET responses
+#84 status=[] fix(security): SSL pinning silently disables itself when API
+#88 status=[status:in-progress] fix(network): RetryInterceptor replays non-idempotent POST/P
+
+#84 is the documented Backlog-close case: it was filed with type/epic/priority
+but never triaged into status:todo, and was closed "not planned" as invalid.
+There is no status label to keep, and the rule adds none.
+
+$ gh api repos/koniz-dev/flutter-starter/issues/84/timeline (label + close events)
+2026-09-19T09:29:14Z labeled type:bug
+2026-09-19T09:29:14Z labeled epic:core-security
+2026-09-19T09:29:14Z labeled priority:P1
+2026-09-19T10:00:16Z closed not_planned
+
+The two issues whose labels were stripped at close, restored to their final
+state (see the comments on each):
+$ gh issue view 39 --json number,state,labels ; gh issue view 40 --json number,state,labels
+#39 CLOSED [type:task, epic:tooling-ci, priority:P3, status:blocked]
+#40 CLOSED [type:bug, epic:design-system, priority:P2, status:in-progress]

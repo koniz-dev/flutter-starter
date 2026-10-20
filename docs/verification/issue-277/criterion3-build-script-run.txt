@@ -1,0 +1,51 @@
+## Criterion 3: the guide's build_release.sh, extracted verbatim from
+## docs/guides/security/implementation.md, run under bash with a stub
+## 'flutter' on PATH that prints its argv one bracketed argument at a time.
+
+$ head -3 build_release.sh
+#!/bin/bash
+# scripts/ci/build_release.sh
+set -euo pipefail
+
+$ shellcheck -s bash build_release.sh
+shellcheck exit: 0
+
+$ API_SSL_FINGERPRINTS=aa:bb,cc:dd build_release.sh production apk
+Building apk for production with obfuscation...
+flutter [build] [apk] [--release] [--obfuscate] [--split-debug-info=./build/debug-info] [--dart-define=ENVIRONMENT=production] [--dart-define=BASE_URL=https://api.example.com] [--dart-define=API_SSL_FINGERPRINTS=aa:bb,cc:dd]
+Build complete. Debug info saved to ./build/debug-info/
+ IMPORTANT: Store debug-info files securely for crash symbolication!
+exit: 0
+
+$ API_SSL_FINGERPRINTS=aa:bb,cc:dd build_release.sh staging appbundle
+Building appbundle for staging with obfuscation...
+flutter [build] [appbundle] [--release] [--obfuscate] [--split-debug-info=./build/debug-info] [--dart-define=ENVIRONMENT=staging] [--dart-define=BASE_URL=https://api-staging.example.com] [--dart-define=API_SSL_FINGERPRINTS=aa:bb,cc:dd]
+Build complete. Debug info saved to ./build/debug-info/
+ IMPORTANT: Store debug-info files securely for crash symbolication!
+exit: 0
+
+$ API_SSL_FINGERPRINTS=aa:bb,cc:dd build_release.sh staging ios
+Building ios for staging with obfuscation...
+flutter [build] [ios] [--release] [--obfuscate] [--split-debug-info=./build/debug-info] [--dart-define=ENVIRONMENT=staging] [--dart-define=BASE_URL=https://api-staging.example.com] [--dart-define=API_SSL_FINGERPRINTS=aa:bb,cc:dd]
+Build complete. Debug info saved to ./build/debug-info/
+ IMPORTANT: Store debug-info files securely for crash symbolication!
+exit: 0
+
+$ BASE_URL=https://api.custom.test API_SSL_FINGERPRINTS=aa:bb build_release.sh staging apk
+Building apk for staging with obfuscation...
+flutter [build] [apk] [--release] [--obfuscate] [--split-debug-info=./build/debug-info] [--dart-define=ENVIRONMENT=staging] [--dart-define=BASE_URL=https://api.custom.test] [--dart-define=API_SSL_FINGERPRINTS=aa:bb]
+Build complete. Debug info saved to ./build/debug-info/
+ IMPORTANT: Store debug-info files securely for crash symbolication!
+exit: 0
+
+$  build_release.sh production apk
+API_SSL_FINGERPRINTS is empty: refusing to build an unpinned release
+exit: 1
+
+$ API_SSL_FINGERPRINTS=aa build_release.sh prod apk
+Unknown environment 'prod' (expected production or staging)
+exit: 1
+
+$ API_SSL_FINGERPRINTS=aa build_release.sh staging web
+Unknown build type 'web' (expected apk, appbundle or ios)
+exit: 1

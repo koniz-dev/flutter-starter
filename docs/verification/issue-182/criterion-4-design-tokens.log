@@ -1,0 +1,27 @@
+# Criterion 4 - the AppDesignTokens row says AppTheme binds the concrete class
+
+## The row, verbatim from docs/architecture/contracts-map.md
+
+50:| `AppDesignTokens` | **No production consumer** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart:9`) | Nowhere, and there is no provider. `AppTheme` binds the **concrete** class at compile time: `static const _tokens = DefaultDesignTokens();` (`lib/shared/theme/app_theme.dart:7`). Nothing in `lib/` is typed on `AppDesignTokens`. | Edit `lib/shared/theme/app_theme.dart` to construct your own token class (and update the theme building that reads `_tokens`). There is no override point. |
+
+## The source it describes
+$ sed -n "1,9p" lib/shared/theme/app_theme.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_starter/shared/design_system/tokens/default_design_tokens.dart';
+
+/// Application theme configuration
+class AppTheme {
+  AppTheme._();
+  static const _tokens = DefaultDesignTokens();
+
+  /// Dark-theme surface (cards, dialogs, app bar).
+
+## Nothing in lib/ is typed on the abstraction:
+$ grep -rn "AppDesignTokens" lib
+lib/core/contracts/design_tokens_contracts.dart:7:abstract class AppDesignTokens {
+lib/shared/design_system/tokens/default_design_tokens.dart:9:class DefaultDesignTokens implements AppDesignTokens {
+
+# The only two hits are the declaration and 'implements AppDesignTokens'.
+# There is no provider: 
+$ grep -rn "designTokens.*Provider\|Provider<AppDesignTokens>" lib
+exit=1   (1 = no provider binds it, so 'To replace' cannot be a provider override)

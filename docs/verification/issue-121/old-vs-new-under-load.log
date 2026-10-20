@@ -1,0 +1,34 @@
+# Pre-#121 (50ms sleep) vs post-#121 (structural rendezvous)
+# Identical machine, identical background load, runs interleaved.
+# OLD = origin/main copy of the test, restored verbatim under a temp name.
+# host: 6 CPUs; background load: 12 busy loops
+# started: Fri Sep 25 12:54:47 UTC 2026
+
+round  1  OLD=PASS  NEW=PASS  (load 135.00)
+round  2  OLD=PASS  NEW=PASS  (load 245.58)
+round  3  OLD=FAIL  NEW=PASS  (load 305.15)
+--- OLD failure, round 3 ---
+00:00 +0 -1: AuthInterceptor 401 refresh queue three concurrent 401s with a failing refresh: all three complete [E]
+  Expected: <1>
+    Actual: <3>
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/network/interceptors/zz_old_sleep_version_test.dart 172:9  main.<fn>.<fn>
+  
+--- end ---
+round  4  OLD=PASS  NEW=PASS  (load 349.12)
+round  5  OLD=PASS  NEW=PASS  (load 349.57)
+round  6  OLD=PASS  NEW=PASS  (load 383.73)
+round  7  OLD=PASS  NEW=PASS  (load 356.90)
+round  8  OLD=PASS  NEW=PASS  (load 382.42)
+round  9  OLD=PASS  NEW=PASS  (load 376.99)
+round 10  OLD=PASS  NEW=PASS  (load 348.18)
+round 11  OLD=PASS  NEW=PASS  (load 380.06)
+round 12  OLD=PASS  NEW=PASS  (load 372.46)
+round 13  OLD=PASS  NEW=PASS  (load 391.83)
+round 14  OLD=PASS  NEW=PASS  (load 412.68)
+round 15  OLD=PASS  NEW=PASS  (load 422.30)
+
+# finished: Fri Sep 25 13:06:32 UTC 2026
+# rounds: 15   OLD failures: 1   NEW failures: 0

@@ -1,0 +1,124 @@
+$ flutter test --timeout=5m --reporter compact
+
+00:09 +85: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/core/di/providers_test.dart: Providers storageInitializationProvider stamps both stores at the current schema version
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting regular storage migration
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:71:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:118:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:128:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:193:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 All migrations completed successfully | Context: {"final_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting secure storage migration
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:71:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:118:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:128:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:193:20)
+
+[... 1921 lines elided by scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:53 +2704 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should use light theme by default                                 
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:53 +2705 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should have dark theme configured                                 
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:54 +2706 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should configure router correctly                                 
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:54 +2707 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should configure localization delegates                           
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:54 +2708 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should configure supported locales                                
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:54 +2709 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should use locale from provider                                   
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:54 +2710 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should configure text direction from provider                     
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:54 +2711 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af36720b09b38823b/test/main_test.dart: MyApp should wrap content in RepaintBoundary                            
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:55 +2715 ~8: 8 skipped tests.                                                                                                                                                                       
+03:55 +2715 ~8: All other tests passed!                                                                                                                                                                
+exit: 0

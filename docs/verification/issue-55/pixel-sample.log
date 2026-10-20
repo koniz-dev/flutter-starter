@@ -1,0 +1,36 @@
+Pixel samples taken from the committed goldens with a pure-Python PNG
+decoder, then run through the same WCAG formula the theme test uses.
+This is what the renderer actually painted, not what the theme says.
+
+LIGHT THEME - docs/verification/issue-55/theme_text_styles_light.png (1200x800)
+  displayLarge glyph     (  30, 97) = #212529
+  bodyLarge glyph        (  30,140) = #212529
+  bodyMedium glyph       (  30,174) = #5A6268
+  labelLarge glyph       (  30,206) = #212529
+  scaffold background    ( 600,400) = #F8F9FA
+  appBar fill            ( 600, 27) = #0069D9
+  appBar label glyph     (  30, 27) = #FFFFFF
+  button fill            (  40,264) = #0069D9
+  button label glyph     (  60,264) = #FFFFFF
+  labelLarge glyph vs scaffold : 14.63:1
+  bodyMedium glyph vs scaffold : 5.89:1
+  bodyLarge  glyph vs scaffold : 14.63:1
+  appBar label vs appBar fill  : 5.22:1
+  button label vs button fill  : 5.22:1
+
+DARK THEME - docs/verification/issue-55/theme_text_styles_dark.png (1200x800)
+  displayLarge glyph     (  30, 97) = #FFFFFF
+  bodyLarge glyph        (  30,140) = #FFFFFF
+  bodyMedium glyph       (  30,174) = #ADB5BD
+  labelLarge glyph       (  30,206) = #FFFFFF
+  scaffold background    ( 600,400) = #121212
+  appBar fill            ( 600, 27) = #1E1E1E
+  appBar label glyph     (  30, 27) = #FFFFFF
+  button fill            (  40,264) = #0069D9
+  button label glyph     (  60,264) = #FFFFFF
+  labelLarge glyph vs scaffold : 18.73:1
+  bodyMedium glyph vs scaffold : 9.03:1
+  bodyLarge  glyph vs scaffold : 18.73:1
+  appBar label vs appBar fill  : 16.67:1
+  button label vs button fill  : 5.22:1
+

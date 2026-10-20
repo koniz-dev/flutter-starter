@@ -1,0 +1,66 @@
+$ flutter test --concurrency=1 --reporter expanded test/features/auth/session_restore_test.dart test/features/auth/data/repositories/auth_repository_impl_test.dart
+
+Waiting for another flutter command to release the startup lock...                                                                  Waiting for another flutter command to release the startup lock...
+00:00 +0: loading test/features/auth/session_restore_test.dart
+00:00 +0: test/features/auth/session_restore_test.dart: cold start session restore (#51) a cached session lands on / instead of /login
+00:03 +1: test/features/auth/session_restore_test.dart: cold start session restore (#51) empty storage still lands on /login
+00:04 +2: test/features/auth/session_restore_test.dart: cold start session restore (#51) restore in flight does not flash /login, then lands on /
+00:04 +3: test/features/auth/session_restore_test.dart: cold start session restore (#51) restore held open for a user with no session ends on /login
+00:04 +4: test/features/auth/session_restore_test.dart: cold start session restore (#51) corrupt cached JSON lands on /login without throwing
+00:04 +5: test/features/auth/session_restore_test.dart: cold start session restore (#51) storage throwing lands on /login without throwing
+00:05 +6: test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with no token lands on /login, not /
+00:05 +7: test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with an empty token lands on /login
+00:05 +8: test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) an unreadable token store lands on /login without throwing
+00:05 +9: test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a token store throwing an Error lands on /login without throwing
+00:05 +10: test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user (#85) a cached user with a readable token still lands on /
+00:05 +11: test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) bounce to /login carries the destination, and returns to it
+00:06 +12: test/features/auth/session_restore_test.dart: deep link survives the login round trip (#51) an off-site redirect target is ignored
+00:06 +13: loading test/features/auth/data/repositories/auth_repository_impl_test.dart
+00:08 +13: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:08 +13: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return User when login succeeds
+00:08 +14: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return ServerFailure when remote data source throws ServerException
+00:08 +15: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return NetworkFailure when remote data source throws NetworkException
+00:08 +16: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should cache refresh token only if provided
+00:08 +17: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl register should return User when registration succeeds
+00:08 +18: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl register should return failure when registration fails
+00:08 +19: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should return success when logout succeeds
+00:08 +20: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should return failure when logout fails
+00:08 +21: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call times out
+00:08 +22: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should clear the local session when the remote call throws an Error
+00:08 +23: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout should report the local failure when the teardown also fails
+00:08 +24: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return User when a token and a cached user exist
+00:08 +25: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when no cached user
+00:08 +26: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the token is gone but the user blob survives
+00:08 +27: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the stored token is empty
+00:08 +28: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should not read the user blob at all without a token
+00:08 +29: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return failure when the token store throws
+00:08 +30: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return failure when cache read fails
+00:08 +31: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return true when a token and a cached user exist
+00:08 +32: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when no cached user
+00:08 +33: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the token is gone but the user blob survives
+00:08 +34: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the stored token is empty
+00:08 +35: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should agree with getCurrentUser on every storage state
+00:08 +36: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should propagate a token store failure
+00:08 +37: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return new token when refresh succeeds
+00:08 +38: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return UnknownFailure when no refresh token available
+00:08 +39: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return failure when refresh fails
+00:08 +40: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should cache refresh token only if provided
+00:08 +41: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should cache refresh token when provided
+00:08 +42: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases login should handle generic Exception
+00:08 +43: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should handle generic Exception
+00:08 +44: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases logout should handle generic Exception
+00:08 +45: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases getCurrentUser should handle generic Exception
+00:08 +46: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases isAuthenticated should handle generic Exception
+00:08 +47: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases refreshToken should handle generic Exception
+00:08 +48: test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (tearDownAll)
+00:08 +48: All tests passed!
+exit: 0
+
+$ flutter test --concurrency=1 --reporter expanded --run-skipped --tags golden test/acceptance/session_restore_acceptance_test.dart
+
+00:00 +0: loading test/acceptance/session_restore_acceptance_test.dart
+00:00 +0: cold start acceptance (#51) with a persisted session the app opens on home
+00:03 +1: cold start acceptance (#51) with empty storage the app opens on login
+00:05 +2: cold start acceptance (#85) a cached user with no token opens on login, not home
+00:06 +3: All tests passed!
+exit: 0

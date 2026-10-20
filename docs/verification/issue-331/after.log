@@ -1,0 +1,39 @@
+# workflow_dispatch run 38971311473 of coverage.yml on fix/331-coverage-workflow-green (3ee81df148d)
+# https://github.com/koniz-dev/flutter-starter/actions/runs/38971311473
+conclusion: success
+  Set up job: success
+  Checkout code: success
+  Setup Flutter: success
+  Install dependencies: success
+  Run tests with coverage: success
+  Install lcov: success
+  Remove generated files from coverage: success
+  Generate coverage report: success
+  Calculate coverage by layer (architecture gates): success
+  Calculate coverage metrics: success
+  Write coverage summary: success
+  Enforce coverage thresholds: success
+  Upload to Codecov (Public): success
+  Generate coverage badge: success
+  Comment coverage summary: skipped
+  Post Setup Flutter: success
+  Post Checkout code: success
+  Complete job: success
+
+# per-layer coverage and gates (from the run log)
+  Domain:       100.0%
+  Data:         97.8%
+  Presentation: 98.1%
+  Core:         93.4%
+✅ Total Coverage: 95.2% >= 80%
+✅ Domain Layer: 100.0% >= 100%
+✅ Data Layer: 97.8% >= 90%
+✅ Presentation Layer: 98.1% >= 80%
+✅ Core Layer: 93.4% >= 80%
+
+# Codecov upload step (excerpt)
+info - 2026-10-16 21:47:55,666 -- > /home/runner/work/flutter-starter/flutter-starter/docs/verification/issue-390/callback-coverage.txt
+info - 2026-10-16 21:47:55,666 -- > /home/runner/work/flutter-starter/flutter-starter/coverage/lcov.info
+info - 2026-10-16 21:47:56,225 -- Your upload is now queued for processing. When finished, results will be available at: https://app.codecov.io/github/koniz-dev/flutter-starter/commit/3ee81df148d9514fd4dda3d9ba9bb06105163442
+info - 2026-10-16 21:47:56,226 -- Sending upload (199355 bytes) to storage
+info - 2026-10-16 21:47:56,499 -- Upload queued for processing complete

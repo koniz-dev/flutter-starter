@@ -1,0 +1,20 @@
+# test/core/logging/log_output_test.dart as it was before #370's fix (423aea5^)
+$ flutter test test/core/logging/log_output_test.dart   (file order)
+  test/core/logging/log_output_test.dart: FileLogOutput sink lifecycle (real temp directory) a log emitted during rotation does not throw, and is kept
+$ flutter test test/core/logging/log_output_test.dart --test-randomize-ordering-seed 3899950154
+  LateInitializationError: Local 'fileLogOutput' has not been initialized.
+00:00 +0 -1: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle very long messages [E]
+00:00 +0 -2: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle special characters in message [E]
+00:00 +0 -3: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle unicode characters in message [E]
+00:00 +0 -4: FileLogOutput JsonLogFormatter - Additional Edge Cases should handle empty message [E]
+00:21 +56 -5: FileLogOutput sink lifecycle (real temp directory) a log emitted during rotation does not throw, and is kept [E]
+00:26 +80 -5: Some tests failed.
+Shuffling test order with --test-randomize-ordering-seed=3899950154
+
+# Reading this log:
+# - The four LateInitializationError failures appear only under the seed: that
+#   is #370's bug, reproduced by seed 3899950154 as criterion 3 asks.
+# - "a log emitted during rotation does not throw, and is kept" fails in both
+#   orders. It is unrelated to ordering: this pre-#370 copy of the file predates
+#   #589 (FileLogOutput now keeps maxFiles files, not maxFiles + 1), and #595
+#   gave that test maxFiles: 50 for exactly this reason.

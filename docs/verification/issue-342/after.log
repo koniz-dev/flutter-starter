@@ -1,0 +1,17 @@
+# the same on this branch
+ok    generate_changelog.sh 1.2.3 exits 0
+ok    the new section sits below Unreleased and above 1.0.0+1
+ok    commits after the tag are listed
+ok    commits before the tag are not listed
+ok    the Unreleased section is kept intact
+ok    with no tag it refuses and names --since
+ok    a refused run leaves CHANGELOG.md untouched
+ok    --since <ref> lists exactly the commits in <ref>..HEAD
+ok    a missing CHANGELOG.md is created with the section
+ok    release.sh fails when the changelog step fails
+ok    after the failure git status --short is empty
+ok    no release branch or tag was created
+ok    bump_version.sh patch keeps the version line's trailing comment
+ok    bump_version.sh patch on a line with no comment adds nothing
+ok    bump_version.sh keeps the comment's spacing exactly
+All release-script tests passed.

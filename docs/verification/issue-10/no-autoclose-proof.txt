@@ -1,0 +1,10 @@
+# Behavioral proof: merging PR #17 did NOT auto-close issue #10
+
+Commit footer on main:
+  - The guideline now says `Refs koniz-dev/flutter-starter#123` and states why
+
+Issue #10 state after the fix merged:
+  state=OPEN closedAt=null
+
+Invariant 3 working: the fix merged, the issue stayed open, and closing
+it was a separate decision taken after the criteria were checked.

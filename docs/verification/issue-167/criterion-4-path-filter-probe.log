@@ -1,0 +1,15 @@
+Local replay of the 'Decide the strip scope' filter from
+.github/workflows/strip-smoke.yml against representative diffs.
+Probe source is quoted in README.md of this directory.
+
+evidence PR (docs/verification md+log+png) -> run=false (all inert)
+README.md only                             -> run=false (all inert)
+docs/*.md only                             -> run=false (all inert)
+docs dart probe (NOT inert)                -> run=true  (1 relevant: docs/verification/issue-48/aot_probe.dart )
+tool/golden change                         -> run=true  (1 relevant: tool/golden/no_tasks/lib/core/routing/app_routes.dart )
+lib change                                 -> run=true  (1 relevant: lib/features/tasks/domain/task.dart )
+pubspec.yaml                               -> run=true  (1 relevant: pubspec.yaml )
+analysis_options.yaml                      -> run=true  (1 relevant: analysis_options.yaml )
+the workflow itself                        -> run=true  (1 relevant: .github/workflows/strip-smoke.yml )
+mixed md + lib                             -> run=true  (1 relevant: lib/main.dart )
+android native                             -> run=true  (1 relevant: android/app/build.gradle.kts )

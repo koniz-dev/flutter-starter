@@ -1,0 +1,8 @@
+00:00 +0: test/core/config/app_config_getters_used_test.dart: the scan sees the environment-backed getters
+00:00 +3: test/core/network/api_client_timeouts_test.dart: criterion 1: API_SEND_TIMEOUT reaches both Dio instances ApiClient sets sendTimeout from AppConfig.apiSendTimeout
+00:00 +4: test/core/network/api_client_timeouts_test.dart: criterion 1: API_SEND_TIMEOUT reaches both Dio instances the 401 replay client borrows it from the host options
+00:00 +5: test/core/network/api_client_timeouts_test.dart: criterion 1: API_SEND_TIMEOUT reaches both Dio instances a replay client with no host falls back to AppConfig
+00:00 +6: test/core/network/api_client_timeouts_test.dart: criterion 2: API_TIMEOUT is an end-to-end deadline per request ApiClient gives up on a hanging request after API_TIMEOUT, as a timeout, and cancels it
+00:01 +7: test/core/network/api_client_timeouts_test.dart: criterion 2: API_TIMEOUT is an end-to-end deadline per request DioNetworkClient without a deadline leaves the request alone
+00:01 +8: test/core/network/api_client_timeouts_test.dart: criterion 2: API_TIMEOUT is an end-to-end deadline per request a response inside the deadline is returned untouched
+00:01 +9: All tests passed!

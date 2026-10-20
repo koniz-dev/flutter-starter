@@ -1,0 +1,26 @@
+$ grep -rn "\.template" lib
+exit=1  (1 = no match anywhere under lib)
+
+$ find . -name "*.template" -not -path "./.git/*"   # the two that do exist; neither is in this feature
+./test/shared/performance/firebase_performance_service_test.dart.template
+./lib/core/performance/infrastructure/firebase_performance_service.dart.template
+
+$ ls lib/features/feature_flags/data/datasources/
+feature_flags_local_datasource.dart
+feature_flags_remote_datasource.dart
+
+# Every file ever added under this feature, across all refs - no template,
+# so the comment was never accurate rather than having gone stale:
+$ git log --all --diff-filter=A --name-only --format= -- 'lib/features/feature_flags/*' | sort -u
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart
+lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart
+lib/features/feature_flags/data/services/local_feature_flags_service.dart
+lib/features/feature_flags/domain/entities/feature_flag.dart
+lib/features/feature_flags/domain/repositories/feature_flags_repository.dart
+lib/features/feature_flags/presentation/examples/feature_flags_example_screen.dart
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart
+lib/features/feature_flags/presentation/widgets/feature_flag_builder.dart
+lib/features/feature_flags/routing/feature_flags_routes.dart

@@ -1,0 +1,143 @@
+Counterfactual: a .env inside the declared directory assets/config/
+Repository HEAD: ef94605 - fix(security): walk declared asset directories in the bundling guard (#150)
+Guard BEFORE #138: tool/check_env_assets.dart at cf18772, extracted to
+  scratchpad/guard_before.dart (it contains no directory walk at all)
+
+--- 0. the tree as it ships ---
+
+$ ls -a assets/config
+.
+..
+.gitkeep
+exit=0
+
+$ grep -n -A4 ^  assets: pubspec.yaml
+172:  assets:
+173-    - .env.example
+174-    - assets/images/
+175-    - assets/config/
+176-
+exit=0
+
+--- 1. a developer drops a real .env into the declared directory ---
+
+$ ls -a assets/config
+.
+..
+.env
+.gitkeep
+exit=0
+
+$ git status --porcelain   # pubspec untouched, and .env is gitignored,
+                           # so review and secret scanners see nothing
+ M analysis_options.yaml
+ M ios/Flutter/Debug.xcconfig
+ M ios/Flutter/Release.xcconfig
+ M macos/Flutter/Flutter-Debug.xcconfig
+ M macos/Flutter/Flutter-Release.xcconfig
+ M pubspec.lock
+?? docs/verification/issue-138/
+(end of git status - empty means nothing to review)
+
+--- 2. the guard as it was BEFORE #138: passes ---
+
+$ dart run /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/guard_before.dart pubspec.yaml
+OK: no unacknowledged env file in the Flutter asset list.
+exit=0
+
+--- 3. the guard as it is AFTER #138: fails ---
+
+$ dart run tool/check_env_assets.dart
+Running build hooks...Running build hooks...SECURITY: a secrets file is bundled as a Flutter asset.
+
+  pubspec.yaml:175  - assets/config/.env (via "assets/config/")  [environment file]
+
+Flutter asset lists are not build-mode scoped, so this file ships in the
+release APK, the release IPA and the web build, not just in debug. Anyone can
+unzip the app bundle to read it, and on web it is served over HTTP at
+/assets/<path> and listed in AssetManifest.json. A declared *directory* bundles
+everything directly inside it, with no pubspec entry per file.
+
+Use instead:
+  * native (all build modes): --dart-define-from-file=.env, or individual
+    --dart-define flags. Nothing is bundled as a readable file.
+  * web: there is no dart-define path, and a web client cannot hold a secret.
+    Serve secrets from your backend and keep only publishable values in the
+    bundle.
+  * key and signing material: keep it out of the tree the app is built from.
+    Nothing an app bundle contains is private.
+
+If the file genuinely holds no secrets and must ship (a web build needing
+runtime config), say so inline and this check will pass:
+
+    - .env # env-asset-ack: web build, contains no secrets
+
+For a file inside a declared directory, put the acknowledgement on the
+directory entry and name the file, so it covers that file and not the whole
+directory:
+
+    - assets/config/ # env-asset-ack: app_config.env, publishable values only
+
+See docs/guides/configuration.md ("Never ship a secret in the bundle").
+
+exit=1
+
+--- 4. the flutter test layer (CI Quality gate) fails too ---
+
+$ flutter test test/tooling/check_env_assets_test.dart --reporter compact
+  stream_transform 2.1.1 (2.1.2 available)
+  test 1.31.1 (1.32.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  test_core 0.6.18 (0.6.20 available)
+  uuid 4.5.3 (4.6.0 available)
+  very_good_analysis 10.1.0 (11.0.0 available)
+  vm_service 15.0.2 (15.3.0 available)
+  webdriver 3.1.0 (3.2.0 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.0.1 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+91 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+  Expected: empty
+    Actual: MappedListIterable<BundledSecretAsset, String>:['assets/config/.env (line 175)']
+  A Flutter asset declaration is not build-mode scoped. Anything listed under flutter: assets: - including every file inside a declared directory - ships in the release APK, the release IPA and the web build. Use --dart-define-from-file on native; on web, keep secrets on the server. See docs/guides/configuration.md.
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/check_env_assets_test.dart 317:5       main.<fn>
+  
+
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a8f6eb05d382190d9/test/tooling/check_env_assets_test.dart -p vm --plain-name 'this repository'\''s pubspec.yaml bundles no secrets file'
+00:13 +17 -1: Some tests failed.                                                                                                                                                                       
+exit=1
+
+--- 5. remove the file: clean tree passes again ---
+
+$ ls -a assets/config
+.
+..
+.gitkeep
+exit=0
+
+$ dart run tool/check_env_assets.dart
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+exit=0
+
+$ git status --porcelain
+ M analysis_options.yaml
+ M ios/Flutter/Debug.xcconfig
+ M ios/Flutter/Release.xcconfig
+ M macos/Flutter/Flutter-Debug.xcconfig
+ M macos/Flutter/Flutter-Release.xcconfig
+ M pubspec.lock
+?? docs/verification/issue-138/
+exit=0
+
+--- note on step 1's git status ---
+The six lines it prints are `flutter pub get` churn (analysis_options.yaml,
+pubspec.lock, four *.xcconfig) plus this evidence directory - they are present
+before and after, and are reverted before committing. The point of that step is
+what is *absent*: `assets/config/.env` appears nowhere in `git status`, because
+`.env` is gitignored, and `pubspec.yaml` is unmodified. There is nothing for a
+reviewer or a secret scanner to see.

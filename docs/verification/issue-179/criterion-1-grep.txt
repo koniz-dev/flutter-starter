@@ -1,0 +1,24 @@
+$ grep -rn "StorageService" lib/features
+lib/features/auth/data/datasources/auth_local_datasource.dart:36:  /// [secureStorageService]
+lib/features/auth/data/datasources/auth_local_datasource.dart:43:    SecureStorageService? secureStorageService,
+lib/features/auth/data/datasources/auth_local_datasource.dart:46:           (secureStorageService != null
+lib/features/auth/data/datasources/auth_local_datasource.dart:47:               ? SecureTokenStore(secureStorageService)
+lib/features/auth/data/datasources/auth_local_datasource.dart:49:                   'Either tokenStore or secureStorageService must '
+
+--- restricted to *_local_datasource.dart ---
+lib/features/auth/data/datasources/auth_local_datasource.dart:36:  /// [secureStorageService]
+lib/features/auth/data/datasources/auth_local_datasource.dart:43:    SecureStorageService? secureStorageService,
+lib/features/auth/data/datasources/auth_local_datasource.dart:46:           (secureStorageService != null
+lib/features/auth/data/datasources/auth_local_datasource.dart:47:               ? SecureTokenStore(secureStorageService)
+lib/features/auth/data/datasources/auth_local_datasource.dart:49:                   'Either tokenStore or secureStorageService must '
+
+$ grep -rnw "StorageService" lib/features   # word boundary; excludes SecureStorageService
+(no matches)
+
+--- what each local data source declares now ---
+lib/features/tasks/data/datasources/tasks_local_datasource.dart:45:  final IKeyValueStore storageService;
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:27:  FeatureFlagsLocalDataSourceImpl({required IKeyValueStore storageService})
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:30:  final IKeyValueStore _storageService;
+lib/features/auth/data/datasources/auth_local_datasource.dart:42:    ITokenStore? tokenStore,
+lib/features/auth/data/datasources/auth_local_datasource.dart:54:  final IKeyValueStore storageService;
+lib/features/auth/data/datasources/auth_local_datasource.dart:57:  final ITokenStore tokenStore;

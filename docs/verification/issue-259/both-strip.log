@@ -1,0 +1,14 @@
+Removed .claude/agents: it serves this repository's issue loop, not the app a fork ships.
+Removed .github/workflows/issue-refs.yml: it serves this repository's issue loop, not the app a fork ships.
+Removed docs/issue-workflow.md: it serves this repository's issue loop, not the app a fork ships.
+Removed docs/verification: it serves this repository's issue loop, not the app a fork ships.
+Removed scripts/bootstrap-issue-labels.sh: it serves this repository's issue loop, not the app a fork ships.
+Removed scripts/dev/check_issue_refs.sh: it serves this repository's issue loop, not the app a fork ships.
+Removed test/tooling/epic_coverage_test.dart: it serves this repository's issue loop, not the app a fork ships.
+Removed tool/check_epic_coverage.dart: it serves this repository's issue loop, not the app a fork ships.
+Removed .claude: emptied by the removals above.
+Dropped 2 process-only section(s) from CONTRIBUTING.md.
+Dropped 3 process-only section(s) from CLAUDE.md.
+Dropped 1 process-only section(s) from tool/README.md.
+Dropped 1 symbol directive(s) naming a stripped path from docs/architecture/contracts-map.md.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test

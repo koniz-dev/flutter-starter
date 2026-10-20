@@ -1,0 +1,47 @@
+=== scripts/ci/bump_version.sh behaviour matrix ===
+
+-- version with NO build number (the shape that used to abort) --
+in=1.0.0       args=[patch]     rc=0  ->  version: 1.0.1
+in=1.0.0       args=[minor]     rc=0  ->  version: 1.1.0
+in=1.0.0       args=[major]     rc=0  ->  version: 2.0.0
+in=1.0.0       args=[build]     rc=0  ->  version: 1.0.0+1
+in=1.0.0       args=[patch 42]  rc=0  ->  version: 1.0.1+42
+
+-- version WITH a build number --
+in=1.0.0+1     args=[patch]     rc=0  ->  version: 1.0.1+2
+in=1.0.0+1     args=[minor]     rc=0  ->  version: 1.1.0+2
+in=1.0.0+1     args=[major]     rc=0  ->  version: 2.0.0+2
+in=1.0.0+7     args=[build]     rc=0  ->  version: 1.0.0+8
+in=1.0.0+7     args=[patch 99]  rc=0  ->  version: 1.0.1+99
+
+-- rejected inputs: must exit non-zero and leave pubspec.yaml untouched --
+in=1.0         args=[patch]     rc=1  ->  version: 1.0
+     Error: unsupported version '1.0' in /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.J40vyX2O96/p.yaml (expected MAJOR.MINOR.PATCH[+BUILD]); pubspec.yaml left untouched
+     pubspec unchanged: YES (no-op on failure)
+in=1.0.0-beta+1 args=[patch]     rc=1  ->  version: 1.0.0-beta+1
+     Error: unsupported version '1.0.0-beta+1' in /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.J40vyX2O96/p.yaml (expected MAJOR.MINOR.PATCH[+BUILD]); pubspec.yaml left untouched
+     pubspec unchanged: YES (no-op on failure)
+in=1.0.0+1     args=[bogus]     rc=1  ->  version: 1.0.0+1
+     Error: Invalid bump type 'bogus'
+     pubspec unchanged: YES (no-op on failure)
+in=1.0.0+1     args=[patch abc] rc=1  ->  version: 1.0.0+1
+     Error: Build number must be a non-negative integer, got 'abc'
+     pubspec unchanged: YES (no-op on failure)
+
+-- no stray temp files left behind --
+. .. p.yaml 
+
+
+=== BEFORE (pre-fix script at a688cbd, same input) ===
+before: version: 1.0.0
+/private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/old_bump_version.sh: line 50: 1.0.0: syntax error: invalid arithmetic operator (error token is ".0.0")
+Version bumped successfully!
+  Old version: 1.0.0
+  New version: 1.0.1+1.0.0
+
+Don't forget to:
+  1. Commit the version change
+  2. Update CHANGELOG.md
+  3. Create a release tag
+exit=0
+after:  version: 1.0.1+1.0.0

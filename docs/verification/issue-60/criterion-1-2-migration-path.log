@@ -1,0 +1,8 @@
+$ flutter test test/core/storage/migration/migration_executor_test.dart --reporter expanded --plain-name missing migration path
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_executor_test.dart
+00:00 +0: MigrationExecutor missing migration path (#60) throws when no migration reaches the target version
+00:00 +1: MigrationExecutor missing migration path (#60) throws on a mid-chain gap (v1->v2, v3->v4, target 4)
+00:00 +2: MigrationExecutor missing migration path (#60) throws when a migration overshoots the target version
+00:00 +3: All tests passed!
+exit: 0

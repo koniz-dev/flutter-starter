@@ -1,0 +1,189 @@
+fastlane fastlane 2.240.1
+
+==================================================================
+$ cd fastlane && fastlane android version
+==================================================================
+[20:24:47]: Get started using a Gemfile for fastlane https://docs.fastlane.tools/getting-started/ios/setup/#use-a-gemfile
+[20:24:50]: ------------------------------
+[20:24:50]: --- Step: default_platform ---
+[20:24:50]: ------------------------------
+[20:24:50]: Driving the lane 'android version' 🚀
+[20:24:50]: ------------------------------------------------
+[20:24:50]: --- Step: Switch to android get_version lane ---
+[20:24:50]: ------------------------------------------------
+[20:24:50]: Cruising over to lane 'android get_version' 🚖
+[20:24:50]: Version: 1.0.0, Version Code: 1
+[20:24:50]: Cruising back to lane 'android version' 🚘
+[20:24:50]: Current Version: 1.0.0
+[20:24:50]: Current Version Code: 1
+
++-----------------------------------------+
+|            fastlane summary             |
++------+--------------------+-------------+
+| Step | Action             | Time (in s) |
++------+--------------------+-------------+
+| 1    | default_platform   | 0           |
+| 2    | Switch to android  | 0           |
+|      | get_version lane   |             |
++------+--------------------+-------------+
+
+[20:24:50]: fastlane.tools finished successfully 🎉
+--- exit: 0 ---
+
+==================================================================
+$ cd fastlane && fastlane android update_changelog
+==================================================================
+[20:24:55]: Seems like launching fastlane takes a while - please run
+[20:24:55]: 
+[20:24:55]: $ [sudo] gem cleanup
+[20:24:55]: 
+[20:24:55]: to uninstall outdated gems and make fastlane launch faster
+[20:24:55]: Alternatively it's recommended to start using a Gemfile to lock your dependencies
+[20:24:55]: To get started with a Gemfile, run
+[20:24:55]: 
+[20:24:55]: $ bundle init
+[20:24:55]: $ echo 'gem "fastlane"' >> Gemfile
+[20:24:55]: $ bundle install
+[20:24:55]: 
+[20:24:55]: After creating the Gemfile and Gemfile.lock, commit those files into version control
+[20:24:55]: Get started using a Gemfile for fastlane https://docs.fastlane.tools/getting-started/ios/setup/#use-a-gemfile
+[20:24:59]: ------------------------------
+[20:24:59]: --- Step: default_platform ---
+[20:24:59]: ------------------------------
+[20:24:59]: Driving the lane 'android update_changelog' 🚀
+[20:24:59]: ------------------------------------------------
+[20:24:59]: --- Step: Switch to android get_version lane ---
+[20:24:59]: ------------------------------------------------
+[20:24:59]: Cruising over to lane 'android get_version' 🚖
+[20:24:59]: Version: 1.0.0, Version Code: 1
+[20:24:59]: Cruising back to lane 'android update_changelog' 🚘
+[20:24:59]: Changelog exists at: ../fastlane/metadata/android/en-US/changelogs/default.txt
+[20:24:59]: Update it manually or use generate_changelog.sh script
+
++-----------------------------------------+
+|            fastlane summary             |
++------+--------------------+-------------+
+| Step | Action             | Time (in s) |
++------+--------------------+-------------+
+| 1    | default_platform   | 0           |
+| 2    | Switch to android  | 0           |
+|      | get_version lane   |             |
++------+--------------------+-------------+
+
+[20:24:59]: fastlane.tools finished successfully 🎉
+--- exit: 0 ---
+
+==================================================================
+$ cd fastlane && fastlane android increment_build
+==================================================================
+[20:25:03]: Get started using a Gemfile for fastlane https://docs.fastlane.tools/getting-started/ios/setup/#use-a-gemfile
+[20:25:07]: ------------------------------
+[20:25:07]: --- Step: default_platform ---
+[20:25:07]: ------------------------------
+[20:25:07]: Driving the lane 'android increment_build' 🚀
+[20:25:07]: Use ./scripts/ci/bump_version.sh build to increment build number
+
++---------------------------------------+
+|           fastlane summary            |
++------+------------------+-------------+
+| Step | Action           | Time (in s) |
++------+------------------+-------------+
+| 1    | default_platform | 0           |
++------+------------------+-------------+
+
+[20:25:07]: fastlane.tools finished successfully 🎉
+--- exit: 0 ---
+
+==================================================================
+$ cd ios/fastlane && fastlane ios version
+==================================================================
+[20:25:12]: Seems like launching fastlane takes a while - please run
+[20:25:12]: 
+[20:25:12]: $ [sudo] gem cleanup
+[20:25:12]: 
+[20:25:12]: to uninstall outdated gems and make fastlane launch faster
+[20:25:12]: Alternatively it's recommended to start using a Gemfile to lock your dependencies
+[20:25:12]: To get started with a Gemfile, run
+[20:25:12]: 
+[20:25:12]: $ bundle init
+[20:25:12]: $ echo 'gem "fastlane"' >> Gemfile
+[20:25:12]: $ bundle install
+[20:25:12]: 
+[20:25:12]: After creating the Gemfile and Gemfile.lock, commit those files into version control
+[20:25:12]: Get started using a Gemfile for fastlane https://docs.fastlane.tools/getting-started/ios/setup/#use-a-gemfile
+[20:25:15]: ------------------------------
+[20:25:15]: --- Step: default_platform ---
+[20:25:15]: ------------------------------
+[20:25:15]: Driving the lane 'ios version' 🚀
+[20:25:15]: --------------------------------------------
+[20:25:15]: --- Step: Switch to ios get_version lane ---
+[20:25:15]: --------------------------------------------
+[20:25:15]: Cruising over to lane 'ios get_version' 🚖
+[20:25:15]: Version: 1.0.0, Build: 1
+[20:25:15]: Cruising back to lane 'ios version' 🚘
+[20:25:15]: Current Version: 1.0.0
+[20:25:15]: Current Build: 1
+
++---------------------------------------+
+|           fastlane summary            |
++------+------------------+-------------+
+| Step | Action           | Time (in s) |
++------+------------------+-------------+
+| 1    | default_platform | 0           |
+| 2    | Switch to ios    | 0           |
+|      | get_version lane |             |
++------+------------------+-------------+
+
+[20:25:15]: fastlane.tools finished successfully 🎉
+--- exit: 0 ---
+
+==================================================================
+$ cd ios/fastlane && fastlane ios update_changelog
+==================================================================
+[20:25:19]: Get started using a Gemfile for fastlane https://docs.fastlane.tools/getting-started/ios/setup/#use-a-gemfile
+[20:25:22]: ------------------------------
+[20:25:22]: --- Step: default_platform ---
+[20:25:22]: ------------------------------
+[20:25:22]: Driving the lane 'ios update_changelog' 🚀
+[20:25:22]: --------------------------------------------
+[20:25:22]: --- Step: Switch to ios get_version lane ---
+[20:25:22]: --------------------------------------------
+[20:25:22]: Cruising over to lane 'ios get_version' 🚖
+[20:25:22]: Version: 1.0.0, Build: 1
+[20:25:22]: Cruising back to lane 'ios update_changelog' 🚘
+[20:25:22]: Changelog exists at: ../../fastlane/metadata/android/en-US/changelogs/default.txt
+[20:25:22]: Update it manually or use generate_changelog.sh script
+
++---------------------------------------+
+|           fastlane summary            |
++------+------------------+-------------+
+| Step | Action           | Time (in s) |
++------+------------------+-------------+
+| 1    | default_platform | 0           |
+| 2    | Switch to ios    | 0           |
+|      | get_version lane |             |
++------+------------------+-------------+
+
+[20:25:22]: fastlane.tools finished successfully 🎉
+--- exit: 0 ---
+
+==================================================================
+$ cd ios/fastlane && fastlane ios increment_build
+==================================================================
+[20:25:26]: Get started using a Gemfile for fastlane https://docs.fastlane.tools/getting-started/ios/setup/#use-a-gemfile
+[20:25:28]: ------------------------------
+[20:25:28]: --- Step: default_platform ---
+[20:25:28]: ------------------------------
+[20:25:28]: Driving the lane 'ios increment_build' 🚀
+[20:25:28]: Use ./scripts/ci/bump_version.sh build to increment build number
+
++---------------------------------------+
+|           fastlane summary            |
++------+------------------+-------------+
+| Step | Action           | Time (in s) |
++------+------------------+-------------+
+| 1    | default_platform | 0           |
++------+------------------+-------------+
+
+[20:25:28]: fastlane.tools finished successfully 🎉
+--- exit: 0 ---

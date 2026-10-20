@@ -1,0 +1,31 @@
+=== build/app/outputs ===
+build/app/outputs/sdk-dependencies/release/sdkDependencies.txt
+build/app/outputs/mapping/release/resources.txt
+build/app/outputs/mapping/release/mapping.txt
+build/app/outputs/mapping/release/usage.txt
+build/app/outputs/mapping/release/configuration.txt
+build/app/outputs/mapping/release/seeds.txt
+build/app/outputs/native-debug-symbols/release/native-debug-symbols.zip
+build/app/outputs/logs/manifest-merger-release-report.txt
+build/app/outputs/apk/release/app-release.apk
+build/app/outputs/apk/release/output-metadata.json
+build/app/outputs/apk/release/baselineProfiles/0/app-release.dm
+build/app/outputs/apk/release/baselineProfiles/1/app-release.dm
+build/app/outputs/flutter-apk/app-release.apk.sha1
+build/app/outputs/flutter-apk/app-release.apk
+=== build/web ===
+total 3196
+drwxr-xr-x  5 runner runner    4096 Sep 19 12:30 .
+drwxr-xr-x 14 runner runner    4096 Sep 19 12:29 ..
+-rw-r--r--  1 runner runner      32 Sep 19 12:30 .last_build_id
+drwxr-xr-x  5 runner runner    4096 Sep 19 12:30 assets
+drwxr-xr-x  4 runner runner    4096 Sep 19 12:29 canvaskit
+-rw-r--r--  1 runner runner     917 Sep 19 12:30 favicon.png
+-rw-r--r--  1 runner runner   12136 Sep 19 12:29 flutter.js
+-rw-r--r--  1 runner runner   13094 Sep 19 12:29 flutter_bootstrap.js
+-rw-r--r--  1 runner runner     784 Sep 19 12:30 flutter_service_worker.js
+drwxr-xr-x  2 runner runner    4096 Sep 19 12:30 icons
+-rw-r--r--  1 runner runner    1211 Sep 19 12:29 index.html
+-rw-r--r--  1 runner runner 3194984 Sep 19 12:30 main.dart.js
+-rw-r--r--  1 runner runner     926 Sep 19 12:30 manifest.json
+-rw-r--r--  1 runner runner     100 Sep 19 12:30 version.json

@@ -1,0 +1,101 @@
+Criterion 4: the go_router name collision is settled observably
+
+----------------------------------------------------------------
+BEFORE - the collision was real
+----------------------------------------------------------------
+
+A throwaway probe was written at commit 4a5f8f2 importing BOTH
+package:go_router/go_router.dart and context_extensions.dart and calling
+context.pop(). Its source is reproduced in this directory's README.md
+(it is deliberately NOT committed as a .dart file - see
+koniz-dev/flutter-starter#187). Analyzer output at that commit:
+
+    warning • Unused import: 'package:flutter_starter/shared/extensions/context_extensions.dart'. Try removing the import directive • test/shared/extensions/collision_probe_test.dart:2:8 • unused_import
+    warning • Unused import: 'package:go_router/go_router.dart'. Try removing the import directive • test/shared/extensions/collision_probe_test.dart:4:8 • unused_import
+      error • A member named 'pop' is defined in 'extension ContextExtensions on BuildContext' and 'extension GoRouterHelper on BuildContext', and neither is more specific. Try using an extension override to specify the extension you want to be chosen • test/shared/extensions/collision_probe_test.dart:13:40 • ambiguous_extension_member_access
+    3 issues found. (ran in 1.5s)
+
+The load-bearing line:
+    error - A member named 'pop' is defined in
+            'extension ContextExtensions on BuildContext' and
+            'extension GoRouterHelper on BuildContext', and neither is
+            more specific.  [ambiguous_extension_member_access]
+
+----------------------------------------------------------------
+AFTER - the same combination now compiles, and is a permanent test
+----------------------------------------------------------------
+
+Criterion 4 asks for 'a widget test file that imports both
+package:go_router/go_router.dart and context_extensions.dart and calls
+context.pop()'. That file is test/shared/extensions/context_extensions_test.dart itself:
+
+$ grep -n '^import' test/shared/extensions/context_extensions_test.dart
+    1:import 'package:flutter/material.dart';
+    2:import 'package:flutter_starter/shared/extensions/context_extensions.dart';
+    3:import 'package:flutter_test/flutter_test.dart';
+    4:import 'package:go_router/go_router.dart';
+
+$ grep -n 'context.pop()' test/shared/extensions/context_extensions_test.dart
+    254:      'context.pop() is unambiguous when go_router is also imported',
+    258:        // both go_router and context_extensions, so `context.pop()` below only
+    276:                  onPressed: () => context.pop(),
+
+It imports both and drives context.pop() through a real GoRouter, so it
+would stop compiling the moment a 'pop' member returns to
+ContextExtensions. The test body:
+
+          'context.pop() is unambiguous when go_router is also imported',
+          (tester) async {
+            // Regression guard for the ambiguous_extension_member_access error that
+            // a `pop` member on ContextExtensions reintroduces. This file imports
+            // both go_router and context_extensions, so `context.pop()` below only
+            // compiles while ContextExtensions has no `pop`.
+            final router = GoRouter(
+              initialLocation: '/',
+              routes: [
+                GoRoute(
+                  path: '/',
+                  builder: (context, state) => Scaffold(
+                    body: ElevatedButton(
+                      onPressed: () => context.push<void>('/second'),
+                      child: const Text('Go to Second'),
+                    ),
+                  ),
+                ),
+                GoRoute(
+                  path: '/second',
+                  builder: (context, state) => Scaffold(
+                    body: ElevatedButton(
+                      onPressed: () => context.pop(),
+                      child: const Text('Pop'),
+                    ),
+                  ),
+                ),
+              ],
+            );
+            addTearDown(router.dispose);
+    
+            await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+    
+            // Act
+            await tester.tap(find.text('Go to Second'));
+            await tester.pumpAndSettle(const Duration(seconds: 5));
+            expect(find.text('Pop'), findsOneWidget);
+    
+            await tester.tap(find.text('Pop'));
+            await tester.pumpAndSettle(const Duration(seconds: 5));
+    
+            // Assert: go_router's pop ran, not a Navigator-based one.
+            expect(find.text('Go to Second'), findsOneWidget);
+          },
+        );
+
+$ flutter analyze test/shared/extensions/context_extensions_test.dart
+    Analyzing context_extensions_test.dart...                       
+    No issues found! (ran in 2.3s)
+
+$ flutter test test/shared/extensions/context_extensions_test.dart --plain-name 'context.pop() is unambiguous when go_router is also imported'
+    00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-acb42ebcaa17cc6d9/test/shared/extensions/context_extensions_test.dart
+    00:00 +0: ContextExtensions context.pop() is unambiguous when go_router is also imported
+    00:01 +1: All tests passed!
+    flutter test exit=0

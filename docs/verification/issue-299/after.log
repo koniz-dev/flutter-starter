@@ -1,0 +1,10 @@
+00:00 +0: which 401s trigger a refresh (#299) criterion 1: /users/auth/login-history refreshes once and the replay reaches the caller
+00:00 +1: which 401s trigger a refresh (#299) criterion 1: /admin/auth/logout-sessions refreshes once and the replay reaches the caller
+00:00 +2: which 401s trigger a refresh (#299) criterion 1: /auth/refresh-settings refreshes once and the replay reaches the caller
+00:00 +3: which 401s trigger a refresh (#299) criterion 2: a 401 from /auth/login does not refresh
+00:00 +4: which 401s trigger a refresh (#299) criterion 2: a 401 from /auth/register does not refresh
+00:00 +5: which 401s trigger a refresh (#299) criterion 2: a 401 from /auth/refresh does not refresh
+00:00 +6: which 401s trigger a refresh (#299) criterion 2: a 401 from /auth/logout does not refresh
+00:00 +7: which 401s trigger a refresh (#299) criterion 2: a 401 from /auth/login?source=app does not refresh
+00:00 +8: which 401s trigger a refresh (#299) criterion 2: a 401 from /auth/logout/ does not refresh
+00:00 +9: All tests passed!

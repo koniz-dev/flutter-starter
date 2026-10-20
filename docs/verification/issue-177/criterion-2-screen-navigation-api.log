@@ -1,0 +1,23 @@
+# Criterion 2: the three screens navigate through the core navigation extension.
+
+$ grep -rn "context\.go(\|context\.pop(\|context\.canPop(\|context\.push(\|context\.pushNamed(\|context\.replace(" lib/features/
+(no output above = no screen calls a raw go_router BuildContext method)
+
+$ grep -rn "goTo\|pushRoute\|popRoute\|canPopRoute\|popOrGoToHome" lib/features/*/presentation/screens/*.dart
+lib/features/auth/presentation/screens/login_screen.dart:115:                    : () => context.goToRegister(),
+lib/features/auth/presentation/screens/register_screen.dart:139:                        if (context.canPopRoute()) {
+lib/features/auth/presentation/screens/register_screen.dart:140:                          context.popRoute<void>();
+lib/features/auth/presentation/screens/register_screen.dart:142:                          context.goToLogin();
+lib/features/tasks/presentation/screens/task_detail_screen.dart:114:    if (mounted && context.canPopRoute()) {
+lib/features/tasks/presentation/screens/task_detail_screen.dart:115:      context.popRoute<void>();
+lib/features/tasks/presentation/screens/task_detail_screen.dart:156:                  } else if (context.canPopRoute()) {
+lib/features/tasks/presentation/screens/task_detail_screen.dart:157:                    context.popRoute<void>();
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:253:              context.pushRoute('${AppRoutes.tasks}/${task.id}');
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:283:            : () => context.pushRoute('${AppRoutes.tasks}/${task.id}'),
+
+$ grep -n "^import" lib/features/auth/presentation/screens/login_screen.dart lib/features/auth/presentation/screens/register_screen.dart lib/features/tasks/presentation/screens/task_detail_screen.dart lib/features/tasks/presentation/screens/tasks_list_screen.dart | grep -i "routing\|go_router"
+lib/features/auth/presentation/screens/login_screen.dart:4:import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+lib/features/auth/presentation/screens/register_screen.dart:4:import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+lib/features/tasks/presentation/screens/task_detail_screen.dart:6:import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:5:import 'package:flutter_starter/core/routing/app_routes.dart';
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:6:import 'package:flutter_starter/core/routing/navigation_extensions.dart';

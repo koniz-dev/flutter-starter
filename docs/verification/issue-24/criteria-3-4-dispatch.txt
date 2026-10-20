@@ -1,0 +1,27 @@
+# Criterion 3: build.yml dispatched (web/development)
+
+  run 32869019450  workflow_dispatch  fix/flutter-version-channel-confusion  completed/success
+JOBS
+✓ Build Web in 1m25s (ID 97871286986)
+- Build iOS (no codesign) in 0s (ID 97871288006)
+- Build Android (ID 97871340797)
+
+ANNOTATIONS
+  Setup Flutter passed and the whole Build Web job completed, producing
+  artifact web-build-development. Previously: failed at Setup Flutter.
+
+# Criterion 4: e2e-android.yml dispatched
+  run 32869023061  completed/failure
+JOBS
+X Patrol on Android emulator in 6m25s (ID 97871298897)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  ✓ Setup Java
+  ✓ Install dependencies
+  ✓ Add Pub global bin to PATH
+  ✓ Install Patrol CLI
+  X Run Patrol tests
+  ✓ Post Setup Java
+  ✓ Post Setup Flutter
+  ✓ Post Checkout code

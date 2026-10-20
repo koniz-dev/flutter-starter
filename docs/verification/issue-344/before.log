@@ -1,0 +1,7 @@
+# test/tooling/android_release_signing_test.dart against main's scripts-smoke.yml
+              '.github/workflows/scripts-smoke.yml:82: ./scripts/ci/build_all.sh "${{ inputs.environment }}" 2>&1 \\'
+  .github/workflows/scripts-smoke.yml:82: ./scripts/ci/build_all.sh "${{ inputs.environment }}" 2>&1 \
+00:00 +0 -1: criterion 2: every Android release build in a workflow follows a signing key in its job [E]
+00:00 +0 -1: the scan catches an unsigned release build and passes a keyed one
+00:00 +0: criterion 2: every Android release build in a workflow follows a signing key in its job
+00:00 +1 -1: Some tests failed.

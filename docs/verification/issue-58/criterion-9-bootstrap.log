@@ -1,0 +1,84 @@
+Criterion 9 - bootstrap-issue-labels.sh --help stops at the header, --dry-run needs no gh
+
+9a. --help, in full. It ends at the last header line; before this issue it ran
+    five lines further and trailed into "set -euo pipefail" and the flags.
+$ ./scripts/bootstrap-issue-labels.sh --help
+Bootstrap the issue-driven workflow labels for this repository.
+
+This script is the CANONICAL SOURCE for the epic:* list. Humans, agents, and
+any issue-filing integration must read epics from here (or from
+`--list-epics`) rather than re-typing them, so the three cannot drift apart.
+See docs/issue-workflow.md and CLAUDE.md ("Workflow").
+
+Idempotent: uses `gh label create --force`, so re-running updates colors and
+descriptions in place instead of failing on existing labels.
+
+Usage:
+  ./scripts/bootstrap-issue-labels.sh                  # apply to this repo
+  REPO=owner/name ./scripts/bootstrap-issue-labels.sh  # apply elsewhere
+  ./scripts/bootstrap-issue-labels.sh --dry-run        # print, change nothing
+  ./scripts/bootstrap-issue-labels.sh --list-epics     # epic slugs, one per line
+  ./scripts/bootstrap-issue-labels.sh --prune-defaults  # also delete the stock
+                                                        # GitHub labels that
+                                                        # duplicate type:*
+
+NOTE ON ISSUE TYPES: GitHub's native issue types (Bug / Feature / Task) are an
+ORGANISATION-level feature. This repository is owned by a user account, so
+types are unavailable and cannot be created by any script. The type:* label
+family below stands in for them. If the repo ever moves to an organisation,
+see the migration note in docs/issue-workflow.md.
+<END OF OUTPUT - no "set -euo pipefail", no flag variables>
+
+9b. --dry-run with gh removed from PATH entirely:
+$ env PATH=/usr/bin:/bin:/usr/sbin:/sbin ./scripts/bootstrap-issue-labels.sh --dry-run
+Target repository: <unknown - set REPO=owner/name>
+(dry run - no changes will be made)
+
+type:* (stands in for native issue types)
+  would create/update  type:bug                     #d73a4a  Something that is broken relative to documented behavior
+  would create/update  type:feature                 #a2eeef  New capability or user-visible enhancement
+  would create/update  type:task                    #c5def5  Chore, refactor, docs, or tooling work with no new capability
+
+epic:* (functional area; exactly one per issue)
+  would create/update  epic:core-network            #5319e7  lib/core/network: Dio ApiClient, interceptors, realtime/WebSocket
+  would create/update  epic:core-storage            #5319e7  lib/core/storage: key-value + secure adapters, token store, migrations
+  would create/update  epic:core-security           #5319e7  lib/core/security: RASP providers, hardening, security docs
+  would create/update  epic:core-config             #5319e7  lib/core/config: env layers, .env, dart-defines, feature flags plumbing
+  would create/update  epic:core-routing            #5319e7  lib/core/routing: GoRouter tree, guards, navigation adapters
+  would create/update  epic:feature-auth            #5319e7  lib/features/auth: login, register, session (sample feature slice)
+  would create/update  epic:feature-tasks           #5319e7  lib/features/tasks: CRUD sample feature slice
+  would create/update  epic:design-system           #5319e7  lib/shared: design tokens, theme, shared widgets, accessibility
+  would create/update  epic:testing                 #5319e7  test/, integration_test/, coverage gates, Patrol E2E, golden acceptance
+  would create/update  epic:tooling-ci              #5319e7  .github/workflows, scripts/, tool/, bricks/, git hooks
+  would create/update  epic:docs                    #5319e7  docs/, README, CONTRIBUTING, CHANGELOG
+
+priority:* (queue order; exactly one per issue)
+  would create/update  priority:P0                  #b60205  Drop everything: main is broken, released build is unusable, or a security hole
+  would create/update  priority:P1                  #d93f0b  Next up: blocks adopters or a documented workflow is wrong
+  would create/update  priority:P2                  #fbca04  Normal queue: real but not blocking
+  would create/update  priority:P3                  #0e8a16  Nice to have: cosmetic, speculative, or long tail
+
+status:* (lifecycle state; exactly one per triaged open issue)
+  would create/update  status:todo                  #e4e4e4  Triaged and startable: has acceptance criteria, nobody assigned
+  would create/update  status:in-progress           #0052cc  Claimed by an assignee and being worked right now
+  would create/update  status:needs-uat             #d876e3  Shipped, but acceptance criteria need a HUMAN to verify
+  would create/update  status:blocked               #7f1d1d  Cannot proceed: needs a decision, credential, or upstream fix
+
+Done. Labels are the source of truth for issue state; any Project board is
+a read-only mirror. See docs/issue-workflow.md.
+exit=0
+
+9c. --list-epics with gh removed from PATH:
+$ env PATH=/usr/bin:/bin:/usr/sbin:/sbin ./scripts/bootstrap-issue-labels.sh --list-epics
+epic:core-network
+epic:core-storage
+epic:core-security
+epic:core-config
+epic:core-routing
+epic:feature-auth
+epic:feature-tasks
+epic:design-system
+epic:testing
+epic:tooling-ci
+epic:docs
+exit=0

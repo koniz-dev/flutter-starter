@@ -1,0 +1,13 @@
+# main's markScreenLoaded
+128:      _screenTrace!.putMetric(PerformanceMetrics.screenLoadTime, 1);
+# main's test pinned the constant
+83:        () => mockTrace.putMetric(PerformanceMetrics.screenLoadTime, 1),
+
+# this branch's test against main's mixin
+No matching calls. All calls: MockPerformanceTrace.putAttribute(screen_name, _TestScreenWithMixin),
+MockPerformanceTrace.startSync(), MockPerformanceTrace.putMetric(screen_load_time, 1)
+00:01 +2 -1: PerformanceScreenMixin records the milliseconds elapsed since the trace started (#326) [E]
+No matching calls. All calls: MockPerformanceTrace.putAttribute(screen_name, _TestScreenWithMixin),
+MockPerformanceTrace.startSync(), MockPerformanceTrace.putMetric(screen_load_time, 1)
+00:01 +2 -2: PerformanceScreenMixin a second screen measures its own load time [E]
+00:01 +11 -2: Some tests failed.

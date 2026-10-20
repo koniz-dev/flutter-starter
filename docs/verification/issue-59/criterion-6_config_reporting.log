@@ -1,0 +1,7 @@
+$ flutter test --reporter expanded --plain-name SSL test/core/config/app_config_test.dart
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a33db2ee8e4f10e3d/test/core/config/app_config_test.dart
+00:00 +0: AppConfig Debug utilities getDebugInfo should report effective SSL pinning state
+00:00 +1: AppConfig Edge Cases printConfig should print the effective SSL pinning state
+00:00 +2: All tests passed!
+exit: 0

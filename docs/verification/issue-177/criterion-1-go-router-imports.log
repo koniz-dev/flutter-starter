@@ -1,0 +1,14 @@
+$ git rev-parse HEAD
+a3c061a6fdf8bf2145f9cc4c78b4c0c0036f93f9
+
+$ grep -rn "package:go_router" lib | grep -v "^lib/core/routing/"
+lib/features/auth/routing/auth_routes.dart:5:import 'package:go_router/go_router.dart';
+lib/features/feature_flags/routing/feature_flags_routes.dart:4:import 'package:go_router/go_router.dart';
+lib/features/home/routing/home_routes.dart:4:import 'package:go_router/go_router.dart';
+lib/features/tasks/routing/tasks_routes.dart:5:import 'package:go_router/go_router.dart';
+
+Criterion 1 expects exactly the four lib/features/*/routing/*_routes.dart
+modules. Count of hits that are NOT such a module:
+$ grep -rn "package:go_router" lib | grep -v "^lib/core/routing/" | grep -vc "/routing/[a-z_]*_routes\.dart:"
+0
+(0 means no other file in lib/ imports go_router)

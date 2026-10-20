@@ -1,0 +1,12 @@
+# test/tooling/tool_readme_check_count_test.dart against main's tool/README.md
+00:00 +0: the scan sees the wired checks
+00:00 +1: criterion 3: check_docs.dart's header states the wired count
+00:00 +2: criteria 1 and 3: tool/README.md states the count and lists each check
+00:00 +2 -1: criteria 1 and 3: tool/README.md states the count and lists each check [E]
+  Expected: contains 'Seven checks, all of which'
+    Actual: '## `check_docs.dart`\n'
+00:00 +2 -1: criterion 2: the README documents the Type.member directive form
+00:00 +2 -2: criterion 2: the README documents the Type.member directive form [E]
+  Expected: contains '`Type.member`'
+    Actual: '# Tool (Dart)\n'
+00:00 +2 -2: Some tests failed.

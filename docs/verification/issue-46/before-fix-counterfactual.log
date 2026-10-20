@@ -1,0 +1,45 @@
+# Counterfactual for criteria 1, 2 and 5.
+#
+# Produced by taking the merged tree, moving ErrorInterceptor back to the
+# FRONT of the dio.interceptors.addAll([...]) list in
+# lib/core/network/api_client.dart (the pre-fix order), running
+#
+#   $ flutter test test/core/network/api_client_interceptor_chain_test.dart \
+#         --reporter expanded
+#
+# and then restoring the fixed file. exit: 1 - all three behavioural tests
+# fail, which is what the bug looked like:
+#   - adapter hits  Expected: <4>   Actual: <1>   (RetryInterceptor skipped)
+#   - 401 replay throws                            (AuthInterceptor skipped)
+#   - trace.stopped Expected: true  Actual: <false> (trace leaked)
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-adbd5524e56f1a01c/test/core/network/api_client_interceptor_chain_test.dart
+00:00 +0: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+00:00 +0 -1: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException [E]
+  Expected: <4>
+    Actual: <1>
+
+  package:matcher                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18              expect
+  test/core/network/api_client_interceptor_chain_test.dart 219:9  main.<fn>.<fn>
+
+00:00 +0 -1: ApiClient interceptor chain refreshes the token once on 401 and replays the original request
+00:00 +0 -2: ApiClient interceptor chain refreshes the token once on 401 and replays the original request [E]
+  Instance of 'ServerException'
+  package:flutter_starter/core/network/adapters/dio_network_client.dart 34:9  DioNetworkClient.send
+
+00:00 +0 -2: ApiClient interceptor chain stops the performance trace when a request fails
+00:00 +0 -3: ApiClient interceptor chain stops the performance trace when a request fails [E]
+  Expected: true
+    Actual: <false>
+
+  package:matcher                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18              expect
+  test/core/network/api_client_interceptor_chain_test.dart 290:7  main.<fn>.<fn>
+
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-adbd5524e56f1a01c/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain refreshes the token once on 401 and replays the original request
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-adbd5524e56f1a01c/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain retries a 503 through the assembled client (1 original + 3 retries) and still surfaces a domain ServerException
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-adbd5524e56f1a01c/test/core/network/api_client_interceptor_chain_test.dart: ApiClient interceptor chain stops the performance trace when a request fails

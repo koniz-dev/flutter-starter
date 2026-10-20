@@ -1,0 +1,17 @@
+# Criterion 4, continued: WHY e2e still fails, and why that is a different bug
+
+Setup Flutter, Setup Java, Install dependencies and Install Patrol CLI all
+pass. The failure is now inside 'Run Patrol tests':
+
+  Error: Patrol version 3.20.0 defined in your project is not compatible
+  with patrol_cli version 4.7.0.
+  This will prevent your tests from running correctly.
+  1. Downgrade patrol_cli ... dart pub global activate patrol_cli 3.11.0
+  2. Or upgrade both "patrol_cli" and "patrol" dependencies.
+
+NOTE: this is NOT the reason criterion 4 predicted. The issue expected a
+failure from the auth flow having no reachable API. The real blocker is a
+version incompatibility that occurs before any test executes, because
+e2e-android.yml runs 'dart pub global activate patrol_cli' unpinned while
+pubspec.yaml pins 'patrol: ^3.10.0'. Filed separately - not silently
+folded in here.

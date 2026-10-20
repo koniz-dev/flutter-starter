@@ -1,0 +1,6 @@
+# the same test on this branch
+00:00 +0: criterion 1: run_e2e_tests.sh and e2e-android.yml run the same target
+00:00 +1: All tests passed!
+
+scripts/test/run_e2e_tests.sh:29:patrol test -t integration_test/app_e2e_test.dart
+.github/workflows/e2e-android.yml:71:          script: bash -o pipefail -c 'patrol test --target integration_test/app_e2e_test.dart 2>&1 | tee patrol-output.log'

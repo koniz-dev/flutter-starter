@@ -1,0 +1,37 @@
+# gh run list --workflow coverage.yml -L 6 (before the fix, main at 2d17d1d802e)
+2026-10-12 schedule failure 38234700640
+2026-10-05 schedule failure 37293544113
+2026-09-28 schedule failure 36402759940
+2026-09-21 schedule success 35578463423
+2026-09-14 schedule success 34823139222
+2026-09-13 workflow_dispatch success 34739181878
+
+# run 38234700640: failed step(s)
+Enforce coverage thresholds: failure
+Upload to Codecov (Public): skipped
+
+# run 37293544113: failed step(s)
+Enforce coverage thresholds: failure
+Upload to Codecov (Public): skipped
+
+# run 38234700640: per-layer coverage and gates
+  Domain:       99.0%
+  Data:         97.1%
+  Presentation: 96.8%
+  Core:         92.8%
+✅ Total Coverage: 94.6% >= 80%
+❌ Domain Layer: 99.0% < 100%
+✅ Data Layer: 97.1% >= 90%
+✅ Presentation Layer: 96.8% >= 80%
+✅ Core Layer: 92.8% >= 80%
+
+# run 37293544113: per-layer coverage and gates
+  Domain:       99.0%
+  Data:         97.1%
+  Presentation: 96.9%
+  Core:         92.3%
+✅ Total Coverage: 94.3% >= 80%
+❌ Domain Layer: 99.0% < 100%
+✅ Data Layer: 97.1% >= 90%
+✅ Presentation Layer: 96.9% >= 80%
+✅ Core Layer: 92.3% >= 80%

@@ -1,0 +1,50 @@
+Criterion 3: context_extensions_test.dart still passes; count before and after
+
+BEFORE (commit 4a5f8f2). Test names, from the source:
+  7:    testWidgets('should get theme', (tester) async {
+  23:    testWidgets('should get textTheme', (tester) async {
+  39:    testWidgets('should get colorScheme', (tester) async {
+  55:    testWidgets('should get mediaQuery', (tester) async {
+  70:    testWidgets('should get screenSize', (tester) async {
+  85:    testWidgets('should get screenWidth', (tester) async {
+  101:    testWidgets('should get screenHeight', (tester) async {
+  117:    testWidgets('should detect mobile screen', (tester) async {
+  137:    testWidgets('should detect tablet screen', (tester) async {
+  157:    testWidgets('should detect desktop screen', (tester) async {
+  177:    testWidgets('should show snackbar', (tester) async {
+  202:    testWidgets('should show error snackbar', (tester) async {
+  227:    testWidgets('should show success snackbar', (tester) async {
+  252:    testWidgets('should navigate to route', (tester) async {
+  280:    testWidgets('should pop route', (tester) async {
+  count: 15
+
+Recorded run of the BEFORE file (captured before the edit):
+  00:01 +13: ContextExtensions should navigate to route
+  00:01 +14: ContextExtensions should pop route
+  00:01 +15: All tests passed!
+  => 15 tests, all passing
+
+AFTER (merged main, 134038d):
+$ flutter test test/shared/extensions/context_extensions_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-acb42ebcaa17cc6d9/test/shared/extensions/context_extensions_test.dart
+00:00 +0: ContextExtensions should get theme
+00:01 +1: ContextExtensions should get textTheme
+00:01 +2: ContextExtensions should get colorScheme
+00:01 +3: ContextExtensions should get mediaQuery
+00:01 +4: ContextExtensions should get screenSize
+00:01 +5: ContextExtensions should get screenWidth
+00:01 +6: ContextExtensions should get screenHeight
+00:01 +7: ContextExtensions should detect mobile screen
+00:02 +8: ContextExtensions should detect tablet screen
+00:02 +9: ContextExtensions should detect desktop screen
+00:02 +10: ContextExtensions should show snackbar
+00:02 +11: ContextExtensions should show error snackbar
+00:02 +12: ContextExtensions should show success snackbar
+00:02 +13: ContextExtensions context.pop() is unambiguous when go_router is also imported
+00:03 +14: All tests passed!
+  flutter test exit=0
+
+=> 15 before, 14 after.
+   Removed: 'should navigate to route' and 'should pop route' (the two
+            tests for the deleted members).
+   Added:   'context.pop() is unambiguous when go_router is also imported'.

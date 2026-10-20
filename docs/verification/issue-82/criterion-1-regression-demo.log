@@ -1,0 +1,119 @@
+Criterion 1 requires a unit test that "fails against the current
+implementation". This is the new test file run against the PRE-FIX helper -
+`git show fdf2832^:lib/core/accessibility/accessibility_helpers.dart` copied
+over the fixed one, run, then restored. Nothing was committed in that state.
+
+Result: 21 passed, 8 failed. Every one of the 8 failures is in the
+`alpha channel` group. All 5 tests in `opaque colours are scored exactly as
+before` PASS against the old implementation too - which is the point of
+criterion 2: those pins describe behaviour the fix did not touch, so they
+cannot be hiding a re-baselining.
+
+00:00 +0: loading test/core/accessibility/accessibility_helpers_test.dart
+00:00 +0: AccessibilityHelpers getContrastRatio returns high contrast for black on white
+00:00 +1: AccessibilityHelpers getContrastRatio returns low contrast for similar colors
+00:00 +2: AccessibilityHelpers getContrastRatio returns 1.0 for same color
+00:00 +3: AccessibilityHelpers alpha channel composites a translucent foreground over the background
+00:00 +3 -1: AccessibilityHelpers alpha channel composites a translucent foreground over the background [E]
+  Expected: a numeric value within <0.01> of <9.48>
+    Actual: <18.733663902900595>
+     Which:  differs by <9.253663902900595>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  test/core/accessibility/accessibility_helpers_test.dart 56:9  main.<fn>.<fn>.<fn>
+  
+00:00 +3 -1: AccessibilityHelpers alpha channel does not score a translucent colour as if it were opaque
+00:00 +3 -2: AccessibilityHelpers alpha channel does not score a translucent colour as if it were opaque [E]
+  Expected: a value less than <18.733663902900595>
+    Actual: <18.733663902900595>
+     Which: is not a value less than <18.733663902900595>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  test/core/accessibility/accessibility_helpers_test.dart 71:9  main.<fn>.<fn>.<fn>
+  
+00:00 +3 -2: AccessibilityHelpers alpha channel white70 clears AA on the dark scaffold, white24 does not
+00:00 +3 -3: AccessibilityHelpers alpha channel white70 clears AA on the dark scaffold, white24 does not [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  test/core/accessibility/accessibility_helpers_test.dart 81:9  main.<fn>.<fn>.<fn>
+  
+00:00 +3 -3: AccessibilityHelpers alpha channel AAA follows the composited ratio, not the opaque one
+00:00 +3 -4: AccessibilityHelpers alpha channel AAA follows the composited ratio, not the opaque one [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/core/accessibility/accessibility_helpers_test.dart 100:9  main.<fn>.<fn>.<fn>
+  
+00:00 +3 -4: AccessibilityHelpers alpha channel a fully transparent foreground is the background
+00:00 +3 -5: AccessibilityHelpers alpha channel a fully transparent foreground is the background [E]
+  Expected: a numeric value within <0.0001> of <1.0>
+    Actual: <18.733663902900595>
+     Which:  differs by <17.733663902900595>
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/core/accessibility/accessibility_helpers_test.dart 115:9  main.<fn>.<fn>.<fn>
+  
+00:00 +3 -5: AccessibilityHelpers alpha channel black54 on white composites instead of scoring 21:1
+00:00 +3 -6: AccessibilityHelpers alpha channel black54 on white composites instead of scoring 21:1 [E]
+  Expected: a numeric value within <0.01> of <4.61>
+    Actual: <21.0>
+     Which:  differs by <16.39>
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/core/accessibility/accessibility_helpers_test.dart 124:9  main.<fn>.<fn>.<fn>
+  
+00:00 +3 -6: AccessibilityHelpers alpha channel rejects a translucent background
+00:01 +3 -7: AccessibilityHelpers alpha channel rejects a translucent background [E]
+  Expected: throws <Instance of 'ArgumentError'>
+    Actual: <Closure: () => double>
+     Which: returned <18.733663902900595>
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/core/accessibility/accessibility_helpers_test.dart 129:9  main.<fn>.<fn>.<fn>
+  
+00:01 +3 -7: AccessibilityHelpers alpha channel rejects a translucent background through the AA/AAA wrappers
+00:01 +3 -8: AccessibilityHelpers alpha channel rejects a translucent background through the AA/AAA wrappers [E]
+  Expected: throws <Instance of 'ArgumentError'>
+    Actual: <Closure: () => bool>
+     Which: returned <true>
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/core/accessibility/accessibility_helpers_test.dart 141:9  main.<fn>.<fn>.<fn>
+  
+00:01 +3 -8: AccessibilityHelpers opaque colours are scored exactly as before light bodyLarge/labelLarge #212529 on the #F8F9FA scaffold is 14.63:1
+00:01 +4 -8: AccessibilityHelpers opaque colours are scored exactly as before light bodyMedium #5A6268 on the #F8F9FA scaffold is 5.89:1
+00:01 +5 -8: AccessibilityHelpers opaque colours are scored exactly as before button label #FFFFFF on the #0069D9 fill is 5.22:1
+00:01 +6 -8: AccessibilityHelpers opaque colours are scored exactly as before dark bodyMedium #ADB5BD on the #121212 scaffold is 9.03:1
+00:01 +7 -8: AccessibilityHelpers opaque colours are scored exactly as before dark appBar label #FFFFFF on the #1E1E1E bar is 16.67:1
+00:01 +8 -8: AccessibilityHelpers meetsContrastRatioAA returns true for black on white
+00:01 +9 -8: AccessibilityHelpers meetsContrastRatioAA returns false for low contrast combinations
+00:01 +10 -8: AccessibilityHelpers meetsContrastRatioAALarge returns true for black on white
+00:01 +11 -8: AccessibilityHelpers meetsContrastRatioAALarge allows lower contrast for large text
+00:01 +12 -8: AccessibilityHelpers getAccessibleTextColor returns black for light backgrounds
+00:01 +13 -8: AccessibilityHelpers getAccessibleTextColor returns white for dark backgrounds
+00:01 +14 -8: AccessibilityHelpers getButtonSemanticLabel returns base label when no state provided
+00:01 +15 -8: AccessibilityHelpers getButtonSemanticLabel includes loading state
+00:01 +16 -8: AccessibilityHelpers getButtonSemanticLabel includes disabled state
+00:01 +17 -8: AccessibilityHelpers getButtonSemanticLabel includes all states
+00:01 +18 -8: AccessibilityHelpers getButtonSemanticLabel state words follow the supplied locale
+00:01 +19 -8: AccessibilityHelpers getProgressSemanticValue formats percentage correctly
+00:01 +20 -8: AccessibilityHelpers getProgressSemanticValue follows the supplied locale
+00:01 +21 -8: Some tests failed.
+
+Failing tests:
+  test/core/accessibility/accessibility_helpers_test.dart: AccessibilityHelpers alpha channel AAA follows the composited ratio, not the opaque one
+  test/core/accessibility/accessibility_helpers_test.dart: AccessibilityHelpers alpha channel a fully transparent foreground is the background
+  test/core/accessibility/accessibility_helpers_test.dart: AccessibilityHelpers alpha channel black54 on white composites instead of scoring 21:1
+  test/core/accessibility/accessibility_helpers_test.dart: AccessibilityHelpers alpha channel composites a translucent foreground over the background
+  ... and 4 more

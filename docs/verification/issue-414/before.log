@@ -1,0 +1,63 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart
+00:00 +0: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Không thể kết nối tới máy chủ. Hãy kiểm tra
+kết nối và thử lại.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.expectLocalizedOnly (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart:67:5)
+#5      main.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart:82:5)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart line 67
+The test description was:
+  criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport
+  text
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -1: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text [E]
+  Test failed. See exception logs above.
+  The test description was: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text
+  
+00:02 +0 -1: RegisterScreen in vi renders it the same way
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Không thể kết nối tới máy chủ. Hãy kiểm tra
+kết nối và thử lại.": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.expectLocalizedOnly (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart:67:5)
+#5      main.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart:97:5)
+<asynchronous suspension>
+#6      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#7      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart line 67
+The test description was:
+  RegisterScreen in vi renders it the same way
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -2: RegisterScreen in vi renders it the same way [E]
+  Test failed. See exception logs above.
+  The test description was: RegisterScreen in vi renders it the same way
+  
+00:02 +0 -2: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart: RegisterScreen in vi renders it the same way
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt414/test/features/auth/presentation/screens/auth_localized_error_test.dart: criterion 2: LoginScreen in vi renders the localized CONNECTION_ERROR message, not the transport text

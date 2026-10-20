@@ -1,0 +1,23 @@
+$ flutter test test/core/routing/navigation_extensions_test.dart --reporter expanded
+
+[... 96 lines of `flutter pub get` version chatter elided ...]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/core/routing/navigation_extensions_test.dart
+00:00 +0: NavigationExtensions destinations goToHome navigates an authenticated user to home
+00:03 +1: NavigationExtensions destinations goToLogin navigates an unauthenticated user to login
+00:06 +2: NavigationExtensions destinations goToRegister navigates an unauthenticated user to register
+00:06 +3: NavigationExtensions push and replace pushRoute stacks the new route on the current one
+00:07 +4: NavigationExtensions push and replace pushRoute carries extra through to the pushed route
+00:07 +5: NavigationExtensions push and replace pushNamedRoute resolves the route name
+00:07 +6: NavigationExtensions push and replace pushNamedRoute appends query parameters
+00:08 +7: NavigationExtensions push and replace replaceRoute swaps the top route without growing the stack
+00:08 +8: NavigationExtensions push and replace replaceNamedRoute swaps the top route by name
+00:09 +9: NavigationExtensions pop popRoute returns to the previous route
+00:09 +10: NavigationExtensions pop popRoute hands the result back to the pusher
+00:10 +11: NavigationExtensions pop popUntilRoute stops at the target instead of emptying the stack
+00:10 +12: NavigationExtensions pop popUntilRoute pops nothing when already on the target
+00:11 +13: NavigationExtensions pop canPopRoute reports true once a route is pushed
+00:11 +14: NavigationExtensions pop canPopRoute reports false at the bottom of the stack
+00:11 +15: NavigationExtensions pop popOrGoToHome pops when there is something to pop
+00:11 +16: NavigationExtensions pop popOrGoToHome goes home when the stack is empty
+00:12 +17: All tests passed!
+exit: 0

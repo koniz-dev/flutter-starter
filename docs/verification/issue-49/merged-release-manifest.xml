@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest android:versionCode="1" android:versionName="1.0.0" android:compileSdkVersion="36" android:compileSdkVersionCodename="16" package="com.example.flutter_starter" platformBuildVersionCode="36" platformBuildVersionName="16">
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="36">
+    </uses-sdk>
+    <uses-permission android:name="android.permission.INTERNET">
+    </uses-permission>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT">
+            </action>
+            <data android:mimeType="text/plain">
+            </data>
+        </intent>
+        <package android:name="com.huawei.hwid">
+        </package>
+        <intent>
+            <action android:name="android.intent.action.MAIN">
+            </action>
+        </intent>
+    </queries>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE">
+    </uses-permission>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC">
+    </uses-permission>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT">
+    </uses-permission>
+    <permission android:name="com.example.flutter_starter.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" android:protectionLevel="0x2">
+    </permission>
+    <uses-permission android:name="com.example.flutter_starter.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION">
+    </uses-permission>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES">
+    </uses-permission>
+    <application android:label="flutter_starter" android:icon="@0x7f0d0000" android:name="android.app.Application" android:extractNativeLibs="false" android:appComponentFactory="androidx.core.app.CoreComponentFactory">
+        <activity android:theme="@0x7f0f00a2" android:name="com.example.flutter_starter.MainActivity" android:exported="true" android:taskAffinity="" android:launchMode="1" android:configChanges="0x40003fb4" android:windowSoftInputMode="0x10" android:hardwareAccelerated="true">
+            <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@0x7f0f00a3">
+            </meta-data>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN">
+                </action>
+                <category android:name="android.intent.category.LAUNCHER">
+                </category>
+            </intent-filter>
+        </activity>
+        <meta-data android:name="flutterEmbedding" android:value="2">
+        </meta-data>
+        <activity android:theme="@0x01030010" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false">
+        </activity>
+        <meta-data android:name="com.google.android.gms.version" android:value="@0x7f0a0004">
+        </meta-data>
+        <uses-library android:name="androidx.window.extensions" android:required="false">
+        </uses-library>
+        <uses-library android:name="androidx.window.sidecar" android:required="false">
+        </uses-library>
+        <provider android:name="androidx.startup.InitializationProvider" android:exported="false" android:authorities="com.example.flutter_starter.androidx-startup">
+            <meta-data android:name="androidx.lifecycle.ProcessLifecycleInitializer" android:value="androidx.startup">
+            </meta-data>
+            <meta-data android:name="androidx.profileinstaller.ProfileInstallerInitializer" android:value="androidx.startup">
+            </meta-data>
+        </provider>
+        <receiver android:name="androidx.profileinstaller.ProfileInstallReceiver" android:permission="android.permission.DUMP" android:enabled="true" android:exported="true" android:directBootAware="false">
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE">
+                </action>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SKIP_FILE">
+                </action>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE">
+                </action>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION">
+                </action>
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

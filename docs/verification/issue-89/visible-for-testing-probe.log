@@ -1,0 +1,44 @@
+# Criterion 4: which option was available, and which was chosen.
+#
+# Question: does `@visibleForTesting` actually do anything on a NAMED
+# CONSTRUCTOR PARAMETER? Answer: yes. Two throwaway libraries under lib/,
+# one declaring an annotated parameter and one calling it from
+# production code, draw the warning:
+
+$ flutter analyze lib/tmp_probe89.dart lib/tmp_probe89_use.dart
+Analyzing 2 items...                                            
+
+warning • The member 'retryDioFactory' can only be used within 'package:flutter_starter/tmp_probe89.dart' or a test • lib/tmp_probe89_use.dart:5:45 • invalid_use_of_visible_for_testing_member
+
+1 issue found. (ran in 0.9s)
+
+# So the annotation was NOT declined out of ignorance. It was declined
+# because applying it would edit
+# lib/core/network/interceptors/auth_interceptor.dart - epic:core-network,
+# not epic:docs, and concurrently worked - and because it would forbid the
+# parameter to forks that legitimately want to control the replay client.
+# The chosen option is the second one the issue offers: document it in
+# network.md as a supported extension point with the re-entrancy caveat.
+# See the "retryDioFactory" section of docs/api/core/network.md.
+
+=== lib/tmp_probe89.dart ===
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+
+/// Probe: does `@visibleForTesting` on a named constructor parameter work?
+class Probe {
+  /// Creates a probe.
+  Probe({@visibleForTesting Dio Function()? retryDioFactory})
+    : _retryDioFactory = retryDioFactory;
+
+  final Dio Function()? _retryDioFactory;
+
+  /// Exposes the factory.
+  Dio Function()? get retryDioFactory => _retryDioFactory;
+}
+=== lib/tmp_probe89_use.dart ===
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/tmp_probe89.dart';
+
+/// Production-side use, from a different library than the declaration.
+Probe buildProbeFromOtherLibrary() => Probe(retryDioFactory: Dio.new);

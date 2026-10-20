@@ -1,0 +1,14 @@
+# new '#314' tests against main's lib/core/network/interceptors/auth_interceptor.dart
+00:00 +0: a throwing token store fails the request instead of stranding it criteria 1-2: an Exception completes the call within 1s with no uncaught zone error
+Cache credential check error: Exception: keystore unavailable
+00:01 +0 -1: a throwing token store fails the request instead of stranding it criteria 1-2: an Exception completes the call within 1s with no uncaught zone error [E]
+  Expected: not <Instance of 'TimeoutException'>
+    Actual: TimeoutException:<TimeoutException after 0:00:01.000000: Future not completed>
+  the call must complete, not hang
+00:01 +0 -1: a throwing token store fails the request instead of stranding it criteria 1-2: an Error completes the call within 1s with no uncaught zone error
+Cache credential check error: Bad state: keystore unavailable
+00:02 +0 -2: a throwing token store fails the request instead of stranding it criteria 1-2: an Error completes the call within 1s with no uncaught zone error [E]
+  Expected: not <Instance of 'TimeoutException'>
+    Actual: TimeoutException:<TimeoutException after 0:00:01.000000: Future not completed>
+  the call must complete, not hang
+00:02 +0 -2: Some tests failed.

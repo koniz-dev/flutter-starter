@@ -1,0 +1,20 @@
+$ flutter test --reporter expanded <the two seam tests>
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/feature_flags/data/datasources/feature_flags_local_datasource_keyvalue_seam_test.dart: FeatureFlagsLocalDataSourceImpl on a bare IKeyValueStore writes an override and reads it back
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart: TasksLocalDataSourceImpl on a bare IKeyValueStore writes a task and reads it back
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart: TasksLocalDataSourceImpl on a bare IKeyValueStore writes a task and reads it back
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart: TasksLocalDataSourceImpl on a bare IKeyValueStore writes a task and reads it back
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart: TasksLocalDataSourceImpl on a bare IKeyValueStore persists under the unchanged tasks_data key
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart: TasksLocalDataSourceImpl on a bare IKeyValueStore deleteAllTasks removes the key
+00:00 +6: All tests passed!
+SEAM_EXIT=0
+
+--- proof the fakes never touch SharedPreferences or a platform channel ---
+$ grep -rn "SharedPreferences\|setMockInitialValues\|StorageService" <the two seam tests>
+test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart:4:/// `StorageService`, there is no `SharedPreferences.setMockInitialValues`, and
+test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart:29:        description: 'No SharedPreferences involved',
+test/features/tasks/data/datasources/tasks_local_datasource_keyvalue_seam_test.dart:40:      expect(all.single.description, 'No SharedPreferences involved');
+test/features/feature_flags/data/datasources/feature_flags_local_datasource_keyvalue_seam_test.dart:5:/// `StorageService`, there is no `SharedPreferences.setMockInitialValues`, and
+
+$ grep -n "class InMemoryKeyValueStore" test/helpers/in_memory_stores.dart
+131:class InMemoryKeyValueStore implements IKeyValueStore {

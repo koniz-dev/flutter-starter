@@ -1,0 +1,38 @@
+# main 9eb614d0655, before the fix
+# criterion 1: environment-dependent test only (the module tests need the new parameter)
+## flutter test (development)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/zz_route_gate_probe_test.dart
+00:00 +0: the app route tree in this run matches the environment (development)
+VP environment=development enableDebugFeatures=true top-level paths=[/login, /register, /tasks, :taskId, /feature-flags-debug, /]
+00:00 +1: All tests passed!
+## flutter test --dart-define=ENVIRONMENT=production
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/zz_route_gate_probe_test.dart
+00:00 +0: the app route tree in this run matches the environment (production)
+VP environment=production enableDebugFeatures=false top-level paths=[/login, /register, /tasks, :taskId, /feature-flags-debug, /]
+00:00 +0 -1: the app route tree in this run matches the environment (production) [E]
+  Expected: not contains '/feature-flags-debug'
+    Actual: ['/login', '/register', '/tasks', ':taskId', '/feature-flags-debug', '/']
+00:00 +0 -1: Some tests failed.
+
+# criterion 2: flutter test test/core/config/enable_toggles_have_readers_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart
+00:00 +0: the guide documents the ENABLE_* toggles
+00:00 +1: ENABLE_LOGGING: has a reader of AppConfig.enableLogging
+00:00 +2: ENABLE_ANALYTICS: has a reader of AppConfig.enableAnalytics
+00:00 +2 -1: ENABLE_ANALYTICS: has a reader of AppConfig.enableAnalytics [E]
+  Expected: non-empty
+    Actual: []
+  nothing outside lib/core/config reads AppConfig.enableAnalytics, so ENABLE_ANALYTICS does nothing; wire it or mark its row "Reserved" in docs/guides/configuration.md
+00:00 +2 -1: ENABLE_CRASH_REPORTING: has a reader of AppConfig.enableCrashReporting
+00:00 +2 -2: ENABLE_CRASH_REPORTING: has a reader of AppConfig.enableCrashReporting [E]
+  Expected: non-empty
+    Actual: []
+  nothing outside lib/core/config reads AppConfig.enableCrashReporting, so ENABLE_CRASH_REPORTING does nothing; wire it or mark its row "Reserved" in docs/guides/configuration.md
+00:00 +2 -2: ENABLE_PERFORMANCE_MONITORING: has a reader of AppConfig.enablePerformanceMonitoring
+00:00 +3 -2: ENABLE_DEBUG_FEATURES: has a reader of AppConfig.enableDebugFeatures
+00:00 +3 -3: ENABLE_DEBUG_FEATURES: has a reader of AppConfig.enableDebugFeatures [E]
+  Expected: non-empty
+    Actual: []
+  nothing outside lib/core/config reads AppConfig.enableDebugFeatures, so ENABLE_DEBUG_FEATURES does nothing; wire it or mark its row "Reserved" in docs/guides/configuration.md
+00:00 +3 -3: ENABLE_HTTP_LOGGING: has a reader of AppConfig.enableHttpLogging
+00:00 +4 -3: Some tests failed.

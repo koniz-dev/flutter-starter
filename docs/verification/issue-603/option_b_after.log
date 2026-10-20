@@ -1,0 +1,3 @@
+# HEAD, renamed to my_app with Option B step 2
+$ flutter test test/docs/i18n_guide_snippets_test.dart test/docs/testing_guide_snippets_test.dart
+00:19 +6: All tests passed!

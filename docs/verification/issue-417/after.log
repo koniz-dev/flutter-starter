@@ -1,0 +1,7 @@
+# after the fix: flutter test test/core/storage/migration/fresh_install_no_language_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/fresh_install_no_language_test.dart
+00:00 +0: a fresh boot writes no language key to either store
+VM versions={regular: 2, secure: 2} prefs={_storage_version: 2, sync_interval_minutes: 15} keychain={_storage_version: 2, sync_interval_minutes: 15}
+00:00 +1: a language the user did choose survives the migration
+00:00 +2: after a fresh boot, a vi device resolves to vi (#324 + #417)
+00:00 +3: All tests passed!

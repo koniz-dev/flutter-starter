@@ -1,0 +1,12 @@
+# Criterion 1: announced scope vs the paths= array (must be identical)
+
+$ grep -n 'paths=' scripts/dev/format_dart.sh
+17:paths=(lib test integration_test tool examples)
+
+$ ./scripts/dev/format_dart.sh --print-paths
+lib test integration_test tool examples
+
+$ ./scripts/dev/audit_template.sh 2>&1 | head -1
+==> format (lib test integration_test tool examples)
+
+Identical: the echo is now derived from --print-paths, not retyped.

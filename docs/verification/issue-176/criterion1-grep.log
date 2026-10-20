@@ -1,0 +1,23 @@
+# Criterion 1 - package:dio appears outside lib/core/network/ exactly once.
+
+$ git log --oneline -1
+07c8f27 refactor(network): type ApiClient's public surface on NetworkResponse (#191)
+
+$ grep -rn "package:dio" lib | grep -v "^lib/core/network/"
+lib/core/errors/dio_exception_mapper.dart:1:import 'package:dio/dio.dart';
+exit: 0
+
+# One line, and it is the designated mapper.
+
+# For contrast, the imports that are allowed (inside lib/core/network/):
+$ grep -rln "package:dio" lib/core/network/
+lib/core/network/interceptors/api_logging_interceptor.dart
+lib/core/network/interceptors/auth_interceptor.dart
+lib/core/network/interceptors/performance_interceptor.dart
+lib/core/network/interceptors/retry_interceptor.dart
+lib/core/network/interceptors/cache_interceptor.dart
+lib/core/network/interceptors/error_interceptor.dart
+lib/core/network/ssl_pinning.dart
+lib/core/network/adapters/shared_transport_adapter.dart
+lib/core/network/adapters/dio_network_client.dart
+lib/core/network/api_client.dart

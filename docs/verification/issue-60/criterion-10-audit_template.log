@@ -1,0 +1,15 @@
+$ ./scripts/dev/audit_template.sh
+
+1:==> format (lib test integration_test tool examples)
+3:==> flutter analyze
+6:==> flutter test
+
+[full output trimmed: gate headers plus the final result line]
+
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+05:16 +2345 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/main_test.dart: HomeScreen should create HomeScreen widget
+05:16 +2346 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/main_test.dart: HomeScreen should display welcome message
+05:16 +2347 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/main_test.dart: HomeScreen should have app bar with title
+05:17 +2348 ~5: All tests passed!
+
+exit: 0

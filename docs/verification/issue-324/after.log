@@ -1,0 +1,8 @@
+# after the fix: flutter test test/core/localization/device_locale_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/localization/device_locale_test.dart
+00:00 +0: criterion 1: an empty preference follows the device a vi_VN device renders the home screen in Vietnamese
+00:01 +1: criterion 1: an empty preference follows the device the first supported language in the device list wins
+00:01 +2: criterion 2: a stored preference still wins stored es on a vi device renders Spanish
+00:01 +3: criterion 3: an unsupported device language falls back a ja_JP device renders the fallback, English
+00:01 +4: criterion 3: an unsupported device language falls back deviceLocale resolves against the supported list
+00:01 +5: All tests passed!

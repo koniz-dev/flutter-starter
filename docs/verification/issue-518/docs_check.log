@@ -1,0 +1,9 @@
+Running build hooks...Running build hooks...links: checked 743 relative link(s) in 140 file(s); 0 broken
+emoji: scanned 72 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+symbols: checked 25 directive(s); 0 unresolved
+env runs: scanned 69 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 68 file(s) against 16 known key(s); 0 unknown
+
+OK: documentation checks passed.
+exit=0

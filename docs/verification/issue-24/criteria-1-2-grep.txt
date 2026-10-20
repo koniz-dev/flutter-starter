@@ -1,0 +1,17 @@
+# Criteria 1 and 2: invalid key gone, channel pins preserved
+
+$ grep -rn "flutter-version: 'stable'" .github/workflows/
+(no matches)
+
+$ grep -c "channel: 'stable'" .github/workflows/*.yml
+.github/workflows/coverage.yml:1
+.github/workflows/deploy-ios.yml:1
+.github/workflows/ci.yml:1
+.github/workflows/deploy-android.yml:1
+.github/workflows/build.yml:3
+.github/workflows/deploy-web.yml:3
+.github/workflows/strip-smoke.yml:1
+.github/workflows/e2e-android.yml:1
+
+Counts match the pre-fix values: build 3, deploy-web 3, and 1 each for
+ci, coverage, deploy-android, deploy-ios, e2e-android, strip-smoke.

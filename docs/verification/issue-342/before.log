@@ -1,0 +1,5 @@
+# scripts/test/release_scripts_test.sh with main's scripts/ci/bump_version.sh
+FAIL  bump_version.sh patch keeps the version line's trailing comment, got: version: 1.2.4+5
+ok    bump_version.sh patch on a line with no comment adds nothing
+FAIL  bump_version.sh keeps the comment's spacing exactly, got: version: 1.2.4
+2 release-script test(s) failed.

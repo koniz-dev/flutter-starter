@@ -1,0 +1,15 @@
+run 1: 01:48 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+run 1: 01:48 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+run 1: 01:48 +2812 ~8: All tests passed!
+run 2: 01:47 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+run 2: 01:47 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+run 2: 01:47 +2812 ~8: All tests passed!
+run 3: 01:54 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+run 3: 01:54 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+run 3: 01:54 +2812 ~8: All tests passed!
+run 4: 01:48 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+run 4: 01:48 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+run 4: 01:48 +2812 ~8: All tests passed!
+run 5: 01:50 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+run 5: 01:50 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+run 5: 01:50 +2812 ~8: All tests passed!

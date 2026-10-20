@@ -1,0 +1,14 @@
+diff --git a/lib/main.dart b/lib/main.dart
+index 1b8dc35..674703c 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -86,6 +86,9 @@ Future<void> main() async {
+     // the restore-in-flight state in production.
+     await container.read(sessionRestorationProvider.future);
+ 
++    throw Exception('MUTATION A: every boot takes the failure branch');
++
++    // ignore: dead_code
+     final localizationService = container.read(localizationServiceProvider);
+     final savedLocale = await localizationService.getCurrentLocale();
+     container.read(localeStateProvider.notifier).locale = savedLocale;

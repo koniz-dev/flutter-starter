@@ -1,0 +1,8 @@
+# env_guard_before_build_test.dart against main's build.yml
+00:00 +0 -1: criterion 2: every flutter build in .github/workflows follows the guard in its job [E]
+  .github/workflows/build.yml:94: flutter build apk --debug 2>&1 | tee build-apk.log
+  .github/workflows/build.yml:157: flutter build apk \
+  .github/workflows/build.yml:212: flutter build ios \
+  .github/workflows/build.yml:244: flutter build web \
+00:00 +0 -2: criterion 1: build.yml runs the guard in each job that builds [E]
+00:00 +1 -2: Some tests failed.

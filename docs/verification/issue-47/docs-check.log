@@ -1,0 +1,21 @@
+341:- Redacts sensitive header keys (`authorization`, `cookie`, `set-cookie`, `x-api-key`) and common secret fields in JSON bodies (see `_sanitizeHeaders` / `_sanitizeJson` in the source file)
+342:- Header matching is **case-insensitive**: dio stores headers in a case-insensitive map that preserves the caller's original casing, so the `Authorization` key written by `AuthInterceptor` is redacted just like a lowercase `authorization`
+115:  static const _sensitiveHeaderKeys = <String>{
+116-    'authorization',
+117-    'cookie',
+118-    'set-cookie',
+119-    'x-api-key',
+120-  };
+121-
+122-  /// Sanitize headers to remove sensitive information
+123-  Map<String, dynamic> _sanitizeHeaders(Map<String, dynamic> headers) {
+--
+128:          _sensitiveHeaderKeys.contains(entry.key.trim().toLowerCase())
+129-          ? '***REDACTED***'
+130-          : entry.value;
+131-    }
+132-
+133-    return sanitized;
+134-  }
+135-
+136-  /// Sanitize request/response body to remove sensitive information

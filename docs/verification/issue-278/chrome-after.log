@@ -1,0 +1,28 @@
+# branch: Chrome with BASE_URL supplied (criterion 3)
+  custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+  win32 5.15.0 (6.4.0 available)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/dart_defines_test.dart
+00:00 +0: DartDefines lookup returns the compile-time value for a known key
+00:00 +1: DartDefines lookup returns the empty string for an unknown key
+00:00 +2: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:00 +3: dart-define mechanism every fromEnvironment call in lib/ takes a string literal
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~1: dart-define mechanism env_config.dart contains no fromEnvironment call at all
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~2: dart-define mechanism dart_defines.dart declares the table as const
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~3: dart-define mechanism no dart-define read is skipped on web
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~4: key coverage every .env.example key has a DartDefines entry
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~5: key coverage every DartDefines entry is documented in .env.example
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~6: key coverage ENVIRONMENT and BASE_URL are covered
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~7: key coverage every key EnvConfig is asked for in lib/ has an entry
+  Skip: reads source files through dart:io; run on the VM
+00:00 +3 ~8: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:00 +4 ~8: end-to-end with a supplied --dart-define pinning defines reach AppConfig, and web never reports pinning effective
+  Skip: run with --dart-define=ENABLE_SSL_PINNING=true and API_SSL_FINGERPRINTS=<sha256> to exercise this
+00:00 +4 ~9: All tests passed!

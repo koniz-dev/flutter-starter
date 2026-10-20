@@ -1,0 +1,12 @@
+# probe doc docs/zz_probe554.md with UserModel.fromJson (exists) and UserModel.toEntity (does not)
+
+## main's tool/doc_symbols.dart (the dotted directives do not even parse, so they are silently skipped)
+exit=0
+symbols: checked 36 directive(s); 0 unresolved
+OK: documentation checks passed.
+
+## this branch
+exit=1
+docs/zz_probe554.md:4: `UserModel.toEntity` is not declared in lib/features/auth/data/models/user_model.dart
+symbols: checked 38 directive(s); 1 unresolved
+1 problem(s) found.

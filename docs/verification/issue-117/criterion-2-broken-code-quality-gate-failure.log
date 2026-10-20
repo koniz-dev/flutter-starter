@@ -1,0 +1,10 @@
+Quality gate	Verify formatting	2026-09-25T13:08:37.6333277Z ##[group]Run dart format --set-exit-if-changed lib test integration_test tool examples
+Quality gate	Verify formatting	2026-09-25T13:08:37.6333965Z ^[[36;1mdart format --set-exit-if-changed lib test integration_test tool examples^[[0m
+Quality gate	Verify formatting	2026-09-25T13:08:37.6398398Z shell: /usr/bin/bash -e {0}
+Quality gate	Verify formatting	2026-09-25T13:08:37.6398697Z env:
+Quality gate	Verify formatting	2026-09-25T13:08:37.6399061Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+Quality gate	Verify formatting	2026-09-25T13:08:37.6399631Z   PUB_CACHE: /home/runner/.pub-cache
+Quality gate	Verify formatting	2026-09-25T13:08:37.6399926Z ##[endgroup]
+Quality gate	Verify formatting	2026-09-25T13:08:38.6932633Z Formatted tool/ci_probe_bad_format.dart
+Quality gate	Verify formatting	2026-09-25T13:08:38.7322516Z Formatted 356 files (1 changed) in 1.07 seconds.
+Quality gate	Verify formatting	2026-09-25T13:08:38.7407838Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,52 @@
+# main f8275fce536, before the fix
+## flutter test test/core/config/env_typed_getters_test.dart --dart-define=ENABLE_SSL_PINNING=true --dart-define=API_CONNECT_TIMEOUT=60 --dart-define=API_TIMEOUT=2.5
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/env_typed_getters_test.dart
+00:00 +0: criterion 1: a .env without the key falls through to the define getBool
+00:00 +0 -1: criterion 1: a .env without the key falls through to the define getBool [E]
+  Expected: true
+    Actual: <false>
+00:00 +0 -1: criterion 1: a .env without the key falls through to the define getInt
+00:00 +0 -2: criterion 1: a .env without the key falls through to the define getInt [E]
+  Expected: <60>
+    Actual: <10>
+00:00 +0 -2: criterion 1: a .env without the key falls through to the define getDouble
+00:00 +0 -3: criterion 1: a .env without the key falls through to the define getDouble [E]
+  Expected: <2.5>
+    Actual: <0.0>
+00:00 +0 -3: criterion 1: a .env without the key falls through to the define a key in neither source still gets the default
+00:00 +1 -3: the .env still wins when it has the key over the define
+00:00 +2 -3: criterion 2: .env booleans parse the way the doc says "true" is true
+00:00 +3 -3: criterion 2: .env booleans parse the way the doc says "TRUE" is true
+00:00 +4 -3: criterion 2: .env booleans parse the way the doc says "1" is true
+00:00 +5 -3: criterion 2: .env booleans parse the way the doc says "yes" is true
+00:00 +5 -4: criterion 2: .env booleans parse the way the doc says "yes" is true [E]
+  Expected: true
+    Actual: <false>
+00:00 +5 -4: criterion 2: .env booleans parse the way the doc says "Yes" is true
+00:00 +5 -5: criterion 2: .env booleans parse the way the doc says "Yes" is true [E]
+  Expected: true
+    Actual: <false>
+00:00 +5 -5: criterion 2: .env booleans parse the way the doc says "on" is true
+00:00 +5 -6: criterion 2: .env booleans parse the way the doc says "on" is true [E]
+  Expected: true
+    Actual: <false>
+00:00 +5 -6: criterion 2: .env booleans parse the way the doc says "ON" is true
+00:00 +5 -7: criterion 2: .env booleans parse the way the doc says "ON" is true [E]
+  Expected: true
+    Actual: <false>
+00:00 +5 -7: criterion 2: .env booleans parse the way the doc says "false" is false
+00:00 +6 -7: criterion 2: .env booleans parse the way the doc says "0" is false
+00:00 +7 -7: criterion 2: .env booleans parse the way the doc says "no" is false
+00:00 +7 -8: criterion 2: .env booleans parse the way the doc says "no" is false [E]
+  Expected: false
+    Actual: <true>
+00:00 +7 -8: criterion 2: .env booleans parse the way the doc says "off" is false
+00:00 +7 -9: criterion 2: .env booleans parse the way the doc says "off" is false [E]
+  Expected: false
+    Actual: <true>
+00:00 +7 -9: criterion 2: .env booleans parse the way the doc says "nonsense" is false
+00:00 +7 -10: criterion 2: .env booleans parse the way the doc says "nonsense" is false [E]
+  Expected: false
+    Actual: <true>
+00:00 +7 -10: (tearDownAll)
+00:00 +7 -10: Some tests failed.

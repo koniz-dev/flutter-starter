@@ -1,0 +1,53 @@
+# Standing guards that this change had to leave intact
+# main @ 5c7603e
+
+## koniz-dev/flutter-starter#89 doc signatures + link/anchor/emoji checks
+$ dart run tool/check_docs.dart
+Running build hooks...Running build hooks...links: checked 709 relative link(s) in 112 file(s); 0 broken
+emoji: scanned 71 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+
+OK: documentation checks passed.
+exit=0
+
+## koniz-dev/flutter-starter#118 epic-coverage guard (no lib/ surface unclaimed or double-claimed)
+$ dart run tool/check_epic_coverage.dart
+Running build hooks...Running build hooks...Epic coverage OK: every tracked surface maps to one epic.
+exit=0
+
+## koniz-dev/flutter-starter#118 + #175 guards as tests
+$ flutter test test/tooling/epic_coverage_test.dart test/tooling/import_rules_test.dart --reporter compact
+00:02 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes                                       
+00:02 +32: All tests passed!                                                                                                                                                                           
+exit=0
+
+## koniz-dev/flutter-starter#146 UTC/Z timestamp contract in TaskModel - untouched by this change
+$ git show 5c7603e --stat --format= | grep -c task_model.dart
+0
+(0 = TaskModel was not edited)
+$ flutter test test/features/tasks/data/models/ --reporter compact
+00:02 +32: TaskModel Timezone-safe timestamps an unparseable or absent timestamp is rejected                                                                                                           
+00:02 +32: All tests passed!                                                                                                                                                                           
+exit=0
+
+## Invariant 3 - commits link, never close
+$ ./scripts/dev/check_issue_refs.sh --range 0e397bf..5c7603e
+Commits in 0e397bf..5c7603e
+  ok    5c7603e3 refactor(tasks): one layer owns the modification stamp, and the dead tasks contract goes (#214)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+exit=0
+
+## No `flutter pub get` churn was committed
+
+`flutter pub get` rewrites `analysis_options.yaml`, `pubspec.lock` and four
+`*.xcconfig` files as a side effect. None of them is in the merged commit:
+
+$ git show 5c7603e --stat --format= | grep -E 'analysis_options|xcconfig|pubspec.lock|Podfile'
+
+exit=1  (1 = no such path in the commit = PASS)
+
+$ git show 5c7603e --stat --format= | tail -3
+ .../providers/tasks_provider_test.dart             |  76 +++++++++++++
+ .../screens/task_detail_screen_test.dart           |  76 +++++++++++++
+ 14 files changed, 359 insertions(+), 199 deletions(-)

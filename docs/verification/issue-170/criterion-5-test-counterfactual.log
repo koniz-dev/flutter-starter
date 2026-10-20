@@ -1,0 +1,40 @@
+The new acceptance cases run against the PRE-FIX guard (main at 75c8d1d),
+imported as tool/cf170_before.dart by a temporary test file. Neither file is
+committed; both were deleted after this run. All three cases fail here. Against
+the merged fix the same assertions pass - see tests.log.
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a2587b89a76273dd4/test/tooling/cf170_before_test.dart
+00:00 +0: an ack naming .env.example does not also cover a real .env
+00:00 +0 -1: an ack naming .env.example does not also cover a real .env [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/cf170_before_test.dart 48:5            main.<fn>
+  
+00:00 +0 -1: prose that merely mentions a file does not acknowledge it
+00:00 +0 -2: prose that merely mentions a file does not acknowledge it [E]
+  Expected: ['assets/config/.env', 'assets/config/.env.web']
+    Actual: MappedIterable<BundledSecretAsset, String>:[]
+     Which: at location [0] is MappedIterable<BundledSecretAsset, String>:[] which shorter than expected
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/cf170_before_test.dart 62:5            main.<fn>
+  
+00:00 +0 -2: matches the acknowledged name case-insensitively
+00:00 +0 -3: matches the acknowledged name case-insensitively [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/cf170_before_test.dart 79:5            main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a2587b89a76273dd4/test/tooling/cf170_before_test.dart: an ack naming .env.example does not also cover a real .env
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a2587b89a76273dd4/test/tooling/cf170_before_test.dart: matches the acknowledged name case-insensitively
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a2587b89a76273dd4/test/tooling/cf170_before_test.dart: prose that merely mentions a file does not acknowledge it

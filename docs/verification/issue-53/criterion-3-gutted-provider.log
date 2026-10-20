@@ -1,0 +1,92 @@
+# Criterion 3: the rewritten storageInitializationProvider tests bite
+
+Mutation applied to lib/core/di/providers.dart on top of merged main
+(commit 08cad8d), then reverted:
+
+    final storageInitializationProvider = FutureProvider<void>((ref) async {});
+
+That is exactly the demonstration the issue describes: "replace the entire body
+of storageInitializationProvider in lib/core/di/providers.dart:82 with
+`async {}`. All five tests still pass." Output of the rewritten tests under the
+same mutation follows.
+
+$ flutter test --timeout=90s test/core/di/providers_test.dart
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a334023fbf2e73cfb/test/core/di/providers_test.dart
+00:00 +0: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +1: Providers Storage Providers secureStorageServiceProvider should provide SecureStorageService
+00:00 +2: Providers Storage Providers iStorageServiceProvider should provide IStorageService
+00:00 +3: Providers Auth Data Source Providers authLocalDataSourceProvider should provide AuthLocalDataSource
+00:00 +4: Providers Auth Data Source Providers authRemoteDataSourceProvider should provide AuthRemoteDataSource
+00:00 +5: Providers Auth Repository Provider authRepositoryProvider should provide AuthRepository
+00:00 +6: Providers Auth Interceptor Provider authInterceptorProvider should provide AuthInterceptor
+00:00 +7: Providers API Client Provider apiClientProvider should provide ApiClient
+00:00 +8: Providers Use Case Providers loginUseCaseProvider should provide LoginUseCase
+00:00 +9: Providers Use Case Providers registerUseCaseProvider should provide RegisterUseCase
+00:00 +10: Providers Use Case Providers logoutUseCaseProvider should provide LogoutUseCase
+00:00 +11: Providers Use Case Providers refreshTokenUseCaseProvider should provide RefreshTokenUseCase
+00:00 +12: Providers Use Case Providers getCurrentUserUseCaseProvider should provide GetCurrentUserUseCase
+00:00 +13: Providers Use Case Providers isAuthenticatedUseCaseProvider should provide IsAuthenticatedUseCase
+00:00 +14: Providers Provider Dependencies authLocalDataSourceProvider should depend on storage providers
+00:00 +15: Providers Provider Dependencies authRemoteDataSourceProvider should depend on apiClientProvider
+00:00 +16: Providers Provider Dependencies authRepositoryProvider should depend on data source providers
+00:00 +17: Providers Provider Dependencies use case providers should depend on authRepositoryProvider
+00:00 +18: Providers Provider Dependencies apiClientProvider should depend on storage and interceptor providers
+00:00 +19: Providers Provider Dependencies authInterceptorProvider should depend on secure storage and repository
+00:00 +20: Providers Provider Singleton Behavior storageServiceProvider should return same instance
+00:00 +21: Providers Provider Singleton Behavior secureStorageServiceProvider should return same instance
+00:00 +22: Providers Provider Singleton Behavior iStorageServiceProvider should return storageService
+00:00 +23: Providers Tasks Providers tasksLocalDataSourceProvider should provide TasksLocalDataSource
+00:00 +24: Providers Tasks Providers tasksRepositoryProvider should provide TasksRepository
+00:00 +25: Providers Tasks Providers getAllTasksUseCaseProvider should provide GetAllTasksUseCase
+00:00 +26: Providers Tasks Providers getTaskByIdUseCaseProvider should provide GetTaskByIdUseCase
+00:00 +27: Providers Tasks Providers createTaskUseCaseProvider should provide CreateTaskUseCase
+00:00 +28: Providers Tasks Providers updateTaskUseCaseProvider should provide UpdateTaskUseCase
+00:00 +29: Providers Tasks Providers deleteTaskUseCaseProvider should provide DeleteTaskUseCase
+00:00 +30: Providers Tasks Providers toggleTaskCompletionUseCaseProvider should provide ToggleTaskCompletionUseCase
+00:00 +31: Providers Tasks Provider Dependencies tasksLocalDataSourceProvider should depend on storageServiceProvider
+00:00 +32: Providers Tasks Provider Dependencies tasksRepositoryProvider should depend on tasksLocalDataSourceProvider
+00:00 +33: Providers Tasks Provider Dependencies tasks use case providers should depend on tasksRepositoryProvider
+00:00 +34: Providers Provider Instance Types all storage providers should return correct types
+00:00 +35: Providers Provider Instance Types authLocalDataSourceProvider should return correct type
+00:00 +36: Providers storageInitializationProvider stamps both stores at the current schema version
+00:00 +36 -1: Providers storageInitializationProvider stamps both stores at the current schema version [E]
+  Expected: '2'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  regular storage must end up migrated, not merely touched
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/di/providers_test.dart 375:9              main.<fn>.<fn>.<fn>
+  
+00:00 +36 -1: Providers storageInitializationProvider surfaces a storage init failure to the caller
+00:00 +36 -2: Providers storageInitializationProvider surfaces a storage init failure to the caller [E]
+  Expected: throws <Instance of 'StateError'> with `message`: 'storage backend unavailable'
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/core/di/providers_test.dart 395:15            main.<fn>.<fn>.<fn>
+  
+00:00 +36 -2: Providers storageInitializationProvider surfaces a migration failure to the caller
+00:00 +36 -3: Providers storageInitializationProvider surfaces a migration failure to the caller [E]
+  Expected: throws <Instance of 'MigrationExecutionException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/core/di/providers_test.dart 425:15            main.<fn>.<fn>.<fn>
+  
+00:00 +36 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a334023fbf2e73cfb/test/core/di/providers_test.dart: Providers storageInitializationProvider stamps both stores at the current schema version
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a334023fbf2e73cfb/test/core/di/providers_test.dart: Providers storageInitializationProvider surfaces a migration failure to the caller
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a334023fbf2e73cfb/test/core/di/providers_test.dart: Providers storageInitializationProvider surfaces a storage init failure to the caller
+
+exit=1 (3 of 3 storageInitializationProvider tests fail under the mutation)
+
+Mutation reverted afterwards: lib/core/di/providers.dart is unchanged on main.

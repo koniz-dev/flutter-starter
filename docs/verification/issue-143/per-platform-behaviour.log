@@ -1,0 +1,161 @@
+How the per-platform behaviour of fontFamily: 'Roboto' was established.
+No golden was used: flutter test renders every glyph with the test font
+regardless of the family, so a screenshot cannot distinguish "resolved"
+from "fell back". The sources below are the installed Flutter SDK and
+the host system font directories.
+
+$ flutter --version
+Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 4cf2416426 (6 weeks ago) • 2026-08-11 11:53:49 -0700
+Engine • hash 59d54a2b2896a6bbf356c94b7fac7b9e235bdacd (revision 5f77625673) (1 months ago) • 2026-08-11 16:38:36.000Z
+Tools • Dart 3.13.0 • DevTools 2.60.0
+exit: 0
+
+--- 1. Flutter picks a family per platform (framework source) ---
+$ grep -n 'TargetPlatform.iOS =>' -A0 /usr/local/share/flutter/packages/flutter/lib/src/material/typography.dart
+219:      TargetPlatform.iOS => (black ?? blackCupertino, white ?? whiteCupertino),
+exit: 0
+
+$ sed -n '217,226p' /usr/local/share/flutter/packages/flutter/lib/src/material/typography.dart
+    assert(platform != null || (black != null && white != null));
+    final (TextTheme blackResolved, TextTheme whiteResolved) = switch (platform) {
+      TargetPlatform.iOS => (black ?? blackCupertino, white ?? whiteCupertino),
+      TargetPlatform.android ||
+      TargetPlatform.fuchsia => (black ?? blackMountainView, white ?? whiteMountainView),
+      TargetPlatform.windows => (black ?? blackRedmond, white ?? whiteRedmond),
+      TargetPlatform.macOS => (black ?? blackRedwoodCity, white ?? whiteRedwoodCity),
+      TargetPlatform.linux => (black ?? blackHelsinki, white ?? whiteHelsinki),
+      null => (black!, white!),
+    };
+exit: 0
+
+$ grep -o "fontFamily: '[^']*'" /usr/local/share/flutter/packages/flutter/lib/src/material/typography.dart | sort | uniq -c
+  30 fontFamily: '.AppleSystemUIFont'
+  14 fontFamily: 'CupertinoSystemDisplay'
+  16 fontFamily: 'CupertinoSystemText'
+  60 fontFamily: 'Roboto'
+  30 fontFamily: 'Segoe UI'
+exit: 0
+
+Per text theme (extracted from the same file):
+  blackMountainView (android, fuchsia)  display*/body*/label*  Roboto
+  blackCupertino    (iOS)               display* CupertinoSystemDisplay, body*/label* CupertinoSystemText
+  blackRedwoodCity  (macOS)             .AppleSystemUIFont
+  blackRedmond      (windows)           Segoe UI
+  blackHelsinki     (linux)             Roboto + _helsinkiFontFallbacks
+
+$ sed -n '757,764p' /usr/local/share/flutter/packages/flutter/lib/src/material/typography.dart
+  static const List<String> _helsinkiFontFallbacks = <String>[
+    'Ubuntu',
+    'Adwaita Sans',
+    'Cantarell',
+    'DejaVu Sans',
+    'Liberation Sans',
+    'Arial',
+  ];
+exit: 0
+
+--- 2. A token fontFamily wins the ThemeData merge (framework source) ---
+$ sed -n '505,525p' /usr/local/share/flutter/packages/flutter/lib/src/material/theme_data.dart
+    typography ??= useMaterial3
+        ? Typography.material2021(platform: platform, colorScheme: colorScheme)
+        : Typography.material2014(platform: platform);
+    TextTheme defaultTextTheme = isDark ? typography.white : typography.black;
+    TextTheme defaultPrimaryTextTheme = primaryIsDark ? typography.white : typography.black;
+    if (fontFamily != null) {
+      defaultTextTheme = defaultTextTheme.apply(fontFamily: fontFamily);
+      defaultPrimaryTextTheme = defaultPrimaryTextTheme.apply(fontFamily: fontFamily);
+    }
+    if (fontFamilyFallback != null) {
+      defaultTextTheme = defaultTextTheme.apply(fontFamilyFallback: fontFamilyFallback);
+      defaultPrimaryTextTheme = defaultPrimaryTextTheme.apply(
+        fontFamilyFallback: fontFamilyFallback,
+      );
+    }
+    if (package != null) {
+      defaultTextTheme = defaultTextTheme.apply(package: package);
+      defaultPrimaryTextTheme = defaultPrimaryTextTheme.apply(package: package);
+    }
+    textTheme = defaultTextTheme.merge(textTheme);
+    primaryTextTheme = defaultPrimaryTextTheme.merge(primaryTextTheme);
+exit: 0
+
+--- 3. Web: the engine registers its own Roboto when none is bundled ---
+$ sed -n '9,16p;112,134p' /usr/local/share/flutter/bin/cache/flutter_web_sdk/lib/_engine/engine/canvaskit/fonts.dart
+// This URL was found by using the Google Fonts Developer API to find the URL
+// for Roboto. The API warns that this URL is not stable. In order to update
+// this, list out all of the fonts and find the URL for the regular
+// Roboto font. The API reference is here:
+// https://developers.google.com/fonts/docs/developer_api
+String _robotoUrl =
+    '${configuration.fontFallbackBaseUrl}roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2';
+
+  /// Loads fonts from `FontManifest.json`.
+  @override
+  Future<AssetFontsResult> loadAssetFonts(FontManifest manifest) async {
+    final pendingDownloads = <Future<FontDownloadResult>>[];
+    var loadedRoboto = false;
+    for (final FontFamily family in manifest.families) {
+      if (family.name == 'Roboto') {
+        loadedRoboto = true;
+      }
+      for (final FontAsset fontAsset in family.fontAssets) {
+        final String url = ui_web.assetManager.getAssetUrl(fontAsset.asset);
+        pendingDownloads.add(_downloadFont(fontAsset.asset, url, family.name));
+      }
+    }
+
+    /// We need a default fallback font for CanvasKit, in order to avoid
+    /// crashing while laying out text with an unregistered font. We chose
+    /// Roboto to match Android.
+    if (!loadedRoboto) {
+      // Download Roboto and add it to the font buffers.
+      pendingDownloads.add(_downloadFont('Roboto', _robotoUrl, 'Roboto'));
+    }
+exit: 0
+
+$ sed -n '22,27p;74,85p' /usr/local/share/flutter/bin/cache/flutter_web_sdk/lib/_engine/engine/skwasm/skwasm_impl/font_collection.dart
+class SkwasmFontCollection implements FlutterFontCollection {
+  SkwasmFontCollection() {
+    _fallbackRegistry = SkwasmFallbackRegistry(this);
+    fontFallbackManager = FontFallbackManager(_fallbackRegistry);
+    setDefaultFontFamilies(<String>['Roboto']);
+  }
+    final fontFutures = <Future<void>>[];
+    final fontFailures = <String, FontLoadError>{};
+
+    /// We need a default fallback font for Skwasm, in order to avoid crashing
+    /// while laying out text with an unregistered font. We chose Roboto to
+    /// match Android.
+    if (!manifest.families.any((FontFamily family) => family.name == 'Roboto')) {
+      manifest.families.add(
+        FontFamily('Roboto', <FontAsset>[FontAsset(_robotoUrl, <String, String>{})]),
+      );
+    }
+exit: 0
+
+--- 4. macOS ships no font named Roboto (this host) ---
+$ ls /System/Library/Fonts | grep -i roboto
+(no output)
+exit: 1
+
+$ ls /System/Library/Fonts/Supplemental | grep -i roboto
+(no output)
+exit: 1
+
+$ ls ~/Library/Fonts /Library/Fonts 2>/dev/null | grep -i roboto
+(no output)
+exit: 1
+
+Empty output above (grep exit 1 = no match): an unbundled
+fontFamily: 'Roboto' had nothing to resolve to on macOS, and the engine
+fell back silently while the ThemeData still reported the name.
+
+--- Not established here ---
+Android and iOS device rendering. No device or emulator is attached to
+this environment, so the Android claim rests on the framework itself
+naming Roboto, unbundled, for android/fuchsia - i.e. Flutter relies on
+the platform providing it - and the iOS claim rests on iOS shipping the
+San Francisco system faces, not Roboto. Neither claim is load-bearing
+for this fix: the fix is that the design system no longer overrides
+whatever the framework chose.

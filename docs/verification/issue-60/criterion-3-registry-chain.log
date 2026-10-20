@@ -1,0 +1,9 @@
+$ flutter test test/core/storage/migration/migration_registry_test.dart --reporter expanded --plain-name chain coverage
+
+Waiting for another flutter command to release the startup lock...
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_registry_test.dart
+00:00 +0: MigrationRegistry chain coverage (#60) migrations span initial -> current with no gap
+00:00 +1: MigrationRegistry chain coverage (#60) regularStorageMigrations span initial -> current
+00:00 +2: MigrationRegistry chain coverage (#60) secureStorageMigrations span initial -> current
+00:00 +3: All tests passed!
+exit: 0

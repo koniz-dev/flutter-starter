@@ -1,0 +1,8 @@
+$ flutter test test/core/network/forced_logout_cache_test.dart --plain-name "#303" -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_cache_test.dart
+00:00 +0: a transient refresh failure leaves the session alone (#303) criterion 1: a RECEIVE_TIMEOUT leaves tokens, user blob, HTTP cache and session intact
+00:00 +1: a transient refresh failure leaves the session alone (#303) criterion 2: a 503 leaves tokens, user blob, HTTP cache and session intact
+00:00 +2: a transient refresh failure leaves the session alone (#303) criterion 3: a failure tagged REFRESH_TOKEN_EXPIRED still forces the full teardown
+00:00 +3: a transient refresh failure leaves the session alone (#303) the code core matches on is the one the auth slice sets
+00:00 +4: All tests passed!
+exit: 0

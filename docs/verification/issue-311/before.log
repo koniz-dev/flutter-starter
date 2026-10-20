@@ -1,0 +1,6 @@
+# cache_index_race_test.dart against main's CacheInterceptor
+00:00 +0 -1: criterion 1: concurrent cached GETs all land in the index [E]
+  Expected: Set:[
+    Actual: Set:[
+     Which: does not contain 'http_cache_http://localhost:3000/v1/a_{}'
+00:00 +1 -1: Some tests failed.

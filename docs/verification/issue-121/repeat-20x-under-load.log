@@ -1,0 +1,29 @@
+# 20 consecutive runs of test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart
+# host: 6 CPUs
+# background load: 8 busy loops running for the duration
+# started: Fri Sep 25 12:50:48 UTC 2026
+# load average at start: 30.22 17.23 30.40
+
+run  1: PASS (14s, load 46.84) -- 00:00 +6: All tests passed!
+run  2: PASS (12s, load 57.30) -- 00:00 +6: All tests passed!
+run  3: PASS (11s, load 75.38) -- 00:00 +6: All tests passed!
+run  4: PASS (13s, load 100.83) -- 00:00 +6: All tests passed!
+run  5: PASS (12s, load 97.54) -- 00:00 +6: All tests passed!
+run  6: PASS (8s, load 92.94) -- 00:00 +6: All tests passed!
+run  7: PASS (10s, load 80.58) -- 00:00 +6: All tests passed!
+run  8: PASS (9s, load 70.63) -- 00:00 +6: All tests passed!
+run  9: PASS (9s, load 61.54) -- 00:00 +6: All tests passed!
+run 10: PASS (8s, load 61.97) -- 00:00 +6: All tests passed!
+run 11: PASS (7s, load 55.00) -- 00:00 +6: All tests passed!
+run 12: PASS (8s, load 52.84) -- 00:00 +6: All tests passed!
+run 13: PASS (8s, load 46.81) -- 00:00 +6: All tests passed!
+run 14: PASS (9s, load 48.37) -- 00:00 +6: All tests passed!
+run 15: PASS (8s, load 45.45) -- 00:00 +6: All tests passed!
+run 16: PASS (12s, load 52.38) -- 00:00 +6: All tests passed!
+run 17: PASS (14s, load 67.90) -- 00:00 +6: All tests passed!
+run 18: PASS (13s, load 86.75) -- 00:00 +6: All tests passed!
+run 19: PASS (12s, load 124.75) -- 00:00 +6: All tests passed!
+run 20: PASS (14s, load 130.88) -- 00:00 +6: All tests passed!
+
+# finished: Fri Sep 25 12:54:19 UTC 2026
+# runs: 20, failures: 0

@@ -1,0 +1,31 @@
+Criteria 1, 2, 3 and 4 for koniz-dev/flutter-starter#127
+=====================================================
+
+$ flutter test test/core/network/forced_logout_session_test.dart --reporter expanded
+
+Run on the merged fix (cf18772). This is the per-test detail that
+tests.log cannot show: run_acceptance.sh trims the full-suite log to a
+head+tail excerpt, and these five tests sit in the elided middle.
+
+Each test assembles the real provider graph - real ApiClient, real
+interceptor chain, real AuthNotifier restored by the production
+restoreSession() - and swaps only the two platform-channel storage
+services and the HTTP transport. The refresh fails through production
+code (no refresh token stored), not a stub.
+
+  criterion 1 -> "a 401 whose refresh fails clears AuthState.user"
+                 "the retry-exhausted logout branch clears AuthState.user too"
+  criterion 2 -> "a forced logout moves the running app to /login"
+                 (router mounted; see also forced_logout_before/after.png)
+  criterion 3 -> "building the API client does not build the auth notifier"
+  criterion 4 -> "a 401 after the container is disposed does not throw"
+
+The app's own logging boxes have been stripped for readability; the
+"API Request: GET /users/me" line each test emits is the 401 being driven.
+
+00:00 +0: forced logout drops the in-memory session (#127 criterion 1) a 401 whose refresh fails clears AuthState.user
+00:00 +1: forced logout drops the in-memory session (#127 criterion 1) the retry-exhausted logout branch clears AuthState.user too
+00:00 +2: no DI cycle is introduced (#127 criterion 3) building the API client does not build the auth notifier
+00:00 +3: the router reacts without a restart (#127 criterion 2) a forced logout moves the running app to /login
+00:03 +4: a forced logout with nobody listening is harmless (#127 c4) a 401 after the container is disposed does not throw
+00:03 +5: All tests passed!

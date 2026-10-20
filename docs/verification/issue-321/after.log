@@ -1,0 +1,46 @@
+# after the fix: flutter test test/core/config/unknown_environment_test.dart
+## no define
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/unknown_environment_test.dart
+00:00 +0: the compile-time define alone is trimmed and checked the same way (development)
+VP define="development" environment=development misconfigured=false baseUrl=http://localhost:3000
+00:00 +1: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=prod
+00:00 +2: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=qa
+00:00 +3: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=Production-EU
+00:00 +4: criterion 1: an unknown ENVIRONMENT is surfaced printConfig warns about it
+00:00 +5: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=development is not flagged
+00:00 +6: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=staging is not flagged
+00:00 +7: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=production is not flagged
+00:00 +8: criterion 2: the value is trimmed before comparison "production " (trailing space) is production
+00:00 +9: criterion 2: the value is trimmed before comparison " Staging" (leading space, capital) is staging
+00:00 +10: (tearDownAll)
+00:00 +10: All tests passed!
+## --dart-define=ENVIRONMENT=prod
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/unknown_environment_test.dart
+00:00 +0: the compile-time define alone is trimmed and checked the same way (prod)
+VP define="prod" environment=prod misconfigured=true baseUrl=http://localhost:3000
+00:00 +1: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=prod
+00:00 +2: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=qa
+00:00 +3: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=Production-EU
+00:00 +4: criterion 1: an unknown ENVIRONMENT is surfaced printConfig warns about it
+00:00 +5: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=development is not flagged
+00:00 +6: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=staging is not flagged
+00:00 +7: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=production is not flagged
+00:00 +8: criterion 2: the value is trimmed before comparison "production " (trailing space) is production
+00:00 +9: criterion 2: the value is trimmed before comparison " Staging" (leading space, capital) is staging
+00:00 +10: (tearDownAll)
+00:00 +10: All tests passed!
+## --dart-define="ENVIRONMENT=production " (trailing space)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/config/unknown_environment_test.dart
+00:00 +0: the compile-time define alone is trimmed and checked the same way (production)
+VP define="production " environment=production misconfigured=false baseUrl=https://api.example.com
+00:00 +1: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=prod
+00:00 +2: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=qa
+00:00 +3: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=Production-EU
+00:00 +4: criterion 1: an unknown ENVIRONMENT is surfaced printConfig warns about it
+00:00 +5: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=development is not flagged
+00:00 +6: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=staging is not flagged
+00:00 +7: criterion 1: an unknown ENVIRONMENT is surfaced ENVIRONMENT=production is not flagged
+00:00 +8: criterion 2: the value is trimmed before comparison "production " (trailing space) is production
+00:00 +9: criterion 2: the value is trimmed before comparison " Staging" (leading space, capital) is staging
+00:00 +10: (tearDownAll)
+00:00 +10: All tests passed!

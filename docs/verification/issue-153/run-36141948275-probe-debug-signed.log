@@ -1,0 +1,140 @@
+Criterion 2a - throwaway branch chore/153-signer-probe: build a DEBUG-signed APK, then run the guard step unchanged. The guard FAILS on CN=Android Debug.
+
+=== gh run view 36141948275 ===
+
+
+X chore/153-signer-probe Build (Manual) · 36141948275
+Triggered via workflow_dispatch about 27 minutes ago
+
+JOBS
+X Build Android in 6m0s (ID 108093676429)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  ✓ Setup Java
+  ✓ Install dependencies
+  ✓ Build the probe APK
+  X Print APK signer certificate
+  ✓ Post Setup Java
+  ✓ Post Setup Flutter
+  ✓ Post Checkout code
+  ✓ Complete job
+- Build Web in 0s (ID 108093677792)
+- Build iOS (no codesign) in 0s (ID 108093677836)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build Android: .github#4
+
+X Process completed with exit code 1.
+Build Android: .github#36
+
+X APK is DEBUG-signed. android/app/build.gradle.kts is supposed to make this impossible.
+Build Android: .github#35
+
+! setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+Build Android: .github#17
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+Build Android: .github#1
+
+
+To see what failed, try: gh run view 36141948275 --log-failed
+View this run on GitHub: https://github.com/koniz-dev/flutter-starter/actions/runs/36141948275
+
+=== step: Build the probe APK ===
+
+##[group]Run set -euo pipefail
+set -euo pipefail
+case "development" in
+  development)
+    echo "PROBE: debug-signed APK (expect the guard to FAIL on CN=Android Debug)"
+    flutter build apk --debug \
+      --dart-define=ENVIRONMENT=development \
+      --dart-define=BASE_URL=http://localhost:3000
+    ;;
+  staging)
+    echo "PROBE: unsigned APK (expect the guard to FAIL: no readable certificate)"
+    flutter build apk --release \
+      --dart-define=ENVIRONMENT=staging \
+      --dart-define=BASE_URL=http://localhost:3000
+    ;;
+  *)
+    echo "::error::probe branch supports environment=development or staging only"
+    exit 1
+    ;;
+esac
+ls -l build/app/outputs/flutter-apk/
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+  JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+  JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+##[endgroup]
+PROBE: debug-signed APK (expect the guard to FAIL on CN=Android Debug)
+Upgrading gradle.properties
+Upgrading gradle.properties
+Warning: Flutter support for your project's Gradle version (8.14.0) will soon be dropped. Please upgrade your Gradle version to a version of at least 9.1.0 soon.
+Running Gradle task 'assembleDebug'...
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/flutter-starter/flutter-starter/android/gradle/wrapper/gradle-wrapper.properties.
+For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+
+Warning: Flutter support for your project's Android Gradle Plugin version (Android Gradle Plugin version 8.11.1) will soon be dropped. Please upgrade your Android Gradle Plugin version to a version of at least Android Gradle Plugin version 9.0.1 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's AGP version is typically defined in the plugins block of the `settings.gradle` file (/home/runner/work/flutter-starter/flutter-starter/android/settings.gradle), by a plugin with the id of com.android.application.
+If you don't see a plugins block, your project was likely created with an older template version. In this case it is most likely defined in the top-level build.gradle file (/home/runner/work/flutter-starter/flutter-starter/android/build.gradle) by the following line in the dependencies block of the buildscript: "classpath 'com.android.tools.build:gradle:<version>'".
+
+Warning: Flutter support for your project's Kotlin version (2.2.20) will soon be dropped. Please upgrade your Kotlin version to a version of at least 2.3.20 soon.
+Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+
+Potential fix: Your project's KGP version is typically defined in the plugins block of the `settings.gradle` file (/home/runner/work/flutter-starter/flutter-starter/android/settings.gradle), by a plugin with the id of org.jetbrains.kotlin.android.
+If you don't see a plugins block, your project was likely created with an older template version, in which case it is most likely defined in the top-level build.gradle file (/home/runner/work/flutter-starter/flutter-starter/android/build.gradle) by the ext.kotlin_version property.
+
+Running Gradle task 'assembleDebug'...                            325.5s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+total 182744
+-rw-r--r-- 1 runner runner 187125568 Sep 25 13:41 app-debug.apk
+-rw-r--r-- 1 runner runner        40 Sep 25 13:41 app-debug.apk.sha1
+
+=== step: Print APK signer certificate ===
+
+##[group]Run set -euo pipefail
+set -euo pipefail
+APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
+./scripts/ci/verify_apk_signer.sh "$APK"
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+  JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+  JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+##[endgroup]
+APK: build/app/outputs/flutter-apk/app-debug.apk
+Using: /usr/local/lib/android/sdk/build-tools/37.0.0/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: C=US, O=Android, CN=Android Debug
+V2 Signer: certificate SHA-256 digest: b560331e689c3d31c94a25fdae0884382af39047efc1a549b4467b3617544a7d
+V2 Signer: certificate SHA-1 digest: eaa4a2515a041ae942c24d0af1f4146b5f52d974
+V2 Signer: certificate MD5 digest: 160364d78c20ac68da7a3131a19850b1
+V2 Signer: key algorithm: RSA
+V2 Signer: key size (bits): 2048
+V2 Signer: public key SHA-256 digest: 2b16e56b54ee1f4154923f7097d0cc7559522fd1d534b99548e39ea48592422e
+V2 Signer: public key SHA-1 digest: 6a96007f02a51598dfca1450848671cf2f49485b
+V2 Signer: public key MD5 digest: 31913d213018bf637e1430743b30cb9d
+Signers: 1
+Certificate DN(s):
+  C=US, O=Android, CN=Android Debug
+##[error]APK is DEBUG-signed. android/app/build.gradle.kts is supposed to make this impossible.
+##[error]Process completed with exit code 1.

@@ -1,0 +1,109 @@
+Negative controls for koniz-dev/flutter-starter#48.
+
+Proof that the new tests fail when the defect is reintroduced - a passing
+test suite is only meaningful if it can fail. Both mutations were applied to
+the merged main tree, run, and reverted; the tree is unmodified afterwards.
+
+================================================================================
+Control A - reintroduce the runtime-keyed lookup in EnvConfig.get
+
+  -      final dartDefineValue = DartDefines.lookup(key);
+  +      final dartDefineValue = String.fromEnvironment(key);
+
+$ flutter test test/core/config/dart_defines_test.dart --reporter compact
+================================================================================
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:01 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:02 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:02 +0: DartDefines lookup returns the compile-time value for a known key
+00:02 +1: DartDefines lookup returns the compile-time value for a known key
+00:02 +1: DartDefines lookup returns the empty string for an unknown key
+00:02 +2: DartDefines lookup returns the empty string for an unknown key
+00:02 +2: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:02 +3: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:02 +3: dart-define mechanism every fromEnvironment call in lib/ takes a string literal
+00:02 +3 -1: dart-define mechanism every fromEnvironment call in lib/ takes a string literal [E]
+  Expected: empty
+    Actual: ['lib/core/config/env_config.dart: argument starts with `k`']
+  A fromEnvironment call with a non-literal argument cannot be const and always returns "" in AOT builds. Add the key to DartDefines.values instead.
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/config/dart_defines_test.dart 98:7        main.<fn>.<fn>
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart -p vm --plain-name 'dart-define mechanism every fromEnvironment call in lib/ takes a string literal'
+00:02 +3 -1: dart-define mechanism env_config.dart contains no fromEnvironment call at all
+00:02 +3 -2: dart-define mechanism env_config.dart contains no fromEnvironment call at all [E]
+  Expected: empty
+    Actual: ['k']
+  EnvConfig must read dart-defines through the const DartDefines table, never directly.
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/config/dart_defines_test.dart 113:7       main.<fn>.<fn>
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart -p vm --plain-name 'dart-define mechanism env_config.dart contains no fromEnvironment call at all'
+00:02 +3 -2: dart-define mechanism dart_defines.dart declares the table as const
+00:02 +4 -2: dart-define mechanism dart_defines.dart declares the table as const
+00:02 +4 -2: dart-define mechanism every dart-define read is guarded by kIsWeb
+00:02 +4 -3: dart-define mechanism every dart-define read is guarded by kIsWeb [E]
+  Expected: <4>
+    Actual: <5>
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/config/dart_defines_test.dart 143:7       main.<fn>.<fn>
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart -p vm --plain-name 'dart-define mechanism every dart-define read is guarded by kIsWeb'
+00:02 +4 -3: key coverage every .env.example key has a DartDefines entry
+00:02 +5 -3: key coverage every .env.example key has a DartDefines entry
+00:02 +5 -3: key coverage every DartDefines entry is documented in .env.example
+00:02 +6 -3: key coverage every DartDefines entry is documented in .env.example
+00:02 +6 -3: key coverage ENVIRONMENT and BASE_URL are covered
+00:02 +7 -3: key coverage ENVIRONMENT and BASE_URL are covered
+00:02 +7 -3: key coverage every key EnvConfig is asked for in lib/ has an entry
+00:02 +8 -3: key coverage every key EnvConfig is asked for in lib/ has an entry
+00:02 +8 -3: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:02 +8 ~1 -3: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:02 +8 ~1 -3: Some tests failed.
+exit: 1
+
+================================================================================
+Control B - add a key to .env.example without adding it to DartDefines.values
+
+  + SENTRY_DSN=
+
+$ flutter test test/core/config/dart_defines_test.dart --reporter compact
+================================================================================
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:01 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:02 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart
+00:02 +0: DartDefines lookup returns the compile-time value for a known key
+00:02 +1: DartDefines lookup returns the compile-time value for a known key
+00:02 +1: DartDefines lookup returns the empty string for an unknown key
+00:02 +2: DartDefines lookup returns the empty string for an unknown key
+00:02 +2: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:02 +3: DartDefines values is a compile-time constant map (unmodifiable at runtime)
+00:02 +3: dart-define mechanism every fromEnvironment call in lib/ takes a string literal
+00:02 +4: dart-define mechanism every fromEnvironment call in lib/ takes a string literal
+00:02 +4: dart-define mechanism env_config.dart contains no fromEnvironment call at all
+00:02 +5: dart-define mechanism env_config.dart contains no fromEnvironment call at all
+00:02 +5: dart-define mechanism dart_defines.dart declares the table as const
+00:02 +6: dart-define mechanism dart_defines.dart declares the table as const
+00:02 +6: dart-define mechanism every dart-define read is guarded by kIsWeb
+00:02 +7: dart-define mechanism every dart-define read is guarded by kIsWeb
+00:02 +7: key coverage every .env.example key has a DartDefines entry
+00:02 +7 -1: key coverage every .env.example key has a DartDefines entry [E]
+  Expected: empty
+    Actual: Set:['SENTRY_DSN']
+  These keys are documented in .env.example but cannot be supplied via --dart-define. Add them to DartDefines.values.
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/core/config/dart_defines_test.dart 152:7       main.<fn>.<fn>
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1dfef01caaae3bb9/test/core/config/dart_defines_test.dart -p vm --plain-name 'key coverage every .env.example key has a DartDefines entry'
+00:02 +7 -1: key coverage every DartDefines entry is documented in .env.example
+00:02 +8 -1: key coverage every DartDefines entry is documented in .env.example
+00:02 +8 -1: key coverage ENVIRONMENT and BASE_URL are covered
+00:02 +9 -1: key coverage ENVIRONMENT and BASE_URL are covered
+00:02 +9 -1: key coverage every key EnvConfig is asked for in lib/ has an entry
+00:02 +10 -1: key coverage every key EnvConfig is asked for in lib/ has an entry
+00:02 +10 -1: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:02 +10 ~1 -1: end-to-end with a supplied --dart-define BASE_URL reaches EnvConfig and AppConfig
+00:02 +10 ~1 -1: Some tests failed.
+exit: 1

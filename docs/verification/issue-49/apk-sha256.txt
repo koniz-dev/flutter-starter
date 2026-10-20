@@ -1,0 +1,4 @@
+$ shasum -a 256 <downloaded CI artifacts>
+
+108532b9c702ac81e66a2d52093d04a873ed103122c112c8af02e8a0f8becb99  run-35433291072 (main 7d98ca4)  app-release.apk
+a92548d6c867ebbbb455036893818b36fa713b924298c0100df9f7aaf7db9471  run-35433621227 (baseline a26ab91)  app-release.apk

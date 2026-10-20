@@ -1,0 +1,8 @@
+# Criterion 1: every UiKeys entry is attached to a widget OR documented
+
+  loginSubmit      attached: lib/features/auth/presentation/screens/login_screen.dart
+  registerSubmit   attached: lib/features/auth/presentation/screens/register_screen.dart
+  homeContent      attached: lib/features/home/presentation/screens/home_screen.dart
+  openTasks        documented as intentionally unattached
+  tasksFab         documented as intentionally unattached
+  addTaskSubmit    documented as intentionally unattached

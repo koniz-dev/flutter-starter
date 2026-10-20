@@ -1,0 +1,95 @@
+# Criteria 1 & 2 - ITasksController / TasksStateSnapshot resolved by DELETION
+# Run from the repository root on main @ 5c7603e
+# NOTE: this log was produced OUTSIDE the working tree and copied in, so the
+#       greps below could not match their own output.
+
+--- Criterion 1: contract and snapshot type gone from lib/ and test/ ---
+$ grep -rn "ITasksController\|TasksStateSnapshot" lib/ test/
+exit=1  (1 = no match anywhere = PASS)
+
+$ cat -n lib/core/contracts/state_boundary_contracts.dart
+     1	// Lightweight boundary contract file; repetitive per-member docs are omitted.
+     2	// ignore_for_file: public_member_api_docs, one_member_abstracts
+     3	
+     4	/// Generic state snapshot contract for controller boundaries.
+     5	abstract class ControllerStateSnapshot {}
+     6	
+     7	/// Generic auth state snapshot contract.
+     8	abstract class AuthStateSnapshot implements ControllerStateSnapshot {
+     9	  bool get isLoading;
+    10	  String? get error;
+    11	  bool get isAuthenticated;
+    12	}
+    13	
+    14	/// State boundary for authentication orchestration.
+    15	abstract class IAuthController {
+    16	  AuthStateSnapshot get snapshot;
+    17	  Future<void> login(String email, String password);
+    18	  Future<void> register(String email, String password, String name);
+    19	  Future<void> logout();
+    20	  Future<void> refreshToken();
+    21	  Future<void> getCurrentUser();
+    22	  Future<bool> isAuthenticated();
+    23	}
+    24	
+    25	/// Notified when a session ends without the user asking for it.
+    26	///
+    27	/// The transport is where an expired session is *discovered*: `AuthInterceptor`
+    28	/// sees the 401, fails the refresh, and clears the persisted session. Nothing
+    29	/// there may reach into the feature holding the in-memory session, so the
+    30	/// feature implements this and hands it down - the same inversion
+    31	/// `IHttpResponseCache` uses in the opposite direction.
+    32	///
+    33	/// Implementations must be **best effort and non-throwing on their own terms**:
+    34	/// this is called from a `finally`-adjacent cleanup path whose only real job is
+    35	/// to complete the failing request's handler.
+    36	abstract class ISessionTerminationSink {
+    37	  /// Drops any in-memory session state.
+    38	  ///
+    39	  /// Persisted teardown (tokens, cached user, cached responses) has already
+    40	  /// run by the time this is called, so an implementation must not repeat it -
+    41	  /// and in particular must not call a logout endpoint, which would post with
+    42	  /// credentials that no longer exist.
+    43	  void onSessionTerminated();
+    44	}
+
+--- Criterion 2: the phantom provider name exists nowhere outside .git/ ---
+$ grep -rn "tasksControllerProvider" . | grep -v "^./.git/"
+exit=1  (1 = no line survived the filter = PASS)
+
+--- Criterion 2 (regression guard on koniz-dev/flutter-starter#182): its other removed phantom stays removed ---
+$ grep -rn "FirebaseFeatureFlagsRemoteDataSource" . | grep -v "^./.git/"
+exit=1  (1 = no line survived the filter = PASS)
+
+--- Criterion 2: the three docs match the DELETED branch of criterion 1 ---
+$ grep -n "ITasksController" docs/architecture/contracts-map.md docs/architecture/adr/0005-state-boundary.md docs/architecture/migrations/boundary-migration-plan.md
+docs/architecture/migrations/boundary-migration-plan.md:63:- Define `IAuthController`. (`ITasksController` was defined and then deleted
+docs/architecture/contracts-map.md:36:`ITasksController` went in koniz-dev/flutter-starter#180, which removed it and
+docs/architecture/contracts-map.md:48:| **No implementor** | The contract is declared and nothing anywhere implements it. **No contract is in this state today** - `ITasksController` was the last one and was deleted by koniz-dev/flutter-starter#180. The row stays so the state has a name if it recurs. |
+docs/architecture/contracts-map.md:62:Until koniz-dev/flutter-starter#182 there was an `ITasksController` row naming a
+docs/architecture/adr/0005-state-boundary.md:12:- ~~`ITasksController`~~ - **deleted** by koniz-dev/flutter-starter#180; see
+docs/architecture/adr/0005-state-boundary.md:26:| `ITasksController` | **Removed.** koniz-dev/flutter-starter#180 deleted the contract and `TasksStateSnapshot`; `grep -rn "ITasksController" lib` now returns nothing. | n/a |
+docs/architecture/adr/0005-state-boundary.md:31:`ITasksController`, the two had drifted in both directions, and
+
+# Every surviving mention above is a historical note. No swap-map ROW names it:
+$ grep -n "^| .ITasksController" docs/architecture/contracts-map.md
+exit=1  (1 = no such row = PASS)
+
+--- Regression guard: everything koniz-dev/flutter-starter#182 added is still there ---
+$ grep -n "IHttpResponseCache\|ISessionTerminationSink\|^| Status | Means |\|^| \*\*Live\*\*\|^| \*\*No implementor\*\*" docs/architecture/contracts-map.md
+19:| HTTP transport | `lib/core/contracts/network_contracts.dart` (`INetworkClient`, `IHttpResponseCache`, `NetworkRequest`, `NetworkResponse`) |
+22:| Presentation controllers | `lib/core/contracts/state_boundary_contracts.dart` (`IAuthController`, `ISessionTerminationSink`, and the `*StateSnapshot` marker types) |
+44:| Status | Means |
+46:| **Live** | Production code in `lib/` is typed on the contract and runs against it. Swapping the implementation changes behavior. |
+48:| **No implementor** | The contract is declared and nothing anywhere implements it. **No contract is in this state today** - `ITasksController` was the last one and was deleted by koniz-dev/flutter-starter#180. The row stays so the state has a name if it recurs. |
+54:| `IHttpResponseCache` | **Live** | `CacheInterceptor` (`lib/core/network/interceptors/cache_interceptor.dart:97`) | Exposed as `ApiClient.responseCache` (`lib/core/network/api_client.dart:160`); held by `AuthInterceptor` (`lib/core/network/interceptors/auth_interceptor.dart:118`) and by `AuthRepositoryImpl` (`lib/features/auth/data/repositories/auth_repository_impl.dart:34`), wired at `lib/features/auth/di/auth_providers.dart:63` | Implement the contract and pass it where `CacheInterceptor` is constructed |
+57:| `ISessionTerminationSink` | **Live** | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart:272`) | Passed to `AuthInterceptor` at `lib/features/auth/di/auth_providers.dart:93`; held at `lib/core/network/interceptors/auth_interceptor.dart:87` and invoked on forced logout at `:534` | Implement the contract and pass it in the same place |
+
+$ grep -n "^- Status:\|^## Implementation status" docs/architecture/adr/0005-state-boundary.md
+3:- Status: Proposed
+17:## Implementation status
+
+--- Regression guard: koniz-dev/flutter-starter#177 navigation work survived the rebase ---
+$ grep -n "Navigation (extension, not a contract)\|AppNavigator" docs/architecture/contracts-map.md
+34:`AppNavigator` went in koniz-dev/flutter-starter#177 - the contract, its adapter
+58:| Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart:25`) over `go_router` | Every screen that navigates: `lib/features/auth/presentation/screens/login_screen.dart:115`, `register_screen.dart:139`, `lib/features/tasks/presentation/screens/tasks_list_screen.dart:253` and `:283`, `task_detail_screen.dart:118` and `:160`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart:15`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |

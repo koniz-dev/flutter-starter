@@ -1,0 +1,26 @@
+# Counter-measurement: what happens if keychain-access-groups IS enabled in the
+# macOS entitlements on a machine with no Apple development certificate.
+#
+#   $ security find-identity -v -p codesigning
+#         0 valid identities found
+#
+# Both macos/Runner/*.entitlements temporarily uncommented to:
+#
+#   <key>keychain-access-groups</key>
+#   <array/>
+#
+# (the EMPTY array - the form flutter_secure_storage's own macOS instructions
+# give. Naming a group explicitly behaves the same way.)
+#
+#   $ flutter build macos --release
+#
+# Output follows. This is why the key ships commented out: it is a restricted
+# entitlement, and enabling it is inseparable from configuring signing.
+The following plugins do not support Swift Package Manager for macos:
+  - patrol
+This will become an error in a future version of Flutter. Please contact the plugin maintainers to request Swift Package Manager adoption.
+Building macOS application...                                   
+/Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af6b53fb454d2fa00/macos/Runner.xcodeproj: error: "Runner" has entitlements that require signing with a development certificate. Enable development signing in the Signing & Capabilities editor. (in target 'Runner' from project 'Runner')
+** BUILD FAILED **
+
+Build process failed

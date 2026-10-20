@@ -1,0 +1,8 @@
+$ git rev-parse --short HEAD
+29005c3
+
+$ git ls-files | grep -E '\.(pem|key)$'   # BEFORE the change
+(grep exit 1: 1 = no match, nothing tracked would become ignored)
+
+$ find . -name '*.pem' -o -name '*.key' | grep -v '^./.git/'   # anything on disk at all
+(none listed above = none)

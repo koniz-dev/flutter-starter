@@ -1,0 +1,9 @@
+1279-══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+1280-The following assertion was thrown running a test:
+1281:A SessionGeneration was used after being disposed.
+1282-Once you have called dispose() on a SessionGeneration, it can no longer be used.
+1283-
+1284-When the exception was thrown, this was the stack:
+1285-#0      ChangeNotifier.debugAssertNotDisposed.<anonymous closure> (package:flutter/src/foundation/change_notifier.dart:184:9)
+1286-#1      ChangeNotifier.debugAssertNotDisposed (package:flutter/src/foundation/change_notifier.dart:191:6)
+1287-#2      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:414:27)

@@ -1,0 +1,17 @@
+# fresh clone of origin/main, then mason get (mason 0.1.3 • core templating engine)
+mason get exit=0
+$ git status --porcelain
+?? .mason/
+?? mason-lock.json
+(end)
+# absolute paths recorded in .mason/bricks.json (temp dir shown as <clone>)
+"/private<clone>/repo/bricks/feature_clean
+"/private<clone>/repo/bricks/flutter_starter_setup
+
+# fresh clone of this branch, then mason get
+mason get exit=0
+$ git status --porcelain
+(end)
+# absolute paths recorded in .mason/bricks.json (temp dir shown as <clone>)
+"/private<clone>/repo/bricks/feature_clean
+"/private<clone>/repo/bricks/flutter_starter_setup

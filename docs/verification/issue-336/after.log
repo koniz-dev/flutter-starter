@@ -1,0 +1,4 @@
+00:00 +0: criterion 2: every flutter build in .github/workflows follows the guard in its job
+00:00 +1: criterion 1: build.yml runs the guard in each job that builds
+00:00 +2: the scan sees the builds it should
+00:00 +3: All tests passed!

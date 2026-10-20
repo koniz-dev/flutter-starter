@@ -1,0 +1,109 @@
+Criterion 4 - a mechanical check rejects auto-closing keywords and requires Refs
+
+FOUR FIXTURES, run through scripts/dev/check_issue_refs.sh.
+
+--- 1. conforming message (must PASS) ---
+$ cat good.txt
+docs: fix a thing
+
+Refs koniz-dev/flutter-starter#58
+
+$ ./scripts/dev/check_issue_refs.sh --body-file good.txt
+Body file /tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/good.txt
+  ok    PR title and body
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+exit=0
+
+--- 2. deliberate violation: auto-closing keyword (must FAIL) ---
+$ cat bad-keyword.txt
+docs: fix a thing
+
+Closes #58
+
+$ ./scripts/dev/check_issue_refs.sh --body-file bad-keyword.txt
+Body file /tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/bad-keyword.txt
+  FAIL  PR title and body
+        auto-closing reference: 'Closes #58'
+        GitHub would close that issue at merge time, before the
+        acceptance criteria run. Use 'Refs koniz-dev/flutter-starter#N'.
+
+1 message(s) violate invariant 3 (docs/issue-workflow.md).
+exit=1
+
+--- 3. deliberate violation: no Refs at all (must FAIL) ---
+$ cat bad-noref.txt
+docs: fix a thing
+
+No reference at all.
+
+$ ./scripts/dev/check_issue_refs.sh --body-file bad-noref.txt
+Body file /tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/bad-noref.txt
+  FAIL  PR title and body
+        no 'Refs koniz-dev/flutter-starter#N' reference found.
+
+1 message(s) violate invariant 3 (docs/issue-workflow.md).
+exit=1
+
+--- 4. PR #44-style prose: keyword NOT adjacent to the ref (must PASS) ---
+$ cat prose.txt
+docs: a thing
+
+Closes out the investigation in #40.
+
+Refs koniz-dev/flutter-starter#58
+
+$ ./scripts/dev/check_issue_refs.sh --body-file prose.txt
+Body file /tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/prose.txt
+  ok    PR title and body
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+exit=0
+
+--- 5. the real commits of this issue, checked as a range ---
+$ ./scripts/dev/check_issue_refs.sh --range fb5f57c~1..origin/main
+Commits in fb5f57c~1..origin/main
+  ok    d1246ccd test(tooling): acceptance evidence for #57 (#110)
+  ok    3c3f951d fix(auth): clear the local session even when the remote logout fails (#103)
+  ok    9aca7285 docs(workflow): say plainly that main has no branch protection (#107)
+  ok    93ad7dc4 test(security): acceptance evidence for #77 (#106)
+  ok    fb5f57c4 docs(workflow): give qa an owner and make the loop rules non-contradictory (#104)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+exit=0
+
+--- 6. the same check running in CI on the two PRs for this issue ---
+$ gh pr checks 104
+Docs check	pass	22s	https://github.com/koniz-dev/flutter-starter/actions/runs/35442374998/job/105895307635	
+Issue refs	pass	5s	https://github.com/koniz-dev/flutter-starter/actions/runs/35442374965/job/105895307336	
+Quality gate	pass	2m24s	https://github.com/koniz-dev/flutter-starter/actions/runs/35442374951/job/105895307399	
+Strip both-samples-removed + analyze + test	pass	2m13s	https://github.com/koniz-dev/flutter-starter/actions/runs/35442374957/job/105895307497	
+Strip feature-flags-removed + analyze + test	pass	2m25s	https://github.com/koniz-dev/flutter-starter/actions/runs/35442374957/job/105895307378	
+Strip tasks-removed + analyze + test	pass	2m19s	https://github.com/koniz-dev/flutter-starter/actions/runs/35442374957/job/105895307478	
+
+$ gh pr checks 107
+Docs check	pass	38s	https://github.com/koniz-dev/flutter-starter/actions/runs/35443035017/job/105897092125	
+Issue refs	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/35443035064/job/105897092310	
+Quality gate	pass	2m29s	https://github.com/koniz-dev/flutter-starter/actions/runs/35443035105/job/105897092435	
+Strip both-samples-removed + analyze + test	pass	2m12s	https://github.com/koniz-dev/flutter-starter/actions/runs/35443035031/job/105897092362	
+Strip feature-flags-removed + analyze + test	pass	2m21s	https://github.com/koniz-dev/flutter-starter/actions/runs/35443035031/job/105897092334	
+Strip tasks-removed + analyze + test	pass	2m24s	https://github.com/koniz-dev/flutter-starter/actions/runs/35443035031/job/105897092352	
+
+$ gh run view 35443035064 --log | grep "Check issue references"
+Issue refs	Check issue references	﻿2026-09-19T12:30:11.5868725Z ##[group]Run ./scripts/dev/check_issue_refs.sh \
+Issue refs	Check issue references	2026-09-19T12:30:11.5870734Z ^[[36;1m./scripts/dev/check_issue_refs.sh \^[[0m
+Issue refs	Check issue references	2026-09-19T12:30:11.5872196Z ^[[36;1m  --range "$BASE_SHA..$HEAD_SHA" \^[[0m
+Issue refs	Check issue references	2026-09-19T12:30:11.5873609Z ^[[36;1m  --body-file "$RUNNER_TEMP/pr.txt"^[[0m
+Issue refs	Check issue references	2026-09-19T12:30:11.5910818Z shell: /usr/bin/bash -e {0}
+Issue refs	Check issue references	2026-09-19T12:30:11.5911923Z env:
+Issue refs	Check issue references	2026-09-19T12:30:11.5912950Z   BASE_SHA: 93ad7dc4a9a137f596d2bcbd03299eb728438c43
+Issue refs	Check issue references	2026-09-19T12:30:11.5914543Z   HEAD_SHA: 5d8e93697db6f27a250c74c1fb5cdd3519c72a62
+Issue refs	Check issue references	2026-09-19T12:30:11.5915908Z ##[endgroup]
+Issue refs	Check issue references	2026-09-19T12:30:11.6111464Z Commits in 93ad7dc4a9a137f596d2bcbd03299eb728438c43..5d8e93697db6f27a250c74c1fb5cdd3519c72a62
+Issue refs	Check issue references	2026-09-19T12:30:11.6207429Z   ok    5d8e9369 docs(workflow): count strip-smoke among the checks a PR gets
+Issue refs	Check issue references	2026-09-19T12:30:11.6279173Z   ok    7f059dfc docs(workflow): say plainly that main has no branch protection
+Issue refs	Check issue references	2026-09-19T12:30:11.6281070Z 
+Issue refs	Check issue references	2026-09-19T12:30:11.6281609Z Body file /home/runner/work/_temp/pr.txt
+Issue refs	Check issue references	2026-09-19T12:30:11.6314928Z   ok    PR title and body
+Issue refs	Check issue references	2026-09-19T12:30:11.6315659Z 
+Issue refs	Check issue references	2026-09-19T12:30:11.6316731Z OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

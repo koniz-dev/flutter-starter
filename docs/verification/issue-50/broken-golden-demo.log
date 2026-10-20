@@ -1,0 +1,17 @@
+Criterion 5, second half: a deliberately broken golden must make the job red.
+
+Method: fresh clone of origin/main, append invalid Dart to
+tool/golden/stripped/lib/core/routing/routes_registry.dart, then run the
+bare --apply strip (which copies that golden into place) and analyze.
+
+--- flutter analyze, exit 1 ---
+  error • Invalid reference to 'this' expression • lib/core/routing/routes_registry.dart:13:29 • invalid_reference_to_this
+  error • Expected to find ';' • lib/core/routing/routes_registry.dart:13:37 • expected_token
+  error • The name 'not' isn't defined, so it can't be used in an 'is' expression. Try changing the name to the name of an existing type, or creating a type with the name 'not' • lib/core/routing/routes_registry.dart:13:37 • type_test_with_undefined_name
+  error • Undefined class 'valid'. Try changing the name to the name of an existing class, or creating a class with the name 'valid' • lib/core/routing/routes_registry.dart:13:41 • undefined_class
+  error • Expected to find ';' • lib/core/routing/routes_registry.dart:13:47 • expected_token
+
+5 errors reported; analyze exit code 1, so the strip-smoke matrix job is RED.
+This also answers criterion 7: excluding tool/golden/** from in-place
+analysis does not hide breakage, because the matrix analyzes the golden
+once it has been copied into the stripped tree.

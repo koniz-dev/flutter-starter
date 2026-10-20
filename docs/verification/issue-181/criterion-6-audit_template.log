@@ -1,0 +1,12 @@
+$ ./scripts/dev/audit_template.sh
+
+==> env asset guard
+==> format (lib test integration_test tool examples)
+==> flutter analyze
+No issues found! (ran in 4.0s)
+==> flutter test
+01:47 +2806 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+01:47 +2807 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+01:47 +2808 ~8: All tests passed!
+
+exit=0

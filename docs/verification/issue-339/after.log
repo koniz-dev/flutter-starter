@@ -1,0 +1,5 @@
+# alpha_probe.sh with this branch's flutter_launcher_icons.yaml
+logo colour type: 6  (6 = RGBA)
+✓ Successfully generated launcher icons
+iOS 1024 icon colour type: 2  (2 = RGB, 6 = RGBA)
+exit: 0

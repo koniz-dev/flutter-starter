@@ -1,0 +1,8 @@
+# same guard on the branch (after the fix)
+All tests passed!
+every acceptance test builds its container the production way
+loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/acceptance_container_test.dart
+scanAcceptanceSource allows createAppContainer, UncontrolledProviderScope and a scope that spreads authModuleOverrides
+scanAcceptanceSource flags a ProviderScope that omits authModuleOverrides
+scanAcceptanceSource flags a bare ProviderContainer, as #288 had it
+scanAcceptanceSource ignores ProviderContainer( written in a comment

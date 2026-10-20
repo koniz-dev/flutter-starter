@@ -1,0 +1,41 @@
+## Criterion 2: every --dart-define key in the 'Code Obfuscation' section
+## of docs/guides/security/implementation.md, checked against the keys of
+## DartDefines.values in lib/core/config/dart_defines.dart.
+
+DartDefines.values keys:
+  API_CONNECT_TIMEOUT
+  API_RECEIVE_TIMEOUT
+  API_SEND_TIMEOUT
+  API_SSL_FINGERPRINTS
+  API_TIMEOUT
+  APP_BUILD_NUMBER
+  APP_VERSION
+  BASE_URL
+  ENABLE_ANALYTICS
+  ENABLE_CRASH_REPORTING
+  ENABLE_DEBUG_FEATURES
+  ENABLE_HTTP_LOGGING
+  ENABLE_LOGGING
+  ENABLE_PERFORMANCE_MONITORING
+  ENABLE_SSL_PINNING
+  ENVIRONMENT
+
+--dart-define occurrences in the section:
+  46:  --dart-define=ENVIRONMENT="$ENVIRONMENT" \
+  47:  --dart-define=BASE_URL="$BASE_URL" \
+  48:  --dart-define=API_SSL_FINGERPRINTS="$API_SSL_FINGERPRINTS"
+  89:            --dart-define=ENVIRONMENT=production \
+  90:            --dart-define=BASE_URL=${{ secrets.BASE_URL }} \
+  91:            --dart-define=API_SSL_FINGERPRINTS="${{ secrets.API_SSL_FINGERPRINTS }}"
+  OK      API_SSL_FINGERPRINTS
+  OK      BASE_URL
+  OK      ENVIRONMENT
+
+result: PASS
+
+## Control: the same check on the section as it was on da78f40, the parent of the fix
+  OK      BASE_URL
+  UNKNOWN CERTIFICATE_FINGERPRINTS
+  OK      ENVIRONMENT
+
+control result: FAIL (expected FAIL)

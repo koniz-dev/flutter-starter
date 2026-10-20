@@ -1,0 +1,8 @@
+# test/tooling/launcher_icons_config_test.dart against main's flutter_launcher_icons.yaml
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt339/test/tooling/launcher_icons_config_test.dart
+00:00 +0: flutter_launcher_icons.yaml flattens alpha whenever it generates iOS icons
+00:00 +0 -1: flutter_launcher_icons.yaml flattens alpha whenever it generates iOS icons [E]
+  Expected: true
+    Actual: <false>
+  an RGBA logo would yield an RGBA iOS icon, which App Store Connect rejects
+00:00 +0 -1: Some tests failed.

@@ -1,0 +1,20 @@
+# Criterion 3: the smoke test asserts something real
+
+  // Runs everywhere, including with no backend. Not a token test: reaching a
+  // rendered login screen exercises the native Patrol harness, app bootstrap,
+  // the Riverpod scope, the router, and localization.
+  patrolTest('E2E: app boots to a usable login screen', ($) async {
+    await _boot($);
+
+    await $(#e2e_login_submit).waitUntilVisible();
+    expect($(#e2e_login_submit), findsOneWidget);
+
+    await $(TextField).at(0).enterText('test@example.com');
+    await $(TextField).at(1).enterText('password123');
+    expect($('test@example.com'), findsOneWidget);
+  });
+
+It waits for the login control, asserts it exists, types into both fields,
+and asserts the typed text renders. Reaching a rendered login screen
+exercises the native harness, app bootstrap, the Riverpod scope, the
+router and localization. It is not a bare app.main() call.

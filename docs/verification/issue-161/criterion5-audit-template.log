@@ -1,0 +1,51 @@
+$ ./scripts/dev/audit_template.sh --reporter compact
+
+(The app logs every test through LoggingService; the box-drawing noise is
+ filtered out below. Gate headings, the per-gate results and the final
+ test tally are verbatim.)
+
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 362 files (0 changed) in 1.53 seconds.
+==> flutter analyze
+Analyzing agent-a12efd43fbec7a869...                            
+No issues found! (ran in 3.7s)
+==> flutter test
+Cache write error: Exception: Storage error
+Cache credential check error: Bad state: keychain down
+NoOpRealtimeClient: Simulated connection to ws://localhost:8080
+NoOpRealtimeClient: Simulated connection to ws://localhost:8080
+NoOpRealtimeClient: Simulated disconnection
+NoOpRealtimeClient: Simulated send -> {type: message, data: hello}
+NoOpRealtimeClient: Simulated send -> test message
+NoOpRealtimeClient: Simulated send -> null
+NoOpRealtimeClient: Simulated connection to ws://localhost
+NoOpRealtimeClient: Simulated send -> hello
+NoOpRealtimeClient: Simulated send -> world
+NoOpRealtimeClient: Simulated disconnection
+NoOpRealtimeClient: Simulated send -> test
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+Pagination error: Exception: Load error
+Pagination error: Exception: network down
+Preload error: HTTP request failed, statusCode: 400, file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a12efd43fbec7a869/not-a-url
+Preload error: HTTP request failed, statusCode: 400, https://example.invalid/missing.jpg
+Preload error: HTTP request failed, statusCode: 400, https://example.invalid/missing.jpg
+Preload error: HTTP request failed, statusCode: 400, https://example.com/image1.jpg
+Preload error: HTTP request failed, statusCode: 400, https://example.com/image2.jpg
+Memory: Attempting to free memory
+Memory: Attempting to free memory
+Memory: Attempting to free memory
+
+--- final lines of the test run ---
+Formatted 362 files (0 changed) in 1.53 seconds.
+No issues found! (ran in 3.7s)
+02:03 +2768 ~8: All other tests passed!                                                                                                                                                                
+
+exit: 0

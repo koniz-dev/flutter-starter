@@ -1,0 +1,80 @@
+Criterion 1 - every surface maps to exactly one epic
+Source of truth: ./scripts/bootstrap-issue-labels.sh --list-map
+Generated on the merged tree at 8b2e3a5
+
+SURFACE                                     CLAIMED BY
+------------------------------------------  -------------------------
+-- lib/ (every directory, plus the entry point)
+lib/l10n                                    epic:i18n 
+lib/main.dart                               epic:app-shell 
+lib/core/accessibility                      epic:design-system 
+lib/core/config                             epic:core-config 
+lib/core/constants                          epic:core-foundation 
+lib/core/contracts                          epic:core-di 
+lib/core/di                                 epic:core-di 
+lib/core/errors                             epic:core-foundation 
+lib/core/feature_flags                      epic:feature-flags 
+lib/core/localization                       epic:i18n 
+lib/core/logging                            epic:core-foundation 
+lib/core/network                            epic:core-network 
+lib/core/performance                        epic:core-foundation 
+lib/core/routing                            epic:core-routing 
+lib/core/security                           epic:core-security 
+lib/core/session                            epic:feature-auth 
+lib/core/startup                            epic:app-shell 
+lib/core/storage                            epic:core-storage 
+lib/core/utils                              epic:core-foundation 
+lib/features/auth                           epic:feature-auth 
+lib/features/feature_flags                  epic:feature-flags 
+lib/features/home                           epic:app-shell 
+lib/features/tasks                          epic:feature-tasks 
+lib/shared/accessibility                    epic:design-system 
+lib/shared/design_system                    epic:design-system 
+lib/shared/extensions                       epic:design-system 
+lib/shared/theme                            epic:design-system 
+lib/shared/widgets                          epic:design-system 
+
+-- native and release surfaces named by the issue
+android                                     epic:platform-release 
+ios                                         epic:platform-release 
+macos                                       epic:platform-release 
+web                                         epic:platform-release 
+fastlane                                    epic:platform-release 
+linux                                       epic:platform-release 
+windows                                     epic:platform-release 
+
+-- every other tracked top-level directory
+assets/config                               epic:core-config 
+assets/images                               epic:design-system 
+bricks                                      epic:tooling-ci 
+docs                                        epic:docs 
+examples                                    epic:docs 
+integration_test                            epic:testing 
+scripts                                     epic:tooling-ci 
+test                                        epic:testing 
+tool                                        epic:tooling-ci 
+.github                                     epic:tooling-ci 
+.githooks                                   epic:tooling-ci 
+.claude                                     epic:docs 
+.vscode                                     epic:tooling-ci 
+
+-- tracked top-level files
+.env.example                                epic:core-config 
+.gitignore                                  epic:tooling-ci 
+.metadata                                   epic:tooling-ci 
+CHANGELOG.md                                epic:docs 
+CLAUDE.md                                   epic:docs 
+CONTRIBUTING.md                             epic:docs 
+LICENSE                                     epic:docs 
+README.md                                   epic:docs 
+analysis_options.yaml                       epic:tooling-ci 
+codecov.yml                                 epic:testing 
+dart_test.yaml                              epic:testing 
+flutter_launcher_icons.yaml                 epic:platform-release 
+flutter_native_splash.yaml                  epic:platform-release 
+l10n.yaml                                   epic:i18n 
+mason.yaml                                  epic:tooling-ci 
+pubspec.lock                                epic:tooling-ci 
+pubspec.yaml                                epic:tooling-ci 
+
+RESULT: every surface above is claimed by exactly one epic.

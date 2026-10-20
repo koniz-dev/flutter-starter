@@ -1,0 +1,40 @@
+# Criterion 6: the copy-paste template ships no vacuous assertions
+
+The template is the file forks copy when they wire up Firebase
+Performance; it carried 14 `expect(true, isTrue)` calls that propagated
+the pattern outward.
+
+$ grep -c 'expect(true, isTrue)' test/shared/performance/firebase_performance_service_test.dart.template
+0
+(exit 1)
+
+What replaced them (operations now assert they ran; swallow-the-exception cases assert the call was still attempted):
+
+$ grep -n 'expect(ran, isTrue)\|returnsNormally);\|verify(() => mockTrace' test/shared/performance/firebase_performance_service_test.dart.template | cat
+110:        expect(ran, isTrue);
+157:        expect(ran, isTrue);
+267:        expect(ran, isTrue);
+294:        expect(ran, isTrue);
+308:        expect(ran, isTrue);
+323:        expect(ran, isTrue);
+346:        expect(ran, isTrue);
+391:        verify(() => mockTrace.start()).called(1);
+399:        verify(() => mockTrace.start()).called(1);
+407:        verify(() => mockTrace.start()).called(1);
+413:        expect(performanceTrace.startSync, returnsNormally);
+414:        verify(() => mockTrace.start()).called(1);
+422:        verify(() => mockTrace.stop()).called(1);
+429:        verify(() => mockTrace.stop()).called(1);
+437:        verify(() => mockTrace.stop()).called(1);
+443:        expect(performanceTrace.stopSync, returnsNormally);
+444:        verify(() => mockTrace.stop()).called(1);
+452:        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
+464:        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
+472:        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
+484:        verify(() => mockTrace.incrementMetric('success', 1)).called(1);
+492:        verify(() => mockTrace.putAttribute('key', 'value')).called(1);
+504:        verify(() => mockTrace.putAttribute('key', 'value')).called(1);
+512:        verify(() => mockTrace.putAttribute('key1', 'value1')).called(1);
+513:        verify(() => mockTrace.putAttribute('key2', 'value2')).called(1);
+(exit 0)
+

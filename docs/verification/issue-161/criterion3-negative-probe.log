@@ -1,0 +1,49 @@
+PROBE - does the reachability suite still bite after the rename?
+
+Issue koniz-dev/flutter-starter#160 wired test/core/startup/startup_reachability_test.dart
+to the exact factory main() calls, so that a regression in the container
+fails the suite. The rename moved both sides at once, which could in
+principle have left the test driving something other than production.
+This probe removes the never-retry policy from the production factory and
+shows the suite goes red. The edit is reverted at the end of this log.
+
+$ git diff -- lib/main.dart
+
+diff --git a/lib/main.dart b/lib/main.dart
+index 49c8280..3910f4f 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -62,7 +62,7 @@ Duration? _neverRetry(int retryCount, Object error) => null;
+ ProviderContainer createAppContainer({
+   List<Override> overrides = const <Override>[],
+ }) {
+-  return ProviderContainer(retry: _neverRetry, overrides: overrides);
++  return ProviderContainer(overrides: overrides);
+ }
+ 
+ // Returns a Future so callers can await startup. `void main() async` would
+
+$ flutter test test/core/startup/startup_reachability_test.dart --timeout=45s
+
+00:05 +0 -1: startup container surfaces failures instead of hanging (#101) a real migration failure reaches the awaiting caller within 5s [E]
+     Which: threw TimeoutException:<TimeoutException after 0:00:05.000000: Future not completed>
+00:10 +0 -2: startup container surfaces failures instead of hanging (#101) a downgrade refusal reaches the awaiting caller within 5s [E]
+     Which: threw TimeoutException:<TimeoutException after 0:00:05.000000: Future not completed>
+00:15 +0 -3: startup container surfaces failures instead of hanging (#101) a plain Exception from storage init is not retried away [E]
+     Which: threw TimeoutException:<TimeoutException after 0:00:05.000000: Future not completed>
+            which has `toString` with value 'TimeoutException after 0:00:05.000000: Future not completed' which does not contain 'startup blew up'
+00:20 +0 -4: startup container surfaces failures instead of hanging (#101) a session restoration failure is not retried away [E]
+     Which: threw TimeoutException:<TimeoutException after 0:00:05.000000: Future not completed>
+            which has `toString` with value 'TimeoutException after 0:00:05.000000: Future not completed' which does not contain 'startup blew up'
+00:43 +2 -5: main() renders StartupFailureApp end to end (#101) a failed version stamp boots into the failure screen [E]
+01:03 +2 -6: main() renders StartupFailureApp end to end (#101) a downgrade refusal boots into the failure screen [E]
+01:04 +3 -6: Some tests failed.
+
+exit: 1   <- non-zero is the expected result for this probe
+
+failing test count reported by the runner:
+01:04 +3 -6: Some tests failed.
+
+Probe reverted:
+$ git status --porcelain -- lib/main.dart
+(no output = lib/main.dart is back to the merged state)

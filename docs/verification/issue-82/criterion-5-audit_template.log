@@ -1,0 +1,20 @@
+Criterion 5: ./scripts/dev/audit_template.sh -> exit 0
+
+Run on the merged main at fdf2832. 2673 tests passed, 8 skipped (the
+golden-tagged acceptance tests that dart_test.yaml skips by default).
+The `flutter pub get` version banner and the ~4700 lines of per-test
+application logging are trimmed; every section header and result is below.
+
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 355 files (0 changed) in 3.13 seconds.
+==> flutter analyze
+[... pub version banner trimmed ...]
+Analyzing agent-aa059230abc5ee9e0...
+No issues found! (ran in 7.4s)
+==> flutter test
+[... pub version banner and ~4700 lines of per-test output trimmed ...]
+02:25 +2671 ~8: test/main_test.dart: HomeScreen should display welcome message
+02:25 +2672 ~8: test/main_test.dart: HomeScreen should have app bar with title
+02:25 +2673 ~8: All tests passed!

@@ -1,0 +1,37 @@
+Addendum: re-check after `main` moved.
+
+The criterion evidence in this directory was produced on `main` at dd0e6af.
+Between then and the merge of this evidence branch, `main` advanced by five
+commits, one of which (#132, "fix(tooling): make macOS networking, release
+signing, fastlane and the Mason rename work") edited `pubspec.yaml` - the file
+criterion 1 and criterion 4 rest on. It added two directory entries to the
+asset list:
+
+    assets:
+      - .env.example
+      - assets/images/
+      - assets/config/
+
+Re-checked on the rebased tree, with that pubspec:
+
+    $ dart run tool/check_env_assets.dart
+    OK: no unacknowledged env file in the Flutter asset list.
+    exit=0
+
+    $ flutter test test/tooling/check_env_assets_test.dart --reporter compact
+    00:05 +8: All tests passed!
+
+So criteria 1, 4 and 6 still hold: the comment block that criterion 1 cites is
+untouched (the new lines were appended after it), and the guard parses the new
+directory entries without complaint.
+
+Known gap this exposed, filed rather than fixed:
+
+  A declared asset *directory* bundles whatever is inside it, so a `.env`
+  dropped into `assets/config/` would ship without ever appearing in the asset
+  list, and this guard - which reads the list - would not see it. Both
+  directories currently hold only `.gitkeep`, so nothing is bundled today.
+  Filed as koniz-dev/flutter-starter#138 (epic:core-security). It is outside
+  criterion 4 as written ("fails when `.env` appears in the `assets:` list of
+  `pubspec.yaml`"), and the directory entries did not exist when #79 was
+  written.

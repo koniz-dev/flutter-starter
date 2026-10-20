@@ -1,0 +1,61 @@
+$ flutter test test/shared/extensions/ --reporter json   (testDone events, one line per test)
+success | DateTimeExtensions isToday should return true for today
+success | DateTimeExtensions isToday should return false for yesterday
+success | DateTimeExtensions isToday should return false for tomorrow
+success | DateTimeExtensions isYesterday should return true for yesterday
+success | DateTimeExtensions isYesterday should return false for today
+success | DateTimeExtensions isYesterday should return false for two days ago
+success | DateTimeExtensions isTomorrow should return true for tomorrow
+success | DateTimeExtensions isTomorrow should return false for today
+success | DateTimeExtensions isTomorrow should return false for two days from now
+success | DateTimeExtensions startOfDay should return start of day
+success | DateTimeExtensions endOfDay should return end of day
+success | DateTimeExtensions toDateString should format date as yyyy-MM-dd
+success | DateTimeExtensions toDateString should pad single digit month and day
+success | DateTimeExtensions toTimeString should format time as HH:mm:ss
+success | DateTimeExtensions toTimeString should pad single digit hours, minutes, seconds
+success | DateTimeExtensions toDateTimeString should format date and time
+success | DateTimeExtensions toDateTimeString should combine toDateString and toTimeString
+success | DateTimeExtensions Edge Cases startOfDay should handle leap year
+success | DateTimeExtensions Edge Cases endOfDay should handle year boundaries
+success | DateTimeExtensions Edge Cases toDateString should handle year boundaries
+success | DateTimeExtensions Edge Cases toTimeString should handle midnight
+success | StringExtensions isValidEmail should return true for valid email addresses
+success | StringExtensions isValidEmail should return false for invalid email addresses
+success | StringExtensions isValidEmail agrees with Validators.isValidEmail on the #63 case table
+success | StringExtensions isValidPhone should return true for valid phone numbers
+success | StringExtensions isValidPhone should return false for invalid phone numbers
+success | StringExtensions capitalize should capitalize first letter
+success | StringExtensions capitalize should return empty string if string is empty
+success | StringExtensions capitalize should handle single character
+success | StringExtensions capitalizeWords should capitalize first letter of each word
+success | StringExtensions capitalizeWords should return empty string if string is empty
+success | StringExtensions capitalizeWords should handle single word
+success | StringExtensions removeWhitespace should remove all whitespace
+success | StringExtensions removeWhitespace should return same string if no whitespace
+success | StringExtensions isNullOrEmpty should return true for empty string
+success | StringExtensions isNullOrEmpty should return false for non-empty string
+success | StringExtensions Edge Cases capitalize should handle special characters
+success | StringExtensions Edge Cases capitalizeWords should handle multiple spaces
+success | StringExtensions Edge Cases removeWhitespace should handle all whitespace types
+success | NullableStringExtensions isNullOrEmpty should return true for null string
+success | NullableStringExtensions isNullOrEmpty should return true for empty string
+success | NullableStringExtensions isNullOrEmpty should return false for non-empty string
+success | NullableStringExtensions orEmpty should return empty string for null
+success | NullableStringExtensions orEmpty should return string value if not null
+success | ContextExtensions should get theme
+success | ContextExtensions should get textTheme
+success | ContextExtensions should get colorScheme
+success | ContextExtensions should get mediaQuery
+success | ContextExtensions should get screenSize
+success | ContextExtensions should get screenWidth
+success | ContextExtensions should get screenHeight
+success | ContextExtensions should detect mobile screen
+success | ContextExtensions should detect tablet screen
+success | ContextExtensions should detect desktop screen
+success | ContextExtensions should show snackbar
+success | ContextExtensions should show error snackbar
+success | ContextExtensions should show success snackbar
+success | ContextExtensions context.pop() is unambiguous when go_router is also imported
+tests: 58 success: True
+exit: 0

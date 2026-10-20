@@ -1,0 +1,8 @@
+# the same test on this branch
+00:00 +0: criterion 2: every self-contained dart snippet analyzes with no error or warning
+00:09 +1: criterion 1: no snippet or note names flutter_gen
+00:09 +2: criterion 3: the language list matches lib/l10n/app_*.arb
+00:09 +3: All tests passed!
+
+# grep -rn flutter_gen docs README.md CONTRIBUTING.md (excluding docs/verification)
+(none)

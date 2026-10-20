@@ -1,0 +1,32 @@
+# main 970a4d799a3, before the fix: 30 consecutive runs of flutter test test/core/logging/production_logging_test.dart
+run 1: pass
+run 2: pass
+run 3: pass
+run 4: pass
+run 5: pass
+run 6: pass
+run 7: pass
+run 8: pass
+run 9: pass
+run 10: pass
+run 11: pass
+run 12: pass
+run 13: pass
+run 14: pass
+run 15: pass
+run 16: FAIL - [E]
+run 17: pass
+run 18: pass
+run 19: pass
+run 20: pass
+run 21: pass
+run 22: pass
+run 23: pass
+run 24: pass
+run 25: pass
+run 26: pass
+run 27: pass
+run 28: pass
+run 29: pass
+run 30: pass
+passed=29 failed=1

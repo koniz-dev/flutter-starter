@@ -1,0 +1,19 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt576/test/core/logging/logging_service_output_test.dart
+00:00 +0: the injected output replaces every built-in output
+00:00 +1: debug logs at Level.debug with the context appended
+00:00 +2: info logs at Level.info with the bare message
+00:00 +3: warning logs at Level.warning and carries the error
+00:00 +4: error logs at Level.error and carries the error
+00:00 +4 -1: error logs at Level.error and carries the error [E]
+  Expected: Level:<Level.error>
+    Actual: Level:<Level.warning>
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/core/logging/logging_service_output_test.dart 70:5  main.<fn>
+  
+00:00 +4 -1: a disabled service never reaches the injected output
+00:00 +5 -1: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt576/test/core/logging/logging_service_output_test.dart: error logs at Level.error and carries the error

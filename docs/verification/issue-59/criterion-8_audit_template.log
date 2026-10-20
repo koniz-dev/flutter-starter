@@ -1,0 +1,10 @@
+$ ./scripts/dev/audit_template.sh
+
+==> format (lib test integration_test tool examples)
+Formatted 345 files (0 changed) in 2.38 seconds.
+==> flutter analyze
+Analyzing agent-a33db2ee8e4f10e3d...                            
+No issues found! (ran in 5.3s)
+==> flutter test
+04:26 +2327 ~4: All tests passed!
+exit: 0

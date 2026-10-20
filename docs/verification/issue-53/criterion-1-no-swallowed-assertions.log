@@ -1,0 +1,45 @@
+# Criterion 1: no test treats its own assertion failure as a pass
+
+`TestFailure implements Exception`, so a `catch` that swallows an
+Exception around an `expect()` converts a failed assertion into a pass.
+The ten sites named in the issue are gone; what the grep still finds is
+listed and accounted for below.
+
+$ grep -rn 'on Exception catch\|on Object catch\|} catch (' test/ | cat
+test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:95:  } on Object catch (error) {
+test/core/network/api_client_interceptor_chain_test.dart:238:        } on Object catch (e) {
+test/core/network/api_client_interceptor_chain_test.dart:356:      } on Object catch (e) {
+test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart:65:        // Before #53 this was wrapped in `on Object catch (e) { expect(e,
+(exit 0)
+
+Accounting, site by site (each inspected):
+
+  feature_flags_providers_test.dart:65   a comment quoting the pattern that was
+                                         removed, not code.
+
+  api_client_interceptor_chain_test.dart:238,356 and
+  auth_interceptor_refresh_queue_test.dart:95
+                                         `try { await call(); } on Object catch
+                                         (e) { thrown = e; }` - there is no
+                                         `expect` inside the `try`, so no
+                                         assertion can be swallowed. The captured
+                                         error is asserted *after* the block
+                                         (`expect(thrown, isA<ServerException>())`),
+                                         which fails if nothing threw. These are
+                                         the capture idiom, not the swallow one,
+                                         and #46/#88 rely on them.
+
+Assertions that a call throws now use throwsA/expectLater:
+
+$ grep -rn 'throwsA(\|throwsStateError' test/core/di/providers_test.dart test/features/auth/data/datasources/auth_local_datasource_test.dart test/core/utils/provider_disposal_test.dart | cat
+test/core/di/providers_test.dart:397:          throwsA(
+test/core/di/providers_test.dart:427:          throwsA(isA<MigrationExecutionException>()),
+test/features/auth/data/datasources/auth_local_datasource_test.dart:308:          throwsA(isA<CacheException>()),
+test/features/auth/data/datasources/auth_local_datasource_test.dart:337:            throwsA(isA<CacheException>()),
+test/features/auth/data/datasources/auth_local_datasource_test.dart:372:          throwsA(isA<CacheException>()),
+test/features/auth/data/datasources/auth_local_datasource_test.dart:386:          throwsA(isA<CacheException>()),
+test/features/auth/data/datasources/auth_local_datasource_test.dart:415:            throwsA(isA<CacheException>()),
+test/features/auth/data/datasources/auth_local_datasource_test.dart:490:          throwsA(isA<CacheException>()),
+test/core/utils/provider_disposal_test.dart:83:      expect(() => container.read(probe), throwsStateError);
+(exit 0)
+

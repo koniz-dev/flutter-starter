@@ -1,0 +1,11 @@
+# NOTE: per-test progress lines and the ANSI-boxed logger output were
+# elided to keep this committable. Kept verbatim: the gate headers, every
+# line that is not a progress tick, the final tally, and the exit code.
+# Reproduce in full with the command on the next line.
+$ flutter test test/features/tasks/ test/features/feature_flags/
+SCOPED_EXIT=0
+
+--- final lines, verbatim ---
+00:29 +468: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: (tearDownAll)
+00:29 +468: All tests passed!
+SCOPED_EXIT=0

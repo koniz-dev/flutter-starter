@@ -1,0 +1,10 @@
+$ ./scripts/dev/audit_template.sh   # run against merged main at 3cbbb9f
+
+==> format (lib test integration_test tool examples)
+Formatted 333 files (0 changed) in 1.51 seconds.
+==> flutter analyze
+No issues found! (ran in 4.6s)
+==> flutter test
+02:28 +2236 ~1: All tests passed!
+
+AUDIT_EXIT=0

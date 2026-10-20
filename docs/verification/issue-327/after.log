@@ -1,0 +1,5 @@
+00:00 +0: criterion 1: VND in vi_VN uses ₫, not the ISO code
+00:00 +1: criterion 2: KRW in ko and EUR in es use intl's symbol
+00:00 +2: the symbol is exactly what intl gives for that locale and code
+00:00 +3: zero-decimal currencies stay without cents
+00:00 +4: All tests passed!

@@ -1,0 +1,174 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a731a2713c6d6f9ac/test/core/network/interceptors/api_logging_interceptor_test.dart
+00:00 +0: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:00 +1: ApiLoggingInterceptor onRequest should include method and path in log
+00:00 +2: ApiLoggingInterceptor onRequest should sanitize sensitive headers written the way production writes them
+00:00 +3: ApiLoggingInterceptor onRequest should sanitize sensitive headers regardless of casing
+00:00 +4: ApiLoggingInterceptor onRequest should leave no secret anywhere in the logged context for an authenticated request
+00:00 +5: ApiLoggingInterceptor onRequest should include query parameters when present
+00:00 +6: ApiLoggingInterceptor onRequest should include body when present
+00:00 +7: ApiLoggingInterceptor onRequest should not include body when null
+00:00 +8: ApiLoggingInterceptor onResponse should log successful response
+00:00 +9: ApiLoggingInterceptor onResponse should log error response as warning
+00:00 +10: ApiLoggingInterceptor onResponse should log 4xx responses as warning
+00:00 +11: ApiLoggingInterceptor onResponse should include response data when present
+00:00 +12: ApiLoggingInterceptor onResponse should redact Set-Cookie in the response header log
+00:00 +13: ApiLoggingInterceptor onError should log error with details
+00:00 +14: ApiLoggingInterceptor onError should include error type in log
+00:00 +15: ApiLoggingInterceptor onError should include response status code when available
+00:00 +16: ApiLoggingInterceptor onError should sanitize sensitive data in error response
+00:00 +17: ApiLoggingInterceptor secret redaction sanitizes a pre-encoded JSON string body field by field
+00:00 +17 -1: ApiLoggingInterceptor secret redaction sanitizes a pre-encoded JSON string body field by field [E]
+  Expected: not contains 'hunter2'
+    Actual: '{method: POST, path: /api/auth/login, baseUrl: , headers: {}, body: {"email":"a@b.c","password":"hunter2"}}'
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 643:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -1: ApiLoggingInterceptor secret redaction redacts a form-encoded string body wholesale
+00:00 +17 -2: ApiLoggingInterceptor secret redaction redacts a form-encoded string body wholesale [E]
+  Expected: '***REDACTED***'
+    Actual: 'grant_type=password&username=a%40b.c&password=hunter2'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: grant_type ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 667:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -2: ApiLoggingInterceptor secret redaction redacts a plain-text string body wholesale
+00:00 +17 -3: ApiLoggingInterceptor secret redaction redacts a plain-text string body wholesale [E]
+  Expected: '***REDACTED***'
+    Actual: '502 Bad Gateway'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: 502 Bad Ga ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 687:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -3: ApiLoggingInterceptor secret redaction redacts a bare JSON scalar string body, which has no key to judge by
+00:00 +17 -4: ApiLoggingInterceptor secret redaction redacts a bare JSON scalar string body, which has no key to judge by [E]
+  Expected: '***REDACTED***'
+    Actual: '"rt_live_9f3c2b1a"'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: "rt_live_9 ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 704:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -4: ApiLoggingInterceptor secret redaction sanitizes a top-level JSON array body
+00:00 +17 -5: ApiLoggingInterceptor secret redaction sanitizes a top-level JSON array body [E]
+  Expected: not contains 'hunter2'
+    Actual: '{method: POST, path: /api/batch, baseUrl: , headers: {}, body: [{"user":"a","password":"hunter2"},{"user":"b","access_token":"at_live_1"}]}'
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 724:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -5: ApiLoggingInterceptor secret redaction redacts a body shape it cannot walk, such as FormData
+00:00 +17 -6: ApiLoggingInterceptor secret redaction redacts a body shape it cannot walk, such as FormData [E]
+  Expected: '***REDACTED***'
+    Actual: <Instance of 'FormData'>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 746:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -6: ApiLoggingInterceptor secret redaction sanitizes query parameters by the same rules as bodies
+00:00 +17 -7: ApiLoggingInterceptor secret redaction sanitizes query parameters by the same rules as bodies [E]
+  Expected: not contains 'abc123'
+    Actual: '{method: GET, path: /api/password-reset, baseUrl: , headers: {}, queryParameters: {reset_token: abc123, page: 2}}'
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 767:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -7: ApiLoggingInterceptor secret redaction sanitizes the query parameters conventionally used to carry credentials
+00:00 +17 -8: ApiLoggingInterceptor secret redaction sanitizes the query parameters conventionally used to carry credentials [E]
+  Expected: '***REDACTED***'
+    Actual: 'at_live_1'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: at_live_1
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 792:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -8: ApiLoggingInterceptor secret redaction redacts proxy-authorization, x-auth-token, x-refresh-token and api-key in mixed casing
+00:00 +17 -9: ApiLoggingInterceptor secret redaction redacts proxy-authorization, x-auth-token, x-refresh-token and api-key in mixed casing [E]
+  Expected: '***REDACTED***'
+    Actual: 'Basic cHJveHk6c2VjcmV0'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: Basic cHJv ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 820:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -9: ApiLoggingInterceptor secret redaction leaves no secret in the error context for a failed login with a string request body and a string response body
+00:00 +17 -10: ApiLoggingInterceptor secret redaction leaves no secret in the error context for a failed login with a string request body and a string response body [E]
+  Expected: not contains 'hunter2'
+    Actual: '{type: DioExceptionType.badResponse, path: /api/auth/login, method: POST, statusCode: 401, responseBody: {"error":"invalid_grant","refresh_token":"rt_live_9f3c2b1a"}, requestBody: {"email":"a@b.c","password":"hunter2"}}'
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 866:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -10: ApiLoggingInterceptor secret redaction leaves no secret in the error context when the bodies are not JSON
+00:00 +17 -11: ApiLoggingInterceptor secret redaction leaves no secret in the error context when the bodies are not JSON [E]
+  Expected: '***REDACTED***'
+    Actual: 'refresh_token=rt_live_9f3c2b1a'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: refresh_to ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 899:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -11: ApiLoggingInterceptor secret redaction does not redact innocent fields whose names merely contain a short secret key
+00:00 +17 -12: ApiLoggingInterceptor secret redaction does not redact innocent fields whose names merely contain a short secret key [E]
+  Expected: '***REDACTED***'
+    Actual: '4321'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: 4321
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 932:9  main.<fn>.<fn>.<fn>
+  
+00:00 +17 -12: ApiLoggingInterceptor secret redaction decides by key name, not value shape, so a token under an unlisted key is still logged
+00:00 +18 -12: ApiLoggingInterceptor _sanitizeBody should sanitize sensitive fields in JSON body
+00:00 +19 -12: ApiLoggingInterceptor _sanitizeBody should sanitize nested sensitive fields
+00:00 +20 -12: ApiLoggingInterceptor _sanitizeBody should handle string body
+00:00 +21 -12: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a731a2713c6d6f9ac/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor secret redaction does not redact innocent fields whose names merely contain a short secret key
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a731a2713c6d6f9ac/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor secret redaction leaves no secret in the error context for a failed login with a string request body and a string response body
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a731a2713c6d6f9ac/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor secret redaction leaves no secret in the error context when the bodies are not JSON
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a731a2713c6d6f9ac/test/core/network/interceptors/api_logging_interceptor_test.dart: ApiLoggingInterceptor secret redaction redacts a bare JSON scalar string body, which has no key to judge by
+  ... and 8 more

@@ -1,0 +1,7 @@
+$ flutter test test/core/storage/migration/migration_executor_test.dart --reporter expanded --plain-name downgrade detection
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/storage/migration/migration_executor_test.dart
+00:00 +0: MigrationExecutor downgrade detection (#60) throws distinctly when stored version is newer
+00:00 +1: MigrationExecutor downgrade detection (#60) an exact version match is still a plain success
+00:00 +2: All tests passed!
+exit: 0

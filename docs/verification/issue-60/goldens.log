@@ -1,0 +1,25 @@
+$ flutter test --run-skipped --tags golden test/acceptance
+
+Waiting for another flutter command to release the startup lock...
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/home_screen_acceptance_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/theme_contrast_acceptance_test.dart: theme contrast acceptance light theme renders every text style with visible ink
+00:03 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:04 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/home_screen_acceptance_test.dart: HomeScreen acceptance renders the home content surface and welcome heading
+00:04 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/home_screen_acceptance_test.dart: HomeScreen acceptance renders the home content surface and welcome heading
+00:04 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+00:05 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with empty storage the app opens on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/acceptance/startup_failure_acceptance_test.dart: StartupFailureApp acceptance paints a recovery screen instead of an empty window
+00:09 +6: All tests passed!
+exit: 0

@@ -1,0 +1,60 @@
+$ gh pr checks 231     # demo PR 231: deliberate break in tool/golden/no_tasks/lib/core/routing/app_routes.dart
+Issue refs	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223248475/job/108352336326	
+Quality gate	pass	2m51s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223248472/job/108352336459	
+Strip both-samples-removed + analyze + test	pass	2m24s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223248466/job/108352336647	
+Strip feature-flags-removed + analyze + test	pass	2m35s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223248466/job/108352336629	
+Strip tasks-removed + analyze + test	fail	45s	https://github.com/koniz-dev/flutter-starter/actions/runs/36223248466/job/108352336566	
+
+$ gh run view --job 108352336566 --log   # Strip tasks-removed, scope step output
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6610573Z Strip smoke [tasks-removed]: RAN IN FULL - 1 changed path(s) can affect a stripped tree. Running strip, analyze and test.
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6619135Z ### Strip smoke scope - `tasks-removed`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6619674Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6620119Z **RAN IN FULL**
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6620416Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6620637Z - event: `pull_request`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6621285Z - range: `fe27a5bd5934ee5a98ee8a2461163b27123690f9...358eb9f5b8ec981cb36fa0096cc5a549dba7a0c5`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6622094Z - strip, analyze and test run: `true`
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6622446Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6622712Z 1 changed path(s) can affect a stripped tree. Running strip, analyze and test.
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6623028Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6623173Z <details><summary>Changed paths</summary>
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6623435Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6623590Z ```
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6623927Z tool/golden/no_tasks/lib/core/routing/app_routes.dart
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6624296Z ```
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6624424Z 
+Strip tasks-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:20.6624564Z </details>
+
+$ gh run view --job 108352336647 --log   # Strip both-samples-removed, scope step output
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3657683Z Strip smoke [both-samples-removed]: RAN IN FULL - 1 changed path(s) can affect a stripped tree. Running strip, analyze and test.
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3666827Z ### Strip smoke scope - `both-samples-removed`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3667391Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3667523Z **RAN IN FULL**
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3667716Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3667843Z - event: `pull_request`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3668437Z - range: `fe27a5bd5934ee5a98ee8a2461163b27123690f9...358eb9f5b8ec981cb36fa0096cc5a549dba7a0c5`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3669088Z - strip, analyze and test run: `true`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3669421Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3669721Z 1 changed path(s) can affect a stripped tree. Running strip, analyze and test.
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3670115Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3670319Z <details><summary>Changed paths</summary>
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3670576Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3670690Z ```
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3671026Z tool/golden/no_tasks/lib/core/routing/app_routes.dart
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3672026Z ```
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3672177Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-09-26T06:16:22.3672278Z </details>
+
+$ gh run view --job 108352336566 --log-failed   # the red variant
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:16:49.5083996Z env:
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:16:49.5084424Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:16:49.5084856Z   PUB_CACHE: /home/runner/.pub-cache
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:16:49.5085164Z ##[endgroup]
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0305803Z Analyzing flutter-starter...                                    
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0311923Z 
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0330909Z    info • A type annotation is needed because it isn't obvious. Try adding a type annotation • lib/core/routing/app_routes.dart:38:1 • specify_nonobvious_property_types
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0335573Z   error • Const variables must be initialized with a constant value. Try changing the initializer to be a constant expression • lib/core/routing/app_routes.dart:38:38 • const_initialized_with_non_constant_value
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0337667Z   error • Undefined name 'undefinedSymbolForIssue167'. Try correcting the name to one that is defined, or defining the name • lib/core/routing/app_routes.dart:38:38 • undefined_identifier
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0344709Z 
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0404506Z 3 issues found. (ran in 10.8s)
+Strip tasks-removed + analyze + test	Analyze stripped tree	2026-09-26T06:17:01.0466957Z ##[error]Process completed with exit code 1.

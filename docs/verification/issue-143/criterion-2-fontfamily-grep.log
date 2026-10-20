@@ -1,0 +1,19 @@
+$ grep -rn "fontFamily" lib/
+lib/shared/design_system/tokens/app_typography.dart:11:/// None of the styles below declares a `fontFamily`. That is on purpose: this
+lib/shared/design_system/tokens/app_typography.dart:16:/// A null `fontFamily` also survives the `defaultTextTheme.merge(textTheme)`
+lib/shared/design_system/tokens/app_typography.dart:34:/// 2. Apply it once for the whole app with `ThemeData(fontFamily: ...)` in
+lib/shared/design_system/tokens/app_typography.dart:35:///    `lib/shared/theme/app_theme.dart`, or per style by adding `fontFamily:`
+grep exit: 0 (1 = no matches)
+
+$ grep -rn "font" lib/ --include=*.dart -i | grep -v fontWeight | grep -v fontSize
+lib/core/accessibility/accessibility_constants.dart:10:/// minimum readable font size, recommended font sizes, a decorative-icon label
+lib/shared/design_system/tokens/app_typography.dart:6:/// Avoid arbitrary font sizes in UI code.
+lib/shared/design_system/tokens/app_typography.dart:11:/// None of the styles below declares a `fontFamily`. That is on purpose: this
+lib/shared/design_system/tokens/app_typography.dart:12:/// starter vendors no font file, so naming a family here would name one that
+lib/shared/design_system/tokens/app_typography.dart:16:/// A null `fontFamily` also survives the `defaultTextTheme.merge(textTheme)`
+lib/shared/design_system/tokens/app_typography.dart:20:/// `.AppleSystemUIFont` on macOS, `Segoe UI` on Windows, and Roboto with a
+lib/shared/design_system/tokens/app_typography.dart:25:/// `test/shared/theme/app_theme_font_family_test.dart` pins that behaviour per
+lib/shared/design_system/tokens/app_typography.dart:30:/// 1. Vendor the font under `assets/fonts/` and declare it in the `fonts:`
+lib/shared/design_system/tokens/app_typography.dart:33:///    enough. Ship the font's licence alongside it.
+lib/shared/design_system/tokens/app_typography.dart:34:/// 2. Apply it once for the whole app with `ThemeData(fontFamily: ...)` in
+lib/shared/design_system/tokens/app_typography.dart:35:///    `lib/shared/theme/app_theme.dart`, or per style by adding `fontFamily:`

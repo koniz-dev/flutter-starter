@@ -1,0 +1,43 @@
+$ grep -n "FromNow" lib/l10n/app_{en,es,ar,vi}.arb
+lib/l10n/app_ar.arb:131:  "minutesFromNow": "{count, plural, zero{الآن} one{بعد دقيقة واحدة} two{بعد دقيقتين} few{بعد {count} دقائق} many{بعد {count} دقيقة} other{بعد {count} دقيقة}}",
+lib/l10n/app_ar.arb:132:  "hoursFromNow": "{count, plural, zero{الآن} one{بعد ساعة واحدة} two{بعد ساعتين} few{بعد {count} ساعات} many{بعد {count} ساعة} other{بعد {count} ساعة}}",
+lib/l10n/app_ar.arb:133:  "daysFromNow": "{count, plural, zero{اليوم} one{بعد يوم واحد} two{بعد يومين} few{بعد {count} أيام} many{بعد {count} يومًا} other{بعد {count} يوم}}",
+lib/l10n/app_ar.arb:134:  "monthsFromNow": "{count, plural, zero{هذا الشهر} one{بعد شهر واحد} two{بعد شهرين} few{بعد {count} أشهر} many{بعد {count} شهرًا} other{بعد {count} شهر}}",
+lib/l10n/app_ar.arb:135:  "yearsFromNow": "{count, plural, zero{هذا العام} one{بعد سنة واحدة} two{بعد سنتين} few{بعد {count} سنوات} many{بعد {count} سنة} other{بعد {count} سنة}}"
+lib/l10n/app_es.arb:131:  "minutesFromNow": "{count, plural, =0{Ahora mismo} =1{En 1 minuto} other{En {count} minutos}}",
+lib/l10n/app_es.arb:132:  "hoursFromNow": "{count, plural, =0{Ahora mismo} =1{En 1 hora} other{En {count} horas}}",
+lib/l10n/app_es.arb:133:  "daysFromNow": "{count, plural, =1{En 1 día} other{En {count} días}}",
+lib/l10n/app_es.arb:134:  "monthsFromNow": "{count, plural, =1{En 1 mes} other{En {count} meses}}",
+lib/l10n/app_es.arb:135:  "yearsFromNow": "{count, plural, =1{En 1 año} other{En {count} años}}"
+lib/l10n/app_en.arb:399:  "minutesFromNow": "{count, plural, =0{Just now} =1{in 1 minute} other{in {count} minutes}}",
+lib/l10n/app_en.arb:408:  "hoursFromNow": "{count, plural, =0{Just now} =1{in 1 hour} other{in {count} hours}}",
+lib/l10n/app_en.arb:417:  "daysFromNow": "{count, plural, =1{in 1 day} other{in {count} days}}",
+lib/l10n/app_en.arb:426:  "monthsFromNow": "{count, plural, =1{in 1 month} other{in {count} months}}",
+lib/l10n/app_en.arb:435:  "yearsFromNow": "{count, plural, =1{in 1 year} other{in {count} years}}",
+lib/l10n/app_vi.arb:322:  "minutesFromNow": "{count, plural, =0{Vừa xong} other{{count} phút nữa}}",
+lib/l10n/app_vi.arb:323:  "hoursFromNow": "{count, plural, =0{Vừa xong} other{{count} giờ nữa}}",
+lib/l10n/app_vi.arb:324:  "daysFromNow": "{count, plural, other{{count} ngày nữa}}",
+lib/l10n/app_vi.arb:325:  "monthsFromNow": "{count, plural, other{{count} tháng nữa}}",
+lib/l10n/app_vi.arb:326:  "yearsFromNow": "{count, plural, other{{count} năm nữa}}"
+
+$ grep -nE "FromNow|Ago\(" lib/core/localization/localized_formatters.dart
+191:        return l10n.yearsFromNow((ahead.inDays / 365).floor());
+193:        return l10n.monthsFromNow((ahead.inDays / 30).floor());
+195:        return l10n.daysFromNow(ahead.inDays);
+197:        return l10n.hoursFromNow(ahead.inHours);
+199:      return l10n.minutesFromNow(ahead.inMinutes);
+204:      return l10n.yearsAgo((difference.inDays / 365).floor());
+206:      return l10n.monthsAgo((difference.inDays / 30).floor());
+208:      return l10n.daysAgo(difference.inDays);
+210:      return l10n.hoursAgo(difference.inHours);
+214:      return l10n.minutesAgo(difference.inMinutes.clamp(0, 59));
+
+$ grep -nE "'(in |ago)|\"(in |ago)" lib/core/localization/localized_formatters.dart  # any user-facing literal
+162:  /// - `now.subtract(Duration(hours: 2))` -> `"2 hours ago"`
+163:  /// - `now.add(Duration(hours: 2))` -> `"in 2 hours"`
+164:  /// - `now.add(Duration(days: 3))` -> `"in 3 days"`
+168:  /// hours ahead reads `"in 1 day"`, exactly as 1 day and 23 hours back reads
+169:  /// `"1 day ago"`. Months are 30 days and years are 365 days.
+
+$ git log -1 --format="%H %s" origin/main
+41c44cc5d1d9dcfa085764095171331380dd9bec fix(i18n): render future dates as "in X" in formatRelativeTime (#272)

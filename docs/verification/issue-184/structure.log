@@ -1,0 +1,48 @@
+$ ls test/shared/theme/
+app_theme_font_family_test.dart
+app_theme_test.dart
+theme_contrast_test.dart
+
+$ ls lib/shared/theme/
+app_theme.dart
+
+$ ls test/core/routing/ | grep -c go_router_navigator_adapter
+0
+$ ls lib/core/routing/adapters/ 2>&1
+ls: lib/core/routing/adapters/: No such file or directory
+$ grep -rn GoRouterNavigatorAdapter lib test | wc -l
+       0
+
+$ ls test/core/storage/
+adapters
+isar_database_template_test.dart
+migration
+secure_storage_service_test.dart
+storage_logging_mixin_test.dart
+storage_migration_service_test.dart
+storage_service_test.dart
+storage_version_test.dart
+
+$ ls test/core/storage/migration/
+migration_executor_test.dart
+migration_registry_test.dart
+migrations
+storage_migration_test.dart
+
+$ ls lib/core/storage/storage_migration_service.dart
+lib/core/storage/storage_migration_service.dart
+
+$ find test -path "*auth*" -name "*flow_test.dart" -o -path "*integration*" -name "*_test.dart" | sort
+test/features/auth/integration/auth_flow_test.dart
+test/features/auth/integration/token_refresh_flow_test.dart
+
+$ ls test/integration 2>&1
+ls: test/integration: No such file or directory
+
+$ ls integration_test/
+README.md
+app_e2e_test.dart
+auth_flow_test.dart
+
+$ git diff --name-only origin/main -- lib/
+(exit: 0; lines: 0)

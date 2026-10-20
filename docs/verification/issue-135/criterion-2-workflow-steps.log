@@ -1,0 +1,78 @@
+$ ruby -ryaml -e '...'   # step order per job, read from the workflow files on main
+--- .github/workflows/deploy-android.yml
+  job deploy:
+    1. Checkout code
+    2. Setup Flutter
+    3. Setup Java
+    4. Get dependencies
+    5. Determine environment
+    6. Guard against a bundled secrets file
+    7. Upload artifacts
+--- .github/workflows/deploy-ios.yml
+  job deploy:
+    1. Checkout code
+    2. Setup Flutter
+    3. Get dependencies
+    4. Install CocoaPods
+    5. Setup Xcode
+    6. Determine environment
+    7. Guard against a bundled secrets file
+    8. Upload artifacts
+--- .github/workflows/deploy-web.yml
+  job deploy-firebase:
+    1. Checkout code
+    2. Setup Flutter
+    3. Get dependencies
+    4. Determine environment
+    5. Guard against a bundled secrets file
+  job deploy-netlify:
+    1. Checkout code
+    2. Setup Flutter
+    3. Get dependencies
+    4. Determine environment
+    5. Guard against a bundled secrets file
+  job deploy-vercel:
+    1. Checkout code
+    2. Setup Flutter
+    3. Get dependencies
+    4. Determine environment
+    5. Guard against a bundled secrets file
+
+The build and publish steps of these jobs are commented out in the repository
+(they need credentials this template does not ship), so the guard step is the
+last active step before them. Its position in the file is what matters:
+
+$ grep -n -B2 -A2 'Guard against a bundled secrets file' .github/workflows/deploy-*.yml
+.github/workflows/deploy-android.yml-92-      # writes into the working tree and before the build, so it sees what the
+.github/workflows/deploy-android.yml-93-      # build will see.
+.github/workflows/deploy-android.yml:94:      - name: Guard against a bundled secrets file
+.github/workflows/deploy-android.yml-95-        run: dart run tool/check_env_assets.dart
+.github/workflows/deploy-android.yml-96-
+.github/workflows/deploy-ios.yml-83-      # writes into the working tree and before the build, so it sees what the
+.github/workflows/deploy-ios.yml-84-      # build will see.
+.github/workflows/deploy-ios.yml:85:      - name: Guard against a bundled secrets file
+.github/workflows/deploy-ios.yml-86-        run: dart run tool/check_env_assets.dart
+.github/workflows/deploy-ios.yml-87-
+.github/workflows/deploy-web.yml-85-      # writes into the working tree and before the build, so it sees what the
+.github/workflows/deploy-web.yml-86-      # build will see.
+.github/workflows/deploy-web.yml:87:      - name: Guard against a bundled secrets file
+.github/workflows/deploy-web.yml-88-        run: dart run tool/check_env_assets.dart
+.github/workflows/deploy-web.yml-89-
+--
+.github/workflows/deploy-web.yml-146-      # writes into the working tree and before the build, so it sees what the
+.github/workflows/deploy-web.yml-147-      # build will see.
+.github/workflows/deploy-web.yml:148:      - name: Guard against a bundled secrets file
+.github/workflows/deploy-web.yml-149-        run: dart run tool/check_env_assets.dart
+.github/workflows/deploy-web.yml-150-
+--
+.github/workflows/deploy-web.yml-209-      # writes into the working tree and before the build, so it sees what the
+.github/workflows/deploy-web.yml-210-      # build will see.
+.github/workflows/deploy-web.yml:211:      - name: Guard against a bundled secrets file
+.github/workflows/deploy-web.yml-212-        run: dart run tool/check_env_assets.dart
+.github/workflows/deploy-web.yml-213-
+
+$ grep -n -A3 'Guard against a bundled secrets file' .github/workflows/deploy-android.yml | head -6
+94:      - name: Guard against a bundled secrets file
+95-        run: dart run tool/check_env_assets.dart
+96-
+97-      # - name: Build App Bundle

@@ -1,0 +1,26 @@
+# Criterion 1: --flavor is gone; nothing references a nonexistent flavor
+
+$ grep -rn -- '--flavor' .github/workflows/
+.github/workflows/build.yml:20:      # --flavor made `flutter build apk` fail with
+
+The single remaining occurrence of the word is the explanatory comment in
+build.yml recording why it must not come back:
+      # NOT a Gradle product flavor. This project configures itself through
+      # `.env` layering and --dart-define (see docs/guides/configuration.md and
+      # lib/core/config/app_config.dart, which reads ENVIRONMENT). No
+      # productFlavors are declared in android/app/build.gradle.kts, so passing
+      # --flavor made `flutter build apk` fail with
+      # "Task 'assembleDevelopmentRelease' not found".
+      environment:
+        description: 'Value passed as --dart-define=ENVIRONMENT'
+        required: true
+
+# Criterion 4: the input and its description were renamed together
+22:      environment:
+23-        description: 'Value passed as --dart-define=ENVIRONMENT'
+24-        required: true
+
+Project convention this now matches:
+29:  /// - .env file: `ENVIRONMENT=production`
+30:  /// - --dart-define: `--dart-define=ENVIRONMENT=production`
+33:      EnvConfig.get('ENVIRONMENT', defaultValue: 'development').toLowerCase();

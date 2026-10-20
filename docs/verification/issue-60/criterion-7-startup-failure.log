@@ -1,0 +1,10 @@
+$ flutter test test/core/startup/startup_failure_app_test.dart --reporter expanded
+
+Waiting for another flutter command to release the startup lock...
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a1021312d36e95b75/test/core/startup/startup_failure_app_test.dart
+00:00 +0: StartupFailureApp (#60) renders a screen instead of an empty window
+00:02 +1: StartupFailureApp (#60) names the failure and reassures about local data
+00:02 +2: StartupFailureApp (#60) offers a retry that calls back
+00:02 +3: StartupFailureApp (#60) hides retry when no recovery is offered
+00:03 +4: All tests passed!
+exit: 0

@@ -1,0 +1,11 @@
+Executable=/Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-af6b53fb454d2fa00/build/macos/Build/Products/Release/flutter_starter.app/Contents/MacOS/flutter_starter
+[Dict]
+	[Key] com.apple.security.app-sandbox
+	[Value]
+		[Bool] true
+	[Key] com.apple.security.get-task-allow
+	[Value]
+		[Bool] true
+	[Key] com.apple.security.network.client
+	[Value]
+		[Bool] true

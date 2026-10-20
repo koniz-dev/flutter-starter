@@ -1,0 +1,30 @@
+### --apply (both samples removed)  (/private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/v-both)
+-- criterion 1: process-only artifacts must be ABSENT
+  ok absent : docs/verification
+  ok absent : tool/check_epic_coverage.dart
+  ok absent : scripts/dev/check_issue_refs.sh
+  ok absent : .github/workflows/issue-refs.yml
+  ok absent : .claude/agents
+  ok absent : scripts/bootstrap-issue-labels.sh
+  ok absent : docs/issue-workflow.md
+  ok absent : test/tooling/epic_coverage_test.dart
+-- criterion 1b: no surviving strip markers in kept markdown
+  ok: no whole-line markers remain
+-- criterion 2: adopter-facing guards must be PRESENT
+  ok present: tool/check_env_assets.dart
+  ok present: tool/check_docs.dart
+  ok present: tool/doc_signatures.dart
+  ok present: tool/doc_symbols.dart
+  ok present: .github/workflows/ci.yml
+  ok present: .github/workflows/strip-smoke.yml
+  ok present: .githooks/pre-push
+  ok present: .githooks/commit-msg
+  ok present: .githooks/pre-commit
+  ok present: scripts/dev/setup_git_hooks.sh
+  ok present: scripts/dev/audit_template.sh
+  ok present: scripts/test/run_acceptance.sh
+-- size
+  files: 621
+  size :  17M
+RESULT --apply (both samples removed): PASS
+

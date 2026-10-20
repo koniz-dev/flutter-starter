@@ -1,0 +1,139 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart
+00:00 +0: criteria 1-2: the register link keeps redirect, and signing up lands on the deep link
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: '/register?redirect=%2Ftasks%2F42'
+  Actual: '/register'
+   Which: is different. Both strings start the same, but the actual value is missing the following
+trailing characters: ?redirect= ...
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart:73:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart line 73
+The test description was:
+  criteria 1-2: the register link keeps redirect, and signing up lands on the deep link
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: criteria 1-2: the register link keeps redirect, and signing up lands on the deep link [E]
+  Test failed. See exception logs above.
+  The test description was: criteria 1-2: the register link keeps redirect, and signing up lands on the deep link
+  
+00:01 +0 -1: criterion 3: "Already have an account?" keeps redirect too
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"register","previousRoutePath":"register"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"register","routePath":"register"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: '/login?redirect=%2Ftasks%2F42'
+  Actual: '/login'
+   Which: is different. Both strings start the same, but the actual value is missing the following
+trailing characters: ?redirect= ...
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart:92:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart line 92
+The test description was:
+  criterion 3: "Already have an account?" keeps redirect too
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -2: criterion 3: "Already have an account?" keeps redirect too [E]
+  Test failed. See exception logs above.
+  The test description was: criterion 3: "Already have an account?" keeps redirect too
+  
+00:02 +0 -2: criterion 4: an off-site redirect through register lands on /
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"register","previousRoutePath":"register"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:145:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"register","routePath":"register"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +1 -2: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart: criteria 1-2: the register link keeps redirect, and signing up lands on the deep link
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/31c12b68-26ef-44d6-adb0-324bd0d68f5d/scratchpad/wt348/test/features/auth/register_deep_link_test.dart: criterion 3: "Already have an account?" keeps redirect too

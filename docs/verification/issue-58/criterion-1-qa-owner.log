@@ -1,0 +1,71 @@
+Criterion 1 - the qa phase has a named owner
+
+$ grep -n "Who invokes" CLAUDE.md docs/issue-workflow.md .claude/agents/qa.md
+CLAUDE.md:237:#### Who invokes each phase
+.claude/agents/qa.md:14:## Who invokes you
+docs/issue-workflow.md:886:**Who invokes `qa`.** No role can invoke another; they are all leaves. The
+
+$ sed -n "/#### Who invokes each phase/,/### Gate table/p" CLAUDE.md
+#### Who invokes each phase
+
+No role invokes another role - none of them can. The phase order is driven by
+**the session that owns the loop**:
+
+- **Orchestrated run** (a top-level session dispatching role subagents): that
+  session is the owner. It dispatches `planner`, then `implementer`, then `qa`
+  on the merged change, then `security` if G3 holds. It is also the only party
+  that can see two implementers at once, so it enforces Parallelism. This is how
+  `qa` came to file koniz-dev/flutter-starter#88 and #89.
+- **Solo run** (one session working an issue end to end, no subagents): there is
+  nobody to dispatch, so the implementer **performs the `qa` checklist itself**
+  before closing, as the last step of G4. The checklist is in
+  [`.claude/agents/implementer.md`](.claude/agents/implementer.md) ("Self-QA
+  before closing") and is a copy of steps 2 and 3 of
+  [`.claude/agents/qa.md`](.claude/agents/qa.md).
+
+Self-QA is the weaker of the two - the same session that wrote the PASS is
+auditing it. Prefer a separate `qa` pass on anything non-trivial. What is never
+acceptable is skipping both and closing anyway.
+
+### Gate table
+
+$ grep -n "Self-QA before closing" .claude/agents/implementer.md .claude/agents/qa.md CLAUDE.md docs/issue-workflow.md
+.claude/agents/qa.md:19:runs ("Self-QA before closing" in
+docs/issue-workflow.md:894:  checklist on its own change before closing - "Self-QA before closing" in
+.claude/agents/implementer.md:100:8. **Self-QA before closing** - only when no separate `qa` phase will run on
+
+$ sed -n "/8. \*\*Self-QA before closing/,/^## Never/p" .claude/agents/implementer.md
+8. **Self-QA before closing** - only when no separate `qa` phase will run on
+   this change (a solo session with no orchestrator). `qa` cannot invoke itself
+   and neither can you, so with nobody to dispatch it, the checklist is yours.
+   Run it *after* the evidence exists and *before* the closing comment:
+
+   - Does every criterion have a **named artifact**, or is some row resting on a
+     claim? A row you cannot point at is a `needs-uat` row.
+   - Open each artifact again and ask what it actually shows. For a golden PNG:
+     is the claim about layout, position, size or colour (a golden proves those)
+     or about wording or an icon glyph (it cannot - `flutter test` renders every
+     glyph as an opaque block)? Rewrite any row of the second kind to cite the
+     `find.text()` / `find.byIcon()` assertion instead.
+   - Did the run copy the standing goldens in? Checksum them against
+     `test/acceptance/goldens/` and say in the comment that no criterion rests
+     on them.
+   - Do the commits carry `Refs owner/repo#N` and no auto-closing keyword?
+     `./scripts/dev/check_issue_refs.sh --range <base>..HEAD` answers this.
+   - Does the issue carry exactly one `status:*` label?
+   - Is anything routed to `needs-uat` that this harness could in fact drive?
+     That is invariant 5 abuse - go drive it.
+
+   A finding here is a defect in your own work: fix it before closing. If it is
+   out of scope, file it as its own issue rather than closing over it.
+
+   Say in the closing comment which one ran: a separate `qa` pass, or self-QA.
+   Self-QA is the weaker of the two and the reader deserves to know which they
+   are getting.
+
+## Never
+
+Proof the qa phase has in fact run (the issue premise "has never run" is stale):
+$ gh issue list --state all --search "Found during the QA phase" --json number,title,state
+#89 OPEN docs: network.md documents ApiClient and AuthInterceptor constructors that do not exist, and 8a73fd2 added a fourth AuthInterceptor parameter without updating it
+#88 CLOSED fix(network): RetryInterceptor replays non-idempotent POST/PUT/PATCH/DELETE up to 4 times - live since 8a73fd2

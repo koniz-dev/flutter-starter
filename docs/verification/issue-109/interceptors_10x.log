@@ -1,0 +1,11 @@
+=== network interceptor tests, 10 consecutive runs ===
+run 1: exit=0 | 00:03 +198: All tests passed!
+run 2: exit=0 | 00:04 +198: All tests passed!
+run 3: exit=0 | 00:05 +198: All tests passed!
+run 4: exit=0 | 00:04 +198: All tests passed!
+run 5: exit=0 | 00:04 +198: All tests passed!
+run 6: exit=0 | 00:04 +198: All tests passed!
+run 7: exit=0 | 00:04 +198: All tests passed!
+run 8: exit=0 | 00:04 +198: All tests passed!
+run 9: exit=0 | 00:04 +198: All tests passed!
+run 10: exit=0 | 00:04 +198: All tests passed!

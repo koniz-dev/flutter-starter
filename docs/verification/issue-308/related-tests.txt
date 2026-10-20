@@ -1,0 +1,2 @@
+# flutter test test/core/storage test/features/auth test/core/network
+00:53 +793: All tests passed!

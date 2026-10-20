@@ -1,0 +1,10 @@
+# main (before): run 39068279809, setup-brick, head 83d64bd
+conclusion=failure
+❌ test/docs/i18n_guide_snippets_test.dart: criterion 2: every self-contained dart snippet analyzes with no error or warning (failed)
+❌ test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning (failed)
+❌ test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/guides/testing/guide.md analyzes with no error or warning (failed)
+
+# this branch (after):
+https://github.com/koniz-dev/flutter-starter/actions/runs/39069212799 head=f84b2b0 conclusion=success
+  mason make flutter_starter_setup (acme_shop) + analyze + test: success
+

@@ -1,0 +1,35 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a731a2713c6d6f9ac/test/core/network/interceptors/api_logging_interceptor_test.dart
+00:00 +0: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:00 +1: ApiLoggingInterceptor onRequest should include method and path in log
+00:00 +2: ApiLoggingInterceptor onRequest should sanitize sensitive headers written the way production writes them
+00:00 +3: ApiLoggingInterceptor onRequest should sanitize sensitive headers regardless of casing
+00:00 +4: ApiLoggingInterceptor onRequest should leave no secret anywhere in the logged context for an authenticated request
+00:00 +5: ApiLoggingInterceptor onRequest should include query parameters when present
+00:00 +6: ApiLoggingInterceptor onRequest should include body when present
+00:00 +7: ApiLoggingInterceptor onRequest should not include body when null
+00:00 +8: ApiLoggingInterceptor onResponse should log successful response
+00:00 +9: ApiLoggingInterceptor onResponse should log error response as warning
+00:00 +10: ApiLoggingInterceptor onResponse should log 4xx responses as warning
+00:00 +11: ApiLoggingInterceptor onResponse should include response data when present
+00:00 +12: ApiLoggingInterceptor onResponse should redact Set-Cookie in the response header log
+00:00 +13: ApiLoggingInterceptor onError should log error with details
+00:00 +14: ApiLoggingInterceptor onError should include error type in log
+00:00 +15: ApiLoggingInterceptor onError should include response status code when available
+00:00 +16: ApiLoggingInterceptor onError should sanitize sensitive data in error response
+00:00 +17: ApiLoggingInterceptor secret redaction sanitizes a pre-encoded JSON string body field by field
+00:00 +18: ApiLoggingInterceptor secret redaction redacts a form-encoded string body wholesale
+00:00 +19: ApiLoggingInterceptor secret redaction redacts a plain-text string body wholesale
+00:00 +20: ApiLoggingInterceptor secret redaction redacts a bare JSON scalar string body, which has no key to judge by
+00:00 +21: ApiLoggingInterceptor secret redaction sanitizes a top-level JSON array body
+00:00 +22: ApiLoggingInterceptor secret redaction redacts a body shape it cannot walk, such as FormData
+00:00 +23: ApiLoggingInterceptor secret redaction sanitizes query parameters by the same rules as bodies
+00:00 +24: ApiLoggingInterceptor secret redaction sanitizes the query parameters conventionally used to carry credentials
+00:00 +25: ApiLoggingInterceptor secret redaction redacts proxy-authorization, x-auth-token, x-refresh-token and api-key in mixed casing
+00:00 +26: ApiLoggingInterceptor secret redaction leaves no secret in the error context for a failed login with a string request body and a string response body
+00:00 +27: ApiLoggingInterceptor secret redaction leaves no secret in the error context when the bodies are not JSON
+00:00 +28: ApiLoggingInterceptor secret redaction does not redact innocent fields whose names merely contain a short secret key
+00:00 +29: ApiLoggingInterceptor secret redaction decides by key name, not value shape, so a token under an unlisted key is still logged
+00:00 +30: ApiLoggingInterceptor _sanitizeBody should sanitize sensitive fields in JSON body
+00:00 +31: ApiLoggingInterceptor _sanitizeBody should sanitize nested sensitive fields
+00:00 +32: ApiLoggingInterceptor _sanitizeBody should handle string body
+00:00 +33: All tests passed!

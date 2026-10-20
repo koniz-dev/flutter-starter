@@ -1,0 +1,24 @@
+# 22 tests, 22 passed, 0 not passed
+
+SUCCESS DateFormatter Edge Cases should format dates at year boundaries
+SUCCESS DateFormatter Edge Cases should format times at day boundaries
+SUCCESS DateFormatter Edge Cases should handle leap year dates
+SUCCESS DateFormatter formatDate should format date correctly
+SUCCESS DateFormatter formatDate should handle different dates
+SUCCESS DateFormatter formatDateTime should format date and time correctly
+SUCCESS DateFormatter formatTime should format time correctly
+SUCCESS DateFormatter parseDate rejects out-of-range calendar fields instead of rolling over
+SUCCESS DateFormatter parseDate rejects trailing junk after a well-formed date
+SUCCESS DateFormatter parseDate should parse valid date string
+SUCCESS DateFormatter parseDate should return null for empty string
+SUCCESS DateFormatter parseDate should return null for invalid date string
+SUCCESS DateFormatter parseDateTime rejects out-of-range calendar and clock fields
+SUCCESS DateFormatter parseDateTime should parse date-time with different times
+SUCCESS DateFormatter parseDateTime should parse valid date-time string
+SUCCESS DateFormatter parseDateTime should return null for invalid date-time string
+SUCCESS DateFormatter timezone round trip a UTC DateTime survives the ISO-8601 round trip unshifted
+SUCCESS DateFormatter timezone round trip a local DateTime survives the ISO-8601 round trip as an instant
+SUCCESS DateFormatter timezone round trip formatIso8601 always emits a UTC instant ending in Z
+SUCCESS DateFormatter timezone round trip parseIso8601 normalises an explicit offset to UTC
+SUCCESS DateFormatter timezone round trip parseIso8601 rejects rubbish and out-of-range dates
+SUCCESS DateFormatter timezone round trip the wall-clock pair is documented as local, and stays local

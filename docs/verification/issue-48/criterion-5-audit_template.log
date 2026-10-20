@@ -1,0 +1,15 @@
+$ ./scripts/dev/audit_template.sh
+
+Run on main after PR #70 merged (commit 67e09a6). Excerpt: section
+banners, the analyzer verdict and the test tally. The full output is
+dominated by the app's own per-test logging and is reproducible by
+re-running the command above.
+
+==> format (lib test integration_test tool examples)
+Formatted 336 files (0 changed) in 2.07 seconds.
+==> flutter analyze
+No issues found! (ran in 4.8s)
+==> flutter test
+01:56 +2251 ~2: All tests passed!
+
+exit: 0

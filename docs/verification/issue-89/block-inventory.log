@@ -1,0 +1,125 @@
+============================================================================
+CRITERION 6: every fenced block in docs/api/core/network.md
+============================================================================
+
+  line  lang   kind                               first code line
+----------------------------------------------------------------------------------------------------
+    36  dart   constructor declaration            ApiClient({
+    83  dart   method declaration                 Future<Response<dynamic>> get(
+   112  dart   method declaration                 Future<Response<dynamic>> post(
+   145  dart   method declaration                 Future<Response<dynamic>> put(
+   178  dart   method declaration                 Future<Response<dynamic>> delete(
+   226  dart   usage example                      final realtimeClient = ref.read(realtimeClientProvider);
+   263  dart   interface declaration              abstract class IGraphQLClient {
+   291  dart   constructor declaration            AuthInterceptor({
+   474  dart   constructor declaration            RetryInterceptor({
+   523  dart   usage example                      // 1. Idempotency-Key header - works through the ApiClient facade, which
+   592  dart   constructor declaration            CacheInterceptor({
+   601  dart   constructor declaration            const CacheConfig({
+   613  dart   constructor call (usage example)   CacheInterceptor(
+   714  text   usage example                      <!-- signature: lib/core/network/api_client.dart ApiClient -->
+   767  dart   usage example                      final apiClient = ref.read(apiClientProvider);
+   792  dart   usage example                      final response = await apiClient.get(
+   805  dart   usage example                      try {
+   823  dart   usage example                      final response = await apiClient.get(
+
+============================================================================
+Declarations compared with source, parameter by parameter
+============================================================================
+
+--- ApiClient  vs  lib/core/network/api_client.dart
+    MATCH
+    1. doc: required StorageService storageService
+       src: required StorageService storageService
+    2. doc: required SecureStorageService secureStorageService
+       src: required SecureStorageService secureStorageService
+    3. doc: required AuthInterceptor authInterceptor
+       src: required AuthInterceptor authInterceptor
+    4. doc: LoggingService? loggingService
+       src: LoggingService? loggingService
+    5. doc: IPerformanceService? performanceService
+       src: IPerformanceService? performanceService
+    6. doc: SslPinning? sslPinning
+       src: SslPinning? sslPinning
+
+--- AuthInterceptor  vs  lib/core/network/interceptors/auth_interceptor.dart
+    MATCH
+    1. doc: ITokenStore? tokenStore
+       src: ITokenStore? tokenStore
+    2. doc: SecureStorageService? secureStorageService
+       src: SecureStorageService? secureStorageService
+    3. doc: required Future<Result<String>> Function() refreshToken
+       src: required Future<Result<String>> Function() refreshToken
+    4. doc: Dio Function()? retryDioFactory
+       src: Dio Function()? retryDioFactory
+    5. doc: IKeyValueStore? keyValueStore
+       src: IKeyValueStore? keyValueStore
+    6. doc: ISessionTerminationSink? sessionSink
+       src: ISessionTerminationSink? sessionSink
+
+--- CacheInterceptor  vs  lib/core/network/interceptors/cache_interceptor.dart
+    MATCH
+    1. doc: required StorageService storageService
+       src: required StorageService storageService
+    2. doc: CacheConfig? cacheConfig
+       src: CacheConfig? cacheConfig
+    3. doc: ITokenStore? tokenStore
+       src: ITokenStore? tokenStore
+
+--- CacheConfig  vs  lib/core/network/interceptors/cache_interceptor.dart
+    MATCH
+    1. doc: this.maxAge = const Duration(hours: 1)
+       src: this.maxAge = const Duration(hours: 1)
+    2. doc: this.maxStale = const Duration(days: 7)
+       src: this.maxStale = const Duration(days: 7)
+    3. doc: this.enableCache = true
+       src: this.enableCache = true
+
+--- RetryInterceptor  vs  lib/core/network/interceptors/retry_interceptor.dart
+    MATCH
+    1. doc: required this.dio
+       src: required this.dio
+    2. doc: this.loggingService
+       src: this.loggingService
+    3. doc: this.maxRetries = 3
+       src: this.maxRetries = 3
+    4. doc: this.initialExecutionDelay = const Duration(seconds: 1)
+       src: this.initialExecutionDelay = const Duration(seconds: 1)
+
+============================================================================
+Method blocks (not directive-covered; compared here by hand)
+============================================================================
+
+--- ApiClient.get: MATCH
+    doc: ['String path', 'Map<String, dynamic>? queryParameters', 'Options? options']
+    src: ['String path', 'Map<String, dynamic>? queryParameters', 'Options? options']
+
+--- ApiClient.post: MATCH
+    doc: ['String path', 'dynamic data', 'Map<String, dynamic>? queryParameters', 'Options? options']
+    src: ['String path', 'dynamic data', 'Map<String, dynamic>? queryParameters', 'Options? options']
+
+--- ApiClient.put: MATCH
+    doc: ['String path', 'dynamic data', 'Map<String, dynamic>? queryParameters', 'Options? options']
+    src: ['String path', 'dynamic data', 'Map<String, dynamic>? queryParameters', 'Options? options']
+
+--- ApiClient.delete: MATCH
+    doc: ['String path', 'dynamic data', 'Map<String, dynamic>? queryParameters', 'Options? options']
+    src: ['String path', 'dynamic data', 'Map<String, dynamic>? queryParameters', 'Options? options']
+
+============================================================================
+RESULT: 0 mismatch(es)
+============================================================================
+
+============================================================================
+Interface block: IGraphQLClient vs lib/core/network/graphql_client_template.dart
+============================================================================
+   doc: abstract class IGraphQLClient {
+   src: abstract class IGraphQLClient {
+   doc: Future<dynamic> query(String document, {Map<String, dynamic>? variables});
+   src: Future<dynamic> query(String document, {Map<String, dynamic>? variables});
+   doc: Future<dynamic> mutate(String document, {Map<String, dynamic>? variables});
+   src: Future<dynamic> mutate(String document, {Map<String, dynamic>? variables});
+   doc: }
+   src: }
+
+RESULT: MATCH

@@ -1,0 +1,10 @@
+$ flutter test test/docs/doc_signatures_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a64988a2b7ae8d501/test/docs/doc_signatures_test.dart
+00:00 +0: documented constructor signatures every <!-- signature: --> block matches its source
+Shell: signatures: checked 5 documented constructor(s); 0 mismatched
+00:00 +1: documented constructor signatures at least one directive exists to check
+00:00 +2: documented constructor signatures the documented parameter lists compile as written
+00:00 +3: doc_signatures parser reads a multi-line named parameter list
+00:00 +4: doc_signatures parser returns null when the constructor is absent or one-line
+00:00 +5: All tests passed!

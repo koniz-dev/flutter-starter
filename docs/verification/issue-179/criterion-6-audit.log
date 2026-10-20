@@ -1,0 +1,188 @@
+# NOTE: per-test progress lines and the ANSI-boxed logger output were
+# elided to keep this committable. Kept verbatim: the gate headers, every
+# line that is not a progress tick, the final tally, and the exit code.
+# Reproduce in full with the command on the next line.
+$ ./scripts/dev/audit_template.sh
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 364 files (0 changed) in 1.58 seconds.
+==> flutter analyze
+Analyzing agent-aca98519bf2f96a95...                            
+No issues found! (ran in 7.5s)
+==> flutter test
+📱 App Configuration
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+📱 App Configuration
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+  Skip: run with --dart-define=BASE_URL=<url> to exercise this
+Cache write error: Exception: Storage error
+Cache credential check error: Bad state: keychain down
+NoOpRealtimeClient: Simulated connection to ws://localhost:8080
+NoOpRealtimeClient: Simulated connection to ws://localhost:8080
+NoOpRealtimeClient: Simulated disconnection
+NoOpRealtimeClient: Simulated send -> {type: message, data: hello}
+NoOpRealtimeClient: Simulated send -> test message
+NoOpRealtimeClient: Simulated send -> null
+NoOpRealtimeClient: Simulated connection to ws://localhost
+NoOpRealtimeClient: Simulated send -> hello
+NoOpRealtimeClient: Simulated send -> world
+NoOpRealtimeClient: Simulated disconnection
+NoOpRealtimeClient: Simulated send -> test
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+Pagination error: Exception: Load error
+Pagination error: Exception: network down
+Preload error: HTTP request failed, statusCode: 400, file:///Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/not-a-url
+Preload error: HTTP request failed, statusCode: 400, https://example.invalid/missing.jpg
+Preload error: HTTP request failed, statusCode: 400, https://example.invalid/missing.jpg
+Preload error: HTTP request failed, statusCode: 400, https://example.com/image1.jpg
+Preload error: HTTP request failed, statusCode: 400, https://example.com/image2.jpg
+Memory: Attempting to free memory
+Memory: Attempting to free memory
+Memory: Attempting to free memory
+📱 App Configuration
+Environment: test
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+📱 App Configuration
+Environment: test
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+📱 App Configuration
+Environment: test
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: false
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: false
+  HTTP Logging: false
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+Shell: signatures: checked 5 documented constructor(s); 0 mismatched
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+  Skip: Host-renderer dependent. Run ./scripts/test/run_acceptance.sh.
+AUDIT_EXIT=0
+
+--- final lines, verbatim ---
+04:13 +2724 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aca98519bf2f96a95/test/main_test.dart: HomeScreen should have app bar with title
+04:13 +2725 ~8: All tests passed!
+AUDIT_EXIT=0

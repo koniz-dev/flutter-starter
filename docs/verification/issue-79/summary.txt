@@ -1,0 +1,63 @@
+Acceptance evidence for koniz-dev/flutter-starter#79
+"fix(security): new configuration docs tell developers to bundle .env as an
+asset, shipping real secrets in every release APK, IPA and web build"
+
+Fix merged as cd56d01 (PR #126). Verified on main at dd0e6af, which contains
+cd56d01. No golden layer was run: the change touches no widget and no PNG can
+show a line of prose, so `./scripts/test/run_acceptance.sh 79 --no-goldens` was
+used and this directory deliberately contains no screenshots.
+
+Criterion -> artifact
+---------------------
+1. pubspec.yaml and docs/guides/configuration.md both state, at the point where
+   `- .env` was suggested, that an asset declaration applies to every build
+   mode, that the file is extractable from a release APK/IPA, and that on web
+   it is fetchable at /assets/.env
+     -> criterion-1-pubspec.txt
+     -> criterion-1-2-configuration-guide.txt
+
+2. The docs name --dart-define / --dart-define-from-file as the supported way
+   to configure a release build on native, and say plainly that Flutter web has
+   no equivalent, so web secrets must come from the server
+     -> criterion-1-2-configuration-guide.txt
+
+3. .env.example no longer suggests API_KEY and SENTRY_DSN without a warning
+     -> criterion-3-env-example.txt
+
+4. A guard fails when `.env` appears in the assets list, is wired into
+   ./scripts/dev/audit_template.sh, and is demonstrated failing on a pubspec
+   with `- .env` and passing on the current one
+     -> criterion-4-guard.log
+
+5. No real secret added to the tree; .env stays gitignored
+     -> criterion-5-no-secrets.txt
+
+6. ./scripts/dev/audit_template.sh exits 0
+     -> criterion-6-audit_template.log
+
+Supporting logs from ./scripts/test/run_acceptance.sh 79 --no-goldens:
+  format.log    dart format --set-exit-if-changed, exit 0
+  analyze.log   flutter analyze, exit 0
+  tests.log     flutter test, 2486 passed / 6 skipped, exit 0
+
+Not verified here (unchanged from the filing security review): no release APK,
+IPA or web bundle was built to observe the extraction first-hand. This
+environment cannot produce signed release artifacts. The claim rests on
+Flutter's asset model having no build-mode scoping, which is documented
+behaviour. Nothing in the fix depends on that observation: every criterion
+above is about what the documentation says and what the guard does, and each
+one was driven directly.
+
+Filed rather than fixed here:
+  #134  epic:core-network. An intermittent failure in
+        auth_interceptor_refresh_queue_test.dart seen on the first acceptance
+        run. Unrelated to this change, which touches no file under lib/.
+        Details in note-first-run-flaky-test.txt.
+  #138  epic:core-security. A declared asset *directory* (assets/config/,
+        added to main after this verification ran) bundles whatever is inside
+        it, so a .env dropped there would ship without appearing in the asset
+        list this guard reads. See addendum-recheck-after-rebase.txt.
+  #135  epic:tooling-ci. The guard runs on the flutter test path, not on the
+        release-build path: scripts/ci/build_all.sh and the deploy-*.yml
+        workflows can still produce an artifact from a working tree that has
+        `- .env` in the asset list without the check ever running.

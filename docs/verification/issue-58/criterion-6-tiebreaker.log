@@ -1,0 +1,77 @@
+Criterion 6 - exactly one tiebreaker definition, and the selector implements it
+
+The single definition (CLAUDE.md):
+### Tiebreaker priority order
+
+**This list is the only definition of the order.** `docs/issue-workflow.md`
+implements it in its queue selector and does not restate it; nothing else may
+paraphrase it. When two candidate issues compete:
+
+1. `priority:P0` over anything else.
+2. Unblocks another issue over standalone.
+3. Lower `priority:*` number.
+4. `type:bug` over `type:feature` over `type:task`.
+5. Lower issue number (oldest first).
+
+Levels 1, 3, 4 and 5 are mechanical and the selector sorts by them. Level 2 is
+not - no label records "unblocks #N" - so the selector prints the ranked
+candidates instead of picking blindly, and the session applies level 2 by
+reading them.
+
+### Parallelism
+
+No second definition anywhere else:
+$ grep -rn "ties break oldest first\|oldest first" CLAUDE.md docs/issue-workflow.md .claude/agents/
+CLAUDE.md:309:5. Lower issue number (oldest first).
+docs/issue-workflow.md:576:# The sweep: everything parked, oldest first
+
+The selector in docs/issue-workflow.md step 1:
+1. **Select.** Rank the unassigned `status:todo` queue by the **Tiebreaker
+   priority order** in [`CLAUDE.md`](../CLAUDE.md#tiebreaker-priority-order).
+   That list is the single definition of the order; this selector implements it
+   and deliberately does not restate it.
+
+   ```bash
+   gh issue list --state open --label status:todo \
+     --search "no:assignee" --limit 200 \
+     --json number,title,labels --jq '
+     [ .[]
+       | { number, title,
+           labels: [.labels[].name] }
+       | { number, title,
+           priority: ((.labels[] | select(startswith("priority:P"))) // "priority:P3"),
+           type:     ((.labels[] | select(startswith("type:")))      // "type:task"),
+           epic:     ((.labels[] | select(startswith("epic:")))      // "epic:?") }
+       | . + { prank: (.priority | ltrimstr("priority:P") | tonumber),
+               trank: ({"type:bug":0,"type:feature":1,"type:task":2}[.type] // 3) } ]
+     | sort_by(.prank, .trank, .number)
+     | .[]
+     | "P\(.prank) \(.type) #\(.number) \(.epic) \(.title)"'
+   ```
+
+   Three details are load-bearing, all learned the hard way:
+
+   - **Rank, do not pick.** Level 2 of the order ("unblocks another issue") has
+     no label to sort on, so the selector prints every candidate in order and
+     the session applies level 2 by reading them. Taking `.[0]` blindly
+     implements 4 of the 5 levels while looking like it implements all of them.
+   - **`sort_by` in jq, not four `gh` calls.** The older loop-per-priority form
+     sorted on priority and issue number only, silently dropping the
+     `type:bug` > `type:feature` > `type:task` level. It also had to be written
+     as `.[0] // empty` plus a `-n` test, because `gh issue list` exits 0 when
+     nothing matches and `--jq '.[0]' && break` therefore breaks on `P0` every
+     time and never reaches `P1`.
+   - **Sort locally, not with `sort:created-asc`.** `gh issue list` defaults to
+     newest-first; sorting by `.number` in jq makes the oldest-first level
+     explicit instead of relying on a search qualifier nobody notices is
+     missing.
+
+   Empty output means the queue is empty: go to step 2. Then check what the
+   other states are holding - `status:blocked`, `status:needs-uat`, and stale
+   `status:in-progress` claims are queue entries too, and they are the
+   planner's, per [section 2](#2-lifecycle).
+
+Live run of that selector (proves it executes and ranks):
+P1 type:bug #62 epic:tooling-ci fix(tooling): macOS/iOS entitlements, release signing, fastlane lanes and the Mason rename hook are all broken off the debug path
+P2 type:bug #65 epic:design-system fix(design-system): FocusManager shadows Flutter's, OptimizedListView hides errors on an empty list, and every screen-reader string is hardcoded English
+P2 type:task #64 epic:core-network fix(architecture): the contracts layer is largely dead - INetworkClient is bypassed, dio leaks into a feature, and the three slices teach three different shapes

@@ -1,0 +1,10 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-aa059230abc5ee9e0/test/core/accessibility/accessibility_helpers_test.dart
+00:00 +0: AccessibilityHelpers alpha channel composites a translucent foreground over the background
+00:00 +1: AccessibilityHelpers alpha channel does not score a translucent colour as if it were opaque
+00:00 +2: AccessibilityHelpers alpha channel white70 clears AA on the dark scaffold, white24 does not
+00:00 +3: AccessibilityHelpers alpha channel AAA follows the composited ratio, not the opaque one
+00:00 +4: AccessibilityHelpers alpha channel a fully transparent foreground is the background
+00:00 +5: AccessibilityHelpers alpha channel black54 on white composites instead of scoring 21:1
+00:00 +6: AccessibilityHelpers alpha channel rejects a translucent background
+00:00 +7: AccessibilityHelpers alpha channel rejects a translucent background through the AA/AAA wrappers
+00:00 +8: All tests passed!

@@ -1,0 +1,21 @@
+00:00 +0: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:00 +1: ApiLoggingInterceptor onRequest should include method and path in log
+00:00 +2: ApiLoggingInterceptor onRequest should sanitize sensitive headers written the way production writes them
+00:00 +3: ApiLoggingInterceptor onRequest should sanitize sensitive headers regardless of casing
+00:00 +4: ApiLoggingInterceptor onRequest should leave no secret anywhere in the logged context for an authenticated request
+00:00 +5: ApiLoggingInterceptor onRequest should include query parameters when present
+00:00 +6: ApiLoggingInterceptor onRequest should include body when present
+00:00 +7: ApiLoggingInterceptor onRequest should not include body when null
+00:00 +8: ApiLoggingInterceptor onResponse should log successful response
+00:00 +9: ApiLoggingInterceptor onResponse should log error response as warning
+00:00 +10: ApiLoggingInterceptor onResponse should log 4xx responses as warning
+00:00 +11: ApiLoggingInterceptor onResponse should include response data when present
+00:00 +12: ApiLoggingInterceptor onResponse should redact Set-Cookie in the response header log
+00:00 +13: ApiLoggingInterceptor onError should log error with details
+00:00 +14: ApiLoggingInterceptor onError should include error type in log
+00:00 +15: ApiLoggingInterceptor onError should include response status code when available
+00:00 +16: ApiLoggingInterceptor onError should sanitize sensitive data in error response
+00:00 +17: ApiLoggingInterceptor _sanitizeBody should sanitize sensitive fields in JSON body
+00:00 +18: ApiLoggingInterceptor _sanitizeBody should sanitize nested sensitive fields
+00:00 +19: ApiLoggingInterceptor _sanitizeBody should handle string body
+00:00 +20: All tests passed!

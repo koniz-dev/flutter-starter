@@ -1,0 +1,24 @@
+# real run on e79b4770f20 + this change: flutter test --coverage, then the two scripts on the same data
+## ./scripts/test/test_coverage.sh --no-test --analyze (excerpt)
+  Total lines: 4456
+  Covered lines: 4236
+  Coverage: 95.06%
+Domain Layer:
+  Overall: 102/102 lines (100.0%)
+Data Layer:
+  Overall: 408/417 lines (97.8%)
+Presentation Layer:
+  Overall: 779/794 lines (98.1%)
+Core Layer:
+  Overall: 2408/2579 lines (93.4%)
+Shared Layer:
+  Overall: 453/478 lines (94.8%)
+
+## ./scripts/test/calculate_layer_coverage.sh coverage/lcov.filtered.info (what CI gates on, after the same exclusions)
+Coverage by layer (percentage of executable lines covered):
+  Domain:       100.0%
+  Data:         97.8%
+  Presentation: 98.1%
+  Core:         93.4%
+
+## CI run 38971311473 (#331), for comparison: Domain 100.0%, Data 97.8%, Presentation 98.1%, Core 93.4%, Total 95.2%

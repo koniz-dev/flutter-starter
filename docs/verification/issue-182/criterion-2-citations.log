@@ -1,0 +1,52 @@
+--- docs/architecture/contracts-map.md ---
+  lib/core/network/adapters/dio_network_client.dart:5: class DioNetworkClient implements INetworkClient {
+  lib/core/network/api_client.dart:138: late final INetworkClient _networkClient;
+  lib/core/network/api_client.dart:54: _networkClient = DioNetworkClient(_dio);
+  lib/core/network/api_client.dart:259: Future<NetworkResponse<dynamic>> _send(
+  lib/core/network/api_client.dart:263: return await _networkClient.send(request);
+  lib/core/network/api_client.dart:154: INetworkClient get networkClient => _networkClient;
+  lib/core/di/providers.dart:107: final Provider<ApiClient> apiClientProvider = Provider<ApiClient>((ref) {
+  lib/core/di/providers.dart:35: final Provider<ApiClient> networkClientProvider = Provider<ApiClient>((ref) {
+  lib/features/auth/di/auth_providers.dart:41: final apiClient = ref.read(networkClientProvider);
+  lib/core/network/interceptors/cache_interceptor.dart:60: class CacheInterceptor extends Interceptor implements IHttpResponseCache {
+  lib/core/network/api_client.dart:160: IHttpResponseCache get responseCache => _cacheInterceptor;
+  lib/core/network/interceptors/auth_interceptor.dart:118: IHttpResponseCache? _responseCache;
+  lib/features/auth/data/repositories/auth_repository_impl.dart:34: final IHttpResponseCache? httpCache;
+  lib/features/auth/di/auth_providers.dart:63: httpCache: ref.read(networkClientProvider).responseCache,
+  lib/core/storage/storage_service.dart:47: class StorageService implements IStorageService, IKeyValueStore {
+  lib/core/di/providers.dart:23: final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
+  lib/features/auth/di/auth_providers.dart:28: final storageService = ref.watch(keyValueStoreProvider);
+  lib/features/auth/di/auth_providers.dart:88: keyValueStore: ref.watch(keyValueStoreProvider),
+  lib/features/tasks/di/tasks_providers.dart:19: final keyValueStore = ref.watch(keyValueStoreProvider);
+  lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:18: final keyValueStore = ref.watch(keyValueStoreProvider);
+  lib/features/auth/data/datasources/auth_local_datasource.dart:54: final IKeyValueStore storageService;
+  lib/features/tasks/data/datasources/tasks_local_datasource.dart:45: final IKeyValueStore storageService;
+  lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:30: final IKeyValueStore _storageService;
+  lib/core/storage/adapters/secure_token_store.dart:6: class SecureTokenStore implements ITokenStore {
+  lib/core/di/providers.dart:28: final tokenStoreProvider = Provider<ITokenStore>((ref) {
+  lib/features/auth/di/auth_providers.dart:29: final tokenStore = ref.watch(tokenStoreProvider);
+  lib/features/auth/di/auth_providers.dart:82: final tokenStore = ref.watch(tokenStoreProvider);
+  lib/core/network/interceptors/auth_interceptor.dart:52: final ITokenStore _tokenStore;
+  lib/features/auth/data/datasources/auth_local_datasource.dart:57: final ITokenStore tokenStore;
+  lib/features/auth/presentation/providers/auth_provider.dart:272: class RiverpodSessionTerminationSink implements ISessionTerminationSink {
+  lib/features/auth/di/auth_providers.dart:93: sessionSink: RiverpodSessionTerminationSink(ref),
+  lib/core/network/interceptors/auth_interceptor.dart:87: final ISessionTerminationSink? _sessionSink;
+  lib/core/network/interceptors/auth_interceptor.dart:534: sessionSink.onSessionTerminated();
+  lib/core/routing/adapters/go_router_navigator_adapter.dart:6: class GoRouterNavigatorAdapter implements AppNavigator {
+  lib/core/routing/navigation_providers.dart:7: final appNavigatorProvider = Provider<AppNavigator>((ref) {
+  test/core/routing/navigation_providers_test.dart:25: final navigator = container.read(appNavigatorProvider);
+  lib/shared/design_system/tokens/default_design_tokens.dart:9: class DefaultDesignTokens implements AppDesignTokens {
+  lib/shared/theme/app_theme.dart:7: static const _tokens = DefaultDesignTokens();
+  lib/features/auth/presentation/providers/auth_provider.dart:47: class AuthNotifier extends _$AuthNotifier implements IAuthController {
+  lib/features/auth/presentation/providers/auth_provider.dart:284: final authControllerProvider = Provider<IAuthController>((ref) {
+  lib/features/tasks/presentation/providers/tasks_provider.dart:55: class TasksNotifier extends _$TasksNotifier {
+  lib/features/tasks/presentation/providers/tasks_provider.dart:195: const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+  lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:24: final class NoOpFeatureFlagsRemoteDataSource
+  lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:6: abstract class FeatureFlagsRemoteDataSource {
+  lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:23: FeatureFlagsRemoteDataSource featureFlagsRemoteDataSource(Ref ref) {
+--- docs/architecture/adr/0005-state-boundary.md ---
+  lib/features/auth/presentation/providers/auth_provider.dart:47: class AuthNotifier extends _$AuthNotifier implements IAuthController {
+  lib/features/auth/presentation/providers/auth_provider.dart:284: final authControllerProvider = Provider<IAuthController>((ref) {
+  lib/features/tasks/presentation/providers/tasks_provider.dart:55: class TasksNotifier extends _$TasksNotifier {
+
+checked 48 citation(s); 0 unresolvable

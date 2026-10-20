@@ -1,0 +1,46 @@
+Criterion 4 - docs state accurately which mechanism works where.
+Excerpts taken from main after PR #70 merged (commit 67e09a6).
+
+=== pubspec.yaml (was line 132: "the app works with --dart-define flags too") ===
+129:  # Environment configuration files
+130-  # Note: Only .env.example is shipped here (the real .env is gitignored).
+131-  #
+132-  # To use a real .env locally: copy .env.example to .env AND add `- .env` to
+133-  # the list below. flutter_dotenv reads through rootBundle, so an .env that is
+134-  # not declared as an asset cannot be loaded at all - EnvConfig.load() fails
+135-  # silently and every value falls through to the next priority.
+136-  #
+137-  # --dart-define is the other supported mechanism. It works on native builds
+138-  # (Android, iOS, macOS, Windows, Linux) in every build mode, but not on
+139-  # Flutter web, and only for the keys declared in
+140-  # lib/core/config/dart_defines.dart. See docs/guides/configuration.md.
+141-  assets:
+142-    - .env.example
+143-
+
+=== README.md line 18 ===
+18:- ⚙️ **Powerful Configurations:** Layered fallback — local `.env` (declare the file in `pubspec.yaml` assets first), then `--dart-define` (native builds only, for the keys declared in `lib/core/config/dart_defines.dart`), then environment-aware defaults. See [Configuration](docs/guides/configuration.md).
+
+=== docs/guides/configuration.md - "What works where" ===
+## What works where
+
+Both mechanisms have hard preconditions. Read this table before assuming a
+value reaches the app.
+
+| Mechanism | Precondition | Debug | Release / profile (AOT) | Flutter web |
+|---|---|---|---|---|
+| `.env` file | The file must be declared in the `assets:` list of `pubspec.yaml`. `flutter_dotenv` reads it through `rootBundle`, not the filesystem. | Yes | Yes | Yes |
+| `--dart-define` | The key must be declared in `lib/core/config/dart_defines.dart`. | Yes | Yes | **No** |
+| Defaults | None. | Yes | Yes | Yes |
+
+Two consequences worth stating plainly:
+
+- **`.env` is not loaded out of the box.** This repository ships only
+  `.env.example` as an asset. Copying it to `.env` is not enough; you must also
+  add `- .env` to `pubspec.yaml`. Until you do, `EnvConfig.load()` fails and
+  `EnvConfig.isInitialized` stays `false`.
+- **`--dart-define` is unavailable on Flutter web.** Every dart-define read in
+  `EnvConfig` is guarded by `if (!kIsWeb)`, so on web the chain is `.env` →
+  defaults only.
+
+### Why the dart-define keys are declared in a table

@@ -1,0 +1,54 @@
+NEGATIVE CONTROL for criterion 3 - this FAILURE is the expected result.
+
+A throwaway copy of the merged tree with popUntilRoute reverted to the
+pre-fix body and nothing else changed:
+
+    void popUntilRoute(String location) {
+      while (canPop()) {
+        if (GoRouterState.of(this).matchedLocation == location) break;
+        pop();
+      }
+    }
+
+The new test fails, which is what proves it would have caught the bug: the
+pre-fix loop popped past /register all the way to the bottom of the stack.
+The old assertion-free test at navigation_extensions_test.dart:289 passed
+against this same code.
+
+$ flutter test test/core/routing/navigation_extensions_test.dart --plain-name popUntilRoute --reporter expanded
+
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/i56regress/test/core/routing/navigation_extensions_test.dart
+00:00 +0: NavigationExtensions pop popUntilRoute stops at the target instead of emptying the stack
+The following TestFailure was thrown running a test:
+Expected: '/register'
+  Actual: '/login'
+   Which: is different.
+          Expected: /register
+            Actual: /login
+                     ^
+           Differ at offset 1
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/i56regress/test/core/routing/navigation_extensions_test.dart:275:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/i56regress/test/core/routing/navigation_extensions_test.dart line 275
+The test description was:
+  popUntilRoute stops at the target instead of emptying the stack
+00:05 +0 -1: NavigationExtensions pop popUntilRoute stops at the target instead of emptying the stack [E]
+  Test failed. See exception logs above.
+  The test description was: popUntilRoute stops at the target instead of emptying the stack
+  
+00:05 +0 -1: NavigationExtensions pop popUntilRoute pops nothing when already on the target
+00:05 +1 -1: Some tests failed.
+
+Failing tests:
+  /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/i56regress/test/core/routing/navigation_extensions_test.dart: NavigationExtensions pop popUntilRoute stops at the target instead of emptying the stack
+exit: 1

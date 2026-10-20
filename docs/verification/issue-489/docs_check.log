@@ -1,0 +1,23 @@
+$ dart run tool/check_docs.dart
+links: checked 743 relative link(s) in 140 file(s); 0 broken
+emoji: scanned 72 file(s); 0 line(s) with emoji
+signatures: checked 5 documented constructor(s); 0 mismatched
+symbols: checked 23 directive(s); 0 unresolved
+env runs: scanned 69 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 68 file(s) against 16 known key(s); 0 unknown
+
+OK: documentation checks passed.
+exit=0
+
+# keys the code actually uses (source of truth for the table)
+40:      'email': email,
+41:      'password': password,
+57:      'email': email,
+58:      'password': password,
+59:      'name': name,
+77:      'refresh_token': refreshToken,
+lib/features/auth/data/models/auth_response_model.dart:38:  @JsonKey(name: 'refresh_token')
+lib/features/auth/data/models/user_model.dart:27:  @JsonKey(name: 'avatar_url')
+
+# the test that pins them
+00:00 +4: All tests passed!

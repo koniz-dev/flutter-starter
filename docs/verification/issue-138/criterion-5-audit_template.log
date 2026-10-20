@@ -1,0 +1,34 @@
+$ ./scripts/dev/audit_template.sh   (HEAD ef94605)
+
+--- first 12 lines ---
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 355 files (0 changed) in 5.60 seconds.
+==> flutter analyze
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 91.0.0 (108.0.0 available)
+  analyzer 8.4.0 (14.4.0 available)
+  analyzer_buffer 0.1.11 (0.3.4 available)
+  analyzer_plugin 0.13.10 (0.14.17 available)
+  archive 4.0.9 (4.3.0 available)
+
+--- last 12 lines ---
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+04:48 +2656 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a8f6eb05d382190d9/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+04:48 +2657 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a8f6eb05d382190d9/test/main_test.dart: HomeScreen should create HomeScreen widget
+04:48 +2658 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a8f6eb05d382190d9/test/main_test.dart: HomeScreen should display welcome message
+04:48 +2659 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a8f6eb05d382190d9/test/main_test.dart: HomeScreen should have app bar with title
+04:48 +2660 ~8: All tests passed!
+
+--- guard tests in this run ---
+check_env_assets_test lines: 19
+
+audit_template.sh exit=0

@@ -1,0 +1,2 @@
+# flutter test test/core/localization test/main_test.dart
+00:04 +147: All tests passed!

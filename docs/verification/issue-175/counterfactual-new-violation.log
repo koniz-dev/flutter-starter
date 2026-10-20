@@ -1,0 +1,125 @@
+# The property that makes the guard worth having: a NEW violation fails it.
+# The allowlist is untouched here; three real imports were added to lib/.
+# See the evidence README for the exact three lines.
+
+$ flutter test test/tooling/import_rules_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart
+00:00 +0: import rules over lib/ (setUpAll)
+00:00 +0: import rules over lib/ no import-rule violation outside the allowlist
+00:00 +0 -1: import rules over lib/ no import-rule violation outside the allowlist [E]
+  NEW import-rule violation(s) - 3 found.
+  These break the architecture rules and are not allowlisted:
+  
+    lib/features/auth/data/datasources/auth_remote_datasource.dart:1
+        imports : package:dio/dio.dart
+        rule    : dio_outside_core_network
+        banned  : package:dio outside lib/core/network/
+        allowed : lib/core/network/** - the dio adapter and the interceptors that implement the dio Interceptor API - plus the one designated mapper allowlisted below. Nothing under lib/features/ may import it. See docs/api/core/network.md, "Where dio is allowed to appear"
+  
+    lib/features/tasks/domain/usecases/get_all_tasks_usecase.dart:1
+        imports : package:flutter_starter/features/tasks/data/models/task_model.dart
+        rule    : domain_imports_outer_layer
+        banned  : a file under lib/features/<f>/domain/ importing that feature's data/ or presentation/
+        allowed : nowhere - domain is the innermost layer and depends on nothing outside itself
+  
+    lib/features/tasks/presentation/screens/tasks_list_screen.dart:1
+        imports : package:flutter_starter/features/auth/domain/entities/user.dart
+        rule    : cross_feature_import
+        banned  : a file under lib/features/<a>/ importing lib/features/<b>/
+        allowed : nowhere - features meet through lib/core/ or lib/shared/, never directly
+  
+  Fix the import. If - and only if - the import is correct as written, add the path under the matching rule in kAllowedImportViolations,
+  in test/tooling/import_rules_test.dart:
+  
+    'dio_outside_core_network': { ... 'lib/features/auth/data/datasources/auth_remote_datasource.dart' }
+    'domain_imports_outer_layer': { ... 'lib/features/tasks/domain/usecases/get_all_tasks_usecase.dart' }
+    'cross_feature_import': { ... 'lib/features/tasks/presentation/screens/tasks_list_screen.dart' }
+  
+  package:matcher                            fail
+  test/tooling/import_rules_test.dart 348:7  main.<fn>.<fn>
+  
+00:00 +0 -1: import rules over lib/ no stale allowlist entry
+00:00 +1 -1: import rules over lib/ every allowlist key names a real rule
+00:00 +2 -1: import rules over lib/ every allowlist path exists, unless it is a stripped sample
+00:00 +3 -1: import rules over lib/ every rule has exactly one allowlist key
+00:00 +4 -1: import rules over lib/ (tearDownAll)
+00:00 +4 -1: rule predicates domain importing its own data or presentation is a violation
+00:00 +5 -1: rule predicates domain importing its own domain, core or a pub package is fine
+00:00 +6 -1: rule predicates data importing presentation is outside this rule set
+00:00 +7 -1: rule predicates one feature importing another is a violation
+00:00 +8 -1: rule predicates a feature importing itself, core or shared is fine
+00:00 +9 -1: rule predicates lib/features importing lib/core is fine - that is the direction
+00:00 +10 -1: rule predicates package:dio is allowed only under lib/core/network/
+00:00 +11 -1: rule predicates go_router is allowed in core routing and route modules
+00:00 +12 -1: rule predicates go_router outside those places is a violation
+00:00 +13 -1: rule predicates lib/core importing lib/features is a violation
+00:00 +14 -1: rule predicates the route registry seam is permanently allowed
+00:00 +15 -1: strippable sample paths cover what tool/strip_sample_features.dart deletes
+00:00 +16 -1: strippable sample paths do not cover files no strip variant removes
+00:00 +17 -1: directive parsing picks up import and export, with line numbers
+00:00 +18 -1: directive parsing a commented-out directive is not a violation
+00:00 +19 -1: directive parsing handles show/hide/as clauses and double quotes
+00:00 +20 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ no import-rule violation outside the allowlist
+
+exit: 1
+
+
+# ---------------------------------------------------------------------
+# Second run, fifth rule: go_router re-added to a screen (the exact edge
+# koniz-dev/flutter-starter#177 removed). Allowlist still untouched.
+# ---------------------------------------------------------------------
+
+$ flutter test test/tooling/import_rules_test.dart --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart
+00:00 +0: import rules over lib/ (setUpAll)
+00:00 +0: import rules over lib/ no import-rule violation outside the allowlist
+00:00 +0 -1: import rules over lib/ no import-rule violation outside the allowlist [E]
+  NEW import-rule violation(s) - 1 found.
+  These break the architecture rules and are not allowlisted:
+  
+    lib/features/tasks/presentation/screens/task_detail_screen.dart:1
+        imports : package:go_router/go_router.dart
+        rule    : go_router_outside_routing
+        banned  : package:go_router outside the routing layer
+        allowed : lib/core/routing/** and the designated per-feature route modules lib/features/<f>/routing/<name>_routes.dart
+  
+  Fix the import. If - and only if - the import is correct as written, add the path under the matching rule in kAllowedImportViolations,
+  in test/tooling/import_rules_test.dart:
+  
+    'go_router_outside_routing': { ... 'lib/features/tasks/presentation/screens/task_detail_screen.dart' }
+  
+  package:matcher                            fail
+  test/tooling/import_rules_test.dart 348:7  main.<fn>.<fn>
+  
+00:00 +0 -1: import rules over lib/ no stale allowlist entry
+00:00 +1 -1: import rules over lib/ every allowlist key names a real rule
+00:00 +2 -1: import rules over lib/ every allowlist path exists, unless it is a stripped sample
+00:00 +3 -1: import rules over lib/ every rule has exactly one allowlist key
+00:00 +4 -1: import rules over lib/ (tearDownAll)
+00:00 +4 -1: rule predicates domain importing its own data or presentation is a violation
+00:00 +5 -1: rule predicates domain importing its own domain, core or a pub package is fine
+00:00 +6 -1: rule predicates data importing presentation is outside this rule set
+00:00 +7 -1: rule predicates one feature importing another is a violation
+00:00 +8 -1: rule predicates a feature importing itself, core or shared is fine
+00:00 +9 -1: rule predicates lib/features importing lib/core is fine - that is the direction
+00:00 +10 -1: rule predicates package:dio is allowed only under lib/core/network/
+00:00 +11 -1: rule predicates go_router is allowed in core routing and route modules
+00:00 +12 -1: rule predicates go_router outside those places is a violation
+00:00 +13 -1: rule predicates lib/core importing lib/features is a violation
+00:00 +14 -1: rule predicates the route registry seam is permanently allowed
+00:00 +15 -1: strippable sample paths cover what tool/strip_sample_features.dart deletes
+00:00 +16 -1: strippable sample paths do not cover files no strip variant removes
+00:00 +17 -1: directive parsing picks up import and export, with line numbers
+00:00 +18 -1: directive parsing a commented-out directive is not a violation
+00:00 +19 -1: directive parsing handles show/hide/as clauses and double quotes
+00:00 +20 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ no import-rule violation outside the allowlist
+
+exit: 1

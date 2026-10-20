@@ -1,0 +1,48 @@
+# main 19cf8ed6d1d, before the fix: flutter test test/tooling/setup_ci_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_ci_test.dart
+00:00 +0: there are deploy workflows to check
+00:00 +1: criterion 1: setup_ci.dart enables exactly one deploy option without --deploy-trigger, no deploy workflow gets a push trigger
+00:00 +1 -1: criterion 1: setup_ci.dart enables exactly one deploy option without --deploy-trigger, no deploy workflow gets a push trigger [E]
+  Expected: not contains 'would enable in deploy-'
+    Actual: '  no commented triggers in `on:`, unchanged: build.yml\n'
+00:00 +1 -1: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=tags enables tags and not branches
+00:01 +1 -2: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=tags enables tags and not branches [E]
+  Expected: not contains 'branches:'
+    Actual: '  no commented triggers in `on:`, unchanged: build.yml\n'
+00:01 +1 -2: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=branch enables branches and not tags
+00:01 +1 -3: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=branch enables branches and not tags [E]
+  Expected: not contains 'tags:'
+    Actual: '  no commented triggers in `on:`, unchanged: build.yml\n'
+00:01 +1 -3: criterion 1: setup_ci.dart enables exactly one deploy option an unknown value is refused and writes nothing
+00:02 +1 -4: criterion 1: setup_ci.dart enables exactly one deploy option an unknown value is refused and writes nothing [E]
+  Expected: <64>
+    Actual: <0>
+00:02 +1 -4: criterion 2: every deploy upload fails on zero files deploy-android.yml
+00:02 +1 -5: criterion 2: every deploy upload fails on zero files deploy-android.yml [E]
+  Expected: contains 'if-no-files-found: error'
+    Actual: 'Upload artifacts\n'
+     Which: does not contain 'if-no-files-found: error'
+00:02 +1 -5: criterion 2: every deploy upload fails on zero files deploy-ios.yml
+00:02 +1 -6: criterion 2: every deploy upload fails on zero files deploy-ios.yml [E]
+  Expected: contains 'if-no-files-found: error'
+    Actual: 'Upload artifacts\n'
+     Which: does not contain 'if-no-files-found: error'
+00:02 +1 -6: criterion 2: every deploy upload fails on zero files deploy-web.yml
+00:02 +2 -6: criterion 3: commented artifact paths use the flavorless layout deploy-android.yml
+00:02 +2 -7: criterion 3: commented artifact paths use the flavorless layout deploy-android.yml [E]
+  Expected: not contains '${ENV}Release'
+    Actual: 'name: Deploy Android\n'
+00:02 +2 -7: criterion 3: commented artifact paths use the flavorless layout deploy-ios.yml
+00:02 +3 -7: criterion 3: commented artifact paths use the flavorless layout deploy-web.yml
+00:02 +4 -7: Some tests failed.
+
+## dart scripts/dev/setup_ci.dart --dry-run (main)
+  would enable in deploy-android.yml:
+    push:
+    tags:
+    - 'v*.*.*'
+    branches: [ main ]
+## grep -c if-no-files-found
+.github/workflows/deploy-android.yml:0
+.github/workflows/deploy-web.yml:0
+.github/workflows/deploy-ios.yml:0

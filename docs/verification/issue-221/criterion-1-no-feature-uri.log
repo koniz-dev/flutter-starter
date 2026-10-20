@@ -1,0 +1,18 @@
+$ grep -n "flutter_starter/features/" lib/core/di/providers.dart
+exit=1
+
+$ grep -n "^import\|^export" lib/core/di/providers.dart
+12:import 'package:flutter_riverpod/flutter_riverpod.dart';
+13:import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
+14:import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+15:import 'package:flutter_starter/core/errors/failures.dart';
+16:import 'package:flutter_starter/core/logging/logging_providers.dart';
+17:import 'package:flutter_starter/core/network/api_client.dart';
+18:import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+19:import 'package:flutter_starter/core/performance/performance_providers.dart';
+20:import 'package:flutter_starter/core/session/session_providers.dart';
+21:import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
+22:import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+23:import 'package:flutter_starter/core/storage/storage_migration_service.dart';
+24:import 'package:flutter_starter/core/storage/storage_service.dart';
+25:import 'package:flutter_starter/core/utils/result.dart';

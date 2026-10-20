@@ -1,0 +1,6 @@
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Number of signers: 1
+Signer #1 certificate DN: CN=Android Debug, O=Android, C=US
+V2 Signer: certificate DN: CN=Android Debug, O=Android, C=US

@@ -1,0 +1,50 @@
+$ flutter test --run-skipped --tags golden test/acceptance
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/home_screen_acceptance_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/home_screen_acceptance_test.dart: HomeScreen acceptance renders the home content surface and welcome heading
+00:02 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/home_screen_acceptance_test.dart: HomeScreen acceptance renders the home content surface and welcome heading
+00:03 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+00:03 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/logout_failure_acceptance_test.dart: failed logout acceptance (#52) a logout whose remote call fails still lands on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:07 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:09 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with a persisted session the app opens on home
+00:10 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#51) with empty storage the app opens on login
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:11 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6aef4eb21dd387fa/test/acceptance/session_restore_acceptance_test.dart: cold start acceptance (#85) a cached user with no token opens on login, not home
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:12 +8: All tests passed!
+exit: 0

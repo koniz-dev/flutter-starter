@@ -1,0 +1,5 @@
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:50 +2810 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:50 +2811 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should display welcome message
+01:50 +2812 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: HomeScreen should have app bar with title
+01:50 +2813 ~8: All tests passed!

@@ -1,0 +1,20 @@
+$ git show --stat 48ba708c3f885c5d9faf6887e1ced0fd4bb31a20
+48ba708c3f885c5d9faf6887e1ced0fd4bb31a20 refactor(storage): depend on IKeyValueStore in tasks and feature flags (#195)
+
+ .../feature_flags_local_datasource.dart            |  6 +-
+ .../providers/feature_flags_providers.dart         |  4 +-
+ .../data/datasources/tasks_local_datasource.dart   |  6 +-
+ lib/features/tasks/di/tasks_providers.dart         |  4 +-
+ ..._flags_local_datasource_keyvalue_seam_test.dart | 46 +++++++++++++
+ .../tasks_local_datasource_keyvalue_seam_test.dart | 79 ++++++++++++++++++++++
+ test/helpers/in_memory_stores.dart                 | 71 +++++++++++++++++++
+ 7 files changed, 206 insertions(+), 10 deletions(-)
+
+--- existing test files in the merged diff (expect none) ---
+(none: no existing test file was touched)
+
+--- persisted key names before and after (expect no diff) ---
+(no added or removed line mentions a storage key)
+
+--- lib/core/storage in the merged diff (expect none) ---
+(none: the migration framework and version stamps were not touched)

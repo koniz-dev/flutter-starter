@@ -1,0 +1,10 @@
+$ gh pr diff 155 --name-only
+tool/ci_probe_bad_format.dart
+
+$ gh pr checks 155   (exit status follows)
+Quality gate	fail	24s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139061862/job/108084121799	
+Issue refs	pass	4s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139061911/job/108084122252	
+Strip both-samples-removed + analyze + test	pass	2m17s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139061855/job/108084122188	
+Strip feature-flags-removed + analyze + test	pass	2m40s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139061855/job/108084122626	
+Strip tasks-removed + analyze + test	pass	2m28s	https://github.com/koniz-dev/flutter-starter/actions/runs/36139061855/job/108084122630	
+exit=1

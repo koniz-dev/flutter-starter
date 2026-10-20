@@ -1,0 +1,15 @@
+# test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart against main's lib/features/tasks/presentation/providers/tasks_provider.dart
+00:00 +0: criterion 1: a failed delete falls back to an empty list, so B sees none of A's tasks, now or on a reload
+00:00 +0 -1: criterion 1: a failed delete falls back to an empty list, so B sees none of A's tasks, now or on a reload [E]
+  Expected: empty
+    Actual: ['A\'s private task']
+00:00 +0 -1: criterion 1: when the fallback write fails too, the list is held empty until a wipe succeeds
+00:00 +0 -2: criterion 1: when the fallback write fails too, the list is held empty until a wipe succeeds [E]
+  Expected: empty
+    Actual: ['A\'s private task']
+00:00 +0 -2: criterion 2: each failure is logged, and none escapes to the zone
+00:00 +0 -3: criterion 2: each failure is logged, and none escapes to the zone [E]
+  Expected: [<contains 'could not delete'>, <contains 'could not overwrite'>]
+    Actual: SubListIterable<String>:[]
+     Which: at location [0] is SubListIterable<String>:[] which shorter than expected
+00:00 +0 -3: Some tests failed.

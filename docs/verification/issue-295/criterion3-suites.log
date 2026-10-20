@@ -1,0 +1,11 @@
+$ flutter test test/core/network test/features/auth
+00:35 +575: All tests passed!
+exit: 0
+
+$ flutter test test/core/network/api_client_interceptor_chain_test.dart --plain-name "a retry is never sent under a different session" -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_interceptor_chain_test.dart
+00:00 +0: a retry is never sent under a different session criterion 1: a GET that failed under session A is not re-sent with session B's token
+00:01 +1: a retry is never sent under a different session criterion 2: a POST opted into replay with an Idempotency-Key is not re-sent with session B's token
+00:02 +2: a retry is never sent under a different session criterion 3: a retry within one session is still sent
+00:03 +3: All tests passed!
+exit: 0

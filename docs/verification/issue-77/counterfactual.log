@@ -1,0 +1,67 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a414e34361e6e495c/test/core/network/api_client_cache_policy_test.dart
+00:00 +0: HTTP cache never stores an authenticated response (#77) an authenticated GET is never written to storage
+00:00 +1: HTTP cache never stores an authenticated response (#77) a repeat authenticated GET always goes to the network, never to cache
+00:00 +2: HTTP cache never stores an authenticated response (#77) an anonymous GET is still cached, which proves the assertions above would catch a regression rather than passing vacuously
+00:00 +3: cache guard does not depend on interceptor order (#77) CacheInterceptor still precedes AuthInterceptor, so the guard must not be header-derived
+00:00 +4: cache guard does not depend on interceptor order (#77) the interceptor bypasses the cache for a request with no Authorization header at all when the token store holds a credential
+00:00 +4 -1: cache guard does not depend on interceptor order (#77) the interceptor bypasses the cache for a request with no Authorization header at all when the token store holds a credential [E]
+  Expected: empty
+    Actual: {
+              'http_cache_/users/me_{}': '{"secret":"a"}',
+              'http_cache_timestamp_http_cache_/users/me_{}': '2026-09-19T18:58:21.237414',
+              'http_cache_index': ['http_cache_/users/me_{}']
+            }
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/network/api_client_cache_policy_test.dart 391:9  main.<fn>.<fn>
+  
+00:00 +4 -1: cache never crosses identities (#77) a second identity never sees the first identity's cached body
+00:00 +5 -1: cache never crosses identities (#77) an anonymously cached body is not replayed to an authenticated request
+00:00 +5 -2: cache never crosses identities (#77) an anonymously cached body is not replayed to an authenticated request [E]
+  Expected: {'motd': 'authenticated'}
+    Actual: {'motd': 'anonymous'}
+     Which: at location ['motd'] is 'anonymous' instead of 'authenticated'
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/network/api_client_cache_policy_test.dart 435:9  main.<fn>.<fn>
+  
+00:00 +5 -2: logout empties the HTTP response cache (#77) a cached body is dropped by the logout path and the next identical GET goes to the network
+00:00 +5 -3: logout empties the HTTP response cache (#77) a cached body is dropped by the logout path and the next identical GET goes to the network [E]
+  Expected: empty
+    Actual: {
+              'http_cache_http://localhost:3000/v1/public/config_{}': '{"motd":"before-logout"}',
+              'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/config_{}': '2026-09-19T18:58:21.344198',
+              'http_cache_index': ['http_cache_http://localhost:3000/v1/public/config_{}']
+            }
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/network/api_client_cache_policy_test.dart 471:9  main.<fn>.<fn>
+  
+00:00 +5 -3: logout empties the HTTP response cache (#77) clearCache removes every entry it wrote, including timestamps
+00:00 +5 -4: logout empties the HTTP response cache (#77) clearCache removes every entry it wrote, including timestamps [E]
+  Expected: empty
+    Actual: {
+              'http_cache_http://localhost:3000/v1/public/one_{}': '{"a":1}',
+              'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/one_{}': '2026-09-19T18:58:21.373942',
+              'http_cache_index': [
+                'http_cache_http://localhost:3000/v1/public/one_{}',
+                'http_cache_http://localhost:3000/v1/public/two_{}'
+              ],
+              'http_cache_http://localhost:3000/v1/public/two_{}': '{"a":1}',
+              'http_cache_timestamp_http_cache_http://localhost:3000/v1/public/two_{}': '2026-09-19T18:58:21.377262'
+            }
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/network/api_client_cache_policy_test.dart 497:7  main.<fn>.<fn>
+  
+00:00 +5 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a414e34361e6e495c/test/core/network/api_client_cache_policy_test.dart: cache guard does not depend on interceptor order (#77) the interceptor bypasses the cache for a request with no Authorization header at all when the token store holds a credential
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a414e34361e6e495c/test/core/network/api_client_cache_policy_test.dart: cache never crosses identities (#77) an anonymously cached body is not replayed to an authenticated request
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a414e34361e6e495c/test/core/network/api_client_cache_policy_test.dart: logout empties the HTTP response cache (#77) a cached body is dropped by the logout path and the next identical GET goes to the network
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a414e34361e6e495c/test/core/network/api_client_cache_policy_test.dart: logout empties the HTTP response cache (#77) clearCache removes every entry it wrote, including timestamps

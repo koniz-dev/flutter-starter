@@ -1,0 +1,65 @@
+Criterion 3: .env.example no longer suggests API_KEY and SENTRY_DSN as
+things to put in .env without a warning.
+
+Verified on main at cd56d01 (PR #126).
+
+$ grep -n "API_KEY" .env.example
+(no match)
+
+$ grep -n "SENTRY_DSN" .env.example
+(no match)
+
+The only surviving mention is the inline warning below; the
+"API_KEY=your_api_key_here" / "SENTRY_DSN=your_sentry_dsn_here"
+example pair is gone.
+
+$ sed -n '1,24p' .env.example
+
+   1  # ============================================================================
+   2  # Environment Configuration Template
+   3  # ============================================================================
+   4  # Copy this file to .env and fill in your values
+   5  # DO NOT commit .env to version control (it's in .gitignore)
+   6  #
+   7  # Usage:
+   8  #   cp .env.example .env
+   9  #   # Edit .env with your values
+  10  #   flutter run --dart-define-from-file=.env
+  11  #
+  12  # DO NOT add `- .env` to the `assets:` list in pubspec.yaml. A Flutter asset
+  13  # declaration is not build-mode scoped, so the file would ship inside the
+  14  # release APK, the release IPA and the web build, where anyone can unzip it or
+  15  # fetch it at https://<host>/assets/.env. Use --dart-define-from-file (above)
+  16  # on native targets; `dart run tool/check_env_assets.dart` fails the build if
+  17  # an env file other than this one ends up in the asset list.
+  18  #
+  19  # This file itself is an asset, which is why every value below is blank or a
+  20  # placeholder. Keep it that way.
+  21  #
+  22  # See docs/guides/configuration.md ("Never ship a secret in the bundle").
+  23  # ============================================================================
+  24  
+
+$ sed -n '<Additional Configuration>,$p' .env.example
+
+  80  # ----------------------------------------------------------------------------
+  81  # Additional Configuration
+  82  # ----------------------------------------------------------------------------
+  83  # Add your own NON-SECRET configuration here, and add the key to
+  84  # lib/core/config/dart_defines.dart so it also works via --dart-define.
+  85  #
+  86  # WARNING - what must never go in a .env used by this app:
+  87  #   API keys, client secrets, access tokens, signing material, database URLs.
+  88  # Everything in a shipped build is readable by its user. On native, a
+  89  # dart-define is compiled into the binary and recoverable from it; on web the
+  90  # whole bundle is downloaded, so a web client cannot hold a secret at all.
+  91  # Anything privileged belongs on a server the app authenticates to, which
+  92  # proxies the call or issues a short-lived, scoped token.
+  93  #
+  94  # Example of a value that is safe here (public by design, per-environment):
+  95  # SUPPORT_URL=https://support.example.com
+  96  #
+  97  # A Sentry DSN is a judgement call: it is designed to be embedded in clients,
+  98  # but it is still a public write endpoint for your project. If you add one,
+  99  # add it knowing it is public.
+ 100  

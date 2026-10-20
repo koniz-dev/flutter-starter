@@ -1,0 +1,124 @@
+$ flutter test --timeout=5m --reporter compact
+
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/core/config/app_config_test.dart: AppConfig Debug utilities should have printConfig method   
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+00:03 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/core/config/app_config_test.dart: AppConfig Debug utilities should have printConfig method   
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+
+📦 App Info:
+  Version: 1.0.0
+  Build Number: 1
+═══════════════════════════════════════════════════════════
+00:03 +75: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/core/config/app_config_test.dart: AppConfig Edge Cases printConfig should not throw in debug mode
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: development
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://localhost:3000
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: false
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: false
+  Crash Reporting: false
+  Performance Monitoring: false
+  Debug Features: true
+  HTTP Logging: true
+
+📦 App Info:
+
+[... 780 lines elided by scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2411 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should use light theme by default                                 
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2412 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should have dark theme configured                                 
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2413 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should configure router correctly                                 
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2414 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should configure localization delegates                           
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2415 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should configure supported locales                                
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2416 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should use locale from provider                                   
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:09 +2417 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should configure text direction from provider                     
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:10 +2418 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a7494430e8329da4e/test/main_test.dart: MyApp should wrap content in RepaintBoundary                            
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:10 +2422 ~5: 5 skipped tests.                                                                                                                                                                       
+02:10 +2422 ~5: All other tests passed!                                                                                                                                                                
+exit: 0

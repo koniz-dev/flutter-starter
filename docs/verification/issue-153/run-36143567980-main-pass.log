@@ -1,0 +1,67 @@
+Criterion 1 - Build (Manual), platform=android, ref=main at f4e9333 (the merged fix). The job is GREEN and the guard prints the DN of a v2-signed APK.
+
+=== gh run view 36143567980 ===
+
+
+✓ main Build (Manual) · 36143567980
+Triggered via workflow_dispatch about 12 minutes ago
+
+JOBS
+✓ Build Android in 5m32s (ID 108099026729)
+- Build iOS (no codesign) in 0s (ID 108099028350)
+- Build Web in 0s (ID 108099028538)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build Android: .github#4
+
+! setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+Build Android: .github#17
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+Build Android: .github#1
+
+
+ARTIFACTS
+android-apks-production
+
+For more information about a job, try: gh run view --job=<job-id>
+View this run on GitHub: https://github.com/koniz-dev/flutter-starter/actions/runs/36143567980
+
+=== step: Print APK signer certificate ===
+
+##[group]Run set -euo pipefail
+set -euo pipefail
+APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
+./scripts/ci/verify_apk_signer.sh "$APK"
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.5-x64/flutter
+  PUB_CACHE: /home/runner/.pub-cache
+  JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+  JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+##[endgroup]
+APK: build/app/outputs/flutter-apk/app-release.apk
+Using: /usr/local/lib/android/sdk/build-tools/37.0.0/apksigner
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+V2 Signer: certificate SHA-256 digest: 5e082c5f3c22e5c946922a44cc4a992838a9493192f52d9402b1c86f21d5e16f
+V2 Signer: certificate SHA-1 digest: 3f5790adda4162460ef9071d83a867b49e9eee56
+V2 Signer: certificate MD5 digest: b4a54bee24d657de3d6f6f29fbc81b42
+V2 Signer: key algorithm: RSA
+V2 Signer: key size (bits): 2048
+V2 Signer: public key SHA-256 digest: 86e20d94cf92b40c4bd14c0c6abee4c092786e3c770c004ed86b9ed890afed2c
+V2 Signer: public key SHA-1 digest: abea2878d88518b09ff05bce4ee43b278b9437fc
+V2 Signer: public key MD5 digest: f0d2cc3ac9496f0ec76a8cf0397f5ec5
+Signers: 1
+Certificate DN(s):
+  CN=CI Throwaway, OU=flutter-starter, O=flutter-starter, C=US
+OK: build/app/outputs/flutter-apk/app-release.apk is signed by 1 non-debug signer(s).

@@ -1,0 +1,85 @@
+$ ./scripts/dev/audit_template.sh
+
+==> format (lib test integration_test tool examples)
+Formatted 332 files (0 changed) in 1.07 seconds.
+==> flutter analyze
+Analyzing agent-a509334bb4e966eb1...                            
+No issues found! (ran in 5.1s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have environment property
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager setLocalOverride should call repository setLocalOverride with correct parameters
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should detect development environment by default
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager setLocalOverride should handle setLocalOverride failure gracefully
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have isDevelopment property
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager clearLocalOverride should call repository clearLocalOverride
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager clearLocalOverride should call repository clearLocalOverride
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/config/app_config_test.dart: AppConfig Environment detection should have isStaging property
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager clearLocalOverride should handle clearLocalOverride failure gracefully
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/core/di/providers_test.dart: Providers Storage Providers storageServiceProvider should provide StorageService
+
+[... 3243 lines elided; head and tail kept, as scripts/test/run_acceptance.sh does ...]
+
+01:50 +2414 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: MyApp should configure localization delegates
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:51 +2415 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: MyApp should configure supported locales
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:51 +2416 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: MyApp should use locale from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:51 +2417 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:51 +2418 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:123:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:51 +2419 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: HomeScreen should create HomeScreen widget
+01:51 +2420 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: HomeScreen should display welcome message
+01:51 +2421 ~5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a509334bb4e966eb1/test/main_test.dart: HomeScreen should have app bar with title
+01:51 +2422 ~5: All tests passed!
+audit exit=0

@@ -1,0 +1,66 @@
+$ flutter test test/features/auth/presentation/providers/auth_provider_test.dart
+
+# Run against the PRE-#181 decision: the merged notifier with only the
+# substring branch restored (see README.md, 'How the red run was produced').
+# The dependency-resolution preamble printed by `flutter test` is elided.
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart
+00:00 +0: AuthNotifier login should update state with user on success
+00:00 +1: AuthNotifier login should update state with error on failure
+00:00 +2: AuthNotifier login should set loading state during login
+00:00 +3: AuthNotifier register should update state with user on success
+00:00 +4: AuthNotifier register should update state with error on failure
+00:00 +5: AuthNotifier logout should clear user on success
+00:00 +6: AuthNotifier logout should handle logout failure
+00:00 +7: AuthNotifier logout should clear the user when the remote logout fails
+00:00 +8: AuthNotifier refreshToken should not change state on success
+00:00 +9: AuthNotifier refreshToken should logout on refresh token expiry
+00:00 +10: AuthNotifier refreshToken should clear the session when the code says the refresh token died
+00:00 +11: AuthNotifier refreshToken should keep the session when an unrelated failure mentions refresh
+00:00 +11 -1: AuthNotifier refreshToken should keep the session when an unrelated failure mentions refresh [E]
+  Unexpected calls: MockLogoutUseCase.call()
+  package:matcher                                                           fail
+  package:mocktail/src/mocktail.dart 734:7                                  _VerifyCall._checkWith
+  package:mocktail/src/mocktail.dart 519:18                                 _makeVerify.<fn>
+  test/features/auth/presentation/providers/auth_provider_test.dart 401:22  main.<fn>.<fn>.<fn>
+  
+00:00 +11 -1: AuthNotifier refreshToken should keep the session when a newer session ended the refresh
+00:00 +11 -2: AuthNotifier refreshToken should keep the session when a newer session ended the refresh [E]
+  Unexpected calls: MockLogoutUseCase.call()
+  package:matcher                                                           fail
+  package:mocktail/src/mocktail.dart 734:7                                  _VerifyCall._checkWith
+  package:mocktail/src/mocktail.dart 519:18                                 _makeVerify.<fn>
+  test/features/auth/presentation/providers/auth_provider_test.dart 444:22  main.<fn>.<fn>.<fn>
+  
+00:00 +11 -2: AuthNotifier getCurrentUser should update state with user on success
+00:00 +12 -2: AuthNotifier getCurrentUser should handle null user
+00:00 +13 -2: AuthNotifier isAuthenticated should return true when authenticated
+00:00 +14 -2: AuthNotifier isAuthenticated should return false when not authenticated
+00:00 +15 -2: AuthNotifier isAuthenticated should return false on failure
+00:00 +16 -2: AuthNotifier Edge Cases should handle initial state correctly
+00:00 +17 -2: AuthNotifier Edge Cases should clear error on successful login after failure
+00:00 +18 -2: AuthNotifier Edge Cases should handle multiple rapid login attempts
+00:00 +19 -2: AuthNotifier Edge Cases should handle empty email in login
+00:00 +20 -2: AuthNotifier Edge Cases should handle empty password in login
+00:00 +21 -2: AuthNotifier Edge Cases should handle empty name in register
+00:00 +22 -2: AuthNotifier Edge Cases should preserve user on refresh token success
+00:00 +23 -2: AuthNotifier Edge Cases should handle getCurrentUser failure
+00:00 +24 -2: AuthNotifier Edge Cases should not logout on an untagged failure naming refresh
+00:00 +24 -3: AuthNotifier Edge Cases should not logout on an untagged failure naming refresh [E]
+  Unexpected calls: MockLogoutUseCase.call()
+  package:matcher                                                           fail
+  package:mocktail/src/mocktail.dart 734:7                                  _VerifyCall._checkWith
+  package:mocktail/src/mocktail.dart 519:18                                 _makeVerify.<fn>
+  test/features/auth/presentation/providers/auth_provider_test.dart 704:20  main.<fn>.<fn>.<fn>
+  
+00:00 +24 -3: AuthNotifier Edge Cases should handle refreshToken with non-refresh failure
+00:00 +25 -3: AuthNotifier Edge Cases should set loading state during register
+00:00 +26 -3: AuthNotifier Edge Cases should set loading state during logout
+00:00 +27 -3: AuthNotifier Edge Cases should set loading state during getCurrentUser
+00:00 +28 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier Edge Cases should not logout on an untagged failure naming refresh
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should keep the session when a newer session ended the refresh
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier refreshToken should keep the session when an unrelated failure mentions refresh
+exit=1

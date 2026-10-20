@@ -1,0 +1,6 @@
+$ flutter test --run-skipped --tags golden test/acceptance
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/acceptance/home_screen_acceptance_test.dart
+00:00 +0: HomeScreen acceptance renders the home content surface and welcome heading
+00:01 +1: All tests passed!
+exit: 0

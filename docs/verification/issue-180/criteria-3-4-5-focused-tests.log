@@ -1,0 +1,95 @@
+# Focused acceptance test runs for koniz-dev/flutter-starter#180
+# main @ 5c7603e
+# Dependency-resolution noise stripped; test lines and exit codes are verbatim.
+
+### Criterion 3 - Task.touch (the one layer that mints a modification stamp)
+$ flutter test test/features/tasks/domain/entities/task_test.dart --plain-name touch --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart
+00:00 +0: Task touch stamps updatedAt with the given instant and changes nothing else
+00:00 +1: Task touch defaults the stamp to now, which is after a past updatedAt
+00:00 +2: All tests passed!
+exit=0
+
+### Criterion 3 - Task.toggleCompletion (flag flipped AND updatedAt strictly later)
+$ flutter test test/features/tasks/domain/entities/task_test.dart --plain-name toggleCompletion --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/domain/entities/task_test.dart
+00:00 +0: Task toggleCompletion flips isCompleted and advances updatedAt past the input
+00:00 +1: Task toggleCompletion flips a completed task back and still advances updatedAt
+00:00 +2: Task toggleCompletion keeps a null description null
+00:00 +3: All tests passed!
+exit=0
+
+### Criterion 3 - the data layer still delegates, atomically (toggleTaskCompletion group)
+$ flutter test test/features/tasks/data/repositories/tasks_repository_impl_test.dart --plain-name toggleTaskCompletion --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: TasksRepositoryImpl toggleTaskCompletion should toggle task completion successfully
+00:00 +1: TasksRepositoryImpl toggleTaskCompletion should return CacheFailure when task not found
+00:00 +2: TasksRepositoryImpl toggleTaskCompletion should return CacheFailure when mutateTasks throws exception
+00:00 +3: TasksRepositoryImpl toggleTaskCompletion should toggle from completed to incomplete
+00:00 +4: TasksRepositoryImpl toggleTaskCompletion should update updatedAt when toggling
+00:00 +5: TasksRepositoryImpl Error handling should handle generic Exception in toggleTaskCompletion
+00:00 +6: TasksRepositoryImpl Edge cases should handle toggleTaskCompletion with task already completed
+00:00 +7: (tearDownAll)
+00:00 +7: All tests passed!
+exit=0
+
+### Criterion 4 - the detail screen persists an advanced updatedAt without minting one
+$ flutter test test/features/tasks/presentation/screens/task_detail_screen_test.dart --plain-name persists an advanced updatedAt without the screen minting one --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: TaskDetailScreen editing existing task persists an advanced updatedAt without the screen minting one
+00:01 +1: (tearDownAll)
+00:01 +1: All tests passed!
+exit=0
+
+### Criterion 5 - TasksNotifier.taskById is the boundary the screen uses
+$ flutter test test/features/tasks/presentation/providers/tasks_provider_test.dart --plain-name taskById --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_provider_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: TasksNotifier taskById returns the task the use case resolved
+00:00 +1: TasksNotifier taskById passes a failure through untouched
+00:00 +2: TasksNotifier taskById leaves the shared list snapshot alone
+00:00 +3: (tearDownAll)
+00:00 +3: All tests passed!
+exit=0
+
+### Criterion 5 - the detail screen's own navigation/load tests (koniz-dev/flutter-starter#177 regression guard)
+$ flutter test test/features/tasks/presentation/screens/task_detail_navigation_test.dart --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: task detail returns to the tasks list after saving
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:02 +1: (tearDownAll)
+00:02 +1: All tests passed!
+exit=0
+

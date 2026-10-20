@@ -1,0 +1,23 @@
+./scripts/dev/audit_template.sh on merged main (11575d2) - koniz-dev/flutter-starter#168 criterion 6
+====================================================================================================
+
+Exit code: 0
+
+The raw output is ~1 MB, almost all of it the compact test reporter's
+carriage-return progress redraws. The stage banners and each stage's verdict
+are reproduced below verbatim (ANSI colour codes stripped, CR treated as a
+line break). The unabridged unit/widget run for the same commit is in
+tests.log, and the per-test names for the #168 assertions are in
+focused-tests.log.
+
+    ==> env asset guard
+    Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+    ==> format (lib test integration_test tool examples)
+    Formatted 361 files (0 changed) in 3.73 seconds.
+    ==> flutter analyze
+    Analyzing agent-ac93d9da11dbf5057...
+    No issues found! (ran in 11.2s)
+    ==> flutter test
+    04:04 +2747 ~8: All tests passed!
+
+exit: 0

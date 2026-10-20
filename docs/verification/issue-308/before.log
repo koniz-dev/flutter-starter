@@ -1,0 +1,26 @@
+# main 3449ad0409a, before the fix: flutter test test/core/storage/adapters/secure_token_delete_failure_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_delete_failure_test.dart
+00:00 +0: criterion 2: SecureTokenStore.clearAllTokens attempts both deletes when the first fails, and throws
+00:00 +0 -1: criterion 2: SecureTokenStore.clearAllTokens attempts both deletes when the first fails, and throws [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+00:00 +0 -1: criterion 2: SecureTokenStore.clearAllTokens throws when only the refresh-token delete fails
+00:00 +0 -2: criterion 2: SecureTokenStore.clearAllTokens throws when only the refresh-token delete fails [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+00:00 +0 -2: criterion 2: SecureTokenStore.clearAllTokens a single clear signals its own failure
+00:00 +0 -3: criterion 2: SecureTokenStore.clearAllTokens a single clear signals its own failure [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+00:00 +0 -3: criterion 2: SecureTokenStore.clearAllTokens succeeds quietly when both deletes work
+00:00 +1 -3: criterion 1: AuthRepositoryImpl.logout surfaces the failure a refresh token that survived is a ResultFailure
+VS logout=Success<void>(null) refresh-after=live-refresh
+00:00 +1 -4: criterion 1: AuthRepositoryImpl.logout surfaces the failure a refresh token that survived is a ResultFailure [E]
+  Expected: <Instance of 'ResultFailure<void>'>
+    Actual: Success<void>:<Success<void>(null)>
+     Which: is not an instance of 'ResultFailure<void>'
+00:00 +1 -4: criterion 1: AuthRepositoryImpl.logout surfaces the failure a clean delete is still Success
+00:00 +2 -4: Some tests failed.

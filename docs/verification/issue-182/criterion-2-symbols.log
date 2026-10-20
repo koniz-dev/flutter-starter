@@ -1,0 +1,434 @@
+# Criterion 2 - koniz-dev/flutter-starter#182
+# Every symbol named in a 'Default implementation', 'Wired in / consumed by'
+# or 'Override or template' cell of docs/architecture/contracts-map.md,
+# checked with: grep -rn "<symbol>" lib
+# main @ ffa4615
+
+## Summary (hit count must be >= 1 for every row)
+
+ok   INetworkClient                            6 hit(s)
+ok   DioNetworkClient                          3 hit(s)
+ok   ApiClient                                27 hit(s)
+ok   apiClientProvider                         6 hit(s)
+ok   networkClientProvider                     3 hit(s)
+ok   AuthRemoteDataSource                     11 hit(s)
+ok   IHttpResponseCache                        8 hit(s)
+ok   CacheInterceptor                          9 hit(s)
+ok   AuthInterceptor                          26 hit(s)
+ok   AuthRepositoryImpl                       11 hit(s)
+ok   IKeyValueStore                           11 hit(s)
+ok   StorageService                           74 hit(s)
+ok   keyValueStoreProvider                     5 hit(s)
+ok   ITokenStore                              15 hit(s)
+ok   SecureTokenStore                          5 hit(s)
+ok   tokenStoreProvider                        3 hit(s)
+ok   ISessionTerminationSink                   4 hit(s)
+ok   RiverpodSessionTerminationSink            3 hit(s)
+ok   AppNavigator                              4 hit(s)
+ok   GoRouterNavigatorAdapter                  3 hit(s)
+ok   appNavigatorProvider                      1 hit(s)
+ok   AppDesignTokens                           2 hit(s)
+ok   DefaultDesignTokens                       3 hit(s)
+ok   AppTheme                                  4 hit(s)
+ok   IAuthController                           3 hit(s)
+ok   AuthNotifier                             12 hit(s)
+ok   authControllerProvider                    1 hit(s)
+ok   ITasksController                          1 hit(s)
+ok   TasksNotifier                            12 hit(s)
+ok   tasksProvider                             4 hit(s)
+ok   tasksNotifierProvider                     7 hit(s)
+ok   NoOpFeatureFlagsRemoteDataSource          3 hit(s)
+ok   FeatureFlagsRemoteDataSource             18 hit(s)
+ok   featureFlagsRemoteDataSourceProvider      3 hit(s)
+ok   NoOpRaspService                           2 hit(s)
+ok   raspServiceProvider                       1 hit(s)
+
+symbols checked: 36; with zero hits: 0
+
+## Full matching lines, per symbol
+
+$ grep -rn "INetworkClient" lib
+lib/core/contracts/network_contracts.dart:55:abstract class INetworkClient {
+lib/core/network/adapters/dio_network_client.dart:4:/// Dio adapter for [INetworkClient].
+lib/core/network/adapters/dio_network_client.dart:5:class DioNetworkClient implements INetworkClient {
+lib/core/network/api_client.dart:138:  late final INetworkClient _networkClient;
+lib/core/network/api_client.dart:145:  /// `.dio` is an explicit opt-out of [INetworkClient] rather than something
+lib/core/network/api_client.dart:154:  INetworkClient get networkClient => _networkClient;
+
+$ grep -rn "DioNetworkClient" lib
+lib/core/network/adapters/dio_network_client.dart:5:class DioNetworkClient implements INetworkClient {
+lib/core/network/adapters/dio_network_client.dart:7:  DioNetworkClient(this._dio);
+lib/core/network/api_client.dart:54:    _networkClient = DioNetworkClient(_dio);
+
+$ grep -rn "ApiClient" lib
+lib/core/di/providers.dart:35:final Provider<ApiClient> networkClientProvider = Provider<ApiClient>((ref) {
+lib/core/di/providers.dart:103:/// Provider for [ApiClient] instance
+lib/core/di/providers.dart:105:/// This provider creates a singleton instance of [ApiClient] that can be used
+lib/core/di/providers.dart:107:final Provider<ApiClient> apiClientProvider = Provider<ApiClient>((ref) {
+lib/core/di/providers.dart:114:  return ApiClient(
+lib/core/contracts/network_contracts.dart:62:/// layer importing `ApiClient` or any dio type.
+lib/core/network/interceptors/auth_interceptor.dart:111:  /// Set by `ApiClient` through [attachResponseCache] rather than by the
+lib/core/network/interceptors/auth_interceptor.dart:122:  /// Called by `ApiClient` once the cache interceptor is built. Safe to call
+lib/core/network/interceptors/auth_interceptor.dart:127:  /// performed by `ApiClient`, and reading them the same way is worth more here
+lib/core/network/interceptors/auth_interceptor.dart:159:  /// Called by `ApiClient` after the transport (including certificate
+lib/core/network/interceptors/retry_interceptor.dart:43:/// // Through ApiClient, whose facade forwards headers but not `extra`:
+lib/core/network/interceptors/cache_interceptor.dart:67:  /// wiring must always supply it - `ApiClient` does.
+lib/core/network/api_client.dart:3:// ApiClient without importing `package:dio` (koniz-dev/flutter-starter#176).
+lib/core/network/api_client.dart:26:class ApiClient {
+lib/core/network/api_client.dart:27:  /// Creates an instance of [ApiClient] with configured Dio instance
+lib/core/network/api_client.dart:39:  ApiClient({
+lib/core/performance/performance_providers.dart:26:/// The interceptor should be added to the Dio instance in ApiClient.
+lib/core/logging/logging_examples.dart:217:  final ExampleApiClient apiClient;
+lib/core/logging/logging_examples.dart:393:  final apiClient = ref.watch(exampleApiClientProvider);
+lib/core/logging/logging_examples.dart:401:/// Provider for [ExampleApiClient] instance
+lib/core/logging/logging_examples.dart:402:final exampleApiClientProvider = Provider<ExampleApiClient>((ref) {
+lib/core/logging/logging_examples.dart:403:  return ExampleApiClient();
+lib/core/logging/logging_examples.dart:408:class ExampleApiClient {
+lib/features/auth/di/auth_providers.dart:61:        // Same ApiClient instance the remote data source already resolved, so
+lib/features/auth/data/datasources/auth_remote_datasource.dart:27:  /// Creates an [AuthRemoteDataSourceImpl] using the shared [ApiClient] (Dio +
+lib/features/auth/data/datasources/auth_remote_datasource.dart:33:  final ApiClient _apiClient;
+lib/features/auth/presentation/providers/auth_provider.dart:269:/// ApiClient -> interceptor -> notifier. Deferred to call time, the edge only
+
+$ grep -rn "apiClientProvider" lib
+lib/core/di/providers.dart:33:/// Backward-compat alias: same instance as [apiClientProvider], typed for auth
+lib/core/di/providers.dart:36:  return ref.watch(apiClientProvider);
+lib/core/di/providers.dart:107:final Provider<ApiClient> apiClientProvider = Provider<ApiClient>((ref) {
+lib/features/auth/di/auth_providers.dart:38:/// Uses ref.read to break circular dependency with apiClientProvider.
+lib/features/auth/data/repositories/auth_repository_impl.dart:33:  /// supplies it from `apiClientProvider`.
+lib/features/auth/presentation/providers/auth_provider.dart:267:/// `apiClientProvider` reads it - so resolving the notifier eagerly would close
+
+$ grep -rn "networkClientProvider" lib
+lib/core/di/providers.dart:35:final Provider<ApiClient> networkClientProvider = Provider<ApiClient>((ref) {
+lib/features/auth/di/auth_providers.dart:41:      final apiClient = ref.read(networkClientProvider);
+lib/features/auth/di/auth_providers.dart:63:        httpCache: ref.read(networkClientProvider).responseCache,
+
+$ grep -rn "AuthRemoteDataSource" lib
+lib/features/auth/di/auth_providers.dart:36:/// Provider for [AuthRemoteDataSource] instance
+lib/features/auth/di/auth_providers.dart:39:final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
+lib/features/auth/di/auth_providers.dart:40:    Provider<AuthRemoteDataSource>((ref) {
+lib/features/auth/di/auth_providers.dart:42:      return AuthRemoteDataSourceImpl(apiClient);
+lib/features/auth/di/auth_providers.dart:54:      final remoteDataSource = ref.read<AuthRemoteDataSource>(
+lib/features/auth/data/datasources/auth_remote_datasource.dart:7:abstract class AuthRemoteDataSource {
+lib/features/auth/data/datasources/auth_remote_datasource.dart:26:class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+lib/features/auth/data/datasources/auth_remote_datasource.dart:27:  /// Creates an [AuthRemoteDataSourceImpl] using the shared [ApiClient] (Dio +
+lib/features/auth/data/datasources/auth_remote_datasource.dart:30:  /// [AuthRemoteDataSource] implementation.
+lib/features/auth/data/datasources/auth_remote_datasource.dart:31:  AuthRemoteDataSourceImpl(this._apiClient);
+lib/features/auth/data/repositories/auth_repository_impl.dart:25:  final AuthRemoteDataSource remoteDataSource;
+
+$ grep -rn "IHttpResponseCache" lib
+lib/core/contracts/state_boundary_contracts.dart:37:/// `IHttpResponseCache` uses in the opposite direction.
+lib/core/contracts/network_contracts.dart:63:abstract class IHttpResponseCache {
+lib/core/network/interceptors/auth_interceptor.dart:118:  IHttpResponseCache? _responseCache;
+lib/core/network/interceptors/auth_interceptor.dart:130:  void attachResponseCache(IHttpResponseCache cache) => _responseCache = cache;
+lib/core/network/interceptors/cache_interceptor.dart:58:/// [IHttpResponseCache], so an anonymous response cached before sign-in
+lib/core/network/interceptors/cache_interceptor.dart:60:class CacheInterceptor extends Interceptor implements IHttpResponseCache {
+lib/core/network/api_client.dart:160:  IHttpResponseCache get responseCache => _cacheInterceptor;
+lib/features/auth/data/repositories/auth_repository_impl.dart:34:  final IHttpResponseCache? httpCache;
+
+$ grep -rn "CacheInterceptor" lib
+lib/core/network/interceptors/auth_interceptor.dart:112:  /// constructor: the cache is a `CacheInterceptor` the client builds itself,
+lib/core/network/interceptors/cache_interceptor.dart:60:class CacheInterceptor extends Interceptor implements IHttpResponseCache {
+lib/core/network/interceptors/cache_interceptor.dart:61:  /// Creates a [CacheInterceptor] with the given [storageService],
+lib/core/network/interceptors/cache_interceptor.dart:68:  CacheInterceptor({
+lib/core/network/api_client.dart:55:    _cacheInterceptor = _dio.interceptors.whereType<CacheInterceptor>().single;
+lib/core/network/api_client.dart:95:    // chain. See CacheInterceptor's class doc and #77.
+lib/core/network/api_client.dart:96:    final cacheInterceptor = CacheInterceptor(
+lib/core/network/api_client.dart:117:    // CacheInterceptor should be early to intercept requests before network
+lib/core/network/api_client.dart:139:  late final CacheInterceptor _cacheInterceptor;
+
+$ grep -rn "AuthInterceptor" lib
+lib/core/di/providers.dart:111:  final authInterceptor = ref.read<AuthInterceptor>(authInterceptorProvider);
+lib/core/contracts/state_boundary_contracts.dart:33:/// The transport is where an expired session is *discovered*: `AuthInterceptor`
+lib/core/network/interceptors/api_logging_interceptor.dart:116:  /// that stores each key exactly as the caller wrote it, so `AuthInterceptor`
+lib/core/network/interceptors/auth_interceptor.dart:28:class AuthInterceptor extends Interceptor {
+lib/core/network/interceptors/auth_interceptor.dart:29:  /// Creates an [AuthInterceptor] with the given dependencies
+lib/core/network/interceptors/auth_interceptor.dart:30:  AuthInterceptor({
+lib/core/network/interceptors/cache_interceptor.dart:38:/// sniffing `options.headers` for `Authorization`. `AuthInterceptor` writes
+lib/core/network/interceptors/cache_interceptor.dart:41:/// happens to be registered *after* `AuthInterceptor` - an invariant nothing
+lib/core/network/interceptors/cache_interceptor.dart:43:/// to get wrong. Reading the same store `AuthInterceptor` reads makes the
+lib/core/network/interceptors/cache_interceptor.dart:64:  /// [tokenStore] should be the same store `AuthInterceptor` uses. When it is
+lib/core/network/api_client.dart:42:    required AuthInterceptor authInterceptor,
+lib/core/network/api_client.dart:61:    AuthInterceptor authInterceptor,
+lib/core/network/api_client.dart:92:    // Shares AuthInterceptor's token store on purpose: the cache must know
+lib/core/network/api_client.dart:94:    // headers, which AuthInterceptor only writes at its own position in the
+lib/core/network/api_client.dart:118:    // AuthInterceptor handles token injection and 401 refresh
+lib/core/session/session_generation.dart:31:/// - `AuthInterceptor._logoutUser()` - a forced logout after a failed refresh
+lib/core/session/session_providers.dart:6:/// Must be one instance for the whole container: `AuthInterceptor` reads it to
+lib/features/auth/di/auth_providers.dart:76:/// Provider for [AuthInterceptor] instance
+lib/features/auth/di/auth_providers.dart:80:final Provider<AuthInterceptor> authInterceptorProvider =
+lib/features/auth/di/auth_providers.dart:81:    Provider<AuthInterceptor>((ref) {
+lib/features/auth/di/auth_providers.dart:83:      final interceptor = AuthInterceptor(
+lib/features/auth/data/repositories/auth_repository_impl.dart:38:  /// Shared with `AuthInterceptor` via `sessionGenerationProvider`. Every
+lib/features/auth/data/repositories/auth_repository_impl.dart:160:  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
+lib/features/auth/data/repositories/auth_repository_impl.dart:209:  /// `AuthInterceptor`, or a fresh [login] - can replace the credential set
+lib/features/auth/presentation/providers/auth_provider.dart:134:  /// This is typically called automatically by the AuthInterceptor,
+lib/features/auth/presentation/providers/auth_provider.dart:208:  /// 2. **The 401 path is now correct.** Since #59 `AuthInterceptor` refreshes
+
+$ grep -rn "AuthRepositoryImpl" lib
+lib/core/network/interceptors/auth_interceptor.dart:97:  /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
+lib/core/network/interceptors/auth_interceptor.dart:99:  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
+lib/core/network/interceptors/auth_interceptor.dart:117:  /// optional in `AuthRepositoryImpl`.
+lib/core/network/api_client.dart:102:    // `AuthRepositoryImpl.logout()` empties, or the session boundary the user
+lib/core/session/session_generation.dart:30:/// - `AuthRepositoryImpl.logout()` - the user signed out.
+lib/core/session/session_generation.dart:33:/// - `AuthRepositoryImpl.login()` / `register()` - a *different* credential
+lib/core/session/session_providers.dart:7:/// decide whether a finished refresh may still write, and `AuthRepositoryImpl`
+lib/features/auth/di/auth_providers.dart:58:      return AuthRepositoryImpl(
+lib/features/auth/data/repositories/auth_repository_impl.dart:14:class AuthRepositoryImpl implements AuthRepository {
+lib/features/auth/data/repositories/auth_repository_impl.dart:15:  /// Creates an [AuthRepositoryImpl] with the given [remoteDataSource] and
+lib/features/auth/data/repositories/auth_repository_impl.dart:17:  AuthRepositoryImpl({
+
+$ grep -rn "IKeyValueStore" lib
+lib/core/di/providers.dart:23:final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
+lib/core/contracts/storage_contracts.dart:5:abstract class IKeyValueStore {
+lib/core/network/interceptors/auth_interceptor.dart:35:    IKeyValueStore? keyValueStore,
+lib/core/network/interceptors/auth_interceptor.dart:67:  final IKeyValueStore? _keyValueStore;
+lib/core/storage/storage_service.dart:47:class StorageService implements IStorageService, IKeyValueStore {
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:27:  FeatureFlagsLocalDataSourceImpl({required IKeyValueStore storageService})
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:30:  final IKeyValueStore _storageService;
+lib/features/tasks/data/datasources/tasks_local_datasource.dart:45:  final IKeyValueStore storageService;
+lib/features/auth/di/auth_providers.dart:26:/// - [IKeyValueStore] for user data (non-sensitive)
+lib/features/auth/data/datasources/auth_local_datasource.dart:54:  final IKeyValueStore storageService;
+lib/features/auth/data/repositories/auth_repository_impl.dart:160:  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
+
+$ grep -rn "StorageService" lib
+lib/core/di/providers.dart:29:  final secureStorage = ref.watch(secureStorageServiceProvider);
+lib/core/di/providers.dart:43:/// Provider for [StorageService] instance
+lib/core/di/providers.dart:45:/// This provider creates a singleton instance of [StorageService] that can be
+lib/core/di/providers.dart:49:/// For sensitive data (tokens, passwords), use [secureStorageServiceProvider].
+lib/core/di/providers.dart:50:final storageServiceProvider = Provider<StorageService>((ref) {
+lib/core/di/providers.dart:51:  return StorageService();
+lib/core/di/providers.dart:54:/// Provider for [SecureStorageService] instance
+lib/core/di/providers.dart:56:/// This provider creates a singleton instance of [SecureStorageService] that
+lib/core/di/providers.dart:62:final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+lib/core/di/providers.dart:63:  return SecureStorageService();
+lib/core/di/providers.dart:66:/// Provider for [IStorageService] interface
+lib/core/di/providers.dart:71:/// **Note**: This defaults to [StorageService] for backward compatibility.
+lib/core/di/providers.dart:72:/// For secure storage, use [secureStorageServiceProvider] directly.
+lib/core/di/providers.dart:73:final iStorageServiceProvider = Provider<IStorageService>((ref) {
+lib/core/di/providers.dart:84:  final secureStorageService = ref.read(secureStorageServiceProvider);
+lib/core/di/providers.dart:93:    secureStorageService: secureStorageService,
+lib/core/di/providers.dart:109:  final secureStorageService = ref.watch(secureStorageServiceProvider);
+lib/core/di/providers.dart:116:    secureStorageService: secureStorageService,
+lib/core/network/interceptors/auth_interceptor.dart:32:    SecureStorageService? secureStorageService,
+lib/core/network/interceptors/auth_interceptor.dart:44:           (secureStorageService != null
+lib/core/network/interceptors/auth_interceptor.dart:45:               ? SecureTokenStore(secureStorageService)
+lib/core/network/interceptors/auth_interceptor.dart:47:                   'Either tokenStore or secureStorageService must be provided.',
+lib/core/network/interceptors/cache_interceptor.dart:50:/// In [StorageService], i.e. `shared_preferences` - plaintext, readable on a
+lib/core/network/interceptors/cache_interceptor.dart:69:    required StorageService storageService,
+lib/core/network/interceptors/cache_interceptor.dart:76:  final StorageService _storageService;
+lib/core/network/interceptors/cache_interceptor.dart:88:  /// `StorageService` exposes no key enumeration, so the interceptor keeps its
+lib/core/network/api_client.dart:30:  /// [secureStorageService] - Secure storage service for authentication
+lib/core/network/api_client.dart:40:    required StorageService storageService,
+lib/core/network/api_client.dart:41:    required SecureStorageService secureStorageService,
+lib/core/network/api_client.dart:48:         secureStorageService,
+lib/core/network/api_client.dart:59:    StorageService storageService,
+lib/core/network/api_client.dart:60:    SecureStorageService secureStorageService,
+lib/core/storage/storage_logging_mixin.dart:11:/// class MyStorageService with StorageLoggingMixin implements IStorageService {
+lib/core/storage/storage_logging_mixin.dart:12:///   MyStorageService(this.loggingService);
+lib/core/storage/local_database.dart:4:/// For simple string/int pair, stick to `IStorageService`.
+lib/core/storage/adapters/secure_token_store.dart:5:/// Secure token store implementation backed by [SecureStorageService].
+lib/core/storage/adapters/secure_token_store.dart:8:  SecureTokenStore(this._secureStorageService);
+lib/core/storage/adapters/secure_token_store.dart:10:  final SecureStorageService _secureStorageService;
+lib/core/storage/adapters/secure_token_store.dart:14:    return _secureStorageService.getString(AppConstants.tokenKey);
+lib/core/storage/adapters/secure_token_store.dart:19:    return _secureStorageService.setString(AppConstants.tokenKey, token);
+lib/core/storage/adapters/secure_token_store.dart:24:    await _secureStorageService.remove(AppConstants.tokenKey);
+lib/core/storage/adapters/secure_token_store.dart:29:    return _secureStorageService.getString(AppConstants.refreshTokenKey);
+lib/core/storage/adapters/secure_token_store.dart:34:    return _secureStorageService.setString(AppConstants.refreshTokenKey, token);
+lib/core/storage/adapters/secure_token_store.dart:39:    await _secureStorageService.remove(AppConstants.refreshTokenKey);
+lib/core/storage/secure_storage_service.dart:14:class SecureStorageService implements IStorageService {
+lib/core/storage/secure_storage_service.dart:15:  /// Creates a [SecureStorageService] instance with platform-specific options
+lib/core/storage/secure_storage_service.dart:16:  SecureStorageService()
+lib/core/storage/storage_service.dart:5:abstract class IStorageService {
+lib/core/storage/storage_service.dart:47:class StorageService implements IStorageService, IKeyValueStore {
+lib/core/storage/storage_migration_service.dart:17:///   secureStorageService: secureStorageService,
+lib/core/storage/storage_migration_service.dart:26:  /// [secureStorageService] - Service for sensitive data
+lib/core/storage/storage_migration_service.dart:30:    required this.secureStorageService,
+lib/core/storage/storage_migration_service.dart:35:  final StorageService storageService;
+lib/core/storage/storage_migration_service.dart:38:  final SecureStorageService secureStorageService;
+lib/core/storage/storage_migration_service.dart:73:        storage: secureStorageService,
+lib/core/storage/storage_migration_service.dart:113:      storage: secureStorageService,
+lib/core/storage/migration/migrations/migration_v1_to_v2.dart:26:  Future<void> migrate(IStorageService storage) async {
+lib/core/storage/migration/migrations/migration_v1_to_v2.dart:114:  Future<String?> _readLegacyString(IStorageService storage, String key) async {
+lib/core/storage/migration/migrations/migration_v1_to_v2.dart:119:      // Exception, and there is no type-probing read on IStorageService.
+lib/core/storage/migration/storage_migration.dart:22:///   Future<void> migrate(IStorageService storage) async {
+lib/core/storage/migration/storage_migration.dart:42:  Future<void> migrate(IStorageService storage);
+lib/core/storage/migration/storage_migration.dart:50:  Future<bool> canMigrate(IStorageService storage) async {
+lib/core/storage/migration/storage_migration.dart:56:  Future<int> _getCurrentVersion(IStorageService storage) async {
+lib/core/storage/migration/storage_migration.dart:67:  /// not be discarded: `SecureStorageService` swallows its own errors and
+lib/core/storage/migration/storage_migration.dart:71:  Future<void> _setVersion(IStorageService storage, int version) async {
+lib/core/storage/migration/storage_migration.dart:88:  Future<void> execute(IStorageService storage) async {
+lib/core/storage/migration/migration_executor.dart:45:  final IStorageService storage;
+lib/core/localization/localization_service.dart:72:  LocalizationService({required StorageService storageService})
+lib/core/localization/localization_service.dart:75:  final StorageService _storageService;
+lib/features/auth/data/datasources/auth_local_datasource.dart:36:  /// [secureStorageService]
+lib/features/auth/data/datasources/auth_local_datasource.dart:43:    SecureStorageService? secureStorageService,
+lib/features/auth/data/datasources/auth_local_datasource.dart:46:           (secureStorageService != null
+lib/features/auth/data/datasources/auth_local_datasource.dart:47:               ? SecureTokenStore(secureStorageService)
+lib/features/auth/data/datasources/auth_local_datasource.dart:49:                   'Either tokenStore or secureStorageService must '
+
+$ grep -rn "keyValueStoreProvider" lib
+lib/core/di/providers.dart:23:final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:18:  final keyValueStore = ref.watch(keyValueStoreProvider);
+lib/features/tasks/di/tasks_providers.dart:19:  final keyValueStore = ref.watch(keyValueStoreProvider);
+lib/features/auth/di/auth_providers.dart:28:  final storageService = ref.watch(keyValueStoreProvider);
+lib/features/auth/di/auth_providers.dart:88:        keyValueStore: ref.watch(keyValueStoreProvider),
+
+$ grep -rn "ITokenStore" lib
+lib/core/di/providers.dart:28:final tokenStoreProvider = Provider<ITokenStore>((ref) {
+lib/core/contracts/storage_contracts.dart:27:abstract class ITokenStore {
+lib/core/network/interceptors/auth_interceptor.dart:31:    ITokenStore? tokenStore,
+lib/core/network/interceptors/auth_interceptor.dart:52:  final ITokenStore _tokenStore;
+lib/core/network/interceptors/auth_interceptor.dart:59:  ITokenStore get tokenStore => _tokenStore;
+lib/core/network/interceptors/cache_interceptor.dart:33:/// the cache - on read and on write - the interceptor asks the [ITokenStore]
+lib/core/network/interceptors/cache_interceptor.dart:71:    ITokenStore? tokenStore,
+lib/core/network/interceptors/cache_interceptor.dart:78:  final ITokenStore? _tokenStore;
+lib/core/storage/adapters/secure_token_store.dart:6:class SecureTokenStore implements ITokenStore {
+lib/features/auth/di/auth_providers.dart:25:/// - [ITokenStore] for tokens (secure)
+lib/features/auth/data/datasources/auth_local_datasource.dart:42:    ITokenStore? tokenStore,
+lib/features/auth/data/datasources/auth_local_datasource.dart:57:  final ITokenStore tokenStore;
+lib/features/auth/data/repositories/auth_repository_impl.dart:160:  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
+lib/features/auth/data/repositories/auth_repository_impl.dart:191:  /// is not decidable here: [ITokenStore] holds opaque strings with no expiry
+lib/features/auth/presentation/providers/auth_provider.dart:203:  /// 1. **Expiry is not locally observable.** `ITokenStore` persists opaque
+
+$ grep -rn "SecureTokenStore" lib
+lib/core/di/providers.dart:30:  return SecureTokenStore(secureStorage);
+lib/core/network/interceptors/auth_interceptor.dart:45:               ? SecureTokenStore(secureStorageService)
+lib/core/storage/adapters/secure_token_store.dart:6:class SecureTokenStore implements ITokenStore {
+lib/core/storage/adapters/secure_token_store.dart:8:  SecureTokenStore(this._secureStorageService);
+lib/features/auth/data/datasources/auth_local_datasource.dart:47:               ? SecureTokenStore(secureStorageService)
+
+$ grep -rn "tokenStoreProvider" lib
+lib/core/di/providers.dart:28:final tokenStoreProvider = Provider<ITokenStore>((ref) {
+lib/features/auth/di/auth_providers.dart:29:  final tokenStore = ref.watch(tokenStoreProvider);
+lib/features/auth/di/auth_providers.dart:82:      final tokenStore = ref.watch(tokenStoreProvider);
+
+$ grep -rn "ISessionTerminationSink" lib
+lib/core/contracts/state_boundary_contracts.dart:42:abstract class ISessionTerminationSink {
+lib/core/network/interceptors/auth_interceptor.dart:36:    ISessionTerminationSink? sessionSink,
+lib/core/network/interceptors/auth_interceptor.dart:87:  final ISessionTerminationSink? _sessionSink;
+lib/features/auth/presentation/providers/auth_provider.dart:272:class RiverpodSessionTerminationSink implements ISessionTerminationSink {
+
+$ grep -rn "RiverpodSessionTerminationSink" lib
+lib/features/auth/di/auth_providers.dart:93:        sessionSink: RiverpodSessionTerminationSink(ref),
+lib/features/auth/presentation/providers/auth_provider.dart:272:class RiverpodSessionTerminationSink implements ISessionTerminationSink {
+lib/features/auth/presentation/providers/auth_provider.dart:274:  const RiverpodSessionTerminationSink(this._ref);
+
+$ grep -rn "AppNavigator" lib
+lib/core/contracts/navigation_contracts.dart:5:abstract class AppNavigator {
+lib/core/routing/adapters/go_router_navigator_adapter.dart:5:/// GoRouter implementation of [AppNavigator].
+lib/core/routing/adapters/go_router_navigator_adapter.dart:6:class GoRouterNavigatorAdapter implements AppNavigator {
+lib/core/routing/navigation_providers.dart:7:final appNavigatorProvider = Provider<AppNavigator>((ref) {
+
+$ grep -rn "GoRouterNavigatorAdapter" lib
+lib/core/routing/adapters/go_router_navigator_adapter.dart:6:class GoRouterNavigatorAdapter implements AppNavigator {
+lib/core/routing/adapters/go_router_navigator_adapter.dart:8:  GoRouterNavigatorAdapter(this._router);
+lib/core/routing/navigation_providers.dart:9:  return GoRouterNavigatorAdapter(router);
+
+$ grep -rn "appNavigatorProvider" lib
+lib/core/routing/navigation_providers.dart:7:final appNavigatorProvider = Provider<AppNavigator>((ref) {
+
+$ grep -rn "AppDesignTokens" lib
+lib/core/contracts/design_tokens_contracts.dart:7:abstract class AppDesignTokens {
+lib/shared/design_system/tokens/default_design_tokens.dart:9:class DefaultDesignTokens implements AppDesignTokens {
+
+$ grep -rn "DefaultDesignTokens" lib
+lib/shared/design_system/tokens/default_design_tokens.dart:9:class DefaultDesignTokens implements AppDesignTokens {
+lib/shared/design_system/tokens/default_design_tokens.dart:11:  const DefaultDesignTokens();
+lib/shared/theme/app_theme.dart:7:  static const _tokens = DefaultDesignTokens();
+
+$ grep -rn "AppTheme" lib
+lib/shared/theme/app_theme.dart:5:class AppTheme {
+lib/shared/theme/app_theme.dart:6:  AppTheme._();
+lib/main.dart:117:      theme: AppTheme.lightTheme,
+lib/main.dart:118:      darkTheme: AppTheme.darkTheme,
+
+$ grep -rn "IAuthController" lib
+lib/core/contracts/state_boundary_contracts.dart:21:abstract class IAuthController {
+lib/features/auth/presentation/providers/auth_provider.dart:47:class AuthNotifier extends _$AuthNotifier implements IAuthController {
+lib/features/auth/presentation/providers/auth_provider.dart:284:final authControllerProvider = Provider<IAuthController>((ref) {
+
+$ grep -rn "AuthNotifier" lib
+lib/features/auth/data/repositories/auth_repository_impl.dart:194:  /// `AuthNotifier.restoreSession` for the reasoning behind that choice.
+lib/features/auth/presentation/providers/auth_provider.dart:47:class AuthNotifier extends _$AuthNotifier implements IAuthController {
+lib/features/auth/presentation/providers/auth_provider.dart:297:///   restore itself swallows failures (see [AuthNotifier.restoreSession]).
+lib/features/auth/presentation/providers/auth_provider.dart:309:/// Riverpod Generator shortens `AuthNotifier` -> `authProvider` by default.
+lib/features/auth/presentation/providers/auth_provider.dart:311:const AuthNotifierProvider authNotifierProvider = authProvider;
+lib/features/auth/presentation/providers/auth_provider.g.dart:13:@ProviderFor(AuthNotifier)
+lib/features/auth/presentation/providers/auth_provider.g.dart:14:const authProvider = AuthNotifierProvider._();
+lib/features/auth/presentation/providers/auth_provider.g.dart:17:final class AuthNotifierProvider
+lib/features/auth/presentation/providers/auth_provider.g.dart:18:    extends $NotifierProvider<AuthNotifier, AuthState> {
+lib/features/auth/presentation/providers/auth_provider.g.dart:20:  const AuthNotifierProvider._()
+lib/features/auth/presentation/providers/auth_provider.g.dart:36:  AuthNotifier create() => AuthNotifier();
+lib/features/auth/presentation/providers/auth_provider.g.dart:51:abstract class _$AuthNotifier extends $Notifier<AuthState> {
+
+$ grep -rn "authControllerProvider" lib
+lib/features/auth/presentation/providers/auth_provider.dart:284:final authControllerProvider = Provider<IAuthController>((ref) {
+
+$ grep -rn "ITasksController" lib
+lib/core/contracts/state_boundary_contracts.dart:53:abstract class ITasksController {
+
+$ grep -rn "TasksNotifier" lib
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:13:@ProviderFor(TasksNotifier)
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:14:const tasksProvider = TasksNotifierProvider._();
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:17:final class TasksNotifierProvider
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:18:    extends $NotifierProvider<TasksNotifier, TasksState> {
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:20:  const TasksNotifierProvider._()
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:36:  TasksNotifier create() => TasksNotifier();
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:51:abstract class _$TasksNotifier extends $Notifier<TasksState> {
+lib/features/tasks/presentation/providers/tasks_provider.dart:55:class TasksNotifier extends _$TasksNotifier {
+lib/features/tasks/presentation/providers/tasks_provider.dart:195:const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:57:    TasksNotifier notifier,
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:195:    TasksNotifier notifier,
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:285:    TasksNotifier notifier,
+
+$ grep -rn "tasksProvider" lib
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:14:const tasksProvider = TasksNotifierProvider._();
+lib/features/tasks/presentation/providers/tasks_provider.g.dart:25:        name: r'tasksProvider',
+lib/features/tasks/presentation/providers/tasks_provider.dart:194:/// Alias for [tasksProvider] (older imports use `tasksNotifierProvider`).
+lib/features/tasks/presentation/providers/tasks_provider.dart:195:const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+
+$ grep -rn "tasksNotifierProvider" lib
+lib/features/tasks/presentation/providers/tasks_provider.dart:194:/// Alias for [tasksProvider] (older imports use `tasksNotifierProvider`).
+lib/features/tasks/presentation/providers/tasks_provider.dart:195:const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+lib/features/tasks/presentation/screens/task_detail_screen.dart:93:    final tasksNotifier = ref.read(tasksNotifierProvider.notifier);
+lib/features/tasks/presentation/screens/task_detail_screen.dart:121:    final tasksState = ref.watch(tasksNotifierProvider);
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:18:    final tasksState = ref.watch(tasksNotifierProvider);
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:19:    final tasksNotifier = ref.read(tasksNotifierProvider.notifier);
+lib/features/tasks/presentation/screens/tasks_list_screen.dart:398:                    .read(tasksNotifierProvider.notifier)
+
+$ grep -rn "NoOpFeatureFlagsRemoteDataSource" lib
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:24:final class NoOpFeatureFlagsRemoteDataSource
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:27:  const NoOpFeatureFlagsRemoteDataSource();
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:24:  return const NoOpFeatureFlagsRemoteDataSource();
+
+$ grep -rn "FeatureFlagsRemoteDataSource" lib
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:6:abstract class FeatureFlagsRemoteDataSource {
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:24:final class NoOpFeatureFlagsRemoteDataSource
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:25:    implements FeatureFlagsRemoteDataSource {
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:27:  const NoOpFeatureFlagsRemoteDataSource();
+lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart:20:  final FeatureFlagsRemoteDataSource remoteDataSource;
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:63:    FeatureFlagsRemoteDataSourceProvider._();
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:65:final class FeatureFlagsRemoteDataSourceProvider
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:68:          FeatureFlagsRemoteDataSource,
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:69:          FeatureFlagsRemoteDataSource,
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:70:          FeatureFlagsRemoteDataSource
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:72:    with $Provider<FeatureFlagsRemoteDataSource> {
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:73:  const FeatureFlagsRemoteDataSourceProvider._()
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:89:  $ProviderElement<FeatureFlagsRemoteDataSource> $createElement(
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:94:  FeatureFlagsRemoteDataSource create(Ref ref) {
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:99:  Override overrideWithValue(FeatureFlagsRemoteDataSource value) {
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:102:      providerOverride: $SyncValueProvider<FeatureFlagsRemoteDataSource>(value),
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:23:FeatureFlagsRemoteDataSource featureFlagsRemoteDataSource(Ref ref) {
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:24:  return const NoOpFeatureFlagsRemoteDataSource();
+
+$ grep -rn "featureFlagsRemoteDataSourceProvider" lib
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:62:const featureFlagsRemoteDataSourceProvider =
+lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:78:        name: r'featureFlagsRemoteDataSourceProvider',
+lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:29:  final remoteDataSource = ref.watch(featureFlagsRemoteDataSourceProvider);
+
+$ grep -rn "NoOpRaspService" lib
+lib/core/security/noop_rasp_service.dart:6:class NoOpRaspService implements IRaspService {
+lib/core/security/rasp_providers.dart:8:  return NoOpRaspService();
+
+$ grep -rn "raspServiceProvider" lib
+lib/core/security/rasp_providers.dart:7:final raspServiceProvider = Provider<IRaspService>((ref) {

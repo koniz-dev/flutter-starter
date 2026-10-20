@@ -1,0 +1,3 @@
+00:00 +0: criterion 1: concurrent cached GETs all land in the index
+00:00 +1: criterion 2: after clearCache() no http_cache_* key remains
+00:00 +2: All tests passed!

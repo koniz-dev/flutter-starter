@@ -1,0 +1,60 @@
+00:00 +0: ApiLoggingInterceptor onRequest should log request when HTTP logging is enabled
+00:00 +1: ApiLoggingInterceptor onRequest should include method and path in log
+00:00 +2: ApiLoggingInterceptor onRequest should sanitize sensitive headers written the way production writes them
+00:00 +2 -1: ApiLoggingInterceptor onRequest should sanitize sensitive headers written the way production writes them [E]
+  Expected: '***REDACTED***'
+    Actual: 'Bearer secret-token'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: Bearer sec ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 126:9  main.<fn>.<fn>.<fn>
+  
+00:00 +2 -1: ApiLoggingInterceptor onRequest should sanitize sensitive headers regardless of casing
+00:00 +2 -2: ApiLoggingInterceptor onRequest should sanitize sensitive headers regardless of casing [E]
+  Expected: '***REDACTED***'
+    Actual: 'Bearer secret-token'
+     Which: is different.
+            Expected: ***REDACTE ...
+              Actual: Bearer sec ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 158:9  main.<fn>.<fn>.<fn>
+  
+00:00 +2 -2: ApiLoggingInterceptor onRequest should leave no secret anywhere in the logged context for an authenticated request
+00:00 +2 -3: ApiLoggingInterceptor onRequest should leave no secret anywhere in the logged context for an authenticated request [E]
+  Expected: not contains 'Bearer '
+    Actual: '{method: POST, path: /api/test, baseUrl: , headers: {Authorization: Bearer eyJhbGciOi.REAL_USER_JWT.sig, Cookie: session=abc123, X-Api-Key: secret-key}}'
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 186:9  main.<fn>.<fn>.<fn>
+  
+00:00 +2 -3: ApiLoggingInterceptor onRequest should include query parameters when present
+00:00 +3 -3: ApiLoggingInterceptor onRequest should include body when present
+00:00 +4 -3: ApiLoggingInterceptor onRequest should not include body when null
+00:00 +5 -3: ApiLoggingInterceptor onResponse should log successful response
+00:00 +6 -3: ApiLoggingInterceptor onResponse should log error response as warning
+00:00 +7 -3: ApiLoggingInterceptor onResponse should log 4xx responses as warning
+00:00 +8 -3: ApiLoggingInterceptor onResponse should include response data when present
+00:00 +9 -3: ApiLoggingInterceptor onResponse should redact Set-Cookie in the response header log
+00:00 +9 -4: ApiLoggingInterceptor onResponse should redact Set-Cookie in the response header log [E]
+  Expected: '***REDACTED***'
+    Actual: ['session=abc123; HttpOnly']
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/core/network/interceptors/api_logging_interceptor_test.dart 411:9  main.<fn>.<fn>.<fn>
+  
+00:00 +9 -4: ApiLoggingInterceptor onError should log error with details
+00:00 +10 -4: ApiLoggingInterceptor onError should include error type in log
+00:00 +11 -4: ApiLoggingInterceptor onError should include response status code when available
+00:00 +12 -4: ApiLoggingInterceptor onError should sanitize sensitive data in error response

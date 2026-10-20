@@ -1,0 +1,19 @@
+$ flutter test test/features/auth/session_restore_test.dart --reporter expanded
+
+[... 96 lines of `flutter pub get` version chatter elided ...]
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a5860d1092fc3514a/test/features/auth/session_restore_test.dart
+00:00 +0: cold start session restore (#51) a cached session lands on / instead of /login
+00:05 +1: cold start session restore (#51) empty storage still lands on /login
+00:06 +2: cold start session restore (#51) restore in flight does not flash /login, then lands on /
+00:06 +3: cold start session restore (#51) restore held open for a user with no session ends on /login
+00:07 +4: cold start session restore (#51) corrupt cached JSON lands on /login without throwing
+00:08 +5: cold start session restore (#51) storage throwing lands on /login without throwing
+00:08 +6: cold start requires a token, not just a cached user (#85) a cached user with no token lands on /login, not /
+00:08 +7: cold start requires a token, not just a cached user (#85) a cached user with an empty token lands on /login
+00:09 +8: cold start requires a token, not just a cached user (#85) an unreadable token store lands on /login without throwing
+00:09 +9: cold start requires a token, not just a cached user (#85) a token store throwing an Error lands on /login without throwing
+00:09 +10: cold start requires a token, not just a cached user (#85) a cached user with a readable token still lands on /
+00:09 +11: deep link survives the login round trip (#51) bounce to /login carries the destination, and returns to it
+00:10 +12: deep link survives the login round trip (#51) an off-site redirect target is ignored
+00:11 +13: All tests passed!
+exit: 0

@@ -1,0 +1,19 @@
+### Counterfactual A: assertion step run on an UNSTRIPPED tree (scratchpad/base, = 8b80f2d as checked out)
+still present after strip: .claude
+still present after strip: .github/workflows/issue-refs.yml
+still present after strip: docs/issue-workflow.md
+still present after strip: docs/verification
+still present after strip: scripts/bootstrap-issue-labels.sh
+still present after strip: scripts/dev/check_issue_refs.sh
+still present after strip: test/tooling/epic_coverage_test.dart
+still present after strip: tool/check_epic_coverage.dart
+./CONTRIBUTING.md
+./CLAUDE.md
+./tool/README.md
+a process-only marker survived the strip
+9 process-only artifact(s) survived the strip.
+EXIT = 1
+
+### Control: same step, same script, on the STRIPPED --apply tree
+All process-only artifacts were removed.
+EXIT = 0

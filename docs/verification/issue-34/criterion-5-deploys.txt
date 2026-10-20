@@ -1,0 +1,23 @@
+# Criterion 5: deploy workflows made consistent, and NOT dispatched
+
+deploy-android.yml carried '--flavor "$ENV"' inside its commented-out build
+template. Removed, so uncommenting it does not reproduce the bug:
+      #     fi
+          
+      #     flutter build appbundle \
+      #       --release \
+      #       --dart-define=ENVIRONMENT="$ENV" \
+      #       --dart-define=BASE_URL="$BASE_URL"
+
+
+deploy-ios.yml turned out to have NO --flavor line. I asserted it did and the
+assertion in the edit script caught the wrong assumption:
+      #     fi
+          
+      #     flutter build ipa \
+      #       --release \
+      #       --dart-define=ENVIRONMENT="$ENV" \
+      #       --dart-define=BASE_URL="$BASE_URL"
+
+Neither deploy workflow was dispatched: they publish to the Play Store and
+App Store Connect. Verifying them is out of scope and would risk a release.

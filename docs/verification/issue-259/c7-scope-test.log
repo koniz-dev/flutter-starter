@@ -1,0 +1,41 @@
+### Criterion 7: CLAUDE.md carries the scope test, and the section is itself marked process-only
+
+-- on main (HEAD=8b80f2d), CLAUDE.md lines 103-118:
+     1	## Acceptance verification
+     2	
+     3	<!-- strip:process-only start -->
+     4	### Scope test: would an adopter notice?
+     5	
+     6	This is a starter template, not an app that ships. A criterion proves the
+     7	**mechanism** is correct; it is not there to prove the *product* runs. So before
+     8	writing one, ask: **would an adopter notice if this were missing?** If answering
+     9	it needs a physical device, a custom CA, an Apple certificate, a reachable
+    10	backend or store credentials, that answer belongs to the adopter's app, not to
+    11	this repository - prove the mechanism at tier 1 or tier 2 here and hand the
+    12	residual over. Precedent: koniz-dev/flutter-starter#48, #59, #62 and #108 each
+    13	sat blocked for months of calendar time on exactly that (a real device, a custom
+    14	CA, an Apple cert, on-device storage inspection) after the mechanism had already
+    15	been proven, and all four closed with the residual assigned to the adopter.
+    16	
+
+-- the marker pairs that enclose it (line numbers in CLAUDE.md on main):
+32:<!-- strip:process-only start -->
+101:<!-- strip:process-only end -->
+105:<!-- strip:process-only start -->
+137:<!-- strip:process-only end -->
+181:<!-- strip:process-only start -->
+366:<!-- strip:process-only end -->
+   -> the 'Scope test' heading at line 106 sits inside the pair 105..137, so it is process-only.
+
+-- after the strip (scratchpad/v-both/CLAUDE.md): the scope test is gone, the file survives
+   occurrences of \"would an adopter notice\": 0
+   occurrences of \"Scope test\" heading    : 0
+   CLAUDE.md line count  main -> stripped : 381 -> 89
+   surviving markers in stripped CLAUDE.md: 0
+
+-- headings that remain in the stripped CLAUDE.md (the file still describes the codebase):
+1:# CLAUDE.md
+12:## Commands
+32:## Acceptance verification
+34:### What this tooling cannot verify
+76:## Conventions

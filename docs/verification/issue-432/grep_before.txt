@@ -1,0 +1,7 @@
+$ git grep -n "_sanitizeJson\|LogSanitizer" origin/main -- docs ":!docs/verification"
+origin/main:docs/guides/security/audit.md:116:sensitive JSON keys via `_sanitizeHeaders` / `_sanitizeJson`
+origin/main:docs/guides/security/implementation.md:279:class LogSanitizer {
+origin/main:docs/guides/security/implementation.md:280:  LogSanitizer._();
+origin/main:docs/guides/security/implementation.md:413:- Extend **`_sanitizeHeaders`** / **`_sanitizeJson`** in that file for custom token header names or payload fields.
+origin/main:docs/guides/security/implementation.md:414:- Reuse **`LogSanitizer`** from Step 1 where you want one shared policy for logs outside this interceptor.
+origin/main:docs/guides/security/implementation.md:799:    final sanitized = LogSanitizer.sanitizeMap(data);

@@ -1,0 +1,10 @@
+$ git rev-parse HEAD
+919b4bd1c869cd5227e0b65e541ec31b680018fc
+$ grep -nE "r'\^" lib/shared/extensions/string_extensions.dart
+exit: 1
+$ grep -nE "RegExp|Validators" lib/shared/extensions/string_extensions.dart
+7:  /// Delegates to [Validators.isValidEmail] so the template ships exactly one
+9:  bool get isValidEmail => Validators.isValidEmail(this);
+13:  /// Delegates to [Validators.isValidPhone].
+14:  bool get isValidPhone => Validators.isValidPhone(this);
+30:    return replaceAll(RegExp(r'\s+'), '');

@@ -1,0 +1,27 @@
+  1s compiling builders/jit
+  2s compiling builders/jit
+  3s compiling builders/jit
+  4s compiling builders/jit
+  5s compiling builders/jit
+  6s compiling builders/jit
+  6s compiling builders/jit
+Running build hooks...Running build hooks...  0s riverpod_generator on 430 inputs; integration_test/app_e2e_test.dart
+W SDK language version 3.13.0 is newer than `analyzer` language version 3.11.0. Run `flutter packages upgrade`.
+  8s riverpod_generator on 430 inputs: 1 no-op; spent 8s sdk; integration_test/auth_flow_test.dart
+  10s riverpod_generator on 430 inputs: 22 no-op; spent 8s sdk; lib/core/localization/failure_localizations.dart
+  27s riverpod_generator on 430 inputs: 50 no-op; spent 15s analyzing, 8s sdk, 3s resolving; lib/core/performance/i_performance_service.dart
+  32s riverpod_generator on 430 inputs: 1 output, 59 no-op; spent 19s analyzing, 8s sdk, 4s resolving; lib/core/routing/app_routes.dart
+  33s riverpod_generator on 430 inputs: 4 output, 212 no-op; spent 19s analyzing, 8s sdk, 4s resolving; test/core/network/api_client_interceptor_chain_test.dart
+  34s riverpod_generator on 430 inputs: 5 output, 419 no-op; spent 20s analyzing, 8s sdk, 4s resolving; tool/golden/stripped/lib/core/routing/app_routes.dart
+  34s riverpod_generator on 430 inputs: 5 output, 425 no-op; spent 20s analyzing, 8s sdk, 4s resolving
+  0s freezed on 430 inputs; integration_test/app_e2e_test.dart
+  1s freezed on 430 inputs: 1 same, 298 no-op; test/features/auth/data/datasources/auth_remote_datasource_failure_test.dart
+  1s freezed on 430 inputs: 1 same, 429 no-op
+  0s json_serializable on 860 inputs; integration_test/app_e2e_test.dart
+  1s json_serializable on 860 inputs: 66 skipped, 67 no-op; lib/core/security/infrastructure/freerasp_service_impl.freezed.dart
+  2s json_serializable on 860 inputs: 266 skipped, 2 output, 267 no-op; spent 1s analyzing; test/core/storage/migration/fresh_install_no_language_test.freezed.dart
+  3s json_serializable on 860 inputs: 395 skipped, 2 output, 396 no-op; spent 2s analyzing; test/tooling/check_env_assets_test.freezed.dart
+  3s json_serializable on 860 inputs: 429 skipped, 2 output, 429 no-op; spent 2s analyzing
+  0s source_gen:combining_builder on 860 inputs; integration_test/app_e2e_test.dart
+  0s source_gen:combining_builder on 860 inputs: 429 skipped, 7 output, 424 no-op
+  Built with build_runner/jit in 48s; wrote 15 outputs.

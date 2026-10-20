@@ -1,0 +1,23 @@
+# Criterion 3: what actually happened - NOT what this issue predicted
+
+Criterion 3 expected a failure from the auth flow having no reachable API.
+That premise was wrong. The run reports SUCCESS while executing NO tests:
+
+  Test summary:
+  📝 Total: 0
+  ✅ Successful: 0
+  ❌ Failed: 0
+  ⏩ Skipped: 0
+  ⏱️  Duration: 13s
+  ✓ Completed executing apk with entrypoint test_bundle.dart on emulator-5554
+
+  run 32870753971 -> conclusion: success
+
+patrol test exits 0 on an empty test set, so the job is a green tick that
+proves nothing. The auth flow was never reached, so the network was never
+the blocker. This is NOT a pass and is not described as one.
+
+Root cause - Patrol's native Android harness does not exist:
+  $ find android -path '*androidTest*'        -> (nothing)
+  $ grep -n testInstrumentationRunner android/app/build.gradle.kts -> (nothing)
+Filed as a separate issue rather than folded in here.

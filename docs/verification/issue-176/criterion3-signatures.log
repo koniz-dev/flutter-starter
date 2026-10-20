@@ -1,0 +1,10 @@
+# Criterion 3 - every verb returns NetworkResponse.
+
+$ grep -n "Future<NetworkResponse<dynamic>>\|Response<dynamic>\|Options?" lib/core/network/api_client.dart
+169:  Future<NetworkResponse<dynamic>> get(
+192:  Future<NetworkResponse<dynamic>> post(
+217:  Future<NetworkResponse<dynamic>> put(
+242:  Future<NetworkResponse<dynamic>> delete(
+259:  Future<NetworkResponse<dynamic>> _send(
+
+# No `Future<Response<dynamic>>` and no `Options?` parameter remain.

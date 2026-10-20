@@ -1,0 +1,126 @@
+$ ./scripts/dev/audit_template.sh
+
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> format (lib test integration_test tool examples)
+Formatted 363 files (0 changed) in 1.13 seconds.
+==> flutter analyze
+Analyzing agent-a6574d4187b6ab16f...                            
+No issues found! (ran in 2.5s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets catches a .env the asset list never names - the gap this closes
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets catches a .env the asset list never names - the gap this closes
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets catches a .env the asset list never names - the gap this closes
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager getFlag should return flag with different sources
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets flags key material and credential files, not ordinary config
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets flags key material and credential files, not ordinary config
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets flags key material and credential files, not ordinary config
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager getFlags a key the repository omits falls back to its default
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager getFlags a key the repository omits falls back to its default
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement naming the file is reviewed, not a failure
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement for one file does not cover another
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager getFlags should handle multiple flags with different values
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: import rules over lib/ (tearDownAll)
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming .env.example does not also cover a real .env
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming .env.example does not also cover a real .env
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming .env.example does not also cover a real .env
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager refresh should handle refresh failure gracefully
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager refresh should handle refresh failure gracefully
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager refresh should handle refresh failure gracefully
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager refresh should handle refresh failure gracefully
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming several files covers each of them
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/tooling/import_rules_test.dart: rule predicates a feature importing itself, core or shared is fine
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager setLocalOverride should call repository setLocalOverride with correct parameters
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/core/feature_flags/feature_flags_manager_test.dart: FeatureFlagsManager setLocalOverride should call repository setLocalOverride with correct parameters
+
+[... 4763 lines elided, same trim rule as scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +2770 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should have dark theme configured
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:12 +2771 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should configure router correctly
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:13 +2772 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should configure localization delegates
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:13 +2773 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should configure supported locales
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:13 +2774 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should use locale from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:13 +2775 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:13 +2776 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:126:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+02:13 +2777 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: HomeScreen should create HomeScreen widget
+02:13 +2778 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: HomeScreen should display welcome message
+02:13 +2779 ~8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a6574d4187b6ab16f/test/main_test.dart: HomeScreen should have app bar with title
+02:13 +2780 ~8: All tests passed!
+exit=0

@@ -1,0 +1,93 @@
+COUNTERFACTUAL for koniz-dev/flutter-starter#169 - acceptance criterion 2.
+
+What was reverted, and only this:
+
+  lib/core/network/interceptors/auth_interceptor.dart
+    - the `if (!_sessionGeneration.isCurrent(generation))` block in
+      _handle401Error
+    - the `|| !_sessionGeneration.isCurrent(generation)` term in
+      _drainPendingRequests
+  lib/features/auth/data/repositories/auth_repository_impl.dart
+    - the `if (!sessionGeneration.isCurrent(generation))` block in refreshToken
+
+Everything else was left in place: the shared SessionGeneration, every
+invalidate() call, the DI wiring and the test file itself. So this run measures
+the guards and nothing else. The guards were restored immediately afterwards;
+the PASS run of the same file is in tests.log.
+
+$ flutter test test/core/network/interceptors/auth_interceptor_session_generation_test.dart --timeout=2m --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/network/interceptors/auth_interceptor_session_generation_test.dart
+00:00 +0: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:00 +0 -1: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout [E]
+  Expected: null
+    Actual: 'NEW-access-1'
+  a logged-out device must hold no access token
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/core/network/interceptors/auth_interceptor_session_generation_test.dart 309:9  main.<fn>.<fn>
+  
+00:00 +0 -1: a logout landing during an in-flight refresh criterion 3: queued requests are rejected, not replayed, when the session ended during the refresh
+00:00 +0 -2: a logout landing during an in-flight refresh criterion 3: queued requests are rejected, not replayed, when the session ended during the refresh [E]
+  Expected: <0>
+    Actual: <3>
+  a drained request put the previous session on the wire after logout
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/core/network/interceptors/auth_interceptor_session_generation_test.dart 349:9  main.<fn>.<fn>
+  
+00:00 +0 -2: a logout landing during an in-flight refresh criterion 4: the retryCount == 1 forced logout survives a refresh already in flight
+00:00 +0 -3: a logout landing during an in-flight refresh criterion 4: the retryCount == 1 forced logout survives a refresh already in flight [E]
+  Expected: null
+    Actual: 'NEW-access-1'
+  the forced logout was overwritten by the in-flight refresh
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/core/network/interceptors/auth_interceptor_session_generation_test.dart 396:9  main.<fn>.<fn>
+  
+00:00 +0 -3: a logout landing during an in-flight refresh the guard does not lean on the cached user blob: after a stale refresh there is no token, so no session can be restored
+00:00 +0 -4: a logout landing during an in-flight refresh the guard does not lean on the cached user blob: after a stale refresh there is no token, so no session can be restored [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/core/network/interceptors/auth_interceptor_session_generation_test.dart 427:9  main.<fn>.<fn>
+  
+00:00 +0 -4: a logout landing during an in-flight refresh criterion 1: a refresh that resolves inside its own session still persists both tokens
+00:00 +1 -4: a logout landing during an in-flight refresh criterion 5: the interceptor refreshes normally again after a subsequent login
+00:00 +1 -5: a logout landing during an in-flight refresh criterion 5: the interceptor refreshes normally again after a subsequent login [E]
+  Expected: null
+    Actual: 'NEW-access-1'
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/core/network/interceptors/auth_interceptor_session_generation_test.dart 460:9  main.<fn>.<fn>
+  
+00:00 +1 -5: a logout landing during an in-flight refresh a login completing during an old refresh keeps the new session: the stale refresh skips its writes rather than undoing them
+00:00 +1 -6: a logout landing during an in-flight refresh a login completing during an old refresh keeps the new session: the stale refresh skips its writes rather than undoing them [E]
+  Expected: 'session-2-access'
+    Actual: 'NEW-access-1'
+     Which: is different.
+            Expected: session-2- ...
+              Actual: NEW-access ...
+                      ^
+             Differ at offset 0
+  a stale refresh must not touch a newer session's tokens
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/core/network/interceptors/auth_interceptor_session_generation_test.dart 498:9  main.<fn>.<fn>
+  
+00:00 +1 -6: SessionGeneration a generation left behind never becomes current again
+00:00 +2 -6: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh a login completing during an old refresh keeps the new session: the stale refresh skips its writes rather than undoing them
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 3: queued requests are rejected, not replayed, when the session ended during the refresh
+  /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a22f35f3592100129/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 4: the retryCount == 1 forced logout survives a refresh already in flight
+  ... and 2 more

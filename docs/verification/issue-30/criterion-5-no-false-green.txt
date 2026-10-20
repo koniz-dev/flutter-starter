@@ -1,0 +1,16 @@
+# Criterion 5: an empty or failing run can no longer present as green
+
+Guard logic exercised against synthetic patrol summaries:
+  Total: 0                  -> exit 1  'collected 0 tests ... false pass'
+  Total: 1, Failed: 1       -> exit 1  '1 of 1 Patrol test(s) failed'
+  Total: 2, Failed: 0       -> exit 0  'OK: 2 test(s) ... 0 failed'
+  no Total: summary at all   -> exit 1  'cannot confirm any test ran'
+  patrol-output.log missing  -> exit 1  'the test step never produced output'
+
+Also fixed a false green I introduced myself: the emulator-runner executes
+its script via POSIX sh, where 'patrol test | tee' returns tee's status.
+Run 32966672465 concluded SUCCESS while reporting Failed: 1 because of it.
+Verified on this machine:
+  /bin/sh -c 'false | tee'          -> exit 0   (the bug)
+  bash -o pipefail -c 'false | tee' -> exit 1   (the fix)
+  bash -o pipefail -c 'true  | tee' -> exit 0   (success still propagates)

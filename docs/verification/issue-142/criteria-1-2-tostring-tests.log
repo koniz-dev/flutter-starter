@@ -1,0 +1,17 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-a76911bf258216a17/test/core/storage/migration/migration_executor_test.dart
+00:00 +0: MigrationExecutor execute returns current version when already at target
+00:00 +1: MigrationExecutor execute runs migrations when version is behind
+00:00 +2: MigrationExecutor execute sets initial version for first install
+00:00 +3: MigrationExecutor execute handles corrupted version gracefully
+00:00 +4: MigrationExecutor execute runs migrations in correct order
+00:00 +5: MigrationExecutor execute throws MigrationExecutionException on migration failure
+00:00 +6: MigrationExecutor missing migration path (#60) throws when no migration reaches the target version
+00:00 +7: MigrationExecutor missing migration path (#60) throws on a mid-chain gap (v1->v2, v3->v4, target 4)
+00:00 +8: MigrationExecutor missing migration path (#60) throws when a migration overshoots the target version
+00:00 +9: MigrationExecutor downgrade detection (#60) throws distinctly when stored version is newer
+00:00 +10: MigrationExecutor downgrade detection (#60) an exact version match is still a plain success
+00:00 +11: MigrationExecutor version stamp write failure (#60) surfaces a rejected version write instead of returning
+00:00 +12: exception toString (#142) the base class names itself and keeps its original-exception line
+00:00 +13: exception toString (#142) a downgrade refusal names itself, not its parent
+00:00 +14: exception toString (#142) a missing migration path names itself, not its parent
+00:00 +15: All tests passed!

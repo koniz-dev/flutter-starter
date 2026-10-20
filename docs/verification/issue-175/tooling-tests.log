@@ -1,0 +1,62 @@
+$ flutter test test/tooling/ --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets catches a .env the asset list never names - the gap this closes
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets passes on the directories as they ship, holding only .gitkeep
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ no import-rule violation outside the allowlist
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets flags key material and credential files, not ordinary config
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement naming the file is reviewed, not a failure
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist key names a real rule
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement for one file does not cover another
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement for one file does not cover another
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming .env.example does not also cover a real .env
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: import rules over lib/ (tearDownAll)
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming several files covers each of them
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack naming several files covers each of them
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: rule predicates domain importing its own domain, core or a pub package is fine
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack with prose after a dash still names its file
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets an ack with prose after a dash still names its file
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: rule predicates one feature importing another is a violation
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets prose that merely mentions a file does not acknowledge it
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets prose that merely mentions a file does not acknowledge it
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: rule predicates lib/features importing lib/core is fine - that is the direction
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets matches the acknowledged name case-insensitively
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets matches the acknowledged name case-insensitively
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: rule predicates go_router is allowed in core routing and route modules
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets does not report a sub-directory Flutter would not bundle
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets does not report a sub-directory Flutter would not bundle
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: rule predicates lib/core importing lib/features is a violation
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findBundledDirectorySecrets tolerates a declared directory that does not exist
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: rule predicates the route registry seam is permanently allowed
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements reports a name no file in the directory matches
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements reports a name no file in the directory matches
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: strippable sample paths do not cover files no strip variant removes
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements says nothing when the acknowledged file is there
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements says nothing when the acknowledged file is there
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: directive parsing a commented-out directive is not a violation
+00:00 +50: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements treats every name on a missing directory as stale
+00:00 +51: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes
+00:00 +52: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: findStaleAcknowledgements ignores a file entry, whose ack names nothing by design
+00:00 +53: /Users/nguyenanhkiet/Playground/flutter-starter/.claude/worktrees/agent-ac3f2ba7ccb9ffdcc/test/tooling/check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
+00:00 +54: All tests passed!
+
+exit: 0

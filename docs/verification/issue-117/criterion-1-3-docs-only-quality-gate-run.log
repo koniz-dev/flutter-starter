@@ -1,0 +1,255 @@
+Quality gate	Set up job	2026-09-25T13:08:54.3839330Z Current runner version: '2.337.0'
+Quality gate	Set up job	2026-09-25T13:08:54.3865600Z ##[group]Runner Image Provisioner
+Quality gate	Set up job	2026-09-25T13:08:54.3866533Z Hosted Compute Agent
+Quality gate	Set up job	2026-09-25T13:08:54.3867124Z Version: 20260828.587
+Quality gate	Set up job	2026-09-25T13:08:54.3867820Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Quality gate	Set up job	2026-09-25T13:08:54.3868601Z Build Date: 2026-08-28T16:44:25Z
+Quality gate	Set up job	2026-09-25T13:08:54.3869324Z Worker ID: {9161f33b-d290-412c-be8e-53abcd88ed29}
+Quality gate	Set up job	2026-09-25T13:08:54.3870086Z Azure Region: westus2
+Quality gate	Set up job	2026-09-25T13:08:54.3870669Z ##[endgroup]
+Quality gate	Set up job	2026-09-25T13:08:54.3872169Z ##[group]Operating System
+Quality gate	Set up job	2026-09-25T13:08:54.3872818Z Ubuntu
+Quality gate	Set up job	2026-09-25T13:08:54.3873330Z 24.04.5
+Quality gate	Set up job	2026-09-25T13:08:54.3873944Z LTS
+Quality gate	Set up job	2026-09-25T13:08:54.3874690Z ##[endgroup]
+Quality gate	Set up job	2026-09-25T13:08:54.3875307Z ##[group]Runner Image
+Quality gate	Set up job	2026-09-25T13:08:54.3875964Z Image: ubuntu-24.04
+Quality gate	Set up job	2026-09-25T13:08:54.3876520Z Version: 20260920.314.1
+Quality gate	Set up job	2026-09-25T13:08:54.3877747Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+Quality gate	Set up job	2026-09-25T13:08:54.3879498Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+Quality gate	Set up job	2026-09-25T13:08:54.3880522Z ##[endgroup]
+Quality gate	Set up job	2026-09-25T13:08:54.3881651Z ##[group]GITHUB_TOKEN Permissions
+Quality gate	Set up job	2026-09-25T13:08:54.3883578Z Contents: read
+Quality gate	Set up job	2026-09-25T13:08:54.3884604Z Metadata: read
+Quality gate	Set up job	2026-09-25T13:08:54.3885376Z ##[endgroup]
+Quality gate	Set up job	2026-09-25T13:08:54.3887556Z Secret source: Actions
+Quality gate	Set up job	2026-09-25T13:08:54.3888638Z Cache mode: write
+Quality gate	Set up job	2026-09-25T13:08:54.3889341Z Prepare workflow directory
+Quality gate	Set up job	2026-09-25T13:08:54.4221431Z Prepare all required actions
+Quality gate	Set up job	2026-09-25T13:08:54.4289768Z Getting action download info
+Quality gate	Set up job	2026-09-25T13:08:54.7918163Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Quality gate	Set up job	2026-09-25T13:08:54.9135918Z Download action repository 'subosito/flutter-action@v2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+Quality gate	Set up job	2026-09-25T13:08:55.2142723Z Getting action download info
+Quality gate	Set up job	2026-09-25T13:08:55.3498032Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+Quality gate	Set up job	2026-09-25T13:08:55.8679435Z Complete job name: Quality gate
+Quality gate	Checkout code	2026-09-25T13:08:55.9628221Z ##[group]Run actions/checkout@v4
+Quality gate	Checkout code	2026-09-25T13:08:55.9629692Z with:
+Quality gate	Checkout code	2026-09-25T13:08:55.9630564Z   fetch-depth: 0
+Quality gate	Checkout code	2026-09-25T13:08:55.9631547Z   repository: koniz-dev/flutter-starter
+Quality gate	Checkout code	2026-09-25T13:08:55.9641565Z   token: ***
+Quality gate	Checkout code	2026-09-25T13:08:55.9642464Z   ssh-strict: true
+Quality gate	Checkout code	2026-09-25T13:08:55.9643376Z   ssh-user: git
+Quality gate	Checkout code	2026-09-25T13:08:55.9644442Z   persist-credentials: true
+Quality gate	Checkout code	2026-09-25T13:08:55.9645477Z   clean: true
+Quality gate	Checkout code	2026-09-25T13:08:55.9646395Z   sparse-checkout-cone-mode: true
+Quality gate	Checkout code	2026-09-25T13:08:55.9647486Z   fetch-tags: false
+Quality gate	Checkout code	2026-09-25T13:08:55.9648403Z   show-progress: true
+Quality gate	Checkout code	2026-09-25T13:08:55.9649337Z   lfs: false
+Quality gate	Checkout code	2026-09-25T13:08:55.9650213Z   submodules: false
+Quality gate	Checkout code	2026-09-25T13:08:55.9651149Z   set-safe-directory: true
+Quality gate	Checkout code	2026-09-25T13:08:55.9652208Z   allow-unsafe-pr-checkout: false
+Quality gate	Checkout code	2026-09-25T13:08:55.9653588Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.0707437Z Syncing repository: koniz-dev/flutter-starter
+Quality gate	Checkout code	2026-09-25T13:08:56.0711834Z ##[group]Getting Git version info
+Quality gate	Checkout code	2026-09-25T13:08:56.0714674Z Working directory is '/home/runner/work/flutter-starter/flutter-starter'
+Quality gate	Checkout code	2026-09-25T13:08:56.0718476Z [command]/usr/bin/git version
+Quality gate	Checkout code	2026-09-25T13:08:56.0769245Z git version 2.55.0
+Quality gate	Checkout code	2026-09-25T13:08:56.0793590Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.0810070Z Temporarily overriding HOME='/home/runner/work/_temp/b18e69b5-ac45-4bcc-a653-6579ae83aced' before making global git config changes
+Quality gate	Checkout code	2026-09-25T13:08:56.0815319Z Adding repository directory to the temporary git global config as a safe directory
+Quality gate	Checkout code	2026-09-25T13:08:56.0819589Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Quality gate	Checkout code	2026-09-25T13:08:56.0871126Z Deleting the contents of '/home/runner/work/flutter-starter/flutter-starter'
+Quality gate	Checkout code	2026-09-25T13:08:56.0876550Z ##[group]Initializing the repository
+Quality gate	Checkout code	2026-09-25T13:08:56.0880389Z [command]/usr/bin/git init /home/runner/work/flutter-starter/flutter-starter
+Quality gate	Checkout code	2026-09-25T13:08:56.1000991Z hint: Using 'master' as the name for the initial branch. This default branch name
+Quality gate	Checkout code	2026-09-25T13:08:56.1005019Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Quality gate	Checkout code	2026-09-25T13:08:56.1008721Z hint: to use in all of your new repositories, which will suppress this warning,
+Quality gate	Checkout code	2026-09-25T13:08:56.1011587Z hint: call:
+Quality gate	Checkout code	2026-09-25T13:08:56.1013070Z hint:
+Quality gate	Checkout code	2026-09-25T13:08:56.1015165Z hint: 	git config --global init.defaultBranch <name>
+Quality gate	Checkout code	2026-09-25T13:08:56.1017374Z hint:
+Quality gate	Checkout code	2026-09-25T13:08:56.1019456Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Quality gate	Checkout code	2026-09-25T13:08:56.1023541Z hint: 'development'. The just-created branch can be renamed via this command:
+Quality gate	Checkout code	2026-09-25T13:08:56.1026551Z hint:
+Quality gate	Checkout code	2026-09-25T13:08:56.1028015Z hint: 	git branch -m <name>
+Quality gate	Checkout code	2026-09-25T13:08:56.1029645Z hint:
+Quality gate	Checkout code	2026-09-25T13:08:56.1031787Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Quality gate	Checkout code	2026-09-25T13:08:56.1113351Z Initialized empty Git repository in /home/runner/work/flutter-starter/flutter-starter/.git/
+Quality gate	Checkout code	2026-09-25T13:08:56.1119305Z [command]/usr/bin/git remote add origin https://github.com/koniz-dev/flutter-starter
+Quality gate	Checkout code	2026-09-25T13:08:56.1123254Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.1128149Z ##[group]Disabling automatic garbage collection
+Quality gate	Checkout code	2026-09-25T13:08:56.1131694Z [command]/usr/bin/git config --local gc.auto 0
+Quality gate	Checkout code	2026-09-25T13:08:56.1167566Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.1170234Z ##[group]Setting up auth
+Quality gate	Checkout code	2026-09-25T13:08:56.1176093Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Quality gate	Checkout code	2026-09-25T13:08:56.1213208Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Quality gate	Checkout code	2026-09-25T13:08:56.1639355Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Quality gate	Checkout code	2026-09-25T13:08:56.1679987Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Quality gate	Checkout code	2026-09-25T13:08:56.1910595Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Quality gate	Checkout code	2026-09-25T13:08:56.1950564Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Quality gate	Checkout code	2026-09-25T13:08:56.2178725Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Quality gate	Checkout code	2026-09-25T13:08:56.2219860Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.2221416Z ##[group]Fetching the repository
+Quality gate	Checkout code	2026-09-25T13:08:56.2230743Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +4c6f7bfc0e8ff64361c232b518df8df0d045cea1:refs/remotes/pull/156/merge
+Quality gate	Checkout code	2026-09-25T13:08:56.9424260Z From https://github.com/koniz-dev/flutter-starter
+Quality gate	Checkout code	2026-09-25T13:08:56.9425398Z  * [new branch]      android                                  -> origin/android
+Quality gate	Checkout code	2026-09-25T13:08:56.9435637Z  * [new branch]      chore/117-gate-docs-probe                -> origin/chore/117-gate-docs-probe
+Quality gate	Checkout code	2026-09-25T13:08:56.9436781Z  * [new branch]      chore/117-gate-red-probe                 -> origin/chore/117-gate-red-probe
+Quality gate	Checkout code	2026-09-25T13:08:56.9437639Z  * [new branch]      chore/acceptance-evidence-issue-48       -> origin/chore/acceptance-evidence-issue-48
+Quality gate	Checkout code	2026-09-25T13:08:56.9438564Z  * [new branch]      chore/acceptance-evidence-issue-48-release-ab -> origin/chore/acceptance-evidence-issue-48-release-ab
+Quality gate	Checkout code	2026-09-25T13:08:56.9439465Z  * [new branch]      chore/acceptance-evidence-issue-59       -> origin/chore/acceptance-evidence-issue-59
+Quality gate	Checkout code	2026-09-25T13:08:56.9440661Z  * [new branch]      chore/evidence-issue-50-verified         -> origin/chore/evidence-issue-50-verified
+Quality gate	Checkout code	2026-09-25T13:08:56.9441754Z  * [new branch]      chore/evidence-issue-54-verified         -> origin/chore/evidence-issue-54-verified
+Quality gate	Checkout code	2026-09-25T13:08:56.9442517Z  * [new branch]      chore/evidence-issue-61-verified         -> origin/chore/evidence-issue-61-verified
+Quality gate	Checkout code	2026-09-25T13:08:56.9443607Z  * [new branch]      chore/evidence-issue-88-verified         -> origin/chore/evidence-issue-88-verified
+Quality gate	Checkout code	2026-09-25T13:08:56.9444609Z  * [new branch]      docs/58-accuracy-followup                -> origin/docs/58-accuracy-followup
+Quality gate	Checkout code	2026-09-25T13:08:56.9445247Z  * [new branch]      docs/58-evidence                         -> origin/docs/58-evidence
+Quality gate	Checkout code	2026-09-25T13:08:56.9445922Z  * [new branch]      docs/58-implementer-checks               -> origin/docs/58-implementer-checks
+Quality gate	Checkout code	2026-09-25T13:08:56.9446667Z  * [new branch]      docs/58-loop-protocol-contradictions     -> origin/docs/58-loop-protocol-contradictions
+Quality gate	Checkout code	2026-09-25T13:08:56.9447401Z  * [new branch]      docs/89-network-signatures               -> origin/docs/89-network-signatures
+Quality gate	Checkout code	2026-09-25T13:08:56.9448021Z  * [new branch]      evidence/issue-138                       -> origin/evidence/issue-138
+Quality gate	Checkout code	2026-09-25T13:08:56.9448815Z  * [new branch]      fix/63-core-utils-defects                -> origin/fix/63-core-utils-defects
+Quality gate	Checkout code	2026-09-25T13:08:56.9449460Z  * [new branch]      fix/63-evidence                          -> origin/fix/63-evidence
+Quality gate	Checkout code	2026-09-25T13:08:56.9450134Z  * [new branch]      fix/auth-refresh-queue-pinned-retry      -> origin/fix/auth-refresh-queue-pinned-retry
+Quality gate	Checkout code	2026-09-25T13:08:56.9450879Z  * [new branch]      fix/coverage-output-clarity              -> origin/fix/coverage-output-clarity
+Quality gate	Checkout code	2026-09-25T13:08:56.9451565Z  * [new branch]      fix/dart-define-const-lookup             -> origin/fix/dart-define-const-lookup
+Quality gate	Checkout code	2026-09-25T13:08:56.9452245Z  * [new branch]      fix/strip-variants-compile               -> origin/fix/strip-variants-compile
+Quality gate	Checkout code	2026-09-25T13:08:56.9452850Z  * [new branch]      fix/tasks-races                          -> origin/fix/tasks-races
+Quality gate	Checkout code	2026-09-25T13:08:56.9453408Z  * [new branch]      foundation                               -> origin/foundation
+Quality gate	Checkout code	2026-09-25T13:08:56.9454027Z  * [new branch]      investigate/frame-policy-probe           -> origin/investigate/frame-policy-probe
+Quality gate	Checkout code	2026-09-25T13:08:56.9455160Z  * [new branch]      investigate/frame-policy-probe-v2        -> origin/investigate/frame-policy-probe-v2
+Quality gate	Checkout code	2026-09-25T13:08:56.9456045Z  * [new branch]      main                                     -> origin/main
+Quality gate	Checkout code	2026-09-25T13:08:56.9456570Z  * [new branch]      test                                     -> origin/test
+Quality gate	Checkout code	2026-09-25T13:08:56.9457155Z  * [new branch]      workflow                                 -> origin/workflow
+Quality gate	Checkout code	2026-09-25T13:08:56.9457677Z  * [new ref]         4c6f7bfc0e8ff64361c232b518df8df0d045cea1 -> pull/156/merge
+Quality gate	Checkout code	2026-09-25T13:08:56.9458828Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.9459275Z ##[group]Determining the checkout info
+Quality gate	Checkout code	2026-09-25T13:08:56.9459754Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:56.9460038Z [command]/usr/bin/git sparse-checkout disable
+Quality gate	Checkout code	2026-09-25T13:08:56.9497747Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Quality gate	Checkout code	2026-09-25T13:08:56.9536796Z ##[group]Checking out the ref
+Quality gate	Checkout code	2026-09-25T13:08:56.9540591Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/156/merge
+Quality gate	Checkout code	2026-09-25T13:08:57.0468919Z Note: switching to 'refs/remotes/pull/156/merge'.
+Quality gate	Checkout code	2026-09-25T13:08:57.0469450Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0469779Z You are in 'detached HEAD' state. You can look around, make experimental
+Quality gate	Checkout code	2026-09-25T13:08:57.0470500Z changes and commit them, and you can discard any commits you make in this
+Quality gate	Checkout code	2026-09-25T13:08:57.0471513Z state without impacting any branches by switching back to a branch.
+Quality gate	Checkout code	2026-09-25T13:08:57.0472101Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0472501Z If you want to create a new branch to retain commits you create, you may
+Quality gate	Checkout code	2026-09-25T13:08:57.0473409Z do so (now or later) by using -c with the switch command. Example:
+Quality gate	Checkout code	2026-09-25T13:08:57.0473925Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0474435Z   git switch -c <new-branch-name>
+Quality gate	Checkout code	2026-09-25T13:08:57.0474814Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0475067Z Or undo this operation with:
+Quality gate	Checkout code	2026-09-25T13:08:57.0475391Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0475571Z   git switch -
+Quality gate	Checkout code	2026-09-25T13:08:57.0476076Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0476493Z Turn off this advice by setting config variable advice.detachedHead to false
+Quality gate	Checkout code	2026-09-25T13:08:57.0477110Z 
+Quality gate	Checkout code	2026-09-25T13:08:57.0477755Z HEAD is now at 4c6f7bf Merge ee427458a24563d49b46ce68eee07e73520c98d6 into a45857b0629f1d50c8b266a5d0043ff4aa7d58b0
+Quality gate	Checkout code	2026-09-25T13:08:57.0488122Z ##[endgroup]
+Quality gate	Checkout code	2026-09-25T13:08:57.0535601Z [command]/usr/bin/git log -1 --format=%H
+Quality gate	Checkout code	2026-09-25T13:08:57.0563674Z 4c6f7bfc0e8ff64361c232b518df8df0d045cea1
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0784714Z ##[group]Run set -euo pipefail
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0785210Z ^[[36;1mset -euo pipefail^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0785514Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0785900Z ^[[36;1mhave() { git rev-parse -q --verify "$1^{commit}" >/dev/null 2>&1; }^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0786369Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0786608Z ^[[36;1mrange=''^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0786877Z ^[[36;1mcase "$EVENT_NAME" in^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0787186Z ^[[36;1m  pull_request)^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0787595Z ^[[36;1m    # Three dots: compare head against the merge base, so commits^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0788160Z ^[[36;1m    # that landed on main after this branch started are not counted^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0788617Z ^[[36;1m    # as this pull request's changes.^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0789026Z ^[[36;1m    if have "$PR_BASE_SHA" && have "$PR_HEAD_SHA"; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0789455Z ^[[36;1m      range="$PR_BASE_SHA...$PR_HEAD_SHA"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0789791Z ^[[36;1m    fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0790037Z ^[[36;1m    ;;^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0790317Z ^[[36;1m  push)^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0790649Z ^[[36;1m    if have "$PUSH_BEFORE" && have "$PUSH_AFTER"; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0791061Z ^[[36;1m      range="$PUSH_BEFORE..$PUSH_AFTER"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0791397Z ^[[36;1m    fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0791636Z ^[[36;1m    ;;^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0791871Z ^[[36;1mesac^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0792108Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0792355Z ^[[36;1mif [ -z "$range" ]; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0792660Z ^[[36;1m  run=true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0793163Z ^[[36;1m  verdict="Could not resolve a diff range for a '$EVENT_NAME' event. Running the full gate."^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0793681Z ^[[36;1m  changed=''^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0793942Z ^[[36;1melse^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0794412Z ^[[36;1m  changed="$(git diff --name-only "$range")"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0794913Z ^[[36;1m  # Everything outside the inert set, plus every .dart file wherever^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0795355Z ^[[36;1m  # it lives.^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0795622Z ^[[36;1m  relevant="$(^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0795894Z ^[[36;1m    {^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0796243Z ^[[36;1m      printf '%s\n' "$changed" | grep -Ev '^(docs/.*|.*\.md)$' || true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0796740Z ^[[36;1m      printf '%s\n' "$changed" | grep -E '^docs/.*\.dart$' || true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0797166Z ^[[36;1m    } | grep -v '^$' | sort -u || true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0797491Z ^[[36;1m  )"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0797747Z ^[[36;1m  if [ -n "$relevant" ]; then^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0798063Z ^[[36;1m    run=true^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0798635Z ^[[36;1m    verdict="$(printf '%s\n' "$relevant" | wc -l | tr -d ' ') changed path(s) can affect this gate. Running format, analyze and test."^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0799241Z ^[[36;1m  else^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0799491Z ^[[36;1m    run=false^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0800227Z ^[[36;1m    verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file), so nothing this gate checks could have changed. format, analyze and test were NOT run."^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0801002Z ^[[36;1m  fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0801229Z ^[[36;1mfi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0801456Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0801711Z ^[[36;1mecho "run=$run" >> "$GITHUB_OUTPUT"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0802032Z ^[[36;1m^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0802248Z ^[[36;1m{^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0802498Z ^[[36;1m  echo "### Quality gate scope"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0802811Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0803073Z ^[[36;1m  echo "- event: \`$EVENT_NAME\`"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0803509Z ^[[36;1m  echo "- range: \`${range:-unresolved}\`"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0804263Z ^[[36;1m  echo "- expensive steps run: \`$run\`"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0804623Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0804875Z ^[[36;1m  echo "$verdict"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0805150Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0805470Z ^[[36;1m  echo "<details><summary>Changed paths</summary>"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0805841Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0806085Z ^[[36;1m  echo '```'^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0806476Z ^[[36;1m  if [ -n "$changed" ]; then printf '%s\n' "$changed"; else echo "(none)"; fi^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0807105Z ^[[36;1m  echo '```'^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0807352Z ^[[36;1m  echo^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0807601Z ^[[36;1m  echo "</details>"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.0807906Z ^[[36;1m} | tee -a "$GITHUB_STEP_SUMMARY"^[[0m
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1106034Z shell: /usr/bin/bash -e {0}
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1106463Z env:
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1106780Z   EVENT_NAME: pull_request
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1107225Z   PR_BASE_SHA: a45857b0629f1d50c8b266a5d0043ff4aa7d58b0
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1107781Z   PR_HEAD_SHA: ee427458a24563d49b46ce68eee07e73520c98d6
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1108248Z   PUSH_BEFORE: 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1108563Z   PUSH_AFTER: 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1108870Z ##[endgroup]
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1321843Z ### Quality gate scope
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1322103Z 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1322226Z - event: `pull_request`
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1323064Z - range: `a45857b0629f1d50c8b266a5d0043ff4aa7d58b0...ee427458a24563d49b46ce68eee07e73520c98d6`
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1324271Z - expensive steps run: `false`
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1324644Z 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1325734Z Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so nothing this gate checks could have changed. format, analyze and test were NOT run.
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1326675Z 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1326844Z <details><summary>Changed paths</summary>
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1327090Z 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1327192Z ```
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1327474Z docs/verification/issue-117/docs-only-probe.md
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1327839Z ```
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1327969Z 
+Quality gate	Decide the gate scope	2026-09-25T13:08:57.1328067Z </details>
+Quality gate	Post Checkout code	2026-09-25T13:08:57.1530649Z Post job cleanup.
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2373700Z [command]/usr/bin/git version
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2416460Z git version 2.55.0
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2457605Z Temporarily overriding HOME='/home/runner/work/_temp/d74649e4-fe3d-4b1a-92ba-bc0095d6498a' before making global git config changes
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2459365Z Adding repository directory to the temporary git global config as a safe directory
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2464069Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2503705Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2539220Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2794797Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2823334Z http.https://github.com/.extraheader
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2834034Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Quality gate	Post Checkout code	2026-09-25T13:08:57.2869199Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Quality gate	Post Checkout code	2026-09-25T13:08:57.3130189Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Quality gate	Post Checkout code	2026-09-25T13:08:57.3167136Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Quality gate	Complete job	2026-09-25T13:08:57.3556583Z Cleaning up orphan processes
+Quality gate	Complete job	2026-09-25T13:08:57.3900514Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

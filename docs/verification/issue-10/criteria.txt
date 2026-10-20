@@ -1,0 +1,24 @@
+# Criterion 1: no auto-close keywords remain in CONTRIBUTING.md
+
+$ grep -nE '(Closes|Fixes|Resolves) #' CONTRIBUTING.md
+(no matches)
+
+# Criterion 2: Refs convention stated, with the reason
+- Reference issues in the footer as `Refs koniz-dev/flutter-starter#123`
+
+> **Do not use `Closes`, `Fixes`, or `Resolves`.** GitHub auto-closes an issue
+> when a commit carrying those keywords lands on the default branch. That closes
+> it at *merge* time, before anyone has run its acceptance criteria — which
+> removes the verification gate the workflow exists to enforce. Use the fully
+> qualified `owner/repo#N` form so the reference survives being quoted elsewhere.
+> See [docs/issue-workflow.md](docs/issue-workflow.md).
+
+# Criterion 3: CONTRIBUTING.md links docs/issue-workflow.md
+121:> [docs/issue-workflow.md](docs/issue-workflow.md) — it defines the label state
+379:> See [docs/issue-workflow.md](docs/issue-workflow.md).
+
+# Criterion 4: PR checklist consistent with the Refs convention
+146:- [ ] Related issues are referenced with `Refs owner/repo#N` (never `Closes`/`Fixes`/`Resolves`)
+
+# Criterion 5: repo-wide, excluding issue-workflow.md (quotes them to ban them)
+(no matches)

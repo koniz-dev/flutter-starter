@@ -1,0 +1,4 @@
+00:00 +0: loading /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/fc021d5d-e66f-4e21-896b-170612c43caa/scratchpad/verify/test/contributing_example_probe_test.dart
+00:00 +0: LoginUseCase returns Success when the repository succeeds
+00:00 +1: LoginUseCase returns a failure when the repository fails
+00:00 +2: All tests passed!

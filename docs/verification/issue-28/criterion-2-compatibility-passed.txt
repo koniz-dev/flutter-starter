@@ -1,0 +1,15 @@
+# Criterion 2: the run gets past the compatibility check
+
+Before the pin - run 32869023061, unpinned CLI:
+  + patrol_cli 4.7.0
+  Error: Patrol version 3.20.0 defined in your project is not compatible
+  with patrol_cli version 4.7.0.
+  -> aborted in seconds, no build, no emulator
+
+After the pin - run 32870753971:
+  + patrol_cli 3.11.0 (4.7.0 available)
+  Activated patrol_cli 3.11.0.
+  patrol test --target integration_test/app_e2e_test.dart
+  ✓ Completed building apk with entrypoint test_bundle.dart (139.5s)
+  • Executing tests of apk with entrypoint test_bundle.dart on emulator-5554...
+  -> compatibility check passed; APK built; emulator executed the bundle

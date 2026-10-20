@@ -1,0 +1,18 @@
+$ grep -n -A2 "throwsA(" test/core/network/forced_logout_session_test.dart test/core/network/forced_logout_cache_test.dart | grep -B1 -A1 ServerException
+# commit: 59a824dff27
+test/core/network/forced_logout_cache_test.dart:391:      throwsA(
+test/core/network/forced_logout_cache_test.dart-392-        isA<ServerException>().having((e) => e.statusCode, 'statusCode', 401),
+test/core/network/forced_logout_cache_test.dart-393-      ),
+--
+test/core/network/forced_logout_session_test.dart:147:      throwsA(
+test/core/network/forced_logout_session_test.dart-148-        isA<ServerException>().having((e) => e.statusCode, 'statusCode', 401),
+test/core/network/forced_logout_session_test.dart-149-      ),
+--
+test/core/network/forced_logout_session_test.dart:192:          throwsA(
+test/core/network/forced_logout_session_test.dart-193-            isA<ServerException>().having(
+test/core/network/forced_logout_session_test.dart-194-              (e) => e.statusCode,
+
+$ git show 53fc4274b6d --stat -- test/core/network/forced_logout_session_test.dart test/core/network/forced_logout_cache_test.dart
+ test/core/network/forced_logout_cache_test.dart   |  4 +++-
+ test/core/network/forced_logout_session_test.dart | 12 ++++++++++--
+ 2 files changed, 13 insertions(+), 3 deletions(-)

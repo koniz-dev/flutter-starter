@@ -1,0 +1,325 @@
+$ # Every docs/verification/issue-*/README.md that quotes a pass or skip count,
+$ # checked against the log it cites. Run after the fix.
+
+----- issue-101 -----
+README lines quoting counts:
+    12:| `tests.log` | Full `flutter test` on merged `main`: 2645 passed, 7 skipped (golden-tagged). |
+    26:**pumps the widget directly**. That is exactly how closed issue #60 passed its
+    LOG goldens.log last count: +10:
+    LOG reachability-postfix.log last count: +8:
+    LOG reachability-prefix-repro.log last count: +0:
+    LOG tests.log last count: +2645 ~7
+
+----- issue-109 -----
+README lines quoting counts:
+    32:| `audit_5x.log` | `./scripts/dev/audit_template.sh` | 5 consecutive | 5/5 `exit=0`, `+2812 ~8: All tests passed!` every time |
+    56:Coverage` groups, which contain all 14 tests the report names, install no
+    112:include those 198 tests.
+    LOG audit-tails.log last count: +2812 ~8
+    LOG audit_5x.log last count: +2812 ~8
+    LOG interceptors_10x.log last count: +198:
+    LOG log_output_20x.log last count: +85:
+    LOG log_output_run_20.log last count: +85:
+
+----- issue-117 -----
+README lines quoting counts:
+    167:2673 tests, 8 skipped). `--no-goldens` because the diff touches nothing under
+    LOG tests.log last count: +2673 ~8
+
+----- issue-118 -----
+README lines quoting counts:
+    105:`+2791 ~8: All tests passed!`. Trimmed to head and tail with ANSI stripped; the
+    LOG audit_template.log last count: +2791 ~8
+    LOG guard-tests.log last count: +11:
+    LOG tests.log last count: +2791 ~8
+
+----- issue-121 -----
+README lines quoting counts:
+    101:| 4. 20 consecutive runs of the file pass, and `audit_template.sh` exits 0 | PASS | [`repeat-20x-under-load.log`](repeat-20x-under-load.log) (20/20 PASS under load averages 46-131 on a 6-CPU host) and [`audit-run1.log`](audit-run1.log), [`audit-run2.log`](audit-run2.log), [`audit-run3.log`](audit-run3.log) (3/3 exit 0, 2645 tests). On merged `main`: [`acceptance-refresh-queue-named.log`](acceptance-refresh-queue-named.log) (all six tests named, exit 0), [`format.log`](format.log), [`analyze.log`](analyze.log), [`tests.log`](tests.log) (2688 passed, 8 skipped, exit 0), [`goldens.log`](goldens.log) |
+    141:records counts (2688 passed, 8 skipped) but no test names.
+    LOG acceptance-refresh-queue-named.log last count: +6:
+    LOG audit-run1.log last count: +2645 ~7
+    LOG audit-run2.log last count: +2645 ~7
+    LOG audit-run3.log last count: +2645 ~7
+    LOG counterfactual-queueing-removed.log last count: +0:
+    LOG diagnosis-probe.log last count: +3:
+    LOG goldens.log last count: +11:
+    LOG repeat-20x-under-load.log last count: +6:
+    LOG tests.log last count: +2688 ~8
+
+----- issue-142 -----
+README lines quoting counts:
+    24:| 4 | `audit_template.log` | `./scripts/dev/audit_template.sh` on merged `main`: env asset guard, format, `flutter analyze` ("No issues found!"), `flutter test` 2691 passed / 8 skipped. Exit 0. |
+    LOG audit_template.log last count: +2691 ~8
+    LOG criteria-1-2-tostring-tests.log last count: +15:
+    LOG criterion-3-reachability.log last count: +8:
+    LOG goldens.log last count: +11:
+    LOG prefix-regression-repro.log last count: +6:
+    LOG tests.log last count: +2691 ~8
+
+----- issue-143 -----
+README lines quoting counts:
+    49:| 4 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `format.log`, `analyze.log`, `tests.log` (2705 passed, 8 skipped, exit 0) - the same three gates the script runs, each teed by the acceptance runner |
+    55:| The resolved family per `TargetPlatform` is now the platform default, light and dark theme, for `displayLarge`, `displayMedium`, `bodyLarge`, `bodyMedium` and `labelLarge` | `platform-font-family-tests.log` - 16 tests pass, and the log embeds the test source so the expected-family table is readable |
+    LOG goldens.log last count: +11:
+    LOG platform-font-family-tests.log last count: +16:
+    LOG tests.log last count: +2705 ~8
+
+----- issue-147 -----
+README lines quoting counts:
+    24:| 6 | `./scripts/dev/audit_template.sh` exits 0 | **PASS** | `format.log`, `analyze.log`, `tests.log` (2728 passed, 8 skipped) |
+    29:on the merged tree: 50 tests pass, including the four that bind to the wiring.
+    147:| `criterion-3-date-tests.log` | `flutter test test/features/tasks/presentation/screens/` on `578dcb7` - 50 pass |
+    LOG criterion-3-date-tests.log last count: +50:
+    LOG criterion-3-negative-probe.log last count: +41:
+    LOG goldens.log last count: +11:
+    LOG tests.log last count: +2728 ~8
+
+----- issue-160 -----
+README lines quoting counts:
+    42:| `mutation-a-full-suite.log` | `flutter test --timeout=5m` under mutation A: `+2691 ~8 -1`, and the single entry under `Failing tests:` is the new test. |
+    45:| `mutation-b-full-suite.log` | Full suite under mutation B: `+2680 ~8 -12`. QA measured 11 failures, all inside the mutated service's own unit tests; the 12th is the new test, marked `[E]` at line 1709. |
+    46:| `audit_template.log` | `./scripts/dev/audit_template.sh`, exit 0, `+2692 ~8`. |
+    47:| `format.log`, `analyze.log`, `tests.log`, `goldens.log` | `./scripts/test/run_acceptance.sh 160` on merged `main`. All exit 0; `tests.log` ends `+2715 ~8: All other tests passed!`. |
+    LOG audit_template.log last count: +2692 ~8
+    LOG baseline-startup-reachability.log last count: +9:
+    LOG goldens.log last count: +11:
+    LOG mutation-a-full-suite.log last count: +2691 ~8
+    LOG mutation-a-startup-reachability.log last count: +8:
+    LOG mutation-b-full-suite.log last count: +2680 ~8
+    LOG mutation-b-startup-reachability.log last count: +8:
+    LOG tests.log last count: +2715 ~8
+
+----- issue-161 -----
+README lines quoting counts:
+    102:  48 tests pass across `startup_reachability_test.dart` and
+    LOG criterion3-coupling.log last count: +48:
+    LOG criterion5-audit-template.log last count: +2768 ~8
+    LOG tests.log last count: +2768 ~8
+
+----- issue-167 -----
+README lines quoting counts:
+    146:`exit: 0`), `tests.log` (`+2794 ~8: All other tests passed!`, `exit: 0`). Those
+    LOG tests.log last count: +2794 ~8
+
+----- issue-170 -----
+README lines quoting counts:
+    34:| 5 | the test file gains cases for 2, 3 and 4, each failing against the old implementation; the counterfactual is recorded | `criterion-5-tooling-tests.log` (33 pass) and `criterion-5-test-counterfactual.log` (the same assertions, 3 failures, against the pre-fix guard) | PASS |
+    36:| 7 | `./scripts/dev/audit_template.sh` exits 0 | `criterion-7-audit-template.log`: env asset guard OK, format 0 changed, analyze no issues, 2742 tests pass, `exit=0` | PASS |
+    LOG criterion-1-2-3-4-cli-counterfactual.log last count: +2:
+    LOG criterion-5-test-counterfactual.log last count: +0:
+    LOG criterion-5-tooling-tests.log last count: +33:
+    LOG criterion-7-audit-template.log last count: +2742 ~8
+    LOG tests.log last count: +2742 ~8
+
+----- issue-175 -----
+README lines quoting counts:
+    15:| `tests.log` | full `flutter test` suite (2768 passed, 8 skipped) |
+    158:| 2 | `flutter test test/tooling/` exits 0 on unmodified `main`; allowlist holds exactly the specified paths | PASS with documented deviation | `tooling-tests.log` (54 tests, exit 0); `allowlist-state.log` - four paths, not eight, because #176 and #177 landed first. See above. |
+    LOG audit-template.log last count: +2768 ~8
+    LOG counterfactual-4a-entry-deleted.log last count: +0:
+    LOG counterfactual-4b-entry-restored.log last count: +21:
+    LOG counterfactual-5-stale-entry.log last count: +1:
+    LOG counterfactual-new-violation.log last count: +0:
+    LOG tests.log last count: +2768 ~8
+    LOG tooling-tests.log last count: +54:
+
+----- issue-177 -----
+README lines quoting counts:
+    87:`flutter test test/tooling/` passes 33 tests, exit 0. Building the guard is a
+    91:(0 changed), `flutter analyze` (no issues), `flutter test` (2735 passed,
+    92:8 skipped).
+    98:`test/core/routing/` suite: 72 tests, exit 0. That covers the three-state auth
+    LOG criterion-5-navigation-behaviour.log last count: +3:
+    LOG criterion-6-tooling.log last count: +33:
+    LOG criterion-7-audit_template.log last count: +2735 ~8
+    LOG goldens.log last count: +11:
+    LOG no-regression-51-redirect-machinery.log last count: +72:
+    LOG tests.log last count: +2735 ~8
+
+----- issue-179 -----
+README lines quoting counts:
+    89:satisfy the narrowed parameter without an edit. The scoped run is 468 tests,
+    102:| `criterion-6-audit.log` | `./scripts/dev/audit_template.sh`, exit 0, 2725 tests |
+    LOG criterion-3-4-seam-tests.log last count: +6:
+    LOG criterion-5-scoped-tests.log last count: +468:
+    LOG criterion-6-audit.log last count: +2725 ~8
+    LOG tests.log last count: +2725 ~8
+
+----- issue-180 -----
+README lines quoting counts:
+    25:| 7. `flutter test test/features/tasks/` exits 0 with no behavioural assertion weakened; changed assertions listed in the PR body | PASS | `criterion-7-tasks-suite.log` - 319 tests, `All tests passed!`, `exit=0`. The six removed test names are all `deleteCompletedTasks` cases; the nine added ones are named; the koniz-dev/flutter-starter#61 atomicity assertions (`mutateTasks(any())).called(1)`, `verifyNever(getTaskById)`, `verifyNever(saveTask)`) are shown still present |
+    57:`tests.log` reports `8 skipped tests`: those are the `golden`-tagged acceptance
+    LOG criteria-3-4-5-focused-tests.log last count: +1:
+    LOG criterion-4-counterfactual.log last count: +1:
+    LOG criterion-7-tasks-suite.log last count: +319:
+    LOG criterion-8-audit_template.log last count: +2794 ~8
+    LOG standing-guards.log last count: +32:
+    LOG tests.log last count: +2794 ~8
+
+----- issue-184 -----
+README lines quoting counts:
+    15:| `tests.log` | `flutter test --timeout=5m` on the merged tree, `+2812 ~8`, exit 0 |
+    16:| `tests-before.log` | the same command on `origin/main` before the change, `+2813 ~8` |
+    24:`flutter test --timeout=5m` summary before: `+2813 ~8`. After: `+2812 ~8`.
+    32:11 tests deleted, 10 added. The three *moved* files
+    LOG tests-before.log last count: +2813 ~8
+    LOG tests.log last count: +2812 ~8
+
+----- issue-187 -----
+README lines quoting counts:
+    118:| `--apply` (both-samples-removed) | 0 | 0 | 0 `No issues found!` | 0, `+2277 ~8: All other tests passed!` |
+    119:| `--remove-tasks` | 0 | 0 | 0 `No issues found!` | 0, `+2464 ~8: All other tests passed!` |
+    120:| `--remove-feature-flags` | 0 | 0 | 0 `No issues found!` | 0, `+2607 ~8: All other tests passed!` |
+    131:(`+2794 ~8: All other tests passed!`, `exit: 0`) - the three gates
+    LOG criteria-1-4-strip-probe.log last count: +2607 ~8
+    LOG tests.log last count: +2794 ~8
+
+----- issue-188 -----
+README lines quoting counts:
+    34:| 5. `./scripts/dev/audit_template.sh` exits 0 | PASS | `criterion-5-audit_template.log`: format 0 changed, analyze "No issues found!", 2780 tests pass, `exit=0`. |
+    40:| `criteria-1-4-tz-asia-bangkok.log` | The new test file at `TZ=Asia/Bangkok`, expanded reporter. 12/12 pass. The host offset is in the group name, so the log itself records that the run was **not** in UTC. |
+    41:| `criteria-1-4-tz-america-santiago.log` | Same file at `TZ=America/Santiago` (offset `-3:00:00`), the other side of UTC. 12/12 pass. |
+    42:| `criteria-1-4-tz-utc.log` | Same file at `TZ=UTC` (offset `0:00:00`), the CI case. 12/12 pass. |
+    64:Both hold whatever the host zone is, which is why the same 12 tests pass at
+    LOG counterfactual.log last count: +0:
+    LOG criteria-1-4-tz-america-santiago.log last count: +12:
+    LOG criteria-1-4-tz-asia-bangkok.log last count: +12:
+    LOG criteria-1-4-tz-utc.log last count: +12:
+    LOG criterion-5-audit_template.log last count: +2780 ~8
+    LOG tests.log last count: +2780 ~8
+
+----- issue-39 -----
+README lines quoting counts:
+    22:| 6 | `./scripts/dev/audit_template.sh` exits 0 | [`criterion-6-audit_template.log`](criterion-6-audit_template.log) | PASS - exit 0, 2232 tests |
+    LOG criterion-6-audit_template.log last count: +2232 ~1
+
+----- issue-40 -----
+README lines quoting counts:
+    20:| 5 | `./scripts/dev/audit_template.sh` exits 0 | [`criterion-5-audit_template.log`](criterion-5-audit_template.log) | PASS - exit 0, 2233 tests |
+    128:`./scripts/dev/audit_template.sh` exits 0 on merged `main`, 2233 tests. The
+    131:`flutter analyze` and 1770 passing tests, the new regression test among them.
+    LOG criterion-3-full-app-settles.log last count: +1:
+    LOG criterion-5-audit_template.log last count: +2233 ~1
+
+----- issue-48 -----
+README lines quoting counts:
+    12:| `dart_defines_test.log` | `test/core/config/dart_defines_test.dart` on a plain run: 11 pass, 1 skipped. |
+    13:| `dart_define_supplied.log` | The same file run with `--dart-define=BASE_URL=https://api.example.com`: 12 pass, the end-to-end case no longer skipped. |
+    LOG criterion-5-audit_template.log last count: +2251 ~2
+    LOG dart_define_supplied.log last count: +12:
+    LOG dart_defines_test.log last count: +11 ~1
+    LOG goldens.log last count: +1:
+    LOG negative_controls.log last count: +10 ~1
+    LOG tests.log last count: +2251 ~2
+
+----- issue-50 -----
+README lines quoting counts:
+    25:| 6 | Both flags together behave as `removeBoth`, or are rejected **before** anything is deleted | PASS | Driven in a clean clone: `--apply --remove-tasks --remove-feature-flags` exits 0 with `Strip complete`, and the resulting tree analyzes clean and passes 1923 tests - i.e. it behaves as `removeBoth` |
+    27:| 8 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` - `AUDIT_EXIT=0`, `+2407 ~5: All tests passed!` |
+    LOG audit_template.log last count: +2407 ~5
+    LOG strip-variants-analyze-test.log last count: +2229 ~5
+
+----- issue-52 -----
+README lines quoting counts:
+    13:| `criterion-tests.log` | The four touched test files, expanded reporter, 82 tests, `exit: 0` |
+    31:| 8 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` (`exit: 0`, 2436 tests) |
+    LOG audit_template.log last count: +2436 ~6
+    LOG criterion-7-pre-fix.log last count: +3:
+    LOG criterion-tests.log last count: +82:
+    LOG goldens.log last count: +7:
+    LOG tests.log last count: +2436 ~6
+
+----- issue-53 -----
+README lines quoting counts:
+    18:| 7 | `./scripts/dev/audit_template.sh` exits 0 and the suite still passes | PASS | `audit_template.log` (exit 0, 2443 tests) |
+    LOG audit_template.log last count: +2443 ~6
+    LOG criterion-3-gutted-provider.log last count: +36:
+    LOG criterion-4-ssl-pinning.log last count: +12:
+    LOG criterion-5-uikeys-mutation.log last count: +0:
+    LOG goldens.log last count: +7:
+    LOG tests.log last count: +2443 ~6
+
+----- issue-54 -----
+README lines quoting counts:
+    26:| 10 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` - `AUDIT_EXIT=0`, `+2407 ~5: All tests passed!` |
+    LOG audit_template.log last count: +2407 ~5
+    LOG contributing-example-probe.log last count: +2:
+    LOG goldens.log last count: +6:
+    LOG tests.log last count: +2407 ~5
+
+----- issue-55 -----
+README lines quoting counts:
+    15:| `tests.log` | full `flutter test`, 2304 passed / 3 skipped (the skipped ones are the `golden`-tagged acceptance tests) |
+    18:| `contrast-pairs.log` | `theme_contrast_test.dart` with the expanded reporter: one named line per contrast pair, 36 tests |
+    19:| `token-mappings.log` | `default_design_tokens_test.dart` with the expanded reporter: one line per token mapping, 19 tests |
+    LOG audit_template.log last count: +2304 ~3
+    LOG contrast-pairs.log last count: +36:
+    LOG goldens.log last count: +3:
+    LOG regression-demo.log last count: +2300 ~3
+    LOG tests.log last count: +2304 ~3
+    LOG token-mappings.log last count: +19:
+
+----- issue-57 -----
+README lines quoting counts:
+    35:format check exit 0, `flutter analyze` `No issues found!`, 2422 tests passed
+    36:with 5 skipped.
+    195:  `audit_template.sh` run failed with 14 tests in
+    197:  file passes in isolation (79 tests) and the very next full run exits 0, which
+    LOG criteria-5-6-scaffolders.log last count: +2:
+    LOG criterion-8-audit-template.log last count: +2422 ~5
+    LOG tests.log last count: +2422 ~5
+
+----- issue-61 -----
+README lines quoting counts:
+    16:`tasks-concurrency-tests.log` (440 tests, exit 0).
+    30:| 11 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` - `AUDIT_EXIT=0`, `+2407 ~5: All tests passed!` |
+    LOG audit_template.log last count: +2407 ~5
+    LOG goldens.log last count: +6:
+    LOG tasks-concurrency-tests.log last count: +440:
+    LOG tests.log last count: +2407 ~5
+
+----- issue-63 -----
+README lines quoting counts:
+    29:| 11 | Each smaller item is fixed or explicitly deferred with a reason | PASS | `criterion-11-smaller-items.log` - 397 tests. Per item: `SUCCESS LazyLoader caches a legitimately null value without throwing`; `SUCCESS PaginationHelper config plumbing a 0-indexed API starts at page 0, not page 1`, `... reset returns to the configured initial page`, `... pageSize is readable`, `... an error is cleared by the next successful page`, `SUCCESS PaginationState.copyWith clearError drops an error that error: null cannot`, `SUCCESS PaginationScrollExtension a list that fits on screen counts as at the end`; `SUCCESS AppException.toString carries the type and the message`; `SUCCESS ExceptionToFailureMapper unmapped AppException subclasses an unknown AppException keeps its message and code`; `SUCCESS Result equality two Success values with equal data are equal`; `SUCCESS ImageCacheHelper preloadImage reports failure when given a context`; `SUCCESS FeatureFlagsManager getFlags should fall back to per-key defaults when repository fails`; `SUCCESS ProviderDisposal does not touch the global image cache on dispose`; `SUCCESS JsonHelper non-finite and non-Exception failures getInt returns null for a non-finite number` and `... getListOf returns null when the converter raises a TypeError`. `CrashlyticsOutput accepts fatal logs` is in `criterion-5-6-logging.log`. Two items are **deferred with a reason**, both recorded here: `JsonHelper.getDouble` still returns `double.infinity` for `1e999` (a representable double that throws nothing, unlike `getInt`), and `ProviderLifecycleManager.clearCaches` remains a documented placeholder because Riverpod exposes no cache-clearing API |
+    31:| 13 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` - `No issues found!` from `flutter analyze` and `All tests passed!` at 2585 tests; `format.log`, `analyze.log`, `tests.log` from the acceptance runner |
+    63:| `criterion-1-2-validators.log` | 94 tests: email table and password composition |
+    64:| `criterion-3-4-dates.log` | 22 tests: strict parsing and the UTC round trip |
+    65:| `criterion-5-6-logging.log` | 159 tests: JSON timestamp, rotation, clearLogs, pre-init buffering, Crashlytics fatal |
+    66:| `criterion-7-8-9-10-performance.log` | 92 tests: single execution, trace stop, path sanitisation, screen-mixin wiring |
+    67:| `criterion-11-smaller-items.log` | 397 tests: the smaller items |
+    89:`api_client_interceptor_chain_test.dart` runs 22 tests green in 23s - and the
+    90:immediately following full-suite run was green at 2585 tests, which is the
+    LOG audit_template.log last count: +2585 ~6
+    LOG goldens.log last count: +8:
+    LOG tests.log last count: +2585 ~6
+
+----- issue-77 -----
+README lines quoting counts:
+    56:| 6 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` - `All tests passed!`, exit 0. Also `format.log`, `analyze.log`, `tests.log` (2422 passed) from `run_acceptance.sh` |
+    116:| `cache_policy_tests.log` | The 9 new `api_client_cache_policy_test.dart` cases, the updated `cache_interceptor_test.dart` unit cases, and `api_client_interceptor_chain_test.dart` (the #46 and #88 guards, untouched by this change) - 59 tests, all passing |
+    LOG audit_template.log last count: +2422 ~5
+    LOG cache_policy_tests.log last count: +59:
+    LOG counterfactual.log last count: +4:
+    LOG goldens.log last count: +6:
+    LOG tests.log last count: +2422 ~5
+
+----- issue-78 -----
+README lines quoting counts:
+    14:| `interceptor_tests.log` | targeted run of `test/core/network/interceptors/api_logging_interceptor_test.dart` on the fixed code: 33 tests, all pass |
+    16:| `audit_template.log` | `./scripts/dev/audit_template.sh` on merged `main`: format check, analyze, 2456 tests, exit 0 |
+    LOG audit_template.log last count: +2456 ~6
+    LOG counterfactual.log last count: +17:
+    LOG goldens.log last count: +7:
+    LOG interceptor_tests.log last count: +33:
+    LOG tests-run1-unrelated-flake.log last count: +2455 ~6
+    LOG tests.log last count: +2456 ~6
+
+----- issue-88 -----
+README lines quoting counts:
+    22:| 6 | `./scripts/dev/audit_template.sh` exits 0 | PASS | `audit_template.log` - `AUDIT_EXIT=0`, `+2407 ~5: All tests passed!` |
+    LOG audit_template.log last count: +2407 ~5
+    LOG goldens.log last count: +6:
+    LOG retry-idempotency-tests.log last count: +45:
+    LOG tests.log last count: +2407 ~5
+

@@ -1,0 +1,19 @@
+# Criteria 3 and 4: a real test is collected, and it fails honestly
+
+BEFORE (run 32870753971, no harness):
+  📝 Total: 0   ✅ Successful: 0   ❌ Failed: 0   ⏩ Skipped: 0
+  conclusion: success  <- a green tick that verified nothing
+
+AFTER (run 32966672465, harness scaffolded):
+  📝 Total: 1   ✅ Successful: 0   ❌ Failed: 1   ⏩ Skipped: 0
+  ❌ E2E: auth -> home (stable ValueKeys) (integration_test/app_e2e_test.dart) (12s)
+  Expected: exactly one matching candidate
+  [<'e2e_home_content'>]: []
+  Which: means none were found but one was expected
+  app_e2e_test.dart line 20
+  Exception: Gradle test execution failed with code 1
+
+Criterion 3: Total went 0 -> 1. The harness collects and runs the test.
+Criterion 4: the test FAILS because the auth flow posts to BASE_URL and no
+  server exists in CI. Reported as a failure, NOT as a pass. Making the
+  shipped suite green without a backend is filed as a separate issue.
