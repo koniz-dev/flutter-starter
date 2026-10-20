@@ -8,7 +8,7 @@ This directory contains the comprehensive test suite for the Flutter Starter pro
 
 ```
 test/
-├── acceptance/       # Golden-tagged acceptance tests (see run_acceptance.sh)
+├── acceptance/       # Golden-tagged acceptance tests (--run-skipped --tags golden)
 ├── core/             # Core layer tests
 ├── docs/             # Checks that the documentation matches the code
 ├── features/         # Feature layer tests (auth, home, tasks, feature_flags, …)

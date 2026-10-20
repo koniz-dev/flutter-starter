@@ -132,7 +132,6 @@ SymbolCheckResult collectSymbolProblems(Directory root) {
           // Evidence directories are frozen records of a past run. A directive
           // in one would start failing the day the code it described changed,
           // which is the opposite of what an evidence file is for.
-          .where((f) => !f.path.contains('docs/verification/'))
           .toList()
         ..sort((a, b) => a.path.compareTo(b.path));
 

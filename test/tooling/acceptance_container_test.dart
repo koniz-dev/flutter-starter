@@ -8,8 +8,8 @@
 // in-memory session, so the router never moves to /login.
 // forced_logout_acceptance_test.dart failed that way from #242 until #288, and
 // nothing noticed, because the acceptance tests are tagged `golden` and skipped
-// everywhere except ./scripts/test/run_acceptance.sh. This scan is not tagged,
-// so it runs in CI.
+// unless a run opts in with --run-skipped --tags golden. This scan is not
+// tagged, so it runs in CI.
 //
 // The rule, per file under test/acceptance/:
 //   * no `ProviderContainer(` at all - use

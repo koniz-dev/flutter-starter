@@ -13,8 +13,7 @@
 // the step the instructions present as "now run it". A line ending in `\` is
 // joined with its continuation, so a multi-line command counts as one.
 //
-// Run by `tool/check_docs.dart` over README.md, CONTRIBUTING.md and `docs/`
-// (evidence under `docs/verification/` excluded).
+// Run by `tool/check_docs.dart` over README.md, CONTRIBUTING.md and `docs/`.
 
 import 'dart:io';
 
@@ -93,8 +92,7 @@ List<File> envRunFiles(Directory root) {
       docs
           .listSync(recursive: true)
           .whereType<File>()
-          .where((f) => f.path.endsWith('.md'))
-          .where((f) => !f.path.contains('docs/verification/')),
+          .where((f) => f.path.endsWith('.md')),
     );
   }
   return files..sort((a, b) => a.path.compareTo(b.path));

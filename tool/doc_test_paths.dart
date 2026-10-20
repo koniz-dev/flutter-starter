@@ -6,7 +6,7 @@
 // it, and nothing noticed (koniz-dev/flutter-starter#360, #551).
 //
 // The rule: inside a fenced code block of README.md, CONTRIBUTING.md or
-// `docs/` (evidence under `docs/verification/` excluded), every path argument
+// `docs/`, every path argument
 // of `flutter test` must exist as a file or directory. Backslash-continued
 // lines are joined first. Flags are skipped, with the value of a flag that
 // takes one (`--tags golden`, `-r expanded`). A path with a `:<line>` suffix
@@ -140,8 +140,7 @@ List<File> testPathFiles(Directory root) {
       docs
           .listSync(recursive: true)
           .whereType<File>()
-          .where((f) => f.path.endsWith('.md'))
-          .where((f) => !f.path.contains('docs/verification/')),
+          .where((f) => f.path.endsWith('.md')),
     );
   }
   return files..sort((a, b) => a.path.compareTo(b.path));

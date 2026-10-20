@@ -13,8 +13,8 @@
 // under plain `dart run` with no Flutter toolchain; `test/docs/` pins the
 // parsed set to the real map.
 //
-// Run by `tool/check_docs.dart` over README.md and `docs/` (evidence under
-// `docs/verification/` excluded) - koniz-dev/flutter-starter#379.
+// Run by `tool/check_docs.dart` over README.md and `docs/`
+// (koniz-dev/flutter-starter#379).
 
 import 'dart:io';
 
@@ -93,8 +93,7 @@ List<File> dartDefineFiles(Directory root) {
       docs
           .listSync(recursive: true)
           .whereType<File>()
-          .where((f) => f.path.endsWith('.md'))
-          .where((f) => !f.path.contains('docs/verification/')),
+          .where((f) => f.path.endsWith('.md')),
     );
   }
   return files..sort((a, b) => a.path.compareTo(b.path));

@@ -11,8 +11,8 @@ name: CI
 # to post a conclusion on EVERY pull request, because a required status check
 # that never reports leaves the pull request stuck on "Expected - waiting for
 # status to be reported" forever. `paths-ignore` suppresses the whole workflow
-# run, so the check never appears at all, and every acceptance-evidence pull
-# request this repository produces is docs-only. The path filtering therefore
+# run, so the check never appears at all on a docs-only pull request. The path
+# filtering therefore
 # moved INSIDE the job, to the "Decide the gate scope" step below: the job
 # always runs and always reports, and skips the expensive steps when nothing it
 # checks could have changed.
@@ -54,9 +54,8 @@ jobs:
       #
       # `**/*.md` qualifies: no step reads markdown. `docs/**` mostly qualifies
       # - EXCEPT `docs/**/*.dart`. `analysis_options.yaml` does not exclude
-      # `docs/`, so a Dart file committed under it is analyzed like any other
-      # (evidence probes did this until they moved to the `evidence` branch).
-      # Treating it as inert would let a broken probe through the gate and turn
+      # `docs/`, so a Dart file committed under it is analyzed like any other.
+      # Treating it as inert would let a broken one through the gate and turn
       # `main` red on somebody else's unrelated pull request. So `.dart` is
       # never inert, wherever it lives.
       #

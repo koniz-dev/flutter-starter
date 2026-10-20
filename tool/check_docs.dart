@@ -391,11 +391,6 @@ List<File>? _maybeFile(String path) {
   return file.existsSync() ? [file] : null;
 }
 
-/// `docs/verification/` is exempt: those files quote captured tool output
-/// verbatim (`scripts/test/test_coverage.sh` prints check marks), and editing
-/// an evidence transcript to satisfy a style rule would falsify the evidence.
-const String _emojiExemptDir = 'docs/verification/';
-
 List<File> _markdownUnder(String path) {
   final dir = Directory(path);
   if (!dir.existsSync()) return const [];
@@ -403,7 +398,6 @@ List<File> _markdownUnder(String path) {
       .listSync(recursive: true)
       .whereType<File>()
       .where((f) => f.path.endsWith('.md'))
-      .where((f) => !f.path.contains(_emojiExemptDir))
       .toList();
 }
 

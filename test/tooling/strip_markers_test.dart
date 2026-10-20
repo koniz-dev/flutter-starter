@@ -1,8 +1,8 @@
 // The strip's markdown markers: every tag is validated before anything is
 // deleted, and a strip removes only the tags it was asked to
 // (koniz-dev/flutter-starter#409). Runs the tool in a scratch directory with
-// `--process-only`, the one mode that touches nothing but markdown and the
-// process-only paths, none of which exist there.
+// `--keep-samples`, the one mode that touches nothing but markdown and the
+// Mason bricks.
 
 import 'dart:io';
 
@@ -23,7 +23,7 @@ void main() {
     'run',
     tool,
     '--apply',
-    '--process-only',
+    '--keep-samples',
     if (removeBricks) '--remove-bricks',
   ], workingDirectory: fixture.path);
 
@@ -53,7 +53,7 @@ void main() {
 
 | a | b |
 | - | - |
-| process row | x <!-- strip:process-only line --> |
+| bricks row | x <!-- strip:bricks line --> |
 | tasks row | y <!-- strip:tasks line --> |
 | kept row | z |
 
@@ -62,12 +62,12 @@ flags prose
 <!-- strip:feature-flags end -->
 ''');
 
-    final result = strip();
+    final result = strip(removeBricks: true);
 
     expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
     final out = file.readAsStringSync();
-    expect(out, isNot(contains('process row')));
-    // --process-only keeps both samples, so their marked prose stays.
+    expect(out, isNot(contains('bricks row')));
+    // --keep-samples keeps both samples, so their marked prose stays.
     expect(out, contains('tasks row'));
     expect(out, contains('flags prose'));
     expect(out, contains('kept row'));

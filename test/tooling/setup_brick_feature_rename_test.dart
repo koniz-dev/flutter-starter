@@ -9,7 +9,7 @@
 // repository's templates are never touched.
 //
 // The hook runs in a `dart` subprocess rather than being imported: an adopter
-// may delete `bricks/` (the fork guide says so, and strip-smoke's process-only
+// may delete `bricks/` (the fork guide says so, and strip-smoke's keep-samples
 // variant does), and a static import of a deleted file would turn
 // `flutter analyze` red. The file skips when there is no brick, and when the
 // setup brick has already renamed the package - that rename rewrites this

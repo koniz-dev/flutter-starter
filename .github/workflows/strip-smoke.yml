@@ -51,10 +51,10 @@ jobs:
             flags: '--remove-tasks'
           - variant: feature-flags-removed
             flags: '--remove-feature-flags'
-          # Both samples kept, only the process-only artifacts removed
-          # (koniz-dev/flutter-starter#333).
-          - variant: process-only
-            flags: '--process-only'
+          # Both samples kept (koniz-dev/flutter-starter#333, #621); the bricks
+          # step below then drops the Mason bricks.
+          - variant: keep-samples
+            flags: '--keep-samples'
     steps:
       # fetch-depth: 0 because the scope step diffs base..head. A shallow clone
       # has neither end of that range.
@@ -95,13 +95,13 @@ jobs:
       #   ios/**, and everything
       #   else not listed above   - not obviously inert, so it runs. Fail safe.
       #   docs/**/*.dart          - `analysis_options.yaml` does not exclude
-      #                             `docs/`, so an evidence probe committed there
-      #                             is analyzed like any other file.
+      #                             `docs/`, so a Dart file committed there is
+      #                             analyzed like any other file.
       #
       # Inert, and only these: `**/*.md` (no step reads markdown) and `docs/**`
-      # that is not `.dart` (evidence PNGs and logs). Every acceptance-evidence
-      # pull request this repository produces is exactly that, and used to cost
-      # about seven billed minutes across the three variants.
+      # that is not `.dart` (images and other assets). A docs-only pull request
+      # is exactly that, and would otherwise cost several billed minutes across
+      # the variants.
       #
       # Anything the step cannot resolve a diff for - workflow_dispatch, a brand
       # new branch, a force push that dropped `before` - fails SAFE and runs the
@@ -204,61 +204,22 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         run: dart run tool/strip_sample_features.dart --apply ${{ matrix.flags }}
 
-      # `flutter analyze` and `flutter test` only prove the stripped tree still
-      # builds. They would stay green if the process-only removals silently
-      # stopped happening, which is the whole point of the strip for an
-      # adopter, so assert the absence directly. Keep this list in step with
-      # `_processOnlyPaths` in tool/strip_sample_features.dart.
-      - name: Assert process-only artifacts are gone
-        if: steps.scope.outputs.run == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          leftovers=0
-          for path in \
-            .claude \
-            .github/workflows/issue-refs.yml \
-            docs/issue-workflow.md \
-            docs/verification \
-            scripts/bootstrap-issue-labels.sh \
-            scripts/dev/check_issue_refs.sh \
-            test/tooling/epic_coverage_test.dart \
-            tool/check_epic_coverage.dart
-          do
-            if [ -e "$path" ]; then
-              echo "still present after strip: $path"
-              leftovers=$((leftovers + 1))
-            fi
-          done
-          # Whole-line match only: tool/README.md documents the marker syntax
-          # inline, and that sentence is meant to survive.
-          marker='^[[:space:]]*<!-- strip:process-only (start|end) -->[[:space:]]*$'
-          if grep -rlE "$marker" --include='*.md' . ; then
-            echo "a process-only marker survived the strip"
-            leftovers=$((leftovers + 1))
-          fi
-          if [ "$leftovers" -ne 0 ]; then
-            echo "$leftovers process-only artifact(s) survived the strip."
-            exit 1
-          fi
-          echo "All process-only artifacts were removed."
-
-      # The process-only variant is the one an adopter keeping both samples
+      # The keep-samples variant is the one an adopter keeping both samples
       # uses. Exercise the two documented actions that turned `flutter test`
-      # red while the epic-coverage guard was still there (#333): generating
+      # red while an upstream-only guard was still on main (#333): generating
       # and committing a feature slice, and removing bricks/ and mason.yaml
       # the way the README says to: --remove-bricks, which also drops the
       # docs that link into them, so the links must still resolve
       # (koniz-dev/flutter-starter#588).
-      - name: Generate a feature slice and drop the bricks (process-only)
-        if: steps.scope.outputs.run == 'true' && matrix.variant == 'process-only'
+      - name: Generate a feature slice and drop the bricks (keep-samples)
+        if: steps.scope.outputs.run == 'true' && matrix.variant == 'keep-samples'
         shell: bash
         run: |
           set -euo pipefail
           test -d lib/features/tasks && test -d lib/features/feature_flags
           ./scripts/dev/create_feature.sh profile
           git add lib/features/profile test/features/profile
-          dart run tool/strip_sample_features.dart --apply --process-only --remove-bricks
+          dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks
           # No `| head` here: under pipefail its early exit SIGPIPEs the
           # writer and fails the step with exit 141.
           printf 'features: %s\n' "$(cd lib/features && echo *)"
