@@ -39,7 +39,7 @@ forbidden_paths=(
 )
 
 # Upstream-process vocabulary that must not appear in main's files.
-vocabulary='status:(todo|in-progress|blocked|needs-uat)|priority:P[0-3]|epic:[a-z]|needs-uat|issue-workflow|\.claude/agents|process-only|run_acceptance|bootstrap-issue-labels|check_issue_refs|issue-refs\.yml|epic_coverage'
+vocabulary='status:(todo|in-progress|blocked|needs-uat)|priority:P[0-3]|epic:[a-z]|needs-uat|issue-workflow|\.claude/agents|process-only|run_acceptance|bootstrap-issue-labels|check_issue_refs|issue-refs\.yml|epic[-_ ]coverage'
 
 status=0
 
