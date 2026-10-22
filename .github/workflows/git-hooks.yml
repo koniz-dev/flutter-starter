@@ -29,9 +29,15 @@ concurrency:
 permissions:
   contents: read
 
+# Template repository only. This job tests the starter's own tooling, so a
+# repository created from the template ("Use this template") skips it unless
+# someone runs it by hand: `github.event.repository.is_template` is true only
+# in the template itself. Delete this workflow if your project does not keep
+# the tooling it tests.
 jobs:
   pre-commit:
     name: pre-commit hook in a fresh clone
+    if: github.event.repository.is_template || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:

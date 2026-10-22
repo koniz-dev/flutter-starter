@@ -30,9 +30,15 @@ concurrency:
 permissions:
   contents: read
 
+# Template repository only. This job tests the starter's own tooling, so a
+# repository created from the template ("Use this template") skips it unless
+# someone runs it by hand: `github.event.repository.is_template` is true only
+# in the template itself. Delete this workflow if your project does not keep
+# the tooling it tests.
 jobs:
   release-scripts:
     name: release scripts (${{ matrix.os }})
+    if: github.event.repository.is_template || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:

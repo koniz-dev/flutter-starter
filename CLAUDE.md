@@ -102,7 +102,7 @@ workflows' `pull_request` triggers drift apart:
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, `tool/doc_symbols.dart`, `tool/doc_env_runs.dart`, `tool/doc_dart_defines.dart`, `tool/doc_test_paths.dart`, `lib/core/config/dart_defines.dart`, or the workflow itself (`.github/workflows/docs-check.yml`) |
 | [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
-| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x5) | **every** PR; strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed <!-- strip:strip-tool line --> |
+| [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x5) | **every** PR in the template repository (in a repository created from it, the job reports as skipped); strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed <!-- strip:strip-tool line --> |
 
 `ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117 and filters
 inside the job instead ("Decide the gate scope", koniz-dev/flutter-starter#167),

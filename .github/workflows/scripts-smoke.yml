@@ -24,6 +24,10 @@
 # Manual by design: an Android release build plus a Windows Flutter setup is
 # far too expensive to put on every push. Run it after touching
 # scripts/ci/build_all.sh, either create_feature script, or the setup brick.
+#
+# In a project created from the template, setup-brick and manual-rename start
+# from the `flutter_starter` package name, so they only mean something before
+# your rename; build-all and scaffold-parity stay useful.
 name: Scripts smoke
 
 on:
