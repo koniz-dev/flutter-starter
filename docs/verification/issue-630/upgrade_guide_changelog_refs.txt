@@ -1,4 +1,4 @@
-# git grep -n -i changelog origin/main -- docs/guides/migration/upgrading-this-starter.md
+# git grep -n -i changelog origin/main -- docs/guides/migration/upgrading-this-starter.md  (after #643)
 docs/guides/migration/upgrading-this-starter.md:30:Then read [the starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md) from your version onwards. Your own
 docs/guides/migration/upgrading-this-starter.md:31:`CHANGELOG.md` records your project's releases, not the starter's.
 docs/guides/migration/upgrading-this-starter.md:36:1. **[The starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md)** - Lists all changes, including breaking changes
@@ -9,4 +9,4 @@ docs/guides/migration/upgrading-this-starter.md:281:  - [ ] Read the starter's c
 docs/guides/migration/upgrading-this-starter.md:315:linked from the starter's changelog.
 docs/guides/migration/upgrading-this-starter.md:359:- Review the starter's changelog
 docs/guides/migration/upgrading-this-starter.md:392:   - Check the starter's changelog
-docs/guides/migration/upgrading-this-starter.md:406:- [CHANGELOG.md](../../../CHANGELOG.md) - Complete change history
+docs/guides/migration/upgrading-this-starter.md:406:- [The starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md) - Every change to the starter, including breaking ones
