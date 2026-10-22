@@ -1,4 +1,4 @@
-// Regression cover for koniz-dev/flutter-starter#169.
+// Regression cover: a logout that lands during a token refresh.
 //
 // A logout that landed while a token refresh was in flight used to be silently
 // undone: the refresh resolved *after* the teardown and re-persisted a live
@@ -18,7 +18,7 @@
 // hand-written stub could not see the two repository writes at all, which is
 // exactly where two thirds of the bug lived.
 //
-// Nothing here synchronises on wall-clock time (the lesson of #121): the
+// Nothing here synchronises on wall-clock time, which proved flaky: the
 // refresh is held open by a `Completer` the test releases, so "the logout
 // happened while the refresh was in flight" is a happens-before rather than a
 // bet on machine load. Both storage fakes are in-memory, because an unmocked
@@ -321,12 +321,12 @@ void main() {
         expect(
           tokens.refreshToken,
           isNull,
-          reason: 'a refresh token outliving an explicit logout is #52 again',
+          reason: 'a refresh token must not outlive an explicit logout',
         );
         // Nothing was replayed with the dead session's credentials...
         expect(retryAdapter.hits, 0);
         // ...and the request that triggered the refresh still completed rather
-        // than hanging - rejection is completion (#59 still holds).
+        // than hanging - rejection is completion.
         expect(outcome, isA<DioException>());
       },
     );
@@ -360,7 +360,7 @@ void main() {
               'a drained request put the previous session on the wire after '
               'logout',
         );
-        // Every handler completed; none was left dangling (#59 still holds),
+        // Every handler completed; none was left dangling,
         // and all three were rejected rather than resolved.
         expect(outcomes, hasLength(3));
         expect(outcomes.whereType<DioException>(), hasLength(3));
@@ -370,8 +370,8 @@ void main() {
     );
 
     // Criterion 4 used to drive the `X-Retry-Count: 1` branch, which forced a
-    // logout while another refresh was in flight. That branch is gone
-    // (koniz-dev/flutter-starter#315): a caller-sent header now queues behind
+    // logout while another refresh was in flight. That branch is gone:
+    // a caller-sent header now queues behind
     // the in-flight refresh like any other 401, and the interceptor's
     // remaining forced logouts all run inside the refresh's own flow.
     test(
@@ -415,8 +415,9 @@ void main() {
         gate.release.complete();
         await _within(pending);
 
-        // Put the user blob back by hand. #85's second check - "a session
-        // needs the blob as well as the token" - is now doing nothing, and
+        // Put the user blob back by hand. Session restore's second check -
+        // "a session needs the blob as well as the token" - is now doing
+        // nothing, and
         // the device is still signed out on the strength of the token alone.
         storage.values[AppConstants.userDataKey] = jsonEncode(
           _seededUser.toJson(),
@@ -505,7 +506,7 @@ void main() {
       },
     );
 
-    // koniz-dev/flutter-starter#368: the test above calls logout() first, and
+    // The test above calls logout() first, and
     // logout's own invalidate() hides a login() or register() that dropped
     // theirs. These two replace the credentials with no logout at all, so the
     // only thing standing between the stale refresh and the new tokens is the
@@ -554,7 +555,7 @@ void main() {
         final tokens = InMemoryTokenStore();
         final container = ProviderContainer(
           overrides: [
-            // The production seam wiring (koniz-dev/flutter-starter#221):
+            // The production seam wiring:
             // without it the interceptor's refresh never reaches the real
             // repository and this test would prove less than it reads.
             ...authModuleOverrides,

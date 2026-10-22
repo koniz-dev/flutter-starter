@@ -1,5 +1,5 @@
 // setup_ci.dart must enable exactly one deploy option, and a deploy run that
-// built nothing must not go green (koniz-dev/flutter-starter#334).
+// built nothing must not go green.
 //
 // The deploy workflows document tag-push and main-push deploys as
 // alternatives, but their commented `push:` block lists both, and

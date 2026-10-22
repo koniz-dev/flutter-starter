@@ -24,7 +24,7 @@ class _TestAuthNotifier extends AuthNotifier {
   AuthState build() => _initial;
 }
 
-// Since #51 the guard holds the requested location while
+// The guard holds the requested location while
 // `sessionRestorationProvider` is loading instead of bouncing to `/login` -
 // otherwise every returning user flashes the login screen. A widget test with
 // no mock storage channel never settles the real restore

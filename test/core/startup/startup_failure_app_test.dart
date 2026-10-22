@@ -3,9 +3,9 @@ import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  // Criterion 7 of #60. A migration failure used to throw before `runApp`,
+  // A migration failure used to throw before `runApp`,
   // so the user got a black window on every launch with no recovery path.
-  group('StartupFailureApp (#60)', () {
+  group('StartupFailureApp', () {
     testWidgets('renders a screen instead of an empty window', (tester) async {
       await tester.pumpWidget(
         const StartupFailureApp(error: 'migration exploded'),

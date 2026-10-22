@@ -1,6 +1,6 @@
 // The strip's markdown markers: every tag is validated before anything is
-// deleted, and a strip removes only the tags it was asked to
-// (koniz-dev/flutter-starter#409). Runs the tool in a scratch directory with
+// deleted, and a strip removes only the tags it was asked to.
+// Runs the tool in a scratch directory with
 // `--keep-samples`, the one mode that touches nothing but markdown and the
 // Mason bricks.
 
@@ -73,7 +73,7 @@ flags prose
     expect(out, contains('kept row'));
   });
 
-  group('--remove-bricks (koniz-dev/flutter-starter#588)', () {
+  group('--remove-bricks', () {
     const body = '''
 # Doc
 

@@ -24,7 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'acceptance_helpers.dart';
 
-/// Visual evidence for #52: what the app shows after a logout whose remote
+/// Visual evidence: what the app shows after a logout whose remote
 /// call failed. Before the fix the local session survived and the app stayed
 /// on home; it now lands on login with the failure surfaced.
 ///
@@ -91,7 +91,7 @@ class _FailingRemoteDataSource implements AuthRemoteDataSource {
 }
 
 void main() {
-  group('failed logout acceptance (#52)', () {
+  group('failed logout acceptance', () {
     testWidgets('a logout whose remote call fails still lands on login', (
       tester,
     ) async {
@@ -112,8 +112,7 @@ void main() {
         ..refresh = 'refresh-token';
 
       // Built through createAppContainer, as lib/main.dart builds it, so the auth
-      // slice's authModuleOverrides fill core's session seams
-      // (koniz-dev/flutter-starter#288).
+      // slice's authModuleOverrides fill core's session seams.
       final container = createAppContainer(
         overrides: [
           authLocalDataSourceProvider.overrideWithValue(localDataSource),
@@ -171,7 +170,7 @@ void main() {
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(HomeScreen), findsNothing);
       // The login screen renders the failure in the user's language, not the
-      // log text kept in `error` (koniz-dev/flutter-starter#414).
+      // log text kept in `error`.
       expect(
         find.text(
           lookupAppLocalizations(const Locale('en')).failureNoConnection,

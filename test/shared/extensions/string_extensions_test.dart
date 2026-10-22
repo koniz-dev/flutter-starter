@@ -20,9 +20,9 @@ void main() {
         expect('user @example.com'.isValidEmail, isFalse);
       });
 
-      // koniz-dev/flutter-starter#261: the extension must agree with
-      // Validators.isValidEmail on the koniz-dev/flutter-starter#63 cases.
-      test('agrees with Validators.isValidEmail on the #63 case table', () {
+      // The extension must agree with Validators.isValidEmail on its
+      // regression cases.
+      test('agrees with Validators.isValidEmail on its case table', () {
         const cases = <String, bool>{
           'user@example..com': false,
           'user@-example.com': false,

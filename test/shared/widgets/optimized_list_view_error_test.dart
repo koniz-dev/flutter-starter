@@ -1,4 +1,4 @@
-// Regression tests for koniz-dev/flutter-starter#65, criterion 2.
+// Regression tests: a failed load is distinguishable from an empty one.
 //
 // An empty list must not look the same whether the load succeeded with no
 // results or failed outright.

@@ -12,7 +12,7 @@ import '../../helpers/pump_app.dart';
 // Screen-level navigation, driven through the *app's* router rather than a
 // router assembled in this file. `login_screen.dart` and `register_screen.dart`
 // called `context.go` and `context.pop` from `package:go_router` directly
-// until #177 moved them onto `NavigationExtensions`; the point of these tests
+// until they moved onto `NavigationExtensions`; the point of these tests
 // is that the move changed nothing a user can observe.
 //
 // Only auth routes are exercised here, because every strip variant keeps the

@@ -28,8 +28,8 @@ class _TestAuthNotifier extends AuthNotifier {
 }
 
 // Reachability, not route-table shape: this pumps the *app's* router and
-// asserts the debug screen renders. Until #56 `AppRoutes.featureFlagsDebug`
-// and `context.goToFeatureFlagsDebug()` existed while `routes_registry.dart`
+// asserts the debug screen renders. `AppRoutes.featureFlagsDebug` and
+// `context.goToFeatureFlagsDebug()` once existed while `routes_registry.dart`
 // registered no route for either.
 
 void main() {

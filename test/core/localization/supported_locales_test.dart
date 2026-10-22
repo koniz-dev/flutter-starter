@@ -1,4 +1,4 @@
-// Regression tests for koniz-dev/flutter-starter#65, criteria 8, 10 and 12.
+// Regression tests: locale parsing and the single supported-locales list.
 import 'dart:convert';
 import 'dart:io';
 

@@ -1,5 +1,5 @@
-// LocaleNotifier.locale's setter is in-memory only
-// (koniz-dev/flutter-starter#545). Its doc used to say it "persists the
+// LocaleNotifier.locale's setter is in-memory only.
+// Its doc used to say it "persists the
 // preference to storage"; it never did. Persisting is
 // LocalizationService.setCurrentLocale's job.
 

@@ -1,4 +1,4 @@
-// The DI graph after koniz-dev/flutter-starter#221 removed the
+// The DI graph after removing the
 // `lib/core/di/providers.dart` <-> `lib/features/auth/di/auth_providers.dart`
 // import cycle.
 //
@@ -67,7 +67,7 @@ void main() {
     return container;
   }
 
-  group('the runtime graph survived breaking the import cycle (#221)', () {
+  group('the runtime graph survived breaking the import cycle', () {
     test(
       'the AuthInterceptor installed in ApiClient is the one '
       'authInterceptorProvider returns',
@@ -115,7 +115,7 @@ void main() {
 
         // The interceptor half is private, so it is asserted through
         // behaviour: only an interceptor holding *this* instance can move
-        // this counter (koniz-dev/flutter-starter#169).
+        // this counter.
         final apiClient = container.read(apiClientProvider)
           ..dio.httpClientAdapter = _UnauthorizedAdapter();
 

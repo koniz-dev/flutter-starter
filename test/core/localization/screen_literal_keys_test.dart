@@ -1,8 +1,7 @@
-// An ARB key for the HomeScreen hint, which shipped hard-coded in English
-// (koniz-dev/flutter-starter#352). #513 switches the screen over; this pins
-// that every locale carries a real translation for it to switch to.
+// An ARB key for the HomeScreen hint, which shipped hard-coded in English.
+// This pins that every locale carries a real translation for the screen to use.
 //
-// The task detail screen's 'Task not found' needs no key: since #448 the
+// The task detail screen's 'Task not found' needs no key: the
 // not-found state renders NotFoundFailure through failureNotFound, so the
 // literal only ever reaches Failure.message, never the screen.
 

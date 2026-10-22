@@ -1,5 +1,5 @@
-// API_SEND_TIMEOUT and API_TIMEOUT were documented, parsed and never applied
-// (koniz-dev/flutter-starter#280): ApiClient set only connect and receive
+// API_SEND_TIMEOUT and API_TIMEOUT were documented, parsed and never applied:
+// ApiClient set only connect and receive
 // timeouts, and nothing read AppConfig.apiTimeout. These tests load a `.env`
 // with distinctive values and assert both reach the wire.
 

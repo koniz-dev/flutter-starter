@@ -49,7 +49,7 @@ class _RecordingHttpCache implements IHttpResponseCache {
 /// told about it.
 typedef _ThrownCase = ({String label, Object thrown, String expectedMessage});
 
-/// `on Exception` was half the defect (#168): an [Error] thrown by a teardown
+/// `on Exception` was half the defect: an [Error] thrown by a teardown
 /// step escaped raw *and* skipped the step after it, so every independence
 /// assertion has to be made for both.
 final _thrownCases = <_ThrownCase>[
@@ -174,7 +174,7 @@ void main() {
         expect(failure?.message, 'Network error');
       });
 
-      // koniz-dev/flutter-starter#181: the forced-logout decision now reads
+      // The forced-logout decision reads
       // `failure.code` alone, so the layer that knows what the round trip
       // meant has to say so. These three pin which outcomes carry the tag.
       test(
@@ -246,7 +246,7 @@ void main() {
         },
       );
 
-      // koniz-dev/flutter-starter#384. RFC 6749 section 5.2 answers a revoked
+      // RFC 6749 section 5.2 answers a revoked
       // or expired refresh token with 400 invalid_grant, and many servers use
       // 403; both arrived as an untagged ServerFailure, indistinguishable from
       // a 503, so a dead refresh token never ended the session.
@@ -428,7 +428,7 @@ void main() {
         verify(() => mockLocalDataSource.clearCache()).called(1);
       });
 
-      // Regression for #52. This test predates the fix and set up exactly
+      // Regression. This test predates the fix and set up exactly
       // this scenario, but asserted only on the Result - so it passed while
       // clearCache() was never reached and the tokens stayed on the device.
       // The two verify() calls are the assertions it was missing.
@@ -515,7 +515,7 @@ void main() {
         expect(result.failureOrNull?.message, 'Keychain locked');
       });
 
-      // Regression for koniz-dev/flutter-starter#168 criteria 1 and 3.
+      // Regression: each local teardown step runs on its own.
       //
       // The two local teardown steps used to share one `try`, so the first to
       // throw skipped the second: every `http_cache_*` body survived a logout
@@ -527,7 +527,7 @@ void main() {
       // (evidence:docs/verification/issue-168/counterfactual.log): against the chained
       // pre-fix body both cases below fail on `httpCache.clearCalls`, which is
       // 0 rather than 1.
-      group('local teardown steps are independent (#168)', () {
+      group('local teardown steps are independent', () {
         for (final failure in _thrownCases) {
           test(
             'a local teardown throwing ${failure.label} must not skip the '
@@ -704,7 +704,7 @@ void main() {
         expect(result.dataOrNull, isNull);
       });
 
-      // Regression for #85: the cold-start restore reads this method, so a
+      // Regression: the cold-start restore reads this method, so a
       // cached user with no token here is what booted a credential-less
       // device straight into the authenticated shell.
       test('should return null User when the token is gone but the user blob '
@@ -757,7 +757,7 @@ void main() {
         verifyNever(() => mockLocalDataSource.getCachedUser());
       });
 
-      // #85 criterion 2: an unreadable token store must surface as a modelled
+      // An unreadable token store must surface as a modelled
       // failure, not an escaping throw on the boot path.
       test('should return failure when the token store throws', () async {
         // Arrange
@@ -827,7 +827,7 @@ void main() {
         expect(result.dataOrNull, isFalse);
       });
 
-      // Regression for #52 criterion 5: AuthInterceptor's forced logout clears
+      // Regression: AuthInterceptor's forced logout clears
       // tokens, and reading the user blob alone reported that as a live
       // session.
       test('should return false when the token is gone but the user blob '
@@ -865,7 +865,7 @@ void main() {
         expect(result.dataOrNull, isFalse);
       });
 
-      // #85 criterion 4: the guard and the boot path must answer the same
+      // The guard and the boot path must answer the same
       // question. Every storage combination, one predicate.
       test('should agree with getCurrentUser on every storage state', () async {
         const userModel = UserModel(id: '1', email: 'test@example.com');

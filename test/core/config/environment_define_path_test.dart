@@ -1,11 +1,10 @@
 // The dart-define path of ENVIRONMENT, with no `.env` loaded: trimmed,
-// lower-cased and checked against the known three exactly as a `.env` value is
-// (koniz-dev/flutter-starter#321).
+// lower-cased and checked against the known three exactly as a `.env` value is.
 //
 // It has a file of its own because it needs `EnvConfig` uninitialized, and
 // every test in unknown_environment_test.dart loads a `.env`. There it relied
-// on running first, which a shuffled order breaks
-// (koniz-dev/flutter-starter#602). `flutter test` runs each file in its own
+// on running first, which a shuffled order breaks.
+// `flutter test` runs each file in its own
 // isolate, so nothing here can have loaded one.
 //
 // Run with --dart-define=ENVIRONMENT=prod or ="production " to exercise a

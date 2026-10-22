@@ -162,7 +162,7 @@ void main() {
       });
     });
 
-    // Criterion 2 of issue #82: honouring alpha must not re-baseline the
+    // Honouring alpha must not re-baseline the
     // palette. These are the colours a real renderer painted, sampled out of
     // the committed goldens in evidence:docs/verification/issue-55/pixel-sample.log,
     // with the ratios that log recorded. They are literals rather than theme

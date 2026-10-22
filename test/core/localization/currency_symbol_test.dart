@@ -1,5 +1,4 @@
-// formatCurrency with an explicit currency code must use intl's symbol
-// (koniz-dev/flutter-starter#327).
+// formatCurrency with an explicit currency code must use intl's symbol.
 //
 // A 14-entry hand-written table overrode intl and fell back to the bare ISO
 // code, so VND - the currency of the app's own vi locale - printed as

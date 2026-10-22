@@ -1,4 +1,4 @@
-// Regression test for koniz-dev/flutter-starter#65, criterion 1.
+// Regression test: no local `FocusManager` may shadow Flutter's.
 //
 // This file imports `package:flutter/material.dart` and
 // `accessibility_widgets.dart` **without a prefix** and uses

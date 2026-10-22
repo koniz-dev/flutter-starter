@@ -26,7 +26,7 @@ class MockStorageService extends Mock implements StorageService {}
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 /// Signed-out token store: `CacheInterceptor` reads the auth interceptor's
-/// store to decide whether a response may be cached (#77), so the mock has to
+/// store to decide whether a response may be cached, so the mock has to
 /// expose a real one.
 class StubTokenStore implements ITokenStore {
   @override
@@ -148,7 +148,6 @@ void main() {
         // ErrorInterceptor.onError calls handler.reject(), which terminates
         // the chain. It must therefore be registered last, or retry, 401
         // refresh, performance teardown and error logging never run.
-        // Refs koniz-dev/flutter-starter#46.
         final interceptors = apiClient.dio.interceptors.toList();
 
         expect(interceptors, hasLength(5));
@@ -182,7 +181,7 @@ void main() {
             'ImplyContentTypeInterceptor',
           );
           // PerformanceInterceptor after Auth and Retry, so a trace records
-          // how the request finally ended (#298).
+          // how the request finally ended.
           expect(interceptors[1], isA<CacheInterceptor>());
           expect(interceptors[2], same(authInterceptor));
           expect(interceptors[3], isA<RetryInterceptor>());
@@ -209,7 +208,7 @@ void main() {
     });
   });
 
-  // koniz-dev/flutter-starter#369: the groups these replace only asserted that
+  // The groups these replace only asserted that
   // the non-nullable `dio` was non-null, so they could not fail. Each test
   // below sends a real request through the real interceptor chain and asserts
   // on what reached the transport.

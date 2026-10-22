@@ -1,5 +1,5 @@
 // scripts/ci/build_all.sh --analyze-size must report what it built, and build
-// only the configured app (koniz-dev/flutter-starter#335).
+// only the configured app.
 //
 // Production builds only an App Bundle, but the analysis looked only for an
 // APK, so it reported nothing; the comparison bundle was built without the

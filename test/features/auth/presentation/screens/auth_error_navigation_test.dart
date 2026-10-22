@@ -1,5 +1,4 @@
-// An auth error belongs to the screen that raised it
-// (koniz-dev/flutter-starter#347).
+// An auth error belongs to the screen that raised it.
 //
 // Both auth screens render the one keepAlive AuthNotifier state, so a failed
 // login followed by the "Register" link opened the register form with the

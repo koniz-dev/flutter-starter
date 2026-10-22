@@ -1,5 +1,4 @@
-// ApiClient.patch and per-request cancellation
-// (koniz-dev/flutter-starter#316).
+// ApiClient.patch and per-request cancellation.
 //
 // The facade had get/post/put/delete only, though NetworkMethod.patch exists,
 // and no way to cancel a request, though AuthInterceptor already threads the

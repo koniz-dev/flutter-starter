@@ -91,7 +91,7 @@ void main() {
       light.colorScheme.error,
       ratio: 5.61,
     ),
-    // Text pairs (koniz-dev/flutter-starter#350): validation errors and the
+    // Text pairs: validation errors and the
     // auth error render colorScheme.error as text, TextButton labels and
     // section headers render colorScheme.primary as text.
     _Pair(
@@ -193,7 +193,7 @@ void main() {
       dark.colorScheme.error,
       ratio: 6.75,
     ),
-    // Text pairs (#350). Before the fix: error 4.14 on the background and
+    // Text pairs. Before the fix: error 4.14 on the background and
     // 3.68 on the surface, primary 3.59 on the background.
     _Pair(
       'error as text on background',
@@ -335,7 +335,7 @@ void main() {
       for (final pair in pairs) {
         test('${pair.name} meets ${pair.minimum}:1', () {
           // getContrastRatio composites a translucent foreground over the
-          // background and rejects a translucent background outright (#82), so
+          // background and rejects a translucent background outright, so
           // these assertions are no longer load-bearing for correctness. They
           // stay as a palette rule: a theme token that ships translucent hides
           // its real contrast behind whatever happens to be painted below it,

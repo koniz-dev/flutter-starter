@@ -14,7 +14,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-// koniz-dev/flutter-starter#414: AuthNotifier stored `failure.message` - the
+// AuthNotifier used to store `failure.message` - the
 // English text DioExceptionMapper builds for logs, sometimes with dio's own
 // wording appended - and both auth screens rendered it verbatim, so a
 // Vietnamese user saw "Connection error: ..." instead of their language.

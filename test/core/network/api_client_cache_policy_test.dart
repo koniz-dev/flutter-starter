@@ -3,7 +3,7 @@
 // an authenticated response, never crosses identities, and is emptied by the
 // logout path.
 //
-// Regression cover for koniz-dev/flutter-starter#77. Before the fix,
+// Regression cover. Before the fix,
 // CacheInterceptor decided whether to bypass the cache by looking for an
 // `Authorization` header on the outgoing RequestOptions. It sits at index 1
 // and AuthInterceptor at index 2, and dio runs onRequest in registration
@@ -276,7 +276,7 @@ void main() {
     )..dio.httpClientAdapter = adapter;
   }
 
-  group('HTTP cache never stores an authenticated response (#77)', () {
+  group('HTTP cache never stores an authenticated response', () {
     test('an authenticated GET is never written to storage', () async {
       tokenStore.accessToken = 'user-a-access-token';
       final adapter = _CountingAdapter([
@@ -335,7 +335,7 @@ void main() {
     );
   });
 
-  group('cache guard does not depend on interceptor order (#77)', () {
+  group('cache guard does not depend on interceptor order', () {
     test(
       'CacheInterceptor still precedes AuthInterceptor, so the guard must '
       'not be header-derived',
@@ -353,7 +353,7 @@ void main() {
             .where((t) => '$t' != 'ImplyContentTypeInterceptor')
             .toList();
 
-        // The registered order is unchanged from #46: ErrorInterceptor last.
+        // The registered order is unchanged: ErrorInterceptor last.
         expect(types, [
           CacheInterceptor,
           AuthInterceptor,
@@ -406,7 +406,7 @@ void main() {
     );
   });
 
-  group('cache never crosses identities (#77)', () {
+  group('cache never crosses identities', () {
     test(
       "a second identity never sees the first identity's cached body",
       () async {
@@ -451,7 +451,7 @@ void main() {
     );
   });
 
-  group('logout empties the HTTP response cache (#77)', () {
+  group('logout empties the HTTP response cache', () {
     test(
       'a cached body is dropped by the logout path and the next identical GET '
       'goes to the network',

@@ -1,5 +1,5 @@
 // Every `flutter build` in a workflow must run after the bundled-secrets
-// guard (koniz-dev/flutter-starter#336).
+// guard.
 //
 // tool/check_env_assets.dart refuses a tree that would ship `.env` as a
 // Flutter asset, but only the deploy workflows ran it; build.yml uploads a
@@ -7,7 +7,7 @@
 // job and fails when a `flutter build` line comes before the guard in its job.
 //
 // The two Fastfiles build release artifacts too, so they get the same check
-// lane by lane (koniz-dev/flutter-starter#507).
+// lane by lane.
 
 import 'dart:io';
 
@@ -117,7 +117,7 @@ jobs:
     expect(problems.single, contains('flutter build web'));
   });
 
-  group('the Fastfiles (#507)', () {
+  group('the Fastfiles', () {
     for (final path in _fastfiles) {
       test('criterion 2: every flutter build in $path follows the guard in '
           'its lane', () {

@@ -1,5 +1,4 @@
-// ci.yml must fail when committed generated code drifts from its sources
-// (koniz-dev/flutter-starter#337).
+// ci.yml must fail when committed generated code drifts from its sources.
 //
 // Five .g.dart files had gone stale with nothing noticing: a provider was
 // edited without re-running build_runner, and the next adopter to regenerate

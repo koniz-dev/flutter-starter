@@ -23,7 +23,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
-/// Regression tests for #51: the persisted session was never read back, so
+/// Regression tests: the persisted session used to never be read back, so
 /// every cold start redirected a returning user to `/login`.
 ///
 /// These drive the real chain - local datasource -> repository -> use case ->
@@ -125,7 +125,7 @@ Future<GoRouter> _pumpRouter(
 Uri _location(GoRouter router) => router.routeInformationProvider.value.uri;
 
 void main() {
-  group('cold start session restore (#51)', () {
+  group('cold start session restore', () {
     late ProviderContainer container;
 
     tearDown(() => container.dispose());
@@ -253,7 +253,7 @@ void main() {
       when(
         () => store.getString(AppConstants.userDataKey),
       ).thenAnswer((_) async => '{ this is not json');
-      // The token is read first (#85), so it has to be readable for the
+      // The token is read first, so it has to be readable for the
       // corrupt blob below to be reached at all.
       final tokenStore = _MockTokenStore();
       when(tokenStore.getAccessToken).thenAnswer((_) async => 'valid-token');
@@ -301,16 +301,16 @@ void main() {
     });
   });
 
-  /// Regression tests for #85: the cold-start restore promoted a device to
+  /// Regression tests: the cold-start restore used to promote a device to
   /// authenticated on the cached user blob alone, never consulting the token
   /// store, so a device holding a stale blob with no credentials booted into
   /// the authenticated shell and then 401'd on every request.
   ///
-  /// These sit beside the #51 cases deliberately: the two issues pull in
+  /// These sit beside the read-back cases deliberately: the two fixes pull in
   /// opposite directions (restore more eagerly / restore less eagerly) and the
   /// only way to see that neither has been over-corrected is to read them
   /// together.
-  group('cold start requires a token, not just a cached user (#85)', () {
+  group('cold start requires a token, not just a cached user', () {
     late ProviderContainer container;
 
     tearDown(() => container.dispose());
@@ -424,7 +424,8 @@ void main() {
     testWidgets('a cached user with a readable token still lands on /', (
       tester,
     ) async {
-      // The other direction: #85 must not undo #51. An expired-but-present
+      // The other direction: refusing a token-less blob must not stop a
+      // real session from being restored. An expired-but-present
       // token is indistinguishable from a fresh one here by design (see
       // AuthNotifier.restoreSession), so "present" is the whole test.
       container = ProviderContainer(
@@ -447,7 +448,7 @@ void main() {
     });
   });
 
-  group('deep link survives the login round trip (#51)', () {
+  group('deep link survives the login round trip', () {
     late ProviderContainer container;
 
     tearDown(() => container.dispose());

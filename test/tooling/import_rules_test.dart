@@ -36,13 +36,13 @@ const kAllowedImportViolations = <String, Set<String>>{
   'domain_imports_outer_layer': <String>{},
   'cross_feature_import': <String>{},
 
-  // The one designated mapper outside `lib/core/network/`. Per
-  // koniz-dev/flutter-starter#176 it is intentional, not scheduled for a fix:
+  // The one designated mapper outside `lib/core/network/`. It is intentional,
+  // not scheduled for a fix:
   // it exists solely to translate `DioException` into a domain exception, and
   // rewriting it without the import would only move the import somewhere less
   // obvious. See docs/api/core/network.md, "Where dio is allowed to appear".
   //
-  // #176 already removed the other dio import this guard was specified with,
+  // The other dio import this guard was specified with is already gone,
   // in lib/features/auth/data/datasources/auth_remote_datasource.dart, so it
   // is absent here rather than seeded-and-deleted.
   'dio_outside_core_network': <String>{
@@ -52,16 +52,15 @@ const kAllowedImportViolations = <String, Set<String>>{
   // Empty, and it should stay that way. This guard was specified with three
   // seeded entries here - login_screen.dart, register_screen.dart and
   // task_detail_screen.dart, which navigated with raw `context.go()` /
-  // `context.pop()`. koniz-dev/flutter-starter#177 landed while this guard was
-  // being written and removed all three, so they are absent rather than
+  // `context.pop()`. A fix landed while this guard was being written and
+  // removed all three, so they are absent rather than
   // seeded-and-deleted.
   'go_router_outside_routing': <String>{},
 
   // Two survivors of the `core/*` -> `features/*` edge.
   //
   // There were three. `lib/core/di/providers.dart` is **gone from this list**
-  // because
-  // koniz-dev/flutter-starter#221 removed the edge: core now declares the
+  // because the edge is gone: core now declares the
   // 401-refresh seams and the auth slice fills them from
   // `authModuleOverrides`.
   //

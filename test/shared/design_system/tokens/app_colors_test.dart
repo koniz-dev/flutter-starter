@@ -4,8 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 // The exact-value expectations below were merged in from the duplicate
 // test/shared/theme/app_colors_test.dart, which imported this same subject
-// from a directory that mirrored nothing in lib/. See
-// koniz-dev/flutter-starter#184.
+// from a directory that mirrored nothing in lib/.
 void main() {
   group('AppColors Semantic Tokens Verification', () {
     test('Primary colors are valid objects', () {

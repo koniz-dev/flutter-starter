@@ -1,5 +1,4 @@
-// A login or register body the app cannot parse stays inside Result
-// (koniz-dev/flutter-starter#306).
+// A login or register body the app cannot parse stays inside Result.
 //
 // The generated fromJson casts with `as String`, so an int user id or a
 // missing token throws a TypeError. AuthRepositoryImpl caught only

@@ -1,5 +1,4 @@
-// A failed Keychain/Keystore delete must not be reported as a clean logout
-// (koniz-dev/flutter-starter#308).
+// A failed Keychain/Keystore delete must not be reported as a clean logout.
 //
 // SecureStorageService.remove swallows the platform error into `false`, and
 // SecureTokenStore's clear methods ignored that bool, so

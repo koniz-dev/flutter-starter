@@ -1,6 +1,6 @@
 // `check_docs --links` scans the markdown outside `docs/` too, and fails on a
-// link that leaves the repository (koniz-dev/flutter-starter#573, split from
-// #361: test/README.md had four `../../` links and nothing failed).
+// link that leaves the repository (test/README.md once had four `../../`
+// links and nothing failed).
 
 import 'dart:io';
 
@@ -89,8 +89,7 @@ void main() {
 
   // "The repository itself passes" is the Docs check's job on main, not a
   // unit test's: strip-smoke's keep-samples job deletes bricks/ and
-  // mason.yaml, which leaves links dangling in that tree
-  // (koniz-dev/flutter-starter#588).
+  // mason.yaml, which leaves links dangling in that tree.
 
   test(
     'criterion 3: the Docs check workflow triggers on every scanned file',

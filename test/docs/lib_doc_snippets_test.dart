@@ -1,5 +1,4 @@
-// Doc-comment examples in lib/ marked `// compile` must compile
-// (koniz-dev/flutter-starter#362).
+// Doc-comment examples in lib/ marked `// compile` must compile.
 //
 // The performance mixins' usage examples named a `PerformanceService` type
 // that does not exist, wrote `implements X with Y` (a syntax error), and in

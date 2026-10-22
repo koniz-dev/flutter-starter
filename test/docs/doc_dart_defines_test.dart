@@ -3,10 +3,10 @@
 // The security guide once built production with
 // `--dart-define=CERTIFICATE_FINGERPRINTS=...`, a key `DartDefines.values`
 // does not contain, so a release built from it shipped unpinned and nothing
-// failed (koniz-dev/flutter-starter#277). `tool/doc_dart_defines.dart` is the
+// failed. `tool/doc_dart_defines.dart` is the
 // rule that would have caught it; `tool/check_docs.dart` runs it on every
 // markdown diff, and this test runs it over the repository from the Quality
-// gate (koniz-dev/flutter-starter#379).
+// gate.
 
 import 'dart:io';
 
@@ -16,7 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../tool/doc_dart_defines.dart';
 
 /// The production build line from docs/guides/security/implementation.md
-/// before #277.
+/// as it stood before the fix.
 const _before = r'''
 ```bash
 flutter build apk --release \
@@ -25,7 +25,7 @@ flutter build apk --release \
 ```
 ''';
 
-/// The same line after #277.
+/// The same line after the fix.
 const _after = r'''
 ```bash
 flutter build apk --release \

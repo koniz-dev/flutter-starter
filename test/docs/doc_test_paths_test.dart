@@ -1,5 +1,4 @@
-// `flutter test <path>` in the docs must name a real file
-// (koniz-dev/flutter-starter#551, split from #360).
+// `flutter test <path>` in the docs must name a real file.
 
 import 'package:flutter_test/flutter_test.dart';
 

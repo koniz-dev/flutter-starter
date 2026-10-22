@@ -1,5 +1,5 @@
 // The Quality gate fails when its own pub get, analyze or test leave a tracked
-// file modified (koniz-dev/flutter-starter#608, split from #338). The
+// file modified. The
 // migrations Flutter applies on a fresh pub get are committed, so a diff
 // there means a new stable changed something, and the job says what to do.
 

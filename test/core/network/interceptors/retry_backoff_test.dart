@@ -1,7 +1,7 @@
 // RetryInterceptor's backoff doubles from the initial delay, keeps its
-// jitter under the bound, and treats a GET's sendTimeout as transient
-// (koniz-dev/flutter-starter#577, split from #376). The delays are measured
-// on fake_async's virtual clock, so the test sleeps through none of them.
+// jitter under the bound, and treats a GET's sendTimeout as transient.
+// The delays are measured on fake_async's virtual clock, so the test sleeps
+// through none of them.
 
 import 'dart:async';
 import 'dart:typed_data';

@@ -1,7 +1,6 @@
 // The Quality gate runs the suite in a random order and names the seed, so an
-// order-dependent test fails a PR with a reproducible command
-// (koniz-dev/flutter-starter#462; #370 and #602 were order-dependent tests
-// that only a shuffled run exposed).
+// order-dependent test fails a PR with a reproducible command (two
+// order-dependent tests were once exposed only by a shuffled run).
 
 import 'dart:io';
 

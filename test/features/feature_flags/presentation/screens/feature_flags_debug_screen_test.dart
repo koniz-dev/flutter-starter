@@ -83,7 +83,7 @@ void main() {
     testWidgets('renders its strings from the es ARB, not hardcoded English', (
       tester,
     ) async {
-      // Arrange - koniz-dev/flutter-starter#264: the screen must read the
+      // Arrange - the screen must read the
       // l10n pipeline, so under `es` every visible string is the es value.
       final flag = FeatureFlag(
         key: 'test_flag',

@@ -1,8 +1,7 @@
-// A workflow that builds an Android release must provision a signing key
-// (koniz-dev/flutter-starter#344).
+// A workflow that builds an Android release must provision a signing key.
 //
-// android/app/build.gradle.kts refuses an unsigned or debug-signed release
-// (#132). build.yml mints a throwaway key for its release APK; the
+// android/app/build.gradle.kts refuses an unsigned or debug-signed release.
+// build.yml mints a throwaway key for its release APK; the
 // scripts-smoke build-all job ran scripts/ci/build_all.sh, which builds
 // release artifacts, without one, so it could not pass. This reads every
 // workflow job by job and fails when a job builds an Android release without

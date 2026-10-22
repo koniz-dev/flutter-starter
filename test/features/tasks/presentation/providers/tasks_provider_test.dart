@@ -172,7 +172,7 @@ void main() {
       });
     });
 
-    // koniz-dev/flutter-starter#180: the detail screen loads its task through
+    // The detail screen loads its task through
     // this method instead of reading `getTaskByIdUseCaseProvider` itself, so
     // both tasks screens reach their data through the same boundary.
     group('taskById', () {
@@ -391,7 +391,7 @@ void main() {
       });
     });
 
-    // koniz-dev/flutter-starter#346: the detail screen needs to know whether
+    // The detail screen needs to know whether
     // its save landed, so the mutations return the use case's result.
     group('mutation results', () {
       test('createTask reports a failure to its caller', () async {

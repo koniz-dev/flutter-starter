@@ -1,14 +1,14 @@
 // Forced logout - the 401 path through AuthInterceptor - must leave the same
 // device state as explicit AuthRepositoryImpl.logout().
 //
-// Regression cover for koniz-dev/flutter-starter#114. Before the fix,
+// Regression cover. Before the fix,
 // `AuthInterceptor._logoutUser()` cleared the tokens and the cached user blob
 // but held no reference to the HTTP response cache, so a session that ended by
 // token expiry left cached bodies on the device while a session the user ended
-// by tapping "log out" did not. #77 decided (its criterion 4) that a logout
-// clears the cache; only one of the two logout paths implemented that decision.
+// by tapping "log out" did not. The design says a logout clears the cache;
+// only one of the two logout paths implemented that decision.
 //
-// Scope of the leak, stated honestly: #77 also made `CacheInterceptor` refuse
+// Scope of the leak, stated honestly: `CacheInterceptor` also refuses
 // to store authenticated responses, so what forced logout left behind is
 // anonymous-scope entries - which still must not outlive a session boundary,
 // and which the sample code here can produce today (see the seeded `/public`
@@ -208,8 +208,7 @@ class _ScriptedAdapter implements HttpClientAdapter {
 /// removes it inside `AuthLocalDataSourceImpl.clearCache()`. Every other key -
 /// including every `http_cache_*` entry, which `CacheInterceptor.clearCache()`
 /// removes one at a time - is untouched, so the only difference the comparison
-/// can report is a step one path skipped and the other did not
-/// (koniz-dev/flutter-starter#168).
+/// can report is a step one path skipped and the other did not.
 class _BlobRemovalFailsStorage extends _InMemoryStorage {
   _BlobRemovalFailsStorage(this.thrown);
 
@@ -346,10 +345,10 @@ void main() {
         // cached user blob is part of the state under comparison.
         //
         // This is *not* the full `authInterceptorProvider` wiring, and saying
-        // so used to be wrong (koniz-dev/flutter-starter#168). Two
+        // so used to be wrong. Two
         // constructor arguments are deliberately omitted:
         //
-        // - `sessionSink:` (#127). The in-memory session is real state, but
+        // - `sessionSink:`. The in-memory session is real state, but
         //   `AuthRepositoryImpl.logout()` - the explicit path this file
         //   compares against - holds no `ISessionTerminationSink` at all; on
         //   that path `AuthNotifier` drops the session itself, a layer above
@@ -359,7 +358,7 @@ void main() {
         //   the boundary sits rather than of a logout step being skipped.
         //   `test/core/network/forced_logout_session_test.dart` covers the
         //   sink on the forced path, with its own counterfactual.
-        // - `sessionGeneration:` (#169). Production shares one counter
+        // - `sessionGeneration:`. Production shares one counter
         //   between the interceptor and the repository; here each gets its
         //   own default. It orders concurrent credential *writes* and leaves
         //   no trace in the persisted state this file snapshots.
@@ -407,7 +406,7 @@ void main() {
     );
   }
 
-  group('forced logout empties the HTTP response cache (#114)', () {
+  group('forced logout empties the HTTP response cache', () {
     test('criterion 1: a 401 whose refresh fails clears the cache', () async {
       final world = await seedSignedInWorld();
 
@@ -455,8 +454,7 @@ void main() {
       () async {
         // The refresh succeeds, and the server then refuses the token it just
         // issued: the replay's 401 is the other `_logoutUser()` call site.
-        // (It replaced the X-Retry-Count branch, removed in
-        // koniz-dev/flutter-starter#315.)
+        // (It replaced the X-Retry-Count branch, since removed.)
         final world = await seedSignedInWorld(
           refreshToken: () async => const Success('fresh-access-token'),
           replies: const [
@@ -477,7 +475,7 @@ void main() {
     );
   });
 
-  group('the two logout paths are equivalent (#114 criterion 3)', () {
+  group('the two logout paths are equivalent', () {
     test(
       'explicit logout() and forced _logoutUser() leave identical device state',
       () async {
@@ -527,7 +525,7 @@ void main() {
       },
     );
 
-    // koniz-dev/flutter-starter#168 criterion 4. The happy-path comparison
+    // The happy-path comparison
     // above never exercises a teardown step that throws, which is exactly
     // where the two paths had diverged: `_logoutUser()` guards each step
     // separately, while the explicit path chained them inside one `try`, so
@@ -543,7 +541,7 @@ void main() {
     ]) {
       test(
         'the two paths stay equivalent when the user-blob removal throws '
-        '${failure.label} (#168)',
+        '${failure.label}',
         () async {
           // The same injected failure on both sides, so any difference in the
           // final snapshots is again attributable to the logout path alone.
@@ -612,7 +610,7 @@ void main() {
     }
   });
 
-  group('cache clearing is best-effort (#114 criterion 4)', () {
+  group('cache clearing is best-effort', () {
     test('a throwing clearCache() still completes the handler', () async {
       final world = await seedSignedInWorld();
       final failingCache = _FailingResponseCache();
@@ -632,7 +630,7 @@ void main() {
     });
   });
 
-  group('the cache dependency is optional (#114 criterion 5)', () {
+  group('the cache dependency is optional', () {
     test(
       'an AuthInterceptor with no cache attached still forces a clean logout',
       () async {
@@ -665,13 +663,13 @@ void main() {
     );
   });
 
-  // koniz-dev/flutter-starter#303. AuthInterceptor treated every failed
+  // AuthInterceptor used to treat every failed
   // refresh as fatal, so one 401 that coincided with a timeout or a 503 on
   // the refresh endpoint wiped the tokens, the cached user and the HTTP cache
   // and signed the user out - although AuthRepositoryImpl tags exactly the
   // failures that mean the refresh token is dead, and leaves transport
   // trouble untagged so the session survives it.
-  group('a transient refresh failure leaves the session alone (#303)', () {
+  group('a transient refresh failure leaves the session alone', () {
     for (final (label, failure) in const [
       (
         'criterion 1: a RECEIVE_TIMEOUT',
@@ -750,7 +748,7 @@ void main() {
     test(
       'the code core matches on is the one the auth slice sets',
       () {
-        // Core may not import the feature (koniz-dev/flutter-starter#221), so
+        // Core may not import the feature, so
         // AuthInterceptor carries its own copy of the code. This pins the two
         // together: renaming one without the other fails here.
         expect(

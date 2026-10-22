@@ -151,7 +151,7 @@ flutter:
 
   group('parseAcknowledgedNames', () {
     // The grammar is the contract a reviewer reads a comment against, so every
-    // clause of it gets a case. koniz-dev/flutter-starter#170: it used to be a
+    // clause of it gets a case. It used to be a
     // raw `contains` against free-form prose.
     test('returns nothing when there is no marker', () {
       expect(parseAcknowledgedNames(''), isEmpty);
@@ -255,7 +255,7 @@ flutter:
       'catches a .env the asset list never names - the gap this closes',
       () {
         // The counterfactual. findDeclaredSecretAssets is exactly what the
-        // guard did before koniz-dev/flutter-starter#138: it reads the list,
+        // guard once did: it reads the list,
         // and the list says nothing about this file. The directory walk is
         // what sees it.
         final pubspec = fixture({
@@ -348,7 +348,7 @@ flutter:
     });
 
     test('an ack naming .env.example does not also cover a real .env', () {
-      // koniz-dev/flutter-starter#170, the whole bug in one case. Every env
+      // The whole bug in one case. Every env
       // file name is a prefix of a longer one, so the old substring test read
       // this truthful comment about .env.example as covering .env as well: the
       // guard exited 0 and a live secrets file shipped in the release APK, the
@@ -557,8 +557,8 @@ flutter:
     });
   });
 
-  group('every asset spelling Flutter accepts (#330)', () {
-    // koniz-dev/flutter-starter#330. The guard used to read only block-style
+  group('every asset spelling Flutter accepts', () {
+    // The guard used to read only block-style
     // `- <path>` lines, so each pubspec below exited 0 while
     // `flutter build bundle` copied the `.env` into build/flutter_assets/.
     // These drive `run`, which is `main` minus the process exit.
@@ -590,7 +590,7 @@ flutter:
 
     const secret = {'.env': 'SECRET=1\n'};
 
-    // koniz-dev/flutter-starter#398: the advice used to tell web adopters
+    // The advice used to tell web adopters
     // there was no dart-define path, steering them away from the fix.
     test('criterion 2: the failure advice does not claim web lacks '
         'dart-defines', () {

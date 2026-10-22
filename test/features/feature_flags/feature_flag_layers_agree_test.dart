@@ -1,5 +1,4 @@
-// The feature-flag layers must agree about one flag
-// (koniz-dev/flutter-starter#318).
+// The feature-flag layers must agree about one flag.
 //
 // `getFlag` used to read the local level without the flag's definition, so in
 // a debug build `enable_debug_menu` was `true (buildMode)` on the debug screen

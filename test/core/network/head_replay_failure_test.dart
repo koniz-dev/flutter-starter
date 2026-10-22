@@ -1,5 +1,4 @@
-// A failed 401 head replay is not a failed refresh
-// (koniz-dev/flutter-starter#304).
+// A failed 401 head replay is not a failed refresh.
 //
 // AuthInterceptor used to replay the original request inside the same `try`
 // as the refresh. When the refresh succeeded but the replay then hit a

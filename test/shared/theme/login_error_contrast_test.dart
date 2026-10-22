@@ -1,5 +1,5 @@
 // A validation error on LoginScreen must be readable: at least 4.5:1 against
-// what it is painted on, in both themes (koniz-dev/flutter-starter#350).
+// what it is painted on, in both themes.
 //
 // The error colour (#DC3545) read 4.30:1 on the light scaffold, and 4.14:1 on
 // the dark one. This reads the colour the framework actually paints - from

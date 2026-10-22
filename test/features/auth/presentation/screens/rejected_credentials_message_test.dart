@@ -1,10 +1,10 @@
 // A rejected login says the credentials are wrong, not that the session
-// ended (koniz-dev/flutter-starter#445).
+// ended.
 //
-// Since #309 a 401 on login is an AuthFailure, and every AuthFailure rendered
+// A 401 on login is an AuthFailure, and every AuthFailure rendered
 // failureAuth - "you're not signed in, or your session has ended". The
 // repository now tags a sign-in AuthFailure with
-// FailureCodes.invalidCredentials (#479). These tests drive the real
+// FailureCodes.invalidCredentials. These tests drive the real
 // AuthRepositoryImpl and AuthNotifier; only the remote data source is
 // replaced, and it rejects the credentials the way the network layer does: a
 // ServerException carrying 401.

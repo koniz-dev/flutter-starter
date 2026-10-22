@@ -67,7 +67,7 @@ void main() {
     });
 
     testWidgets('records the milliseconds elapsed since the trace started '
-        '(#326)', (tester) async {
+        '', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: _TestScreenWithMixin(

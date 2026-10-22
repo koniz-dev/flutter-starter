@@ -1,5 +1,5 @@
 // An ENVIRONMENT outside the three known names must be reported, not
-// silently treated as "none of them" (koniz-dev/flutter-starter#321).
+// silently treated as "none of them".
 //
 // `AppConfig.environment` was only lower-cased. `prod`, or `production` with
 // a trailing space, made isDevelopment, isStaging and isProduction all false,
@@ -48,8 +48,7 @@ void main() {
 
   // The dart-define path (no .env loaded) is checked in
   // environment_define_path_test.dart: every test here loads a .env, so a
-  // case needing none could only pass while it happened to run first
-  // (koniz-dev/flutter-starter#602).
+  // case needing none could only pass while it happened to run first.
 
   group('criterion 1: an unknown ENVIRONMENT is surfaced', () {
     for (final value in ['prod', 'qa', 'Production-EU']) {

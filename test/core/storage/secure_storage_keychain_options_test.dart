@@ -1,5 +1,4 @@
-// SecureStorageService's Keychain accessibility, pinned
-// (koniz-dev/flutter-starter#571, for #374).
+// SecureStorageService's Keychain accessibility, pinned.
 //
 // `first_unlock_this_device` keeps tokens off backups and new devices; a
 // downgrade to `first_unlock` lets them migrate. The plugin sends the iOS

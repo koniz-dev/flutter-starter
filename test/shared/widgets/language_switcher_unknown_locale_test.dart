@@ -1,4 +1,4 @@
-// Regression test for koniz-dev/flutter-starter#65, criterion 3.
+// Regression test: an unknown stored locale must not crash the switcher.
 //
 // `LocaleNotifier.locale` is a public, unvalidated setter fed from storage, so
 // a stale or hand-edited language code reaches the widgets. It used to hit a

@@ -1,5 +1,4 @@
-// A production build must log somewhere by default
-// (koniz-dev/flutter-starter#320).
+// A production build must log somewhere by default.
 //
 // File logging is the output meant for production, but it sat behind
 // ENABLE_LOGGING, whose default was false in production, so LoggingService
@@ -127,7 +126,7 @@ void main() {
             // LoggingService starts FileLogOutput.init() unawaited. Ending the
             // test before it has opened logs/app.log let tearDown delete the
             // directory underneath it, and the open then failed after the
-            // test had completed (koniz-dev/flutter-starter#418).
+            // test had completed.
             await fileOutputOpened();
           } else {
             // A staging release build: no file and no debug console, so

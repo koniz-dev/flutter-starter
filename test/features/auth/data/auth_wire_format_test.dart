@@ -1,5 +1,4 @@
-// The auth slice speaks one wire convention: snake_case
-// (koniz-dev/flutter-starter#312).
+// The auth slice speaks one wire convention: snake_case.
 //
 // It used to send `refresh_token` but read `refreshToken`, so a backend that
 // answered in the convention the app itself used had its refresh token parsed

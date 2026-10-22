@@ -1,6 +1,6 @@
 // EnvConfig's typed getters must follow the documented priority order -
 // .env, then --dart-define, then the default - when a .env is loaded that
-// lacks the key (koniz-dev/flutter-starter#322).
+// lacks the key.
 //
 // They used to ask dotenv for the key with `fallback: defaultValue`. dotenv
 // returns the fallback instead of throwing when the key is missing, so the

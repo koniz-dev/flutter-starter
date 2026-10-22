@@ -1,5 +1,5 @@
 // MigrationExecutor's guards, each pinned by a test that fails when the guard
-// is removed (koniz-dev/flutter-starter#372). The audit found all three
+// is removed. The audit found all three
 // survived their mutants: the final version-stamp check, the sort by
 // fromVersion, and the reset of a stored version below the initial one.
 

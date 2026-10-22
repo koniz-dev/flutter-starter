@@ -743,10 +743,10 @@ void main() {
       });
     });
 
-    // koniz-dev/flutter-starter#305: body fields were cast with `as String?`,
+    // Body fields used to be cast with `as String?`,
     // so a list `message` or a numeric `code` threw a TypeError inside
     // ErrorInterceptor and the 400 reached the caller as a network error.
-    group('bodies with non-String fields (#305)', () {
+    group('bodies with non-String fields', () {
       DioException badResponse(int status, Object? body) => DioException(
         requestOptions: requestOptions,
         type: DioExceptionType.badResponse,

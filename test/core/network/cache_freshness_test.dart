@@ -1,5 +1,4 @@
-// CacheConfig.maxAge must decide when the network is asked again
-// (koniz-dev/flutter-starter#310).
+// CacheConfig.maxAge must decide when the network is asked again.
 //
 // An entry older than maxAge but younger than maxStale was served straight
 // from the cache with no network attempt, so a user saw data up to seven

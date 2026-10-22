@@ -315,7 +315,7 @@ void main() {
       });
     });
 
-    // Before #53 this group held three verbatim duplicates of the tests above,
+    // This group used to hold three verbatim duplicates of the tests above,
     // every one of which ended in `expect(true, isTrue)` or
     // `expect(e, isNotNull)` inside a `catch`. Replacing the whole body of
     // `storageInitializationProvider` with `async {}` left all of them green.
@@ -413,8 +413,8 @@ void main() {
         // returning a success the next launch would contradict.
         removeSecureBackend();
 
-        // Read through the container `main()` actually builds
-        // (koniz-dev/flutter-starter#101). It opts out of Riverpod 3's default
+        // Read through the container `main()` actually builds.
+        // It opts out of Riverpod 3's default
         // retry, which would otherwise keep retrying this failure because
         // `MigrationExecutionException implements Exception` rather than
         // `Error` - and with `read(...future)` awaiting without listening, the

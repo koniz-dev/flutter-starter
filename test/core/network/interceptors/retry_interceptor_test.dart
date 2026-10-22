@@ -229,7 +229,7 @@ void main() {
     });
   });
 
-  // Regression cover for koniz-dev/flutter-starter#88.
+  // Regression cover: only safe methods are retried by default.
   group('RetryInterceptor idempotency gate', () {
     late _MockDio dio;
     late RetryInterceptor interceptor;

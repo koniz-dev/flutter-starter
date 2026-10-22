@@ -2,7 +2,7 @@
 //
 // API_SEND_TIMEOUT and API_TIMEOUT were documented, parsed, exposed as
 // AppConfig getters and unit-tested - and read by nothing, so setting them did
-// nothing (koniz-dev/flutter-starter#280). A getter test only proves a knob
+// nothing. A getter test only proves a knob
 // parses. This one proves each knob is wired: it fails when an AppConfig
 // getter that reads the environment is referenced by no file in lib/ outside
 // lib/core/config/. Derived predicates such as `isStaging` are not knobs and
@@ -14,12 +14,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 const _appConfigPath = 'lib/core/config/app_config.dart';
 
-/// Knobs known to be unread, each with the issue that owns it. The scan fails
+/// Knobs known to be unread, each with why it is unread. The scan fails
 /// if one of these gains a reader, so the entry is removed with the fix.
 const Map<String, String> _knownUnread = {
-  // Documented as "Reserved, not wired" by koniz-dev/flutter-starter#319.
-  'enableAnalytics': '#319',
-  'enableCrashReporting': '#319',
+  // Documented as "Reserved, not wired".
+  'enableAnalytics': 'reserved, not wired',
+  'enableCrashReporting': 'reserved, not wired',
 };
 
 /// Knobs whose only readers live in a sample feature that
@@ -99,8 +99,8 @@ void main() {
 
   test('the known-unread list holds only knobs that are still unread', () {
     final stale = [
-      for (final MapEntry(key: name, value: issue) in _knownUnread.entries)
-        if (!knobs.contains(name) || isRead(name)) '$name ($issue)',
+      for (final MapEntry(key: name, value: why) in _knownUnread.entries)
+        if (!knobs.contains(name) || isRead(name)) '$name ($why)',
     ];
 
     expect(

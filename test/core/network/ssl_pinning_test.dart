@@ -1,4 +1,4 @@
-// Regression cover for koniz-dev/flutter-starter#59.
+// Regression cover for SSL pinning.
 //
 // Two defects: the 401 replay client built its own bare Dio, so the freshly
 // minted access token travelled over an unpinned transport; and requesting
@@ -117,7 +117,7 @@ void main() {
       expect(off.createAdapter(), isNull);
     });
 
-    // Criterion 4 of #53. These assert the *wiring* of the pinning branch:
+    // These assert the *wiring* of the pinning branch:
     // which adapter an ApiClient ends up with, and what the installed
     // fingerprint check answers. Real TLS behaviour - an actual handshake
     // against a server presenting a mismatched certificate - is tier 3 and is
@@ -203,7 +203,7 @@ void main() {
     }
 
     test('installs the pinned adapter, and only when pinning is on', () {
-      // Criterion 4 of #53: the unpinned case is not "some IOHttpClientAdapter"
+      // The unpinned case is not "some IOHttpClientAdapter"
       // - Dio's default transport is one of those too. What separates them is
       // the createHttpClient hook, which only the pinned policy sets.
       final pinnedClient = buildClient(

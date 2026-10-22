@@ -1,5 +1,4 @@
-// test_coverage.sh must report the numbers CI enforces
-// (koniz-dev/flutter-starter#332).
+// test_coverage.sh must report the numbers CI enforces.
 //
 // Its --analyze figures came from `grep ... -A 1000`, which counted the next
 // thousand lines after every matching file, so other files' lines spilled

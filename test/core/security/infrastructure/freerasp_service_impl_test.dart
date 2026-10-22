@@ -1,14 +1,13 @@
 // Drives FreeRaspServiceImpl against freerasp's real Dart API with its
 // platform channels mocked, so a freerasp upgrade that changes how threats
-// reach the listener fails here rather than only on a device
-// (koniz-dev/flutter-starter#388).
+// reach the listener fails here rather than only on a device.
 //
 // The target platform is overridden to iOS. The shipped placeholder signing
 // hash fails freeRASP's Android config check, which runs in the
 // `AndroidConfig` constructor on 6.12 and 8.x alike and only when the target
 // platform is Android, so on Android startProtection() throws before the
-// listener is attached. That is koniz-dev/flutter-starter#317, not what is
-// under test here; the iOS placeholder passes freeRASP's iOS check. The
+// listener is attached. That is a separate limitation, not what is under
+// test here; the iOS placeholder passes freeRASP's iOS check. The
 // Dart-side wiring under test does not depend on the platform.
 
 import 'package:flutter/foundation.dart';
@@ -139,8 +138,7 @@ void main() {
     expect(threats, [SecurityThreat.debugger]);
   });
 
-  group('every freeRASP detection is forwarded or deliberately ignored '
-      '(#390)', () {
+  group('every freeRASP detection is forwarded or deliberately ignored', () {
     test('the wire-code table covers every Threat of the pinned freerasp', () {
       // A freerasp upgrade that adds a Threat fails here first: add its code
       // from ThreatX.fromInt, then map it or list it as ignored.
@@ -192,7 +190,7 @@ void main() {
           expect(threats, isEmpty, reason: _deliberatelyIgnored[threat]);
         } else {
           // A null ThreatCallback parameter is exactly how 13 detections were
-          // dropped without a trace before #390: nothing arrives at all.
+          // dropped without a trace before: nothing arrives at all.
           expect(threats, [_expected[threat]]);
         }
       });

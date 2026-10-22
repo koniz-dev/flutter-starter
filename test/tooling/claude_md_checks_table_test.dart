@@ -3,8 +3,8 @@
 // Sessions read that table to decide which checks to wait for before merging,
 // and nothing gates a merge on this repository. It drifted three ways: the
 // Docs check row missed trigger paths, a fifth PR workflow (build.yml's JDK 25
-// job) had no row, and the Strip count stayed at x3 after a fourth variant
-// (koniz-dev/flutter-starter#437). These tests read the workflows' real
+// job) had no row, and the Strip count stayed at x3 after a fourth variant.
+// These tests read the workflows' real
 // `pull_request` triggers and fail on any disagreement.
 
 import 'dart:io';

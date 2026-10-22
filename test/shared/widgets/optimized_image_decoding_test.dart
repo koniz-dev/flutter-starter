@@ -1,4 +1,4 @@
-// Regression tests for koniz-dev/flutter-starter#65, criterion 4.
+// Regression tests: images decode at the device pixel ratio.
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/optimized_image.dart';
 import 'package:flutter_test/flutter_test.dart';

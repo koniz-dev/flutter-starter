@@ -1,5 +1,4 @@
-// The testing guides' test-tree listings must match the real test/ tree
-// (koniz-dev/flutter-starter#572, split from #361).
+// The testing guides' test-tree listings must match the real test/ tree.
 //
 // Both described a test/integration/ directory that does not exist, put
 // integration_test/ inside test/ (it is at the repository root), and left out

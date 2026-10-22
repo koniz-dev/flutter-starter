@@ -2,7 +2,7 @@
 // prove the interceptor chain actually reaches retry, 401 refresh and the
 // performance trace teardown before ErrorInterceptor terminates it.
 //
-// Regression cover for koniz-dev/flutter-starter#46: ErrorInterceptor used to
+// Regression cover: ErrorInterceptor used to
 // be registered FIRST, and because dio runs onError handlers in registration
 // order, its handler.reject(...) terminated the chain before any of those ran.
 
@@ -389,7 +389,7 @@ void main() {
     // touches GET, so the storage mock is never called and the chain under
     // test stays isolated.
     //
-    // The retry case must use GET. Since #88, RetryInterceptor replays only
+    // The retry case must use GET. RetryInterceptor replays only
     // safe methods by default, so a POST would reach the transport once and
     // prove nothing about reachability. The GET path needs the cache lookup
     // stubbed to a miss (see below) but exercises the identical error chain.
@@ -425,10 +425,9 @@ void main() {
           thrown = e;
         }
 
-        // Criterion 1 of #46: RetryInterceptor is reachable on the error path.
+        // RetryInterceptor is reachable on the error path.
         expect(adapter.hits, 4);
-        // Criterion 3 of #46: ErrorInterceptor still maps the exhausted
-        // failure.
+        // ErrorInterceptor still maps the exhausted failure.
         expect(thrown, isA<ServerException>());
         expect((thrown! as ServerException).statusCode, 503);
         expect(thrown, isNot(isA<DioException>()));
@@ -508,13 +507,13 @@ void main() {
     });
   });
 
-  // koniz-dev/flutter-starter#298: a 401 that was refreshed and replayed
+  // A 401 that was refreshed and replayed
   // successfully was traced as a failed 401. PerformanceInterceptor used to
   // run first and stop the trace in its onError before AuthInterceptor
   // recovered, and the replay's 200 is resolved from onError, which ends the
   // host chain. The real replay client is used here (no retryDioFactory), so
   // the replay borrows the host transport and its PerformanceInterceptor.
-  group('the performance trace of a refreshed request (#298)', () {
+  group('the performance trace of a refreshed request', () {
     late _MockStorageService storageService;
     late _MockSecureStorageService secureStorageService;
     late _RecordingPerformanceService performance;
@@ -615,11 +614,11 @@ void main() {
     });
   });
 
-  // koniz-dev/flutter-starter#299: AuthInterceptor skipped the refresh for any
+  // AuthInterceptor used to skip the refresh for any
   // path that merely *contained* an auth endpoint, so an adopter route such as
   // /users/auth/login-history answered 401 with "please login again" while
   // every other route refreshed transparently.
-  group('which 401s trigger a refresh (#299)', () {
+  group('which 401s trigger a refresh', () {
     late _MockStorageService storageService;
     late _MockSecureStorageService secureStorageService;
 
@@ -688,8 +687,8 @@ void main() {
     }
   });
 
-  // Regression cover for koniz-dev/flutter-starter#88: retry became reachable
-  // for every method in #46, so a failing POST was replayed 4 times against a
+  // Regression cover: once retry became reachable on the error path it ran
+  // for every method, so a failing POST was replayed 4 times against a
   // degraded backend. Only safe methods are replayed now.
   group('ApiClient retry idempotency', () {
     late _MockStorageService storageService;
@@ -811,7 +810,7 @@ void main() {
     );
   });
 
-  // koniz-dev/flutter-starter#276. AuthInterceptor used to end the error chain
+  // AuthInterceptor used to end the error chain
   // whenever it gave up on a 401, so ErrorInterceptor never mapped it and the
   // caller got NetworkException("Instance of 'NetworkError'"). Every exit
   // below is one of the paths that used to do that.
@@ -874,8 +873,7 @@ void main() {
         expect(tokenStore.accessToken, isNull);
       });
 
-      // This exit replaced the X-Retry-Count branch, removed in
-      // koniz-dev/flutter-starter#315.
+      // This exit replaced the X-Retry-Count branch, since removed.
       test(
         'criterion 2: a replay the server refuses with 401',
         () async {
@@ -994,8 +992,8 @@ void main() {
     },
   );
 
-  // koniz-dev/flutter-starter#286. Once AuthInterceptor forwarded its failures
-  // down the chain (#276), a replay that failed transiently after a successful
+  // Once AuthInterceptor forwarded its failures
+  // down the chain, a replay that failed transiently after a successful
   // refresh reached RetryInterceptor, which re-sent it - carrying the bearer
   // token minted for the session the forced logout had just ended - and handed
   // the caller a success.
@@ -1042,10 +1040,10 @@ void main() {
     // failures. Each replay failure is one RetryInterceptor treats as
     // transient for a GET, so before the fix every one of them was re-sent.
     //
-    // Since koniz-dev/flutter-starter#304 a transient replay failure no
-    // longer ends the session either: the refresh succeeded, so the fresh
-    // token is kept and only this request fails. What #286 guards - nothing
-    // re-sent after the replay - is unchanged.
+    // A transient replay failure no longer ends the session either: the
+    // refresh succeeded, so the fresh token is kept and only this request
+    // fails. What this group guards - nothing re-sent after the replay - is
+    // unchanged.
     for (final replayFailure in <Object>[
       503,
       DioExceptionType.receiveTimeout,
@@ -1075,7 +1073,7 @@ void main() {
             'Bearer expired-access-token',
             'Bearer fresh-access-token',
           ]);
-          // #304: a transient replay failure is not a dead session.
+          // A transient replay failure is not a dead session.
           expect(generation.isCurrent(before), isTrue);
           expect(tokenStore.accessToken, 'fresh-access-token');
         },
@@ -1233,7 +1231,7 @@ void main() {
     );
   });
 
-  // koniz-dev/flutter-starter#290. The head request's replay - the one whose
+  // The head request's replay - the one whose
   // 401 started the refresh - was the only replay that did not re-check the
   // session after `await setAccessToken`, so a logout landing during that
   // secure-storage write still put the fresh token on the wire.
@@ -1330,7 +1328,7 @@ void main() {
     },
   );
 
-  // koniz-dev/flutter-starter#295. onRequest checked the request's generation
+  // onRequest used to check the request's generation
   // before `await getAccessToken()` and not after it, so a session switch that
   // landed during that platform read still sent the request - first send or
   // re-send - with the new user's bearer token.
@@ -1424,7 +1422,7 @@ void main() {
     );
   });
 
-  group('a 400 with a non-String body field (#305)', () {
+  group('a 400 with a non-String body field', () {
     test('a list message surfaces as ServerException(400), not as a '
         'NetworkException', () async {
       final adapter = _CountingAdapter([
@@ -1459,7 +1457,7 @@ void main() {
     });
   });
 
-  // koniz-dev/flutter-starter#314. onRequest awaited the token read without a
+  // onRequest used to await the token read without a
   // guard, and dio does not await an async interceptor callback: a throwing
   // store called neither `next` nor `reject`, so the caller's future never
   // completed and the exception escaped as an uncaught zone error.
@@ -1523,7 +1521,7 @@ void main() {
     }
   });
 
-  // koniz-dev/flutter-starter#315. AuthInterceptor logged out, without a
+  // AuthInterceptor used to log out, without a
   // refresh, any 401 on a request carrying `X-Retry-Count: 1` - a header its
   // own replay set but, going through a Dio without this interceptor, could
   // never bring back to it. So only a caller that set the header reached the

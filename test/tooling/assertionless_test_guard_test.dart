@@ -1,4 +1,4 @@
-// Every test body must assert something (koniz-dev/flutter-starter#377).
+// Every test body must assert something.
 //
 // 'should handle cancel button in edit mode' ran for months with no `expect`
 // or `verify` at all - it tapped back only if a back button happened to exist

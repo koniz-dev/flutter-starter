@@ -1,5 +1,4 @@
-// The feature-flags debug screen must not ship in production
-// (koniz-dev/flutter-starter#319).
+// The feature-flags debug screen must not ship in production.
 //
 // The screen writes a local override for any flag, `enable_premium_features`
 // included, and `/feature-flags-debug` used to be registered in every build,

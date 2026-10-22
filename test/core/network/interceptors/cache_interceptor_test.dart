@@ -84,7 +84,7 @@ void main() {
       registerFallbackValue(<String>[]);
 
       // The interceptor keeps its own key index so clearCache knows what to
-      // remove (#77); StorageService has no key enumeration. Default it to
+      // remove; StorageService has no key enumeration. Default it to
       // empty so every existing case still exercises the path it used to.
       when(
         () => mockStorageService.getStringList(any()),
@@ -282,7 +282,7 @@ void main() {
       });
 
       test('should keep a stale entry within maxStale as the fallback for a '
-          'refetch, not serve it (#310)', () async {
+          'refetch, not serve it', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
         const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
@@ -586,7 +586,7 @@ void main() {
       });
     });
 
-    group('credential-aware bypass (#77)', () {
+    group('credential-aware bypass', () {
       test(
         'does not write a response to storage while the token store holds '
         'an access token, even though the request has no Authorization header',

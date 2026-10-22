@@ -1,5 +1,4 @@
-// A log file that cannot be opened must not escape as an uncaught error
-// (koniz-dev/flutter-starter#421).
+// A log file that cannot be opened must not escape as an uncaught error.
 //
 // File.openWrite returns its IOSink synchronously and opens the file later,
 // so the try around it in FileLogOutput._initializeLogFile never saw a
@@ -86,7 +85,7 @@ void main() {
     },
   );
 
-  // koniz-dev/flutter-starter#447: openWrite starts its own lazy open, which
+  // openWrite starts its own lazy open, which
   // dart:io only observes once something is written. A directory that
   // vanished after the probe open made that open fail unobserved - an
   // uncaught error the try and _watch both missed.

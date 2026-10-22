@@ -1,7 +1,6 @@
-// parseIso8601 must reject out-of-range fields in every form it accepts
-// (koniz-dev/flutter-starter#325).
+// parseIso8601 must reject out-of-range fields in every form it accepts.
 //
-// The #63 check only matched the dashed date prefix and never the time, so
+// An earlier check only matched the dashed date prefix and never the time, so
 // the basic form 20260230 still rolled over to 1 March and T25:61 into the
 // next day. CacheInterceptor (entry age) and TaskModel depend on this.
 

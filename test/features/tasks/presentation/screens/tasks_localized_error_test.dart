@@ -15,7 +15,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/test_fixtures.dart';
 
-// koniz-dev/flutter-starter#415: TasksNotifier and TaskDetailScreen stored
+// TasksNotifier and TaskDetailScreen used to store
 // `failure.message` - English text built for logs - and the tasks screens
 // rendered it verbatim, so a Vietnamese user saw English transport text.
 

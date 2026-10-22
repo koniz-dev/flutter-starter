@@ -170,7 +170,7 @@ void main() {
         expect(await storage.getInt('sync_interval_minutes'), 60);
       });
 
-      test('should not seed a language choice (#417)', () async {
+      test('should not seed a language choice', () async {
         // Arrange
         await storage.setString(StorageVersion.versionKey, '1');
 
@@ -354,7 +354,7 @@ void main() {
     // A re-run used to read it back with `getString`, which throws a
     // `TypeError` - an Error, so every `on Exception` handler missed it -
     // and that threw before `runApp` on every launch.
-    group('idempotency (#60)', () {
+    group('idempotency', () {
       test('migrate twice does not throw and leaves the same data', () async {
         // Arrange
         await storage.setString(StorageVersion.versionKey, '1');

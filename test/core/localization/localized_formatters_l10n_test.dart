@@ -1,4 +1,4 @@
-// Regression tests for koniz-dev/flutter-starter#65, criteria 7 and 9.
+// Regression tests: localized date and relative-time formatting.
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
@@ -75,7 +75,7 @@ void main() {
       );
     });
 
-    // koniz-dev/flutter-starter#263: the future phrasing is translated too.
+    // The future phrasing is translated too.
     test('future dates use the localized *FromNow strings', () {
       final ref = DateTime.now();
       String format(Duration d, String code) =>

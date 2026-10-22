@@ -23,7 +23,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Regression tests for #52: a remote logout that failed short-circuited the
+/// Regression tests: a remote logout that failed short-circuited the
 /// local teardown, so the access token, the long-lived refresh token, and the
 /// cached user all survived a logout the user believed had happened.
 ///
@@ -165,7 +165,7 @@ class _FailingRemoteDataSource implements AuthRemoteDataSource {
       throw UnimplementedError();
 }
 
-/// Stand-in for the HTTP response cache #77 wired into logout.
+/// Stand-in for the HTTP response cache that logout empties.
 class _FakeHttpCache implements IHttpResponseCache {
   int clearCalls = 0;
 
@@ -204,7 +204,7 @@ _seededDevice() {
 
 void main() {
   group('logout tears the local session down even when the remote call '
-      'fails (#52)', () {
+      'fails', () {
     // Every realistic failure shape: a modelled AppException, a raw Dio
     // timeout, and an Error - which is not an Exception at all and used to
     // escape the repository entirely.
@@ -260,7 +260,7 @@ void main() {
         );
         expect(await device.localDataSource.getCachedUser(), isNull);
         expect((await repository.isAuthenticated()).dataOrNull, isFalse);
-        // The HTTP response cache is local session state too (#77), so it is
+        // The HTTP response cache is local session state too, so it is
         // dropped on this path as well.
         expect(httpCache.clearCalls, 1);
       });
@@ -283,7 +283,7 @@ void main() {
     });
   });
 
-  group('a failed logout still redirects to /login (#52)', () {
+  group('a failed logout still redirects to /login', () {
     setUp(() {
       // `authRepositoryProvider` resolves the real `ApiClient`, whose response
       // cache is backed by SharedPreferences; without the mock the logout
