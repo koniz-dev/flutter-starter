@@ -6,8 +6,7 @@
 // [sessionTerminationSinkProvider]) and the auth slice supplies the adapter
 // from `authModuleOverrides` at the composition root. That is what replaced
 // the import cycle this file used to close with
-// `lib/features/auth/di/auth_providers.dart`
-// (koniz-dev/flutter-starter#221).
+// `lib/features/auth/di/auth_providers.dart`.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
@@ -152,7 +151,7 @@ final Provider<TokenRefresher> tokenRefresherProvider =
 /// Null by default, which is exactly the degraded behaviour
 /// [AuthInterceptor] already documents for a missing sink: storage is torn
 /// down, the in-memory session is not. The auth slice overrides it with its
-/// Riverpod-backed sink (koniz-dev/flutter-starter#127).
+/// Riverpod-backed sink.
 final Provider<ISessionTerminationSink?> sessionTerminationSinkProvider =
     Provider<ISessionTerminationSink?>((ref) => null);
 
@@ -164,8 +163,7 @@ final Provider<ISessionTerminationSink?> sessionTerminationSinkProvider =
 /// Lives in core, beside the [apiClientProvider] that installs it, because
 /// every dependency it has is core-owned once the two seams above stand in
 /// for the feature. It used to live in `lib/features/auth/di/` and was the
-/// single symbol that closed the core <-> feature import cycle
-/// (koniz-dev/flutter-starter#221).
+/// single symbol that closed the core <-> feature import cycle.
 final Provider<AuthInterceptor> authInterceptorProvider =
     Provider<AuthInterceptor>((ref) {
       final interceptor = AuthInterceptor(
@@ -175,10 +173,10 @@ final Provider<AuthInterceptor> authInterceptorProvider =
         // or the app keeps presenting a session it has no token for.
         keyValueStore: ref.watch(keyValueStoreProvider),
         // ...and has to drop the *in-memory* session as well, or the running
-        // app keeps presenting one until it is restarted (#127).
+        // app keeps presenting one until it is restarted.
         sessionSink: ref.read(sessionTerminationSinkProvider),
         // Shared with `authRepositoryProvider`, so a logout raised on either
-        // side is visible to a refresh in flight on the other (#169).
+        // side is visible to a refresh in flight on the other.
         sessionGeneration: ref.watch(sessionGenerationProvider),
       );
       // Releases the single 401-replay client and its connection pool.

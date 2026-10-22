@@ -51,8 +51,7 @@ class NetworkError implements Exception {
   final Object? cause;
 
   /// Carries the message, code and status, so wrapping this in another
-  /// exception never degrades to `Instance of 'NetworkError'`
-  /// (koniz-dev/flutter-starter#276).
+  /// exception never degrades to `Instance of 'NetworkError'`.
   @override
   String toString() {
     final details = <String>[
