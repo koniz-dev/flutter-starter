@@ -17,18 +17,16 @@
 //      (see `tool/doc_symbols.dart`). Check 3 is the strong form and needs a
 //      signature block; this is the weak, broad one, and it is the one that
 //      would have caught `contracts-map.md` citing a provider that never
-//      existed (koniz-dev/flutter-starter#206).
+//      existed.
 //   5. Setup steps that `cp .env.example .env` then run `flutter run` or
 //      `flutter build` pass `--dart-define-from-file`, in README.md,
-//      CONTRIBUTING.md and `docs/` (see `tool/doc_env_runs.dart`,
-//      koniz-dev/flutter-starter#355).
+//      CONTRIBUTING.md and `docs/` (see `tool/doc_env_runs.dart`).
 //   6. Every `--dart-define` key in a fenced block of README.md or `docs/` is
 //      a key of `DartDefines.values`, so no guide passes a flag the app never
-//      reads (see `tool/doc_dart_defines.dart`,
-//      koniz-dev/flutter-starter#379).
+//      reads (see `tool/doc_dart_defines.dart`).
 //   7. Every `flutter test <path>` in a fenced block of README.md,
 //      CONTRIBUTING.md or `docs/` names a file or directory that exists
-//      (see `tool/doc_test_paths.dart`, koniz-dev/flutter-starter#551).
+//      (see `tool/doc_test_paths.dart`).
 //
 // Usage:
 //   dart run tool/check_docs.dart               # all checks
@@ -144,7 +142,7 @@ int _checkLinks(Directory root) {
       } else {
         resolved = _normalize('${_dirname(file.path)}/${_decode(pathPart)}');
         // A link that leaves the checkout can resolve on one machine and
-        // nowhere else - test/README.md had four (koniz-dev/flutter-starter#573).
+        // nowhere else - test/README.md had four.
         if (resolved != root.path && !resolved.startsWith('${root.path}/')) {
           broken++;
           stderr.writeln(

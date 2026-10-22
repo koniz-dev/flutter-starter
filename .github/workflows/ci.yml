@@ -7,7 +7,7 @@ name: CI
 # GitHub Actions minutes low for forks and small teams. For faster feedback at
 # higher cost, split format/analyze/test into parallel jobs again.
 #
-# NO `paths-ignore`, deliberately (koniz-dev/flutter-starter#117). This job has
+# NO `paths-ignore`, deliberately. This job has
 # to post a conclusion on EVERY pull request, because a required status check
 # that never reports leaves the pull request stuck on "Expected - waiting for
 # status to be reported" forever. `paths-ignore` suppresses the whole workflow
@@ -158,8 +158,8 @@ jobs:
 
       # Generated code is committed, so it must match its sources: a provider
       # edited without re-running build_runner left stale hashes that the
-      # next adopter to regenerate got as an unrelated diff
-      # (koniz-dev/flutter-starter#337). `git status --porcelain` rather than
+      # next adopter to regenerate got as an unrelated diff.
+      # `git status --porcelain` rather than
       # `git diff` so a new, untracked output fails too.
       - name: Check generated code is up to date
         if: steps.scope.outputs.run == 'true'
@@ -184,7 +184,7 @@ jobs:
 
       # The suite runs in a fresh random order on every PR, so a test that
       # only passes because of the tests before it fails here, not in a fork
-      # months later (koniz-dev/flutter-starter#370, #462, #602). flutter
+      # months later. flutter
       # prints the seed it picked; a failure repeats it with the exact command
       # that reproduces the order.
       - name: Run tests (random order)
@@ -212,7 +212,7 @@ jobs:
       # xcconfigs) and the lock as this stable resolves it are committed, so a
       # diff here means a new stable re-pinned or re-migrated something - the
       # same event as a new stable's lints, handled the same way: fix it on
-      # main first (koniz-dev/flutter-starter#338, #608).
+      # main first.
       - name: Tracked files are unchanged
         if: steps.scope.outputs.run == 'true'
         shell: bash

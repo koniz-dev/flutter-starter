@@ -47,7 +47,7 @@ jobs:
       contents: read
       pull-requests: write
 
-    # The coverage targets, in one place (koniz-dev/flutter-starter#331). The
+    # The coverage targets, in one place. The
     # enforcement step, the job summary and the PR comment all read these, so
     # the table can no longer promise a target the gate does not enforce.
     #
@@ -115,7 +115,7 @@ jobs:
 
           # --github-output emits ONLY key=value lines. The previous version
           # appended the script's human summary too, so prose like
-          # "Summary of coverage by layer" became a step-output key (#39).
+          # "Summary of coverage by layer" became a step-output key.
           ./scripts/test/calculate_layer_coverage.sh --github-output coverage/lcov.info \
             >> "$GITHUB_OUTPUT"
 
@@ -129,8 +129,9 @@ jobs:
           OVERALL=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines.*:" | head -1 | grep -oP '\d+\.\d+%' | head -1 | sed 's/%//' || echo "0")
           
           # File counts, kept only as context. They are NOT coverage - labelling
-          # them "Domain files: 15" beside a percentage is what made issue #25
-          # look like a real defect. Per-layer percentages come from the
+          # them "Domain files: 15" beside a percentage once made a bogus
+          # coverage report look like a real defect. Per-layer percentages come
+          # from the
           # layer_coverage step above.
           DOMAIN_FILES=$(grep -c "^SF:.*lib/features/.*/domain" coverage/lcov.info || echo "0")
           DATA_FILES=$(grep -c "^SF:.*lib/features/.*/data" coverage/lcov.info || echo "0")

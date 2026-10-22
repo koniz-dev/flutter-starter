@@ -48,8 +48,8 @@ Three things keep that true:
   generated folders. The templates write imports in the order sorted for
   `flutter_starter`, and both rename paths rewrite that name in them, so after
   a rename to a name that sorts elsewhere (`my_app`, `acme_shop`) the order
-  would trip `directives_ordering` (koniz-dev/flutter-starter#594).
-  `create_feature.sh` and `.ps1` do the same (#442). scripts-smoke generates a
+  would trip `directives_ordering`.
+  `create_feature.sh` and `.ps1` do the same. scripts-smoke generates a
   slice with this brick after each rename and analyzes it with infos fatal.
 
 - `scripts/dev/create_feature.sh`, `scripts/dev/create_feature.ps1` and this

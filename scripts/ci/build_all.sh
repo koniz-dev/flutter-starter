@@ -72,9 +72,8 @@ flutter pub get
 echo -e "${GREEN}✓ Cleaned${NC}"
 echo ""
 
-# Refuse to build a tree that would ship a secrets file.
-#
-# koniz-dev/flutter-starter#135. The guard already runs in
+# Refuse to build a tree that would ship a secrets file: a `.env` declared as
+# a Flutter asset ships inside the artifact. The guard already runs in
 # scripts/dev/audit_template.sh and, through
 # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither of
 # those is this path, and this path is the one that produces an artifact. A
@@ -104,8 +103,8 @@ echo ""
 # No --flavor anywhere below. ENVIRONMENT here is a --dart-define value read by
 # lib/core/config/app_config.dart, NOT a Gradle product flavor: no
 # productFlavors are declared in android/app/build.gradle.kts, so passing
-# --flavor fails with "Task 'bundleProductionRelease' not found". Issue #34
-# removed the flag from the workflows and missed this script (issue #57).
+# --flavor fails with "Task 'bundleProductionRelease' not found". The flag was
+# once removed from the workflows and missed here.
 echo -e "${YELLOW}Building Android...${NC}"
 if [ "$ENVIRONMENT" == "production" ]; then
     flutter build appbundle \
@@ -162,8 +161,7 @@ echo ""
 
 # Analyze build size if requested
 #
-# koniz-dev/flutter-starter#335: production builds only an App Bundle, but this
-# used to report only an APK, so production reported nothing; the comparison
+# Production builds only an App Bundle, but this used to report only an APK, so production reported nothing; the comparison
 # bundle was built without the environment's --dart-define values, so it was not
 # the configured app; and the advice claimed an ABI split nothing performs.
 if [ "$ANALYZE_SIZE" = true ]; then

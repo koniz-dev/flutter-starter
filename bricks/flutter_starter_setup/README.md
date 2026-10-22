@@ -29,7 +29,7 @@ flutter test
 
 Both should be as clean on the renamed tree as they were before. If
 `flutter analyze` reports anything the template did not, that is a bug in this
-brick (koniz-dev/flutter-starter#283).
+brick.
 
 ## What gets rewritten
 

@@ -2,8 +2,7 @@
 //
 // Prose drifts from code silently. `docs/api/core/network.md` documented an
 // `AuthInterceptor` parameter that never existed while omitting three that
-// did, across four separate commits, because nothing compared the two
-// (koniz-dev/flutter-starter#89).
+// did, across four separate commits, because nothing compared the two.
 //
 // A documentation block opts into checking with an HTML comment directly
 // above its fenced code block:
@@ -23,7 +22,7 @@
 // line or many. Comments and surrounding prose are ignored, so a block may
 // keep its `///` explanation.
 //
-// Two parameters match when (koniz-dev/flutter-starter#481):
+// Two parameters match when:
 //
 //   * neither is a super- or field-formal (`super.code`, `this.statusCode`):
 //     their texts are equal - type, `required` marker and default value;

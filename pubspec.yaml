@@ -110,7 +110,7 @@ dev_dependencies:
   very_good_analysis: ^10.0.0
 
   # YAML parser for tool/check_env_assets.dart, which must read every asset
-  # spelling Flutter accepts (koniz-dev/flutter-starter#330). Already in the
+  # spelling Flutter accepts. Already in the
   # lock as a transitive dependency; declared because tool/ imports it.
   yaml: ^3.1.3
 
@@ -158,7 +158,7 @@ flutter:
   # configuration, not a secret store.
   #
   # The same works on Flutter web - EnvConfig reads the DartDefines table on
-  # every target (koniz-dev/flutter-starter#278, #398) - but a web client
+  # every target - but a web client
   # cannot hold a secret at all: the whole bundle is downloaded by the user.
   # Serve secrets from your backend; keep only publishable values in the app.
   #

@@ -43,7 +43,6 @@ import 'package:flutter_starter/shared/theme/app_theme.dart';
 // failure is recoverable, an unbounded hang is not, so startup opts out and
 // lets the exception surface. Retry here stays user-driven, via the Try again
 // button that calls `main()` again.
-// Refs koniz-dev/flutter-starter#101
 Duration? _neverRetry(int retryCount, Object error) => null;
 
 /// Builds the app's one [ProviderContainer]: `main()` boots from it and then
@@ -66,7 +65,7 @@ ProviderContainer createAppContainer({
   // `authModuleOverrides` first, so a caller-supplied override of the same
   // provider still wins: this is the composition root, and it is the only
   // place that knows both that core declares the 401-refresh seams and that
-  // the auth slice fills them (koniz-dev/flutter-starter#221).
+  // the auth slice fills them.
   return ProviderContainer(
     retry: _neverRetry,
     overrides: <Override>[...authModuleOverrides, ...overrides],
@@ -104,7 +103,7 @@ Future<void> main() async {
     // falls back to localhost and SSL pinning is off. printConfig() only warns
     // in debug, so a release build booted silently on that config. Refuse to
     // start instead, through the same failure screen as any other startup
-    // error (koniz-dev/flutter-starter#412).
+    // error.
     if (AppConfig.environmentMisconfigured) {
       throw StateError(
         'ENVIRONMENT "${AppConfig.environment}" is not one of '

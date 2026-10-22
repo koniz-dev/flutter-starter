@@ -20,13 +20,12 @@ Documentation integrity checker. Seven checks, all of which had silently rotted:
   `{named}`, on one line or many - in order, with the same types, `required`
   markers and defaults. A super- or field-formal (`super.code`) is compared by
   kind, name, `required` and default only, since docs write the reader-facing
-  type (koniz-dev/flutter-starter#481). Added after koniz-dev/flutter-starter#89,
-  where `docs/api/core/network.md` documented an `AuthInterceptor` parameter
+  type. Added after `docs/api/core/network.md` documented an `AuthInterceptor` parameter
   that never existed while missing three that did.
 - **Symbol existence** (`doc_symbols.dart`): every
   `<!-- symbol: <source path> <identifier> -->` directive must name an
   identifier that file actually declares. Added after
-  koniz-dev/flutter-starter#206, where `docs/architecture/contracts-map.md` -
+  `docs/architecture/contracts-map.md` -
   the document an adopter follows to swap an implementation - cited
   `tasksControllerProvider` and `FirebaseFeatureFlagsRemoteDataSource`, neither
   of which has ever existed anywhere in the repository.
@@ -34,21 +33,18 @@ Documentation integrity checker. Seven checks, all of which had silently rotted:
   `CONTRIBUTING.md` and `docs/`, the first `flutter run` or `flutter build`
   after a `cp .env.example .env` line must pass `--dart-define-from-file`
   (or explicit `--dart-define=` flags). `.env` is not an asset, so a plain run
-  ignores the file it just told the reader to fill in. Added after
-  koniz-dev/flutter-starter#355, where README's Quick Start and CONTRIBUTING
-  did exactly that (rule: koniz-dev/flutter-starter#434).
+  ignores the file it just told the reader to fill in. Added after README's
+  Quick Start and CONTRIBUTING did exactly that.
 - **`--dart-define` keys** (`doc_dart_defines.dart`): every
   `--dart-define=<KEY>=` in a fenced block of `README.md` or `docs/` names a
   key of `DartDefines.values` (`lib/core/config/dart_defines.dart`), the only
-  table a define reaches the app through. Added after
-  koniz-dev/flutter-starter#277, where the security guide built production with
-  a key nothing read (rule: koniz-dev/flutter-starter#379).
+  table a define reaches the app through. Added after the security guide
+  built production with a key nothing read.
 - **`flutter test` paths** (`doc_test_paths.dart`): every path argument of
   `flutter test` in a fenced block of `README.md`, `CONTRIBUTING.md` or `docs/`
   exists, after joining continued lines and skipping flags, `:line` suffixes and
-  placeholders (`<...>`, `path/to`). Added after koniz-dev/flutter-starter#360,
-  where CONTRIBUTING named a test file that did not exist (rule:
-  koniz-dev/flutter-starter#551).
+  placeholders (`<...>`, `path/to`). Added after CONTRIBUTING named a test
+  file that did not exist.
 
 ```bash
 dart run tool/check_docs.dart               # all checks
@@ -80,7 +76,7 @@ and a broken doc link should not block an unrelated `lib/` fix.
 ```
 
 One directive per asserted identifier: a top-level name, or `Type.member` for a
-member (koniz-dev/flutter-starter#554). It takes no fenced block and says
+member. It takes no fenced block and says
 nothing about the shape of the declaration - only that the name is declared in
 that file. Accepted forms: `class` in every modifier spelling, `mixin`, `enum`,
 `extension`, `extension type`, `typedef`, a top-level
@@ -125,12 +121,12 @@ flutter test
 
 `--keep-samples` removes neither sample. On its own it does nothing; with
 `--remove-bricks` it is how a fork that keeps `tasks` and `feature_flags` drops
-the Mason bricks (koniz-dev/flutter-starter#333, #621). It cannot be combined
+the Mason bricks. It cannot be combined
 with `--remove-tasks` or `--remove-feature-flags`.
 
 `--remove-bricks` can be added to any mode. It deletes `bricks/` and
 `mason.yaml` and drops the `strip:bricks` passages that link into them, so the
-links that are left still resolve (koniz-dev/flutter-starter#588). Deleting the
+links that are left still resolve. Deleting the
 two by hand leaves those links dangling, and `check_docs --links` fails.
 
 ### Markers
@@ -146,7 +142,7 @@ such as a table row where a marker line would end the table, put
 `<!-- strip:<tag> line -->` anywhere on the line.
 `test/tooling/strip_sample_prose_test.dart` fails if a kept markdown file
 names a sample's symbol outside such a marker, in the full tree and in every
-strip variant (koniz-dev/flutter-starter#409).
+strip variant.
 
 Prose about the Mason bricks uses `strip:bricks` and goes with
 `--remove-bricks`.

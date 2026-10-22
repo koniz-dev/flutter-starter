@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Tests for .githooks/pre-commit in a fresh clone (koniz-dev/flutter-starter#300).
+# Tests for .githooks/pre-commit in a fresh clone.
 #
 # Usage: ./scripts/test/pre_commit_hook_test.sh
 #
@@ -16,8 +16,8 @@
 #   2. After `flutter pub get`: the hook exits 0 on the clean tree, and
 #      non-zero on a real format violation.
 #
-# HOOK_UNDER_TEST=<file> points the tests at another copy of the hook - that
-# is how the evidence for #300 ran them against main's hook.
+# HOOK_UNDER_TEST=<file> points the tests at another copy of the hook, for
+# example an older revision, to show a case fails there.
 #
 # Needs Flutter on PATH. Run in CI by .github/workflows/git-hooks.yml.
 # Exits non-zero when any case fails.
@@ -75,7 +75,7 @@ else
 fi
 
 # --- Case 2: dependencies resolved -----------------------------------------
-# pub get leaves the clone clean on the current stable (#338, #608); if a new
+# pub get leaves the clone clean on the current stable; if a new
 # stable makes it dirty a tracked file, that is not the hook's doing, and this
 # case judges only the hook's exit status anyway.
 (cd "$CLONE" && flutter pub get >/dev/null 2>&1) || fail "flutter pub get failed in the clone"

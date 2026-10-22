@@ -5,11 +5,11 @@ name: Docs check
 #
 # This exists because the Quality gate in `ci.yml` treats `**/*.md` and
 # `docs/**` as inert and never inspects them (it used to skip the workflow
-# outright via `paths-ignore`; since koniz-dev/flutter-starter#117 it reports
+# outright via `paths-ignore`; now it reports
 # on every PR but skips its expensive steps). Broken relative links,
 # broken heading anchors and emoji (against the convention in CLAUDE.md)
 # therefore accumulated with nothing to catch them - 29 broken links and
-# 487 emoji lines by the time koniz-dev/flutter-starter#54 was filed.
+# 487 emoji lines by the time anyone looked.
 #
 # Deliberately the mirror image of ci.yml: this job runs ONLY on markdown
 # and on the checker itself, so the two gates never both fire on the same

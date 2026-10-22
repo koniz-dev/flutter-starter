@@ -39,7 +39,7 @@ on:
           - staging
           - production
 
-# Least privilege (koniz-dev/flutter-starter#343): the deploy steps talk to
+# Least privilege: the deploy steps talk to
 # their store or host with their own secrets, not GITHUB_TOKEN, so the token
 # only needs to read the repository. When you enable a step that comments on
 # PRs or creates GitHub deployments with GITHUB_TOKEN - the Firebase
@@ -101,7 +101,8 @@ jobs:
           fi
 
       # Runs on the tree that is about to be built, which is the whole point:
-      # koniz-dev/flutter-starter#135. The guard already runs in
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
       # scripts/dev/audit_template.sh and, via
       # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
       # of those is this path. A Flutter asset list is not build-mode scoped, so
@@ -134,7 +135,7 @@ jobs:
       #   with:
       #     serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
       #     packageName: com.example.flutter_starter
-      #     # Flavorless layout (#34). `${ENV}` is a shell variable and is NOT
+      #     # Flavorless layout. `${ENV}` is a shell variable and is NOT
       #     # expanded inside `with:`, so the path is literal.
       #     releaseFiles: build/app/outputs/bundle/release/app-release.aab
       #     track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
@@ -148,6 +149,5 @@ jobs:
           name: android-bundle
           path: build/app/outputs/bundle/**/*.aab
           # A run that built nothing must fail, not go green with zero
-          # artifacts while the build steps above are still commented out
-          # (koniz-dev/flutter-starter#334).
+          # artifacts while the build steps above are still commented out.
           if-no-files-found: error

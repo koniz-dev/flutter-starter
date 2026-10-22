@@ -10,11 +10,11 @@ set -e
 #
 # They used to be mixed on stdout, and .github/workflows/coverage.yml appended
 # every line with `while IFS='=' read -r key value`, so prose such as
-# "Summary of coverage by layer" became a step-output key. See issue #39.
+# "Summary of coverage by layer" became a step-output key.
 #
 # A third mode serves scripts/test/test_coverage.sh --analyze, so the local
 # report counts lines exactly the way CI's gate does instead of reimplementing
-# the parse (koniz-dev/flutter-starter#332):
+# the parse:
 #   --pattern=<regex> print "<covered> <total>" for files whose path matches
 GITHUB_OUTPUT_MODE=0
 LCOV_FILE=""

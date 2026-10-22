@@ -14,8 +14,8 @@
 # exists, otherwise above the first `## [<version>]` heading, otherwise at the
 # end of the file. The insertion is done with awk into a temp file that is
 # moved into place only once complete, so it does not depend on the GNU/BSD
-# `sed -i` split (koniz-dev/flutter-starter#282: the BSD branch used to abort
-# with `invalid command code`, and the GNU branch inserted after line 1).
+# `sed -i` split (the BSD branch used to abort with `invalid command code`,
+# and the GNU branch inserted after line 1).
 
 set -euo pipefail
 

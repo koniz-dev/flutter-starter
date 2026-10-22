@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Tests for scripts/ci/generate_changelog.sh and scripts/ci/release.sh against
-# throwaway fixture repositories (koniz-dev/flutter-starter#282).
+# throwaway fixture repositories.
 #
 # Usage: ./scripts/test/release_scripts_test.sh
 #
@@ -11,8 +11,8 @@
 # .github/workflows/release-scripts.yml, because the bug it guards was a
 # GNU/BSD `sed -i` split that only ever showed up on one of the two.
 #
-# SCRIPTS_UNDER_TEST=<dir> points the tests at another copy of scripts/ci/ -
-# that is how the evidence for #282 ran them against main's scripts.
+# SCRIPTS_UNDER_TEST=<dir> points the tests at another copy of scripts/ci/,
+# for example an older revision, to show a case fails there.
 #
 # Exits non-zero when any case fails.
 
@@ -161,7 +161,7 @@ else
     fail "no release branch or tag was created (branch=$branch tags=$tags)"
 fi
 
-# --- bump_version.sh keeps a trailing comment (koniz-dev/flutter-starter#342)
+# --- bump_version.sh keeps a trailing comment
 bump_fixture() { # pubspec-version-line -> echoes the rewritten line
     local dir="$WORK/bump-$RANDOM"
     mkdir -p "$dir/scripts/ci"
