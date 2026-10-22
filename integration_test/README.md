@@ -51,20 +51,18 @@ This is upstream Flutter behaviour, deliberate for live bindings, and not someth
 
 Do not rely on translated button labels for critical steps. Use `ValueKey`s from [`lib/core/constants/ui_keys.dart`](../lib/core/constants/ui_keys.dart) (e.g. `e2e_login_submit`, `e2e_home_content`).
 
-Each file here holds **two** tests:
+Each file here holds **two** tests, and both run on a fresh clone:
 
-1. **A smoke test that always runs** — the app boots to a usable login screen. No backend needed. It is not a token test: reaching a rendered login screen exercises the native Patrol harness, app bootstrap, the Riverpod scope, the router, and localization.
-2. **The authenticated flow, skipped by default** — everything past login. The sample auth flow POSTs to `BASE_URL`; with no server the login call fails, the app stays on the login screen, and those assertions are unreachable. Rather than ship a suite that is red by construction, they are gated:
+1. **A smoke test** — the app boots to a usable login screen. It is not a token test: reaching a rendered login screen exercises the native Patrol harness, app bootstrap, the Riverpod scope, the router, and localization.
+2. **The authenticated flow** — sign in, reach home. With no backend configured, the debug build Patrol runs signs in through the offline demo account (the login screen's demo card fills it), so no server is needed. Built with a `BASE_URL`, the demo is off and the test sends the sample credentials to that API instead, which must accept them:
 
 ```bash
-# skipped (default) — the suite is green on a fresh clone
+# no backend: signs in through the demo account
 patrol test --target integration_test/app_e2e_test.dart
 
-# run the authenticated flow, once you have an API reachable from the device
-patrol test --target integration_test/app_e2e_test.dart --dart-define=E2E_BACKEND=true
+# against your API, reachable from the device
+patrol test --target integration_test/app_e2e_test.dart --dart-define=BASE_URL=https://api.example.com
 ```
-
-A skipped test still appears in the summary (`⏩ Skipped: 1`), so it cannot be quietly forgotten.
 
 **There is no tasks coverage, on purpose.** `UiKeys.openTasks`, `UiKeys.tasksFab`, and `UiKeys.addTaskSubmit` are declared but attached to no widget in `lib/`: `HomeScreen` is a deliberately minimal shell with no entry point into the sample `tasks` feature. Patrol matches on the widget tree, so a selector written against an unattached key finds nothing — attach the key first if your fork adds that entry point.
 No strip variant wires them either: `tool/golden/` holds routing files and one E2E file, and none of them attaches these keys. <!-- strip:strip-tool line -->
