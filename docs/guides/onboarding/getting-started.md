@@ -140,9 +140,17 @@ the app restarts.
 Demo mode turns itself off as soon as `BASE_URL` is set (in `.env` or with
 `--dart-define`), in staging and production, and in every release build.
 <!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
-To remove it entirely, delete `lib/features/auth/demo/` and
-`test/features/auth/demo/`, then the lines `git grep -n DemoAuth lib test`
-still lists.
+To remove it entirely:
+
+1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/` and
+   `test/flutter_test_config.dart`.
+2. Delete the lines `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo lib`
+   still lists: two imports and one line in `auth_providers.dart`, two
+   imports and the `if (DemoAuth.enabled)` block in `login_screen.dart`.
+3. Delete this section.
+
+`flutter analyze` and `flutter test` then pass; the `demoMode*` strings in
+`lib/l10n/` are unused and can go too.
 
 ### Platform-Specific
 
