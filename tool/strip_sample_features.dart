@@ -288,6 +288,7 @@ void main(List<String> args) {
   for (final relative in overrides) {
     _copyGoldenFile(goldenPath, root.path, relative);
   }
+  _sortGoldenImports(root, overrides);
 
   // `lib/core/di/providers.dart` needs no patching: it names no feature at
   // all since koniz-dev/flutter-starter#221 removed the three
@@ -417,6 +418,37 @@ void _copyGoldenFile(
   final dest = File(p.join(repoRootPath, relativePath));
   dest.parent.createSync(recursive: true);
   src.copySync(dest.path);
+}
+
+/// Sorts the imports of the golden files just copied in.
+///
+/// They are written in the order sorted for the package name `flutter_starter`,
+/// and a rename rewrites that name inside them. After a rename to one that
+/// sorts elsewhere (`my_app` after `flutter_test`), the order trips
+/// `directives_ordering` - so the analyzer sorts them, as
+/// `scripts/dev/create_feature.sh` and the feature brick do. A failure is
+/// reported, not fatal: the tree still builds, and `flutter analyze` names
+/// the file.
+void _sortGoldenImports(Directory root, List<String> copied) {
+  for (final relative in copied.where((f) => f.endsWith('.dart'))) {
+    final result = Process.runSync(
+      'dart',
+      [
+        'fix',
+        '--apply',
+        '--code=directives_ordering',
+        relative,
+      ],
+      workingDirectory: root.path,
+      runInShell: Platform.isWindows,
+    );
+    if (result.exitCode != 0) {
+      stderr.writeln(
+        'Could not sort the imports of $relative; run '
+        '`dart fix --apply --code=directives_ordering $relative`.',
+      );
+    }
+  }
 }
 
 void _deleteDir(Directory dir) {
