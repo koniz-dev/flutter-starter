@@ -139,7 +139,7 @@ the app restarts.
 
 One rule decides whether there is a backend: `AppConfig.hasBackend`, true
 once `BASE_URL` is set (in `.env` or with `--dart-define`) or the environment
-is staging or production. Demo mode is on exactly when it is false in a debug
+is anything but `development`. Demo mode is on exactly when it is false in a debug
 build, so it turns itself off with a `BASE_URL` - a local server included,
 which therefore needs `BASE_URL=http://localhost:3000` spelled out - and in
 every profile or release build.
