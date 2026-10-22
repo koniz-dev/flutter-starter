@@ -496,7 +496,11 @@ the row is updated.
 ### Fallback Defaults
 
 **BASE_URL defaults:**
-- Development: `http://localhost:3000`
+- Development: `http://localhost:3000`, used only by profile and release
+  builds. Leaving `BASE_URL` empty in development means *no backend*
+  (`AppConfig.hasBackend` is false): a debug build then signs in with the
+  offline demo account and sends no request at all. To use a server on your
+  machine, set `BASE_URL=http://localhost:3000` explicitly.
 - Staging: `https://api-staging.example.com`
 - Production: `https://api.example.com`
 

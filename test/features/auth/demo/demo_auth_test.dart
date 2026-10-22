@@ -3,10 +3,13 @@
 
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_starter/core/constants/ui_keys.dart';
+import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
@@ -172,33 +175,7 @@ void main() {
     testWidgets('the fill button and Login reach the home screen', (
       tester,
     ) async {
-      final container = createAppContainer(
-        overrides: [
-          authLocalDataSourceProvider.overrideWithValue(
-            AuthLocalDataSourceImpl(
-              storageService: InMemoryKeyValueStore(),
-              tokenStore: InMemoryTokenStore(),
-            ),
-          ),
-        ],
-      );
-      addTearDown(container.dispose);
-      await container.read(sessionRestorationProvider.future);
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: MaterialApp.router(
-            routerConfig: container.read(goRouterProvider),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: LocalizationService.supportedLocales,
-          ),
-        ),
-      );
+      await _pumpApp(tester);
       await tester.pumpAndSettle();
 
       expect(find.byType(LoginScreen), findsOneWidget);
@@ -216,6 +193,27 @@ void main() {
 
       expect(find.byKey(UiKeys.homeContent), findsOneWidget);
       expect(find.byType(LoginScreen), findsNothing);
+    });
+
+    testWidgets('demo sign-in to home sends nothing over the network', (
+      tester,
+    ) async {
+      // With no backend, demo auth and the API client agree: the client is
+      // built (logout wipes its response cache), but nothing on the way from
+      // login to home starts a request on it, so the development `baseUrl`
+      // fallback is never contacted.
+      final container = await _pumpApp(tester);
+      final outgoing = _RecordingInterceptor();
+      container.read(apiClientProvider).dio.interceptors.insert(0, outgoing);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(UiKeys.demoSignInFill));
+      await tester.pump();
+      await tester.tap(find.byKey(UiKeys.loginSubmit));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(UiKeys.homeContent), findsOneWidget);
+      expect(outgoing.requests, isEmpty);
     });
 
     testWidgets('with demo mode off the login screen shows no demo card', (
@@ -242,4 +240,53 @@ void main() {
       expect(find.byType(DemoSignInCard), findsNothing);
     });
   });
+}
+
+/// Pumps the real app - container, session restore, router - with in-memory
+/// auth storage and [overrides].
+Future<ProviderContainer> _pumpApp(
+  WidgetTester tester, {
+  List<Override> overrides = const [],
+}) async {
+  final container = createAppContainer(
+    overrides: [
+      authLocalDataSourceProvider.overrideWithValue(
+        AuthLocalDataSourceImpl(
+          storageService: InMemoryKeyValueStore(),
+          tokenStore: InMemoryTokenStore(),
+        ),
+      ),
+      ...overrides,
+    ],
+  );
+  addTearDown(container.dispose);
+  await container.read(sessionRestorationProvider.future);
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: container,
+      child: MaterialApp.router(
+        routerConfig: container.read(goRouterProvider),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: LocalizationService.supportedLocales,
+      ),
+    ),
+  );
+  return container;
+}
+
+/// Records every request the API client starts, before any other
+/// interceptor can delay or cancel it.
+class _RecordingInterceptor extends Interceptor {
+  final List<String> requests = [];
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    requests.add('${options.method} ${options.path}');
+    handler.next(options);
+  }
 }

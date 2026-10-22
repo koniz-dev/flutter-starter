@@ -137,9 +137,13 @@ end to end on day one. The login screen shows a "Demo mode" card; its button
 fills `demo@example.com` / `demo1234`. Registering also works and lasts until
 the app restarts.
 
-Demo mode turns itself off as soon as `BASE_URL` is set (in `.env` or with
-`--dart-define`), in staging and production, and in every profile or release
-build. A demo session stays signed in after that switch until you sign out, so
+One rule decides whether there is a backend: `AppConfig.hasBackend`, true
+once `BASE_URL` is set (in `.env` or with `--dart-define`) or the environment
+is staging or production. Demo mode is on exactly when it is false in a debug
+build, so it turns itself off with a `BASE_URL` - a local server included,
+which therefore needs `BASE_URL=http://localhost:3000` spelled out - and in
+every profile or release build.
+<!-- symbol: lib/core/config/app_config.dart AppConfig.hasBackend --> A demo session stays signed in after that switch until you sign out, so
 sign out (or clear the app's data) before pointing the app at a real backend.
 <!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
 To remove it entirely:
