@@ -133,9 +133,12 @@ Three tiers exist here:
   closing comment, linking
   `https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-<N>/<file>`.
   That branch has no Flutter project, so commit and push there with
-  `--no-verify`. Code comments cite evidence as `evidence:docs/verification/...`
-  (a git revspec: `git show origin/evidence:docs/...`). Terminal scrollback is
-  not evidence.
+  `--no-verify`. Terminal scrollback is not evidence.
+- **Nothing on `main` points back here.** Code comments, docs and test names
+  say *why* the code is the way it is; they never cite an issue
+  (`koniz-dev/flutter-starter#N`, a bare `#N`, an issue URL) or the evidence
+  branch. Those belong in commit messages and PR bodies. `check_deliverable.sh`
+  fails on the cited forms (koniz-dev/flutter-starter#629).
 - **Open every screenshot yourself** and confirm it shows the asserted behavior
   before writing PASS. A zero exit from `run_acceptance.sh` is an input, not a
   verdict; the script prints that reminder on success on purpose.
