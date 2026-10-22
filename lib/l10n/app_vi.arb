@@ -410,5 +410,8 @@
   "homeAddScreensHint": "Thêm màn hình trong lib/features/.",
   "@homeAddScreensHint": {
     "description": "Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated"
-  }
+  },
+  "demoModeTitle": "Chế độ demo",
+  "demoModeBody": "Chưa cấu hình backend (BASE_URL trống), nên đăng nhập được mô phỏng ngay trên thiết bị. Dùng {email} / {password}, hoặc đăng ký tài khoản bất kỳ.",
+  "demoModeFill": "Điền tài khoản demo"
 }

@@ -566,4 +566,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeAddScreensHint => 'Añade pantallas en lib/features/.';
+
+  @override
+  String get demoModeTitle => 'Modo demo';
+
+  @override
+  String demoModeBody(String email, String password) {
+    return 'No hay un backend configurado (BASE_URL está vacío), así que el inicio de sesión se simula en este dispositivo. Usa $email / $password, o registra cualquier cuenta.';
+  }
+
+  @override
+  String get demoModeFill => 'Rellenar la cuenta demo';
 }

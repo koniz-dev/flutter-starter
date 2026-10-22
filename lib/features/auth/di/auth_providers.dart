@@ -8,6 +8,7 @@ import 'package:flutter_starter/core/session/session_providers.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/is_authenticated_usecase.dart';
@@ -40,6 +41,9 @@ final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
 /// Uses ref.read to break circular dependency with apiClientProvider.
 final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
     Provider<AuthRemoteDataSource>((ref) {
+      // No backend configured in a development build: sign in offline, so a
+      // fresh copy runs end to end (koniz-dev/flutter-starter#628).
+      if (DemoAuth.enabled) return DemoAuthRemoteDataSource();
       final apiClient = ref.read(networkClientProvider);
       return AuthRemoteDataSourceImpl(apiClient);
     });

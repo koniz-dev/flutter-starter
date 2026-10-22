@@ -216,5 +216,8 @@
   "failureStorage": "تعذّرت قراءة البيانات أو حفظها على هذا الجهاز.",
   "failureServer": "حدث خطأ في الخادم. يرجى المحاولة لاحقًا.",
   "failureUnknown": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
-  "homeAddScreensHint": "أضف الشاشات ضمن lib/features/."
+  "homeAddScreensHint": "أضف الشاشات ضمن lib/features/.",
+  "demoModeTitle": "وضع العرض التجريبي",
+  "demoModeBody": "لم يتم إعداد خادم خلفي (BASE_URL فارغ)، لذا تتم محاكاة تسجيل الدخول على هذا الجهاز. استخدم {email} / {password}، أو سجّل أي حساب.",
+  "demoModeFill": "املأ الحساب التجريبي"
 }
