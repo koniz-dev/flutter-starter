@@ -138,7 +138,9 @@ fills `demo@example.com` / `demo1234`. Registering also works and lasts until
 the app restarts.
 
 Demo mode turns itself off as soon as `BASE_URL` is set (in `.env` or with
-`--dart-define`), in staging and production, and in every release build.
+`--dart-define`), in staging and production, and in every profile or release
+build. A demo session stays signed in after that switch until you sign out, so
+sign out (or clear the app's data) before pointing the app at a real backend.
 <!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
 To remove it entirely:
 

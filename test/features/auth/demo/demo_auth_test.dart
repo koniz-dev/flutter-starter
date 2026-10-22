@@ -27,7 +27,7 @@ void main() {
     test('no BASE_URL, development, debug build: on', () {
       expect(
         DemoAuth.isEnabledFor(
-          releaseMode: false,
+          debugBuild: true,
           environment: 'development',
           baseUrl: '',
         ),
@@ -38,7 +38,7 @@ void main() {
     test('a configured BASE_URL turns it off', () {
       expect(
         DemoAuth.isEnabledFor(
-          releaseMode: false,
+          debugBuild: true,
           environment: 'development',
           baseUrl: 'https://api.example.com',
         ),
@@ -46,10 +46,10 @@ void main() {
       );
     });
 
-    test('a release build can never enable it', () {
+    test('a profile or release build can never enable it', () {
       expect(
         DemoAuth.isEnabledFor(
-          releaseMode: true,
+          debugBuild: false,
           environment: 'development',
           baseUrl: '',
         ),
@@ -61,7 +61,7 @@ void main() {
       test('the $environment environment turns it off', () {
         expect(
           DemoAuth.isEnabledFor(
-            releaseMode: false,
+            debugBuild: true,
             environment: environment,
             baseUrl: '',
           ),
@@ -73,7 +73,7 @@ void main() {
     test('whitespace is not a BASE_URL', () {
       expect(
         DemoAuth.isEnabledFor(
-          releaseMode: false,
+          debugBuild: true,
           environment: 'development',
           baseUrl: '  ',
         ),

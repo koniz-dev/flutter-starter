@@ -14,12 +14,12 @@ import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 ///
 /// * `BASE_URL` is not configured (empty in `.env` and in `--dart-define`);
 /// * `ENVIRONMENT` is `development`;
-/// * the build is not a release build.
+/// * the build is a debug build.
 ///
 /// Setting `BASE_URL`, building for staging or production, or building in
-/// release mode turns it off, so it cannot ship by accident. To remove it,
-/// delete `lib/features/auth/demo/` and the lines that reference [DemoAuth]
-/// (`git grep -n DemoAuth`).
+/// profile or release mode turns it off, so it cannot ship by accident. To
+/// remove it, follow "Signing In Before You Have a Backend" in
+/// `docs/guides/onboarding/getting-started.md`.
 abstract final class DemoAuth {
   /// The account the login screen offers while demo mode is on.
   static const String email = 'demo@example.com';
@@ -35,17 +35,17 @@ abstract final class DemoAuth {
   static bool get enabled =>
       debugEnabledOverride ??
       isEnabledFor(
-        releaseMode: kReleaseMode,
+        debugBuild: kDebugMode,
         environment: AppConfig.environment,
         baseUrl: EnvConfig.get('BASE_URL'),
       );
 
   /// The rule behind [enabled], with every input explicit.
   static bool isEnabledFor({
-    required bool releaseMode,
+    required bool debugBuild,
     required String environment,
     required String baseUrl,
-  }) => !releaseMode && environment == 'development' && baseUrl.trim().isEmpty;
+  }) => debugBuild && environment == 'development' && baseUrl.trim().isEmpty;
 }
 
 /// An [AuthRemoteDataSource] that never touches the network.
