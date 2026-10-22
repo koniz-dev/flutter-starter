@@ -10,13 +10,18 @@ import 'doc_snippets.dart';
 
 void main() {
   test('template imports are pointed at the given package, others kept', () {
-    const block = '''
-import 'package:flutter_starter/core/utils/result.dart';
+    // Built from templatePackage, not written out: a rename rewrites every
+    // literal `package:flutter_starter/` in .dart files, this test's input
+    // included, and then there is nothing left to point anywhere
+    // (koniz-dev/flutter-starter#626). The target is a name no rename uses.
+    const block =
+        '''
+import 'package:$templatePackage/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 ''';
 
-    expect(forPackage(block, 'acme_shop'), '''
-import 'package:acme_shop/core/utils/result.dart';
+    expect(forPackage(block, 'zz_target_app'), '''
+import 'package:zz_target_app/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 ''');
   });
@@ -33,8 +38,9 @@ import 'package:flutter_test/flutter_test.dart';
   });
 
   test('a snippet importing the template package analyzes clean here', () {
-    const block = '''
-import 'package:flutter_starter/core/utils/result.dart';
+    const block =
+        '''
+import 'package:$templatePackage/core/utils/result.dart';
 
 Result<int> ok() => const Success(1);
 ''';
