@@ -2,7 +2,7 @@
 #
 # scripts/ci/generate_changelog.sh used to branch on $OSTYPE between GNU and
 # BSD `sed -i`, and the BSD branch aborted every macOS release half-done while
-# CI - Linux only - never noticed (koniz-dev/flutter-starter#282). The script
+# CI - Linux only - never noticed. The script
 # no longer uses `sed -i`, and this job keeps it that way: the same fixture
 # tests run on ubuntu-latest and on macos-latest, whose /bin/bash is 3.2.
 #

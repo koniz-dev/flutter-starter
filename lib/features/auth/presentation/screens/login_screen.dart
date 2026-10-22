@@ -18,7 +18,7 @@ class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key, this.redirect});
 
   /// The deep link the router guard parked on this route, if any, carried
-  /// on to the other auth screen (koniz-dev/flutter-starter#348).
+  /// on to the other auth screen.
   final String? redirect;
 
   @override
@@ -108,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Text(
                     // The failure in the user's language, never the log
-                    // text in `error` (koniz-dev/flutter-starter#414).
+                    // text in `error`.
                     authState.failure?.localizedMessage(l10n) ??
                         authState.error!,
                     style: TextStyle(

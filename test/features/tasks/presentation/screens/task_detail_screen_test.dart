@@ -294,7 +294,7 @@ void main() {
           findsOneWidget,
         );
         // Retrying a lookup for a missing task cannot help, so not-found
-        // offers Back instead (koniz-dev/flutter-starter#514).
+        // offers Back instead.
         expect(find.text('Retry'), findsNothing);
         expect(find.text('Back'), findsOneWidget);
       });
@@ -425,7 +425,7 @@ void main() {
         verify(() => mockUpdateTaskUseCase(any())).called(1);
       });
 
-      // koniz-dev/flutter-starter#180: the screen no longer stamps `updatedAt`.
+      // The screen no longer stamps `updatedAt`.
       // This drives the real `UpdateTaskUseCase` over a fake repository, so the
       // timestamp asserted is the one production code actually persists - a
       // mocked use case would pass whether or not the stamp survived the move.
@@ -530,7 +530,7 @@ void main() {
         verifyNever(() => mockUpdateTaskUseCase(any()));
       });
 
-      // koniz-dev/flutter-starter#345: a whitespace-only title used to pass
+      // A whitespace-only title used to pass
       // the raw-text validator and be saved as "".
       testWidgets('rejects a whitespace-only title when updating task', (
         tester,
@@ -663,7 +663,7 @@ void main() {
         ).called(1);
       });
 
-      // koniz-dev/flutter-starter#346: a failed create used to be dropped on
+      // A failed create used to be dropped on
       // the floor - the screen popped (or, here, just sat silently) and the
       // failure only reached the list behind it.
       testWidgets('a failed create keeps the typed text and shows the error', (
@@ -737,7 +737,7 @@ void main() {
         );
       });
 
-      // koniz-dev/flutter-starter#377: this test used to assert nothing - it
+      // This test used to assert nothing - it
       // tapped back only if a back button happened to exist, and the shared
       // single-route harness never gives it one. It now opens the detail from
       // a list route, so Back always exists, and asserts the outcome.
@@ -1139,8 +1139,8 @@ void main() {
         await tester.pumpAndSettle();
 
         // Assert - the detail rows render the dates through
-        // `DateFormatter.formatDateTime`, not a hand-rolled padLeft chain
-        // (koniz-dev/flutter-starter#147 criterion 3). Asserted with
+        // `DateFormatter.formatDateTime`, not a hand-rolled padLeft chain.
+        // Asserted with
         // `find.text()` because a golden renders every glyph as an opaque
         // block and cannot show a date.
         expect(

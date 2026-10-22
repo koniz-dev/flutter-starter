@@ -417,8 +417,8 @@ environment before calling `flutter` or `dart`. Without that, git's exported
 `GIT_DIR` makes the Flutter SDK resolve its own version against *this*
 repository instead of the SDK, which reported
 `The current Flutter SDK version is 0.0.0-unknown` and rejected commits that
-were clean when the same command was run by hand
-([#140](https://github.com/koniz-dev/flutter-starter/issues/140)). If you ever
+were clean when the same command was run by hand.
+If you ever
 see a hook report an SDK version that is not the one `flutter --version` prints
 outside the hook, that is the symptom, and it is a bug worth filing.
 

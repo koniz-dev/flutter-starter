@@ -8,8 +8,8 @@
 //    markdown diff. It catches a symbol mistyped or invented in a document.
 //  * this test is the **Quality gate**, which fires on a `lib/` diff. It
 //    catches an identifier deleted or renamed in `lib/` while the document
-//    still cites it - the direction koniz-dev/flutter-starter#182 actually
-//    drifted, where `contracts-map.md` named a provider that had never
+//    still cites it - the direction the docs have actually drifted in,
+//    where `contracts-map.md` named a provider that had never
 //    existed.
 //
 // `ci.yml` skips analyze and test on a markdown-only diff, so each gate sees
@@ -190,7 +190,7 @@ final realProvider = Provider<int>((ref) => 1);
     );
   });
 
-  // koniz-dev/flutter-starter#554: a directive can name `Type.member`.
+  // A directive can name `Type.member`.
   group('declaresMember', () {
     final userModel = File(
       'lib/features/auth/data/models/user_model.dart',

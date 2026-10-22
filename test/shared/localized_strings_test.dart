@@ -1,4 +1,4 @@
-// Regression tests for koniz-dev/flutter-starter#65, criteria 5, 6 and 11.
+// Regression tests: no hardcoded English in shared widgets.
 //
 // Every user-visible and screen-reader string in `lib/shared/` and
 // `lib/core/accessibility/` must come from the ARBs. These tests pump the
@@ -22,8 +22,7 @@ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Every English literal the issue reported as hardcoded, from sections 5 and
-/// 6 of koniz-dev/flutter-starter#65.
+/// Every English literal once found hardcoded in these widgets.
 const _englishLiterals = <String>[
   'No items found',
   'Load More',

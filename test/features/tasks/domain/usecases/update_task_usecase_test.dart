@@ -163,7 +163,7 @@ void main() {
       expect(task.updatedAt.isAfter(originalTask.updatedAt), isTrue);
     });
 
-    // koniz-dev/flutter-starter#345: the detail screen could save a blank
+    // The detail screen used to be able to save a blank
     // title through this use case.
     for (final title in ['', '   ', '\t\n']) {
       test(

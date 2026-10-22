@@ -18,7 +18,7 @@ import 'package:flutter_starter/core/config/app_config.dart';
 /// no `SecurityContext` and no `HttpClient`, so an app cannot see, let alone
 /// pin, the server certificate. On web [createAdapter] returns `null` and
 /// Dio keeps its browser transport, and [isEffective] is `false` whatever the
-/// configuration says (koniz-dev/flutter-starter#307).
+/// configuration says.
 @immutable
 class SslPinning {
   /// Creates a policy from an explicit flag and fingerprint list.

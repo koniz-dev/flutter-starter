@@ -106,10 +106,10 @@ void main() {
       });
     });
 
-    // Criterion 3 of #60. Bumping StorageVersion.current without registering
+    // Bumping StorageVersion.current without registering
     // the matching migration must fail here, not on a user's device where the
     // executor throws before the first frame.
-    group('chain coverage (#60)', () {
+    group('chain coverage', () {
       test('migrations span initial -> current with no gap', () {
         _expectSpansVersionChain(MigrationRegistry.migrations);
       });

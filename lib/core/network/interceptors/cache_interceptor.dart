@@ -46,7 +46,7 @@ class CacheConfig {
 /// 4xx is the server's answer and is passed through. A successful refetch
 /// replaces the entry. `maxAge` used to have no effect: a stale entry was
 /// served straight from the cache for up to seven days with no network
-/// attempt at all (koniz-dev/flutter-starter#310).
+/// attempt at all.
 /// ## What is cached
 ///
 /// Only **unauthenticated** `GET` responses with status 200. Before touching
@@ -59,8 +59,8 @@ class CacheConfig {
 /// that header from its own `onRequest`, and dio runs `onRequest` in
 /// registration order, so a header sniff only works while this interceptor
 /// happens to be registered *after* `AuthInterceptor` - an invariant nothing
-/// enforces, on a surface koniz-dev/flutter-starter#46 already proved is easy
-/// to get wrong. Reading the same store `AuthInterceptor` reads makes the
+/// enforces, on a surface that has already proved easy to get wrong. Reading
+/// the same store `AuthInterceptor` reads makes the
 /// decision correct at any position in the chain. The header check is kept as
 /// a secondary guard for credentials a caller attaches by hand through
 /// `Options(headers: ...)`, which *are* already present this early.
@@ -83,7 +83,7 @@ class CacheConfig {
 /// The wall-clock pair ([DateFormatter.formatDateTime] /
 /// [DateFormatter.parseDateTime]) must not be used here: it writes no
 /// timezone marker, so the reader has to assume its own current offset. That
-/// is exactly the defect koniz-dev/flutter-starter#188 fixed - a bare
+/// is exactly a defect this cache once had - a bare
 /// `DateTime.now().toIso8601String()` on a local `DateTime` emits neither `Z`
 /// nor an offset, so after a flight or a DST transition every entry written
 /// before the change was aged out by the offset, evicting fresh entries in
@@ -96,7 +96,7 @@ class CacheConfig {
 ///   jumps at upgrade time. They are as wrong as they always were and no
 ///   more, and they drain on their own: the first refetch after `maxAge`
 ///   rewrites the timestamp in the new form. No migration ships, for the
-///   reason given in #146 - the offset in force at write time was never
+///   simple reason that the offset in force at write time was never
 ///   recorded, so a migration would have to assume the device's current
 ///   offset, which is the same assumption the read path already makes at the
 ///   same moment.
@@ -388,7 +388,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   /// Every read-modify-write of the index chains onto this, so two cached
   /// GETs completing together cannot both read the same old index and let
   /// the last write drop the other's key - which left that body out of
-  /// [clearCache] and so alive past a logout (koniz-dev/flutter-starter#311).
+  /// [clearCache] and so alive past a logout.
   ///
   /// Null while idle, so an idle interceptor never makes a caller wait on a
   /// future created earlier, possibly in another zone (a completed future

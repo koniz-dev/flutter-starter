@@ -47,8 +47,6 @@ The one policy that does not re-arm is `benchmark`, and `pumpAndSettle` explicit
 
 This is upstream Flutter behaviour, deliberate for live bindings, and not something this repository can remove. The cost is only that device tests must poll instead of waiting for quiescence. **On the host VM (`flutter test`) `pumpAndSettle` is fine**, including on the full app — `test/main_test.dart` pumps `MyApp` and settles as a standing regression guard.
 
-See issue #40.
-
 ## Stable selectors
 
 Do not rely on translated button labels for critical steps. Use `ValueKey`s from [`lib/core/constants/ui_keys.dart`](../lib/core/constants/ui_keys.dart) (e.g. `e2e_login_submit`, `e2e_home_content`).

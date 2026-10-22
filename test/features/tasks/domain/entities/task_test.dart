@@ -192,7 +192,6 @@ void main() {
     // applies `toggleCompletion` inside its atomic mutation instead of
     // hand-copying `TaskModel` fields, and `UpdateTaskUseCase` calls `touch`
     // instead of minting its own `DateTime.now()`.
-    // Refs koniz-dev/flutter-starter#180.
     group('touch', () {
       test(
         'stamps updatedAt with the given instant and changes nothing else',

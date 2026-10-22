@@ -1,5 +1,5 @@
 // Kept markdown must not name a sample feature's symbols outside a strip
-// marker (koniz-dev/flutter-starter#409).
+// marker.
 //
 // `--remove-feature-flags` used to delete `docs/features/feature-flags.md` and
 // leave `docs/guides/configuration.md` documenting `LocalFeatureFlagsService`

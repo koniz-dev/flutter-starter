@@ -1,11 +1,10 @@
-// Tasks loaded for one user must not reach the next one
-// (koniz-dev/flutter-starter#353).
+// Tasks loaded for one user must not reach the next one.
 //
 // Built on the real provider graph: the real auth repository ends and starts
 // sessions, the real tasks data source writes `tasks_data` into one in-memory
 // store, and only the network is replaced. The tasks slice learns about the
 // session change solely through sessionEpochProvider, because it may not
-// import auth (#452).
+// import auth.
 
 import 'dart:async';
 import 'dart:convert';

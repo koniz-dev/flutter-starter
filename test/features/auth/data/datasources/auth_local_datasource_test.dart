@@ -720,7 +720,7 @@ void main() {
     });
   });
 
-  // Regression for koniz-dev/flutter-starter#168 criteria 2 and 3.
+  // Regression: each store tears down independently.
   //
   // `clearCache()` used to run both stores' teardown inside one `try`, so a
   // throwing `storageService.remove()` skipped `tokenStore.clearAllTokens()`
@@ -734,7 +734,7 @@ void main() {
   //
   // Counterfactual, actually run
   // (evidence:docs/verification/issue-168/counterfactual.log).
-  group('clearCache tears its two stores down independently (#168)', () {
+  group('clearCache tears its two stores down independently', () {
     for (final failure in <({String label, Object thrown})>[
       (
         label: 'an Exception',

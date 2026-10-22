@@ -2,7 +2,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   # App Store Connect rejects an app icon with an alpha channel, and a PNG
-  # logo usually has one: flatten it for iOS (koniz-dev/flutter-starter#339).
+  # logo usually has one: flatten it for iOS.
   remove_alpha_ios: true
   image_path: "assets/images/logo.png"
   min_sdk_android: 21

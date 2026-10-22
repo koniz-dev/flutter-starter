@@ -20,8 +20,7 @@
 // Both read the list through `parseAssetDeclarations`, a real YAML parse, so
 // every spelling Flutter accepts counts: `- .env`, the map form `- path: .env`
 // (which `flavors:` and `transformers:` need), a flow list `[.env.example,
-// .env]`, and `deferred-components:` asset lists
-// (koniz-dev/flutter-starter#330).
+// .env]`, and `deferred-components:` asset lists.
 //
 // A directory entry such as `- assets/config/` bundles every file directly
 // inside it, so a `.env` dropped in there ships without any pubspec diff at
@@ -38,7 +37,7 @@
 // design and a pinning setup may legitimately ship one.
 //
 // Deliberate exception. `--dart-define-from-file` configures a build on every
-// target, Flutter web included (koniz-dev/flutter-starter#278, #398). A bundled
+// target, Flutter web included. A bundled
 // `.env` remains an option only for configuration that must change *without a
 // rebuild* - an asset can be swapped at deploy time - and only for values you
 // would publish, because whatever the app bundles, its users can read. To take
@@ -72,8 +71,8 @@
 // What this cannot catch:
 //
 //   * a file created after the check runs. The directory walk sees the tree as
-//     it is at check time, and nothing re-runs it at build time - see
-//     koniz-dev/flutter-starter#135 for the release-build path;
+//     it is at check time. The build scripts and deploy workflows run it
+//     again just before building, but nothing re-runs it during the build;
 //   * a secret inside a file whose name looks innocuous. Matching is by name
 //     only; nothing reads file contents;
 //   * a secret in a *sub*-directory of a declared directory, which Flutter does
@@ -138,7 +137,7 @@ final RegExp _ackName = RegExp(r'^[A-Za-z0-9_+-]*\.[A-Za-z0-9._+-]*$');
 ///
 ///   * `# env-asset-ack: .env.example, publishable placeholders only` covers
 ///     `.env.example` and nothing else. It does **not** cover `.env`, which a
-///     substring test used to let through (koniz-dev/flutter-starter#170).
+///     substring test used to let through.
 ///   * `# env-asset-ack: .env.web only; there is no .env here` covers
 ///     *nothing*: the first segment is not a bare file name, so the list is
 ///     empty and the prose - including the `.env` inside it - is ignored. A
@@ -277,8 +276,7 @@ class AssetDeclaration {
   /// A **directory** entry has to name the file, and the name is compared
   /// **exactly** (case-insensitively), never as a substring. Every env file
   /// name is a prefix of a longer one, so the old substring test let
-  /// `# env-asset-ack: .env.example` acknowledge a real `.env` as well
-  /// (koniz-dev/flutter-starter#170).
+  /// `# env-asset-ack: .env.example` acknowledge a real `.env` as well.
   bool acknowledges(String fileName) {
     final marker = comment.indexOf(ackMarker);
     if (marker < 0) {
@@ -399,7 +397,7 @@ List<StaleAcknowledgement> findStaleAcknowledgements(
 /// The check fails **closed** on it: `main` exits 2 rather than reporting a
 /// clean tree it never actually read. A guard that shrugs at a shape it does
 /// not recognise is how map-form and flow-style entries shipped a `.env` past
-/// it (koniz-dev/flutter-starter#330).
+/// it.
 class AssetListFormatException implements Exception {
   /// Creates the exception for [message], about the pubspec's 1-based [line].
   const AssetListFormatException(this.message, {this.line});
@@ -687,8 +685,8 @@ int run(List<String> args, {StringSink? out, StringSink? err}) {
   // that can hide a bundled secret is a false PASS, and that is now an exit 1
   // below; what is left here is a reminder about files a human has already
   // signed off on, and acknowledgements that cover nothing at all. Stdout on a
-  // passing run used to carry the real signal, which is exactly how
-  // koniz-dev/flutter-starter#170 stayed quiet in CI.
+  // passing run used to carry the real signal, which is exactly how an
+  // over-broad acknowledgement once stayed quiet in CI.
   for (final f in findings.where((f) => f.acknowledged)) {
     stderr.writeln(
       'check_env_assets: $path:${f.line} bundles "${f.path}" with an '

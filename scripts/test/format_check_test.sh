@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# A format *check* must report, not rewrite (koniz-dev/flutter-starter#341).
+# A format *check* must report, not rewrite.
 #
 # In a scratch copy of the tracked tree with one misformatted file planted
 # under tool/:

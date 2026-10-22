@@ -1,5 +1,4 @@
-// tool/README.md must say how many checks check_docs runs
-// (koniz-dev/flutter-starter#564, split from #366).
+// tool/README.md must say how many checks check_docs runs.
 //
 // The README said "Three checks" while listing four, then "Five" while the
 // tool ran seven. This counts the checks check_docs.dart actually wires in

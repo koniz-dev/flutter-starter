@@ -149,7 +149,7 @@ void main() {
     );
   });
 
-  // koniz-dev/flutter-starter#276: ApiClient._send wraps an unexpected
+  // ApiClient._send wraps an unexpected
   // Exception as NetworkException(e.toString()), so this string is what a
   // user would read. It used to be "Instance of 'NetworkError'".
   group('NetworkError.toString', () {

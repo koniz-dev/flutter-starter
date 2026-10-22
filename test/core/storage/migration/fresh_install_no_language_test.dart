@@ -1,11 +1,10 @@
-// A fresh install must not get a stored language it never chose
-// (koniz-dev/flutter-starter#417).
+// A fresh install must not get a stored language it never chose.
 //
 // The example MigrationV1ToV2 seeded `language = 'en'` whenever the key was
 // absent. A fresh install is stamped v1, so it ran on every first launch, and
 // MigrationRegistry applies it to both stores. `language` is the key
 // LocalizationService reads as the user's choice, so the device language
-// (#324) lost to an English "preference" nobody had set.
+// lost to an English "preference" nobody had set.
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -104,7 +103,7 @@ void main() {
     expect(await storage.getString(AppConstants.languageKey), 'vi');
   });
 
-  testWidgets('after a fresh boot, a vi device resolves to vi (#324 + #417)', (
+  testWidgets('after a fresh boot, a vi device resolves to vi', (
     tester,
   ) async {
     tester.platformDispatcher.localesTestValue = const [Locale('vi', 'VN')];

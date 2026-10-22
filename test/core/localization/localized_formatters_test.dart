@@ -258,7 +258,7 @@ void main() {
       });
     });
 
-    // koniz-dev/flutter-starter#263: future dates used to fall through to
+    // Future dates used to fall through to
     // "Just now". Each case pins the reference time with `now:` so a slow
     // test run cannot push the target across a unit boundary.
     group('formatRelativeTime in the future', () {

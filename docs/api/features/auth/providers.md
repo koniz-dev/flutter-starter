@@ -4,7 +4,7 @@ Riverpod providers for authentication dependency injection.
 
 ## Overview
 
-Authentication providers live in `lib/features/auth/di/auth_providers.dart`. Import that file directly - `lib/core/di/providers.dart` re-exported it until koniz-dev/flutter-starter#221, and no longer does: core naming a feature was half of an import cycle, and the re-export was the other half.
+Authentication providers live in `lib/features/auth/di/auth_providers.dart`. Import that file directly - `lib/core/di/providers.dart` used to re-export it, and no longer does: core naming a feature was half of an import cycle, and the re-export was the other half.
 
 `authInterceptorProvider` moved the other way, into `lib/core/di/providers.dart`, because `apiClientProvider` installs it. The two things it needs from this feature arrive as overrides:
 

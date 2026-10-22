@@ -25,7 +25,7 @@ then
 fi
 
 # The same target e2e-android.yml runs, so the local and CI E2E paths test
-# one file (koniz-dev/flutter-starter#578).
+# one file.
 patrol test -t integration_test/app_e2e_test.dart
 
 echo -e "${GREEN}✅ E2E tests complete!${NC}"

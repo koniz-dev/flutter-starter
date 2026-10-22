@@ -1,5 +1,5 @@
 // Tests for the shared test helpers that docs point adopters at but no test
-// used (koniz-dev/flutter-starter#375). The issue's three broken helpers -
+// used. The issue's three broken helpers -
 // findWidgetWithText, findTextFormFieldByLabel, waitForCondition - had no
 // caller and were deleted rather than fixed, along with the other unused ones.
 

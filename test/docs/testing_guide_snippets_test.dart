@@ -1,5 +1,5 @@
 // The testing guide's and CONTRIBUTING's code must compile against this
-// repository (koniz-dev/flutter-starter#360).
+// repository.
 //
 // They imported `package:flutter_starter/test/helpers/...`, which cannot
 // resolve - test/ is not part of the package - and read the result of

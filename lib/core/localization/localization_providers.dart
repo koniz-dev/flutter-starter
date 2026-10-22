@@ -32,7 +32,7 @@ class LocaleNotifier extends Notifier<Locale> {
       });
     });
     // Until storage answers, follow the device rather than assuming
-    // English (koniz-dev/flutter-starter#324).
+    // English.
     return LocalizationService.deviceLocale();
   }
 
@@ -44,8 +44,7 @@ class LocaleNotifier extends Notifier<Locale> {
   /// In memory only: nothing is written to storage, so the choice is gone on
   /// the next launch. To keep it, persist it as well with
   /// [LocalizationService.setCurrentLocale] - which writes the preference this
-  /// notifier reads back at startup through [currentLocaleProvider]
-  /// (koniz-dev/flutter-starter#545).
+  /// notifier reads back at startup through [currentLocaleProvider].
   set locale(Locale locale) {
     state = locale;
   }

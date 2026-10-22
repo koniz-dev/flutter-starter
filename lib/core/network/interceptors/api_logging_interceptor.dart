@@ -156,7 +156,7 @@ class ApiLoggingInterceptor extends Interceptor {
     'signature',
     'pincode',
     'otpcode',
-    // Strapi returns its session token as `jwt` (koniz-dev/flutter-starter#313).
+    // Strapi returns its session token as `jwt`.
     'jwt',
   };
 
@@ -179,7 +179,7 @@ class ApiLoggingInterceptor extends Interceptor {
   ///
   /// `ApiClient` takes a path, so `get('/verify?token=X')` is a normal call,
   /// and that path used to be logged verbatim in the request, response and
-  /// error entries (koniz-dev/flutter-starter#313). Everything except the
+  /// error entries. Everything except the
   /// redacted values is kept exactly as written.
   static String redactPath(String path) {
     final queryStart = path.indexOf('?');

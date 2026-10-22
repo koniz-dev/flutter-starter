@@ -93,8 +93,8 @@ class AccessibleButton extends StatelessWidget {
 
     // One node for one control. The Material button makes its own button
     // node, so wrapping it in a second `Semantics(button: true)` gave a screen
-    // reader two focus stops, the outer one with no tap action
-    // (koniz-dev/flutter-starter#351). This node replaces the button's: it
+    // reader two focus stops, the outer one with no tap action.
+    // This node replaces the button's: it
     // carries the effective label, the enabled state, focusability and the
     // tap.
     return Semantics(
@@ -161,8 +161,7 @@ class AccessibleIconButton extends StatelessWidget {
     );
 
     // One node for one control, as in [AccessibleButton]: the IconButton's
-    // own node - and its tooltip's - is replaced by this one
-    // (koniz-dev/flutter-starter#351).
+    // own node - and its tooltip's - is replaced by this one.
     return Semantics(
       container: true,
       excludeSemantics: true,

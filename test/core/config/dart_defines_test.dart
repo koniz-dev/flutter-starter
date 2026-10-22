@@ -138,10 +138,9 @@ void main() {
     });
 
     test('no dart-define read is skipped on web', () {
-      // koniz-dev/flutter-starter#278. dart2js resolves the const table like
-      // every other compiler, so web needs no guard. Until #278 every read
-      // here sat behind `if (!kIsWeb)` and a web build discarded each
-      // --dart-define it was given.
+      // dart2js resolves the const table like every other compiler, so web
+      // needs no guard. Every read here used to sit behind `if (!kIsWeb)`,
+      // and a web build discarded each --dart-define it was given.
       final source = _stripLineComments(
         File('lib/core/config/env_config.dart').readAsStringSync(),
       );
@@ -152,8 +151,7 @@ void main() {
         reason: 'get and has each consult it',
       );
       // The typed getters parse what get() resolves, so they inherit its
-      // dart-define fallback rather than each carrying their own
-      // (koniz-dev/flutter-starter#322).
+      // dart-define fallback rather than each carrying their own.
       for (final getter in ['getBool', 'getInt', 'getDouble']) {
         final body = RegExp(
           'static \\w+ $getter\\([^)]*\\)[^;{]*(\\{[^}]*\\}|=>[^;]*;)',
@@ -203,7 +201,7 @@ void main() {
     // Skipped otherwise, because the value is baked in at compile time and
     // cannot be injected from inside the test.
     //
-    // Also run it on web (#278):
+    // Also run it on web:
     //   flutter test --platform chrome \
     //     --dart-define=BASE_URL=https://api.example.com \
     //     test/core/config/dart_defines_test.dart
@@ -225,7 +223,7 @@ void main() {
     );
 
     // With pinning requested through dart-defines, web must not report
-    // itself as pinned: the browser owns TLS (#307), and since #278 the
+    // itself as pinned: the browser owns TLS, and the
     // defines do reach a web build. Run as
     //   flutter test [--platform chrome] --dart-define=ENABLE_SSL_PINNING=true \
     //     --dart-define=API_SSL_FINGERPRINTS=<sha256> \

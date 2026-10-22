@@ -1,10 +1,10 @@
 // Setup instructions that copy `.env` must also feed it to the build.
 //
 // `.env` is not a Flutter asset, so plain `flutter run` ignores it and runs on
-// the built-in defaults. README and CONTRIBUTING drifted into exactly that
-// (koniz-dev/flutter-starter#355); `tool/doc_env_runs.dart` is the rule that
+// the built-in defaults. README and CONTRIBUTING drifted into exactly that;
+// `tool/doc_env_runs.dart` is the rule that
 // would have caught it, and `tool/check_docs.dart` runs it on every markdown
-// diff (koniz-dev/flutter-starter#434). This test pins the rule's behaviour on
+// diff. This test pins the rule's behaviour on
 // fixtures and runs it over the repository from the Quality gate.
 
 import 'dart:io';
@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../tool/doc_env_runs.dart';
 
-/// README.md lines 86-96 as they stood before #355.
+/// README.md lines 86-96 as they once stood.
 const _readmeBefore = '''
 ### 4. Application Configuration
 Initialize the local environment settings explicitly:
@@ -28,7 +28,7 @@ flutter run
 ```
 ''';
 
-/// The same section after #355.
+/// The same section after the fix.
 const _readmeAfter = '''
 ### 4. Application Configuration
 Initialize the local environment settings explicitly:

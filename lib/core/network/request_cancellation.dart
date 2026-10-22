@@ -6,8 +6,7 @@ import 'dart:async';
 /// longer wanted - a screen disposed, a search superseded by the next
 /// keystroke. The caller's future then fails with a `NetworkException` coded
 /// `REQUEST_CANCELLED`, and nothing further reaches the transport for that
-/// request: not a `RetryInterceptor` re-send, not a 401 refresh's replay
-/// (koniz-dev/flutter-starter#316).
+/// request: not a `RetryInterceptor` re-send, not a 401 refresh's replay.
 ///
 /// One handle may cover several requests; cancelling it cancels them all.
 /// Cancelling twice, or after the requests finished, does nothing.

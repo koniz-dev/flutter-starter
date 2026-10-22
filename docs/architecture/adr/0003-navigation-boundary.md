@@ -27,7 +27,7 @@ Screens call `context.goToRegister()`, `context.pushRoute(...)`,
 do not import `package:go_router`.
 
 The `AppNavigator` contract, `GoRouterNavigatorAdapter` and
-`appNavigatorProvider` were **deleted** (koniz-dev/flutter-starter#177).
+`appNavigatorProvider` were **deleted**.
 
 The auth redirect policy decision from the original ADR stands and is
 implemented: `app_router.dart` holds the redirect, including the three-state

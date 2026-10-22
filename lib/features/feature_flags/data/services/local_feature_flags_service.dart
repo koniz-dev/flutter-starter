@@ -6,10 +6,10 @@ import 'package:flutter_starter/features/feature_flags/domain/entities/feature_f
 /// Handles compile-time and build-mode flags. A remote source and the debug
 /// screen's local overrides sit above these; see the feature-flags guide.
 ///
-/// There is deliberately **no environment level** (koniz-dev/flutter-starter#279).
+/// There is deliberately **no environment level**.
 /// It used to come first, reading `EnvConfig.has('FEATURE_<KEY>')`, but
 /// `EnvConfig` reads a `--dart-define` only through the const `DartDefines`
-/// table (#48), and a key built at run time from the flag name is never in
+/// table, and a key built at run time from the flag name is never in
 /// that table. So `--dart-define=FEATURE_...=true` was discarded in every
 /// build, and the level could fire only from a `.env` bundled as an asset,
 /// which `docs/guides/configuration.md` tells you not to ship. A promise the
@@ -77,8 +77,7 @@ class LocalFeatureFlagsService {
   ///
   /// This is the lookup the repository's `getFlag` uses, so one flag reads
   /// the same there as in [getAllLocalFlags]. Calling [getLocalFlag] with
-  /// the key alone passes no defaults and always returns null
-  /// (koniz-dev/flutter-starter#318).
+  /// the key alone passes no defaults and always returns null.
   ///
   /// Returns null if [key] has no local definition, or if its definition
   /// sets no default for this build.

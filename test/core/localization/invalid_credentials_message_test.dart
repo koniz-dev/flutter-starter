@@ -1,7 +1,6 @@
-// Rejected credentials need their own message
-// (koniz-dev/flutter-starter#479, split from #445).
+// Rejected credentials need their own message.
 //
-// Since #309 a 401 on login is an AuthFailure, and every AuthFailure rendered
+// A 401 on login is an AuthFailure, and every AuthFailure rendered
 // as failureAuth - "you're not signed in, or your session has ended" - which
 // is wrong for a mistyped password. A failure tagged
 // FailureCodes.invalidCredentials renders failureInvalidCredentials instead.

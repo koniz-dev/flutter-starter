@@ -3,8 +3,7 @@
 // `docs/architecture/contracts-map.md` is the document an adopter follows to
 // swap an implementation, and it cited `tasksControllerProvider` and
 // `FirebaseFeatureFlagsRemoteDataSource` - two identifiers that have never
-// existed anywhere in this repository. Nothing caught it
-// (koniz-dev/flutter-starter#182, split out as #206).
+// existed anywhere in this repository. Nothing caught it.
 //
 // `tool/doc_signatures.dart` already checks the strong assertion - *this
 // constructor's parameter list matches* - but it only fits a documented
@@ -67,8 +66,7 @@ class SymbolProblem {
 }
 
 /// Directive syntax: `<!-- symbol: <source path> <identifier> -->`, where
-/// the identifier is a top-level name or `Type.member`
-/// (koniz-dev/flutter-starter#554).
+/// the identifier is a top-level name or `Type.member`.
 final RegExp _directivePattern = RegExp(
   r'^\s*<!--\s*symbol:\s*(\S+)\s+'
   r'([A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)?)\s*-->\s*$',
@@ -205,7 +203,7 @@ bool _resolves(String source, String symbol) {
 
 /// Whether the class, mixin, enum or extension [type] in [source] declares
 /// [member] directly: a named or factory constructor (`Type.member(`), a
-/// method, a getter or setter, or a field (koniz-dev/flutter-starter#554).
+/// method, a getter or setter, or a field.
 ///
 /// Only the type's own body is searched, and only at its top level - a call
 /// such as `return toJson();` inside a method body is not a declaration.

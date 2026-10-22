@@ -10,7 +10,7 @@ class _RecordingOutput extends LogOutput {
   void output(OutputEvent event) => events.add(event);
 }
 
-// koniz-dev/flutter-starter#576: through the injected output a test sees the
+// Through the injected output a test sees the
 // level and the formatted text each call produced, so logging an error as a
 // warning (or any other level swap) fails here.
 void main() {

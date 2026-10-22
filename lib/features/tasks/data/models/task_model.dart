@@ -36,8 +36,8 @@ import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 /// path makes, reached at the same moment. The offset that was in force when
 /// the row was written was never recorded and is not recoverable by any
 /// reader. A migration would therefore buy no accuracy while adding a boot
-/// path that can fail (a failed startup migration reaches `StartupFailureApp`
-/// since koniz-dev/flutter-starter#101).
+/// path that can fail (a failed startup migration reaches
+/// `StartupFailureApp`).
 ///
 /// Legacy rows drain on their own instead. `TasksLocalDataSource` stores the
 /// whole list under one key and rewrites all of it on any mutation, so the

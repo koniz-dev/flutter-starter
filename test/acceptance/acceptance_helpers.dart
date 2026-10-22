@@ -45,7 +45,7 @@ const Size kAcceptanceSurface = Size(1200, 800);
 /// The scope applies [authModuleOverrides] before [overrides], exactly as
 /// `createAppContainer` in lib/main.dart does, so a screen under test sees the
 /// providers production wires. Without them core's session seams stay empty
-/// and a forced logout never reaches the router (koniz-dev/flutter-starter#288).
+/// and a forced logout never reaches the router.
 /// test/tooling/acceptance_container_test.dart enforces this for every file
 /// under test/acceptance/.
 Future<void> pumpAcceptance(

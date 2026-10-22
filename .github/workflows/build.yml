@@ -4,7 +4,7 @@ name: Build (Manual)
 # touches android/ (or this toolchain gate), `android-jdk25` checks the
 # Gradle/AGP/Kotlin floors and builds a debug APK on JDK 25 - the JDK bundled
 # with current Android Studio, which CI's Java 17 never exercised while the
-# project could not build on it (koniz-dev/flutter-starter#329, #387). The
+# project could not build on it. The
 # manual jobs keep their `inputs.platform` guards, which are false on a PR.
 on:
   pull_request:
@@ -80,8 +80,7 @@ jobs:
         run: flutter pub get
 
       # The bundled-secrets guard, before any build: a `.env` declared as a
-      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
-      # #336).
+      # Flutter asset ships inside the artifact.
       - name: Guard against a bundled secrets file
         run: dart run tool/check_env_assets.dart
 
@@ -128,8 +127,7 @@ jobs:
         run: flutter pub get
 
       # The bundled-secrets guard, before any build: a `.env` declared as a
-      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
-      # #336).
+      # Flutter asset ships inside the artifact.
       - name: Guard against a bundled secrets file
         run: dart run tool/check_env_assets.dart
 
@@ -174,8 +172,7 @@ jobs:
       # above rather than by the Android debug key. The check itself lives in
       # scripts/ci/verify_apk_signer.sh so it can be pointed at a deliberately
       # debug-signed or deliberately unsigned APK and observed to FAIL - the
-      # inline version could not be, and shipped broken twice as a result
-      # (koniz-dev/flutter-starter#62, koniz-dev/flutter-starter#153).
+      # inline version could not be, and shipped broken twice as a result.
       - name: Print APK signer certificate
         shell: bash
         run: |
@@ -208,8 +205,7 @@ jobs:
         run: flutter pub get
 
       # The bundled-secrets guard, before any build: a `.env` declared as a
-      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
-      # #336).
+      # Flutter asset ships inside the artifact.
       - name: Guard against a bundled secrets file
         run: dart run tool/check_env_assets.dart
 
@@ -251,8 +247,7 @@ jobs:
         run: flutter pub get
 
       # The bundled-secrets guard, before any build: a `.env` declared as a
-      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
-      # #336).
+      # Flutter asset ships inside the artifact.
       - name: Guard against a bundled secrets file
         run: dart run tool/check_env_assets.dart
 

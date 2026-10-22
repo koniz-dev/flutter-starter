@@ -86,7 +86,7 @@ class LocalizationService {
   /// returns the first whose language this app ships; [defaultLocale] when
   /// none matches. Used whenever the user has stored no choice, so a device
   /// set to Vietnamese opens in Vietnamese rather than always in
-  /// [defaultLocale] (koniz-dev/flutter-starter#324).
+  /// [defaultLocale].
   static Locale deviceLocale([List<Locale>? preferred]) {
     for (final locale in preferred ?? _platformLocales) {
       final supported = SupportedLocale.fromLanguageCode(locale.languageCode);

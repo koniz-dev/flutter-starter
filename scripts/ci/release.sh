@@ -65,8 +65,7 @@ echo ""
 # Steps 3 and 4 change pubspec.yaml and CHANGELOG.md, and the two land together
 # or not at all. The tree was clean when we started (checked above), so undoing
 # means restoring both files to HEAD - and deleting CHANGELOG.md if step 4 was
-# what created it. Before koniz-dev/flutter-starter#282 a failed step 4 left a
-# bumped pubspec.yaml with no changelog, no branch, no commit and no tag.
+# what created it. Without this, a failed step 4 used to leave a bumped pubspec.yaml with no changelog, no branch, no commit and no tag.
 rollback_release_files() {
     git checkout -- pubspec.yaml
     if git ls-files --error-unmatch CHANGELOG.md >/dev/null 2>&1; then

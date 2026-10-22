@@ -3,8 +3,8 @@
 #
 # Before dependencies resolve, `dart format` used to rewrite ~100 untouched
 # files and then fail the commit; nothing noticed, because every machine and
-# every CI job that runs the hook has already run `pub get`
-# (koniz-dev/flutter-starter#300). A fresh clone is the only state that shows
+# every CI job that runs the hook has already run `pub get`.
+# A fresh clone is the only state that shows
 # it, so this job makes one.
 #
 # Not a PR check: it runs on pushes to main that touch the hooks or this test,

@@ -1,5 +1,5 @@
 // LazyLoader must not crash on a failed preload, nor resurrect a cleared
-// cache (koniz-dev/flutter-starter#328).
+// cache.
 //
 // preload() fired `unawaited(load(key))`, so a loader failure became an
 // uncaught zone error; and clearCache() during a load was undone when the load

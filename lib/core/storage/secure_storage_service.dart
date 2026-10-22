@@ -11,7 +11,7 @@ import 'package:flutter_starter/core/storage/string_list_encoding.dart';
 /// - API keys
 /// - Other sensitive information
 ///
-/// Platform-specific configuration (koniz-dev/flutter-starter#571):
+/// Platform-specific configuration:
 /// - iOS and macOS: Keychain items are `first_unlock_this_device` - readable
 ///   after the first unlock since boot, and never migrated to a backup or a
 ///   new device. macOS used to get the plugin's default, `unlocked`, because
@@ -19,8 +19,8 @@ import 'package:flutter_starter/core/storage/string_list_encoding.dart';
 ///
 /// String lists are stored as a JSON array (see `string_list_encoding.dart`),
 /// so any element round-trips - including one holding a comma, and `['']`.
-/// A list written before koniz-dev/flutter-starter#281 in the old
-/// comma-joined form still reads back, split on commas as it was written.
+/// A list written in the old comma-joined form still reads back, split on
+/// commas as it was written.
 class SecureStorageService implements IStorageService, IStrictStringRead {
   /// Creates a [SecureStorageService] instance with platform-specific options
   SecureStorageService()
@@ -33,7 +33,7 @@ class SecureStorageService implements IStorageService, IStrictStringRead {
   ///
   /// Named so a test can check them: the plugin sends them only when
   /// `dart:io`'s `Platform.isIOS` is true, so a host `flutter test` never sees
-  /// them on the method channel (koniz-dev/flutter-starter#374).
+  /// them on the method channel.
   static const IOSOptions iosOptions = IOSOptions(
     accessibility: KeychainAccessibility.first_unlock_this_device,
   );

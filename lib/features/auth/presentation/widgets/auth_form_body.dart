@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 /// Both screens used to be a non-scrolling `Padding > Form > Column(center)`,
 /// so a soft keyboard on a phone, or the phone turned to landscape, made the
 /// column overflow and pushed the submit button off-screen where it could not
-/// be reached (koniz-dev/flutter-starter#349). The minimum height keeps the
+/// be reached. The minimum height keeps the
 /// form vertically centred exactly as before whenever there is room.
 class AuthFormBody extends StatelessWidget {
   /// Wraps [child], normally the screen's `Form`.

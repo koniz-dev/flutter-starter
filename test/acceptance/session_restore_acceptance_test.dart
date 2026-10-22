@@ -21,7 +21,7 @@ import 'package:go_router/go_router.dart';
 
 import 'acceptance_helpers.dart';
 
-/// Visual evidence for #51 and #85: what a cold start actually shows for a
+/// Visual evidence: what a cold start actually shows for a
 /// persisted session, for empty storage, and for a cached user whose token
 /// is gone.
 ///
@@ -66,8 +66,7 @@ Future<GoRouter> _pumpColdStart(
   addTearDown(() => tester.binding.setSurfaceSize(null));
 
   // Built through createAppContainer, as lib/main.dart builds it, so the auth
-  // slice's authModuleOverrides fill core's session seams
-  // (koniz-dev/flutter-starter#288).
+  // slice's authModuleOverrides fill core's session seams.
   final container = createAppContainer(
     overrides: [
       authLocalDataSourceProvider.overrideWithValue(localDataSource),
@@ -100,7 +99,7 @@ Future<GoRouter> _pumpColdStart(
 }
 
 void main() {
-  group('cold start acceptance (#51)', () {
+  group('cold start acceptance: restore', () {
     testWidgets('with a persisted session the app opens on home', (
       tester,
     ) async {
@@ -143,12 +142,12 @@ void main() {
     });
   });
 
-  group('cold start acceptance (#85)', () {
+  group('cold start acceptance: no token', () {
     testWidgets('a cached user with no token opens on login, not home', (
       tester,
     ) async {
       // The state AuthInterceptor's forced logout leaves behind: the user blob
-      // outlived the token clear. Before #85 this booted into the
+      // outlived the token clear. This used to boot into the
       // authenticated shell and then 401'd on every request.
       final router = await _pumpColdStart(
         tester,

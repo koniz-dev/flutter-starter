@@ -14,7 +14,7 @@
 // The deploy workflows document tag-push and main-branch-push deploys as
 // ALTERNATIVES, but their commented `push:` block lists both. Uncommenting the
 // whole block enabled both at once, so every push to main deployed, as
-// production (koniz-dev/flutter-starter#334). Without --deploy-trigger the
+// production. Without --deploy-trigger the
 // deploy-* workflows are left manual-only; with it, exactly the chosen option
 // is enabled and the other stays commented.
 //
@@ -33,7 +33,7 @@
 // column 0 - a second top-level workflow key - and GitHub rejected the file.
 // It also only ever uncommented the key, never the `tags:`/`branches:` lines
 // under it, turning the one real trigger it did touch into a null value:
-// "deploy on every branch" (issue #57).
+// "deploy on every branch".
 //
 // So: only the top-level `on:` block is considered, only commented lines whose
 // content is `push:` or `pull_request:` start a change, and the commented child

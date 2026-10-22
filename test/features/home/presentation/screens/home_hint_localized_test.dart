@@ -5,7 +5,7 @@ import 'package:flutter_starter/features/home/presentation/screens/home_screen.d
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// koniz-dev/flutter-starter#513 (split from #352): HomeScreen rendered its
+// HomeScreen used to render its
 // 'Add screens under lib/features/.' hint as a literal, so it read in English
 // under every locale.
 

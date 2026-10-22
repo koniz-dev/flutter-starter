@@ -1,5 +1,4 @@
-// SecureStorageService string lists must round-trip any string
-// (koniz-dev/flutter-starter#281).
+// SecureStorageService string lists must round-trip any string.
 //
 // They used to be joined and split on ',', so `['a,b', 'c']` came back as
 // three elements and `['']` came back empty, while the shared_preferences
@@ -94,7 +93,7 @@ void main() {
       );
     });
 
-    // koniz-dev/flutter-starter#471: the residual ambiguity decodeStringList
+    // The residual ambiguity decodeStringList
     // documents and accepts. Pinned so the doc stays true: if this ever
     // reads as legacy, the encoding changed and the doc must say how.
     test('the documented residual: legacy text that is itself a JSON array '

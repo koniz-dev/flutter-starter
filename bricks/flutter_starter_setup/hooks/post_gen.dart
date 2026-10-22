@@ -64,7 +64,7 @@ Future<void> run(HookContext context) async {
 
   // Last, because it needs the renamed package resolved and the regenerated
   // localizations in place. Without it the tree analyzed clean before the
-  // rename and red after it (koniz-dev/flutter-starter#283).
+  // rename and red after it.
   await _repairRenamedSources(rootPath, logger);
 
   logger.alert('Setup complete. Next: flutter analyze && flutter test');
@@ -403,7 +403,7 @@ Future<void> _patchPatrolConfig(
 ///
 /// README and `mason-demo-script.md` document `mason make feature_clean` after
 /// setup. Left alone, every feature the brick generates imports the template
-/// package and does not resolve (koniz-dev/flutter-starter#358). The templates
+/// package and does not resolve. The templates
 /// are deliberately not in [_renamedDirectories]: that list is also handed to
 /// `dart fix` and `dart format`, which cannot parse mustache. Only the import
 /// prefix is replaced, so mustache tags and templated filenames are untouched.

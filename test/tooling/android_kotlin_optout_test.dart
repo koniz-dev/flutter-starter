@@ -1,6 +1,5 @@
 // The Android build opts out of AGP 9's built-in Kotlin exactly as long as a
-// resolved plugin still applies the Kotlin Gradle plugin (KGP) itself
-// (koniz-dev/flutter-starter#392).
+// resolved plugin still applies the Kotlin Gradle plugin (KGP) itself.
 //
 // The opt-out (`android.builtInKotlin=false`, `android.newDsl=false`) is what
 // `flutter create` writes today, and it cannot go while freerasp, patrol or
@@ -39,15 +38,14 @@ String? mismatch({required bool optedOut, required Set<String> kgpPlugins}) {
         'remove id("kotlin-android") from android/app/build.gradle.kts and '
         'android.builtInKotlin / android.newDsl from android/gradle.properties '
         '(https://docs.flutter.dev/release/breaking-changes/'
-        'migrate-to-built-in-kotlin/for-app-developers, '
-        'koniz-dev/flutter-starter#392).';
+        'migrate-to-built-in-kotlin/for-app-developers).';
   }
   if (!optedOut && kgpPlugins.isNotEmpty) {
     return 'android/gradle.properties no longer opts out of built-in Kotlin, '
         'but these resolved plugins still apply the Kotlin Gradle plugin: '
         '${(kgpPlugins.toList()..sort()).join(', ')}. Keep '
         'android.builtInKotlin=false and android.newDsl=false until they ship '
-        'built-in-Kotlin versions (koniz-dev/flutter-starter#392).';
+        'built-in-Kotlin versions.';
   }
   return null;
 }

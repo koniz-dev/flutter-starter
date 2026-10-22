@@ -72,8 +72,7 @@ abstract class AppColors {
   ///
   /// Used as text - validation messages, auth errors - on [background]
   /// (5.32:1) and [surface] (5.61:1), and as a fill behind [textInverse]
-  /// (5.61:1). It was #DC3545, 4.30:1 as text on [background], below AA
-  /// (koniz-dev/flutter-starter#350).
+  /// (5.61:1). It was #DC3545, 4.30:1 as text on [background], below AA.
   static const Color error = Color(0xFFC82333);
 
   /// [error] for the dark theme, where #C82333 is too dark to read on the
@@ -83,7 +82,7 @@ abstract class AppColors {
 
   /// [primary] for the dark theme's text and accents - text buttons,
   /// section headers - at 7.14:1 on the dark background. [primary] itself is
-  /// 3.59:1 there, below AA for text (#350). Filled buttons keep [primary].
+  /// 3.59:1 there, below AA for text. Filled buttons keep [primary].
   static const Color primaryOnDark = Color(0xFF4DA3FF);
 
   /// Informational state color.

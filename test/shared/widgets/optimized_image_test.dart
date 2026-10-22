@@ -164,8 +164,8 @@ void main() {
   // Every preload goes through the seam, never ImageCacheHelper.preloadImage:
   // the real path starts a 10 s precache timeout that is still pending when a
   // test ends, unless an earlier test already left the URL in the shared
-  // imageCache - so the result depended on test order
-  // (koniz-dev/flutter-starter#617). ImageCacheHelper's own tests cover the
+  // imageCache - so the result depended on test order.
+  // ImageCacheHelper's own tests cover the
   // real path.
   late List<String> preloaded;
   setUp(() {

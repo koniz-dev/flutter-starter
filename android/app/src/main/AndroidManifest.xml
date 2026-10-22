@@ -6,8 +6,8 @@
          auth flow post to AppConfig.baseUrl.
          A release build happens to receive INTERNET transitively today, from an
          Android library manifest in the dependency graph rather than from any
-         Flutter plugin's own manifest (see
-         evidence:docs/verification/issue-49/baseline-release-manifest.xml). Do not rely
+         Flutter plugin's own manifest, as the merged release manifest shows.
+         Do not rely
          on that: a permission the app needs for its own traffic must not vanish
          when a dependency is dropped or bumped. -->
     <uses-permission android:name="android.permission.INTERNET"/>

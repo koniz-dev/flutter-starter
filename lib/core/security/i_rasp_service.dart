@@ -19,7 +19,7 @@ enum SecurityThreat {
   unknown,
 
   // The values below each carry exactly one freeRASP detection, one to one,
-  // so a listener can tell them apart (koniz-dev/flutter-starter#390). Several
+  // so a listener can tell them apart. Several
   // are device-posture signals rather than attacks; see the RASP section of
   // docs/guides/security/implementation.md before turning any of them into a
   // forced logout.

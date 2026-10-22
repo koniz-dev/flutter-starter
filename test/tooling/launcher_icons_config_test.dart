@@ -1,5 +1,4 @@
-// The iOS app icon must be generated without an alpha channel
-// (koniz-dev/flutter-starter#339).
+// The iOS app icon must be generated without an alpha channel.
 //
 // flutter_launcher_icons.yaml set `ios: true` without `remove_alpha_ios`, so
 // branding with a PNG logo - which normally has alpha - produced an RGBA 1024

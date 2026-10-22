@@ -16,7 +16,7 @@
 // fires on markdown only. It runs here as well because `ci.yml` skips its
 // analyze and test steps on a markdown-only diff, so each gate sees exactly
 // one drift direction, and the code side - a constructor gaining a parameter -
-// is the direction koniz-dev/flutter-starter#89 actually drifted.
+// is the direction the docs have actually drifted in.
 
 import 'dart:io';
 
@@ -156,7 +156,7 @@ class Sample {
       ]);
     });
 
-    test('reads a one-line positional-then-named list (#481)', () {
+    test('reads a one-line positional-then-named list', () {
       const source = '''
 class ServerFailure extends Failure {
   const ServerFailure(super.message, {super.code, this.statusCode});
@@ -189,7 +189,7 @@ class ServerFailure extends Failure {
     });
   });
 
-  group('doc_signatures matching rule (#481)', () {
+  group('doc_signatures matching rule', () {
     DocParameter one(String source) => parameters(source, 'X')!.single;
 
     test('a formal matches a typed parameter of the same name and kind', () {

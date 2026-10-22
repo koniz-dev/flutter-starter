@@ -26,13 +26,13 @@ class _TestAuthNotifier extends AuthNotifier {
 // These tests drive the *app's* router (`goRouterProvider`), not a router
 // assembled in the test file. A local router can register whatever the helper
 // under test happens to need, which is how `goToTasks()` read as covered for
-// the year the app registered no `/tasks` route at all (#56). Pumping the real
+// the year the app registered no `/tasks` route at all. Pumping the real
 // tree means a helper pointing at an unregistered location fails here.
 //
 // Every case states its auth precondition, because the top-level redirect is
 // part of the behaviour: `sessionRestorationProvider` is overridden with a
 // completed future so the guard is not sitting in its "restore in flight"
-// hold state (#51), which is what `main()` has already awaited before
+// hold state, which is what `main()` has already awaited before
 // `runApp`.
 
 void main() {

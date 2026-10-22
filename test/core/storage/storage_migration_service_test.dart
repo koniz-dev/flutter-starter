@@ -77,7 +77,7 @@ void main() {
         final results = await migrationService.migrateAll();
 
         // The returned versions used to be asserted only as "not null", which
-        // held even when migration silently did nothing (#60).
+        // held even when migration silently did nothing.
         expect(results['regular'], StorageVersion.current);
         expect(results['secure'], StorageVersion.current);
         expect(
@@ -126,7 +126,7 @@ void main() {
       );
     });
 
-    // Criterion 5 of #60: SecureStorageService returns false instead of
+    // SecureStorageService returns false instead of
     // throwing when the backend is unavailable, so the version stamp write
     // used to fail in silence and the chain re-ran on every launch.
     test('migrateSecure surfaces an unwritable secure backend', () async {

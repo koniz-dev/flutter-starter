@@ -29,15 +29,15 @@ import 'package:path/path.dart' as p;
 /// tree are listed. The partial variants need far fewer overrides than
 /// `stripped` because `lib/main.dart` and the home screen are already
 /// feature-agnostic on the committed tree. `routes_registry.dart` is not:
-/// since #56 it composes the tasks and feature-flags route modules, so every
+/// it composes the tasks and feature-flags route modules, so every
 /// variant needs its own copy.
 ///
-/// The `test/core/routing/` files are deliberately absent: since #56 those
-/// tests assert only the routes every variant keeps, and each sample feature
+/// The `test/core/routing/` files are deliberately absent: those tests
+/// assert only the routes every variant keeps, and each sample feature
 /// asserts its own routing in `test/features/<feature>/routing/`, which the
 /// strip deletes with the feature. Three near-identical copies of a test file
 /// is how the `stripped` copy of `app_router_test.dart` silently stayed on
-/// the pre-#51 router.
+/// an outdated router.
 const _goldenOverrides = <String, List<String>>{
   'stripped': [
     'lib/core/routing/app_router.dart',
@@ -74,10 +74,10 @@ const _goldenOverrides = <String, List<String>>{
 ///     table - carrying `<!-- strip:<tag> line -->` anywhere on it.
 ///
 /// `strip-tool` regions document this tool itself, and go when it removes
-/// itself after a sample strip (koniz-dev/flutter-starter#622).
-/// `feature-flags` and `tasks` regions go with their sample (koniz-dev/flutter-starter#409), and stay,
+/// itself after a sample strip.
+/// `feature-flags` and `tasks` regions go with their sample, and stay,
 /// invisible, while the sample is kept. `bricks` regions go with `bricks/`
-/// and `mason.yaml` under `--remove-bricks` (koniz-dev/flutter-starter#588).
+/// and `mason.yaml` under `--remove-bricks`.
 const _featureFlagsTag = 'feature-flags';
 const _tasksTag = 'tasks';
 const _bricksTag = 'bricks';
@@ -91,8 +91,8 @@ const _markerTags = <String>[
 
 /// What exists only to run this strip. Once it has removed a sample, running it
 /// again is not supported, so after a sample strip it deletes all of it - the
-/// adopter keeps nothing whose only job was producing their tree
-/// (koniz-dev/flutter-starter#622). `--keep-samples` keeps it, because the
+/// adopter keeps nothing whose only job was producing their tree.
+/// `--keep-samples` keeps it, because the
 /// samples can still be removed later.
 const _selfPaths = <String>[
   'tool/strip_sample_features.dart',
@@ -152,11 +152,11 @@ void main(List<String> args) {
       args.contains('--remove-feature-flags');
 
   // Removes neither sample, so an adopter keeping both can still drop the
-  // Mason bricks (koniz-dev/flutter-starter#333, #621).
+  // Mason bricks.
   final keepSamples = args.contains('--keep-samples');
   // Deleting bricks/ by hand left seven links dangling in docs a fork keeps,
   // so the documented way to drop them is this flag, which takes their
-  // `strip:bricks` prose along (koniz-dev/flutter-starter#588).
+  // `strip:bricks` prose along.
   final removeBricks = args.contains('--remove-bricks');
   if (keepSamples && (tasksFlag || featureFlagsFlag)) {
     stderr.writeln(
@@ -291,8 +291,8 @@ void main(List<String> args) {
   _sortGoldenImports(root, overrides);
 
   // `lib/core/di/providers.dart` needs no patching: it names no feature at
-  // all since koniz-dev/flutter-starter#221 removed the three
-  // backward-compatibility re-exports this step used to strip.
+  // all, now that the three backward-compatibility re-exports this step used
+  // to strip are gone.
   if (removeTasks) {
     _patchTestFixtures(p.join(root.path, 'test/helpers/test_fixtures.dart'));
     _patchMockFactories(p.join(root.path, 'test/helpers/mock_factories.dart'));
@@ -307,7 +307,7 @@ void main(List<String> args) {
   ];
 
   // Documentation asserts identifiers with
-  // `<!-- symbol: <path> <name> -->` (koniz-dev/flutter-starter#206), and
+  // `<!-- symbol: <path> <name> -->`, and
   // `test/docs/doc_symbols_test.dart` fails the run when one does not resolve.
   // A directive naming a file this strip just deleted would therefore turn
   // every stripped variant red in `flutter test`, so the directives go with
@@ -721,7 +721,7 @@ void _deleteSymbolDirectives(Directory repoRoot, List<String> prefixes) {
 /// `docs` is in the list because `analysis_options.yaml` does not exclude it,
 /// so `flutter analyze` reads `docs/**/*.dart` too. This scan fails the run
 /// loudly and locally rather than leaving CI to discover it two steps later,
-/// which is what happened on koniz-dev/flutter-starter#171.
+/// which is what happened once.
 List<String> _collectStrippedViolations(
   Directory repoRoot,
   List<String> needles,

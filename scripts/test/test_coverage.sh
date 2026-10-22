@@ -88,7 +88,7 @@ LAYER_SCRIPT="$SCRIPT_DIR/calculate_layer_coverage.sh"
 FILTERED="coverage/lcov.filtered.info"
 
 # Every number below is computed from a filtered copy of lcov.info, never the
-# raw file (koniz-dev/flutter-starter#332). The default exclusions are the ones
+# raw file. The default exclusions are the ones
 # .github/workflows/coverage.yml removes before it gates, so a local run and
 # CI agree; each --exclude=<path> drops every file whose path contains it.
 # --exclude used to be parsed into EXCLUDE_PATHS and never read.

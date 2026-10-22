@@ -40,8 +40,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Shared with `AuthInterceptor` via `sessionGenerationProvider`. Every
   /// method here that replaces or removes the credential set advances it, and
   /// [refreshToken] - the only method that persists a token it did not itself
-  /// ask the user for - checks it before writing
-  /// (koniz-dev/flutter-starter#169).
+  /// ask the user for - checks it before writing.
   ///
   /// Optional in the constructor so existing call sites keep compiling; a
   /// repository given its own counter still guards its own writes, it just
@@ -53,8 +52,8 @@ class AuthRepositoryImpl implements AuthRepository {
   /// The generated `fromJson` casts with `as String`, so an int user id or a
   /// missing `token` throws a `TypeError` - an [Error], which the
   /// `on Exception` clauses never caught. It escaped the `Result` contract
-  /// and left the login screen loading forever
-  /// (koniz-dev/flutter-starter#306). Nothing has been cached at that point:
+  /// and left the login screen loading forever.
+  /// Nothing has been cached at that point:
   /// parsing happens before the first write.
   static const _unreadableResponse = ServerFailure(
     'The server sent a response this app could not read.',
@@ -66,8 +65,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// An [AuthFailure] here is the server rejecting the credentials the user
   /// just typed - a 401 from the login endpoint - not a session that ended.
   /// It is tagged [FailureCodes.invalidCredentials] so the screen says so
-  /// instead of rendering `failureAuth`, "your session has ended"
-  /// (koniz-dev/flutter-starter#445).
+  /// instead of rendering `failureAuth`, "your session has ended".
   static Failure _signInFailure(Exception exception) {
     final failure = ExceptionToFailureMapper.map(exception);
     if (failure is! AuthFailure) return failure;
@@ -129,14 +127,14 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Local teardown is **unconditional**: the remote call is best-effort and
   /// the teardown - [AuthLocalDataSource.clearCache], which drops the cached
   /// user blob *and* every token, refresh token included, plus the HTTP
-  /// response cache (#77) - runs even when it throws. Sequencing
+  /// response cache - runs even when it throws. Sequencing
   /// the teardown after the network call inside one `try` is what used to leave
   /// a live refresh token on the device whenever the server was unreachable, a
   /// 500, or had no `/auth/logout` route at all.
   ///
   /// The teardown's own steps are independent of each other for the same
   /// reason: each is guarded separately and a failure - or absence - of one
-  /// must not skip the rest (#168). Making them unconditional relative to the
+  /// must not skip the rest. Making them unconditional relative to the
   /// *remote* call but still coupled to *each other* left the same outcome
   /// reachable one layer down.
   ///
@@ -151,7 +149,7 @@ class AuthRepositoryImpl implements AuthRepository {
     // to be signed out, so a refresh already in flight is stale from this
     // instant. Doing it after the teardown would leave the whole remote call
     // plus `clearCache()` as a window in which that refresh could still land
-    // and re-persist the pair being removed (koniz-dev/flutter-starter#169).
+    // and re-persist the pair being removed.
     sessionGeneration.invalidate();
 
     // `on Object`: the remote call can throw an Error as well as an Exception
@@ -170,13 +168,12 @@ class AuthRepositoryImpl implements AuthRepository {
     // Chaining these two as sequential awaits inside one `try` meant a
     // throwing `clearCache()` skipped the HTTP cache entirely, leaving every
     // `http_cache_*` body in plaintext shared_preferences on a device whose
-    // user had just asked to be signed out
-    // (koniz-dev/flutter-starter#168).
+    // user had just asked to be signed out.
     //
     // The first failure is the one reported: it is the step whose state the
     // caller most needs to know survived, and reporting later ones would hide
     // it. Nothing here returns early - a `return` inside a teardown sequence
-    // is what #114 and #127 each had to remove.
+    // has already caused skipped teardown steps twice.
     Object? localError;
 
     try {
@@ -187,7 +184,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     // Cached HTTP bodies are local session state too - drop them with the
     // rest of it, or the next sign-in can be served the previous user's
-    // responses (#77).
+    // responses.
     final cache = httpCache;
     if (cache != null) {
       try {
@@ -225,7 +222,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
   /// forced logout can clear the token while the blob survives a failed
   /// removal. Returning the blob alone is what let a cold start promote a
-  /// tokenless device straight into the authenticated shell (#85): the user
+  /// tokenless device straight into the authenticated shell: the user
   /// saw home, then every request 401'd.
   ///
   /// The token is read first and deliberately not inspected beyond
@@ -250,7 +247,8 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Defined as `getCurrentUser() != null` and implemented by delegating to it,
   /// so the boot path (which reads the user) and every guard (which reads this
   /// predicate) cannot disagree about whether a device is signed in. Requiring
-  /// a token here but not there is exactly the split that produced #85.
+  /// a token here but not there is exactly the split that once let the two
+  /// disagree.
   ///
   /// "Present and non-empty" is the whole test. Whether the token is *expired*
   /// is not decidable here: [ITokenStore] holds opaque strings with no expiry
@@ -273,8 +271,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// network round trip, and [logout] - or a forced logout in
   /// `AuthInterceptor`, or a fresh [login] - can replace the credential set
   /// while that round trip is open. Writing unconditionally is what re-armed a
-  /// signed-out device with a live access *and* refresh token
-  /// (koniz-dev/flutter-starter#169).
+  /// signed-out device with a live access *and* refresh token.
   ///
   /// A stale refresh reports failure rather than [Success]: it did not produce
   /// a token this session can use. It deliberately does not *clear* anything -
@@ -335,8 +332,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// - **403** is what many servers send for a token they refuse.
   ///
   /// Tagging only 401 left the other two indistinguishable from a 503, so a
-  /// dead refresh token never ended the session
-  /// (koniz-dev/flutter-starter#384).
+  /// dead refresh token never ended the session.
   ///
   /// Everything else is transport trouble and must leave the session alone:
   /// a timeout, a connection error, any 5xx, and the two 4xx statuses that
@@ -344,8 +340,8 @@ class AuthRepositoryImpl implements AuthRepository {
   /// 429 Too Many Requests.
   ///
   /// The tag is set *here*, in the layer that knows what the round trip meant,
-  /// because the caller cannot tell. Before koniz-dev/flutter-starter#181 the
-  /// decision was made a layer up by substring-matching `failure.message`,
+  /// because the caller cannot tell. The decision used to be made a layer up by
+  /// substring-matching `failure.message`,
   /// which fired on unrelated errors and still missed this one: the default
   /// message for a 401 is "Unauthorized. Please login again." and contains no
   /// "refresh" at all.

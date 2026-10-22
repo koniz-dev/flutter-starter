@@ -35,7 +35,7 @@ import 'package:go_router/go_router.dart';
 ///
 /// In `integration_test/`, use Patrol's `waitUntilVisible` (which polls rather
 /// than demanding quiescence) instead of `pumpAndSettle`. See
-/// `integration_test/README.md` and issue #40.
+/// `integration_test/README.md`.
 ///
 /// Example:
 /// ```dart

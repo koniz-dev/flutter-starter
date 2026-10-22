@@ -1,12 +1,12 @@
-// Regression cover for koniz-dev/flutter-starter#59.
+// Regression cover for the requests queued behind a token refresh.
 //
 // Drives AuthInterceptor through a real Dio against a fake HttpClientAdapter,
 // so every assertion is about futures the caller actually awaits - the queued
 // handlers used to be neither resolved nor rejected, which no mock-handler
 // test can observe. No test in this file touches the network.
 //
-// Nothing in this file synchronises on wall-clock time
-// (koniz-dev/flutter-starter#121). The two concurrency tests used to stand in
+// Nothing in this file synchronises on wall-clock time.
+// The two concurrency tests used to stand in
 // for "the other two requests are queued by now" with
 // `Future.delayed(Duration(milliseconds: 50))`; under full-suite load that
 // window could close before the later 401s arrived, the refresh finished, and

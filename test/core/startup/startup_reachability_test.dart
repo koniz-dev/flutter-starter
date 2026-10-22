@@ -13,10 +13,10 @@ import 'package:flutter_starter/main.dart' as app;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Regression suite for koniz-dev/flutter-starter#101.
+/// Regression suite: a startup failure must reach the screen.
 ///
-/// The bug was NOT that `StartupFailureApp` failed to paint - #60 already
-/// proved that, by pumping the widget directly in
+/// The bug was NOT that `StartupFailureApp` failed to paint - that was already
+/// proved by pumping the widget directly in
 /// `test/acceptance/startup_failure_acceptance_test.dart`. The bug was that
 /// nothing could ever *reach* it: `main()` built a bare `ProviderContainer()`,
 /// Riverpod 3 retried the failed `storageInitializationProvider` because
@@ -38,7 +38,7 @@ void main() {
   ///
   /// Without it every secure write is swallowed into `false`, the version
   /// stamp never persists, and `MigrationExecutor` reports the mismatch - one
-  /// of the real failure paths #60 introduced.
+  /// of the real startup failure paths.
   void installSecureBackend(Map<String, String> backing) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_secureChannel, (methodCall) async {
@@ -76,7 +76,7 @@ void main() {
   /// already asserted correctly. Serving the asset removes the noise instead of
   /// teaching anyone to ignore it.
   ///
-  /// [contents] defaults to a *known* environment: since #412, `main()` refuses
+  /// [contents] defaults to a *known* environment: `main()` refuses
   /// to boot on an unknown one, so the healthy-path tests must not serve one.
   /// The asset is evicted first because `rootBundle` caches it by key, which
   /// would otherwise hand every later test the first test's `.env`.
@@ -121,14 +121,14 @@ void main() {
   /// `integration_test/app_e2e_test.dart` uses on a device.
   ///
   /// The frame budget is the point of this helper. `expect(booted, isTrue)`
-  /// is the bounded-time assertion #101 is about: on the pre-fix `main.dart`
-  /// the startup future never completes, so `main()` never returns, and this
-  /// fails with a readable message instead of hanging the suite.
+  /// is the bounded-time assertion this file is about: on the pre-fix
+  /// `main.dart` the startup future never completes, so `main()` never
+  /// returns, and this fails with a readable message instead of hanging the
+  /// suite.
   ///
   /// Shared by both end-to-end groups on purpose. The failure group and the
   /// healthy group must boot through the *same* code path, or "healthy" and
   /// "failed" stop being comparable outcomes of one entrypoint.
-  /// Refs koniz-dev/flutter-starter#160
   Future<void> bootRealMain(WidgetTester tester) async {
     var booted = false;
     Object? bootError;
@@ -138,7 +138,7 @@ void main() {
     // SharedPreferences and the Keychain go over platform channels - and
     // `testWidgets` runs on a fake clock that never delivers those replies.
     // Awaiting `main()` on the fake clock stalls for reasons that have
-    // nothing to do with #101, which would make a red run unreadable.
+    // nothing to do with the hang, which would make a red run unreadable.
     await tester.runAsync(() async {
       try {
         await app.main().timeout(_bootBudget);
@@ -151,7 +151,7 @@ void main() {
       }
     });
 
-    // THE assertion this whole file exists for. #101 is not "the failure
+    // THE assertion this whole file exists for. The bug is not "the failure
     // screen renders wrong", it is "main() never returns, so no screen is
     // reached at all". On the pre-fix entrypoint this fails here, in bounded
     // time, instead of hanging the suite.
@@ -160,7 +160,7 @@ void main() {
       isTrue,
       reason:
           'main() did not return within ${_bootBudget.inSeconds}s. That is '
-          'the #101 hang: the awaited startup future stays pending, runApp '
+          'the startup hang: the awaited startup future stays pending, runApp '
           'is never called, and no screen - failure or otherwise - exists',
     );
     expect(
@@ -182,7 +182,7 @@ void main() {
     );
   }
 
-  group('startup container surfaces failures instead of hanging (#101)', () {
+  group('startup container surfaces failures instead of hanging', () {
     test(
       'a real migration failure reaches the awaiting caller within 5s',
       () async {
@@ -206,9 +206,9 @@ void main() {
     );
 
     test('a downgrade refusal reaches the awaiting caller within 5s', () async {
-      // Data stamped newer than this build understands. #60 made this throw
+      // Data stamped newer than this build understands. This throws
       // StorageDowngradeException, and it is a second, independent route into
-      // the same hang - the issue only names the stamp-write path.
+      // the same hang besides the stamp-write path.
       SharedPreferences.setMockInitialValues(<String, Object>{
         StorageVersion.versionKey: '${StorageVersion.current + 1}',
       });
@@ -315,7 +315,7 @@ void main() {
     }, timeout: const Timeout(Duration(seconds: 30)));
   });
 
-  group('main() renders StartupFailureApp end to end (#101)', () {
+  group('main() renders StartupFailureApp end to end', () {
     testWidgets('a failed version stamp boots into the failure screen', (
       tester,
     ) async {
@@ -361,16 +361,16 @@ void main() {
     });
   });
 
-  // The mirror image of the group above, and the whole point of #160.
+  // The mirror image of the group above.
   //
   // Both cases above *expect* `StartupFailureApp`, so a regression that turns
-  // every launch into the failure screen makes them pass harder. #160 proved
-  // that by mutation: injecting a throw into `main()`'s `try` left the entire
+  // every launch into the failure screen makes them pass harder. A mutation
+  // test proved that: injecting a throw into `main()`'s `try` left the entire
   // suite green at 2645 passing tests, and making
   // `LocalizationService.getCurrentLocale()` throw a `StateError` failed only
   // that service's own unit tests. Nothing asserted what a *healthy* boot
-  // hands to `runApp`, which is exactly the shape of the closed #60 defect
-  // inverted.
+  // hands to `runApp`, which is exactly the shape of the original
+  // startup defect inverted.
   //
   // An earlier comment here claimed this case could not be written, because
   // `runApp` runs inside `tester.runAsync` and building the full MyApp tree
@@ -381,10 +381,10 @@ void main() {
   // `main()` returns, and a single bounded `pumpAndSettle` afterwards settles
   // the whole app - router, Riverpod scope and localization included - in one
   // frame. The comment is replaced by the test it said was impossible.
-  // koniz-dev/flutter-starter#412: a release build with a mistyped
+  // A release build with a mistyped
   // ENVIRONMENT used to boot against the development fallbacks - localhost,
   // no SSL pinning - with the only warning printed in debug builds.
-  group('main() refuses an unknown ENVIRONMENT (#412)', () {
+  group('main() refuses an unknown ENVIRONMENT', () {
     testWidgets('ENVIRONMENT=prod boots into the failure screen, naming the '
         'value and the known environments', (tester) async {
       installSecureBackend(<String, String>{});
@@ -401,7 +401,7 @@ void main() {
     });
   });
 
-  group('main() boots MyApp end to end on a healthy startup (#160)', () {
+  group('main() boots MyApp end to end on a healthy startup', () {
     testWidgets('a healthy startup hands MyApp to runApp, not the failure '
         'screen', (tester) async {
       // A working Keychain is what separates this from the first failure case:
@@ -481,7 +481,7 @@ void main() {
 
 /// How long `main()` gets to finish booting before a test calls it hung.
 ///
-/// Real seconds, not pumped ones: the point of #101 is that a startup
+/// Real seconds, not pumped ones: the point of this suite is that a startup
 /// failure has to become visible in bounded time. The fixed entrypoint
 /// finishes in tens of milliseconds; the broken one never finishes at all.
 const Duration _bootBudget = Duration(seconds: 20);

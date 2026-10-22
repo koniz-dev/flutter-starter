@@ -1,4 +1,4 @@
-// A failed version read is not a fresh install (koniz-dev/flutter-starter#297).
+// A failed version read is not a fresh install.
 //
 // SecureStorageService.getString returns null both for a missing key and for
 // a Keychain/Keystore read that throws. MigrationExecutor read that null as

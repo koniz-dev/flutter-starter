@@ -83,7 +83,7 @@ void main() {
         final count = await ImageCacheHelper.preloadImages(urls);
 
         // flutter test answers every HTTP request with 400, so both preloads
-        // fail and none may be counted (koniz-dev/flutter-starter#371).
+        // fail and none may be counted.
         expect(count, 0);
       });
     });

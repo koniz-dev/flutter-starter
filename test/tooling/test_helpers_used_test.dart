@@ -1,5 +1,4 @@
-// Every public helper in test/helpers/ must have a caller
-// (koniz-dev/flutter-starter#375).
+// Every public helper in test/helpers/ must have a caller.
 //
 // About 50 shared helpers had no reference anywhere, including three that
 // were broken in ways no caller would have survived: findWidgetWithText

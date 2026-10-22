@@ -1,11 +1,12 @@
 // Pins every redaction rule in ApiLoggingInterceptor, one realistic key per
-// rule (koniz-dev/flutter-starter#367).
+// rule.
 //
 // The existing tests exercised a handful of keys, so removing `secret` - or any
 // of a dozen other entries in `_sensitiveKeyFragments` / `_sensitiveKeysExact`
 // - left the suite green, and so did logging `response.data` unsanitized,
-// which is the #78 class of leak. Each key below is chosen so that only its own
-// rule matches it: drop that one entry and exactly that case fails.
+// which is the class of leak this guards. Each key below is chosen so that
+// only its own rule matches it: drop that one entry and exactly that case
+// fails.
 
 import 'package:dio/dio.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';

@@ -1,10 +1,9 @@
-// The cache index must list every cached key, even under concurrent GETs
-// (koniz-dev/flutter-starter#311).
+// The cache index must list every cached key, even under concurrent GETs.
 //
 // _addToIndex read the index, appended and wrote it back with no
 // serialization, so two cached GETs completing together each read the same
 // old index and the last write dropped the other's key. clearCache() walks
-// only the index, so that body survived the logout wipe (#77, #114). The
+// only the index, so that body survived the logout wipe. The
 // store here makes list reads asynchronous, as a real one is.
 
 import 'dart:convert';

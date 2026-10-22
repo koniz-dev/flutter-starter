@@ -2,7 +2,7 @@
 // through a fully assembled ApiClient against a fake transport rather than a
 // mocked ApiClient.
 //
-// Criterion 4 of koniz-dev/flutter-starter#176: the transport boundary stopped
+// The transport boundary stopped
 // returning `dio.Response` and started returning `NetworkResponse`, so the
 // failure path had to be pinned to a type that does not depend on which of the
 // two the datasource holds. `auth_remote_datasource_test.dart` stubs
@@ -95,7 +95,7 @@ class _InMemoryTokenStore implements ITokenStore {
 }
 
 void main() {
-  group('AuthRemoteDataSourceImpl failure behaviour (#176)', () {
+  group('AuthRemoteDataSourceImpl failure behaviour', () {
     late _MockStorageService storageService;
     late _MockSecureStorageService secureStorageService;
     late _FixedAdapter adapter;

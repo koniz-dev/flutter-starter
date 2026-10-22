@@ -1,5 +1,4 @@
-// Every shell script and git hook must pass `shellcheck -S warning`
-// (koniz-dev/flutter-starter#302).
+// Every shell script and git hook must pass `shellcheck -S warning`.
 //
 // Nothing in CI ran shellcheck, so warnings - an unused variable, an
 // unchecked `cd` - accumulated unseen. This runs it under `flutter test`, which

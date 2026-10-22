@@ -9,8 +9,8 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// koniz-dev/flutter-starter#351: AccessibleButton and AccessibleIconButton
-// wrapped a Material button - which makes its own button node - in a second
+// AccessibleButton and AccessibleIconButton used to wrap a Material button -
+// which makes its own button node - in a second
 // `Semantics(button: true)`. A screen reader got two focus stops for one
 // control, and the outer one had no tap action.
 

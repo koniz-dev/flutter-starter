@@ -35,8 +35,8 @@ class _TestAuthNotifier extends AuthNotifier {
 }
 
 // Reachability, not route-table shape: these pump the *app's* router and
-// assert that the destination screen renders. Until #56 the tasks constants
-// and `context.goToTasks()` existed while `routes_registry.dart` registered
+// assert that the destination screen renders. The tasks constants and
+// `context.goToTasks()` once existed while `routes_registry.dart` registered
 // neither, so every screen in this feature was dead code and the old tests
 // missed it by building their own router with the routes already in it.
 

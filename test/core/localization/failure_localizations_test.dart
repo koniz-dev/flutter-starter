@@ -1,5 +1,5 @@
 // A failure reaches the screen in the user's language, never as transport
-// text (koniz-dev/flutter-starter#323).
+// text.
 //
 // Failure.message is built by DioExceptionMapper in English, often with
 // dio's own wording appended, and screens rendered it as-is. This pins the
@@ -138,7 +138,7 @@ void main() {
           jsonDecode(File('lib/l10n/app_en.arb').readAsStringSync())
               as Map<String, dynamic>;
       final keys = template.keys.where((k) => k.startsWith('failure'));
-      // 13 since failureInvalidCredentials (#479).
+      // 13 since failureInvalidCredentials.
       expect(keys, hasLength(13));
 
       for (final lang in ['es', 'ar', 'vi']) {

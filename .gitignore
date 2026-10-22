@@ -31,8 +31,7 @@ migrate_working_dir/
 # Mason — hook package cache + compiled hook output (local only)
 bricks/**/hooks/.dart_tool/
 bricks/**/hooks/build/
-# `mason get` state: both record absolute paths on this machine
-# (koniz-dev/flutter-starter#340).
+# `mason get` state: both record absolute paths on this machine.
 .mason/
 mason-lock.json
 .flutter-plugins-dependencies
@@ -79,12 +78,12 @@ ios/fastlane/README.md
 *.certSigningRequest
 *.keystore
 *.jks
-# Private key material in its commonest raw forms (koniz-dev/flutter-starter#164).
+# Private key material in its commonest raw forms.
 # An exported signing key, a service-account key, a TLS key and an SSH key all
 # land as a .pem or a .key; .pfx is the same PKCS#12 container as the .p12
 # above, under its Windows name. tool/check_env_assets.dart already refuses to
-# let any of them be declared as a Flutter asset
-# (koniz-dev/flutter-starter#138), so git should not track one either. That
+# let any of them be declared as a Flutter asset,
+# so git should not track one either. That
 # guard's `secretAssetExtensions` set and this block are now the same list of
 # private formats, which is the point: one policy, two enforcement points.
 *.pem
@@ -94,10 +93,9 @@ ios/fastlane/README.md
 # NOT ignored, on purpose: *.crt and *.der.
 # A certificate is the public half of a key pair. Certificate pinning
 # legitimately ships one inside the app, so ignoring them would break a
-# supported setup for no gain. koniz-dev/flutter-starter#138 decided this - see
-# the "Public certificates" note at the top of tool/check_env_assets.dart,
-# which leaves .cer, .crt and .der out of its secret set for the same reason -
-# and koniz-dev/flutter-starter#164 kept it. If you are here to "fix the
+# supported setup for no gain. See the "Public certificates" note at the top
+# of tool/check_env_assets.dart, which leaves .cer, .crt and .der out of its
+# secret set for the same reason. If you are here to "fix the
 # inconsistency", this is the reason not to.
 #
 # `*.cer` is the one asymmetry, and it is deliberate too: it predates both

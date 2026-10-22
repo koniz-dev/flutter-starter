@@ -165,7 +165,7 @@ void main() {
       });
 
       test('getDebugInfo should report effective SSL pinning state', () {
-        // Regression cover for koniz-dev/flutter-starter#59: the dump used to
+        // Regression cover: the dump used to
         // report only the requested flag, so an adopter with
         // ENABLE_SSL_PINNING=true and no fingerprints saw "true" while
         // nothing was pinned.
@@ -196,7 +196,7 @@ void main() {
       });
 
       // The version and build number are not configuration: they come from
-      // pubspec.yaml's `version:` via the platform (#467).
+      // pubspec.yaml's `version:` via the platform.
       test('getDebugInfo reports no app version or build number', () {
         final debugInfo = AppConfig.getDebugInfo();
         expect(debugInfo.containsKey('appVersion'), isFalse);
@@ -324,7 +324,7 @@ void main() {
       });
 
       test('printConfig should print the effective SSL pinning state', () {
-        // Regression cover for koniz-dev/flutter-starter#59.
+        // Regression cover: the effective state, not the requested flag.
         final lines = <String>[];
         final original = debugPrint;
         debugPrint = (message, {wrapWidth}) => lines.add(message ?? '');

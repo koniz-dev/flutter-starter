@@ -1,5 +1,5 @@
-// FileLogOutput keeps at most maxFiles files, the current one included
-// (koniz-dev/flutter-starter#589). Rotation used to shift `.1..maxFiles-1` up
+// FileLogOutput keeps at most maxFiles files, the current one included.
+// Rotation used to shift `.1..maxFiles-1` up
 // to `.maxFiles`, so the directory held maxFiles + 1.
 
 import 'dart:io';

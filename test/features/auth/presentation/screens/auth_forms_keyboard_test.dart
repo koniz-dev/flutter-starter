@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/pump_app.dart';
 
-// koniz-dev/flutter-starter#349: LoginScreen and RegisterScreen were a
+// LoginScreen and RegisterScreen used to be a
 // non-scrolling Padding > Form > Column(center). When the soft keyboard took
 // 300px of a 360x640 phone, or the phone was turned to 640x360, the column
 // overflowed (the yellow-and-black stripe) and the submit button was pushed

@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'acceptance_helpers.dart';
 
 void main() {
-  // Criterion 7 of #60: a failed storage migration must not leave the user
+  // A failed storage migration must not leave the user
   // with a blank window. `StartupFailureApp` is itself the root app (it stands
   // in for the `MyApp` that never got built), so it is pumped directly rather
   // than through `pumpAcceptance`, which would nest a second MaterialApp.

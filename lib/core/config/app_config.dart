@@ -52,8 +52,8 @@ class AppConfig {
   /// This is a misconfiguration, and a dangerous one: [isDevelopment],
   /// [isStaging] and [isProduction] are then all false, so [baseUrl] falls
   /// back to the development `http://localhost:3000` and [enableSslPinning]
-  /// is off. `ENVIRONMENT=prod` used to do exactly that with no warning
-  /// (koniz-dev/flutter-starter#321). [printConfig] reports it, and it is in
+  /// is off. `ENVIRONMENT=prod` used to do exactly that with no warning.
+  /// [printConfig] reports it, and it is in
   /// [getDebugInfo].
   static bool get environmentMisconfigured =>
       !knownEnvironments.contains(environment);
@@ -172,9 +172,9 @@ class AppConfig {
   /// falls back to the system trust store and pinning is *not* in effect.
   ///
   /// Never in effect on Flutter web, where the browser owns TLS and
-  /// `SslPinning` installs no adapter (koniz-dev/flutter-starter#307). This
+  /// `SslPinning` installs no adapter. This
   /// mirrors `SslPinning.isEffective`, so `getDebugInfo` cannot report a web
-  /// build as pinned once `--dart-define` reaches web (#278).
+  /// build as pinned once `--dart-define` reaches web.
   static bool get sslPinningEffective =>
       !kIsWeb && enableSslPinning && apiSslFingerprints.isNotEmpty;
 
@@ -200,7 +200,7 @@ class AppConfig {
   ///
   /// Production used to default to `false`, which turned `LoggingService`
   /// into a no-op and dropped the info-and-above JSON lines its file output
-  /// exists to keep (koniz-dev/flutter-starter#320). What each environment
+  /// exists to keep. What each environment
   /// logs, and where, is decided by `LoggingService`, not by this switch.
   ///
   /// Can be overridden via .env or a dart-define: `ENABLE_LOGGING=false`
@@ -279,7 +279,7 @@ class AppConfig {
   // come from pubspec.yaml's `version:`, which the build stamps into the
   // platform bundle; read them from the platform at runtime. The
   // APP_VERSION / APP_BUILD_NUMBER keys this class used to parse were read
-  // by nothing (koniz-dev/flutter-starter#467).
+  // by nothing.
 
   /// Enable HTTP request/response logging
   ///

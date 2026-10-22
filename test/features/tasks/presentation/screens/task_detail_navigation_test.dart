@@ -21,7 +21,7 @@ import '../../../../helpers/pump_app.dart';
 import '../../../../helpers/test_fixtures.dart';
 
 // `task_detail_screen.dart` called `context.canPop()` / `context.pop()` from
-// `package:go_router` directly until #177 moved it onto
+// `package:go_router` directly until it moved onto
 // `NavigationExtensions`. This drives the *app's* router - not one assembled
 // in the test file - so the assertion is that a user leaving the detail screen
 // still lands on the tasks list.
@@ -96,7 +96,7 @@ void main() {
     expect(find.byType(TasksListScreen), findsOneWidget);
   });
 
-  // koniz-dev/flutter-starter#346: `_saveTask` popped whenever the screen was
+  // `_saveTask` used to pop whenever the screen was
   // still mounted, so a failed save closed the editor and threw the edit away.
   group('a failed save keeps the editor open', () {
     late _MockGetTaskByIdUseCase getTaskById;

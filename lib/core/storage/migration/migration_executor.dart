@@ -211,7 +211,7 @@ class MigrationExecutor {
   /// [MigrationExecutionException] **before anything is written**: treating
   /// it as a fresh install re-ran every migration over migrated data and
   /// stamped v1 over the real version, so the next healthy launch ran the
-  /// chain a second time (koniz-dev/flutter-starter#297).
+  /// chain a second time.
   Future<int> _getCurrentVersion() async {
     final String? versionString;
     try {
@@ -327,8 +327,7 @@ class MigrationExecutor {
   /// The first registered migration starting at [fromVersion], or null.
   StorageMigration? _migrationFrom(int fromVersion) {
     // Order comes from this lookup, not from the list: `_planMigrations`
-    // asks for the step that starts at each version in turn
-    // (koniz-dev/flutter-starter#565).
+    // asks for the step that starts at each version in turn.
     for (final migration in migrations) {
       if (migration.fromVersion == fromVersion &&
           migration.toVersion > fromVersion) {

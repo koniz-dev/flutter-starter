@@ -143,8 +143,8 @@ final refreshToken = authResponse.refreshToken;
 ## Wire format
 
 The auth slice speaks **snake_case** on the wire, in both directions. Your
-backend must send and accept exactly these keys
-(koniz-dev/flutter-starter#312). Paths are relative to `BASE_URL` plus the
+backend must send and accept exactly these keys.
+Paths are relative to `BASE_URL` plus the
 `/v1` API version (`ApiEndpoints`):
 
 | Call | Endpoint | Request body | Response body |

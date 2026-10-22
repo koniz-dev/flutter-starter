@@ -1,10 +1,10 @@
 // test/README.md must point inside the repository and describe the real
-// test/ tree (koniz-dev/flutter-starter#361).
+// test/ tree.
 //
 // Four of its links used `../../` from test/, which resolves outside the
 // repository, and its tree listed a test/integration/ directory that does
 // not exist while leaving out acceptance/, docs/ and tooling/. check_docs
-// only walks docs/ (#573 extends it), so this pins test/README.md itself.
+// does not walk test/, so this pins test/README.md itself.
 
 import 'dart:io';
 

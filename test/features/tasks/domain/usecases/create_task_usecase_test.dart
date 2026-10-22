@@ -154,7 +154,7 @@ void main() {
       verify(() => mockRepository.createTask(any())).called(1);
     });
 
-    // koniz-dev/flutter-starter#345: a blank title is a domain error, not a
+    // A blank title is a domain error, not a
     // task with an empty name.
     for (final title in ['', '   ', '\t\n']) {
       test(

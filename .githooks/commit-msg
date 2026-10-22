@@ -7,7 +7,7 @@ commit_msg="$(head -n 1 "$msg_file")"
 
 # Subjects Git itself generates, or that exist only to be autosquashed. None of
 # them is under the author's control, so rejecting them forced --no-verify,
-# which switches off every hook rather than just this rule (issue #57).
+# which switches off every hook rather than just this rule.
 #
 #   Merge branch 'x'          git merge
 #   Revert "feat(auth): x"    git revert

@@ -1,8 +1,8 @@
-// The Android toolchain floor check (koniz-dev/flutter-starter#387).
+// The Android toolchain floor check.
 //
 // Flutter only warns when Gradle, AGP or Kotlin drops below what it supports;
 // `tool/check_android_toolchain.dart` turns that into a failure. These tests
-// pin it on fixtures - including the Gradle 8.14 the project sat on in #329 -
+// pin it on fixtures - including the Gradle 8.14 the project once sat on -
 // and run it over the real `android/` files.
 
 import 'dart:io';

@@ -1,5 +1,4 @@
-// A refreshed-and-replayed request must be logged like any other
-// (koniz-dev/flutter-starter#477).
+// A refreshed-and-replayed request must be logged like any other.
 //
 // AuthInterceptor resolves the replay from onError, which in dio ends the
 // host chain, so ApiLoggingInterceptor logged the 401 and never the 200 the

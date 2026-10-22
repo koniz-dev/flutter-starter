@@ -1,4 +1,4 @@
-// Criterion 5 of #53: the E2E selector contract, asserted in the gating tier.
+// The E2E selector contract, asserted in the gating tier.
 //
 // `UiKeys` is the set of stable selectors `integration_test/` (Patrol) matches
 // on. Until this file existed, `homeContent` was asserted only in

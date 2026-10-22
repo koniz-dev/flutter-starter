@@ -18,7 +18,7 @@ class _FixedLocale extends LocaleNotifier {
 }
 
 void main() {
-  // Regression guard for #40. On a real device `pumpAndSettle` never returns,
+  // Regression guard. On a real device `pumpAndSettle` never returns,
   // and the natural suspicion is that the app tree schedules frames forever.
   // It does not: under the standard test binding the whole app - router,
   // Riverpod scope, localization and the initial route - reaches an idle frame.
@@ -28,7 +28,7 @@ void main() {
   // battery and jank bug on device, not just a test problem. The device-side
   // timeout is a property of Patrol's live binding instead; see
   // `test/helpers/pump_app.dart` and `integration_test/README.md`.
-  group('full app reaches an idle frame (#40 regression)', () {
+  group('full app reaches an idle frame', () {
     testWidgets('pumpAndSettle on the whole app does not time out', (
       tester,
     ) async {
@@ -73,7 +73,7 @@ void main() {
       expect(materialApp.title, 'Flutter Starter');
     });
 
-    // koniz-dev/flutter-starter#373: these used to check only that a theme
+    // These used to check only that a theme
     // existed, so swapping the light and dark themes still passed.
     testWidgets('criterion 1: theme is AppTheme.lightTheme', (tester) async {
       final container = ProviderContainer();
@@ -136,7 +136,7 @@ void main() {
       expect(materialApp.supportedLocales.length, greaterThan(0));
     });
 
-    // #373: this used to check only that a locale existed, so hard-coding
+    // This used to check only that a locale existed, so hard-coding
     // `locale: const Locale('en')` in main.dart still passed.
     testWidgets('criterion 2: MaterialApp.locale follows localeStateProvider', (
       tester,

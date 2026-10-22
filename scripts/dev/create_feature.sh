@@ -6,7 +6,7 @@
 #
 # Output is kept byte-identical to scripts/dev/create_feature.ps1 and to
 # `mason make feature_clean`: all three are generated from the same verified
-# source (issue #57). Whatever changes here changes there.
+# source. Whatever changes here changes there.
 set -euo pipefail
 
 if [ $# -ne 1 ] || [ -z "${1:-}" ]; then
@@ -304,7 +304,7 @@ EOF
 # The templates write imports in the order that is sorted for the package name
 # `flutter_starter`. After a rename (`my_app` sorts after `flutter_test`) that
 # order trips `directives_ordering`, so the analyzer, not this script, sorts
-# them (koniz-dev/flutter-starter#442). The formatter, likewise, decides where
+# them. The formatter, likewise, decides where
 # long generated lines wrap, so the result satisfies
 # `dart format --set-exit-if-changed` for any name length.
 if command -v dart >/dev/null 2>&1; then

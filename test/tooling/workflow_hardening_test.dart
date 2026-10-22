@@ -1,4 +1,4 @@
-// Workflow hardening (koniz-dev/flutter-starter#343).
+// Workflow hardening.
 //
 // The three deploy workflows declared no `permissions:` - so they ran with the
 // default token scope - and no `concurrency:`, so two deploys could race; and

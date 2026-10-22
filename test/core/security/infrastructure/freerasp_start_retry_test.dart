@@ -1,5 +1,5 @@
 // A failed startProtection() must stay retryable, and concurrent calls must
-// start protection once (koniz-dev/flutter-starter#317).
+// start protection once.
 //
 // The service marked itself initialized before the start was attempted, so a
 // start that threw - which the shipped placeholder config does on Android -

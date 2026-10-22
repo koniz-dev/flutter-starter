@@ -1,8 +1,7 @@
-// No hard-coded words in a `Text(` under presentation code
-// (koniz-dev/flutter-starter#515, split from #352).
+// No hard-coded words in a `Text(` under presentation code.
 //
-// English kept reaching shipped screens as `Text('...')` literals (#264,
-// #352, #513) and nothing failed when it did. This scans
+// English kept reaching shipped screens as `Text('...')` literals and
+// nothing failed when it did. This scans
 // `lib/features/**/presentation` and `lib/shared/widgets` for a string
 // literal passed straight to `Text(`, single-line or multi-line.
 //

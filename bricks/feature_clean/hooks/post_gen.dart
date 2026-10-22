@@ -10,8 +10,8 @@ import 'package:mason/mason.dart';
 /// inside these templates, and a name that sorts after `flutter_test`
 /// (`my_app`) or before `flutter_riverpod` (`app`) then trips
 /// `directives_ordering` in every generated file. So the analyzer sorts them,
-/// exactly as `scripts/dev/create_feature.sh` does
-/// (koniz-dev/flutter-starter#442, #594), and `dart format` wraps them.
+/// exactly as `scripts/dev/create_feature.sh` does,
+/// and `dart format` wraps them.
 Future<void> run(HookContext context) async {
   // Mason runs hooks with the generation output folder as the working
   // directory; HookContext has no target path API (mason ^0.1.2+).

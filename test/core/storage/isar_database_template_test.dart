@@ -16,7 +16,7 @@ void main() {
 
     // `returnsNormally` is a synchronous matcher: against an async method it
     // only asserts that calling it returned a Future, which is true even of
-    // an implementation that always throws (#60). Await the future instead.
+    // an implementation that always throws. Await the future instead.
     test('init completes', () async {
       await expectLater(db.init(), completes);
     });

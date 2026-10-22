@@ -1,5 +1,5 @@
 // The ApiClient example in RetryInterceptor's class doc must use parameters
-// ApiClient.post really has (koniz-dev/flutter-starter#296).
+// ApiClient.post really has.
 //
 // It passed `options: Options(headers: ...)`, and ApiClient.post has no
 // `options` parameter, so an adopter copying the documented way to opt a POST

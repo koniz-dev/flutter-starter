@@ -1,4 +1,4 @@
-// Regression tests for koniz-dev/flutter-starter#65, criterion 6.
+// Regression tests: announcements follow the locale's text direction.
 //
 // `sendAnnouncement` used to be called with a literal `TextDirection.ltr` for
 // every locale, and the announcement strings were hardcoded English. These

@@ -1207,7 +1207,7 @@ done
 
 Adopters reach for exactly these first, and a green coverage badge on code no
 running screen exercises says nothing about whether it works. Most of the
-defects fixed in koniz-dev/flutter-starter#63 were in this set, and every one
+defects fixed in the utilities audit were in this set, and every one
 of them had a passing test alongside it - several tests actually asserted the
 buggy behavior as correct.
 
@@ -1234,7 +1234,7 @@ Rejected alternatives:
 
 ### What was done
 
-1. Every defect listed in koniz-dev/flutter-starter#63 was fixed, with a
+1. Every defect the audit listed was fixed, with a
    regression test that fails against the old behavior.
 2. The tests that asserted buggy behavior were corrected rather than deleted -
    `validators_test.dart` asserted `isTrue` for five malformed addresses, and
@@ -1248,7 +1248,7 @@ Rejected alternatives:
    `// ignore: argument_type_not_assignable` comments in `lib/`, which
    suppress a compile-time **error** rather than a lint.
 4. Wiring `PaginationHelper`, `Debouncer` and `DateFormatter` into the tasks
-   sample was filed separately as koniz-dev/flutter-starter#147. That issue wired `DateFormatter` and **rejected** the
+   sample was handled separately. That change wired `DateFormatter` and **rejected** the
    tasks sample as a host for the other two - see "The tasks sample is not the
    host" below.
 
@@ -1267,7 +1267,7 @@ the tree - fix the row in the same change that moves the call site.
 
 | Utility | Exercised by a running screen? | Where |
 |---|---|---|
-| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
+| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model; `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen |
 | `PaginationHelper` | no | - |
 | `Debouncer` / `Throttler` | no | - |
 | `LazyLoader` | no | - |
@@ -1282,9 +1282,8 @@ to prevent. That call site is now the utility.
 <!-- strip:tasks start -->
 ### The tasks sample is not the host for `PaginationHelper` or `Debouncer`
 
-**Decided, not open.** koniz-dev/flutter-starter#147 wired `DateFormatter` and
-dropped the other two halves of its own proposal; koniz-dev/flutter-starter#210
-recorded that outcome here. Both utilities stay **adopter-only**. This is a
+**Decided, not open.** Wiring `DateFormatter` went ahead and the other two
+halves of that proposal were dropped. Both utilities stay **adopter-only**. This is a
 verdict on the *host*, not on the utilities: nothing below says a debouncer or
 a pagination helper is a bad thing to ship, only that bolting one onto this
 sample would teach the wrong lesson and cost real behaviour.
@@ -1339,9 +1338,8 @@ table marked "no": `PaginationHelper`, `Debouncer` / `Throttler`, `LazyLoader`,
 The date replaces "two releases from now", which nobody could evaluate without
 the release history. Whoever runs the review re-runs the loop at the top of
 this section, writes the verdict per row into the table, and sets the next
-`Review by` date. A verdict of "delete" for `PaginationHelper` has an issue
-waiting for it: koniz-dev/flutter-starter#223, which closes as *not planned* if
-the verdict is "keep".
+`Review by` date. A verdict of "delete" for `PaginationHelper` means removing
+it and its tests; a verdict of "keep" needs no change.
 
 ---
 

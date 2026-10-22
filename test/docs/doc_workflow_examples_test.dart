@@ -1,5 +1,4 @@
-// GitHub Actions examples in the docs must run on this repository's tooling
-// (koniz-dev/flutter-starter#365).
+// GitHub Actions examples in the docs must run on this repository's tooling.
 //
 // The security guide's CI example pinned `flutter-version: '3.24.0'`, whose
 // Dart SDK is below pubspec.yaml's `sdk:` constraint so `pub get` failed, and

@@ -10,7 +10,7 @@ if ! command -v flutter >/dev/null 2>&1; then
 fi
 
 # Git exports its own environment into every hook process. In a plain clone
-# that is harmless - the probe in koniz-dev/flutter-starter#140 shows only
+# that is harmless - a probe of a plain clone shows only
 # GIT_INDEX_FILE (relative), GIT_PREFIX, GIT_EXEC_PATH and the author fields.
 # In a worktree, and under `git --git-dir=...`, git also exports an absolute
 # GIT_DIR, and that one is poison here: `flutter` shells out to git to work out
@@ -37,8 +37,8 @@ no_git_env=(
 
 # Without resolved dependencies `dart format` cannot read the
 # very_good_analysis include in analysis_options.yaml, formats with the wrong
-# settings, and rewrites ~100 untouched files in place before failing
-# (koniz-dev/flutter-starter#300). Refuse before anything runs.
+# settings, and rewrites ~100 untouched files in place before failing.
+# Refuse before anything runs.
 if [ ! -f .dart_tool/package_config.json ]; then
   echo "❌ Dependencies are not resolved (.dart_tool/package_config.json is missing)."
   echo "   Run: flutter pub get"

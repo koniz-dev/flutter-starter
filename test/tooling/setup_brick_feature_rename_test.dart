@@ -3,7 +3,7 @@
 // hook rewrote `package:flutter_starter/` in `lib/`, `test/`, the
 // `create_feature` scripts and more - but never in `bricks/feature_clean/`,
 // so every feature the brick generated after a rename imported a package that
-// no longer existed (koniz-dev/flutter-starter#358).
+// no longer existed.
 //
 // This drives the hook's own rewrite on a temporary copy of the brick, so the
 // repository's templates are never touched.
@@ -17,7 +17,7 @@
 //
 // The subprocess cold-compiles the hook and `package:mason`, which takes tens
 // of seconds on a loaded machine, so it runs exactly once, in `setUpAll`, and
-// every test inspects that one result (koniz-dev/flutter-starter#446). The
+// every test inspects that one result. The
 // file-level timeout covers that one cold compile.
 @Timeout(Duration(minutes: 3))
 library;

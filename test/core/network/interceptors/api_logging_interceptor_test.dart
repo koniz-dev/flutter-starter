@@ -584,7 +584,7 @@ void main() {
       });
     });
 
-    /// Refs koniz-dev/flutter-starter#78.
+    /// Regression cover for leaking unredacted request and response data.
     ///
     /// Every test here asserts on what the LoggingService actually received,
     /// and every secret literal is one that must not survive into any sink.

@@ -5,8 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 // The fontSize/fontWeight expectations below were merged in from the duplicate
 // test/shared/theme/app_text_styles_test.dart, which imported this same
 // subject from a directory that mirrored nothing in lib/ and was named after
-// `AppTextStyles`, a class that no longer exists. See
-// koniz-dev/flutter-starter#184.
+// `AppTextStyles`, a class that no longer exists.
 void main() {
   group('AppTypography Properties Test', () {
     test('No token declares a fontFamily', () {

@@ -746,7 +746,7 @@ void main() {
       );
     });
 
-    // koniz-dev/flutter-starter#345: the validator checked the raw text, so a
+    // The validator used to check the raw text, so a
     // whitespace-only title passed and was saved as "".
     testWidgets('rejects a whitespace-only title in add task dialog', (
       tester,
@@ -922,7 +922,7 @@ void main() {
       verify(() => mockGetAllTasksUseCase()).called(greaterThan(1));
     });
   });
-  // Criterion 3 of koniz-dev/flutter-starter#147: the row date must come from
+  // The row date must come from
   // `DateFormatter`, and it is asserted with `find.text()` rather than a
   // golden - the acceptance goldens render every glyph as an opaque block and
   // so cannot show a date at all.

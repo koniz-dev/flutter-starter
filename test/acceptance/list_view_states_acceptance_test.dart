@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'acceptance_helpers.dart';
 
-/// Visual evidence for koniz-dev/flutter-starter#65, criterion 2.
+/// Visual evidence for the list view's empty and error states.
 ///
 /// The two PNGs exist to be compared with each other: an empty list that
 /// **failed** must not look like an empty list that **succeeded with no

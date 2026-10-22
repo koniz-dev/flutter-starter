@@ -1,5 +1,5 @@
-// The doc-snippet tests must keep passing in a renamed fork
-// (koniz-dev/flutter-starter#603): the docs keep importing the template's
+// The doc-snippet tests must keep passing in a renamed fork:
+// the docs keep importing the template's
 // package, and the shared analyzer points those imports at the fork's.
 
 import 'dart:io';
@@ -12,8 +12,8 @@ void main() {
   test('template imports are pointed at the given package, others kept', () {
     // Built from templatePackage, not written out: a rename rewrites every
     // literal `package:flutter_starter/` in .dart files, this test's input
-    // included, and then there is nothing left to point anywhere
-    // (koniz-dev/flutter-starter#626). The target is a name no rename uses.
+    // included, and then there is nothing left to point anywhere.
+    // The target is a name no rename uses.
     const block =
         '''
 import 'package:$templatePackage/core/utils/result.dart';

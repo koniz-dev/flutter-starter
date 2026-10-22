@@ -176,7 +176,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // Assert
-      // The failure's localized text, never its log message (#414).
+      // The failure's localized text, never its log message.
       expect(
         find.text(lookupAppLocalizations(const Locale('en')).failureAuth),
         findsOneWidget,

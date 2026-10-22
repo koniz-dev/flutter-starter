@@ -1,5 +1,4 @@
-// With no stored language choice the app follows the device language
-// (koniz-dev/flutter-starter#324).
+// With no stored language choice the app follows the device language.
 //
 // LocaleNotifier.build() and LocalizationService.getCurrentLocale() both
 // returned the fixed default (en_US) when nothing was stored, and

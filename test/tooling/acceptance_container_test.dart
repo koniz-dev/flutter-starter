@@ -1,12 +1,12 @@
 // Guard: every acceptance test builds its Riverpod container the way
-// production does (koniz-dev/flutter-starter#288).
+// production does.
 //
 // Core declares the 401-refresh and session-termination seams, and the auth
 // slice fills them through `authModuleOverrides`, which `createAppContainer`
 // in lib/main.dart applies. A test that builds a bare `ProviderContainer`
 // leaves those seams empty: a forced logout clears storage but never drops the
 // in-memory session, so the router never moves to /login.
-// forced_logout_acceptance_test.dart failed that way from #242 until #288, and
+// forced_logout_acceptance_test.dart once failed that way for weeks, and
 // nothing noticed, because the acceptance tests are tagged `golden` and skipped
 // unless a run opts in with --run-skipped --tags golden. This scan is not
 // tagged, so it runs in CI.
@@ -95,7 +95,7 @@ void main() {
   group('scanAcceptanceSource', () {
     // The scanner proves itself on the shapes it must catch and must allow,
     // so a broken regex cannot turn the real scan below into a silent pass.
-    test('flags a bare ProviderContainer, as #288 had it', () {
+    test('flags a bare ProviderContainer, as the broken test had it', () {
       const source = '''
 final container = ProviderContainer(
   overrides: [storageServiceProvider.overrideWithValue(storage)],
@@ -160,7 +160,7 @@ await tester.pumpWidget(
       isEmpty,
       reason:
           "Without authModuleOverrides, core's session seams are empty and "
-          'a forced logout never reaches the router - the #288 failure, which '
+          'a forced logout never reaches the router - a failure that '
           'stays invisible because acceptance tests are skipped in CI.',
     );
   });

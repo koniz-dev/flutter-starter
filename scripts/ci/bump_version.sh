@@ -13,7 +13,7 @@
 # rewrite goes through a temp file that is moved into place only once it is
 # complete. `release.sh` calls this after `flutter test` and `flutter analyze`
 # have already run, so a mid-edit abort there used to leave a half-written
-# pubspec behind (issue #57).
+# pubspec behind.
 #
 # Pre-release versions (`1.0.0-beta+1`) are rejected with an explanation rather
 # than guessed at: what "bump the patch of a pre-release" should mean is a
@@ -132,8 +132,8 @@ trap cleanup EXIT
 cp -p "$PUBSPEC" "$TMP_FILE"
 
 # Only the first top-level `version:` line is rewritten, and only its value: a
-# trailing comment on it - and a CRLF file's CR - is carried over as written
-# (koniz-dev/flutter-starter#342). awk keeps every other line byte for byte.
+# trailing comment on it - and a CRLF file's CR - is carried over as written.
+# awk keeps every other line byte for byte.
 awk -v new="version: $NEW_VERSION" '
     !done && /^version:/ {
         suffix = ""

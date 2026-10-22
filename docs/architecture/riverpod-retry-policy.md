@@ -74,9 +74,8 @@ reached, the `StartupFailureApp` error screen below the guard never fired, and
 the user got a black window with no error, no retry button, and no way out. A
 visible failure is recoverable; an unbounded hang is not.
 
-Full reasoning, with the measurements: koniz-dev/flutter-starter#101, and the
-regression suite in `test/core/startup/startup_reachability_test.dart` (which
-drives the real `createAppContainer()`, so a regression in `main.dart`'s
+The reasoning is pinned by the regression suite in
+`test/core/startup/startup_reachability_test.dart` (which drives the real `createAppContainer()`, so a regression in `main.dart`'s
 container fails those tests).
 
 ## Why it could not be limited to startup

@@ -143,7 +143,7 @@ void main() {
     // A missing migration path used to log a warning and return the stale
     // version, which every caller discards - so the app started and read
     // new-shaped keys off old-shaped data.
-    group('missing migration path (#60)', () {
+    group('missing migration path', () {
       test('throws when no migration reaches the target version', () async {
         await storage.setString(StorageVersion.versionKey, '1');
 
@@ -234,7 +234,7 @@ void main() {
       });
     });
 
-    group('downgrade detection (#60)', () {
+    group('downgrade detection', () {
       test('throws distinctly when stored version is newer', () async {
         await storage.setString(
           StorageVersion.versionKey,
@@ -262,7 +262,7 @@ void main() {
                   StorageVersion.current,
                 )
                 // Asserted on the real thrown object, not just a hand-built
-                // one: #142 was found through a widget test failing with
+                // one: a past bug was found through a widget test failing with
                 // `Found 0 widgets`, which reads as "wrong screen" rather
                 // than "wrong class name". Here it fails at the throw site.
                 .having(
@@ -290,7 +290,7 @@ void main() {
       });
     });
 
-    group('version stamp write failure (#60)', () {
+    group('version stamp write failure', () {
       test('surfaces a rejected version write instead of returning', () async {
         await storage.setString(StorageVersion.versionKey, '1');
         final failingStamp = _VersionWriteFailingStorage(storage);
@@ -312,7 +312,7 @@ void main() {
   // These assert the exact string, not `contains`, because the string itself
   // is the product: `main()` renders `'$error'` verbatim into
   // `StartupFailureApp`, so this is what a user quotes in a bug report.
-  group('exception toString (#142)', () {
+  group('exception toString', () {
     test('the base class names itself and keeps its original-exception '
         'line', () {
       expect(

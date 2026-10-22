@@ -433,7 +433,7 @@ void main() {
       });
     });
 
-    // Regression cover for koniz-dev/flutter-starter#146: toJson() used to
+    // Regression cover: toJson() used to
     // call toIso8601String() on a local DateTime, writing no `Z` and no
     // numeric offset, so the stored instant depended on the reader's zone.
     //
@@ -574,7 +574,7 @@ void main() {
       });
 
       test('a legacy offset-less row is read as local wall clock', () {
-        // Arrange - the shape every row written before #146 has on disk.
+        // Arrange - the shape every row written before the fix has on disk.
         final json = jsonWith(
           '2026-09-19T14:30:00.000',
           '2026-09-19T14:30:00.000',

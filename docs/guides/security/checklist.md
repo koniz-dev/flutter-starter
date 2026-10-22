@@ -37,8 +37,8 @@ them.
       the tree as it is when it runs. It is now also on the release-build path:
       `scripts/ci/build_all.sh` runs it before the first build, and
       `deploy-android.yml`, `deploy-ios.yml` and every job of `deploy-web.yml`
-      run it as a **Guard against a bundled secrets file** step before theirs
-      ([#135](https://github.com/koniz-dev/flutter-starter/issues/135)). Running
+      run it as a **Guard against a bundled secrets file** step before theirs.
+Running
       it by hand is still the habit to keep: those paths cover the artifact, not
       the tree you are about to hand to them.
       Use `--dart-define-from-file=.env` on native; on web, keep secrets on the
@@ -52,9 +52,7 @@ them.
       `tool/check_env_assets.dart` refuses to let the private ones
       (`secretAssetExtensions`: `.pem`, `.key`, `.pfx`, `.p12`, `.p8`, `.jks`,
       `.keystore`, `.mobileprovision`, `.provisionprofile`) be declared as a
-      Flutter asset
-      ([#138](https://github.com/koniz-dev/flutter-starter/issues/138),
-      [#164](https://github.com/koniz-dev/flutter-starter/issues/164)). Run
+      Flutter asset. Run
       `git ls-files | grep -iE '\.(pem|key|pfx|p12|p8|jks|keystore)$'` before a
       release; it must print nothing. A file that is already tracked stays
       tracked - `.gitignore` does not retroactively untrack it - so if that

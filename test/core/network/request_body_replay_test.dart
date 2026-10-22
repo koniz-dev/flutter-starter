@@ -1,4 +1,4 @@
-// A replayed request must carry its body again (koniz-dev/flutter-starter#284).
+// A replayed request must carry its body again.
 //
 // AuthInterceptor replays a request after a successful 401 refresh, and
 // RetryInterceptor replays one after a transient failure. Both used to pass

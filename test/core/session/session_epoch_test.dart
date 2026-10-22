@@ -1,8 +1,7 @@
-// A session change must be observable outside the auth slice
-// (koniz-dev/flutter-starter#452).
+// A session change must be observable outside the auth slice.
 //
 // Features may not import lib/features/auth/ (import_rules_test), so per-user
-// state elsewhere - the tasks slice in #353 - needs a signal from
+// state elsewhere - the tasks slice, say - needs a signal from
 // lib/core/session/. SessionGeneration already advances on every transition
 // that replaces or removes the credential set; these tests pin that each one is
 // now *observable*, through sessionEpochProvider, on the real provider graph.

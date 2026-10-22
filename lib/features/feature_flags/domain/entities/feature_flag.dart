@@ -77,7 +77,7 @@ enum FeatureFlagSource {
 
   /// Environment variable.
   ///
-  /// No shipped source produces this since koniz-dev/flutter-starter#279:
+  /// No shipped source produces this:
   /// `LocalFeatureFlagsService` no longer reads `FEATURE_<KEY>`. Kept so a
   /// custom source you add can still report it.
   environment,

@@ -13,10 +13,10 @@
 # Why this file exists instead of an inline `run:` block: the guard is a
 # pattern match over another tool's human-readable output, and it has shipped
 # broken twice in opposite directions - first reading `META-INF/*.RSA`, which a
-# v2-signed APK does not contain, so it passed having verified nothing
-# (koniz-dev/flutter-starter#62); then greping for `Signer #1 certificate DN:`,
+# v2-signed APK does not contain, so it passed having verified nothing;
+# then greping for `Signer #1 certificate DN:`,
 # a label apksigner only emits for v1/JAR signing, so it failed every correctly
-# v2-signed build (koniz-dev/flutter-starter#153). As a script it can be pointed
+# v2-signed build. As a script it can be pointed
 # at a deliberately debug-signed or deliberately unsigned APK and observed to
 # fail, which is the only thing that makes it a guard rather than a decoration.
 #

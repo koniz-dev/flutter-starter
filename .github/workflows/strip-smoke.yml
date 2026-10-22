@@ -1,7 +1,7 @@
 # Verifies every `tool/strip_sample_features.dart` variant leaves an
 # analyzable, testable tree.
 #
-# All four variants run, not just the default one. Until #50 only the bare
+# All variants run, not just the default one. Once only the bare
 # `--apply` was exercised, so `--remove-tasks` and `--remove-feature-flags`
 # shipped goldens that imported a routing layout refactored away months
 # earlier and no job ever noticed.
@@ -13,9 +13,9 @@
 # `flutter analyze` afterwards checks the goldens in the only state where the
 # answer means anything.
 #
-# NO `paths-ignore`, deliberately (koniz-dev/flutter-starter#167, same shape as
-# #117 for `ci.yml`). These three jobs are listed by #58 as safe to mark
-# required, and `paths-ignore` suppresses the whole workflow run, so a required
+# NO `paths-ignore`, deliberately (the same shape as `ci.yml`). These jobs
+# are safe to mark required, and `paths-ignore` suppresses the whole workflow
+# run, so a required
 # check would never report and every pull request would sit on "Expected -
 # waiting for status to be reported" forever. The filter lives INSIDE each job
 # instead, in "Decide the strip scope": the job always runs and always reports,
@@ -61,7 +61,7 @@ jobs:
           # tree but keep the import order sorted for flutter_starter.
           - variant: renamed-both
             flags: ''
-          # Both samples kept (koniz-dev/flutter-starter#333, #621); the bricks
+          # Both samples kept; the bricks
           # step below then drops the Mason bricks.
           - variant: keep-samples
             flags: '--keep-samples'
@@ -88,7 +88,7 @@ jobs:
       #                             deletes and rewrites files here.
       #   tool/**                 - the strip script itself, and `tool/golden/**`,
       #                             the replacement sources it copies over `lib/`.
-      #                             A stale golden is the exact #50 failure this
+      #                             A stale golden is the exact failure this
       #                             matrix exists to catch.
       #   test/**                 - the stripped tree still has to pass `flutter test`,
       #                             and strip deletes the sample features' tests.
@@ -230,11 +230,10 @@ jobs:
 
       # The keep-samples variant is the one an adopter keeping both samples
       # uses. Exercise the two documented actions that turned `flutter test`
-      # red while an upstream-only guard was still on main (#333): generating
+      # red while an upstream-only guard was still on main: generating
       # and committing a feature slice, and removing bricks/ and mason.yaml
       # the way the README says to: --remove-bricks, which also drops the
-      # docs that link into them, so the links must still resolve
-      # (koniz-dev/flutter-starter#588).
+      # docs that link into them, so the links must still resolve.
       - name: Generate a feature slice and drop the bricks (keep-samples)
         if: steps.scope.outputs.run == 'true' && matrix.variant == 'keep-samples'
         shell: bash
@@ -252,7 +251,7 @@ jobs:
 
       # After removing a sample the strip deletes its own machinery and every
       # strip marker, so the tree an adopter keeps holds nothing whose only job
-      # was producing it (koniz-dev/flutter-starter#622). Assert that directly:
+      # was producing it. Assert that directly:
       # analyze and test would stay green if it silently stopped.
       - name: The strip removed itself (sample variants)
         if: steps.scope.outputs.run == 'true' && matrix.variant != 'keep-samples'

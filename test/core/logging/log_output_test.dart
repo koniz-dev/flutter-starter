@@ -14,7 +14,7 @@ void main() {
   // Every test gets a real, empty documents directory. Without one,
   // getApplicationDocumentsDirectory threw, init() swallowed it, no file was
   // ever written, and the assertions below sat behind `if
-  // (logFiles.isNotEmpty)` guards that never ran (koniz-dev/flutter-starter#371).
+  // (logFiles.isNotEmpty)` guards that never ran.
   late Directory documentsDir;
   setUp(() async {
     documentsDir = await Directory.systemTemp.createTemp('log_output_docs');
@@ -37,7 +37,7 @@ void main() {
   // Every test owns its FileLogOutput and registers its own teardown right
   // after constructing it. A shared `late` variable torn down by the group
   // threw LateInitializationError under a randomized order, because the
-  // nested groups never assigned it (koniz-dev/flutter-starter#370).
+  // nested groups never assigned it.
   group('FileLogOutput', () {
     test('should initialize log file', () async {
       // Arrange
@@ -1665,8 +1665,7 @@ void main() {
         () async {
           // Arrange - a tiny maxFileSize so a write crosses the threshold,
           // and enough generations that retention never drops a line: this
-          // test is about the rotation window, not the cap
-          // (koniz-dev/flutter-starter#589).
+          // test is about the rotation window, not the cap.
           final output = FileLogOutput(
             fileName: 'rotate.log',
             maxFileSize: 64,

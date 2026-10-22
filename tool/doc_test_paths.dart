@@ -3,7 +3,7 @@
 // CONTRIBUTING told contributors to run
 // `flutter test test/features/auth/domain/usecases/login_test.dart`; the file
 // is `login_usecase_test.dart`, so the command failed for everyone who copied
-// it, and nothing noticed (koniz-dev/flutter-starter#360, #551).
+// it, and nothing noticed.
 //
 // The rule: inside a fenced code block of README.md, CONTRIBUTING.md or
 // `docs/`, every path argument

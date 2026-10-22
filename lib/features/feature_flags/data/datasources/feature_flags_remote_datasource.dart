@@ -14,8 +14,8 @@
 /// this plain.
 ///
 /// This comment used to send the reader to a template file in this directory.
-/// None was ever committed - not here, and not anywhere in the history
-/// (koniz-dev/flutter-starter#207). Writing one now would ship vendor code
+/// None was ever committed - not here, and not anywhere in the history.
+/// Writing one now would ship vendor code
 /// that `flutter analyze` never reads, to save implementing a contract that
 /// is legible from its own signature.
 abstract class FeatureFlagsRemoteDataSource {

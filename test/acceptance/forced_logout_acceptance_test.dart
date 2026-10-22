@@ -26,7 +26,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../helpers/in_memory_stores.dart';
 import 'acceptance_helpers.dart';
 
-/// Visual evidence for #127 criterion 2: the screen a running app is showing
+/// Visual evidence: the screen a running app is showing
 /// before and after the transport forces a logout, with no restart in between.
 ///
 /// Remember what these PNGs can and cannot prove (see acceptance_helpers.dart):
@@ -64,8 +64,7 @@ void main() {
     final storage = InMemoryStorage();
     final tokens = InMemoryTokenStore();
     // Built through createAppContainer, as lib/main.dart builds it, so the auth
-    // slice's authModuleOverrides fill core's session seams
-    // (koniz-dev/flutter-starter#288).
+    // slice's authModuleOverrides fill core's session seams.
     final container = createAppContainer(
       overrides: [
         storageServiceProvider.overrideWithValue(storage),

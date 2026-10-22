@@ -4,8 +4,8 @@
 // `--dart-define` reaches the app: a key missing from that const table cannot
 // be read in a release build at all. The security guide once told readers to
 // build production with `--dart-define=CERTIFICATE_FINGERPRINTS=...`, a key
-// nothing reads, so a release built from it shipped unpinned
-// (koniz-dev/flutter-starter#277). Nothing failed.
+// nothing reads, so a release built from it shipped unpinned.
+// Nothing failed.
 //
 // The rule: inside a fenced code block, every `--dart-define=<KEY>=` and
 // `--dart-define <KEY>=` must name a key of `DartDefines.values`. The known
@@ -13,8 +13,7 @@
 // under plain `dart run` with no Flutter toolchain; `test/docs/` pins the
 // parsed set to the real map.
 //
-// Run by `tool/check_docs.dart` over README.md and `docs/`
-// (koniz-dev/flutter-starter#379).
+// Run by `tool/check_docs.dart` over README.md and `docs/`.
 
 import 'dart:io';
 

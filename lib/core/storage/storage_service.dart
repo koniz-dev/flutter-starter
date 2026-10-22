@@ -50,8 +50,7 @@ abstract class IStorageService {
 /// asking for an optional value does not crash. The migration executor cannot
 /// work that way. Reading "no version" as a fresh install made it re-run every
 /// migration over already migrated data and overwrite the stamp with v1
-/// whenever a read failed while writes still worked
-/// (koniz-dev/flutter-starter#297).
+/// whenever a read failed while writes still worked.
 ///
 /// Implement it on a storage whose [IStorageService.getString] hides read
 /// failures. A storage whose reads already throw, such as [StorageService]

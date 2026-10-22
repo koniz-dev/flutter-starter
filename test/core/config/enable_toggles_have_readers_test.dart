@@ -1,5 +1,5 @@
 // Every `ENABLE_*` toggle in the configuration guide either does something or
-// says that it does not (koniz-dev/flutter-starter#319).
+// says that it does not.
 //
 // `ENABLE_DEBUG_FEATURES`, `ENABLE_ANALYTICS` and `ENABLE_CRASH_REPORTING`
 // were documented and parsed by `AppConfig`, but nothing outside

@@ -1,4 +1,4 @@
-// A format check must report, not rewrite (koniz-dev/flutter-starter#341).
+// A format check must report, not rewrite.
 //
 // `format_dart.sh --check` ran `dart format --set-exit-if-changed` without
 // `--output=none`, so the "check" reformatted the working tree and exited 1;

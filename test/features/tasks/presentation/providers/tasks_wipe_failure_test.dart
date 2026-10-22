@@ -83,8 +83,8 @@ final Provider<List<RouteBase>> _tasksRoutesProvider = Provider(
   buildTasksRoutes,
 );
 
-// koniz-dev/flutter-starter#458. tasksSessionResetProvider deleted
-// `tasks_data` on a session change and invalidated tasksProvider once the
+// tasksSessionResetProvider used to delete `tasks_data` on a session change
+// and invalidate tasksProvider once the
 // delete *finished* - whether or not it succeeded. A failed delete therefore
 // let the rebuilt notifier reload the previous user's tasks for the next one,
 // and the error reached only the zone's uncaught-error handler.

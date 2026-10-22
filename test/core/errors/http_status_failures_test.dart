@@ -1,5 +1,4 @@
-// HTTP error statuses must reach callers as distinguishable failures
-// (koniz-dev/flutter-starter#309).
+// HTTP error statuses must reach callers as distinguishable failures.
 //
 // Every bad response became a ServerException and every ServerException a
 // ServerFailure with no status, so a wrong password, a 403, a 404 and a 500

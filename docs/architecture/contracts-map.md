@@ -30,7 +30,7 @@ implemented but no production code consumes them. For those two, following the
 
 That is no longer an open question.
 [adr/0006-contract-status-and-slice-shape.md](adr/0006-contract-status-and-slice-shape.md)
-(koniz-dev/flutter-starter#183) gives each a verdict: **`AppDesignTokens` is to
+ gives each a verdict: **`AppDesignTokens` is to
 be wired** - type `AppTheme._tokens` on the abstraction - and
 **`IAuthController` is to be removed**, with `AuthStateSnapshot`,
 `ControllerStateSnapshot` and `authControllerProvider`. Both rows stay here
@@ -39,10 +39,9 @@ are becoming. Neither is filed yet, and the ADR names the epic and the exact
 edit for each.
 
 Two rows that used to sit here were answered by deletion rather than by wiring.
-`AppNavigator` went in koniz-dev/flutter-starter#177 - the contract, its adapter
+`AppNavigator` went - the contract, its adapter
 and its provider are gone, and navigation is the `Navigation` row below.
-`ITasksController` went in koniz-dev/flutter-starter#180, which removed it and
-`TasksStateSnapshot` from `state_boundary_contracts.dart`: it had no implementor
+`ITasksController` went too, together with `TasksStateSnapshot`, from `state_boundary_contracts.dart`: it had no implementor
 and no consumer, and it had drifted from the tasks slice's notifier in both directions - it
 declared `loadTasks()` and `clearError()` the notifier never had, and lacked the
 `updateTask` the notifier does have. Neither has a row below, which is the
@@ -53,7 +52,7 @@ documentation of one.
 | --- | --- |
 | **Live** | Production code in `lib/` is typed on the contract and runs against it. Swapping the implementation changes behavior. |
 | **No production consumer** | An implementation exists, and for some rows a provider binds it to the contract, but nothing in `lib/` reads that binding. Tests may. Swapping the implementation changes nothing until a consumer exists. |
-| **No implementor** | The contract is declared and nothing anywhere implements it. **No contract is in this state today** - `ITasksController` was the last one and was deleted by koniz-dev/flutter-starter#180. The row stays so the state has a name if it recurs. |
+| **No implementor** | The contract is declared and nothing anywhere implements it. **No contract is in this state today** - `ITasksController` was the last one and was deleted. The row stays so the state has a name if it recurs. |
 
 | Contract / surface | Status | Default implementation | Wired in / consumed by | To replace |
 | --- | --- | --- | --- | --- |
@@ -67,10 +66,10 @@ documentation of one.
 | `AppDesignTokens` | **No production consumer** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`) | Nowhere, and there is no provider. `AppTheme` binds the **concrete** class at compile time: `static const _tokens = DefaultDesignTokens();` (`lib/shared/theme/app_theme.dart`). Nothing in `lib/` is typed on `AppDesignTokens`. | Edit `lib/shared/theme/app_theme.dart` to construct your own token class (and update the theme building that reads `_tokens`). There is no override point. |
 | `IAuthController` | **No production consumer** | `AuthNotifier` (`lib/features/auth/presentation/providers/auth_provider.dart`) | `authControllerProvider` (`lib/features/auth/presentation/providers/auth_provider.dart`) binds it, but that identifier has **zero readers** in `lib/` and `test/` - the UI reads the generated `authProvider` directly. | Rebinding `authControllerProvider` to your orchestrator has no effect until something reads it |
 
-Until koniz-dev/flutter-starter#182 there was an `ITasksController` row naming a
+There used to be an `ITasksController` row naming a
 controller provider that has never existed anywhere in the tree - the name is
 deliberately not repeated here, so that grepping for it stays a clean test.
-koniz-dev/flutter-starter#180 then deleted the contract itself.
+The contract itself was deleted after that.
 
 That is no longer left to a reviewer. Every identifier named in the tables
 above and below - providers, types, and the members the rows point at -
@@ -85,7 +84,7 @@ row, add a directive for every identifier you put in it** - a symbol whose only
 occurrence in the repository is this file is the tell, and the directive is what
 turns that from a convention into a gate. The tables cite files without line
 numbers on purpose: line anchors rotted within weeks, most of them off by a few
-lines (koniz-dev/flutter-starter#364), while a directive fails the moment the
+lines, while a directive fails the moment the
 name it guards moves or disappears.
 
 <!-- symbol: lib/core/di/providers.dart apiClientProvider -->
@@ -134,7 +133,7 @@ to mistype.
 | Storage | `lib/core/storage/adapters/` |
 | Routing | None. Navigation is a `BuildContext` extension, not a contract plus adapter; `go_router` stays inside `lib/core/routing/` |
 | Theme | Prefer tokens in `lib/shared/design_system/` + `lib/shared/theme/app_theme.dart` |
-| State | Notifiers under `lib/features/*/presentation/providers/`; one implements a controller contract (`AuthNotifier`), the tasks slice deliberately does not - see koniz-dev/flutter-starter#180 |
+| State | Notifiers under `lib/features/*/presentation/providers/`; one implements a controller contract (`AuthNotifier`), the tasks slice deliberately does not |
 
 ## Optional modules
 

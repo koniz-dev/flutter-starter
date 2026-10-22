@@ -3,8 +3,7 @@
 // `.env` is deliberately not a Flutter asset, so it reaches the app only
 // through `--dart-define-from-file=.env`. README's Quick Start and
 // CONTRIBUTING told a newcomer to `cp .env.example .env`, fill it in, and then
-// run plain `flutter run` - which silently ran on the built-in defaults
-// (koniz-dev/flutter-starter#355).
+// run plain `flutter run` - which silently ran on the built-in defaults.
 //
 // The rule: in a fenced code block, the first `flutter run` or `flutter build`
 // command after a `cp .env.example .env` line must pass

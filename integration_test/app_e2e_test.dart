@@ -24,7 +24,7 @@ const hasBackend = bool.fromEnvironment('E2E_BACKEND');
 /// exits and throws `pumpAndSettle timed out` however idle the app is.
 ///
 /// Patrol's `waitUntilVisible` polls instead of demanding quiescence, so it is
-/// unaffected. See `integration_test/README.md` and issue #40.
+/// unaffected. See `integration_test/README.md`.
 Future<void> _boot(PatrolIntegrationTester $) async {
   await app.main();
   await $.pump(const Duration(seconds: 1));

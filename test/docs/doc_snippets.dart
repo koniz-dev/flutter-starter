@@ -66,6 +66,6 @@ String currentPackageName() => RegExp(
 /// The docs keep the template's package name - neither rename path rewrites
 /// Markdown, and fork-and-customize makes updating it optional - so in a
 /// renamed fork every snippet would otherwise import a package that no longer
-/// exists and turn `flutter test` red (koniz-dev/flutter-starter#603).
+/// exists and turn `flutter test` red.
 String forPackage(String block, String package) =>
     block.replaceAll('package:$templatePackage/', 'package:$package/');

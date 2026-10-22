@@ -4,7 +4,7 @@
 # Usage: pwsh scripts/dev/create_feature.ps1 <feature_name>   # snake_case
 #
 # Output is byte-identical to scripts/dev/create_feature.sh (LF endings, UTF-8
-# without BOM); both are generated from the same verified source (issue #57).
+# without BOM); both are generated from the same verified source.
 param (
     [Parameter(Mandatory = $true)]
     [string]$FeatureName
@@ -299,7 +299,7 @@ void main() {
 # The templates write imports in the order that is sorted for the package name
 # `flutter_starter`. After a rename (`my_app` sorts after `flutter_test`) that
 # order trips `directives_ordering`, so the analyzer, not this script, sorts
-# them (koniz-dev/flutter-starter#442). The formatter, likewise, decides where
+# them. The formatter, likewise, decides where
 # long generated lines wrap, so the result satisfies
 # `dart format --set-exit-if-changed` for any name length.
 if (Get-Command dart -ErrorAction SilentlyContinue) {

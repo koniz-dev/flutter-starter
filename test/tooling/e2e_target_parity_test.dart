@@ -1,6 +1,6 @@
 // The local E2E script and the CI E2E workflow must run the same Patrol
-// target (koniz-dev/flutter-starter#578, split from #378), and that target is
-// the only E2E test (koniz-dev/flutter-starter#378).
+// target, and that target is
+// the only E2E test.
 //
 // scripts/test/run_e2e_tests.sh ran integration_test/auth_flow_test.dart
 // while e2e-android.yml ran app_e2e_test.dart - a near-identical copy - so a
@@ -32,7 +32,7 @@ void main() {
     }
   });
 
-  test('criterion 1 (#378): the CI target is the only E2E test, in the repo '
+  test('criterion 1: the CI target is the only E2E test, in the repo '
       'and in every strip golden', () {
     final ci = _targets('.github/workflows/e2e-android.yml');
     Set<String> e2eTests(String dir) => {
@@ -42,8 +42,7 @@ void main() {
     };
 
     expect(e2eTests('integration_test'), ci);
-    // After a sample strip the tool removes itself, tool/golden/ included
-    // (koniz-dev/flutter-starter#622).
+    // After a sample strip the tool removes itself, tool/golden/ included.
     final goldens = Directory('tool/golden');
     for (final golden
         in goldens.existsSync()

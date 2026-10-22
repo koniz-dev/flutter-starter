@@ -1,13 +1,13 @@
 // A forced logout must end the session in the app that is *running*, not only
 // on the device.
 //
-// Regression cover for koniz-dev/flutter-starter#127. `AuthInterceptor`
-// cleared the tokens (#59), the cached user blob (#85's precondition) and the
-// HTTP response cache (#114) - the whole persisted session - and told nobody.
+// Regression cover. `AuthInterceptor` cleared the tokens, the cached user
+// blob and the HTTP response cache - the whole persisted session - and told
+// nobody.
 // `AuthNotifier` still held a `User` in memory, the router guard reads
 // `authState.user != null`, so the authenticated shell stayed on screen backed
-// by credentials that no longer existed. #85 fixed the next *cold start*; this
-// is the same-session half.
+// by credentials that no longer existed. Session restore already handled the
+// next *cold start*; this is the same-session half.
 //
 // These tests assemble the real provider graph - real `ApiClient`, real
 // interceptor chain, real `AuthNotifier` - and only swap the two things that
@@ -106,7 +106,7 @@ void main() {
       overrides: [
         // Same seam wiring `createAppContainer()` applies in production:
         // core declares the 401-refresh ports and the auth slice fills
-        // them (koniz-dev/flutter-starter#221). Without this the
+        // them. Without this the
         // interceptor can neither refresh nor reach the in-memory
         // session, and these tests would pass vacuously.
         ...authModuleOverrides,
@@ -151,7 +151,7 @@ void main() {
     );
   }
 
-  group('forced logout drops the in-memory session (#127 criterion 1)', () {
+  group('forced logout drops the in-memory session', () {
     test('a 401 whose refresh fails clears AuthState.user', () async {
       final session = await signedInSession();
 
@@ -178,7 +178,7 @@ void main() {
     });
   });
 
-  group('no DI cycle is introduced (#127 criterion 3)', () {
+  group('no DI cycle is introduced', () {
     test(
       'building the API client does not build the auth notifier',
       () async {
@@ -191,7 +191,7 @@ void main() {
           overrides: [
             // Same seam wiring `createAppContainer()` applies in production:
             // core declares the 401-refresh ports and the auth slice fills
-            // them (koniz-dev/flutter-starter#221). Without this the
+            // them. Without this the
             // interceptor can neither refresh nor reach the in-memory
             // session, and these tests would pass vacuously.
             ...authModuleOverrides,
@@ -212,7 +212,7 @@ void main() {
     );
   });
 
-  group('the router reacts without a restart (#127 criterion 2)', () {
+  group('the router reacts without a restart', () {
     testWidgets('a forced logout moves the running app to /login', (
       tester,
     ) async {
@@ -258,7 +258,7 @@ void main() {
     });
   });
 
-  group('a forced logout with nobody listening is harmless (#127 c4)', () {
+  group('a forced logout with nobody listening is harmless', () {
     testWidgets('a 401 after the container is disposed does not throw', (
       tester,
     ) async {
@@ -268,7 +268,7 @@ void main() {
         overrides: [
           // Same seam wiring `createAppContainer()` applies in production:
           // core declares the 401-refresh ports and the auth slice fills
-          // them (koniz-dev/flutter-starter#221). Without this the
+          // them. Without this the
           // interceptor can neither refresh nor reach the in-memory
           // session, and these tests would pass vacuously.
           ...authModuleOverrides,

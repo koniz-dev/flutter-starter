@@ -36,7 +36,7 @@ class LoggingService {
   /// [debugMode] - Stands in for `kDebugMode`, for tests
   /// [output] - Replaces every built-in output, so a test can observe the
   /// level and formatted lines each call produces
-  /// (koniz-dev/flutter-starter#576)
+  ///
   LoggingService({
     bool? enableLogging,
     bool? enableFileLogging,
@@ -119,7 +119,7 @@ class LoggingService {
 
     // A release build with no file output - staging by default - would
     // otherwise have no output at all and drop every line while logging is
-    // on (koniz-dev/flutter-starter#320). The console reaches the platform
+    // on. The console reaches the platform
     // log (logcat, the unified log), which is better than nothing.
     if (outputs.isEmpty) {
       outputs.add(ConsoleOutput());

@@ -1,5 +1,5 @@
 // The setup docs must tell an Android-emulator user how to reach a backend on
-// their machine (koniz-dev/flutter-starter#301).
+// their machine.
 //
 // The development default is http://localhost:3000, and on an Android
 // emulator localhost is the emulator itself. Nothing in the setup docs said
@@ -14,7 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 const _files = [
   'docs/guides/onboarding/getting-started.md',
   'docs/guides/configuration.md',
-  // The BASE_URL comment (koniz-dev/flutter-starter#493).
+  // The BASE_URL comment.
   '.env.example',
 ];
 

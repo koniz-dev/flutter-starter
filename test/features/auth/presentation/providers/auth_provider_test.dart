@@ -243,7 +243,7 @@ void main() {
         expect(state.error, 'Logout failed');
       });
 
-      // Regression for #52 criterion 4. The repository tears the local session
+      // Regression. The repository tears the local session
       // down even when the remote call fails, so the notifier must not keep
       // presenting an authenticated session: the router keys its redirect off
       // state.user.
@@ -370,7 +370,7 @@ void main() {
         },
       );
 
-      // koniz-dev/flutter-starter#181. The forced-logout decision used to read
+      // The forced-logout decision used to read
       // `failure.message.toLowerCase().contains('refresh')`, so any error
       // phrased "please refresh and try again" - in any language that happens
       // to contain the substring - signed the user out. Fails on the
@@ -414,7 +414,7 @@ void main() {
       );
 
       // The same defect with teeth: the repository's own
-      // "Session ended while the token refresh was in flight" failure (#169)
+      // "Session ended while the token refresh was in flight" failure
       // contains "refresh", so the substring match forced a logout on the
       // session that had *replaced* this one - the exact damage the session
       // generation guard exists to prevent, inflicted from the other side.
@@ -686,7 +686,7 @@ void main() {
         expect(state.user, isNull);
       });
 
-      // Expectation deliberately inverted by koniz-dev/flutter-starter#181.
+      // Expectation deliberately inverted.
       // This test used to assert that a *message* reading "Refresh token
       // invalid" was enough to force a logout - it codified the substring
       // match. An untagged failure now leaves the session alone; the data
@@ -808,7 +808,7 @@ void main() {
     });
   });
 
-  // koniz-dev/flutter-starter#384, criterion 3. Driven through the real
+  // A rejected refresh token, driven through the real
   // RefreshTokenUseCase and AuthRepositoryImpl rather than a stubbed failure,
   // so the test proves the 400 the server sends is what reaches the notifier
   // as REFRESH_TOKEN_EXPIRED.

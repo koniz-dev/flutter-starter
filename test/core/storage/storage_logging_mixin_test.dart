@@ -277,12 +277,12 @@ void main() {
       });
     });
 
-    // Criterion 8 of #60. Redaction used to match the *value* against
+    // Redaction used to match the *value* against
     // ['password','token','secret','key','auth']. A real JWT contains none
     // of those, so it fell through to the 100-character truncation and the
     // header plus most of the payload went into the log - under a key the
     // caller had already named `auth_token`.
-    group('key-based redaction (#60)', () {
+    group('key-based redaction', () {
       /// The canonical HS256 example token. Lower-cased it contains none of
       /// the sensitive substrings, which is the whole point.
       const jwt =

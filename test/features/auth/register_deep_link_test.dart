@@ -15,7 +15,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/pump_app.dart';
 
-// koniz-dev/flutter-starter#348: the guard parks a deep link as
+// The guard parks a deep link as
 // `/login?redirect=<path>`, but the register link went to a bare `/register`,
 // so a new user who opened a shared link landed on `/` after signing up.
 

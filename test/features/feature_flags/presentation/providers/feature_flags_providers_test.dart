@@ -62,7 +62,7 @@ void main() {
 
     group('Initialization Provider', () {
       test('featureFlagsInitializationProvider completes', () async {
-        // Before #53 this was wrapped in `on Object catch (e) { expect(e,
+        // This used to be wrapped in `on Object catch (e) { expect(e,
         // isNotNull); }`, which turned any failure - including a failed
         // assertion - into a pass. With SharedPreferences mocked there is no
         // reason for it to fail, so the completion is asserted directly.

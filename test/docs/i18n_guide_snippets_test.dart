@@ -1,5 +1,4 @@
-// The internationalization guide's code must compile against this repository
-// (koniz-dev/flutter-starter#359).
+// The internationalization guide's code must compile against this repository.
 //
 // It imported `package:flutter_gen/gen_l10n/app_localizations.dart`, which
 // does not exist here (the app generates into lib/l10n/), set a notifier's

@@ -1,8 +1,8 @@
 // integration_test/README.md must not cite a tool/golden/ path that does not
-// exist (koniz-dev/flutter-starter#585). The README said
+// exist. The README said
 // "`tool/golden/no_feature_flags/` shows the wiring, and its own
 // `app_e2e_test.dart` does drive the full tasks flow" - the directory exists,
-// the E2E file in it was deleted in #93. So a sentence that cites a golden
+// the E2E file in it had been deleted. So a sentence that cites a golden
 // variant and names a `*_test.dart` file is read as claiming that file is in
 // the variant's integration_test/, and that claim is checked too.
 
@@ -14,7 +14,7 @@ final String _readme = File('integration_test/README.md').readAsStringSync();
 
 void main() {
   // After a sample strip the tool removes itself, tool/golden/ included, and
-  // the README's lines about it go too (koniz-dev/flutter-starter#622).
+  // the README's lines about it go too.
   final skip = Directory('tool/golden').existsSync()
       ? null
       : 'no tool/golden/: the sample strip has removed itself';

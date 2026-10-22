@@ -169,9 +169,9 @@ void main() {
       });
     });
 
-    group('no unreachable environment source (#279)', () {
-      // koniz-dev/flutter-starter#279. getLocalFlag used to consult
-      // EnvConfig.has('FEATURE_<KEY>') first. Since #48, EnvConfig reads a
+    group('no unreachable environment source', () {
+      // getLocalFlag used to consult
+      // EnvConfig.has('FEATURE_<KEY>') first. EnvConfig reads a
       // dart-define only through the const DartDefines table, and a key
       // built at run time from the flag name is never in it, so
       // --dart-define=FEATURE_...=true was discarded in every build. The

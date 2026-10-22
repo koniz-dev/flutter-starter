@@ -48,7 +48,7 @@ on:
           - netlify
           - vercel
 
-# Least privilege (koniz-dev/flutter-starter#343): the deploy steps talk to
+# Least privilege: the deploy steps talk to
 # their store or host with their own secrets, not GITHUB_TOKEN, so the token
 # only needs to read the repository. When you enable a step that comments on
 # PRs or creates GitHub deployments with GITHUB_TOKEN - the Firebase
@@ -94,7 +94,8 @@ jobs:
           fi
 
       # Runs on the tree that is about to be built, which is the whole point:
-      # koniz-dev/flutter-starter#135. The guard already runs in
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
       # scripts/dev/audit_template.sh and, via
       # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
       # of those is this path. A Flutter asset list is not build-mode scoped, so
@@ -155,7 +156,8 @@ jobs:
           echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
 
       # Runs on the tree that is about to be built, which is the whole point:
-      # koniz-dev/flutter-starter#135. The guard already runs in
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
       # scripts/dev/audit_template.sh and, via
       # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
       # of those is this path. A Flutter asset list is not build-mode scoped, so
@@ -218,7 +220,8 @@ jobs:
           echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
 
       # Runs on the tree that is about to be built, which is the whole point:
-      # koniz-dev/flutter-starter#135. The guard already runs in
+      # a `.env` declared as an asset ships inside the artifact. The guard
+      # already runs in
       # scripts/dev/audit_template.sh and, via
       # test/tooling/check_env_assets_test.dart, in `flutter test` - but neither
       # of those is this path. A Flutter asset list is not build-mode scoped, so

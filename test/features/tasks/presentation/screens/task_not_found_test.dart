@@ -23,9 +23,9 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../helpers/pump_app.dart';
 import '../../../../helpers/test_fixtures.dart';
 
-// koniz-dev/flutter-starter#514 (split from #352): the task detail screen's
-// not-found state offered Retry, and retrying a lookup for a task that does
-// not exist cannot help. It now offers Back; a load *failure* keeps Retry.
+// The task detail screen's not-found state used to offer Retry, and retrying
+// a lookup for a task that does not exist cannot help. It now offers Back; a
+// load *failure* keeps Retry.
 
 class _MockTasksRepository extends Mock implements TasksRepository {}
 

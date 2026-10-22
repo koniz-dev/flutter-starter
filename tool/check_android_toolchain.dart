@@ -3,9 +3,8 @@
 // Flutter only *warns* when Gradle, the Android Gradle Plugin or Kotlin is
 // below its floor ("support ... will soon be dropped"), and CI pinned Java 17,
 // so the project sat on Gradle 8.14 - which rejects the JDK 25 bundled with
-// current Android Studio - while every check stayed green
-// (koniz-dev/flutter-starter#329). This turns the warning into a failure
-// (koniz-dev/flutter-starter#387).
+// current Android Studio - while every check stayed green.
+// This turns the warning into a failure.
 //
 // Reads:
 //   android/gradle/wrapper/gradle-wrapper.properties   distributionUrl

@@ -1,7 +1,7 @@
 // A fenced block under `<!-- test-excerpt: <path> -->` must appear verbatim in
 // <path>, so a guide's sample test cannot drift from the test it quotes
-// (koniz-dev/flutter-starter#432: the security guide's sample tested a
-// `LogSanitizer` class that never existed).
+// (the security guide's sample once tested a `LogSanitizer` class that never
+// existed).
 
 import 'dart:io';
 

@@ -1,7 +1,6 @@
-// A secret in a path's query string must not reach the logs
-// (koniz-dev/flutter-starter#313).
+// A secret in a path's query string must not reach the logs.
 //
-// ApiLoggingInterceptor redacted queryParameters (#78) but logged
+// ApiLoggingInterceptor redacted queryParameters but logged
 // options.path verbatim, so `get('/auth/magic-link/verify?token=X')` - a
 // normal call, since ApiClient takes a path - wrote X into the request,
 // response and error entries, and RetryInterceptor's retry line. `jwt`, the

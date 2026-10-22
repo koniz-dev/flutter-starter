@@ -135,7 +135,7 @@ mixin PerformanceScreenMixin<T extends StatefulWidget> on State<T> {
   ///
   /// Records `screen_load_time` as the milliseconds since the trace started.
   /// It used to record the constant 1 whatever the screen took, so every
-  /// screen read as loading in 1 ms (koniz-dev/flutter-starter#326).
+  /// screen read as loading in 1 ms.
   void markScreenLoaded() {
     final startedAt = _traceStartedAt;
     if (_screenTrace != null && startedAt != null) {

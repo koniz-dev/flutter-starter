@@ -82,8 +82,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   /// Typed on [NetworkResponse], the transport-agnostic contract, so no dio
-  /// type reaches this feature and the transport stays swappable. See
-  /// koniz-dev/flutter-starter#176.
+  /// type reaches this feature and the transport stays swappable.
   Future<NetworkResponse<dynamic>> _post(
     String path,
     Map<String, dynamic>? body,

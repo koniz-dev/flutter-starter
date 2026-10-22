@@ -32,13 +32,13 @@ should inject `ApiClient` via `apiClientProvider` or the typed alias
 
 ### Where dio is allowed to appear
 
-Since koniz-dev/flutter-starter#176 the request surface of `ApiClient` is typed
+The request surface of `ApiClient` is typed
 entirely on `lib/core/contracts/network_contracts.dart`: every verb returns
 `NetworkResponse<dynamic>` and takes `Map<String, String>? headers` rather than
 dio's `Options`. A data source can therefore hold an `ApiClient` without
 importing `package:dio`, which is what makes `INetworkClient` genuinely
-swappable - before #176 the sample auth data source was typed on
-`dio.Response` and swapping the transport meant editing every data source.
+swappable - when the sample auth data source was typed on `dio.Response`,
+swapping the transport meant editing every data source.
 
 The rule the tree follows, checkable with one command:
 
@@ -60,7 +60,8 @@ work - swapping `httpClientAdapter` in a test, inspecting `interceptors`,
 reading `BaseOptions`. It is no longer on any request path, so using it is an
 explicit opt-out of the contract rather than something an ordinary `post()`
 forces on the caller. Typing a data source on what it returns puts
-`package:dio` back in the feature layer, which is the leak #176 closed.
+`package:dio` back in the feature layer, which is the leak the typed surface
+closed.
 
 ### Constructor
 
@@ -87,8 +88,8 @@ ApiClient({
 | `loggingService` | no | **Passing it is what installs `ApiLoggingInterceptor`.** Omit it and there is no HTTP logging at all, whatever `ENABLE_HTTP_LOGGING` says |
 | `performanceService` | no | **Passing it is what installs `PerformanceInterceptor`.** Omit it and no HTTP trace is ever started |
 | `cacheConfig` | no | `CacheInterceptor`'s freshness policy (`maxAge`, `maxStale`, `enableCache`); defaults to `CacheConfig()` |
-| `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` . **Ignored on Flutter web**, where the browser owns TLS: `createAdapter()` returns `null` and Dio keeps its browser transport (koniz-dev/flutter-starter#307) |
-| `retryInitialDelay`, `retryMaxJitter` | no | Test-only overrides of `RetryInterceptor`'s backoff (defaults 1s and 500ms). Pass `Duration.zero` for both so a test that walks the retry path does not sleep through it (koniz-dev/flutter-starter#577) |
+| `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` . **Ignored on Flutter web**, where the browser owns TLS: `createAdapter()` returns `null` and Dio keeps its browser transport |
+| `retryInitialDelay`, `retryMaxJitter` | no | Test-only overrides of `RetryInterceptor`'s backoff (defaults 1s and 500ms). Pass `Duration.zero` for both so a test that walks the retry path does not sleep through it |
 
 The two optional services are installed conditionally in `ApiClient._createDio`
 (`if (loggingService != null)` / `if (performanceService != null)`), so their
@@ -292,9 +293,9 @@ Future<NetworkResponse<dynamic>> delete(
 <!-- symbol: lib/core/network/request_cancellation.dart RequestCancellation -->
 
 Every verb takes an optional `cancellation:`, a `RequestCancellation`. It is a
-plain Dart handle - no dio type crosses into the feature layer (#176) - that
-the client bridges to the request's dio `CancelToken`
-(koniz-dev/flutter-starter#316). Cancel it when the result is no longer
+plain Dart handle - no dio type crosses into the feature layer - that
+the client bridges to the request's dio `CancelToken`.
+Cancel it when the result is no longer
 wanted: a screen disposed, a search superseded by the next keystroke.
 
 ```dart
@@ -336,7 +337,7 @@ The ApiClient is configured with:
 <!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
 
 - Interceptors (order matters; see `ApiClient._createDio`): `CacheInterceptor` (its bypass decision is order-independent - see [CacheInterceptor](#cacheinterceptor)), `AuthInterceptor`, `RetryInterceptor` (safe methods only by default - see [RetryInterceptor](#retryinterceptor)), optional `ApiLoggingInterceptor` when a `LoggingService` is provided, optional `PerformanceInterceptor` when a performance service is, then `ErrorInterceptor` **last**. dio runs `onRequest` and `onError` in registration order, and `ErrorInterceptor.onError` terminates the chain with `handler.reject(...)`, so anything registered after it never sees the error.
-  - `PerformanceInterceptor` sits after `AuthInterceptor` and `RetryInterceptor` so each trace records how the request finally ended. A 401 that is refreshed and replayed is resolved from `AuthInterceptor.onError`, which in dio ends the host chain - so the 401 replay client borrows the host's `ApiLoggingInterceptor` and `PerformanceInterceptor`, and the replay carries the original request's `extra` (and with it the trace). One trace covers the refreshed request and records the replay's 200; a retried request keeps its trace too (koniz-dev/flutter-starter#298, #477).
+  - `PerformanceInterceptor` sits after `AuthInterceptor` and `RetryInterceptor` so each trace records how the request finally ended. A 401 that is refreshed and replayed is resolved from `AuthInterceptor.onError`, which in dio ends the host chain - so the 401 replay client borrows the host's `ApiLoggingInterceptor` and `PerformanceInterceptor`, and the replay carries the original request's `extra` (and with it the trace). One trace covers the refreshed request and records the replay's 200; a retried request keeps its trace too.
 
 ---
 
@@ -447,7 +448,7 @@ from the initializer list. `tokenStore` wins when both are given.
 repository.** That is deliberate: `AuthRepository` depends on `ApiClient`, which
 depends on this interceptor, so holding a repository here would close a
 dependency cycle at bootstrap. `authInterceptorProvider` - which lives in
-`lib/core/di/providers.dart` since koniz-dev/flutter-starter#221 - passes
+`lib/core/di/providers.dart` - passes
 `() => ref.read(tokenRefresherProvider)()`, resolving the callback lazily at
 call time. `tokenRefresherProvider` is a seam core declares and the auth slice
 fills from `authModuleOverrides`, which is how the *file-level* cycle between
@@ -496,8 +497,7 @@ client is only pinned if you pin it yourself.
 
 **Why documented rather than annotated `@visibleForTesting`.** The annotation
 does work on a named parameter - a cross-library production call site draws
-`invalid_use_of_visible_for_testing_member`, verified under issue 89 and
-recorded in [`visible-for-testing-probe.log`](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-89/visible-for-testing-probe.log) on the `evidence` branch. It was
+`invalid_use_of_visible_for_testing_member`, as a probe confirmed. It was
 declined for two reasons. It would edit
 `lib/core/network/interceptors/auth_interceptor.dart`, a code change rather
 than a documentation one; and it would forbid the parameter to forks that
@@ -537,8 +537,8 @@ its own.
      failure (a 503, a timeout) reaches the caller mapped like any other, and
      the fresh token and the session are kept, so the queued requests in
      point 4 are still replayed. Only a replay answered **401**, meaning the
-     server refused a token it just issued, logs the session out
-     (koniz-dev/flutter-starter#304). Before, any replay failure logged out
+     server refused a token it just issued, logs the session out.
+Before, any replay failure logged out
      and rejected every queued request.
    - **Failure** (a `Result` failure, a null token, or anything thrown -
      `Error` as well as `Exception`): the session is logged out and the
@@ -562,8 +562,7 @@ replay handling, which logs the session out. No request header is involved.
 There used to be one - the replay set `X-Retry-Count: 1`, and a request
 arriving with it was logged out without a refresh - but the replay could never
 bring that header back here, so only a caller that set it by hand ever reached
-the branch, and every replay sent the header to the server. It was removed in
-koniz-dev/flutter-starter#315.
+the branch, and every replay sent the header to the server. It was removed.
 
 **What the caller receives when a 401 is given up on:**
 
@@ -573,7 +572,7 @@ without a token - fails it with `handler.next(...)`, not `handler.reject(...)`.
 In dio's error chain `reject` skips every interceptor registered after this
 one, so `ErrorInterceptor` never mapped the 401 and the caller received
 `NetworkException("Instance of 'NetworkError'")`, a connectivity failure with
-an unreadable message (koniz-dev/flutter-starter#276). With `next`, the 401 is
+an unreadable message. With `next`, the 401 is
 logged by `ApiLoggingInterceptor` and mapped by `ErrorInterceptor` exactly like
 any other failing status: the caller gets a `ServerException` with
 `statusCode: 401` and the server's message and code.
@@ -583,8 +582,7 @@ marks it `extra['retry'] = false` (`RetryInterceptor.retryExtraKey`), so
 `RetryInterceptor` passes it through. Every exit that forwards has already
 ended or abandoned the session, and a failed replay carries the bearer token
 minted for that session: re-sending it put an ended session's credential on
-the wire and returned a success to the caller
-(koniz-dev/flutter-starter#286).
+the wire and returned a success to the caller.
 
 **On a re-send with no token stored:** `onRequest` removes an `Authorization`
 header it wrote on an earlier attempt, so a `RetryInterceptor` retry that runs
@@ -600,25 +598,24 @@ backoff - `onRequest` rejects it before reading the token store, as a
 `NetworkException` with code `REQUEST_CANCELLED`, and nothing reaches the wire.
 Without this, the re-send was authorised with the token stored *now*, so a
 request the old session made ran as the new user and the new user's response
-went to the old session's caller (koniz-dev/flutter-starter#289). A retry inside
+went to the old session's caller. A retry inside
 one session, including after a token refresh, keeps its generation and is sent
 as before. The same check runs again **after** the token read, on every send,
 first or re-send. That read is a platform call, so a sign-out and a different
 user's sign-in can land while it is pending and return the new user's token.
-Before koniz-dev/flutter-starter#295 that token was sent. Both checks cover sends
+That token used to be sent. Both checks cover sends
 through the chain only. The 401 replay goes through the separate replay client
-and never re-enters `onRequest`, so its session checks live in `_handle401Error`
-(see koniz-dev/flutter-starter#290).
+and never re-enters `onRequest`, so its session checks live in `_handle401Error`.
 
 **Forced logout (the 401 path):**
 
 When the refresh says the session is over, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself.
 
-Which refresh failures end the session (koniz-dev/flutter-starter#303):
+Which refresh failures end the session:
 
 | Refresh result | Session | Caller gets |
 |---|---|---|
-| Any failure with code `REFRESH_TOKEN_EXPIRED`. `AuthRepositoryImpl` sets it for a 400, 401 or 403 from the refresh endpoint, and when no refresh token is stored (#384). | Ends: forced logout | The original 401, as a `ServerException` |
+| Any failure with code `REFRESH_TOKEN_EXPIRED`. `AuthRepositoryImpl` sets it for a 400, 401 or 403 from the refresh endpoint, and when no refresh token is stored. | Ends: forced logout | The original 401, as a `ServerException` |
 | `NetworkFailure`: a timeout, connection error or bad certificate on the refresh call | **Kept**, with no teardown | `NetworkException` "Could not refresh the session (...)" |
 | Untagged `ServerFailure`: 408, 429 or 5xx | **Kept**, with no teardown | `NetworkException` "Could not refresh the session (...)" |
 | Anything else: `NO_TOKEN_REFRESHER`, or an untagged auth or unknown failure from a custom refresher | Ends: forced logout | The original 401 |
@@ -648,7 +645,7 @@ the request path:
 A refresh is a read-modify-write that spans a full network round trip, and the
 thing it writes back - the access and refresh tokens - is shared mutable state.
 A user tapping "log out" while a background 401 is refreshing is ordinary use,
-not a microsecond race, and until #169 nothing in the refresh path noticed: the
+not a microsecond race, and once nothing in the refresh path noticed: the
 response came back after the teardown and re-persisted a complete, unexpired
 credential pair onto a device that was signed out on screen. Three unconditional
 writes sat behind that one round trip - `cacheToken` and `cacheRefreshToken`
@@ -685,9 +682,8 @@ The request whose 401 started the refresh is checked the same way, and a second
 time **after** `setAccessToken` returns. That write is a platform call, so a
 logout or sign-in can land while it is pending. Once the generation is stale,
 the request fails with its original 401 and is not replayed, and no
-`_logoutUser()` runs, for the reason given above. Before
-koniz-dev/flutter-starter#290 this request was the only replay with no check
-after the write, so it went on the wire with the freshly minted token after the
+`_logoutUser()` runs, for the reason given above. This request used to be the
+only replay with no check after the write, so it went on the wire with the freshly minted token after the
 user had signed out, and its caller received a success.
 
 The guard does not wedge anything. Each refresh reads the generation afresh, so
@@ -817,7 +813,7 @@ attempts a `GET` does.
 Two interceptors send a request a second time: `AuthInterceptor` after a
 successful 401 refresh, and `RetryInterceptor` after a transient failure. Both
 take the body from `RequestBodyReplay` (`lib/core/network/request_body_replay.dart`)
-rather than reusing the original object (koniz-dev/flutter-starter#284):
+rather than reusing the original object:
 
 | Body | On a replay |
 |---|---|
@@ -855,14 +851,14 @@ In `StorageService`, i.e. **`shared_preferences`** - `/data/data/<pkg>/shared_pr
 
 Keys are `http_cache_<uri>_<queryParameters>` for the body and `http_cache_timestamp_<body key>` for the write time, plus `http_cache_index`, a `StringList` of every body key currently written.
 
-The write time is stored through `DateFormatter.formatIso8601`, so it is UTC and always carries the `Z` designator, and read back through `DateFormatter.parseIso8601`. Age is then the distance between two absolute instants and does not move when the device's UTC offset does - before koniz-dev/flutter-starter#188 it was a bare local `DateTime.now().toIso8601String()`, which writes no designator at all, so a flight or a DST transition aged every earlier entry out by the offset. An offset-less entry already on the device is still read as local wall clock, exactly as before, and is rewritten in the new form on the first refetch.
+The write time is stored through `DateFormatter.formatIso8601`, so it is UTC and always carries the `Z` designator, and read back through `DateFormatter.parseIso8601`. Age is then the distance between two absolute instants and does not move when the device's UTC offset does - it used to be a bare local `DateTime.now().toIso8601String()`, which writes no designator at all, so a flight or a DST transition aged every earlier entry out by the offset. An offset-less entry already on the device is still read as local wall clock, exactly as before, and is rewritten in the new form on the first refetch.
 
 Do not relax the credential check without first moving the store to `SecureStorageService`.
 
 ### Lifetime
 
 - `maxAge` (default 1 hour): an entry younger than this is served without a network request.
-- Past `maxAge` the entry is **stale**: the request goes to the network, and the entry is kept only as a fallback. It is served only if that fetch fails for transport reasons - a connection error, a timeout, or a 5xx. A 4xx is the server's answer and reaches the caller, and a successful refetch replaces the entry. Before koniz-dev/flutter-starter#310 a stale entry was served straight from the cache, with no network attempt, for up to `maxStale`.
+- Past `maxAge` the entry is **stale**: the request goes to the network, and the entry is kept only as a fallback. It is served only if that fetch fails for transport reasons - a connection error, a timeout, or a 5xx. A 4xx is the server's answer and reaches the caller, and a successful refetch replaces the entry. A stale entry used to be served straight from the cache, with no network attempt, for up to `maxStale`.
 - `maxStale` (default 7 days): past this an entry is removed, even as a fallback.
 - A stored timestamp that does not parse, or whose calendar date is out of range such as `2024-02-30`, has no age: the entry is removed and the read reported as a miss rather than aged on a guess. The whole cost is one network request.
 - `CacheInterceptor.clearCache()` walks `http_cache_index` and removes every body, every timestamp and the index itself.
@@ -972,7 +968,7 @@ password-reset tokens, `?access_token=` values and `?api_key=` credentials.
 
 A query string **embedded in the request path** is redacted the same way.
 `ApiClient` takes a path, so `get('/verify?token=X')` is a normal call, and that
-path used to be logged verbatim (koniz-dev/flutter-starter#313).
+path used to be logged verbatim.
 `ApiLoggingInterceptor.redactPath` replaces the value of every sensitive key in
 it and keeps the rest of the path exactly as written. It applies to the
 request, response and error entries and to `RetryInterceptor`'s retry lines.
@@ -999,8 +995,7 @@ trade-off wrong for you, add `code` to the exact-match list.
 The wholesale cases are deliberate. A `String` body that fails to parse offers
 no keys to judge, and a form-encoded login body
 (`grant_type=password&password=hunter2`) is a credential carrier; logging it
-verbatim because parsing failed was the defect reported in
-koniz-dev/flutter-starter#78. The trade-off is that plain-text error bodies are
+verbatim because parsing failed was a real defect. The trade-off is that plain-text error bodies are
 no longer readable in the log - the status code, path and method still are. The
 same reasoning covers `FormData`: a multipart login form holds the password in
 `FormData.fields`, which no key walk can reach.
@@ -1035,8 +1030,8 @@ That split matters. `ci.yml` reports on every PR but **skips its analyze and
 test steps when the diff is only markdown**, and `docs-check.yml` only fires on
 markdown, so a docs-side typo is seen by exactly one of them and a code-side
 addition by exactly the other. Wiring this check into a single gate would leave
-it blind to one direction - and the code side is the direction that produced
-koniz-dev/flutter-starter#89: five commits changing constructors in
+it blind to one direction - and the code side is the direction that once
+produced five commits changing constructors in
 `lib/core/network/` with no markdown in the diff.
 
 Covered here: `ApiClient`, `AuthInterceptor`, `RetryInterceptor`,

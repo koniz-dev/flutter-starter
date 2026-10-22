@@ -1,12 +1,11 @@
 // No guide may tell an adopter to put feature providers in core DI.
 //
 // Feature DI lives in `lib/features/<feature>/di/<feature>_providers.dart` -
-// what `create_feature.sh` and the `feature_clean` brick generate - and #221
-// removed feature names from `lib/core`. Five guides still said "add to
+// what `create_feature.sh` and the `feature_clean` brick generate - and
+// `lib/core` names no feature. Five guides still said "add to
 // `lib/core/di/providers.dart`" (or "remove from" it), which, followed
 // literally, adds a `core -> features` import that
-// `test/tooling/import_rules_test.dart` rejects
-// (koniz-dev/flutter-starter#356).
+// `test/tooling/import_rules_test.dart` rejects.
 //
 // The check is textual: a line that pairs an instruction verb with
 // `core/di/providers.dart` is flagged unless the same line negates it
@@ -38,7 +37,7 @@ List<int> coreDiInstructionLines(String source) {
 
 void main() {
   group('coreDiInstructionLines', () {
-    test('flags each instruction form the guides used before #356', () {
+    test('flags each instruction form the guides once used', () {
       for (final line in const [
         'Add providers to `lib/core/di/providers.dart`.',
         'Add to `lib/core/di/providers.dart`:',

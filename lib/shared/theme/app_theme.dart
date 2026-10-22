@@ -78,7 +78,7 @@ class AppTheme {
       colorScheme: ColorScheme.dark(
         // Lighter than the light theme's: these are read as text on the dark
         // surfaces, where the light theme's primary and error fall below
-        // 4.5:1 (koniz-dev/flutter-starter#350). Filled buttons keep
+        // 4.5:1. Filled buttons keep
         // _tokens.primary through elevatedButtonTheme below.
         primary: AppColors.primaryOnDark,
         secondary: _tokens.secondary,

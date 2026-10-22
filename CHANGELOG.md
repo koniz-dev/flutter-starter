@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `SecureStorageService? secureStorageService`. `ITokenStore tokenStore` is now
   a required parameter, and the `ArgumentError` thrown when neither was supplied
   is gone with it - the analyzer reports the missing argument instead.
-  (koniz-dev/flutter-starter#196)
 
   **What an adopter has to change.** Only code that constructed the data source
   with the secure-storage form. Nothing in this repository's `lib/` did;

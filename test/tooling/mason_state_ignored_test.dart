@@ -1,7 +1,7 @@
 // `mason get` writes `.mason/bricks.json` and `mason-lock.json`, both holding
 // absolute paths on the machine that ran it, and neither was ignored - the
-// next `git add -A` committed one developer's local paths
-// (koniz-dev/flutter-starter#340). evidence:docs/verification/issue-340 runs a real
+// next `git add -A` committed one developer's local paths.
+// evidence:docs/verification/issue-340 runs a real
 // `mason get` in a fresh clone; this pins the ignore rules it relies on.
 
 import 'dart:io';

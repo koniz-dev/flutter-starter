@@ -8,7 +8,7 @@
 # `paths` below is the single source of truth for the format scope and must stay
 # in step with the "Verify formatting" step in .github/workflows/ci.yml. Anything
 # that needs to name the scope should call --print-paths rather than retyping it:
-# retyped copies drifted to a wrong value once already (see issue #8).
+# retyped copies drifted to a wrong value once already.
 #
 # `bricks` is deliberately NOT in scope: bricks/**/__brick__/** holds Mason
 # templates containing mustache, which is not valid Dart, so `dart format` exits
@@ -21,7 +21,7 @@ if [[ "${1:-}" == "--print-paths" ]]; then
 fi
 if [[ "${1:-}" == "--check" ]]; then
   # --output=none: a check reports, it does not rewrite. Without it `dart
-  # format` reformats the tree *and* exits 1 (koniz-dev/flutter-starter#341).
+  # format` reformats the tree *and* exits 1.
   dart format --output=none --set-exit-if-changed "${paths[@]}"
 else
   dart format "${paths[@]}"

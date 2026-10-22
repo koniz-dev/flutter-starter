@@ -2,7 +2,7 @@
 // timestamp has to name an instant - not a wall clock reading whose meaning
 // depends on the offset the reader happens to be in.
 //
-// Regression cover for koniz-dev/flutter-starter#188. Before the fix,
+// Regression cover. Before the fix,
 // `_cacheResponse` stored `DateTime.now().toIso8601String()` on a *local*
 // DateTime, which emits neither `Z` nor a numeric offset, and
 // `_getCachedResponse` read it back with `DateTime.parse`, which reads a
@@ -290,7 +290,7 @@ void main() {
               writtenAt.toIso8601String(),
             ]) {
               seedEntry(timestamp);
-              // Stale since #310: not served directly but refetched, with
+              // Stale: not served directly but refetched, with
               // the entry kept as the fallback for a failed fetch.
               final request = _getRequest();
               final handler = _CapturingRequestHandler();

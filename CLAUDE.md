@@ -18,8 +18,7 @@ flutter test --run-skipped --tags golden test/acceptance   # acceptance goldens 
 
 `flutter pub get` on the current stable leaves the tree clean: the migrations
 it used to apply (analyzer excludes, the Pods includes in four `*.xcconfig`
-files, the SDK-pinned lock entries) are committed (koniz-dev/flutter-starter#338,
-#608). If it does dirty a tracked file, a new stable re-pinned or re-migrated
+files, the SDK-pinned lock entries) are committed. If it does dirty a tracked file, a new stable re-pinned or re-migrated
 something; the Quality gate's "Tracked files are unchanged" step fails on it
 too. Fix that on `main` in its own change - re-run `flutter pub get` and commit
 the result - rather than reverting it or sweeping it into an unrelated PR.
@@ -104,9 +103,8 @@ workflows' `pull_request` triggers drift apart:
 | [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
 | [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x5) | **every** PR in the template repository (in a repository created from it, the job reports as skipped); strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed <!-- strip:strip-tool line --> |
 
-`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117 and filters
-inside the job instead ("Decide the gate scope", koniz-dev/flutter-starter#167),
-so the check always posts a conclusion and can be a required status check, while
+`ci.yml` has no `paths-ignore`; it filters inside the job instead ("Decide
+the gate scope"), so the check always posts a conclusion and can be a required status check, while
 a docs-only PR installs no Flutter toolchain.
 `strip-smoke.yml` does the same ("Decide the strip scope"). <!-- strip:strip-tool line --> A PR reporting zero checks is the
 registration race, never a path exclusion. Poll until

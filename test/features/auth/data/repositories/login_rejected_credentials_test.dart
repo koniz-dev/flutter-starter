@@ -1,5 +1,5 @@
 // A 401 from the login endpoint must be identifiable as rejected credentials
-// without matching on message text (koniz-dev/flutter-starter#309).
+// without matching on message text.
 //
 // It used to arrive as a ServerFailure indistinguishable from a server fault.
 // This drives the real provider graph - AuthRepositoryImpl, the real remote

@@ -13,7 +13,7 @@ import 'package:flutter_starter/core/config/dart_defines.dart';
 /// call is not const and therefore always returns `''` in AOT (release and
 /// profile) builds, and dart2js does not support it at all. The const table
 /// is resolved by every compiler, dart2js included, which is why web needs no
-/// special case (koniz-dev/flutter-starter#278).
+/// special case.
 ///
 /// Usage:
 /// ```dart
@@ -38,7 +38,7 @@ class EnvConfig {
   /// refuses. Pass `.env` as a build input instead:
   /// `--dart-define-from-file=.env`, the second step of the fallback chain
   /// on [EnvConfig]. See "Never ship a secret in the bundle" in
-  /// `docs/guides/configuration.md` (koniz-dev/flutter-starter#546).
+  /// `docs/guides/configuration.md`.
   ///
   /// Example:
   /// ```dart
@@ -118,7 +118,7 @@ class EnvConfig {
   /// The typed getters used to ask dotenv with `fallback: defaultValue`,
   /// which returns the fallback for a missing key instead of throwing, so a
   /// `.env` without the key hid its `--dart-define`; dotenv also rejected
-  /// `yes` and `on` (koniz-dev/flutter-starter#322). They now parse the
+  /// `yes` and `on`. They now parse the
   /// string [get] resolves.
   static bool getBool(String key, {bool defaultValue = false}) {
     final value = get(key).trim().toLowerCase();

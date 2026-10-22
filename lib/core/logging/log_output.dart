@@ -72,7 +72,7 @@ class FileLogOutput extends LogOutput {
 
   /// Runs between the probe open and `openWrite`, for tests only: the one
   /// point where the log directory can vanish under a sink that has not
-  /// opened yet (koniz-dev/flutter-starter#447).
+  /// opened yet.
   @visibleForTesting
   Future<void> Function()? debugAfterProbeOpen;
 
@@ -146,7 +146,7 @@ class FileLogOutput extends LogOutput {
       final file = _logFile = File(path.join(_logDirectory!, fileName));
       // openWrite returns its sink at once and opens the file later, so a
       // failed open never reached this try: it escaped as an uncaught async
-      // error (koniz-dev/flutter-starter#421). Opening once with an await
+      // error. Opening once with an await
       // surfaces it here instead, and _watch covers a failure after that.
       await (await file.open(mode: FileMode.append)).close();
       await debugAfterProbeOpen?.call();
@@ -155,7 +155,7 @@ class FileLogOutput extends LogOutput {
       // The probe above is not the sink's open: openWrite starts its own, and
       // dart:io only observes that one once the sink is written to. If it
       // failed first - the directory removed in between - the error escaped
-      // unobserved (koniz-dev/flutter-starter#447). An empty write attaches
+      // unobserved. An empty write attaches
       // the sink to its file and flush() waits for that open, so a failure
       // lands in this try.
       sink.add(const <int>[]);
@@ -323,7 +323,7 @@ class FileLogOutput extends LogOutput {
       // maxFiles counts the current file, so at most maxFiles - 1 rotated
       // generations survive: `.1` (newest) to `.${keep}` (oldest). This used
       // to shift `.1..maxFiles-1` up to `.maxFiles` and keep maxFiles + 1
-      // files (koniz-dev/flutter-starter#589).
+      // files.
       final keep = (maxFiles < 1 ? 1 : maxFiles) - 1;
       File rotated(int generation) =>
           File(path.join(_logDirectory!, '$fileName.$generation'));

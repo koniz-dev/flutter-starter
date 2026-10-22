@@ -209,7 +209,7 @@ void main() {
         verify(() => handler.next(any())).called(1);
       });
 
-      // koniz-dev/flutter-starter#315: the header used to skip the refresh and
+      // The header used to skip the refresh and
       // log the caller out. Loop protection is structural now - the replay
       // goes through a Dio without this interceptor - so the header means
       // nothing here.
@@ -454,7 +454,7 @@ void main() {
       });
     });
 
-    // Regression for #52 criterion 6: the forced logout cleared tokens only,
+    // Regression: the forced logout used to clear tokens only,
     // leaving the cached user blob behind, so the two logout paths
     // (AuthRepository.logout() and this one) left different state.
     group('forced logout cleanup', () {

@@ -1,4 +1,4 @@
-// Pinning on Flutter web (koniz-dev/flutter-starter#307).
+// Pinning on Flutter web.
 //
 // A browser owns TLS: there is no SecurityContext and no HttpClient, so an app
 // cannot pin a certificate there at all. `SslPinning.createAdapter()` used to
