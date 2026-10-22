@@ -51,6 +51,10 @@ jobs:
             flags: '--remove-tasks'
           - variant: feature-flags-removed
             flags: '--remove-feature-flags'
+          # Renamed first, then stripped: the golden files are renamed with the
+          # tree but keep the import order sorted for flutter_starter.
+          - variant: renamed-both
+            flags: ''
           # Both samples kept (koniz-dev/flutter-starter#333, #621); the bricks
           # step below then drops the Mason bricks.
           - variant: keep-samples
@@ -199,6 +203,20 @@ jobs:
       - name: Install dependencies (full starter)
         if: steps.scope.outputs.run == 'true'
         run: flutter pub get
+
+      - name: Rename to my_app first, as fork-and-customize Option B documents
+        if: steps.scope.outputs.run == 'true' && matrix.variant == 'renamed-both'
+        shell: bash
+        run: |
+          set -euo pipefail
+          doc=docs/guides/onboarding/fork-and-customize.md
+          sed -i 's/^name: flutter_starter$/name: my_app/' pubspec.yaml
+          awk '/^   NEW=your_package$/{f=1} f{print} f&&/perl -pi/{exit}' "$doc" \
+            | sed 's/^   //; s/^NEW=your_package$/NEW=my_app/' > "$RUNNER_TEMP/rename.sh"
+          grep -q 'perl -pi' "$RUNNER_TEMP/rename.sh"
+          bash -euo pipefail "$RUNNER_TEMP/rename.sh"
+          flutter pub get
+          dart fix --apply --code=directives_ordering
 
       - name: Apply strip
         if: steps.scope.outputs.run == 'true'
