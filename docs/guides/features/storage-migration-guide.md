@@ -165,8 +165,7 @@ if (!hasSyncInterval) {
 Seed only keys whose absence means "not set up yet", never a user choice.
 A fresh install runs every migration from v1, so a seeded preference is
 indistinguishable from one the user made. Seeding `language = 'en'` here
-used to override the device language on every first launch
-(koniz-dev/flutter-starter#417).
+used to override the device language on every first launch.
 
 ### Cleaning Up Deprecated Keys
 

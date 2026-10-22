@@ -98,8 +98,7 @@ enabled by default in staging and production, but it also needs a non-empty
 fingerprint list. With `API_SSL_FINGERPRINTS` unset, which is how
 `.env.example` ships, the adapter is never installed and traffic is **not**
 pinned. That case is logged as `SSL PINNING MISCONFIGURED` and asserts in debug
-builds. The silent fail-open was fixed in
-[#84](https://github.com/koniz-dev/flutter-starter/issues/84), but a release
+builds. The silent fail-open is fixed, but a release
 build still runs unpinned.
 
 **Risk while unconfigured:** attackers could intercept and modify network
@@ -119,8 +118,7 @@ matched against `_sensitiveHeaderKeys`, `_sensitiveKeyFragments` and
 (`lib/core/network/interceptors/api_logging_interceptor.dart`). It is a no-op
 entirely when `AppConfig.enableHttpLogging` is false.
 
-The gaps listed in
-[#78](https://github.com/koniz-dev/flutter-starter/issues/78) are closed:
+The known sanitizer gaps are closed:
 string bodies go through `_sanitizeStringBody`, query parameters through
 `_sanitizeMap`, and `proxy-authorization` is in the header set.
 

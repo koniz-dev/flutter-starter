@@ -8,11 +8,11 @@
 
 `lib/core/contracts/` has declared boundary contracts since ADRs 0001-0005 were
 written, and nothing in this repository ever recorded which of them the running
-app actually depends on. koniz-dev/flutter-starter#64 was filed on the claim
-that "the contracts layer is largely dead"; that was true on 2026-09-14 and is
-not true now. Two contracts that did not exist when #64 was filed -
-`IHttpResponseCache` (koniz-dev/flutter-starter#114) and
-`ISessionTerminationSink` (koniz-dev/flutter-starter#127) - were added
+app actually depends on. A review once claimed that "the contracts layer is
+largely dead"; that was true on 2026-09-14 and is not true now. Two contracts
+that did not exist at the time -
+`IHttpResponseCache` and
+`ISessionTerminationSink` - were added
 specifically to hold the dependency rule, and two dead ones have since been
 deleted.
 
@@ -32,10 +32,10 @@ Every line and symbol below was re-derived against `main` at `da030fa` with
 Every contract in `lib/core/contracts/` is either load-bearing - production code
 in `lib/` is typed on it and runs against it - or it is removed. A contract in
 neither state is a claim the template makes and does not keep, and it is
-exactly what koniz-dev/flutter-starter#180 found when `ITasksController` had
+exactly what turned up when `ITasksController` had
 drifted from `TasksNotifier` in both directions with nobody noticing.
 
-Nine boundary contracts have existed across the life of #64. Here is each one.
+Nine boundary contracts have existed across that review. Here is each one.
 
 ### Load-bearing (5)
 
@@ -53,10 +53,10 @@ consumer sets, and a verdict is per contract.
 
 ### Removed (2)
 
-| Contract | Removed by | Why |
-|---|---|---|
-| `AppNavigator` | koniz-dev/flutter-starter#177 | `appNavigatorProvider` was read only by its own test. `NavigationExtensions` is the single navigation API; see [0003-navigation-boundary.md](0003-navigation-boundary.md). The contract, its `GoRouterNavigatorAdapter` and the provider are all gone - `grep -rn "AppNavigator" lib` returns nothing |
-| `ITasksController` | koniz-dev/flutter-starter#180 | No implementor and no consumer, and it had drifted from `TasksNotifier` in both directions - it declared `loadTasks()` and `clearError()` the notifier never had, and lacked the `updateTask` it does have. Deleted with `TasksStateSnapshot` rather than manufacturing an implementor |
+| Contract | Why |
+|---|---|
+| `AppNavigator` | `appNavigatorProvider` was read only by its own test. `NavigationExtensions` is the single navigation API; see [0003-navigation-boundary.md](0003-navigation-boundary.md). The contract, its `GoRouterNavigatorAdapter` and the provider are all gone - `grep -rn "AppNavigator" lib` returns nothing |
+| `ITasksController` | No implementor and no consumer, and it had drifted from `TasksNotifier` in both directions - it declared `loadTasks()` and `clearError()` the notifier never had, and lacked the `updateTask` it does have. Deleted with `TasksStateSnapshot` rather than manufacturing an implementor |
 
 ### Verdict: remove (1)
 
@@ -80,8 +80,8 @@ call site to gain an abstraction with one implementor and no second candidate.
 The starter would be teaching indirection for its own sake, which is the
 failure mode ADR 0003 identified for `AppNavigator` and resolved the same way.
 
-The change belongs with the auth slice, following the precedent of
-koniz-dev/flutter-starter#180, which removed `ITasksController` from
+The change belongs with the auth slice, following the precedent of the change
+that removed `ITasksController` from
 `lib/core/contracts/state_boundary_contracts.dart` together with the tasks
 slice rather than splitting a four-line deletion in two. See "Follow-up work"
 below.
@@ -127,8 +127,7 @@ The three slices have three shapes. Measured on `main` at `da030fa`:
 | Wiring lives in | `di/` | `di/` | **`presentation/providers/`** |
 | Directories no other slice has | `presentation/widgets/` | - | `data/services/`, `presentation/examples/` |
 
-The `routing/` row corrects koniz-dev/flutter-starter#183's table, which
-recorded tasks as having no `routing/`. It has one; all three slices do.
+The `routing/` row corrects an earlier table, which recorded tasks as having no `routing/`. It has one; all three slices do.
 
 **`auth` is canonical.** It is the only slice that has every axis, it is the
 shape `bricks/feature_clean` already generates (minus `routing/`, noted below),
@@ -154,10 +153,10 @@ but no new slice should grow them.
 
 ## Decision 3: two outcomes this ADR records rather than decides
 
-Both were decided by sibling children of koniz-dev/flutter-starter#64. They are
+Both were decided alongside this review. They are
 here because an ADR that omits them leaves a reader guessing.
 
-**`ApiClient`'s Dio surface** - koniz-dev/flutter-starter#176. The
+**`ApiClient`'s Dio surface.** The
 `Response`-returning overloads are **removed**: every verb on `ApiClient` now
 returns `NetworkResponse<dynamic>` (`api_client.dart:169`, `:192`, `:217`,
 `:242`) and `_sendWithCompatibility`, which rebuilt a Dio `Response` out of a
@@ -165,10 +164,10 @@ returns `NetworkResponse<dynamic>` (`api_client.dart:169`, `:192`, `:217`,
 a documented escape hatch that is deliberately not on any request path - for
 swapping `Dio.httpClientAdapter`, inspecting `Dio.interceptors` or reading
 `BaseOptions`. Typing a data source on what it returns puts `package:dio` back
-in the feature layer, which is the leak #176 closed;
+in the feature layer, which is the leak this closed;
 `test/tooling/import_rules_test.dart` now guards that.
 
-**`AppNavigator`** - koniz-dev/flutter-starter#177. Deleted, with
+**`AppNavigator`.** Deleted, with
 `GoRouterNavigatorAdapter` and `appNavigatorProvider`. `NavigationExtensions` on
 `BuildContext` is the one navigation API, and `go_router` stays inside
 `lib/core/routing/`. [0003-navigation-boundary.md](0003-navigation-boundary.md)
@@ -180,7 +179,7 @@ This ADR **supersedes** [0005-state-boundary.md](0005-state-boundary.md).
 
 0005 proposed controller contracts for feature orchestration and named two,
 `IAuthController` and `ITasksController`. One has been deleted
-(koniz-dev/flutter-starter#180) and this ADR decides to delete the other. When
+ and this ADR decides to delete the other. When
 an ADR's entire decision has been reversed, amending it in place produces a
 document whose Decision section argues for something the repository has chosen
 not to do - which is how 0005 came to carry an "Implementation status" section
@@ -194,7 +193,7 @@ one implementor and no consumer; an adopter who needs it can add the contract
 against their own second implementation, which is when the abstraction starts
 paying for itself. The seam that did earn its keep went the other way:
 `ISessionTerminationSink` and `tokenRefresherProvider`
-(koniz-dev/flutter-starter#221) exist because `lib/core/` genuinely may not
+ exist because `lib/core/` genuinely may not
 import `lib/features/`, and they have real consumers on both sides.
 
 ## Consequences

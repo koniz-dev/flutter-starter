@@ -69,7 +69,7 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
 4. Search `docs/` for `package:flutter_starter` in fenced code examples and update them if you care about copy-paste accuracy (the Mason brick does not rewrite Markdown).
 
 **If you never use Mason:** after renaming, you can remove **`bricks/`** and **`mason.yaml`**.
-Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling (koniz-dev/flutter-starter#588). <!-- strip:strip-tool line -->
+Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling. <!-- strip:strip-tool line -->
 
 ## 2. Android application id and namespace
 
@@ -123,7 +123,7 @@ All four variants are exercised by [`strip-smoke.yml`](../../../.github/workflow
 
 Then search the kept guides for the removed modules (for example
 `git grep -n -i "feature.flag" docs/guides`) and adjust what you find; the strip
-does not rewrite prose (koniz-dev/flutter-starter#409).
+does not rewrite prose.
 
 The strip removes itself afterwards - the tool, its golden tree, its workflow
 and its tests - since it cannot run twice; `--keep-samples` keeps it.

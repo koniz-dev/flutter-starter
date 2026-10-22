@@ -73,7 +73,7 @@ bundled `.env` is still allowed, for values you would be happy to publish,
 because publishing them is exactly what it does. The usual reason is runtime
 configuration that must change without a rebuild.
 
-Until koniz-dev/flutter-starter#278 this section called web the exception.
+This section used to call web the exception.
 `EnvConfig` used to skip every dart-define read behind `if (!kIsWeb)`, which
 left a bundled `.env` as the only way to configure a web build. That guard was
 never a platform limitation: dart2js resolves the const `DartDefines` table the
@@ -89,8 +89,7 @@ runs in four places:
   build, so a local tree that never reached CI cannot produce an artifact; and
 - `deploy-android.yml`, `deploy-ios.yml` and all three jobs of
   `deploy-web.yml`, as a **Guard against a bundled secrets file** step placed
-  after every step that writes into the working tree and before the build
-  (koniz-dev/flutter-starter#135).
+  after every step that writes into the working tree and before the build.
 
 It checks the two ways a file gets bundled:
 
@@ -106,9 +105,8 @@ It checks the two ways a file gets bundled:
    whether they are declared as `- assets/config/` or `- path: assets/config/`.
 
 The list is read with a real YAML parse, and only the acknowledgement comment
-is read from the raw text. Until koniz-dev/flutter-starter#330 a hand-written
-line scan read block-style `- <path>` lines only, so the map and flow forms
-exited 0 while `flutter build bundle` copied the `.env` into the artifact. Now
+is read from the raw text. A hand-written line scan once read block-style
+`- <path>` lines only, so the map and flow forms exited 0 while `flutter build bundle` copied the `.env` into the artifact. Now
 anything the parse cannot read for certain - invalid YAML, an `assets:` that is
 not a list, a map entry with no `path:`, an entry that is not a path string -
 **exits 2**. The guard fails closed: it never reports a list clean that it did
@@ -173,8 +171,7 @@ the first segment that is not a file name onwards is prose and covers nothing.
 | `# env-asset-ack: .env.example, publishable placeholders only` | `.env.example` | **`.env`** |
 | `# env-asset-ack: .env.web only; there is no .env here` | nothing - the first segment is prose | everything, including `.env.web` |
 
-The last two rows are the point. Until
-koniz-dev/flutter-starter#170 the match was a substring test against the whole
+The last two rows are the point. The match used to be a substring test against the whole
 comment, and every env file name is a prefix of a longer one: an ack naming
 `.env.example` also acknowledged a real `.env`, and even a sentence *denying*
 that a `.env` existed acknowledged it, because the denial contains the name. A
@@ -256,7 +253,7 @@ any target and in any build mode. `LocalFeatureFlagsService` used to promise
 an "environment" level, `FEATURE_<KEY>`, as its top priority. It looked the key
 up through `EnvConfig`, and a key built at run time from the flag name is never
 in the `DartDefines` table, so the define was discarded everywhere. The level
-was removed in koniz-dev/flutter-starter#279 rather than left as a source that
+was removed rather than left as a source that
 cannot fire.
 
 What does decide a local flag, highest first:
@@ -271,7 +268,7 @@ What does decide a local flag, highest first:
 
 `FeatureFlagsManager.isEnabled`, `isFeatureEnabledProvider` and the debug
 screen all resolve a flag through this one order, so they cannot disagree
-about it (koniz-dev/flutter-starter#318). The debug screen lists every
+about it. The debug screen lists every
 `FeatureFlags.all` key, including keys at level 5. A toggle there refreshes
 every provider that reads a flag, not only the screen's own list.
 
@@ -317,8 +314,8 @@ The configuration system consists of three classes:
 
 2. **`EnvConfig`** (`lib/core/config/env_config.dart`): Low-level environment variable loader
    - Loads from `.env` files using `flutter_dotenv` (asset-backed)
-   - Reads `--dart-define` values through `DartDefines`, on every target including web (koniz-dev/flutter-starter#278)
-   - Provides fallback chain: `.env` → `--dart-define` → defaults, per key: a `.env` that lacks a key does not hide that key's `--dart-define`. `getBool`, `getInt` and `getDouble` parse the string `get` resolves, so they follow the same chain (koniz-dev/flutter-starter#322)
+   - Reads `--dart-define` values through `DartDefines`, on every target including web
+   - Provides fallback chain: `.env` → `--dart-define` → defaults, per key: a `.env` that lacks a key does not hide that key's `--dart-define`. `getBool`, `getInt` and `getDouble` parse the string `get` resolves, so they follow the same chain
    - `getBool` is true for `true`, `1`, `yes` and `on` (case-insensitive) and false for any other value that is present
 
 3. **`AppConfig`** (`lib/core/config/app_config.dart`): High-level application configuration
@@ -485,7 +482,7 @@ print(config);
 
 The app version and build number are not configuration keys: they come from
 `pubspec.yaml`'s `version:`, which the build stamps into the platform bundle,
-and are read from the platform at runtime (koniz-dev/flutter-starter#467).
+and are read from the platform at runtime.
 
 <!-- symbol: lib/core/network/api_client.dart ApiClient -->
 <!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
@@ -516,8 +513,8 @@ With `ENABLE_LOGGING` unset, `LoggingService` writes to:
 | Staging or development release | yes, as the platform log | no | debug and up, pretty |
 
 Production used to default `ENABLE_LOGGING` to `false`, so the file output it
-was meant to use never ran and every production error was dropped
-(koniz-dev/flutter-starter#320). A release build with no file output also had
+was meant to use never ran and every production error was dropped.
+A release build with no file output also had
 no console, because the console output is added only under `kDebugMode`. The
 console is now the fallback whenever no other output is configured.
 

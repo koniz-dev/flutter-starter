@@ -55,8 +55,7 @@ every certificate goes through the callback.
 pin on Flutter web. There, `SslPinning.createAdapter()` returns `null` and
 `isEffective` is `false` whatever `ENABLE_SSL_PINNING` and
 `API_SSL_FINGERPRINTS` say, so the web build uses the browser's own transport
-and trust store. Until koniz-dev/flutter-starter#307 it installed the dart:io
-adapter anyway, and every web request failed with
+and trust store. It used to install the dart:io adapter anyway, and every web request failed with
 `Unsupported operation: SecurityContext constructor`. If a web client needs
 stronger guarantees, enforce them on the server side, for example with HSTS
 and Certificate Transparency monitoring. There is no app-side substitute.
@@ -635,7 +634,7 @@ There is **no** `device_security.dart` in this starter; wire threat handling in 
 
 #### What the adapter forwards
 
-`FreeRaspServiceImpl` forwards **every** detection the pinned freerasp (8.2.4) reports. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Until koniz-dev/flutter-starter#390 only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
+`FreeRaspServiceImpl` forwards **every** detection the pinned freerasp (8.2.4) reports. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Once only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
 
 | freeRASP callback | `SecurityThreat` | Platforms | Kind |
 |---|---|---|---|
