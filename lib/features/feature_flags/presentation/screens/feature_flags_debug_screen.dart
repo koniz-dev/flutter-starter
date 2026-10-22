@@ -23,7 +23,7 @@ class _FeatureFlagsDebugScreenState
   ///
   /// Invalidating only [allFeatureFlagsProvider] refreshed this screen and
   /// left every widget listening to [isFeatureEnabledProvider] or
-  /// [featureFlagProvider] on the old value (koniz-dev/flutter-starter#318).
+  /// [featureFlagProvider] on the old value.
   void _flagsChanged() {
     ref
       ..invalidate(allFeatureFlagsProvider)

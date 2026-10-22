@@ -64,7 +64,7 @@ Future<FeatureFlag?> featureFlag(Ref ref, FeatureFlagKey key) async {
 /// A [FeatureFlags.all] key no source sets appears at its
 /// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
 /// falls back to - so the debug screen can show and toggle the flags the app
-/// actually gates on (koniz-dev/flutter-starter#318).
+/// actually gates on.
 @riverpod
 Future<Map<String, FeatureFlag?>> allFeatureFlags(Ref ref) async {
   final repository = ref.watch(featureFlagsRepositoryProvider);

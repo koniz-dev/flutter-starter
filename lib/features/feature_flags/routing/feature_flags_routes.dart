@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 /// `ENABLE_DEBUG_FEATURES` says otherwise. The screen writes a local override
 /// for any flag, `enable_premium_features` included, so registering it in
 /// every build let any signed-in user of a production build flip flags by
-/// deep link, or by URL on web (koniz-dev/flutter-starter#319). Where it is
+/// deep link, or by URL on web. Where it is
 /// not registered, `/feature-flags-debug` is an unknown route.
 ///
 /// [enabled] replaces the [AppConfig] check, for tests.

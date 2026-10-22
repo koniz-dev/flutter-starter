@@ -387,7 +387,7 @@ final class FeatureFlagFamily extends $Family
 /// A [FeatureFlags.all] key no source sets appears at its
 /// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
 /// falls back to - so the debug screen can show and toggle the flags the app
-/// actually gates on (koniz-dev/flutter-starter#318).
+/// actually gates on.
 
 @ProviderFor(allFeatureFlags)
 const allFeatureFlagsProvider = AllFeatureFlagsProvider._();
@@ -397,7 +397,7 @@ const allFeatureFlagsProvider = AllFeatureFlagsProvider._();
 /// A [FeatureFlags.all] key no source sets appears at its
 /// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
 /// falls back to - so the debug screen can show and toggle the flags the app
-/// actually gates on (koniz-dev/flutter-starter#318).
+/// actually gates on.
 
 final class AllFeatureFlagsProvider
     extends
@@ -414,7 +414,7 @@ final class AllFeatureFlagsProvider
   /// A [FeatureFlags.all] key no source sets appears at its
   /// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
   /// falls back to - so the debug screen can show and toggle the flags the app
-  /// actually gates on (koniz-dev/flutter-starter#318).
+  /// actually gates on.
   const AllFeatureFlagsProvider._()
     : super(
         from: null,
