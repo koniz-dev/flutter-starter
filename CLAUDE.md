@@ -73,16 +73,18 @@ make verification worthless.
   real test (`Total: 1`). The job also fails on `Total: 0` or a non-zero
   `Failed:` count, so a green run there is now trustworthy - that was not true
   before, when it went green having run nothing.
-  Two live caveats: the shipped test still **fails without a reachable backend**
-  (the auth flow posts to `BASE_URL`), so whoever runs it needs an API; and `patrol_cli` must stay pinned to the version matching
-  the `patrol` dependency, or it aborts before any test runs.
+  It needs no backend: built without `BASE_URL`, the auth -> home test signs
+  in through the offline demo account. One live caveat: `patrol_cli` must
+  stay pinned to the version matching the `patrol` dependency, or it aborts
+  before any test runs.
 - **Real device behavior**, including everything RASP (`lib/core/security/` is a
   no-op by default and only meaningful on a real device).
 - **Gestures**: hover, right-click, drag, long-press discoverability,
   multi-touch, one-handed reachability.
 - **Store and deploy flows**: `fastlane/`, `deploy-{android,ios,web}.yml` all
   need credentials this environment lacks.
-- **Anything needing a live backend.** The auth flow calls the network; no
+- **Anything needing a live backend.** With no `BASE_URL` the app signs in
+  through the offline demo, which proves the flow but not your API; no
   reachable API exists here.
 - **Coverage thresholds.** [`coverage.yml`](.github/workflows/coverage.yml) is
   manual plus weekly, not per-PR.

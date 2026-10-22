@@ -84,7 +84,7 @@ integration_test/    # At the repository root, not under test/: Patrol E2E
 
 ### E2E on GitHub Actions (manual only)
 
-Patrol E2E **does not block PRs**. To run on CI: open **Actions → [E2E Android (Patrol)](../../../.github/workflows/e2e-android.yml) → Run workflow**. Requires a working backend if the login flow calls your API. Integration tests use stable `ValueKey`s from `lib/core/constants/ui_keys.dart`.
+Patrol E2E **does not block PRs**. To run on CI: open **Actions → [E2E Android (Patrol)](../../../.github/workflows/e2e-android.yml) → Run workflow**. It needs no backend: without `BASE_URL` the login flow signs in through the offline demo account. Integration tests use stable `ValueKey`s from `lib/core/constants/ui_keys.dart`.
 
 ## Documentation
 

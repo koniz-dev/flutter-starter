@@ -3,15 +3,6 @@ import 'package:flutter_starter/main.dart' as app;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
-/// Whether a reachable backend is configured for this run.
-///
-/// Pass `--dart-define=E2E_BACKEND=true` when you have an API. The sample auth
-/// flow POSTs to `BASE_URL`; with no server the login call fails, the app stays
-/// on the login screen, and every assertion past login is unreachable. Those
-/// assertions are skipped rather than shipped permanently red - a starter whose
-/// E2E suite is red by construction teaches people to ignore it.
-const hasBackend = bool.fromEnvironment('E2E_BACKEND');
-
 /// Boots the app and waits for the first frame.
 ///
 /// Deliberately does NOT use `pumpAndSettle`, which cannot work on a device.
@@ -30,10 +21,20 @@ Future<void> _boot(PatrolIntegrationTester $) async {
   await $.pump(const Duration(seconds: 1));
 }
 
-/// Enters the sample credentials and submits the login form.
+/// Signs in and waits for the home screen.
+///
+/// With no backend - a debug build with `BASE_URL` unset - the login screen
+/// offers the offline demo sign-in, and its fill button supplies the demo
+/// account, so this runs with no server at all. Built with
+/// `--dart-define=BASE_URL=<url>`, the demo is off and the sample credentials
+/// go to that API, which must accept them.
 Future<void> _submitLogin(PatrolIntegrationTester $) async {
-  await $(TextField).at(0).enterText('test@example.com');
-  await $(TextField).at(1).enterText('password123');
+  if ($(#e2e_demo_sign_in_fill).exists) {
+    await $(#e2e_demo_sign_in_fill).tap();
+  } else {
+    await $(TextField).at(0).enterText('test@example.com');
+    await $(TextField).at(1).enterText('password123');
+  }
   await $(#e2e_login_submit).tap();
   await $(#e2e_home_content).waitUntilVisible();
 }
@@ -54,7 +55,7 @@ void main() {
   });
 
   patrolTest(
-    'E2E: auth -> home (requires a reachable backend)',
+    'E2E: auth -> home',
     ($) async {
       await _boot($);
 
@@ -64,6 +65,5 @@ void main() {
 
       expect($(#e2e_home_content), findsOneWidget);
     },
-    skip: !hasBackend,
   );
 }
