@@ -41,8 +41,6 @@ final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
 /// Uses ref.read to break circular dependency with apiClientProvider.
 final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
     Provider<AuthRemoteDataSource>((ref) {
-      // No backend configured in a development build: sign in offline, so a
-      // fresh copy runs end to end (koniz-dev/flutter-starter#628).
       if (DemoAuth.enabled) return DemoAuthRemoteDataSource();
       final apiClient = ref.read(networkClientProvider);
       return AuthRemoteDataSourceImpl(apiClient);

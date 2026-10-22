@@ -1,6 +1,5 @@
 // The offline demo sign-in: when it is on, what it accepts, and that a fresh
-// app can go from the login screen to home with no backend
-// (koniz-dev/flutter-starter#628).
+// app can go from the login screen to home with no backend.
 
 import 'dart:io';
 
