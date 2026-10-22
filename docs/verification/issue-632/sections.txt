@@ -1,0 +1,44 @@
+# headings, origin/main CONTRIBUTING.md
+1:# Contributing
+6:## Table of Contents
+18:## Development Setup
+20:### Prerequisites
+33:### Setup Steps
+72:## Development Workflow
+74:### Branch Naming
+97:### Workflow Steps
+138:### Pull Request Checklist
+148:### Pre-PR quality gate (non-platform)
+171:### GitHub branch protection (recommended)
+184:## Coding Standards
+186:### Code Style
+193:### Architecture
+201:### Code Organization
+214:### Naming Conventions
+222:### Best Practices
+235:## Commit Message Guidelines
+239:### Format
+249:### Types
+263:### Examples
+277:### Guidelines
+285:### Git hooks
+313:## Testing Guidelines
+315:### Test Structure
+330:### Test Types
+336:### Writing Tests
+345:### Example Test
+422:### Running Tests
+425:# Run all tests
+428:# Run tests with coverage
+431:# Run specific test file
+437:## Documentation
+439:### Code Documentation
+446:### Example
+470:### Documentation Updates
+481:## Review Process
+483:### What to Expect
+490:### Responding to Feedback
+499:## License
+
+# starter-contributor wording still present (expect none):
+(none)
