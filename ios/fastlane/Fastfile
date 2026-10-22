@@ -57,7 +57,7 @@ platform :ios do
 
     # The bundled-secrets guard, before any build: a `.env` declared as a
     # Flutter asset ships inside the artifact. `sh` raises on a non-zero exit,
-    # so a failing guard aborts the lane (koniz-dev/flutter-starter#507).
+    # so a failing guard aborts the lane.
     sh("cd #{REPO_ROOT} && dart run tool/check_env_assets.dart")
 
     # Get version info
@@ -89,7 +89,7 @@ platform :ios do
 
     # The bundled-secrets guard, before any build: a `.env` declared as a
     # Flutter asset ships inside the artifact. `sh` raises on a non-zero exit,
-    # so a failing guard aborts the lane (koniz-dev/flutter-starter#507).
+    # so a failing guard aborts the lane.
     sh("cd #{REPO_ROOT} && dart run tool/check_env_assets.dart")
 
     # Without --export-method the export is app-store, which is NOT installable

@@ -18,7 +18,7 @@
 	     flutter_secure_storage_darwin, the backing store for SecureTokenStore,
 	     needs this capability or every write fails with
 	     errSecMissingEntitlement (-34018) and no token survives a restart.
-	     Measured on macOS: see evidence:docs/verification/issue-62/.
+	     Measured on macOS.
 
 	     It is a RESTRICTED entitlement. With it present - even as the empty
 	     array below - `flutter build macos` and `flutter run -d macos` fail on
