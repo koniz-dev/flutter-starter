@@ -63,7 +63,7 @@ class MigrationV1ToV2 extends StorageMigration {
     // On a string-only backend (secure storage) an already-migrated list
     // reads back through getString as its stored encoding. Splitting that on
     // commas would fragment it, so a value that is already an encoded list is
-    // left alone (koniz-dev/flutter-starter#281).
+    // left alone.
     if (oldTags != null && decodeEncodedStringList(oldTags) == null) {
       final tagsList = oldTags.isEmpty
           ? <String>[]
@@ -78,8 +78,7 @@ class MigrationV1ToV2 extends StorageMigration {
     // choice. This used to seed `language = 'en'`: a fresh install is stamped
     // v1, so it ran on every first launch, and `language` is the key
     // LocalizationService reads as the user's pick - so the device language
-    // lost to an English preference nobody had made
-    // (koniz-dev/flutter-starter#417).
+    // lost to an English preference nobody had made.
     final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
     if (!hasSyncInterval) {
       await storage.setInt('sync_interval_minutes', 15);

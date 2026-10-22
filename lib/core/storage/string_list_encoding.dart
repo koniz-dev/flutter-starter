@@ -2,8 +2,8 @@
 /// as the Keychain/Keystore behind `SecureStorageService`.
 ///
 /// Lists used to be joined with `,`, so an element containing a comma came
-/// back as several elements and `['']` came back as `[]`
-/// (koniz-dev/flutter-starter#281). They are now stored as a JSON array, which
+/// back as several elements and `['']` came back as `[]`.
+/// They are now stored as a JSON array, which
 /// is unambiguous for any string. Values written in the old comma form still
 /// decode, with one accepted residual ambiguity - see [decodeStringList].
 library;
@@ -34,17 +34,17 @@ List<String>? decodeEncodedStringList(String raw) {
 /// Decodes a stored list: the JSON form, or the legacy comma-joined form
 /// (where `''` is the empty list).
 ///
-/// **One residual ambiguity, accepted** (koniz-dev/flutter-starter#471). JSON
-/// is tried first, so a legacy value whose comma-joined text is *itself* a
-/// JSON array of strings decodes as JSON: `['["x"]']`, written before #281 as
-/// the raw text `["x"]`, now reads back as `['x']`, and the two-element
+/// **One residual ambiguity, accepted**. JSON is tried first, so a legacy
+/// value whose comma-joined text is *itself* a JSON array of strings decodes
+/// as JSON: `['["x"]']`, written in the old form as the raw text `["x"]`, now
+/// reads back as `['x']`, and the two-element
 /// `['["a"', '"b"]']` (stored as `["a","b"]`) as `['a', 'b']`.
 ///
 /// It is accepted rather than fixed because no encoding can rule it out. A
 /// legacy value is an arbitrary string, so any marker a new encoding adds - a
 /// version prefix, a sentinel character - is text some legacy value could
-/// already hold, and values in this unmarked JSON form, written since #281,
-/// must keep decoding too. A prefix would only move the ambiguity, not remove
+/// already hold, and values already written in this unmarked JSON form must
+/// keep decoding too. A prefix would only move the ambiguity, not remove
 /// it. Hitting it takes a legacy element that is literally JSON array syntax
 /// with string items; the lists stored here hold identifiers and tokens.
 List<String> decodeStringList(String raw) {

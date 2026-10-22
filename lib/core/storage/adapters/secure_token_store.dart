@@ -41,8 +41,7 @@ class SecureTokenStore implements ITokenStore {
   /// Deletes both tokens, attempting the second even when the first fails.
   ///
   /// Throws [CacheException] if either delete failed: a token that is still
-  /// on the device after a logout must reach the caller, not read as success
-  /// (koniz-dev/flutter-starter#308).
+  /// on the device after a logout must reach the caller, not read as success.
   @override
   Future<void> clearAllTokens() async {
     (Object, StackTrace)? first;
