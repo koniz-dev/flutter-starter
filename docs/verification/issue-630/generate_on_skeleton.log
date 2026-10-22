@@ -1,0 +1,41 @@
+$ cat CHANGELOG.md   # as shipped
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+$ ./scripts/ci/generate_changelog.sh 1.0.1 --since HEAD~3
+[0;32mGenerating changelog from HEAD~3 to HEAD[0m
+[0;32mChangelog generated successfully![0m
+  [1;33mVersion:[0m 1.0.1
+  [1;33mDate:[0m 2026-10-23
+  [1;33mRange:[0m HEAD~3..HEAD
+
+Review CHANGELOG.md and commit if satisfied.
+exit: 0
+
+$ cat CHANGELOG.md   # after
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.0.1] - 2026-10-23
+
+### Documentation
+
+- start main's CHANGELOG empty, link the starter's own history
+
+### Chore
+
+- drop upstream issue pointers from the deliverable, keep the reasons (#641)
+- run the starter's tooling self-tests only in the template repo (#638)
+
