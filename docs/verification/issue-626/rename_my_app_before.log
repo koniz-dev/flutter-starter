@@ -1,0 +1,4 @@
+# origin/main, after the Option B rename to my_app
+$ flutter test test/docs
+00:00 +11 -1: test/docs/doc_snippets_rename_test.dart: template imports are pointed at the given package, others kept [E]
+00:24 +69 -1: Some tests failed.

@@ -1,0 +1,3 @@
+# HEAD, after the Option B rename to my_app
+$ flutter test test/docs
+00:22 +70: All tests passed!
