@@ -25,14 +25,15 @@ This starter follows [Semantic Versioning](https://semver.org/):
 # Check pubspec.yaml
 cat pubspec.yaml | grep version
 
-# Check CHANGELOG.md for latest changes
-cat CHANGELOG.md
 ```
+
+Then read [the starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md) from your version onwards. Your own
+`CHANGELOG.md` records your project's releases, not the starter's.
 
 ### Step 2: Review Breaking Changes
 
 Before upgrading, always check:
-1. **CHANGELOG.md** - Lists all changes, including breaking changes
+1. **[The starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md)** - Lists all changes, including breaking changes
 2. **Migration Guides** - This document and version-specific guides
 3. **Dependencies** - Check for dependency updates
 
@@ -232,7 +233,7 @@ flutter pub run scripts/dev/migration/migrate_to_v2.0.0.dart
 
 **Steps:**
 1. Update dependencies: `flutter pub upgrade`
-2. Review CHANGELOG.md for new features
+2. Review the starter's changelog for new features
 3. Test your application
 4. No breaking changes expected
 
@@ -240,7 +241,7 @@ flutter pub run scripts/dev/migration/migrate_to_v2.0.0.dart
 
 **Steps:**
 1. Backup your project
-2. Review breaking changes in CHANGELOG.md
+2. Review breaking changes in the starter's changelog
 3. Update dependencies: `flutter pub upgrade`
 4. Run migration scripts (if available)
 5. Fix breaking changes manually
@@ -277,7 +278,7 @@ Use this checklist for each upgrade:
   - [ ] Commit current state
 
 - [ ] **Review Changes**
-  - [ ] Read CHANGELOG.md
+  - [ ] Read the starter's changelog
   - [ ] Review breaking changes
   - [ ] Check dependency updates
 
@@ -311,7 +312,7 @@ Use this checklist for each upgrade:
 
 No version-specific guides exist yet, because no version after `1.0.0` has been
 released. When one is, it will be added to this directory and listed here, and
-linked from `CHANGELOG.md`.
+linked from the starter's changelog.
 
 ## Troubleshooting Upgrades
 
@@ -355,7 +356,7 @@ flutter pub deps
 ### 1. Stay Up-to-Date
 
 - Regularly check for updates
-- Review CHANGELOG.md
+- Review the starter's changelog
 - Test updates in a separate branch
 
 ### 2. Incremental Upgrades
@@ -388,7 +389,7 @@ If you encounter issues during upgrade:
 
 1. **Check Documentation**
    - Review this guide
-   - Check CHANGELOG.md
+   - Check the starter's changelog
    - Review migration guides
 
 2. **Search Issues**
