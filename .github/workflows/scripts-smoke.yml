@@ -299,6 +299,12 @@ jobs:
       - name: The renamed tree analyzes clean
         run: flutter analyze
 
+      # Tests that hold literal package:flutter_starter/ strings are rewritten
+      # by the rename too; analyze cannot see a test that then asserts the
+      # wrong thing (koniz-dev/flutter-starter#626).
+      - name: The renamed tree's tests pass
+        run: flutter test --timeout=5m
+
       - name: A feature scaffolded after the rename compiles
         shell: bash
         run: |
