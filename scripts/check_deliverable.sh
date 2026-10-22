@@ -13,8 +13,11 @@
 #   * names that process in a tracked file: status/priority/epic labels, the
 #     needs-uat state, the issue workflow, the acceptance harness, or the
 #     process-only strip.
-# Provenance such as "koniz-dev/flutter-starter#123" is allowed: an adopter can
-# follow it, and it explains why the code is the way it is.
+#   * points into this repository's tracker or evidence: a
+#     "koniz-dev/flutter-starter#N" reference, or an issues/pull/evidence URL.
+#     Those are another project's history, not the adopter's; the comment
+#     should say why the code is the way it is instead
+#     (koniz-dev/flutter-starter#629). A path in ref_allowlist may keep one.
 set -euo pipefail
 
 REF="${1:-origin/main}"
@@ -41,6 +44,13 @@ forbidden_paths=(
 # Upstream-process vocabulary that must not appear in main's files.
 vocabulary='status:(todo|in-progress|blocked|needs-uat)|priority:P[0-3]|epic:[a-z]|needs-uat|issue-workflow|\.claude/agents|process-only|run_acceptance|bootstrap-issue-labels|check_issue_refs|issue-refs\.yml|epic[-_ ]coverage'
 
+# Upstream tracker and evidence pointers.
+refs='koniz-dev/flutter-starter#[0-9]|github\.com/koniz-dev/flutter-starter/(issues|pull)/[0-9]|github\.com/koniz-dev/flutter-starter/(blob|tree)/evidence'
+
+# Files that may keep such a pointer, each with its reason. Keep it short.
+ref_allowlist=(
+)
+
 status=0
 
 for path in "${forbidden_paths[@]}"; do
@@ -55,10 +65,20 @@ if hits=$(git grep -n -I -E "$vocabulary" "$REF" -- . 2>/dev/null); then
   status=1
 fi
 
+pathspec=(.)
+for allowed in ${ref_allowlist[@]+"${ref_allowlist[@]}"}; do
+  pathspec+=(":!$allowed")
+done
+if hits=$(git grep -n -I -E "$refs" "$REF" -- "${pathspec[@]}" 2>/dev/null); then
+  echo "$hits" | sed "s#^$REF:#upstream tracker reference in #"
+  status=1
+fi
+
 if [[ $status -eq 0 ]]; then
   echo "Deliverable: $REF carries nothing that only serves the upstream process."
 else
   echo
   echo "Move these to the maintainers branch, or reword them for an adopter."
+  echo "For a tracker reference, keep the reason and drop the pointer."
 fi
 exit $status
