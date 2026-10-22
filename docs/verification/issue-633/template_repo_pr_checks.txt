@@ -1,0 +1,11 @@
+# PR #638 in the template repo: Strip jobs ran (criterion 3)
+SUCCESS Strip tasks-removed + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/39815983944/job/119954572011
+SUCCESS Quality gate https://github.com/koniz-dev/flutter-starter/actions/runs/39815984092/job/119954573073
+SUCCESS Docs check https://github.com/koniz-dev/flutter-starter/actions/runs/39815984065/job/119954573565
+SUCCESS Strip both-samples-removed + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/39815983944/job/119954571831
+SUCCESS Strip feature-flags-removed + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/39815983944/job/119954572178
+SUCCESS Strip renamed-both + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/39815983944/job/119954572528
+SUCCESS Strip keep-samples + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/39815983944/job/119954572026
+
+# gh api repos/koniz-dev/flutter-starter --jq .is_template
+true

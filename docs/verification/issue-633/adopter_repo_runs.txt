@@ -1,0 +1,13 @@
+# Fresh repository created with: gh repo create koniz-dev/fs-template-probe-633 --private --template koniz-dev/flutter-starter
+# from main at 76f2abc (#638). Its initial commit triggered these runs:
+is_template=false template_repository=koniz-dev/flutter-starter
+Git hooks [push] run=skipped
+   job: pre-commit hook in a fresh clone -> skipped (-0.2 min)
+Docs check [push] run=success
+   job: Docs check -> success (1.7 min)
+Strip smoke [push] run=skipped
+   job: Strip ${{ matrix.variant }} + analyze + test -> skipped (0 min)
+Release scripts [push] run=skipped
+   job: release scripts (${{ matrix.os }}) -> skipped (0 min)
+CI [push] run=success
+   job: Quality gate -> success (8.8 min)
