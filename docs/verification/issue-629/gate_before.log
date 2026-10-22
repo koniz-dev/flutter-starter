@@ -1,0 +1,590 @@
+$ check_deliverable.sh origin/main  (main before, at 76f2abcc105)
+upstream tracker reference in .githooks/pre-commit:13:# that is harmless - the probe in koniz-dev/flutter-starter#140 shows only
+upstream tracker reference in .githooks/pre-commit:41:# (koniz-dev/flutter-starter#300). Refuse before anything runs.
+upstream tracker reference in .githooks/pre-push:13:# that is harmless - the probe in koniz-dev/flutter-starter#140 shows only
+upstream tracker reference in .githooks/pre-push:22:# hook is where koniz-dev/flutter-starter#140 observed it; this hook runs the
+upstream tracker reference in .github/workflows/build.yml:7:# project could not build on it (koniz-dev/flutter-starter#329, #387). The
+upstream tracker reference in .github/workflows/build.yml:83:      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+upstream tracker reference in .github/workflows/build.yml:131:      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+upstream tracker reference in .github/workflows/build.yml:178:      # (koniz-dev/flutter-starter#62, koniz-dev/flutter-starter#153).
+upstream tracker reference in .github/workflows/build.yml:211:      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+upstream tracker reference in .github/workflows/build.yml:254:      # Flutter asset ships inside the artifact (koniz-dev/flutter-starter#135,
+upstream tracker reference in .github/workflows/ci.yml:10:# NO `paths-ignore`, deliberately (koniz-dev/flutter-starter#117). This job has
+upstream tracker reference in .github/workflows/ci.yml:162:      # (koniz-dev/flutter-starter#337). `git status --porcelain` rather than
+upstream tracker reference in .github/workflows/ci.yml:187:      # months later (koniz-dev/flutter-starter#370, #462, #602). flutter
+upstream tracker reference in .github/workflows/ci.yml:215:      # main first (koniz-dev/flutter-starter#338, #608).
+upstream tracker reference in .github/workflows/coverage.yml:50:    # The coverage targets, in one place (koniz-dev/flutter-starter#331). The
+upstream tracker reference in .github/workflows/deploy-android.yml:42:# Least privilege (koniz-dev/flutter-starter#343): the deploy steps talk to
+upstream tracker reference in .github/workflows/deploy-android.yml:104:      # koniz-dev/flutter-starter#135. The guard already runs in
+upstream tracker reference in .github/workflows/deploy-android.yml:152:          # (koniz-dev/flutter-starter#334).
+upstream tracker reference in .github/workflows/deploy-ios.yml:42:# Least privilege (koniz-dev/flutter-starter#343): the deploy steps talk to
+upstream tracker reference in .github/workflows/deploy-ios.yml:95:      # koniz-dev/flutter-starter#135. The guard already runs in
+upstream tracker reference in .github/workflows/deploy-ios.yml:180:          # artifacts (koniz-dev/flutter-starter#334).
+upstream tracker reference in .github/workflows/deploy-web.yml:51:# Least privilege (koniz-dev/flutter-starter#343): the deploy steps talk to
+upstream tracker reference in .github/workflows/deploy-web.yml:97:      # koniz-dev/flutter-starter#135. The guard already runs in
+upstream tracker reference in .github/workflows/deploy-web.yml:158:      # koniz-dev/flutter-starter#135. The guard already runs in
+upstream tracker reference in .github/workflows/deploy-web.yml:221:      # koniz-dev/flutter-starter#135. The guard already runs in
+upstream tracker reference in .github/workflows/docs-check.yml:8:# outright via `paths-ignore`; since koniz-dev/flutter-starter#117 it reports
+upstream tracker reference in .github/workflows/docs-check.yml:12:# 487 emoji lines by the time koniz-dev/flutter-starter#54 was filed.
+upstream tracker reference in .github/workflows/git-hooks.yml:7:# (koniz-dev/flutter-starter#300). A fresh clone is the only state that shows
+upstream tracker reference in .github/workflows/release-scripts.yml:5:# CI - Linux only - never noticed (koniz-dev/flutter-starter#282). The script
+upstream tracker reference in .github/workflows/scripts-smoke.yml:7:# flag for months after koniz-dev/flutter-starter#34 removed it everywhere
+upstream tracker reference in .github/workflows/scripts-smoke.yml:9:# (koniz-dev/flutter-starter#57). Neither failure was reachable from `ci.yml`,
+upstream tracker reference in .github/workflows/scripts-smoke.yml:16:# it (koniz-dev/flutter-starter#283).
+upstream tracker reference in .github/workflows/scripts-smoke.yml:22:# documented steps stop working (koniz-dev/flutter-starter#357, #441).
+upstream tracker reference in .github/workflows/scripts-smoke.yml:82:      # build.yml (koniz-dev/flutter-starter#344); the artifacts are NOT
+upstream tracker reference in .github/workflows/scripts-smoke.yml:227:          # must name the new package too (koniz-dev/flutter-starter#358).
+upstream tracker reference in .github/workflows/scripts-smoke.yml:249:      # (koniz-dev/flutter-starter#594). Analyze with infos fatal.
+upstream tracker reference in .github/workflows/scripts-smoke.yml:308:      # wrong thing (koniz-dev/flutter-starter#626).
+upstream tracker reference in .github/workflows/scripts-smoke.yml:318:          # package (koniz-dev/flutter-starter#442).
+upstream tracker reference in .github/workflows/scripts-smoke.yml:323:      # (koniz-dev/flutter-starter#594). Analyze with infos fatal.
+upstream tracker reference in .github/workflows/strip-smoke.yml:16:# NO `paths-ignore`, deliberately (koniz-dev/flutter-starter#167, same shape as
+upstream tracker reference in .github/workflows/strip-smoke.yml:64:          # Both samples kept (koniz-dev/flutter-starter#333, #621); the bricks
+upstream tracker reference in .github/workflows/strip-smoke.yml:237:      # (koniz-dev/flutter-starter#588).
+upstream tracker reference in .github/workflows/strip-smoke.yml:255:      # was producing it (koniz-dev/flutter-starter#622). Assert that directly:
+upstream tracker reference in .gitignore:35:# (koniz-dev/flutter-starter#340).
+upstream tracker reference in .gitignore:82:# Private key material in its commonest raw forms (koniz-dev/flutter-starter#164).
+upstream tracker reference in .gitignore:87:# (koniz-dev/flutter-starter#138), so git should not track one either. That
+upstream tracker reference in .gitignore:97:# supported setup for no gain. koniz-dev/flutter-starter#138 decided this - see
+upstream tracker reference in .gitignore:100:# and koniz-dev/flutter-starter#164 kept it. If you are here to "fix the
+upstream tracker reference in CHANGELOG.md:16:  (koniz-dev/flutter-starter#196)
+upstream tracker reference in CLAUDE.md:21:files, the SDK-pinned lock entries) are committed (koniz-dev/flutter-starter#338,
+upstream tracker reference in CLAUDE.md:107:`ci.yml` lost its `paths-ignore` in koniz-dev/flutter-starter#117 and filters
+upstream tracker reference in CLAUDE.md:108:inside the job instead ("Decide the gate scope", koniz-dev/flutter-starter#167),
+upstream tracker reference in CONTRIBUTING.md:421:([#140](https://github.com/koniz-dev/flutter-starter/issues/140)). If you ever
+upstream tracker reference in android/gradle.properties:14:# (koniz-dev/flutter-starter#392).
+upstream tracker reference in bricks/feature_clean/README.md:51:  would trip `directives_ordering` (koniz-dev/flutter-starter#594).
+upstream tracker reference in bricks/feature_clean/hooks/post_gen.dart:14:/// (koniz-dev/flutter-starter#442, #594), and `dart format` wraps them.
+upstream tracker reference in bricks/flutter_starter_setup/README.md:32:brick (koniz-dev/flutter-starter#283).
+upstream tracker reference in bricks/flutter_starter_setup/hooks/post_gen.dart:67:  // rename and red after it (koniz-dev/flutter-starter#283).
+upstream tracker reference in bricks/flutter_starter_setup/hooks/post_gen.dart:406:/// package and does not resolve (koniz-dev/flutter-starter#358). The templates
+upstream tracker reference in docs/api/core/network.md:35:Since koniz-dev/flutter-starter#176 the request surface of `ApiClient` is typed
+upstream tracker reference in docs/api/core/network.md:90:| `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` . **Ignored on Flutter web**, where the browser owns TLS: `createAdapter()` returns `null` and Dio keeps its browser transport (koniz-dev/flutter-starter#307) |
+upstream tracker reference in docs/api/core/network.md:91:| `retryInitialDelay`, `retryMaxJitter` | no | Test-only overrides of `RetryInterceptor`'s backoff (defaults 1s and 500ms). Pass `Duration.zero` for both so a test that walks the retry path does not sleep through it (koniz-dev/flutter-starter#577) |
+upstream tracker reference in docs/api/core/network.md:297:(koniz-dev/flutter-starter#316). Cancel it when the result is no longer
+upstream tracker reference in docs/api/core/network.md:339:  - `PerformanceInterceptor` sits after `AuthInterceptor` and `RetryInterceptor` so each trace records how the request finally ended. A 401 that is refreshed and replayed is resolved from `AuthInterceptor.onError`, which in dio ends the host chain - so the 401 replay client borrows the host's `ApiLoggingInterceptor` and `PerformanceInterceptor`, and the replay carries the original request's `extra` (and with it the trace). One trace covers the refreshed request and records the replay's 200; a retried request keeps its trace too (koniz-dev/flutter-starter#298, #477).
+upstream tracker reference in docs/api/core/network.md:450:`lib/core/di/providers.dart` since koniz-dev/flutter-starter#221 - passes
+upstream tracker reference in docs/api/core/network.md:500:recorded in [`visible-for-testing-probe.log`](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-89/visible-for-testing-probe.log) on the `evidence` branch. It was
+upstream tracker reference in docs/api/core/network.md:541:     (koniz-dev/flutter-starter#304). Before, any replay failure logged out
+upstream tracker reference in docs/api/core/network.md:566:koniz-dev/flutter-starter#315.
+upstream tracker reference in docs/api/core/network.md:576:an unreadable message (koniz-dev/flutter-starter#276). With `next`, the 401 is
+upstream tracker reference in docs/api/core/network.md:587:(koniz-dev/flutter-starter#286).
+upstream tracker reference in docs/api/core/network.md:603:went to the old session's caller (koniz-dev/flutter-starter#289). A retry inside
+upstream tracker reference in docs/api/core/network.md:608:Before koniz-dev/flutter-starter#295 that token was sent. Both checks cover sends
+upstream tracker reference in docs/api/core/network.md:611:(see koniz-dev/flutter-starter#290).
+upstream tracker reference in docs/api/core/network.md:617:Which refresh failures end the session (koniz-dev/flutter-starter#303):
+upstream tracker reference in docs/api/core/network.md:689:koniz-dev/flutter-starter#290 this request was the only replay with no check
+upstream tracker reference in docs/api/core/network.md:820:rather than reusing the original object (koniz-dev/flutter-starter#284):
+upstream tracker reference in docs/api/core/network.md:858:The write time is stored through `DateFormatter.formatIso8601`, so it is UTC and always carries the `Z` designator, and read back through `DateFormatter.parseIso8601`. Age is then the distance between two absolute instants and does not move when the device's UTC offset does - before koniz-dev/flutter-starter#188 it was a bare local `DateTime.now().toIso8601String()`, which writes no designator at all, so a flight or a DST transition aged every earlier entry out by the offset. An offset-less entry already on the device is still read as local wall clock, exactly as before, and is rewritten in the new form on the first refetch.
+upstream tracker reference in docs/api/core/network.md:865:- Past `maxAge` the entry is **stale**: the request goes to the network, and the entry is kept only as a fallback. It is served only if that fetch fails for transport reasons - a connection error, a timeout, or a 5xx. A 4xx is the server's answer and reaches the caller, and a successful refetch replaces the entry. Before koniz-dev/flutter-starter#310 a stale entry was served straight from the cache, with no network attempt, for up to `maxStale`.
+upstream tracker reference in docs/api/core/network.md:975:path used to be logged verbatim (koniz-dev/flutter-starter#313).
+upstream tracker reference in docs/api/core/network.md:1003:koniz-dev/flutter-starter#78. The trade-off is that plain-text error bodies are
+upstream tracker reference in docs/api/core/network.md:1039:koniz-dev/flutter-starter#89: five commits changing constructors in
+upstream tracker reference in docs/api/features/auth/models.md:147:(koniz-dev/flutter-starter#312). Paths are relative to `BASE_URL` plus the
+upstream tracker reference in docs/api/features/auth/providers.md:7:Authentication providers live in `lib/features/auth/di/auth_providers.dart`. Import that file directly - `lib/core/di/providers.dart` re-exported it until koniz-dev/flutter-starter#221, and no longer does: core naming a feature was half of an import cycle, and the re-export was the other half.
+upstream tracker reference in docs/architecture/adr/0003-navigation-boundary.md:30:`appNavigatorProvider` were **deleted** (koniz-dev/flutter-starter#177).
+upstream tracker reference in docs/architecture/adr/0005-state-boundary.md:9:> `ITasksController` was deleted by koniz-dev/flutter-starter#180, and 0006
+upstream tracker reference in docs/architecture/adr/0005-state-boundary.md:20:- ~~`ITasksController`~~ - **deleted** by koniz-dev/flutter-starter#180; see
+upstream tracker reference in docs/architecture/adr/0005-state-boundary.md:29:koniz-dev/flutter-starter#180:
+upstream tracker reference in docs/architecture/adr/0005-state-boundary.md:34:| `ITasksController` | **Removed.** koniz-dev/flutter-starter#180 deleted the contract and `TasksStateSnapshot`; `grep -rn "ITasksController" lib` now returns nothing. | n/a |
+upstream tracker reference in docs/architecture/adr/0005-state-boundary.md:40:koniz-dev/flutter-starter#180 deleted the contract instead of manufacturing an
+upstream tracker reference in docs/architecture/adr/0005-state-boundary.md:43:[0006](0006-contract-status-and-slice-shape.md) (koniz-dev/flutter-starter#183):
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:11:app actually depends on. koniz-dev/flutter-starter#64 was filed on the claim
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:14:`IHttpResponseCache` (koniz-dev/flutter-starter#114) and
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:15:`ISessionTerminationSink` (koniz-dev/flutter-starter#127) - were added
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:35:exactly what koniz-dev/flutter-starter#180 found when `ITasksController` had
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:58:| `AppNavigator` | koniz-dev/flutter-starter#177 | `appNavigatorProvider` was read only by its own test. `NavigationExtensions` is the single navigation API; see [0003-navigation-boundary.md](0003-navigation-boundary.md). The contract, its `GoRouterNavigatorAdapter` and the provider are all gone - `grep -rn "AppNavigator" lib` returns nothing |
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:59:| `ITasksController` | koniz-dev/flutter-starter#180 | No implementor and no consumer, and it had drifted from `TasksNotifier` in both directions - it declared `loadTasks()` and `clearError()` the notifier never had, and lacked the `updateTask` it does have. Deleted with `TasksStateSnapshot` rather than manufacturing an implementor |
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:84:koniz-dev/flutter-starter#180, which removed `ITasksController` from
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:130:The `routing/` row corrects koniz-dev/flutter-starter#183's table, which
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:157:Both were decided by sibling children of koniz-dev/flutter-starter#64. They are
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:160:**`ApiClient`'s Dio surface** - koniz-dev/flutter-starter#176. The
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:171:**`AppNavigator`** - koniz-dev/flutter-starter#177. Deleted, with
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:183:(koniz-dev/flutter-starter#180) and this ADR decides to delete the other. When
+upstream tracker reference in docs/architecture/adr/0006-contract-status-and-slice-shape.md:197:(koniz-dev/flutter-starter#221) exist because `lib/core/` genuinely may not
+upstream tracker reference in docs/architecture/contracts-map.md:33:(koniz-dev/flutter-starter#183) gives each a verdict: **`AppDesignTokens` is to
+upstream tracker reference in docs/architecture/contracts-map.md:42:`AppNavigator` went in koniz-dev/flutter-starter#177 - the contract, its adapter
+upstream tracker reference in docs/architecture/contracts-map.md:44:`ITasksController` went in koniz-dev/flutter-starter#180, which removed it and
+upstream tracker reference in docs/architecture/contracts-map.md:56:| **No implementor** | The contract is declared and nothing anywhere implements it. **No contract is in this state today** - `ITasksController` was the last one and was deleted by koniz-dev/flutter-starter#180. The row stays so the state has a name if it recurs. |
+upstream tracker reference in docs/architecture/contracts-map.md:70:Until koniz-dev/flutter-starter#182 there was an `ITasksController` row naming a
+upstream tracker reference in docs/architecture/contracts-map.md:73:koniz-dev/flutter-starter#180 then deleted the contract itself.
+upstream tracker reference in docs/architecture/contracts-map.md:88:lines (koniz-dev/flutter-starter#364), while a directive fails the moment the
+upstream tracker reference in docs/architecture/contracts-map.md:137:| State | Notifiers under `lib/features/*/presentation/providers/`; one implements a controller contract (`AuthNotifier`), the tasks slice deliberately does not - see koniz-dev/flutter-starter#180 |
+upstream tracker reference in docs/architecture/design-decisions.md:1210:defects fixed in koniz-dev/flutter-starter#63 were in this set, and every one
+upstream tracker reference in docs/architecture/design-decisions.md:1237:1. Every defect listed in koniz-dev/flutter-starter#63 was fixed, with a
+upstream tracker reference in docs/architecture/design-decisions.md:1251:   sample was filed separately as koniz-dev/flutter-starter#147. That issue wired `DateFormatter` and **rejected** the
+upstream tracker reference in docs/architecture/design-decisions.md:1270:| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model (koniz-dev/flutter-starter#146); `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen (koniz-dev/flutter-starter#147) |
+upstream tracker reference in docs/architecture/design-decisions.md:1285:**Decided, not open.** koniz-dev/flutter-starter#147 wired `DateFormatter` and
+upstream tracker reference in docs/architecture/design-decisions.md:1286:dropped the other two halves of its own proposal; koniz-dev/flutter-starter#210
+upstream tracker reference in docs/architecture/design-decisions.md:1343:waiting for it: koniz-dev/flutter-starter#223, which closes as *not planned* if
+upstream tracker reference in docs/architecture/riverpod-retry-policy.md:77:Full reasoning, with the measurements: koniz-dev/flutter-starter#101, and the
+upstream tracker reference in docs/guides/configuration.md:76:Until koniz-dev/flutter-starter#278 this section called web the exception.
+upstream tracker reference in docs/guides/configuration.md:93:  (koniz-dev/flutter-starter#135).
+upstream tracker reference in docs/guides/configuration.md:109:is read from the raw text. Until koniz-dev/flutter-starter#330 a hand-written
+upstream tracker reference in docs/guides/configuration.md:177:koniz-dev/flutter-starter#170 the match was a substring test against the whole
+upstream tracker reference in docs/guides/configuration.md:259:was removed in koniz-dev/flutter-starter#279 rather than left as a source that
+upstream tracker reference in docs/guides/configuration.md:274:about it (koniz-dev/flutter-starter#318). The debug screen lists every
+upstream tracker reference in docs/guides/configuration.md:320:   - Reads `--dart-define` values through `DartDefines`, on every target including web (koniz-dev/flutter-starter#278)
+upstream tracker reference in docs/guides/configuration.md:321:   - Provides fallback chain: `.env` → `--dart-define` → defaults, per key: a `.env` that lacks a key does not hide that key's `--dart-define`. `getBool`, `getInt` and `getDouble` parse the string `get` resolves, so they follow the same chain (koniz-dev/flutter-starter#322)
+upstream tracker reference in docs/guides/configuration.md:488:and are read from the platform at runtime (koniz-dev/flutter-starter#467).
+upstream tracker reference in docs/guides/configuration.md:520:(koniz-dev/flutter-starter#320). A release build with no file output also had
+upstream tracker reference in docs/guides/features/internationalization-guide.md:25:- **Device Language by Default**: With no stored choice, the app uses the first language in the device's preference list that it ships, and English when none matches (`LocalizationService.deviceLocale`, koniz-dev/flutter-starter#324). A stored choice always wins. The example storage migration no longer seeds a `language` value on a fresh install (koniz-dev/flutter-starter#417), so a first launch follows the device too
+upstream tracker reference in docs/guides/features/storage-migration-guide.md:169:(koniz-dev/flutter-starter#417).
+upstream tracker reference in docs/guides/onboarding/fork-and-customize.md:72:Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting the two by hand leaves dangling (koniz-dev/flutter-starter#588). <!-- strip:strip-tool line -->
+upstream tracker reference in docs/guides/onboarding/fork-and-customize.md:126:does not rewrite prose (koniz-dev/flutter-starter#409).
+upstream tracker reference in docs/guides/security/audit.md:102:[#84](https://github.com/koniz-dev/flutter-starter/issues/84), but a release
+upstream tracker reference in docs/guides/security/audit.md:123:[#78](https://github.com/koniz-dev/flutter-starter/issues/78) are closed:
+upstream tracker reference in docs/guides/security/checklist.md:41:      ([#135](https://github.com/koniz-dev/flutter-starter/issues/135)). Running
+upstream tracker reference in docs/guides/security/checklist.md:56:      ([#138](https://github.com/koniz-dev/flutter-starter/issues/138),
+upstream tracker reference in docs/guides/security/checklist.md:57:      [#164](https://github.com/koniz-dev/flutter-starter/issues/164)). Run
+upstream tracker reference in docs/guides/security/implementation.md:58:and trust store. Until koniz-dev/flutter-starter#307 it installed the dart:io
+upstream tracker reference in docs/guides/security/implementation.md:638:`FreeRaspServiceImpl` forwards **every** detection the pinned freerasp (8.2.4) reports. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Until koniz-dev/flutter-starter#390 only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
+upstream tracker reference in fastlane/Fastfile:60:    # so a failing guard aborts the lane (koniz-dev/flutter-starter#507).
+upstream tracker reference in fastlane/Fastfile:91:    # so a failing guard aborts the lane (koniz-dev/flutter-starter#507).
+upstream tracker reference in flutter_launcher_icons.yaml:5:  # logo usually has one: flatten it for iOS (koniz-dev/flutter-starter#339).
+upstream tracker reference in ios/fastlane/Fastfile:60:    # so a failing guard aborts the lane (koniz-dev/flutter-starter#507).
+upstream tracker reference in ios/fastlane/Fastfile:92:    # so a failing guard aborts the lane (koniz-dev/flutter-starter#507).
+upstream tracker reference in lib/core/accessibility/accessibility_constants.dart:12:/// promises - see koniz-dev/flutter-starter#65.
+upstream tracker reference in lib/core/config/app_config.dart:56:  /// (koniz-dev/flutter-starter#321). [printConfig] reports it, and it is in
+upstream tracker reference in lib/core/config/app_config.dart:175:  /// `SslPinning` installs no adapter (koniz-dev/flutter-starter#307). This
+upstream tracker reference in lib/core/config/app_config.dart:203:  /// exists to keep (koniz-dev/flutter-starter#320). What each environment
+upstream tracker reference in lib/core/config/app_config.dart:282:  // by nothing (koniz-dev/flutter-starter#467).
+upstream tracker reference in lib/core/config/env_config.dart:16:/// special case (koniz-dev/flutter-starter#278).
+upstream tracker reference in lib/core/config/env_config.dart:41:  /// `docs/guides/configuration.md` (koniz-dev/flutter-starter#546).
+upstream tracker reference in lib/core/config/env_config.dart:121:  /// `yes` and `on` (koniz-dev/flutter-starter#322). They now parse the
+upstream tracker reference in lib/core/contracts/network_contracts.dart:55:  /// (koniz-dev/flutter-starter#276).
+upstream tracker reference in lib/core/di/providers.dart:10:// (koniz-dev/flutter-starter#221).
+upstream tracker reference in lib/core/di/providers.dart:155:/// Riverpod-backed sink (koniz-dev/flutter-starter#127).
+upstream tracker reference in lib/core/di/providers.dart:168:/// (koniz-dev/flutter-starter#221).
+upstream tracker reference in lib/core/errors/dio_exception_mapper.dart:152:  /// (koniz-dev/flutter-starter#305). A list is joined with `; `, numbers
+upstream tracker reference in lib/core/errors/exception_to_failure_mapper.dart:9:  /// - ServerException → by HTTP status (koniz-dev/flutter-starter#309):
+upstream tracker reference in lib/core/localization/failure_localizations.dart:11:  /// [AuthFailure] means (koniz-dev/flutter-starter#445, #479).
+upstream tracker reference in lib/core/localization/failure_localizations.dart:22:/// text (koniz-dev/flutter-starter#323).
+upstream tracker reference in lib/core/localization/localization_providers.dart:35:    // English (koniz-dev/flutter-starter#324).
+upstream tracker reference in lib/core/localization/localization_providers.dart:48:  /// (koniz-dev/flutter-starter#545).
+upstream tracker reference in lib/core/localization/localization_service.dart:89:  /// [defaultLocale] (koniz-dev/flutter-starter#324).
+upstream tracker reference in lib/core/localization/localized_formatters.dart:102:    // `150.000 VND` instead of `150.000 ₫` (koniz-dev/flutter-starter#327).
+upstream tracker reference in lib/core/logging/log_output.dart:75:  /// opened yet (koniz-dev/flutter-starter#447).
+upstream tracker reference in lib/core/logging/log_output.dart:149:      // error (koniz-dev/flutter-starter#421). Opening once with an await
+upstream tracker reference in lib/core/logging/log_output.dart:158:      // unobserved (koniz-dev/flutter-starter#447). An empty write attaches
+upstream tracker reference in lib/core/logging/log_output.dart:326:      // files (koniz-dev/flutter-starter#589).
+upstream tracker reference in lib/core/logging/logging_service.dart:39:  /// (koniz-dev/flutter-starter#576)
+upstream tracker reference in lib/core/logging/logging_service.dart:122:    // on (koniz-dev/flutter-starter#320). The console reaches the platform
+upstream tracker reference in lib/core/network/adapters/dio_network_client.dart:17:  /// `AppConfig.apiTimeout` (`API_TIMEOUT`) - koniz-dev/flutter-starter#280.
+upstream tracker reference in lib/core/network/adapters/dio_network_client.dart:26:  /// optional extra here, used by `ApiClient` (koniz-dev/flutter-starter#316).
+upstream tracker reference in lib/core/network/api_client.dart:3:// ApiClient without importing `package:dio` (koniz-dev/flutter-starter#176).
+upstream tracker reference in lib/core/network/api_client.dart:45:  /// not sleep through it (koniz-dev/flutter-starter#577)
+upstream tracker reference in lib/core/network/api_client.dart:144:    // replay's 200, not a failed 401 (koniz-dev/flutter-starter#298)
+upstream tracker reference in lib/core/network/interceptors/api_logging_interceptor.dart:159:    // Strapi returns its session token as `jwt` (koniz-dev/flutter-starter#313).
+upstream tracker reference in lib/core/network/interceptors/api_logging_interceptor.dart:182:  /// error entries (koniz-dev/flutter-starter#313). Everything except the
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:82:  /// (koniz-dev/flutter-starter#127).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:100:  /// (koniz-dev/flutter-starter#169). [_logoutUser] advances it for the same
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:219:      // (koniz-dev/flutter-starter#477) and the request's trace recorded the
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:261:  /// cannot import (koniz-dev/flutter-starter#221); a test pins the two
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:286:    // response to the ended session's caller (koniz-dev/flutter-starter#289).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:299:    // would surface as an uncaught zone error (koniz-dev/flutter-starter#314).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:320:    // re-send - as the new user (koniz-dev/flutter-starter#295).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:330:      // session's bearer token on the wire (koniz-dev/flutter-starter#286).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:388:  /// (koniz-dev/flutter-starter#299). The query string is ignored, and an
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:430:    // the server on every replay (koniz-dev/flutter-starter#315).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:475:        // false (koniz-dev/flutter-starter#303). refreshedToken stays null,
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:494:      // the wire after the user signed out (koniz-dev/flutter-starter#290).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:511:      // over a single 503 (koniz-dev/flutter-starter#304).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:552:  /// unreadable message, and never logged (koniz-dev/flutter-starter#276).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:567:  /// (koniz-dev/flutter-starter#286). Before #276 the early `reject` made the
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:584:  ///   (koniz-dev/flutter-starter#384).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:635:  /// the reason (koniz-dev/flutter-starter#284).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:743:  /// (koniz-dev/flutter-starter#114).
+upstream tracker reference in lib/core/network/interceptors/auth_interceptor.dart:760:  /// (koniz-dev/flutter-starter#169).
+upstream tracker reference in lib/core/network/interceptors/cache_interceptor.dart:49:/// attempt at all (koniz-dev/flutter-starter#310).
+upstream tracker reference in lib/core/network/interceptors/cache_interceptor.dart:62:/// enforces, on a surface koniz-dev/flutter-starter#46 already proved is easy
+upstream tracker reference in lib/core/network/interceptors/cache_interceptor.dart:86:/// is exactly the defect koniz-dev/flutter-starter#188 fixed - a bare
+upstream tracker reference in lib/core/network/interceptors/cache_interceptor.dart:391:  /// [clearCache] and so alive past a logout (koniz-dev/flutter-starter#311).
+upstream tracker reference in lib/core/network/interceptors/performance_interceptor.dart:21:/// (koniz-dev/flutter-starter#298). A retry re-enters the chain with the same
+upstream tracker reference in lib/core/network/interceptors/retry_interceptor.dart:114:    // the replay (koniz-dev/flutter-starter#284).
+upstream tracker reference in lib/core/network/request_body_replay.dart:4:/// (koniz-dev/flutter-starter#284).
+upstream tracker reference in lib/core/network/request_cancellation.dart:10:/// (koniz-dev/flutter-starter#316).
+upstream tracker reference in lib/core/network/ssl_pinning.dart:21:/// configuration says (koniz-dev/flutter-starter#307).
+upstream tracker reference in lib/core/performance/performance_screen_mixin.dart:138:  /// screen read as loading in 1 ms (koniz-dev/flutter-starter#326).
+upstream tracker reference in lib/core/security/i_rasp_service.dart:22:  // so a listener can tell them apart (koniz-dev/flutter-starter#390). Several
+upstream tracker reference in lib/core/security/infrastructure/freerasp_service_impl.dart:13:/// koniz-dev/flutter-starter#390 the callback set only 10 of freeRASP's 23
+upstream tracker reference in lib/core/security/infrastructure/freerasp_service_impl.dart:22:  /// silent no-op that protected nothing (koniz-dev/flutter-starter#317).
+upstream tracker reference in lib/core/session/session_generation.dart:12:/// (koniz-dev/flutter-starter#169).
+upstream tracker reference in lib/core/session/session_generation.dart:54:/// it - learns the user changed and resets (koniz-dev/flutter-starter#452).
+upstream tracker reference in lib/core/session/session_providers.dart:11:/// koniz-dev/flutter-starter#169 describes.
+upstream tracker reference in lib/core/session/session_providers.dart:23:/// (koniz-dev/flutter-starter#452).
+upstream tracker reference in lib/core/storage/adapters/secure_token_store.dart:45:  /// (koniz-dev/flutter-starter#308).
+upstream tracker reference in lib/core/storage/migration/migration_executor.dart:214:  /// chain a second time (koniz-dev/flutter-starter#297).
+upstream tracker reference in lib/core/storage/migration/migration_executor.dart:331:    // (koniz-dev/flutter-starter#565).
+upstream tracker reference in lib/core/storage/migration/migrations/migration_v1_to_v2.dart:66:    // left alone (koniz-dev/flutter-starter#281).
+upstream tracker reference in lib/core/storage/migration/migrations/migration_v1_to_v2.dart:82:    // (koniz-dev/flutter-starter#417).
+upstream tracker reference in lib/core/storage/secure_storage_service.dart:14:/// Platform-specific configuration (koniz-dev/flutter-starter#571):
+upstream tracker reference in lib/core/storage/secure_storage_service.dart:22:/// A list written before koniz-dev/flutter-starter#281 in the old
+upstream tracker reference in lib/core/storage/secure_storage_service.dart:36:  /// them on the method channel (koniz-dev/flutter-starter#374).
+upstream tracker reference in lib/core/storage/storage_service.dart:54:/// (koniz-dev/flutter-starter#297).
+upstream tracker reference in lib/core/storage/string_list_encoding.dart:6:/// (koniz-dev/flutter-starter#281). They are now stored as a JSON array, which
+upstream tracker reference in lib/core/storage/string_list_encoding.dart:37:/// **One residual ambiguity, accepted** (koniz-dev/flutter-starter#471). JSON
+upstream tracker reference in lib/core/utils/date_formatter.dart:105:  /// (koniz-dev/flutter-starter#63, #325).
+upstream tracker reference in lib/core/utils/lazy_loader.dart:77:        // that (koniz-dev/flutter-starter#328).
+upstream tracker reference in lib/core/utils/lazy_loader.dart:104:  /// one (koniz-dev/flutter-starter#328). Nothing is cached for the key, so a
+upstream tracker reference in lib/features/auth/data/datasources/auth_local_datasource.dart:41:  /// stood beside [tokenStore] until koniz-dev/flutter-starter#196 removed
+upstream tracker reference in lib/features/auth/data/datasources/auth_local_datasource.dart:140:  /// (koniz-dev/flutter-starter#168).
+upstream tracker reference in lib/features/auth/data/datasources/auth_remote_datasource.dart:86:  /// koniz-dev/flutter-starter#176.
+upstream tracker reference in lib/features/auth/data/models/auth_response_model.dart:13:/// (koniz-dev/flutter-starter#312).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:44:  /// (koniz-dev/flutter-starter#169).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:57:  /// (koniz-dev/flutter-starter#306). Nothing has been cached at that point:
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:70:  /// (koniz-dev/flutter-starter#445).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:154:    // and re-persist the pair being removed (koniz-dev/flutter-starter#169).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:174:    // (koniz-dev/flutter-starter#168).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:277:  /// (koniz-dev/flutter-starter#169).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:339:  /// (koniz-dev/flutter-starter#384).
+upstream tracker reference in lib/features/auth/data/repositories/auth_repository_impl.dart:347:  /// because the caller cannot tell. Before koniz-dev/flutter-starter#181 the
+upstream tracker reference in lib/features/auth/di/auth_providers.dart:92:/// (koniz-dev/flutter-starter#221). Dependency direction now runs one way:
+upstream tracker reference in lib/features/auth/domain/auth_error_codes.dart:6:/// when it should fire (koniz-dev/flutter-starter#181). Every path that means
+upstream tracker reference in lib/features/auth/domain/auth_error_codes.dart:13:/// gate is 100% (koniz-dev/flutter-starter#331).
+upstream tracker reference in lib/features/auth/domain/auth_error_codes.dart:28:  /// device. See koniz-dev/flutter-starter#169.
+upstream tracker reference in lib/features/auth/presentation/auth_redirect.dart:8:/// signed up and landed on `/` (koniz-dev/flutter-starter#348). [redirect] is
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.dart:29:    /// (koniz-dev/flutter-starter#414).
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.dart:81:      // (koniz-dev/flutter-starter#306).
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.dart:121:      // (koniz-dev/flutter-starter#306).
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.dart:195:  /// and the other way round (koniz-dev/flutter-starter#347). Each screen
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.dart:225:        // (koniz-dev/flutter-starter#181). The data layer sets this code on
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.freezed.dart:23:/// (koniz-dev/flutter-starter#414).
+upstream tracker reference in lib/features/auth/presentation/providers/auth_provider.freezed.dart:232:/// (koniz-dev/flutter-starter#414).
+upstream tracker reference in lib/features/auth/presentation/screens/login_screen.dart:21:  /// on to the other auth screen (koniz-dev/flutter-starter#348).
+upstream tracker reference in lib/features/auth/presentation/screens/login_screen.dart:111:                    // text in `error` (koniz-dev/flutter-starter#414).
+upstream tracker reference in lib/features/auth/presentation/screens/register_screen.dart:19:  /// on to the other auth screen (koniz-dev/flutter-starter#348).
+upstream tracker reference in lib/features/auth/presentation/screens/register_screen.dart:124:                    // text in `error` (koniz-dev/flutter-starter#414).
+upstream tracker reference in lib/features/auth/presentation/widgets/auth_form_body.dart:11:/// be reached (koniz-dev/flutter-starter#349). The minimum height keeps the
+upstream tracker reference in lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:18:/// (koniz-dev/flutter-starter#207). Writing one now would ship vendor code
+upstream tracker reference in lib/features/feature_flags/data/services/local_feature_flags_service.dart:9:/// There is deliberately **no environment level** (koniz-dev/flutter-starter#279).
+upstream tracker reference in lib/features/feature_flags/data/services/local_feature_flags_service.dart:81:  /// (koniz-dev/flutter-starter#318).
+upstream tracker reference in lib/features/feature_flags/domain/entities/feature_flag.dart:80:  /// No shipped source produces this since koniz-dev/flutter-starter#279:
+upstream tracker reference in lib/features/feature_flags/presentation/providers/feature_flags_providers.dart:67:/// actually gates on (koniz-dev/flutter-starter#318).
+upstream tracker reference in lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:390:/// actually gates on (koniz-dev/flutter-starter#318).
+upstream tracker reference in lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:400:/// actually gates on (koniz-dev/flutter-starter#318).
+upstream tracker reference in lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart:417:  /// actually gates on (koniz-dev/flutter-starter#318).
+upstream tracker reference in lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:26:  /// [featureFlagProvider] on the old value (koniz-dev/flutter-starter#318).
+upstream tracker reference in lib/features/feature_flags/routing/feature_flags_routes.dart:14:/// deep link, or by URL on web (koniz-dev/flutter-starter#319). Where it is
+upstream tracker reference in lib/features/tasks/data/models/task_model.dart:40:/// since koniz-dev/flutter-starter#101).
+upstream tracker reference in lib/features/tasks/domain/entities/task.dart:67:  /// koniz-dev/flutter-starter#180 three callers minted their own - the update
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:38:  /// (koniz-dev/flutter-starter#415).
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:76:/// (koniz-dev/flutter-starter#353). [sessionEpochProvider] is the signal that
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:91:/// [TasksSessionWipe] (koniz-dev/flutter-starter#458).
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:104:/// could not (koniz-dev/flutter-starter#458).
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:194:    // (koniz-dev/flutter-starter#458).
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:244:  /// koniz-dev/flutter-starter#180 removed. The result is returned rather than
+upstream tracker reference in lib/features/tasks/presentation/providers/tasks_provider.dart:256:  /// (koniz-dev/flutter-starter#346).
+upstream tracker reference in lib/features/tasks/presentation/screens/task_detail_screen.dart:34:  /// (koniz-dev/flutter-starter#415).
+upstream tracker reference in lib/features/tasks/presentation/screens/task_detail_screen.dart:133:    // behind the closed screen (koniz-dev/flutter-starter#346).
+upstream tracker reference in lib/features/tasks/presentation/screens/task_detail_screen.dart:180:              // (koniz-dev/flutter-starter#514). A deep link has nothing to
+upstream tracker reference in lib/features/tasks/routing/tasks_routes.dart:16:/// (koniz-dev/flutter-starter#353).
+upstream tracker reference in lib/main.dart:46:// Refs koniz-dev/flutter-starter#101
+upstream tracker reference in lib/main.dart:69:  // the auth slice fills them (koniz-dev/flutter-starter#221).
+upstream tracker reference in lib/main.dart:107:    // error (koniz-dev/flutter-starter#412).
+upstream tracker reference in lib/shared/accessibility/accessibility_widgets.dart:97:    // (koniz-dev/flutter-starter#351). This node replaces the button's: it
+upstream tracker reference in lib/shared/accessibility/accessibility_widgets.dart:165:    // (koniz-dev/flutter-starter#351).
+upstream tracker reference in lib/shared/design_system/tokens/app_colors.dart:76:  /// (koniz-dev/flutter-starter#350).
+upstream tracker reference in lib/shared/theme/app_theme.dart:81:        // 4.5:1 (koniz-dev/flutter-starter#350). Filled buttons keep
+upstream tracker reference in pubspec.yaml:113:  # spelling Flutter accepts (koniz-dev/flutter-starter#330). Already in the
+upstream tracker reference in pubspec.yaml:161:  # every target (koniz-dev/flutter-starter#278, #398) - but a web client
+upstream tracker reference in scripts/ci/build_all.sh:77:# koniz-dev/flutter-starter#135. The guard already runs in
+upstream tracker reference in scripts/ci/build_all.sh:165:# koniz-dev/flutter-starter#335: production builds only an App Bundle, but this
+upstream tracker reference in scripts/ci/bump_version.sh:136:# (koniz-dev/flutter-starter#342). awk keeps every other line byte for byte.
+upstream tracker reference in scripts/ci/generate_changelog.sh:17:# `sed -i` split (koniz-dev/flutter-starter#282: the BSD branch used to abort
+upstream tracker reference in scripts/ci/release.sh:68:# what created it. Before koniz-dev/flutter-starter#282 a failed step 4 left a
+upstream tracker reference in scripts/ci/verify_apk_signer.sh:17:# (koniz-dev/flutter-starter#62); then greping for `Signer #1 certificate DN:`,
+upstream tracker reference in scripts/ci/verify_apk_signer.sh:19:# v2-signed build (koniz-dev/flutter-starter#153). As a script it can be pointed
+upstream tracker reference in scripts/dev/create_feature.ps1:302:# them (koniz-dev/flutter-starter#442). The formatter, likewise, decides where
+upstream tracker reference in scripts/dev/create_feature.sh:307:# them (koniz-dev/flutter-starter#442). The formatter, likewise, decides where
+upstream tracker reference in scripts/dev/format_dart.sh:24:  # format` reformats the tree *and* exits 1 (koniz-dev/flutter-starter#341).
+upstream tracker reference in scripts/dev/setup_ci.dart:17:// production (koniz-dev/flutter-starter#334). Without --deploy-trigger the
+upstream tracker reference in scripts/test/calculate_layer_coverage.sh:17:# the parse (koniz-dev/flutter-starter#332):
+upstream tracker reference in scripts/test/format_check_test.sh:2:# A format *check* must report, not rewrite (koniz-dev/flutter-starter#341).
+upstream tracker reference in scripts/test/pre_commit_hook_test.sh:3:# Tests for .githooks/pre-commit in a fresh clone (koniz-dev/flutter-starter#300).
+upstream tracker reference in scripts/test/release_scripts_test.sh:4:# throwaway fixture repositories (koniz-dev/flutter-starter#282).
+upstream tracker reference in scripts/test/release_scripts_test.sh:164:# --- bump_version.sh keeps a trailing comment (koniz-dev/flutter-starter#342)
+upstream tracker reference in scripts/test/run_e2e_tests.sh:28:# one file (koniz-dev/flutter-starter#578).
+upstream tracker reference in scripts/test/test_coverage.sh:91:# raw file (koniz-dev/flutter-starter#332). The default exclusions are the ones
+upstream tracker reference in test/acceptance/acceptance_helpers.dart:48:/// and a forced logout never reaches the router (koniz-dev/flutter-starter#288).
+upstream tracker reference in test/acceptance/forced_logout_acceptance_test.dart:68:    // (koniz-dev/flutter-starter#288).
+upstream tracker reference in test/acceptance/list_view_states_acceptance_test.dart:11:/// Visual evidence for koniz-dev/flutter-starter#65, criterion 2.
+upstream tracker reference in test/acceptance/logout_failure_acceptance_test.dart:116:      // (koniz-dev/flutter-starter#288).
+upstream tracker reference in test/acceptance/logout_failure_acceptance_test.dart:174:      // log text kept in `error` (koniz-dev/flutter-starter#414).
+upstream tracker reference in test/acceptance/session_restore_acceptance_test.dart:70:  // (koniz-dev/flutter-starter#288).
+upstream tracker reference in test/core/accessibility/focus_announcer_direction_test.dart:1:// Regression tests for koniz-dev/flutter-starter#65, criterion 6.
+upstream tracker reference in test/core/config/app_config_getters_used_test.dart:5:// nothing (koniz-dev/flutter-starter#280). A getter test only proves a knob
+upstream tracker reference in test/core/config/app_config_getters_used_test.dart:20:  // Documented as "Reserved, not wired" by koniz-dev/flutter-starter#319.
+upstream tracker reference in test/core/config/app_config_test.dart:168:        // Regression cover for koniz-dev/flutter-starter#59: the dump used to
+upstream tracker reference in test/core/config/app_config_test.dart:327:        // Regression cover for koniz-dev/flutter-starter#59.
+upstream tracker reference in test/core/config/dart_defines_test.dart:141:      // koniz-dev/flutter-starter#278. dart2js resolves the const table like
+upstream tracker reference in test/core/config/dart_defines_test.dart:156:      // (koniz-dev/flutter-starter#322).
+upstream tracker reference in test/core/config/enable_toggles_have_readers_test.dart:2:// says that it does not (koniz-dev/flutter-starter#319).
+upstream tracker reference in test/core/config/env_typed_getters_test.dart:3:// lacks the key (koniz-dev/flutter-starter#322).
+upstream tracker reference in test/core/config/environment_define_path_test.dart:3:// (koniz-dev/flutter-starter#321).
+upstream tracker reference in test/core/config/environment_define_path_test.dart:8:// (koniz-dev/flutter-starter#602). `flutter test` runs each file in its own
+upstream tracker reference in test/core/config/unknown_environment_test.dart:2:// silently treated as "none of them" (koniz-dev/flutter-starter#321).
+upstream tracker reference in test/core/config/unknown_environment_test.dart:52:  // (koniz-dev/flutter-starter#602).
+upstream tracker reference in test/core/di/provider_graph_acyclic_test.dart:1:// The DI graph after koniz-dev/flutter-starter#221 removed the
+upstream tracker reference in test/core/di/provider_graph_acyclic_test.dart:118:        // this counter (koniz-dev/flutter-starter#169).
+upstream tracker reference in test/core/di/providers_test.dart:417:        // (koniz-dev/flutter-starter#101). It opts out of Riverpod 3's default
+upstream tracker reference in test/core/errors/dio_exception_mapper_test.dart:746:    // koniz-dev/flutter-starter#305: body fields were cast with `as String?`,
+upstream tracker reference in test/core/errors/http_status_failures_test.dart:2:// (koniz-dev/flutter-starter#309).
+upstream tracker reference in test/core/localization/currency_symbol_test.dart:2:// (koniz-dev/flutter-starter#327).
+upstream tracker reference in test/core/localization/device_locale_test.dart:2:// (koniz-dev/flutter-starter#324).
+upstream tracker reference in test/core/localization/failure_localizations_test.dart:2:// text (koniz-dev/flutter-starter#323).
+upstream tracker reference in test/core/localization/invalid_credentials_message_test.dart:2:// (koniz-dev/flutter-starter#479, split from #445).
+upstream tracker reference in test/core/localization/locale_setter_test.dart:2:// (koniz-dev/flutter-starter#545). Its doc used to say it "persists the
+upstream tracker reference in test/core/localization/localized_formatters_l10n_test.dart:1:// Regression tests for koniz-dev/flutter-starter#65, criteria 7 and 9.
+upstream tracker reference in test/core/localization/localized_formatters_l10n_test.dart:78:    // koniz-dev/flutter-starter#263: the future phrasing is translated too.
+upstream tracker reference in test/core/localization/localized_formatters_test.dart:261:    // koniz-dev/flutter-starter#263: future dates used to fall through to
+upstream tracker reference in test/core/localization/screen_literal_keys_test.dart:2:// (koniz-dev/flutter-starter#352). #513 switches the screen over; this pins
+upstream tracker reference in test/core/localization/supported_locales_test.dart:1:// Regression tests for koniz-dev/flutter-starter#65, criteria 8, 10 and 12.
+upstream tracker reference in test/core/logging/file_log_open_failure_test.dart:2:// (koniz-dev/flutter-starter#421).
+upstream tracker reference in test/core/logging/file_log_open_failure_test.dart:89:  // koniz-dev/flutter-starter#447: openWrite starts its own lazy open, which
+upstream tracker reference in test/core/logging/log_file_cap_test.dart:2:// (koniz-dev/flutter-starter#589). Rotation used to shift `.1..maxFiles-1` up
+upstream tracker reference in test/core/logging/log_output_test.dart:17:  // (logFiles.isNotEmpty)` guards that never ran (koniz-dev/flutter-starter#371).
+upstream tracker reference in test/core/logging/log_output_test.dart:40:  // nested groups never assigned it (koniz-dev/flutter-starter#370).
+upstream tracker reference in test/core/logging/log_output_test.dart:1669:          // (koniz-dev/flutter-starter#589).
+upstream tracker reference in test/core/logging/logging_service_output_test.dart:13:// koniz-dev/flutter-starter#576: through the injected output a test sees the
+upstream tracker reference in test/core/logging/production_logging_test.dart:2:// (koniz-dev/flutter-starter#320).
+upstream tracker reference in test/core/logging/production_logging_test.dart:130:            // test had completed (koniz-dev/flutter-starter#418).
+upstream tracker reference in test/core/network/adapters/dio_network_client_test.dart:152:  // koniz-dev/flutter-starter#276: ApiClient._send wraps an unexpected
+upstream tracker reference in test/core/network/api_client_cache_policy_test.dart:6:// Regression cover for koniz-dev/flutter-starter#77. Before the fix,
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:5:// Regression cover for koniz-dev/flutter-starter#46: ErrorInterceptor used to
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:511:  // koniz-dev/flutter-starter#298: a 401 that was refreshed and replayed
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:618:  // koniz-dev/flutter-starter#299: AuthInterceptor skipped the refresh for any
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:691:  // Regression cover for koniz-dev/flutter-starter#88: retry became reachable
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:814:  // koniz-dev/flutter-starter#276. AuthInterceptor used to end the error chain
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:878:      // koniz-dev/flutter-starter#315.
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:997:  // koniz-dev/flutter-starter#286. Once AuthInterceptor forwarded its failures
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:1045:    // Since koniz-dev/flutter-starter#304 a transient replay failure no
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:1236:  // koniz-dev/flutter-starter#290. The head request's replay - the one whose
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:1333:  // koniz-dev/flutter-starter#295. onRequest checked the request's generation
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:1462:  // koniz-dev/flutter-starter#314. onRequest awaited the token read without a
+upstream tracker reference in test/core/network/api_client_interceptor_chain_test.dart:1526:  // koniz-dev/flutter-starter#315. AuthInterceptor logged out, without a
+upstream tracker reference in test/core/network/api_client_patch_and_cancel_test.dart:2:// (koniz-dev/flutter-starter#316).
+upstream tracker reference in test/core/network/api_client_test.dart:151:        // Refs koniz-dev/flutter-starter#46.
+upstream tracker reference in test/core/network/api_client_test.dart:212:  // koniz-dev/flutter-starter#369: the groups these replace only asserted that
+upstream tracker reference in test/core/network/api_client_timeouts_test.dart:2:// (koniz-dev/flutter-starter#280): ApiClient set only connect and receive
+upstream tracker reference in test/core/network/cache_freshness_test.dart:2:// (koniz-dev/flutter-starter#310).
+upstream tracker reference in test/core/network/cache_index_race_test.dart:2:// (koniz-dev/flutter-starter#311).
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:4:// Regression cover for koniz-dev/flutter-starter#114. Before the fix,
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:212:/// (koniz-dev/flutter-starter#168).
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:349:        // so used to be wrong (koniz-dev/flutter-starter#168). Two
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:459:        // koniz-dev/flutter-starter#315.)
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:530:    // koniz-dev/flutter-starter#168 criterion 4. The happy-path comparison
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:668:  // koniz-dev/flutter-starter#303. AuthInterceptor treated every failed
+upstream tracker reference in test/core/network/forced_logout_cache_test.dart:753:        // Core may not import the feature (koniz-dev/flutter-starter#221), so
+upstream tracker reference in test/core/network/forced_logout_session_test.dart:4:// Regression cover for koniz-dev/flutter-starter#127. `AuthInterceptor`
+upstream tracker reference in test/core/network/forced_logout_session_test.dart:109:        // them (koniz-dev/flutter-starter#221). Without this the
+upstream tracker reference in test/core/network/forced_logout_session_test.dart:194:            // them (koniz-dev/flutter-starter#221). Without this the
+upstream tracker reference in test/core/network/forced_logout_session_test.dart:271:          // them (koniz-dev/flutter-starter#221). Without this the
+upstream tracker reference in test/core/network/head_replay_failure_test.dart:2:// (koniz-dev/flutter-starter#304).
+upstream tracker reference in test/core/network/interceptors/api_logging_interceptor_test.dart:587:    /// Refs koniz-dev/flutter-starter#78.
+upstream tracker reference in test/core/network/interceptors/api_logging_redaction_rules_test.dart:2:// rule (koniz-dev/flutter-starter#367).
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:1:// Regression cover for koniz-dev/flutter-starter#59.
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_refresh_queue_test.dart:9:// (koniz-dev/flutter-starter#121). The two concurrency tests used to stand in
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_session_generation_test.dart:1:// Regression cover for koniz-dev/flutter-starter#169.
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_session_generation_test.dart:374:    // (koniz-dev/flutter-starter#315): a caller-sent header now queues behind
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_session_generation_test.dart:508:    // koniz-dev/flutter-starter#368: the test above calls logout() first, and
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_session_generation_test.dart:557:            // The production seam wiring (koniz-dev/flutter-starter#221):
+upstream tracker reference in test/core/network/interceptors/auth_interceptor_test.dart:212:      // koniz-dev/flutter-starter#315: the header used to skip the refresh and
+upstream tracker reference in test/core/network/interceptors/cache_interceptor_timestamp_test.dart:5:// Regression cover for koniz-dev/flutter-starter#188. Before the fix,
+upstream tracker reference in test/core/network/interceptors/path_query_redaction_test.dart:2:// (koniz-dev/flutter-starter#313).
+upstream tracker reference in test/core/network/interceptors/retry_backoff_test.dart:3:// (koniz-dev/flutter-starter#577, split from #376). The delays are measured
+upstream tracker reference in test/core/network/interceptors/retry_doc_example_test.dart:2:// ApiClient.post really has (koniz-dev/flutter-starter#296).
+upstream tracker reference in test/core/network/interceptors/retry_interceptor_test.dart:232:  // Regression cover for koniz-dev/flutter-starter#88.
+upstream tracker reference in test/core/network/replayed_response_logging_test.dart:2:// (koniz-dev/flutter-starter#477).
+upstream tracker reference in test/core/network/request_body_replay_test.dart:1:// A replayed request must carry its body again (koniz-dev/flutter-starter#284).
+upstream tracker reference in test/core/network/ssl_pinning_test.dart:1:// Regression cover for koniz-dev/flutter-starter#59.
+upstream tracker reference in test/core/network/ssl_pinning_web_test.dart:1:// Pinning on Flutter web (koniz-dev/flutter-starter#307).
+upstream tracker reference in test/core/security/infrastructure/freerasp_service_impl_test.dart:4:// (koniz-dev/flutter-starter#388).
+upstream tracker reference in test/core/security/infrastructure/freerasp_service_impl_test.dart:10:// listener is attached. That is koniz-dev/flutter-starter#317, not what is
+upstream tracker reference in test/core/security/infrastructure/freerasp_start_retry_test.dart:2:// start protection once (koniz-dev/flutter-starter#317).
+upstream tracker reference in test/core/session/session_epoch_test.dart:2:// (koniz-dev/flutter-starter#452).
+upstream tracker reference in test/core/startup/startup_reachability_test.dart:16:/// Regression suite for koniz-dev/flutter-starter#101.
+upstream tracker reference in test/core/startup/startup_reachability_test.dart:131:  /// Refs koniz-dev/flutter-starter#160
+upstream tracker reference in test/core/startup/startup_reachability_test.dart:384:  // koniz-dev/flutter-starter#412: a release build with a mistyped
+upstream tracker reference in test/core/storage/adapters/secure_token_delete_failure_test.dart:2:// (koniz-dev/flutter-starter#308).
+upstream tracker reference in test/core/storage/migration/fresh_install_no_language_test.dart:2:// (koniz-dev/flutter-starter#417).
+upstream tracker reference in test/core/storage/migration/migration_executor_guards_test.dart:2:// is removed (koniz-dev/flutter-starter#372). The audit found all three
+upstream tracker reference in test/core/storage/migration/migration_read_failure_test.dart:1:// A failed version read is not a fresh install (koniz-dev/flutter-starter#297).
+upstream tracker reference in test/core/storage/secure_storage_keychain_options_test.dart:2:// (koniz-dev/flutter-starter#571, for #374).
+upstream tracker reference in test/core/storage/secure_storage_string_list_test.dart:2:// (koniz-dev/flutter-starter#281).
+upstream tracker reference in test/core/storage/secure_storage_string_list_test.dart:97:    // koniz-dev/flutter-starter#471: the residual ambiguity decodeStringList
+upstream tracker reference in test/core/utils/date_formatter_rollover_test.dart:2:// (koniz-dev/flutter-starter#325).
+upstream tracker reference in test/core/utils/image_cache_helper_test.dart:86:        // fail and none may be counted (koniz-dev/flutter-starter#371).
+upstream tracker reference in test/core/utils/lazy_loader_defects_test.dart:2:// cache (koniz-dev/flutter-starter#328).
+upstream tracker reference in test/docs/check_docs_link_scope_test.dart:2:// link that leaves the repository (koniz-dev/flutter-starter#573, split from
+upstream tracker reference in test/docs/check_docs_link_scope_test.dart:93:  // (koniz-dev/flutter-starter#588).
+upstream tracker reference in test/docs/doc_dart_defines_test.dart:6:// failed (koniz-dev/flutter-starter#277). `tool/doc_dart_defines.dart` is the
+upstream tracker reference in test/docs/doc_dart_defines_test.dart:9:// gate (koniz-dev/flutter-starter#379).
+upstream tracker reference in test/docs/doc_env_runs_test.dart:5:// (koniz-dev/flutter-starter#355); `tool/doc_env_runs.dart` is the rule that
+upstream tracker reference in test/docs/doc_env_runs_test.dart:7:// diff (koniz-dev/flutter-starter#434). This test pins the rule's behaviour on
+upstream tracker reference in test/docs/doc_signatures_test.dart:19:// is the direction koniz-dev/flutter-starter#89 actually drifted.
+upstream tracker reference in test/docs/doc_snippets.dart:69:/// exists and turn `flutter test` red (koniz-dev/flutter-starter#603).
+upstream tracker reference in test/docs/doc_snippets_rename_test.dart:2:// (koniz-dev/flutter-starter#603): the docs keep importing the template's
+upstream tracker reference in test/docs/doc_snippets_rename_test.dart:16:    // (koniz-dev/flutter-starter#626). The target is a name no rename uses.
+upstream tracker reference in test/docs/doc_symbols_test.dart:11://    still cites it - the direction koniz-dev/flutter-starter#182 actually
+upstream tracker reference in test/docs/doc_symbols_test.dart:193:  // koniz-dev/flutter-starter#554: a directive can name `Type.member`.
+upstream tracker reference in test/docs/doc_test_paths_test.dart:2:// (koniz-dev/flutter-starter#551, split from #360).
+upstream tracker reference in test/docs/doc_workflow_examples_test.dart:2:// (koniz-dev/flutter-starter#365).
+upstream tracker reference in test/docs/feature_di_docs_test.dart:9:// (koniz-dev/flutter-starter#356).
+upstream tracker reference in test/docs/i18n_guide_snippets_test.dart:2:// (koniz-dev/flutter-starter#359).
+upstream tracker reference in test/docs/lib_doc_snippets_test.dart:2:// (koniz-dev/flutter-starter#362).
+upstream tracker reference in test/docs/test_excerpts_test.dart:3:// (koniz-dev/flutter-starter#432: the security guide's sample tested a
+upstream tracker reference in test/docs/testing_guide_snippets_test.dart:2:// repository (koniz-dev/flutter-starter#360).
+upstream tracker reference in test/docs/testing_guide_trees_test.dart:2:// (koniz-dev/flutter-starter#572, split from #361).
+upstream tracker reference in test/features/auth/data/auth_wire_format_test.dart:2:// (koniz-dev/flutter-starter#312).
+upstream tracker reference in test/features/auth/data/datasources/auth_local_datasource_test.dart:723:  // Regression for koniz-dev/flutter-starter#168 criteria 2 and 3.
+upstream tracker reference in test/features/auth/data/datasources/auth_remote_datasource_failure_test.dart:5:// Criterion 4 of koniz-dev/flutter-starter#176: the transport boundary stopped
+upstream tracker reference in test/features/auth/data/repositories/auth_repository_impl_test.dart:177:      // koniz-dev/flutter-starter#181: the forced-logout decision now reads
+upstream tracker reference in test/features/auth/data/repositories/auth_repository_impl_test.dart:249:      // koniz-dev/flutter-starter#384. RFC 6749 section 5.2 answers a revoked
+upstream tracker reference in test/features/auth/data/repositories/auth_repository_impl_test.dart:518:      // Regression for koniz-dev/flutter-starter#168 criteria 1 and 3.
+upstream tracker reference in test/features/auth/data/repositories/auth_unreadable_response_test.dart:2:// (koniz-dev/flutter-starter#306).
+upstream tracker reference in test/features/auth/data/repositories/login_rejected_credentials_test.dart:2:// without matching on message text (koniz-dev/flutter-starter#309).
+upstream tracker reference in test/features/auth/presentation/providers/auth_provider_test.dart:373:      // koniz-dev/flutter-starter#181. The forced-logout decision used to read
+upstream tracker reference in test/features/auth/presentation/providers/auth_provider_test.dart:689:      // Expectation deliberately inverted by koniz-dev/flutter-starter#181.
+upstream tracker reference in test/features/auth/presentation/providers/auth_provider_test.dart:811:  // koniz-dev/flutter-starter#384, criterion 3. Driven through the real
+upstream tracker reference in test/features/auth/presentation/screens/auth_error_navigation_test.dart:2:// (koniz-dev/flutter-starter#347).
+upstream tracker reference in test/features/auth/presentation/screens/auth_forms_keyboard_test.dart:9:// koniz-dev/flutter-starter#349: LoginScreen and RegisterScreen were a
+upstream tracker reference in test/features/auth/presentation/screens/auth_localized_error_test.dart:17:// koniz-dev/flutter-starter#414: AuthNotifier stored `failure.message` - the
+upstream tracker reference in test/features/auth/presentation/screens/rejected_credentials_message_test.dart:2:// ended (koniz-dev/flutter-starter#445).
+upstream tracker reference in test/features/auth/register_deep_link_test.dart:18:// koniz-dev/flutter-starter#348: the guard parks a deep link as
+upstream tracker reference in test/features/feature_flags/data/services/local_feature_flags_service_test.dart:173:      // koniz-dev/flutter-starter#279. getLocalFlag used to consult
+upstream tracker reference in test/features/feature_flags/feature_flag_layers_agree_test.dart:2:// (koniz-dev/flutter-starter#318).
+upstream tracker reference in test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart:86:      // Arrange - koniz-dev/flutter-starter#264: the screen must read the
+upstream tracker reference in test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart:2:// (koniz-dev/flutter-starter#319).
+upstream tracker reference in test/features/home/presentation/screens/home_hint_localized_test.dart:8:// koniz-dev/flutter-starter#513 (split from #352): HomeScreen rendered its
+upstream tracker reference in test/features/tasks/data/models/task_model_test.dart:436:    // Regression cover for koniz-dev/flutter-starter#146: toJson() used to
+upstream tracker reference in test/features/tasks/domain/entities/task_test.dart:195:    // Refs koniz-dev/flutter-starter#180.
+upstream tracker reference in test/features/tasks/domain/usecases/create_task_usecase_test.dart:157:    // koniz-dev/flutter-starter#345: a blank title is a domain error, not a
+upstream tracker reference in test/features/tasks/domain/usecases/update_task_usecase_test.dart:166:    // koniz-dev/flutter-starter#345: the detail screen could save a blank
+upstream tracker reference in test/features/tasks/presentation/providers/tasks_provider_test.dart:175:    // koniz-dev/flutter-starter#180: the detail screen loads its task through
+upstream tracker reference in test/features/tasks/presentation/providers/tasks_provider_test.dart:394:    // koniz-dev/flutter-starter#346: the detail screen needs to know whether
+upstream tracker reference in test/features/tasks/presentation/providers/tasks_session_reset_test.dart:2:// (koniz-dev/flutter-starter#353).
+upstream tracker reference in test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart:86:// koniz-dev/flutter-starter#458. tasksSessionResetProvider deleted
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_navigation_test.dart:99:  // koniz-dev/flutter-starter#346: `_saveTask` popped whenever the screen was
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_screen_test.dart:297:        // offers Back instead (koniz-dev/flutter-starter#514).
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_screen_test.dart:428:      // koniz-dev/flutter-starter#180: the screen no longer stamps `updatedAt`.
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_screen_test.dart:533:      // koniz-dev/flutter-starter#345: a whitespace-only title used to pass
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_screen_test.dart:666:      // koniz-dev/flutter-starter#346: a failed create used to be dropped on
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_screen_test.dart:740:      // koniz-dev/flutter-starter#377: this test used to assert nothing - it
+upstream tracker reference in test/features/tasks/presentation/screens/task_detail_screen_test.dart:1143:        // (koniz-dev/flutter-starter#147 criterion 3). Asserted with
+upstream tracker reference in test/features/tasks/presentation/screens/task_not_found_test.dart:26:// koniz-dev/flutter-starter#514 (split from #352): the task detail screen's
+upstream tracker reference in test/features/tasks/presentation/screens/tasks_list_screen_test.dart:749:    // koniz-dev/flutter-starter#345: the validator checked the raw text, so a
+upstream tracker reference in test/features/tasks/presentation/screens/tasks_list_screen_test.dart:925:  // Criterion 3 of koniz-dev/flutter-starter#147: the row date must come from
+upstream tracker reference in test/features/tasks/presentation/screens/tasks_localized_error_test.dart:18:// koniz-dev/flutter-starter#415: TasksNotifier and TaskDetailScreen stored
+upstream tracker reference in test/helpers/helpers_test.dart:2:// used (koniz-dev/flutter-starter#375). The issue's three broken helpers -
+upstream tracker reference in test/main_test.dart:76:    // koniz-dev/flutter-starter#373: these used to check only that a theme
+upstream tracker reference in test/shared/accessibility/focus_manager_shadowing_test.dart:1:// Regression test for koniz-dev/flutter-starter#65, criterion 1.
+upstream tracker reference in test/shared/accessibility/single_button_node_test.dart:12:// koniz-dev/flutter-starter#351: AccessibleButton and AccessibleIconButton
+upstream tracker reference in test/shared/design_system/tokens/app_colors_test.dart:8:// koniz-dev/flutter-starter#184.
+upstream tracker reference in test/shared/design_system/tokens/app_typography_test.dart:9:// koniz-dev/flutter-starter#184.
+upstream tracker reference in test/shared/extensions/string_extensions_test.dart:23:      // koniz-dev/flutter-starter#261: the extension must agree with
+upstream tracker reference in test/shared/extensions/string_extensions_test.dart:24:      // Validators.isValidEmail on the koniz-dev/flutter-starter#63 cases.
+upstream tracker reference in test/shared/localized_strings_test.dart:1:// Regression tests for koniz-dev/flutter-starter#65, criteria 5, 6 and 11.
+upstream tracker reference in test/shared/localized_strings_test.dart:26:/// 6 of koniz-dev/flutter-starter#65.
+upstream tracker reference in test/shared/theme/login_error_contrast_test.dart:2:// what it is painted on, in both themes (koniz-dev/flutter-starter#350).
+upstream tracker reference in test/shared/theme/theme_contrast_test.dart:94:    // Text pairs (koniz-dev/flutter-starter#350): validation errors and the
+upstream tracker reference in test/shared/widgets/language_switcher_unknown_locale_test.dart:1:// Regression test for koniz-dev/flutter-starter#65, criterion 3.
+upstream tracker reference in test/shared/widgets/optimized_image_decoding_test.dart:1:// Regression tests for koniz-dev/flutter-starter#65, criterion 4.
+upstream tracker reference in test/shared/widgets/optimized_image_test.dart:168:  // (koniz-dev/flutter-starter#617). ImageCacheHelper's own tests cover the
+upstream tracker reference in test/shared/widgets/optimized_list_view_error_test.dart:1:// Regression tests for koniz-dev/flutter-starter#65, criterion 2.
+upstream tracker reference in test/tooling/acceptance_container_test.dart:2:// production does (koniz-dev/flutter-starter#288).
+upstream tracker reference in test/tooling/android_emulator_host_note_test.dart:2:// their machine (koniz-dev/flutter-starter#301).
+upstream tracker reference in test/tooling/android_emulator_host_note_test.dart:17:  // The BASE_URL comment (koniz-dev/flutter-starter#493).
+upstream tracker reference in test/tooling/android_kotlin_optout_test.dart:3:// (koniz-dev/flutter-starter#392).
+upstream tracker reference in test/tooling/android_kotlin_optout_test.dart:43:        'koniz-dev/flutter-starter#392).';
+upstream tracker reference in test/tooling/android_kotlin_optout_test.dart:50:        'built-in-Kotlin versions (koniz-dev/flutter-starter#392).';
+upstream tracker reference in test/tooling/android_release_signing_test.dart:2:// (koniz-dev/flutter-starter#344).
+upstream tracker reference in test/tooling/android_toolchain_floor_test.dart:1:// The Android toolchain floor check (koniz-dev/flutter-starter#387).
+upstream tracker reference in test/tooling/assertionless_test_guard_test.dart:1:// Every test body must assert something (koniz-dev/flutter-starter#377).
+upstream tracker reference in test/tooling/build_all_analyze_size_test.dart:2:// only the configured app (koniz-dev/flutter-starter#335).
+upstream tracker reference in test/tooling/check_env_assets_test.dart:154:    // clause of it gets a case. koniz-dev/flutter-starter#170: it used to be a
+upstream tracker reference in test/tooling/check_env_assets_test.dart:258:        // guard did before koniz-dev/flutter-starter#138: it reads the list,
+upstream tracker reference in test/tooling/check_env_assets_test.dart:351:      // koniz-dev/flutter-starter#170, the whole bug in one case. Every env
+upstream tracker reference in test/tooling/check_env_assets_test.dart:561:    // koniz-dev/flutter-starter#330. The guard used to read only block-style
+upstream tracker reference in test/tooling/check_env_assets_test.dart:593:    // koniz-dev/flutter-starter#398: the advice used to tell web adopters
+upstream tracker reference in test/tooling/ci_clean_tree_test.dart:2:// file modified (koniz-dev/flutter-starter#608, split from #338). The
+upstream tracker reference in test/tooling/ci_generated_code_check_test.dart:2:// (koniz-dev/flutter-starter#337).
+upstream tracker reference in test/tooling/ci_random_order_test.dart:3:// (koniz-dev/flutter-starter#462; #370 and #602 were order-dependent tests
+upstream tracker reference in test/tooling/claude_md_checks_table_test.dart:7:// (koniz-dev/flutter-starter#437). These tests read the workflows' real
+upstream tracker reference in test/tooling/e2e_target_parity_test.dart:2:// target (koniz-dev/flutter-starter#578, split from #378), and that target is
+upstream tracker reference in test/tooling/e2e_target_parity_test.dart:3:// the only E2E test (koniz-dev/flutter-starter#378).
+upstream tracker reference in test/tooling/e2e_target_parity_test.dart:46:    // (koniz-dev/flutter-starter#622).
+upstream tracker reference in test/tooling/env_guard_before_build_test.dart:2:// guard (koniz-dev/flutter-starter#336).
+upstream tracker reference in test/tooling/env_guard_before_build_test.dart:10:// lane by lane (koniz-dev/flutter-starter#507).
+upstream tracker reference in test/tooling/format_check_readonly_test.dart:1:// A format check must report, not rewrite (koniz-dev/flutter-starter#341).
+upstream tracker reference in test/tooling/import_rules_test.dart:40:  // koniz-dev/flutter-starter#176 it is intentional, not scheduled for a fix:
+upstream tracker reference in test/tooling/import_rules_test.dart:55:  // `context.pop()`. koniz-dev/flutter-starter#177 landed while this guard was
+upstream tracker reference in test/tooling/import_rules_test.dart:64:  // koniz-dev/flutter-starter#221 removed the edge: core now declares the
+upstream tracker reference in test/tooling/integration_test_readme_test.dart:2:// exist (koniz-dev/flutter-starter#585). The README said
+upstream tracker reference in test/tooling/integration_test_readme_test.dart:17:  // the README's lines about it go too (koniz-dev/flutter-starter#622).
+upstream tracker reference in test/tooling/launcher_icons_config_test.dart:2:// (koniz-dev/flutter-starter#339).
+upstream tracker reference in test/tooling/mason_state_ignored_test.dart:4:// (koniz-dev/flutter-starter#340). evidence:docs/verification/issue-340 runs a real
+upstream tracker reference in test/tooling/setup_brick_feature_rename_test.dart:6:// no longer existed (koniz-dev/flutter-starter#358).
+upstream tracker reference in test/tooling/setup_brick_feature_rename_test.dart:20:// every test inspects that one result (koniz-dev/flutter-starter#446). The
+upstream tracker reference in test/tooling/setup_ci_test.dart:2:// built nothing must not go green (koniz-dev/flutter-starter#334).
+upstream tracker reference in test/tooling/shellcheck_test.dart:2:// (koniz-dev/flutter-starter#302).
+upstream tracker reference in test/tooling/strip_markers_test.dart:3:// (koniz-dev/flutter-starter#409). Runs the tool in a scratch directory with
+upstream tracker reference in test/tooling/strip_markers_test.dart:76:  group('--remove-bricks (koniz-dev/flutter-starter#588)', () {
+upstream tracker reference in test/tooling/strip_sample_prose_test.dart:2:// marker (koniz-dev/flutter-starter#409).
+upstream tracker reference in test/tooling/test_coverage_script_test.dart:2:// (koniz-dev/flutter-starter#332).
+upstream tracker reference in test/tooling/test_helpers_used_test.dart:2:// (koniz-dev/flutter-starter#375).
+upstream tracker reference in test/tooling/test_readme_test.dart:2:// test/ tree (koniz-dev/flutter-starter#361).
+upstream tracker reference in test/tooling/text_literal_guard_test.dart:2:// (koniz-dev/flutter-starter#515, split from #352).
+upstream tracker reference in test/tooling/tool_readme_check_count_test.dart:2:// (koniz-dev/flutter-starter#564, split from #366).
+upstream tracker reference in test/tooling/workflow_hardening_test.dart:1:// Workflow hardening (koniz-dev/flutter-starter#343).
+upstream tracker reference in tool/README.md:23:  type (koniz-dev/flutter-starter#481). Added after koniz-dev/flutter-starter#89,
+upstream tracker reference in tool/README.md:29:  koniz-dev/flutter-starter#206, where `docs/architecture/contracts-map.md` -
+upstream tracker reference in tool/README.md:38:  koniz-dev/flutter-starter#355, where README's Quick Start and CONTRIBUTING
+upstream tracker reference in tool/README.md:39:  did exactly that (rule: koniz-dev/flutter-starter#434).
+upstream tracker reference in tool/README.md:44:  koniz-dev/flutter-starter#277, where the security guide built production with
+upstream tracker reference in tool/README.md:45:  a key nothing read (rule: koniz-dev/flutter-starter#379).
+upstream tracker reference in tool/README.md:49:  placeholders (`<...>`, `path/to`). Added after koniz-dev/flutter-starter#360,
+upstream tracker reference in tool/README.md:51:  koniz-dev/flutter-starter#551).
+upstream tracker reference in tool/README.md:83:member (koniz-dev/flutter-starter#554). It takes no fenced block and says
+upstream tracker reference in tool/README.md:128:the Mason bricks (koniz-dev/flutter-starter#333, #621). It cannot be combined
+upstream tracker reference in tool/README.md:133:links that are left still resolve (koniz-dev/flutter-starter#588). Deleting the
+upstream tracker reference in tool/README.md:149:strip variant (koniz-dev/flutter-starter#409).
+upstream tracker reference in tool/check_android_toolchain.dart:7:// (koniz-dev/flutter-starter#329). This turns the warning into a failure
+upstream tracker reference in tool/check_android_toolchain.dart:8:// (koniz-dev/flutter-starter#387).
+upstream tracker reference in tool/check_docs.dart:20://      existed (koniz-dev/flutter-starter#206).
+upstream tracker reference in tool/check_docs.dart:24://      koniz-dev/flutter-starter#355).
+upstream tracker reference in tool/check_docs.dart:28://      koniz-dev/flutter-starter#379).
+upstream tracker reference in tool/check_docs.dart:31://      (see `tool/doc_test_paths.dart`, koniz-dev/flutter-starter#551).
+upstream tracker reference in tool/check_docs.dart:147:        // nowhere else - test/README.md had four (koniz-dev/flutter-starter#573).
+upstream tracker reference in tool/check_env_assets.dart:24:// (koniz-dev/flutter-starter#330).
+upstream tracker reference in tool/check_env_assets.dart:41:// target, Flutter web included (koniz-dev/flutter-starter#278, #398). A bundled
+upstream tracker reference in tool/check_env_assets.dart:76://     koniz-dev/flutter-starter#135 for the release-build path;
+upstream tracker reference in tool/check_env_assets.dart:141:///     substring test used to let through (koniz-dev/flutter-starter#170).
+upstream tracker reference in tool/check_env_assets.dart:281:  /// (koniz-dev/flutter-starter#170).
+upstream tracker reference in tool/check_env_assets.dart:402:/// it (koniz-dev/flutter-starter#330).
+upstream tracker reference in tool/check_env_assets.dart:691:  // koniz-dev/flutter-starter#170 stayed quiet in CI.
+upstream tracker reference in tool/doc_dart_defines.dart:8:// (koniz-dev/flutter-starter#277). Nothing failed.
+upstream tracker reference in tool/doc_dart_defines.dart:17:// (koniz-dev/flutter-starter#379).
+upstream tracker reference in tool/doc_env_runs.dart:7:// (koniz-dev/flutter-starter#355).
+upstream tracker reference in tool/doc_signatures.dart:6:// (koniz-dev/flutter-starter#89).
+upstream tracker reference in tool/doc_signatures.dart:26:// Two parameters match when (koniz-dev/flutter-starter#481):
+upstream tracker reference in tool/doc_symbols.dart:7:// (koniz-dev/flutter-starter#182, split out as #206).
+upstream tracker reference in tool/doc_symbols.dart:71:/// (koniz-dev/flutter-starter#554).
+upstream tracker reference in tool/doc_symbols.dart:208:/// method, a getter or setter, or a field (koniz-dev/flutter-starter#554).
+upstream tracker reference in tool/doc_test_paths.dart:6:// it, and nothing noticed (koniz-dev/flutter-starter#360, #551).
+upstream tracker reference in tool/golden/stripped/lib/main.dart:46:// Refs koniz-dev/flutter-starter#101
+upstream tracker reference in tool/golden/stripped/lib/main.dart:69:  // the auth slice fills them (koniz-dev/flutter-starter#221).
+upstream tracker reference in tool/golden/stripped/lib/main.dart:107:    // error (koniz-dev/flutter-starter#412).
+upstream tracker reference in tool/strip_sample_features.dart:77:/// itself after a sample strip (koniz-dev/flutter-starter#622).
+upstream tracker reference in tool/strip_sample_features.dart:78:/// `feature-flags` and `tasks` regions go with their sample (koniz-dev/flutter-starter#409), and stay,
+upstream tracker reference in tool/strip_sample_features.dart:80:/// and `mason.yaml` under `--remove-bricks` (koniz-dev/flutter-starter#588).
+upstream tracker reference in tool/strip_sample_features.dart:95:/// (koniz-dev/flutter-starter#622). `--keep-samples` keeps it, because the
+upstream tracker reference in tool/strip_sample_features.dart:155:  // Mason bricks (koniz-dev/flutter-starter#333, #621).
+upstream tracker reference in tool/strip_sample_features.dart:159:  // `strip:bricks` prose along (koniz-dev/flutter-starter#588).
+upstream tracker reference in tool/strip_sample_features.dart:294:  // all since koniz-dev/flutter-starter#221 removed the three
+upstream tracker reference in tool/strip_sample_features.dart:310:  // `<!-- symbol: <path> <name> -->` (koniz-dev/flutter-starter#206), and
+upstream tracker reference in tool/strip_sample_features.dart:724:/// which is what happened on koniz-dev/flutter-starter#171.
+
+Move these to the maintainers branch, or reword them for an adopter.
+For a tracker reference, keep the reason and drop the pointer.
+exit: 1

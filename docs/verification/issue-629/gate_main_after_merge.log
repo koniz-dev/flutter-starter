@@ -1,0 +1,3 @@
+$ check_deliverable.sh origin/main  (main after #641)
+Deliverable: origin/main carries nothing that only serves the upstream process.
+exit: 0

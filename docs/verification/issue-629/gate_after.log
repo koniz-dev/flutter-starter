@@ -1,0 +1,3 @@
+$ check_deliverable.sh HEAD  (this branch, at 65815a4705d)
+Deliverable: HEAD carries nothing that only serves the upstream process.
+exit: 0
