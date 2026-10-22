@@ -1,0 +1,34 @@
+https://github.com/koniz-dev/flutter-starter/actions/runs/39835411771
+head 9b1f1587bdc8e4dce5714eef532c29e4933ad6cd
+Patrol on Android emulator: success
+   Set up job: success
+   Checkout code: success
+   Setup Flutter: success
+   Setup Java: success
+   Install dependencies: success
+   Add Pub global bin to PATH: success
+   Install Patrol CLI: success
+   Run Patrol tests: success
+   Reject an empty test run: success
+   Upload Patrol output: success
+   Post Setup Java: success
+   Post Setup Flutter: success
+   Post Checkout code: success
+   Complete job: success
+
+# Patrol output (ANSI stripped)
+🧪 E2E: app boots to a usable login screen
+        ✅   1. waitUntilVisible widgets with key [<'e2e_login_submit'>].
+        ✅   2. enterText widgets with type "TextField" (ignoring all but index 0).
+        ✅   3. enterText widgets with type "TextField" (ignoring all but index 1).
+✅ E2E: app boots to a usable login screen (integration_test/app_e2e_test.dart) (163s)
+🧪 E2E: auth -> home
+        ✅   1. tap widgets with key [<'e2e_demo_sign_in_fill'>].
+        ✅   2. tap widgets with key [<'e2e_login_submit'>].
+        ✅   3. waitUntilVisible widgets with key [<'e2e_home_content'>].
+✅ E2E: auth -> home (integration_test/app_e2e_test.dart) (182s)
+📝 Total: 2
+✅ Successful: 2
+❌ Failed: 0
+⏩ Skipped: 0
+  echo "::error::No 'Total:' summary in patrol output; cannot confirm any test ran."
