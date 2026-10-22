@@ -99,7 +99,7 @@ class LocalizedFormatters {
     // symbol for the locale. A hand-written symbol table used to override
     // the symbol and fell back to the bare ISO code for anything it lacked,
     // so VND - the currency of the app's own vi locale - printed as
-    // `150.000 VND` instead of `150.000 ₫` (koniz-dev/flutter-starter#327).
+    // `150.000 VND` instead of `150.000 ₫`.
     return NumberFormat.simpleCurrency(
       locale: locale.toString(),
       name: currencyCode,

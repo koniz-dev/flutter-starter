@@ -8,7 +8,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 abstract final class FailureCodes {
   /// Sign-in or registration was rejected because the email and password do
   /// not match an account - not an expired session, which plain
-  /// [AuthFailure] means (koniz-dev/flutter-starter#445, #479).
+  /// [AuthFailure] means.
   static const String invalidCredentials = 'INVALID_CREDENTIALS';
 }
 
@@ -19,7 +19,7 @@ abstract final class FailureCodes {
 /// an error which most likely cannot be solved by the library"), and a
 /// `ServerFailure` carries whatever the backend sent. Rendering it bypassed
 /// the ARB pipeline, so a Vietnamese or Arabic user saw English transport
-/// text (koniz-dev/flutter-starter#323).
+/// text.
 ///
 /// This never returns [Failure.message]. It maps the stable [Failure.code]
 /// values the app itself produces, then falls back to the [Failure] subtype,
