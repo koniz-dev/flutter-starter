@@ -1,0 +1,22 @@
+All tests passed!
+test/core/config/app_config_has_backend_test.dart: AppConfig.hasBackendFor a BASE_URL is a backend, a local server included
+test/core/config/app_config_has_backend_test.dart: AppConfig.hasBackendFor development with no BASE_URL has no backend
+test/core/config/app_config_has_backend_test.dart: AppConfig.hasBackendFor production always has one, through its default baseUrl
+test/core/config/app_config_has_backend_test.dart: AppConfig.hasBackendFor staging always has one, through its default baseUrl
+test/core/config/app_config_has_backend_test.dart: demo auth is on exactly when a debug build has no backend
+test/core/config/app_config_has_backend_test.dart: this test run: development, no BASE_URL, so no backend
+test/features/auth/demo/demo_auth_test.dart: criterion 2: demo mode is on only in an unconfigured debug build a configured BASE_URL turns it off
+test/features/auth/demo/demo_auth_test.dart: criterion 2: demo mode is on only in an unconfigured debug build a profile or release build can never enable it
+test/features/auth/demo/demo_auth_test.dart: criterion 2: demo mode is on only in an unconfigured debug build no BASE_URL, development, debug build: on
+test/features/auth/demo/demo_auth_test.dart: criterion 2: demo mode is on only in an unconfigured debug build the production environment turns it off
+test/features/auth/demo/demo_auth_test.dart: criterion 2: demo mode is on only in an unconfigured debug build the staging environment turns it off
+test/features/auth/demo/demo_auth_test.dart: criterion 2: demo mode is on only in an unconfigured debug build whitespace is not a BASE_URL
+test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend demo sign-in to home sends nothing over the network
+test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend the fill button and Login reach the home screen
+test/features/auth/demo/demo_auth_test.dart: criterion 3: login -> demo sign-in -> home, with no backend with demo mode off the login screen shows no demo card
+test/features/auth/demo/demo_auth_test.dart: criterion 3: removing it is one folder and the files that import it only the provider and the login screen import the demo
+test/features/auth/demo/demo_auth_test.dart: the demo data source a refresh token works once, then is spent
+test/features/auth/demo/demo_auth_test.dart: the demo data source a registered account can sign in again
+test/features/auth/demo/demo_auth_test.dart: the demo data source a wrong password is an AuthException, like a 401
+test/features/auth/demo/demo_auth_test.dart: the demo data source the demo account signs in and gets tokens
+test/features/auth/demo/demo_auth_test.dart: the demo data source the provider picks it only while demo mode is on
