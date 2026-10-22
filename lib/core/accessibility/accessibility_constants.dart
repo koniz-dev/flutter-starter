@@ -9,7 +9,7 @@
 /// described a guarantee nothing implemented (a focus-announcement debounce, a
 /// minimum readable font size, recommended font sizes, a decorative-icon label
 /// and a touch-target spacing) were removed rather than left to read as
-/// promises - see koniz-dev/flutter-starter#65.
+/// promises.
 class AccessibilityConstants {
   AccessibilityConstants._();
 
