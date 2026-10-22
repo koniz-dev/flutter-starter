@@ -5,6 +5,8 @@ import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/validators.dart';
+import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
+import 'package:flutter_starter/features/auth/demo/demo_sign_in_card.dart';
 import 'package:flutter_starter/features/auth/presentation/auth_redirect.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/auth/presentation/widgets/auth_form_body.dart';
@@ -56,6 +58,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (DemoAuth.enabled) ...[
+                DemoSignInCard(
+                  onFill: () {
+                    _emailController.text = DemoAuth.email;
+                    _passwordController.text = DemoAuth.password;
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(

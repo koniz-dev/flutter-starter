@@ -547,4 +547,15 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get homeAddScreensHint => 'Thêm màn hình trong lib/features/.';
+
+  @override
+  String get demoModeTitle => 'Chế độ demo';
+
+  @override
+  String demoModeBody(String email, String password) {
+    return 'Chưa cấu hình backend (BASE_URL trống), nên đăng nhập được mô phỏng ngay trên thiết bị. Dùng $email / $password, hoặc đăng ký tài khoản bất kỳ.';
+  }
+
+  @override
+  String get demoModeFill => 'Điền tài khoản demo';
 }

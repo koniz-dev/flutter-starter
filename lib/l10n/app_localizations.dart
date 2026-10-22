@@ -929,6 +929,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add screens under lib/features/.'**
   String get homeAddScreensHint;
+
+  /// Title of the card on the login screen shown while the app signs in offline because no backend is configured
+  ///
+  /// In en, this message translates to:
+  /// **'Demo mode'**
+  String get demoModeTitle;
+
+  /// Body of the demo-mode card on the login screen. Keep BASE_URL untranslated
+  ///
+  /// In en, this message translates to:
+  /// **'No backend is configured (BASE_URL is empty), so sign-in is simulated on this device. Use {email} / {password}, or register any account.'**
+  String demoModeBody(String email, String password);
+
+  /// Button on the demo-mode card that fills the login form with the demo account
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the demo account'**
+  String get demoModeFill;
 }
 
 class _AppLocalizationsDelegate

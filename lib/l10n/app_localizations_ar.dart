@@ -590,4 +590,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeAddScreensHint => 'أضف الشاشات ضمن lib/features/.';
+
+  @override
+  String get demoModeTitle => 'وضع العرض التجريبي';
+
+  @override
+  String demoModeBody(String email, String password) {
+    return 'لم يتم إعداد خادم خلفي (BASE_URL فارغ)، لذا تتم محاكاة تسجيل الدخول على هذا الجهاز. استخدم $email / $password، أو سجّل أي حساب.';
+  }
+
+  @override
+  String get demoModeFill => 'املأ الحساب التجريبي';
 }

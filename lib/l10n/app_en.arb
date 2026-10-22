@@ -661,5 +661,25 @@
   "homeAddScreensHint": "Add screens under lib/features/.",
   "@homeAddScreensHint": {
     "description": "Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated"
+  },
+  "demoModeTitle": "Demo mode",
+  "demoModeBody": "No backend is configured (BASE_URL is empty), so sign-in is simulated on this device. Use {email} / {password}, or register any account.",
+  "demoModeFill": "Fill in the demo account",
+  "@demoModeTitle": {
+    "description": "Title of the card on the login screen shown while the app signs in offline because no backend is configured"
+  },
+  "@demoModeBody": {
+    "description": "Body of the demo-mode card on the login screen. Keep BASE_URL untranslated",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "password": {
+        "type": "String"
+      }
+    }
+  },
+  "@demoModeFill": {
+    "description": "Button on the demo-mode card that fills the login form with the demo account"
   }
 }

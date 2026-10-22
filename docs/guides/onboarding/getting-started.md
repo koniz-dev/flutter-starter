@@ -129,6 +129,31 @@ flutter run -d <device-id>
 flutter run --release
 ```
 
+### Signing In Before You Have a Backend
+
+A debug build with `ENVIRONMENT=development` and no `BASE_URL` signs in
+against an in-process demo account instead of the network, so the app runs
+end to end on day one. The login screen shows a "Demo mode" card; its button
+fills `demo@example.com` / `demo1234`. Registering also works and lasts until
+the app restarts.
+
+Demo mode turns itself off as soon as `BASE_URL` is set (in `.env` or with
+`--dart-define`), in staging and production, and in every profile or release
+build. A demo session stays signed in after that switch until you sign out, so
+sign out (or clear the app's data) before pointing the app at a real backend.
+<!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
+To remove it entirely:
+
+1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/` and
+   `test/flutter_test_config.dart`.
+2. Delete the lines `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo lib`
+   still lists: two imports and one line in `auth_providers.dart`, two
+   imports and the `if (DemoAuth.enabled)` block in `login_screen.dart`.
+3. Delete this section.
+
+`flutter analyze` and `flutter test` then pass; the `demoMode*` strings in
+`lib/l10n/` are unused and can go too.
+
 ### Platform-Specific
 
 ```bash

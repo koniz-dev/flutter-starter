@@ -12,6 +12,10 @@ abstract final class UiKeys {
   /// Primary action on the register screen.
   static const registerSubmit = ValueKey<String>('e2e_register_submit');
 
+  /// Fills the login form with the demo account. Present only while the app
+  /// signs in offline because no backend is configured.
+  static const demoSignInFill = ValueKey<String>('e2e_demo_sign_in_fill');
+
   /// Home body after authentication (works for full and stripped home UIs).
   static const homeContent = ValueKey<String>('e2e_home_content');
 
