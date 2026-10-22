@@ -403,7 +403,7 @@ If you encounter issues during upgrade:
 
 ## Related Documentation
 
-- [CHANGELOG.md](../../../CHANGELOG.md) - Complete change history
+- [The starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md) - Every change to the starter, including breaking ones
 - [Getting Started](../onboarding/getting-started.md) - Initial setup
 - [Understanding the Codebase](../onboarding/understanding-codebase.md) - Architecture overview
 - [Common Tasks](../features/common-tasks.md) - Common development tasks
