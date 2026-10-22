@@ -80,7 +80,9 @@ class AppConfig {
   /// Base URL for API requests
   ///
   /// Environment-aware defaults:
-  /// - Development: `http://localhost:3000`
+  /// - Development: `http://localhost:3000`, which only a profile or release
+  ///   build ever contacts: without `BASE_URL` a development debug build has
+  ///   no backend ([hasBackend]) and signs in offline instead
   /// - Staging: `https://api-staging.example.com`
   /// - Production: `https://api.example.com`
   ///
@@ -104,6 +106,25 @@ class AppConfig {
         return 'http://localhost:3000';
     }
   }
+
+  /// Whether this build talks to a backend: `BASE_URL` is set, or
+  /// [environment] is not `development`.
+  ///
+  /// This is the one rule for "is there a backend". Where it is false in a
+  /// debug build, auth - the only feature that calls the network - signs in
+  /// with the offline demo account, so the app as a whole runs without a
+  /// server and nothing contacts the development [baseUrl] fallback. To use
+  /// a local server in development, set `BASE_URL` to it.
+  static bool get hasBackend => hasBackendFor(
+    environment: environment,
+    baseUrl: EnvConfig.get('BASE_URL'),
+  );
+
+  /// The rule behind [hasBackend], with every input explicit.
+  static bool hasBackendFor({
+    required String environment,
+    required String baseUrl,
+  }) => baseUrl.trim().isNotEmpty || environment != 'development';
 
   /// API timeout in seconds
   ///

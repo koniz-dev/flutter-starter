@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
-import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
@@ -9,12 +8,10 @@ import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 /// Offline demo sign-in, so a fresh copy of the app runs end to end before it
 /// has a backend.
 ///
-/// It is on only when **all** of these hold - otherwise the real
-/// `AuthRemoteDataSourceImpl` is used:
-///
-/// * `BASE_URL` is not configured (empty in `.env` and in `--dart-define`);
-/// * `ENVIRONMENT` is `development`;
-/// * the build is a debug build.
+/// It is on only in a debug build with no backend - [AppConfig.hasBackend]
+/// false: `ENVIRONMENT` is `development` and `BASE_URL` is empty in `.env`
+/// and in `--dart-define`. Otherwise the real `AuthRemoteDataSourceImpl` is
+/// used.
 ///
 /// Setting `BASE_URL`, building for staging or production, or building in
 /// profile or release mode turns it off, so it cannot ship by accident. To
@@ -33,19 +30,16 @@ abstract final class DemoAuth {
 
   /// Whether this build uses the demo sign-in.
   static bool get enabled =>
-      debugEnabledOverride ??
-      isEnabledFor(
-        debugBuild: kDebugMode,
-        environment: AppConfig.environment,
-        baseUrl: EnvConfig.get('BASE_URL'),
-      );
+      debugEnabledOverride ?? (kDebugMode && !AppConfig.hasBackend);
 
   /// The rule behind [enabled], with every input explicit.
   static bool isEnabledFor({
     required bool debugBuild,
     required String environment,
     required String baseUrl,
-  }) => debugBuild && environment == 'development' && baseUrl.trim().isEmpty;
+  }) =>
+      debugBuild &&
+      !AppConfig.hasBackendFor(environment: environment, baseUrl: baseUrl);
 }
 
 /// An [AuthRemoteDataSource] that never touches the network.
