@@ -1,0 +1,27 @@
+# e8101d6ea03: rename to my_app, then --apply 
+renamed tree (before strip): analyze clean
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+No issues found! (ran in 2.9s)
+analyze exit: 0
+
+# e8101d6ea03: rename to my_app, then --apply --remove-tasks
+renamed tree (before strip): analyze clean
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+No issues found! (ran in 2.8s)
+analyze exit: 0
+
+# e8101d6ea03: rename to my_app, then --apply --remove-feature-flags
+renamed tree (before strip): analyze clean
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+No issues found! (ran in 2.8s)
+analyze exit: 0
+
+# e8101d6ea03: rename to my_app, then --apply --keep-samples
+renamed tree (before strip): analyze clean
+Running build hooks...Running build hooks...Nothing to remove: --keep-samples keeps both samples. Add --remove-bricks to drop the Mason bricks.
+No issues found! (ran in 2.9s)
+analyze exit: 0
+

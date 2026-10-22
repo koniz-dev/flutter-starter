@@ -1,0 +1,35 @@
+# d3d2abfa255: rename to my_app, then --apply 
+renamed tree (before strip): analyze clean
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+   info • Sort directive sections alphabetically. Try sorting the directives • integration_test/app_e2e_test.dart:3:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/app_router.dart:8:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/navigation_extensions.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/routes_registry.dart:4:1 • directives_ordering
+4 issues found. (ran in 2.9s)
+analyze exit: 1
+
+# d3d2abfa255: rename to my_app, then --apply --remove-tasks
+renamed tree (before strip): analyze clean
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/navigation_extensions.dart:8:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/routes_registry.dart:8:1 • directives_ordering
+2 issues found. (ran in 3.0s)
+analyze exit: 1
+
+# d3d2abfa255: rename to my_app, then --apply --remove-feature-flags
+renamed tree (before strip): analyze clean
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/navigation_extensions.dart:8:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/core/routing/routes_registry.dart:8:1 • directives_ordering
+2 issues found. (ran in 2.8s)
+analyze exit: 1
+
+# d3d2abfa255: rename to my_app, then --apply --keep-samples
+renamed tree (before strip): analyze clean
+Running build hooks...Running build hooks...Nothing to remove: --keep-samples keeps both samples. Add --remove-bricks to drop the Mason bricks.
+No issues found! (ran in 2.9s)
+analyze exit: 0
+

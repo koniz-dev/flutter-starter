@@ -1,0 +1,18 @@
+https://github.com/koniz-dev/flutter-starter/actions/runs/39812941366
+head e8101d6ea03fa7c8b28af12fe318f33e0e7f40d0
+Strip renamed-both + analyze + test: success
+   Set up job: success
+   Checkout code: success
+   Decide the strip scope: success
+   Setup Flutter: success
+   Install dependencies (full starter): success
+   Rename to my_app first, as fork-and-customize Option B documents: success
+   Apply strip: success
+   Generate a feature slice and drop the bricks (keep-samples): skipped
+   The strip removed itself (sample variants): success
+   Install dependencies (after strip): success
+   Analyze stripped tree: success
+   Run tests (stripped tree): success
+   Post Setup Flutter: success
+   Post Checkout code: success
+   Complete job: success
