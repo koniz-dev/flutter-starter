@@ -204,6 +204,11 @@ void main() {
 
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(DemoSignInCard), findsOneWidget);
+      // Criterion 2: the demo path is labelled as demo, with its credentials.
+      expect(find.text('Demo mode'), findsOneWidget);
+      expect(find.textContaining('BASE_URL is empty'), findsOneWidget);
+      expect(find.textContaining(DemoAuth.email), findsOneWidget);
+      expect(find.text('Fill in the demo account'), findsOneWidget);
 
       await tester.tap(find.byKey(UiKeys.demoSignInFill));
       await tester.pump();
