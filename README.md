@@ -1,134 +1,90 @@
-# 🚀 Flutter Starter
+# Flutter Starter
 
-A highly modular, production-ready Flutter starter framework focusing on **Clean Architecture**, optional hardening (RASP), robust environment configuration, and extensive developer tooling.
+A Flutter app built on Clean Architecture: domain, data and presentation layers
+per feature, Riverpod for state and dependency injection, and a Dio-based
+network layer behind a transport-agnostic contract.
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.8+-0175C2?logo=dart)](https://dart.dev)
-[![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-blue)](docs/architecture/)
+What is in the box:
 
----
+- **Auth** with token refresh, session restore and forced logout. Until you
+  set `BASE_URL`, a debug build signs in offline with a demo account, so the
+  app runs end to end before you have a backend.
+- **Two sample features**, `tasks` (local CRUD) and `feature_flags`, showing a
+  complete slice each.
+- **Configuration** layered from `.env`, `--dart-define` and per-environment
+  defaults ([Configuration](docs/guides/configuration.md)).
+- **Optional hardening**: certificate pinning, and RASP via `freerasp`, which
+  is a no-op until you wire it ([Security](docs/guides/security/implementation.md)).
+- **Tests** mirroring `lib/` (unit and widget), acceptance goldens, and Patrol
+  end-to-end tests in `integration_test/`.
+- **Tooling**: Conventional Commits and format/analyze hooks, CI on every pull
+  request, feature scaffolding, release and deploy scripts.
 
-## 🌟 Key Highlights
-
-- 🏛️ **Clean Architecture:** Domain, Data, Presentation layers powered by `Riverpod` and `Freezed`.
-- 🛡️ **RASP (optional):** `freerasp` is in `pubspec.yaml`; the app defaults to a **no-op** `raspServiceProvider` until you wire a real implementation. See [Security implementation](docs/guides/security/implementation.md).
-- 🌐 **Network Protocol:** Resilient HTTP Client (`dio`) with intercepts and a detached WebSocket Real-Time Interface.
-- 🧪 **Comprehensive Automation:** Unit/widget/integration tests, optional E2E with **Patrol** (local or [manual CI workflow](.github/workflows/e2e-android.yml)).
-- 🎨 **1-Click Branding:** Native splash screens and launcher icons scaffolded straight from `logo.png`.
-- ⚙️ **Powerful Configurations:** Layered fallback — local `.env` (pass it as `--dart-define-from-file=.env`; never add it to `pubspec.yaml` assets, which would ship it in every release build), then `--dart-define` (native builds only, for the keys declared in `lib/core/config/dart_defines.dart`), then environment-aware defaults. See [Configuration](docs/guides/configuration.md).
-
-> Looking for the complete list of features and tech-stack? Check out the [**Comprehensive Documentation**](docs/README.md).
-
----
-
-## Super starter (fork and customize)
-
-- **[Super starter hub](docs/architecture/super-starter-hub.md)** — capability map and links
-- **[Choose your stack](docs/architecture/choose-your-stack.md)** — keep defaults vs swap adapters
-- **[Fork and customize](docs/guides/onboarding/fork-and-customize.md)** — rename package, Android/iOS ids, optional strip
-- **[Repository layout](docs/guides/onboarding/repository-layout.md)** — non-platform folders (`lib`, `test`, `docs`, `scripts`, …)
-
-### Mason brick (optional)
-
-With [Mason CLI](https://pub.dev/packages/mason_cli) installed:
+## Getting started
 
 ```bash
-dart pub global activate mason_cli
-mason get
-mason make flutter_starter_setup
-```
-
-#### Demo (GIF/video)
-
-If you want the README to feel “hands-on”, add a short demo clip showing feature generation.
-
-- **Suggested asset path**: `docs/assets/mason-generate-feature.gif`
-- **Suggested flow**:
-  - `mason get`
-  - `mason make feature_clean` (or your feature brick)
-  - quick peek at generated folders under `lib/features/<feature>/`
-
-Recording checklist: `docs/guides/support/mason-demo-script.md`.
-
-After recording, reference it here:
-
-```md
-![Mason demo](docs/assets/mason-generate-feature.gif)
-```
-
-<!-- strip:bricks start -->
-See [bricks/README.md](bricks/README.md) and [bricks/flutter_starter_setup/README.md](bricks/flutter_starter_setup/README.md). If you rename everything by hand and do not need Mason, you can remove **`bricks/`** and **`mason.yaml`**.
-Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run: it also drops the passages in the docs that link into them, which deleting by hand would leave dangling. <!-- strip:strip-tool line -->
-<!-- strip:bricks end -->
-
-To drop sample `tasks` and `feature_flags` without Mason: `dart run tool/strip_sample_features.dart --apply`. <!-- strip:strip-tool line -->
-
----
-
-## 🚀 Quick Start
-
-### 1. Installation
-
-Clone the repository and install dependencies:
-```bash
-git clone <repository-url> my_app
-cd my_app
 flutter pub get
+./scripts/dev/setup_git_hooks.sh
+flutter run
 ```
 
-### 2. Generate Boilerplate Code
-Run the build runner to generate Riverpod providers, JSON serialization, and Freezed unions:
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
+Generated code (Freezed, json_serializable, Riverpod) is committed; run
+`flutter pub run build_runner build --delete-conflicting-outputs` only after
+changing an annotated source.
 
-### 3. Native Branding (Optional)
-Drop an image to `assets/images/logo.png` and auto-generate Android and iOS splash screens/icons via:
-```bash
-./scripts/dev/setup_branding.sh
-```
+To point the app at your API, copy the example environment file, set
+`BASE_URL` in it, and pass it to the build:
 
-### 4. Application Configuration
-Initialize the local environment settings explicitly:
 ```bash
 cp .env.example .env
-```
-_(Open `.env` and fill out backend specifics before compiling)_
-
-### 5. Running
-```bash
 flutter run --dart-define-from-file=.env
 ```
-`.env` is not a Flutter asset (so it never ships in a release bundle); the
-`--dart-define-from-file` flag is how the app reads it. Plain `flutter run`
-ignores the file and runs on built-in defaults.
 
-### 6. E2E tests (Patrol, optional)
+`.env` is a build input, never a Flutter asset, so it does not ship inside the
+app. Without `--dart-define-from-file`, `flutter run` uses the built-in
+development defaults.
 
-Patrol does not run on every PR by default. Locally: `dart pub global activate patrol_cli 3.11.0` then `./scripts/test/run_e2e_tests.sh` (or `patrol test --target integration_test/app_e2e_test.dart`). On GitHub: **Actions → E2E Android (Patrol) → Run workflow** (Android emulator). Stable selectors use [`lib/core/constants/ui_keys.dart`](lib/core/constants/ui_keys.dart).
+Before pushing, run the same checks CI runs:
 
----
+```bash
+./scripts/dev/audit_template.sh
+```
 
-## 📚 Central Documentation
+## Working on the project
 
-Rather than cluttering this repository root, we've broken down every system behavior into dedicated guides. Start exploring:
+- [Getting started](docs/guides/onboarding/getting-started.md) - setup,
+  environments, running on each platform
+- [Understanding the codebase](docs/guides/onboarding/understanding-codebase.md)
+  and [Architecture](docs/architecture/README.md)
+- [Adding a feature](docs/api/examples/adding-features.md) - scaffold one with
+  `./scripts/dev/create_feature.sh <name>`
+- [Testing](docs/guides/testing/testing-summary.md), including the Patrol
+  end-to-end tests ([`integration_test/README.md`](integration_test/README.md))
+- [Deployment](docs/deployment/README.md) - store builds and CI
+- [All documentation](docs/README.md)
 
-*   📖 **[Documentation Home (Overview & Modules)](docs/README.md)** 
-*   🏛️ **[Architecture Decisions (Clean Architecture & Layers)](docs/architecture/README.md)**
-*   ⚙️ **[Configuration & Environment Overrides](docs/guides/configuration.md)**
-*   🌐 **[Network & Real-Time Websockets APIs](docs/api/core/network.md)**
-*   🛡️ **[Security, Anti-Tamper & RASP Implementation](docs/guides/security/implementation.md)**
-*   🧪 **[Testing & Automated Coverage Checks](docs/guides/testing/testing-summary.md)**
-*   🚀 **[Deployment (stores & CI)](docs/deployment/README.md)**
-*   🆕 **[Creating New Features](docs/api/examples/adding-features.md)**
+Contribution conventions (branches, commits, the quality gate) are in
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
----
+## Using this template
 
-## 🤝 Contributing & License
+This section is for setting the project up from the template. Delete it once
+that is done.
 
-We adhere to standard Conventional Commits and GitHooks to ensure clean delivery. Please review the [**Contributing Guide**](CONTRIBUTING.md) to learn how to open Pull Requests properly.
+1. **Rename** the package, display name and application ids:
+   [Fork and customize](docs/guides/onboarding/fork-and-customize.md).
+2. **Brand** it: put your logo at `assets/images/logo.png` and run
+   `./scripts/dev/setup_branding.sh` for launcher icons and splash screens.
+3. **Drop what you do not need.** `dart run tool/strip_sample_features.dart --apply` removes both sample features; see [`tool/README.md`](tool/README.md) for the variants. <!-- strip:strip-tool line -->
+4. **Connect your backend** by setting `BASE_URL`, which also turns the demo
+   sign-in off ([how to remove it](docs/guides/onboarding/getting-started.md#signing-in-before-you-have-a-backend)).
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+<!-- strip:bricks start -->
+The rename can also be done with Mason: `dart pub global activate mason_cli`,
+`mason get`, then `mason make flutter_starter_setup`. See
+[bricks/README.md](bricks/README.md). If you rename by hand, drop the bricks with `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, or add `--remove-bricks` to whichever strip you run. <!-- strip:strip-tool line -->
+<!-- strip:bricks end -->
 
----
-**Made with ❤️ using Flutter**
+## License
+
+MIT - see [LICENSE](LICENSE).
