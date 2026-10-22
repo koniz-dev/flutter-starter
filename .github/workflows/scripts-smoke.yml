@@ -262,7 +262,7 @@ jobs:
 
   manual-rename:
     if: inputs.job == 'all' || inputs.job == 'manual-rename'
-    name: fork-and-customize Option B (my_app) + analyze + scaffold
+    name: fork-and-customize Option B (my_app, My App) + analyze + test + scaffold
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -299,6 +299,29 @@ jobs:
           # Step 3.
           flutter pub get
           dart fix --apply --code=directives_ordering
+
+      # Section 2 of the same guide, extracted rather than copied, so the job
+      # goes red when the documented commands stop covering a file.
+      - name: Apply section 2 (display name and application ids) as documented
+        shell: bash
+        run: |
+          set -euo pipefail
+          doc=docs/guides/onboarding/fork-and-customize.md
+          awk "/^export NAME='My App'/{f=1} f{print} f&&/^flutter gen-l10n\$/{exit}" \
+            "$doc" > "$RUNNER_TEMP/section2.sh"
+          if ! grep -q '^flutter gen-l10n$' "$RUNNER_TEMP/section2.sh"; then
+            echo "could not extract section 2 from $doc" >&2
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/section2.sh"
+          bash -euo pipefail "$RUNNER_TEMP/section2.sh"
+          awk "/^git grep -n -i -e 'flutter starter'/{f=1} f{print} f&&/# prints nothing\$/{exit}" \
+            "$doc" > "$RUNNER_TEMP/leftovers.sh"
+          cat "$RUNNER_TEMP/leftovers.sh"
+          if bash "$RUNNER_TEMP/leftovers.sh"; then
+            echo "the template's display name or ids are still in the tree" >&2
+            exit 1
+          fi
 
       - name: The renamed tree analyzes clean
         run: flutter analyze

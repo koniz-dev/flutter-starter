@@ -1,5 +1,5 @@
 name: flutter_starter
-description: A production-ready Flutter starter project.
+description: A Flutter app built on Clean Architecture.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
