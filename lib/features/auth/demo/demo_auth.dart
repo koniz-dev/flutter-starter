@@ -24,7 +24,8 @@ abstract final class DemoAuth {
   /// Password of [email]; it satisfies the login form's validators.
   static const String password = 'demo1234';
 
-  /// Forces demo mode on or off, for tests. `null` uses [isEnabledFor].
+  /// Forces demo mode on or off, for tests. `null` applies the rule: a debug
+  /// build without [AppConfig.hasBackend].
   @visibleForTesting
   static bool? debugEnabledOverride;
 
