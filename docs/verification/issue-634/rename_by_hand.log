@@ -1,0 +1,111 @@
+# 74ea936dfb3
+## section 2 as extracted:
+export NAME='My App'                    # display name
+export PACKAGE=my_app                   # the package name from section 1
+export ANDROID_ID=com.mycompany.my_app  # Android namespace and applicationId
+export APPLE_ID=com.mycompany.myApp     # iOS and macOS bundle identifier
+export ORG="${ANDROID_ID%.*}"
+
+# The display name and the template ids, everywhere outside docs/.
+git grep -lz -e 'Flutter Starter' -e 'com\.example\.flutter' -- . \
+  ':!docs' ':!bricks' ':!LICENSE' ':!.github/workflows/scripts-smoke.yml' \
+  | xargs -0 perl -pi -e '
+      s/com\.example\.flutterStarter/$ENV{APPLE_ID}/g;
+      s/com\.example\.flutter_starter/$ENV{ANDROID_ID}/g;
+      s/Flutter Starter/$ENV{NAME}/g'
+
+# The launcher label and Patrol's app name are the display name; in the
+# desktop and web runners the bare template name is the binary, window
+# and page name.
+perl -pi -e 's/android:label="flutter_starter"/android:label="$ENV{NAME}"/' \
+  android/app/src/main/AndroidManifest.xml
+perl -pi -e 's/^(  app_name:) flutter_starter$/$1 $ENV{NAME}/' pubspec.yaml
+perl -pi -e 's/flutter_starter/$ENV{PACKAGE}/g; s/com\.example/$ENV{ORG}/g' \
+  ios/Runner/Info.plist web/index.html web/manifest.json \
+  linux/CMakeLists.txt linux/runner/my_application.cc \
+  windows/CMakeLists.txt windows/runner/Runner.rc windows/runner/main.cpp \
+  macos/Runner/Configs/AppInfo.xcconfig macos/Runner.xcodeproj/project.pbxproj \
+  macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+
+# MainActivity and the Patrol test runner live in a directory named after
+# the Android id, and must stay in the same package.
+for src in main/kotlin androidTest/java; do
+  mkdir -p "android/app/src/$src/${ANDROID_ID//.//}"
+  git mv android/app/src/$src/com/example/flutter_starter/* \
+    "android/app/src/$src/${ANDROID_ID//.//}/"
+done
+
+flutter gen-l10n
+Because l10n.yaml exists, the options defined there will be used instead.
+To use the command line arguments, delete the l10n.yaml file in the Flutter project.
+
+
+section 2 exit: 0
+## leftover check (prints nothing when clean):
+git grep -n -i -e 'flutter starter' -e 'com\.example\.flutter' -- . \
+  ':!docs' ':!test' ':!bricks' ':!LICENSE' \
+  ':!.github/workflows/scripts-smoke.yml'   # prints nothing
+grep exit: 1 (1 = nothing found)
+## git status --short | head
+ M .github/workflows/deploy-android.yml
+ M CONTRIBUTING.md
+ M README.md
+ M android/app/build.gradle.kts
+RM android/app/src/androidTest/java/com/example/flutter_starter/MainActivityTest.java -> android/app/src/androidTest/java/com/mycompany/my_app/MainActivityTest.java
+ M android/app/src/main/AndroidManifest.xml
+RM android/app/src/main/kotlin/com/example/flutter_starter/MainActivity.kt -> android/app/src/main/kotlin/com/mycompany/my_app/MainActivity.kt
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/data/models/{{feature_name}}_model.dart
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/data/repositories/{{feature_name}}_repository_impl.dart
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/di/{{feature_name}}_providers.dart
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/domain/repositories/{{feature_name}}_repository.dart
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/domain/usecases/get_{{feature_name}}_by_id_usecase.dart
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/providers/{{feature_name}}_provider.dart
+ M bricks/feature_clean/__brick__/lib/features/{{feature_name}}/presentation/screens/{{feature_name}}_screen.dart
+ M bricks/feature_clean/__brick__/test/features/{{feature_name}}/{{#include_tests}}{{feature_name}}_repository_impl_test.dart{{/include_tests}}
+ M examples/performance_examples.dart
+ M fastlane/Appfile
+ M fastlane/Fastfile
+ M fastlane/README.md
+ M integration_test/app_e2e_test.dart
+ M ios/ExportOptions.plist
+ M ios/Runner.xcodeproj/project.pbxproj
+ M ios/Runner/Info.plist
+ M ios/fastlane/Appfile
+ M ios/fastlane/Fastfile
+ M lib/core/accessibility/accessibility_helpers.dart
+ M lib/core/accessibility/focus_announcer.dart
+ M lib/core/config/app_config.dart
+ M lib/core/config/env_config.dart
+ M lib/core/constants/api_endpoints.dart
+ M lib/core/constants/app_constants.dart
+ M lib/core/di/providers.dart
+ M lib/core/errors/dio_exception_mapper.dart
+ M lib/core/errors/exception_to_failure_mapper.dart
+ M lib/core/feature_flags/feature_flags_manager.dart
+ M lib/core/localization/failure_localizations.dart
+ M lib/core/localization/localization_extensions.dart
+ M lib/core/localization/localization_providers.dart
+ M lib/core/localization/localization_service.dart
+ M lib/core/localization/localized_formatters.dart
+ M lib/core/logging/logging_examples.dart
+ M lib/core/logging/logging_providers.dart
+ M lib/core/logging/logging_service.dart
+ M lib/core/network/adapters/dio_network_client.dart
+ M lib/core/network/api_client.dart
+ M lib/core/network/interceptors/api_logging_interceptor.dart
+ M lib/core/network/interceptors/auth_interceptor.dart
+ M lib/core/network/interceptors/cache_interceptor.dart
+ M lib/core/network/interceptors/error_interceptor.dart
+ M lib/core/network/interceptors/performance_interceptor.dart
+ M lib/core/network/interceptors/retry_interceptor.dart
+ M lib/core/network/realtime/noop_realtime_client.dart
+ M lib/core/network/realtime/raw_websocket_client.dart
+ M lib/core/network/realtime/realtime_providers.dart
+ M lib/core/network/ssl_pinning.dart
+ M lib/core/performance/infrastructure/firebase_performance_service.dart.template
+ M lib/core/performance/noop_performance_service.dart
+ M lib/core/performance/performance.dart
+ M lib/core/performance/performance_providers.dart
+ M lib/core/performance/performance_repository_mixin.dart
+No issues found! (ran in 3.1s)
+03:04 +3455 ~14: All tests passed!

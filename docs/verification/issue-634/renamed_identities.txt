@@ -1,0 +1,41 @@
+# Visible names and ids after Option B + section 2 (my_app / My App / com.mycompany.my_app / com.mycompany.myApp)
+15:        android:label="My App"
+51:    namespace = "com.mycompany.my_app"
+62:        applicationId = "com.mycompany.my_app"
+7:	<key>CFBundleDisplayName</key>
+8-	<string>My App</string>
+--
+15:	<key>CFBundleName</key>
+16-	<string>my_app</string>
+374:				PRODUCT_BUNDLE_IDENTIFIER = com.mycompany.myApp;
+390:				PRODUCT_BUNDLE_IDENTIFIER = com.mycompany.myApp.RunnerTests;
+8:PRODUCT_NAME = my_app
+11:PRODUCT_BUNDLE_IDENTIFIER = com.mycompany.myApp
+14:PRODUCT_COPYRIGHT = Copyright © 2025 com.mycompany. All rights reserved.
+83:        packageName: 'com.mycompany.my_app',
+88:        bundleIds: ['com.mycompany.myApp'],
+16:  static const String appName = 'My App';
+lib/main.dart:153:      title: 'My App',
+lib/core/startup/startup_failure_app.dart:38:      title: 'My App',
+3:  "appTitle": "My App",
+7:  "welcome": "Welcome to My App with Clean Architecture!",
+213:  app_name: My App
+215:    package_name: com.mycompany.my_app
+7:set(BINARY_NAME "my_app")
+10:set(APPLICATION_ID "com.mycompany.my_app")
+61:add_dependencies(${BINARY_NAME} flutter_assemble)
+67:set_target_properties(${BINARY_NAME}
+94:install(TARGETS ${BINARY_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}"
+98:            VALUE "ProductName", "my_app" "\0"
+32:  <title>my_app</title>
+ios/fastlane/Fastfile:21:  APP_IDENTIFIER = "com.mycompany.myApp" # TODO: Update to match your bundle ID
+ios/fastlane/Fastfile:22:  APP_NAME = "My App" # TODO: Update to match your app name
+fastlane/Fastfile:24:  PACKAGE_NAME = "com.mycompany.my_app" # TODO: Update to match your package name
+fastlane/Fastfile:25:  APP_NAME = "My App" # TODO: Update to match your app name
+fastlane/Fastfile:126:      package_name: PACKAGE_NAME,
+fastlane/Fastfile:151:      package_name: PACKAGE_NAME,
+fastlane/Fastfile:173:      package_name: PACKAGE_NAME,
+fastlane/Fastfile:195:      package_name: PACKAGE_NAME,
+fastlane/Fastfile:220:      package_name: PACKAGE_NAME,
+RM android/app/src/androidTest/java/com/example/flutter_starter/MainActivityTest.java -> android/app/src/androidTest/java/com/mycompany/my_app/MainActivityTest.java
+RM android/app/src/main/kotlin/com/example/flutter_starter/MainActivity.kt -> android/app/src/main/kotlin/com/mycompany/my_app/MainActivity.kt
