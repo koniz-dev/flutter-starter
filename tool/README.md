@@ -155,7 +155,7 @@ Prose about the Mason bricks uses `strip:bricks` and goes with
 
 Edit **`tool/golden/stripped/`** when the stripped baseline should change (e.g. new `AppRoutes`, `main` bootstrap). Mirrored paths include `lib/`, `test/core/routing/` (`app_router_test.dart`, `app_routes_test.dart`), and `integration_test/`. The tree is **excluded from** `flutter analyze` via `analysis_options.yaml` so it does not conflict with the real `lib/`.
 
-CI runs **Strip smoke** (`.github/workflows/strip-smoke.yml`): apply strip on a fresh checkout, then `flutter analyze` and `flutter test`.
+CI runs **Strip smoke** (`.github/workflows/strip-smoke.yml`): apply strip on a fresh checkout, then `flutter analyze` and `flutter test`. It runs on its own only in the template repository; in a repository created from the template, run it from the Actions tab when you change the strip tool or its goldens.
 <!-- strip:strip-tool end -->
 
 See also [Fork and customize](../docs/guides/onboarding/fork-and-customize.md) and [Contracts map](../docs/architecture/contracts-map.md) (stripped vs full starter).

@@ -31,8 +31,8 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | [`test_coverage.sh`](test/test_coverage.sh) | Coverage reports (HTML, thresholds). |
 | [`calculate_layer_coverage.sh`](test/calculate_layer_coverage.sh) | Layer breakdown (used by CI). |
 | [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests. |
-| [`release_scripts_test.sh`](test/release_scripts_test.sh) | Fixture-repo tests for `generate_changelog.sh` and `release.sh`. Needs no Flutter. Run in CI on Ubuntu and macOS by [`release-scripts.yml`](../.github/workflows/release-scripts.yml). |
-| [`pre_commit_hook_test.sh`](test/pre_commit_hook_test.sh) | Runs the real `.githooks/pre-commit` in a fresh local clone: before `flutter pub get` it must refuse and rewrite nothing; after, pass a clean tree and fail a format violation. Needs Flutter. Run in CI by [`git-hooks.yml`](../.github/workflows/git-hooks.yml). |
+| [`release_scripts_test.sh`](test/release_scripts_test.sh) | Fixture-repo tests for `generate_changelog.sh` and `release.sh`. Needs no Flutter. Run in CI on Ubuntu and macOS by [`release-scripts.yml`](../.github/workflows/release-scripts.yml) - automatically only in the template repository, by hand (Actions tab) in a project created from it. |
+| [`pre_commit_hook_test.sh`](test/pre_commit_hook_test.sh) | Runs the real `.githooks/pre-commit` in a fresh local clone: before `flutter pub get` it must refuse and rewrite nothing; after, pass a clean tree and fail a format violation. Needs Flutter. Run in CI by [`git-hooks.yml`](../.github/workflows/git-hooks.yml) - automatically only in the template repository, by hand (Actions tab) in a project created from it. |
 
 ## Conventions
 
