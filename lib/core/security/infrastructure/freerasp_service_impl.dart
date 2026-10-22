@@ -9,9 +9,9 @@ import 'package:freerasp/freerasp.dart';
 /// Every detection freeRASP reports is forwarded to [onThreatDetected]: each
 /// [Threat] through [securityThreatFor], and malware, which freeRASP delivers
 /// on its own callback rather than as a [Threat], as
-/// [SecurityThreat.malware]. Nothing is dropped. Until
-/// koniz-dev/flutter-starter#390 the callback set only 10 of freeRASP's 23
-/// callbacks, so malware, an unlocked bootloader and automation, among
+/// [SecurityThreat.malware]. Nothing is dropped. The callback set once set
+/// only 10 of freeRASP's 23 callbacks, so malware, an unlocked bootloader and
+/// automation, among
 /// others, never reached a listener.
 class FreeRaspServiceImpl implements IRaspService {
   final _threatController = StreamController<SecurityThreat>.broadcast();
@@ -19,7 +19,7 @@ class FreeRaspServiceImpl implements IRaspService {
   /// Set only once a start has *succeeded*. It used to be set before the
   /// start was even attempted, so a start that threw - as the shipped
   /// placeholder config does on Android - turned every later call into a
-  /// silent no-op that protected nothing (koniz-dev/flutter-starter#317).
+  /// silent no-op that protected nothing.
   bool _started = false;
 
   /// The start in flight, shared by concurrent callers so protection is
