@@ -111,7 +111,7 @@ class RetryInterceptor extends Interceptor {
 
     // A body that can be read only once cannot be sent again. Not retrying
     // leaves the caller with the real failure rather than a StateError from
-    // the replay (koniz-dev/flutter-starter#284).
+    // the replay.
     if (!RequestBodyReplay.canReplay(err.requestOptions.data)) {
       if (_shouldRetry(err) && retryCount < maxRetries) {
         loggingService?.debug(

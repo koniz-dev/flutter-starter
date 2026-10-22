@@ -1,6 +1,6 @@
 // Transport facade. Its public request surface is typed entirely on
 // `lib/core/contracts/network_contracts.dart`, so a caller can hold an
-// ApiClient without importing `package:dio` (koniz-dev/flutter-starter#176).
+// ApiClient without importing `package:dio`.
 // ignore_for_file: directives_ordering
 
 import 'package:dio/dio.dart';
@@ -42,7 +42,7 @@ class ApiClient {
   /// [CacheConfig]'s one hour fresh, seven days as a fallback
   /// [retryInitialDelay] and [retryMaxJitter] - Override
   /// [RetryInterceptor]'s backoff, so a test that walks the retry path does
-  /// not sleep through it (koniz-dev/flutter-starter#577)
+  /// not sleep through it
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
@@ -112,7 +112,7 @@ class ApiClient {
     // Shares AuthInterceptor's token store on purpose: the cache must know
     // whether a credential exists, and it cannot learn that from the request
     // headers, which AuthInterceptor only writes at its own position in the
-    // chain. See CacheInterceptor's class doc and #77.
+    // chain. See CacheInterceptor's class doc.
     final cacheInterceptor = CacheInterceptor(
       storageService: storageService,
       tokenStore: authInterceptor.tokenStore,
@@ -121,7 +121,7 @@ class ApiClient {
 
     // A forced logout (401 whose refresh fails) has to empty the same cache
     // `AuthRepositoryImpl.logout()` empties, or the session boundary the user
-    // did not choose leaves cached bodies behind. See #114.
+    // did not choose leaves cached bodies behind.
     authInterceptor.attachResponseCache(cacheInterceptor);
 
     // Add interceptors - Order matters!
@@ -141,7 +141,7 @@ class ApiClient {
     // (omitted if loggingService is null)
     // PerformanceInterceptor sits after Auth and Retry so its trace records
     // how the request finally ended - a refreshed-and-replayed 401 is the
-    // replay's 200, not a failed 401 (koniz-dev/flutter-starter#298)
+    // replay's 200, not a failed 401
     // (omitted if performanceService is null)
     // ErrorInterceptor converts whatever survives into a domain exception
     dio.interceptors.addAll([
@@ -169,14 +169,14 @@ class ApiClient {
 
   /// Escape hatch onto the underlying Dio instance.
   ///
-  /// Deliberately kept, and deliberately not on any request path. Since #176
-  /// no verb on this class accepts or returns a dio type, so reaching for
+  /// Deliberately kept, and deliberately not on any request path. No verb on
+  /// this class accepts or returns a dio type, so reaching for
   /// `.dio` is an explicit opt-out of [INetworkClient] rather than something
   /// an ordinary `post()` forces on the caller. Use it for transport-level
   /// concerns only - swapping [Dio.httpClientAdapter], inspecting
   /// [Dio.interceptors], reading [BaseOptions]. Typing a data source on what
   /// it returns puts `package:dio` back in the feature layer, which is the
-  /// leak #176 closed.
+  /// leak the typed verbs closed.
   Dio get dio => _dio;
 
   /// Getter for transport-agnostic network contract.

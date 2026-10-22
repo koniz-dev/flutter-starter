@@ -17,8 +17,8 @@ import 'package:flutter_starter/core/performance/performance_attributes.dart';
 /// One trace per logical request. `ApiClient` registers this interceptor just
 /// before `ErrorInterceptor`, after `AuthInterceptor` and `RetryInterceptor`,
 /// so the trace records how the request finally ended: a 401 that was
-/// refreshed and replayed records the replay's 200, not the 401
-/// (koniz-dev/flutter-starter#298). A retry re-enters the chain with the same
+/// refreshed and replayed records the replay's 200, not the 401.
+/// A retry re-enters the chain with the same
 /// request options and keeps the trace already running, and each trace is
 /// stopped at most once.
 class PerformanceInterceptor extends Interceptor {

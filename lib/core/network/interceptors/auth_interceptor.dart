@@ -78,8 +78,7 @@ class AuthInterceptor extends Interceptor {
   /// running* holds the session in memory, and nothing in this layer is
   /// allowed to know what holds it. A forced logout that only emptied storage
   /// left the authenticated shell on screen, backed by credentials that no
-  /// longer existed, until the next cold start
-  /// (koniz-dev/flutter-starter#127).
+  /// longer existed, until the next cold start.
   ///
   /// A constructor dependency rather than an `attach...` call, unlike
   /// [_responseCache]: the sink is resolvable when `authInterceptorProvider`
@@ -88,16 +87,16 @@ class AuthInterceptor extends Interceptor {
   ///
   /// Optional for the same reason [_keyValueStore] is: hand-built call sites
   /// (and every test that drives this interceptor standalone) keep compiling,
-  /// and a missing sink degrades to exactly the pre-#127 behaviour rather than
-  /// to a crash.
+  /// and a missing sink degrades to not telling the running app - the
+  /// behaviour before the sink existed - rather than to a crash.
   final ISessionTerminationSink? _sessionSink;
 
   /// Which sign-in the credentials this interceptor writes belong to.
   ///
   /// The 401 handler reads it before awaiting the refresh and re-checks it
   /// before persisting anything, so a logout that lands during the round trip
-  /// cannot be undone by the response that arrives after it
-  /// (koniz-dev/flutter-starter#169). [_logoutUser] advances it for the same
+  /// cannot be undone by the response that arrives after it.
+  /// [_logoutUser] advances it for the same
   /// reason in the other direction.
   ///
   /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
@@ -216,8 +215,8 @@ class AuthInterceptor extends Interceptor {
       // order. A successful replay is resolved from onError, which in dio
       // ends the host chain: no interceptor there sees the replay's
       // response, so without these the replayed response was never logged
-      // (koniz-dev/flutter-starter#477) and the request's trace recorded the
-      // 401 or was never stopped (#298). ApiLoggingInterceptor redacts the
+      // and the request's trace recorded the
+      // 401 or was never stopped. ApiLoggingInterceptor redacts the
       // replay's fresh Authorization header like any other.
       dio.interceptors.addAll(
         host.interceptors.where(
@@ -258,7 +257,7 @@ class AuthInterceptor extends Interceptor {
   /// The failure code a refresher sets when the refresh token itself is dead.
   ///
   /// The same string as `AuthErrorCodes.refreshTokenExpired`, which core
-  /// cannot import (koniz-dev/flutter-starter#221); a test pins the two
+  /// cannot import; a test pins the two
   /// together. See [_endsSession].
   static const String refreshTokenExpiredCode = 'REFRESH_TOKEN_EXPIRED';
 
@@ -283,7 +282,7 @@ class AuthInterceptor extends Interceptor {
     // the earlier attempt's `extra` - of a request first sent under a session
     // that has since ended. Authorising it with the token stored now would
     // send it as whoever signed in during the backoff, and hand that user's
-    // response to the ended session's caller (koniz-dev/flutter-starter#289).
+    // response to the ended session's caller.
     // The first send stamps the generation, so only a re-send can find it
     // stale here; the check after the token read covers both.
     final issuedUnder = options.extra.putIfAbsent(
@@ -296,7 +295,7 @@ class AuthInterceptor extends Interceptor {
     // store that throws - `ITokenStore` is a public seam, and an `Error` gets
     // past the default store's own guard - would call neither `next` nor
     // `reject`: the caller's future would never complete, and the exception
-    // would surface as an uncaught zone error (koniz-dev/flutter-starter#314).
+    // would surface as an uncaught zone error.
     final String? token;
     try {
       token = await _tokenStore.getAccessToken();
@@ -317,7 +316,7 @@ class AuthInterceptor extends Interceptor {
     // Checked again because the read above is a platform call: a sign-out and
     // a different user's sign-in landing while it was pending return *their*
     // token, and sending it would run this session's request - first send or
-    // re-send - as the new user (koniz-dev/flutter-starter#295).
+    // re-send - as the new user.
     if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
 
     if (token != null && token.isNotEmpty) {
@@ -327,7 +326,7 @@ class AuthInterceptor extends Interceptor {
       // A re-send of a request this interceptor already authorised - a
       // `RetryInterceptor` attempt copies the earlier attempt's headers - and
       // the session has ended since. Leaving the header would put the ended
-      // session's bearer token on the wire (koniz-dev/flutter-starter#286).
+      // session's bearer token on the wire.
       // Only a header this interceptor wrote is removed; one the caller
       // attached itself is theirs to keep.
       options.headers.remove('Authorization');
@@ -384,8 +383,8 @@ class AuthInterceptor extends Interceptor {
   ///
   /// An exact match on the endpoint path, not `contains`: a route that merely
   /// contains `/auth/login` - `/users/auth/login-history` - is an ordinary
-  /// authenticated route and must refresh like any other
-  /// (koniz-dev/flutter-starter#299). The query string is ignored, and an
+  /// authenticated route and must refresh like any other.
+  /// The query string is ignored, and an
   /// absolute URL is reduced to its path below the base URL's.
   bool _shouldExcludeEndpoint(RequestOptions options) {
     return _excludedEndpoints.contains(_endpointPath(options));
@@ -427,7 +426,7 @@ class AuthInterceptor extends Interceptor {
     // `X-Retry-Count: 1` header that used to guard this could never be seen on
     // a replay, so the branch only ever fired for a caller that set the header
     // itself, logging it out without trying a refresh, and the header went to
-    // the server on every replay (koniz-dev/flutter-starter#315).
+    // the server on every replay.
 
     // If refresh is already in progress, queue this request
     if (_isRefreshing) {
@@ -472,7 +471,7 @@ class AuthInterceptor extends Interceptor {
         // the session is still good, so nothing is torn down and nothing is
         // replayed. The caller fails with the refresh failure as the cause
         // rather than with this 401, whose "please login again" would be
-        // false (koniz-dev/flutter-starter#303). refreshedToken stays null,
+        // false. refreshedToken stays null,
         // so the `finally` drain rejects every queued request too.
         _reject(handler, _refreshFailedTransiently(err, failure));
         return;
@@ -491,7 +490,7 @@ class AuthInterceptor extends Interceptor {
       // Checked again because the write above is a platform call: a logout or
       // sign-in landing while it was pending makes the replay belong to a
       // session that has ended, and sending it would put the fresh token on
-      // the wire after the user signed out (koniz-dev/flutter-starter#290).
+      // the wire after the user signed out.
       // Same exit as the check above, for the same reasons: no replay, no
       // _logoutUser(), and the `finally` drain rejects every queued request.
       if (!_sessionGeneration.isCurrent(generation)) {
@@ -508,7 +507,7 @@ class AuthInterceptor extends Interceptor {
       // and the `finally` drain still replays the queued requests with the
       // fresh token, exactly as a failed *queued* replay does. Sharing the
       // outer catch used to log the user out and reject every queued request
-      // over a single 503 (koniz-dev/flutter-starter#304).
+      // over a single 503.
       //
       // A replay answered 401 is the one exception: the server refused a token
       // it just issued, so the session really is unusable.
@@ -549,7 +548,7 @@ class AuthInterceptor extends Interceptor {
   /// the caller with no domain error inside. `DioNetworkClient` and
   /// `ApiClient._send` then turned it into `NetworkException("Instance of
   /// 'NetworkError'")`: a 401 reported as a connectivity failure, with an
-  /// unreadable message, and never logged (koniz-dev/flutter-starter#276).
+  /// unreadable message, and never logged.
   ///
   /// `next` hands the error on instead, so a 401 this interceptor gives up on
   /// is logged and then mapped by `ErrorInterceptor` - which ends the chain
@@ -563,9 +562,9 @@ class AuthInterceptor extends Interceptor {
   /// that reaches here has already ended the request's session or given up on
   /// it, and a failed replay's options carry the bearer token minted for the
   /// session that was just torn down: re-sending it put that token on the wire
-  /// after the forced logout and handed the caller a success
-  /// (koniz-dev/flutter-starter#286). Before #276 the early `reject` made the
-  /// same guarantee by accident; this states it on purpose.
+  /// after the forced logout and handed the caller a success.
+  /// An early `reject` once made the same guarantee by accident; this states
+  /// it on purpose.
   void _reject(ErrorInterceptorHandler handler, DioException error) {
     error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
     handler.next(error);
@@ -580,8 +579,7 @@ class AuthInterceptor extends Interceptor {
   ///   certificate on the refresh call;
   /// - an untagged [ServerFailure]. `AuthRepositoryImpl` tags the statuses
   ///   that mean the refresh token is dead (400, 401 and 403) with
-  ///   [refreshTokenExpiredCode], so what is left is 408, 429 and 5xx
-  ///   (koniz-dev/flutter-starter#384).
+  ///   [refreshTokenExpiredCode], so what is left is 408, 429 and 5xx.
   ///
   /// Everything else ends the session:
   ///
@@ -632,7 +630,7 @@ class AuthInterceptor extends Interceptor {
   /// The body goes through [RequestBodyReplay]: a [FormData] is sent as a
   /// clone, because dio finalizes the original on the first send, and a body
   /// that cannot be read twice fails the replay with a [DioException] naming
-  /// the reason (koniz-dev/flutter-starter#284).
+  /// the reason.
   Future<Response<dynamic>> _retryRequest(
     DioException err,
     String newToken,
@@ -681,7 +679,7 @@ class AuthInterceptor extends Interceptor {
         sendTimeout: newOptions.sendTimeout,
         // The original's per-request metadata travels with the replay - its
         // performance trace among it, which the replay client's borrowed
-        // PerformanceInterceptor finishes with the replay's outcome (#298).
+        // PerformanceInterceptor finishes with the replay's outcome.
         extra: Map<String, dynamic>.of(newOptions.extra),
       ),
     );
@@ -739,11 +737,10 @@ class AuthInterceptor extends Interceptor {
   /// leaves. Clearing only the tokens used to leave a user blob behind that
   /// `isAuthenticated()` read as a live session with no token to send, and
   /// leaving the response cache behind let bodies cached before the session
-  /// ended outlive it on the path the user does not control
-  /// (koniz-dev/flutter-starter#114).
+  /// ended outlive it on the path the user does not control.
   ///
   /// The last step tells the **running app**. Storage is what the next launch
-  /// reads; the in-memory session is what this launch renders, and until #127
+  /// reads; the in-memory session is what this launch renders, and once
   /// nothing dropped it, so the authenticated shell stayed up with no
   /// credentials behind it. The app is told *after* storage is emptied, so any
   /// listener reacting to the state change (the router guard, a screen
@@ -756,8 +753,7 @@ class AuthInterceptor extends Interceptor {
   /// The generation is advanced *first*, synchronously, ahead of every
   /// `await` below, so anything still in flight for the ending session - a
   /// refresh, a token write - is already stale by the time it reaches its own
-  /// check, rather than racing the teardown it is about to undo
-  /// (koniz-dev/flutter-starter#169).
+  /// check, rather than racing the teardown it is about to undo.
   Future<void> _logoutUser() async {
     // Nothing in flight may write a credential for the session being ended.
     // Unguarded on purpose: it is a synchronous integer increment that cannot
@@ -785,7 +781,7 @@ class AuthInterceptor extends Interceptor {
     //
     // Guarded rather than early-returned. An `if (x == null) return;` here
     // reads harmlessly while this is the last step and silently skips every
-    // step added after it - which is exactly the bug #114 had to fix.
+    // step added after it - which is exactly a bug this once had.
     final responseCache = _responseCache;
     if (responseCache != null) {
       try {

@@ -14,7 +14,7 @@ class DioNetworkClient implements INetworkClient {
   /// must finish within it. Dio's connect, send and receive timeouts each
   /// bound one phase of one attempt, so without this a request that keeps
   /// retrying has no upper bound at all. `ApiClient` passes
-  /// `AppConfig.apiTimeout` (`API_TIMEOUT`) - koniz-dev/flutter-starter#280.
+  /// `AppConfig.apiTimeout` (`API_TIMEOUT`).
   DioNetworkClient(this._dio, {Duration? deadline}) : _deadline = deadline;
 
   final Dio _dio;
@@ -23,7 +23,7 @@ class DioNetworkClient implements INetworkClient {
   /// Sends [request]; [cancellation], when given, cancels it on demand.
   ///
   /// The [INetworkClient] contract has no cancellation parameter, so it is an
-  /// optional extra here, used by `ApiClient` (koniz-dev/flutter-starter#316).
+  /// optional extra here, used by `ApiClient`.
   /// One dio [CancelToken] backs both the caller's cancellation and the
   /// deadline, and every re-send of the request - a retry, a 401 replay -
   /// carries it.

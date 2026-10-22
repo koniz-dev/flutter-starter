@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
-/// What a replayed request may send as its body
-/// (koniz-dev/flutter-starter#284).
+/// What a replayed request may send as its body.
 ///
 /// Two interceptors send a request a second time: `AuthInterceptor` after a
 /// successful 401 refresh, and `RetryInterceptor` after a transient failure.
