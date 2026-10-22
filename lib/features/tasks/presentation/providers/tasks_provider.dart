@@ -34,8 +34,7 @@ class TasksState {
   /// Error message if operation failed, null otherwise.
   ///
   /// This is [Failure.message]: English text built for logs. Screens render
-  /// [failure] through `localizedMessage` instead
-  /// (koniz-dev/flutter-starter#415).
+  /// [failure] through `localizedMessage` instead.
   final String? error;
 
   /// The failure behind [error], kept so a screen can show it in the user's
@@ -72,8 +71,8 @@ class TasksState {
 /// Tasks are stored device-wide under one `tasks_data` key, not per user, so
 /// the slice deletes them when a session ends or is replaced - logout, forced
 /// logout, login, register - rather than scoping the key: scoping would need
-/// the user id, and features may not import the auth slice that owns it
-/// (koniz-dev/flutter-starter#353). [sessionEpochProvider] is the signal that
+/// the user id, and features may not import the auth slice that owns it.
+/// [sessionEpochProvider] is the signal that
 /// crosses that boundary.
 ///
 /// The stored blob is deleted first and [tasksProvider] is invalidated only
@@ -88,7 +87,7 @@ class TasksState {
 ///
 /// A failed delete must not hand the previous user's tasks to the next one,
 /// so the wipe falls back, and as a last resort holds the list empty - see
-/// [TasksSessionWipe] (koniz-dev/flutter-starter#458).
+/// [TasksSessionWipe].
 final tasksSessionResetProvider = Provider<void>((ref) {
   ref.listen<int>(sessionEpochProvider, (_, _) {
     final wipe = ref.read(tasksSessionWipeProvider);
@@ -101,7 +100,7 @@ final tasksSessionResetProvider = Provider<void>((ref) {
 });
 
 /// Removes the stored tasks of a session that has ended, and remembers when it
-/// could not (koniz-dev/flutter-starter#458).
+/// could not.
 ///
 /// [run] never throws. In order:
 ///
@@ -190,8 +189,7 @@ class TasksNotifier extends _$TasksNotifier {
     state = state.copyWith(isLoading: true, clearError: true);
 
     // The previous session's tasks could not be wiped: what is stored may be
-    // theirs, so retry the wipe and load nothing until it succeeds
-    // (koniz-dev/flutter-starter#458).
+    // theirs, so retry the wipe and load nothing until it succeeds.
     final wipe = ref.read(tasksSessionWipeProvider);
     if (wipe.pending) {
       await wipe.run();
@@ -240,8 +238,8 @@ class TasksNotifier extends _$TasksNotifier {
   /// The detail screen needs one task rather than the whole list, but it must
   /// not reach past the notifier into `getTaskByIdUseCaseProvider`: that is the
   /// presentation boundary `tasks_list_screen.dart` already respects, and two
-  /// screens in one slice answering it differently is what
-  /// koniz-dev/flutter-starter#180 removed. The result is returned rather than
+  /// screens in one slice answering it differently is the drift this avoids.
+  /// The result is returned rather than
   /// written to [state] because a single opened task is a per-screen concern -
   /// folding it into the shared snapshot would make every list rebuild on it.
   Future<Result<Task?>> taskById(String id) {
@@ -252,8 +250,7 @@ class TasksNotifier extends _$TasksNotifier {
   /// Creates a new task with [title] and optional [description].
   ///
   /// Returns the use case's result so a caller can tell a failed save from a
-  /// successful one; the failure is also recorded in `state.error`
-  /// (koniz-dev/flutter-starter#346).
+  /// successful one; the failure is also recorded in `state.error`.
   Future<Result<Task>> createTask({
     required String title,
     String? description,

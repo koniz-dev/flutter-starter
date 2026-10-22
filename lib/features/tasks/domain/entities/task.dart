@@ -63,9 +63,9 @@ class Task {
   ///
   /// Every modification of a task restamps [updatedAt]; that is an invariant of
   /// the entity, so the stamp is minted here rather than by whichever caller
-  /// happens to be performing the modification. Before
-  /// koniz-dev/flutter-starter#180 three callers minted their own - the update
-  /// use case, `TasksRepositoryImpl.toggleTaskCompletion` in `data/`, and
+  /// happens to be performing the modification. Three callers once minted
+  /// their own - the update use case,
+  /// `TasksRepositoryImpl.toggleTaskCompletion` in `data/`, and
   /// `task_detail_screen.dart` in widget code - so the slice taught three
   /// different answers about where the rule lives.
   Task touch({DateTime? at}) => copyWith(updatedAt: at ?? DateTime.now());

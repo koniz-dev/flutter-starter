@@ -12,8 +12,7 @@ import 'package:go_router/go_router.dart';
 ///
 /// It also starts [tasksSessionResetProvider]: the router is built at startup,
 /// so this is where the tasks slice hooks into the app's lifetime and wipes the
-/// previous user's tasks on every session change
-/// (koniz-dev/flutter-starter#353).
+/// previous user's tasks on every session change.
 List<RouteBase> buildTasksRoutes(Ref ref) {
   ref.read(tasksSessionResetProvider);
   return <RouteBase>[

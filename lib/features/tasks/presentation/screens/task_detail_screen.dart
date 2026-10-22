@@ -30,8 +30,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
   Task? _task;
   bool _isLoading = true;
 
-  /// Why the task could not be shown, rendered in the user's language
-  /// (koniz-dev/flutter-starter#415).
+  /// Why the task could not be shown, rendered in the user's language.
   Failure? _error;
 
   /// Why the last save failed, shown above the form until the next attempt.
@@ -130,7 +129,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
 
     // A failed save keeps the editor open with the user's text intact and
     // says why here, rather than popping to a list that shows the error
-    // behind the closed screen (koniz-dev/flutter-starter#346).
+    // behind the closed screen.
     final failure = result.failureOrNull;
     if (failure != null) {
       setState(() => _saveError = failure);
@@ -176,8 +175,8 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
               ),
               const SizedBox(height: 16),
               // Retrying a lookup for a task that does not exist cannot help,
-              // so not-found offers a way out instead
-              // (koniz-dev/flutter-starter#514). A deep link has nothing to
+              // so not-found offers a way out instead.
+              // A deep link has nothing to
               // pop back to, so it goes to the tasks list.
               if (_error is NotFoundFailure)
                 ElevatedButton.icon(
