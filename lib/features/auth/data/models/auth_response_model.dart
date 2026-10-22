@@ -9,8 +9,7 @@ part 'auth_response_model.g.dart';
 /// request sends `refresh_token`, [UserModel] reads `avatar_url`, and this
 /// model reads `user`, `token` and `refresh_token`. A backend that answered
 /// `refreshToken` while the app sent `refresh_token` used to have its refresh
-/// token parsed as null and never stored, so the first expiry forced a logout
-/// (koniz-dev/flutter-starter#312).
+/// token parsed as null and never stored, so the first expiry forced a logout.
 @JsonSerializable(explicitToJson: true)
 class AuthResponseModel {
   /// Creates an [AuthResponseModel] with [user], [token], and optional

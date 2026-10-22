@@ -8,8 +8,7 @@ import 'dart:async';
 /// replace while that round trip is still open. Nothing in the refresh path
 /// used to notice, so a logout that landed mid-refresh was silently undone:
 /// the response came back and re-persisted a live credential pair onto a
-/// device the user had just signed out of
-/// (koniz-dev/flutter-starter#169).
+/// device the user had just signed out of.
 ///
 /// This is the marker that makes such a write detectable. A caller reads
 /// [current] **before** it starts the round trip and checks [isCurrent]
@@ -51,12 +50,12 @@ import 'dart:async';
 ///
 /// Every [invalidate] also notifies the listeners added with [addListener].
 /// That is how per-user state outside the auth slice - which may not import
-/// it - learns the user changed and resets (koniz-dev/flutter-starter#452).
+/// it - learns the user changed and resets.
 /// Most callers should listen through `sessionEpochProvider` rather than here.
 ///
 /// A plain listener list rather than a `ChangeNotifier`, on purpose: there is
 /// no disposed state. A forced logout can land after the provider container
-/// that owned this instance is gone (#127), and it must then notify nobody
+/// that owned this instance is gone, and it must then notify nobody
 /// rather than trip a use-after-dispose assertion.
 class SessionGeneration {
   int _current = 0;

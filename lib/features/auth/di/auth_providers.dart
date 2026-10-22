@@ -68,7 +68,7 @@ final Provider<AuthRepository> authRepositoryProvider =
         // The *same* instance `authInterceptorProvider` holds. Two of the
         // three credential writes behind one 401 refresh happen in this
         // repository and one in the interceptor; they only agree about which
-        // session is live if they share this counter (#169).
+        // session is live if they share this counter.
         sessionGeneration: ref.watch(sessionGenerationProvider),
       );
     });
@@ -88,8 +88,8 @@ final Provider<AuthRepository> authRepositoryProvider =
 /// that drives a real 401 through `apiClientProvider` must too.
 ///
 /// This replaced `authInterceptorProvider` living here, which was the single
-/// symbol closing the `lib/core/di/` <-> `lib/features/auth/di/` import cycle
-/// (koniz-dev/flutter-starter#221). Dependency direction now runs one way:
+/// symbol closing the `lib/core/di/` <-> `lib/features/auth/di/` import cycle.
+/// Dependency direction now runs one way:
 /// feature -> core.
 final List<Override> authModuleOverrides = <Override>[
   tokenRefresherProvider.overrideWith(
@@ -97,7 +97,7 @@ final List<Override> authModuleOverrides = <Override>[
         () => ref.read(authRepositoryProvider).refreshToken(),
   ),
   // The feature implements the contract and hands it down; `lib/core/network`
-  // never learns that a Riverpod notifier is what it just cleared (#127).
+  // never learns that a Riverpod notifier is what it just cleared.
   sessionTerminationSinkProvider.overrideWith(
     RiverpodSessionTerminationSink.new,
   ),

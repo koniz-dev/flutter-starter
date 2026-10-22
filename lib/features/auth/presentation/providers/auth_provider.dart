@@ -25,8 +25,7 @@ abstract class AuthState with _$AuthState {
     /// Error message if authentication failed, null otherwise.
     ///
     /// This is [Failure.message]: English text built for logs, not for
-    /// people. Screens render [failure] through `localizedMessage` instead
-    /// (koniz-dev/flutter-starter#414).
+    /// people. Screens render [failure] through `localizedMessage` instead.
     String? error,
 
     /// The failure behind [error], kept so a screen can show it in the
@@ -77,8 +76,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       result = await loginUseCase(email, password);
     } on Object catch (_) {
       // The use case is meant to return a Result, never throw. If one
-      // escapes anyway, the screen must not stay loading forever
-      // (koniz-dev/flutter-starter#306).
+      // escapes anyway, the screen must not stay loading forever.
       state = state.copyWith(
         isLoading: false,
         error: _unexpectedFailure.message,
@@ -117,8 +115,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       result = await registerUseCase(email, password, name);
     } on Object catch (_) {
       // The use case is meant to return a Result, never throw. If one
-      // escapes anyway, the screen must not stay loading forever
-      // (koniz-dev/flutter-starter#306).
+      // escapes anyway, the screen must not stay loading forever.
       state = state.copyWith(
         isLoading: false,
         error: _unexpectedFailure.message,
@@ -192,11 +189,11 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   ///
   /// Both auth screens render this one keepAlive state, so an error raised on
   /// the login screen was still showing when the user moved to registration,
-  /// and the other way round (koniz-dev/flutter-starter#347). Each screen
+  /// and the other way round. Each screen
   /// clears it as the user follows its link to the other one.
   ///
   /// Not cleared when a screen merely appears: a failed logout lands on the
-  /// login screen with its error on purpose (#52), and that must stay.
+  /// login screen with its error on purpose, and that must stay.
   void clearError() {
     if (state.error == null && state.failure == null) return;
     state = state.copyWith(error: null, failure: null);
@@ -221,8 +218,8 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
         // localisable, so matching on it fired on any error phrased "please
         // refresh and try again" - including the one this repository raises
         // when a *newer* session ended the refresh in flight, whose message
-        // reads "Session ended while the token refresh was in flight"
-        // (koniz-dev/flutter-starter#181). The data layer sets this code on
+        // reads "Session ended while the token refresh was in flight".
+        // The data layer sets this code on
         // every round trip that means the refresh token is dead.
         if (failure.code == AuthErrorCodes.refreshTokenExpired) {
           await logout();
@@ -278,7 +275,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// A cached user blob is **not** enough. `AuthRepository.getCurrentUser()`
   /// requires a non-empty access token as well, so a device holding a stale
   /// user blob with no credentials boots to `/login` instead of into the
-  /// authenticated shell it cannot make a single request from (#85).
+  /// authenticated shell it cannot make a single request from.
   ///
   /// ## Expired-but-present token: restore, do not bounce
   ///
@@ -291,7 +288,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   ///    a JWT the contract never promises - the token may be an opaque handle
   ///    or a session id - and a wrong guess signs out a perfectly good session.
   ///    The server is the only authority on expiry, and it answers with a 401.
-  /// 2. **The 401 path is now correct.** Since #59 `AuthInterceptor` refreshes
+  /// 2. **The 401 path is correct.** `AuthInterceptor` refreshes
   ///    once, replays the queued requests, and on a failed refresh clears the
   ///    tokens *and* the cached user blob - exactly the state a logout leaves.
   ///    The next `getCurrentUser()` therefore returns null and the next cold
@@ -304,8 +301,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   ///
   /// The accepted cost: a user whose refresh token is *also* dead sees one
   /// authenticated frame before the first 401 resolves. That is strictly better
-  /// than a guaranteed `/login` flash for every returning user, and it is the
-  /// trade #51 was about.
+  /// than a guaranteed `/login` flash for every returning user.
   Future<void> restoreSession() async {
     try {
       final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);

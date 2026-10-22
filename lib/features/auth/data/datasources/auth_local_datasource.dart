@@ -38,13 +38,12 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   ///
   /// Both parameters are contracts, and deliberately so: this file names no
   /// concrete storage type at all. A nullable secure-storage escape hatch
-  /// stood beside [tokenStore] until koniz-dev/flutter-starter#196 removed
-  /// it - it was the last concrete type named here, it taught two ways to
+  /// used to stand beside [tokenStore] and was removed - it was the last
+  /// concrete type named here, it taught two ways to
   /// build the same object, and it turned a missing argument into a runtime
   /// `ArgumentError` where the analyzer can now say so at compile time.
   ///
   /// A call site that passed one wraps it: `tokenStore: SecureTokenStore(x)`.
-  /// See the `#196` entry in `CHANGELOG.md`.
   AuthLocalDataSourceImpl({
     required this.storageService,
     required this.tokenStore,
@@ -136,8 +135,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   /// [IKeyValueStore.remove] - a `MissingPluginException` on a stripped build,
   /// a `PlatformException` from a corrupt prefs file - skipped
   /// [ITokenStore.clearAllTokens] and left the access token *and* the refresh
-  /// token in the Keychain/Keystore after an explicit logout
-  /// (koniz-dev/flutter-starter#168).
+  /// token in the Keychain/Keystore after an explicit logout.
   ///
   /// Both guards catch `on Object`, not `on Exception`, matching
   /// `AuthInterceptor._logoutUser()`. The narrower clause let an [Error]

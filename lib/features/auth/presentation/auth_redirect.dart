@@ -5,7 +5,7 @@ import 'package:flutter_starter/core/routing/app_routes.dart';
 /// link the router guard parked there.
 ///
 /// Without this a new user who opened a shared link and chose "Register"
-/// signed up and landed on `/` (koniz-dev/flutter-starter#348). [redirect] is
+/// signed up and landed on `/`. [redirect] is
 /// passed through untouched: the guard's `_destinationAfterAuth` is what
 /// rejects an off-site or looping target, and it runs on whichever auth route
 /// the user finishes on.

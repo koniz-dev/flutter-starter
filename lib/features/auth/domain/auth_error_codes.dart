@@ -3,14 +3,14 @@
 /// A session-lifetime decision must never rest on a failure's free-text
 /// `message`: the message is server-supplied, localisable and reworded without
 /// notice, so matching on it both fires when it should not and stays silent
-/// when it should fire (koniz-dev/flutter-starter#181). Every path that means
+/// when it should fire. Every path that means
 /// "this session cannot be revived" sets [refreshTokenExpired] explicitly, and
 /// the presentation layer reads only that.
 ///
 /// `abstract final` makes this a pure namespace - it cannot be instantiated,
 /// extended or implemented - without a private constructor. A `_()`
 /// constructor is a line no test can execute, and the domain layer's coverage
-/// gate is 100% (koniz-dev/flutter-starter#331).
+/// gate is 100%.
 abstract final class AuthErrorCodes {
   /// The stored refresh token can no longer produce an access token.
   ///
@@ -25,6 +25,6 @@ abstract final class AuthErrorCodes {
   ///
   /// Deliberately **not** a forced logout: whoever ended the session already
   /// tore it down, and a newer sign-in may already own the credentials on the
-  /// device. See koniz-dev/flutter-starter#169.
+  /// device.
   static const String sessionTerminated = 'SESSION_TERMINATED';
 }

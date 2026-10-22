@@ -19,8 +19,7 @@ mixin _$AuthState {
  bool get isLoading;/// Error message if authentication failed, null otherwise.
 ///
 /// This is [Failure.message]: English text built for logs, not for
-/// people. Screens render [failure] through `localizedMessage` instead
-/// (koniz-dev/flutter-starter#414).
+/// people. Screens render [failure] through `localizedMessage` instead.
  String? get error;/// The failure behind [error], kept so a screen can show it in the
 /// user's language.
  Failure? get failure;
@@ -228,8 +227,7 @@ class _AuthState implements AuthState {
 /// Error message if authentication failed, null otherwise.
 ///
 /// This is [Failure.message]: English text built for logs, not for
-/// people. Screens render [failure] through `localizedMessage` instead
-/// (koniz-dev/flutter-starter#414).
+/// people. Screens render [failure] through `localizedMessage` instead.
 @override final  String? error;
 /// The failure behind [error], kept so a screen can show it in the
 /// user's language.

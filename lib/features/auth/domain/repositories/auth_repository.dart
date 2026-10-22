@@ -16,7 +16,7 @@ abstract class AuthRepository {
   ///
   /// "None" includes a device that still holds a cached user but no usable
   /// credentials: an implementation must consult the token store, not just the
-  /// cached user. This is the boot path's only source of truth (#85).
+  /// cached user. This is the boot path's only source of truth.
   Future<Result<User?>> getCurrentUser();
 
   /// Whether a usable session is present, i.e. `getCurrentUser() != null`.

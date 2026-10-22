@@ -7,8 +7,8 @@ import 'package:flutter_starter/core/session/session_generation.dart';
 /// decide whether a finished refresh may still write, and `AuthRepositoryImpl`
 /// both reads it (in `refreshToken`) and advances it (in `login`, `register`
 /// and `logout`). Two instances would let each side believe the session it is
-/// holding is still live, which is exactly the state
-/// koniz-dev/flutter-starter#169 describes.
+/// holding is still live: a refresh that lands after a logout would put the
+/// signed-out user's credentials back on the device.
 final sessionGenerationProvider = Provider<SessionGeneration>((ref) {
   return SessionGeneration();
 });
@@ -19,8 +19,7 @@ final sessionGenerationProvider = Provider<SessionGeneration>((ref) {
 /// Logout, forced logout, login and register all advance the generation, so a
 /// feature holding per-user state - in memory or on disk - listens to this
 /// and resets on every change. It is the only way to learn the user changed
-/// without importing the auth slice, which features may not do
-/// (koniz-dev/flutter-starter#452).
+/// without importing the auth slice, which features may not do.
 ///
 /// A [Notifier] rather than a `Provider` that invalidates itself: assigning
 /// `state` notifies listeners synchronously, inside the `invalidate()` call,
