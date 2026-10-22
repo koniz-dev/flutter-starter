@@ -1,0 +1,37 @@
+# docs/guides/onboarding/getting-started.md
+139-
+140:One rule decides whether there is a backend: `AppConfig.hasBackend`, true
+141-once `BASE_URL` is set (in `.env` or with `--dart-define`) or the environment
+142-is anything but `development`. Demo mode is on exactly when it is false in a debug
+143-build, so it turns itself off with a `BASE_URL` - a local server included,
+144-which therefore needs `BASE_URL=http://localhost:3000` spelled out - and in
+145-every profile or release build.
+146:<!-- symbol: lib/core/config/app_config.dart AppConfig.hasBackend --> A demo session stays signed in after that switch until you sign out, so
+147-sign out (or clear the app's data) before pointing the app at a real backend.
+148-<!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
+149-To remove it entirely:
+150-
+151-1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/` and
+152-   `test/flutter_test_config.dart`.
+
+# docs/guides/configuration.md
+499-- Development: `http://localhost:3000`, used only by profile and release
+500:  builds. Leaving `BASE_URL` empty in development means *no backend*
+501:  (`AppConfig.hasBackend` is false): a debug build then signs in with the
+502-  offline demo account and sends no request at all. To use a server on your
+503-  machine, set `BASE_URL=http://localhost:3000` explicitly.
+504-- Staging: `https://api-staging.example.com`
+505-- Production: `https://api.example.com`
+506-
+507-> **Android emulator:** `localhost` there is the emulator itself, not your machine. A backend running on your machine is reached at `http://10.0.2.2:<port>` (for example `BASE_URL=http://10.0.2.2:3000`). The iOS Simulator, desktop and web builds use `localhost` as shown.
+
+# .env.example
+34-# ----------------------------------------------------------------------------
+35:# Base URL for API requests. Empty in development means no backend: a debug
+36-# build signs in with the offline demo account instead.
+37-# Examples:
+38-#   Development: http://localhost:3000
+39-#     (Android emulator: http://10.0.2.2:3000 - localhost there is the
+40-#     emulator itself; iOS Simulator, desktop and web use localhost)
+41-#   Staging: https://api-staging.example.com
+
