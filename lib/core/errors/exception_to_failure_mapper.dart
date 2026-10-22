@@ -6,7 +6,7 @@ class ExceptionToFailureMapper {
   /// Converts a domain exception to an appropriate typed failure
   ///
   /// Maps different exception types to their corresponding failure types:
-  /// - ServerException → by HTTP status (koniz-dev/flutter-starter#309):
+  /// - ServerException → by HTTP status:
   ///   401 → AuthFailure, 403 → PermissionFailure, 404 → NotFoundFailure,
   ///   422 → ValidationFailure, anything else → ServerFailure carrying the
   ///   status code

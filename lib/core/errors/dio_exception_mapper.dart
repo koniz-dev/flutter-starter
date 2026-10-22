@@ -148,8 +148,8 @@ class DioExceptionMapper {
   /// Never throws: a body is whatever the server sent. The fields used to be
   /// read with `as String?`, so NestJS's default validation body - whose
   /// `message` is a list - threw a `TypeError` inside `ErrorInterceptor`, and
-  /// the caller got `NetworkError(code: unknown)` instead of the 400
-  /// (koniz-dev/flutter-starter#305). A list is joined with `; `, numbers
+  /// the caller got `NetworkError(code: unknown)` instead of the 400.
+  /// A list is joined with `; `, numbers
   /// and booleans are printed, and anything else (a map) is skipped.
   static String? _messageText(Object? value) {
     final text = switch (value) {

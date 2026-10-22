@@ -101,8 +101,7 @@ class DateFormatter {
   /// Returns null when the string does not parse, or when a date or time
   /// field is out of range. [DateTime.parse] rolls `2024-02-30` over to
   /// 1 March and `T25:61` into the next day; this method returns null
-  /// instead, in the extended and the basic form alike
-  /// (koniz-dev/flutter-starter#63, #325).
+  /// instead, in the extended and the basic form alike.
   static DateTime? parseIso8601(String value) {
     final parsed = DateTime.tryParse(value);
     if (parsed == null) return null;

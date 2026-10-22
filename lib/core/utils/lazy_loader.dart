@@ -74,7 +74,7 @@ class LazyLoader<K, T> {
         final value = await _loader(key);
         // Cache the result - unless the cache was cleared, or this key
         // evicted, while the load was in flight: writing it back would undo
-        // that (koniz-dev/flutter-starter#328).
+        // that.
         final discarded =
             generation != _generation || _evictedWhileLoading.remove(key);
         if (cacheEnabled && !discarded) {
@@ -101,7 +101,7 @@ class LazyLoader<K, T> {
   ///
   /// A failed preload is dropped, not left as an uncaught zone error - which
   /// a zone that rethrows turns into a crash, and a crash reporter files as
-  /// one (koniz-dev/flutter-starter#328). Nothing is cached for the key, so a
+  /// one. Nothing is cached for the key, so a
   /// later [load] retries and surfaces the error to a caller who awaits it.
   void preload(K key) {
     if (!_cache.containsKey(key) && !_loadingFutures.containsKey(key)) {
