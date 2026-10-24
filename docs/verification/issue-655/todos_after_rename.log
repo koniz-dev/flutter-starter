@@ -1,0 +1,30 @@
+# e5dff3e09b7: after fork-and-customize section 2 (as extracted from the guide)
+section 2 exit: 0
+$ grep -n TODO fastlane ios/fastlane
+fastlane/Appfile:7:package_name("com.mycompany.my_app") # TODO: Update to match your app's package name
+fastlane/Appfile:10:# json_key_file("path/to/service-account.json") # TODO: Uncomment and set path to service account JSON
+fastlane/Appfile:13:# json_key_data("{\"type\":\"service_account\",...}") # TODO: Uncomment and set service account JSON string
+fastlane/Appfile:16:# default_track("internal") # TODO: Uncomment and set default track (internal, alpha, beta, production)
+fastlane/Fastfile:24:  PACKAGE_NAME = "com.mycompany.my_app" # TODO: Update to match your package name
+fastlane/Fastfile:25:  APP_NAME = "My App" # TODO: Update to match your app name
+ios/fastlane/Appfile:8:team_id("YOUR_TEAM_ID") # TODO: Replace with your Apple Team ID
+ios/fastlane/Appfile:11:# api_key_id("YOUR_API_KEY_ID") # TODO: Uncomment and set if using API key authentication
+ios/fastlane/Appfile:14:# api_issuer_id("YOUR_ISSUER_ID") # TODO: Uncomment and set if using API key authentication
+ios/fastlane/Appfile:18:app_identifier("com.mycompany.myApp") # TODO: Update to match your app's bundle ID
+ios/fastlane/Appfile:21:# apple_id("your.email@example.com") # TODO: Uncomment and set your Apple ID
+ios/fastlane/Appfile:24:# itc_team_id("YOUR_ITC_TEAM_ID") # TODO: Uncomment if different from team_id
+ios/fastlane/Fastfile:21:  APP_IDENTIFIER = "com.mycompany.myApp" # TODO: Update to match your bundle ID
+ios/fastlane/Fastfile:22:  APP_NAME = "My App" # TODO: Update to match your app name
+
+# c7cad7a1a06: after fork-and-customize section 2 (as extracted from the guide)
+section 2 exit: 0
+$ grep -n TODO fastlane ios/fastlane
+fastlane/Appfile:10:# json_key_file("path/to/service-account.json") # TODO: Uncomment and set path to service account JSON
+fastlane/Appfile:13:# json_key_data("{\"type\":\"service_account\",...}") # TODO: Uncomment and set service account JSON string
+fastlane/Appfile:16:# default_track("internal") # TODO: Uncomment and set default track (internal, alpha, beta, production)
+ios/fastlane/Appfile:8:team_id("YOUR_TEAM_ID") # TODO: Replace with your Apple Team ID
+ios/fastlane/Appfile:11:# api_key_id("YOUR_API_KEY_ID") # TODO: Uncomment and set if using API key authentication
+ios/fastlane/Appfile:14:# api_issuer_id("YOUR_ISSUER_ID") # TODO: Uncomment and set if using API key authentication
+ios/fastlane/Appfile:21:# apple_id("your.email@example.com") # TODO: Uncomment and set your Apple ID
+ios/fastlane/Appfile:24:# itc_team_id("YOUR_ITC_TEAM_ID") # TODO: Uncomment if different from team_id
+
