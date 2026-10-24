@@ -134,13 +134,12 @@ dependency acceptable.
 - Import `package:flutter/material.dart`, Dio, or any I/O package
 
 **On "pure Dart".** The rule is *no framework behaviour in the domain layer*,
-not *no Flutter import at all*. The three domain entities
-(`lib/features/auth/domain/entities/user.dart:1`,
-`lib/features/tasks/domain/entities/task.dart:1`,
-`lib/features/feature_flags/domain/entities/feature_flag.dart:1`) each import
+not *no Flutter import at all*. The domain entities
+(`lib/features/*/domain/entities/`, such as
+`lib/features/auth/domain/entities/user.dart:1`) each import
 `package:flutter/foundation.dart` for `@immutable`, a compile-time annotation
 re-exported from `package:meta` that contributes nothing at runtime. Those
-three lines are the only Flutter imports anywhere under
+lines are the only Flutter imports anywhere under
 `lib/features/*/domain/`; use cases and repository interfaces are
 framework-free. This guide states what the code does - it previously claimed
 an absolute purity the code has never had.

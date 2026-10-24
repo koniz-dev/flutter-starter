@@ -138,9 +138,8 @@ rm lib/core/storage/secure_storage_service.dart
 Remove tests for removed features:
 
 ```bash
-# Remove feature tests
+# Remove the tests of each feature you removed
 rm -rf test/features/auth
-rm -rf test/features/feature_flags
 
 # Update test files that reference removed features
 ```

@@ -1224,6 +1224,7 @@ Rejected alternatives:
 - **Delete them.** Removes the defect surface, and removes the reason an
   adopter would pick a starter over `flutter create`. It is also a breaking
   change for anyone already on the template.
+<!-- strip:tasks start -->
 - **Wire them into the sample features.** This was the strongest option for
   `PaginationHelper` and `Debouncer` - a paginated, debounce-searched tasks
   list would exercise both for real - and it was **tried and rejected**. It
@@ -1231,6 +1232,7 @@ Rejected alternatives:
   fixed the defects, so it was tracked separately; the outcome is recorded in
   "The tasks sample is not the host" below, and `DateFormatter` is the one
   utility that survived it.
+<!-- strip:tasks end -->
 
 ### What was done
 
@@ -1247,10 +1249,12 @@ Rejected alternatives:
    they were documented no-ops carrying the only two
    `// ignore: argument_type_not_assignable` comments in `lib/`, which
    suppress a compile-time **error** rather than a lint.
+<!-- strip:tasks start -->
 4. Wiring `PaginationHelper`, `Debouncer` and `DateFormatter` into the tasks
    sample was handled separately. That change wired `DateFormatter` and **rejected** the
    tasks sample as a host for the other two - see "The tasks sample is not the
    host" below.
+<!-- strip:tasks end -->
 
 ### Call-site status
 
@@ -1267,19 +1271,19 @@ the tree - fix the row in the same change that moves the call site.
 
 | Utility | Exercised by a running screen? | Where |
 |---|---|---|
-| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model; `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen |
+| `DateFormatter` | yes, both pairs | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model; `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen <!-- strip:tasks line --> |
 | `PaginationHelper` | no | - |
 | `Debouncer` / `Throttler` | no | - |
 | `LazyLoader` | no | - |
 | `ProviderDisposal` | no | - |
 | `PerformanceUtils` and the three performance mixins | no | - |
 
+<!-- strip:tasks start -->
 The tasks detail screen previously formatted its two timestamps with a
 hand-rolled `padLeft` chain while `DateFormatter` sat unused one directory
 away - the duplication the "keep them as building blocks" decision is supposed
 to prevent. That call site is now the utility.
 
-<!-- strip:tasks start -->
 ### The tasks sample is not the host for `PaginationHelper` or `Debouncer`
 
 **Decided, not open.** Wiring `DateFormatter` went ahead and the other two
