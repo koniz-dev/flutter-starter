@@ -3,11 +3,11 @@ import 'package:flutter_starter/core/contracts/design_tokens_contracts.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_typography.dart';
 
-/// Default semantic token implementation for the starter.
+/// Default semantic token implementation.
 ///
-/// Maps contract-level semantic tokens to default starter values.
+/// Maps contract-level semantic tokens to the app's default values.
 class DefaultDesignTokens implements AppDesignTokens {
-  /// Creates the default semantic token mapping for starter theme.
+  /// Creates the default semantic token mapping for the app theme.
   const DefaultDesignTokens();
 
   @override

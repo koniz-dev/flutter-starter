@@ -1,21 +1,28 @@
-# Flutter Starter Documentation
+# Documentation
 
-Welcome to the documentation for the Flutter starter template. The template is organized around **Clean Architecture**, explicit boundaries, and replaceable integrations.
+How this app is built and how to work on it. The code follows **Clean
+Architecture**, with explicit boundaries and replaceable integrations.
 
-## Super starter entry
+## Start here
 
-Start here when adopting or forking the template:
+- [**Getting started**](guides/onboarding/getting-started.md) - setup, environments, running on each platform
+- [**Understanding the codebase**](guides/onboarding/understanding-codebase.md) and [**Architecture**](architecture/README.md)
+- [**Contracts and adapter map**](architecture/contracts-map.md) - swap points and optional modules
+- [**Riverpod retry policy**](architecture/riverpod-retry-policy.md) - auto-retry is off process-wide; read before adding a provider that can fail
+- [**Repository layout (non-platform)**](guides/onboarding/repository-layout.md) - `lib`, `test`, `docs`, `scripts`, CI
 
-- [**Super starter hub**](architecture/super-starter-hub.md) — capability matrix and links to every area
-- [**Choose your stack**](architecture/choose-your-stack.md) — Path A (defaults) vs Path B (bring your own adapters)
-- [**Contracts and adapter map**](architecture/contracts-map.md) — swap points and optional modules
-- [**Riverpod retry policy**](architecture/riverpod-retry-policy.md) — auto-retry is off process-wide; read before adding a provider that can fail
-- [**Fork and customize**](guides/onboarding/fork-and-customize.md) — rename package, Mason, optional strip
-- [**Repository layout (non-platform)**](guides/onboarding/repository-layout.md) — `lib`, `test`, `docs`, `scripts`, CI, bricks
+## Setting up from the template
 
-Root [README.md](../README.md) also links Mason and these docs.
+These pages are for turning the template into this project and keeping it
+in step with the template later. Drop the group once the project is set up,
+or keep it for upgrades.
 
-## Canonical code paths (for writers)
+- [**Super starter hub**](architecture/super-starter-hub.md) - what the template provides, with links to every area
+- [**Choose your stack**](architecture/choose-your-stack.md) - keep the defaults or bring your own adapters
+- [**Fork and customize**](guides/onboarding/fork-and-customize.md) - rename the package and app ids, Mason, optional strip
+- [**Upgrading this starter**](guides/migration/upgrading-this-starter.md) - taking in later template changes
+
+## Where things live (for writers)
 
 Keep docs and examples pointing here unless the tree moves:
 
@@ -32,7 +39,6 @@ Keep docs and examples pointing here unless the tree moves:
 
 - **Workflows:** [Testing summary](guides/testing/testing-summary.md) matches [`.github/workflows/`](../.github/workflows/); if you change CI, update that guide.
 - **`docs/api/`:** Describes `lib/` APIs — after refactors, search for old file paths or class names here.
-- **Fork renames:** Mason does not rewrite Markdown; samples may still show `package:flutter_starter` until you replace them ([Fork and customize](guides/onboarding/fork-and-customize.md)).
 - **Blueprints:** Long-form guides (especially [Security implementation](guides/security/implementation.md)) mix edits to existing files with **optional** modules you add yourself; headings mark blueprints where relevant.
 - **`examples/`:** [`examples/`](../examples/) — see [`examples/README.md`](../examples/README.md); also [Repository layout](guides/onboarding/repository-layout.md).
 
@@ -51,7 +57,7 @@ Navigate through the folders to dive deeper into the project modules:
 
 ---
 
-## Starter Principles
+## Principles
 ### Architecture and Quality
 - **Clean Architecture** - Domain/data/presentation separation
 - **Explicit Boundaries** - Contracts in `core/contracts` + adapters
@@ -77,13 +83,13 @@ Navigate through the folders to dive deeper into the project modules:
 
 ## Core vs Optional Modules
 
-### Hard-Core (fixed by default starter architecture)
+### Core (the fixed architecture)
 - **State + DI:** Riverpod provider architecture and app bootstrap flow.
 - **Routing:** GoRouter-based route tree and guards.
 - **HTTP Layer:** Dio-based `ApiClient` and interceptor pipeline.
 
 ### Optional / Pluggable (safe to replace or skip)
-- **Feature Flags Remote:** Firebase Remote Config integration is optional; default flow can run with local/no-op remote flags.
+- **Feature Flags Remote:** Firebase Remote Config integration is optional; default flow can run with local/no-op remote flags. <!-- strip:feature-flags line -->
 - **RASP:** FreeRASP implementation is opt-in via provider override.
 - **Performance Monitoring:** Default uses no-op performance service; Firebase performance is opt-in.
 - **Firebase setup:** Firebase dependencies are intentionally not present in `pubspec.yaml` by default; opt in by adding packages and wiring the optional templates/providers in docs.
@@ -139,9 +145,8 @@ lib/
 │   └── utils/              # Generic utilities
 │
 ├── features/                # Clean Architecture feature modules
-│   ├── auth/               # Example: Authentication feature
-│   ├── feature_flags/      # Example: Dynamic Flag Toggle UI
-│   └── tasks/              # Example: Standard CRUD operation
+│   ├── auth/               # Authentication (sign-in, session, offline demo)
+│   └── home/               # Home screen shown after sign-in
 │
 ├── shared/                  # Agnostic reusable resources
 │   ├── accessibility/      # A11y helpers
@@ -153,3 +158,6 @@ lib/
 ├── l10n/                   # Language `.arb` files
 └── main.dart               # Bootstrap entry point
 ```
+
+`lib/features/tasks/` is a sample slice (local CRUD) and the template's worked example of a complete feature. <!-- strip:tasks line -->
+`lib/features/feature_flags/` is a sample slice (flags with local overrides and a debug-only override screen). <!-- strip:feature-flags line -->

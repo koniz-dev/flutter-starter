@@ -1,6 +1,6 @@
 /// Remote data source for feature flags.
 ///
-/// **No remote implementation ships with this starter.** The provider binds
+/// **No remote implementation ships by default.** The provider binds
 /// [NoOpFeatureFlagsRemoteDataSource], so flags resolve from the local source
 /// alone and the app takes on no flag vendor by default.
 ///
