@@ -47,9 +47,16 @@ class DemoSignInCard extends StatelessWidget {
             const SizedBox(height: 8),
             Align(
               alignment: AlignmentDirectional.centerEnd,
+              // The theme's primary-coloured button sits on the card's
+              // container colour, which it does not contrast with; the card's
+              // own foreground does.
               child: OutlinedButton(
                 key: UiKeys.demoSignInFill,
                 onPressed: onFill,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: colors.onSecondaryContainer,
+                  side: BorderSide(color: colors.onSecondaryContainer),
+                ),
                 child: Text(l10n.demoModeFill),
               ),
             ),
