@@ -25,10 +25,9 @@ const Map<String, String> _knownUnread = {
 /// Knobs whose only readers live in a sample feature that
 /// `tool/strip_sample_features.dart` can delete. In a tree stripped of that
 /// feature the knob is legitimately unread, so it is not scanned there - the
-/// same rule `enable_toggles_have_readers_test.dart` applies.
-const Map<String, String> _readOnlyByStrippableFeature = {
-  'enableDebugFeatures': 'lib/features/feature_flags',
-};
+/// same rule `enable_toggles_have_readers_test.dart` applies. None today:
+/// `enableDebugFeatures` is read by the route registry, in every variant.
+const Map<String, String> _readOnlyByStrippableFeature = {};
 
 /// Every `static <Type> get <name>` declared on AppConfig.
 final RegExp _getter = RegExp(r'static\s+[\w<>?, ]+\s+get\s+(\w+)\s*(?:=>|\{)');
