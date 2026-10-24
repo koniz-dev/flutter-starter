@@ -14,7 +14,7 @@ import 'package:go_router/go_router.dart';
 /// the constant.
 ///
 /// Screens that must never ship in production - ones that change app state
-/// for testing, like the feature-flags override screen - go in
+/// for testing, such as a flag-override screen - go in
 /// [_buildDebugRoutes] instead. That block is registered only while
 /// [AppConfig.enableDebugFeatures] holds: true in development, false in
 /// staging and production unless `ENABLE_DEBUG_FEATURES` says otherwise.
