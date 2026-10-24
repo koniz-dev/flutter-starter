@@ -229,6 +229,11 @@ jobs:
             echo "the feature_clean brick still imports package:flutter_starter/" >&2
             exit 1
           fi
+          # Root guides whose code samples a team copies.
+          if git grep -n 'package:flutter_starter/' -- '*.md' ':!docs' ':!bricks'; then
+            echo "root markdown above still imports package:flutter_starter/" >&2
+            exit 1
+          fi
           if grep -rn "'Flutter Starter'\|\"appTitle\": \"Flutter Starter\"" lib test integration_test \
               --include='*.dart' --include='*.arb'; then
             echo "the template title survived the rename" >&2
@@ -320,6 +325,13 @@ jobs:
           cat "$RUNNER_TEMP/leftovers.sh"
           if bash "$RUNNER_TEMP/leftovers.sh"; then
             echo "the template's display name or ids are still in the tree" >&2
+            exit 1
+          fi
+
+      - name: Root markdown names the new package
+        run: |
+          if git grep -n 'package:flutter_starter/' -- '*.md' ':!docs' ':!bricks'; then
+            echo "root markdown above still imports package:flutter_starter/" >&2
             exit 1
           fi
 

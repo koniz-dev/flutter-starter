@@ -38,6 +38,8 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
      they write the import lines of every feature you scaffold, so a missed
      script produces features that do not compile.
    - `bricks/feature_clean/__brick__/` - the same, for `mason make feature_clean`.
+   - `CONTRIBUTING.md` - its example test imports the package, and your team
+     copies it.
 
    One command for all of them (`perl` behaves the same on macOS and Linux):
 
@@ -45,7 +47,7 @@ Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_ide
    NEW=your_package
    git grep -lz 'package:flutter_starter/' -- lib test integration_test tool \
      examples bricks/feature_clean scripts/dev/create_feature.sh \
-     scripts/dev/create_feature.ps1 'docs/*.dart' \
+     scripts/dev/create_feature.ps1 'docs/*.dart' CONTRIBUTING.md \
      | xargs -0 perl -pi -e "s#package:flutter_starter/#package:${NEW}/#g"
    ```
 3. Run `flutter pub get`, then re-sort the imports - your package name sorts

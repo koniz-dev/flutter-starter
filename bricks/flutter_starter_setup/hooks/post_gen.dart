@@ -77,6 +77,9 @@ Future<void> run(HookContext context) async {
 /// a `.dart` file under `docs/` would be analyzed like any
 /// other source; left importing `package:flutter_starter/` it fails analysis
 /// with `uri_does_not_exist` once the package is renamed.
+/// Root markdown whose code samples import the package.
+const _renamedRootMarkdown = <String>['README.md', 'CONTRIBUTING.md'];
+
 const _renamedDirectories = <String>[
   'lib',
   'test',
@@ -213,6 +216,17 @@ Future<void> _renameDartPackage(
         text = text.replaceAll(oldImport, newImport);
         await entity.writeAsString(text);
       }
+    }
+  }
+
+  // The root guides show code an adopter's team copies; CONTRIBUTING's
+  // example test imports the package.
+  for (final name in _renamedRootMarkdown) {
+    final file = File('$rootPath/$name');
+    if (!file.existsSync()) continue;
+    final text = await file.readAsString();
+    if (text.contains(oldImport)) {
+      await file.writeAsString(text.replaceAll(oldImport, newImport));
     }
   }
 

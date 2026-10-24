@@ -42,7 +42,7 @@ brick.
 - `examples/`
 - `docs/` - only `.dart` files, such as committed verification probes. The analyzer reads them, because `analysis_options.yaml` does not exclude `docs/`.
 
-It does **not** edit Markdown under `docs/` (code samples there may still say `flutter_starter` until you search/replace manually).
+It rewrites `package:flutter_starter/` in the root `README.md` and `CONTRIBUTING.md`, whose code samples a team copies, but does **not** edit Markdown under `docs/` (code samples there may still say `flutter_starter` until you search/replace manually).
 
 ### Repairing what the rename breaks
 
