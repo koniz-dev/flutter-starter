@@ -1,0 +1,39 @@
+# 39d98d798d9: --apply 
+$ git grep -n -i 'features/tasks\|features/feature_flags\|tasks sample\|feature.flags sample' -- docs
+docs/architecture/adr/0006-contract-status-and-slice-shape.md:45:| `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/features/auth/data/datasources/auth_local_
+docs/architecture/contracts-map.md:62:| `IKeyValueStore` | **Live** | `StorageService` (`lib/core/storage/storage_service.dart`) | `keyValueStoreProvider` (`lib
+docs/architecture/contracts-map.md:65:| Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigati
+docs/architecture/design-decisions.md:1230:  belonged to the tasks sample rather than to the `lib/core/` change that
+docs/architecture/design-decisions.md:1232:  "The tasks sample is not the host" below, and `DateFormatter` is the one
+docs/architecture/design-decisions.md:1252:   tasks sample as a host for the other two - see "The tasks sample is not the
+docs/architecture/design-decisions.md:1270:| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `par
+docs/architecture/overview.md:139:`lib/features/tasks/domain/entities/task.dart:1`,
+docs/architecture/overview.md:140:`lib/features/feature_flags/domain/entities/feature_flag.dart:1`) each import
+docs/architecture/riverpod-retry-policy.md:187:  synchronous, as is the tasks sample's notifier; their I/O runs in methods that
+docs/guides/migration/customization-guide.md:134:rm -rf test/features/feature_flags
+matches: 11
+OK: documentation checks passed.
+
+# 39d98d798d9: --apply --remove-tasks
+$ git grep -n -i 'features/tasks\|tasks sample' -- docs
+docs/architecture/adr/0006-contract-status-and-slice-shape.md:45:| `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/features/auth/data/datasources/auth_local_
+docs/architecture/contracts-map.md:62:| `IKeyValueStore` | **Live** | `StorageService` (`lib/core/storage/storage_service.dart`) | `keyValueStoreProvider` (`lib
+docs/architecture/contracts-map.md:65:| Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigati
+docs/architecture/design-decisions.md:1230:  belonged to the tasks sample rather than to the `lib/core/` change that
+docs/architecture/design-decisions.md:1232:  "The tasks sample is not the host" below, and `DateFormatter` is the one
+docs/architecture/design-decisions.md:1252:   tasks sample as a host for the other two - see "The tasks sample is not the
+docs/architecture/design-decisions.md:1270:| `DateFormatter` | yes, both pairs, while the tasks sample is kept (no once it is stripped) | `formatIso8601` / `par
+docs/architecture/overview.md:139:`lib/features/tasks/domain/entities/task.dart:1`,
+docs/architecture/riverpod-retry-policy.md:187:  synchronous, as is the tasks sample's notifier; their I/O runs in methods that
+matches: 9
+OK: documentation checks passed.
+
+# 39d98d798d9: --apply --remove-feature-flags
+$ git grep -n -i 'features/feature_flags\|feature.flags sample' -- docs
+docs/architecture/adr/0006-contract-status-and-slice-shape.md:45:| `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/features/auth/data/datasources/auth_local_
+docs/architecture/contracts-map.md:62:| `IKeyValueStore` | **Live** | `StorageService` (`lib/core/storage/storage_service.dart`) | `keyValueStoreProvider` (`lib
+docs/architecture/overview.md:140:`lib/features/feature_flags/domain/entities/feature_flag.dart:1`) each import
+docs/guides/migration/customization-guide.md:134:rm -rf test/features/feature_flags
+matches: 4
+OK: documentation checks passed.
+

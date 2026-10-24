@@ -1,0 +1,15 @@
+# 9d0914f6726: --apply 
+$ git grep -n -i 'features/tasks\|features/feature_flags\|tasks sample\|feature.flags sample' -- docs
+matches: 0
+OK: documentation checks passed.
+
+# 9d0914f6726: --apply --remove-tasks
+$ git grep -n -i 'features/tasks\|tasks sample' -- docs
+matches: 0
+OK: documentation checks passed.
+
+# 9d0914f6726: --apply --remove-feature-flags
+$ git grep -n -i 'features/feature_flags\|feature.flags sample' -- docs
+matches: 0
+OK: documentation checks passed.
+

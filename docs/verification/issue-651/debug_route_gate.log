@@ -1,0 +1,6 @@
+# ENVIRONMENT=development
+VP environment=development enableDebugFeatures=true paths=[/login, /register, /tasks, :taskId, /feature-flags-debug, /]
+00:00 +4: All tests passed!
+# ENVIRONMENT=production
+VP environment=production enableDebugFeatures=false paths=[/login, /register, /tasks, :taskId, /]
+00:00 +4: All tests passed!

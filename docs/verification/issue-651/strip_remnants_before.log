@@ -1,0 +1,22 @@
+# b03ffbc7844: --apply 
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+task UiKeys left: 1 file(s)
+readers of AppConfig.enableDebugFeatures outside lib/core/config:
+No issues found! (ran in 4.9s)
+02:37 +2893 ~15: All tests passed!
+
+# e5dff3e09b7: --apply --remove-tasks
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+task UiKeys left: 1 file(s)
+readers of AppConfig.enableDebugFeatures outside lib/core/config:
+  lib/features/feature_flags/routing/feature_flags_routes.dart
+No issues found! (ran in 5.7s)
+03:00 +3098 ~16: All tests passed!
+
+# e5dff3e09b7: --apply --remove-feature-flags
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+task UiKeys left: 1 file(s)
+readers of AppConfig.enableDebugFeatures outside lib/core/config:
+No issues found! (ran in 6.0s)
+02:51 +3254 ~16: All tests passed!
+
