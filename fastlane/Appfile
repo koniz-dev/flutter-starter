@@ -4,7 +4,7 @@
 
 # Package name (Application ID)
 # This should match your app's applicationId in build.gradle.kts
-package_name("com.example.flutter_starter") # TODO: Update to match your app's package name
+package_name("com.example.flutter_starter") # Set by the rename: fork-and-customize section 2, or the setup brick
 
 # Google Play Service Account JSON (for CI/CD)
 # json_key_file("path/to/service-account.json") # TODO: Uncomment and set path to service account JSON

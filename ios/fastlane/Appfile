@@ -15,7 +15,7 @@ team_id("YOUR_TEAM_ID") # TODO: Replace with your Apple Team ID
 
 # App Identifier (Bundle ID)
 # This should match your Xcode project's Bundle Identifier
-app_identifier("com.example.flutterStarter") # TODO: Update to match your app's bundle ID
+app_identifier("com.example.flutterStarter") # Set by the rename: fork-and-customize section 2, or the setup brick
 
 # Apple ID for App Store Connect
 # apple_id("your.email@example.com") # TODO: Uncomment and set your Apple ID
