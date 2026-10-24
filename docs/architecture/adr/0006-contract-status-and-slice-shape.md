@@ -125,7 +125,7 @@ The three slices have three shapes. Measured on `main` at `da030fa`:
 | `data/models/` | yes | yes | **no** |
 | `routing/` | yes (`auth_routes.dart`) | yes (`tasks_routes.dart`) | yes (`feature_flags_routes.dart`) |
 | Wiring lives in | `di/` | `di/` | **`presentation/providers/`** |
-| Directories no other slice has | `presentation/widgets/` | - | `data/services/`, `presentation/examples/` |
+| Directories no other slice has | `presentation/widgets/` | - | `data/services/` |
 
 The `routing/` row corrects an earlier table, which recorded tasks as having no `routing/`. It has one; all three slices do.
 
@@ -142,9 +142,11 @@ network boundary. Per axis:
 | `routing/` | A slice that owns screens declares them in `routing/<slice>_routes.dart`. | conforms | conforms |
 | Wiring location | Same as `di/`. | conforms | **must conform** |
 
-`presentation/examples/` and `data/services/` are feature_flags-only and are
-**not** part of the canonical shape; nothing in this ADR requires deleting them,
-but no new slice should grow them.
+`data/services/` is feature_flags-only and is **not** part of the canonical
+shape; nothing in this ADR requires deleting it, but no new slice should grow
+one. Feature flags also had a `presentation/examples/` screen that nothing
+constructed; it was removed because it opened the flag-override screen
+directly, around the debug-only route gate.
 
 `bricks/feature_clean` generates `data/{datasources,models,repositories}`,
 `di/`, `domain/{entities,repositories,usecases}` and
