@@ -326,7 +326,7 @@ class AuthRepositoryImpl implements AuthRepository {
   /// [ServerException] whose status is in [_deadRefreshTokenStatuses]: the
   /// server rejecting the very token it was handed.
   ///
-  /// - **401** is what this starter's sample backend sends.
+  /// - **401** is what many REST backends send for a dead refresh token.
   /// - **400** is what an OAuth 2.0 server sends: RFC 6749 section 5.2 answers
   ///   a revoked or expired refresh token with `400 invalid_grant`.
   /// - **403** is what many servers send for a token they refuse.

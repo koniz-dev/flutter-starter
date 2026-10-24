@@ -8,8 +8,8 @@ import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
 ///
 /// ## Typeface: deliberately unset
 ///
-/// None of the styles below declares a `fontFamily`. That is on purpose: this
-/// starter vendors no font file, so naming a family here would name one that
+/// None of the styles below declares a `fontFamily`. That is on purpose: the
+/// app vendors no font file, so naming a family here would name one that
 /// is not bundled, and Flutter resolves an unknown family by falling back
 /// silently.
 ///
