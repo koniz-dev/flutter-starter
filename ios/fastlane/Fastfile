@@ -18,8 +18,8 @@ platform :ios do
   # ========================================================================
 
   # App configuration
-  APP_IDENTIFIER = "com.example.flutterStarter" # TODO: Update to match your bundle ID
-  APP_NAME = "Flutter Starter" # TODO: Update to match your app name
+  APP_IDENTIFIER = "com.example.flutterStarter" # Set by the rename: fork-and-customize section 2, or the setup brick
+  APP_NAME = "Flutter Starter" # Set by the rename: fork-and-customize section 2, or the setup brick
 
   # Repository root, relative to this Fastfile's working directory.
   REPO_ROOT = "../.."

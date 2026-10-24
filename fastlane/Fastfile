@@ -21,8 +21,8 @@ platform :android do
   # ========================================================================
 
   # App configuration
-  PACKAGE_NAME = "com.example.flutter_starter" # TODO: Update to match your package name
-  APP_NAME = "Flutter Starter" # TODO: Update to match your app name
+  PACKAGE_NAME = "com.example.flutter_starter" # Set by the rename: fork-and-customize section 2, or the setup brick
+  APP_NAME = "Flutter Starter" # Set by the rename: fork-and-customize section 2, or the setup brick
 
   # ========================================================================
   # Helper Lanes
