@@ -1,0 +1,15 @@
+# a35c51e4aef: --apply 
+$ git grep -n -i 'features/tasks\|features/feature_flags\|tasks sample\|feature.flags sample' -- docs
+matches: 0
+OK: documentation checks passed.
+
+# a35c51e4aef: --apply --remove-tasks
+$ git grep -n -i 'features/tasks\|tasks sample' -- docs
+matches: 0
+OK: documentation checks passed.
+
+# a35c51e4aef: --apply --remove-feature-flags
+$ git grep -n -i 'features/feature_flags\|feature.flags sample' -- docs
+matches: 0
+OK: documentation checks passed.
+

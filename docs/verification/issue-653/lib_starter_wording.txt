@@ -1,0 +1,12 @@
+# lib/ comments calling the code a starter, origin/main vs this branch
+## 39d98d798d9
+lib/core/network/realtime/realtime_providers.dart:6:/// By default, it uses a NoOp client since this is a Starter.
+lib/features/auth/data/repositories/auth_repository_impl.dart:329:  /// - **401** is what this starter's sample backend sends.
+lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart:3:/// **No remote implementation ships with this starter.** The provider binds
+lib/shared/design_system/tokens/app_typography.dart:12:/// starter vendors no font file, so naming a family here would name one that
+lib/shared/design_system/tokens/default_design_tokens.dart:6:/// Default semantic token implementation for the starter.
+lib/shared/design_system/tokens/default_design_tokens.dart:8:/// Maps contract-level semantic tokens to default starter values.
+lib/shared/design_system/tokens/default_design_tokens.dart:10:  /// Creates the default semantic token mapping for starter theme.
+
+## 809b62743bc
+
