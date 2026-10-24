@@ -477,7 +477,7 @@ print(config);
 | `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableAnalytics`, but the starter ships no analytics, so nothing reads it. Gate your analytics SDK on it (default: true in staging/prod) |
 | `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableCrashReporting`, but the starter ships no crash reporter, so nothing reads it. Gate your crash reporter on it (default: true in staging/prod) |
 | `ENABLE_PERFORMANCE_MONITORING` | bool | Environment-aware | Enable performance monitoring |
-| `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Gates debug-only routes - in this starter, the feature-flags sample's debug screen, which does not exist without it. In a tree without that sample nothing reads it (default: true in dev only) |
+| `ENABLE_DEBUG_FEATURES` | bool | Environment-aware | Gates the debug-only block in `lib/core/routing/routes_registry.dart`: screens that must never ship in production, such as the feature-flags override screen. Off, their paths are unknown routes (default: true in dev only) |
 | `ENABLE_HTTP_LOGGING` | bool | Environment-aware | Enable HTTP loggers (default: true in dev) |
 
 The app version and build number are not configuration keys: they come from

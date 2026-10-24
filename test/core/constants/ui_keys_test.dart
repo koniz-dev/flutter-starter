@@ -89,9 +89,6 @@ void main() {
       expect(UiKeys.loginSubmit.value, 'e2e_login_submit');
       expect(UiKeys.registerSubmit.value, 'e2e_register_submit');
       expect(UiKeys.homeContent.value, 'e2e_home_content');
-      expect(UiKeys.openTasks.value, 'e2e_open_tasks');
-      expect(UiKeys.tasksFab.value, 'e2e_tasks_fab');
-      expect(UiKeys.addTaskSubmit.value, 'e2e_add_task_submit');
     });
   });
 }

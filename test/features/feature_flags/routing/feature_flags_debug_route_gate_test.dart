@@ -3,9 +3,9 @@
 // The screen writes a local override for any flag, `enable_premium_features`
 // included, and `/feature-flags-debug` used to be registered in every build,
 // so any signed-in user of a production build could reach it by deep link, or
-// by URL on web. It is now registered only when
-// `AppConfig.enableDebugFeatures` holds, which is false in production unless
-// `ENABLE_DEBUG_FEATURES` says otherwise.
+// by URL on web. It now sits in the route registry's debug-only block, which
+// is registered only when `AppConfig.enableDebugFeatures` holds - false in
+// production unless `ENABLE_DEBUG_FEATURES` says otherwise.
 //
 // Run this file twice to see both environments:
 //   flutter test <this file>
@@ -16,7 +16,6 @@ import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/routes_registry.dart';
-import 'package:flutter_starter/features/feature_flags/routing/feature_flags_routes.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -34,25 +33,30 @@ void main() {
   setUp(() => container = ProviderContainer());
   tearDown(() => container.dispose());
 
-  List<String> appPaths() =>
-      _paths(container.read(Provider<List<RouteBase>>(buildAppRoutes)));
-
-  List<String> flagPaths({bool? enabled}) => _paths(
+  List<String> appPaths({bool? debugRoutes}) => _paths(
     container.read(
       Provider<List<RouteBase>>(
-        (ref) => buildFeatureFlagsRoutes(ref, enabled: enabled),
+        (ref) => buildAppRoutes(ref, debugRoutes: debugRoutes),
       ),
     ),
   );
 
-  test('the module registers the route only when debug features are on', () {
-    expect(flagPaths(enabled: true), [AppRoutes.featureFlagsDebug]);
-    expect(flagPaths(enabled: false), isEmpty);
+  test('the route is registered only when debug routes are on', () {
+    expect(appPaths(debugRoutes: true), contains(AppRoutes.featureFlagsDebug));
+    expect(
+      appPaths(debugRoutes: false),
+      isNot(contains(AppRoutes.featureFlagsDebug)),
+    );
+  });
+
+  test('turning debug routes off removes nothing else', () {
+    final on = appPaths(debugRoutes: true)..remove(AppRoutes.featureFlagsDebug);
+    expect(appPaths(debugRoutes: false), on);
   });
 
   test('by default it follows AppConfig.enableDebugFeatures', () {
     expect(
-      flagPaths().contains(AppRoutes.featureFlagsDebug),
+      appPaths().contains(AppRoutes.featureFlagsDebug),
       AppConfig.enableDebugFeatures,
     );
   });
