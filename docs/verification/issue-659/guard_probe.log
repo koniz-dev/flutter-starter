@@ -1,0 +1,17 @@
+# Probe: a file constructing FeatureFlagsDebugScreen outside the route module (lib/zz_probe.dart, temporary)
+  Expected: empty
+    Actual: ['lib/zz_probe.dart']
+00:00 +0 -1: Some tests failed.
+
+# Without the probe
+00:00 +1: All tests passed!
+
+# git grep -n FeatureFlagsDebugScreen -- lib (after)
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:11:class FeatureFlagsDebugScreen extends ConsumerStatefulWidget {
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:12:  /// Creates a [FeatureFlagsDebugScreen]
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:13:  const FeatureFlagsDebugScreen({super.key});
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:16:  ConsumerState<FeatureFlagsDebugScreen> createState() =>
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:17:      _FeatureFlagsDebugScreenState();
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:20:class _FeatureFlagsDebugScreenState
+lib/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart:21:    extends ConsumerState<FeatureFlagsDebugScreen> {
+lib/features/feature_flags/routing/feature_flags_routes.dart:17:      builder: (context, state) => const FeatureFlagsDebugScreen(),

@@ -1,0 +1,23 @@
+# 39d98d798d9: Option B step 2 to my_app, as extracted from the guide
+NEW=my_app
+git grep -lz 'package:flutter_starter/' -- lib test integration_test tool \
+  examples bricks/feature_clean scripts/dev/create_feature.sh \
+  scripts/dev/create_feature.ps1 'docs/*.dart' \
+  | xargs -0 perl -pi -e "s#package:flutter_starter/#package:${NEW}/#g"
+$ git grep -n 'package:flutter_starter/' -- '*.md' ':!docs' ':!bricks'
+CONTRIBUTING.md:354:import 'package:flutter_starter/core/errors/failures.dart';
+CONTRIBUTING.md:355:import 'package:flutter_starter/core/utils/result.dart';
+CONTRIBUTING.md:356:import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+CONTRIBUTING.md:357:import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+CONTRIBUTING.md:358:import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+exit: 0 (1 = nothing found)
+
+# c2fa35ee539: Option B step 2 to my_app, as extracted from the guide
+NEW=my_app
+git grep -lz 'package:flutter_starter/' -- lib test integration_test tool \
+  examples bricks/feature_clean scripts/dev/create_feature.sh \
+  scripts/dev/create_feature.ps1 'docs/*.dart' CONTRIBUTING.md \
+  | xargs -0 perl -pi -e "s#package:flutter_starter/#package:${NEW}/#g"
+$ git grep -n 'package:flutter_starter/' -- '*.md' ':!docs' ':!bricks'
+exit: 1 (1 = nothing found)
+
