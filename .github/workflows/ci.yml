@@ -223,10 +223,13 @@ jobs:
           COVERAGE_MIN_TOTAL: 94
         shell: bash
         run: |
-          set -o pipefail
+          # Actions runs bash with -e: without set +e a failing check exits
+          # here, before the summary line and the annotation below.
+          set +e
           ./scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL" \
             | tee "$RUNNER_TEMP/coverage.log"
           status=${PIPESTATUS[0]}
+          set -e
           total=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)
           echo "- Line coverage: \`${total:-unknown}\` (minimum \`${COVERAGE_MIN_TOTAL}%\`)" >> "$GITHUB_STEP_SUMMARY"
           if [ "$status" -ne 0 ]; then

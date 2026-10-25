@@ -69,7 +69,11 @@ void main() {
         r'test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL"',
       ),
     );
+    // Actions runs bash with -e, so without set +e a failing check would
+    // exit before reporting the figure and the annotation.
+    expect(gate, contains('set +e'));
     expect(gate, contains(r'status=${PIPESTATUS[0]}'));
+    expect(gate, contains('::error title=Coverage below minimum::'));
     expect(gate, contains(r'exit "$status"'));
     expect(gate, contains("if: steps.scope.outputs.run == 'true'"));
   });
