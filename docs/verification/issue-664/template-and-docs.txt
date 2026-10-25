@@ -1,0 +1,18 @@
+# Criterion 4 on main fbca508119c
+fbca508119c feat(logging): add an error-reporting seam that LoggingService forwards to (#676)
+A	lib/core/logging/crashlytics_error_reporter_template.dart
+1:// TEMPLATE: Not bound by default; opt in by overriding errorReporterProvider.
+8://      errorReporterProvider.overrideWithValue(CrashlyticsErrorReporter()),
+17:class CrashlyticsErrorReporter implements IErrorReporter {
+
+146:| Crash / error reporting | `NoOpErrorReporter` (`lib/core/logging/noop_error_reporter.dart`) | Your `IErrorReporter` (`lib/core/logging/i_error_reporter.dart`); a Crashlytics example is `lib/core/logging/crashlytics_error_reporter_template.dart`. `LoggingService.error` forwards to it | Override `errorReporterProvider` in `lib/core/logging/error_reporter_providers.dart` |
+
+# Criterion 5
+52:## Error reporting
+76:### Plugging in Crashlytics
+87:### Plugging in Sentry or your own service
+104:### Analytics, push notifications and other services
+
+$ dart run tool/check_docs.dart
+
+OK: documentation checks passed.

@@ -1,0 +1,24 @@
+# Criterion 6: PR #676 checks
+pass	Quality gate	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050312/job/121158911567
+pass	Docs check	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050435/job/121158911921
+pass	Strip both-samples-removed + analyze + test	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050306/job/121158911571
+pass	Strip tasks-removed + analyze + test	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050306/job/121158911871
+pass	Strip feature-flags-removed + analyze + test	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050306/job/121158911583
+pass	Strip renamed-both + analyze + test	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050306/job/121158911577
+pass	Strip keep-samples + analyze + test	https://github.com/koniz-dev/flutter-starter/actions/runs/40190050306/job/121158911613
+
+Quality gate run 40190050312 steps:
+success	Set up job
+success	Checkout code
+success	Decide the gate scope
+success	Setup Flutter
+success	Install dependencies
+success	Check generated code is up to date
+success	Verify formatting
+success	Analyze code
+success	Run tests (random order)
+success	Enforce minimum coverage
+success	Tracked files are unchanged
+success	Post Setup Flutter
+success	Post Checkout code
+success	Complete job

@@ -1,0 +1,6 @@
+# Mutations of LoggingService forwarding on main fbca508119c; each must make error_reporter_test.dart fail
+drop catchError (async failure): +5 -1: Some tests failed
+drop sync catch: +5 -1: Some tests failed
+report only when logging is enabled: +5 -1: Some tests failed
+drop forwarding entirely: +2 -4: Some tests failed
+restored: 0 modified files

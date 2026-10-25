@@ -1,0 +1,14 @@
+# Criterion 1 - seam files on main fbca508119c
+lib/core/logging/error_reporter_providers.dart
+lib/core/logging/i_error_reporter.dart
+lib/core/logging/noop_error_reporter.dart
+
+lib/core/logging/error_reporter_providers.dart:12:final errorReporterProvider = Provider<IErrorReporter>((ref) {
+lib/core/logging/i_error_reporter.dart:15:abstract class IErrorReporter {
+lib/core/logging/noop_error_reporter.dart:6:class NoOpErrorReporter implements IErrorReporter {
+
+# Criterion 2 - LoggingService consumes it
+23:    errorReporter: ref.watch(errorReporterProvider),
+221:    _report(message, context, error, stackTrace);
+(error() is the only caller of _report; debug/info/warning do not call it:)
+2
