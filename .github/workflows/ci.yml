@@ -193,7 +193,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          flutter test --timeout=5m --test-randomize-ordering-seed random \
+          flutter test --coverage --timeout=5m --test-randomize-ordering-seed random \
             2>&1 | tee "$RUNNER_TEMP/flutter-test.log"
           status=${PIPESTATUS[0]}
           set -e
@@ -204,6 +204,33 @@ jobs:
           if [ "$status" -ne 0 ]; then
             echo "::error title=flutter test failed (random order seed ${seed:-unknown})::Reproduce with: flutter test --test-randomize-ordering-seed ${seed:-unknown}"
             echo "- **Failed.** Reproduce with \`flutter test --test-randomize-ordering-seed ${seed:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit "$status"
+
+      # Total line coverage is a per-PR floor, so a pull request that deletes
+      # tests fails here instead of weeks later in coverage.yml's weekly
+      # report. test_coverage.sh removes the same files coverage.yml removes
+      # (generated code, l10n, main.dart, test helpers) using only awk, so this
+      # step installs nothing.
+      #
+      # The floor sits a little below what the starter measures today, with
+      # and without its sample features stripped, so a fresh project starts
+      # green. Raise it as your suite grows; coverage.yml keeps the per-layer
+      # targets.
+      - name: Enforce minimum coverage
+        if: steps.scope.outputs.run == 'true'
+        env:
+          COVERAGE_MIN_TOTAL: 94
+        shell: bash
+        run: |
+          set -o pipefail
+          ./scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL" \
+            | tee "$RUNNER_TEMP/coverage.log"
+          status=${PIPESTATUS[0]}
+          total=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)
+          echo "- Line coverage: \`${total:-unknown}\` (minimum \`${COVERAGE_MIN_TOTAL}%\`)" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$status" -ne 0 ]; then
+            echo "::error title=Coverage below minimum::Line coverage ${total:-unknown} is below ${COVERAGE_MIN_TOTAL}%. Add tests, or lower COVERAGE_MIN_TOTAL in ci.yml with a reason."
           fi
           exit "$status"
 

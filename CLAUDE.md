@@ -88,8 +88,10 @@ make verification worthless.
 - **Anything needing a live backend.** With no `BASE_URL` the app signs in
   through the offline demo, which proves the flow but not your API; no
   reachable API exists here.
-- **Coverage thresholds.** [`coverage.yml`](.github/workflows/coverage.yml) is
-  manual plus weekly, not per-PR.
+- **Per-layer coverage thresholds.** The Quality gate enforces only a total
+  line coverage floor (`COVERAGE_MIN_TOTAL` in [`ci.yml`](.github/workflows/ci.yml)).
+  The per-layer targets live in [`coverage.yml`](.github/workflows/coverage.yml),
+  which is manual plus weekly, not per-PR.
 
 ### Which checks a PR gets
 
