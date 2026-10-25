@@ -1,0 +1,8 @@
+^[[36;1m  echo "::error::patrol-output.log missing - the test step never produced output."^[[0m
+^[[36;1mecho "Patrol reported test count: ${total:-<none>}"^[[0m
+^[[36;1m  echo "::error::No 'Total:' summary in patrol output; cannot confirm any test ran."^[[0m
+^[[36;1m  echo "::error::Patrol collected 0 tests. A green run here would be a false pass."^[[0m
+^[[36;1m  echo "::error::$failed of $total Patrol test(s) failed. See the patrol-output artifact."^[[0m
+^[[36;1mecho "OK: $total test(s) collected and executed, 0 failed."^[[0m
+Patrol reported test count: 2
+OK: 2 test(s) collected and executed, 0 failed.

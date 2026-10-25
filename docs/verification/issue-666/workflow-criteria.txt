@@ -1,0 +1,101 @@
+# Criteria 1-3: e2e-android.yml as merged on main (eb816aa3558574e993853f990f794a0c84c0d7fa)
+
+## Criterion 1 - header (lines 1-17)
+# Patrol E2E on Android. Never runs on a pull request, so it never blocks one.
+#
+# Needs no backend: built without `BASE_URL`, the auth -> home test signs in
+# through the offline demo account (see integration_test/app_e2e_test.dart).
+# Built with `--dart-define=BASE_URL=<url>`, it signs in against that API
+# instead, which must then be reachable from the emulator.
+#
+# Triggers:
+#   * workflow_dispatch - any repository, any time.
+#   * schedule (weekly) - template repository only, so a Patrol, AGP or
+#     emulator change that breaks the harness surfaces within a week rather
+#     than whenever someone next dispatches it. A repository created from the
+#     template ("Use this template") skips the scheduled run:
+#     `github.event.repository.is_template` is true only in the template
+#     itself. To run it weekly in your project, drop that condition from the
+#     job's `if:` below; it costs roughly 40 runner minutes a week.
+name: E2E Android (Patrol)
+
+## Stale phrase gone from tracked files
+$ git grep -n "reachable API if"
+(no matches)
+
+## Criterion 2 - schedule trigger and template-only job gate
+19:on:
+20-  schedule:
+21-    - cron: '0 4 * * 1' # weekly (Mon 04:00 UTC), after coverage.yml's slot
+22-  workflow_dispatch:
+43:    if: github.event_name == 'workflow_dispatch' || github.event.repository.is_template
+83:          api-level: ${{ inputs.api_level || '34' }}
+85:          profile: ${{ inputs.emulator_profile || 'pixel_6' }}
+
+## Criterion 3 - guard step untouched by the change
+$ git diff eb816aa3558~1 eb816aa3558 -- .github/workflows/e2e-android.yml
+diff --git a/.github/workflows/e2e-android.yml b/.github/workflows/e2e-android.yml
+index ab771edca14..53bbedbc638 100644
+--- a/.github/workflows/e2e-android.yml
++++ b/.github/workflows/e2e-android.yml
+@@ -1,8 +1,24 @@
+-# Patrol E2E on Android — manual only (does not block PRs).
+-# Requires a reachable API if the auth flow calls the network; see integration_test/app_e2e_test.dart.
++# Patrol E2E on Android. Never runs on a pull request, so it never blocks one.
++#
++# Needs no backend: built without `BASE_URL`, the auth -> home test signs in
++# through the offline demo account (see integration_test/app_e2e_test.dart).
++# Built with `--dart-define=BASE_URL=<url>`, it signs in against that API
++# instead, which must then be reachable from the emulator.
++#
++# Triggers:
++#   * workflow_dispatch - any repository, any time.
++#   * schedule (weekly) - template repository only, so a Patrol, AGP or
++#     emulator change that breaks the harness surfaces within a week rather
++#     than whenever someone next dispatches it. A repository created from the
++#     template ("Use this template") skips the scheduled run:
++#     `github.event.repository.is_template` is true only in the template
++#     itself. To run it weekly in your project, drop that condition from the
++#     job's `if:` below; it costs roughly 40 runner minutes a week.
+ name: E2E Android (Patrol)
+ 
+ on:
++  schedule:
++    - cron: '0 4 * * 1' # weekly (Mon 04:00 UTC), after coverage.yml's slot
+   workflow_dispatch:
+     inputs:
+       api_level:
+@@ -24,6 +40,7 @@ permissions:
+ jobs:
+   patrol:
+     name: Patrol on Android emulator
++    if: github.event_name == 'workflow_dispatch' || github.event.repository.is_template
+     runs-on: ubuntu-latest
+     timeout-minutes: 60
+ 
+@@ -61,9 +78,11 @@ jobs:
+       - name: Run Patrol tests
+         uses: reactivecircus/android-emulator-runner@v2
+         with:
+-          api-level: ${{ inputs.api_level }}
++          # A scheduled run has no `inputs`, so these fall back to the
++          # dispatch form's defaults above. Keep the two in step.
++          api-level: ${{ inputs.api_level || '34' }}
+           arch: x86_64
+-          profile: ${{ inputs.emulator_profile }}
++          profile: ${{ inputs.emulator_profile || 'pixel_6' }}
+           # `bash -o pipefail` is load-bearing. The emulator-runner executes this
+           # via /usr/bin/sh, so a bare `patrol test ... | tee` returns tee's exit
+           # status and a FAILING test set reports as a green job. Verified: a run
+
+$ grep -n "Reject an empty test run" -A2 .github/workflows/e2e-android.yml
+95:      - name: Reject an empty test run
+96-        if: always()
+97-        run: |
+
+$ actionlint .github/workflows/e2e-android.yml
+.github/workflows/e2e-android.yml:67:9: shellcheck reported issue in this script: SC2086:info:1:32: Double quote to prevent globbing and word splitting [shellcheck]
+   |
+67 |         run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+   |         ^~~~
+(only finding is pre-existing SC2086 info on the unchanged GITHUB_PATH line)
