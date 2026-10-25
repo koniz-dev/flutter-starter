@@ -49,29 +49,74 @@ try {
 
 ---
 
-## Crashlytics Template
+## Error reporting
 
-An optional Firebase Crashlytics Log Output template.
+`LoggingService.error` forwards every error it logs - the message, the error
+object, its stack trace and the context map - to an `IErrorReporter`. Features
+keep logging through `loggingServiceProvider` and never call a crash reporting
+SDK themselves.
 
-**Location:** `lib/core/logging/crashlytics_output_template.dart`
+| Piece | Location |
+| --- | --- |
+| Interface | `IErrorReporter` in `lib/core/logging/i_error_reporter.dart` |
+| Default | `NoOpErrorReporter` in `lib/core/logging/noop_error_reporter.dart` - reports nothing |
+| Provider to override | `errorReporterProvider` in `lib/core/logging/error_reporter_providers.dart` |
+| Crashlytics example | `CrashlyticsErrorReporter` in `lib/core/logging/crashlytics_error_reporter_template.dart` |
 
-### Setup
+Two behaviours to know:
 
-1. Run: `flutter pub add firebase_crashlytics`
-2. Follow the instructions at the top of the file to uncomment the logic.
-3. Add to `LoggingService`:
+- **Reporting ignores `ENABLE_LOGGING`.** That toggle governs log outputs.
+  Which reporter is bound governs reporting, so turning logs off does not
+  silently drop crash reports.
+- **A failing reporter never breaks the caller.** If `recordError` throws, or
+  its future fails, `LoggingService` logs a warning (`Error reporter failed`)
+  and carries on. The warning goes to the logger directly, not back to the
+  reporter.
+
+### Plugging in Crashlytics
+
+1. Run `flutter pub add firebase_crashlytics` and initialise Firebase.
+2. In `lib/core/logging/crashlytics_error_reporter_template.dart`, uncomment
+   the import and the body of `recordError`.
+3. Override the provider once, where the app container is built:
+
    ```dart
-   if (_enableRemoteLogging) {
-     outputs.add(CrashlyticsOutput());
-   }
+   errorReporterProvider.overrideWithValue(CrashlyticsErrorReporter()),
    ```
 
-This template is opt-in and not enabled by default.
+### Plugging in Sentry or your own service
 
-### Behavior
+Implement the interface and override the same provider:
 
-- Automatically filters logs to only send `Level.warning` and `Level.error` to Firebase.
-- Maps `Level.error` as "fatal" errors in the Crashlytics dashboard.
+```dart
+class SentryErrorReporter implements IErrorReporter {
+  @override
+  Future<void> recordError(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, dynamic>? context,
+  }) =>
+      Sentry.captureException(error ?? message, stackTrace: stackTrace);
+}
+```
+
+### Analytics, push notifications and other services
+
+The starter ships no analytics or push seam, on purpose: nothing in it would
+call one, and
+[ADR 0006](../../architecture/adr/0006-contract-status-and-slice-shape.md)
+rules out a contract with no production consumer. When your app gets its
+first consumer, add the seam with the same three pieces, next to that consumer:
+
+1. An interface (`IAnalyticsService` with `logEvent`, say).
+2. A no-op default, so tests and builds without the vendor still run.
+3. A `Provider` typed on the interface that returns the no-op, which you
+   override with the vendor adapter where the app container is built.
+
+Features then read the provider, never the SDK. `IErrorReporter` and
+`IRaspService` (`lib/core/security/`) are the two worked examples in this
+tree.
 
 ---
 

@@ -96,6 +96,7 @@ name it guards moves or disappears.
 <!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart authControllerProvider -->
 <!-- symbol: lib/features/auth/presentation/providers/auth_provider.g.dart authProvider -->
 <!-- symbol: lib/core/security/rasp_providers.dart raspServiceProvider -->
+<!-- symbol: lib/core/logging/error_reporter_providers.dart errorReporterProvider -->
 <!-- symbol: lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart featureFlagsRemoteDataSourceProvider -->
 <!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
 <!-- symbol: lib/core/network/api_client.dart ApiClient._networkClient -->
@@ -142,7 +143,7 @@ to mistype.
 | Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@riverpod featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` <!-- strip:feature-flags line --> |
 | RASP | `NoOpRaspService` | `freerasp` (when you wire it) | `raspServiceProvider` in `lib/core/security/rasp_providers.dart` |
 | Firebase Performance | No-op via performance providers | Firebase SDK | `lib/core/performance/performance_providers.dart` (see comments there) |
-| Crashlytics logging | Template output | `lib/core/logging/crashlytics_output_template.dart` | Wire into logging pipeline when needed |
+| Crash / error reporting | `NoOpErrorReporter` (`lib/core/logging/noop_error_reporter.dart`) | Your `IErrorReporter` (`lib/core/logging/i_error_reporter.dart`); a Crashlytics example is `lib/core/logging/crashlytics_error_reporter_template.dart`. `LoggingService.error` forwards to it | Override `errorReporterProvider` in `lib/core/logging/error_reporter_providers.dart` |
 | GraphQL | Template | `lib/core/network/graphql_client_template.dart` | Copy/adapt; keep REST behind `INetworkClient` |
 | Isar / local DB | Template + interface | `lib/core/storage/isar_database_template.dart`, `local_database.dart` | Opt-in persistence |
 | Patrol E2E | Dev dependency | `integration_test/` | Optional flows |
