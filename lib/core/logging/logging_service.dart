@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/logging/i_error_reporter.dart';
 import 'package:flutter_starter/core/logging/log_output.dart';
+import 'package:flutter_starter/core/logging/noop_error_reporter.dart';
 import 'package:logger/logger.dart';
 
 /// Comprehensive logging service for the application
@@ -13,7 +15,8 @@ import 'package:logger/logger.dart';
 /// - Multiple log levels (debug, info, warning, error)
 /// - Structured logging with context/metadata
 /// - Multiple outputs (console, file, remote)
-/// - Integration with error tracking services
+/// - Integration with error tracking services: every [error] is forwarded to
+///   the [IErrorReporter] it was given (`errorReporterProvider`)
 /// - Respects ENABLE_LOGGING flag from AppConfig
 ///
 /// Usage:
@@ -33,6 +36,8 @@ class LoggingService {
   /// production)
   /// [enableRemoteLogging] - Whether to log to remote services
   /// (default: false)
+  /// [errorReporter] - Receives every [error], whether or not logging is
+  /// enabled (default: [NoOpErrorReporter])
   /// [debugMode] - Stands in for `kDebugMode`, for tests
   /// [output] - Replaces every built-in output, so a test can observe the
   /// level and formatted lines each call produces
@@ -41,11 +46,13 @@ class LoggingService {
     bool? enableLogging,
     bool? enableFileLogging,
     bool? enableRemoteLogging,
+    IErrorReporter? errorReporter,
     @visibleForTesting bool? debugMode,
     @visibleForTesting LogOutput? output,
   }) : _enableLogging = enableLogging ?? AppConfig.enableLogging,
        _enableFileLogging = enableFileLogging ?? AppConfig.isProduction,
        _enableRemoteLogging = enableRemoteLogging ?? false,
+       _errorReporter = errorReporter ?? const NoOpErrorReporter(),
        _debugMode = debugMode ?? kDebugMode,
        _injectedOutput = output {
     _initializeLogger();
@@ -59,6 +66,9 @@ class LoggingService {
 
   /// Whether remote logging is enabled
   final bool _enableRemoteLogging;
+
+  /// Where [error] forwards to, independent of [_enableLogging]
+  final IErrorReporter _errorReporter;
 
   /// Whether this is a debug build (`kDebugMode` unless a test says so)
   final bool _debugMode;
@@ -186,24 +196,63 @@ class LoggingService {
     );
   }
 
-  /// Log an error message
+  /// Log an error message and forward it to the error reporter
   ///
   /// [message] - The log message
   /// [context] - Optional context/metadata to include in the log
   /// [error] - Optional error object
   /// [stackTrace] - Optional stack trace
+  ///
+  /// The reporter is called even when logging is disabled, and a reporter
+  /// that throws or fails asynchronously never breaks the caller.
   void error(
     String message, {
     Map<String, dynamic>? context,
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (!_enableLogging) return;
-    _logger.e(
-      _formatMessage(message, context),
-      error: error,
-      stackTrace: stackTrace,
-    );
+    if (_enableLogging) {
+      _logger.e(
+        _formatMessage(message, context),
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+    _report(message, context, error, stackTrace);
+  }
+
+  void _report(
+    String message,
+    Map<String, dynamic>? context,
+    Object? error,
+    StackTrace? stackTrace,
+  ) {
+    void onFailure(Object failure, StackTrace failureTrace) {
+      // Straight to the logger, not through error(): a failing reporter must
+      // not be asked to report its own failure.
+      if (_enableLogging) {
+        _logger.w(
+          'Error reporter failed',
+          error: failure,
+          stackTrace: failureTrace,
+        );
+      }
+    }
+
+    try {
+      unawaited(
+        _errorReporter
+            .recordError(
+              message,
+              error: error,
+              stackTrace: stackTrace,
+              context: context,
+            )
+            .catchError(onFailure),
+      );
+    } on Object catch (failure, failureTrace) {
+      onFailure(failure, failureTrace);
+    }
   }
 
   /// Format a log message with optional context
