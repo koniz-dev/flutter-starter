@@ -1,0 +1,75 @@
+# Criterion 3 on branch at 1a0cae900c8: one injected violation per kind, each run alone, file removed after.
+# Each failure names the offending file and line, the import, and the rule.
+=== domain -> own data/
+injected: lib/features/tasks/domain/usecases/probe_a.dart
+    import 'package:flutter_starter/features/tasks/data/models/task_model.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/features/tasks/domain/usecases/probe_a.dart:1
+       imports : package:flutter_starter/features/tasks/data/models/task_model.dart
+       rule    : domain_imports_outer_layer
++0 -1: Some tests failed.
+
+=== domain -> own presentation/
+injected: lib/features/tasks/domain/usecases/probe_b.dart
+    import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/features/tasks/domain/usecases/probe_b.dart:1
+       imports : package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart
+       rule    : domain_imports_outer_layer
++0 -1: Some tests failed.
+
+=== domain -> package:dio
+injected: lib/features/auth/domain/usecases/probe_c.dart
+    import 'package:dio/dio.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/features/auth/domain/usecases/probe_c.dart:1
+       imports : package:dio/dio.dart
+       rule    : dio_outside_core_network
++0 -1: Some tests failed.
+
+=== domain -> package:flutter/material.dart
+injected: lib/features/auth/domain/entities/probe_d.dart
+    import 'package:flutter/material.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/features/auth/domain/entities/probe_d.dart:1
+       imports : package:flutter/material.dart
+       rule    : domain_imports_flutter_ui
++0 -1: Some tests failed.
+
+=== feature -> another feature's data/
+injected: lib/features/tasks/presentation/screens/probe_e.dart
+    import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/features/tasks/presentation/screens/probe_e.dart:1
+       imports : package:flutter_starter/features/auth/data/models/user_model.dart
+       rule    : cross_feature_import
++0 -1: Some tests failed.
+
+=== feature -> another feature's presentation/
+injected: lib/features/auth/presentation/screens/probe_f.dart
+    import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/features/auth/presentation/screens/probe_f.dart:1
+       imports : package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart
+       rule    : cross_feature_import
++0 -1: Some tests failed.
+
+=== lib/core -> lib/features outside the allowlist
+injected: lib/core/utils/probe_g.dart
+    import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+
+ NEW import-rule violation(s) - 1 found.
+   lib/core/utils/probe_g.dart:1
+       imports : package:flutter_starter/features/auth/domain/entities/user.dart
+       rule    : core_imports_feature
++0 -1: Some tests failed.
+
+=== clean tree after all probes removed
+git status --porcelain lib: ''
++24: All tests passed!

@@ -1,0 +1,30 @@
+# Criterion 4 on branch at 1a0cae900c8
+$ ./scripts/dev/create_feature.sh scaffold_probe
+Creating feature: scaffold_probe
+Feature scaffold_probe created:
+  lib/features/scaffold_probe
+  test/features/scaffold_probe
+Next: flutter analyze && flutter test test/features/scaffold_probe
+
+$ git status --porcelain (what the scaffold created)
+?? lib/features/scaffold_probe/
+?? test/features/scaffold_probe/
+
+## imports in the scaffolded domain/:
+1:import 'package:flutter_starter/core/utils/result.dart';
+2:import 'package:flutter_starter/features/scaffold_probe/domain/entities/scaffold_probe.dart';
+3:import 'package:flutter_starter/features/scaffold_probe/domain/repositories/scaffold_probe_repository.dart';
+1:import 'package:equatable/equatable.dart';
+1:import 'package:flutter_starter/core/utils/result.dart';
+2:import 'package:flutter_starter/features/scaffold_probe/domain/entities/scaffold_probe.dart';
+
+$ flutter test test/tooling/import_rules_test.dart
++24: All tests passed!
+
+$ flutter analyze lib/features/scaffold_probe test/features/scaffold_probe
+No issues found! (ran in 2.9s)
+
+$ flutter test test/features/scaffold_probe
++2: All tests passed!
+
+removed; git status --porcelain: ''
