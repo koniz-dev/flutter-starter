@@ -1,0 +1,24 @@
+# Baseline line coverage on main eb816aa3558, measured locally with
+# flutter test --coverage, then scripts/test/test_coverage.sh --no-test (coverage.yml's exclusions)
+
+full tree:
+  Total lines: 4755
+  Covered lines: 4556
+  Coverage: 95.81%
+
+stripped variants (dart run tool/strip_sample_features.dart --apply <flags>):
+both-samples-removed test exit 0
+  Total lines: 3690
+  Covered lines: 3508
+  Coverage: 95.07%
+tasks-removed (--remove-tasks) test exit 0
+  Total lines: 4092
+  Covered lines: 3901
+  Coverage: 95.33%
+feature-flags-removed (--remove-feature-flags) test exit 0
+  Total lines: 4353
+  Covered lines: 4163
+  Coverage: 95.64%
+
+
+local wall time of flutter test --coverage (full tree): 5:03.99 total

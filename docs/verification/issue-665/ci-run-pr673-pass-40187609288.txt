@@ -1,0 +1,30 @@
+# chore/665-coverage-gate  run 40187609288  https://github.com/koniz-dev/flutter-starter/actions/runs/40187609288
+head=f4960c43f65899f9f4e245fa3aa6514b8ab143e8 event=pull_request conclusion=success
+job 2026-10-25T11:08:21Z -> 2026-10-25T11:14:36Z
+success	Set up job	2026-10-25T11:08:22Z	2026-10-25T11:08:23Z
+success	Checkout code	2026-10-25T11:08:23Z	2026-10-25T11:08:25Z
+success	Decide the gate scope	2026-10-25T11:08:25Z	2026-10-25T11:08:25Z
+success	Setup Flutter	2026-10-25T11:08:25Z	2026-10-25T11:08:42Z
+success	Install dependencies	2026-10-25T11:08:42Z	2026-10-25T11:08:43Z
+success	Check generated code is up to date	2026-10-25T11:08:43Z	2026-10-25T11:09:22Z
+success	Verify formatting	2026-10-25T11:09:22Z	2026-10-25T11:09:23Z
+success	Analyze code	2026-10-25T11:09:23Z	2026-10-25T11:09:41Z
+success	Run tests (random order)	2026-10-25T11:09:41Z	2026-10-25T11:14:33Z
+success	Enforce minimum coverage	2026-10-25T11:14:33Z	2026-10-25T11:14:33Z
+success	Tracked files are unchanged	2026-10-25T11:14:33Z	2026-10-25T11:14:33Z
+success	Post Setup Flutter	2026-10-25T11:14:33Z	2026-10-25T11:14:33Z
+success	Post Checkout code	2026-10-25T11:14:33Z	2026-10-25T11:14:34Z
+success	Complete job	2026-10-25T11:14:34Z	2026-10-25T11:14:34Z
+
+## Enforce minimum coverage step output
+^[[36;1mtotal=$(grep -oE 'Coverage: [0-9.]+%' "$RUNNER_TEMP/coverage.log" | grep -oE '[0-9.]+%' || true)^[[0m
+^[[36;1m  echo "::error title=Coverage below minimum::Line coverage ${total:-unknown} is below ${COVERAGE_MIN_TOTAL}%. Add tests, or lower COVERAGE_MIN_TOTAL in ci.yml with a reason."^[[0m
+^[[0;34mCoverage Statistics:^[[0m
+  Total lines: 4755
+  Covered lines: 4559
+  Coverage: 95.88%
+^[[0;32m✓ Coverage 95.88% meets minimum threshold of 94%^[[0m
+^[[0;32mCoverage report complete!^[[0m
+
+## Check-run annotations
+notice: : "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"

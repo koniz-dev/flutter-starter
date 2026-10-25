@@ -1,0 +1,32 @@
+# Quality gate durations, successful ci.yml runs (gh run view --json jobs)
+# columns: created, run id, event, branch, 'Run tests (random order)' step, whole job
+# coverage collection starts at run 40186727967 (PR 673)
+
+2026-10-22T18:33:54Z	39832511991	push	main	test=181s	job=260s
+2026-10-22T18:48:20Z	39834578520	pull_request	fix/639-one-backend-rule	test=134s	job=197s
+2026-10-22T18:54:32Z	39835474547	push	main	test=182s	job=266s
+2026-10-22T18:54:58Z	39835535473	pull_request	test/640-patrol-demo-sign-in	test=150s	job=222s
+2026-10-22T19:02:02Z	39836531751	pull_request	fix/639-doc-precision	test=192s	job=281s
+2026-10-22T19:07:14Z	39837304242	push	main	test=189s	job=279s
+2026-10-22T19:37:30Z	39841725889	push	main	test=181s	job=259s
+2026-10-24T07:54:06Z	40075948146	pull_request	fix/650-demo-card-contrast	test=180s	job=314s
+2026-10-24T07:59:51Z	40076298039	push	main	test=174s	job=312s
+2026-10-24T08:20:15Z	40077636368	pull_request	chore/655-fastlane-todos	test=171s	job=250s
+2026-10-24T08:33:15Z	40078492847	pull_request	fix/651-strip-sample-remnants	test=187s	job=270s
+2026-10-24T08:33:28Z	40078506490	push	main	test=188s	job=265s
+2026-10-24T08:38:18Z	40078815846	push	main	test=137s	job=202s
+2026-10-24T08:47:26Z	40079410874	pull_request	docs/653-project-docs-index	test=168s	job=243s
+2026-10-24T08:57:28Z	40080049973	push	main	test=166s	job=244s
+2026-10-24T08:58:50Z	40080130953	pull_request	docs/654-rename-contributing	test=184s	job=264s
+2026-10-24T09:10:32Z	40080908815	pull_request	fix/659-example-screen-gate	test=180s	job=266s
+2026-10-24T09:15:31Z	40081239431	push	main	test=186s	job=276s
+2026-10-25T09:45:07Z	40181936622	pull_request	chore/666-e2e-android-weekly	test=184s	job=263s
+2026-10-25T09:52:17Z	40182434367	push	main	test=193s	job=286s
+2026-10-25T10:55:12Z	40186727967	pull_request	chore/665-coverage-gate	test=232s	job=311s
+2026-10-25T11:01:29Z	40187146754	pull_request	chore/665-coverage-gate	test=290s	job=384s
+2026-10-25T11:08:18Z	40187609288	pull_request	chore/665-coverage-gate	test=292s	job=375s
+2026-10-25T11:15:31Z	40188101887	push	main	test=302s	job=387s
+
+before: n=20 test median=181s range=134-193s | job median=264s range=197-314s
+after: n=4 test median=291s range=232-302s | job median=380s range=311-387s
+delta (medians): test +110s, job +115s
