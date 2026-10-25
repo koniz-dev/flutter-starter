@@ -114,9 +114,11 @@ Two workflows measure coverage, from the same files:
   `flutter test --coverage`, then its **Enforce minimum coverage** step runs
   `scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL"`. Total
   line coverage below `COVERAGE_MIN_TOTAL` fails the PR. It checks the total
-  only, needs no `lcov` install, and adds under a minute to the job
-  (collecting coverage slows `flutter test` slightly; the check itself takes
-  about a second).
+  only and needs no `lcov` install. It is not free: collecting coverage makes
+  `flutter test` roughly 60% slower, which on this starter's suite adds about
+  two minutes to the job (the threshold check itself takes under a second).
+  To trade the gate back for speed, drop `--coverage` from the **Run tests**
+  step and delete **Enforce minimum coverage**.
 - **[`coverage.yml`](../../../.github/workflows/coverage.yml), manual plus
   weekly.** Its triggers are `workflow_dispatch` and a `schedule` (Mondays,
   03:00 UTC); the `push` / `pull_request` triggers are commented out, waiting
