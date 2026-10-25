@@ -34,6 +34,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// Do not add to this map to silence a new failure - fix the import instead.
 const kAllowedImportViolations = <String, Set<String>>{
   'domain_imports_outer_layer': <String>{},
+  'domain_imports_flutter_ui': <String>{},
   'cross_feature_import': <String>{},
 
   // The one designated mapper outside `lib/core/network/`. It is intentional,
@@ -62,12 +63,14 @@ const kAllowedImportViolations = <String, Set<String>>{
   // There were three. `lib/core/di/providers.dart` is **gone from this list**
   // because the edge is gone: core now declares the
   // 401-refresh seams and the auth slice fills them from
-  // `authModuleOverrides`.
-  //
-  // The two left belong to the feature-flags sample and to routing. Until
-  // they are fixed they are allowlisted so that they cannot get worse.
+  // `authModuleOverrides`. Until the two below are fixed they are allowlisted
+  // so that they cannot get worse.
   'core_imports_feature': <String>{
+    // Types its API on the feature-flags slice's FeatureFlag entity and
+    // repository; it ships and strips with that sample.
     'lib/core/feature_flags/feature_flags_manager.dart',
+    // The auth redirect reads authNotifierProvider to decide where a
+    // signed-in or signed-out user may go.
     'lib/core/routing/app_router.dart',
   },
 };
@@ -153,6 +156,17 @@ bool _domainImportsOuterLayer(String sourcePath, String uri) {
       uri.startsWith('${kPkg}features/$feature/presentation/');
 }
 
+/// `foundation.dart` stays allowed: it carries `@immutable` and
+/// `listEquals`, which entities use, and pulls in no widget or rendering code.
+const String kFlutterFoundation = 'package:flutter/foundation.dart';
+
+bool _domainImportsFlutterUi(String sourcePath, String uri) {
+  final feature = featureOf(sourcePath);
+  if (feature == null) return false;
+  if (!sourcePath.startsWith('lib/features/$feature/domain/')) return false;
+  return uri.startsWith('package:flutter/') && uri != kFlutterFoundation;
+}
+
 bool _crossFeatureImport(String sourcePath, String uri) {
   final from = featureOf(sourcePath);
   final to = featureOfUri(uri);
@@ -186,6 +200,16 @@ const List<ImportRule> kImportRules = <ImportRule>[
         'nowhere - domain is the innermost layer and depends on '
         'nothing outside itself',
     violates: _domainImportsOuterLayer,
+  ),
+  ImportRule(
+    id: 'domain_imports_flutter_ui',
+    banned:
+        'a file under lib/features/<f>/domain/ importing a Flutter UI '
+        'library (material, widgets, cupertino, painting, rendering, ...)',
+    allowedIn:
+        '$kFlutterFoundation only - domain is plain Dart plus '
+        '@immutable; widgets belong in presentation/',
+    violates: _domainImportsFlutterUi,
   ),
   ImportRule(
     id: 'cross_feature_import',
@@ -456,6 +480,39 @@ void main() {
       );
       expect(ruleFor(domainFile, pkg('core/errors/failures.dart')), isNull);
       expect(ruleFor(domainFile, 'package:dartz/dartz.dart'), isNull);
+    });
+
+    test('domain importing a Flutter UI library is a violation', () {
+      for (final library in const [
+        'material',
+        'widgets',
+        'cupertino',
+        'painting',
+      ]) {
+        expect(
+          ruleFor(domainFile, 'package:flutter/$library.dart'),
+          'domain_imports_flutter_ui',
+          reason: library,
+        );
+      }
+    });
+
+    test('domain may import foundation.dart, and presentation material', () {
+      expect(ruleFor(domainFile, kFlutterFoundation), isNull);
+      expect(ruleFor(screenFile, 'package:flutter/material.dart'), isNull);
+      expect(
+        ruleFor(
+          'lib/features/tasks/data/models/task_model.dart',
+          'package:flutter/material.dart',
+        ),
+        isNull,
+      );
+    });
+
+    test('domain importing package:dio is a violation too', () {
+      // Covered by the dio rule, which applies everywhere outside
+      // lib/core/network/, domain included.
+      expect(ruleFor(domainFile, dio), 'dio_outside_core_network');
     });
 
     test('data importing presentation is outside this rule set', () {
