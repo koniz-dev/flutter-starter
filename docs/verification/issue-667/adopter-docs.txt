@@ -1,0 +1,5 @@
+# Criterion 3 on main 7c4e0ccefea: docs/deployment/summary.md
+17:- **Dependency updates:** [`.github/dependabot.yml`](../../.github/dependabot.yml) opens weekly PRs for pub packages and GitHub Actions, with minor and patch bumps grouped into one PR per ecosystem. `patrol` is excluded because it must be bumped together with the `patrol_cli` version pinned in [`e2e-android.yml`](../../.github/workflows/e2e-android.yml). To stop the PRs, delete `dependabot.yml` (or one of its `updates:` entries). Security updates are a separate repository setting (Settings → Code security).
+
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.

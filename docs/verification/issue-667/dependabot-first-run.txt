@@ -1,0 +1,37 @@
+# Criterion 4: first Dependabot run after .github/dependabot.yml landed on main (7c4e0ccefea, PR #678, merged 2026-10-25 ~12:08 UTC)
+
+## Update runs
+40191881212	github_actions in /. - Update #1651441495	completed	success	2026-10-25T12:09:27Z
+40191880547	pub in /. - Update #1651441493	in_progress		2026-10-25T12:09:26Z
+40191877316	github_actions in /. - Update #1651441455	completed	success	2026-10-25T12:09:24Z
+40191877231	pub in /. - Update #1651441447	completed	success	2026-10-25T12:09:24Z
+
+## PRs opened by dependabot[bot]
+#683	chore(deps): Bump very_good_analysis from 10.1.0 to 11.0.0	dependabot/pub/very_good_analysis-11.0.0
+#682	chore(deps): Bump go_router from 17.1.0 to 18.1.1	dependabot/pub/go_router-18.1.1
+#681	chore(deps): Bump equatable from 2.0.8 to 2.1.0	dependabot/pub/equatable-2.1.0
+#680	chore(deps): Bump flutter_secure_storage from 10.0.0 to 11.2.0	dependabot/pub/flutter_secure_storage-11.2.0
+#679	chore(deps): Bump the pub-minor-and-patch group with 17 updates	dependabot/pub/pub-minor-and-patch-920d4db819
+
+## patrol excluded: does any Dependabot PR touch patrol?
+(no lines above = no PR bumps patrol in pubspec.yaml)
+
+## pubspec.lock patrol entries in the group PR
+   patrol: ^3.10.0
+ 
+   # Riverpod Generator - generates provider boilerplate
+-  riverpod_generator: ^3.0.3
+#679: pubspec.lock hunks naming patrol/patrol_finders/patrol_log: 0
+#680: pubspec.lock hunks naming patrol/patrol_finders/patrol_log: 0
+#681: pubspec.lock hunks naming patrol/patrol_finders/patrol_log: 0
+#682: pubspec.lock hunks naming patrol/patrol_finders/patrol_log: 0
+#683: pubspec.lock hunks naming patrol/patrol_finders/patrol_log: 0
+
+## Final state of the four update runs
+pub in /. - Update #1651441447	success
+github_actions in /. - Update #1651441455	success
+pub in /. - Update #1651441493	success
+github_actions in /. - Update #1651441495	success
+
+## Config errors reported by Dependabot (none expected): repository issues titled with 'Dependabot' since the merge
+(empty = none)
