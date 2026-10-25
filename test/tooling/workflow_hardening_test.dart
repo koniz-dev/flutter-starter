@@ -9,8 +9,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Action majors that still run on Node 20, and the Node 24 major each moved
-/// to. Dependabot is not used: its "Bump ..." commits carry no
-/// `Refs owner/repo#N`, which the Issue refs check requires on every PR.
+/// to. Dependabot (`.github/dependabot.yml`) now proposes newer majors; this
+/// list keeps the deprecated ones from coming back.
 const _node20Majors = {
   'actions/checkout@v4': 'actions/checkout@v7',
   'actions/setup-java@v4': 'actions/setup-java@v6',

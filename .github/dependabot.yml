@@ -1,0 +1,39 @@
+# Dependabot version updates: weekly PRs for pub packages and GitHub Actions.
+#
+# Minor and patch bumps are grouped into one PR per ecosystem to keep the PR
+# count down; majors still arrive one per package, since those are the ones
+# that need reading. Every PR runs the Quality gate like any other.
+#
+# This file ships with the template, so a repository created from it gets the
+# same PRs. To turn them off, delete this file (or one `updates:` entry);
+# security updates are a separate setting under Settings -> Code security.
+version: 2
+
+updates:
+  - package-ecosystem: pub
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      pub-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # `patrol` must move together with the `patrol_cli` version pinned in
+      # .github/workflows/e2e-android.yml (see the compatibility table linked
+      # there); a lone bump makes the CLI abort before any test runs. Bump
+      # both by hand.
+      - dependency-name: patrol
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(ci)
+    groups:
+      actions-minor-and-patch:
+        update-types: [minor, patch]
