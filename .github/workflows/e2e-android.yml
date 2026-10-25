@@ -1,8 +1,24 @@
-# Patrol E2E on Android — manual only (does not block PRs).
-# Requires a reachable API if the auth flow calls the network; see integration_test/app_e2e_test.dart.
+# Patrol E2E on Android. Never runs on a pull request, so it never blocks one.
+#
+# Needs no backend: built without `BASE_URL`, the auth -> home test signs in
+# through the offline demo account (see integration_test/app_e2e_test.dart).
+# Built with `--dart-define=BASE_URL=<url>`, it signs in against that API
+# instead, which must then be reachable from the emulator.
+#
+# Triggers:
+#   * workflow_dispatch - any repository, any time.
+#   * schedule (weekly) - template repository only, so a Patrol, AGP or
+#     emulator change that breaks the harness surfaces within a week rather
+#     than whenever someone next dispatches it. A repository created from the
+#     template ("Use this template") skips the scheduled run:
+#     `github.event.repository.is_template` is true only in the template
+#     itself. To run it weekly in your project, drop that condition from the
+#     job's `if:` below; it costs roughly 40 runner minutes a week.
 name: E2E Android (Patrol)
 
 on:
+  schedule:
+    - cron: '0 4 * * 1' # weekly (Mon 04:00 UTC), after coverage.yml's slot
   workflow_dispatch:
     inputs:
       api_level:
@@ -24,6 +40,7 @@ permissions:
 jobs:
   patrol:
     name: Patrol on Android emulator
+    if: github.event_name == 'workflow_dispatch' || github.event.repository.is_template
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -61,9 +78,11 @@ jobs:
       - name: Run Patrol tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ inputs.api_level }}
+          # A scheduled run has no `inputs`, so these fall back to the
+          # dispatch form's defaults above. Keep the two in step.
+          api-level: ${{ inputs.api_level || '34' }}
           arch: x86_64
-          profile: ${{ inputs.emulator_profile }}
+          profile: ${{ inputs.emulator_profile || 'pixel_6' }}
           # `bash -o pipefail` is load-bearing. The emulator-runner executes this
           # via /usr/bin/sh, so a bare `patrol test ... | tee` returns tee's exit
           # status and a FAILING test set reports as a green job. Verified: a run

@@ -65,9 +65,11 @@ make verification worthless.
 - **Patrol E2E.** `integration_test/` and `patrol: ^3.10.0` exist, but
   `patrol_cli` is not installed locally, no Android/iOS device or emulator is
   connected (only macOS desktop and Chrome), and
-  [`e2e-android.yml`](.github/workflows/e2e-android.yml) is
-  `workflow_dispatch`-only by design. **A session cannot run Patrol.**
-  A **human** can now run it: Actions -> E2E Android (Patrol) -> Run workflow.
+  [`e2e-android.yml`](.github/workflows/e2e-android.yml) never runs on a
+  pull request, by design: it runs on `workflow_dispatch`, plus a weekly
+  `schedule` in the template repository only (a repository created from it
+  skips the scheduled run). **A session cannot run Patrol locally.**
+  Anyone can dispatch it: Actions -> E2E Android (Patrol) -> Run workflow.
   The native harness exists (`android/app/src/androidTest/`,
   `PatrolJUnitRunner`, orchestrator) and run 32966672465 collected and executed a
   real test (`Total: 1`). The job also fails on `Total: 0` or a non-zero
