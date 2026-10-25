@@ -1,0 +1,42 @@
+# Criterion 1 on main cffe9fe945d
+$ ls lib/core/logging/logging_examples.dart
+ls: lib/core/logging/logging_examples.dart: No such file or directory
+
+$ git log --follow --name-status -1 -- examples/logging_examples.dart
+cffe9fe945d chore(logging): move logging_examples.dart out of lib/ into examples/ (#684)
+
+R100	lib/core/logging/logging_examples.dart	examples/logging_examples.dart
+
+$ git grep -n "logging_examples" (every remaining mention)
+docs/api/core/logging.md:16:[`examples/logging_examples.dart`](../../../examples/logging_examples.dart).
+examples/README.md:8:| [`logging_examples.dart`](logging_examples.dart) | Structured logging with `LoggingService` in a use case, a repository and an API client, with identifiers masked before they reach a log line |
+
+$ flutter analyze examples (the moved snippets still compile)
+No issues found! (ran in 3.7s)
+
+$ dart format --output=none --set-exit-if-changed examples
+Formatted 2 files (0 changed) in 0.06 seconds.
+exit 0
+
+# Criterion 2
+$ sed -n 38,42p test/core/config/enable_toggles_have_readers_test.dart
+
+/// Source with `//` comment lines removed, so a commented-out call is not
+/// counted as a reader.
+String _code(File file) => file
+    .readAsLinesSync()
+
+$ flutter test test/core/config/enable_toggles_have_readers_test.dart
+00:01 +7: All tests passed!
+
+# Criterion 3
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.
+audit_template.sh: the harness logs format.log / analyze.log / tests.log in this directory; PR #684 checks:
+pass	Quality gate
+pass	Docs check
+pass	Strip both-samples-removed + analyze + test
+pass	Strip tasks-removed + analyze + test
+pass	Strip feature-flags-removed + analyze + test
+pass	Strip renamed-both + analyze + test
+pass	Strip keep-samples + analyze + test
