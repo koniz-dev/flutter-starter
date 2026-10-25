@@ -41,7 +41,7 @@ dependencies:
   freezed_annotation: ^3.1.0
 
   # Routing - Declarative routing for Flutter with deep linking support
-  go_router: ^17.0.0
+  go_router: ^18.1.1
 
   # Utilities - Internationalization and localization support
   # Used in date_formatter.dart for date formatting
