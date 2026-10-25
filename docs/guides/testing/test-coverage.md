@@ -108,21 +108,25 @@ straight to `$GITHUB_OUTPUT` without the human text becoming step-output keys.
 
 ### GitHub Actions
 
-Coverage does **not** run on pushes or pull requests. The triggers in
-[`coverage.yml`](../../../.github/workflows/coverage.yml) are `workflow_dispatch`
-and a weekly `schedule` (Mondays, 03:00 UTC) only; the per-branch `push` and
-`pull_request` triggers are present but commented out, waiting for you to pick
-your branch names. `ci.yml` (the **Quality gate** that does run on every PR)
-has no coverage step at all.
+Two workflows measure coverage, from the same files:
 
-So on a manual or scheduled run, coverage is:
-- Calculated over the whole repository
-- Enforced against the thresholds in the **Enforce coverage thresholds** step
-- Uploaded to Codecov
+- **`ci.yml`, every push and pull request.** The **Quality gate** runs
+  `flutter test --coverage`, then its **Enforce minimum coverage** step runs
+  `scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL"`. Total
+  line coverage below `COVERAGE_MIN_TOTAL` fails the PR. It checks the total
+  only, needs no `lcov` install, and adds under a minute to the job
+  (collecting coverage slows `flutter test` slightly; the check itself takes
+  about a second).
+- **[`coverage.yml`](../../../.github/workflows/coverage.yml), manual plus
+  weekly.** Its triggers are `workflow_dispatch` and a `schedule` (Mondays,
+  03:00 UTC); the `push` / `pull_request` triggers are commented out, waiting
+  for you to pick your branch names. A run is calculated over the whole
+  repository, enforced against the per-layer targets in its **Enforce coverage
+  thresholds** step, and uploaded to Codecov.
 
-To gate PRs on coverage, uncomment the `push:` / `pull_request:` triggers at
-the top of `coverage.yml` and set your branches. Until you do, treat coverage
-as a weekly report, not a gate.
+Both drop the same files before counting: `coverage.yml` with `lcov --remove`,
+`test_coverage.sh` with the equivalent `awk` filter.
+`test/tooling/ci_coverage_gate_test.dart` fails if the two lists drift.
 
 ### Codecov Integration
 
@@ -156,22 +160,27 @@ per-layer floors (domain 100%, data 90%, presentation 80%, core 80%) in its
 ([`coverage.yml:139-171`](../../../.github/workflows/coverage.yml)). If coverage
 drops below any of them, that workflow run fails.
 
-Because the workflow is manual plus weekly, a failing threshold does **not**
-block a pull request and does not turn the **Quality gate** red. Nothing in the
-per-PR path looks at coverage.
+Because that workflow is manual plus weekly, a per-layer target it misses does
+**not** block a pull request. What does block one is the **Quality gate**'s
+total floor, `COVERAGE_MIN_TOTAL` in
+[`ci.yml`](../../../.github/workflows/ci.yml). It starts a little below what
+this starter measures with and without its sample features, so a fresh project
+is green; raise it as your suite grows.
 
 ### Increasing Threshold
 
 To increase the minimum threshold:
 
-1. **Update coverage workflow** (`.github/workflows/coverage.yml`), step **Enforce coverage thresholds** — adjust the numeric targets in the `check_threshold` calls (e.g. total `80`, domain `100`, data `90`).
+1. **Update the per-PR floor** (`.github/workflows/ci.yml`), step **Enforce minimum coverage** — raise `COVERAGE_MIN_TOTAL`.
 
-2. **Update coverage script** (`scripts/test/test_coverage.sh`):
+2. **Update coverage workflow** (`.github/workflows/coverage.yml`), step **Enforce coverage thresholds** — adjust the numeric targets in the `check_threshold` calls (e.g. total `80`, domain `100`, data `90`).
+
+3. **Update coverage script** (`scripts/test/test_coverage.sh`):
    ```bash
    MIN_COVERAGE=85  # Change default
    ```
 
-3. **Update documentation** (this file)
+4. **Update documentation** (this file)
 
 ## Improving Coverage
 

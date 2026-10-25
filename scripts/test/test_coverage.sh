@@ -101,7 +101,9 @@ COVERAGE_EXCLUDES=$(printf '%s\n' "${EXCLUDE_PATHS[@]}") awk '
     skip = (path ~ /\.g\.dart$/ || path ~ /\.freezed\.dart$/ ||
             path ~ /\.config\.dart$/ || path ~ /\/generated\// ||
             path ~ /\/l10n\// || path ~ /(^|\/)main\.dart$/ ||
-            path ~ /(^|\/)test\// || path ~ /_test\.dart$/)
+            path ~ /(^|\/)test\// || path ~ /_test\.dart$/ ||
+            path ~ /(^|\/)test_helpers\.dart$/ ||
+            path ~ /(^|\/)test_fixtures\.dart$/)
     for (i = 1; i <= n; i++) {
       if (ex[i] != "" && index(path, ex[i]) > 0) skip = 1
     }
