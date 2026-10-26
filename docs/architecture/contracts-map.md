@@ -157,7 +157,7 @@ to mistype.
 - Features depend on **contracts** and **domain**, not on vendor SDKs in domain.
 - Adapters depend on **contracts + vendor**.
 - Composition root (`lib/core/di/providers.dart`, `main.dart`, feature DI files) **binds** implementations.
-- `lib/core/**` never imports `lib/features/**` (one seam aside: `routes_registry.dart`). Where core needs something a feature owns - refreshing a token on a 401 - it declares the port and the feature supplies the adapter through `authModuleOverrides`, applied in `createAppContainer()`. `test/tooling/import_rules_test.dart` enforces the direction.
+- `lib/core/**` does not import `lib/features/**`. The route registry seam (`routes_registry.dart`) is exempt by design, and two known exceptions - `feature_flags_manager.dart` and `app_router.dart` - are allowlisted with a reason each until they are fixed. Where core needs something a feature owns - refreshing a token on a 401 - it declares the port and the feature supplies the adapter through `authModuleOverrides`, applied in `createAppContainer()`. `test/tooling/import_rules_test.dart` enforces the direction, and also keeps a feature's `domain/` free of its own `data/` and `presentation/`, of other features, of `package:dio`, and of every Flutter UI library (only `package:flutter/foundation.dart` is allowed).
 
 ## Related
 

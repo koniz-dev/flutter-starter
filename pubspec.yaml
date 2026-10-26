@@ -16,7 +16,7 @@ dependencies:
   dio: ^5.9.0
 
   # Utilities - Value equality comparison for objects
-  equatable: ^2.0.7
+  equatable: ^2.1.0
 
   # Flutter SDK - Core Flutter framework
   flutter:
@@ -33,7 +33,7 @@ dependencies:
   flutter_riverpod: ^3.0.3
 
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^11.2.0
   # Security (optional) - FreeRASP concrete implementation
   freerasp: ^8.2.4
 

@@ -36,8 +36,8 @@ String _getterFor(String key) {
       words.skip(1).map((w) => w[0].toUpperCase() + w.substring(1)).join();
 }
 
-/// Source with `//` comment lines removed, so a commented-out call such as
-/// the one in `logging_examples.dart` is not counted as a reader.
+/// Source with `//` comment lines removed, so a commented-out call is not
+/// counted as a reader.
 String _code(File file) => file
     .readAsLinesSync()
     .where((line) => !line.trimLeft().startsWith('//'))
