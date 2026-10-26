@@ -1,0 +1,83 @@
+# main at 7b2a020b4e5 (after #706)
+$ sed -n 1,70p .github/dependabot.yml
+# Dependabot version updates: weekly PRs for pub packages and GitHub Actions.
+#
+# Minor and patch bumps are grouped into one PR per ecosystem to keep the PR
+# count down; majors still arrive one per package, since those are the ones
+# that need reading. Every PR runs the Quality gate like any other.
+#
+# `update-types` is judged on the package Dependabot is updating, not on the
+# packages pub has to move with it. A minor flutter_riverpod bump can need
+# riverpod_generator, riverpod_annotation and freezed across a major, and
+# would carry them into a group named minor-and-patch. Those packages
+# version together, so they get their own group, which takes any update
+# type: its PR says what it is, and a major there means regenerating the
+# committed *.g.dart / *.freezed.dart files.
+#
+# The minor-and-patch group excludes them by name as well. Group order is
+# not enough: when Dependabot refreshes one group's PR it considers only that
+# group, and it ranks overlapping groups by its own notion of specificity,
+# which put freezed* and riverpod* into minor-and-patch. Keep the two lists
+# below identical.
+#
+# A 0.x minor (0.13 -> 0.14) counts as minor here, though pub treats it as
+# breaking; read those in the grouped PR.
+#
+# This file ships with the template, so a repository created from it gets the
+# same PRs. To turn them off, delete this file (or one `updates:` entry);
+# security updates are a separate setting under Settings -> Code security.
+version: 2
+
+updates:
+  - package-ecosystem: pub
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      pub-codegen:
+        patterns:
+          - build_runner
+          - flutter_riverpod
+          - riverpod*
+          - freezed*
+          - json_annotation
+          - json_serializable
+      pub-minor-and-patch:
+        update-types: [minor, patch]
+        exclude-patterns:
+          - build_runner
+          - flutter_riverpod
+          - riverpod*
+          - freezed*
+          - json_annotation
+          - json_serializable
+    ignore:
+      # `patrol` must move together with the `patrol_cli` version pinned in
+      # .github/workflows/e2e-android.yml (see the compatibility table linked
+      # there); a lone bump makes the CLI abort before any test runs. Bump
+      # both by hand.
+      - dependency-name: patrol
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(ci)
+    groups:
+      actions-minor-and-patch:
+
+$ grep -n "Dependency updates" docs/deployment/summary.md
+17:- **Dependency updates:** [`.github/dependabot.yml`](../../.github/dependabot.yml) opens weekly PRs for pub packages and GitHub Actions, with minor and patch bumps grouped into one PR per ecosystem. The code generation stack (`build_runner`, `flutter_riverpod`, `riverpod*`, `freezed*`, `json_annotation`, `json_serializable`) is grouped separately and can include majors, because pub moves those packages together. A major there means regenerating the committed generated files. A 0.x minor bump (for example 0.13 → 0.14) can still arrive in the minor-and-patch group, although pub treats it as breaking. `patrol` is excluded because it must be bumped together with the `patrol_cli` version pinned in [`e2e-android.yml`](../../.github/workflows/e2e-android.yml). To stop the PRs, delete `dependabot.yml` (or one of its `updates:` entries). Security updates are a separate repository setting (Settings → Code security).
+
+$ gh pr checks 706
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40352542681/job/121676190302
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40352542735/job/121676190320
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40352542735/job/121676191304
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40352542735/job/121676190920
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40352542735/job/121676190806
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40352542735/job/121676190979
