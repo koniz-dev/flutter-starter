@@ -6,15 +6,15 @@ This guide will help you set up your development environment and get the Flutter
 
 Before you begin, ensure you have the following installed:
 
-- **Flutter SDK**: **3.38.4 or newer**
+- **Flutter SDK**: **3.47.0 or newer**
   - Check your version: `flutter --version`
   - Install/update: [Flutter Installation Guide](https://docs.flutter.dev/get-started/install)
 
-- **Dart SDK**: **3.10.3 or newer** (included with Flutter)
+- **Dart SDK**: **3.13.0 or newer** (included with Flutter)
 
 > **Where those numbers come from.** The committed `pubspec.lock` records the
 > resolved graph's requirements in its `sdks:` block:
-> `dart: ">=3.10.3 <4.0.0"`, `flutter: ">=3.38.4"`. `pubspec.yaml` declares
+> `dart: ">=3.13.0 <4.0.0"`, `flutter: ">=3.47.0"`. `pubspec.yaml` declares
 > only `environment: sdk: '^3.8.0'` and carries **no `flutter:` constraint**,
 > so an older SDK does not produce a clear "upgrade Flutter" message - step 2
 > below (`flutter pub get`) fails with a version-solve error naming a

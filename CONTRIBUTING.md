@@ -19,8 +19,8 @@ and the checks every pull request has to pass.
 
 ### Prerequisites
 
-- Flutter SDK **>=3.38.4**
-- Dart SDK **>=3.10.3** (bundled with Flutter)
+- Flutter SDK **>=3.47.0**
+- Dart SDK **>=3.13.0** (bundled with Flutter)
 - Git
 - IDE (VS Code, Android Studio, or IntelliJ IDEA)
 
