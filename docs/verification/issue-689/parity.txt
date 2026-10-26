@@ -1,0 +1,17 @@
+# main at 0bfd2dec92e
+$ grep -n "test\\/" scripts/test/test_coverage.sh
+106:            path ~ /^test\// || path ~ /_test\.dart$/ ||
+
+$ flutter test test/tooling/ci_coverage_gate_test.dart -r expanded
+All tests passed!
+test_coverage.sh drops every file coverage.yml removes keeps lib/core/test_mode/z.dart, which coverage.yml keeps
+test_coverage.sh drops every file coverage.yml removes keeps lib/features/x/test/y.dart, which coverage.yml keeps
+test_coverage.sh drops every file coverage.yml removes test/**
+
+$ gh pr checks 711
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40366075877/job/121724014516
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40366074596/job/121724010720
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40366074596/job/121724010710
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40366074596/job/121724010414
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40366074596/job/121724011151
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40366074596/job/121724010742

@@ -1,0 +1,7 @@
+# Mutation on branch commit 52d4d4a099e: revert the anchor to (^|\/)test\/
+106:            path ~ /(^|\/)test\// || path ~ /_test\.dart$/ ||
+  lib/features/x/test/y.dart was dropped:
+00:00 +14 -1: Some tests failed.
+
+# Unmutated:
+00:00 +15: All tests passed!
