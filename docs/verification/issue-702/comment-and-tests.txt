@@ -1,0 +1,52 @@
+# main at 84d8ee0f3f2
+$ grep -rn "offers no way to request" lib/
+(exit 1 - no match)
+
+$ sed -n 540,575p lib/core/network/interceptors/auth_interceptor.dart
+  /// Fails the request with [error] **without ending the error chain**.
+  ///
+  /// In dio's error chain, a bare `handler.reject(error)` stops it outright:
+  /// every interceptor registered after this one is skipped (`dio_mixin.dart`
+  /// only runs the next error callback for a `next` or `rejectCallFollowing`
+  /// state). `reject(error, true)` requests the latter since dio 5.10, but
+  /// `next` already continues the chain on every dio 5.x and needs no flag
+  /// that a later edit could drop, so this keeps using it. `ApiClient`
+  /// registers `RetryInterceptor`, `ApiLoggingInterceptor`
+  /// and, last, `ErrorInterceptor` after this one, so a rejected 401 reached
+  /// the caller with no domain error inside. `DioNetworkClient` and
+  /// `ApiClient._send` then turned it into `NetworkException("Instance of
+  /// 'NetworkError'")`: a 401 reported as a connectivity failure, with an
+  /// unreadable message, and never logged.
+  ///
+  /// `next` hands the error on instead, so a 401 this interceptor gives up on
+  /// is logged and then mapped by `ErrorInterceptor` - which ends the chain
+  /// itself - exactly like any other failing status. Every failure exit in
+  /// this class goes through here; a bare `handler.reject(...)` would
+  /// reintroduce the bug on that one path.
+  ///
+  /// Forwarded, but **never re-sent**. The error is marked with
+  /// [RetryInterceptor.retryExtraKey] `= false` before it moves on, so
+  /// `RetryInterceptor` passes it through instead of replaying it. Every exit
+  /// that reaches here has already ended the request's session or given up on
+  /// it, and a failed replay's options carry the bearer token minted for the
+  /// session that was just torn down: re-sending it put that token on the wire
+  /// after the forced logout and handed the caller a success.
+  /// An early `reject` once made the same guarantee by accident; this states
+  /// it on purpose.
+  void _reject(ErrorInterceptorHandler handler, DioException error) {
+    error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
+    handler.next(error);
+  }
+
+  /// Whether a failed refresh means the session is over.
+
+$ flutter test test/core/network/interceptors/auth_interceptor_test.dart test/core/network/api_client_interceptor_chain_test.dart
+00:01 +76: All tests passed!
+
+$ gh pr checks 712
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40369319903/job/121735460156
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40369319906/job/121735464303
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40369319906/job/121735464304
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40369319906/job/121735464206
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40369319906/job/121735464411
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40369319906/job/121735464024
