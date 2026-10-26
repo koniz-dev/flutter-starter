@@ -59,6 +59,34 @@ void main() {
       });
     });
 
+    group('Transform Timeout', () {
+      test('should map transformTimeout to NetworkException', () {
+        final dioException = DioException(
+          requestOptions: requestOptions,
+          type: DioExceptionType.transformTimeout,
+          message: 'Transform timeout occurred',
+        );
+
+        final result = DioExceptionMapper.map(dioException);
+
+        expect(result, isA<NetworkException>());
+        expect(result.message, contains('Transform timeout'));
+        expect(result.code, 'TRANSFORM_TIMEOUT');
+      });
+
+      test('should handle null message in transformTimeout', () {
+        final dioException = DioException(
+          requestOptions: requestOptions,
+          type: DioExceptionType.transformTimeout,
+        );
+
+        final result = DioExceptionMapper.map(dioException);
+
+        expect(result.code, 'TRANSFORM_TIMEOUT');
+        expect(result.message, contains('Response processing timed out'));
+      });
+    });
+
     group('Bad Response', () {
       test('should map badResponse to ServerException with status code', () {
         final response = Response(

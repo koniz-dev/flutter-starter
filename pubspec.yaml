@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Network Layer - HTTP client with interceptors support
-  dio: ^5.9.0
+  dio: ^5.11.1
 
   # Utilities - Value equality comparison for objects
   equatable: ^2.1.0

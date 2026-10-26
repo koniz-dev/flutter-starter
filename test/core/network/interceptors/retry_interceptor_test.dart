@@ -20,7 +20,8 @@ class _FakeErrorHandler extends Fake implements ErrorInterceptorHandler {
   void resolve(Response<dynamic> response) => onResolve(response);
 
   @override
-  void reject(DioException err) => onReject(err);
+  void reject(DioException err, [bool callFollowingErrorInterceptor = false]) =>
+      onReject(err);
 
   @override
   void next(DioException err) => (onNext ?? (_) {})(err);
