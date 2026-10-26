@@ -456,17 +456,29 @@ See `test/helpers/test_fixtures.dart` for all available fixtures.
 
 ### Layer-Specific Goals
 
-| Layer | Target | Priority |
-|-------|--------|----------|
-| **Domain** | 100% | Critical |
-| **Data** | 90%+ | High |
-| **Core** | 80%+ | High (CI enforces 80% for `lib/core`) |
-| **Presentation** | 80%+ | Medium |
-| **Shared** | 80%+ | Medium |
+| Layer | Target | Priority | Enforced by |
+|-------|--------|----------|-------------|
+| **Domain** | 100% | Critical | `coverage.yml` (`COVERAGE_MIN_DOMAIN`) |
+| **Data** | 90%+ | High | `coverage.yml` (`COVERAGE_MIN_DATA`) |
+| **Core** | 80%+ | High | `coverage.yml` (`COVERAGE_MIN_CORE`) |
+| **Presentation** | 80%+ | Medium | `coverage.yml` (`COVERAGE_MIN_PRESENTATION`) |
+| **Shared** | 80%+ | Medium | Not enforced; a goal only |
+
+[`coverage.yml`](../../../.github/workflows/coverage.yml) runs on manual
+dispatch and weekly, **not on pull requests**, so a PR can lower a layer
+below its target without failing. These are targets to keep, not a merge gate.
 
 ### Overall Target
 
-**Minimum: 80%** overall coverage
+- **Per pull request:** the Quality gate in
+  [`ci.yml`](../../../.github/workflows/ci.yml) fails when total line coverage
+  drops below `COVERAGE_MIN_TOTAL` (currently 94%). This is the only coverage
+  number a PR is held to.
+- **Weekly / manual:** `coverage.yml` also checks the total, against its own,
+  lower `COVERAGE_MIN_TOTAL` (80%), alongside the per-layer numbers above.
+
+See [Test coverage](test-coverage.md) for how the two workflows differ and how
+to change either threshold.
 
 ### Critical Components (100% Required)
 
