@@ -139,14 +139,14 @@ Secure storage service implementation using flutter_secure_storage for sensitive
 /// Creates a [SecureStorageService] instance with platform-specific options
 /// 
 /// Platform-specific:
-/// - Android: Uses EncryptedSharedPreferences
+/// - Android: the plugin's default cipher storage (no AndroidOptions passed)
 /// - iOS: Uses Keychain with first unlock accessibility
 SecureStorageService();
 ```
 
 ### Features
 
-- Encrypted storage on Android (EncryptedSharedPreferences)
+- Encrypted storage on Android (AES-GCM, Keystore-backed key)
 - Keychain storage on iOS
 - Implements `IStorageService` interface
 - Safe error handling (returns null/false on errors)
@@ -155,8 +155,13 @@ SecureStorageService();
 ### Platform-Specific Behavior
 
 **Android:**
-- Uses EncryptedSharedPreferences
-- Data is encrypted at rest
+- Uses `flutter_secure_storage`'s default Android options; `SecureStorageService`
+  passes no `AndroidOptions`
+- Values are encrypted with AES-GCM; the AES key is wrapped with RSA-OAEP by a
+  key held in the Android Keystore
+- `resetOnError` is `true` (the plugin default): if the key cannot be
+  recovered - for example after a backup is restored to another device - the
+  plugin deletes every stored value, and the user has to sign in again
 
 **iOS:**
 - Uses Keychain

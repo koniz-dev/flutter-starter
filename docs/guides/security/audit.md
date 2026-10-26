@@ -25,7 +25,11 @@ This audit covers:
 
 1. **Secure Token Storage**
    - Using `flutter_secure_storage` with proper platform-specific encryption
-   - Android: EncryptedSharedPreferences enabled
+   - Android: the plugin's default cipher storage - values encrypted with
+     AES-GCM, the key wrapped with RSA-OAEP by a key in the Android Keystore.
+     `SecureStorageService` passes no `AndroidOptions`, so `resetOnError` is
+     `true`: on an unrecoverable key error the plugin wipes every stored value
+     and the user is logged out
    - iOS: Keychain with `first_unlock_this_device` accessibility
    - Tokens stored separately from user data
 

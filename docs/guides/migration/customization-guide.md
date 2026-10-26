@@ -130,7 +130,7 @@ rm lib/core/storage/secure_storage_service.dart
 # Remove secureStorageServiceProvider
 
 # Remove dependency
-# flutter_secure_storage: ^9.2.4
+# Remove flutter_secure_storage from pubspec.yaml
 ```
 
 ### Step 5: Clean Up Tests
