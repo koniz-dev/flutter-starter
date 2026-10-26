@@ -8,10 +8,15 @@
 # packages pub has to move with it. A minor flutter_riverpod bump can need
 # riverpod_generator, riverpod_annotation and freezed across a major, and
 # would carry them into a group named minor-and-patch. Those packages
-# version together, so they get their own group, listed first (a package
-# joins the first group it matches) and taking any update type: their PR
-# says what it is, and a major there means regenerating the committed
-# *.g.dart / *.freezed.dart files.
+# version together, so they get their own group, which takes any update
+# type: its PR says what it is, and a major there means regenerating the
+# committed *.g.dart / *.freezed.dart files.
+#
+# The minor-and-patch group excludes them by name as well. Group order is
+# not enough: when Dependabot refreshes one group's PR it considers only that
+# group, and it ranks overlapping groups by its own notion of specificity,
+# which put freezed* and riverpod* into minor-and-patch. Keep the two lists
+# below identical.
 #
 # A 0.x minor (0.13 -> 0.14) counts as minor here, though pub treats it as
 # breaking; read those in the grouped PR.
@@ -40,6 +45,13 @@ updates:
           - json_serializable
       pub-minor-and-patch:
         update-types: [minor, patch]
+        exclude-patterns:
+          - build_runner
+          - flutter_riverpod
+          - riverpod*
+          - freezed*
+          - json_annotation
+          - json_serializable
     ignore:
       # `patrol` must move together with the `patrol_cli` version pinned in
       # .github/workflows/e2e-android.yml (see the compatibility table linked
