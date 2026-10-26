@@ -1,0 +1,34 @@
+# flutter_launcher_icons / flutter_native_splash check against this repo's yaml configs
+# Inputs: ic192.png = android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png; ic1024.png = same, upscaled with sips
+ic192.png:  PNG image data, 192 x 192, 8-bit colormap, non-interlaced
+ic1024.png: PNG image data, 1024 x 1024, 8-bit/color RGBA, non-interlaced
+
+Each run: clean worktree, logo copied to assets/images/logo.png, 'dart run flutter_launcher_icons'
+main (0.13.1),   ic192.png  (8-bit colormap): ✓ Successfully generated launcher icons
+main (0.13.1),   ic1024.png (RGBA):           ✓ Successfully generated launcher icons
+#707 (0.14.4),   ic192.png  (8-bit colormap): RangeError (length): Invalid value: Not in inclusive range 0..631: 1020
+#707 (0.14.4),   ic1024.png (RGBA):           ✓ Successfully generated launcher icons
+
+## Full 0.14.4 failure output (first run)
+  ════════════════════════════════════════════
+     FLUTTER LAUNCHER ICONS (v0.14.4)                               
+  ════════════════════════════════════════════
+  
+• Creating default icons Android
+• Adding a new Android launcher icon
+
+✕ Could not generate launcher icons
+RangeError (length): Invalid value: Not in inclusive range 0..631: 1020
+
+## flutter_native_splash 2.4.8 (#707 head), same palette logo: 'dart run flutter_native_splash:create'
+✅ Native splash complete.
+Now go finish building something awesome! 💪 You rock! 🤘🤩
+Like the package? Please give it a 👍 here: https://pub.dev/packages/flutter_native_splash
+
+
+Upstream: https://github.com/fluttercommunity/flutter_launcher_icons/issues/615 (open since 0.14.1, same RangeError ... 1020, same remove_alpha_ios config)
+
+## Control: same size, colour type only (0.14.4)
+rgba192.png (192x192 RGBA):      ✓ Successfully generated launcher icons
+ic192.png  (192x192 colormap):  RangeError (length): Invalid value: Not in inclusive range 0..631: 1020
+-> the palette colour type triggers it, not the size.
