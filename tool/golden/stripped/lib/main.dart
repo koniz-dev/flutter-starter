@@ -78,7 +78,16 @@ ProviderContainer createAppContainer({
 // discard it: integration tests could not wait for runApp, and any error
 // thrown by the awaits below would surface as an unhandled async error
 // instead of propagating.
-Future<void> main() async {
+Future<void> main() => bootstrap();
+
+/// The body of [main], with the container factory as a seam: a test passes
+/// one built by [createAppContainer] with overrides (a recording error
+/// reporter, say) and drives the real startup sequence through it. The
+/// startup failure screen's Try again re-runs it with the same factory.
+@visibleForTesting
+Future<void> bootstrap({
+  ProviderContainer Function() createContainer = createAppContainer,
+}) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Future.wait([EnvConfig.load(), _initializeImageCache()]);
@@ -87,7 +96,7 @@ Future<void> main() async {
     AppConfig.printConfig();
   }
 
-  final container = createAppContainer();
+  final container = createContainer();
 
   // From here on, errors nothing else catches reach LoggingService and so the
   // bound IErrorReporter. A retry from the startup failure screen re-runs
@@ -136,9 +145,28 @@ Future<void> main() async {
     final localizationService = container.read(localizationServiceProvider);
     final savedLocale = await localizationService.getCurrentLocale();
     container.read(localeStateProvider.notifier).locale = savedLocale;
-  } on Object catch (error) {
+  } on Object catch (error, stackTrace) {
+    // Caught here, so neither uncaught-error handler sees it: report it
+    // explicitly, or a failed launch never reaches the bound IErrorReporter.
+    try {
+      container
+          .read(loggingServiceProvider)
+          .error('Startup failed', error: error, stackTrace: stackTrace);
+    } on Object {
+      // Reporting must not stand between the user and the failure screen.
+    }
+    // The handlers log through this container's LoggingService, which is
+    // about to be disposed: take them down with it. Try again installs them
+    // afresh with the next container.
+    _restoreErrorHandlers?.call();
+    _restoreErrorHandlers = null;
     container.dispose();
-    runApp(StartupFailureApp(error: error, onRetry: main));
+    runApp(
+      StartupFailureApp(
+        error: error,
+        onRetry: () => bootstrap(createContainer: createContainer),
+      ),
+    );
     return;
   }
 
