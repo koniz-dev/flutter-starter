@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'auth_provider.dart';
@@ -9,6 +9,7 @@ part of 'auth_provider.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -33,16 +34,21 @@ $AuthStateCopyWith<AuthState> get copyWith => _$AuthStateCopyWithImpl<AuthState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error)&&(identical(other.failure, failure) || other.failure == failure));
+  final _this = this as AuthState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthState&&(identical(other.user, _this.user) || other.user == _this.user)&&(identical(other.isLoading, _this.isLoading) || other.isLoading == _this.isLoading)&&(identical(other.error, _this.error) || other.error == _this.error)&&(identical(other.failure, _this.failure) || other.failure == _this.failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,isLoading,error,failure);
+int get hashCode {
+  final _this = this as AuthState;
+  return Object.hash(runtimeType,_this.user,_this.isLoading,_this.error,_this.failure);
+}
 
 @override
 String toString() {
-  return 'AuthState(user: $user, isLoading: $isLoading, error: $error, failure: $failure)';
+  final _this = this as AuthState;
+  return 'AuthState(user: ${_this.user}, isLoading: ${_this.isLoading}, error: ${_this.error}, failure: ${_this.failure})';
 }
 
 
@@ -71,7 +77,7 @@ class _$AuthStateCopyWithImpl<$Res>
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? user = freezed,Object? isLoading = null,Object? error = freezed,Object? failure = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(AuthState(
 user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
@@ -243,16 +249,18 @@ _$AuthStateCopyWith<_AuthState> get copyWith => __$AuthStateCopyWithImpl<_AuthSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error)&&(identical(other.failure, failure) || other.failure == failure));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthState&&(identical(other.user, user) || other.user == user)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user,isLoading,error,failure);
+int get hashCode {
+    return Object.hash(runtimeType,user,isLoading,error,failure);
+}
 
 @override
 String toString() {
-  return 'AuthState(user: $user, isLoading: $isLoading, error: $error, failure: $failure)';
+    return 'AuthState(user: $user, isLoading: $isLoading, error: $error, failure: $failure)';
 }
 
 

@@ -10,7 +10,7 @@ part of 'feature_flags_providers.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(featureFlagsLocalDataSource)
-const featureFlagsLocalDataSourceProvider =
+final featureFlagsLocalDataSourceProvider =
     FeatureFlagsLocalDataSourceProvider._();
 
 final class FeatureFlagsLocalDataSourceProvider
@@ -21,7 +21,7 @@ final class FeatureFlagsLocalDataSourceProvider
           FeatureFlagsLocalDataSource
         >
     with $Provider<FeatureFlagsLocalDataSource> {
-  const FeatureFlagsLocalDataSourceProvider._()
+  FeatureFlagsLocalDataSourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -59,7 +59,7 @@ String _$featureFlagsLocalDataSourceHash() =>
     r'b434d71945023fb007a5e780a33cfdf867591c3a';
 
 @ProviderFor(featureFlagsRemoteDataSource)
-const featureFlagsRemoteDataSourceProvider =
+final featureFlagsRemoteDataSourceProvider =
     FeatureFlagsRemoteDataSourceProvider._();
 
 final class FeatureFlagsRemoteDataSourceProvider
@@ -70,7 +70,7 @@ final class FeatureFlagsRemoteDataSourceProvider
           FeatureFlagsRemoteDataSource
         >
     with $Provider<FeatureFlagsRemoteDataSource> {
-  const FeatureFlagsRemoteDataSourceProvider._()
+  FeatureFlagsRemoteDataSourceProvider._()
     : super(
         from: null,
         argument: null,
@@ -108,7 +108,7 @@ String _$featureFlagsRemoteDataSourceHash() =>
     r'4cb08139f8b25263f3fa2b499c0c1eafce6c586f';
 
 @ProviderFor(featureFlagsRepository)
-const featureFlagsRepositoryProvider = FeatureFlagsRepositoryProvider._();
+final featureFlagsRepositoryProvider = FeatureFlagsRepositoryProvider._();
 
 final class FeatureFlagsRepositoryProvider
     extends
@@ -118,7 +118,7 @@ final class FeatureFlagsRepositoryProvider
           FeatureFlagsRepository
         >
     with $Provider<FeatureFlagsRepository> {
-  const FeatureFlagsRepositoryProvider._()
+  FeatureFlagsRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -156,7 +156,7 @@ String _$featureFlagsRepositoryHash() =>
     r'd0730b681f2e1924a27b654e5cf6ff8eed542708';
 
 @ProviderFor(featureFlagsManager)
-const featureFlagsManagerProvider = FeatureFlagsManagerProvider._();
+final featureFlagsManagerProvider = FeatureFlagsManagerProvider._();
 
 final class FeatureFlagsManagerProvider
     extends
@@ -166,7 +166,7 @@ final class FeatureFlagsManagerProvider
           FeatureFlagsManager
         >
     with $Provider<FeatureFlagsManager> {
-  const FeatureFlagsManagerProvider._()
+  FeatureFlagsManagerProvider._()
     : super(
         from: null,
         argument: null,
@@ -204,13 +204,13 @@ String _$featureFlagsManagerHash() =>
     r'85723c5f453bdae6e014b3f196f99c4dd2a3a94b';
 
 @ProviderFor(featureFlagsInitialization)
-const featureFlagsInitializationProvider =
+final featureFlagsInitializationProvider =
     FeatureFlagsInitializationProvider._();
 
 final class FeatureFlagsInitializationProvider
     extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
     with $FutureModifier<void>, $FutureProvider<void> {
-  const FeatureFlagsInitializationProvider._()
+  FeatureFlagsInitializationProvider._()
     : super(
         from: null,
         argument: null,
@@ -239,12 +239,12 @@ String _$featureFlagsInitializationHash() =>
     r'8eab227c2ec9162c70758bdf3064c98bdb4c8c11';
 
 @ProviderFor(isFeatureEnabled)
-const isFeatureEnabledProvider = IsFeatureEnabledFamily._();
+final isFeatureEnabledProvider = IsFeatureEnabledFamily._();
 
 final class IsFeatureEnabledProvider
     extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
     with $FutureModifier<bool>, $FutureProvider<bool> {
-  const IsFeatureEnabledProvider._({
+  IsFeatureEnabledProvider._({
     required IsFeatureEnabledFamily super.from,
     required FeatureFlagKey super.argument,
   }) : super(
@@ -291,7 +291,7 @@ String _$isFeatureEnabledHash() => r'a73a0b59675ba3996aa5f3f380e3f15521ce58a7';
 
 final class IsFeatureEnabledFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<bool>, FeatureFlagKey> {
-  const IsFeatureEnabledFamily._()
+  IsFeatureEnabledFamily._()
     : super(
         retry: null,
         name: r'isFeatureEnabledProvider',
@@ -308,7 +308,7 @@ final class IsFeatureEnabledFamily extends $Family
 }
 
 @ProviderFor(featureFlag)
-const featureFlagProvider = FeatureFlagFamily._();
+final featureFlagProvider = FeatureFlagFamily._();
 
 final class FeatureFlagProvider
     extends
@@ -318,7 +318,7 @@ final class FeatureFlagProvider
           FutureOr<FeatureFlag?>
         >
     with $FutureModifier<FeatureFlag?>, $FutureProvider<FeatureFlag?> {
-  const FeatureFlagProvider._({
+  FeatureFlagProvider._({
     required FeatureFlagFamily super.from,
     required FeatureFlagKey super.argument,
   }) : super(
@@ -366,7 +366,7 @@ String _$featureFlagHash() => r'49d55e5447defd7845f4eab3891c2892b96c907a';
 
 final class FeatureFlagFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<FeatureFlag?>, FeatureFlagKey> {
-  const FeatureFlagFamily._()
+  FeatureFlagFamily._()
     : super(
         retry: null,
         name: r'featureFlagProvider',
@@ -390,7 +390,7 @@ final class FeatureFlagFamily extends $Family
 /// actually gates on.
 
 @ProviderFor(allFeatureFlags)
-const allFeatureFlagsProvider = AllFeatureFlagsProvider._();
+final allFeatureFlagsProvider = AllFeatureFlagsProvider._();
 
 /// Every flag the repository knows, plus every [FeatureFlags.all] key.
 ///
@@ -415,7 +415,7 @@ final class AllFeatureFlagsProvider
   /// [FeatureFlagKey.defaultValue] - the value [FeatureFlagsManager.isEnabled]
   /// falls back to - so the debug screen can show and toggle the flags the app
   /// actually gates on.
-  const AllFeatureFlagsProvider._()
+  AllFeatureFlagsProvider._()
     : super(
         from: null,
         argument: null,
