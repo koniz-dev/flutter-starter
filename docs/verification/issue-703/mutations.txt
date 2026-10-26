@@ -1,0 +1,19 @@
+# Mutations on branch commit 74827c272c1 (committed first; each restored with git checkout)
+
+M1: auth replay drops transformTimeout
+Some tests failed.
+a client-wide transformTimeout reaches the replay after a 401 refresh [E]
+per-request options reach the replay after a 401 refresh [E]
+
+M2: retry drops transformTimeout
+Some tests failed.
+per-request options reach the retry after a transient failure [E]
+
+M3: retry drops followRedirects and maxRedirects
+Some tests failed.
+per-request options reach the retry after a transient failure [E]
+
+Pre-fix (parent commit's lib/ with this test): all 3 cases failed with 'Actual: <null>' for transformTimeout.
+
+Unmutated:
+All tests passed!

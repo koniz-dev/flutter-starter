@@ -1,0 +1,20 @@
+# main at 59eb8aebcf0
+$ git show HEAD -- lib/ (the copied fields)
++        transformTimeout: newOptions.transformTimeout,
++            followRedirects: options.followRedirects,
++            maxRedirects: options.maxRedirects,
++            transformTimeout: options.transformTimeout,
+
+$ flutter test test/core/network/request_options_carry_over_test.dart -r expanded
+a client-wide transformTimeout reaches the replay after a 401 refresh
+per-request options reach the replay after a 401 refresh
+per-request options reach the retry after a transient failure
+All tests passed!
+
+$ gh pr checks 713
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40372479236/job/121746570465
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40372479231/job/121746571497
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40372479231/job/121746571564
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40372479231/job/121746571421
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40372479231/job/121746571212
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40372479231/job/121746570940
