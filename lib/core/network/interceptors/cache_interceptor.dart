@@ -216,6 +216,9 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
         return true;
       case DioExceptionType.badResponse:
         return (err.response?.statusCode ?? 0) >= 500;
+      // The network did answer; the body then took too long to decode on
+      // this device. Serving the stale copy would hide that, so it surfaces.
+      case DioExceptionType.transformTimeout:
       case DioExceptionType.badCertificate:
       case DioExceptionType.cancel:
       case DioExceptionType.unknown:

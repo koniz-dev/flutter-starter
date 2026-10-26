@@ -6,7 +6,7 @@ class DioExceptionMapper {
   /// Converts a [DioException] to an appropriate domain exception
   ///
   /// Maps different DioException types to domain exceptions:
-  /// - Connection/timeout errors → NetworkException
+  /// - Connection/timeout errors (including transformTimeout) → NetworkException
   /// - Bad response (4xx, 5xx) → ServerException
   /// - Other errors → NetworkException
   static AppException map(DioException exception) {
@@ -28,6 +28,17 @@ class DioExceptionMapper {
           'Receive timeout: '
           '${exception.message ?? 'Response receive timed out'}',
           code: 'RECEIVE_TIMEOUT',
+        );
+
+      // The server answered, but decoding the body locally (for example a
+      // large JSON payload) took longer than RequestOptions.transformTimeout.
+      // The data never reached the app, so it is reported like the other
+      // client-side timeouts rather than as a server error.
+      case DioExceptionType.transformTimeout:
+        return NetworkException(
+          'Transform timeout: '
+          '${exception.message ?? 'Response processing timed out'}',
+          code: 'TRANSFORM_TIMEOUT',
         );
 
       case DioExceptionType.badResponse:

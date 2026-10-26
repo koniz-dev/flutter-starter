@@ -124,6 +124,29 @@ void main() {
       );
     }
 
+    test(
+      'a transformTimeout on the refetch surfaces instead of the stale entry',
+      () async {
+        // The network answered; decoding timed out on the device. That is
+        // not a transport failure, so the stale copy must not mask it.
+        final h = build([200, DioExceptionType.transformTimeout]);
+        await h.client.get('/feed');
+        ageCache(const Duration(hours: 2));
+
+        await expectLater(
+          h.client.get('/feed'),
+          throwsA(
+            isA<NetworkException>().having(
+              (e) => e.code,
+              'code',
+              'TRANSFORM_TIMEOUT',
+            ),
+          ),
+        );
+        expect(h.adapter.hits, 2);
+      },
+    );
+
     test('a 4xx from the refetch is the answer, not the stale entry', () async {
       final h = build([200, 404]);
       await h.client.get('/feed');

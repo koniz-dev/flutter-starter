@@ -858,7 +858,7 @@ Do not relax the credential check without first moving the store to `SecureStora
 ### Lifetime
 
 - `maxAge` (default 1 hour): an entry younger than this is served without a network request.
-- Past `maxAge` the entry is **stale**: the request goes to the network, and the entry is kept only as a fallback. It is served only if that fetch fails for transport reasons - a connection error, a timeout, or a 5xx. A 4xx is the server's answer and reaches the caller, and a successful refetch replaces the entry. A stale entry used to be served straight from the cache, with no network attempt, for up to `maxStale`.
+- Past `maxAge` the entry is **stale**: the request goes to the network, and the entry is kept only as a fallback. It is served only if that fetch fails for transport reasons - a connection error, a connect, send or receive timeout, or a 5xx. A transform timeout (the answer arrived but decoding it on the device outlasted `RequestOptions.transformTimeout`) is not one: it surfaces as a `NetworkException` with code `TRANSFORM_TIMEOUT`, which the UI shows as a timeout. A 4xx is the server's answer and reaches the caller, and a successful refetch replaces the entry. A stale entry used to be served straight from the cache, with no network attempt, for up to `maxStale`.
 - `maxStale` (default 7 days): past this an entry is removed, even as a fallback.
 - A stored timestamp that does not parse, or whose calendar date is out of range such as `2024-02-30`, has no age: the entry is removed and the read reported as a miss rather than aged on a guess. The whole cost is one network request.
 - `CacheInterceptor.clearCache()` walks `http_cache_index` and removes every body, every timestamp and the index itself.

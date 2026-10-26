@@ -38,6 +38,7 @@ extension FailureLocalizations on Failure {
       case 'CONNECTION_TIMEOUT':
       case 'SEND_TIMEOUT':
       case 'RECEIVE_TIMEOUT':
+      case 'TRANSFORM_TIMEOUT':
         return l10n.failureTimeout;
       case 'CONNECTION_ERROR':
       case 'NETWORK_ERROR':
