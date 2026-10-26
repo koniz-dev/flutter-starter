@@ -1,0 +1,17 @@
+# Mutations on branch commit db9343a3d8c; each restored with git checkout
+
+M1 (criterion 3): delete the install call in lib/main.dart
+Some tests failed.
+main() and the uncaught-error handlers Try again after a startup failure installs them once, so an uncaught error is reported once [E]
+main() and the uncaught-error handlers a healthy startup installs both handlers [E]
+
+M2: install twice (no restore before installing)
+Some tests failed.
+main() and the uncaught-error handlers Try again after a startup failure installs them once, so an uncaught error is reported once [E]
+
+M3: keep the handlers when the container fails
+Some tests failed.
+main() and the uncaught-error handlers Try again after a startup failure installs them once, so an uncaught error is reported once [E]
+
+Unmutated:
+All tests passed!
