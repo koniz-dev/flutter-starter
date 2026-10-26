@@ -1,0 +1,7 @@
+# Scaffold check on branch commit 666250c9fc5 (riverpod_generator 4 / freezed 4)
+# Throwaway worktree; create_feature.sh output is byte-identical to `mason make feature_clean` by design.
+$ ./scripts/dev/create_feature.sh orders  -> exit 0
+?? lib/features/orders/
+?? test/features/orders/
+$ flutter analyze lib/features/orders test/features/orders -> No issues found!
+$ flutter test test/features/orders -> 00:00 +2: All tests passed!

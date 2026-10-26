@@ -1,0 +1,39 @@
+# main at 0f0362b8028
+## direct constraints
+33:  flutter_riverpod: ^3.4.3
+41:  freezed_annotation: ^3.1.0
+51:  json_annotation: ^4.12.0
+61:  riverpod_annotation: ^4.0.7
+72:  build_runner: ^2.16.2
+86:  freezed: ^4.0.1
+94:  json_serializable: ^6.15.2
+107:  riverpod_generator: ^4.0.9
+## resolved
+  flutter_riverpod: "3.4.3"
+  riverpod_annotation: "4.0.7"
+  riverpod_generator: "4.0.9"
+  freezed: "4.0.3"
+  json_annotation: "4.12.0"
+  json_serializable: "6.15.2"
+  build_runner: "2.16.2"
+  build: "4.0.11"
+  analyzer: "14.6.0"
+sdks:
+  dart: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
+
+## the aliases (riverpod_generator 4: generated providers are not const)
+lib/features/auth/presentation/providers/auth_provider.dart:398:final AuthNotifierProvider authNotifierProvider = authProvider;
+lib/features/tasks/presentation/providers/tasks_provider.dart:368:final TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+
+## regenerated files in the merge
+ lib/core/routing/app_router.g.dart                 |   4 +-
+ .../providers/auth_provider.freezed.dart           |  24 ++-
+ .../presentation/providers/auth_provider.g.dart    |   9 +-
+ .../providers/feature_flags_providers.g.dart       |  36 ++--
+ .../presentation/providers/tasks_provider.g.dart   |   9 +-
+ .../stripped/lib/core/routing/app_router.g.dart    |   4 +-
+
+$ dart run build_runner build -d on main (must leave no diff)
+build_runner exit 0
+(no lines above = no diff)

@@ -1,0 +1,24 @@
+$ gh pr checks 710
+Docs check	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362652183/job/121711907646
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362651872/job/121711905897
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362651933/job/121711906393
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362651933/job/121711905979
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362651933/job/121711906398
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362651933/job/121711906550
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40362651933/job/121711906492
+
+$ scripts-smoke.yml on the PR branch
+run 40362635600: success
+  mason make flutter_starter_setup (acme_shop) + analyze + test: success
+  build_all.sh (production): success
+  fork-and-customize Option B (my_app, My App) + analyze + test + scaffold: success
+  create_feature.sh == create_feature.ps1 (Windows): success
+
+## Dependabot opened #709 (pub-codegen group) for the same set, closed as superseded:
+| build_runner | `2.13.1` | `2.15.1` |
+| flutter_riverpod | `3.0.3` | `3.4.3` |
+| freezed | `3.2.3` | `4.0.1` |
+| json_annotation | `4.9.0` | `4.12.0` |
+| json_serializable | `6.11.2` | `6.15.2` |
+| riverpod_annotation | `3.0.3` | `4.0.7` |
+| riverpod_generator | `3.0.3` | `4.0.9` |
