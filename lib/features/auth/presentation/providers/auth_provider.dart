@@ -395,4 +395,4 @@ final sessionRestorationProvider = FutureProvider<void>((ref) async {
 ///
 /// Riverpod Generator shortens `AuthNotifier` -> `authProvider` by default.
 /// Keep the original name as a stable API surface for app code and tests.
-const AuthNotifierProvider authNotifierProvider = authProvider;
+final AuthNotifierProvider authNotifierProvider = authProvider;
