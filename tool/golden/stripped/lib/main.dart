@@ -13,6 +13,8 @@ import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/logging/logging_providers.dart';
+import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
@@ -87,6 +89,14 @@ Future<void> main() async {
 
   final container = createAppContainer();
 
+  // From here on, errors nothing else catches reach LoggingService and so the
+  // bound IErrorReporter. A retry from the startup failure screen re-runs
+  // main() with a new container: restore first, so handlers do not stack.
+  _restoreErrorHandlers?.call();
+  _restoreErrorHandlers = installUncaughtErrorHandlers(
+    container.read(loggingServiceProvider),
+  );
+
   // Everything before the first frame runs inside one guard. Throwing here
   // means `runApp` is never reached: a black window on every launch, with no
   // way out. Catching `Object` rather than `Exception` is deliberate - a
@@ -134,6 +144,8 @@ Future<void> main() async {
 
   runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
 }
+
+VoidCallback? _restoreErrorHandlers;
 
 Future<void> _initializeImageCache() async {
   imageCache.maximumSize = 100;
