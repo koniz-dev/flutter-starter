@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
+import 'package:flutter_starter/core/logging/i_error_reporter.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/core/storage/migration/migration_executor.dart';
 import 'package:flutter_starter/core/storage/storage_version.dart';
@@ -31,6 +34,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///   these tests rather than being papered over by a hand-rolled container;
 /// * the end-to-end group calls the real `app.main()` and asserts on what it
 ///   passed to `runApp`.
+class _RecordingReporter implements IErrorReporter {
+  final reports = <({String message, Object? error, StackTrace? stack})>[];
+
+  @override
+  Future<void> recordError(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, dynamic>? context,
+  }) async {
+    reports.add((message: message, error: error, stack: stackTrace));
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -129,7 +146,10 @@ void main() {
   /// Shared by both end-to-end groups on purpose. The failure group and the
   /// healthy group must boot through the *same* code path, or "healthy" and
   /// "failed" stop being comparable outcomes of one entrypoint.
-  Future<void> bootRealMain(WidgetTester tester) async {
+  Future<void> bootRealMain(
+    WidgetTester tester, {
+    Future<void> Function() entry = app.main,
+  }) async {
     var booted = false;
     Object? bootError;
 
@@ -141,7 +161,7 @@ void main() {
     // nothing to do with the hang, which would make a red run unreadable.
     await tester.runAsync(() async {
       try {
-        await app.main().timeout(_bootBudget);
+        await entry().timeout(_bootBudget);
         booted = true;
       } on TimeoutException {
         booted = false;
@@ -340,6 +360,31 @@ void main() {
       );
     });
 
+    testWidgets('the caught startup failure is reported once, with its '
+        'stack', (tester) async {
+      // No secure backend -> MigrationExecutionException, caught by main().
+      final reporter = _RecordingReporter();
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(
+          createContainer: () => app.createAppContainer(
+            overrides: [errorReporterProvider.overrideWithValue(reporter)],
+          ),
+        ),
+      );
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      // The migration also logs (and so reports) its own errors where they
+      // happen; main() adds exactly one report saying the launch failed.
+      final startup = reporter.reports.where(
+        (r) => r.message == 'Startup failed',
+      );
+      expect(startup, hasLength(1));
+      final report = startup.single;
+      expect(report.error, isA<MigrationExecutionException>());
+      expect(report.stack, isNotNull);
+    });
+
     testWidgets('a downgrade refusal boots into the failure screen', (
       tester,
     ) async {
@@ -397,6 +442,84 @@ void main() {
       expect(
         find.textContaining('development, staging, production'),
         findsOneWidget,
+      );
+    });
+  });
+
+  // main() installs the uncaught-error handlers, and they live as long as the
+  // container whose LoggingService they log through: removed with a failed
+  // container, installed again - once - by Try again.
+  group('main() and the uncaught-error handlers', () {
+    late void Function(FlutterErrorDetails)? flutterBefore;
+    late ErrorCallback? platformBefore;
+
+    // Read inside the test body: testWidgets installs its own
+    // FlutterError.onError after setUp has run.
+    void recordHandlers() {
+      app.debugForgetUncaughtErrorHandlers();
+      flutterBefore = FlutterError.onError;
+      platformBefore = PlatformDispatcher.instance.onError;
+      addTearDown(() {
+        app.debugForgetUncaughtErrorHandlers();
+        FlutterError.onError = flutterBefore;
+        PlatformDispatcher.instance.onError = platformBefore;
+      });
+    }
+
+    Future<void> Function() bootWith(_RecordingReporter reporter) =>
+        () => app.bootstrap(
+          createContainer: () => app.createAppContainer(
+            overrides: [errorReporterProvider.overrideWithValue(reporter)],
+          ),
+        );
+
+    testWidgets('a healthy startup installs both handlers', (tester) async {
+      recordHandlers();
+      installSecureBackend(<String, String>{});
+
+      await bootRealMain(tester, entry: bootWith(_RecordingReporter()));
+
+      expect(FlutterError.onError, isNot(same(flutterBefore)));
+      expect(PlatformDispatcher.instance.onError, isNot(same(platformBefore)));
+    });
+
+    testWidgets('Try again after a startup failure installs them once, so an '
+        'uncaught error is reported once', (tester) async {
+      recordHandlers();
+      final reporter = _RecordingReporter();
+
+      // No secure backend: the first launch fails.
+      await bootRealMain(tester, entry: bootWith(reporter));
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expect(
+        FlutterError.onError,
+        same(flutterBefore),
+        reason: 'the handlers go with the failed, disposed container',
+      );
+
+      // Fix the cause and press Try again: run the screen's own onRetry.
+      installSecureBackend(<String, String>{});
+      final failure = tester.widget<StartupFailureApp>(
+        find.byType(StartupFailureApp),
+      );
+      await bootRealMain(tester, entry: failure.onRetry!);
+      expect(find.byKey(StartupFailureApp.bodyKey), findsNothing);
+      expect(FlutterError.onError, isNot(same(flutterBefore)));
+
+      reporter.reports.clear();
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: StateError('after retry'),
+          stack: StackTrace.current,
+        ),
+      );
+      // The test binding's handler, chained behind ours, recorded it too.
+      expect(tester.takeException(), isA<StateError>());
+      await tester.pump();
+
+      expect(
+        reporter.reports.where((r) => r.message == 'Uncaught Flutter error'),
+        hasLength(1),
       );
     });
   });

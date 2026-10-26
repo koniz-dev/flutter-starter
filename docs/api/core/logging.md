@@ -79,6 +79,27 @@ Two behaviours to know:
   and carries on. The warning goes to the logger directly, not back to the
   reporter.
 
+### What reaches the reporter
+
+| Source | Reported? | How |
+| --- | --- | --- |
+| `LoggingService.error(...)` called by app code | Yes | Directly |
+| Uncaught framework errors (a throwing `build`, layout, paint, gesture callback) | Yes | `FlutterError.onError`, installed by `installUncaughtErrorHandlers` in `main()` |
+| Errors that escape every zone (an un-awaited `Future` that fails) | Yes | `PlatformDispatcher.onError`, same installer; it returns `true`, so the engine does not print the error again |
+| `debug`, `info`, `warning` calls | No | Logged only |
+| An error that code catches and does not pass to `error()` | No | Nothing sees it |
+| A startup failure `main()` catches (storage migration, session restore, locale read, an unknown `ENVIRONMENT`) | Yes | `main()` calls `error('Startup failed', ...)` once before showing the failure screen. The step that failed may already have logged, and so reported, its own error (the migration does) |
+| Anything thrown before `main()` builds the container (`EnvConfig.load`, binding setup) | No | The handlers are not installed yet |
+| Errors while the startup failure screen is shown | No | The handlers are removed with the failed container; Try again installs them again |
+| Native crashes (a crash in Kotlin, Swift or the engine) | No | Needs the vendor SDK's native integration |
+
+`installUncaughtErrorHandlers` (`lib/core/logging/uncaught_error_handlers.dart`)
+chains to the handlers that were set before it, so framework errors are still
+dumped to the console as before. The red error screen comes from
+`ErrorWidget.builder` and is not affected. Its return value restores them;
+`main()` uses it so the startup failure screen's Try again, which re-runs
+`main()`, does not install a second set.
+
 ### Plugging in Crashlytics
 
 1. Run `flutter pub add firebase_crashlytics` and initialise Firebase.

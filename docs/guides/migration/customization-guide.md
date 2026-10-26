@@ -74,9 +74,9 @@ Review `pubspec.yaml` and remove unused dependencies:
 ```yaml
 dependencies:
   # Remove if not using
-  # equatable: ^2.0.7  # Only needed if using Equatable
-  # freezed_annotation: ^3.1.0  # Only needed if using Freezed
-  # json_annotation: ^4.9.0  # Only needed if using JSON serialization
+  # equatable  # Only needed if using Equatable
+  # freezed_annotation  # Only needed if using Freezed
+  # json_annotation  # Only needed if using JSON serialization
 ```
 
 **After removing dependencies:**

@@ -42,17 +42,20 @@ void main() {
     });
   }
 
-  test('the codegen stack has its own group, ahead of minor-and-patch', () {
+  test('the codegen stack has its own group and is excluded from '
+      'minor-and-patch', () {
     // pub moves these together, so a minor bump of one can carry another
     // across a major; they must not land in a group named minor-and-patch.
+    // Group order does not keep them out: a refresh of one group's PR only
+    // considers that group. The exclusion does.
     final groups = ecosystem('pub')['groups'] as YamlMap;
-    final names = groups.keys.cast<String>().toList();
+    final codegen = groups['pub-codegen'] as YamlMap;
+    final minorAndPatch = groups['pub-minor-and-patch'] as YamlMap;
     expect(
-      names.indexOf('pub-codegen'),
-      lessThan(names.indexOf('pub-minor-and-patch')),
+      (minorAndPatch['exclude-patterns'] as YamlList?)?.toList(),
+      unorderedEquals((codegen['patterns'] as YamlList).toList()),
     );
 
-    final codegen = groups['pub-codegen'] as YamlMap;
     expect(codegen['update-types'], isNull, reason: 'majors are expected here');
     final patterns = (codegen['patterns'] as YamlList).cast<String>();
     bool matches(String name) => patterns.any(
@@ -81,6 +84,27 @@ void main() {
       expect(declared, contains(name));
       expect(matches(name), isTrue, reason: '$name is not in pub-codegen');
     }
+  });
+
+  test('flutter_launcher_icons stays on 0.13.x', () {
+    // 0.14.x crashes on a palette PNG logo, which setup_branding.sh feeds it.
+    final rule = (ecosystem('pub')['ignore'] as YamlList)
+        .cast<YamlMap>()
+        .singleWhere((i) => i['dependency-name'] == 'flutter_launcher_icons');
+    expect(
+      (rule['update-types'] as YamlList).toList(),
+      unorderedEquals([
+        'version-update:semver-minor',
+        'version-update:semver-major',
+      ]),
+    );
+
+    final pubspec =
+        loadYaml(File('pubspec.yaml').readAsStringSync()) as YamlMap;
+    expect(
+      (pubspec['dev_dependencies'] as YamlMap)['flutter_launcher_icons'],
+      startsWith('^0.13.'),
+    );
   });
 
   test('patrol is not bumped apart from the pinned patrol_cli', () {

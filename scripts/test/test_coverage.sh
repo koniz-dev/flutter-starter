@@ -91,6 +91,8 @@ FILTERED="coverage/lcov.filtered.info"
 # raw file. The default exclusions are the ones
 # .github/workflows/coverage.yml removes before it gates, so a local run and
 # CI agree; each --exclude=<path> drops every file whose path contains it.
+# `test/**` is anchored there: only the root test/ goes, not a lib/.../test/
+# directory, so the same holds here.
 # --exclude used to be parsed into EXCLUDE_PATHS and never read.
 # Passed through the environment: BSD awk (macOS) rejects a newline inside a
 # -v value, and one path per line is the separator a path cannot contain.
@@ -101,7 +103,7 @@ COVERAGE_EXCLUDES=$(printf '%s\n' "${EXCLUDE_PATHS[@]}") awk '
     skip = (path ~ /\.g\.dart$/ || path ~ /\.freezed\.dart$/ ||
             path ~ /\.config\.dart$/ || path ~ /\/generated\// ||
             path ~ /\/l10n\// || path ~ /(^|\/)main\.dart$/ ||
-            path ~ /(^|\/)test\// || path ~ /_test\.dart$/ ||
+            path ~ /^test\// || path ~ /_test\.dart$/ ||
             path ~ /(^|\/)test_helpers\.dart$/ ||
             path ~ /(^|\/)test_fixtures\.dart$/)
     for (i = 1; i <= n; i++) {

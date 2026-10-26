@@ -11,13 +11,13 @@ part of 'auth_provider.dart';
 /// Authentication provider (Riverpod 3.0 - using Notifier)
 
 @ProviderFor(AuthNotifier)
-const authProvider = AuthNotifierProvider._();
+final authProvider = AuthNotifierProvider._();
 
 /// Authentication provider (Riverpod 3.0 - using Notifier)
 final class AuthNotifierProvider
     extends $NotifierProvider<AuthNotifier, AuthState> {
   /// Authentication provider (Riverpod 3.0 - using Notifier)
-  const AuthNotifierProvider._()
+  AuthNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,8 +52,7 @@ abstract class _$AuthNotifier extends $Notifier<AuthState> {
   AuthState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AuthState, AuthState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$AuthNotifier extends $Notifier<AuthState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

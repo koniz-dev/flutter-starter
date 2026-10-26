@@ -365,4 +365,4 @@ class TasksNotifier extends _$TasksNotifier {
 }
 
 /// Alias for [tasksProvider] (older imports use `tasksNotifierProvider`).
-const TasksNotifierProvider tasksNotifierProvider = tasksProvider;
+final TasksNotifierProvider tasksNotifierProvider = tasksProvider;

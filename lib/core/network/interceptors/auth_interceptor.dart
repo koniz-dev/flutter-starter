@@ -539,11 +539,13 @@ class AuthInterceptor extends Interceptor {
 
   /// Fails the request with [error] **without ending the error chain**.
   ///
-  /// In dio's error chain, `handler.reject(...)` stops it outright: every
-  /// interceptor registered after this one is skipped (`dio_mixin.dart` only
-  /// runs the next error callback for a `next` or `rejectCallFollowing`
-  /// state, and `ErrorInterceptorHandler` offers no way to request the
-  /// latter). `ApiClient` registers `RetryInterceptor`, `ApiLoggingInterceptor`
+  /// In dio's error chain, a bare `handler.reject(error)` stops it outright:
+  /// every interceptor registered after this one is skipped (`dio_mixin.dart`
+  /// only runs the next error callback for a `next` or `rejectCallFollowing`
+  /// state). `reject(error, true)` requests the latter since dio 5.10, but
+  /// `next` already continues the chain on every dio 5.x and needs no flag
+  /// that a later edit could drop, so this keeps using it. `ApiClient`
+  /// registers `RetryInterceptor`, `ApiLoggingInterceptor`
   /// and, last, `ErrorInterceptor` after this one, so a rejected 401 reached
   /// the caller with no domain error inside. `DioNetworkClient` and
   /// `ApiClient._send` then turned it into `NetworkException("Instance of
@@ -677,6 +679,7 @@ class AuthInterceptor extends Interceptor {
         validateStatus: newOptions.validateStatus,
         receiveTimeout: newOptions.receiveTimeout,
         sendTimeout: newOptions.sendTimeout,
+        transformTimeout: newOptions.transformTimeout,
         // The original's per-request metadata travels with the replay - its
         // performance trace among it, which the replay client's borrowed
         // PerformanceInterceptor finishes with the replay's outcome.

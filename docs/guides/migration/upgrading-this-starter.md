@@ -95,10 +95,27 @@ flutter analyze
 
 ## Breaking Changes by Version
 
+### Already current: riverpod_generator 4 and Freezed 4
+
+The starter generates code with `riverpod_generator` 4, `riverpod_annotation`
+4 and `freezed` 4. Code carried over from an older copy needs two changes:
+
+- **Generated providers are no longer `const`.** An alias such as
+  `const AuthNotifierProvider authNotifierProvider = authProvider;` no longer
+  compiles ("Const variables must be initialized with a constant value");
+  declare it `final`. Anything that put a generated provider inside a `const`
+  list or constructor call needs the same change.
+- **Freezed no longer accepts `final` on a constructor parameter.** Dart 3.13
+  removed that syntax, so `@unfreezed` can no longer make a single field
+  immutable that way.
+
+After pulling the upgrade, regenerate:
+`dart run build_runner build --delete-conflicting-outputs`.
+
 ### Already current: Riverpod 3 and `failureCallback:`
 
 Both changes below are **already in this starter** - `pubspec.yaml` depends on
-`flutter_riverpod: ^3.0.3`, and `Result.when` in
+`flutter_riverpod` 3.x, and `Result.when` in
 `lib/core/utils/result.dart` takes `failureCallback:`. They are kept here for
 anyone carrying code from an older copy of the template.
 

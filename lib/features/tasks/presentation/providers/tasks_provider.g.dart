@@ -11,13 +11,13 @@ part of 'tasks_provider.dart';
 /// Tasks provider (Riverpod Generator).
 
 @ProviderFor(TasksNotifier)
-const tasksProvider = TasksNotifierProvider._();
+final tasksProvider = TasksNotifierProvider._();
 
 /// Tasks provider (Riverpod Generator).
 final class TasksNotifierProvider
     extends $NotifierProvider<TasksNotifier, TasksState> {
   /// Tasks provider (Riverpod Generator).
-  const TasksNotifierProvider._()
+  TasksNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,8 +52,7 @@ abstract class _$TasksNotifier extends $Notifier<TasksState> {
   TasksState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<TasksState, TasksState>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$TasksNotifier extends $Notifier<TasksState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

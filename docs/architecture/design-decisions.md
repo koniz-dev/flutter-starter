@@ -960,7 +960,7 @@ The subsections below are **illustrative migration sketches** (hypothetical file
 1. **Replace dependencies**
    ```yaml
    dependencies:
-     # flutter_riverpod: ^3.0.3  # Remove
+     # flutter_riverpod  # Remove
      provider: ^6.0.0  # Add
    ```
 

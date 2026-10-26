@@ -11,7 +11,7 @@ part of 'app_router.dart';
 /// Provider for GoRouter instance (stripped baseline).
 
 @ProviderFor(goRouter)
-const goRouterProvider = GoRouterProvider._();
+final goRouterProvider = GoRouterProvider._();
 
 /// Provider for GoRouter instance (stripped baseline).
 
@@ -19,7 +19,7 @@ final class GoRouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
     with $Provider<GoRouter> {
   /// Provider for GoRouter instance (stripped baseline).
-  const GoRouterProvider._()
+  GoRouterProvider._()
     : super(
         from: null,
         argument: null,
