@@ -1,0 +1,3 @@
+  api-level: 34
+  profile: pixel_6
+Hardware profile: pixel_6

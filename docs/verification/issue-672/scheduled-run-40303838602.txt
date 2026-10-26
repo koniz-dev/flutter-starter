@@ -1,0 +1,25 @@
+$ gh run list --workflow e2e-android.yml --event schedule
+40303838602	schedule	2026-10-26T09:59:22Z	success	e28c9b4a4ddcf2546d20c8534d1d3b0a0af4504e	https://github.com/koniz-dev/flutter-starter/actions/runs/40303838602
+
+$ gh run view 40303838602 --json jobs (job + steps)
+job: Patrol on Android emulator -> success
+  Set up job -> success
+  Checkout code -> success
+  Setup Flutter -> success
+  Setup Java -> success
+  Install dependencies -> success
+  Add Pub global bin to PATH -> success
+  Install Patrol CLI -> success
+  Run Patrol tests -> success
+  Reject an empty test run -> success
+  Upload Patrol output -> success
+  Post Setup Java -> success
+  Post Setup Flutter -> success
+  Post Checkout code -> success
+  Complete job -> success
+
+$ gh run view 40303838602 --log | grep guard/summary lines
+📝 Total: 2
+✅ Successful: 2
+❌ Failed: 0
+OK: 2 test(s) collected and executed, 0 failed.
