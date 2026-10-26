@@ -30,7 +30,7 @@ void main() {
 
       final groups = (entry['groups'] as YamlMap).values.cast<YamlMap>();
       expect(
-        groups.map((g) => (g['update-types'] as YamlList).toList()),
+        groups.map((g) => (g['update-types'] as YamlList?)?.toList()),
         contains(unorderedEquals(['minor', 'patch'])),
       );
     });
@@ -41,6 +41,47 @@ void main() {
       expect(prefix, matches(RegExp(r'^(chore|ci|build)(\([a-z-]+\))?$')));
     });
   }
+
+  test('the codegen stack has its own group, ahead of minor-and-patch', () {
+    // pub moves these together, so a minor bump of one can carry another
+    // across a major; they must not land in a group named minor-and-patch.
+    final groups = ecosystem('pub')['groups'] as YamlMap;
+    final names = groups.keys.cast<String>().toList();
+    expect(
+      names.indexOf('pub-codegen'),
+      lessThan(names.indexOf('pub-minor-and-patch')),
+    );
+
+    final codegen = groups['pub-codegen'] as YamlMap;
+    expect(codegen['update-types'], isNull, reason: 'majors are expected here');
+    final patterns = (codegen['patterns'] as YamlList).cast<String>();
+    bool matches(String name) => patterns.any(
+      (p) => p.endsWith('*')
+          ? name.startsWith(p.substring(0, p.length - 1))
+          : name == p,
+    );
+
+    final pubspec =
+        loadYaml(File('pubspec.yaml').readAsStringSync()) as YamlMap;
+    final declared = [
+      ...(pubspec['dependencies'] as YamlMap).keys,
+      ...(pubspec['dev_dependencies'] as YamlMap).keys,
+    ].cast<String>();
+    const stack = [
+      'build_runner',
+      'flutter_riverpod',
+      'riverpod_annotation',
+      'riverpod_generator',
+      'freezed',
+      'freezed_annotation',
+      'json_annotation',
+      'json_serializable',
+    ];
+    for (final name in stack) {
+      expect(declared, contains(name));
+      expect(matches(name), isTrue, reason: '$name is not in pub-codegen');
+    }
+  });
 
   test('patrol is not bumped apart from the pinned patrol_cli', () {
     final ignored = (ecosystem('pub')['ignore'] as YamlList)

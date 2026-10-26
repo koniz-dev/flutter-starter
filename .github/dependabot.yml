@@ -4,6 +4,18 @@
 # count down; majors still arrive one per package, since those are the ones
 # that need reading. Every PR runs the Quality gate like any other.
 #
+# `update-types` is judged on the package Dependabot is updating, not on the
+# packages pub has to move with it. A minor flutter_riverpod bump can need
+# riverpod_generator, riverpod_annotation and freezed across a major, and
+# would carry them into a group named minor-and-patch. Those packages
+# version together, so they get their own group, listed first (a package
+# joins the first group it matches) and taking any update type: their PR
+# says what it is, and a major there means regenerating the committed
+# *.g.dart / *.freezed.dart files.
+#
+# A 0.x minor (0.13 -> 0.14) counts as minor here, though pub treats it as
+# breaking; read those in the grouped PR.
+#
 # This file ships with the template, so a repository created from it gets the
 # same PRs. To turn them off, delete this file (or one `updates:` entry);
 # security updates are a separate setting under Settings -> Code security.
@@ -18,6 +30,14 @@ updates:
     commit-message:
       prefix: chore(deps)
     groups:
+      pub-codegen:
+        patterns:
+          - build_runner
+          - flutter_riverpod
+          - riverpod*
+          - freezed*
+          - json_annotation
+          - json_serializable
       pub-minor-and-patch:
         update-types: [minor, patch]
     ignore:
