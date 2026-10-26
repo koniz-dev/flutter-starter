@@ -1,0 +1,94 @@
+# main at 6624aff5346
+
+$ sed -n 24,34p docs/guides/security/audit.md
+### Current Strengths
+
+1. **Secure Token Storage**
+   - Using `flutter_secure_storage` with proper platform-specific encryption
+   - Android: the plugin's default cipher storage - values encrypted with
+     AES-GCM, the key wrapped with RSA-OAEP by a key in the Android Keystore.
+     `SecureStorageService` passes no `AndroidOptions`, so `resetOnError` is
+     `true`: on an unrecoverable key error the plugin wipes every stored value
+     and the user is logged out
+   - iOS: Keychain with `first_unlock_this_device` accessibility
+   - Tokens stored separately from user data
+
+$ sed -n 136,170p docs/api/core/storage.md
+### Constructor
+
+```dart
+/// Creates a [SecureStorageService] instance with platform-specific options
+/// 
+/// Platform-specific:
+/// - Android: the plugin's default cipher storage (no AndroidOptions passed)
+/// - iOS: Uses Keychain with first unlock accessibility
+SecureStorageService();
+```
+
+### Features
+
+- Encrypted storage on Android (AES-GCM, Keystore-backed key)
+- Keychain storage on iOS
+- Implements `IStorageService` interface
+- Safe error handling (returns null/false on errors)
+- Suitable for: authentication tokens, passwords, API keys, sensitive information
+
+### Platform-Specific Behavior
+
+**Android:**
+- Uses `flutter_secure_storage`'s default Android options; `SecureStorageService`
+  passes no `AndroidOptions`
+- Values are encrypted with AES-GCM; the AES key is wrapped with RSA-OAEP by a
+  key held in the Android Keystore
+- `resetOnError` is `true` (the plugin default): if the key cannot be
+  recovered - for example after a backup is restored to another device - the
+  plugin deletes every stored value, and the user has to sign in again
+
+**iOS:**
+- Uses Keychain
+- Accessibility: `first_unlock_this_device`
+- Data is encrypted and protected by iOS security
+
+
+## Source of truth: the app passes no AndroidOptions
+$ sed -n 24,31p lib/core/storage/secure_storage_service.dart
+class SecureStorageService implements IStorageService, IStrictStringRead {
+  /// Creates a [SecureStorageService] instance with platform-specific options
+  SecureStorageService()
+    : _storage = const FlutterSecureStorage(
+        iOptions: iosOptions,
+        mOptions: macOsOptions,
+      );
+
+
+## Plugin defaults (flutter_secure_storage 11.2.0, as locked)
+387:  flutter_secure_storage:
+388-    dependency: "direct main"
+$ sed -n 35,59p ~/.pub-cache/hosted/pub.dev/flutter_secure_storage-11.2.0/lib/options/android_options.dart
+class AndroidOptions extends Options {
+  /// Standard secure storage using AES-GCM with RSA OAEP key wrapping.
+  ///
+  /// This is the default constructor with strong security:
+  /// - RSA/ECB/OAEPWithSHA-256AndMGF1Padding for key protection
+  /// - AES/GCM/NoPadding for data encryption
+  /// - No biometric authentication required
+  /// - API 23+ (Android 6.0+)
+  ///
+  /// For biometric authentication, use `AndroidOptions.biometric()`.
+  ///
+  /// Advanced users can customize cipher algorithms for specific use cases:
+  /// - AES_GCM_NoPadding storage + RSA key ciphers (standard RSA wrapping)
+  /// - AES_GCM_NoPadding storage + AES_GCM_NoPadding key
+  ///   (KeyStore-based, supports biometrics)
+  const AndroidOptions({
+    bool resetOnError = true,
+    bool migrateOnAlgorithmChange = true,
+    bool migrateWithBackup = false,
+    bool enforceBiometrics = false,
+    bool requireBiometricsPerOperation = false,
+    KeyCipherAlgorithm keyCipherAlgorithm =
+        KeyCipherAlgorithm.RSA_ECB_OAEPwithSHA_256andMGF1Padding,
+    StorageCipherAlgorithm storageCipherAlgorithm =
+        StorageCipherAlgorithm.AES_GCM_NoPadding,
+$ grep -n "aOptions = " .../lib/flutter_secure_storage.dart
+43:    this.aOptions = AndroidOptions.defaultOptions,
