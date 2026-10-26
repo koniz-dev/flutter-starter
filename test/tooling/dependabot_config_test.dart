@@ -86,6 +86,27 @@ void main() {
     }
   });
 
+  test('flutter_launcher_icons stays on 0.13.x', () {
+    // 0.14.x crashes on a palette PNG logo, which setup_branding.sh feeds it.
+    final rule = (ecosystem('pub')['ignore'] as YamlList)
+        .cast<YamlMap>()
+        .singleWhere((i) => i['dependency-name'] == 'flutter_launcher_icons');
+    expect(
+      (rule['update-types'] as YamlList).toList(),
+      unorderedEquals([
+        'version-update:semver-minor',
+        'version-update:semver-major',
+      ]),
+    );
+
+    final pubspec =
+        loadYaml(File('pubspec.yaml').readAsStringSync()) as YamlMap;
+    expect(
+      (pubspec['dev_dependencies'] as YamlMap)['flutter_launcher_icons'],
+      startsWith('^0.13.'),
+    );
+  });
+
   test('patrol is not bumped apart from the pinned patrol_cli', () {
     final ignored = (ecosystem('pub')['ignore'] as YamlList)
         .cast<YamlMap>()

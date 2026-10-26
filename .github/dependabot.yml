@@ -18,7 +18,7 @@
 # which put freezed* and riverpod* into minor-and-patch. Keep the two lists
 # below identical.
 #
-# A 0.x minor (0.13 -> 0.14) counts as minor here, though pub treats it as
+# A 0.x minor (0.1 -> 0.2) counts as minor here, though pub treats it as
 # breaking; read those in the grouped PR.
 #
 # This file ships with the template, so a repository created from it gets the
@@ -58,6 +58,17 @@ updates:
       # there); a lone bump makes the CLI abort before any test runs. Bump
       # both by hand.
       - dependency-name: patrol
+      # flutter_launcher_icons 0.14.x aborts with "RangeError (length)" on a
+      # palette (8-bit colormap) PNG, a common format for an optimised logo;
+      # 0.13.1 reads it. scripts/dev/setup_branding.sh would then fail on the
+      # adopter's first branding run. Upstream:
+      # https://github.com/fluttercommunity/flutter_launcher_icons/issues/615
+      # 0.13.x patches still come through; re-check a palette logo before
+      # lifting this.
+      - dependency-name: flutter_launcher_icons
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-major
 
   - package-ecosystem: github-actions
     directory: /
