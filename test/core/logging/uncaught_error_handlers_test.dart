@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -61,11 +62,8 @@ void main() {
     expect(report.stack.toString(), contains('_ThrowsInBuild.build'));
   });
 
-  test('an error that escaped every zone is reported once, with its stack, '
-      'and marked handled', () async {
-    // The engine delivers a root-zone uncaught async error by calling
-    // PlatformDispatcher.onError; flutter_test's zone catches such errors
-    // first, so the handler is invoked the way the engine would.
+  test('an async error that escaped every zone is reported once, with its '
+      'stack, and marked handled', () async {
     final dispatcher = PlatformDispatcher.instance;
     final previousCalls = <Object>[];
     final saved = dispatcher.onError;
@@ -79,11 +77,17 @@ void main() {
       container.read(loggingServiceProvider),
     );
     addTearDown(restore);
+    final installed = dispatcher.onError!;
+    bool? handled;
+    dispatcher.onError = (error, stack) => handled = installed(error, stack);
 
+    // A failing Future nobody awaits, in the root zone: flutter_test's own
+    // zone never sees it, and the engine hands it to PlatformDispatcher
+    // .onError, as it would in the app.
     final error = StateError('async failure');
     final stack = StackTrace.current;
-    final handled = dispatcher.onError!(error, stack);
-    await pumpEventQueue();
+    Zone.root.run(() => unawaited(Future<void>.error(error, stack)));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
 
     expect(handled, isTrue);
     expect(previousCalls, [error], reason: 'the previous handler is chained');
