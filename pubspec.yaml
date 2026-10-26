@@ -107,7 +107,7 @@ dev_dependencies:
   riverpod_generator: ^4.0.9
 
   # Linting - Comprehensive lint rules for Flutter/Dart (Very Good Ventures)
-  very_good_analysis: ^10.0.0
+  very_good_analysis: ^11.0.0
 
   # YAML parser for tool/check_env_assets.dart, which must read every asset
   # spelling Flutter accepts. Already in the
