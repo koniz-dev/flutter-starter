@@ -88,7 +88,9 @@ Two behaviours to know:
 | Errors that escape every zone (an un-awaited `Future` that fails) | Yes | `PlatformDispatcher.onError`, same installer; it returns `true`, so the engine does not print the error again |
 | `debug`, `info`, `warning` calls | No | Logged only |
 | An error that code catches and does not pass to `error()` | No | Nothing sees it |
+| A startup failure `main()` catches (storage migration, session restore, locale read, an unknown `ENVIRONMENT`) | Yes | `main()` calls `error('Startup failed', ...)` once before showing the failure screen. The step that failed may already have logged, and so reported, its own error (the migration does) |
 | Anything thrown before `main()` builds the container (`EnvConfig.load`, binding setup) | No | The handlers are not installed yet |
+| Errors while the startup failure screen is shown | No | The handlers are removed with the failed container; Try again installs them again |
 | Native crashes (a crash in Kotlin, Swift or the engine) | No | Needs the vendor SDK's native integration |
 
 `installUncaughtErrorHandlers` (`lib/core/logging/uncaught_error_handlers.dart`)

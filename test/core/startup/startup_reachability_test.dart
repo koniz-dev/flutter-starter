@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
+import 'package:flutter_starter/core/logging/i_error_reporter.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/core/storage/migration/migration_executor.dart';
 import 'package:flutter_starter/core/storage/storage_version.dart';
@@ -31,6 +33,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///   these tests rather than being papered over by a hand-rolled container;
 /// * the end-to-end group calls the real `app.main()` and asserts on what it
 ///   passed to `runApp`.
+class _RecordingReporter implements IErrorReporter {
+  final reports = <({String message, Object? error, StackTrace? stack})>[];
+
+  @override
+  Future<void> recordError(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, dynamic>? context,
+  }) async {
+    reports.add((message: message, error: error, stack: stackTrace));
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -129,7 +145,10 @@ void main() {
   /// Shared by both end-to-end groups on purpose. The failure group and the
   /// healthy group must boot through the *same* code path, or "healthy" and
   /// "failed" stop being comparable outcomes of one entrypoint.
-  Future<void> bootRealMain(WidgetTester tester) async {
+  Future<void> bootRealMain(
+    WidgetTester tester, {
+    Future<void> Function() entry = app.main,
+  }) async {
     var booted = false;
     Object? bootError;
 
@@ -141,7 +160,7 @@ void main() {
     // nothing to do with the hang, which would make a red run unreadable.
     await tester.runAsync(() async {
       try {
-        await app.main().timeout(_bootBudget);
+        await entry().timeout(_bootBudget);
         booted = true;
       } on TimeoutException {
         booted = false;
@@ -338,6 +357,31 @@ void main() {
         findsOneWidget,
         reason: 'the real exception is surfaced to the user, not a placeholder',
       );
+    });
+
+    testWidgets('the caught startup failure is reported once, with its '
+        'stack', (tester) async {
+      // No secure backend -> MigrationExecutionException, caught by main().
+      final reporter = _RecordingReporter();
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(
+          createContainer: () => app.createAppContainer(
+            overrides: [errorReporterProvider.overrideWithValue(reporter)],
+          ),
+        ),
+      );
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      // The migration also logs (and so reports) its own errors where they
+      // happen; main() adds exactly one report saying the launch failed.
+      final startup = reporter.reports.where(
+        (r) => r.message == 'Startup failed',
+      );
+      expect(startup, hasLength(1));
+      final report = startup.single;
+      expect(report.error, isA<MigrationExecutionException>());
+      expect(report.stack, isNotNull);
     });
 
     testWidgets('a downgrade refusal boots into the failure screen', (
