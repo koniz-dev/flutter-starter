@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Network Layer - HTTP client with interceptors support
-  dio: ^5.9.0
+  dio: ^5.11.1
 
   # Utilities - Value equality comparison for objects
   equatable: ^2.1.0
@@ -23,7 +23,7 @@ dependencies:
     sdk: flutter
 
   # Configuration - Environment variable loader from .env files
-  flutter_dotenv: ^6.0.0
+  flutter_dotenv: ^6.0.1
 
   # Localization - Flutter localization support
   flutter_localizations:
@@ -51,17 +51,17 @@ dependencies:
   json_annotation: ^4.9.0
 
   # Logging - Comprehensive logging solution with multiple outputs
-  logger: ^2.6.2
+  logger: ^2.8.0
 
   # File System - Path provider for file-based logging
   path: ^1.9.1
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
 
   # Riverpod Generator - annotations for @riverpod
   riverpod_annotation: ^3.0.3
 
   # Storage - Simple key-value storage for non-sensitive data
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.6
 
   # Network Layer - WebSocket client
   web_socket_channel: ^3.0.1
@@ -75,8 +75,8 @@ dev_dependencies:
   fake_async: ^1.3.3
 
   # Branding & UI configuration tools
-  flutter_launcher_icons: ^0.13.1
-  flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.8
 
   # Testing - Flutter testing framework and utilities
   flutter_test:
@@ -95,10 +95,10 @@ dev_dependencies:
 
   # Mason brick hooks import package:mason; dev_dependency here so the analyzer
   # resolves it for bricks/flutter_starter_setup/hooks/post_gen.dart.
-  mason: ^0.1.2
+  mason: ^0.1.3
 
   # Testing - Mocking library for unit tests (no code generation required)
-  mocktail: ^1.0.4
+  mocktail: ^1.0.5
 
   # Testing - End-to-End testing framework
   patrol: ^3.10.0
@@ -112,7 +112,7 @@ dev_dependencies:
   # YAML parser for tool/check_env_assets.dart, which must read every asset
   # spelling Flutter accepts. Already in the
   # lock as a transitive dependency; declared because tool/ imports it.
-  yaml: ^3.1.3
+  yaml: ^3.1.4
 
 
 # For information on the generic Dart part of this file, see the
