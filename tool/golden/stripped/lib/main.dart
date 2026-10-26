@@ -175,6 +175,13 @@ Future<void> bootstrap({
 
 VoidCallback? _restoreErrorHandlers;
 
+/// Forgets the handlers a previous [bootstrap] installed, without restoring
+/// what they replaced. A test that boots the app more than once in one
+/// isolate calls this first, so a restore callback left by an earlier test
+/// does not reinstate that test's handlers.
+@visibleForTesting
+void debugForgetUncaughtErrorHandlers() => _restoreErrorHandlers = null;
+
 Future<void> _initializeImageCache() async {
   imageCache.maximumSize = 100;
   imageCache.maximumSizeBytes = 100 << 20;
