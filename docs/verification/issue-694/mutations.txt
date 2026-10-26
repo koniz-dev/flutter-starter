@@ -1,0 +1,13 @@
+# Mutations on branch commit 94433d92a84 (committed first, restored with git checkout)
+
+M1: cache_interceptor - treat transformTimeout as a transport failure (return true)
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/cache_freshness_test.dart: criterion 1: an entry older than maxAge goes back to the network a transformTimeout on the refetch surfaces instead of the stale entry
+00:00 +4 -1: criterion 1: an entry older than maxAge goes back to the network a transformTimeout on the refetch surfaces instead of the stale entry [E]
+00:00 +4: criterion 1: an entry older than maxAge goes back to the network a transformTimeout on the refetch surfaces instead of the stale entry
+
+M2: mapper - map transformTimeout to code RECEIVE_TIMEOUT
+00:00 +50 -2: Some tests failed.
+
+M3: failure_localizations - drop the TRANSFORM_TIMEOUT case
+  TRANSFORM_TIMEOUT
+00:00 +21 -1: Some tests failed.

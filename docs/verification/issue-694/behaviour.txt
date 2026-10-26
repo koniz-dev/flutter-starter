@@ -1,0 +1,43 @@
+# main at a4856e01741
+$ grep -n "^  dio:" pubspec.yaml; lock entry
+16:  dio: ^5.11.1
+260:  dio:
+261-    dependency: "direct main"
+262-    description:
+263-      name: dio
+264-      sha256: "852ec3b48cc431ac04fff978413c541502b67ffc3e26921e74e3d994694192c1"
+265-      url: "https://pub.dev"
+266-    source: hosted
+
+$ git grep -n -A6 "case DioExceptionType.transformTimeout" -- lib
+lib/core/errors/dio_exception_mapper.dart-33-      // The server answered, but decoding the body locally (for example a
+lib/core/errors/dio_exception_mapper.dart-34-      // large JSON payload) took longer than RequestOptions.transformTimeout.
+lib/core/errors/dio_exception_mapper.dart-35-      // The data never reached the app, so it is reported like the other
+lib/core/errors/dio_exception_mapper.dart-36-      // client-side timeouts rather than as a server error.
+lib/core/errors/dio_exception_mapper.dart:37:      case DioExceptionType.transformTimeout:
+lib/core/errors/dio_exception_mapper.dart-38-        return NetworkException(
+lib/core/errors/dio_exception_mapper.dart-39-          'Transform timeout: '
+lib/core/errors/dio_exception_mapper.dart-40-          '${exception.message ?? 'Response processing timed out'}',
+lib/core/errors/dio_exception_mapper.dart-41-          code: 'TRANSFORM_TIMEOUT',
+lib/core/errors/dio_exception_mapper.dart-42-        );
+lib/core/errors/dio_exception_mapper.dart-43-
+--
+lib/core/network/interceptors/cache_interceptor.dart-217-      case DioExceptionType.badResponse:
+lib/core/network/interceptors/cache_interceptor.dart-218-        return (err.response?.statusCode ?? 0) >= 500;
+lib/core/network/interceptors/cache_interceptor.dart-219-      // The network did answer; the body then took too long to decode on
+lib/core/network/interceptors/cache_interceptor.dart-220-      // this device. Serving the stale copy would hide that, so it surfaces.
+lib/core/network/interceptors/cache_interceptor.dart:221:      case DioExceptionType.transformTimeout:
+lib/core/network/interceptors/cache_interceptor.dart-222-      case DioExceptionType.badCertificate:
+lib/core/network/interceptors/cache_interceptor.dart-223-      case DioExceptionType.cancel:
+lib/core/network/interceptors/cache_interceptor.dart-224-      case DioExceptionType.unknown:
+lib/core/network/interceptors/cache_interceptor.dart-225-        return false;
+lib/core/network/interceptors/cache_interceptor.dart-226-    }
+lib/core/network/interceptors/cache_interceptor.dart-227-  }
+
+$ git grep -n TRANSFORM_TIMEOUT -- lib
+lib/core/errors/dio_exception_mapper.dart:41:          code: 'TRANSFORM_TIMEOUT',
+lib/core/localization/failure_localizations.dart:41:      case 'TRANSFORM_TIMEOUT':
+
+$ flutter test (the three affected files)
+  stream_transform 2.1.1 (2.1.2 available)
+All tests passed!

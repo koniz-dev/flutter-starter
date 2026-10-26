@@ -1,0 +1,8 @@
+$ gh pr checks 701
+Docs check	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885761/job/121652557204
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885669/job/121652559336
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885877/job/121652557658
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885877/job/121652558061
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885877/job/121652557885
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885877/job/121652557829
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40345885877/job/121652558375
