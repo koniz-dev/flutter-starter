@@ -71,7 +71,7 @@ final storageServiceProvider = Provider<StorageService>((ref) {
 /// uses encrypted storage for sensitive data such as authentication tokens.
 ///
 /// Platform-specific:
-/// - Android: EncryptedSharedPreferences
+/// - Android: AES-GCM, key wrapped by the Android Keystore
 /// - iOS: Keychain
 final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
   return SecureStorageService();

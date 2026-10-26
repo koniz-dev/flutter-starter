@@ -323,8 +323,8 @@ If startup fails with a version mismatch:
 1. Check that all migrations update version correctly
 2. Verify migration chain is complete (no gaps) - see Failure Modes above
 3. Check for corrupted version data
-4. On secure storage, confirm the Keychain / EncryptedSharedPreferences is
-   actually writable; a rejected version write now fails the migration
+4. On secure storage, confirm the Keychain (iOS/macOS) or the Android Keystore
+   is actually writable; a rejected version write now fails the migration
 
 ## Testing
 

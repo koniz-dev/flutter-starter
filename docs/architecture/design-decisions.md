@@ -673,7 +673,7 @@ class StorageService implements IStorageService {
 // Sensitive storage
 class SecureStorageService implements IStorageService {
   // Uses flutter_secure_storage
-  // Android: EncryptedSharedPreferences
+  // Android: AES-GCM, key wrapped by the Android Keystore
   // iOS: Keychain
 }
 
