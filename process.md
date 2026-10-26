@@ -70,6 +70,34 @@ GitHub issues are the single source of truth. Full spec:
    a direct push would succeed - so the branch-and-PR rule is discipline, not
    enforcement. Never test that.
 10. Done means closed AND evidence-backed. One issue at a time.
+11. **Dependabot PRs** (`chore(deps)` / `chore(ci)`, from `.github/dependabot.yml`
+    on `main`) have no issue and their commits carry no `Refs`. They are
+    handled like this, and the refs check is not relaxed for them:
+    - **Merge only a PR that needs no code change.** A bump that breaks the
+      build, needs regenerated code, or changes behaviour (a new enum value, a
+      removed option) gets an issue; the work ships as an ordinary PR that
+      `Refs` that issue, and the Dependabot PR is closed as superseded.
+      Precedent: #679 split into #692-#694; #707 and #709 superseded by #708
+      and #710.
+    - **Checks:** the Quality gate and every Strip job green on the current
+      head (`gh pr update-branch` first if `main` moved under it), plus the
+      `security` phase - a dependency bump is a G3 risk surface - covering
+      publisher and lockfile hash. A PR touching `android/` or a native plugin
+      also gets `build.yml` dispatched on its branch (#680).
+    - **Squash message:** the maintainer writes the body, so it carries
+      `Refs koniz-dev/flutter-starter#<N>` where `<N>` is the issue the bump
+      belongs to, or else the Dependabot PR's own number (a PR is linkable
+      under the same `#N`; it holds the changelog and the checks). Check it
+      with `check_issue_refs.sh --body-file` before merging:
+
+      ```bash
+      printf 'Refs koniz-dev/flutter-starter#700\n' > /tmp/body.txt
+      $M/scripts/check_issue_refs.sh --body-file /tmp/body.txt
+      gh pr merge 700 --squash --delete-branch --body-file /tmp/body.txt
+      ```
+
+    - **No issue, no evidence directory.** The PR and its security comment are
+      the record. A bump that needed an issue follows the normal G1-G4 path.
 
 **Canonical epic list:
 [`scripts/bootstrap-issue-labels.sh`](scripts/bootstrap-issue-labels.sh)**
