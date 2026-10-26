@@ -115,5 +115,31 @@ void main() {
         expect(result.exitCode, 0, reason: out);
       });
     }
+
+    // The globs are anchored: `test/**` removes the root test/ only. A
+    // lib/ file under a directory that happens to be named test/ is source
+    // coverage.yml counts, so the script must count it too.
+    for (final path in const [
+      'lib/features/x/test/y.dart',
+      'lib/core/test_mode/z.dart',
+    ]) {
+      test('keeps $path, which coverage.yml keeps', () async {
+        File('${workdir.path}/coverage/lcov.info').writeAsStringSync(
+          '${_record('lib/kept.dart', covered: true)}\n'
+          '${_record(path, covered: true)}\n',
+        );
+        final result = await Process.run(
+          'bash',
+          ['$repo/scripts/test/test_coverage.sh', '--no-test', '--min=100'],
+          workingDirectory: workdir.path,
+        );
+        final out = '${result.stdout}${result.stderr}';
+        expect(
+          out,
+          contains('Total lines: 2'),
+          reason: '$path was dropped:\n$out',
+        );
+      });
+    }
   });
 }
