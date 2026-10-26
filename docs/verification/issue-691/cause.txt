@@ -1,0 +1,21 @@
+# Cause, from the Dependabot job that opened #679: run 40197309920 (job 1651520465), base c666fedb14f
+# Excerpt of the updater lines (gh run view 40197309920 --log | grep updater):
+
+Checking if flutter_riverpod 3.0.3 needs updating
+Latest version is 3.4.3
+Adding dependencies as handled: (flutter_riverpod).
+Requirements to unlock all
+Creating dependency change for flutter_riverpod (3.4.3) in group pub-minor-and-patch
+Updating flutter_riverpod, json_annotation, riverpod_generator, riverpod_annotation, json_serializable, freezed
+...
+Skipping freezed as it has already been updated to 4.0.1
+Skipping riverpod_annotation as it has already been updated to 4.0.7
+Skipping riverpod_generator as it has already been updated to 4.0.9
+
+Reading: the group's update-types filter was applied to flutter_riverpod (3.0.3 -> 3.4.3, minor).
+Pub's resolution for that update unlocked all of its co-dependents, which crossed a major
+(riverpod_* 3 -> 4, freezed 3 -> 4), and they rode along into pub-minor-and-patch.
+
+equatable: "Checking if equatable 2.0.8 needs updating / Latest version is 3.0.0" and no dependency
+change in the group - its latest is a major, so it was not grouped; the separate per-package run
+then proposed 2.1.0 (#681).

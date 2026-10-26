@@ -1,0 +1,10 @@
+# Mutations against test/tooling/dependabot_config_test.dart, on branch commit 9dd1ced68ea
+# (committed before mutating; each mutation restored with git checkout).
+
+M1: delete the `- riverpod*` pattern from pub-codegen
+  -> FAIL: "riverpod_annotation is not in pub-codegen"   (00:00 +6 -1: Some tests failed.)
+
+M2: move pub-minor-and-patch above pub-codegen
+  -> FAIL: "Expected: a value less than <0>"            (00:00 +6 -1: Some tests failed.)
+
+Unmutated: 00:00 +7: All tests passed!
