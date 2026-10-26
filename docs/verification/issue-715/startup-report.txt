@@ -1,0 +1,45 @@
+# main at a82981160bc
+$ sed -n "/on Object catch (error, stackTrace)/,/return;/p" lib/main.dart
+  } on Object catch (error, stackTrace) {
+    // Caught here, so neither uncaught-error handler sees it: report it
+    // explicitly, or a failed launch never reaches the bound IErrorReporter.
+    try {
+      container
+          .read(loggingServiceProvider)
+          .error('Startup failed', error: error, stackTrace: stackTrace);
+    } on Object {
+      // Reporting must not stand between the user and the failure screen.
+    }
+    // The handlers log through this container's LoggingService, which is
+    // about to be disposed: take them down with it. Try again installs them
+    // afresh with the next container.
+    _restoreErrorHandlers?.call();
+    _restoreErrorHandlers = null;
+    container.dispose();
+    runApp(
+      StartupFailureApp(
+        error: error,
+        onRetry: () => bootstrap(createContainer: createContainer),
+      ),
+    );
+    return;
+
+$ diff lib/main.dart tool/golden/stripped/lib/main.dart
+(identical)
+
+$ flutter test test/core/startup/startup_reachability_test.dart --plain-name "reported once" -r expanded
+All tests passed!
+main() renders StartupFailureApp end to end the caught startup failure is reported once, with its stack
+
+$ grep -n "Startup failed\|failure screen is shown" docs/api/core/logging.md
+91:| A startup failure `main()` catches (storage migration, session restore, locale read, an unknown `ENVIRONMENT`) | Yes | `main()` calls `error('Startup failed', ...)` once before showing the failure screen. The step that failed may already have logged, and so reported, its own error (the migration does) |
+93:| Errors while the startup failure screen is shown | No | The handlers are removed with the failed container; Try again installs them again |
+
+$ gh pr checks 718
+Docs check	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382277961/job/121781362419
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382278011/job/121781362724
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382278514/job/121781366505
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382278514/job/121781366297
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382278514/job/121781365843
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382278514/job/121781366479
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40382278514/job/121781366434

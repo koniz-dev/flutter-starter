@@ -1,0 +1,7 @@
+# Mutation on branch commit 86508bae646
+M1: drop the 'Startup failed' error() call
+Some tests failed.
+main() renders StartupFailureApp end to end the caught startup failure is reported once, with its stack [E]
+
+Unmutated:
+00:04 +11: All tests passed!
