@@ -679,6 +679,7 @@ class AuthInterceptor extends Interceptor {
         validateStatus: newOptions.validateStatus,
         receiveTimeout: newOptions.receiveTimeout,
         sendTimeout: newOptions.sendTimeout,
+        transformTimeout: newOptions.transformTimeout,
         // The original's per-request metadata travels with the replay - its
         // performance trace among it, which the replay client's borrowed
         // PerformanceInterceptor finishes with the replay's outcome.
