@@ -1,0 +1,20 @@
+# main at 2bed2e4899f (after #717)
+$ flutter test test/core/logging/uncaught_error_handlers_test.dart -r expanded
+an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+an async error that escaped every zone is reported once, with its stack, and marked handled
+the returned callback restores the previous handlers
+All tests passed!
+
+$ grep -n "Zone.root" test/core/logging/uncaught_error_handlers_test.dart
+86-    // .onError, as it would in the app.
+87-    final error = StateError('async failure');
+88-    final stack = StackTrace.current;
+89:    Zone.root.run(() => unawaited(Future<void>.error(error, stack)));
+
+$ gh pr checks 717
+Quality gate	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40380225624/job/121774140702
+Strip both-samples-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40380225581/job/121774140490
+Strip feature-flags-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40380225581/job/121774141057
+Strip keep-samples + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40380225581/job/121774141234
+Strip renamed-both + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40380225581/job/121774141391
+Strip tasks-removed + analyze + test	pass	https://github.com/koniz-dev/flutter-starter/actions/runs/40380225581/job/121774141553

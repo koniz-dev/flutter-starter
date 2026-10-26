@@ -1,0 +1,29 @@
+# Mutations on branch commit fb044155739; each restored with git checkout
+
+M1: framework handler does not report
+Some tests failed.
+an uncaught framework error is reported once, with its stack, and still reaches the previous handler [E]
+
+M2: platform handler returns false
+Some tests failed.
+an error that escaped every zone is reported once, with its stack, and marked handled [E]
+
+M3: framework handler does not chain to the previous one
+Some tests failed.
+an uncaught framework error is reported once, with its stack, and still reaches the previous handler [E]
+
+M4: restore callback leaves the new handlers in place
+Some tests failed.
+the returned callback restores the previous handlers [E]
+
+Unmutated:
+All tests passed!
+
+# After the root-zone test (branch commit de14e6a164d)
+M2b: platform handler returns false
+Some tests failed.
+an async error that escaped every zone is reported once, with its stack, and marked handled - did not complete [E]
+the returned callback restores the previous handlers - did not complete [E]
+M5: platform handler does not report
+Some tests failed.
+an async error that escaped every zone is reported once, with its stack, and marked handled [E]
