@@ -33,7 +33,7 @@ dependencies:
   flutter_riverpod: ^3.0.3
 
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^11.2.0
   # Security (optional) - FreeRASP concrete implementation
   freerasp: ^8.2.4
 
