@@ -1,0 +1,35 @@
+main 103cd9e5f0c
+
+$ grep -rn _AuthStateNotifier test lib
+(no output)
+
+$ git show --stat --format=%s HEAD -- test/   (rename only)
+test(routing): name the redirect re-run group for what it tests (#726)
+
+diff --git a/test/core/routing/app_router_test.dart b/test/core/routing/app_router_test.dart
+index ff15c772d83..096974f5ae3 100644
+--- a/test/core/routing/app_router_test.dart
++++ b/test/core/routing/app_router_test.dart
+@@ -361,7 +361,7 @@ void main() {
+     });
+   });
+ 
+-  group('_AuthStateNotifier', () {
++  group('session status changes', () {
+     late ProviderContainer container;
+ 
+     tearDown(() {
+
+$ flutter test test/core/routing
+00:07 +59: All tests passed!
+
+$ flutter test test/core/routing/app_router_test.dart --plain-name "session status changes"
+00:01 +1: All tests passed!
+
+PR #726 checks:
+Quality gate -> pass
+Strip both-samples-removed + analyze + test -> pass
+Strip feature-flags-removed + analyze + test -> pass
+Strip keep-samples + analyze + test -> pass
+Strip renamed-both + analyze + test -> pass
+Strip tasks-removed + analyze + test -> pass
