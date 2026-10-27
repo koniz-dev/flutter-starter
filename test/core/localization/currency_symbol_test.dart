@@ -12,7 +12,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  setUpAll(() async => initializeDateFormatting());
+  setUpAll(() async => await initializeDateFormatting());
 
   String format(num amount, String locale, String code) =>
       LocalizedFormatters.formatCurrency(

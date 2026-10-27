@@ -63,7 +63,7 @@ class LazyLoader<K, T> {
 
     // Return existing loading future if already loading
     if (_loadingFutures.containsKey(key)) {
-      return _loadingFutures[key]!;
+      return await _loadingFutures[key]!;
     }
 
     // Start loading
@@ -94,7 +94,7 @@ class LazyLoader<K, T> {
     }();
 
     _loadingFutures[key] = future;
-    return future;
+    return await future;
   }
 
   /// Preload a resource without waiting for it
@@ -175,10 +175,10 @@ class DeferredImportLoader {
     }
 
     if (_loadingFuture != null) {
-      return _loadingFuture;
+      return await _loadingFuture;
     }
 
-    return _loadingFuture = () async {
+    return await (_loadingFuture = () async {
       try {
         await _loadFunction();
         _isLoaded = true;
@@ -187,7 +187,7 @@ class DeferredImportLoader {
         _loadingFuture = null;
         rethrow;
       }
-    }();
+    }());
   }
 
   /// Check if the library is loaded
@@ -234,7 +234,7 @@ class LazyInitializer<T> {
     }
 
     if (_initFuture != null) {
-      return _initFuture!;
+      return await _initFuture!;
     }
 
     _initFuture = () async {
@@ -249,7 +249,7 @@ class LazyInitializer<T> {
       }
     }();
 
-    return _initFuture!;
+    return await _initFuture!;
   }
 
   /// Check if initialized

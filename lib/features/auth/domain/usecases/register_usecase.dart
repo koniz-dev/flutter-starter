@@ -12,6 +12,6 @@ class RegisterUseCase {
 
   /// Executes registration with [email], [password], and [name]
   Future<Result<User>> call(String email, String password, String name) async {
-    return repository.register(email, password, name);
+    return await repository.register(email, password, name);
   }
 }

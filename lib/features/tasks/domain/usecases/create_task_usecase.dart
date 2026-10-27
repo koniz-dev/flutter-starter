@@ -49,6 +49,6 @@ class CreateTaskUseCase {
       updatedAt: now,
       description: description,
     );
-    return repository.createTask(task);
+    return await repository.createTask(task);
   }
 }

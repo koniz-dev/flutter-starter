@@ -77,7 +77,7 @@ void main() {
     );
   });
 
-  for (final MapEntry(key: key, value: row) in rows.entries) {
+  for (final MapEntry(:key, value: row) in rows.entries) {
     final getter = _getterFor(key);
     final reserved = row.contains('Reserved');
     final claim = reserved

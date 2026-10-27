@@ -139,7 +139,7 @@ class _GatedTokenStore extends _InMemoryTokenStore {
   Future<bool> setAccessToken(String token) async {
     if (!writeStarted.isCompleted) writeStarted.complete();
     await release.future;
-    return super.setAccessToken(token);
+    return await super.setAccessToken(token);
   }
 }
 

@@ -12,6 +12,6 @@ class LoginUseCase {
 
   /// Executes login with [email] and [password]
   Future<Result<User>> call(String email, String password) async {
-    return repository.login(email, password);
+    return await repository.login(email, password);
   }
 }

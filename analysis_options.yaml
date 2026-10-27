@@ -29,6 +29,14 @@ analyzer:
     - macos/**
     - linux/**
 
+# very_good_analysis 11 switched the formatter to `trailing_commas: automate`,
+# which joins every short argument list that ends in a comma and reflowed 65
+# files here. Keeping `preserve` keeps a written trailing comma meaning "one
+# argument per line", and spares a project built on this starter that
+# reformat when it takes the upgrade.
+formatter:
+  trailing_commas: preserve
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:very_good_analysis/analysis_options.yaml`

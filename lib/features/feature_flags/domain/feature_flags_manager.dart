@@ -26,7 +26,7 @@ class FeatureFlagsManager {
   /// Returns the flag value from the highest priority source.
   Future<bool> isEnabled(FeatureFlagKey key) async {
     final result = await _repository.getFlag(key.value);
-    return result.when(
+    return await result.when(
       success: (flag) => flag.value,
       failureCallback: (_) => key.defaultValue,
     );
@@ -35,7 +35,10 @@ class FeatureFlagsManager {
   /// Get a feature flag with full details
   Future<FeatureFlag?> getFlag(FeatureFlagKey key) async {
     final result = await _repository.getFlag(key.value);
-    return result.when(success: (flag) => flag, failureCallback: (_) => null);
+    return await result.when(
+      success: (flag) => flag,
+      failureCallback: (_) => null,
+    );
   }
 
   /// Get multiple feature flags
@@ -51,7 +54,7 @@ class FeatureFlagsManager {
     };
     final flagKeys = keys.map((k) => k.value).toList();
     final result = await _repository.getFlags(flagKeys);
-    return result.when(
+    return await result.when(
       success: (flags) => <String, bool>{
         ...defaults,
         ...flags.map((k, v) => MapEntry(k, v.value)),

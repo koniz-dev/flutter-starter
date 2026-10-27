@@ -82,7 +82,7 @@ class _GatedStorage extends InMemoryStorage {
   @override
   Future<bool> remove(String key) async {
     if (key == _tasksKey) await tasksRemoval?.future;
-    return super.remove(key);
+    return await super.remove(key);
   }
 }
 

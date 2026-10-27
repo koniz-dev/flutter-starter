@@ -202,7 +202,7 @@ class ApiClient {
     Map<String, String>? headers,
     RequestCancellation? cancellation,
   }) async {
-    return _send(
+    return await _send(
       cancellation: cancellation,
       NetworkRequest(
         path: path,
@@ -229,7 +229,7 @@ class ApiClient {
     Map<String, String>? headers,
     RequestCancellation? cancellation,
   }) async {
-    return _send(
+    return await _send(
       cancellation: cancellation,
       NetworkRequest(
         path: path,
@@ -257,7 +257,7 @@ class ApiClient {
     Map<String, String>? headers,
     RequestCancellation? cancellation,
   }) async {
-    return _send(
+    return await _send(
       cancellation: cancellation,
       NetworkRequest(
         path: path,
@@ -285,7 +285,7 @@ class ApiClient {
     Map<String, String>? headers,
     RequestCancellation? cancellation,
   }) async {
-    return _send(
+    return await _send(
       cancellation: cancellation,
       NetworkRequest(
         path: path,
@@ -313,7 +313,7 @@ class ApiClient {
     Map<String, String>? headers,
     RequestCancellation? cancellation,
   }) async {
-    return _send(
+    return await _send(
       cancellation: cancellation,
       NetworkRequest(
         path: path,

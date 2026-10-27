@@ -1,5 +1,5 @@
 // Lightweight boundary contract file; repetitive per-member docs are omitted.
-// ignore_for_file: public_member_api_docs, one_member_abstracts
+// ignore_for_file: public_member_api_docs
 
 /// Supported HTTP methods for transport-agnostic requests.
 enum NetworkMethod { get, post, put, patch, delete }

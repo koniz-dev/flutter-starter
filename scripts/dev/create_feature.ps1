@@ -68,8 +68,6 @@ import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
 
 /// Data-layer contract for the ${FeaturePascal} feature.
-// Scaffolds start with one method; drop the ignore once a second one lands.
-// ignore: one_member_abstracts
 abstract interface class ${FeaturePascal}Repository {
   /// Loads the [${FeaturePascal}Entity] identified by [id].
   Future<Result<${FeaturePascal}Entity>> getById(String id);
@@ -98,8 +96,6 @@ Write-GeneratedFile "lib/features/$($FeatureName)/data/datasources/$($FeatureNam
 ///
 /// Implement this against ``ApiClient`` (see lib/core/network/), then
 /// override the provider declared in the feature's ``di/`` directory.
-// Scaffolds start with one method; drop the ignore once a second one lands.
-// ignore: one_member_abstracts
 abstract interface class ${FeaturePascal}RemoteDataSource {
   /// Fetches the raw JSON for [id].
   Future<Map<String, dynamic>> fetchById(String id);

@@ -11,6 +11,6 @@ class DeleteTaskUseCase {
 
   /// Executes deleting a task by [id]
   Future<Result<void>> call(String id) async {
-    return repository.deleteTask(id);
+    return await repository.deleteTask(id);
   }
 }

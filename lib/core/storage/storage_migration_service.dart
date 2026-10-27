@@ -103,7 +103,7 @@ class StorageMigrationService {
       loggingService: loggingService,
       migrations: migrations,
     );
-    return executor.execute();
+    return await executor.execute();
   }
 
   /// Execute migrations for secure storage only
@@ -114,6 +114,6 @@ class StorageMigrationService {
       loggingService: loggingService,
       migrations: migrations,
     );
-    return executor.execute();
+    return await executor.execute();
   }
 }

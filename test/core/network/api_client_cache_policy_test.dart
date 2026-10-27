@@ -231,15 +231,15 @@ class _StubLocalDataSource implements AuthLocalDataSource {
   final _InMemoryTokenStore _tokenStore;
 
   @override
-  Future<void> clearCache() async => _tokenStore.clearAllTokens();
+  Future<void> clearCache() async => await _tokenStore.clearAllTokens();
 
   @override
   Future<void> cacheRefreshToken(String token) async =>
-      _tokenStore.setRefreshToken(token);
+      await _tokenStore.setRefreshToken(token);
 
   @override
   Future<void> cacheToken(String token) async =>
-      _tokenStore.setAccessToken(token);
+      await _tokenStore.setAccessToken(token);
 
   @override
   Future<void> cacheUser(UserModel user) async {}

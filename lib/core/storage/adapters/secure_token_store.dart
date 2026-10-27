@@ -17,7 +17,7 @@ class SecureTokenStore implements ITokenStore {
 
   @override
   Future<bool> setAccessToken(String token) async {
-    return _secureStorageService.setString(AppConstants.tokenKey, token);
+    return await _secureStorageService.setString(AppConstants.tokenKey, token);
   }
 
   /// Throws [CacheException] if the Keychain/Keystore delete fails.
@@ -31,7 +31,10 @@ class SecureTokenStore implements ITokenStore {
 
   @override
   Future<bool> setRefreshToken(String token) async {
-    return _secureStorageService.setString(AppConstants.refreshTokenKey, token);
+    return await _secureStorageService.setString(
+      AppConstants.refreshTokenKey,
+      token,
+    );
   }
 
   /// Throws [CacheException] if the Keychain/Keystore delete fails.

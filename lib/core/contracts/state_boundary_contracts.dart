@@ -1,5 +1,5 @@
 // Lightweight boundary contract file; repetitive per-member docs are omitted.
-// ignore_for_file: public_member_api_docs, one_member_abstracts
+// ignore_for_file: public_member_api_docs
 
 /// Generic state snapshot contract for controller boundaries.
 abstract class ControllerStateSnapshot {}

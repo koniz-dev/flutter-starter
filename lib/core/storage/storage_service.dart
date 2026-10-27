@@ -58,7 +58,6 @@ abstract class IStorageService {
 /// `getString` the same way.
 // A one-method interface on purpose: callers test for it with `is`, which a
 // top-level function cannot offer.
-// ignore: one_member_abstracts
 abstract interface class IStrictStringRead {
   /// The value stored under [key], or `null` when there is none.
   ///
@@ -91,7 +90,7 @@ class StorageService implements IStorageService, IKeyValueStore {
   @override
   Future<bool> setString(String key, String value) async {
     final prefs = await _preferences;
-    return prefs.setString(key, value);
+    return await prefs.setString(key, value);
   }
 
   @override
@@ -103,7 +102,7 @@ class StorageService implements IStorageService, IKeyValueStore {
   @override
   Future<bool> setInt(String key, int value) async {
     final prefs = await _preferences;
-    return prefs.setInt(key, value);
+    return await prefs.setInt(key, value);
   }
 
   @override
@@ -115,7 +114,7 @@ class StorageService implements IStorageService, IKeyValueStore {
   @override
   Future<bool> setBool(String key, {required bool value}) async {
     final prefs = await _preferences;
-    return prefs.setBool(key, value);
+    return await prefs.setBool(key, value);
   }
 
   @override
@@ -127,7 +126,7 @@ class StorageService implements IStorageService, IKeyValueStore {
   @override
   Future<bool> setDouble(String key, double value) async {
     final prefs = await _preferences;
-    return prefs.setDouble(key, value);
+    return await prefs.setDouble(key, value);
   }
 
   @override
@@ -139,19 +138,19 @@ class StorageService implements IStorageService, IKeyValueStore {
   @override
   Future<bool> setStringList(String key, List<String> value) async {
     final prefs = await _preferences;
-    return prefs.setStringList(key, value);
+    return await prefs.setStringList(key, value);
   }
 
   @override
   Future<bool> remove(String key) async {
     final prefs = await _preferences;
-    return prefs.remove(key);
+    return await prefs.remove(key);
   }
 
   @override
   Future<bool> clear() async {
     final prefs = await _preferences;
-    return prefs.clear();
+    return await prefs.clear();
   }
 
   @override

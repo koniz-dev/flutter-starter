@@ -20,6 +20,6 @@ class UpdateTaskUseCase {
     final invalid = validateTaskTitle(task.title);
     if (invalid != null) return ResultFailure(invalid);
     final updatedTask = task.touch();
-    return repository.updateTask(updatedTask);
+    return await repository.updateTask(updatedTask);
   }
 }

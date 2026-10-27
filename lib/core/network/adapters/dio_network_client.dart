@@ -44,8 +44,8 @@ class DioNetworkClient implements INetworkClient {
       );
     }
     final pending = _send(request, cancelToken);
-    if (deadline == null) return pending;
-    return pending.timeout(
+    if (deadline == null) return await pending;
+    return await pending.timeout(
       deadline,
       onTimeout: () {
         // Stop the work as well as the wait; the abandoned future's own

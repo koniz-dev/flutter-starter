@@ -12,6 +12,6 @@ class GetTaskByIdUseCase {
 
   /// Executes getting a task by [id]
   Future<Result<Task?>> call(String id) async {
-    return repository.getTaskById(id);
+    return await repository.getTaskById(id);
   }
 }

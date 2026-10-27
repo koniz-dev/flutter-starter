@@ -26,7 +26,7 @@ class _SlowListStorage extends InMemoryStorage {
   @override
   Future<List<String>?> getStringList(String key) async {
     await Future<void>.delayed(const Duration(milliseconds: 5));
-    return super.getStringList(key);
+    return await super.getStringList(key);
   }
 }
 

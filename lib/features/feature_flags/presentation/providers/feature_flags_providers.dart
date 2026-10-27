@@ -50,13 +50,13 @@ Future<void> featureFlagsInitialization(Ref ref) async {
 @riverpod
 Future<bool> isFeatureEnabled(Ref ref, FeatureFlagKey key) async {
   final manager = ref.watch(featureFlagsManagerProvider);
-  return manager.isEnabled(key);
+  return await manager.isEnabled(key);
 }
 
 @riverpod
 Future<FeatureFlag?> featureFlag(Ref ref, FeatureFlagKey key) async {
   final manager = ref.watch(featureFlagsManagerProvider);
-  return manager.getFlag(key);
+  return await manager.getFlag(key);
 }
 
 /// Every flag the repository knows, plus every [FeatureFlags.all] key.
@@ -69,7 +69,7 @@ Future<FeatureFlag?> featureFlag(Ref ref, FeatureFlagKey key) async {
 Future<Map<String, FeatureFlag?>> allFeatureFlags(Ref ref) async {
   final repository = ref.watch(featureFlagsRepositoryProvider);
   final result = await repository.getAllFlags();
-  return result.when(
+  return await result.when(
     success: (flags) => <String, FeatureFlag?>{
       for (final key in FeatureFlags.all)
         key.value: FeatureFlag(

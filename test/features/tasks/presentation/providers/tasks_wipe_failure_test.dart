@@ -54,13 +54,13 @@ class _FailingStorage extends InMemoryStorage {
   @override
   Future<bool> remove(String key) async {
     if (key == _tasksKey && failRemove) throw Exception('remove failed');
-    return super.remove(key);
+    return await super.remove(key);
   }
 
   @override
   Future<bool> setString(String key, String value) async {
     if (key == _tasksKey && failWrite) throw Exception('write failed');
-    return super.setString(key, value);
+    return await super.setString(key, value);
   }
 }
 

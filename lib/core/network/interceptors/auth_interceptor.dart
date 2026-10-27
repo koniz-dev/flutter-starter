@@ -372,7 +372,7 @@ class AuthInterceptor extends Interceptor {
         return super.onError(err, handler);
       }
 
-      return _handle401Error(err, handler);
+      return await _handle401Error(err, handler);
     }
 
     super.onError(err, handler);
@@ -661,7 +661,7 @@ class AuthInterceptor extends Interceptor {
 
     // Replay through the shared retry client so the transport - and its
     // certificate pinning - matches the original request.
-    return retryDio().request(
+    return await retryDio().request(
       newOptions.path,
       data: RequestBodyReplay.bodyFor(newOptions.data),
       queryParameters: newOptions.queryParameters,

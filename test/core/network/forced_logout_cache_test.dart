@@ -226,7 +226,7 @@ class _BlobRemovalFailsStorage extends _InMemoryStorage {
       // ignore: only_throw_errors
       throw thrown;
     }
-    return super.remove(key);
+    return await super.remove(key);
   }
 }
 

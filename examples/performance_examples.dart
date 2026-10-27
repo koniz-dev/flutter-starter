@@ -22,7 +22,7 @@ Future<void> _simDelay(int milliseconds) =>
 Future<Map<String, dynamic>> exampleApiCallTracing(
   IPerformanceService performanceService,
 ) async {
-  return performanceService.measureApiCall<Map<String, dynamic>>(
+  return await performanceService.measureApiCall<Map<String, dynamic>>(
     method: 'GET',
     path: '/users',
     call: () async {
@@ -36,23 +36,24 @@ Future<Map<String, dynamic>> exampleApiCallTracing(
 Future<List<Map<String, dynamic>>> exampleDatabaseQueryTracing(
   IPerformanceService performanceService,
 ) async {
-  return performanceService.measureDatabaseQuery<List<Map<String, dynamic>>>(
-    queryName: 'get_users',
-    query: () async {
-      await _simDelay(200);
-      return <Map<String, dynamic>>[
-        <String, dynamic>{'id': '1', 'name': 'User 1'},
-        <String, dynamic>{'id': '2', 'name': 'User 2'},
-      ];
-    },
-    attributes: {PerformanceAttributes.queryType: 'select'},
-  );
+  return await performanceService
+      .measureDatabaseQuery<List<Map<String, dynamic>>>(
+        queryName: 'get_users',
+        query: () async {
+          await _simDelay(200);
+          return <Map<String, dynamic>>[
+            <String, dynamic>{'id': '1', 'name': 'User 1'},
+            <String, dynamic>{'id': '2', 'name': 'User 2'},
+          ];
+        },
+        attributes: {PerformanceAttributes.queryType: 'select'},
+      );
 }
 
 Future<String> exampleHeavyComputationTracing(
   IPerformanceService performanceService,
 ) async {
-  return performanceService.measureComputation<String>(
+  return await performanceService.measureComputation<String>(
     operationName: 'image_processing',
     computation: () async {
       await _simDelay(1000);
