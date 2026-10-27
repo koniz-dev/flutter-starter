@@ -84,6 +84,9 @@ GitHub issues are the single source of truth. Full spec:
       `security` phase - a dependency bump is a G3 risk surface - covering
       publisher and lockfile hash. A PR touching `android/` or a native plugin
       also gets `build.yml` dispatched on its branch (#680).
+      Do not wait on `gh pr checks --watch`: Dependabot attaches its own
+      `.github/dependabot.yml` status, which stays pending, so the watch
+      never returns (#700). Poll until every other check has a conclusion.
     - **Squash message:** the maintainer writes the body, so it carries
       `Refs koniz-dev/flutter-starter#<N>` where `<N>` is the issue the bump
       belongs to, or else the Dependabot PR's own number (a PR is linkable
