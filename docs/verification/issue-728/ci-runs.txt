@@ -1,0 +1,50 @@
+PR #733 head checks (merged as 401c8d056f9):
+Android on JDK 25 (toolchain floor + debug build) -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542138182/job/122323046592
+Docs check -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137699/job/122323044745
+Quality gate -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137832/job/122323044391
+Strip both-samples-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137913/job/122323045922
+Strip feature-flags-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137913/job/122323046296
+Strip keep-samples + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137913/job/122323046274
+Strip renamed-both + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137913/job/122323045567
+Strip tasks-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40542137913/job/122323046374
+Build Android -> skipping  https://github.com/koniz-dev/flutter-starter/actions/runs/40542138182/job/122323048900
+Build Web -> skipping  https://github.com/koniz-dev/flutter-starter/actions/runs/40542138182/job/122323048991
+Build iOS (no codesign) -> skipping  https://github.com/koniz-dev/flutter-starter/actions/runs/40542138182/job/122323049005
+
+Manual workflows dispatched on main 401c8d056f9 (exercise the pinned actions not run on a PR):
+Build (Manual) -> success  https://github.com/koniz-dev/flutter-starter/actions/runs/40543437900
+   Build Android -> success
+   Build Web -> success
+   Android on JDK 25 (toolchain floor + debug build) -> success
+   Build iOS (no codesign) -> success
+E2E Android (Patrol) -> success  https://github.com/koniz-dev/flutter-starter/actions/runs/40543444738
+   Patrol on Android emulator -> success
+Scripts smoke -> success  https://github.com/koniz-dev/flutter-starter/actions/runs/40543450806
+   create_feature.sh == create_feature.ps1 (Windows) -> success
+   build_all.sh (production) -> success
+   fork-and-customize Option B (my_app, My App) + analyze + test + scaffold -> success
+   mason make flutter_starter_setup (acme_shop) + analyze + test -> success
+Coverage Analysis -> failure  https://github.com/koniz-dev/flutter-starter/actions/runs/40543431379
+   Coverage Analysis -> failure
+
+Coverage Analysis failed on 'Domain Layer: 99.3% < 100%' - every action step ran (checkout, flutter-action, codecov); the threshold is a test-coverage regression unrelated to pinning, filed separately.
+
+security: https://github.com/koniz-dev/flutter-starter/pull/733#issuecomment-6447716742
+   step: Set up job -> success
+   step: Checkout code -> success
+   step: Setup Flutter -> success
+   step: Install dependencies -> success
+   step: Run tests with coverage -> success
+   step: Install lcov -> success
+   step: Remove generated files from coverage -> success
+   step: Generate coverage report -> success
+   step: Calculate coverage by layer (architecture gates) -> success
+   step: Calculate coverage metrics -> success
+   step: Write coverage summary -> success
+   step: Enforce coverage thresholds -> failure
+   step: Upload to Codecov (Public) -> skipped
+   step: Generate coverage badge -> skipped
+   step: Comment coverage summary -> skipped
+   step: Post Setup Flutter -> success
+   step: Post Checkout code -> success
+   step: Complete job -> success

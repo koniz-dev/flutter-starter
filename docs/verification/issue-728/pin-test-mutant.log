@@ -1,0 +1,10 @@
+$ flutter test test/tooling/workflow_action_pins_test.dart   (main 401c8d056f9)
+00:00 +4: All tests passed!
+
+$ mutant: first actions/checkout in .github/workflows/ci.yml back to @v7
+43:        uses: actions/checkout@v7
+    Actual: ['.github/workflows/ci.yml:43: uses: actions/checkout@v7']
+00:00 +3 -1: Some tests failed.
+
+$ after revert
+00:00 +4: All tests passed!

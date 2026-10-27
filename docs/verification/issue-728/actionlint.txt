@@ -1,0 +1,49 @@
+$ actionlint --version
+1.7.12
+
+## before (baa519f600b), normalised file:message, sorted
+.github/workflows/build.yml: shellcheck reported issue in this script: SC2012:info:2:7: Use find instead of ls to better handle non-alphanumeric filenames [shellcheck]
+.github/workflows/ci.yml: shellcheck reported issue in this script: SC2001:style:7:3: See if you can use ${variable//search/replace} instead [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:13:24: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:14:28: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:15:38: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:16:34: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:17:50: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:18:34: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2129:style:14:1: Consider using { cmd1; cmd2; } >> file instead of individual redirects [shellcheck]
+.github/workflows/deploy-android.yml: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-android.yml: shellcheck reported issue in this script: SC2086:info:4:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-ios.yml: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-ios.yml: shellcheck reported issue in this script: SC2086:info:4:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:1:62: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:1:62: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:4:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:6:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/e2e-android.yml: shellcheck reported issue in this script: SC2086:info:1:32: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/scripts-smoke.yml: shellcheck reported issue in this script: SC2012:info:5:3: Use find instead of ls to better handle non-alphanumeric filenames [shellcheck]
+
+## after (main)
+.github/workflows/build.yml: shellcheck reported issue in this script: SC2012:info:2:7: Use find instead of ls to better handle non-alphanumeric filenames [shellcheck]
+.github/workflows/ci.yml: shellcheck reported issue in this script: SC2001:style:7:3: See if you can use ${variable//search/replace} instead [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:13:24: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:14:28: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:15:38: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:16:34: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:17:50: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2086:info:18:34: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/coverage.yml: shellcheck reported issue in this script: SC2129:style:14:1: Consider using { cmd1; cmd2; } >> file instead of individual redirects [shellcheck]
+.github/workflows/deploy-android.yml: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-android.yml: shellcheck reported issue in this script: SC2086:info:4:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-ios.yml: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-ios.yml: shellcheck reported issue in this script: SC2086:info:4:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:1:62: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:1:62: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:4:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/deploy-web.yml: shellcheck reported issue in this script: SC2086:info:6:36: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/e2e-android.yml: shellcheck reported issue in this script: SC2086:info:1:32: Double quote to prevent globbing and word splitting [shellcheck]
+.github/workflows/scripts-smoke.yml: shellcheck reported issue in this script: SC2012:info:5:3: Use find instead of ls to better handle non-alphanumeric filenames [shellcheck]
+
+$ diff before after
+(identical: pinning introduced no finding)
