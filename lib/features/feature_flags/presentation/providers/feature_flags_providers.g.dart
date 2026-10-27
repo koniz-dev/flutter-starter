@@ -287,7 +287,7 @@ final class IsFeatureEnabledProvider
   }
 }
 
-String _$isFeatureEnabledHash() => r'a73a0b59675ba3996aa5f3f380e3f15521ce58a7';
+String _$isFeatureEnabledHash() => r'9e727ad59f1fb4b335e047a4735b2659a0cb3414';
 
 final class IsFeatureEnabledFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<bool>, FeatureFlagKey> {
@@ -362,7 +362,7 @@ final class FeatureFlagProvider
   }
 }
 
-String _$featureFlagHash() => r'49d55e5447defd7845f4eab3891c2892b96c907a';
+String _$featureFlagHash() => r'fe2e8b6f686aa4aa32d0a9b3d19c8d91382169ba';
 
 final class FeatureFlagFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<FeatureFlag?>, FeatureFlagKey> {
@@ -441,4 +441,4 @@ final class AllFeatureFlagsProvider
   }
 }
 
-String _$allFeatureFlagsHash() => r'485d8ad25e26706753ad10d01881bb0fe1e492e6';
+String _$allFeatureFlagsHash() => r'a810f0ea9ce47355d834fdf818d48400f9e75e0f';
