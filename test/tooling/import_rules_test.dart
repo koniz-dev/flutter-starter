@@ -58,17 +58,15 @@ const kAllowedImportViolations = <String, Set<String>>{
   // seeded-and-deleted.
   'go_router_outside_routing': <String>{},
 
-  // Two survivors of the `core/*` -> `features/*` edge.
+  // The one survivor of the `core/*` -> `features/*` edge.
   //
   // There were three. `lib/core/di/providers.dart` is **gone from this list**
   // because the edge is gone: core now declares the
   // 401-refresh seams and the auth slice fills them from
-  // `authModuleOverrides`. Until the two below are fixed they are allowlisted
-  // so that they cannot get worse.
+  // `authModuleOverrides`. `FeatureFlagsManager` is gone because it moved
+  // into the feature-flags slice it was typed on. Until the one below is
+  // fixed it is allowlisted so that it cannot get worse.
   'core_imports_feature': <String>{
-    // Types its API on the feature-flags slice's FeatureFlag entity and
-    // repository; it ships and strips with that sample.
-    'lib/core/feature_flags/feature_flags_manager.dart',
     // The auth redirect reads authNotifierProvider to decide where a
     // signed-in or signed-out user may go.
     'lib/core/routing/app_router.dart',
@@ -120,7 +118,6 @@ const String kPkg = 'package:flutter_starter/';
 const List<String> kStrippableSamplePaths = <String>[
   'lib/features/tasks/',
   'lib/features/feature_flags/',
-  'lib/core/feature_flags/',
 ];
 
 /// True when [path] is removed by some `--remove-*` strip variant.
@@ -642,7 +639,7 @@ void main() {
       );
       expect(
         isStrippableSamplePath(
-          'lib/core/feature_flags/feature_flags_manager.dart',
+          'lib/features/feature_flags/domain/feature_flags_manager.dart',
         ),
         isTrue,
       );

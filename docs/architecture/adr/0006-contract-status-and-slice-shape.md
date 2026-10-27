@@ -137,7 +137,7 @@ network boundary. Per axis:
 | Axis | Rule | tasks | feature_flags |
 |---|---|---|---|
 | `di/` | A slice's wiring lives in `di/<slice>_providers.dart`. | conforms | **must conform.** `feature_flags_providers.dart:7-9` produces the only `presentation/` -> `data/` import edges in `lib/`; moving the file to `di/` removes them without changing a line of logic |
-| `domain/usecases/` | A slice exposes its operations as use cases, not as repository calls from a notifier. | conforms (6) | **legitimately differs.** Feature flags has no orchestration to put in a use case: every operation is a single repository read or write, and `FeatureFlagsManager` already sits in `lib/core/feature_flags/` as the policy layer. A use case per flag read would be a pass-through |
+| `domain/usecases/` | A slice exposes its operations as use cases, not as repository calls from a notifier. | conforms (6) | **legitimately differs.** Feature flags has no orchestration to put in a use case: every operation is a single repository read or write, and `FeatureFlagsManager` (`domain/feature_flags_manager.dart`) is the policy layer. A use case per flag read would be a pass-through |
 | `data/models/` | A slice that crosses a serialization boundary has models distinct from its entities. | conforms | **legitimately differs.** `FeatureFlag` is persisted as-is through `IKeyValueStore` with no wire format to map, so a model would duplicate the entity |
 | `routing/` | A slice that owns screens declares them in `routing/<slice>_routes.dart`. | conforms | conforms |
 | Wiring location | Same as `di/`. | conforms | **must conform** |

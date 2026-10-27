@@ -36,7 +36,7 @@ class _Sample {
 const _samples = [
   _Sample(
     'feature-flags',
-    ['lib/features/feature_flags', 'lib/core/feature_flags'],
+    ['lib/features/feature_flags'],
     ['docs/features/feature-flags.md'],
     ['/feature-flags-debug'],
   ),
