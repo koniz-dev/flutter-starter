@@ -1,0 +1,42 @@
+$ grep -n audit_template CLAUDE.md
+12:./scripts/dev/audit_template.sh        # codegen + format + analyze + test (CI adds: random order, coverage floor, clean tree)
+
+$ sed -n 1,17p scripts/dev/audit_template.sh
+#!/usr/bin/env bash
+# Non-platform quality gate: env asset guard, generated code up to date,
+# format (scoped), analyze, unit/widget tests.
+# Does not run Android/iOS/Web builds or Patrol E2E.
+#
+# Usage: ./scripts/dev/audit_template.sh [flutter test arguments]
+#
+#   AUDIT_SKIP_CODEGEN=1  skip the generated-code check. It runs build_runner,
+#                         which is the slowest step; skip it only when no
+#                         annotated source (Freezed, json_serializable,
+#                         Riverpod) changed.
+#
+# The CI Quality gate runs the same steps, plus three this script does not:
+# tests in random order, the total line coverage floor (COVERAGE_MIN_TOTAL in
+# ci.yml, see scripts/test/test_coverage.sh), and a check that pub get,
+# analyze and test left every tracked file unchanged.
+set -euo pipefail
+
+$ grep -n "      - name:" .github/workflows/ci.yml   (Quality gate steps)
+42:      - name: Checkout code
+65:      - name: Decide the gate scope
+148:      - name: Setup Flutter
+155:      - name: Install dependencies
+164:      - name: Check generated code is up to date
+177:      - name: Verify formatting
+181:      - name: Analyze code
+190:      - name: Run tests (random order)
+220:      - name: Enforce minimum coverage
+246:      - name: Tracked files are unchanged
+
+PR #727 checks:
+Docs check -> pass
+Quality gate -> pass
+Strip both-samples-removed + analyze + test -> pass
+Strip feature-flags-removed + analyze + test -> pass
+Strip keep-samples + analyze + test -> pass
+Strip renamed-both + analyze + test -> pass
+Strip tasks-removed + analyze + test -> pass

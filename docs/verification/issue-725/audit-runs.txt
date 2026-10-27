@@ -1,0 +1,29 @@
+# Local runs of scripts/dev/audit_template.sh on branch chore/audit-codegen-check
+
+## 1. clean tree (flutter test filtered to no tests on purpose; exit 79 is flutter test's 'no tests ran')
+==> generated code (build_runner build -d)
+Generated code matches its sources.
+==> format (lib test integration_test tool examples)
+
+## 2. mutant: '/// Mutant doc comment: not regenerated.' above @riverpod featureFlagsManager, .g.dart not regenerated -> exit 1
+==> generated code (build_runner build -d)
+build_runner rewrote generated files; they did not match their sources:
+  lib/features/feature_flags/presentation/providers/feature_flags_providers.g.dart
+The regenerated files are now in the working tree; review and commit them.
+
+## 3. same mutant after the run above regenerated the .g.dart -> full audit exit 0
+==> generated code (build_runner build -d)
+Generated code matches its sources.
+03:49 +3513 ~14: All tests passed!
+
+## 4. AUDIT_SKIP_CODEGEN=1
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+## 5. final script on main baa519f600b: full audit
+==> env asset guard
+==> generated code (build_runner build -d)
+Generated code matches its sources.
+==> format (lib test integration_test tool examples)
+==> flutter analyze
+==> flutter test
+07:37 +3513 ~14: All tests passed!
+exit 0
