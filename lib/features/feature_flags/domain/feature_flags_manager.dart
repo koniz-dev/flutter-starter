@@ -129,10 +129,9 @@ class FeatureFlagKey {
 
 /// Centralized feature flag definitions
 ///
-/// All feature flags should be defined here for type-safe access.
-class FeatureFlags {
-  FeatureFlags._();
-
+/// All feature flags should be defined here for type-safe access. A holder of
+/// constants only: `abstract final` so it is never instantiated or subclassed.
+abstract final class FeatureFlags {
   // Example feature flags - replace with your actual flags
 
   /// Enable new experimental feature
