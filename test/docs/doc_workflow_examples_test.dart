@@ -3,7 +3,7 @@
 // The security guide's CI example pinned `flutter-version: '3.24.0'`, whose
 // Dart SDK is below pubspec.yaml's `sdk:` constraint so `pub get` failed, and
 // used `actions/upload-artifact@v3`, which GitHub has retired. This compares
-// every `uses: owner/action@vN` in a fenced block of README.md,
+// every `uses: owner/action@...` in a fenced block of README.md,
 // CONTRIBUTING.md or docs/ with the major .github/workflows/ uses for the same
 // action, and rejects a `flutter-version:` pin: the workflows float the
 // stable channel, which always satisfies the SDK constraint.
@@ -12,7 +12,13 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-final RegExp _uses = RegExp(r'uses:\s*([\w.-]+/[\w.-]+)@(v\d+)');
+/// `uses: owner/action@vN...` or, pinned, `uses: owner/action@<sha> # vN...`.
+final RegExp _uses = RegExp(
+  r'uses:\s*([\w.-]+/[\w.-]+)@(?:(v\d+)\S*|[0-9a-f]{40}\s+#\s+(v\d+)\S*)',
+);
+
+/// The major a [_uses] match names: its tag, or the release in its comment.
+String _major(RegExpMatch m) => (m.group(2) ?? m.group(3))!;
 final RegExp _fence = RegExp(r'^\s*(`{3,}|~{3,})');
 
 List<File> _docs() => [
@@ -41,7 +47,7 @@ void main() {
   final workflowMajors = <String, Set<String>>{};
   for (final f in Directory('.github/workflows').listSync().whereType<File>()) {
     for (final m in _uses.allMatches(f.readAsStringSync())) {
-      (workflowMajors[m.group(1)!] ??= {}).add(m.group(2)!);
+      (workflowMajors[m.group(1)!] ??= {}).add(_major(m));
     }
   }
 
@@ -52,9 +58,9 @@ void main() {
       for (final (line, text) in _fencedLines(doc.readAsStringSync())) {
         for (final m in _uses.allMatches(text)) {
           final used = workflowMajors[m.group(1)!];
-          if (used != null && !used.contains(m.group(2))) {
+          if (used != null && !used.contains(_major(m))) {
             problems.add(
-              '${doc.path}:$line: ${m.group(1)}@${m.group(2)}, workflows use '
+              '${doc.path}:$line: ${m.group(1)}@${_major(m)}, workflows use '
               '${used.join(', ')}',
             );
           }

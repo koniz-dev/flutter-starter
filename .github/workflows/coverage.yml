@@ -63,12 +63,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
       
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           # No `flutter-version:` here. "stable" is a CHANNEL, not a version, and
           # passing it as a version makes flutter-action fail with "Unable to
@@ -219,7 +219,7 @@ jobs:
       # PRIVATE REPOSITORY: Upload to Codecov (requires token)
       # Comment out the block below if your repository is PUBLIC
       # - name: Upload to Codecov (Private)
-      #   uses: codecov/codecov-action@v7
+      #   uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       #   with:
       #     files: ./coverage/lcov.info
       #     flags: unittests
@@ -229,7 +229,7 @@ jobs:
       
       # PUBLIC REPOSITORY: Upload to Codecov (no token needed)
       - name: Upload to Codecov (Public)
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: ./coverage/lcov.info
           flags: unittests
@@ -259,7 +259,7 @@ jobs:
       # repository the job summary is where the table appears.
       - name: Comment coverage summary
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: marocchino/sticky-pull-request-comment@v3
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         with:
           recreate: true
           message: |

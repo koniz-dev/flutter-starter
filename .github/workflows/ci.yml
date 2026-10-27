@@ -40,7 +40,7 @@ jobs:
       # has neither end of that range. Costs a second or two on this repository
       # and is what keeps the skip decision honest.
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -147,7 +147,7 @@ jobs:
       # PR). This is what happened in run 32638785145 under stable-3.47.1.
       - name: Setup Flutter
         if: steps.scope.outputs.run == 'true'
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: 'stable'
           cache: true
