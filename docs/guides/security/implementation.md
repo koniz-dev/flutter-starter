@@ -199,8 +199,10 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: subosito/flutter-action@v2
+      # Pinned to a commit, not a tag: a tag can be moved, and this job holds
+      # your release secrets. Dependabot keeps the SHA and comment current.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           # Floating stable, as this repository's own workflows do: a pinned
           # version can fall below pubspec.yaml's `sdk:` constraint.
