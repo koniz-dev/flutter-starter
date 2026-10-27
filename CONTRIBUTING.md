@@ -140,7 +140,7 @@ Examples:
 Before asking for review, make sure:
 
 - [ ] Code follows the project's style guidelines
-- [ ] `./scripts/dev/audit_template.sh` passes (format, analyze, tests)
+- [ ] `./scripts/dev/audit_template.sh` passes (generated code, format, analyze, tests)
 - [ ] Documentation is updated (if needed)
 - [ ] Commit messages follow the guidelines
 - [ ] The PR description says what changed and why, and links the issue it addresses

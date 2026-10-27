@@ -9,7 +9,7 @@ Flutter app built on Clean Architecture: single root `pubspec.yaml`, sources in
 
 ```bash
 flutter pub get
-./scripts/dev/audit_template.sh        # format check + analyze + test (same gates as CI)
+./scripts/dev/audit_template.sh        # codegen + format + analyze + test (CI adds: random order, coverage floor, clean tree)
 flutter test --timeout=5m              # unit + widget (goldens skipped by default)
 flutter analyze
 dart format lib test integration_test tool examples

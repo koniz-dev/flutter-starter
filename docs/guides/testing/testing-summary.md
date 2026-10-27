@@ -13,6 +13,7 @@ Run the same gates CI uses for Dart code (no Android/iOS/Web builds):
 Or step by step:
 
 ```bash
+dart run build_runner build -d         # then: git status shows no *.g.dart / *.freezed.dart change
 ./scripts/dev/format_dart.sh --check   # or: dart format --set-exit-if-changed lib test integration_test tool examples
 flutter analyze
 flutter test
