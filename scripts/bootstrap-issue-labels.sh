@@ -71,7 +71,7 @@ EPICS=(
   "core-foundation|lib/core/{utils,errors,logging,performance,constants}: cross-cutting primitives|lib/core/utils lib/core/errors lib/core/logging lib/core/performance lib/core/constants"
   "feature-auth|lib/features/auth + lib/core/session: login, register, session (sample slice)|lib/features/auth lib/core/session"
   "feature-tasks|lib/features/tasks: CRUD sample feature slice|lib/features/tasks"
-  "feature-flags|lib/features/feature_flags + lib/core/feature_flags: both halves of the flag stack|lib/features/feature_flags lib/core/feature_flags"
+  "feature-flags|lib/features/feature_flags: the flag stack, manager included|lib/features/feature_flags"
   "app-shell|lib/main.dart, lib/core/startup, lib/features/home: entry point and app shell|lib/main.dart lib/core/startup lib/features/home"
   "design-system|lib/shared + lib/core/accessibility + assets/images: tokens, theme, widgets, a11y|lib/shared lib/core/accessibility assets/images"
   "i18n|lib/l10n, lib/core/localization, l10n.yaml: ARB catalogs and locale plumbing|lib/l10n lib/core/localization l10n.yaml"
