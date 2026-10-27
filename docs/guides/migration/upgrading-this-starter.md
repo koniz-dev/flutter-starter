@@ -3,12 +3,18 @@
 This guide helps you upgrade your Flutter starter project to newer versions and
 handle breaking changes.
 
-**Scope note.** This starter is at `1.0.0+1` and has shipped no releases with
-breaking changes yet. Everything below the "Breaking Changes by Version"
-heading is an **illustration of the format** future release notes will use, not
-a record of changes you need to make. In the same spirit, `scripts/dev/migration/`
-**does not exist** in this repository - it is the convention this guide proposes
-for migration scripts you or a future release may add.
+**Starter version:** v2.0.0
+
+That line records which release of the starter this copy of the template came
+from. It is not your app's version (`version:` in `pubspec.yaml` is yours), and
+nothing updates it in your project, so it keeps telling you where you started.
+Each release is a tag on the upstream repository with notes on
+[its releases page](https://github.com/koniz-dev/flutter-starter/releases), listing every change you may have to make.
+
+`scripts/dev/migration/` **does not exist** in this repository - it is the
+convention this guide proposes for migration scripts you or a future release
+may add. The "Version 2.1.0 (Hypothetical Future Version)" section below is an
+illustration of the format, not a record of changes.
 
 ## Overview
 
@@ -21,19 +27,30 @@ This starter follows [Semantic Versioning](https://semver.org/):
 
 ### Step 1: Check Current Version
 
-```bash
-# Check pubspec.yaml
-cat pubspec.yaml | grep version
+Your starting point is the **Starter version** line at the top of this file,
+not `pubspec.yaml`:
 
+```bash
+grep -m1 'Starter version' docs/guides/migration/upgrading-this-starter.md
 ```
 
-Then read [the starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md) from your version onwards. Your own
+Every release is tagged upstream, so you can list and diff what changed since
+yours (`v2.0.0` below stands for the version that line shows):
+
+```bash
+git remote add upstream https://github.com/koniz-dev/flutter-starter.git
+git fetch upstream --tags
+git log --oneline v2.0.0..upstream/main      # every upstream commit since
+git diff --stat v2.0.0 upstream/main -- lib  # what changed in the code
+```
+
+Then read the [release notes](https://github.com/koniz-dev/flutter-starter/releases) from your version onwards. Your own
 `CHANGELOG.md` records your project's releases, not the starter's.
 
 ### Step 2: Review Breaking Changes
 
 Before upgrading, always check:
-1. **[The starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md)** - Lists all changes, including breaking changes
+1. **[The starter's release notes](https://github.com/koniz-dev/flutter-starter/releases)** - Every release, with what you have to change for each breaking one
 2. **Migration Guides** - This document and version-specific guides
 3. **Dependencies** - Check for dependency updates
 
@@ -171,7 +188,7 @@ result.when(
 
 **Script:** none ships; the steps above are manual.
 
-### Version 1.1.0 (Hypothetical Future Version)
+### Version 2.1.0 (Hypothetical Future Version)
 
 #### Configuration System Update
 
@@ -201,11 +218,11 @@ you add one - create the directory as part of that change.
 
 **Example Script Structure:**
 ```dart
-// scripts/dev/migration/migrate_to_v2.0.0.dart
+// scripts/dev/migration/migrate_to_v3.0.0.dart
 import 'dart:io';
 
 void main() {
-  print('Migrating to v2.0.0...');
+  print('Migrating to v3.0.0...');
   
   // 1. Update dependencies
   _updateDependencies();
@@ -235,13 +252,13 @@ void _updateCodePatterns() {
 
 ```bash
 # Make script executable (after you have created it)
-chmod +x scripts/dev/migration/migrate_to_v2.0.0.dart
+chmod +x scripts/dev/migration/migrate_to_v3.0.0.dart
 
 # Run script
-dart scripts/dev/migration/migrate_to_v2.0.0.dart
+dart scripts/dev/migration/migrate_to_v3.0.0.dart
 
 # Or with Flutter
-flutter pub run scripts/dev/migration/migrate_to_v2.0.0.dart
+flutter pub run scripts/dev/migration/migrate_to_v3.0.0.dart
 ```
 
 ## Common Upgrade Scenarios
@@ -420,7 +437,7 @@ If you encounter issues during upgrade:
 
 ## Related Documentation
 
-- [The starter's changelog](https://github.com/koniz-dev/flutter-starter/blob/maintainers/history/starter-changelog.md) - Every change to the starter, including breaking ones
+- [The starter's release notes](https://github.com/koniz-dev/flutter-starter/releases) - Every release, including what each breaking change asks of you
 - [Getting Started](../onboarding/getting-started.md) - Initial setup
 - [Understanding the Codebase](../onboarding/understanding-codebase.md) - Architecture overview
 - [Common Tasks](../features/common-tasks.md) - Common development tasks
