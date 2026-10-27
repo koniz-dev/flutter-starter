@@ -7,7 +7,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | Script | Purpose |
 |--------|---------|
 | [`format_dart.sh`](dev/format_dart.sh) | Format only `lib`, `test`, `integration_test`, `tool`, `examples` (avoids scanning `build/`). Use `--check` for CI-style verification, or `--print-paths` to read the scope. Not `bricks/`: it holds Mason templates whose mustache is not valid Dart, so `dart format` exits 65 on it. |
-| [`audit_template.sh`](dev/audit_template.sh) | Full non-platform gate: format check, `flutter analyze`, `flutter test`. |
+| [`audit_template.sh`](dev/audit_template.sh) | Full non-platform gate: env asset guard, generated code up to date (`AUDIT_SKIP_CODEGEN=1` skips it), format check, `flutter analyze`, `flutter test`. The script header lists what the CI Quality gate adds. |
 | [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Copy `.githooks/*` â†’ `.git/hooks/` (single source of truth in repo). |
 | [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
 | [`create_feature.sh`](dev/create_feature.sh) | Scaffold a feature slice under `lib/features/<name>/` plus its mirrored test under `test/features/<name>/`. Output passes `flutter analyze` and `dart format --set-exit-if-changed` as generated. |
