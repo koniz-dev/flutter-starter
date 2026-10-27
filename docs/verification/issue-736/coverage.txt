@@ -1,0 +1,27 @@
+Coverage Analysis dispatched on main 1c3dd920d66: https://github.com/koniz-dev/flutter-starter/actions/runs/40553643027
+conclusion: success
+✅ Total Coverage: 95.9% >= 80%
+✅ Domain Layer: 100.0% >= 100%
+✅ Data Layer: 97.8% >= 90%
+✅ Presentation Layer: 97.9% >= 80%
+✅ Core Layer: 94.7% >= 80%
+
+Before (main 401c8d056f9): https://github.com/koniz-dev/flutter-starter/actions/runs/40543431379 -> failure, 'Domain Layer: 99.3% < 100%'
+
+Local full 'flutter test --coverage' on the fix branch, DA records with 0 hits under /domain/:
+  before: lib/features/feature_flags/domain/feature_flags_manager.dart: 134  (FeatureFlags._();)
+  after:  0 lines
+
+$ grep -n "abstract final class FeatureFlags\|FeatureFlags\._" lib/features/feature_flags/domain/feature_flags_manager.dart
+134:abstract final class FeatureFlags {
+
+$ grep -rn "FeatureFlags\._\|extends FeatureFlags\|FeatureFlags()" lib test tool bricks
+(none)
+
+PR #737 checks:
+Quality gate -> pass
+Strip both-samples-removed + analyze + test -> pass
+Strip feature-flags-removed + analyze + test -> pass
+Strip keep-samples + analyze + test -> pass
+Strip renamed-both + analyze + test -> pass
+Strip tasks-removed + analyze + test -> pass
