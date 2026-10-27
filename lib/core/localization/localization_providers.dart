@@ -18,7 +18,7 @@ final localizationServiceProvider = Provider<LocalizationService>((ref) {
 /// when the locale changes.
 final currentLocaleProvider = FutureProvider<Locale>((ref) async {
   final localizationService = ref.watch(localizationServiceProvider);
-  return localizationService.getCurrentLocale();
+  return await localizationService.getCurrentLocale();
 });
 
 /// Notifier for managing locale state

@@ -69,7 +69,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
 
       final result = await usecase.measureUseCaseOperation<String>(
@@ -103,7 +103,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
       when(() => mockService.startTrace(any())).thenReturn(mockTrace);
 
@@ -136,7 +136,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
       when(() => mockService.startTrace(any())).thenReturn(mockTrace);
 

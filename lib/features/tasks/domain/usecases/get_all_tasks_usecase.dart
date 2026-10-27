@@ -12,6 +12,6 @@ class GetAllTasksUseCase {
 
   /// Executes getting all tasks
   Future<Result<List<Task>>> call() async {
-    return repository.getAllTasks();
+    return await repository.getAllTasks();
   }
 }

@@ -11,6 +11,6 @@ class RefreshTokenUseCase {
 
   /// Executes token refresh for the current user
   Future<Result<String>> call() async {
-    return repository.refreshToken();
+    return await repository.refreshToken();
   }
 }

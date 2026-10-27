@@ -366,7 +366,7 @@ class _VersionWriteFailingStorage implements IStorageService {
   @override
   Future<bool> setString(String key, String value) async {
     if (key == StorageVersion.versionKey) return false;
-    return _inner.setString(key, value);
+    return await _inner.setString(key, value);
   }
 
   @override

@@ -11,7 +11,6 @@
 library;
 
 /// Interface for a crash or error reporting service.
-// ignore: one_member_abstracts
 abstract class IErrorReporter {
   /// Reports an error logged as [message].
   ///

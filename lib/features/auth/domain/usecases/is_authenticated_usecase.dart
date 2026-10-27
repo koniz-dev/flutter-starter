@@ -11,6 +11,6 @@ class IsAuthenticatedUseCase {
 
   /// Executes checking if the user is authenticated
   Future<Result<bool>> call() async {
-    return repository.isAuthenticated();
+    return await repository.isAuthenticated();
   }
 }

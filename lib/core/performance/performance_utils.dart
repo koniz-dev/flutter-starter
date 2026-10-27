@@ -37,7 +37,7 @@ class PerformanceUtils {
       ...?additionalAttributes,
     };
 
-    return service.measureOperation<T>(
+    return await service.measureOperation<T>(
       name: 'api_${method.toLowerCase()}_${_sanitizePath(path)}',
       operation: call,
       attributes: attributes,
@@ -68,7 +68,7 @@ class PerformanceUtils {
       ...?attributes,
     };
 
-    return service.measureOperation<T>(
+    return await service.measureOperation<T>(
       name: 'db_query_$queryName',
       operation: query,
       attributes: queryAttributes,
@@ -94,7 +94,7 @@ class PerformanceUtils {
     required Future<T> Function() computation,
     Map<String, String>? attributes,
   }) async {
-    return service.measureOperation<T>(
+    return await service.measureOperation<T>(
       name: 'computation_$operationName',
       operation: computation,
       attributes: attributes,

@@ -12,6 +12,6 @@ class GetCurrentUserUseCase {
 
   /// Executes getting the current authenticated user
   Future<Result<User?>> call() async {
-    return repository.getCurrentUser();
+    return await repository.getCurrentUser();
   }
 }

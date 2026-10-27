@@ -271,7 +271,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     }
 
     // Primary guard: never touch the cache while a session credential exists.
-    return _hasSessionCredential();
+    return await _hasSessionCredential();
   }
 
   /// Returns true when a session credential exists in the token store.

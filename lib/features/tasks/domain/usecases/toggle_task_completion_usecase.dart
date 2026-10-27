@@ -12,6 +12,6 @@ class ToggleTaskCompletionUseCase {
 
   /// Executes toggling task completion by [id]
   Future<Result<Task>> call(String id) async {
-    return repository.toggleTaskCompletion(id);
+    return await repository.toggleTaskCompletion(id);
   }
 }

@@ -70,7 +70,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
 
       final result = await repository.measureRepositoryOperation<String>(
@@ -103,7 +103,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
       when(() => mockService.startTrace(any())).thenReturn(mockTrace);
 
@@ -140,7 +140,7 @@ void main() {
           final cb =
               invocation.namedArguments[#operation]
                   as Future<Result<String>> Function();
-          return cb();
+          return await cb();
         });
         when(() => mockService.startTrace(any())).thenReturn(mockTrace);
 
@@ -174,7 +174,7 @@ void main() {
           final cb =
               invocation.namedArguments[#operation]
                   as Future<Result<String>> Function();
-          return cb();
+          return await cb();
         });
 
         var calls = 0;
@@ -235,7 +235,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
 
       await repository.measureDataFetch<String>(
@@ -268,7 +268,7 @@ void main() {
         final cb =
             invocation.namedArguments[#operation]
                 as Future<Result<String>> Function();
-        return cb();
+        return await cb();
       });
 
       await repository.measureDataSave<String>(

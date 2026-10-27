@@ -275,7 +275,7 @@ class LoggingService {
   /// Get all log files (if file logging is enabled)
   Future<List<File>> getLogFiles() async {
     if (_fileOutput == null) return [];
-    return _fileOutput!.getLogFiles();
+    return await _fileOutput!.getLogFiles();
   }
 
   /// Clear all log files (if file logging is enabled)

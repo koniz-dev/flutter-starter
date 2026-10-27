@@ -64,7 +64,7 @@ mixin PerformanceUseCaseMixin {
   }) async {
     final service = performanceService;
     if (service == null || !service.isEnabled) {
-      return operation();
+      return await operation();
     }
 
     final operationAttributes = <String, String>{

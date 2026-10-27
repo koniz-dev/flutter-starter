@@ -11,6 +11,6 @@ class LogoutUseCase {
 
   /// Executes logout for the current user
   Future<Result<void>> call() async {
-    return repository.logout();
+    return await repository.logout();
   }
 }

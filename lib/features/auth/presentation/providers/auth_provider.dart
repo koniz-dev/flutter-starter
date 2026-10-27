@@ -338,7 +338,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
     final isAuthenticatedUseCase = ref.read(isAuthenticatedUseCaseProvider);
     final result = await isAuthenticatedUseCase();
 
-    return result.when(
+    return await result.when(
       success: (isAuth) => isAuth,
       failureCallback: (_) => false,
     );

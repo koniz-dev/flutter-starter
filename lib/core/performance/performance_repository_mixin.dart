@@ -68,7 +68,7 @@ mixin PerformanceRepositoryMixin {
   }) async {
     final service = performanceService;
     if (service == null || !service.isEnabled) {
-      return operation();
+      return await operation();
     }
 
     final operationAttributes = <String, String>{
@@ -130,7 +130,7 @@ mixin PerformanceRepositoryMixin {
       ...?attributes,
     };
 
-    return measureRepositoryOperation<T>(
+    return await measureRepositoryOperation<T>(
       operationName: operationName,
       operation: operation,
       attributes: fetchAttributes,
@@ -154,7 +154,7 @@ mixin PerformanceRepositoryMixin {
       ...?attributes,
     };
 
-    return measureRepositoryOperation<T>(
+    return await measureRepositoryOperation<T>(
       operationName: operationName,
       operation: operation,
       attributes: saveAttributes,
