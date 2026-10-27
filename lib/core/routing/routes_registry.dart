@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/routing/session_status.dart';
 import 'package:flutter_starter/features/auth/routing/auth_routes.dart';
 import 'package:flutter_starter/features/feature_flags/routing/feature_flags_routes.dart';
 import 'package:flutter_starter/features/home/routing/home_routes.dart';
@@ -35,3 +36,13 @@ List<RouteBase> buildAppRoutes(Ref ref, {bool? debugRoutes}) {
 List<RouteBase> _buildDebugRoutes(Ref ref) => <RouteBase>[
   ...buildFeatureFlagsRoutes(ref),
 ];
+
+/// The session state the redirect in `app_router.dart` reads.
+///
+/// Composed here, beside the routes, so the router imports no feature: the
+/// feature that owns sign-in supplies it, as it supplies its routes.
+final NotifierProvider<Notifier<SessionStatus>, SessionStatus>
+sessionStatusProvider =
+    NotifierProvider<Notifier<SessionStatus>, SessionStatus>(
+      AuthSessionStatusNotifier.new,
+    );

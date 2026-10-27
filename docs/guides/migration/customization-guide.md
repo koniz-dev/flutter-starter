@@ -38,9 +38,9 @@ files, so update them in the same change:
 rm -rf lib/features/auth test/features/auth
 ```
 
-- `lib/core/routing/app_router.dart` - the redirect guard reads
-  `authNotifierProvider`; rewrite or remove the login redirect.
-- `lib/core/routing/routes_registry.dart` - drop `buildAuthRoutes`.
+- `lib/core/routing/routes_registry.dart` - drop `buildAuthRoutes`, and
+  point `sessionStatusProvider` at your own sign-in state (or return
+  `SessionStatus.signedIn` to turn the login redirect off).
 - `lib/main.dart` - drop `authModuleOverrides` and the session-restore wiring.
 
 Auth's providers live in `lib/features/auth/di/auth_providers.dart` and go with

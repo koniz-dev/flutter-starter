@@ -4,7 +4,7 @@ import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_logging.dart';
 import 'package:flutter_starter/core/routing/route_not_found_screen.dart';
 import 'package:flutter_starter/core/routing/routes_registry.dart';
-import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/core/routing/session_status.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,7 +13,7 @@ part 'app_router.g.dart';
 /// Provider for GoRouter instance (stripped baseline).
 @Riverpod(keepAlive: true)
 GoRouter goRouter(Ref ref) {
-  final authStateNotifier = _AuthStateNotifier(ref);
+  final sessionChanges = _SessionStatusNotifier(ref);
   final loggingService = ref.read(loggingServiceProvider);
 
   return GoRouter(
@@ -26,9 +26,8 @@ GoRouter goRouter(Ref ref) {
     errorBuilder: (context, state) =>
         RouteNotFoundScreen(location: state.uri.toString()),
     redirect: (context, state) {
-      final restoration = ref.read(sessionRestorationProvider);
-      final authState = ref.read(authNotifierProvider);
-      final isAuthenticated = authState.user != null;
+      final status = ref.read(sessionStatusProvider);
+      final isAuthenticated = status == SessionStatus.signedIn;
       final isAuthRoute =
           state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register;
@@ -38,7 +37,7 @@ GoRouter goRouter(Ref ref) {
       // bouncing here would send every returning user to /login for a frame
       // and snap them back. Hold the requested location instead - the
       // refreshListenable below re-runs this the moment restore settles.
-      if (!isAuthenticated && restoration.isLoading) {
+      if (status == SessionStatus.restoring) {
         return null;
       }
 
@@ -52,7 +51,7 @@ GoRouter goRouter(Ref ref) {
 
       return null;
     },
-    refreshListenable: authStateNotifier,
+    refreshListenable: sessionChanges,
   );
 }
 
@@ -94,28 +93,16 @@ String _destinationAfterAuth(Uri current) {
   return target;
 }
 
-class _AuthStateNotifier extends ChangeNotifier {
-  _AuthStateNotifier(this._ref) {
-    _ref.listen<AuthState>(authNotifierProvider, (previous, next) {
-      final wasAuthenticated = previous?.user != null;
-      final isAuthenticated = next.user != null;
-
-      if (wasAuthenticated != isAuthenticated) {
-        notifyListeners();
-      }
-    });
-
-    // Starts the restore (listening initialises the provider) and re-runs the
-    // redirect when it settles. The auth listener above is not enough: a
-    // restore that finds no session leaves the auth state untouched, so
-    // without this the app would sit on the held location forever instead of
-    // falling through to /login.
-    _ref.listen<AsyncValue<void>>(sessionRestorationProvider, (previous, next) {
-      if (previous?.isLoading != next.isLoading) {
+/// Re-runs the redirect whenever [sessionStatusProvider] changes.
+///
+/// Listening also builds the provider, which is what starts the session
+/// restore.
+class _SessionStatusNotifier extends ChangeNotifier {
+  _SessionStatusNotifier(Ref ref) {
+    ref.listen<SessionStatus>(sessionStatusProvider, (previous, next) {
+      if (previous != next) {
         notifyListeners();
       }
     });
   }
-
-  final Ref _ref;
 }

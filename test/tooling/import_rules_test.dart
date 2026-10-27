@@ -58,19 +58,14 @@ const kAllowedImportViolations = <String, Set<String>>{
   // seeded-and-deleted.
   'go_router_outside_routing': <String>{},
 
-  // The one survivor of the `core/*` -> `features/*` edge.
+  // Empty: the `core/*` -> `features/*` edge has no survivors.
   //
-  // There were three. `lib/core/di/providers.dart` is **gone from this list**
-  // because the edge is gone: core now declares the
-  // 401-refresh seams and the auth slice fills them from
-  // `authModuleOverrides`. `FeatureFlagsManager` is gone because it moved
-  // into the feature-flags slice it was typed on. Until the one below is
-  // fixed it is allowlisted so that it cannot get worse.
-  'core_imports_feature': <String>{
-    // The auth redirect reads authNotifierProvider to decide where a
-    // signed-in or signed-out user may go.
-    'lib/core/routing/app_router.dart',
-  },
+  // There were three. `lib/core/di/providers.dart` went when core began
+  // declaring the 401-refresh seams that the auth slice fills from
+  // `authModuleOverrides`. `FeatureFlagsManager` moved into the feature-flags
+  // slice it was typed on. `app_router.dart` now reads `SessionStatus` from
+  // the route registry seam instead of the auth provider.
+  'core_imports_feature': <String>{},
 };
 
 // ---------------------------------------------------------------------------
