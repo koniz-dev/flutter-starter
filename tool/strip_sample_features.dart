@@ -135,8 +135,8 @@ void main(List<String> args) {
       'Usage: dart run tool/strip_sample_features.dart --apply '
       '[--remove-tasks] [--remove-feature-flags] | --keep-samples '
       '[--remove-bricks]\n'
-      'Removes lib/features/tasks, lib/features/feature_flags, related tests, '
-      'and core FeatureFlagsManager. Rewires entrypoints from '
+      'Removes lib/features/tasks, lib/features/feature_flags and related '
+      'tests. Rewires entrypoints from '
       'tool/golden/<variant>/. Keeps auth sample. --keep-samples removes '
       'neither sample. --remove-bricks also deletes bricks/ and mason.yaml, '
       'and the docs that link into them.',
@@ -255,20 +255,6 @@ void main(List<String> args) {
   if (removeFeatureFlags) {
     _deleteDir(Directory(p.join(root.path, 'lib/features/feature_flags')));
     _deleteDir(Directory(p.join(root.path, 'test/features/feature_flags')));
-    _deleteDir(Directory(p.join(root.path, 'test/core/feature_flags')));
-  }
-
-  if (removeFeatureFlags) {
-    final manager = File(
-      p.join(root.path, 'lib/core/feature_flags/feature_flags_manager.dart'),
-    );
-    if (manager.existsSync()) {
-      manager.deleteSync();
-    }
-    final ffDir = Directory(p.join(root.path, 'lib/core/feature_flags'));
-    if (ffDir.existsSync() && ffDir.listSync().isEmpty) {
-      ffDir.deleteSync();
-    }
   }
 
   if (removeTasks) {
@@ -302,8 +288,6 @@ void main(List<String> args) {
   final needles = <String>[
     if (removeTasks) 'package:flutter_starter/features/tasks/',
     if (removeFeatureFlags) 'package:flutter_starter/features/feature_flags/',
-    if (removeFeatureFlags)
-      'package:flutter_starter/core/feature_flags/feature_flags_manager.dart',
   ];
 
   // Documentation asserts identifiers with
@@ -315,7 +299,6 @@ void main(List<String> args) {
   _deleteSymbolDirectives(root, [
     if (removeTasks) 'lib/features/tasks/',
     if (removeFeatureFlags) 'lib/features/feature_flags/',
-    if (removeFeatureFlags) 'lib/core/feature_flags/',
   ]);
 
   final violations = _collectStrippedViolations(root, needles);

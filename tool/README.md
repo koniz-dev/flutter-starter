@@ -108,7 +108,7 @@ feature that is no longer there.
 <!-- strip:strip-tool start -->
 ## `strip_sample_features.dart`
 
-Removes sample **`tasks`** and **`feature_flags`** modules (and related tests), deletes `lib/core/feature_flags/feature_flags_manager.dart` when present, and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.
+Removes sample **`tasks`** and **`feature_flags`** modules (and related tests) and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.
 
 Guards: after file operations the script scans `lib/`, `test/`, `integration_test/`, and `examples/` for leftover imports of the removed modules and exits with code **3** if any remain.
 

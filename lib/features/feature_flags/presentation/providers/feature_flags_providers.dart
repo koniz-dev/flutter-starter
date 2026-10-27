@@ -2,12 +2,12 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/feature_flags/feature_flags_manager.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_local_datasource.dart';
 import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart';
 import 'package:flutter_starter/features/feature_flags/data/repositories/feature_flags_repository_impl.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
 import 'package:flutter_starter/features/feature_flags/domain/repositories/feature_flags_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

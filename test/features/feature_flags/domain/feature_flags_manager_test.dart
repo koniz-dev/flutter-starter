@@ -1,7 +1,7 @@
 import 'package:flutter_starter/core/errors/failures.dart';
-import 'package:flutter_starter/core/feature_flags/feature_flags_manager.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
 import 'package:flutter_starter/features/feature_flags/domain/repositories/feature_flags_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
