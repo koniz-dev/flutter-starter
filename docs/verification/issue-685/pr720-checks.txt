@@ -1,0 +1,8 @@
+PR #720, head 033b788171a85132216e696a4c3a35b8330ff408, merged as 567fadf9891
+Docs check -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015837/job/122198785055
+Quality gate -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015784/job/122198785806
+Strip both-samples-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015840/job/122198785908
+Strip feature-flags-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015840/job/122198786011
+Strip keep-samples + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015840/job/122198785721
+Strip renamed-both + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015840/job/122198786003
+Strip tasks-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40507015840/job/122198786041

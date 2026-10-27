@@ -1,0 +1,12 @@
+$ grep -n "known exception" docs/architecture/contracts-map.md   (main 567fadf9891)
+160:- `lib/core/**` does not import `lib/features/**`. The route registry seam (`routes_registry.dart`) is exempt by design, and one known exception - `app_router.dart` - is allowlisted with a reason until it is fixed. Where core needs something a feature owns - refreshing a token on a 401 - it declares the port and the feature supplies the adapter through `authModuleOverrides`, applied in `createAppContainer()`. `test/tooling/import_rules_test.dart` enforces the direction, and also keeps a feature's `domain/` free of its own `data/` and `presentation/`, of other features, of `package:dio`, and of every Flutter UI library (only `package:flutter/foundation.dart` is allowed).
+
+$ grep -rn "feature_flags_manager" docs/architecture/contracts-map.md
+(no match)
+
+$ allowlist on main:
+  'core_imports_feature': <String>{
+    // The auth redirect reads authNotifierProvider to decide where a
+    // signed-in or signed-out user may go.
+    'lib/core/routing/app_router.dart',
+  },

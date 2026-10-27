@@ -1,0 +1,18 @@
+$ flutter test test/tooling/import_rules_test.dart   (clean main 567fadf9891)
+00:01 +24: All tests passed!
+exit 0
+
+$ mutant: restore lib/core/feature_flags/feature_flags_manager.dart importing the slice
+3:import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
+4:import 'package:flutter_starter/features/feature_flags/domain/repositories/feature_flags_repository.dart';
+    lib/core/feature_flags/feature_flags_manager.dart:3
+        rule    : core_imports_feature
+    lib/core/feature_flags/feature_flags_manager.dart:4
+        rule    : core_imports_feature
+    'core_imports_feature': { ... 'lib/core/feature_flags/feature_flags_manager.dart' }
+    'core_imports_feature': { ... 'lib/core/feature_flags/feature_flags_manager.dart' }
+00:01 +23 -1: Some tests failed.
+exit (see above)
+
+$ after removing the mutant
+00:00 +24: All tests passed!
