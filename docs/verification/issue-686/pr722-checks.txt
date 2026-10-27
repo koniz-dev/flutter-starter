@@ -1,0 +1,10 @@
+PR #722 merged as 728cfe92b41
+Docs check -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514425913/job/122224515890
+Quality gate -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514425896/job/122224515868
+Strip both-samples-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514426083/job/122224516925
+Strip feature-flags-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514426083/job/122224516690
+Strip keep-samples + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514426083/job/122224516671
+Strip renamed-both + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514426083/job/122224516740
+Strip tasks-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40514426083/job/122224516425
+
+security: https://github.com/koniz-dev/flutter-starter/pull/722#issuecomment-6443581329

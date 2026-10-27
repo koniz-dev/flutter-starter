@@ -1,0 +1,14 @@
+$ grep -n "features/" lib/core/routing/app_router.dart   (main 728cfe92b41)
+(no match)
+
+$ flutter test test/tooling/import_rules_test.dart
+00:00 +24: All tests passed!
+
+$ mutant: app_router.dart imports the auth provider again
+8:import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart' as auth;
+    lib/core/routing/app_router.dart:8
+        rule    : core_imports_feature
+00:00 +23 -1: Some tests failed.
+
+$ after reverting the mutant
+00:00 +24: All tests passed!

@@ -1,0 +1,24 @@
+$ git diff --stat 567fadf9891 728cfe92b41 -- test/ integration_test/   (test files touched by #722)
+ test/tooling/import_rules_test.dart | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
+
+$ flutter test test/core/routing/app_router_test.dart --plain-name 'should redirect unauthenticated user from home to login'
+00:01 +1: All tests passed!
+
+$ flutter test test/core/routing/app_router_test.dart --plain-name 'should redirect authenticated user away from auth routes'
+00:01 +1: All tests passed!
+
+$ flutter test test/core/routing/app_router_test.dart --plain-name 're-runs the redirect when the user logs out'
+00:01 +1: All tests passed!
+
+$ flutter test test/features/auth/session_restore_test.dart --plain-name 'an off-site redirect target is ignored'
+00:02 +1: All tests passed!
+
+$ flutter test test/features/auth/register_deep_link_test.dart --plain-name 'criterion 4: an off-site redirect through register lands on'
+00:02 +1: All tests passed!
+
+$ flutter test test/features/auth/logout_teardown_test.dart --plain-name 'router leaves home for login after the remote call'
+00:02 +1: All tests passed!
+
+$ flutter test test/core/routing test/features/auth test/core/network/forced_logout_session_test.dart
+01:00 +369: All tests passed!
