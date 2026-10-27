@@ -1,0 +1,20 @@
+$ check_issue_refs.sh --body-file squash-body.txt
+Body file ../flutter-starter-evidence/docs/verification/issue-677/squash-body.txt
+  ok    PR title and body
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+exit 0
+
+$ negative control: a body with no Refs
+Body file /tmp/nr.txt
+  FAIL  PR title and body
+        no 'Refs koniz-dev/flutter-starter#N' reference found.
+
+1 message(s) violate invariant 3 (docs/issue-workflow.md).
+exit 1
+
+$ check_issue_refs.sh --range b463c05f03c~1..b463c05f03c   (the squash commit on main)
+Commits in b463c05f03c~1..b463c05f03c
+  ok    b463c05f chore(deps): Bump cupertino_icons from 1.0.8 to 2.0.0 (#700)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

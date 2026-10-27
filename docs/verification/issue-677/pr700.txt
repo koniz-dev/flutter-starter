@@ -1,0 +1,17 @@
+{"author":"app/dependabot","mergeCommit":"b463c05f03c20853bf65e590e83aa5819a050acc","mergedAt":"2026-10-27T11:57:49Z","number":700,"state":"MERGED","title":"chore(deps): Bump cupertino_icons from 1.0.8 to 2.0.0"}
+
+Quality gate -> pass
+Strip both-samples-removed + analyze + test -> pass
+Strip feature-flags-removed + analyze + test -> pass
+Strip keep-samples + analyze + test -> pass
+Strip renamed-both + analyze + test -> pass
+Strip tasks-removed + analyze + test -> pass
+.github/dependabot.yml -> pending
+
+b463c05f03c20853bf65e590e83aa5819a050acc
+chore(deps): Bump cupertino_icons from 1.0.8 to 2.0.0 (#700)
+
+Refs koniz-dev/flutter-starter#700
+
+security comment:
+https://github.com/koniz-dev/flutter-starter/pull/700#issuecomment-6425351316
