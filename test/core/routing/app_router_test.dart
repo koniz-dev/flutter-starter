@@ -361,7 +361,7 @@ void main() {
     });
   });
 
-  group('_AuthStateNotifier', () {
+  group('session status changes', () {
     late ProviderContainer container;
 
     tearDown(() {
