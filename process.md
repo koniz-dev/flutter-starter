@@ -101,6 +101,21 @@ GitHub issues are the single source of truth. Full spec:
 
     - **No issue, no evidence directory.** The PR and its security comment are
       the record. A bump that needed an issue follows the normal G1-G4 path.
+12. **Changelog and releases.** An adopter learns what changed from the
+    starter's GitHub Releases, not from `main`: their copy of `main` carries
+    only the `**Starter version:** vX.Y.Z` line at the top of
+    `docs/guides/migration/upgrading-this-starter.md`.
+    - Any merged change an adopter could notice (a moved file, a new
+      dependency floor, a behaviour change, a new lint) gets an entry under
+      `## [Unreleased]` in [`history/starter-changelog.md`](history/starter-changelog.md)
+      in the same session that merges it. A **Breaking** entry says what the
+      adopter has to change.
+    - To release: rename `[Unreleased]` to `[X.Y.Z] - <date>` here, bump the
+      marker on `main` through an ordinary PR, then run
+      `$M/scripts/release_starter.sh vX.Y.Z` (`--dry-run` first). It refuses
+      unless the marker on `origin/main` and the changelog heading agree, and
+      publishes that changelog section as the release notes, tagged at
+      `origin/main`.
 
 **Canonical epic list:
 [`scripts/bootstrap-issue-labels.sh`](scripts/bootstrap-issue-labels.sh)**
