@@ -1,0 +1,37 @@
+$ grep very_good_analysis pubspec.yaml
+110:  very_good_analysis: ^11.0.0
+
+$ pubspec.lock entry
+1068:  very_good_analysis:
+1069-    dependency: "direct dev"
+1070-    description:
+1071-      name: very_good_analysis
+1072-      sha256: "0bd5eb8d6be76aa0d71e70cbdae6cac8f784f761170568e3c2214a6948c7f6d3"
+1073-      url: "https://pub.dev"
+1074-    source: hosted
+
+$ formatter / rule overrides in analysis_options.yaml
+# very_good_analysis 11 switched the formatter to `trailing_commas: automate`,
+# which joins every short argument list that ends in a comma and reflowed 65
+# files here. Keeping `preserve` keeps a written trailing comma meaning "one
+# argument per line", and spares a project built on this starter that
+# reformat when it takes the upgrade.
+formatter:
+  trailing_commas: preserve
+  rules:
+    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
+$ dart format --set-exit-if-changed lib test integration_test tool examples
+Formatted 489 files (0 changed) in 1.72 seconds.
+exit 0
+
+$ flutter analyze
+No issues found! (ran in 6.4s)
+
+$ grep -rn one_member_abstracts lib test bricks scripts
+(no match)
+1075-    version: "11.0.0"

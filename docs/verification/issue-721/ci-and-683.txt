@@ -1,0 +1,23 @@
+PR #724 head 47c161c5de0, merged as 93a2ab360ce
+Quality gate -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40520753372/job/122246865206
+Strip both-samples-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40520753377/job/122246864721
+Strip feature-flags-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40520753377/job/122246864523
+Strip keep-samples + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40520753377/job/122246864500
+Strip renamed-both + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40520753377/job/122246864748
+Strip tasks-removed + analyze + test -> pass  https://github.com/koniz-dev/flutter-starter/actions/runs/40520753377/job/122246864024
+
+scripts-smoke (workflow_dispatch on the PR branch): https://github.com/koniz-dev/flutter-starter/actions/runs/40520773635
+build_all.sh (production) -> success
+create_feature.sh == create_feature.ps1 (Windows) -> success
+fork-and-customize Option B (my_app, My App) + analyze + test + scaffold -> success
+mason make flutter_starter_setup (acme_shop) + analyze + test -> success
+
+First head 3581095a40e failed Quality gate (stale riverpod .g.dart hashes) and Strip keep-samples (scaffolded feature still carried // ignore: one_member_abstracts); fixed in 47c161c5de0.
+
+security: https://github.com/koniz-dev/flutter-starter/pull/724#issuecomment-6444268701
+
+$ gh pr view 683
+state=CLOSED closedAt=2026-10-27T14:32:26Z
+last comment: OK, I won't notify you again about this release, but will get in touch when a new version is available. If you'd rather skip all updates until the next major or minor version, let me know by commenting `@dependabot ignore this major version` or `@dependabot ignore this minor version`. You can also ignore all major, minor, or patch releases for a dependency by adding an [`ignore` condition](https://docs.github.com/en/code-security/supply-chain-security/configuration-options-for-dependency-updates#ignore) with the desired `update_types` to your config file.
+
+If you change your mind, just re-open this PR and I'll resolve any conflicts on it.
