@@ -4,7 +4,7 @@ This project includes a production-ready, multi-environment configuration system
 
 - **Local Development**: `.env` files for easy local configuration
 - **CI/CD**: `--dart-define` flags for build-time configuration
-- **Fallback Chain**: `.env` → `--dart-define` → defaults
+- **Fallback Chain**: `--dart-define` (your `.env` arrives this way, through `--dart-define-from-file=.env`) → defaults; a `.env` loaded at runtime with `EnvConfig.load()` would rank first, but none is loaded by default
 - **Environment-Aware Defaults**: Different configurations per environment
 - **Feature Flags**: Enable/disable features per environment
 - **Network Configuration**: Timeout settings for API calls
