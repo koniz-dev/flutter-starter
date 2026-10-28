@@ -1,0 +1,18 @@
+## fixed Build Web step, rendered (flutter replaced by echo)
+ENVIRONMENT="$INPUT_ENVIRONMENT"
+BASE_URL="$INPUT_BASE_URL"
+if [ -z "$BASE_URL" ]; then
+  BASE_URL="http://localhost:3000"
+fi
+
+echo flutter build web \
+  --dart-define=ENVIRONMENT="$ENVIRONMENT" \
+  --dart-define=BASE_URL="$BASE_URL"
+
+## with INPUT_BASE_URL set to the payload
+flutter build web --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://x"; echo INJECTED-$(id -un) #
+exit 0
+
+## with INPUT_BASE_URL empty (fallback)
+flutter build web --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=http://localhost:3000
+exit 0

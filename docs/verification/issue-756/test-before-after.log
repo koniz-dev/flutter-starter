@@ -1,0 +1,27 @@
+## before the fix (1f7332d4aa8 build.yml)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/fs-756/test/tooling/workflow_dispatch_inputs_test.dart
+00:00 +0: no run: script interpolates a free-text dispatch input
+00:00 +0 -1: no run: script interpolates a free-text dispatch input [E]
+  Expected: empty
+    Actual: [
+              '.github/workflows/build.yml:160: base_url',
+              '.github/workflows/build.yml:219: base_url',
+              '.github/workflows/build.yml:256: base_url'
+00:00 +0 -1: the check itself reports string and untyped inputs inside run:
+00:00 +0 -2: the check itself reports string and untyped inputs inside run: [E]
+  Expected: ['w.yml:14: url', 'w.yml:14: text']
+    Actual: ['w.yml:13: url', 'w.yml:13: text']
+00:00 +0 -2: the check itself ignores a workflow without dispatch inputs
+00:00 +1 -2: Some tests failed.
+flutter test exit 1
+
+## after the fix (inputs moved to env:)
+00:00 +0: loading /Users/nguyenanhkiet/Playground/fs-756/test/tooling/workflow_dispatch_inputs_test.dart
+00:00 +0: no run: script interpolates a free-text dispatch input
+00:00 +1: the check itself reports string and untyped inputs inside run:
+00:00 +2: the check itself ignores a workflow without dispatch inputs
+00:00 +3: All tests passed!
+flutter test exit 0
+
+## actionlint 1.7.12
+exit 0

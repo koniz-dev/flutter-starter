@@ -1,0 +1,35 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart
+00:00 +0: every workflow action is pinned to a commit SHA with its version
+00:00 +1: the pin check itself accepts a SHA with its version comment
+00:00 +2: the pin check itself rejects a tag, a branch, a short SHA and a missing comment
+00:00 +3: the pin check itself exempts local actions and docker images by digest
+00:00 +4: the pin check itself finds uses however the key is spelled
+00:00 +5: the pin check itself accepts a pinned flow-mapping step
+00:00 +6: the pin check itself finds a job-level reusable workflow
+00:00 +7: the pin check itself scans composite actions under .github/
+00:00 +8: the pin check itself follows uses: ./path to a local action outside .github/
+00:00 +9: the pin check itself follows local actions that call local actions
+00:00 +10: the pin check itself reports a local action that has no action.yml
+00:00 +11: the pin check itself reads case-variant file names
+00:00 +12: the pin check itself takes the version only from the line comment
+00:00 +13: the pin check itself names a version comment that is not a plain release tag
+00:00 +14: the pin check itself accepts release tags with a pre-release or build suffix
+00:00 +15: the pin check itself container images requires a digest for container and service images
+00:00 +16: the pin check itself container images accepts container and service images by digest
+00:00 +17: the pin check itself container images requires a digest for a Docker action image, not a Dockerfile
+00:00 +18: the pin check itself container images requires a full digest for uses: docker://
+00:00 +19: the pin check itself container images reports images through checkActionPins
+00:00 +20: All tests passed!
+branch 858e9c0f1b4, flutter test exit 0
+
+## real tree
+13 files, every action pinned.
+exit 0
+
+## header comment
+22:// Container images get the same treatment, since a tag such as `node:20`
+23-// moves too: `jobs.<id>.container`, `jobs.<id>.services.<name>.image` and a
+24-// Docker action's `runs.image: docker://...` must end in `@sha256:<64 hex>`.
+25-// A Docker action built from its own Dockerfile is accepted; that
+26-// Dockerfile's `FROM` lines are not checked.
+27-//
