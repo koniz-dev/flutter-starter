@@ -1,0 +1,4 @@
+success mason make flutter_starter_setup (acme_shop) + analyze + test
+success fork-and-customize Option B (my_app, My App) + analyze + test + scaffold
+success create_feature.sh == create_feature.ps1 (Windows)
+success build_all.sh (production)

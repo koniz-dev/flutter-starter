@@ -1,0 +1,37 @@
+## on 4ace345c8ff
+environment:
+  sdk: ^3.13.0
+  flutter: '>=3.47.0'
+
+sdks:
+  dart: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0"
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/sdk_floor_test.dart
+00:00 +0: ./pubspec.yaml declares the SDK floor its lock needs
+00:00 +1: bricks/feature_clean/hooks/pubspec.yaml declares the SDK floor its lock needs
+00:00 +2: bricks/flutter_starter_setup/hooks/pubspec.yaml declares the SDK floor its lock needs
+00:00 +3: the floor check itself accepts a declared floor equal to or above the lock
+00:00 +4: the floor check itself names both values when a declared floor is lower
+00:00 +5: the floor check itself ignores an SDK the lock does not constrain
+00:00 +6: All tests passed!
+flutter test exit 0
+
+## mutant (temporary): pubspec.yaml back to sdk: '^3.8.0', no flutter: line
+  Expected: empty
+    Actual: [
+              'dart: declared 3.8.0, lock needs 3.13.0',
+              'flutter: declared nothing, lock needs 3.47.0'
+00:00 +2 -1: Some tests failed.
+flutter test exit 1
+
+## mutant (temporary): flutter: '>=99.0.0' - what an SDK below the floor sees from pub get
+Resolving dependencies...
+The current Flutter SDK version is 3.47.0.
+
+Because flutter_starter requires Flutter SDK version >=99.0.0, version solving failed.
+Failed to update packages.
+flutter pub get exit 1
+
+## after revert: pub get, then the tracked tree
+flutter pub get exit 0
+git status --porcelain: []
