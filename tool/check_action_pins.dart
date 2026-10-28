@@ -62,9 +62,17 @@ final RegExp _pinParts = RegExp(r'^([\w.-]+/[\w.-]+)[\w./-]*@([0-9a-f]{40})$');
 /// brackets and commas that close its flow collection may come before it, so
 /// a `#` inside another key's string (`name: "x # v1.0"`) is not a comment.
 /// Group 1 is the version.
+///
+/// The version is an allowlist, not "anything after `#`": it becomes a path
+/// in a GitHub API call, where `..` or `?` would point it at another
+/// repository's tag.
 final RegExp _versionComment = RegExp(
-  r'^[\s,}\]]*\s#\s*(v?\d+(\.\d+){1,2}\S*)\s*$',
+  r'^[\s,}\]]*\s#\s*'
+  r'(v?\d+(?:\.\d+){1,2}(?:[-+][0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?)\s*$',
 );
+
+/// The text of a `#` comment in the rest of a line, when there is one.
+final RegExp _anyComment = RegExp(r'\s#\s*(.*?)\s*$');
 
 /// Exempt: actions in this repository, and container images by digest.
 bool _exempt(String target) =>
@@ -161,10 +169,21 @@ List<ActionUse> missingLocalActions(Directory root) => _scan(root).missing;
 /// then local actions that do not exist.
 List<String> checkActionPins(Directory root) => [
   for (final f in actionFiles(root))
-    for (final use in unpinnedUses(f.path, f.readAsStringSync())) '$use',
+    for (final use in unpinnedUses(f.path, f.readAsStringSync()))
+      _describe(use),
   for (final use in missingLocalActions(root))
     '$use (no action.yml or action.yaml there)',
 ];
+
+/// [use] as a problem line, saying why when it is pinned to a SHA but its
+/// comment is not a release tag.
+String _describe(ActionUse use) {
+  final comment = _anyComment.firstMatch(use.trailing)?.group(1);
+  if (_shaRef.hasMatch(use.target) && comment != null) {
+    return '$use: version comment "$comment" is not a release tag (vX.Y.Z)';
+  }
+  return '$use';
+}
 
 /// Names compare case-insensitively: a case-insensitive file system (a macOS
 /// runner) loads `Action.yml` as `action.yml`, so the check reads it too.

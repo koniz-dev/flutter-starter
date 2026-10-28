@@ -205,5 +205,36 @@ void main() {
         );
       }
     });
+    test('names a version comment that is not a plain release tag', () {
+      for (final comment in [
+        'v1.0.0/../../x/y/git/ref/tags/v1.0.0',
+        'v1.0.0?x',
+        'v1.0.0#x',
+        'v1.0.0-..',
+      ]) {
+        final root = _repo({
+          '.github/workflows/w.yml': 'steps:\n  - uses: a/b@$sha # $comment\n',
+        });
+        final why = 'version comment "$comment" is not a release tag (vX.Y.Z)';
+        expect(checkActionPins(root), [
+          '${root.path}/.github/workflows/w.yml:2: uses: a/b@$sha: $why',
+        ], reason: comment);
+      }
+    });
+
+    test('accepts release tags with a pre-release or build suffix', () {
+      for (final comment in [
+        'v1.2',
+        '1.2.3',
+        'v1.2.3-rc.1',
+        'v1.2.3+build.5',
+      ]) {
+        expect(
+          _unpinned('- uses: a/b@$sha # $comment'),
+          isEmpty,
+          reason: comment,
+        );
+      }
+    });
   });
 }
