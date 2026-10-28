@@ -1,0 +1,63 @@
+## baseline on be3d5bd376d
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart
+00:00 +0: every workflow action is pinned to a commit SHA with its version
+00:00 +1: the pin check itself accepts a SHA with its version comment
+00:00 +2: the pin check itself rejects a tag, a branch, a short SHA and a missing comment
+00:00 +3: the pin check itself exempts local actions and docker images by digest
+00:00 +4: the pin check itself finds uses however the key is spelled
+00:00 +5: the pin check itself accepts a pinned flow-mapping step
+00:00 +6: the pin check itself finds a job-level reusable workflow
+00:00 +7: the pin check itself scans composite actions under .github/
+00:00 +8: All tests passed!
+flutter test exit 0
+12 files, every action pinned.
+tool exit 0
+
+## mutant (temporary): inserted as ci.yml line 39:       - {name: probe, uses: evil/act@v1}
+      - {name: probe, uses: evil/act@v1}
+  Expected: empty
+    Actual: [
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.github/workflows/ci.yml:39: uses: evil/act@v1'
+00:00 +0 -1: Some tests failed.
+flutter test exit 1
+./.github/workflows/ci.yml:39: uses: evil/act@v1
+Pin each action to the commit of a release, with the release as a comment: uses: owner/repo@<40-hex sha> # vX.Y.Z
+tool exit 1
+
+## mutant (temporary): inserted as ci.yml line 39:       - "uses": evil/act@v1
+      - "uses": evil/act@v1
+  Expected: empty
+    Actual: [
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.github/workflows/ci.yml:39: uses: evil/act@v1'
+00:00 +0 -1: Some tests failed.
+flutter test exit 1
+./.github/workflows/ci.yml:39: uses: evil/act@v1
+Pin each action to the commit of a release, with the release as a comment: uses: owner/repo@<40-hex sha> # vX.Y.Z
+tool exit 1
+
+## mutant (temporary): inserted as ci.yml line 39:       - 'uses': evil/act@v1
+      - 'uses': evil/act@v1
+  Expected: empty
+    Actual: [
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.github/workflows/ci.yml:39: uses: evil/act@v1'
+00:00 +0 -1: Some tests failed.
+flutter test exit 1
+./.github/workflows/ci.yml:39: uses: evil/act@v1
+Pin each action to the commit of a release, with the release as a comment: uses: owner/repo@<40-hex sha> # vX.Y.Z
+tool exit 1
+
+## mutant (temporary): inserted as ci.yml line 39:       - uses : evil/act@v1
+      - uses : evil/act@v1
+  Expected: empty
+    Actual: [
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.github/workflows/ci.yml:39: uses: evil/act@v1'
+00:00 +0 -1: Some tests failed.
+flutter test exit 1
+./.github/workflows/ci.yml:39: uses: evil/act@v1
+Pin each action to the commit of a release, with the release as a comment: uses: owner/repo@<40-hex sha> # vX.Y.Z
+tool exit 1
+
+## after revert
+git status --porcelain .github: []
+12 files, every action pinned.
+tool exit 0
