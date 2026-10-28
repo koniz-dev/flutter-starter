@@ -236,5 +236,92 @@ void main() {
         );
       }
     });
+
+    group('container images', () {
+      final digest = 'sha256:${'a' * 64}';
+
+      test('requires a digest for container and service images', () {
+        const workflow = r'''
+jobs:
+  a:
+    container: node:20
+    services:
+      db:
+        image: postgres:16
+  b:
+    container:
+      image: alpine:3.20
+  c:
+    container: ${{ matrix.image }}
+''';
+        expect(unpinnedImages('w.yml', workflow), [
+          'w.yml:3: container: node:20',
+          'w.yml:6: services.image: postgres:16',
+          'w.yml:9: container: alpine:3.20',
+          r'w.yml:11: container: ${{ matrix.image }}',
+        ]);
+      });
+
+      test('accepts container and service images by digest', () {
+        final workflow =
+            'jobs:\n'
+            '  a:\n'
+            '    container: node:20@$digest\n'
+            '    services:\n'
+            '      db:\n'
+            '        image: postgres@$digest\n'
+            '  b:\n'
+            '    container:\n'
+            '      image: alpine@$digest\n';
+        expect(unpinnedImages('w.yml', workflow), isEmpty);
+      });
+
+      test('requires a digest for a Docker action image, not a Dockerfile', () {
+        expect(
+          unpinnedImages(
+            'action.yml',
+            'runs:\n  using: docker\n  image: docker://alpine:latest\n',
+          ),
+          ['action.yml:3: runs.image: docker://alpine:latest'],
+        );
+        expect(
+          unpinnedImages(
+            'action.yml',
+            'runs:\n  using: docker\n  image: docker://alpine@$digest\n',
+          ),
+          isEmpty,
+        );
+        expect(
+          unpinnedImages(
+            'action.yml',
+            'runs:\n  using: docker\n  image: Dockerfile\n',
+          ),
+          isEmpty,
+        );
+      });
+
+      test('requires a full digest for uses: docker://', () {
+        for (final image in [
+          'docker://alpine:latest@sha256:',
+          'docker://alpine@sha256:${'a' * 63}',
+          'docker://alpine@sha256:${'A' * 64}',
+        ]) {
+          expect(
+            _unpinned("- uses: '$image'"),
+            ['w.yml:1: uses: $image'],
+            reason: image,
+          );
+        }
+      });
+
+      test('reports images through checkActionPins', () {
+        final root = _repo({
+          '.github/workflows/w.yml': 'jobs:\n  a:\n    container: node:20\n',
+        });
+        expect(checkActionPins(root), [
+          '${root.path}/.github/workflows/w.yml:3: container: node:20',
+        ]);
+      });
+    });
   });
 }
