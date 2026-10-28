@@ -8,4 +8,4 @@
 00:00 +6: the pin check itself finds a job-level reusable workflow
 00:00 +7: the pin check itself scans composite actions under .github/
 00:00 +8: All tests passed!
-main 9534a1c5516, exit 
+main 9534a1c5516, flutter test exit 0
