@@ -116,7 +116,8 @@ that is not pinned to a full commit SHA followed by its release as a comment
 `docker://...@sha256:` images are exempt. File names are matched case-insensitively (`Release.YML`,
 `Action.yml`), since a case-insensitive runner file system loads them. It parses the YAML, so a `uses` key
 written in a flow mapping, quoted, or as `uses :` is checked like any other. The
-version must be the line's own comment: in a flow mapping, put `uses` last
+version must be the line's own comment and a plain release tag (`v1.2.3`,
+`1.2`, `v1.2.3-rc.1`; no `/`, `..`, `?` or `#`): in a flow mapping, put `uses` last
 (`- {name: x, uses: owner/repo@<sha>} # vX.Y.Z`), since a `#` inside another
 key's value is not a comment.
 

@@ -123,6 +123,19 @@ void main() {
       expect(result.verified, 2);
       expect(calls, 1);
     });
+    test('never asks the API about a comment that is not a release tag', () {
+      final root = _repo(
+        'steps:\n'
+        '  - uses: a/b@$_commit # v1.0.0/../../../../x/y/git/ref/tags/v2\n'
+        '  - uses: a/b@$_commit # v1.0.0?x\n',
+      );
+      final result = verifyTags(
+        root,
+        (repo, tag) => fail('resolver called with $repo $tag'),
+      );
+      expect(result.problems, hasLength(2));
+      expect(result.verified, 0);
+    });
   });
 
   group('ghTagResolver', () {
