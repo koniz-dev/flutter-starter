@@ -1,0 +1,20 @@
+## scratch: pin written with a \x escape (\x31 = '1'), commit is v6.0.0's under '# v7.0.1'
+jobs:
+  a:
+    runs-on: x
+    steps:
+      - uses: "actions/checkout@\x31af3b93b6815bc44a9784bd300feb67ff0d1eeb3" # v7.0.1
+<scratch>/.github/workflows/w.yml:5: actions/checkout v7.0.1 is 3d3c42e5aac5ba805825da76410c181273ba90b1, but the pin is 1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+1 pins are not the commit their version comment names.
+exit 1
+
+## scratch: pin split by an escaped line break
+jobs:
+  a:
+    runs-on: x
+    steps:
+      - uses: "actions/checkout@1af3b93b6815bc44a978\
+          4bd300feb67ff0d1eeb3" # v7.0.1
+<scratch>/.github/workflows/w.yml:5: actions/checkout v7.0.1 is 3d3c42e5aac5ba805825da76410c181273ba90b1, but the pin is 1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+1 pins are not the commit their version comment names.
+exit 1

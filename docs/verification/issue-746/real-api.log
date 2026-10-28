@@ -1,0 +1,22 @@
+## real tree, real API (7dbe3f87672)
+55 pins in 13 files match their version comment.
+exit 0
+
+## scratch: decoy pin in name:, real pin is actions/checkout v6.0.0's commit under '# v7.0.1'
+jobs:
+  a:
+    runs-on: x
+    steps:
+      - {name: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 ", uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3} # v7.0.1
+<scratch>/.github/workflows/w.yml:5: actions/checkout v7.0.1 is 3d3c42e5aac5ba805825da76410c181273ba90b1, but the pin is 1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+1 pins are not the commit their version comment names.
+exit 1
+
+## scratch: two flow steps on one line
+jobs:
+  a:
+    runs-on: x
+    steps: [{uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1}, {uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3}] # v7.0.1
+<scratch>/.github/workflows/w.yml:4: uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Pin each action to the commit of a release, with the release as a comment: uses: owner/repo@<40-hex sha> # vX.Y.Z
+exit 1
