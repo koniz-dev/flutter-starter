@@ -29,11 +29,15 @@ keytool -genkey -v -keystore android/upload-keystore.jks \
 Then create `android/key.properties` (both files are git-ignored):
 
 ```properties
-storeFile=upload-keystore.jks   # relative to android/, or absolute
+storeFile=upload-keystore.jks
 storePassword=...
 keyAlias=upload
 keyPassword=...
 ```
+
+`storeFile` is relative to `android/`, or absolute. A `.properties` file has
+no trailing comments - text after a value, `#` included, becomes part of it -
+so put any note on a line of its own that starts with `#`.
 
 In CI, [`deploy-android.yml`](../../.github/workflows/deploy-android.yml)
 ships a commented-out "Setup Android keystore" step that writes both from
