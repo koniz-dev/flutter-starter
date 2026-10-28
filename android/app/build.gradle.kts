@@ -122,8 +122,10 @@ if (releaseKeystore == null && !allowUnsignedRelease) {
                 Release signing is not configured, so this build would produce an
                 unsigned (previously: debug-signed) artifact. Refusing.
 
-                Create android/key.properties:
-                    storeFile=upload-keystore.jks   # relative to android/, or absolute
+                Create android/key.properties (a .properties file has no trailing
+                comments, so keep notes on their own # line):
+                    # storeFile is relative to android/, or absolute
+                    storeFile=upload-keystore.jks
                     storePassword=...
                     keyAlias=...
                     keyPassword=...
