@@ -29,7 +29,7 @@ enum SupportedLocale {
 
   /// Creates a [SupportedLocale] with the given [locale], [displayName] and
   /// [regionDisplayName]
-  const SupportedLocale(this.locale, this.displayName, this.regionDisplayName);
+  SupportedLocale(this.locale, this.displayName, this.regionDisplayName);
 
   /// The locale object
   final Locale locale;

@@ -29,10 +29,11 @@ List<String> _fromEnvironmentArgumentStarts(String source) {
       .toList(growable: false);
 }
 
-Iterable<File> _dartFilesUnder(String directory) => Directory(directory)
-    .listSync(recursive: true)
-    .whereType<File>()
-    .where((f) => f.path.endsWith('.dart'));
+Iterable<File> _dartFilesUnder(String directory) =>
+    Directory(directory)
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.dart'));
 
 /// Keys declared in `.env.example`, i.e. lines of the form `KEY=` or `KEY=v`.
 Set<String> _envExampleKeys() {

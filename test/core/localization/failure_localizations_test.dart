@@ -123,9 +123,9 @@ void main() {
 
   group('criterion 2: the vi string is the vi ARB value', () {
     test('CONNECTION_ERROR in vi', () {
-      final arb =
-          jsonDecode(File('lib/l10n/app_vi.arb').readAsStringSync())
-              as Map<String, dynamic>;
+      final arb = jsonDecode(
+        File('lib/l10n/app_vi.arb').readAsStringSync(),
+      ) as Map<String, dynamic>;
       final failure = _fromDio(DioExceptionType.connectionError);
 
       expect(failure.code, 'CONNECTION_ERROR');
@@ -134,17 +134,17 @@ void main() {
     });
 
     test('every failure key is translated in all four locales', () {
-      final template =
-          jsonDecode(File('lib/l10n/app_en.arb').readAsStringSync())
-              as Map<String, dynamic>;
+      final template = jsonDecode(
+        File('lib/l10n/app_en.arb').readAsStringSync(),
+      ) as Map<String, dynamic>;
       final keys = template.keys.where((k) => k.startsWith('failure'));
       // 13 since failureInvalidCredentials.
       expect(keys, hasLength(13));
 
       for (final lang in ['es', 'ar', 'vi']) {
-        final arb =
-            jsonDecode(File('lib/l10n/app_$lang.arb').readAsStringSync())
-                as Map<String, dynamic>;
+        final arb = jsonDecode(
+          File('lib/l10n/app_$lang.arb').readAsStringSync(),
+        ) as Map<String, dynamic>;
         for (final key in keys) {
           expect(arb[key], isA<String>(), reason: '$lang $key');
           expect(arb[key], isNot(template[key]), reason: '$lang $key');

@@ -53,9 +53,9 @@ String? mismatch({required bool optedOut, required Set<String> kgpPlugins}) {
 /// Plugin name -> android build script, for every resolved package that has
 /// one, read through `.dart_tool/package_config.json`.
 Map<String, String> _resolvedAndroidBuildFiles() {
-  final config =
-      jsonDecode(File('.dart_tool/package_config.json').readAsStringSync())
-          as Map<String, dynamic>;
+  final config = jsonDecode(
+    File('.dart_tool/package_config.json').readAsStringSync(),
+  ) as Map<String, dynamic>;
   final files = <String, String>{};
   for (final package
       in (config['packages'] as List).cast<Map<String, dynamic>>()) {

@@ -25,10 +25,9 @@ and the checks every pull request has to pass.
 - IDE (VS Code, Android Studio, or IntelliJ IDEA)
 
 Those are the floors the committed `pubspec.lock` resolves against (see its
-`sdks:` block). `pubspec.yaml` declares the looser `environment: sdk: '^3.8.0'`
-and no `flutter:` constraint at all, so an older SDK does not fail with a clear
-message - it fails inside `flutter pub get` with a transitive solve error
-naming a package such as `path_provider_foundation`. Trust the lockfile.
+`sdks:` block), and `pubspec.yaml`'s `environment:` states the same ones, so an
+older SDK fails `flutter pub get` with a message naming the SDK version it
+needs. `test/tooling/sdk_floor_test.dart` fails if the two drift apart.
 
 ### Setup Steps
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/network/realtime/i_realtime_client.dart';
 

@@ -64,9 +64,9 @@ void main() {
     late Map<String, dynamic> arb;
 
     setUpAll(() {
-      arb =
-          jsonDecode(File('lib/l10n/app_ar.arb').readAsStringSync())
-              as Map<String, dynamic>;
+      arb = jsonDecode(
+        File('lib/l10n/app_ar.arb').readAsStringSync(),
+      ) as Map<String, dynamic>;
     });
 
     for (final key in [
