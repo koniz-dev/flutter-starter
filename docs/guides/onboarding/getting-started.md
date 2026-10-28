@@ -41,9 +41,12 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd flutter_starter
+git clone <repository-url> my_app
+cd my_app
 ```
+
+Name the directory whatever you like; without the second argument `git clone`
+names it after the repository (`flutter-starter` for this one).
 
 ### 2. Install Dependencies
 
@@ -77,20 +80,19 @@ that ships your values inside every release APK, IPA and web build. See
 
 You can pass configuration via command-line flags (see [Environment Configuration](#environment-configuration) below).
 
-### 4. Generate Code
+### 4. Generated Code (nothing to run)
 
-The project uses code generation for models and serialization. Run:
+Generated code (Freezed, json_serializable, Riverpod) is committed, so a fresh
+clone builds without running a generator. Regenerate only after you change an
+annotated source - add or modify a `@freezed`, `@JsonSerializable` or
+`@riverpod` declaration:
 
 ```bash
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
-**Note**: Run this command whenever you:
-- Add or modify `@freezed` classes
-- Add or modify `@JsonSerializable` classes
-- Change model structures
+While you are changing such sources, watch mode regenerates on every save:
 
-**Watch mode** (for development):
 ```bash
 flutter pub run build_runner watch --delete-conflicting-outputs
 ```
@@ -213,11 +215,17 @@ flutter run -d windows
 
 ## Environment Configuration
 
-The project supports multiple configuration methods with a fallback chain:
+Each value resolves through this chain, per key:
 
-1. **`.env` file** (highest priority for local development)
-2. **`--dart-define` flags** (for CI/CD)
-3. **Environment-aware defaults** (fallback)
+1. **`--dart-define`** - which is how the documented `.env` setup arrives too:
+   `--dart-define-from-file=.env` turns every line of the file into a
+   dart-define. CI passes `--dart-define=KEY=value` flags directly.
+2. **Environment-aware defaults** when neither supplies the key.
+
+`EnvConfig` also checks a `.env` loaded at runtime with `EnvConfig.load()`
+before the dart-defines, but nothing loads one by default: `.env` is not an
+asset, and must not become one (see
+[Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)).
 
 ### Configuration Variables
 
