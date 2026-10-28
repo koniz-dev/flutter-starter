@@ -172,5 +172,25 @@ void main() {
         '${root.path}/.github/workflows/ci.yml:4: uses: ./tools/gone $reason',
       ]);
     });
+    test('reads case-variant file names', () {
+      final root = _repo({
+        '.github/workflows/Release.YML':
+            'jobs:\n  a:\n    steps:\n      - uses: evil/act@v1\n',
+        '.github/actions/x/Action.yml':
+            'runs:\n  using: composite\n  steps:\n    - uses: evil/act@v2\n',
+        '.github/workflows/ci.yml':
+            'jobs:\n  a:\n    steps:\n      - uses: ./tools/y\n',
+        'tools/y/ACTION.YAML':
+            'runs:\n  using: composite\n  steps:\n    - uses: evil/act@v3\n',
+      });
+      expect(
+        checkActionPins(root),
+        unorderedEquals([
+          '${root.path}/.github/workflows/Release.YML:4: uses: evil/act@v1',
+          '${root.path}/.github/actions/x/Action.yml:4: uses: evil/act@v2',
+          '${root.path}/tools/y/ACTION.YAML:4: uses: evil/act@v3',
+        ]),
+      );
+    });
   });
 }
