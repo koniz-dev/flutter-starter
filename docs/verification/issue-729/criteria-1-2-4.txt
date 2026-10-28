@@ -1,0 +1,46 @@
+=== criterion 1: marker at tag and on main
+v2.0.0:docs/guides/migration/upgrading-this-starter.md -> **Starter version:** v2.0.0
+origin/main:docs/guides/migration/upgrading-this-starter.md -> **Starter version:** v2.0.0
+$ flutter test test/docs/starter_version_marker_test.dart
+00:00 +1: Step 1 reads the marker, not pubspec.yaml
+00:00 +2: All tests passed!
+
+=== criterion 2: Step 1
+### Step 1: Check Current Version
+
+Your starting point is the **Starter version** line at the top of this file,
+not `pubspec.yaml`:
+
+```bash
+grep -m1 'Starter version' docs/guides/migration/upgrading-this-starter.md
+```
+
+Every release is tagged upstream, so you can list and diff what changed since
+yours (`v2.0.0` below stands for the version that line shows):
+
+```bash
+git remote add upstream https://github.com/koniz-dev/flutter-starter.git
+git fetch upstream --tags
+git log --oneline v2.0.0..upstream/main      # every upstream commit since
+git diff --stat v2.0.0 upstream/main -- lib  # what changed in the code
+```
+
+Then read the [release notes](https://github.com/koniz-dev/flutter-starter/releases) from your version onwards. Your own
+`CHANGELOG.md` records your project's releases, not the starter's.
+
+### Step 2: Review Breaking Changes
+=== criterion 4: Scope note
+--- 'no breaking release' phrasing (expect no match)
+grep exit=1
+--- the Scope note was removed by #738 (5d8e9edfed3). Before:
+**Scope note.** This starter is at `1.0.0+1` and has shipped no releases with
+breaking changes yet. Everything below the "Breaking Changes by Version"
+heading is an **illustration of the format** future release notes will use, not
+a record of changes you need to make. In the same spirit, `scripts/dev/migration/`
+**does not exist** in this repository - it is the convention this guide proposes
+for migration scripts you or a future release may add.
+--- its two caveats are kept on main:
+14:`scripts/dev/migration/` **does not exist** in this repository - it is the
+16:may add. The "Version 2.1.0 (Hypothetical Future Version)" section below is an
+17:illustration of the format, not a record of changes.
+88:does not exist. When a release adds one, its release notes name the script and

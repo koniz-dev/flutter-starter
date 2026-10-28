@@ -1,0 +1,14 @@
+=== criterion 3: tag and release
+tag v2.0.0 -> 7b656aceb43f47f89f0ea902ad0bf69cee471c0e
+v2.0.0 is an ancestor of origin/main (2974085f8fe)
+$ gh release view v2.0.0 --json tagName,name,isDraft,isPrerelease,publishedAt,url
+{"isDraft":false,"isPrerelease":false,"name":"v2.0.0","publishedAt":"2026-10-28T22:49:42Z","tagName":"v2.0.0","url":"https://github.com/koniz-dev/flutter-starter/releases/tag/v2.0.0"}
+
+$ gh api repos/koniz-dev/flutter-starter/releases/latest --jq .tag_name
+v2.0.0
+
+=== notes vs changelog: release-v2.0.0-notes.md is the body; compare with the [2.0.0] section on maintainers (466d4a422b5), blank lines at either end trimmed
+diff: identical
+changelog heading: ## [2.0.0] - 2026-10-29
+release_starter.sh refused unless the marker at the tagged commit equals the heading (scripts/release_starter.sh:39-43), and it printed: release v2.0.0 -> 7b656aceb43f47f89f0ea902ad0bf69cee471c0e
+=== Breaking entries (12), each with its change instruction; see release-v2.0.0-notes.md lines 1-67, tokenStore entry at 103-120
