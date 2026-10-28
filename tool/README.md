@@ -106,6 +106,23 @@ feature that is no longer there.
 <!-- strip:strip-tool end -->
 
 <!-- strip:strip-tool start -->
+## `check_action_pins.dart`
+
+Fails when a workflow under `.github/workflows/`, or a composite action
+(`action.yml` / `action.yaml`) anywhere under `.github/`, runs an action that is
+not pinned to a full commit SHA followed by its release as a comment
+(`uses: owner/repo@<40-hex sha> # vX.Y.Z`). Local `./` actions and
+`docker://...@sha256:` images are exempt. It parses the YAML, so a `uses` key
+written in a flow mapping, quoted, or as `uses :` is checked like any other.
+
+```bash
+dart run tool/check_action_pins.dart
+```
+
+Exits 1 and prints `file:line: uses: <target>` for every unpinned action.
+`test/tooling/workflow_action_pins_test.dart` runs it under `flutter test`, so
+the Quality gate enforces it.
+
 ## `strip_sample_features.dart`
 
 Removes sample **`tasks`** and **`feature_flags`** modules (and related tests) and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.
