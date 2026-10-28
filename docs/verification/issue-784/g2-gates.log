@@ -1,0 +1,21 @@
+HEAD 7c4a0c12ad12a543982925fab4870bf7932ef577
+06:08 +3544 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:08 +3545 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:08 +3546 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:08 +3547 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3548 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3549 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3550 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3551 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3552 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3553 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:09 +3554 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:11 +3555 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/helpers_test.dart: pumping createTestApp hosts a widget under a Scaffold
+06:11 +3556 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/helpers_test.dart: pumping createTestApp hosts a widget under a Scaffold
+06:12 +3557 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/helpers_test.dart: pumping pumpAppAndSettle pumps and settles animations
+06:12 +3558 ~14: All tests passed!
+audit exit=0
+Epic coverage OK: every tracked surface maps to one epic.
+epic exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+deliverable exit=0
