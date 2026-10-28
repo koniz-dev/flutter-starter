@@ -1,0 +1,8 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart
+00:00 +0: accepts a pin that is its lightweight tag
+00:00 +1: peels an annotated tag to its commit
+00:01 +2: rejects a SHA that is not the tag commit, naming both
+00:01 +3: rejects a version comment that is not a tag
+00:02 +4: exits 2 when the API cannot be asked, rather than passing
+00:02 +5: All tests passed!
+main cc85f6b5db8, flutter test exit 0

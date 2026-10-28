@@ -1,0 +1,170 @@
+Action pins	Set up job	﻿2026-10-28T14:35:44.0764914Z Current runner version: '2.338.0'
+Action pins	Set up job	2026-10-28T14:35:44.0789111Z ##[group]Runner Image Provisioner
+Action pins	Set up job	2026-10-28T14:35:44.0789922Z Hosted Compute Agent
+Action pins	Set up job	2026-10-28T14:35:44.0790521Z Version: 20261021.618
+Action pins	Set up job	2026-10-28T14:35:44.0791096Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+Action pins	Set up job	2026-10-28T14:35:44.0791908Z Build Date: 2026-10-21T00:45:21Z
+Action pins	Set up job	2026-10-28T14:35:44.0792546Z Worker ID: {4e8ac5f3-6d44-4da8-be74-a4dd0f6b0a86}
+Action pins	Set up job	2026-10-28T14:35:44.0793189Z Region: westus3
+Action pins	Set up job	2026-10-28T14:35:44.0793667Z Cloud: Azure
+Action pins	Set up job	2026-10-28T14:35:44.0794183Z ##[endgroup]
+Action pins	Set up job	2026-10-28T14:35:44.0795635Z ##[group]Operating System
+Action pins	Set up job	2026-10-28T14:35:44.0796235Z Ubuntu
+Action pins	Set up job	2026-10-28T14:35:44.0796714Z 24.04.5
+Action pins	Set up job	2026-10-28T14:35:44.0797184Z LTS
+Action pins	Set up job	2026-10-28T14:35:44.0797692Z ##[endgroup]
+Action pins	Set up job	2026-10-28T14:35:44.0798209Z ##[group]Runner Image
+Action pins	Set up job	2026-10-28T14:35:44.0798761Z Image: ubuntu-24.04
+Action pins	Set up job	2026-10-28T14:35:44.0799292Z Version: 20261012.334.1
+Action pins	Set up job	2026-10-28T14:35:44.0800245Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+Action pins	Set up job	2026-10-28T14:35:44.0802100Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+Action pins	Set up job	2026-10-28T14:35:44.0803002Z ##[endgroup]
+Action pins	Set up job	2026-10-28T14:35:44.0804016Z ##[group]GITHUB_TOKEN Permissions
+Action pins	Set up job	2026-10-28T14:35:44.0806120Z Contents: read
+Action pins	Set up job	2026-10-28T14:35:44.0806711Z Metadata: read
+Action pins	Set up job	2026-10-28T14:35:44.0807212Z ##[endgroup]
+Action pins	Set up job	2026-10-28T14:35:44.0809209Z Secret source: Actions
+Action pins	Set up job	2026-10-28T14:35:44.0810062Z Cache mode: write
+Action pins	Set up job	2026-10-28T14:35:44.0811018Z Prepare workflow directory
+Action pins	Set up job	2026-10-28T14:35:44.1172513Z Prepare all required actions
+Action pins	Set up job	2026-10-28T14:35:44.1220640Z Getting action download info
+Action pins	Set up job	2026-10-28T14:35:44.4293478Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Action pins	Set up job	2026-10-28T14:35:44.5919912Z Complete job name: Action pins
+Action pins	Checkout code	﻿2026-10-28T14:35:44.6655420Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Action pins	Checkout code	2026-10-28T14:35:44.6656481Z with:
+Action pins	Checkout code	2026-10-28T14:35:44.6656990Z   repository: koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T14:35:44.6660464Z   token: ***
+Action pins	Checkout code	2026-10-28T14:35:44.6660930Z   ssh-strict: true
+Action pins	Checkout code	2026-10-28T14:35:44.6661630Z   ssh-user: git
+Action pins	Checkout code	2026-10-28T14:35:44.6662114Z   persist-credentials: true
+Action pins	Checkout code	2026-10-28T14:35:44.6662615Z   clean: true
+Action pins	Checkout code	2026-10-28T14:35:44.6663130Z   sparse-checkout-cone-mode: true
+Action pins	Checkout code	2026-10-28T14:35:44.6663686Z   fetch-depth: 1
+Action pins	Checkout code	2026-10-28T14:35:44.6664185Z   fetch-tags: false
+Action pins	Checkout code	2026-10-28T14:35:44.6664666Z   show-progress: true
+Action pins	Checkout code	2026-10-28T14:35:44.6665147Z   lfs: false
+Action pins	Checkout code	2026-10-28T14:35:44.6665616Z   submodules: false
+Action pins	Checkout code	2026-10-28T14:35:44.6666101Z   set-safe-directory: true
+Action pins	Checkout code	2026-10-28T14:35:44.6666690Z   allow-unsafe-pr-checkout: false
+Action pins	Checkout code	2026-10-28T14:35:44.6667525Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:44.9310246Z Syncing repository: koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T14:35:44.9312698Z ##[group]Getting Git version info
+Action pins	Checkout code	2026-10-28T14:35:44.9313575Z Working directory is '/home/runner/work/flutter-starter/flutter-starter'
+Action pins	Checkout code	2026-10-28T14:35:44.9314805Z [command]/usr/bin/git version
+Action pins	Checkout code	2026-10-28T14:35:44.9315282Z git version 2.55.0
+Action pins	Checkout code	2026-10-28T14:35:44.9316732Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:44.9320562Z Temporarily overriding HOME='/home/runner/work/_temp/e3e35b68-9a41-4968-aa8d-2ea265477f0b' before making global git config changes
+Action pins	Checkout code	2026-10-28T14:35:44.9321985Z Adding repository directory to the temporary git global config as a safe directory
+Action pins	Checkout code	2026-10-28T14:35:44.9323056Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Action pins	Checkout code	2026-10-28T14:35:44.9335609Z Deleting the contents of '/home/runner/work/flutter-starter/flutter-starter'
+Action pins	Checkout code	2026-10-28T14:35:44.9338582Z ##[group]Determining repository object format
+Action pins	Checkout code	2026-10-28T14:35:44.9340216Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:44.9341803Z ##[group]Initializing the repository
+Action pins	Checkout code	2026-10-28T14:35:44.9344080Z [command]/usr/bin/git init /home/runner/work/flutter-starter/flutter-starter
+Action pins	Checkout code	2026-10-28T14:35:44.9443672Z hint: Using 'master' as the name for the initial branch. This default branch name
+Action pins	Checkout code	2026-10-28T14:35:44.9445741Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Action pins	Checkout code	2026-10-28T14:35:44.9447391Z hint: to use in all of your new repositories, which will suppress this warning,
+Action pins	Checkout code	2026-10-28T14:35:44.9448719Z hint: call:
+Action pins	Checkout code	2026-10-28T14:35:44.9449424Z hint:
+Action pins	Checkout code	2026-10-28T14:35:44.9450287Z hint: 	git config --global init.defaultBranch <name>
+Action pins	Checkout code	2026-10-28T14:35:44.9451459Z hint:
+Action pins	Checkout code	2026-10-28T14:35:44.9452466Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Action pins	Checkout code	2026-10-28T14:35:44.9454115Z hint: 'development'. The just-created branch can be renamed via this command:
+Action pins	Checkout code	2026-10-28T14:35:44.9455448Z hint:
+Action pins	Checkout code	2026-10-28T14:35:44.9456230Z hint: 	git branch -m <name>
+Action pins	Checkout code	2026-10-28T14:35:44.9457072Z hint:
+Action pins	Checkout code	2026-10-28T14:35:44.9458182Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Action pins	Checkout code	2026-10-28T14:35:44.9464506Z Initialized empty Git repository in /home/runner/work/flutter-starter/flutter-starter/.git/
+Action pins	Checkout code	2026-10-28T14:35:44.9473867Z [command]/usr/bin/git remote add origin https://github.com/koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T14:35:44.9522001Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:44.9523378Z ##[group]Disabling automatic garbage collection
+Action pins	Checkout code	2026-10-28T14:35:44.9533338Z [command]/usr/bin/git config --local gc.auto 0
+Action pins	Checkout code	2026-10-28T14:35:44.9559600Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:44.9561371Z ##[group]Setting up auth
+Action pins	Checkout code	2026-10-28T14:35:44.9562308Z Removing SSH command configuration
+Action pins	Checkout code	2026-10-28T14:35:44.9565341Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Action pins	Checkout code	2026-10-28T14:35:44.9592411Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Action pins	Checkout code	2026-10-28T14:35:44.9883294Z Removing HTTP extra header
+Action pins	Checkout code	2026-10-28T14:35:44.9893006Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Action pins	Checkout code	2026-10-28T14:35:44.9939706Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Action pins	Checkout code	2026-10-28T14:35:45.0129835Z Removing includeIf entries pointing to credentials config files
+Action pins	Checkout code	2026-10-28T14:35:45.0136697Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Action pins	Checkout code	2026-10-28T14:35:45.0165291Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Action pins	Checkout code	2026-10-28T14:35:45.0335632Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Action pins	Checkout code	2026-10-28T14:35:45.0367457Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path /home/runner/work/_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Checkout code	2026-10-28T14:35:45.0395665Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Checkout code	2026-10-28T14:35:45.0426285Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Checkout code	2026-10-28T14:35:45.0455478Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Checkout code	2026-10-28T14:35:45.0482917Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:45.0484154Z ##[group]Fetching the repository
+Action pins	Checkout code	2026-10-28T14:35:45.0490319Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c974768681f9d8b19b1452fe9b1d6c6b73dfede8:refs/remotes/pull/745/merge
+Action pins	Checkout code	2026-10-28T14:35:46.0507925Z From https://github.com/koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T14:35:46.0510726Z  * [new ref]         c974768681f9d8b19b1452fe9b1d6c6b73dfede8 -> pull/745/merge
+Action pins	Checkout code	2026-10-28T14:35:46.0516593Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:46.0518745Z ##[group]Determining the checkout info
+Action pins	Checkout code	2026-10-28T14:35:46.0521589Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:46.0523244Z [command]/usr/bin/git sparse-checkout disable
+Action pins	Checkout code	2026-10-28T14:35:46.0564565Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Action pins	Checkout code	2026-10-28T14:35:46.0589810Z ##[group]Checking out the ref
+Action pins	Checkout code	2026-10-28T14:35:46.0593352Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/745/merge
+Action pins	Checkout code	2026-10-28T14:35:46.1014200Z Note: switching to 'refs/remotes/pull/745/merge'.
+Action pins	Checkout code	2026-10-28T14:35:46.1015359Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1016143Z You are in 'detached HEAD' state. You can look around, make experimental
+Action pins	Checkout code	2026-10-28T14:35:46.1018825Z changes and commit them, and you can discard any commits you make in this
+Action pins	Checkout code	2026-10-28T14:35:46.1021880Z state without impacting any branches by switching back to a branch.
+Action pins	Checkout code	2026-10-28T14:35:46.1023939Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1025213Z If you want to create a new branch to retain commits you create, you may
+Action pins	Checkout code	2026-10-28T14:35:46.1027940Z do so (now or later) by using -c with the switch command. Example:
+Action pins	Checkout code	2026-10-28T14:35:46.1029601Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1030334Z   git switch -c <new-branch-name>
+Action pins	Checkout code	2026-10-28T14:35:46.1031642Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1032355Z Or undo this operation with:
+Action pins	Checkout code	2026-10-28T14:35:46.1033532Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1034271Z   git switch -
+Action pins	Checkout code	2026-10-28T14:35:46.1035305Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1036864Z Turn off this advice by setting config variable advice.detachedHead to false
+Action pins	Checkout code	2026-10-28T14:35:46.1038943Z 
+Action pins	Checkout code	2026-10-28T14:35:46.1040527Z HEAD is now at c974768 Merge ff3a1adcfb0ec4fd00b6231f81cee3aec7015f26 into 9534a1c55169a26ba3a97e7f21e71400adfebba0
+Action pins	Checkout code	2026-10-28T14:35:46.1046520Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T14:35:46.1067144Z [command]/usr/bin/git log -1 --format=%H
+Action pins	Checkout code	2026-10-28T14:35:46.1088535Z c974768681f9d8b19b1452fe9b1d6c6b73dfede8
+Action pins	Verify each pinned SHA is its release's commit	﻿2026-10-28T14:35:46.1362675Z ##[group]Run scripts/ci/verify_action_pins.sh
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T14:35:46.1364269Z ^[[36;1mscripts/ci/verify_action_pins.sh^[[0m
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T14:35:46.1537636Z shell: /usr/bin/bash -e {0}
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T14:35:46.1538888Z env:
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T14:35:46.1548714Z   GH_TOKEN: ***
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T14:35:46.1549739Z ##[endgroup]
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T14:35:54.3136658Z 59 pins in 13 files match their version comment.
+Action pins	Post Checkout code	﻿2026-10-28T14:35:54.3289200Z Post job cleanup.
+Action pins	Post Checkout code	2026-10-28T14:35:54.4095877Z [command]/usr/bin/git version
+Action pins	Post Checkout code	2026-10-28T14:35:54.4164336Z git version 2.55.0
+Action pins	Post Checkout code	2026-10-28T14:35:54.4197739Z Temporarily overriding HOME='/home/runner/work/_temp/10f257af-b9ce-41bc-a628-7ca43a0fe9e5' before making global git config changes
+Action pins	Post Checkout code	2026-10-28T14:35:54.4199415Z Adding repository directory to the temporary git global config as a safe directory
+Action pins	Post Checkout code	2026-10-28T14:35:54.4201819Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Action pins	Post Checkout code	2026-10-28T14:35:54.4229950Z Removing SSH command configuration
+Action pins	Post Checkout code	2026-10-28T14:35:54.4236530Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Action pins	Post Checkout code	2026-10-28T14:35:54.4266314Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Action pins	Post Checkout code	2026-10-28T14:35:54.4469678Z Removing HTTP extra header
+Action pins	Post Checkout code	2026-10-28T14:35:54.4476679Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Action pins	Post Checkout code	2026-10-28T14:35:54.4506316Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Action pins	Post Checkout code	2026-10-28T14:35:54.4696893Z Removing includeIf entries pointing to credentials config files
+Action pins	Post Checkout code	2026-10-28T14:35:54.4704114Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Action pins	Post Checkout code	2026-10-28T14:35:54.4725590Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4726911Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4728598Z includeif.gitdir:/github/workspace/.git.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4729505Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4734739Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4753366Z /home/runner/work/_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4763362Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-c1b19119\-2a7e\-43fe\-bf81\-b22f40cac102\.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4803003Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4825056Z /home/runner/work/_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4845835Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-c1b19119\-2a7e\-43fe\-bf81\-b22f40cac102\.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4873461Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4892027Z /github/runner_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4900611Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-c1b19119\-2a7e\-43fe\-bf81\-b22f40cac102\.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4935118Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T14:35:54.4956274Z /github/runner_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4965444Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-c1b19119\-2a7e\-43fe\-bf81\-b22f40cac102\.config
+Action pins	Post Checkout code	2026-10-28T14:35:54.4993070Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Action pins	Post Checkout code	2026-10-28T14:35:54.5159274Z Removing credentials config '/home/runner/work/_temp/git-credentials-c1b19119-2a7e-43fe-bf81-b22f40cac102.config'
+Action pins	Complete job	﻿2026-10-28T14:35:54.5299845Z Cleaning up orphan processes

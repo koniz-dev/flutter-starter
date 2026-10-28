@@ -1,0 +1,23 @@
+## against the real workflows at ff3a1adcfb0
+59 pins in 13 files match their version comment.
+exit 0
+
+## scratch copy (/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.bMHk2HP34V): docs-check.yml's checkout SHA replaced by 1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 (a real actions/checkout commit, v6.0.0's), comment left as # v7.0.1
+--- .github/workflows/docs-check.yml	2026-10-27 23:41:39
++++ <scratch>/.github/workflows/docs-check.yml	2026-10-28 21:34:28
+@@ -55,7 +55,7 @@
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout code
+-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v7.0.1
+ 
+       # `tool/check_docs.dart` imports only `dart:io`, but it lives inside a
+       # package, so `dart run` still resolves `pubspec.yaml` and would trigger
+.github/workflows/docs-check.yml:58: actions/checkout v7.0.1 is 3d3c42e5aac5ba805825da76410c181273ba90b1, but the pin is 1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+1 of 59 pins are not the commit their version comment names.
+exit 1
+
+## offline check on the same scratch copy: still accepts it (the gap this closes)
+13 files, every action pinned.
+exit 0
