@@ -145,7 +145,8 @@ final refreshToken = authResponse.refreshToken;
 The auth slice speaks **snake_case** on the wire, in both directions. Your
 backend must send and accept exactly these keys.
 Paths are relative to `BASE_URL` plus the
-`/v1` API version (`ApiEndpoints`):
+`/v1` API version (`ApiEndpoints.apiVersion`; set it to `''` for an unversioned
+API), so login is `<BASE_URL>/v1/auth/login`:
 
 | Call | Endpoint | Request body | Response body |
 |---|---|---|---|

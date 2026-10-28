@@ -156,6 +156,38 @@ To remove it entirely:
 `flutter analyze` and `flutter test` then pass; the `demoMode*` strings in
 `lib/l10n/` are unused and can go too.
 
+### Connecting Your Backend
+
+Setting `BASE_URL` points the app at your API, but the app also expects a
+particular API. Check two things before the first sign-in:
+
+- **Every request goes to `BASE_URL` + `/v1` + the endpoint path.** With
+  `BASE_URL=https://api.example.com`, sign-in posts to
+  `https://api.example.com/v1/auth/login`. The `/v1` is
+  `ApiEndpoints.apiVersion` in `lib/core/constants/api_endpoints.dart`; it is
+  read in two places, the client's base URL (`lib/core/network/api_client.dart`)
+  and the token-refresh call (`lib/core/network/interceptors/auth_interceptor.dart`).
+  Set it to `''` for an API that is not versioned, or to your own prefix.
+- **The auth slice speaks a fixed wire format** - snake_case, on four
+  endpoints:
+
+  | Call | Endpoint | Request body | Response body |
+  |---|---|---|---|
+  | Login | `POST /auth/login` | `email`, `password` | `user`, `token`, `refresh_token` |
+  | Register | `POST /auth/register` | `email`, `password`, `name` | `user`, `token`, `refresh_token` |
+  | Refresh | `POST /auth/refresh` | `refresh_token` | `user`, `token`, `refresh_token` |
+  | Logout | `POST /auth/logout` | none | ignored |
+
+  `user` is an object with a string `id`, `email`, and optional `name` and
+  `avatar_url`. The full contract, with an example body, is the
+  [auth wire format](../../api/features/auth/models.md#wire-format). If your
+  API differs, adapt the models or the remote data source as that section
+  describes. A mismatch does not always fail loudly: a camelCase
+  `refreshToken` parses as no refresh token, and the session then ends at the
+  first access-token expiry.
+
+<!-- symbol: lib/core/constants/api_endpoints.dart ApiEndpoints.apiVersion -->
+
 ### Platform-Specific
 
 ```bash
@@ -192,7 +224,7 @@ The project supports multiple configuration methods with a fallback chain:
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ENVIRONMENT` | String | `development` | Environment: `development`, `staging`, or `production` |
-| `BASE_URL` | String | Environment-aware | API base URL |
+| `BASE_URL` | String | Environment-aware | API base URL. Requests go to `BASE_URL` + `/v1` + the path (`https://api.example.com/v1/auth/login`); see [Connecting Your Backend](#connecting-your-backend) to change the `/v1` |
 | `API_TIMEOUT` | int | `30` | End-to-end deadline per request, in seconds, retries included (see [configuration](../configuration.md#environment-variables)) |
 | `ENABLE_LOGGING` | bool | Environment-aware | Enable logging |
 | `ENABLE_ANALYTICS` | bool | Environment-aware | Enable analytics |
