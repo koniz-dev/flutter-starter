@@ -10,6 +10,7 @@ Use this after you copy or fork the template into your own app.
    - Or run `dart run tool/strip_sample_features.dart --apply` (see section 3) to remove both **tasks** and **feature_flags** while keeping **auth** and core. <!-- strip:strip-tool line -->
 3. Read [Choose your stack](../../architecture/choose-your-stack.md) to decide what to keep vs swap (network, storage, navigation adapters).
 4. Follow sections 1 and 2 below to rename the package, display name and native ids.
+5. Turn on Dependabot alerts and security updates for the new repository (section 6). A repository created from a template starts with them off.
 
 ## 1. Rename the Dart package
 
@@ -195,3 +196,42 @@ Use [contracts-map.md](../../architecture/contracts-map.md) to keep `ITokenStore
 - [Choose your stack](../../architecture/choose-your-stack.md) — Path A vs Path B.
 - [Super starter hub](../../architecture/super-starter-hub.md) — full capability map.
 - [Contracts and adapter map](../../architecture/contracts-map.md) — swap points.
+
+## 6. Turn on Dependabot alerts
+
+A repository created with "Use this template" gets `.github/dependabot.yml`,
+which opens weekly **version update** PRs. It does not get the two settings
+that tell you about a **vulnerable** dependency: they belong to the repository,
+not to its files, and start off.
+
+In your repository, open **Settings -> Advanced Security** (called *Code
+security and analysis* on older layouts) and enable:
+
+- **Dependency graph** - the inventory the other two read. Public repositories
+  have it on already.
+- **Dependabot alerts** - GitHub compares the dependencies in that graph with
+  the GitHub Advisory Database, which covers pub packages, and raises an alert
+  under the **Security** tab when a version you resolve has a published
+  vulnerability.
+- **Dependabot security updates** - for an alert that has a fixed version,
+  Dependabot opens a PR that moves to it, without waiting for the weekly
+  version updates.
+
+Or, with `gh` logged in as a repository admin:
+
+```bash
+gh api -X PUT repos/<owner>/<repo>/vulnerability-alerts
+gh api -X PUT repos/<owner>/<repo>/automated-security-fixes
+```
+
+What an alert covers: the pub packages in `pubspec.lock`, direct and
+transitive. What it does not:
+
+- **GitHub Actions versions.** Keeping the actions in `.github/workflows/`
+  current is the job of `dependabot.yml`'s weekly `github-actions` updates,
+  and keeping each pin honest is the job of the **Action pins** check (see
+  [Deployment summary](../../deployment/summary.md)).
+- **Native dependencies** that Flutter plugins add at build time (Gradle,
+  CocoaPods, Swift packages). They are not in `pubspec.lock`.
+- **Your own code.** An alert is about a published advisory for a version
+  you depend on, nothing more.

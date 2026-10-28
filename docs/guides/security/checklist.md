@@ -44,6 +44,13 @@ Running
       Use `--dart-define-from-file=.env` on native; on web, keep secrets on the
       server. See
       [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
+- [ ] **Enable Dependabot alerts and security updates** - repository
+  **Settings -> Advanced Security**: Dependency graph, Dependabot alerts,
+  Dependabot security updates. A repository created from the template starts
+  with them off; `.github/dependabot.yml` ships only version updates. Alerts
+  cover the pub packages in `pubspec.lock`, not GitHub Actions versions (those
+  are `dependabot.yml`'s weekly updates) and not native plugin dependencies.
+  Steps: [Fork and customize, section 6](../onboarding/fork-and-customize.md#6-turn-on-dependabot-alerts).
 - [ ] **Confirm no private key material is tracked (shipped)** - the same policy
       as the `.env` item above, enforced one step earlier. `.gitignore` ignores
       `*.pem`, `*.key`, `*.pfx`, `*.p12`, `*.p8`, `*.jks`, `*.keystore`,
@@ -90,7 +97,7 @@ Running
 - [ ] **Add root/jailbreak detection**
 - [ ] Implement anti-tampering checks
 - [ ] Add debugger detection
-- [ ] Set up dependency vulnerability scanning
+- [ ] Add scanning for native (Gradle, CocoaPods) dependencies, which Dependabot alerts on `pubspec.lock` do not see
 
 ### Platform Security
 - [ ] Configure Android App Links
