@@ -1,0 +1,88 @@
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.5.2 available)
+  async 2.13.0 (2.13.1 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  build_runner 2.16.2 (2.17.1 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.1.0 available)
+  code_builder 4.11.1 (4.13.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  equatable 2.1.0 (3.0.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.5 available)
+  objective_c 9.3.0 (9.6.2 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  patrol 3.20.0 (4.10.0 available)
+  patrol_finders 2.9.0 (3.6.0 available)
+  patrol_log 0.5.0 (0.10.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.0 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+55 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleRelease'...                        
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/Users/nguyenanhkiet/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: Your Android app project: app located at: /Users/nguyenanhkiet/Playground/fs-walkthrough/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): freerasp, patrol, shared_preferences_android
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+Font asset "CupertinoIcons.ttf" was tree-shaken, reducing it from 257628 to 848 bytes (99.7% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 2152 bytes (99.9% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Running Gradle task 'assembleRelease'...                          161.9s
+✓ Built build/app/outputs/flutter-apk/app-release.apk (115.7MB)
+flutter build apk --release --dart-define-from-file=.env  2>&1  6.53s user 1.21s system 4% cpu 2:47.40 total
+exit=0

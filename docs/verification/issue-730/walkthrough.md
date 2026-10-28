@@ -18,7 +18,7 @@ Line numbers in the friction notes refer to `main` at `50ad5f4`. The strip rewri
 | 2. Strip both samples | **fail, worked around**: 1 test red | ~11 min (9 of them `flutter test`) | strip after Mason rename reverts the app title (#759); routing guide left on removed `AppRoutes.tasks` (#770) |
 | 3. `BASE_URL` at a real API | **gap recorded, sign-in not made to work** | ~6 min | contract not linked from onboarding (#760); silent `/v1` prefix (#761); no adaptation guide (#762) |
 | 4. `create_feature.sh` + one routed screen | pass after a workaround | ~12 min + test rerun | feature guide ignores the scaffold and has no routing step (#763); hidden "home last" order in the registry test (#764); common-tasks contradicts routing-guide (#771) |
-| 5. Release APK + web build | web **pass**; APK **not built** (host disk full, then a broken NDK directory the session was not allowed to delete) | ~7 min | release-signing refusal and unsigned flag only in the Gradle error (#765) |
+| 5. Release APK + web build | web **pass**; APK refused without a keystore as designed, unsigned smoke build **pass** (after the host's disk-full and broken-NDK problems were cleared) | ~7 min + 3 min | release-signing refusal and unsigned flag only in the Gradle error (#765); the refusal's `key.properties` template is not valid as a `.properties` file (#784, docs #785) |
 
 Duplicates checked with `gh issue list --state all --search ...` before filing: the closest existing issues were #283 (brick never applied the display name to the Dart side - fixed for `lib/`, not for `tool/golden`), #627 (strip after rename and import order), #489 (wire format documented - it is, just not linked from onboarding), #312 and #306 (auth casing and the int id `TypeError` in Result handling), #356 (feature providers in core DI). None covers the findings below, so nothing was linked as a duplicate. Each one was filed separately.
 
@@ -185,18 +185,23 @@ Documented commands: `flutter build apk --release --dart-define-from-file=.env` 
 | `flutter build web --release --dart-define-from-file=.env` | **1** - dart2js: `FileSystemException: writeFrom failed ... (OS Error: No space left on device, errno = 28)` | 64s | `05-web.log` |
 | `flutter clean`, then `flutter build web --release --dart-define-from-file=.env` | 0, "Built build/web" (41 MB) | 72s | `05-web.log` |
 | `flutter build apk --release --dart-define-from-file=.env` | **1** - `[CXX1101] NDK at ~/Library/Android/sdk/ndk/28.2.13676358 did not have a source.properties file` | 5s | `05-apk.log` |
+| *(the user deleted the empty NDK directory; Gradle reinstalled it during a build in the main checkout)* | | | |
+| `flutter build apk --release --dart-define-from-file=.env`, no `android/key.properties` | **1** - "Release signing is not configured ... Refusing." | 7s | `05-apk-refused.log` |
+| `flutter build apk --release --dart-define-from-file=.env -PallowUnsignedRelease=true` | 0, "Built build/app/outputs/flutter-apk/app-release.apk (115.7MB)" | 167s | `05-apk-unsigned.log` |
 
-Both first failures were the host, not the starter: the data volume had 276 MB free (`df -h`). It later recovered to 9.8 GB because something outside this session freed space. The failed NDK install left an empty `~/Library/Android/sdk/ndk/28.2.13676358`. Flutter's own hint is to delete it and let AGP re-download it, but the session's permission policy refused the delete. **The release APK was therefore not built.** To finish this step:
+Both first failures were the host, not the starter: the data volume had 276 MB free (`df -h`). It later recovered to 9.8 GB because something outside this session freed space. The failed NDK install left an empty `~/Library/Android/sdk/ndk/28.2.13676358`. Flutter's own hint is to delete it and let AGP re-download it, but the session's permission policy refused the delete. At first, then, the release APK could not be built. The step was finished later, after the user ran:
 
 ```bash
 rm -rf ~/Library/Android/sdk/ndk/28.2.13676358
-cd /Users/nguyenanhkiet/Playground/fs-walkthrough
-flutter build apk --release --dart-define-from-file=.env
 ```
 
 That removes only the empty, half-installed NDK directory, which Gradle re-downloads (about 2 GB). It does not touch the starter.
 
-Expected next stop, read from `android/app/build.gradle.kts:108-141` but not observed in a run: with no `android/key.properties`, the build refuses ("Release signing is not configured ... Refusing."), and the escape hatch `flutter build apk --release -PallowUnsignedRelease=true` appears only in that error text. `docs/deployment/android-deployment.md:15` and `configuration.md:47` mention neither. Filed **#765**. Its body says the refusal was read from the build script, not captured from a run.
+Next stop, first read from `android/app/build.gradle.kts:108-141` and later observed in a run (`05-apk-refused.log`): with no `android/key.properties`, the build refuses ("Release signing is not configured ... Refusing."), and the escape hatch `flutter build apk --release -PallowUnsignedRelease=true` appears only in that error text. `docs/deployment/android-deployment.md:15` and `configuration.md:47` mention neither. Filed **#765**. Its body says the refusal was read from the build script, which was true when it was filed. The later run printed the same text.
+
+The captured refusal also shows a defect in its own template: `storeFile=upload-keystore.jks   # relative to android/, or absolute`. `java.util.Properties` has no trailing comments, so a verbatim copy sets `storeFile` to the whole line after `=` and the keystore-existence check then rejects it. Filed as **#784** (the Gradle message) and **#785** (the same line in `android-deployment.md`). While checking for other copies, the Android signing section of `docs/guides/security/implementation.md` turned out to use `keystore.properties` and a replacement `build.gradle.kts`, which this build does not read: filed as **#786**.
+
+This walkthrough tree was cloned before the step 0-5 fixes merged, so its docs are the old ones. The build behaviour above comes from `android/app/build.gradle.kts`, which those fixes did not change.
 
 Web build check: `build/web/assets/` contains `.env.example` (blank by design, documented in `.env.example` itself) and no `.env`.
 
@@ -217,11 +222,14 @@ Web build check: `build/web/assets/` contains `.env.example` (blank by design, d
 | #769 | docs(onboarding): the Mason rename steps fail with 'mason: command not found' when ~/.pub-cache/bin is not on PATH | type:task, epic:docs, P3 |
 | #770 | docs(routing): after the strip, routing-guide.md's examples still use AppRoutes.tasks and taskDetailName, which no longer exist | type:bug, epic:docs, P3 |
 | #771 | docs(features): common-tasks.md navigates by a hardcoded path that routing-guide.md marks as the pattern to avoid | type:bug, epic:docs, P3 |
+| #784 | fix(android): the key.properties template in the release-signing refusal sets storeFile to the trailing comment | type:bug, epic:platform-release, P2 |
+| #785 | docs(deployment): the key.properties example puts a trailing comment in storeFile's value | type:bug, epic:docs, P2 |
+| #786 | docs(security): the Android release-signing steps use keystore.properties and a replacement build.gradle.kts the starter does not read | type:bug, epic:docs, P2 |
 
-No status label on any of them (Backlog).
+#759-#771 were filed with no status label (Backlog). #784-#786 were filed at `status:todo` after the step 5 rerun.
 
 ## Not verified here
 
-- The release APK, and therefore what the signing refusal (#765) prints in a run. See step 5.
+- Installing the release APK. The unsigned smoke build cannot be installed, by design, and there is no keystore here.
 - Signing in against dummyjson end to end. Per the issue, the gap is recorded rather than an adapter being written.
 - Anything on a device, an emulator or a browser session. The web build was compiled, not opened.
