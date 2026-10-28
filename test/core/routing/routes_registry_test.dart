@@ -14,30 +14,20 @@ void main() {
       final appRoutesProvider = Provider<List<RouteBase>>(buildAppRoutes);
       final routes = container.read(appRoutesProvider);
 
-      // Auth routes first, home last; any sample-feature modules sit between
-      // them, so this holds for every strip variant.
-      expect(routes.length, greaterThanOrEqualTo(3));
+      // The registry's contract is membership, not order: go_router
+      // matches top-level routes by path, so a feature module may sit
+      // anywhere in the list, after home included. Feature modules assert
+      // their own registration in test/features/<feature>/routing/.
+      String key(RouteBase route) => '${(route as GoRoute).name} ${route.path}';
+      final registered = {for (final route in routes) key(route)};
 
       final authRoutesProvider = Provider<List<RouteBase>>(buildAuthRoutes);
       final authRoutes = container.read(authRoutesProvider);
       expect(authRoutes, hasLength(2));
-
-      // Validate that the first N routes match auth routes by shape.
-      for (var i = 0; i < authRoutes.length; i++) {
-        expect(routes[i], isA<GoRoute>());
-        expect(authRoutes[i], isA<GoRoute>());
-        expect((routes[i] as GoRoute).path, (authRoutes[i] as GoRoute).path);
-        expect((routes[i] as GoRoute).name, (authRoutes[i] as GoRoute).name);
-      }
-
-      // Last route is home route (per routes_registry).
-      // Feature modules assert their own registration in
-      // test/features/<feature>/routing/.
       final homeRouteProvider = Provider<GoRoute>(buildHomeRoute);
-      final expectedHome = container.read(homeRouteProvider);
-      final actualHome = routes.last as GoRoute;
-      expect(actualHome.path, expectedHome.path);
-      expect(actualHome.name, expectedHome.name);
+      final home = container.read(homeRouteProvider);
+
+      expect(registered, containsAll([...authRoutes.map(key), key(home)]));
     });
   });
 }
