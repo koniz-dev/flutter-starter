@@ -157,9 +157,15 @@ jobs:
 
       - name: Build APK
         shell: bash
+        # Inputs reach the script through env:, never by ${{ }} substitution
+        # into its text: base_url is free text, and substituted it would run
+        # as code.
+        env:
+          INPUT_ENVIRONMENT: ${{ inputs.environment }}
+          INPUT_BASE_URL: ${{ inputs.base_url }}
         run: |
-          ENVIRONMENT="${{ inputs.environment }}"
-          BASE_URL="${{ inputs.base_url }}"
+          ENVIRONMENT="$INPUT_ENVIRONMENT"
+          BASE_URL="$INPUT_BASE_URL"
           if [ -z "$BASE_URL" ]; then
             BASE_URL="http://localhost:3000"
           fi
@@ -216,9 +222,15 @@ jobs:
 
       - name: Build iOS
         shell: bash
+        # Inputs reach the script through env:, never by ${{ }} substitution
+        # into its text: base_url is free text, and substituted it would run
+        # as code.
+        env:
+          INPUT_ENVIRONMENT: ${{ inputs.environment }}
+          INPUT_BASE_URL: ${{ inputs.base_url }}
         run: |
-          ENVIRONMENT="${{ inputs.environment }}"
-          BASE_URL="${{ inputs.base_url }}"
+          ENVIRONMENT="$INPUT_ENVIRONMENT"
+          BASE_URL="$INPUT_BASE_URL"
           if [ -z "$BASE_URL" ]; then
             BASE_URL="http://localhost:3000"
           fi
@@ -253,9 +265,15 @@ jobs:
 
       - name: Build Web
         shell: bash
+        # Inputs reach the script through env:, never by ${{ }} substitution
+        # into its text: base_url is free text, and substituted it would run
+        # as code.
+        env:
+          INPUT_ENVIRONMENT: ${{ inputs.environment }}
+          INPUT_BASE_URL: ${{ inputs.base_url }}
         run: |
-          ENVIRONMENT="${{ inputs.environment }}"
-          BASE_URL="${{ inputs.base_url }}"
+          ENVIRONMENT="$INPUT_ENVIRONMENT"
+          BASE_URL="$INPUT_BASE_URL"
           if [ -z "$BASE_URL" ]; then
             BASE_URL="http://localhost:3000"
           fi
