@@ -1,0 +1,51 @@
+79:- **Connect your backend** by setting `BASE_URL`, which also turns the demo
+80-   sign-in off ([how to remove it](docs/guides/onboarding/getting-started.md#signing-in-before-you-have-a-backend)).
+81-   Requests go to `BASE_URL` + `/v1`, and sign-in expects the
+82-   [auth wire format](docs/api/features/auth/models.md#wire-format); see
+83-   [Connecting your backend](docs/guides/onboarding/getting-started.md#connecting-your-backend).
+
+## getting-started.md
+### Connecting Your Backend
+
+Setting `BASE_URL` points the app at your API, but the app also expects a
+particular API. Check two things before the first sign-in:
+
+- **Every request goes to `BASE_URL` + `/v1` + the endpoint path.** With
+  `BASE_URL=https://api.example.com`, sign-in posts to
+  `https://api.example.com/v1/auth/login`. The `/v1` is
+  `ApiEndpoints.apiVersion` in `lib/core/constants/api_endpoints.dart`; it is
+  read in two places, the client's base URL (`lib/core/network/api_client.dart`)
+  and the token-refresh call (`lib/core/network/interceptors/auth_interceptor.dart`).
+  Set it to `''` for an API that is not versioned, or to your own prefix.
+- **The auth slice speaks a fixed wire format** - snake_case, on four
+  endpoints:
+
+  | Call | Endpoint | Request body | Response body |
+  |---|---|---|---|
+  | Login | `POST /auth/login` | `email`, `password` | `user`, `token`, `refresh_token` |
+  | Register | `POST /auth/register` | `email`, `password`, `name` | `user`, `token`, `refresh_token` |
+  | Refresh | `POST /auth/refresh` | `refresh_token` | `user`, `token`, `refresh_token` |
+  | Logout | `POST /auth/logout` | none | ignored |
+
+  `user` is an object with a string `id`, `email`, and optional `name` and
+  `avatar_url`. The full contract, with an example body, is the
+  [auth wire format](../../api/features/auth/models.md#wire-format). If your
+  API differs, adapt the models or the remote data source as that section
+  describes. A mismatch does not always fail loudly: a camelCase
+  `refreshToken` parses as no refresh token, and the session then ends at the
+  first access-token expiry.
+
+<!-- symbol: lib/core/constants/api_endpoints.dart ApiEndpoints.apiVersion -->
+227:| `BASE_URL` | String | Environment-aware | API base URL. Requests go to `BASE_URL` + `/v1` + the path (`https://api.example.com/v1/auth/login`); see [Connecting Your Backend](#connecting-your-backend) to change the `/v1` |
+
+## configuration.md
+476:| `BASE_URL` | String | Environment-aware | API base URL. Every request goes to `BASE_URL` + `ApiEndpoints.apiVersion` (`/v1`) + the endpoint path, so `BASE_URL=https://api.example.com` signs in at `https://api.example.com/v1/auth/login`. For an unversioned API set `apiVersion` to `''` in `lib/core/constants/api_endpoints.dart`; it is read by `ApiClient` and by `AuthInterceptor`'s refresh call. The auth endpoints and keys are the [auth wire format](../api/features/auth/models.md#wire-format) |
+
+## models.md
+147:Paths are relative to `BASE_URL` plus the
+148-`/v1` API version (`ApiEndpoints.apiVersion`; set it to `''` for an unversioned
+149-API), so login is `<BASE_URL>/v1/auth/login`:
+150-
+
+## check_docs on df96c4e4bfe
+OK: documentation checks passed.

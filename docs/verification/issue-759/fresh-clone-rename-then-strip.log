@@ -1,0 +1,20 @@
+## fresh clone of fix/brick-title-in-strip-goldens
+d325c58 fix(tooling): apply the brick's display name to tool/golden as well
+## mason make (Acme Notes)
+Rewrote identifiers in 21 platform file(s)
+Re-sorted imports and reformatted lib, test, integration_test, tool, examples, docs
+Setup complete. Next: flutter analyze && flutter test
+## criterion 3: git grep 'Flutter Starter' -- tool/golden
+(exit 1 - 1 means nothing found)
+## strip
+Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+Strip complete. Run: flutter pub get && flutter analyze && flutter test
+## criterion 1: title in lib/main.dart
+200:      title: 'Acme Notes',
+## criterion 2: analyze
+No issues found! (ran in 5.5s)
+analyze exit 0
+## criterion 2: test
+flutter test exit 0
+03:30 +2980 ~16: All tests passed!
