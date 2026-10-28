@@ -108,9 +108,10 @@ feature that is no longer there.
 <!-- strip:strip-tool start -->
 ## `check_action_pins.dart`
 
-Fails when a workflow under `.github/workflows/`, or a composite action
-(`action.yml` / `action.yaml`) anywhere under `.github/`, runs an action that is
-not pinned to a full commit SHA followed by its release as a comment
+Fails when a workflow under `.github/workflows/`, a composite action
+(`action.yml` / `action.yaml`) anywhere under `.github/`, or a local action a
+workflow reaches through `uses: ./<path>` (wherever it lives) runs an action
+that is not pinned to a full commit SHA followed by its release as a comment
 (`uses: owner/repo@<40-hex sha> # vX.Y.Z`). Local `./` actions and
 `docker://...@sha256:` images are exempt. It parses the YAML, so a `uses` key
 written in a flow mapping, quoted, or as `uses :` is checked like any other.
@@ -119,7 +120,8 @@ written in a flow mapping, quoted, or as `uses :` is checked like any other.
 dart run tool/check_action_pins.dart
 ```
 
-Exits 1 and prints `file:line: uses: <target>` for every unpinned action.
+Exits 1 and prints `file:line: uses: <target>` for every unpinned action, and
+for every `uses: ./<path>` that has no `action.yml` / `action.yaml`.
 `test/tooling/workflow_action_pins_test.dart` runs it under `flutter test`, so
 the Quality gate enforces it.
 
