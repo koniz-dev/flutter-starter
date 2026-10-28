@@ -1,0 +1,23 @@
+HEAD 7b656aceb43f47f89f0ea902ad0bf69cee471c0e
+--- android-deployment.md
+16:`android/key.properties`. Without that file, **a release build is refused** -
+25:keytool -genkey -v -keystore android/upload-keystore.jks \
+29:Then create `android/key.properties` (both files are git-ignored):
+32:storeFile=upload-keystore.jks   # relative to android/, or absolute
+33:storePassword=...
+34:keyAlias=upload
+35:keyPassword=...
+46:flutter build apk --release --dart-define-from-file=.env -PallowUnsignedRelease=true
+50:signed, so it **cannot be installed on a device or uploaded** to Google Play;
+55:1. **Signing** — Set up `android/key.properties` and the keystore as in [Release signing](#release-signing); do not commit either. In CI, keep them in secrets.
+--- configuration.md
+47:flutter build apk --release --dart-define-from-file=.env
+52:[Android release signing](../deployment/android-deployment.md#release-signing),
+--- APK
+-rw-r--r--@ 1 nguyenanhkiet  staff  118185045 Oct 29 04:19 build/app/outputs/flutter-apk/app-release.apk
+2e96f8bb656cad34b44df886af1cc46e1cc5a6becba9c2f5c2c5d0f11c96fb98  build/app/outputs/flutter-apk/app-release.apk
+--- signature (apksigner 36.0.0, Android Studio JBR; JVM WARNING lines dropped)
+
+DOES NOT VERIFY
+ERROR: Missing META-INF/MANIFEST.MF
+exit=1
