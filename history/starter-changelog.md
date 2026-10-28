@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The release-signing refusal's `key.properties` template is valid.** It
+  showed `storeFile=upload-keystore.jks   # relative to android/, or absolute`;
+  `.properties` files have no trailing comments, so a pasted copy pointed at a
+  keystore that does not exist. The note is now on its own `#` line.
+  If your `android/key.properties` came from that template, remove the text
+  after `storeFile`'s value.
+
+### Documentation
+
+- `docs/deployment/android-deployment.md`: the same `key.properties` example,
+  fixed the same way.
+- `docs/guides/security/implementation.md`, "Android Release Signing": no
+  longer has you create `keystore.properties` or paste a replacement
+  `build.gradle.kts`. It describes the signing and R8 setup that ships and
+  says `android/app/proguard-rules.pro` is picked up automatically.
+- `docs/guides/security/audit.md`: release signing is listed as implemented,
+  not as an open CRITICAL.
+
 ## [2.0.0] - 2026-10-29
 
 The first tagged release. If your project was created from the template before
