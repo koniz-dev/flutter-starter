@@ -13,6 +13,18 @@ List<String> _unpinned(String source, {String path = 'w.yml'}) => [
   for (final use in unpinnedUses(path, source)) '$use',
 ];
 
+/// A scratch repository holding [files] (`relative path -> content`).
+Directory _repo(Map<String, String> files) {
+  final root = Directory.systemTemp.createTempSync('action_pins_');
+  addTearDown(() => root.deleteSync(recursive: true));
+  for (final MapEntry(:key, :value) in files.entries) {
+    File('${root.path}/$key')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(value);
+  }
+  return root;
+}
+
 void main() {
   test('every workflow action is pinned to a commit SHA with its version', () {
     final files = actionFiles(Directory.current);
@@ -21,12 +33,8 @@ void main() {
       isNotEmpty,
     );
 
-    final unpinned = [
-      for (final f in files)
-        for (final use in unpinnedUses(f.path, f.readAsStringSync())) '$use',
-    ];
     expect(
-      unpinned,
+      checkActionPins(Directory.current),
       isEmpty,
       reason:
           'Pin each action to the commit of a release, with the release as '
@@ -127,6 +135,42 @@ void main() {
         ].map((u) => '$u'),
         ['${action.path}:4: uses: evil/act@v1'],
       );
+    });
+    test('follows uses: ./path to a local action outside .github/', () {
+      final root = _repo({
+        '.github/workflows/ci.yml':
+            'jobs:\n  a:\n    steps:\n      - uses: ./tools/setup\n',
+        'tools/setup/action.yml':
+            'runs:\n  using: composite\n  steps:\n    - uses: evil/act@v1\n',
+      });
+      expect(checkActionPins(root), [
+        '${root.path}/tools/setup/action.yml:4: uses: evil/act@v1',
+      ]);
+    });
+
+    test('follows local actions that call local actions', () {
+      final root = _repo({
+        '.github/workflows/ci.yml':
+            'jobs:\n  a:\n    steps:\n      - uses: ./a\n',
+        'a/action.yaml':
+            'runs:\n  using: composite\n  steps:\n    - uses: ./b\n',
+        'b/action.yml':
+            'runs:\n  using: composite\n  steps:\n    - uses: evil/act@v1\n',
+      });
+      expect(checkActionPins(root), [
+        '${root.path}/b/action.yml:4: uses: evil/act@v1',
+      ]);
+    });
+
+    test('reports a local action that has no action.yml', () {
+      final root = _repo({
+        '.github/workflows/ci.yml':
+            'jobs:\n  a:\n    steps:\n      - uses: ./tools/gone\n',
+      });
+      const reason = '(no action.yml or action.yaml there)';
+      expect(checkActionPins(root), [
+        '${root.path}/.github/workflows/ci.yml:4: uses: ./tools/gone $reason',
+      ]);
     });
   });
 }

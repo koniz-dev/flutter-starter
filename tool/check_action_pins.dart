@@ -7,8 +7,10 @@
 // comment after it is what Dependabot's github-actions updates read and
 // rewrite, so it is required too.
 //
-// Reads every workflow under `.github/workflows/` and every composite action
-// (`action.yml` / `action.yaml`) under `.github/`. The files are parsed as
+// Reads every workflow under `.github/workflows/`, every composite action
+// (`action.yml` / `action.yaml`) under `.github/`, and every local action a
+// workflow or action reaches through `uses: ./<path>`, wherever it lives; a
+// `./<path>` with no `action.yml` / `action.yaml` is reported too. The files are parsed as
 // YAML rather than matched line by line, so a `uses` key is found however it
 // is spelled: block or flow mapping, quoted or not, `uses :` included.
 //
@@ -20,6 +22,7 @@
 
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 /// One `uses` value: where it is, what it names, and the rest of its line
@@ -93,16 +96,54 @@ List<ActionUse> unpinnedUses(String path, String source) => [
       use,
 ];
 
-/// The workflows and composite actions under [root]'s `.github/`, sorted.
-List<File> actionFiles(Directory root) {
+/// The workflows and composite actions under [root]'s `.github/`, plus every
+/// local action (`uses: ./path`) they reach, wherever it lives, sorted.
+List<File> actionFiles(Directory root) => _scan(root).files;
+
+/// Each `uses: ./path` whose directory has no `action.yml` / `action.yaml`.
+/// GitHub cannot run it, and the check cannot see what it would run.
+List<ActionUse> missingLocalActions(Directory root) => _scan(root).missing;
+
+({List<File> files, List<ActionUse> missing}) _scan(Directory root) {
   final github = Directory('${root.path}/.github');
-  if (!github.existsSync()) return [];
-  final files = [
-    for (final entity in github.listSync(recursive: true))
-      if (entity is File && _isActionFile(entity.path)) entity,
-  ]..sort((a, b) => a.path.compareTo(b.path));
-  return files;
+  final queue = [
+    if (github.existsSync())
+      for (final entity in github.listSync(recursive: true))
+        if (entity is File && _isActionFile(entity.path)) entity,
+  ];
+  final seen = <String, File>{};
+  final missing = <ActionUse>[];
+  while (queue.isNotEmpty) {
+    final file = queue.removeLast();
+    if (seen.putIfAbsent(p.normalize(file.absolute.path), () => file) != file) {
+      continue;
+    }
+    for (final use in actionUses(file.path, file.readAsStringSync())) {
+      if (!use.target.startsWith('./')) continue;
+      final dir = p.join(root.path, use.target.substring(2));
+      final action = [
+        File(p.join(dir, 'action.yml')),
+        File(p.join(dir, 'action.yaml')),
+      ].where((f) => f.existsSync()).firstOrNull;
+      if (action == null) {
+        missing.add(use);
+      } else {
+        queue.add(action);
+      }
+    }
+  }
+  final files = seen.values.toList()..sort((a, b) => a.path.compareTo(b.path));
+  return (files: files, missing: missing);
 }
+
+/// Every problem under [root], as `file:line: ...` lines: unpinned actions,
+/// then local actions that do not exist.
+List<String> checkActionPins(Directory root) => [
+  for (final f in actionFiles(root))
+    for (final use in unpinnedUses(f.path, f.readAsStringSync())) '$use',
+  for (final use in missingLocalActions(root))
+    '$use (no action.yml or action.yaml there)',
+];
 
 bool _isActionFile(String path) {
   final normalized = path.replaceAll(r'\', '/');
@@ -119,11 +160,9 @@ void main(List<String> args) {
     stderr.writeln('No workflows found under ${root.path}/.github.');
     exit(1);
   }
-  final unpinned = [
-    for (final f in files) ...unpinnedUses(f.path, f.readAsStringSync()),
-  ];
-  if (unpinned.isNotEmpty) {
-    unpinned.forEach(stderr.writeln);
+  final problems = checkActionPins(root);
+  if (problems.isNotEmpty) {
+    problems.forEach(stderr.writeln);
     stderr.writeln(
       'Pin each action to the commit of a release, with the release as a '
       'comment: uses: owner/repo@<40-hex sha> # vX.Y.Z',
