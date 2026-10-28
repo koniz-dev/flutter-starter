@@ -183,8 +183,9 @@ particular API. Check two things before the first sign-in:
   `user` is an object with a string `id`, `email`, and optional `name` and
   `avatar_url`. The full contract, with an example body, is the
   [auth wire format](../../api/features/auth/models.md#wire-format). If your
-  API differs, adapt the models or the remote data source as that section
-  describes. A mismatch does not always fail loudly: a camelCase
+  API differs, follow
+  [Adapting the auth slice to an existing API](../../api/features/auth/models.md#adapting-the-auth-slice-to-an-existing-api),
+  which lists the file to change for each difference. A mismatch does not always fail loudly: a camelCase
   `refreshToken` parses as no refresh token, and the session then ends at the
   first access-token expiry.
 
