@@ -1,0 +1,30 @@
+## analysis_options.yaml decisions (df30ed5e42e + this change)
+    # Three lints that ask for syntax new in Dart 3.13. They apply only
+    # because the SDK floor is 3.13, and each stays off by decision, not by
+    # oversight. Turn one on when you want its style; `dart fix --apply`
+    # rewrites the code for the first two.
+    #
+    # Off: wants `const new(...)` in place of `const ClassName(...)` (278
+    # declarations here). The named form is what every Dart reader, generator
+    # and doc today writes, and the brick templates and tool/golden copies
+    # would have to change in step.
+    unnecessary_type_name_in_constructor: false
+    # Off: wants `class A;` in place of `class A {}` (142 here). Same reason;
+    # the two spellings mean the same thing.
+    empty_container_bodies: false
+    # Off: before 3.13 this lint only asked for `this.x` where a parameter was
+    # assigned to a field of the same name, and nothing here violated that.
+    # From 3.13 it also asks for private named initializing formals
+    # (`{required this._store}`), which is every hit it reports here (18), and
+    # that form is kept out of the code for the same readability reason. The
+    # cost is losing the older check too.
+    prefer_initializing_formals: false
+
+## hits if each rule were turned on
+unnecessary_type_name_in_constructor: 278
+empty_container_bodies: 142
+prefer_initializing_formals: 18
+  of which name a private named formal (this._): 18
+
+## as committed
+No issues found! (ran in 3.6s)
