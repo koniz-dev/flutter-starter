@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- **`pubspec.yaml` declares the SDK floor the lock needs:** `sdk: ^3.13.0`, `flutter: '>=3.47.0'` (was `sdk: '^3.8.0'`). The language version is now 3.13: `dart format` reformats some expressions differently, and three lints that ask for 3.13-only syntax (`unnecessary_type_name_in_constructor`, `empty_container_bodies`, `prefer_initializing_formals`) are disabled in `analysis_options.yaml`. Merge your `environment:` and run `dart format` once.
+- **`scripts/ci/verify_action_pins.sh` is gone**; use `dart run tool/check_action_pins.dart --verify-tags`.
+- **The pin check is stricter.** In a flow mapping `uses` must come last (`- {name: x, uses: owner/repo@<sha>} # vX.Y.Z`); the version comment must be a plain release tag; `container:`, `services.<name>.image` and `runs.image: docker://...` need `@sha256:<64 hex>`; a `uses: ./path` with no `action.yml` fails. Pin anything you added the same way.
+
 ### Added
 
-- **Action pins** check (`.github/workflows/action-pins.yml`, runs on any PR touching `.github/`): `scripts/ci/verify_action_pins.sh` resolves each pinned action's `# vX.Y.Z` tag through the GitHub API and fails when the SHA is not that release's commit, for example a commit that exists only in a fork. Your repository inherits it; it uses only the default `GITHUB_TOKEN` with `contents: read`.
-- `tool/check_action_pins.dart`: the offline pin check, now YAML-parsed. It also catches flow-mapping, quoted-key and `uses :` spellings and scans composite actions (`action.yml`) under `.github/`.
+- **Action pins** workflow (`.github/workflows/action-pins.yml`, any PR touching `.github/`): **Action pins** resolves each pinned action's `# vX.Y.Z` tag through the GitHub API and fails when the SHA is not that release's commit (for example a commit that exists only in a fork); **Workflow lint** runs a checksum-verified actionlint (with shellcheck) over every workflow. Read-only `GITHUB_TOKEN`.
+- `tool/check_action_pins.dart`: the offline pin check, YAML-parsed; follows local actions anywhere in the repository and matches file names case-insensitively.
+- `test/tooling/sdk_floor_test.dart` (declared SDK floor vs lock) and `test/tooling/workflow_dispatch_inputs_test.dart` (no free-text dispatch input interpolated into `run:`).
+- Fork guide section 6 and a security checklist item: turn on Dependabot alerts and security updates for your repository.
+
+### Fixed
+
+- `build.yml` passes its `workflow_dispatch` inputs through `env:`; `base_url` was substituted into the script text and could run as code.
+- Workflow `run:` scripts quote `$GITHUB_OUTPUT` / `$GITHUB_PATH` (actionlint clean).
 
 ## [2.0.0] - 2026-10-28
 
