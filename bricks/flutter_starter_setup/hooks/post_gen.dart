@@ -160,7 +160,9 @@ Future<void> _applyDisplayNameToDart(
   final arbValue = '"appTitle": ${jsonEncode(displayName)}';
 
   var changed = 0;
-  for (final dirName in ['lib', 'test', 'integration_test']) {
+  // tool/golden holds the copies tool/strip_sample_features.dart writes over
+  // lib/; left on the template name, a strip after the rename put it back.
+  for (final dirName in ['lib', 'test', 'integration_test', 'tool/golden']) {
     final dir = Directory('$rootPath/$dirName');
     if (!dir.existsSync()) continue;
     await for (final entity in dir.list(recursive: true, followLinks: false)) {

@@ -236,7 +236,7 @@ jobs:
             echo "root markdown above still imports package:flutter_starter/" >&2
             exit 1
           fi
-          if grep -rn "'Flutter Starter'\|\"appTitle\": \"Flutter Starter\"" lib test integration_test \
+          if grep -rn "'Flutter Starter'\|\"appTitle\": \"Flutter Starter\"" lib test integration_test tool/golden \
               --include='*.dart' --include='*.arb'; then
             echo "the template title survived the rename" >&2
             exit 1
@@ -266,6 +266,24 @@ jobs:
           dart format --set-exit-if-changed --output=none \
             lib/features/brick_probe test/features/brick_probe
           flutter test test/features/brick_probe
+          rm -rf lib/features/brick_probe test/features/brick_probe
+
+      # Rename, then strip: the order the README lists them in. The strip
+      # copies tool/golden over lib/, so a golden still on the template title
+      # undoes the rename.
+      - name: Stripping after the rename keeps the display name
+        shell: bash
+        run: |
+          set -euo pipefail
+          dart run tool/strip_sample_features.dart --apply
+          grep -n "title: 'Acme Shop'," lib/main.dart
+          if grep -rn "'Flutter Starter'" lib test --include='*.dart'; then
+            echo "the strip put the template title back" >&2
+            exit 1
+          fi
+          flutter pub get
+          flutter analyze
+          flutter test --timeout=5m
 
   manual-rename:
     if: inputs.job == 'all' || inputs.job == 'manual-rename'
