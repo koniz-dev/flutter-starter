@@ -1,0 +1,50 @@
+name: Action pins
+
+# ========================================================================
+# Checks that every pinned action's SHA is the commit its version comment
+# names.
+#
+# `flutter test` (test/tooling/workflow_action_pins_test.dart) already fails
+# on any `uses` that is not `owner/repo@<40-hex sha> # vX.Y.Z`, but it runs
+# offline, so it cannot tell whether the SHA is that release's commit.
+# GitHub runs `owner/repo@<sha>` for any commit in the repository's fork
+# network, including one pushed only to a fork, so a pin that reads like a
+# routine Dependabot bump could still run someone else's code with this
+# project's deploy secrets. scripts/ci/verify_action_pins.sh asks the GitHub
+# API for each tag and fails on a mismatch.
+#
+# Runs on any PR or push that touches .github/, which is every Dependabot
+# github-actions bump. Needs no Flutter toolchain.
+# ========================================================================
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/**'
+      - 'scripts/ci/verify_action_pins.sh'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '.github/**'
+      - 'scripts/ci/verify_action_pins.sh'
+  workflow_dispatch:
+
+concurrency:
+  group: action-pins-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Action pins
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Verify each pinned SHA is its release's commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/ci/verify_action_pins.sh
