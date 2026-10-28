@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Action pins** check (`.github/workflows/action-pins.yml`, runs on any PR touching `.github/`): `scripts/ci/verify_action_pins.sh` resolves each pinned action's `# vX.Y.Z` tag through the GitHub API and fails when the SHA is not that release's commit, for example a commit that exists only in a fork. Your repository inherits it; it uses only the default `GITHUB_TOKEN` with `contents: read`.
+- `tool/check_action_pins.dart`: the offline pin check, now YAML-parsed. It also catches flow-mapping, quoted-key and `uses :` spellings and scans composite actions (`action.yml`) under `.github/`.
+
 ## [2.0.0] - 2026-10-28
 
 The first tagged release. If your project was created from the template before
