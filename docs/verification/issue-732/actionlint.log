@@ -1,0 +1,173 @@
+## actionlint on origin/main before (a16d8e3376a)
+findings: 20
+
+## actionlint on the branch (eae806e7220)
+exit 0
+
+## diff of run: scripts (criterion 3: quoting and equivalent rewrites only)
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 822024bb4e6..5d5d15f58c6 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -177,7 +177,7 @@ jobs:
+         shell: bash
+         run: |
+           set -euo pipefail
+-          APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
++          APK=$(find build/app/outputs/flutter-apk -name '*.apk' | sort | head -1)
+           ./scripts/ci/verify_apk_signer.sh "$APK"
+ 
+       - name: Upload artifacts
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 1a59e3197d2..1e239dd8243 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -253,6 +253,8 @@ jobs:
+             git diff --stat
+             echo "::error title=pub get / analyze / test changed tracked files::Run flutter pub get on main with this stable and commit the result (usually pubspec.lock or analysis_options.yaml)."
+             echo "- **Tracked files changed by pub get / analyze / test:**" >> "$GITHUB_STEP_SUMMARY"
++            # sed prefixes every line; ${dirty//...} cannot anchor at each line start.
++            # shellcheck disable=SC2001
+             echo "$dirty" | sed 's/^/  - /' >> "$GITHUB_STEP_SUMMARY"
+             exit 1
+           fi
+diff --git a/.github/workflows/coverage.yml b/.github/workflows/coverage.yml
+index 670874bf282..0dec262d6ae 100644
+--- a/.github/workflows/coverage.yml
++++ b/.github/workflows/coverage.yml
+@@ -138,11 +138,13 @@ jobs:
+           PRESENTATION_FILES=$(grep -c "^SF:.*lib/features/.*/presentation" coverage/lcov.info || echo "0")
+           CORE_FILES=$(grep -c "^SF:.*lib/core" coverage/lcov.info || echo "0")
+ 
+-          echo "overall=$OVERALL" >> $GITHUB_OUTPUT
+-          echo "domain_files=$DOMAIN_FILES" >> $GITHUB_OUTPUT
+-          echo "data_files=$DATA_FILES" >> $GITHUB_OUTPUT
+-          echo "presentation_files=$PRESENTATION_FILES" >> $GITHUB_OUTPUT
+-          echo "core_files=$CORE_FILES" >> $GITHUB_OUTPUT
++          {
++            echo "overall=$OVERALL"
++            echo "domain_files=$DOMAIN_FILES"
++            echo "data_files=$DATA_FILES"
++            echo "presentation_files=$PRESENTATION_FILES"
++            echo "core_files=$CORE_FILES"
++          } >> "$GITHUB_OUTPUT"
+ 
+           echo "📊 Overall line coverage: ${OVERALL}%"
+           echo ""
+@@ -252,7 +254,7 @@ jobs:
+             COLOR="yellow"
+           fi
+           
+-          echo "color=$COLOR" >> $GITHUB_OUTPUT
++          echo "color=$COLOR" >> "$GITHUB_OUTPUT"
+       
+       # Runs only once a `pull_request:` trigger is enabled above - this
+       # workflow ships with schedule and workflow_dispatch only, so on this
+diff --git a/.github/workflows/deploy-android.yml b/.github/workflows/deploy-android.yml
+index d3206816375..8c381a73592 100644
+--- a/.github/workflows/deploy-android.yml
++++ b/.github/workflows/deploy-android.yml
+@@ -95,9 +95,9 @@ jobs:
+         id: env
+         run: |
+           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+-            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
++            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+           else
+-            echo "environment=production" >> $GITHUB_OUTPUT
++            echo "environment=production" >> "$GITHUB_OUTPUT"
+           fi
+ 
+       # Runs on the tree that is about to be built, which is the whole point:
+diff --git a/.github/workflows/deploy-ios.yml b/.github/workflows/deploy-ios.yml
+index 012fedf52a3..ba15b972bcb 100644
+--- a/.github/workflows/deploy-ios.yml
++++ b/.github/workflows/deploy-ios.yml
+@@ -86,9 +86,9 @@ jobs:
+         id: env
+         run: |
+           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+-            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
++            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+           else
+-            echo "environment=production" >> $GITHUB_OUTPUT
++            echo "environment=production" >> "$GITHUB_OUTPUT"
+           fi
+ 
+       # Runs on the tree that is about to be built, which is the whole point:
+diff --git a/.github/workflows/deploy-web.yml b/.github/workflows/deploy-web.yml
+index ce5e48284a0..273dec94bac 100644
+--- a/.github/workflows/deploy-web.yml
++++ b/.github/workflows/deploy-web.yml
+@@ -86,11 +86,11 @@ jobs:
+         id: env
+         run: |
+           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+-            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
++            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+-            echo "environment=production" >> $GITHUB_OUTPUT
++            echo "environment=production" >> "$GITHUB_OUTPUT"
+           else
+-            echo "environment=production" >> $GITHUB_OUTPUT
++            echo "environment=production" >> "$GITHUB_OUTPUT"
+           fi
+ 
+       # Runs on the tree that is about to be built, which is the whole point:
+@@ -153,7 +153,7 @@ jobs:
+       - name: Determine environment
+         id: env
+         run: |
+-          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
++          echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+ 
+       # Runs on the tree that is about to be built, which is the whole point:
+       # a `.env` declared as an asset ships inside the artifact. The guard
+@@ -217,7 +217,7 @@ jobs:
+       - name: Determine environment
+         id: env
+         run: |
+-          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
++          echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+ 
+       # Runs on the tree that is about to be built, which is the whole point:
+       # a `.env` declared as an asset ships inside the artifact. The guard
+diff --git a/.github/workflows/e2e-android.yml b/.github/workflows/e2e-android.yml
+index 8fc3384bfff..61b7096fb5e 100644
+--- a/.github/workflows/e2e-android.yml
++++ b/.github/workflows/e2e-android.yml
+@@ -64,7 +64,7 @@ jobs:
+         run: flutter pub get
+ 
+       - name: Add Pub global bin to PATH
+-        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
++        run: echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+ 
+       # The CLI version MUST match the `patrol` dependency pinned in
+       # pubspec.yaml (^3.10.0 -> 3.20.0). Activating unpinned resolves the newest
+diff --git a/.github/workflows/scripts-smoke.yml b/.github/workflows/scripts-smoke.yml
+index 7403adb6693..b568a9efa72 100644
+--- a/.github/workflows/scripts-smoke.yml
++++ b/.github/workflows/scripts-smoke.yml
+@@ -118,6 +118,8 @@ jobs:
+             echo "=== build/app/outputs ==="
+             find build/app/outputs -type f 2>/dev/null | head -40
+             echo "=== build/web ==="
++            # A listing for people to read in the log; nothing parses it.
++            # shellcheck disable=SC2012
+             ls -la build/web 2>/dev/null | head -20
+           } | tee build_outputs.txt
+ 
+
+## mutant (temporary): first >> "$GITHUB_OUTPUT" in deploy-web.yml unquoted again
+-            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
++            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+.github/workflows/deploy-web.yml:87:9: shellcheck reported issue in this script: SC2086:info:2:64: Double quote to prevent globbing and word splitting [shellcheck]
+   |
+87 |         run: |
+   |         ^~~~
+exit 1
+
+## after revert
+exit 0
+git status --porcelain: []

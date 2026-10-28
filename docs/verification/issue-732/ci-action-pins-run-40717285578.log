@@ -1,0 +1,361 @@
+Action pins	Set up job	﻿2026-10-28T15:34:16.0499180Z Current runner version: '2.338.0'
+Action pins	Set up job	2026-10-28T15:34:16.0525747Z ##[group]Runner Image Provisioner
+Action pins	Set up job	2026-10-28T15:34:16.0526884Z Hosted Compute Agent
+Action pins	Set up job	2026-10-28T15:34:16.0527456Z Version: 20261021.618
+Action pins	Set up job	2026-10-28T15:34:16.0528127Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+Action pins	Set up job	2026-10-28T15:34:16.0528843Z Build Date: 2026-10-21T00:45:21Z
+Action pins	Set up job	2026-10-28T15:34:16.0529519Z Worker ID: {5d306fd0-7163-427d-a552-e76c61cbec7d}
+Action pins	Set up job	2026-10-28T15:34:16.0530250Z Region: northcentralus
+Action pins	Set up job	2026-10-28T15:34:16.0530815Z Cloud: Azure
+Action pins	Set up job	2026-10-28T15:34:16.0531345Z ##[endgroup]
+Action pins	Set up job	2026-10-28T15:34:16.0533048Z ##[group]Operating System
+Action pins	Set up job	2026-10-28T15:34:16.0533712Z Ubuntu
+Action pins	Set up job	2026-10-28T15:34:16.0534296Z 24.04.5
+Action pins	Set up job	2026-10-28T15:34:16.0535142Z LTS
+Action pins	Set up job	2026-10-28T15:34:16.0535733Z ##[endgroup]
+Action pins	Set up job	2026-10-28T15:34:16.0536298Z ##[group]Runner Image
+Action pins	Set up job	2026-10-28T15:34:16.0536928Z Image: ubuntu-24.04
+Action pins	Set up job	2026-10-28T15:34:16.0537505Z Version: 20261025.353.1
+Action pins	Set up job	2026-10-28T15:34:16.0538529Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+Action pins	Set up job	2026-10-28T15:34:16.0540268Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+Action pins	Set up job	2026-10-28T15:34:16.0541195Z ##[endgroup]
+Action pins	Set up job	2026-10-28T15:34:16.0542309Z ##[group]GITHUB_TOKEN Permissions
+Action pins	Set up job	2026-10-28T15:34:16.0545119Z Contents: read
+Action pins	Set up job	2026-10-28T15:34:16.0545840Z Metadata: read
+Action pins	Set up job	2026-10-28T15:34:16.0546401Z ##[endgroup]
+Action pins	Set up job	2026-10-28T15:34:16.0548537Z Secret source: Actions
+Action pins	Set up job	2026-10-28T15:34:16.0549497Z Cache mode: write
+Action pins	Set up job	2026-10-28T15:34:16.0550173Z Prepare workflow directory
+Action pins	Set up job	2026-10-28T15:34:16.0888033Z Prepare all required actions
+Action pins	Set up job	2026-10-28T15:34:16.0939240Z Getting action download info
+Action pins	Set up job	2026-10-28T15:34:16.3267938Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Action pins	Set up job	2026-10-28T15:34:16.5480159Z Complete job name: Action pins
+Action pins	Checkout code	﻿2026-10-28T15:34:16.6271183Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Action pins	Checkout code	2026-10-28T15:34:16.6272212Z with:
+Action pins	Checkout code	2026-10-28T15:34:16.6272925Z   repository: koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T15:34:16.6277273Z   token: ***
+Action pins	Checkout code	2026-10-28T15:34:16.6277790Z   ssh-strict: true
+Action pins	Checkout code	2026-10-28T15:34:16.6278405Z   ssh-user: git
+Action pins	Checkout code	2026-10-28T15:34:16.6278973Z   persist-credentials: true
+Action pins	Checkout code	2026-10-28T15:34:16.6279562Z   clean: true
+Action pins	Checkout code	2026-10-28T15:34:16.6280080Z   sparse-checkout-cone-mode: true
+Action pins	Checkout code	2026-10-28T15:34:16.6280660Z   fetch-depth: 1
+Action pins	Checkout code	2026-10-28T15:34:16.6281231Z   fetch-tags: false
+Action pins	Checkout code	2026-10-28T15:34:16.6281757Z   show-progress: true
+Action pins	Checkout code	2026-10-28T15:34:16.6282286Z   lfs: false
+Action pins	Checkout code	2026-10-28T15:34:16.6282783Z   submodules: false
+Action pins	Checkout code	2026-10-28T15:34:16.6283314Z   set-safe-directory: true
+Action pins	Checkout code	2026-10-28T15:34:16.6283976Z   allow-unsafe-pr-checkout: false
+Action pins	Checkout code	2026-10-28T15:34:16.6284957Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:16.8871056Z Syncing repository: koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T15:34:16.8873791Z ##[group]Getting Git version info
+Action pins	Checkout code	2026-10-28T15:34:16.8875331Z Working directory is '/home/runner/work/flutter-starter/flutter-starter'
+Action pins	Checkout code	2026-10-28T15:34:16.8876862Z [command]/usr/bin/git version
+Action pins	Checkout code	2026-10-28T15:34:16.8949607Z git version 2.56.0
+Action pins	Checkout code	2026-10-28T15:34:16.8970640Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:16.8993449Z Temporarily overriding HOME='/home/runner/work/_temp/f3e15968-1bbc-4ee9-b985-5e0e951302c3' before making global git config changes
+Action pins	Checkout code	2026-10-28T15:34:16.8995831Z Adding repository directory to the temporary git global config as a safe directory
+Action pins	Checkout code	2026-10-28T15:34:16.9001598Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Action pins	Checkout code	2026-10-28T15:34:16.9050009Z Deleting the contents of '/home/runner/work/flutter-starter/flutter-starter'
+Action pins	Checkout code	2026-10-28T15:34:16.9053649Z ##[group]Determining repository object format
+Action pins	Checkout code	2026-10-28T15:34:16.9056018Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:16.9057247Z ##[group]Initializing the repository
+Action pins	Checkout code	2026-10-28T15:34:16.9062214Z [command]/usr/bin/git init /home/runner/work/flutter-starter/flutter-starter
+Action pins	Checkout code	2026-10-28T15:34:16.9179726Z hint: Using 'master' as the name for the initial branch. This default branch name
+Action pins	Checkout code	2026-10-28T15:34:16.9182906Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Action pins	Checkout code	2026-10-28T15:34:16.9184488Z hint: to use in all of your new repositories, which will suppress this warning,
+Action pins	Checkout code	2026-10-28T15:34:16.9186186Z hint: call:
+Action pins	Checkout code	2026-10-28T15:34:16.9186974Z hint:
+Action pins	Checkout code	2026-10-28T15:34:16.9187900Z hint: 	git config --global init.defaultBranch <name>
+Action pins	Checkout code	2026-10-28T15:34:16.9189103Z hint:
+Action pins	Checkout code	2026-10-28T15:34:16.9190159Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Action pins	Checkout code	2026-10-28T15:34:16.9191970Z hint: 'development'. The just-created branch can be renamed via this command:
+Action pins	Checkout code	2026-10-28T15:34:16.9193336Z hint:
+Action pins	Checkout code	2026-10-28T15:34:16.9194096Z hint: 	git branch -m <name>
+Action pins	Checkout code	2026-10-28T15:34:16.9195387Z hint:
+Action pins	Checkout code	2026-10-28T15:34:16.9196610Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Action pins	Checkout code	2026-10-28T15:34:16.9202780Z Initialized empty Git repository in /home/runner/work/flutter-starter/flutter-starter/.git/
+Action pins	Checkout code	2026-10-28T15:34:16.9207281Z [command]/usr/bin/git remote add origin https://github.com/koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T15:34:16.9253120Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:16.9255033Z ##[group]Disabling automatic garbage collection
+Action pins	Checkout code	2026-10-28T15:34:16.9256460Z [command]/usr/bin/git config --local gc.auto 0
+Action pins	Checkout code	2026-10-28T15:34:16.9292228Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:16.9294488Z ##[group]Setting up auth
+Action pins	Checkout code	2026-10-28T15:34:16.9296322Z Removing SSH command configuration
+Action pins	Checkout code	2026-10-28T15:34:16.9298466Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Action pins	Checkout code	2026-10-28T15:34:16.9334746Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Action pins	Checkout code	2026-10-28T15:34:16.9703488Z Removing HTTP extra header
+Action pins	Checkout code	2026-10-28T15:34:16.9705997Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Action pins	Checkout code	2026-10-28T15:34:16.9748265Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Action pins	Checkout code	2026-10-28T15:34:16.9964148Z Removing includeIf entries pointing to credentials config files
+Action pins	Checkout code	2026-10-28T15:34:16.9969094Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Action pins	Checkout code	2026-10-28T15:34:17.0003170Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Action pins	Checkout code	2026-10-28T15:34:17.0213254Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Action pins	Checkout code	2026-10-28T15:34:17.0258102Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path /home/runner/work/_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Checkout code	2026-10-28T15:34:17.0421451Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Checkout code	2026-10-28T15:34:17.0460860Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Checkout code	2026-10-28T15:34:17.0497452Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Checkout code	2026-10-28T15:34:17.0532652Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:17.0533894Z ##[group]Fetching the repository
+Action pins	Checkout code	2026-10-28T15:34:17.0539691Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f8e7e33c3452907925d35e6f7a80bc1551c6f149:refs/remotes/pull/754/merge
+Action pins	Checkout code	2026-10-28T15:34:17.6798127Z From https://github.com/koniz-dev/flutter-starter
+Action pins	Checkout code	2026-10-28T15:34:17.6801797Z  * [new ref]         f8e7e33c3452907925d35e6f7a80bc1551c6f149 -> pull/754/merge
+Action pins	Checkout code	2026-10-28T15:34:17.6810328Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:17.6812605Z ##[group]Determining the checkout info
+Action pins	Checkout code	2026-10-28T15:34:17.6815001Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:17.6816276Z [command]/usr/bin/git sparse-checkout disable
+Action pins	Checkout code	2026-10-28T15:34:17.6881009Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Action pins	Checkout code	2026-10-28T15:34:17.6928862Z ##[group]Checking out the ref
+Action pins	Checkout code	2026-10-28T15:34:17.6933606Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/754/merge
+Action pins	Checkout code	2026-10-28T15:34:17.7389222Z Note: switching to 'refs/remotes/pull/754/merge'.
+Action pins	Checkout code	2026-10-28T15:34:17.7390866Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7392002Z You are in 'detached HEAD' state. You can look around, make experimental
+Action pins	Checkout code	2026-10-28T15:34:17.7394999Z changes and commit them, and you can discard any commits you make in this
+Action pins	Checkout code	2026-10-28T15:34:17.7397462Z state without impacting any branches by switching back to a branch.
+Action pins	Checkout code	2026-10-28T15:34:17.7398910Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7399870Z If you want to create a new branch to retain commits you create, you may
+Action pins	Checkout code	2026-10-28T15:34:17.7402152Z do so (now or later) by using -c with the switch command. Example:
+Action pins	Checkout code	2026-10-28T15:34:17.7403484Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7404226Z   git switch -c <new-branch-name>
+Action pins	Checkout code	2026-10-28T15:34:17.7405481Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7406217Z Or undo this operation with:
+Action pins	Checkout code	2026-10-28T15:34:17.7407196Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7407804Z   git switch -
+Action pins	Checkout code	2026-10-28T15:34:17.7408528Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7409660Z Turn off this advice by setting config variable advice.detachedHead to false
+Action pins	Checkout code	2026-10-28T15:34:17.7411193Z 
+Action pins	Checkout code	2026-10-28T15:34:17.7413232Z HEAD is now at f8e7e33 Merge eae806e7220be164d93e81500812ca56dbc860b7 into 50ad5f4f4d1ecfd6c2516b633a17cbf7a6cc7a18
+Action pins	Checkout code	2026-10-28T15:34:17.7419188Z ##[endgroup]
+Action pins	Checkout code	2026-10-28T15:34:17.7449064Z [command]/usr/bin/git log -1 --format=%H
+Action pins	Checkout code	2026-10-28T15:34:17.7477337Z f8e7e33c3452907925d35e6f7a80bc1551c6f149
+Action pins	Verify each pinned SHA is its release's commit	﻿2026-10-28T15:34:17.7799740Z ##[group]Run scripts/ci/verify_action_pins.sh
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T15:34:17.7801775Z ^[[36;1mscripts/ci/verify_action_pins.sh^[[0m
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T15:34:17.7822202Z shell: /usr/bin/bash -e {0}
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T15:34:17.7823572Z env:
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T15:34:17.7835638Z   GH_TOKEN: ***
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T15:34:17.7836850Z ##[endgroup]
+Action pins	Verify each pinned SHA is its release's commit	2026-10-28T15:34:25.7171792Z 60 pins in 13 files match their version comment.
+Action pins	Post Checkout code	﻿2026-10-28T15:34:25.7521463Z Post job cleanup.
+Action pins	Post Checkout code	2026-10-28T15:34:25.8399451Z [command]/usr/bin/git version
+Action pins	Post Checkout code	2026-10-28T15:34:25.8440950Z git version 2.56.0
+Action pins	Post Checkout code	2026-10-28T15:34:25.8478934Z Temporarily overriding HOME='/home/runner/work/_temp/2cd59dad-5b58-4ff5-a769-37f0e6d14beb' before making global git config changes
+Action pins	Post Checkout code	2026-10-28T15:34:25.8480638Z Adding repository directory to the temporary git global config as a safe directory
+Action pins	Post Checkout code	2026-10-28T15:34:25.8486042Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Action pins	Post Checkout code	2026-10-28T15:34:25.8526573Z Removing SSH command configuration
+Action pins	Post Checkout code	2026-10-28T15:34:25.8534582Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Action pins	Post Checkout code	2026-10-28T15:34:25.8563817Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Action pins	Post Checkout code	2026-10-28T15:34:25.8799872Z Removing HTTP extra header
+Action pins	Post Checkout code	2026-10-28T15:34:25.8806856Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Action pins	Post Checkout code	2026-10-28T15:34:25.8846632Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Action pins	Post Checkout code	2026-10-28T15:34:25.9076960Z Removing includeIf entries pointing to credentials config files
+Action pins	Post Checkout code	2026-10-28T15:34:25.9083121Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Action pins	Post Checkout code	2026-10-28T15:34:25.9148295Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9149579Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9150873Z includeif.gitdir:/github/workspace/.git.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9151780Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9158894Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9185168Z /home/runner/work/_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9197478Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-3e1a0aad\-cccb\-4d1a\-b42d\-367cbe086dc7\.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9266463Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9303445Z /home/runner/work/_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9319695Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-3e1a0aad\-cccb\-4d1a\-b42d\-367cbe086dc7\.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9375883Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9410008Z /github/runner_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9422429Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-3e1a0aad\-cccb\-4d1a\-b42d\-367cbe086dc7\.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9466197Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Action pins	Post Checkout code	2026-10-28T15:34:25.9492393Z /github/runner_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9497634Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-3e1a0aad\-cccb\-4d1a\-b42d\-367cbe086dc7\.config
+Action pins	Post Checkout code	2026-10-28T15:34:25.9537198Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Action pins	Post Checkout code	2026-10-28T15:34:25.9754885Z Removing credentials config '/home/runner/work/_temp/git-credentials-3e1a0aad-cccb-4d1a-b42d-367cbe086dc7.config'
+Action pins	Complete job	﻿2026-10-28T15:34:25.9922425Z Cleaning up orphan processes
+Workflow lint	Set up job	﻿2026-10-28T15:34:16.0203793Z Current runner version: '2.338.0'
+Workflow lint	Set up job	2026-10-28T15:34:16.0224227Z ##[group]Runner Image Provisioner
+Workflow lint	Set up job	2026-10-28T15:34:16.0225044Z Hosted Compute Agent
+Workflow lint	Set up job	2026-10-28T15:34:16.0225409Z Version: 20261021.618
+Workflow lint	Set up job	2026-10-28T15:34:16.0225786Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+Workflow lint	Set up job	2026-10-28T15:34:16.0226334Z Build Date: 2026-10-21T00:45:21Z
+Workflow lint	Set up job	2026-10-28T15:34:16.0226752Z Worker ID: {a8083239-a07c-4a8c-b476-9a19618dd938}
+Workflow lint	Set up job	2026-10-28T15:34:16.0227214Z Region: centralus
+Workflow lint	Set up job	2026-10-28T15:34:16.0227563Z Cloud: Azure
+Workflow lint	Set up job	2026-10-28T15:34:16.0227889Z ##[endgroup]
+Workflow lint	Set up job	2026-10-28T15:34:16.0228766Z ##[group]Operating System
+Workflow lint	Set up job	2026-10-28T15:34:16.0229143Z Ubuntu
+Workflow lint	Set up job	2026-10-28T15:34:16.0229507Z 24.04.5
+Workflow lint	Set up job	2026-10-28T15:34:16.0229840Z LTS
+Workflow lint	Set up job	2026-10-28T15:34:16.0230162Z ##[endgroup]
+Workflow lint	Set up job	2026-10-28T15:34:16.0230590Z ##[group]Runner Image
+Workflow lint	Set up job	2026-10-28T15:34:16.0230963Z Image: ubuntu-24.04
+Workflow lint	Set up job	2026-10-28T15:34:16.0231338Z Version: 20261012.334.1
+Workflow lint	Set up job	2026-10-28T15:34:16.0231981Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+Workflow lint	Set up job	2026-10-28T15:34:16.0233077Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+Workflow lint	Set up job	2026-10-28T15:34:16.0233649Z ##[endgroup]
+Workflow lint	Set up job	2026-10-28T15:34:16.0234346Z ##[group]GITHUB_TOKEN Permissions
+Workflow lint	Set up job	2026-10-28T15:34:16.0235884Z Contents: read
+Workflow lint	Set up job	2026-10-28T15:34:16.0236330Z Metadata: read
+Workflow lint	Set up job	2026-10-28T15:34:16.0236689Z ##[endgroup]
+Workflow lint	Set up job	2026-10-28T15:34:16.0238360Z Secret source: Actions
+Workflow lint	Set up job	2026-10-28T15:34:16.0238999Z Cache mode: write
+Workflow lint	Set up job	2026-10-28T15:34:16.0239474Z Prepare workflow directory
+Workflow lint	Set up job	2026-10-28T15:34:16.0499504Z Prepare all required actions
+Workflow lint	Set up job	2026-10-28T15:34:16.0538308Z Getting action download info
+Workflow lint	Set up job	2026-10-28T15:34:16.2957348Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Workflow lint	Set up job	2026-10-28T15:34:16.4691913Z Complete job name: Workflow lint
+Workflow lint	Checkout code	﻿2026-10-28T15:34:16.5263410Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Workflow lint	Checkout code	2026-10-28T15:34:16.5263950Z with:
+Workflow lint	Checkout code	2026-10-28T15:34:16.5264220Z   repository: koniz-dev/flutter-starter
+Workflow lint	Checkout code	2026-10-28T15:34:16.5266571Z   token: ***
+Workflow lint	Checkout code	2026-10-28T15:34:16.5266814Z   ssh-strict: true
+Workflow lint	Checkout code	2026-10-28T15:34:16.5267057Z   ssh-user: git
+Workflow lint	Checkout code	2026-10-28T15:34:16.5267310Z   persist-credentials: true
+Workflow lint	Checkout code	2026-10-28T15:34:16.5267583Z   clean: true
+Workflow lint	Checkout code	2026-10-28T15:34:16.5267836Z   sparse-checkout-cone-mode: true
+Workflow lint	Checkout code	2026-10-28T15:34:16.5268126Z   fetch-depth: 1
+Workflow lint	Checkout code	2026-10-28T15:34:16.5268369Z   fetch-tags: false
+Workflow lint	Checkout code	2026-10-28T15:34:16.5268616Z   show-progress: true
+Workflow lint	Checkout code	2026-10-28T15:34:16.5268864Z   lfs: false
+Workflow lint	Checkout code	2026-10-28T15:34:16.5269093Z   submodules: false
+Workflow lint	Checkout code	2026-10-28T15:34:16.5269347Z   set-safe-directory: true
+Workflow lint	Checkout code	2026-10-28T15:34:16.5269632Z   allow-unsafe-pr-checkout: false
+Workflow lint	Checkout code	2026-10-28T15:34:16.5269987Z env:
+Workflow lint	Checkout code	2026-10-28T15:34:16.5270220Z   ACTIONLINT_VERSION: 1.7.12
+Workflow lint	Checkout code	2026-10-28T15:34:16.5270634Z   ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+Workflow lint	Checkout code	2026-10-28T15:34:16.5271099Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:16.7199872Z Syncing repository: koniz-dev/flutter-starter
+Workflow lint	Checkout code	2026-10-28T15:34:16.7201594Z ##[group]Getting Git version info
+Workflow lint	Checkout code	2026-10-28T15:34:16.7202046Z Working directory is '/home/runner/work/flutter-starter/flutter-starter'
+Workflow lint	Checkout code	2026-10-28T15:34:16.7202640Z [command]/usr/bin/git version
+Workflow lint	Checkout code	2026-10-28T15:34:16.7259456Z git version 2.55.0
+Workflow lint	Checkout code	2026-10-28T15:34:16.7277134Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:16.7282567Z Temporarily overriding HOME='/home/runner/work/_temp/333f18bb-0631-46f0-b093-9a5a39056ba9' before making global git config changes
+Workflow lint	Checkout code	2026-10-28T15:34:16.7283804Z Adding repository directory to the temporary git global config as a safe directory
+Workflow lint	Checkout code	2026-10-28T15:34:16.7289401Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Workflow lint	Checkout code	2026-10-28T15:34:16.7341282Z Deleting the contents of '/home/runner/work/flutter-starter/flutter-starter'
+Workflow lint	Checkout code	2026-10-28T15:34:16.7344121Z ##[group]Determining repository object format
+Workflow lint	Checkout code	2026-10-28T15:34:16.7345580Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:16.7346316Z ##[group]Initializing the repository
+Workflow lint	Checkout code	2026-10-28T15:34:16.7350012Z [command]/usr/bin/git init /home/runner/work/flutter-starter/flutter-starter
+Workflow lint	Checkout code	2026-10-28T15:34:16.7437759Z hint: Using 'master' as the name for the initial branch. This default branch name
+Workflow lint	Checkout code	2026-10-28T15:34:16.7442458Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Workflow lint	Checkout code	2026-10-28T15:34:16.7443654Z hint: to use in all of your new repositories, which will suppress this warning,
+Workflow lint	Checkout code	2026-10-28T15:34:16.7444456Z hint: call:
+Workflow lint	Checkout code	2026-10-28T15:34:16.7445097Z hint:
+Workflow lint	Checkout code	2026-10-28T15:34:16.7445723Z hint: 	git config --global init.defaultBranch <name>
+Workflow lint	Checkout code	2026-10-28T15:34:16.7446406Z hint:
+Workflow lint	Checkout code	2026-10-28T15:34:16.7447027Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Workflow lint	Checkout code	2026-10-28T15:34:16.7447965Z hint: 'development'. The just-created branch can be renamed via this command:
+Workflow lint	Checkout code	2026-10-28T15:34:16.7448771Z hint:
+Workflow lint	Checkout code	2026-10-28T15:34:16.7449266Z hint: 	git branch -m <name>
+Workflow lint	Checkout code	2026-10-28T15:34:16.7449888Z hint:
+Workflow lint	Checkout code	2026-10-28T15:34:16.7450591Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Workflow lint	Checkout code	2026-10-28T15:34:16.7451822Z Initialized empty Git repository in /home/runner/work/flutter-starter/flutter-starter/.git/
+Workflow lint	Checkout code	2026-10-28T15:34:16.7453869Z [command]/usr/bin/git remote add origin https://github.com/koniz-dev/flutter-starter
+Workflow lint	Checkout code	2026-10-28T15:34:16.7498436Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:16.7499150Z ##[group]Disabling automatic garbage collection
+Workflow lint	Checkout code	2026-10-28T15:34:16.7500921Z [command]/usr/bin/git config --local gc.auto 0
+Workflow lint	Checkout code	2026-10-28T15:34:16.7532464Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:16.7533929Z ##[group]Setting up auth
+Workflow lint	Checkout code	2026-10-28T15:34:16.7534397Z Removing SSH command configuration
+Workflow lint	Checkout code	2026-10-28T15:34:16.7538335Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Workflow lint	Checkout code	2026-10-28T15:34:16.7569791Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Workflow lint	Checkout code	2026-10-28T15:34:16.7851777Z Removing HTTP extra header
+Workflow lint	Checkout code	2026-10-28T15:34:16.7856593Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Workflow lint	Checkout code	2026-10-28T15:34:16.7888203Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Workflow lint	Checkout code	2026-10-28T15:34:16.8064348Z Removing includeIf entries pointing to credentials config files
+Workflow lint	Checkout code	2026-10-28T15:34:16.8068625Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Workflow lint	Checkout code	2026-10-28T15:34:16.8098653Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Workflow lint	Checkout code	2026-10-28T15:34:16.8280496Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Workflow lint	Checkout code	2026-10-28T15:34:16.8313962Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path /home/runner/work/_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Checkout code	2026-10-28T15:34:16.8345730Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Checkout code	2026-10-28T15:34:16.8377593Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Checkout code	2026-10-28T15:34:16.8406752Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Checkout code	2026-10-28T15:34:16.8434649Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:16.8435300Z ##[group]Fetching the repository
+Workflow lint	Checkout code	2026-10-28T15:34:16.8439592Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f8e7e33c3452907925d35e6f7a80bc1551c6f149:refs/remotes/pull/754/merge
+Workflow lint	Checkout code	2026-10-28T15:34:17.6722887Z From https://github.com/koniz-dev/flutter-starter
+Workflow lint	Checkout code	2026-10-28T15:34:17.6724351Z  * [new ref]         f8e7e33c3452907925d35e6f7a80bc1551c6f149 -> pull/754/merge
+Workflow lint	Checkout code	2026-10-28T15:34:17.6727223Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:17.6728159Z ##[group]Determining the checkout info
+Workflow lint	Checkout code	2026-10-28T15:34:17.6729223Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:17.6730865Z [command]/usr/bin/git sparse-checkout disable
+Workflow lint	Checkout code	2026-10-28T15:34:17.6777077Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Workflow lint	Checkout code	2026-10-28T15:34:17.6806934Z ##[group]Checking out the ref
+Workflow lint	Checkout code	2026-10-28T15:34:17.6809408Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/754/merge
+Workflow lint	Checkout code	2026-10-28T15:34:17.7250063Z Note: switching to 'refs/remotes/pull/754/merge'.
+Workflow lint	Checkout code	2026-10-28T15:34:17.7250970Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7251540Z You are in 'detached HEAD' state. You can look around, make experimental
+Workflow lint	Checkout code	2026-10-28T15:34:17.7252825Z changes and commit them, and you can discard any commits you make in this
+Workflow lint	Checkout code	2026-10-28T15:34:17.7254097Z state without impacting any branches by switching back to a branch.
+Workflow lint	Checkout code	2026-10-28T15:34:17.7255137Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7255813Z If you want to create a new branch to retain commits you create, you may
+Workflow lint	Checkout code	2026-10-28T15:34:17.7257256Z do so (now or later) by using -c with the switch command. Example:
+Workflow lint	Checkout code	2026-10-28T15:34:17.7258052Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7258404Z   git switch -c <new-branch-name>
+Workflow lint	Checkout code	2026-10-28T15:34:17.7258967Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7259341Z Or undo this operation with:
+Workflow lint	Checkout code	2026-10-28T15:34:17.7260042Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7260471Z   git switch -
+Workflow lint	Checkout code	2026-10-28T15:34:17.7261052Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7261913Z Turn off this advice by setting config variable advice.detachedHead to false
+Workflow lint	Checkout code	2026-10-28T15:34:17.7263041Z 
+Workflow lint	Checkout code	2026-10-28T15:34:17.7264324Z HEAD is now at f8e7e33 Merge eae806e7220be164d93e81500812ca56dbc860b7 into 50ad5f4f4d1ecfd6c2516b633a17cbf7a6cc7a18
+Workflow lint	Checkout code	2026-10-28T15:34:17.7269201Z ##[endgroup]
+Workflow lint	Checkout code	2026-10-28T15:34:17.7303156Z [command]/usr/bin/git log -1 --format=%H
+Workflow lint	Checkout code	2026-10-28T15:34:17.7328820Z f8e7e33c3452907925d35e6f7a80bc1551c6f149
+Workflow lint	Install actionlint	﻿2026-10-28T15:34:17.7532702Z ##[group]Run set -euo pipefail
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7533625Z ^[[36;1mset -euo pipefail^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7534639Z ^[[36;1mtarball="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7535972Z ^[[36;1mcurl -sSfL -o "$tarball" \^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7537352Z ^[[36;1m  "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/$tarball"^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7538879Z ^[[36;1mecho "$ACTIONLINT_SHA256  $tarball" | sha256sum -c -^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7539908Z ^[[36;1mtar -xzf "$tarball" actionlint^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7540992Z ^[[36;1msudo install actionlint /usr/local/bin/actionlint^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7541983Z ^[[36;1mactionlint -version^[[0m
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7746456Z shell: /usr/bin/bash -e {0}
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7747234Z env:
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7747850Z   ACTIONLINT_VERSION: 1.7.12
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7749038Z   ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+Workflow lint	Install actionlint	2026-10-28T15:34:17.7750344Z ##[endgroup]
+Workflow lint	Install actionlint	2026-10-28T15:34:18.0279130Z actionlint_1.7.12_linux_amd64.tar.gz: OK
+Workflow lint	Install actionlint	2026-10-28T15:34:18.0727572Z 1.7.12
+Workflow lint	Install actionlint	2026-10-28T15:34:18.0728149Z installed by downloading from release page
+Workflow lint	Install actionlint	2026-10-28T15:34:18.0728566Z built with go1.26.1 compiler for linux/amd64
+Workflow lint	Lint the workflows	﻿2026-10-28T15:34:18.0767670Z ##[group]Run actionlint -color .github/workflows/*.yml
+Workflow lint	Lint the workflows	2026-10-28T15:34:18.0767959Z ^[[36;1mactionlint -color .github/workflows/*.yml^[[0m
+Workflow lint	Lint the workflows	2026-10-28T15:34:18.0822575Z shell: /usr/bin/bash -e {0}
+Workflow lint	Lint the workflows	2026-10-28T15:34:18.0822749Z env:
+Workflow lint	Lint the workflows	2026-10-28T15:34:18.0822895Z   ACTIONLINT_VERSION: 1.7.12
+Workflow lint	Lint the workflows	2026-10-28T15:34:18.0823154Z   ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+Workflow lint	Lint the workflows	2026-10-28T15:34:18.0823428Z ##[endgroup]
+Workflow lint	Post Checkout code	﻿2026-10-28T15:34:18.7848170Z Post job cleanup.
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8428624Z [command]/usr/bin/git version
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8466099Z git version 2.55.0
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8491920Z Temporarily overriding HOME='/home/runner/work/_temp/122bda5b-00de-4fb8-a6f8-7aa86233fae3' before making global git config changes
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8493180Z Adding repository directory to the temporary git global config as a safe directory
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8497752Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8529770Z Removing SSH command configuration
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8534856Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8569707Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8777032Z Removing HTTP extra header
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8781923Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.8832215Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9038540Z Removing includeIf entries pointing to credentials config files
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9044489Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9071314Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9071901Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9072225Z includeif.gitdir:/github/workspace/.git.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9072482Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9078530Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9101849Z /home/runner/work/_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9109858Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-7b875c6a\-74a0\-441a\-b282\-727cf3b624f7\.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9180739Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9203024Z /home/runner/work/_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9209526Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-7b875c6a\-74a0\-441a\-b282\-727cf3b624f7\.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9240701Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9262402Z /github/runner_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9268666Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-7b875c6a\-74a0\-441a\-b282\-727cf3b624f7\.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9299271Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9321000Z /github/runner_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9327690Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-7b875c6a\-74a0\-441a\-b282\-727cf3b624f7\.config
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9356890Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Workflow lint	Post Checkout code	2026-10-28T15:34:18.9533644Z Removing credentials config '/home/runner/work/_temp/git-credentials-7b875c6a-74a0-441a-b282-727cf3b624f7.config'
+Workflow lint	Complete job	﻿2026-10-28T15:34:18.9653812Z Cleaning up orphan processes
