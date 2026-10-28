@@ -47,6 +47,11 @@ flutter run --dart-define-from-file=.env
 flutter build apk --release --dart-define-from-file=.env
 ```
 
+A release APK needs a signing key first; without `android/key.properties`
+the build is refused. See
+[Android release signing](../deployment/android-deployment.md#release-signing),
+including the unsigned smoke build.
+
 Two honest caveats.
 
 - **A dart-define is not a vault.** The values are compiled into the binary and
