@@ -1,3 +1,4 @@
 mason make flutter_starter_setup (acme_shop) + analyze + test	Stripping after the rename keeps the display name	2026-10-28T16:51:33.1531074Z ^[[36;1mgrep -n "title: 'Acme Shop'," lib/main.dart^[[0m
 mason make flutter_starter_setup (acme_shop) + analyze + test	Stripping after the rename keeps the display name	2026-10-28T16:51:42.3058814Z 200:      title: 'Acme Shop',
 mason make flutter_starter_setup (acme_shop) + analyze + test	Stripping after the rename keeps the display name	2026-10-28T16:51:46.4854416Z No issues found! (ran in 2.8s)
+2026-10-28T16:53:46Z 🎉 2980 tests passed, 16 skipped. (Stripping after the rename keeps the display name step)
