@@ -1,0 +1,240 @@
+$ flutter build web --release --dart-define-from-file=.env
+# started 2026-10-28 23:12:16
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.5.2 available)
+  async 2.13.0 (2.13.1 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  build_runner 2.16.2 (2.17.1 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.1.0 available)
+  code_builder 4.11.1 (4.13.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  equatable 2.1.0 (3.0.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.5 available)
+  objective_c 9.3.0 (9.6.2 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  patrol 3.20.0 (4.10.0 available)
+  patrol_finders 2.9.0 (3.6.0 available)
+  patrol_log 0.5.0 (0.10.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.0 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+55 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Compiling lib/main.dart for the Web...                          
+Wasm dry run succeeded. Consider building and testing your application with the `--wasm` flag. See docs for more info: https://docs.flutter.dev/platform-integration/web/wasm
+Use --no-wasm-dry-run to disable these warnings.
+Target dart2js failed: ProcessException: Process exited abnormally with exit code 253:
+file:///Users/nguyenanhkiet/Playground/fs-walkthrough/.dart_tool/flutter_build/58ebf912c09fc06c5baf2015c61e8c77/main.dart:
+Internal Error: The compiler crashed when compiling this element.
+
+The compiler is broken.
+
+When compiling the above element, the compiler crashed. It is not
+possible to tell if this is caused by a problem in your program or
+not. Regardless, the compiler should not crash.
+
+The Dart team would greatly appreciate if you would take a moment to
+report this problem at http://dartbug.com/new.
+
+Please include the following information:
+
+* the name and version of your operating system,
+
+* the Dart SDK build number (3.13.0), and
+
+* the entire message you see here (including the full stack trace
+  below as well as the source location above).
+
+The compiler crashed: FileSystemException: writeFrom failed, path = '/Users/nguyenanhkiet/Playground/fs-walkthrough/.dart_tool/flutter_build/58ebf912c09fc06c5baf2015c61e8c77/app.dill' (OS Error: No space left on device, errno = 28)
+#0      _RandomAccessFile.writeFromSync (dart:io/file_impl.dart:999)
+#1      FileBinaryOutputSink.add (package:compiler/src/util/output_util.dart:15)
+#2      BufferedSink.addByte (package:kernel/binary/ast_to_binary.dart:3835)
+#3      BinaryPrinter.writeUInt30 (package:kernel/binary/ast_to_binary.dart:113)
+#4      BinaryPrinter.writeUriToSource (package:kernel/binary/ast_to_binary.dart:950)
+#5      BinaryPrinter.writeComponentFile.<anonymous closure> (package:kernel/binary/ast_to_binary.dart:623)
+#6      Timeline.timeSync (dart:developer/timeline.dart:184)
+#7      BinaryPrinter.writeComponentFile (package:kernel/binary/ast_to_binary.dart:603)
+#8      SerializationTask.serializeComponent.<anonymous closure> (package:compiler/src/serialization/task.dart:77)
+#9      CompilerTask.measureSubtask (package:compiler/src/common/tasks.dart:198)
+#10     SerializationTask.serializeComponent (package:compiler/src/serialization/task.dart:68)
+#11     Compiler.produceKernel (package:compiler/src/compiler.dart:451)
+<asynchronous suspension>
+#12     Compiler.runSequentialPhases (package:compiler/src/compiler.dart:712)
+<asynchronous suspension>
+#13     Compiler.runInternal.<anonymous closure> (package:compiler/src/compiler.dart:329)
+<asynchronous suspension>
+#14     Compiler.runInternal (package:compiler/src/compiler.dart:328)
+<asynchronous suspension>
+#15     Compiler.run.<anonymous closure> (package:compiler/src/compiler.dart:240)
+<asynchronous suspension>
+#16     compile.<anonymous closure> (package:compiler/compiler_api.dart:273)
+<asynchronous suspension>
+#17     compile.compilationDone (package:compiler/src/dart2js.dart:764)
+<asynchronous suspension>
+#18     main (package:compiler/src/dart2js.dart:1318)
+<asynchronous suspension>
+
+
+'record-use' is now enabled by default; this flag is no longer required.
+  Command: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart compile js --platform-binaries=/usr/local/share/flutter/bin/cache/flutter_web_sdk/kernel --invoker=flutter_tool -Ddart.vm.product=true -DENVIRONMENT=development -DBASE_URL=https://dummyjson.com -DAPI_TIMEOUT=30 -DAPI_CONNECT_TIMEOUT=10 -DAPI_RECEIVE_TIMEOUT=30 -DAPI_SEND_TIMEOUT=30 -DAPI_SSL_FINGERPRINTS= -DENABLE_SSL_PINNING= -DENABLE_LOGGING= -DENABLE_ANALYTICS= -DENABLE_CRASH_REPORTING= -DENABLE_PERFORMANCE_MONITORING= -DENABLE_DEBUG_FEATURES= -DENABLE_HTTP_LOGGING= -DFLUTTER_BUILD_NAME=1.0.0 -DFLUTTER_BUILD_NUMBER=1 -DFLUTTER_VERSION=3.47.0 -DFLUTTER_CHANNEL=stable -DFLUTTER_GIT_URL=https://github.com/flutter/flutter.git -DFLUTTER_FRAMEWORK_REVISION=4cf2416426 -DFLUTTER_ENGINE_REVISION=5f77625673 -DFLUTTER_DART_VERSION=3.13.0 -DFLUTTER_WEB_USE_SKIA=true -DFLUTTER_WEB_USE_SKWASM=false -DFLUTTER_WEB_CANVASKIT_URL=https://www.gstatic.com/flutter-canvaskit/5f77625673248ee5846fbcaf5d3e1a3878386fd7/ --write-resources --enable-experiment=record-use --native-null-assertions --no-source-maps -O4 --minify -o /Users/nguyenanhkiet/Playground/fs-walkthrough/.dart_tool/flutter_build/58ebf912c09fc06c5baf2015c61e8c77/app.dill --packages=/Users/nguyenanhkiet/Playground/fs-walkthrough/.dart_tool/package_config.json --cfe-only /Users/nguyenanhkiet/Playground/fs-walkthrough/.dart_tool/flutter_build/58ebf912c09fc06c5baf2015c61e8c77/main.dart
+#0      RunResult.throwException (package:flutter_tools/src/base/process.dart:153:5)
+#1      _DefaultProcessUtils.run (package:flutter_tools/src/base/process.dart:379:19)
+<asynchronous suspension>
+#2      Dart2JSTarget.build (package:flutter_tools/src/build_system/targets/web.dart:219:5)
+<asynchronous suspension>
+#3      _BuildInstance._invokeInternal (package:flutter_tools/src/build_system/build_system.dart:937:9)
+<asynchronous suspension>
+#4      Future.wait.<anonymous closure> (dart:async/future.dart:567:21)
+<asynchronous suspension>
+#5      _BuildInstance.invokeTarget (package:flutter_tools/src/build_system/build_system.dart:875:32)
+<asynchronous suspension>
+#6      Future.wait.<anonymous closure> (dart:async/future.dart:567:21)
+<asynchronous suspension>
+#7      _BuildInstance.invokeTarget (package:flutter_tools/src/build_system/build_system.dart:875:32)
+<asynchronous suspension>
+#8      Future.wait.<anonymous closure> (dart:async/future.dart:567:21)
+<asynchronous suspension>
+#9      _BuildInstance.invokeTarget (package:flutter_tools/src/build_system/build_system.dart:875:32)
+<asynchronous suspension>
+#10     FlutterBuildSystem.build (package:flutter_tools/src/build_system/build_system.dart:684:16)
+<asynchronous suspension>
+#11     WebBuilder.buildWeb (package:flutter_tools/src/web/compile.dart:107:34)
+<asynchronous suspension>
+#12     BuildWebCommand.runCommand (package:flutter_tools/src/commands/build_web.dart:293:5)
+<asynchronous suspension>
+#13     FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1663:27)
+<asynchronous suspension>
+#14     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#15     CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#16     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:496:9)
+<asynchronous suspension>
+#17     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#18     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+<asynchronous suspension>
+#19     FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+<asynchronous suspension>
+#20     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+<asynchronous suspension>
+#21     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#22     main (package:flutter_tools/executable.dart:103:3)
+<asynchronous suspension>
+
+Compiling lib/main.dart for the Web...                             61.1s
+Error: Failed to compile application for the Web.
+# exit=1 elapsed=64s
+
+$ flutter build web --release --dart-define-from-file=.env
+# started 2026-10-28 23:13:54
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.5.2 available)
+  async 2.13.0 (2.13.1 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  build_runner 2.16.2 (2.17.1 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.1.0 available)
+  code_builder 4.11.1 (4.13.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  equatable 2.1.0 (3.0.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.5 available)
+  objective_c 9.3.0 (9.6.2 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  patrol 3.20.0 (4.10.0 available)
+  patrol_finders 2.9.0 (3.6.0 available)
+  patrol_log 0.5.0 (0.10.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.0 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+55 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Compiling lib/main.dart for the Web...                          
+Wasm dry run succeeded. Consider building and testing your application with the `--wasm` flag. See docs for more info: https://docs.flutter.dev/platform-integration/web/wasm
+Use --no-wasm-dry-run to disable these warnings.
+Font asset "CupertinoIcons.ttf" was tree-shaken, reducing it from 257628 to 1472 bytes (99.4% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 8636 bytes (99.5% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Compiling lib/main.dart for the Web...                             69.6s
+✓ Built build/web
+# exit=0 elapsed=72s
+

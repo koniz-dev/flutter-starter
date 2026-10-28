@@ -1,0 +1,5 @@
+$ flutter test --timeout=5m --reporter=expanded 2>&1 | grep -v $'^\x1b\[38' | grep -E '\[E\]|All tests passed|Some tests failed|^  /'; exit ${PIPESTATUS[0]}
+# started 2026-10-28 23:15:35
+03:58 +2965 ~16: All tests passed!
+# exit=0 elapsed=257s
+

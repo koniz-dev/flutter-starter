@@ -1,0 +1,6 @@
+$ flutter test --timeout=5m --reporter=expanded > /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-730/04-test-full.raw 2>&1; rc=$?; grep -v "^\x1b\[38" /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-730/04-test-full.raw | grep -E "\[E\]|tests passed|tests failed" ; rm /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-730/04-test-full.raw; exit $rc
+# started 2026-10-28 23:00:22
+02:51 +1586 ~8 -1: /Users/nguyenanhkiet/Playground/fs-walkthrough/test/core/routing/routes_registry_test.dart: buildAppRoutes should include auth routes and home route [E]
+07:02 +2964 ~16 -1: Some tests failed.
+# exit=1 elapsed=434s
+

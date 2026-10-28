@@ -1,0 +1,47 @@
+$ dart pub global activate mason_cli
+# started 2026-10-28 22:31:35
+Package mason_cli is currently active at version 0.1.4.
+Resolving dependencies...
+Downloading packages...
+> crypto 3.0.8 (was 3.0.7)
+  equatable 2.1.0 (3.0.0 available)
+> posix 6.5.4 (was 6.5.2)
+> web 1.1.2 (was 1.1.1)
+Building package executables...
+Built mason_cli:mason.
+Installed executable mason.
+Warning: Pub installs executables into $HOME/.pub-cache/bin, which is not on your path.
+You can fix that by adding this to your shell's config file (.zshrc, .bashrc, .bash_profile, etc.):
+
+  export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+Activated mason_cli 0.1.4.
+# exit=0 elapsed=33s
+
+$ mason --version; echo PATH-has-pub-cache: $(echo $PATH | grep -c pub-cache)
+# started 2026-10-28 22:32:08
+bash: mason: command not found
+PATH-has-pub-cache: 0
+# exit=0 elapsed=0s
+
+$ export PATH="$PATH:$HOME/.pub-cache/bin"; mason get
+# started 2026-10-28 22:32:17
+⠋ Getting bricks...✓ Got bricks (20.4s)
+# exit=0 elapsed=24s
+
+$ export PATH="$PATH:$HOME/.pub-cache/bin"; mason make flutter_starter_setup --package_name acme_notes --application_id com.acme.acme_notes --ios_bundle_id com.acme.acmeNotes --app_display_name "Acme Notes" --strip_sample_features false --include_tasks_sample true --include_feature_flags_sample true
+# started 2026-10-28 22:32:41
+⠋ Making flutter_starter_setup...✓ Generated 1 file. (89ms)
+  created _mason_hook_only.md
+Rewrote 8 feature_clean brick template(s)
+Renamed Dart package to acme_notes
+Applied "Acme Notes" to 15 Dart/ARB file(s)
+Moved MainActivity to match com.acme.acme_notes
+Moved MainActivityTest to match com.acme.acme_notes
+Updated iOS PRODUCT_BUNDLE_IDENTIFIER to com.acme.acmeNotes
+Updated patrol config to com.acme.acme_notes
+Rewrote identifiers in 21 platform file(s)
+Re-sorted imports and reformatted lib, test, integration_test, tool, examples, docs
+Setup complete. Next: flutter analyze && flutter test
+# exit=0 elapsed=63s
+

@@ -1,0 +1,1 @@
+{'accessToken': ('str', 'eyJhbGciOiJI...'), 'refreshToken': ('str', 'eyJhbGciOiJI...'), 'id': ('int', 1), 'username': ('str', 'emilys'), 'email': ('str', 'emily.johnson@x.dummyjson.com'), 'firstName': ('str', 'Emily'), 'lastName': ('str', 'Johnson'), 'gender': ('str', 'female'), 'image': ('str', 'https://dummyjson.com/icon/emilys/128')}

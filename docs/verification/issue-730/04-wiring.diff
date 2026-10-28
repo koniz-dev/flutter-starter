@@ -1,0 +1,277 @@
+diff --git a/lib/core/routing/app_routes.dart b/lib/core/routing/app_routes.dart
+index 299e17d..145a24b 100644
+--- a/lib/core/routing/app_routes.dart
++++ b/lib/core/routing/app_routes.dart
+@@ -1,4 +1,4 @@
+-// Core route constants are intentionally centralized here for copy/paste usage.
++// Stripped baseline: keep routes minimal and focused.
+ // ignore_for_file: public_member_api_docs
+ 
+ /// Application route paths and names.
+@@ -8,27 +8,17 @@ class AppRoutes {
+   static const String home = '/';
+   static const String login = '/login';
+   static const String register = '/register';
+-
+-  static const String tasks = '/tasks';
+-  static const String taskDetail = '/tasks/:taskId';
+-
+-  static const String featureFlagsDebug = '/feature-flags-debug';
++  static const String notes = '/notes';
+ 
+   static const String homeName = 'home';
+   static const String loginName = 'login';
+   static const String registerName = 'register';
+-
+-  static const String tasksName = 'tasks';
+-  static const String taskDetailName = 'task-detail';
+-
+-  static const String featureFlagsDebugName = 'feature-flags-debug';
++  static const String notesName = 'notes';
+ }
+ 
+ /// Route parameter keys
+ class RouteParams {
+   RouteParams._();
+-
+-  static const String taskId = 'taskId';
+ }
+ 
+ /// Query parameter keys
+diff --git a/lib/core/routing/routes_registry.dart b/lib/core/routing/routes_registry.dart
+index f5c435b..4eba4ad 100644
+--- a/lib/core/routing/routes_registry.dart
++++ b/lib/core/routing/routes_registry.dart
+@@ -1,10 +1,9 @@
++import 'package:acme_notes/core/config/app_config.dart';
++import 'package:acme_notes/core/routing/session_status.dart';
++import 'package:acme_notes/features/auth/routing/auth_routes.dart';
++import 'package:acme_notes/features/home/routing/home_routes.dart';
++import 'package:acme_notes/features/notes/routing/notes_routes.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+-import 'package:flutter_starter/core/config/app_config.dart';
+-import 'package:flutter_starter/core/routing/session_status.dart';
+-import 'package:flutter_starter/features/auth/routing/auth_routes.dart';
+-import 'package:flutter_starter/features/feature_flags/routing/feature_flags_routes.dart';
+-import 'package:flutter_starter/features/home/routing/home_routes.dart';
+-import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
+ import 'package:go_router/go_router.dart';
+ 
+ /// Composes the app route tree from per-feature route modules.
+@@ -26,15 +25,15 @@ import 'package:go_router/go_router.dart';
+ List<RouteBase> buildAppRoutes(Ref ref, {bool? debugRoutes}) {
+   return <RouteBase>[
+     ...buildAuthRoutes(ref),
+-    ...buildTasksRoutes(ref),
+     if (debugRoutes ?? AppConfig.enableDebugFeatures) ..._buildDebugRoutes(ref),
++    buildNotesRoute(ref),
+     buildHomeRoute(ref),
+   ];
+ }
+ 
+ /// Debug-only route modules; see [buildAppRoutes].
+-List<RouteBase> _buildDebugRoutes(Ref ref) => <RouteBase>[
+-  ...buildFeatureFlagsRoutes(ref),
++List<RouteBase> _buildDebugRoutes(Ref ref) => const <RouteBase>[
++  // Add your debug-only route modules here.
+ ];
+ 
+ /// The session state the redirect in `app_router.dart` reads.
+diff --git a/lib/features/home/presentation/screens/home_screen.dart b/lib/features/home/presentation/screens/home_screen.dart
+index 8c8178d..7a53182 100644
+--- a/lib/features/home/presentation/screens/home_screen.dart
++++ b/lib/features/home/presentation/screens/home_screen.dart
+@@ -1,13 +1,14 @@
++import 'package:acme_notes/core/constants/ui_keys.dart';
++import 'package:acme_notes/core/routing/app_routes.dart';
++import 'package:acme_notes/core/routing/navigation_extensions.dart';
++import 'package:acme_notes/l10n/app_localizations.dart';
++import 'package:acme_notes/shared/widgets/language_switcher.dart';
+ import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ 
+-import 'package:flutter_starter/core/constants/ui_keys.dart';
+-import 'package:flutter_starter/l10n/app_localizations.dart';
+-import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+-
+-/// Home screen after sign-in (minimal shell; extend per product).
++/// Home screen widget.
+ class HomeScreen extends ConsumerWidget {
+-  /// Creates the home screen.
++  /// Creates a [HomeScreen].
+   const HomeScreen({super.key});
+ 
+   @override
+@@ -41,6 +42,12 @@ class HomeScreen extends ConsumerWidget {
+                 ),
+                 textAlign: TextAlign.center,
+               ),
++              const SizedBox(height: 24),
++              FilledButton(
++                onPressed: () => context.pushRoute(AppRoutes.notes),
++                // l10n-literal-ok: walkthrough probe
++                child: const Text('Notes'),
++              ),
+             ],
+           ),
+         ),
+diff --git a/lib/main.dart b/lib/main.dart
+index 75e133d..67f0dfe 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -1,6 +1,19 @@
+ // Stripped baseline: keep bootstrap minimal (docs live in repo docs).
+ // ignore_for_file: public_member_api_docs
+ 
++import 'package:acme_notes/core/config/app_config.dart';
++import 'package:acme_notes/core/config/env_config.dart';
++import 'package:acme_notes/core/di/providers.dart';
++import 'package:acme_notes/core/localization/localization_providers.dart';
++import 'package:acme_notes/core/localization/localization_service.dart';
++import 'package:acme_notes/core/logging/logging_providers.dart';
++import 'package:acme_notes/core/logging/uncaught_error_handlers.dart';
++import 'package:acme_notes/core/routing/app_router.dart';
++import 'package:acme_notes/core/startup/startup_failure_app.dart';
++import 'package:acme_notes/features/auth/di/auth_providers.dart';
++import 'package:acme_notes/features/auth/presentation/providers/auth_provider.dart';
++import 'package:acme_notes/l10n/app_localizations.dart';
++import 'package:acme_notes/shared/theme/app_theme.dart';
+ import 'package:flutter/material.dart';
+ import 'package:flutter_localizations/flutter_localizations.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+@@ -8,19 +21,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ // where riverpod 3 exposes it. Needed only for createAppContainer's
+ // test seam.
+ import 'package:flutter_riverpod/misc.dart' show Override;
+-import 'package:flutter_starter/core/config/app_config.dart';
+-import 'package:flutter_starter/core/config/env_config.dart';
+-import 'package:flutter_starter/core/di/providers.dart';
+-import 'package:flutter_starter/core/localization/localization_providers.dart';
+-import 'package:flutter_starter/core/localization/localization_service.dart';
+-import 'package:flutter_starter/core/logging/logging_providers.dart';
+-import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
+-import 'package:flutter_starter/core/routing/app_router.dart';
+-import 'package:flutter_starter/core/startup/startup_failure_app.dart';
+-import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+-import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+-import 'package:flutter_starter/l10n/app_localizations.dart';
+-import 'package:flutter_starter/shared/theme/app_theme.dart';
+ 
+ // Disables Riverpod auto-retry for EVERY provider, for the whole process
+ // lifetime - not just for startup. A container-level `Retry` is
+@@ -197,7 +197,7 @@ class MyApp extends ConsumerWidget {
+     final router = ref.watch(goRouterProvider);
+ 
+     return MaterialApp.router(
+-      title: 'Flutter Starter',
++      title: 'Acme Notes',
+       theme: AppTheme.lightTheme,
+       darkTheme: AppTheme.darkTheme,
+       routerConfig: router,
+diff --git a/lib/features/notes/routing/notes_routes.dart b/lib/features/notes/routing/notes_routes.dart
+new file mode 100644
+index 0000000..629bdba
+--- /dev/null
++++ b/lib/features/notes/routing/notes_routes.dart
+@@ -0,0 +1,14 @@
++import 'package:acme_notes/core/routing/app_routes.dart';
++import 'package:acme_notes/features/notes/presentation/screens/notes_screen.dart';
++import 'package:flutter_riverpod/flutter_riverpod.dart';
++import 'package:go_router/go_router.dart';
++
++/// Builds the Notes route, reachable once signed in.
++GoRoute buildNotesRoute(Ref ref) {
++  return GoRoute(
++    path: AppRoutes.notes,
++    name: AppRoutes.notesName,
++    builder: (context, state) =>
++        NotesScreen(id: state.uri.queryParameters['id'] ?? '1'),
++  );
++}
+diff --git a/test/features/notes/notes_route_test.dart b/test/features/notes/notes_route_test.dart
+new file mode 100644
+index 0000000..13442e3
+--- /dev/null
++++ b/test/features/notes/notes_route_test.dart
+@@ -0,0 +1,31 @@
++import 'package:acme_notes/features/auth/domain/entities/user.dart';
++import 'package:acme_notes/features/auth/presentation/providers/auth_provider.dart';
++import 'package:acme_notes/features/notes/presentation/screens/notes_screen.dart';
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++import '../../helpers/pump_app.dart';
++
++class _SignedIn extends AuthNotifier {
++  @override
++  AuthState build() => const AuthState(
++    user: User(id: 'u-1', email: 'a@b.co'),
++  );
++}
++
++void main() {
++  testWidgets('a signed-in user reaches the notes screen from home', (
++    tester,
++  ) async {
++    await pumpAppRouter(
++      tester,
++      overrides: [
++        authNotifierProvider.overrideWith(_SignedIn.new),
++        sessionRestorationProvider.overrideWith((ref) async {}),
++      ],
++    );
++    await tester.tap(find.widgetWithText(FilledButton, 'Notes'));
++    await tester.pumpAndSettle();
++    expect(find.byType(NotesScreen), findsOneWidget);
++  });
++}
+# generated data source / provider edits:
+import 'package:acme_notes/core/di/providers.dart';
+import 'package:acme_notes/features/notes/data/datasources/notes_remote_datasource.dart';
+import 'package:acme_notes/features/notes/data/repositories/notes_repository_impl.dart';
+import 'package:acme_notes/features/notes/domain/repositories/notes_repository.dart';
+import 'package:acme_notes/features/notes/domain/usecases/get_notes_by_id_usecase.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// Remote data source for the Notes feature.
+final notesRemoteDataSourceProvider = Provider<NotesRemoteDataSource>((
+  ref,
+) {
+  return NotesRemoteDataSourceImpl(ref.watch(apiClientProvider));
+});
+
+/// Repository for the Notes feature.
+final notesRepositoryProvider = Provider<NotesRepository>((ref) {
+  return NotesRepositoryImpl(
+    remoteDataSource: ref.watch(notesRemoteDataSourceProvider),
+  );
+});
+
+/// Use case that loads one Notes by id.
+final getNotesByIdUseCaseProvider = Provider<GetNotesByIdUseCase>((ref) {
+  return GetNotesByIdUseCase(ref.watch(notesRepositoryProvider));
+});
+import 'package:acme_notes/core/network/api_client.dart';
+
+/// Remote source of raw Notes data.
+///
+/// Implement this against `ApiClient` (see lib/core/network/), then
+/// override the provider declared in the feature's `di/` directory.
+abstract interface class NotesRemoteDataSource {
+  /// Fetches the raw JSON for [id].
+  Future<Map<String, dynamic>> fetchById(String id);
+}
+
+/// [NotesRemoteDataSource] over [ApiClient]: `GET /notes/<id>`.
+final class NotesRemoteDataSourceImpl implements NotesRemoteDataSource {
+  /// Creates a [NotesRemoteDataSourceImpl].
+  const NotesRemoteDataSourceImpl(this._apiClient);
+
+  final ApiClient _apiClient;
+
+  @override
+  Future<Map<String, dynamic>> fetchById(String id) async {
+    final response = await _apiClient.get('/notes/$id');
+    return response.data as Map<String, dynamic>;
+  }
+}

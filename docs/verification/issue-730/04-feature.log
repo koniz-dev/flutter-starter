@@ -1,0 +1,9 @@
+$ ./scripts/dev/create_feature.sh notes
+# started 2026-10-28 22:57:17
+Creating feature: notes
+Feature notes created:
+  lib/features/notes
+  test/features/notes
+Next: flutter analyze && flutter test test/features/notes
+# exit=0 elapsed=7s
+
