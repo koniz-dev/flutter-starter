@@ -322,156 +322,50 @@ call site.
 
 ### 4. Android Release Signing
 
-#### Step 1: Create Keystore
+Release signing already ships. Set it up as described in
+[Android deployment - Release signing](../../deployment/android-deployment.md#release-signing);
+do not paste a different `build.gradle.kts` over the existing one.
 
-```bash
-# Generate keystore (run once, store securely)
-keytool -genkey -v -keystore android/app/upload-keystore.jks \
-  -keyalg RSA -keysize 2048 -validity 10000 \
-  -alias upload \
-  -storepass <your-keystore-password> \
-  -keypass <your-key-password> \
-  -dname "CN=Your Company, OU=Development, O=Your Company, L=City, ST=State, C=US"
-```
+#### What ships
 
-#### Step 2: Create keystore.properties (DO NOT COMMIT)
+`android/app/build.gradle.kts` reads `android/key.properties` (`storeFile`,
+`storePassword`, `keyAlias`, `keyPassword`; `storeFile` relative to `android/`
+or absolute) and signs `release` with it. It never falls back to the debug key:
 
-```properties
-# android/keystore.properties (add to .gitignore)
-storePassword=<your-keystore-password>
-keyPassword=<your-key-password>
-keyAlias=upload
-storeFile=upload-keystore.jks
-```
+| Situation | What the build does |
+|---|---|
+| No `android/key.properties` | Refuses every release `assemble`/`bundle`/`package` task ("Release signing is not configured ... Refusing.") |
+| A key missing or blank | Fails, naming the missing keys |
+| `storeFile` points at nothing | Fails, naming the resolved path |
+| `-PallowUnsignedRelease=true` | Builds an unsigned release for local smoke tests; it cannot be installed or uploaded |
 
-#### Step 3: Update build.gradle.kts
+`android/.gitignore` already ignores `key.properties`, `**/*.jks` and
+`**/*.keystore`. In CI,
+[`deploy-android.yml`](../../../.github/workflows/deploy-android.yml) has a
+commented-out "Setup Android keystore" step that writes the keystore and
+`key.properties` from secrets; uncomment it once the secrets exist.
 
-```kotlin
-// android/app/build.gradle.kts
-import java.util.Properties
+#### R8 / ProGuard
 
-plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("dev.flutter.flutter-gradle-plugin")
-}
+Nothing to switch on. The Flutter Gradle plugin already runs R8 on `release`
+builds, with minification and resource shrinking, using
+`proguard-android-optimize.txt` and Flutter's own keep rules. Pass
+`-Pshrink=false` to turn it off for one build.
 
-// Load keystore properties
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(keystorePropertiesFile.inputStream())
-}
-
-android {
-    namespace = "com.example.flutter_starter"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    defaultConfig {
-        applicationId = "com.example.flutter_starter"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-
-    signingConfigs {
-        create("release") {
-            if (keystorePropertiesFile.exists()) {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-
-flutter {
-    source = "../.."
-}
-```
-
-#### Step 4: Create ProGuard Rules
+If a plugin or reflection-based code needs extra keep rules, create
+`android/app/proguard-rules.pro`; the Flutter plugin adds it to the release
+build automatically when it exists, so `build.gradle.kts` does not change.
+For example, for a library loaded by reflection (substitute its package):
 
 ```proguard
 # android/app/proguard-rules.pro
-# Flutter
--keep class io.flutter.app.** { *; }
--keep class io.flutter.plugin.**  { *; }
--keep class io.flutter.util.**  { *; }
--keep class io.flutter.view.**  { *; }
--keep class io.flutter.**  { *; }
--keep class io.flutter.plugins.**  { *; }
-
-# Keep native methods
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
-# Keep secure storage
--keep class com.it_nomads.fluttersecurestorage.** { *; }
--dontwarn com.it_nomads.fluttersecurestorage.**
-
-# Keep JSON serialization
--keepattributes Signature
--keepattributes *Annotation*
--keep class * implements java.io.Serializable { *; }
--keepclassmembers class * {
-    @com.google.gson.annotations.SerializedName <fields>;
-}
-
-# Keep your models (adjust package name)
--keep class com.example.flutter_starter.** { *; }
+-keep class com.example.reflected.** { *; }
+-dontwarn com.example.reflected.**
 ```
 
-#### Step 5: Update .gitignore
-
-```gitignore
-# Add to .gitignore
-*.jks
-*.keystore
-keystore.properties
-upload-keystore.jks
-```
-
-#### Step 6: CI/CD Configuration
-
-For CI/CD, use environment variables or secrets:
-
-```kotlin
-// Alternative: Use environment variables in CI/CD
-signingConfigs {
-    create("release") {
-        keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties["keyAlias"] as String?
-        keyPassword = System.getenv("KEY_PASSWORD") ?: keystoreProperties["keyPassword"] as String?
-        storeFile = file(System.getenv("KEYSTORE_FILE") ?: keystoreProperties["storeFile"] as String)
-        storePassword = System.getenv("KEYSTORE_PASSWORD") ?: keystoreProperties["storePassword"] as String?
-    }
-}
-```
+Add rules only for what an R8 build actually breaks; a release build that
+crashes with `ClassNotFoundException` or `NoSuchMethodError` names the class
+to keep.
 
 ---
 
