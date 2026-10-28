@@ -1,0 +1,13 @@
+## baseline 60e73c4828f
+exit 0
+00:00 +2: All tests passed!
+
+## mutant: 'context.pushRoute(AppRoutes.tasks);' appended inside a fence of docs/guides/features/routing-guide.md
+exit 1
+    Actual: ['docs/guides/features/routing-guide.md:46: {AppRoutes.task}']
+  docs/guides/features/routing-guide.md:46: {AppRoutes.task}
+
+## after revert
+
+## git grep on the full tree
+(exit 1: 1 = nothing found)

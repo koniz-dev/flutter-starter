@@ -1,0 +1,24 @@
+## baseline b286eb34745
+00:00 +1: All tests passed!
+exit 0
+
+## mutant: a feature route appended after buildHomeRoute(ref)
++    GoRoute(path: '/probe', name: 'probe', builder: (c, s) => const SizedBox()),
+00:00 +1: All tests passed!
+exit 0
+
+## mutant: home route removed
+  Expected: contains all of ['login /login', 'register /register', 'home /']
+    Actual: Set:[
+     Which: has no match for 'home /' at index 2
+00:00 +0 -1: Some tests failed.
+exit 1
+
+## mutant: auth routes removed
+  Expected: contains all of ['login /login', 'register /register', 'home /']
+    Actual: Set:['tasks /tasks', 'feature-flags-debug /feature-flags-debug', 'home /']
+     Which: has no match for 'login /login' at index 0 along with 1 other unmatched
+00:00 +0 -1: Some tests failed.
+exit 1
+
+## after revert

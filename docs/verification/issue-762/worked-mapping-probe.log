@@ -1,0 +1,42 @@
+## probe test (not committed): the guide's _fromFlat mapping against the real models
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+Map<String, dynamic> _fromFlat(Map<String, dynamic> json) => {
+  'user': {
+    'id': '${json['id']}',
+    'email': json['email'],
+    'name': '${json['firstName'] ?? ''} ${json['lastName'] ?? ''}'.trim(),
+    'avatar_url': json['image'],
+  },
+  'token': json['accessToken'],
+  'refresh_token': json['refreshToken'],
+};
+
+void main() {
+  test('dummyjson flat login body maps onto the models', () {
+    final flat = <String, dynamic>{
+      'id': 1,
+      'username': 'emilys',
+      'email': 'emily.johnson@x.dummyjson.com',
+      'firstName': 'Emily',
+      'lastName': 'Johnson',
+      'image': 'https://dummyjson.com/icon/emilys/128',
+      'accessToken': 'at',
+      'refreshToken': 'rt',
+    };
+    expect(() => AuthResponseModel.fromJson(flat), throwsA(anything));
+    final model = AuthResponseModel.fromJson(_fromFlat(flat));
+    expect(model.user.id, '1');
+    expect(model.user.name, 'Emily Johnson');
+    expect(model.user.avatarUrl, 'https://dummyjson.com/icon/emilys/128');
+    expect(model.token, 'at');
+    expect(model.refreshToken, 'rt');
+  });
+}
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/zz_probe/flat_mapping_test.dart
+00:00 +0: dummyjson flat login body maps onto the models
+00:00 +1: All tests passed!
+
+## live dummyjson login response keys and id type (2026-10-29)
+['accessToken', 'email', 'firstName', 'gender', 'id', 'image', 'lastName', 'refreshToken', 'username'] id: int
