@@ -154,15 +154,20 @@ still logged. See
 
 **Recommendation:** Enable code obfuscation. See [Security Implementation Guide](./implementation.md#2-code-obfuscation).
 
-#### CRITICAL: Debug Signing in Release
+#### LOW: Release signing is enforced, but the keystore is yours to supply
 
-**Issue:** Release builds use debug signing keys.
+**Status:** Implemented.
 
-**Location:** `android/app/build.gradle.kts:49`
+`android/app/build.gradle.kts` signs `release` only with the keystore named in
+`android/key.properties` and never falls back to the debug key. Without that
+file every release build is refused ("Release signing is not configured ...
+Refusing."); a missing key or a `storeFile` that points at nothing fails the
+build too. An unsigned release needs an explicit `-PallowUnsignedRelease=true`
+and cannot be installed or uploaded.
 
-**Risk:** Anyone can install debug builds, and release builds aren't properly signed.
-
-**Recommendation:** Configure proper release signing. See [Security Implementation Guide](./implementation.md#4-android-release-signing).
+**Recommendation:** Create the upload keystore and `android/key.properties`,
+keep both out of version control, and back the keystore up. See
+[Android deployment - Release signing](../../deployment/android-deployment.md#release-signing).
 
 #### MEDIUM: Root/jailbreak detection is wired but inert
 
