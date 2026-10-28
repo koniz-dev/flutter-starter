@@ -1,0 +1,18 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart
+00:00 +0: every workflow action is pinned to a commit SHA with its version
+00:00 +1: the pin check itself accepts a SHA with its version comment
+00:00 +2: the pin check itself rejects a tag, a branch, a short SHA and a missing comment
+00:00 +3: the pin check itself exempts local actions and docker images by digest
+00:00 +4: the pin check itself finds uses however the key is spelled
+00:00 +5: the pin check itself accepts a pinned flow-mapping step
+00:00 +6: the pin check itself finds a job-level reusable workflow
+00:00 +7: the pin check itself scans composite actions under .github/
+00:00 +8: the pin check itself follows uses: ./path to a local action outside .github/
+00:00 +9: the pin check itself follows local actions that call local actions
+00:00 +10: the pin check itself reports a local action that has no action.yml
+00:00 +11: the pin check itself reads case-variant file names
+00:00 +12: All tests passed!
+branch dd60b866313, flutter test exit 0
+
+## real tree
+13 files, every action pinned.
