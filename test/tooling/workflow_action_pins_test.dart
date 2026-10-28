@@ -1,50 +1,28 @@
-// Every action a workflow runs is pinned to a full commit SHA. A tag such as
-// `@v2` can be moved to another commit by whoever controls the action's
-// repository, and the deploy workflows hand that commit the project's store,
-// hosting and signing secrets. A SHA cannot move. The `# vX.Y.Z` comment after
-// it is what Dependabot's github-actions updates read and rewrite.
+// Every action a workflow or composite action runs is pinned to a full commit
+// SHA with its release as a comment; `tool/check_action_pins.dart` says why.
+// These tests run it over the real `.github/` files and pin its parsing on
+// fixtures, including the YAML spellings a line match would miss.
 
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// `uses: owner/repo[/path]@<40 hex> # v1.2.3`
-final _pinned = RegExp(
-  r'^uses:\s+[\w.-]+/[\w./-]+@[0-9a-f]{40}\s+#\s+v?\d+(\.\d+){1,2}\S*\s*$',
-);
+import '../../tool/check_action_pins.dart';
 
-/// Exempt: actions in this repository, and container images by digest.
-bool _exempt(String target) =>
-    target.startsWith('./') ||
-    (target.startsWith('docker://') && target.contains('@sha256:'));
-
-/// Each `uses:` line in [workflow] that is not pinned, as `file:line: text`.
-List<String> unpinnedUses(String path, String workflow) {
-  final found = <String>[];
-  final lines = workflow.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    final line = lines[i].trim().replaceFirst(RegExp(r'^-\s+'), '');
-    if (!line.startsWith('uses:')) continue;
-    final target = line.substring('uses:'.length).trim().split(RegExp(r'\s'));
-    if (_exempt(target.first)) continue;
-    if (!_pinned.hasMatch(line)) found.add('$path:${i + 1}: $line');
-  }
-  return found;
-}
+List<String> _unpinned(String source, {String path = 'w.yml'}) => [
+  for (final use in unpinnedUses(path, source)) '$use',
+];
 
 void main() {
   test('every workflow action is pinned to a commit SHA with its version', () {
-    final workflows =
-        Directory('.github/workflows')
-            .listSync()
-            .whereType<File>()
-            .where((f) => f.path.endsWith('.yml') || f.path.endsWith('.yaml'))
-            .toList()
-          ..sort((a, b) => a.path.compareTo(b.path));
-    expect(workflows, isNotEmpty);
+    final files = actionFiles(Directory.current);
+    expect(
+      files.where((f) => f.path.contains('/.github/workflows/')),
+      isNotEmpty,
+    );
 
     final unpinned = [
-      for (final f in workflows) ...unpinnedUses(f.path, f.readAsStringSync()),
+      for (final f in files) ...unpinnedUses(f.path, f.readAsStringSync()),
     ];
     expect(
       unpinned,
@@ -60,7 +38,7 @@ void main() {
 
     test('accepts a SHA with its version comment', () {
       expect(
-        unpinnedUses('w.yml', '      - uses: actions/checkout@$sha # v7.0.1'),
+        _unpinned('      - uses: actions/checkout@$sha # v7.0.1'),
         isEmpty,
       );
     });
@@ -73,7 +51,7 @@ void main() {
         'actions/checkout@$sha',
       ]) {
         expect(
-          unpinnedUses('w.yml', 'steps:\n  - uses: $ref'),
+          _unpinned('steps:\n  - uses: $ref'),
           ['w.yml:2: uses: $ref'],
           reason: ref,
         );
@@ -82,12 +60,71 @@ void main() {
 
     test('exempts local actions and docker images by digest', () {
       expect(
-        unpinnedUses(
-          'w.yml',
+        _unpinned(
           '- uses: ./.github/actions/setup\n'
-              '- uses: docker://alpine@sha256:${'a' * 64}',
+          '- uses: docker://alpine@sha256:${'a' * 64}',
         ),
         isEmpty,
+      );
+    });
+
+    test('finds uses however the key is spelled', () {
+      for (final step in [
+        '- {name: x, uses: evil/act@v1}',
+        '- "uses": evil/act@v1',
+        "- 'uses': evil/act@v1",
+        '- uses : evil/act@v1',
+      ]) {
+        expect(
+          _unpinned('steps:\n  $step'),
+          ['w.yml:2: uses: evil/act@v1'],
+          reason: step,
+        );
+      }
+    });
+
+    test('accepts a pinned flow-mapping step', () {
+      expect(
+        _unpinned(
+          'steps:\n  - {name: x, uses: actions/checkout@$sha} # v7.0.1',
+        ),
+        isEmpty,
+      );
+    });
+
+    test('finds a job-level reusable workflow', () {
+      expect(
+        _unpinned(
+          'jobs:\n  call:\n    uses: evil/repo/.github/workflows/x.yml@v1',
+        ),
+        ['w.yml:3: uses: evil/repo/.github/workflows/x.yml@v1'],
+      );
+    });
+
+    test('scans composite actions under .github/', () {
+      final root = Directory.systemTemp.createTempSync('action_pins_');
+      addTearDown(() => root.deleteSync(recursive: true));
+      File('${root.path}/.github/workflows/ci.yml')
+        ..createSync(recursive: true)
+        ..writeAsStringSync(
+          'jobs:\n  a:\n    steps:\n      - uses: ./.github/actions/setup\n',
+        );
+      final action = File('${root.path}/.github/actions/setup/action.yml')
+        ..createSync(recursive: true)
+        ..writeAsStringSync(
+          'runs:\n'
+          '  using: composite\n'
+          '  steps:\n'
+          '    - uses: evil/act@v1\n',
+        );
+
+      final files = actionFiles(root);
+      expect(files.map((f) => f.path), contains(action.path));
+      expect(
+        [
+          for (final f in files) ...unpinnedUses(f.path, f.readAsStringSync()),
+        ].map((u) => '$u'),
+        ['${action.path}:4: uses: evil/act@v1'],
       );
     });
   });
