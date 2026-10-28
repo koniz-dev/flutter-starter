@@ -1,24 +1,35 @@
 // Fails when a GitHub Actions step runs an action that is not pinned to a
-// commit SHA.
+// commit SHA, or (with --verify-tags) whose SHA is not the commit its version
+// comment names.
 //
 // A tag such as `@v2` can be moved to another commit by whoever controls the
 // action's repository, and the deploy workflows hand that commit the project's
 // store, hosting and signing secrets. A SHA cannot move. The `# vX.Y.Z`
 // comment after it is what Dependabot's github-actions updates read and
-// rewrite, so it is required too.
+// rewrite, so it is required too. And it is checked: GitHub runs
+// `owner/repo@<sha>` for any commit in the repository's fork network,
+// including one pushed only to a fork, so a well-formed pin with a plausible
+// comment could still run someone else's code.
 //
 // Reads every workflow under `.github/workflows/`, every composite action
 // (`action.yml` / `action.yaml`) under `.github/`, and every local action a
 // workflow or action reaches through `uses: ./<path>`, wherever it lives; a
-// `./<path>` with no `action.yml` / `action.yaml` is reported too. The files are parsed as
-// YAML rather than matched line by line, so a `uses` key is found however it
-// is spelled: block or flow mapping, quoted or not, `uses :` included.
+// `./<path>` with no `action.yml` / `action.yaml` is reported too. The files
+// are parsed as YAML rather than matched line by line, so a `uses` key is
+// found however it is spelled (block or flow mapping, quoted or not, escaped)
+// and text in another key is never taken for a pin.
 //
 // Usage:
 //   dart run tool/check_action_pins.dart [root]
+//   dart run tool/check_action_pins.dart --verify-tags [root]
 //
-// `root` defaults to the current directory. Exits 0 when every action is
-// pinned, 1 otherwise, printing `file:line: uses: <target>` for each.
+// `root` defaults to the current directory. Without a flag it works offline
+// and exits 0 when every action is pinned, 1 otherwise, printing
+// `file:line: uses: <target>` for each. --verify-tags then resolves each
+// version comment's tag in `owner/repo` through `gh api` (annotated tags
+// peeled) and exits 1 on a mismatch or a missing tag, 2 when the API could not
+// be asked. It needs `gh` authenticated (in Actions:
+// `GH_TOKEN: ${{ github.token }}`).
 
 import 'dart:io';
 
@@ -44,11 +55,15 @@ class ActionUse {
 /// `owner/repo[/path]@<40 hex>`
 final RegExp _shaRef = RegExp(r'^[\w.-]+/[\w./-]+@[0-9a-f]{40}$');
 
+/// `owner/repo` and the SHA of a pinned target.
+final RegExp _pinParts = RegExp(r'^([\w.-]+/[\w.-]+)[\w./-]*@([0-9a-f]{40})$');
+
 /// `# v1.2.3` as the line's YAML comment: after the `uses` value only the
 /// brackets and commas that close its flow collection may come before it, so
 /// a `#` inside another key's string (`name: "x # v1.0"`) is not a comment.
+/// Group 1 is the version.
 final RegExp _versionComment = RegExp(
-  r'^[\s,}\]]*\s#\s*v?\d+(\.\d+){1,2}\S*\s*$',
+  r'^[\s,}\]]*\s#\s*(v?\d+(\.\d+){1,2}\S*)\s*$',
 );
 
 /// Exempt: actions in this repository, and container images by digest.
@@ -165,8 +180,90 @@ bool _isActionFile(String path) {
       (lower.endsWith('.yml') || lower.endsWith('.yaml'));
 }
 
+/// Resolves the commit [tag] names in [repo] (`owner/repo`), or null when
+/// the tag does not exist. Throws [TagLookupException] when it cannot tell.
+typedef TagResolver = String? Function(String repo, String tag);
+
+/// The API could not be asked, so neither a match nor a mismatch is known.
+class TagLookupException implements Exception {
+  const TagLookupException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+/// A [TagResolver] over `gh api`, following annotated tags to their commit.
+/// [gh] is the executable to run; tests point it at a fake.
+TagResolver ghTagResolver({String gh = 'gh'}) => (repo, tag) {
+  (String, String)? object(String path) {
+    final result = Process.runSync(gh, [
+      'api',
+      path,
+      '--jq',
+      '.object.type + " " + .object.sha',
+    ]);
+    if (result.exitCode != 0) {
+      final output = '${result.stdout}${result.stderr}'.trim();
+      if (output.contains('HTTP 404') || output.contains('Not Found')) {
+        return null;
+      }
+      throw TagLookupException('GitHub API error for $path: $output');
+    }
+    final parts = (result.stdout as String).trim().split(' ');
+    return parts.length == 2 ? (parts[0], parts[1]) : null;
+  }
+
+  var found = object('repos/$repo/git/ref/tags/$tag');
+  while (found != null && found.$1 == 'tag') {
+    found = object('repos/$repo/git/tags/${found.$2}');
+  }
+  return found?.$1 == 'commit' ? found!.$2 : null;
+};
+
+/// Checks every non-exempt `uses` under [root] against the commit its
+/// version comment's tag names, as `file:line: ...` problems. Every such
+/// `uses` is either verified or reported, so a pin the check cannot read is
+/// never a silent pass. Each `owner/repo@tag` is resolved once.
+({List<String> problems, int verified}) verifyTags(
+  Directory root,
+  TagResolver resolve,
+) {
+  final resolved = <String, String?>{};
+  final problems = <String>[];
+  var verified = 0;
+  for (final file in actionFiles(root)) {
+    for (final use in actionUses(file.path, file.readAsStringSync())) {
+      if (_exempt(use.target)) continue;
+      final pin = _pinParts.firstMatch(use.target);
+      final version = _versionComment.firstMatch(use.trailing)?.group(1);
+      final at = '${use.path}:${use.line}';
+      if (pin == null || version == null) {
+        problems.add('$at: uses: ${use.target} is not a pinned release');
+        continue;
+      }
+      final (repo, sha) = (pin.group(1)!, pin.group(2)!);
+      final real = resolved.putIfAbsent(
+        '$repo@$version',
+        () => resolve(repo, version),
+      );
+      if (real == null) {
+        problems.add('$at: $repo has no tag $version; the pin is $sha');
+      } else if (real != sha) {
+        problems.add('$at: $repo $version is $real, but the pin is $sha');
+      } else {
+        verified++;
+      }
+    }
+  }
+  return (problems: problems, verified: verified);
+}
+
 void main(List<String> args) {
-  final root = Directory(args.isEmpty ? '.' : args.first);
+  final verify = args.contains('--verify-tags');
+  final rest = args.where((a) => a != '--verify-tags').toList();
+  final root = Directory(rest.isEmpty ? '.' : rest.first);
   final files = actionFiles(root);
   if (files.isEmpty) {
     stderr.writeln('No workflows found under ${root.path}/.github.');
@@ -181,5 +278,27 @@ void main(List<String> args) {
     );
     exit(1);
   }
-  stdout.writeln('${files.length} files, every action pinned.');
+  if (!verify) {
+    stdout.writeln('${files.length} files, every action pinned.');
+    return;
+  }
+  final ({List<String> problems, int verified}) result;
+  try {
+    result = verifyTags(root, ghTagResolver());
+  } on TagLookupException catch (e) {
+    stderr.writeln(e);
+    exit(2);
+  }
+  if (result.problems.isNotEmpty) {
+    result.problems.forEach(stderr.writeln);
+    stderr.writeln(
+      '${result.problems.length} pins are not the commit their version '
+      'comment names.',
+    );
+    exit(1);
+  }
+  stdout.writeln(
+    '${result.verified} pins in ${files.length} files match their version '
+    'comment.',
+  );
 }

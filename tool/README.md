@@ -129,6 +129,17 @@ for every `uses: ./<path>` that has no `action.yml` / `action.yaml`.
 `test/tooling/workflow_action_pins_test.dart` runs it under `flutter test`, so
 the Quality gate enforces it.
 
+```bash
+dart run tool/check_action_pins.dart --verify-tags
+```
+
+Also resolves each version comment's tag in `owner/repo` through `gh api`
+(annotated tags peeled) and fails when the pinned SHA is not that tag's commit,
+for example a commit pushed only to a fork of the action. Exits 1 on a
+mismatch or a missing tag, 2 when the API cannot be asked. It needs `gh`
+logged in, so it is not part of `flutter test`; the **Action pins** workflow
+(`.github/workflows/action-pins.yml`) runs it on any change under `.github/`.
+
 ## `strip_sample_features.dart`
 
 Removes sample **`tasks`** and **`feature_flags`** modules (and related tests) and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.
