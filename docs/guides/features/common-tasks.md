@@ -232,11 +232,16 @@ See [API Integration](../../api/examples/api-integration.md) for more patterns.
    }
    ```
 
-2. **Add Navigation**: register the screen in `lib/core/routing/` (see
-   `app_routes.dart` and `routes_registry.dart`), then navigate by location:
+2. **Add Navigation**: three pieces, described in the
+   [routing guide](routing-guide.md) - a constant in
+   `lib/core/routing/app_routes.dart` (`static const String myScreen =
+   '/my-screen';`), a `lib/features/<feature>/routing/<feature>_routes.dart`
+   module that builds the `GoRoute`, and its entry in `buildAppRoutes`
+   (`lib/core/routing/routes_registry.dart`). Then navigate by the constant,
+   never a string literal:
    ```dart
    // Navigate to screen (go_router; see NavigationExtensions)
-   context.pushRoute('/my-screen');
+   context.pushRoute(AppRoutes.myScreen);
    ```
 
 3. **Handle State**:

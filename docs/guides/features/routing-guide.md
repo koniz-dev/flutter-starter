@@ -42,10 +42,12 @@ import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 
 context.goToHome();
-context.pushRoute(AppRoutes.tasks);
+context.pushRoute(AppRoutes.register);
+
+// A route your feature adds, with a path parameter (`/orders/:orderId`):
 context.pushNamedRoute(
-  AppRoutes.taskDetailName,
-  pathParameters: {'taskId': 'task-123'},
+  AppRoutes.orderDetailName,
+  pathParameters: {'orderId': 'order-123'},
 );
 
 if (context.canPopRoute()) {
@@ -64,10 +66,10 @@ Always use constants from `AppRoutes` instead of hardcoded paths.
 ```dart
 // Good
 context.goToLogin();
-context.pushRoute(AppRoutes.tasks);
+context.pushRoute(AppRoutes.register);
 
 // Avoid
-context.pushRoute('/tasks');
+context.pushRoute('/register');
 ```
 
 ## Authentication Redirect

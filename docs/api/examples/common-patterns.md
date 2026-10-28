@@ -216,7 +216,7 @@ context.showSuccessSnackBar('Success!');
 // so the helpers live in NavigationExtensions
 // (lib/core/routing/navigation_extensions.dart).
 context.goToHome();
-context.pushRoute('/tasks');
+context.pushRoute(AppRoutes.register); // a constant, never a literal path
 context.popRoute();
 ```
 

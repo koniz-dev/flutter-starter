@@ -40,7 +40,15 @@ const _samples = [
     ['docs/features/feature-flags.md'],
     ['/feature-flags-debug'],
   ),
-  _Sample('tasks', ['lib/features/tasks'], ['docs/features/tasks.md'], []),
+  _Sample(
+    'tasks',
+    ['lib/features/tasks'],
+    ['docs/features/tasks.md'],
+    // Declared in lib/core/routing/app_routes.dart, which the strip keeps
+    // and rewrites, so the declaration scan does not see them as the
+    // sample's.
+    ['AppRoutes.task', 'taskDetailName', "'/tasks"],
+  ),
 ];
 
 /// Not checked: archives of what happened, which name what existed then.
