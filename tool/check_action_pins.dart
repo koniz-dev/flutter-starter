@@ -44,9 +44,12 @@ class ActionUse {
 /// `owner/repo[/path]@<40 hex>`
 final RegExp _shaRef = RegExp(r'^[\w.-]+/[\w./-]+@[0-9a-f]{40}$');
 
-/// `# v1.2.3` at the end of the line, after anything that closes a flow
-/// collection.
-final RegExp _versionComment = RegExp(r'#\s*v?\d+(\.\d+){1,2}\S*\s*$');
+/// `# v1.2.3` as the line's YAML comment: after the `uses` value only the
+/// brackets and commas that close its flow collection may come before it, so
+/// a `#` inside another key's string (`name: "x # v1.0"`) is not a comment.
+final RegExp _versionComment = RegExp(
+  r'^[\s,}\]]*\s#\s*v?\d+(\.\d+){1,2}\S*\s*$',
+);
 
 /// Exempt: actions in this repository, and container images by digest.
 bool _exempt(String target) =>

@@ -192,5 +192,18 @@ void main() {
         ]),
       );
     });
+    test('takes the version only from the line comment', () {
+      for (final step in [
+        '- {uses: a/b@$sha, with: {ref: "# v1.2.3"}}',
+        '- {uses: a/b@$sha, name: "release # 1.0"}',
+        '- {uses: a/b@$sha, name: x} # v1.2.3',
+      ]) {
+        expect(
+          _unpinned('steps:\n  $step'),
+          ['w.yml:2: uses: a/b@$sha'],
+          reason: step,
+        );
+      }
+    });
   });
 }
