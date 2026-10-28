@@ -120,11 +120,14 @@ List<ActionUse> missingLocalActions(Directory root) => _scan(root).missing;
     }
     for (final use in actionUses(file.path, file.readAsStringSync())) {
       if (!use.target.startsWith('./')) continue;
-      final dir = p.join(root.path, use.target.substring(2));
-      final action = [
-        File(p.join(dir, 'action.yml')),
-        File(p.join(dir, 'action.yaml')),
-      ].where((f) => f.existsSync()).firstOrNull;
+      final dir = Directory(p.join(root.path, use.target.substring(2)));
+      final action = dir.existsSync()
+          ? dir
+                .listSync()
+                .whereType<File>()
+                .where((f) => _isActionName(p.basename(f.path)))
+                .firstOrNull
+          : null;
       if (action == null) {
         missing.add(use);
       } else {
@@ -145,12 +148,18 @@ List<String> checkActionPins(Directory root) => [
     '$use (no action.yml or action.yaml there)',
 ];
 
+/// Names compare case-insensitively: a case-insensitive file system (a macOS
+/// runner) loads `Action.yml` as `action.yml`, so the check reads it too.
+bool _isActionName(String name) =>
+    const {'action.yml', 'action.yaml'}.contains(name.toLowerCase());
+
 bool _isActionFile(String path) {
   final normalized = path.replaceAll(r'\', '/');
   final name = normalized.split('/').last;
-  if (name == 'action.yml' || name == 'action.yaml') return true;
+  if (_isActionName(name)) return true;
+  final lower = name.toLowerCase();
   return normalized.contains('/.github/workflows/') &&
-      (name.endsWith('.yml') || name.endsWith('.yaml'));
+      (lower.endsWith('.yml') || lower.endsWith('.yaml'));
 }
 
 void main(List<String> args) {

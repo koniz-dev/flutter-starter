@@ -113,7 +113,8 @@ Fails when a workflow under `.github/workflows/`, a composite action
 workflow reaches through `uses: ./<path>` (wherever it lives) runs an action
 that is not pinned to a full commit SHA followed by its release as a comment
 (`uses: owner/repo@<40-hex sha> # vX.Y.Z`). Local `./` actions and
-`docker://...@sha256:` images are exempt. It parses the YAML, so a `uses` key
+`docker://...@sha256:` images are exempt. File names are matched case-insensitively (`Release.YML`,
+`Action.yml`), since a case-insensitive runner file system loads them. It parses the YAML, so a `uses` key
 written in a flow mapping, quoted, or as `uses :` is checked like any other.
 
 ```bash
