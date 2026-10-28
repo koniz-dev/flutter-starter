@@ -22,7 +22,8 @@ void main() {
     );
 
     final unpinned = [
-      for (final f in files) ...unpinnedUses(f.path, f.readAsStringSync()),
+      for (final f in files)
+        for (final use in unpinnedUses(f.path, f.readAsStringSync())) '$use',
     ];
     expect(
       unpinned,
