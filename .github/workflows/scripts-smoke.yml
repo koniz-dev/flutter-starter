@@ -118,6 +118,8 @@ jobs:
             echo "=== build/app/outputs ==="
             find build/app/outputs -type f 2>/dev/null | head -40
             echo "=== build/web ==="
+            # A listing for people to read in the log; nothing parses it.
+            # shellcheck disable=SC2012
             ls -la build/web 2>/dev/null | head -20
           } | tee build_outputs.txt
 

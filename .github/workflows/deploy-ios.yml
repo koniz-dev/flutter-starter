@@ -86,9 +86,9 @@ jobs:
         id: env
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
           else
-            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "environment=production" >> "$GITHUB_OUTPUT"
           fi
 
       # Runs on the tree that is about to be built, which is the whole point:

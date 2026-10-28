@@ -106,7 +106,7 @@ workflows' `pull_request` triggers drift apart:
 |---|---|---|
 | [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, `tool/doc_symbols.dart`, `tool/doc_env_runs.dart`, `tool/doc_dart_defines.dart`, `tool/doc_test_paths.dart`, `lib/core/config/dart_defines.dart`, or the workflow itself (`.github/workflows/docs-check.yml`) |
-| [`action-pins.yml`](.github/workflows/action-pins.yml) | Action pins | any `.github/**` (so every Dependabot github-actions bump) or `scripts/ci/verify_action_pins.sh`; asks the GitHub API, so it is not part of the offline `flutter test` suite |
+| [`action-pins.yml`](.github/workflows/action-pins.yml) | Action pins, Workflow lint (actionlint + shellcheck) | any `.github/**` (so every Dependabot github-actions bump) or `scripts/ci/verify_action_pins.sh`; asks the GitHub API, so it is not part of the offline `flutter test` suite |
 | [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
 | [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x5) | **every** PR in the template repository (in a repository created from it, the job reports as skipped); strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed <!-- strip:strip-tool line --> |
 
