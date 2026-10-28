@@ -48,3 +48,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: scripts/ci/verify_action_pins.sh
+
+  # actionlint type-checks every workflow and runs shellcheck on each `run:`
+  # script, the scripts that handle this project's secrets and artifact
+  # paths. The binary is a pinned release, checked against its published
+  # SHA-256 before it runs.
+  actionlint:
+    name: Workflow lint
+    runs-on: ubuntu-latest
+    env:
+      ACTIONLINT_VERSION: 1.7.12
+      ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install actionlint
+        run: |
+          set -euo pipefail
+          tarball="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl -sSfL -o "$tarball" \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/$tarball"
+          echo "$ACTIONLINT_SHA256  $tarball" | sha256sum -c -
+          tar -xzf "$tarball" actionlint
+          sudo install actionlint /usr/local/bin/actionlint
+          actionlint -version
+
+      - name: Lint the workflows
+        run: actionlint -color .github/workflows/*.yml

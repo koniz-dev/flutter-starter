@@ -253,6 +253,8 @@ jobs:
             git diff --stat
             echo "::error title=pub get / analyze / test changed tracked files::Run flutter pub get on main with this stable and commit the result (usually pubspec.lock or analysis_options.yaml)."
             echo "- **Tracked files changed by pub get / analyze / test:**" >> "$GITHUB_STEP_SUMMARY"
+            # sed prefixes every line; ${dirty//...} cannot anchor at each line start.
+            # shellcheck disable=SC2001
             echo "$dirty" | sed 's/^/  - /' >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi

@@ -138,11 +138,13 @@ jobs:
           PRESENTATION_FILES=$(grep -c "^SF:.*lib/features/.*/presentation" coverage/lcov.info || echo "0")
           CORE_FILES=$(grep -c "^SF:.*lib/core" coverage/lcov.info || echo "0")
 
-          echo "overall=$OVERALL" >> $GITHUB_OUTPUT
-          echo "domain_files=$DOMAIN_FILES" >> $GITHUB_OUTPUT
-          echo "data_files=$DATA_FILES" >> $GITHUB_OUTPUT
-          echo "presentation_files=$PRESENTATION_FILES" >> $GITHUB_OUTPUT
-          echo "core_files=$CORE_FILES" >> $GITHUB_OUTPUT
+          {
+            echo "overall=$OVERALL"
+            echo "domain_files=$DOMAIN_FILES"
+            echo "data_files=$DATA_FILES"
+            echo "presentation_files=$PRESENTATION_FILES"
+            echo "core_files=$CORE_FILES"
+          } >> "$GITHUB_OUTPUT"
 
           echo "📊 Overall line coverage: ${OVERALL}%"
           echo ""
@@ -252,7 +254,7 @@ jobs:
             COLOR="yellow"
           fi
           
-          echo "color=$COLOR" >> $GITHUB_OUTPUT
+          echo "color=$COLOR" >> "$GITHUB_OUTPUT"
       
       # Runs only once a `pull_request:` trigger is enabled above - this
       # workflow ships with schedule and workflow_dispatch only, so on this

@@ -64,7 +64,7 @@ jobs:
         run: flutter pub get
 
       - name: Add Pub global bin to PATH
-        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+        run: echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
 
       # The CLI version MUST match the `patrol` dependency pinned in
       # pubspec.yaml (^3.10.0 -> 3.20.0). Activating unpinned resolves the newest

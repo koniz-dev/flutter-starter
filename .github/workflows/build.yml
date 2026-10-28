@@ -177,7 +177,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          APK=$(ls build/app/outputs/flutter-apk/*.apk | head -1)
+          APK=$(find build/app/outputs/flutter-apk -name '*.apk' | sort | head -1)
           ./scripts/ci/verify_apk_signer.sh "$APK"
 
       - name: Upload artifacts
