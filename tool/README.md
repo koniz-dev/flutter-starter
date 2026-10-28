@@ -113,7 +113,10 @@ Fails when a workflow under `.github/workflows/`, a composite action
 workflow reaches through `uses: ./<path>` (wherever it lives) runs an action
 that is not pinned to a full commit SHA followed by its release as a comment
 (`uses: owner/repo@<40-hex sha> # vX.Y.Z`). Local `./` actions and
-`docker://...@sha256:` images are exempt. File names are matched case-insensitively (`Release.YML`,
+`docker://...@sha256:` images are exempt. Container images (`jobs.<id>.container`, `services.<name>.image`, and a
+Docker action's `runs.image: docker://...`) must be pinned by digest
+(`<image>@sha256:<64 hex>`); a Docker action built from its own `Dockerfile` is
+accepted, and that Dockerfile's `FROM` lines are not checked. File names are matched case-insensitively (`Release.YML`,
 `Action.yml`), since a case-insensitive runner file system loads them. It parses the YAML, so a `uses` key
 written in a flow mapping, quoted, or as `uses :` is checked like any other. The
 version must be the line's own comment and a plain release tag (`v1.2.3`,

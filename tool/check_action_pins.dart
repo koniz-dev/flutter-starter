@@ -19,6 +19,12 @@
 // found however it is spelled (block or flow mapping, quoted or not, escaped)
 // and text in another key is never taken for a pin.
 //
+// Container images get the same treatment, since a tag such as `node:20`
+// moves too: `jobs.<id>.container`, `jobs.<id>.services.<name>.image` and a
+// Docker action's `runs.image: docker://...` must end in `@sha256:<64 hex>`.
+// A Docker action built from its own Dockerfile is accepted; that
+// Dockerfile's `FROM` lines are not checked.
+//
 // Usage:
 //   dart run tool/check_action_pins.dart [root]
 //   dart run tool/check_action_pins.dart --verify-tags [root]
@@ -74,10 +80,13 @@ final RegExp _versionComment = RegExp(
 /// The text of a `#` comment in the rest of a line, when there is one.
 final RegExp _anyComment = RegExp(r'\s#\s*(.*?)\s*$');
 
+/// A container image pinned by digest: `<image>@sha256:<64 hex>`.
+final RegExp _imageDigest = RegExp(r'@sha256:[0-9a-f]{64}$');
+
 /// Exempt: actions in this repository, and container images by digest.
 bool _exempt(String target) =>
     target.startsWith('./') ||
-    (target.startsWith('docker://') && target.contains('@sha256:'));
+    (target.startsWith('docker://') && _imageDigest.hasMatch(target));
 
 /// Every `uses` key in [source], at any depth.
 List<ActionUse> actionUses(String path, String source) {
@@ -121,6 +130,50 @@ List<ActionUse> unpinnedUses(String path, String source) => [
             _versionComment.hasMatch(use.trailing)))
       use,
 ];
+
+/// Every container image [source] runs that is not pinned by digest, as
+/// `file:line: <key>: <image>`: a workflow's `jobs.<id>.container` (a string
+/// or its `image`) and `jobs.<id>.services.<name>.image`, and a Docker
+/// action's `runs.image` when it names an image (`docker://...`) rather than
+/// a Dockerfile in the action. An expression (`${{ ... }}`) is reported too:
+/// nothing here can tell what it resolves to. The Dockerfile's own `FROM`
+/// lines are not checked.
+List<String> unpinnedImages(String path, String source) {
+  final found = <String>[];
+  void check(String key, Object? node) {
+    if (node is! YamlScalar || node.value is! String) return;
+    final image = node.value as String;
+    if (!_imageDigest.hasMatch(image)) {
+      found.add('$path:${node.span.start.line + 1}: $key: $image');
+    }
+  }
+
+  final root = loadYamlNode(source, sourceUrl: Uri.file(path));
+  if (root is! YamlMap) return found;
+  final runs = root.nodes['runs'];
+  if (runs is YamlMap) {
+    final image = runs.nodes['image'];
+    if (image is YamlScalar && '${image.value}'.startsWith('docker://')) {
+      check('runs.image', image);
+    }
+  }
+  final jobs = root.nodes['jobs'];
+  if (jobs is! YamlMap) return found;
+  for (final job in jobs.nodes.values.whereType<YamlMap>()) {
+    final container = job.nodes['container'];
+    check(
+      'container',
+      container is YamlMap ? container.nodes['image'] : container,
+    );
+    final services = job.nodes['services'];
+    if (services is YamlMap) {
+      for (final service in services.nodes.values.whereType<YamlMap>()) {
+        check('services.image', service.nodes['image']);
+      }
+    }
+  }
+  return found;
+}
 
 /// The workflows and composite actions under [root]'s `.github/`, plus every
 /// local action (`uses: ./path`) they reach, wherever it lives, sorted.
@@ -171,6 +224,8 @@ List<String> checkActionPins(Directory root) => [
   for (final f in actionFiles(root))
     for (final use in unpinnedUses(f.path, f.readAsStringSync()))
       _describe(use),
+  for (final f in actionFiles(root))
+    ...unpinnedImages(f.path, f.readAsStringSync()),
   for (final use in missingLocalActions(root))
     '$use (no action.yml or action.yaml there)',
 ];
@@ -293,7 +348,8 @@ void main(List<String> args) {
     problems.forEach(stderr.writeln);
     stderr.writeln(
       'Pin each action to the commit of a release, with the release as a '
-      'comment: uses: owner/repo@<40-hex sha> # vX.Y.Z',
+      'comment: uses: owner/repo@<40-hex sha> # vX.Y.Z, and each container '
+      'image by digest: <image>@sha256:<64 hex>',
     );
     exit(1);
   }
