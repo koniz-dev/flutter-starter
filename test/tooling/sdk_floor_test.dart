@@ -10,12 +10,17 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yaml/yaml.dart';
 
-/// Every committed pubspec that has a lock beside it.
-const _packages = [
+/// The root package and every brick hook package that has a lock beside its
+/// pubspec. Found rather than listed: a stripped tree has no `bricks/`.
+List<String> _packages() => [
   '.',
-  'bricks/feature_clean/hooks',
-  'bricks/flutter_starter_setup/hooks',
-];
+  if (Directory('bricks').existsSync())
+    for (final f in Directory('bricks').listSync(recursive: true))
+      if (f is File &&
+          f.uri.pathSegments.last == 'pubspec.yaml' &&
+          File('${f.parent.path}/pubspec.lock').existsSync())
+        f.parent.path,
+]..sort();
 
 /// The lower bound of a constraint such as `^3.13.0`, `>=3.47.0` or
 /// `">=3.13.0 <4.0.0"`; null when there is none.
@@ -52,7 +57,8 @@ List<String> floorMismatches(String pubspec, String lock) {
 }
 
 void main() {
-  for (final dir in _packages) {
+  final packages = _packages();
+  for (final dir in packages) {
     test('$dir/pubspec.yaml declares the SDK floor its lock needs', () {
       final mismatches = floorMismatches(
         File('$dir/pubspec.yaml').readAsStringSync(),
