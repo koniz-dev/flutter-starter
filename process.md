@@ -112,10 +112,13 @@ GitHub issues are the single source of truth. Full spec:
       adopter has to change.
     - To release: rename `[Unreleased]` to `[X.Y.Z] - <date>` here, bump the
       marker on `main` through an ordinary PR, then run
-      `$M/scripts/release_starter.sh vX.Y.Z` (`--dry-run` first). It refuses
-      unless the marker on `origin/main` and the changelog heading agree, and
-      publishes that changelog section as the release notes, tagged at
-      `origin/main`.
+      `$M/scripts/release_starter.sh vX.Y.Z --dry-run <commit>`, then the
+      same without `--dry-run`. `<commit>` is the `main` commit the changelog
+      section describes (default `origin/main`); pass it whenever `main` may
+      move between writing the notes and publishing. The script refuses
+      unless that commit is on `origin/main` and its marker and the changelog
+      heading agree, and publishes the section as the release notes, tagged
+      there.
 
 **Canonical epic list:
 [`scripts/bootstrap-issue-labels.sh`](scripts/bootstrap-issue-labels.sh)**

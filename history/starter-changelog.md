@@ -7,24 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Breaking
-
-- **`pubspec.yaml` declares the SDK floor the lock needs:** `sdk: ^3.13.0`, `flutter: '>=3.47.0'` (was `sdk: '^3.8.0'`). The language version is now 3.13: `dart format` reformats some expressions differently, and three lints that ask for 3.13-only syntax (`unnecessary_type_name_in_constructor`, `empty_container_bodies`, `prefer_initializing_formals`) are disabled in `analysis_options.yaml`. Merge your `environment:` and run `dart format` once.
-- **`scripts/ci/verify_action_pins.sh` is gone**; use `dart run tool/check_action_pins.dart --verify-tags`.
-- **The pin check is stricter.** In a flow mapping `uses` must come last (`- {name: x, uses: owner/repo@<sha>} # vX.Y.Z`); the version comment must be a plain release tag; `container:`, `services.<name>.image` and `runs.image: docker://...` need `@sha256:<64 hex>`; a `uses: ./path` with no `action.yml` fails. Pin anything you added the same way.
-
-### Added
-
-- **Action pins** workflow (`.github/workflows/action-pins.yml`, any PR touching `.github/`): **Action pins** resolves each pinned action's `# vX.Y.Z` tag through the GitHub API and fails when the SHA is not that release's commit (for example a commit that exists only in a fork); **Workflow lint** runs a checksum-verified actionlint (with shellcheck) over every workflow. Read-only `GITHUB_TOKEN`.
-- `tool/check_action_pins.dart`: the offline pin check, YAML-parsed; follows local actions anywhere in the repository and matches file names case-insensitively.
-- `test/tooling/sdk_floor_test.dart` (declared SDK floor vs lock) and `test/tooling/workflow_dispatch_inputs_test.dart` (no free-text dispatch input interpolated into `run:`).
-- Fork guide section 6 and a security checklist item: turn on Dependabot alerts and security updates for your repository.
-
-### Fixed
-
-- `build.yml` passes its `workflow_dispatch` inputs through `env:`; `base_url` was substituted into the script text and could run as code.
-- Workflow `run:` scripts quote `$GITHUB_OUTPUT` / `$GITHUB_PATH` (actionlint clean).
-
 ## [2.0.0] - 2026-10-28
 
 The first tagged release. If your project was created from the template before
@@ -90,6 +72,10 @@ change. Upgrade path: `docs/guides/migration/upgrading-this-starter.md`.
 - **Auth: `AuthLocalDataSourceImpl` requires `tokenStore`.** See the entry
   below.
 
+- **`pubspec.yaml` declares the SDK floor the lock needs:** `sdk: ^3.13.0`, `flutter: '>=3.47.0'` (was `sdk: '^3.8.0'`). The language version is now 3.13: `dart format` reformats some expressions differently, and three lints that ask for 3.13-only syntax (`unnecessary_type_name_in_constructor`, `empty_container_bodies`, `prefer_initializing_formals`) are disabled in `analysis_options.yaml`. Merge your `environment:` and run `dart format` once.
+- **`scripts/ci/verify_action_pins.sh` is gone**; use `dart run tool/check_action_pins.dart --verify-tags`.
+- **The pin check is stricter.** In a flow mapping `uses` must come last (`- {name: x, uses: owner/repo@<sha>} # vX.Y.Z`); the version comment must be a plain release tag; `container:`, `services.<name>.image` and `runs.image: docker://...` need `@sha256:<64 hex>`; a `uses: ./path` with no `action.yml` fails. Pin anything you added the same way.
+
 ### Added
 
 - Offline demo sign-in: a debug build with no `BASE_URL` signs in with a demo
@@ -102,6 +88,11 @@ change. Upgrade path: `docs/guides/migration/upgrading-this-starter.md`.
 - Quality gate fails when total line coverage drops below 94%.
 - `audit_template.sh` checks that committed generated code matches its sources
   (`AUDIT_SKIP_CODEGEN=1` skips it).
+
+- **Action pins** workflow (`.github/workflows/action-pins.yml`, any PR touching `.github/`): **Action pins** resolves each pinned action's `# vX.Y.Z` tag through the GitHub API and fails when the SHA is not that release's commit (for example a commit that exists only in a fork); **Workflow lint** runs a checksum-verified actionlint (with shellcheck) over every workflow. Read-only `GITHUB_TOKEN`.
+- `tool/check_action_pins.dart`: the offline pin check, YAML-parsed; follows local actions anywhere in the repository and matches file names case-insensitively.
+- `test/tooling/sdk_floor_test.dart` (declared SDK floor vs lock) and `test/tooling/workflow_dispatch_inputs_test.dart` (no free-text dispatch input interpolated into `run:`).
+- Fork guide section 6 and a security checklist item: turn on Dependabot alerts and security updates for your repository.
 
 ### Changed
 
@@ -117,7 +108,6 @@ change. Upgrade path: `docs/guides/migration/upgrading-this-starter.md`.
 - The example screen that opened feature-flag overrides directly.
 
 ### Removed (earlier, unreleased until this tag)
-
 
 - **BREAKING - Auth**: `AuthLocalDataSourceImpl` no longer accepts
   `SecureStorageService? secureStorageService`. `ITokenStore tokenStore` is now
@@ -149,6 +139,11 @@ change. Upgrade path: `docs/guides/migration/upgrading-this-starter.md`.
   is unchanged. Behaviour is identical - the old constructor built exactly this
   object. Any other `ITokenStore` implementation works too, which is the point
   of the parameter being typed on the contract.
+
+### Fixed
+
+- `build.yml` passes its `workflow_dispatch` inputs through `env:`; `base_url` was substituted into the script text and could run as code.
+- Workflow `run:` scripts quote `$GITHUB_OUTPUT` / `$GITHUB_PATH` (actionlint clean).
 
 ## [1.0.0+1] - Enterprise Starter V2.0 Upgrade
 
