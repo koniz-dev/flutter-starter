@@ -1,0 +1,31 @@
+$ cat android/key.properties   # OLD template line, verbatim
+storeFile=upload-keystore.jks   # relative to android/, or absolute
+storePassword=throwaway
+keyAlias=upload
+keyPassword=throwaway
+$ flutter build apk --release --dart-define-from-file=.env
+Running Gradle task 'assembleRelease'...                        
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/Users/nguyenanhkiet/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file '/Users/nguyenanhkiet/Playground/flutter-starter/android/app/build.gradle.kts' line: 42
+
+* What went wrong:
+android/key.properties points at a keystore that does not exist: /Users/nguyenanhkiet/Playground/flutter-starter/android/upload-keystore.jks   # relative to android/, or absolute
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1s
+Running Gradle task 'assembleRelease'...                         1,559ms
+Gradle task assembleRelease failed with exit code 1
+exit=1

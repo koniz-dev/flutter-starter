@@ -1,0 +1,19 @@
+origin/main 9112cecf3984ed941f5965e47732514ef8417a64 (PR #787 squash)
+--- criterion 1: Release signing properties block
+Then create `android/key.properties` (both files are git-ignored):
+
+```properties
+storeFile=upload-keystore.jks
+storePassword=...
+keyAlias=upload
+keyPassword=...
+```
+
+`storeFile` is relative to `android/`, or absolute. A `.properties` file has
+no trailing comments - text after a value, `#` included, becomes part of it -
+so put any note on a line of its own that starts with `#`.
+--- criterion 2: grep -rnE '^[a-zA-Z]+=[^ ]+ +#' docs
+grep exit=1 (1 = no match)
+--- sanity: the same grep on the parent commit 7b656aceb43 (before the fix)
+32:storeFile=upload-keystore.jks   # relative to android/, or absolute
+grep exit=0

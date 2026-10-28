@@ -1,0 +1,37 @@
+$ cat -A-equivalent of android/key.properties (copied from the refusal in c2-refused.log, values filled in)
+    # storeFile is relative to android/, or absolute|
+    storeFile=upload-keystore.jks|
+    storePassword=throwaway|
+    keyAlias=upload|
+    keyPassword=throwaway|
+$ flutter build apk --release --dart-define-from-file=.env
+Running Gradle task 'assembleRelease'...                        
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/Users/nguyenanhkiet/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: Your Android app project: app located at: /Users/nguyenanhkiet/Playground/flutter-starter/android/app/build.gradle.kts
+applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter.
+Please migrate your app to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers
+
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): freerasp, patrol, shared_preferences_android
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+Font asset "CupertinoIcons.ttf" was tree-shaken, reducing it from 257628 to 848 bytes (99.7% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 3360 bytes (99.8% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Running Gradle task 'assembleRelease'...                           59.7s
+✓ Built build/app/outputs/flutter-apk/app-release.apk (118.2MB)
+exit=0
+$ apksigner verify --print-certs build/app/outputs/flutter-apk/app-release.apk   (JVM WARNING lines dropped)
+
+Signer #1 certificate DN: CN=throwaway
+Signer #1 certificate SHA-256 digest: 38dbac03eeb7f8fba5f1519c50d275fad1d7c8391e9534f0c9673fea8e2e122c
+Signer #1 certificate SHA-1 digest: cf1c673d590c3527dc59b7a00d13a6b4b0e119dc
+Signer #1 certificate MD5 digest: 97550f0b1c27fc4ffab4f8b9f16b1fff
+exit=0
