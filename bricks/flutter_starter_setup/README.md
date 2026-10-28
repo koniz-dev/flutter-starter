@@ -6,7 +6,7 @@ Parent index: [`../README.md`](../README.md).
 
 ## Prerequisites
 
-- [Mason CLI](https://pub.dev/packages/mason_cli): `dart pub global activate mason_cli`
+- [Mason CLI](https://pub.dev/packages/mason_cli): `dart pub global activate mason_cli`, with `~/.pub-cache/bin` on `PATH` (`export PATH="$PATH":"$HOME/.pub-cache/bin"`). Without it `mason` is `command not found`; see [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md).
 - Run from the **repository root** (where `pubspec.yaml` and `mason.yaml` live).
 
 ## Usage
