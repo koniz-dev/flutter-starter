@@ -78,6 +78,9 @@ that is done.
 - **Drop what you do not need.** `dart run tool/strip_sample_features.dart --apply` removes both sample features; see [`tool/README.md`](tool/README.md) for the variants. <!-- strip:strip-tool line -->
 - **Connect your backend** by setting `BASE_URL`, which also turns the demo
    sign-in off ([how to remove it](docs/guides/onboarding/getting-started.md#signing-in-before-you-have-a-backend)).
+   Requests go to `BASE_URL` + `/v1`, and sign-in expects the
+   [auth wire format](docs/api/features/auth/models.md#wire-format); see
+   [Connecting your backend](docs/guides/onboarding/getting-started.md#connecting-your-backend).
 
 <!-- strip:bricks start -->
 The rename can also be done with Mason: `dart pub global activate mason_cli`,

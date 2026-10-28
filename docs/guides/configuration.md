@@ -468,7 +468,7 @@ print(config);
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ENVIRONMENT` | String | `development` | Environment name: `development`, `staging`, or `production`, trimmed and case-insensitive. Any other value sets `AppConfig.environmentMisconfigured` and falls back to the development base URL with no SSL pinning; `printConfig` warns about it. Add a new environment to `AppConfig.knownEnvironments` |
-| `BASE_URL` | String | Environment-aware | API base URL |
+| `BASE_URL` | String | Environment-aware | API base URL. Every request goes to `BASE_URL` + `ApiEndpoints.apiVersion` (`/v1`) + the endpoint path, so `BASE_URL=https://api.example.com` signs in at `https://api.example.com/v1/auth/login`. For an unversioned API set `apiVersion` to `''` in `lib/core/constants/api_endpoints.dart`; it is read by `ApiClient` and by `AuthInterceptor`'s refresh call. The auth endpoints and keys are the [auth wire format](../api/features/auth/models.md#wire-format) |
 | `API_TIMEOUT` | int | `30` | End-to-end deadline per request, in seconds: the whole call, retries and a 401 refresh-and-replay included. When it passes the request is cancelled and fails as a timeout. Applied by `DioNetworkClient.send` |
 | `API_CONNECT_TIMEOUT` | int | `10` | Dio connect timeout per attempt, in seconds |
 | `API_RECEIVE_TIMEOUT` | int | `30` | Dio receive timeout per attempt, in seconds |
