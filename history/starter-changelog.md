@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0] - 2026-10-28
+## [2.0.0] - 2026-10-29
 
 The first tagged release. If your project was created from the template before
 this tag, every **Breaking** entry below may apply to it; each says what to
@@ -144,6 +144,17 @@ change. Upgrade path: `docs/guides/migration/upgrading-this-starter.md`.
 
 - `build.yml` passes its `workflow_dispatch` inputs through `env:`; `base_url` was substituted into the script text and could run as code.
 - Workflow `run:` scripts quote `$GITHUB_OUTPUT` / `$GITHUB_PATH` (actionlint clean).
+- The setup brick's display name now reaches `tool/golden` too, so stripping after a Mason rename keeps your app title (scripts-smoke covers rename then strip).
+- `routes_registry_test.dart` checks the auth and home routes by membership, so a feature route may sit anywhere in `buildAppRoutes`, after home included.
+
+### Documentation
+
+- Getting started: "Connecting Your Backend" - requests go to `BASE_URL` + `/v1` + path (`ApiEndpoints.apiVersion`, set it to `''` for an unversioned API), and the auth endpoints and keys the app expects; the clone step names its directory; build_runner is no longer a setup step; the config chain is described as it resolves (dart-defines, the `.env` among them, then defaults).
+- Auth models reference: "Adapting the auth slice to an existing API", with a worked mapping from a flat `accessToken`/`refreshToken` response with an int id.
+- "Adding a feature" starts from `create_feature.sh` and ends at a routed, tested screen.
+- Android deployment: release signing, the refusal without `android/key.properties`, and the `-PallowUnsignedRelease=true` smoke build.
+- Fork guide and brick READMEs put `~/.pub-cache/bin` on `PATH` before `mason`.
+- Routing examples use routes every stripped tree has; `analysis_options.yaml` records why the three Dart 3.13 syntax lints stay off.
 
 ## [1.0.0+1] - Enterprise Starter V2.0 Upgrade
 
