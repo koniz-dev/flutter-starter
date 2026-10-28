@@ -1,0 +1,14 @@
+## main df30ed5e42e getting-started.md, step 1
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url> my_app
+cd my_app
+```
+
+Name the directory whatever you like; without the second argument `git clone`
+names it after the repository (`flutter-starter` for this one).
+
+### 2. Install Dependencies
+## check_docs
+OK: documentation checks passed.

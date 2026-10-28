@@ -1,0 +1,27 @@
+## main df30ed5e42e fork-and-customize.md Option A
+dart pub global activate mason_cli
+export PATH="$PATH":"$HOME/.pub-cache/bin"   # where pub puts global executables
+mason get
+mason make flutter_starter_setup
+```
+
+`dart pub global activate` installs `mason` into `~/.pub-cache/bin` (on
+Windows `%LOCALAPPDATA%\Pub\Cache\bin`), which is often not on `PATH`; the
+activate step warns about it, and without the `export` the next line fails
+with `mason: command not found`. Add the directory to your shell profile to
+keep it, or run the commands as `dart pub global run mason_cli:mason get` and
+`dart pub global run mason_cli:mason make flutter_starter_setup` instead.
+## bricks/README.md
+13-From the repository root (after `dart pub global activate mason_cli`).
+14:`mason` must be on `PATH`: `dart pub global activate` puts it in
+15-`~/.pub-cache/bin`, so run `export PATH="$PATH":"$HOME/.pub-cache/bin"` first
+16-(or prefix each command with `dart pub global run mason_cli:`); otherwise
+17-they fail with `mason: command not found`. See
+18-[Fork and customize](../docs/guides/onboarding/fork-and-customize.md).
+19-
+## bricks/flutter_starter_setup/README.md
+9:- [Mason CLI](https://pub.dev/packages/mason_cli): `dart pub global activate mason_cli`, with `~/.pub-cache/bin` on `PATH` (`export PATH="$PATH":"$HOME/.pub-cache/bin"`). Without it `mason` is `command not found`; see [Fork and customize](../../docs/guides/onboarding/fork-and-customize.md).
+## the no-PATH form works
+mason 0.1.3 • core templating engine
+## check_docs
+OK: documentation checks passed.

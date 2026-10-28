@@ -1,0 +1,254 @@
+## following docs/api/examples/adding-features.md on a clean worktree of origin/main ca57cff2483
+## step 1
+$ ./scripts/dev/create_feature.sh notes  (run before; output listed the 10 files in the guide table)
+
+## files changed or added by steps 3-5
+ M lib/core/routing/app_routes.dart
+ M lib/core/routing/routes_registry.dart
+ M lib/features/home/presentation/screens/home_screen.dart
+ M lib/l10n/app_ar.arb
+ M lib/l10n/app_en.arb
+ M lib/l10n/app_es.arb
+ M lib/l10n/app_localizations.dart
+ M lib/l10n/app_localizations_ar.dart
+ M lib/l10n/app_localizations_en.dart
+ M lib/l10n/app_localizations_es.dart
+ M lib/l10n/app_localizations_vi.dart
+ M lib/l10n/app_vi.arb
+?? lib/features/notes/
+?? test/features/notes/
+
+diff --git a/lib/core/routing/app_routes.dart b/lib/core/routing/app_routes.dart
+index 299e17d3317..427331f0e1e 100644
+--- a/lib/core/routing/app_routes.dart
++++ b/lib/core/routing/app_routes.dart
+@@ -14,6 +14,9 @@ class AppRoutes {
+ 
+   static const String featureFlagsDebug = '/feature-flags-debug';
+ 
++  static const String notes = '/notes';
++  static const String notesName = 'notes';
++
+   static const String homeName = 'home';
+   static const String loginName = 'login';
+   static const String registerName = 'register';
+diff --git a/lib/core/routing/routes_registry.dart b/lib/core/routing/routes_registry.dart
+index f5c435b547a..e8cdf04d9e4 100644
+--- a/lib/core/routing/routes_registry.dart
++++ b/lib/core/routing/routes_registry.dart
+@@ -4,6 +4,7 @@ import 'package:flutter_starter/core/routing/session_status.dart';
+ import 'package:flutter_starter/features/auth/routing/auth_routes.dart';
+ import 'package:flutter_starter/features/feature_flags/routing/feature_flags_routes.dart';
+ import 'package:flutter_starter/features/home/routing/home_routes.dart';
++import 'package:flutter_starter/features/notes/routing/notes_routes.dart';
+ import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
+ import 'package:go_router/go_router.dart';
+ 
+@@ -28,6 +29,7 @@ List<RouteBase> buildAppRoutes(Ref ref, {bool? debugRoutes}) {
+     ...buildAuthRoutes(ref),
+     ...buildTasksRoutes(ref),
+     if (debugRoutes ?? AppConfig.enableDebugFeatures) ..._buildDebugRoutes(ref),
++    buildNotesRoute(ref),
+     buildHomeRoute(ref),
+   ];
+ }
+diff --git a/lib/features/home/presentation/screens/home_screen.dart b/lib/features/home/presentation/screens/home_screen.dart
+index 8c8178d3421..24f20c1c31d 100644
+--- a/lib/features/home/presentation/screens/home_screen.dart
++++ b/lib/features/home/presentation/screens/home_screen.dart
+@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ 
+ import 'package:flutter_starter/core/constants/ui_keys.dart';
++import 'package:flutter_starter/core/localization/localization_extensions.dart';
++import 'package:flutter_starter/core/routing/app_routes.dart';
++import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+ 
+@@ -41,6 +44,10 @@ class HomeScreen extends ConsumerWidget {
+                 ),
+                 textAlign: TextAlign.center,
+               ),
++              FilledButton(
++                onPressed: () => context.pushRoute(AppRoutes.notes),
++                child: Text(context.l10n.notesTitle),
++              ),
+             ],
+           ),
+         ),
+diff --git a/lib/l10n/app_ar.arb b/lib/l10n/app_ar.arb
+index 0fcbb64a6d2..011ce3c6b37 100644
+--- a/lib/l10n/app_ar.arb
++++ b/lib/l10n/app_ar.arb
+@@ -1,6 +1,7 @@
+ {
+   "@@locale": "ar",
+   "appTitle": "Flutter Starter",
++  "notesTitle": "ملاحظات",
+   "welcome": "مرحباً بك في Flutter Starter مع Clean Architecture!",
+   "featureFlagsReady": "نظام Feature Flags جاهز!",
+   "checkExamples": "تحقق من الأمثلة في feature_flags_example_screen.dart",
+diff --git a/lib/l10n/app_en.arb b/lib/l10n/app_en.arb
+index 27e014390b1..ca0db9fa5e3 100644
+--- a/lib/l10n/app_en.arb
++++ b/lib/l10n/app_en.arb
+@@ -1,6 +1,7 @@
+ {
+   "@@locale": "en",
+   "appTitle": "Flutter Starter",
++  "notesTitle": "Notes",
+   "@appTitle": {
+     "description": "The application title"
+   },
+diff --git a/lib/l10n/app_es.arb b/lib/l10n/app_es.arb
+index a66dc93fe68..b89ff605552 100644
+--- a/lib/l10n/app_es.arb
++++ b/lib/l10n/app_es.arb
+@@ -1,6 +1,7 @@
+ {
+   "@@locale": "es",
+   "appTitle": "Flutter Starter",
++  "notesTitle": "Notas",
+   "welcome": "¡Bienvenido a Flutter Starter con Arquitectura Limpia!",
+   "featureFlagsReady": "¡El Sistema de Feature Flags está listo!",
+   "checkExamples": "Consulta los ejemplos en feature_flags_example_screen.dart",
+diff --git a/lib/l10n/app_localizations.dart b/lib/l10n/app_localizations.dart
+index d05a2196f52..bb1d4d78f82 100644
+--- a/lib/l10n/app_localizations.dart
++++ b/lib/l10n/app_localizations.dart
+@@ -108,6 +108,12 @@ abstract class AppLocalizations {
+   /// **'Flutter Starter'**
+   String get appTitle;
+ 
++  /// No description provided for @notesTitle.
++  ///
++  /// In en, this message translates to:
++  /// **'Notes'**
++  String get notesTitle;
++
+   /// Welcome message on home screen
+   ///
+   /// In en, this message translates to:
+diff --git a/lib/l10n/app_localizations_ar.dart b/lib/l10n/app_localizations_ar.dart
+index c82c6e12f14..ea82fcc7472 100644
+--- a/lib/l10n/app_localizations_ar.dart
++++ b/lib/l10n/app_localizations_ar.dart
+@@ -12,6 +12,9 @@ class AppLocalizationsAr extends AppLocalizations {
+   @override
+   String get appTitle => 'Flutter Starter';
+ 
++  @override
++  String get notesTitle => 'ملاحظات';
++
+   @override
+   String get welcome => 'مرحباً بك في Flutter Starter مع Clean Architecture!';
+ 
+diff --git a/lib/l10n/app_localizations_en.dart b/lib/l10n/app_localizations_en.dart
+index decc9001307..716d9973ca7 100644
+--- a/lib/l10n/app_localizations_en.dart
++++ b/lib/l10n/app_localizations_en.dart
+@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
+   @override
+   String get appTitle => 'Flutter Starter';
+ 
++  @override
++  String get notesTitle => 'Notes';
++
+   @override
+   String get welcome => 'Welcome to Flutter Starter with Clean Architecture!';
+ 
+diff --git a/lib/l10n/app_localizations_es.dart b/lib/l10n/app_localizations_es.dart
+index 76ce905edc6..9930063127b 100644
+--- a/lib/l10n/app_localizations_es.dart
++++ b/lib/l10n/app_localizations_es.dart
+@@ -12,6 +12,9 @@ class AppLocalizationsEs extends AppLocalizations {
+   @override
+   String get appTitle => 'Flutter Starter';
+ 
++  @override
++  String get notesTitle => 'Notas';
++
+   @override
+   String get welcome =>
+       '¡Bienvenido a Flutter Starter con Arquitectura Limpia!';
+diff --git a/lib/l10n/app_localizations_vi.dart b/lib/l10n/app_localizations_vi.dart
+index c95754b62f3..d062f823389 100644
+--- a/lib/l10n/app_localizations_vi.dart
++++ b/lib/l10n/app_localizations_vi.dart
+@@ -12,6 +12,9 @@ class AppLocalizationsVi extends AppLocalizations {
+   @override
+   String get appTitle => 'Flutter Starter';
+ 
++  @override
++  String get notesTitle => 'Ghi chú';
++
+   @override
+   String get welcome =>
+       'Chào mừng đến với Flutter Starter với Clean Architecture!';
+diff --git a/lib/l10n/app_vi.arb b/lib/l10n/app_vi.arb
+index 5dd596dc2a4..513e47279a8 100644
+--- a/lib/l10n/app_vi.arb
++++ b/lib/l10n/app_vi.arb
+@@ -1,6 +1,7 @@
+ {
+   "@@locale": "vi",
+   "appTitle": "Flutter Starter",
++  "notesTitle": "Ghi chú",
+   "@appTitle": {
+     "description": "The application title"
+   },
+### new: lib/features/notes/routing/notes_routes.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/routing/app_routes.dart';
+import 'package:flutter_starter/features/notes/presentation/screens/notes_screen.dart';
+import 'package:go_router/go_router.dart';
+
+/// Builds the Notes route, reachable once signed in.
+GoRoute buildNotesRoute(Ref ref) {
+  return GoRoute(
+    path: AppRoutes.notes,
+    name: AppRoutes.notesName,
+    builder: (context, state) =>
+        NotesScreen(id: state.uri.queryParameters['id'] ?? '1'),
+  );
+}
+### new: test/features/notes/notes_route_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
+import 'package:flutter_starter/features/notes/presentation/screens/notes_screen.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../helpers/pump_app.dart';
+
+class _SignedIn extends AuthNotifier {
+  @override
+  AuthState build() => const AuthState(
+    user: User(id: 'u-1', email: 'user@example.com'),
+  );
+}
+
+void main() {
+  testWidgets('a signed-in user reaches the notes screen from home', (
+    tester,
+  ) async {
+    await pumpAppRouter(
+      tester,
+      overrides: [
+        authNotifierProvider.overrideWith(_SignedIn.new),
+        sessionRestorationProvider.overrideWith((ref) async {}),
+      ],
+    );
+    await tester.tap(find.widgetWithText(FilledButton, 'Notes'));
+    await tester.pumpAndSettle();
+    expect(find.byType(NotesScreen), findsOneWidget);
+  });
+}
+
+## flutter analyze
+No issues found! (ran in 2.7s)
+## flutter test
+flutter test exit 0
+04:13 +3561 ~14: All tests passed!
+03:06 +3207 ~6: /Users/nguyenanhkiet/Playground/fs-763/test/features/notes/notes_route_test.dart: a signed-in user reaches the notes screen from home

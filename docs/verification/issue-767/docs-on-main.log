@@ -1,0 +1,25 @@
+## main df30ed5e42e getting-started.md, step 4
+### 4. Generated Code (nothing to run)
+
+Generated code (Freezed, json_serializable, Riverpod) is committed, so a fresh
+clone builds without running a generator. Regenerate only after you change an
+annotated source - add or modify a `@freezed`, `@JsonSerializable` or
+`@riverpod` declaration:
+
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+While you are changing such sources, watch mode regenerates on every save:
+
+```bash
+flutter pub run build_runner watch --delete-conflicting-outputs
+```
+
+### 5. Verify Setup
+## README.md says
+31:Generated code (Freezed, json_serializable, Riverpod) is committed; run
+32-`flutter pub run build_runner build --delete-conflicting-outputs` only after
+33-changing an annotated source.
+## check_docs
+OK: documentation checks passed.

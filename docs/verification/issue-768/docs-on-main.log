@@ -1,0 +1,28 @@
+## main df30ed5e42e getting-started.md, Environment Configuration
+## Environment Configuration
+
+Each value resolves through this chain, per key:
+
+1. **`--dart-define`** - which is how the documented `.env` setup arrives too:
+   `--dart-define-from-file=.env` turns every line of the file into a
+   dart-define. CI passes `--dart-define=KEY=value` flags directly.
+2. **Environment-aware defaults** when neither supplies the key.
+
+`EnvConfig` also checks a `.env` loaded at runtime with `EnvConfig.load()`
+before the dart-defines, but nothing loads one by default: `.env` is not an
+asset, and must not become one (see
+[Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)).
+
+### Configuration Variables
+## configuration.md summary
+7:- **Fallback Chain**: `--dart-define` (your `.env` arrives this way, through `--dart-define-from-file=.env`) → defaults; a `.env` loaded at runtime with `EnvConfig.load()` would rank first, but none is loaded by default
+## EnvConfig resolution (lib/core/config/env_config.dart)
+/// Environment configuration loader with fallback chain:
+/// 1. A loaded .env file - see [load]; normally there is none
+/// 2. --dart-define flags, on every platform including Flutter web, for the
+///    keys listed in [DartDefines.values]. This is how `.env` reaches a build:
+///    `flutter run --dart-define-from-file=.env`, with nothing bundled
+## priority claims left
+(exit 1: 1 = none)
+## check_docs
+OK: documentation checks passed.
