@@ -13,12 +13,10 @@ Before you begin, ensure you have the following installed:
 - **Dart SDK**: **3.13.0 or newer** (included with Flutter)
 
 > **Where those numbers come from.** The committed `pubspec.lock` records the
-> resolved graph's requirements in its `sdks:` block:
-> `dart: ">=3.13.0 <4.0.0"`, `flutter: ">=3.47.0"`. `pubspec.yaml` declares
-> only `environment: sdk: '^3.8.0'` and carries **no `flutter:` constraint**,
-> so an older SDK does not produce a clear "upgrade Flutter" message - step 2
-> below (`flutter pub get`) fails with a version-solve error naming a
-> transitive package such as `path_provider_foundation`. If you see that,
+> resolved graph's requirements in its `sdks:` block
+> (`dart: ">=3.13.0 <4.0.0"`, `flutter: ">=3.47.0"`), and `pubspec.yaml`'s
+> `environment:` declares the same floors. On an older SDK, step 2 below
+> (`flutter pub get`) stops with a message naming the SDK version it needs;
 > upgrade Flutter before anything else.
 
 - **IDE**: Choose one of the following:

@@ -464,9 +464,11 @@ class AuthInterceptor extends Interceptor {
 
       final newToken = result.isSuccess ? result.dataOrNull : null;
 
-      if (result case ResultFailure(
-        :final failure,
-      ) when !_endsSession(failure)) {
+      if (result
+          case ResultFailure(
+            :final failure,
+          )
+          when !_endsSession(failure)) {
         // Transport trouble on the refresh endpoint, not a dead refresh token:
         // the session is still good, so nothing is torn down and nothing is
         // replayed. The caller fails with the refresh failure as the cause

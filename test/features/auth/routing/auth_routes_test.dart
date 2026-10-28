@@ -16,20 +16,16 @@ void main() {
       expect(routes, hasLength(2));
       expect(routes.every((r) => r is GoRoute), isTrue);
 
-      final login =
-          routes.firstWhere(
-                (r) => r is GoRoute && r.path == AppRoutes.login,
-                orElse: () => throw StateError('Login route not found'),
-              )
-              as GoRoute;
+      final login = routes.firstWhere(
+        (r) => r is GoRoute && r.path == AppRoutes.login,
+        orElse: () => throw StateError('Login route not found'),
+      ) as GoRoute;
       expect(login.name, AppRoutes.loginName);
 
-      final register =
-          routes.firstWhere(
-                (r) => r is GoRoute && r.path == AppRoutes.register,
-                orElse: () => throw StateError('Register route not found'),
-              )
-              as GoRoute;
+      final register = routes.firstWhere(
+        (r) => r is GoRoute && r.path == AppRoutes.register,
+        orElse: () => throw StateError('Register route not found'),
+      ) as GoRoute;
       expect(register.name, AppRoutes.registerName);
     });
   });

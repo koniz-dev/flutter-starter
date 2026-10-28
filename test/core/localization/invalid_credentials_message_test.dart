@@ -46,18 +46,18 @@ void main() {
   test('criterion 1: every ARB file carries the key translated, and the '
       'template describes it', () {
     for (final locale in const ['en', 'vi', 'es', 'ar']) {
-      final arb =
-          jsonDecode(File('lib/l10n/app_$locale.arb').readAsStringSync())
-              as Map<String, dynamic>;
+      final arb = jsonDecode(
+        File('lib/l10n/app_$locale.arb').readAsStringSync(),
+      ) as Map<String, dynamic>;
       expect(
         arb['failureInvalidCredentials'],
         isA<String>().having((s) => s.trim(), 'trimmed', isNotEmpty),
         reason: 'app_$locale.arb',
       );
     }
-    final en =
-        jsonDecode(File('lib/l10n/app_en.arb').readAsStringSync())
-            as Map<String, dynamic>;
+    final en = jsonDecode(
+      File('lib/l10n/app_en.arb').readAsStringSync(),
+    ) as Map<String, dynamic>;
     expect(
       (en['@failureInvalidCredentials'] as Map)['description'],
       isNotEmpty,

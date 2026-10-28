@@ -52,5 +52,14 @@ linter:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
+    # These three ask for syntax that is new in Dart 3.13 (`new(...)`
+    # constructors, `class A;` bodies, private named initializing formals).
+    # They apply only because the SDK floor is 3.13, and adopting them would
+    # rewrite about 440 declarations into a form most Dart readers have not
+    # met yet. Re-enable them when you want that style.
+    unnecessary_type_name_in_constructor: false
+    empty_container_bodies: false
+    prefer_initializing_formals: false
+
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
