@@ -22,9 +22,17 @@ From the repository root (with [Mason CLI](https://pub.dev/packages/mason_cli) i
 
 ```bash
 dart pub global activate mason_cli
+export PATH="$PATH":"$HOME/.pub-cache/bin"   # where pub puts global executables
 mason get
 mason make flutter_starter_setup
 ```
+
+`dart pub global activate` installs `mason` into `~/.pub-cache/bin` (on
+Windows `%LOCALAPPDATA%\Pub\Cache\bin`), which is often not on `PATH`; the
+activate step warns about it, and without the `export` the next line fails
+with `mason: command not found`. Add the directory to your shell profile to
+keep it, or run the commands as `dart pub global run mason_cli:mason get` and
+`dart pub global run mason_cli:mason make flutter_starter_setup` instead.
 
 Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_identifier`, `app_display_name`, and whether to include optional samples (`tasks`, `feature_flags`).
 
