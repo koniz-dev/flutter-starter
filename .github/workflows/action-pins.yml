@@ -10,23 +10,25 @@ name: Action pins
 # GitHub runs `owner/repo@<sha>` for any commit in the repository's fork
 # network, including one pushed only to a fork, so a pin that reads like a
 # routine Dependabot bump could still run someone else's code with this
-# project's deploy secrets. scripts/ci/verify_action_pins.sh asks the GitHub
-# API for each tag and fails on a mismatch.
+# project's deploy secrets. `tool/check_action_pins.dart --verify-tags` reads
+# the same parsed `uses` values as the offline check, asks the GitHub API for
+# each tag, and fails on a mismatch.
 #
 # Runs on any PR or push that touches .github/, which is every Dependabot
-# github-actions bump. Needs no Flutter toolchain.
+# github-actions bump. Flutter is set up only so `dart run` can resolve the
+# package; nothing is built.
 # ========================================================================
 on:
   push:
     branches: [ main ]
     paths:
       - '.github/**'
-      - 'scripts/ci/verify_action_pins.sh'
+      - 'tool/check_action_pins.dart'
   pull_request:
     branches: [ main ]
     paths:
       - '.github/**'
-      - 'scripts/ci/verify_action_pins.sh'
+      - 'tool/check_action_pins.dart'
   workflow_dispatch:
 
 concurrency:
@@ -44,10 +46,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
       - name: Verify each pinned SHA is its release's commit
         env:
           GH_TOKEN: ${{ github.token }}
-        run: scripts/ci/verify_action_pins.sh
+        run: dart run tool/check_action_pins.dart --verify-tags
 
   # actionlint type-checks every workflow and runs shellcheck on each `run:`
   # script, the scripts that handle this project's secrets and artifact
