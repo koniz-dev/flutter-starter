@@ -1,0 +1,47 @@
+--- criterion 3: Flutter Gradle plugin source, Flutter 3.47.0 • channel stable • https://github.com/flutter/flutter.git
+/usr/local/share/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:216-228
+        if (FlutterPluginUtils.shouldShrinkResources(project)) {
+            val releaseBuildType: BuildType = FlutterPluginUtils.getAndroidExtension(project).buildTypes.getByName("release")
+            releaseBuildType.isMinifyEnabled = true
+            releaseBuildType.isShrinkResources = FlutterPluginUtils.isBuiltAsApp(project)
+            releaseBuildType.proguardFiles.add(
+                FlutterPluginUtils.getAndroidExtension(project).getDefaultProguardFile("proguard-android-optimize.txt")
+            )
+            releaseBuildType.proguardFiles.add(flutterProguardRules)
+            val proguardRulesPro = File("${project.projectDir}/proguard-rules.pro")
+            if (proguardRulesPro.exists()) {
+                releaseBuildType.proguardFiles.add(proguardRulesPro)
+            }
+        }
+/usr/local/share/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterPluginUtils.kt:39 and 225-233
+    internal const val PROP_SHOULD_SHRINK_RESOURCES = "shrink"
+    @JvmStatic
+    @JvmName("shouldShrinkResources")
+    fun shouldShrinkResources(project: Project): Boolean {
+        if (project.hasProperty(PROP_SHOULD_SHRINK_RESOURCES)) {
+            val propertyValue = project.property(PROP_SHOULD_SHRINK_RESOURCES)
+            return propertyValue.toString().toBoolean()
+        }
+        return true
+    }
+--- android/app/build.gradle.kts buildTypes (no minify settings of its own)
+    buildTypes {
+        release {
+            // Deliberately NOT signingConfigs.getByName("debug"). A debug-signed
+            // bundle builds fine everywhere and is then rejected by Play Console
+            // with "You uploaded an APK or Android App Bundle that was signed in
+            // debug mode", long after the green CI run that produced it.
+            signingConfig = signingConfigs.findByName("release")
+        }
+    }
+--- empirical: R8 output of the release build made for koniz-dev/flutter-starter#784 on this checkout (no minify settings in build.gradle.kts)
+total 30488
+-rw-r--r--@ 1 nguyenanhkiet  staff     42224 Oct 29 04:31 configuration.txt
+-rw-r--r--@ 1 nguyenanhkiet  staff   1531980 Oct 29 04:31 mapping.prt
+-rw-r--r--@ 1 nguyenanhkiet  staff  11529682 Oct 29 04:31 mapping.txt
+-rw-r--r--@ 1 nguyenanhkiet  staff    120999 Oct 29 04:31 resources.txt
+-rw-r--r--@ 1 nguyenanhkiet  staff    145952 Oct 29 04:30 seeds.txt
+-rw-r--r--@ 1 nguyenanhkiet  staff   2227550 Oct 29 04:30 usage.txt
+# compiler: R8
+# compiler_version: 9.1.31
+# min_api: 24

@@ -1,0 +1,56 @@
+origin/main 1a7f22c6b54e18190a353b16ce18962938642f3b (PR #790 squash); implementation.md identical in this tree
+--- criterion 1: section 4 as merged
+### 4. Android Release Signing
+
+Release signing already ships. Set it up as described in
+[Android deployment - Release signing](../../deployment/android-deployment.md#release-signing);
+do not paste a different `build.gradle.kts` over the existing one.
+
+#### What ships
+
+`android/app/build.gradle.kts` reads `android/key.properties` (`storeFile`,
+`storePassword`, `keyAlias`, `keyPassword`; `storeFile` relative to `android/`
+or absolute) and signs `release` with it. It never falls back to the debug key:
+
+| Situation | What the build does |
+|---|---|
+| No `android/key.properties` | Refuses every release `assemble`/`bundle`/`package` task ("Release signing is not configured ... Refusing.") |
+| A key missing or blank | Fails, naming the missing keys |
+| `storeFile` points at nothing | Fails, naming the resolved path |
+| `-PallowUnsignedRelease=true` | Builds an unsigned release for local smoke tests; it cannot be installed or uploaded |
+
+`android/.gitignore` already ignores `key.properties`, `**/*.jks` and
+`**/*.keystore`. In CI,
+[`deploy-android.yml`](../../../.github/workflows/deploy-android.yml) has a
+commented-out "Setup Android keystore" step that writes the keystore and
+`key.properties` from secrets; uncomment it once the secrets exist.
+
+#### R8 / ProGuard
+
+Nothing to switch on. The Flutter Gradle plugin already runs R8 on `release`
+builds, with minification and resource shrinking, using
+`proguard-android-optimize.txt` and Flutter's own keep rules. Pass
+`-Pshrink=false` to turn it off for one build.
+
+If a plugin or reflection-based code needs extra keep rules, create
+`android/app/proguard-rules.pro`; the Flutter plugin adds it to the release
+build automatically when it exists, so `build.gradle.kts` does not change.
+For example, for a library loaded by reflection (substitute its package):
+
+```proguard
+# android/app/proguard-rules.pro
+-keep class com.example.reflected.** { *; }
+-dontwarn com.example.reflected.**
+```
+
+Add rules only for what an R8 build actually breaks; a release build that
+crashes with `ClassNotFoundException` or `NoSuchMethodError` names the class
+to keep.
+
+---
+
+### 5. Security Headers
+--- criterion 1: forbidden instructions (expect no match)
+grep exit=1
+--- criterion 2: git grep -n 'keystore.properties' -- docs
+grep exit=1 (1 = no match)

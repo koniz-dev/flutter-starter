@@ -1,0 +1,11 @@
+$ dart run tool/check_docs.dart
+Running build hooks...Running build hooks...links: checked 616 relative link(s) in 74 file(s); 0 broken
+emoji: scanned 66 file(s); 0 line(s) with emoji
+signatures: checked 13 documented constructor(s); 0 mismatched
+symbols: checked 71 directive(s); 0 unresolved
+env runs: scanned 63 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 63 file(s); 0 missing
+
+OK: documentation checks passed.
+exit=0
