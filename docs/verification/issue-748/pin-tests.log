@@ -1,0 +1,30 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: every workflow action is pinned to a commit SHA with its version
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself accepts a SHA with its version comment
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself rejects a tag, a branch, a short SHA and a missing comment
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself exempts local actions and docker images by digest
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself finds uses however the key is spelled
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself accepts a pinned flow-mapping step
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself finds a job-level reusable workflow
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself scans composite actions under .github/
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself follows uses: ./path to a local action outside .github/
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself follows local actions that call local actions
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself reports a local action that has no action.yml
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself reads case-variant file names
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself takes the version only from the line comment
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself names a version comment that is not a plain release tag
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/workflow_action_pins_test.dart: the pin check itself accepts release tags with a pre-release or build suffix
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags accepts a pin that is its tag commit
+00:01 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags rejects a SHA that is not the tag commit, naming both
+00:01 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags rejects a version comment that is not a tag
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags checks the uses value, not a pin written in another key
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags checks every step on a line, not only the first
+00:01 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags reads pins written with YAML escapes
+00:01 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags resolves each repo@tag once
+00:01 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: verifyTags never asks the API about a comment that is not a release tag
+00:01 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver returns a lightweight tag commit
+00:10 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver peels an annotated tag to its commit
+00:10 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver returns null for a missing tag
+00:11 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/verify_action_pins_test.dart: ghTagResolver throws, rather than passing, when the API cannot be asked
+00:11 +27: All tests passed!
+branch 6175b903ffd, flutter test exit 0

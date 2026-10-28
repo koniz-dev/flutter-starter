@@ -1,0 +1,5 @@
+## scratch: the review's path-traversal comment
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1/../../../../../../cli/cli/git/ref/tags/v2.0.0
+<scratch>/.github/workflows/w.yml:5: uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1: version comment "v7.0.1/../../../../../../cli/cli/git/ref/tags/v2.0.0" is not a release tag (vX.Y.Z)
+Pin each action to the commit of a release, with the release as a comment: uses: owner/repo@<40-hex sha> # vX.Y.Z
+exit 1
