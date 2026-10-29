@@ -174,6 +174,10 @@ class ApiLoggingInterceptor extends Interceptor {
     'sessionid',
   };
 
+  /// A `%` not followed by two hex digits - what makes
+  /// `Uri.decodeQueryComponent` throw.
+  static final RegExp _malformedPercent = RegExp('%(?![0-9A-Fa-f]{2})');
+
   /// [path] with every query parameter embedded in it that names a secret
   /// redacted, by the same key rules as `queryParameters`.
   ///
@@ -192,6 +196,11 @@ class ApiLoggingInterceptor extends Interceptor {
       final equals = pair.indexOf('=');
       if (equals < 0) return pair;
       final rawKey = pair.substring(0, equals);
+      // Malformed percent-encoding (`a%=1`, `%zz=1`) would make the decode
+      // below throw, and PerformanceInterceptor redacts every request's path,
+      // so the request itself failed, in every build. A key that cannot be
+      // read cannot be cleared either: its value is redacted.
+      if (_malformedPercent.hasMatch(rawKey)) return '$rawKey=$_redacted';
       final key = Uri.decodeQueryComponent(rawKey);
       return _isSensitiveKey(key) ? '$rawKey=$_redacted' : pair;
     });
