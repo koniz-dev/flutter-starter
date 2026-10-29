@@ -131,6 +131,21 @@ shapes. Redaction matches key names, so a token under an unexpected key is
 still logged. See
 [Security Implementation Guide](./implementation.md#3-log-sanitization).
 
+#### MEDIUM: On web, tokens sit in localStorage beside their key
+
+**Status:** Open - an adopter decision for any app that ships the web target.
+
+`SecureStorageService` passes no web options, so on Flutter web
+`flutter_secure_storage_web` stores the tokens in `window.localStorage`,
+AES-GCM encrypted, with the raw AES key stored right beside them. Any script
+running on the origin reads and decrypts both the access and the refresh
+token. Native platforms are unaffected (Keystore, Keychain).
+
+**Recommendation:** for a web deployment, send a strict Content-Security-Policy
+response header, keep access tokens short-lived, and keep the refresh token in
+an `httpOnly`, `Secure`, `SameSite` cookie set by the server rather than in
+client storage. See [Storage - Web](../../api/core/storage.md#platform-specific-behavior).
+
 ## 3. Code Security
 
 ### Current Strengths
