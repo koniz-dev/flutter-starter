@@ -142,6 +142,61 @@ void main() {
     expect(adapter.sent.single.$2, 'Basic partner-creds');
   });
 
+  // dio joins a relative path to the base URL as strings. With a base URL
+  // that has no path, a path starting with `@` or `.` moves the host.
+  group('a base URL with no path', () {
+    late Dio dio;
+
+    void buildBare(int statusCode) {
+      adapter = _RecordingAdapter(statusCode);
+      dio = Dio(BaseOptions(baseUrl: 'https://api.example.com'))
+        ..httpClientAdapter = adapter
+        ..interceptors.add(
+          AuthInterceptor(
+            tokenStore: store,
+            sessionGeneration: generation,
+            refreshToken: () async {
+              refreshCalls++;
+              return const Success('refreshed-token');
+            },
+          ),
+        );
+    }
+
+    for (final (path, host) in [
+      ('@evil.example/x', 'evil.example'),
+      ('.evil.example/x', 'api.example.com.evil.example'),
+    ]) {
+      test('$path lands on $host and is sent without the token', () async {
+        buildBare(200);
+
+        await dio.get<dynamic>(path);
+
+        expect(adapter.sent.single.$1.host, host);
+        expect(adapter.sent.single.$2, isNull);
+      });
+
+      test("$path's 401 is not refreshed", () async {
+        buildBare(401);
+
+        await expectLater(dio.get<dynamic>(path), throwsA(isA<DioException>()));
+
+        expect(refreshCalls, 0);
+        expect(adapter.sent, hasLength(1));
+        expect(store.accessToken, 'access-token');
+      });
+    }
+
+    test('an ordinary path on it carries the token', () async {
+      buildBare(200);
+
+      await dio.get<dynamic>('/x');
+
+      expect(adapter.sent.single.$1.host, 'api.example.com');
+      expect(adapter.sent.single.$2, 'Bearer access-token');
+    });
+  });
+
   test('an API-origin 401 still refreshes once and replays', () async {
     build(401);
 
