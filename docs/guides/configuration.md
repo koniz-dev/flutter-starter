@@ -44,8 +44,14 @@ unchanged as a *build input* without ever becoming an asset:
 
 ```bash
 flutter run --dart-define-from-file=.env
-flutter build apk --release --dart-define-from-file=.env
+flutter build apk --release --dart-define-from-file=.env.production
 ```
+
+A release build refuses to start with `ENVIRONMENT=development` - the default,
+and what `.env.example` ships - because that registers the debug routes and
+turns HTTP logging on. Keep a copy set to `production` (or `staging`) for
+release builds; `.env.production` and `.env.staging` are git-ignored for that.
+Profile builds (`--profile`) are not refused.
 
 A release APK needs a signing key first; without `android/key.properties`
 the build is refused. See

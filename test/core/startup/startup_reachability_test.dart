@@ -446,6 +446,49 @@ void main() {
     });
   });
 
+  // `development` is the default and what `.env.example` ships, so a release
+  // built from an unedited `.env` was a development build in a release
+  // binary: debug routes registered, pinning ignored, without a word.
+  group('main() refuses a release build configured as development', () {
+    testWidgets('a release build with ENVIRONMENT=development boots into the '
+        'failure screen', (tester) async {
+      installSecureBackend(<String, String>{});
+
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(releaseMode: true),
+      );
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expect(find.textContaining('ENVIRONMENT=development'), findsOneWidget);
+    });
+
+    testWidgets('a release build with ENVIRONMENT=production starts', (
+      tester,
+    ) async {
+      installSecureBackend(<String, String>{});
+      installEnvAsset(
+        'ENVIRONMENT=production\nAPI_SSL_FINGERPRINTS=${'a' * 64}\n',
+      );
+
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(releaseMode: true),
+      );
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsNothing);
+      expect(find.byType(app.MyApp), findsOneWidget);
+    });
+
+    testWidgets('a non-release development build starts', (tester) async {
+      installSecureBackend(<String, String>{});
+
+      await bootRealMain(tester);
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsNothing);
+    });
+  });
+
   // main() installs the uncaught-error handlers, and they live as long as the
   // container whose LoggingService they log through: removed with a failed
   // container, installed again - once - by Try again.

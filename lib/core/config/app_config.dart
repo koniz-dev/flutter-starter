@@ -175,16 +175,29 @@ class AppConfig {
   /// Enforces verification of server certificate fingerprints using
   /// [apiSslFingerprints].
   /// Default behavior:
-  /// - Development: `false` (to allow proxy debugging like Charles/Proxyman)
   /// - Staging/Production: `true`
+  /// - Development: `true` once [apiSslFingerprints] holds any, `false`
+  ///   otherwise (to allow proxy debugging like Charles/Proxyman). Configured
+  ///   fingerprints are a statement that this backend is pinned; ignoring them
+  ///   because the environment says development shipped releases unpinned.
   ///
-  /// Can be overridden via .env: `ENABLE_SSL_PINNING=true`
+  /// Can be overridden via .env: `ENABLE_SSL_PINNING=false`
   static bool get enableSslPinning {
     if (EnvConfig.has('ENABLE_SSL_PINNING')) {
       return EnvConfig.getBool('ENABLE_SSL_PINNING');
     }
-    return isStaging || isProduction;
+    return isStaging || isProduction || apiSslFingerprints.isNotEmpty;
   }
+
+  /// Whether a release build is configured as `development`.
+  ///
+  /// `development` is the default and the value `.env.example` ships, so a
+  /// release built from an unedited `.env` lands here: debug routes
+  /// registered, HTTP logging on, pinning off unless fingerprints are set.
+  /// `main()` refuses to start on it. Profile builds are allowed - profiling
+  /// against a development backend is what `--profile` is for.
+  static bool releaseBuiltAsDevelopment({bool releaseMode = kReleaseMode}) =>
+      releaseMode && isDevelopment;
 
   /// Whether certificate pinning is actually enforced.
   ///
