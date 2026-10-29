@@ -1,0 +1,9 @@
+origin/main 61df0272940b0c3cfa36528e0ebc374e5f4ab777
+$ flutter test test/core/network/redact_path_malformed_key_test.dart
+00:00 +35: through ApiClient, with logging off /v?café=1 reaches the transport and succeeds
+00:00 +36: All tests passed!
+
+--- mutant: lib/core/network/interceptors/api_logging_interceptor.dart at dea4c9e531f (after #854, before #861 - the regex-only fix)
+00:00 +0 -1: Some tests failed.
+Failing tests:
+Note: this mutant fails at compile time, because the test file at origin/main also tests redactUrl (added in #867), which the dea4c9e531f file lacks. The behavioural mutant run against the regex-only redactPath - 11 failures, every non-UTF-8 and non-ASCII key case and both ApiClient cases - was done before #861 merged and is quoted in its PR description: https://github.com/koniz-dev/flutter-starter/pull/861

@@ -1,0 +1,14 @@
+origin/main 61df0272940b0c3cfa36528e0ebc374e5f4ab777
+$ flutter test test/core/network/realtime/noop_realtime_client_test.dart
+00:00 +14: All tests passed!
+
+--- mutant 1: lib/core/network/realtime/noop_realtime_client.dart at 9a229f24612 (before #863)
+00:00 +10 -1: NoOpRealtimeClient send prints the payload type, never its content [E]
+00:00 +10 -2: NoOpRealtimeClient connect prints the URL without its token, and send prints no payload [E]
+00:00 +12 -2: Some tests failed.
+Failing tests:
+
+--- mutant 2: lib/core/network/realtime/noop_realtime_client.dart at ad2c92d2eaa (#863, before userinfo redaction in #867)
+00:00 +11 -1: NoOpRealtimeClient connect prints the URL without its token, and send prints no payload [E]
+00:00 +13 -1: Some tests failed.
+Failing tests:

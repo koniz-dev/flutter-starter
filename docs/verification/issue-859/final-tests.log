@@ -1,0 +1,31 @@
+origin/main 61df0272940b0c3cfa36528e0ebc374e5f4ab777
+$ flutter test test/core/network/realtime/raw_websocket_url_redaction_test.dart test/core/network/redact_path_malformed_key_test.dart
+a refused handshake rethrows an error without the token or the userinfo password
+an apostrophe in an earlier query value does not expose the token
+userinfo "u:SECRET%2fx" is redacted from the error and the logs
+userinfo "u:SECRET%41" is redacted from the error and the logs
+userinfo "u:SECRETé" is redacted from the error and the logs
+userinfo "u:SECRET x" is redacted from the error and the logs
+userinfo in a ws:\\ URL is redacted from the error and the logs
+an unparsable URL throws a FormatException without the token
+00:00 +47: All tests passed!
+
+--- mutant 1: lib/core/network/realtime/raw_websocket_client.dart at 92fccefe000 (#862, the first fix: regex scrub + Uri userinfo lookup)
+00:00 +4 -1: an apostrophe in an earlier query value does not expose the token [E]
+00:00 +4 -2: userinfo "u:SECRET%2fx" is redacted from the error and the logs [E]
+00:00 +4 -3: userinfo "u:SECRET%41" is redacted from the error and the logs [E]
+00:00 +4 -4: userinfo "u:SECRETé" is redacted from the error and the logs [E]
+00:00 +4 -5: userinfo "u:SECRET x" is redacted from the error and the logs [E]
+00:00 +5 -6: an unparsable URL throws a FormatException without the token [E]
+00:00 +5 -6: Some tests failed.
+Failing tests:
+
+--- mutant 2: lib/core/network/interceptors/api_logging_interceptor.dart at e397a4fb4ce (#867, before the authority-form fix #869)
+redactUrl removes the secret from ws:\\u:SECRET@h/s [E]
+redactUrl removes the secret from ws:/\u:SECRET@h/s [E]
+redactUrl removes the secret from ws:\/u:SECRET@h/s [E]
+redactUrl removes the secret from //u:SECRET@h/s [E]
+redactUrl removes the secret from //SECRET@h/x://y [E]
+userinfo in a ws:\\ URL is redacted from the error and the logs [E]
+00:00 +41 -6: Some tests failed.
+Failing tests:

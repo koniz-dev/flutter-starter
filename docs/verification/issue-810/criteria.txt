@@ -1,0 +1,395 @@
+origin/main 61df0272940b0c3cfa36528e0ebc374e5f4ab777 (#868 = b532a30da66)
+--- criterion 3: grep -rn 'flutter run --release' docs/guides/onboarding
+exit=1 (1 = no match)
+--- criterion 2: getting-started and the performance guides
+docs/guides/onboarding/getting-started.md:131:flutter run --profile
+docs/guides/performance/summary.md:283:1. Build in profile mode: `flutter build apk --profile` (release-like performance without a signing key; a release build needs one - see [Release signing](../../deployment/android-deployment.md#release-signing))
+docs/guides/performance/summary.md:301:   flutter run --profile
+docs/guides/performance/optimization-guide.md:438:1. Build in profile mode: `flutter build apk --profile` (release-like performance without a signing key; a release build needs one - see [Release signing](../../deployment/android-deployment.md#release-signing))
+docs/guides/performance/optimization-guide.md:459:   # flutter run --profile
+--- criterion 1: the CI example keystore step
+      - name: Setup Android keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+          echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+          echo "storeFile=upload-keystore.jks" >> android/key.properties
+commented-out "Setup Android keystore" step that writes the keystore and
+`key.properties` from secrets; uncomment it once the secrets exist.
+
+#### R8 / ProGuard
+
+Nothing to switch on. The Flutter Gradle plugin already runs R8 on `release`
+builds, with minification and resource shrinking, using
+`proguard-android-optimize.txt` and Flutter's own keep rules. Pass
+`-Pshrink=false` to turn it off for one build.
+
+If a plugin or reflection-based code needs extra keep rules, create
+`android/app/proguard-rules.pro`; the Flutter plugin adds it to the release
+build automatically when it exists, so `build.gradle.kts` does not change.
+For example, for a library loaded by reflection (substitute its package):
+
+```proguard
+# android/app/proguard-rules.pro
+-keep class com.example.reflected.** { *; }
+-dontwarn com.example.reflected.**
+```
+
+Add rules only for what an R8 build actually breaks; a release build that
+crashes with `ClassNotFoundException` or `NoSuchMethodError` names the class
+to keep.
+
+---
+
+### 5. Security Headers
+
+Two kinds of header, delivered two different ways:
+
+- **Content-Security-Policy** works in a `<meta http-equiv>` tag in
+  `web/index.html` (except `frame-ancestors`, `report-uri` and `sandbox`,
+  which only work as a response header).
+- **`X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`** and
+  `frame-ancestors` work **only as HTTP response headers** set by your server
+  or host. In a `<meta>` tag browsers ignore them, so a meta-tag "clickjacking
+  fix" protects nothing.
+
+#### Step 1: A CSP that lets Flutter's renderer load
+
+A default `flutter build web` does not load everything from your own origin:
+
+- **CanvasKit** comes from `https://www.gstatic.com/flutter-canvaskit/<engine
+  revision>/` (flutter_tools sets `FLUTTER_WEB_CANVASKIT_URL` unless the build
+  passes `--no-web-resources-cdn`, which bundles it under `canvaskit/` on
+  your origin instead);
+- **fallback fonts** come from `https://fonts.gstatic.com/s/` (the engine's
+  `fontFallbackBaseUrl` default), whichever way CanvasKit is served.
+
+A policy of `default-src 'self'` with `font-src 'self' data:` blocks both, and
+the app renders nothing. A starting point that allows them:
+
+```html
+<!-- web/index.html, inside <head> -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: https:;
+               font-src 'self' data: https://fonts.gstatic.com;
+               connect-src 'self' https://api.example.com https://www.gstatic.com https://fonts.gstatic.com;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+```
+
+Replace `https://api.example.com` with your `BASE_URL` origin. If you build
+with `--no-web-resources-cdn`, drop `https://www.gstatic.com`. Then tighten it
+(`'unsafe-inline'`, `'unsafe-eval'`) only as far as your target browsers still
+render the app - test the built app, not `flutter run`.
+
+#### Step 2: The headers that must come from the server
+
+Set these on your host, not in `index.html`. For example, Firebase Hosting
+(`firebase.json`):
+
+```json
+{
+  "hosting": {
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Frame-Options", "value": "DENY" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" },
+          { "key": "Content-Security-Policy", "value": "frame-ancestors 'none'" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Netlify (`_headers`), Vercel (`vercel.json` `headers`) and any reverse proxy
+have the same mechanism.
+
+---
+
+## High Priority Fixes
+
+### 6. Network Security Config
+
+#### Step 1: Create Network Security Config
+
+```xml
+<!-- android/app/src/main/res/xml/network_security_config.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Base configuration: Only allow HTTPS -->
+    <base-config cleartextTraffic="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    
+    <!-- Domain-specific configuration for production API -->
+    <domain-config cleartextTraffic="false">
+        <domain includeSubdomains="true">api.example.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <!-- Add pinned certificate if needed -->
+        </trust-anchors>
+    </domain-config>
+    
+    <!-- Debug overrides: Allow cleartext for localhost only -->
+    <debug-overrides>
+        <domain-config cleartextTraffic="true">
+            <domain includeSubdomains="true">localhost</domain>
+            <domain includeSubdomains="true">127.0.0.1</domain>
+            <domain includeSubdomains="true">10.0.2.2</domain>
+        </domain-config>
+    </debug-overrides>
+</network-security-config>
+```
+
+#### Step 2: Update AndroidManifest.xml
+
+```xml
+<!-- android/app/src/main/AndroidManifest.xml -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="flutter_starter"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules">
+        <!-- ... rest of manifest ... -->
+    </application>
+</manifest>
+```
+
+#### Step 3: Create Backup Rules
+
+Two files, because Android reads a different one depending on the version the
+app runs on ([Android 12 behavior changes](https://developer.android.com/about/versions/12/behavior-changes-12#backup-restore)):
+
+- **Android 12 (API 31) and later** read `dataExtractionRules`, which has
+  separate rules for cloud backup and for device-to-device (D2D) transfer.
+  Once it is set, `fullBackupContent` is ignored there. Rules in the old
+  format never affected D2D transfers, and on some manufacturers' devices
+  `allowBackup="false"` stops cloud backup but not a D2D transfer - so the
+  `<device-transfer>` excludes below are what actually keep data off a new
+  phone.
+- **Android 11 and earlier** read `fullBackupContent` (and `allowBackup`).
+
+```xml
+<!-- android/app/src/main/res/xml/data_extraction_rules.xml (Android 12+) -->
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </device-transfer>
+</data-extraction-rules>
+```
+
+```xml
+<!-- android/app/src/main/res/xml/backup_rules.xml (Android 11 and earlier) -->
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude all files from backup to protect sensitive data -->
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="database" path="." />
+    <exclude domain="file" path="." />
+</full-backup-content>
+```
+
+Why this matters here: `flutter_secure_storage` keeps its ciphertext in
+shared preferences and its key in the Android Keystore, which never leaves the
+device. A restored copy of the ciphertext cannot be decrypted (the plugin's own
+README names the `InvalidKeyException: Failed to unwrap key` this causes); with
+`resetOnError` on, the plugin then wipes it and the user signs in again. The
+plaintext preferences - the cached user, the unauthenticated HTTP cache - would
+otherwise move to the new device as they are.
+
+---
+
+### 7. Root/Jailbreak Detection (FreeRASP)
+
+To implement enterprise-grade Runtime Application Self-Protection (RASP), we utilize `freerasp` which operates at a lower level than typical check plugins.
+
+#### Step 1: Initialize RASP Service
+
+Ensure `freerasp` is configured with your production hashes and connected to the `raspServiceProvider` in `lib/core/security/`. 
+
+Edit the placeholder `TalsecConfig` inside [`lib/core/security/infrastructure/freerasp_service_impl.dart`](../../../lib/core/security/infrastructure/freerasp_service_impl.dart) (package names, signing cert hashes, team id, email, stores). The class **`FreeRaspServiceImpl`** already implements [`IRaspService`](../../../lib/core/security/i_rasp_service.dart).
+
+#### Step 2: Override `raspServiceProvider` and start protection
+
+[`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) defaults to [`NoOpRaspService`](../../../lib/core/security/noop_rasp_service.dart). When you are ready to ship real RASP, override it in `createAppContainer` in `lib/main.dart` - the one container the app runs on - by adding it to the list that already holds `authModuleOverrides`:
+
+```dart
+// lib/main.dart
+import 'package:flutter_starter/core/security/infrastructure/freerasp_service_impl.dart';
+import 'package:flutter_starter/core/security/rasp_providers.dart';
+
+ProviderContainer createAppContainer({
+  List<Override> overrides = const <Override>[],
+}) {
+  return ProviderContainer(
+    retry: _neverRetry,
+    overrides: <Override>[
+      ...authModuleOverrides,
+      raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
+      ...overrides,
+    ],
+  );
+}
+```
+
+Then start protection in `bootstrap()`, right after `final container = createContainer();`:
+
+```dart
+final rasp = container.read(raspServiceProvider);
+await rasp.startProtection();
+rasp.onThreatDetected.listen((threat) {
+  // Map SecurityThreat (privilegedAccess, emulator, debugger, ...) to policy
+});
+```
+
+Do **not** build a second `ProviderContainer` for this. `createAppContainer`
+is what binds `authModuleOverrides` - the token refresher and the session
+termination sink - and `_neverRetry`; a container built without them loses 401
+refresh and forced logout without any error.
+
+<!-- symbol: lib/main.dart createAppContainer -->
+<!-- symbol: lib/features/auth/di/auth_providers.dart authModuleOverrides -->
+
+There is **no** `device_security.dart` in this starter; wire threat handling in your own module if you need blocking UI or forced logout.
+
+#### What the adapter forwards
+
+`FreeRaspServiceImpl` forwards **every** detection the pinned freerasp (8.2.4) reports. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Once only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
+
+| freeRASP callback | `SecurityThreat` | Platforms | Kind |
+|---|---|---|---|
+| `onAppIntegrity` | `tampered` | both | attack |
+| `onObfuscationIssues` | `tampered` | both | build posture |
+| `onDebug` | `debugger` | both | attack |
+| `onHooks` | `privilegedAccess` | both | attack |
+| `onPrivilegedAccess` | `privilegedAccess` | both | attack |
+| `onSimulator` | `emulator` | both | attack |
+| `onUnofficialStore` | `unofficialStore` | both | attack |
+| `onDeviceBinding` | `unknown` | both | attack |
+| `onDeviceID` | `unknown` | iOS | informational |
+| `onSecureHardwareNotAvailable` | `unknown` | both | device posture |
+| `onMalware` | `malware` | Android | attack |
+| `onBootloader` | `unlockedBootloader` | Android | attack |
+| `onAutomation` | `automation` | Android | attack |
+| `onMultiInstance` | `multiInstance` | Android | attack |
+| `onTimeSpoofing` | `timeSpoofing` | both | attack |
+| `onLocationSpoofing` | `locationSpoofing` | Android | attack |
+| `onScreenshot` | `screenshot` | both | user action |
+| `onScreenRecording` | `screenRecording` | both | user action |
+| `onPasscode` | `passcodeNotSet` | both | device posture |
+| `onDevMode` | `developerMode` | Android | device posture |
+| `onADBEnabled` | `adbEnabled` | Android | device posture |
+| `onSystemVPN` | `systemVpn` | both | device posture |
+| `onUnsecureWiFi` | `unsecureWiFi` | Android | device posture |
+
+"Kind" is guidance for your policy, not something the adapter acts on. A **device posture** or **user action** signal fires on many legitimate devices: a developer phone has developer options and ADB on, and a corporate phone runs a system VPN. Forcing a logout on those locks out real users. Log them or warn, and save blocking for the **attack** rows.
+
+`test/core/security/infrastructure/freerasp_service_impl_test.dart` drives each of freeRASP's `Threat` values through its mocked platform channel and fails if one is neither forwarded as this table says nor listed as deliberately ignored. A freerasp upgrade that adds a detection therefore fails `flutter test` until someone maps it, and the exhaustive `switch` in `FreeRaspServiceImpl.securityThreatFor` stops compiling first. A new `Threat` gets a row here, too.
+
+### 8. Session management (blueprint)
+
+Not in this repo. Full template (session timer + lifecycle sketch): **[Security blueprints → Session management](./blueprints.md#session-management)**.
+
+## Compliance Features
+
+### 9. GDPR consent (blueprint)
+
+Not in this repo. Full template (consent manager + screen): **[Security blueprints → GDPR](./blueprints.md#gdpr-and-consent-ui)**.
+
+---
+
+## Testing Your Security Implementation
+
+### Test SSL Pinning
+
+```dart
+// test/security/ssl_pinning_test.dart
+void main() {
+  test('SSL pinning should reject invalid certificates', () async {
+    // Test with invalid certificate
+    // Should throw exception
+  });
+}
+```
+
+### Test Log Sanitization
+
+The redaction rules are pinned by
+`test/core/network/interceptors/api_logging_redaction_rules_test.dart`. This is
+its response-side case, verbatim:
+
+<!-- test-excerpt: test/core/network/interceptors/api_logging_redaction_rules_test.dart -->
+```dart
+  test('criterion 2: onResponse never logs an access_token value', () {
+    Map<String, dynamic>? context;
+    when(
+      () => logging.info(any(), context: any(named: 'context')),
+    ).thenAnswer((invocation) {
+      context = invocation.namedArguments[#context] as Map<String, dynamic>?;
+    });
+
+    interceptor.onResponse(
+      Response<dynamic>(
+        requestOptions: RequestOptions(path: '/auth/login', method: 'POST'),
+        statusCode: 200,
+        data: {'access_token': 'T0KEN-VALUE', 'user': 'u'},
+      ),
+      _ResponseHandler(),
+    );
+
+    expect(context, isNotNull);
+    expect(context.toString(), isNot(contains('T0KEN-VALUE')));
+    expect((context!['body'] as Map)['access_token'], _redacted);
+  });
+```
+
+---
+
+## Next Steps
+
+1. **Prioritize:** Start with critical fixes (SSL pinning, obfuscation, logging)
+2. **Test:** Thoroughly test each implementation
+3. **Document:** Update your internal documentation
+4. **Monitor:** Set up security monitoring
+5. **Review:** Schedule regular security audits
+
+---
+
+**Remember:** Security is an ongoing process, not a one-time task. Regularly review and update your security measures.
+
+
+--- production-build template
+267:flutter build apk --release --obfuscate --split-debug-info=./build/debug-info --dart-define-from-file=.env.production
+270:flutter build appbundle --release --obfuscate --split-debug-info=./build/debug-info --dart-define-from-file=.env.production
+273:flutter build ios --release --obfuscate --split-debug-info=./build/debug-info --dart-define-from-file=.env.production
+$ flutter test test/docs/doc_workflow_examples_test.dart
+00:00 +2: All tests passed!
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.

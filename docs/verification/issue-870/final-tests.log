@@ -1,0 +1,10 @@
+origin/main 61df0272940b0c3cfa36528e0ebc374e5f4ab777
+$ flutter test test/docs/doc_symbols_raw_string_test.dart test/docs/doc_symbols_test.dart
+00:00 +16: All tests passed!
+--- mutant: tool/doc_symbols.dart at 7703be2e01b (before #871)
+00:00 +0 -1: a declaration after r'\' is found [E]
+00:00 +0 -2: a declaration after r"\" is found [E]
+00:00 +0 -3: a declaration after r'''\''' is found [E]
+00:00 +0 -4: a declaration after r'a\' is found [E]
+00:00 +1 -4: Some tests failed.
+Failing tests:
