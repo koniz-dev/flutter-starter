@@ -278,6 +278,11 @@ class AuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // An absolute URL on another origin - a presigned upload, a CDN, a
+    // pagination link - is not this API: the token is never sent there, and
+    // a header the caller attached is theirs to keep.
+    if (!_targetsApiOrigin(options)) return super.onRequest(options, handler);
+
     // A re-send - a `RetryInterceptor` attempt runs the whole chain again with
     // the earlier attempt's `extra` - of a request first sent under a session
     // that has since ended. Authorising it with the token stored now would
@@ -367,8 +372,10 @@ class AuthInterceptor extends Interceptor {
   ) async {
     // Handle 401 Unauthorized - refresh token or logout
     if (err.response?.statusCode == 401) {
-      // Check if this endpoint should be excluded from token refresh
-      if (_shouldExcludeEndpoint(err.requestOptions)) {
+      // Another origin's 401 says nothing about this API's session, and it
+      // was never sent this API's token.
+      if (!_targetsApiOrigin(err.requestOptions) ||
+          _shouldExcludeEndpoint(err.requestOptions)) {
         return super.onError(err, handler);
       }
 
@@ -376,6 +383,23 @@ class AuthInterceptor extends Interceptor {
     }
 
     super.onError(err, handler);
+  }
+
+  /// Whether [options] goes to the API's own origin - the scheme, host and
+  /// port of its base URL.
+  ///
+  /// A relative path always does. dio sends an absolute path as is, ignoring
+  /// the base URL, so only an absolute one can leave the origin. A client
+  /// with no base URL - the interceptor installed on a bare `Dio` - has no
+  /// origin to compare against, so every request on it counts as the API's.
+  static bool _targetsApiOrigin(RequestOptions options) {
+    final target = Uri.parse(options.path);
+    if (!target.hasScheme) return true;
+    final api = Uri.parse(options.baseUrl);
+    if (!api.hasAuthority) return true;
+    return target.scheme == api.scheme &&
+        target.host == api.host &&
+        target.port == api.port;
   }
 
   /// Whether [options] targets one of the auth endpoints themselves, whose
