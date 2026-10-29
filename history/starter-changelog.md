@@ -7,7 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- **A release build configured as `ENVIRONMENT=development` refuses to
+  start.** `development` is the default and the value `.env.example` ships, so
+  a release built from an unedited `.env` used to run with the debug routes
+  registered, HTTP logging on and pinning off. It now opens on the startup
+  failure screen instead (profile builds are not affected).
+  **What you change:** build releases with `ENVIRONMENT=staging` or
+  `production` - for example `--dart-define-from-file=.env.production`
+  (`.env.production` and `.env.staging` are now git-ignored). `build.yml`'s
+  manual input now defaults to `staging`, and `build_all.sh development`
+  exits with an explanation.
+- **Configured `API_SSL_FINGERPRINTS` now pin in development too**, unless
+  `ENABLE_SSL_PINNING=false`. **What you change:** if you set fingerprints in
+  a development `.env` and debug through a proxy, add
+  `ENABLE_SSL_PINNING=false` there.
+
+### Security
+
+- `AuthInterceptor` attaches the access token only to the API's own origin
+  (judged on the URL dio actually sends). An absolute URL on another host -
+  a presigned upload, a pagination link - no longer receives it, and that
+  host's 401 no longer refreshes or ends the session.
+- A 401 for a request sent under a session that has since ended (the user
+  signed out, maybe someone else signed in) no longer refreshes the current
+  user's tokens or replays the old request as them.
+- `RawWebSocketClientImpl` opens its `wss://` handshake through the pinned
+  `HttpClient` (`SslPinning.createHttpClient()`) when pinning is in effect.
+- `PerformanceInterceptor` and the Firebase performance template record the
+  request path redacted, as the logs do, so a `?token=` no longer reaches a
+  trace attribute.
+
 ### Fixed
+
+- **`LoggingService` writes logs in profile and release builds.** It relied on
+  the logger package's default filter, which drops every event once asserts
+  are off, so the production file and console outputs received nothing.
 
 - **The release-signing refusal's `key.properties` template is valid.** It
   showed `storeFile=upload-keystore.jks   # relative to android/, or absolute`;
@@ -26,6 +62,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   says `android/app/proguard-rules.pro` is picked up automatically.
 - `docs/guides/security/audit.md`: release signing is listed as implemented,
   not as an open CRITICAL.
+- `docs/api/core/storage.md` gains a Web section: on Flutter web the tokens
+  sit in `localStorage` with their AES key beside them, and what to do about
+  it. The security audit lists it as an open item.
 
 ## [2.0.0] - 2026-10-29
 
