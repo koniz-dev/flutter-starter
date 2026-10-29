@@ -1,0 +1,54 @@
+origin/main 34f3bcf151e4873b79706f21394fa69010ae5dec (PR #855 squash 34f3bcf151e)
+--- criterion 1: implementation.md RASP Step 2 as merged
+#### Step 2: Override `raspServiceProvider` and start protection
+
+[`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) defaults to [`NoOpRaspService`](../../../lib/core/security/noop_rasp_service.dart). When you are ready to ship real RASP, override it in `createAppContainer` in `lib/main.dart` - the one container the app runs on - by adding it to the list that already holds `authModuleOverrides`:
+
+```dart
+// lib/main.dart
+import 'package:flutter_starter/core/security/infrastructure/freerasp_service_impl.dart';
+import 'package:flutter_starter/core/security/rasp_providers.dart';
+
+ProviderContainer createAppContainer({
+  List<Override> overrides = const <Override>[],
+}) {
+  return ProviderContainer(
+    retry: _neverRetry,
+    overrides: <Override>[
+      ...authModuleOverrides,
+      raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
+      ...overrides,
+    ],
+  );
+}
+```
+
+Then start protection in `bootstrap()`, right after `final container = createContainer();`:
+
+```dart
+final rasp = container.read(raspServiceProvider);
+await rasp.startProtection();
+rasp.onThreatDetected.listen((threat) {
+  // Map SecurityThreat (privilegedAccess, emulator, debugger, ...) to policy
+});
+```
+
+Do **not** build a second `ProviderContainer` for this. `createAppContainer`
+is what binds `authModuleOverrides` - the token refresher and the session
+termination sink - and `_neverRetry`; a container built without them loses 401
+refresh and forced logout without any error.
+
+<!-- symbol: lib/main.dart createAppContainer -->
+<!-- symbol: lib/features/auth/di/auth_providers.dart authModuleOverrides -->
+
+There is **no** `device_security.dart` in this starter; wire threat handling in your own module if you need blocking UI or forced logout.
+--- criterion 2: grep -n "final container = ProviderContainer(" implementation.md
+exit=1 (1 = no match)
+--- criterion 3: grep -n "overrides: overrides)" riverpod-retry-policy.md
+exit=1 (1 = no match)
+$ flutter test test/docs/retry_policy_snippet_test.dart
+00:00 +1: All tests passed!
+--- the same test against the pre-fix doc (6028656d7fb):
+00:00 +0 -1: Some tests failed.
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.
