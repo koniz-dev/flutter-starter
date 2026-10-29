@@ -1,0 +1,9 @@
+--- docs/api/core/network.md, Refreshing across a logout (on main)
+A 401 is judged by the session its request was **sent** under, which
+`onRequest` stamps on every API-origin request. If that session has ended by
+the time the 401 arrives - its user signed out, and maybe someone else signed
+in - the request simply fails: no refresh, no replay, no logout. Refreshing
+would rotate the *current* user's credentials and replay the old request as
+them, handing the ended session's caller someone else's data; with nothing
+stored, it would log out whoever is signing in.
+

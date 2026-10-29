@@ -1,0 +1,7 @@
+$ lib/core/network/interceptors/auth_interceptor.dart replaced by its ce7ac4629c5 version (before #843), then:
+00:00 +5 -1: a base URL with no path @evil.example/x lands on evil.example and is sent without the token [E]
+00:00 +5 -2: a base URL with no path @evil.example/x's 401 is not refreshed [E]
+00:00 +5 -3: a base URL with no path .evil.example/x lands on api.example.com.evil.example and is sent without the token [E]
+00:00 +5 -4: a base URL with no path .evil.example/x's 401 is not refreshed [E]
+00:00 +7 -4: Some tests failed.
+Failing tests:

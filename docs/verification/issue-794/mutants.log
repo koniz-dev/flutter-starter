@@ -1,0 +1,9 @@
+$ mutant A: lib/core/config/app_config.dart releaseBuiltAsDevelopment returns false
+releaseBuiltAsDevelopment ENVIRONMENT=development, releaseMode: true -> true [E]
+main() refuses a release build configured as development a release build with ENVIRONMENT=development boots into the failure screen [E]
+00:06 +21 -2: Some tests failed.
+Failing tests:
+$ mutant B: lib/core/config/app_config.dart old pinning default (isStaging || isProduction)
+00:00 +0 -1: pinning in development fingerprints with ENABLE_SSL_PINNING unset enforce pinning [E]
+00:00 +6 -1: Some tests failed.
+Failing tests:

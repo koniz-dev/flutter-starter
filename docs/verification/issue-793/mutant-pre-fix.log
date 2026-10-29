@@ -1,0 +1,13 @@
+$ lib/core/network/interceptors/auth_interceptor.dart replaced by its e2becae05ef version (before #840), then:
+00:00 +0 -1: an ended session's 401 does not refresh the next user's tokens or replay the request as them [E]
+  Expected: empty
+    Actual: ['B-refresh']
+00:30 +0 -2: an ended session's 401 is not queued behind, or replayed by, a refresh the newer session started [E]
+00:30 +0 -2: an ended session's 401 is not queued behind, or replayed by, a refresh the newer session started [E]
+  Expected: not <Instance of 'Exception'>
+    Actual: NetworkException:<NetworkException(RECEIVE_TIMEOUT): Request deadline exceeded: no response within 30s (API_TIMEOUT)>
+00:30 +0 -3: an ended session's 401 with nothing stored does not end the session again [E]
+  Expected: <Instance of 'Exception'>
+    Actual: <Instance of 'NetworkResponse<dynamic>'>
+00:30 +1 -3: Some tests failed.
+Failing tests:

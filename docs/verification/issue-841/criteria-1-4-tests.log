@@ -1,0 +1,14 @@
+origin/main cc71fcc2a5756ffa65281eadbac2df6dd12d34e5
+$ flutter test test/core/network/auth_token_origin_test.dart
+00:00 +0: a foreign-origin absolute URL is sent without the token
+00:00 +1: an absolute URL on the API origin carries the token
+00:00 +2: a relative path carries the token
+00:00 +3: a foreign-origin 401 neither refreshes nor clears the session, and reaches the caller as a 401
+00:00 +4: a header the caller set on a foreign-origin request is kept
+00:00 +5: a base URL with no path @evil.example/x lands on evil.example and is sent without the token
+00:00 +6: a base URL with no path @evil.example/x's 401 is not refreshed
+00:00 +7: a base URL with no path .evil.example/x lands on api.example.com.evil.example and is sent without the token
+00:00 +8: a base URL with no path .evil.example/x's 401 is not refreshed
+00:00 +9: a base URL with no path an ordinary path on it carries the token
+00:00 +10: an API-origin 401 still refreshes once and replays
+00:00 +11: All tests passed!

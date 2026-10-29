@@ -1,0 +1,24 @@
+--- criterion 3: configuration.md release section
+flutter build apk --release --dart-define-from-file=.env.production
+```
+
+A release build refuses to start with `ENVIRONMENT=development` - the default,
+and what `.env.example` ships - because that registers the debug routes and
+turns HTTP logging on. Keep a copy set to `production` (or `staging`) for
+release builds; `.env.production` and `.env.staging` are git-ignored for that.
+Profile builds (`--profile`) are not refused.
+--- .env.example
+29-# Options: development, staging, production
+30:# A release build refuses to start as development. Build releases from a
+31-# copy set to staging or production - .env.staging and .env.production are
+32-# git-ignored for that: --dart-define-from-file=.env.production
+33-ENVIRONMENT=development
+34-
+--- .gitignore
+59:# Per-environment build inputs, e.g. --dart-define-from-file=.env.production
+60-.env.production
+61-.env.staging
+62-
+--- git check-ignore
+.gitignore:60:.env.production	.env.production
+.gitignore:61:.env.staging	.env.staging
