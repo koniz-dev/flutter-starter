@@ -89,7 +89,11 @@ class LoggingService {
   void _initializeLogger() {
     if (!_enableLogging) {
       // Create a no-op logger if logging is disabled
-      _logger = Logger(output: _NoOpOutput(), printer: _NoOpPrinter());
+      _logger = Logger(
+        filter: ProductionFilter(),
+        output: _NoOpOutput(),
+        printer: _NoOpPrinter(),
+      );
       return;
     }
 
@@ -99,6 +103,7 @@ class LoggingService {
     if (injected != null) {
       outputs.add(injected);
       _logger = Logger(
+        filter: _filter(),
         printer: _printer(),
         output: injected,
         level: _getLogLevel(),
@@ -139,11 +144,21 @@ class LoggingService {
     final output = outputs.length == 1 ? outputs.first : MultiOutput(outputs);
 
     _logger = Logger(
+      filter: _filter(),
       printer: _printer(),
       output: output,
       level: _getLogLevel(),
     );
   }
+
+  /// Filters by [_getLogLevel] alone, in every build mode.
+  ///
+  /// Never the logger package's default: `Logger.defaultFilter` is a
+  /// `DevelopmentFilter`, which decides inside an `assert` and so drops every
+  /// event once asserts are off - in every profile and release build. The
+  /// file and console outputs set up for production then received nothing,
+  /// and `flutter test`, which runs with asserts on, could not tell.
+  LogFilter _filter() => ProductionFilter();
 
   /// Choose printer based on environment
   LogPrinter _printer() => AppConfig.isProduction

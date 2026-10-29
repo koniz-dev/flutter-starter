@@ -32,6 +32,7 @@ Main service for handling all application logs.
   - Dev: Pretty printing to console.
   - Prod: JSON formatting for easier ingestion by log aggregators.
 - **Togglable**: `ENABLE_LOGGING=false` turns every output off. It defaults to `true` in every environment.
+- **Levels per build**: production writes `info` and above; staging and development write `debug` and above. The level is the only filter, in every build mode - profile and release included. (The `logger` package's default filter drops everything once asserts are off, so `LoggingService` never uses it.)
 - **Outputs**: the console in debug builds, `logs/app.log` in production, and the console as a fallback in any build that would otherwise have no output. The per-build table is in [Where logs go](../../guides/configuration.md#where-logs-go).
 
 ### Usage
