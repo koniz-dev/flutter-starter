@@ -349,7 +349,7 @@ The project provides an abstract interface `IRealtimeClient` for handling persis
 
 ### Implementations
 - `NoOpRealtimeClient`: A mocked dummy client injected by default to prevent connection errors where real-time is not needed.
-- `RawWebSocketClientImpl`: Concrete class powered by the `web_socket_channel` package.
+- `RawWebSocketClientImpl`: Concrete class powered by the `web_socket_channel` package. Its handshake follows the same pinning policy as `ApiClient`: when pinning is in effect it connects through the pinned `HttpClient` from `SslPinning.createHttpClient()`, so a `wss://` server whose certificate the fingerprints do not name is refused. Pass `sslPinning:` to use a different policy.
 
 ### Usage Example
 ```dart

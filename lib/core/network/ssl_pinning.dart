@@ -64,6 +64,22 @@ class SslPinning {
   /// request, so a web build configured with the mobile fingerprints would
   /// send nothing at all.
   HttpClientAdapter? createAdapter() {
+    final pinnedClient = _pinnedClientFactory();
+    if (pinnedClient == null) return null;
+    return IOHttpClientAdapter(createHttpClient: pinnedClient);
+  }
+
+  /// Builds a pinned [HttpClient] for a transport that takes one directly -
+  /// `RawWebSocketClientImpl`'s handshake - or `null` exactly when
+  /// [createAdapter] would be, with the same misconfiguration report.
+  ///
+  /// A WebSocket opened without it trusts every certificate the platform
+  /// does, whatever the fingerprints say.
+  HttpClient? createHttpClient() => _pinnedClientFactory()?.call();
+
+  /// The factory both transports share, or `null` when pinning is not
+  /// effective.
+  HttpClient Function()? _pinnedClientFactory() {
     if (kIsWeb || !enabled) {
       return null;
     }
@@ -75,15 +91,12 @@ class SslPinning {
     }
 
     final accepted = List<String>.unmodifiable(fingerprints);
-    return IOHttpClientAdapter(
-      createHttpClient: () {
-        // Empty trusted roots force every connection through
-        // badCertificateCallback, so the fingerprint check cannot be skipped.
-        return HttpClient(context: SecurityContext())
+    // Empty trusted roots force every connection through
+    // badCertificateCallback, so the fingerprint check cannot be skipped.
+    return () =>
+        HttpClient(context: SecurityContext())
           ..badCertificateCallback = (cert, host, port) =>
               _accepts(cert, host, accepted);
-      },
-    );
   }
 
   /// Whether [cert] matches one of [fingerprints].

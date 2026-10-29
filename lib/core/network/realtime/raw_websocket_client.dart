@@ -1,16 +1,47 @@
 import 'dart:async';
+import 'dart:io' show HttpClient;
 
 import 'package:flutter_starter/core/network/realtime/i_realtime_client.dart';
+import 'package:flutter_starter/core/network/ssl_pinning.dart';
 import 'package:logger/logger.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+/// Opens a [WebSocketChannel] to `uri`, through `pinnedClient` when one is
+/// given.
+typedef WebSocketConnector = WebSocketChannel Function(
+  Uri uri,
+  HttpClient? pinnedClient,
+);
+
+WebSocketChannel _connect(Uri uri, HttpClient? pinnedClient) =>
+    pinnedClient == null
+    ? WebSocketChannel.connect(uri)
+    : IOWebSocketChannel.connect(uri, customClient: pinnedClient);
 
 /// A raw WebSocket implementation of [IRealtimeClient] using
 /// `web_socket_channel` package.
+///
+/// The handshake follows the same certificate pinning policy as `ApiClient`:
+/// when [SslPinning.isEffective], the connection goes through the pinned
+/// [HttpClient] from [SslPinning.createHttpClient], so a `wss://` URL is
+/// refused for any certificate the fingerprints do not name. Otherwise -
+/// pinning off, or on web, where the browser owns TLS - it uses the default
+/// transport.
 class RawWebSocketClientImpl implements IRealtimeClient {
   /// Creates a client whose [connect] gives up after [connectTimeout].
+  ///
+  /// [sslPinning] defaults to [SslPinning.fromConfig], the policy `ApiClient`
+  /// uses. [connectChannel] is a seam for tests.
   RawWebSocketClientImpl({
     this.connectTimeout = const Duration(seconds: 10),
-  });
+    SslPinning? sslPinning,
+    WebSocketConnector connectChannel = _connect,
+  }) : _sslPinning = sslPinning ?? SslPinning.fromConfig(),
+       _connectChannel = connectChannel;
+
+  final SslPinning _sslPinning;
+  final WebSocketConnector _connectChannel;
 
   /// How long [connect] waits for the WebSocket handshake before it fails
   /// with a [TimeoutException].
@@ -56,7 +87,10 @@ class RawWebSocketClientImpl implements IRealtimeClient {
     final generation = _generation;
 
     _logger.d('Connecting to WebSocket at: $url');
-    final channel = WebSocketChannel.connect(Uri.parse(url));
+    final channel = _connectChannel(
+      Uri.parse(url),
+      _sslPinning.createHttpClient(),
+    );
     _pending = channel;
     try {
       await channel.ready.timeout(connectTimeout);
