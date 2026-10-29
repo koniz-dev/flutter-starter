@@ -1,0 +1,17 @@
+branch fix/no-development-release at 8977d26715d (tree = squash 6028656d7fb):
+03:41 +3582 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/helpers_test.dart: pumping pumpAppAndSettle pumps and settles animations
+03:41 +3583 ~14: All tests passed!
+
+--- PR #845 checks
+skipping Build Android https://github.com/koniz-dev/flutter-starter/actions/runs/40921909622/job/123617214602
+skipping Build Web https://github.com/koniz-dev/flutter-starter/actions/runs/40921909622/job/123617179392
+pass Action pins https://github.com/koniz-dev/flutter-starter/actions/runs/40921909676/job/123617125545
+pass Android on JDK 25 (toolchain floor + debug build) https://github.com/koniz-dev/flutter-starter/actions/runs/40921909622/job/123617124484
+pass Quality gate https://github.com/koniz-dev/flutter-starter/actions/runs/40921909660/job/123617124117
+pass Strip both-samples-removed + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/40921909586/job/123617123765
+pass Strip tasks-removed + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/40921909586/job/123617123826
+pass Strip feature-flags-removed + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/40921909586/job/123617123941
+pass Strip renamed-both + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/40921909586/job/123617123376
+pass Strip keep-samples + analyze + test https://github.com/koniz-dev/flutter-starter/actions/runs/40921909586/job/123617123932
+pass Workflow lint https://github.com/koniz-dev/flutter-starter/actions/runs/40921909676/job/123617125244
+skipping Build iOS (no codesign) https://github.com/koniz-dev/flutter-starter/actions/runs/40921909622/job/123617125963

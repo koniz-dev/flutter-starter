@@ -1,0 +1,28 @@
+origin/main 6028656d7fbc1133bb49bd37b64f7f73e26184b0 (PR #845 squash)
+--- criterion 1: build.yml environment input
+      environment:
+        # No `development`: these jobs build release artifacts, and a release
+        # build configured as development refuses to start (lib/main.dart).
+        description: 'Value passed as --dart-define=ENVIRONMENT'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      base_url:
+--- criterion 3: scripts-smoke.yml environment input
+      environment:
+        description: 'Argument passed to scripts/ci/build_all.sh'
+        required: true
+        default: 'production'
+        type: choice
+        # No `development`: build_all.sh builds release artifacts and refuses it.
+        options:
+          - staging
+          - production
+
+--- grep 'development' in both input blocks (expect only the comments):
+.github/workflows/build.yml:35:        # No `development`: these jobs build release artifacts, and a release
+.github/workflows/build.yml:36:        # build configured as development refuses to start (lib/main.dart).
+.github/workflows/scripts-smoke.yml:52:        # No `development`: build_all.sh builds release artifacts and refuses it.
