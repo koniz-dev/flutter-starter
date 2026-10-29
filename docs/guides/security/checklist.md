@@ -67,10 +67,10 @@ Running
       it is in the history. `*.crt` and `*.der` are deliberately trackable: a
       certificate is the public half, and pinning may legitimately ship one.
 - [ ] **Enable code obfuscation for release builds**
-- [ ] **Configure proper Android release signing** (remove debug signing)
+- [ ] **Create your upload keystore and `android/key.properties`** (the build never debug-signs; it refuses a release without them - see [Release signing](../../deployment/android-deployment.md#release-signing))
 - [ ] Add production build guards (prevent debug code in production)
 - [ ] Review and remove any hardcoded secrets/API keys
-- [ ] Add ProGuard rules for Android
+- [ ] Add R8 keep rules only if a release build breaks (R8 already runs on release - see [R8 / ProGuard](./implementation.md#r8--proguard))
 
 ### Platform Security
 - [ ] **Add network security config for Android**
