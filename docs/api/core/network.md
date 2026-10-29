@@ -414,9 +414,11 @@ Dio interceptor for adding authentication tokens to requests and handling automa
 
 **Location:** `lib/core/network/interceptors/auth_interceptor.dart`
 
-Credentials are attached only to the API's own origin: a relative path, or an
-absolute URL with the same scheme, host and port as the base URL. An absolute
-URL elsewhere - a presigned upload, a CDN, a pagination link from another
+Credentials are attached only to the API's own origin: the URL dio actually
+sends must have the same scheme, host and port as the base URL. That is judged
+on the joined URL, not the path alone - dio joins a relative path to the base
+URL as strings, so with a base URL that has no path, `@evil.example/x` lands on
+another host. An absolute URL elsewhere - a presigned upload, a CDN, a pagination link from another
 host - goes out with no `Authorization` header from this interceptor (one the
 caller set is left alone), and its 401 is handed back as an ordinary 401: no
 refresh, no logout. On a client with no base URL there is no origin to

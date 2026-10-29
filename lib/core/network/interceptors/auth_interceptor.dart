@@ -408,15 +408,25 @@ class AuthInterceptor extends Interceptor {
   /// Whether [options] goes to the API's own origin - the scheme, host and
   /// port of its base URL.
   ///
-  /// A relative path always does. dio sends an absolute path as is, ignoring
-  /// the base URL, so only an absolute one can leave the origin. A client
-  /// with no base URL - the interceptor installed on a bare `Dio` - has no
-  /// origin to compare against, so every request on it counts as the API's.
+  /// Judged on [RequestOptions.uri], the URL dio will actually fetch, not on
+  /// the path alone. dio sends an absolute path as is, and it *joins* a
+  /// relative one to the base URL as strings rather than resolving it: with a
+  /// base URL that has no path, `@evil.example/x` or `.evil.example/x` lands
+  /// on another host although the path has no scheme. A URL that cannot be
+  /// parsed counts as foreign, so it never carries the token.
+  ///
+  /// A client with no base URL - the interceptor installed on a bare `Dio` -
+  /// has no origin to compare against, so every request on it counts as the
+  /// API's.
   static bool _targetsApiOrigin(RequestOptions options) {
-    final target = Uri.parse(options.path);
-    if (!target.hasScheme) return true;
     final api = Uri.parse(options.baseUrl);
     if (!api.hasAuthority) return true;
+    final Uri target;
+    try {
+      target = options.uri;
+    } on FormatException {
+      return false;
+    }
     return target.scheme == api.scheme &&
         target.host == api.host &&
         target.port == api.port;
