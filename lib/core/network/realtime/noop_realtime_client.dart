@@ -25,7 +25,7 @@ class NoOpRealtimeClient implements IRealtimeClient {
   @override
   Future<void> connect(String url) async {
     _debugPrint(
-      'Simulated connection to ${ApiLoggingInterceptor.redactPath(url)}',
+      'Simulated connection to ${ApiLoggingInterceptor.redactUrl(url)}',
     );
   }
 

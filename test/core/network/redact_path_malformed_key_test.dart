@@ -103,6 +103,36 @@ void main() {
 
   // Wired as apiClientProvider wires it: the no-op performance service still
   // installs PerformanceInterceptor, which redacts every request's path.
+  group('redactUrl', () {
+    for (final (url, secret) in [
+      ('wss://u:SECRET@h/s', 'SECRET'),
+      ('wss://SECRET@h/s', 'SECRET'),
+      ('wss://u:SECRET%2fx@h/s', 'SECRET'),
+      ('wss://u:SECRETé@h/s', 'SECRET'),
+      ('wss://u:SE@CRET@h/s', 'CRET'),
+      ('wss://u:SECRET@h:443x/s?token=T0KEN', 'SECRET'),
+      ('wss://h/s?token=T0KEN', 'T0KEN'),
+    ]) {
+      test('removes the secret from $url', () {
+        expect(ApiLoggingInterceptor.redactUrl(url), isNot(contains(secret)));
+      });
+    }
+
+    test('keeps a URL with nothing to redact as written', () {
+      expect(
+        ApiLoggingInterceptor.redactUrl('wss://h:8443/s?room=lobby#x'),
+        'wss://h:8443/s?room=lobby#x',
+      );
+    });
+
+    test('an @ after the authority is not userinfo', () {
+      expect(
+        ApiLoggingInterceptor.redactUrl('wss://h/s?mail=a@b.c'),
+        'wss://h/s?mail=a@b.c',
+      );
+    });
+  });
+
   group('through ApiClient, with logging off', () {
     for (final path in ['/v?a%=1', '/v?%zz=1', '/v?%E9=1', '/v?café=1']) {
       test('$path reaches the transport and succeeds', () async {
