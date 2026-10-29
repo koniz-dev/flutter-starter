@@ -371,53 +371,72 @@ to keep.
 
 ### 5. Security Headers
 
-#### Step 1: Update web/index.html
+Two kinds of header, delivered two different ways:
+
+- **Content-Security-Policy** works in a `<meta http-equiv>` tag in
+  `web/index.html` (except `frame-ancestors`, `report-uri` and `sandbox`,
+  which only work as a response header).
+- **`X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`** and
+  `frame-ancestors` work **only as HTTP response headers** set by your server
+  or host. In a `<meta>` tag browsers ignore them, so a meta-tag "clickjacking
+  fix" protects nothing.
+
+#### Step 1: A CSP that lets Flutter's renderer load
+
+A default `flutter build web` does not load everything from your own origin:
+
+- **CanvasKit** comes from `https://www.gstatic.com/flutter-canvaskit/<engine
+  revision>/` (flutter_tools sets `FLUTTER_WEB_CANVASKIT_URL` unless the build
+  passes `--no-web-resources-cdn`, which bundles it under `canvaskit/` on
+  your origin instead);
+- **fallback fonts** come from `https://fonts.gstatic.com/s/` (the engine's
+  `fontFallbackBaseUrl` default), whichever way CanvasKit is served.
+
+A policy of `default-src 'self'` with `font-src 'self' data:` blocks both, and
+the app renders nothing. A starting point that allows them:
 
 ```html
-<!-- web/index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-  <base href="$FLUTTER_BASE_HREF">
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" 
-        content="default-src 'self'; 
-                 script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
-                 style-src 'self' 'unsafe-inline'; 
-                 img-src 'self' data: https:; 
-                 connect-src 'self' https://api.example.com;
-                 font-src 'self' data:;">
-  
-  <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" 
-        content="geolocation=(), microphone=(), camera=()">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="flutter_starter">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>flutter_starter</title>
-  <link rel="manifest" href="manifest.json">
-</head>
-<body>
-  <script src="flutter_bootstrap.js" async></script>
-</body>
-</html>
+<!-- web/index.html, inside <head> -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: https:;
+               font-src 'self' data: https://fonts.gstatic.com;
+               connect-src 'self' https://api.example.com https://www.gstatic.com https://fonts.gstatic.com;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 ```
 
-**Note:** Adjust CSP policy based on your actual requirements. The above is a starting point.
+Replace `https://api.example.com` with your `BASE_URL` origin. If you build
+with `--no-web-resources-cdn`, drop `https://www.gstatic.com`. Then tighten it
+(`'unsafe-inline'`, `'unsafe-eval'`) only as far as your target browsers still
+render the app - test the built app, not `flutter run`.
+
+#### Step 2: The headers that must come from the server
+
+Set these on your host, not in `index.html`. For example, Firebase Hosting
+(`firebase.json`):
+
+```json
+{
+  "hosting": {
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Frame-Options", "value": "DENY" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" },
+          { "key": "Content-Security-Policy", "value": "frame-ancestors 'none'" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Netlify (`_headers`), Vercel (`vercel.json` `headers`) and any reverse proxy
+have the same mechanism.
 
 ---
 
