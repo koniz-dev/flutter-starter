@@ -110,10 +110,78 @@ void main() {
     expect(thrown, isA<WebSocketChannelException>());
     expect('$thrown', isNot(contains('SECRET')));
     expect('$thrown', isNot(contains('hunter2')));
-    // What the caller needs to diagnose it is kept.
-    expect('$thrown', contains('not upgraded'));
+    // What the caller needs to diagnose it is kept: where, and what failed.
+    expect('$thrown', contains('WebSocketException'));
     expect('$thrown', contains('room=lobby'));
     expect((thrown! as WebSocketChannelException).inner, isNull);
     expect(logs.lines.join('\n'), isNot(contains('hunter2')));
   });
+
+  /// Connects to a loopback server that refuses the upgrade with 403 and
+  /// returns what connect() threw.
+  Future<Object?> refusedConnect(String Function(int port) urlFor) async {
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => server.close(force: true));
+    server.listen((request) {
+      request.response.statusCode = HttpStatus.forbidden;
+      unawaited(request.response.close());
+    });
+    final client = RawWebSocketClientImpl(sslPinning: _noPinning);
+    try {
+      await client.connect(urlFor(server.port));
+    } on Object catch (e) {
+      return e;
+    }
+    return null;
+  }
+
+  // dart:io quotes the URL in '...'; scrubbing its text stopped at the first
+  // apostrophe inside the URL and left the rest raw.
+  test(
+    'an apostrophe in an earlier query value does not expose the token',
+    () async {
+      final thrown = await refusedConnect(
+        (port) => "ws://127.0.0.1:$port/s?name=O'Brien&token=SECRET",
+      );
+
+      expect(thrown, isA<WebSocketChannelException>());
+      expect('$thrown', isNot(contains('SECRET')));
+    },
+  );
+
+  // Uri normalises userinfo, so looking it up through Uri missed the raw
+  // text and the password stayed in the logs and both errors.
+  for (final password in ['SECRET%2fx', 'SECRET%41', 'SECRETé', 'SECRET x']) {
+    test(
+      'userinfo "u:$password" is redacted from the error and the logs',
+      () async {
+        final thrown = await refusedConnect(
+          (port) => 'ws://u:$password@127.0.0.1:$port/s',
+        );
+
+        expect(thrown, isNotNull);
+        expect('$thrown', isNot(contains('SECRET')));
+        expect(logs.lines.join('\n'), isNot(contains('SECRET')));
+      },
+    );
+  }
+
+  test(
+    'an unparsable URL throws a FormatException without the token',
+    () async {
+      final client = RawWebSocketClientImpl(sslPinning: _noPinning);
+
+      Object? thrown;
+      try {
+        await client.connect('wss://u:PASS@host:443x/socket?token=SECRET');
+      } on Object catch (e) {
+        thrown = e;
+      }
+
+      expect(thrown, isA<FormatException>());
+      expect('$thrown', isNot(contains('SECRET')));
+      expect('$thrown', isNot(contains('PASS')));
+      expect(logs.lines.join('\n'), isNot(contains('PASS')));
+    },
+  );
 }

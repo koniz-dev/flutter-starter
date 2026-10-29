@@ -205,6 +205,33 @@ class ApiLoggingInterceptor extends Interceptor {
     return utf8.decode(bytes, allowMalformed: true);
   }
 
+  /// [url] fit for a log line or an error message: its userinfo replaced,
+  /// then every query value whose key names a secret, as [redactPath] does.
+  ///
+  /// Userinfo is cut out of the raw text - everything between `://` and the
+  /// last `@` of the authority - not found through `Uri`, which normalises it
+  /// (`%2f` to `%2F`, `%41` to `A`) and so misses the original, and which
+  /// cannot parse a malformed URL at all.
+  static String redactUrl(String url) {
+    var text = url;
+    final schemeEnd = text.indexOf('://');
+    if (schemeEnd >= 0) {
+      final authorityStart = schemeEnd + 3;
+      var authorityEnd = text.length;
+      for (final delimiter in const ['/', '?', '#']) {
+        final index = text.indexOf(delimiter, authorityStart);
+        if (index >= 0 && index < authorityEnd) authorityEnd = index;
+      }
+      final at = text.lastIndexOf('@', authorityEnd - 1);
+      if (at >= authorityStart) {
+        text =
+            '${text.substring(0, authorityStart)}$_redacted'
+            '${text.substring(at)}';
+      }
+    }
+    return redactPath(text);
+  }
+
   /// [path] with every query parameter embedded in it that names a secret
   /// redacted, by the same key rules as `queryParameters`.
   ///

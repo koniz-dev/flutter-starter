@@ -105,7 +105,7 @@ void main() {
       };
       addTearDown(() => debugPrint = debugPrintSynchronously);
 
-      await client.connect('wss://h/s?token=SECRET&room=lobby');
+      await client.connect('wss://u:PASS-SECRET@h/s?token=SECRET&room=lobby');
       client.send({'auth': 'PAYLOAD-SECRET'});
 
       final printed = logs.join('\n');
