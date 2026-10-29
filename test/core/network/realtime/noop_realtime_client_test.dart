@@ -81,7 +81,7 @@ void main() {
       debugPrint = debugPrintSynchronously;
     });
 
-    test('send prints debug message', () {
+    test('send prints the payload type, never its content', () {
       final logs = <String>[];
       debugPrint = (message, {wrapWidth}) {
         if (message != null) logs.add(message);
@@ -89,9 +89,28 @@ void main() {
 
       client.send('hello');
 
-      expect(logs, contains('NoOpRealtimeClient: Simulated send -> hello'));
+      expect(logs, contains('NoOpRealtimeClient: Simulated send of a String'));
+      expect(logs.join('\n'), isNot(contains('hello')));
 
       debugPrint = debugPrintSynchronously;
+    });
+
+    // The default realtimeClientProvider: realtime code written before a
+    // real client is wired sends real URLs and payloads through it.
+    test('connect prints the URL without its token, and send prints no '
+        'payload', () async {
+      final logs = <String>[];
+      debugPrint = (message, {wrapWidth}) {
+        if (message != null) logs.add(message);
+      };
+      addTearDown(() => debugPrint = debugPrintSynchronously);
+
+      await client.connect('wss://h/s?token=SECRET&room=lobby');
+      client.send({'auth': 'PAYLOAD-SECRET'});
+
+      final printed = logs.join('\n');
+      expect(printed, isNot(contains('SECRET')));
+      expect(printed, contains('room=lobby'));
     });
 
     test('multiple operations in sequence work', () async {
