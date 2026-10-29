@@ -1,0 +1,14 @@
+$ lib/core/network/interceptors/auth_interceptor.dart replaced by its 2974085f8fe version (before #839), then:
+$ flutter test test/core/network/auth_token_origin_test.dart
+00:00 +0 -1: a foreign-origin absolute URL is sent without the token [E]
+  Expected: null
+    Actual: 'Bearer access-token'
+00:00 +2 -2: a foreign-origin 401 neither refreshes nor clears the session, and reaches the caller as a 401 [E]
+  Expected: <0>
+    Actual: <1>
+00:00 +2 -3: a header the caller set on a foreign-origin request is kept [E]
+  Expected: 'Basic partner-creds'
+    Actual: 'Bearer access-token'
+            Expected: Basic partn ...
+              Actual: Bearer acce ...
+00:00 +3 -3: Some tests failed.

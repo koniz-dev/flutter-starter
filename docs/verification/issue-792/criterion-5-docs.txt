@@ -1,0 +1,17 @@
+origin/main ce7ac4629c50a696ef1f1694dc3dd72a37a6a60b
+--- criterion 5: docs/api/core/network.md, AuthInterceptor section as merged in #839 (e2becae05ef)
+## AuthInterceptor
+
+Dio interceptor for adding authentication tokens to requests and handling automatic token refresh on 401 errors.
+
+**Location:** `lib/core/network/interceptors/auth_interceptor.dart`
+
+Credentials are attached only to the API's own origin: a relative path, or an
+absolute URL with the same scheme, host and port as the base URL. An absolute
+URL elsewhere - a presigned upload, a CDN, a pagination link from another
+host - goes out with no `Authorization` header from this interceptor (one the
+caller set is left alone), and its 401 is handed back as an ordinary 401: no
+refresh, no logout. On a client with no base URL there is no origin to
+compare, so every request counts as the API's.
+
+### Constructor

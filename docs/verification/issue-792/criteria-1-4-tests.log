@@ -1,0 +1,9 @@
+origin/main e2becae05efae157efdeadebdc02697cff04099a (PR #839 squash); test file identical in this tree: yes
+$ flutter test test/core/network/auth_token_origin_test.dart
+00:00 +0: a foreign-origin absolute URL is sent without the token
+00:00 +1: an absolute URL on the API origin carries the token
+00:00 +2: a relative path carries the token
+00:00 +3: a foreign-origin 401 neither refreshes nor clears the session, and reaches the caller as a 401
+00:00 +4: a header the caller set on a foreign-origin request is kept
+00:00 +5: an API-origin 401 still refreshes once and replays
+00:00 +6: All tests passed!
