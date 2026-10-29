@@ -1,0 +1,12 @@
+origin/main c099a0fe4242becce58db45a4cbb231aa2f36427 (#864 = 798c11747da)
+--- criterion 1: grep -n 'ignored on Flutter web' troubleshooting.md
+exit=1 (1 = no match)
+--- the corrected item 3, and the FAQ
+66:3. Check the key exists in `DartDefines.values` (`lib/core/config/dart_defines.dart`): a key missing there resolves to empty on every platform, Flutter web included. See [What works where](../configuration.md#what-works-where)
+234:A: Add the key to `.env.example` *and* to `DartDefines.values` in `lib/core/config/dart_defines.dart` - a key reaches a build only through that table, and `test/core/config/dart_defines_test.dart` fails if the two drift apart. Then add a typed getter in `AppConfig`. `EnvConfig` needs no change. See [Why the dart-define keys are declared in a table](../configuration.md#why-the-dart-define-keys-are-declared-in-a-table).
+--- code: EnvConfig reads DartDefines with no kIsWeb branch
+kIsWeb in env_config.dart: exit=1 (1 = none)
+101:    final dartDefineValue = DartDefines.lookup(key);
+159:    return DartDefines.lookup(key).isNotEmpty;
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.

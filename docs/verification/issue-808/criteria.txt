@@ -1,0 +1,28 @@
+origin/main c099a0fe4242becce58db45a4cbb231aa2f36427 (#865 = c099a0fe424)
+$ flutter test test/docs/auth_providers_quotes_test.dart
+00:00 +0: the doc quotes at least the two providers this test was written for
+00:00 +1: authLocalDataSourceProvider is quoted as auth_providers.dart declares it
+00:00 +2: authRemoteDataSourceProvider is quoted as auth_providers.dart declares it
+00:00 +3: authRepositoryProvider is quoted as auth_providers.dart declares it
+00:00 +4: loginUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +5: registerUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +6: logoutUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +7: refreshTokenUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +8: getCurrentUserUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +9: isAuthenticatedUseCaseProvider is quoted as auth_providers.dart declares it
+00:00 +10: All tests passed!
+--- the same test against the pre-fix doc (798c11747da):
+00:00 +2 -1: authRemoteDataSourceProvider is quoted as auth_providers.dart declares it [E]
+00:00 +2 -2: authRepositoryProvider is quoted as auth_providers.dart declares it [E]
+00:00 +8 -2: Some tests failed.
+Failing tests:
+--- override note
+96:An override of `authRepositoryProvider` - a different data source, say - must
+97|pass `httpCache` and `sessionGeneration` as well. Both are optional, so an
+An override of `authRepositoryProvider` - a different data source, say - must
+pass `httpCache` and `sessionGeneration` as well. Both are optional, so an
+override without them compiles, but logout then stops clearing the HTTP cache
+and a 401 refresh can write credentials into a session that has ended.
+
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.
