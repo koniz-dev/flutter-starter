@@ -240,11 +240,15 @@ test - it only means anything on a physical device.
 
 #### CRITICAL: Missing Security Headers
 
-**Issue:** No security headers in `index.html`.
+**Issue:** `web/index.html` sets no Content-Security-Policy, and no host
+configuration ships the response headers.
 
 **Risk:** Vulnerable to XSS, clickjacking, and other web attacks.
 
-**Recommendation:** Add security headers. See [Security Implementation Guide](./implementation.md#5-security-headers).
+**Recommendation:** Add a CSP that still lets Flutter load CanvasKit and its
+fallback fonts, and set `X-Frame-Options`, `X-Content-Type-Options` and
+`Permissions-Policy` as **response headers** on your host - in a `<meta>` tag
+browsers ignore them. See [Security Implementation Guide](./implementation.md#5-security-headers).
 
 ## 5. Compliance (GDPR & Privacy)
 
