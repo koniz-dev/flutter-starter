@@ -240,9 +240,16 @@ bool declaresMember(String source, String type, String member) {
     }
     if (c == "'" || c == '"') {
       final quote = source.startsWith(c * 3, i) ? c * 3 : c;
+      // `r'...'`: a backslash is an ordinary character, so `r'\'` closes
+      // on its second quote. Reading it as an escape ran on through the rest
+      // of the body and hid every declaration after it.
+      final raw =
+          i > 0 &&
+          source[i - 1] == 'r' &&
+          (i < 2 || !RegExp(r'[A-Za-z0-9_$]').hasMatch(source[i - 2]));
       var j = i + quote.length;
       while (j < source.length && !source.startsWith(quote, j)) {
-        j += source[j] == r'\' ? 2 : 1;
+        j += !raw && source[j] == r'\' ? 2 : 1;
       }
       i = j + quote.length;
       if (depth == 1) topLevel.write('""');
