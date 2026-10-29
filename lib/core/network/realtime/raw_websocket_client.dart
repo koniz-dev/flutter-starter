@@ -42,6 +42,22 @@ class RawWebSocketClientImpl implements IRealtimeClient {
        _connectChannel = connectChannel;
 
   final SslPinning _sslPinning;
+
+  /// A URL as dart:io quotes it in an error message.
+  static final RegExp _urlInText = RegExp(
+    r'''[A-Za-z][A-Za-z0-9+.\-]*://[^\s'"]+''',
+  );
+
+  /// [url] with userinfo and every query value whose key names a secret
+  /// replaced by the redaction marker the HTTP logs use.
+  static String _redactUrl(String url) {
+    final userInfo = Uri.tryParse(url)?.userInfo ?? '';
+    final withoutUser = userInfo.isEmpty
+        ? url
+        : url.replaceFirst('$userInfo@', '***REDACTED***@');
+    return ApiLoggingInterceptor.redactPath(withoutUser);
+  }
+
   final WebSocketConnector _connectChannel;
 
   /// How long [connect] waits for the WebSocket handshake before it fails
@@ -87,10 +103,10 @@ class RawWebSocketClientImpl implements IRealtimeClient {
     if (isConnected || _pending != null) disconnect();
     final generation = _generation;
     // Realtime endpoints often authenticate with a query token
-    // (`wss://host/socket?token=...`). What this class writes - log lines and
-    // the cancellation error a caller may forward to crash reporting - uses
-    // the URL redacted by the same key rules as the HTTP logs.
-    final safeUrl = ApiLoggingInterceptor.redactPath(url);
+    // (`wss://host/socket?token=...`), sometimes with userinfo. What this
+    // class writes or throws - log lines, and every error a caller may
+    // forward to crash reporting - uses the redacted URL.
+    final safeUrl = _redactUrl(url);
 
     _logger.d('Connecting to WebSocket at: $safeUrl');
     final channel = _connectChannel(
@@ -100,7 +116,7 @@ class RawWebSocketClientImpl implements IRealtimeClient {
     _pending = channel;
     try {
       await channel.ready.timeout(connectTimeout);
-    } catch (e) {
+    } catch (e, stackTrace) {
       // The type only: dart:io's handshake errors quote the full URL.
       _logger.e(
         'Failed to open WebSocket connection to $safeUrl: '
@@ -108,6 +124,20 @@ class RawWebSocketClientImpl implements IRealtimeClient {
       );
       if (identical(_pending, channel)) _pending = null;
       _close(channel);
+      if (e is WebSocketChannelException) {
+        // dart:io writes the URL - token and userinfo included - into the
+        // handshake error ("Connection to '...' was not upgraded"), and
+        // WebSocketChannelException copies it into its message and keeps
+        // the original as `inner`. Rethrown, that reached any crash report
+        // the caller forwards it to. A new exception carries the message
+        // with every URL replaced by the redacted one, and no `inner`.
+        Error.throwWithStackTrace(
+          WebSocketChannelException(
+            (e.message ?? '').replaceAll(_urlInText, safeUrl),
+          ),
+          stackTrace,
+        );
+      }
       rethrow;
     }
 
