@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io' show HttpClient;
 
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/realtime/i_realtime_client.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
 import 'package:logger/logger.dart';
@@ -85,8 +86,13 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   Future<void> connect(String url) async {
     if (isConnected || _pending != null) disconnect();
     final generation = _generation;
+    // Realtime endpoints often authenticate with a query token
+    // (`wss://host/socket?token=...`). What this class writes - log lines and
+    // the cancellation error a caller may forward to crash reporting - uses
+    // the URL redacted by the same key rules as the HTTP logs.
+    final safeUrl = ApiLoggingInterceptor.redactPath(url);
 
-    _logger.d('Connecting to WebSocket at: $url');
+    _logger.d('Connecting to WebSocket at: $safeUrl');
     final channel = _connectChannel(
       Uri.parse(url),
       _sslPinning.createHttpClient(),
@@ -95,17 +101,23 @@ class RawWebSocketClientImpl implements IRealtimeClient {
     try {
       await channel.ready.timeout(connectTimeout);
     } catch (e) {
-      _logger.e('Failed to open WebSocket connection: $e');
+      // The type only: dart:io's handshake errors quote the full URL.
+      _logger.e(
+        'Failed to open WebSocket connection to $safeUrl: '
+        '${e.runtimeType}',
+      );
       if (identical(_pending, channel)) _pending = null;
       _close(channel);
       rethrow;
     }
 
     if (generation != _generation) {
-      _logger.d('WebSocket connection to $url was superseded; closing it.');
+      _logger.d(
+        'WebSocket connection to $safeUrl was superseded; closing it.',
+      );
       _close(channel);
       throw WebSocketChannelException(
-        'Connection to $url was cancelled before it opened.',
+        'Connection to $safeUrl was cancelled before it opened.',
       );
     }
 
