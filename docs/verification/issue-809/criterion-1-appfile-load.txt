@@ -1,0 +1,22 @@
+fastlane 2.240.1 (CredentialsManager::AppfileConfig from /Users/nguyenanhkiet/.local/share/gem/ruby/4.0.0/gems/fastlane-2.240.1)
+=== fastlane/Appfile with every commented call uncommented
+package_name("com.example.flutter_starter")
+json_key_file("path/to/service-account.json")
+json_key_data_raw("{\"type\":\"service_account\",...}")
+loaded: apple_id, json_key_data_raw, json_key_file, package_name
+=== ios/fastlane/Appfile with every commented call uncommented
+team_id("YOUR_TEAM_ID")
+app_identifier("com.example.flutterStarter")
+apple_id("your.email@example.com")
+itc_team_id("YOUR_ITC_TEAM_ID")
+loaded: app_identifier, apple_id, itc_team_id, team_id
+=== the pre-fix Appfiles (origin/main), same treatment
+--- fastlane/Appfile
+undefined method 'json_key_data' for an instance of CredentialsManager::AppfileConfig  (NoMethodError)
+--- ios/fastlane/Appfile
+undefined method 'api_key_id' for an instance of CredentialsManager::AppfileConfig  (NoMethodError)
+=== ruby -c
+Syntax OK
+Syntax OK
+=== criterion 3 grep
+exit=1 (1 = no match)
