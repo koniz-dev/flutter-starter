@@ -14,7 +14,7 @@ The network layer provides:
 - `ErrorInterceptor` - Exception conversion
 - `RetryInterceptor` - Retries transient failures for safe methods only
 - `CacheInterceptor` - Caches unauthenticated `GET` responses in plaintext `shared_preferences`; see [CacheInterceptor](#cacheinterceptor)
-- `PerformanceInterceptor` - Optional HTTP timing (when performance service is wired)
+- `PerformanceInterceptor` - Optional HTTP timing (when performance service is wired). The path it records - trace name and `http_path` attribute - goes through `ApiLoggingInterceptor.redactPath` first, so a `?token=` in a path is redacted there exactly as in the logs
 - `ApiLoggingInterceptor` - Request/response logging via `LoggingService` when enabled
 
 ---

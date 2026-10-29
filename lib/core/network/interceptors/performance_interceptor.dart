@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/performance_attributes.dart';
 
@@ -41,18 +42,19 @@ class PerformanceInterceptor extends Interceptor {
       return;
     }
 
+    // The path as the logs show it: `get('/verify?token=X')` is a normal
+    // call, and a trace attribute leaves the device just like a log line.
+    final path = ApiLoggingInterceptor.redactPath(options.path);
+
     // Store trace in request options for use in onResponse/onError
-    final trace = _performanceService.startHttpTrace(
-      options.method,
-      options.path,
-    );
+    final trace = _performanceService.startHttpTrace(options.method, path);
 
     if (trace != null) {
       // Store trace in request options extra for later use
       options.extra['performance_trace'] = trace;
       trace
         ..putAttribute(PerformanceAttributes.httpMethod, options.method)
-        ..putAttribute(PerformanceAttributes.httpPath, options.path)
+        ..putAttribute(PerformanceAttributes.httpPath, path)
         ..startSync();
     }
 
