@@ -174,9 +174,36 @@ class ApiLoggingInterceptor extends Interceptor {
     'sessionid',
   };
 
-  /// A `%` not followed by two hex digits - what makes
-  /// `Uri.decodeQueryComponent` throw.
+  /// A `%` not followed by two hex digits: an escape that names no byte.
   static final RegExp _malformedPercent = RegExp('%(?![0-9A-Fa-f]{2})');
+
+  /// [rawKey] decoded the way a query component is, without ever throwing,
+  /// or `null` when it holds a `%` that names no byte.
+  ///
+  /// `Uri.decodeQueryComponent` throws not only on a bare `%` but on escapes
+  /// that are well formed yet not UTF-8 (`%E9`, `%FF` - Latin-1 keys from
+  /// legacy backends) and on raw non-ASCII (`café`). `PerformanceInterceptor`
+  /// redacts every request's path, so any of those failed the request itself,
+  /// in every build. Invalid bytes decode to U+FFFD instead, which the key
+  /// rules then ignore like any other separator.
+  static String? _decodeKey(String rawKey) {
+    if (_malformedPercent.hasMatch(rawKey)) return null;
+    final runes = rawKey.runes.toList();
+    final bytes = <int>[];
+    for (var i = 0; i < runes.length; i++) {
+      final rune = runes[i];
+      if (rune == 0x25) {
+        final hex = String.fromCharCodes(runes.sublist(i + 1, i + 3));
+        bytes.add(int.parse(hex, radix: 16));
+        i += 2;
+      } else if (rune == 0x2B) {
+        bytes.add(0x20);
+      } else {
+        bytes.addAll(utf8.encode(String.fromCharCode(rune)));
+      }
+    }
+    return utf8.decode(bytes, allowMalformed: true);
+  }
 
   /// [path] with every query parameter embedded in it that names a secret
   /// redacted, by the same key rules as `queryParameters`.
@@ -196,12 +223,10 @@ class ApiLoggingInterceptor extends Interceptor {
       final equals = pair.indexOf('=');
       if (equals < 0) return pair;
       final rawKey = pair.substring(0, equals);
-      // Malformed percent-encoding (`a%=1`, `%zz=1`) would make the decode
-      // below throw, and PerformanceInterceptor redacts every request's path,
-      // so the request itself failed, in every build. A key that cannot be
-      // read cannot be cleared either: its value is redacted.
-      if (_malformedPercent.hasMatch(rawKey)) return '$rawKey=$_redacted';
-      final key = Uri.decodeQueryComponent(rawKey);
+      final key = _decodeKey(rawKey);
+      // A key that cannot be read cannot be cleared either: its value is
+      // redacted.
+      if (key == null) return '$rawKey=$_redacted';
       return _isSensitiveKey(key) ? '$rawKey=$_redacted' : pair;
     });
     return '${path.substring(0, queryStart + 1)}${query.join('&')}'
