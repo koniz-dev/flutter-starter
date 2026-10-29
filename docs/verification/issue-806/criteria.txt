@@ -1,0 +1,36 @@
+origin/main ad2c92d2eaa04d0bb2a1d910be49352e6ab95d8a (#858 = dea4c9e531f)
+$ flutter test test/docs/api_integration_snippets_test.dart
+00:06 +1: All tests passed!
+--- the same test against the pre-fix doc (b812ebf0b72):
+  ERROR|COMPILE_TIME_ERROR|AWAIT_IN_WRONG_CONTEXT|snippet_0.dart|38|17|5|The await expression can only be used in an async function.
+  ERROR|COMPILE_TIME_ERROR|INVALID_ASSIGNMENT|snippet_2.dart|49|26|15|A value of type 'dynamic' can't be assigned to a variable of type 'String'.
+  ERROR|COMPILE_TIME_ERROR|RETURN_OF_INVALID_TYPE_FROM_CLOSURE|snippet_3.dart|34|10|102|The returned type 'dynamic' isn't returnable from a 'Future<bool>' function, as required by the closure's context.
+  ERROR|COMPILE_TIME_ERROR|UNDEFINED_CLASS|snippet_0.dart|7|9|9|Undefined class 'ApiClient'.
+  ERROR|COMPILE_TIME_ERROR|UNDEFINED_IDENTIFIER|snippet_0.dart|37|21|3|Undefined name 'ref'.
+  ERROR|COMPILE_TIME_ERROR|UNDEFINED_IDENTIFIER|snippet_1.dart|5|28|9|Undefined name 'apiClient'.
+  ERROR|COMPILE_TIME_ERROR|UNDEFINED_IDENTIFIER|snippet_2.dart|32|35|20|Undefined name 'loginUseCaseProvider'.
+  ERROR|COMPILE_TIME_ERROR|UNDEFINED_IDENTIFIER|snippet_3.dart|32|28|30|Undefined name 'isAuthenticatedUseCaseProvider'.
+  WARNING|STATIC_WARNING|INFERENCE_FAILURE_ON_FUNCTION_INVOCATION|snippet_2.dart|32|30|4|The type argument(s) of the function 'read' can't be inferred.
+  WARNING|STATIC_WARNING|INFERENCE_FAILURE_ON_FUNCTION_INVOCATION|snippet_3.dart|32|23|4|The type argument(s) of the function 'read' can't be inferred.
+  WARNING|STATIC_WARNING|INFERENCE_FAILURE_ON_UNTYPED_PARAMETER|snippet_2.dart|38|17|4|The type of 'user' can't be inferred; a type must be explicitly provided.
+  WARNING|STATIC_WARNING|INFERENCE_FAILURE_ON_UNTYPED_PARAMETER|snippet_2.dart|42|25|7|The type of 'failure' can't be inferred; a type must be explicitly provided.
+  WARNING|STATIC_WARNING|INFERENCE_FAILURE_ON_UNTYPED_PARAMETER|snippet_3.dart|35|15|15|The type of 'isAuthenticated' can't be inferred; a type must be explicitly provided.
+  WARNING|STATIC_WARNING|UNUSED_LOCAL_VARIABLE|snippet_1.dart|5|11|8|The value of the local variable 'response' isn't used.
+--- criterion 2: imports used
+17:import 'package:flutter_starter/core/di/providers.dart';
+18:import 'package:flutter_starter/core/network/api_client.dart';
+87:import 'package:flutter_starter/core/errors/exceptions.dart';
+88:import 'package:flutter_starter/core/network/api_client.dart';
+220:import 'package:flutter_starter/core/errors/failures.dart';
+221:import 'package:flutter_starter/core/utils/result.dart';
+222:import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+223:import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+224:import 'package:flutter_starter/shared/extensions/context_extensions.dart';
+313:import 'package:flutter_starter/core/utils/result.dart';
+314:import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+--- executeWithRetry as merged
+Future<Result<T>> executeWithRetry<T>(
+  Future<Result<T>> Function() operation, {
+  int maxRetries = 3,
+  Duration delay = const Duration(seconds: 1),
+}) async {
