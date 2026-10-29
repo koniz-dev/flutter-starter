@@ -63,7 +63,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 **Solutions:**
 1. Ensure `.env` file exists in project root
 2. Pass it to the build: `flutter run --dart-define-from-file=.env`. `.env` is deliberately **not** in the `assets:` list - an asset ships in every release artifact - so it is not read without that flag. See [Never ship a secret in the bundle](../configuration.md#never-ship-a-secret-in-the-bundle)
-3. Check the key exists in `lib/core/config/dart_defines.dart`, and note that dart-defines are ignored on Flutter web
+3. Check the key exists in `DartDefines.values` (`lib/core/config/dart_defines.dart`): a key missing there resolves to empty on every platform, Flutter web included. See [What works where](../configuration.md#what-works-where)
 4. Verify `EnvConfig.load()` is called in `main()` before `runApp()`
 5. Do a full restart (not hot reload) after changing `.env`; dart-defines need a rebuild
 
@@ -231,7 +231,7 @@ A: This project uses Riverpod. If you need alternatives, discuss with the team f
 A: Use `AppConfig.isDevelopment`, `AppConfig.isStaging`, or `AppConfig.isProduction` to conditionally execute code.
 
 **Q: How do I add new configuration variables?**
-A: Add to `EnvConfig` for loading, then add typed getter in `AppConfig`. Update `.env.example` and documentation.
+A: Add the key to `.env.example` *and* to `DartDefines.values` in `lib/core/config/dart_defines.dart` - a key reaches a build only through that table, and `test/core/config/dart_defines_test.dart` fails if the two drift apart. Then add a typed getter in `AppConfig`. `EnvConfig` needs no change. See [Why the dart-define keys are declared in a table](../configuration.md#why-the-dart-define-keys-are-declared-in-a-table).
 
 ## Where to Get Help
 
