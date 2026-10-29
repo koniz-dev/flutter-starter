@@ -470,7 +470,8 @@ to keep.
         android:usesCleartextTraffic="false"
         android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="false"
-        android:fullBackupContent="@xml/backup_rules">
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <!-- ... rest of manifest ... -->
     </application>
 </manifest>
@@ -478,8 +479,37 @@ to keep.
 
 #### Step 3: Create Backup Rules
 
+Two files, because Android reads a different one depending on the version the
+app runs on ([Android 12 behavior changes](https://developer.android.com/about/versions/12/behavior-changes-12#backup-restore)):
+
+- **Android 12 (API 31) and later** read `dataExtractionRules`, which has
+  separate rules for cloud backup and for device-to-device (D2D) transfer.
+  Once it is set, `fullBackupContent` is ignored there. Rules in the old
+  format never affected D2D transfers, and on some manufacturers' devices
+  `allowBackup="false"` stops cloud backup but not a D2D transfer - so the
+  `<device-transfer>` excludes below are what actually keep data off a new
+  phone.
+- **Android 11 and earlier** read `fullBackupContent` (and `allowBackup`).
+
 ```xml
-<!-- android/app/src/main/res/xml/backup_rules.xml -->
+<!-- android/app/src/main/res/xml/data_extraction_rules.xml (Android 12+) -->
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </device-transfer>
+</data-extraction-rules>
+```
+
+```xml
+<!-- android/app/src/main/res/xml/backup_rules.xml (Android 11 and earlier) -->
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <!-- Exclude all files from backup to protect sensitive data -->
@@ -488,6 +518,14 @@ to keep.
     <exclude domain="file" path="." />
 </full-backup-content>
 ```
+
+Why this matters here: `flutter_secure_storage` keeps its ciphertext in
+shared preferences and its key in the Android Keystore, which never leaves the
+device. A restored copy of the ciphertext cannot be decrypted (the plugin's own
+README names the `InvalidKeyException: Failed to unwrap key` this causes); with
+`resetOnError` on, the plugin then wipes it and the user signs in again. The
+plaintext preferences - the cached user, the unauthenticated HTTP cache - would
+otherwise move to the new device as they are.
 
 ---
 
