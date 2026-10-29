@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 import 'package:flutter_starter/core/performance/noop_performance_service.dart'
     show NoOpPerformanceService;
@@ -137,9 +138,12 @@ class FirebasePerformanceService implements IPerformanceService {
     final traceName = 'http_${method.toLowerCase()}_$sanitizedPath';
     final trace = startTrace(traceName);
     if (trace != null) {
+      // Redacted again here, not only in PerformanceInterceptor: the
+      // attribute is sent to Firebase, and a caller that starts a trace
+      // directly must not leak a `?token=` either. Idempotent.
       trace
         ..putAttribute('http_method', method)
-        ..putAttribute('http_path', path);
+        ..putAttribute('http_path', ApiLoggingInterceptor.redactPath(path));
     }
     return trace;
   }
