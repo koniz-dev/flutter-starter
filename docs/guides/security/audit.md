@@ -281,7 +281,7 @@ See [Security Checklist](./checklist.md) for a comprehensive checklist of all se
 ### Phase 1: Critical Security (Week 1)
 1. SSL pinning fingerprints (the code is shipped; supply `API_SSL_FINGERPRINTS`)
 2. Code Obfuscation
-3. Release Signing
+3. Release signing keystore (the refusal ships; supply your key)
 4. Log sanitization coverage for your own header names and payload keys
 5. Security Headers
 
@@ -289,7 +289,7 @@ See [Security Checklist](./checklist.md) for a comprehensive checklist of all se
 1. Network Security Config
 2. Root/Jailbreak Detection
 3. Session Management
-4. ProGuard Rules
+4. R8 keep rules, only if a release build breaks (R8 already runs)
 
 ### Phase 3: Compliance (Week 4)
 1. GDPR Consent Management
@@ -343,7 +343,7 @@ Your Flutter app has a **solid security foundation** with secure storage, proper
    default outside development, but it is inert until you set
    `API_SSL_FINGERPRINTS`
 2. **Code Obfuscation** - Critical for protecting intellectual property
-3. **Release Signing** - Required for app store distribution
+3. **Release signing keystore** - the build refuses a release until you supply it
 4. **Log sanitization gaps** - the interceptor redacts, but not everywhere
 5. **Security Headers** - Essential for web security
 

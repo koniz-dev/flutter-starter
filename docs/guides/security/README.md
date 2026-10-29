@@ -51,7 +51,7 @@ improvements still needed before production.
   missing fingerprint list is logged and asserts in debug builds, but a release
   build still runs unpinned
 - No code obfuscation in release (when you ship production)
-- Debug signing or missing release keystore for store builds
+- Your release keystore: the build never debug-signs, and refuses a release build until `android/key.properties` exists
 - Verify **`ApiLoggingInterceptor`** redaction covers your tokens/payloads — see [audit](./audit.md)
 - Security headers / web hardening for your hosting setup
 
@@ -60,7 +60,7 @@ improvements still needed before production.
 ### Phase 1: Critical Security (Week 1)
 1. SSL pinning fingerprints (configure, do not re-implement)
 2. Code Obfuscation
-3. Release Signing
+3. Release signing keystore (the refusal ships; supply your key)
 4. Log Sanitization
 5. Security Headers
 
@@ -68,7 +68,7 @@ improvements still needed before production.
 1. Network Security Config
 2. Root/Jailbreak Detection
 3. Session Management
-4. ProGuard Rules
+4. R8 keep rules, only if a release build breaks (R8 already runs)
 
 ### Phase 3: Compliance (Week 4)
 1. GDPR Consent Management
@@ -83,7 +83,7 @@ improvements still needed before production.
 - **[SSL Certificate Pinning](./implementation.md#1-ssl-certificate-pinning)** - implemented; configure your fingerprints
 - **[Code Obfuscation](./implementation.md#2-code-obfuscation)** - Protect intellectual property
 - **[Log Sanitization](./implementation.md#3-log-sanitization)** - Prevent sensitive data exposure
-- **[Android Release Signing](./implementation.md#4-android-release-signing)** - Required for app store
+- **[Android Release Signing](./implementation.md#4-android-release-signing)** - the refusal ships; supply your keystore
 - **[Security Headers](./implementation.md#5-security-headers)** - Essential for web security
 
 ### High Priority Fixes
