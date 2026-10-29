@@ -51,13 +51,13 @@ Provider for `AuthRemoteDataSource` instance.
 ```dart
 /// Provider for [AuthRemoteDataSource] instance
 ///
-/// Uses [networkClientProvider] (typed [ApiClient], same instance as
-/// [apiClientProvider]) with `ref.read` to limit rebuild churn.
-final authRemoteDataSourceProvider =
+/// Uses ref.read to break circular dependency with apiClientProvider.
+final Provider<AuthRemoteDataSource> authRemoteDataSourceProvider =
     Provider<AuthRemoteDataSource>((ref) {
-  final apiClient = ref.read(networkClientProvider);
-  return AuthRemoteDataSourceImpl(apiClient);
-});
+      if (DemoAuth.enabled) return DemoAuthRemoteDataSource();
+      final apiClient = ref.read(networkClientProvider);
+      return AuthRemoteDataSourceImpl(apiClient);
+    });
 ```
 
 ---
@@ -70,20 +70,34 @@ Provider for `AuthRepository` instance.
 
 ```dart
 /// Provider for [AuthRepository] instance
-/// 
-/// This provider creates a singleton instance of [AuthRepositoryImpl]
-/// that coordinates between remote and local data sources.
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.read<AuthRemoteDataSource>(
-    authRemoteDataSourceProvider,
-  );
-  final localDataSource = ref.watch(authLocalDataSourceProvider);
-  return AuthRepositoryImpl(
-    remoteDataSource: remoteDataSource,
-    localDataSource: localDataSource,
-  );
-});
+///
+/// Coordinates between remote and local data sources.
+final Provider<AuthRepository> authRepositoryProvider =
+    Provider<AuthRepository>((ref) {
+      final remoteDataSource = ref.read<AuthRemoteDataSource>(
+        authRemoteDataSourceProvider,
+      );
+      final localDataSource = ref.watch(authLocalDataSourceProvider);
+      return AuthRepositoryImpl(
+        remoteDataSource: remoteDataSource,
+        localDataSource: localDataSource,
+        // Same ApiClient instance the remote data source already resolved, so
+        // this adds no new edge to the provider graph.
+        httpCache: ref.read(networkClientProvider).responseCache,
+        // The *same* instance `authInterceptorProvider` holds. Two of the
+        // three credential writes behind one 401 refresh happen in this
+        // repository and one in the interceptor; they only agree about which
+        // session is live if they share this counter.
+        sessionGeneration: ref.watch(sessionGenerationProvider),
+      );
+    });
 ```
+
+An override of `authRepositoryProvider` - a different data source, say - must
+pass `httpCache` and `sessionGeneration` as well. Both are optional, so an
+override without them compiles, but logout then stops clearing the HTTP cache
+and a 401 refresh can write credentials into a session that has ended.
+
 
 ---
 
