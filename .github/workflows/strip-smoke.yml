@@ -108,8 +108,11 @@ jobs:
       #                             `docs/`, so a Dart file committed there is
       #                             analyzed like any other file.
       #
-      # Inert, and only these: `**/*.md` (no step reads markdown) and `docs/**`
-      # that is not `.dart` (images and other assets). A docs-only pull request
+      # Inert here, and only these: `**/*.md` and `docs/**` that is not `.dart`
+      # (images and other assets). Markdown is not truly inert - strip markers
+      # live in it, and tests parse it - but on a docs-only change the Quality
+      # gate runs every test that reads markdown (ci.yml, DOC_TESTS), the
+      # strip-marker tests among them, so this matrix does not repeat that. A docs-only pull request
       # is exactly that, and would otherwise cost several billed minutes across
       # the variants.
       #
