@@ -59,13 +59,9 @@ dart run tool/strip_sample_features.dart --apply --remove-feature-flags
 ```
 <!-- strip:strip-tool end -->
 
-**Update `pubspec.yaml`:**
-```yaml
-dependencies:
-  # Remove if only used for feature flags
-  # firebase_core: ^4.2.1
-  # firebase_remote_config: ^6.1.1
-```
+The feature-flags slice brings no dependency of its own (it stores overrides
+in the same `shared_preferences` the app already uses), so `pubspec.yaml` needs
+no change.
 
 ### Step 3: Remove Unused Dependencies
 
@@ -440,25 +436,32 @@ flutter pub run build_runner watch --delete-conflicting-outputs
 
 ### Custom Network Configuration
 
-**Modify `lib/core/network/api_client.dart`:**
+Add to `ApiClient`, do not replace it. Its constructor builds the client in
+`_createDio` (`lib/core/network/api_client.dart`): SSL pinning, the cache,
+`AuthInterceptor` (the bearer token and 401 refresh), retry, logging,
+performance and error mapping. A replacement class drops all of that, and
+`apiClientProvider` no longer compiles against it.
+
+To add an interceptor, insert it in the list `_createDio` installs. The order
+matters - dio runs `onRequest` and `onError` in registration order:
 
 ```dart
-class ApiClient {
-  ApiClient(this.dio);
-  
-  final Dio dio;
-  
-  // Add custom interceptors
-  void addCustomInterceptor(Interceptor interceptor) {
-    dio.interceptors.add(interceptor);
-  }
-  
-  // Add custom headers
-  void setCustomHeaders(Map<String, String> headers) {
-    dio.options.headers.addAll(headers);
-  }
-}
+dio.interceptors.addAll([
+  cacheInterceptor,
+  authInterceptor,
+  // After AuthInterceptor if it needs the Authorization header; before
+  // ErrorInterceptor, which ends the error chain, if it handles errors.
+  MyTenantHeaderInterceptor(),
+  RetryInterceptor(/* ... */),
+  // ...
+  ErrorInterceptor(), // stays last
+]);
 ```
+
+For a header on one call, pass it to that call:
+`apiClient.get('/reports', headers: {'X-Tenant': tenantId})`.
+
+<!-- symbol: lib/core/network/api_client.dart ApiClient._createDio -->
 
 ### Custom Storage Implementation
 
@@ -495,7 +498,13 @@ class CustomStorageServiceImpl implements CustomStorageService {
 ```dart
 // lib/core/errors/failures.dart
 class CustomFailure extends Failure {
-  const CustomFailure(super.message);
+  const CustomFailure(super.message, {super.code});
+
+  // Failure declares copyWith abstract; every failure implements it.
+  @override
+  Failure copyWith({String? message, String? code}) {
+    return CustomFailure(message ?? this.message, code: code ?? this.code);
+  }
 }
 
 // Update exception mapper
@@ -584,13 +593,9 @@ flutter pub add hive hive_flutter
 
 ### Adding Routing
 
-```bash
-# Add dependency
-flutter pub add go_router
-
-# Create router configuration
-# Update navigation
-```
+Routing already ships: `go_router` is a dependency, and every route is
+registered in `lib/core/routing/routes_registry.dart`. To add a screen, follow
+the [routing guide](../features/routing-guide.md).
 
 ### Adding Analytics
 
