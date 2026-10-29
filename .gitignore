@@ -56,6 +56,9 @@ app.*.map.json
 .env
 .env.local
 .env.*.local
+# Per-environment build inputs, e.g. --dart-define-from-file=.env.production
+.env.production
+.env.staging
 
 # fastlane run artifacts (both fastlane/ and ios/fastlane/). fastlane also
 # regenerates its own README.md on every run; that one is not tracked either.
