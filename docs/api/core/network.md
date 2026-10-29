@@ -679,6 +679,14 @@ refresh is in flight clears the flag again and the stale response lands on the
 rather than clearing the store - clearing would destroy the credentials of a
 session that started during the refresh.
 
+A 401 is judged by the session its request was **sent** under, which
+`onRequest` stamps on every API-origin request. If that session has ended by
+the time the 401 arrives - its user signed out, and maybe someone else signed
+in - the request simply fails: no refresh, no replay, no logout. Refreshing
+would rotate the *current* user's credentials and replay the old request as
+them, handing the ended session's caller someone else's data; with nothing
+stored, it would log out whoever is signing in.
+
 Queued requests are **rejected, not replayed**, once the generation they were
 queued under is stale. Replaying would put `Authorization: Bearer ...` on the
 wire for a user who has signed out; the check sits inside the drain loop, so a
