@@ -1,0 +1,6 @@
+origin/main 71d9060fa4c7dcf319f24c318ed88be104b72896 (PR #849 squash 71d9060fa4c)
+$ flutter test test/core/logging/release_log_filter_test.dart
+00:00 +0: info and error reach the output when the package default would drop them
+00:00 +1: outside production the level is debug, and debug lines are written too
+00:00 +2: every Logger LoggingService builds names its filter
+00:00 +3: All tests passed!

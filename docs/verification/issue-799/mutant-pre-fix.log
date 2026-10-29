@@ -1,0 +1,6 @@
+$ lib/core/logging/logging_service.dart replaced by its f7ae03d4ca6 version (before #849), then:
+00:00 +0 -1: info and error reach the output when the package default would drop them [E]
+00:00 +0 -2: outside production the level is debug, and debug lines are written too [E]
+00:00 +0 -3: every Logger LoggingService builds names its filter [E]
+00:00 +0 -3: Some tests failed.
+Failing tests:

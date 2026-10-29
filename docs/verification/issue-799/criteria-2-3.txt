@@ -1,0 +1,27 @@
+--- criterion 2: grep -n "filter:" lib/core/logging/logging_service.dart
+93:        filter: ProductionFilter(),
+106:        filter: _filter(),
+147:      filter: _filter(),
+--- Logger( constructions
+92:      _logger = Logger(
+105:      _logger = Logger(
+146:    _logger = Logger(
+--- criterion 3: docs/api/core/logging.md
+35:- **Levels per build**: production writes `info` and above; staging and development write `debug` and above. The level is the only filter, in every build mode - profile and release included. (The `logger` package's default filter drops everything once asserts are off, so `LoggingService` never uses it.)
+--- the probe from the issue (logger 2.8.0, asserts off vs on) is in the issue body; DevelopmentFilter source:
+/// when `assert`s are evaluated, Flutter calls this debug mode).
+///
+/// In release mode ALL logs are omitted.
+class DevelopmentFilter extends LogFilter {
+  @override
+  bool shouldLog(LogEvent event) {
+    var shouldLog = false;
+    assert(() {
+      if (event.level >= level!) {
+        shouldLog = true;
+      }
+      return true;
+    }());
+    return shouldLog;
+  }
+}
