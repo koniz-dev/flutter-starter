@@ -125,8 +125,10 @@ flutter run
 flutter devices  # List available devices
 flutter run -d <device-id>
 
-# Run in release mode (for performance testing)
-flutter run --release
+# Run in profile mode (for performance testing). A release build also needs
+# a signing key and ENVIRONMENT=staging or production: see
+# docs/deployment/android-deployment.md#release-signing
+flutter run --profile
 ```
 
 ### Signing In Before You Have a Backend

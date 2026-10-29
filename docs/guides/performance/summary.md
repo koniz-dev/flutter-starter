@@ -280,7 +280,7 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
 ## Testing Performance
 
 ### Before Testing
-1. Build release version: `flutter build apk --release`
+1. Build in profile mode: `flutter build apk --profile` (release-like performance without a signing key; a release build needs one - see [Release signing](../../deployment/android-deployment.md#release-signing))
 2. Disable debug mode
 3. Test on real device (not emulator)
 

@@ -208,6 +208,22 @@ jobs:
           # version can fall below pubspec.yaml's `sdk:` constraint.
           channel: 'stable'
       
+      # The release build is refused without android/key.properties. Store
+      # the keystore and its passwords as secrets (the same step ships,
+      # commented out, in .github/workflows/deploy-android.yml).
+      - name: Setup Android keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+          echo "storePassword=$KEYSTORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$KEY_ALIAS" >> android/key.properties
+          echo "storeFile=upload-keystore.jks" >> android/key.properties
+
       - name: Build APK
         run: |
           flutter build apk --release \
@@ -218,14 +234,14 @@ jobs:
             --dart-define=API_SSL_FINGERPRINTS="${{ secrets.API_SSL_FINGERPRINTS }}"
       
       - name: Upload Debug Info
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: debug-info
           path: build/debug-info/
           retention-days: 365
       
       - name: Upload APK
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -242,17 +258,19 @@ and [`docs/deployment/ios-deployment.md`](../../deployment/ios-deployment.md):
 
 ### With Obfuscation
 
-Always use obfuscation for production builds:
+Always use obfuscation for production builds. A release build needs
+`ENVIRONMENT=production` (it refuses to start as `development`) and, on Android,
+the signing key in `android/key.properties`:
 
 ```bash
 # Android APK
-flutter build apk --release --obfuscate --split-debug-info=./build/debug-info
+flutter build apk --release --obfuscate --split-debug-info=./build/debug-info --dart-define-from-file=.env.production
 
 # Android App Bundle
-flutter build appbundle --release --obfuscate --split-debug-info=./build/debug-info
+flutter build appbundle --release --obfuscate --split-debug-info=./build/debug-info --dart-define-from-file=.env.production
 
 # iOS
-flutter build ios --release --obfuscate --split-debug-info=./build/debug-info
+flutter build ios --release --obfuscate --split-debug-info=./build/debug-info --dart-define-from-file=.env.production
 ```
 
 **Important:** Store the `debug-info` files securely. You'll need them to symbolicate crash reports.
