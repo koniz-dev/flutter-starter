@@ -1,0 +1,14 @@
+diff --git a/test/core/network/request_body_replay_test.dart b/test/core/network/request_body_replay_test.dart
+index 5ab2214ad67..c6aacd8501a 100644
+--- a/test/core/network/request_body_replay_test.dart
++++ b/test/core/network/request_body_replay_test.dart
+@@ -282,6 +282,9 @@ void main() {
+       );
+       expect(thrown.toString(), isNot(contains('StateError')));
+       expect(adapter.hits, hasLength(1), reason: 'nothing is replayed');
++      // ignore: avoid_print
++      print('AUDIT code=${(thrown as NetworkException).code} message=${thrown.message}');
++      expect(thrown.code, RequestBodyReplay.notReplayableCode);
+     });
+   });
+ 
