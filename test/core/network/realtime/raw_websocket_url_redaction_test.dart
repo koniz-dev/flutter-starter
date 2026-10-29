@@ -166,6 +166,22 @@ void main() {
     );
   }
 
+  // dart:io accepts `ws:\\` and sends its userinfo as Basic credentials.
+  test(
+    r'userinfo in a ws:\\ URL is redacted from the error and the logs',
+    () async {
+      final thrown = await refusedConnect(
+        (port) =>
+            r'ws:\\user:SECRET@127.0.0.1:'
+            '$port/s',
+      );
+
+      expect(thrown, isNotNull);
+      expect('$thrown', isNot(contains('SECRET')));
+      expect(logs.lines.join('\n'), isNot(contains('SECRET')));
+    },
+  );
+
   test(
     'an unparsable URL throws a FormatException without the token',
     () async {

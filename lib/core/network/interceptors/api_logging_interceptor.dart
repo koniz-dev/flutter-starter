@@ -205,24 +205,38 @@ class ApiLoggingInterceptor extends Interceptor {
     return utf8.decode(bytes, allowMalformed: true);
   }
 
+  /// A backslash, spelled by code unit: `r'\'` reads to the docs tooling's
+  /// declaration scanner as an escaped quote that never closes.
+  static final String _backslash = String.fromCharCode(0x5C);
+
+  /// Where an authority begins, as `Uri.parse` and dart:io see it: after an
+  /// optional `scheme:`, two characters that are each `/` or `\`. So
+  /// `ws:\\user:pass@host` and `//user:pass@host` have userinfo too - and
+  /// the first one is sent to the server as credentials.
+  static final RegExp _authorityStart = RegExp(
+    r'^(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}',
+  );
+
   /// [url] fit for a log line or an error message: its userinfo replaced,
   /// then every query value whose key names a secret, as [redactPath] does.
   ///
-  /// Userinfo is cut out of the raw text - everything between `://` and the
-  /// last `@` of the authority - not found through `Uri`, which normalises it
-  /// (`%2f` to `%2F`, `%41` to `A`) and so misses the original, and which
-  /// cannot parse a malformed URL at all.
+  /// Userinfo is cut out of the raw text - everything between the start of
+  /// the authority and its last `@` - not found through `Uri`, which
+  /// normalises it (`%2f` to `%2F`, `%41` to `A`) and so misses the original,
+  /// and which cannot parse a malformed URL at all.
   static String redactUrl(String url) {
     var text = url;
-    final schemeEnd = text.indexOf('://');
-    if (schemeEnd >= 0) {
-      final authorityStart = schemeEnd + 3;
+    final authority = _authorityStart.firstMatch(text);
+    if (authority != null) {
+      final authorityStart = authority.end;
       var authorityEnd = text.length;
-      for (final delimiter in const ['/', '?', '#']) {
+      for (final delimiter in ['/', _backslash, '?', '#']) {
         final index = text.indexOf(delimiter, authorityStart);
         if (index >= 0 && index < authorityEnd) authorityEnd = index;
       }
-      final at = text.lastIndexOf('@', authorityEnd - 1);
+      final at = authorityEnd > authorityStart
+          ? text.lastIndexOf('@', authorityEnd - 1)
+          : -1;
       if (at >= authorityStart) {
         text =
             '${text.substring(0, authorityStart)}$_redacted'
