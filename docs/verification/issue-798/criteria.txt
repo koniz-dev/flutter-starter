@@ -1,0 +1,99 @@
+origin/main a65ecb124fe1e9be5ed0df8381df6ba3aeb8cfba (PR #850 squash a069c88cbe1)
+--- criterion 1: implementation.md, manifest attributes and Step 3
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules">
+#### Step 3: Create Backup Rules
+
+Two files, because Android reads a different one depending on the version the
+app runs on ([Android 12 behavior changes](https://developer.android.com/about/versions/12/behavior-changes-12#backup-restore)):
+
+- **Android 12 (API 31) and later** read `dataExtractionRules`, which has
+  separate rules for cloud backup and for device-to-device (D2D) transfer.
+  Once it is set, `fullBackupContent` is ignored there. Rules in the old
+  format never affected D2D transfers, and on some manufacturers' devices
+  `allowBackup="false"` stops cloud backup but not a D2D transfer - so the
+  `<device-transfer>` excludes below are what actually keep data off a new
+  phone.
+- **Android 11 and earlier** read `fullBackupContent` (and `allowBackup`).
+
+```xml
+<!-- android/app/src/main/res/xml/data_extraction_rules.xml (Android 12+) -->
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="file" path="." />
+    </device-transfer>
+</data-extraction-rules>
+```
+
+```xml
+<!-- android/app/src/main/res/xml/backup_rules.xml (Android 11 and earlier) -->
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude all files from backup to protect sensitive data -->
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="database" path="." />
+    <exclude domain="file" path="." />
+</full-backup-content>
+```
+
+Why this matters here: `flutter_secure_storage` keeps its ciphertext in
+shared preferences and its key in the Android Keystore, which never leaves the
+device. A restored copy of the ciphertext cannot be decrypted (the plugin's own
+README names the `InvalidKeyException: Failed to unwrap key` this causes); with
+`resetOnError` on, the plugin then wipes it and the user signs in again. The
+plaintext preferences - the cached user, the unauthenticated HTTP cache - would
+otherwise move to the new device as they are.
+
+---
+
+### 7. Root/Jailbreak Detection (FreeRASP)
+--- criterion 2 (docs branch): audit.md
+#### LOW: Android backup is left on by default
+
+**Status:** Open - an adopter decision. `android/app/src/main/AndroidManifest.xml`
+sets no `allowBackup`, `fullBackupContent` or `dataExtractionRules`, so Android's
+defaults apply: shared preferences go to cloud backup and to a device-to-device
+transfer. The tokens there are Keystore-wrapped ciphertext that cannot be
+decrypted on another device - `flutter_secure_storage` fails with
+`InvalidKeyException: Failed to unwrap key`, wipes it, and the user signs in
+again - but the plaintext preferences (the cached user, the unauthenticated
+HTTP cache) move as they are.
+
+**Recommendation:** exclude them from both cloud backup and D2D transfer, with
+`dataExtractionRules` for Android 12+ and `fullBackupContent` for earlier
+versions. See [Security Implementation Guide](./implementation.md#step-3-create-backup-rules).
+
+#### MEDIUM: On web, tokens sit in localStorage beside their key
+--- manifest unchanged (no backup attributes):
+0
+--- sources: developer.android.com/about/versions/12/behavior-changes-12 (backup-restore), quoted:
+"For apps running on and targeting Android 12 and higher: Specifying include and exclude rules with the XML configuration mechanism doesn't affect D2D transfers, though it still affects cloud-based backup and restore ... On devices from some device manufacturers, specifying android:allowBackup="false" does disable backups to Google Drive, but doesn't disable D2D transfers for the app."
+"When you point to the new XML configuration, the android:fullBackupContent attribute that points to the old config is ignored on devices running Android 12 or higher."
+--- flutter_secure_storage 11.2.0 README, "Disabling Auto Backup":
+#### Disabling Auto Backup
+
+_Note_ By default Android backups data on Google Drive. It can cause exception `java.security.InvalidKeyException: Failed to unwrap key`.
+You need to:
+
+- [Disable autobackup](https://developer.android.com/guide/topics/data/autobackup#EnablingAutoBackup), [details](https://github.com/juliansteenbakker/flutter_secure_storage/issues/13#issuecomment-421083742)
+- [Exclude sharedprefs](https://developer.android.com/guide/topics/data/autobackup#IncludingFiles) used by `FlutterSecureStorage`, [details](https://github.com/juliansteenbakker/flutter_secure_storage/issues/43#issuecomment-471642126)
+
+Add the following to your `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<application
+  android:allowBackup="false"
+  ...>
+</application>
+```
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.
