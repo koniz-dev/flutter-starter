@@ -1,0 +1,98 @@
+origin/main b812ebf0b72a5f3bcf83dc02693bbc8927ad719f (PR #857 squash b812ebf0b72)
+--- criterion 1: the CSP in implementation.md section 5
+### 5. Security Headers
+
+Two kinds of header, delivered two different ways:
+
+- **Content-Security-Policy** works in a `<meta http-equiv>` tag in
+  `web/index.html` (except `frame-ancestors`, `report-uri` and `sandbox`,
+  which only work as a response header).
+- **`X-Frame-Options`, `X-Content-Type-Options`, `Permissions-Policy`** and
+  `frame-ancestors` work **only as HTTP response headers** set by your server
+  or host. In a `<meta>` tag browsers ignore them, so a meta-tag "clickjacking
+  fix" protects nothing.
+
+#### Step 1: A CSP that lets Flutter's renderer load
+
+A default `flutter build web` does not load everything from your own origin:
+
+- **CanvasKit** comes from `https://www.gstatic.com/flutter-canvaskit/<engine
+  revision>/` (flutter_tools sets `FLUTTER_WEB_CANVASKIT_URL` unless the build
+  passes `--no-web-resources-cdn`, which bundles it under `canvaskit/` on
+  your origin instead);
+- **fallback fonts** come from `https://fonts.gstatic.com/s/` (the engine's
+  `fontFallbackBaseUrl` default), whichever way CanvasKit is served.
+
+A policy of `default-src 'self'` with `font-src 'self' data:` blocks both, and
+the app renders nothing. A starting point that allows them:
+
+```html
+<!-- web/index.html, inside <head> -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: https:;
+               font-src 'self' data: https://fonts.gstatic.com;
+               connect-src 'self' https://api.example.com https://www.gstatic.com https://fonts.gstatic.com;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+```
+
+Replace `https://api.example.com` with your `BASE_URL` origin. If you build
+with `--no-web-resources-cdn`, drop `https://www.gstatic.com`. Then tighten it
+(`'unsafe-inline'`, `'unsafe-eval'`) only as far as your target browsers still
+render the app - test the built app, not `flutter run`.
+
+#### Step 2: The headers that must come from the server
+
+Set these on your host, not in `index.html`. For example, Firebase Hosting
+(`firebase.json`):
+
+```json
+{
+  "hosting": {
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Frame-Options", "value": "DENY" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" },
+          { "key": "Content-Security-Policy", "value": "frame-ancestors 'none'" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Netlify (`_headers`), Vercel (`vercel.json` `headers`) and any reverse proxy
+have the same mechanism.
+
+---
+
+## High Priority Fixes
+--- criterion 2: grep -rn http-equiv="X-Frame-Options" docs
+exit=1 (1 = no match)
+--- audit.md web entry
+#### CRITICAL: Missing Security Headers
+
+**Issue:** `web/index.html` sets no Content-Security-Policy, and no host
+configuration ships the response headers.
+
+**Risk:** Vulnerable to XSS, clickjacking, and other web attacks.
+
+**Recommendation:** Add a CSP that still lets Flutter load CanvasKit and its
+fallback fonts, and set `X-Frame-Options`, `X-Content-Type-Options` and
+`Permissions-Policy` as **response headers** on your host - in a `<meta>` tag
+browsers ignore them. See [Security Implementation Guide](./implementation.md#5-security-headers).
+
+## 5. Compliance (GDPR & Privacy)
+--- the facts, from the local Flutter SDK source
+129:          'FLUTTER_WEB_CANVASKIT_URL=https://www.gstatic.com/flutter-canvaskit/${globals.flutterVersion.engineRevision}/',
+366:  /// Defaults to 'https://fonts.gstatic.com/s/'.
+368:      _configuration?.fontFallbackBaseUrl ?? 'https://fonts.gstatic.com/s/';
+    --[no-]web-resources-cdn                                 Use Web static resources hosted on a CDN.
+                                                             (defaults to on)
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.
