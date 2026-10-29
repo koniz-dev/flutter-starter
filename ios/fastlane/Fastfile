@@ -132,9 +132,9 @@ platform :ios do
       force: true,
       submit_for_review: false, # Set to true to auto-submit for review
       automatic_release: false, # Set to true for automatic release after approval
-      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"], # Uncomment if using API key file
-      # api_key_id: ENV["APP_STORE_CONNECT_KEY_ID"], # Uncomment if using API key
-      # api_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"] # Uncomment if using API key
+      # API key: a fastlane key JSON file through APP_STORE_CONNECT_API_KEY_PATH
+      # (read automatically), or app_store_connect_api_key(...) before this call.
+      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
     )
 
     UI.success("Successfully uploaded to App Store Connect!")
@@ -156,9 +156,9 @@ platform :ios do
       skip_submission: true, # Don't submit for review automatically
       distribute_external: false, # Set to true for external testing
       groups: groups,
-      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"], # Uncomment if using API key file
-      # api_key_id: ENV["APP_STORE_CONNECT_KEY_ID"], # Uncomment if using API key
-      # api_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"] # Uncomment if using API key
+      # API key: a fastlane key JSON file through APP_STORE_CONNECT_API_KEY_PATH
+      # (read automatically), or app_store_connect_api_key(...) before this call.
+      # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
     )
 
     UI.success("Successfully uploaded to TestFlight!")
@@ -180,9 +180,9 @@ platform :ios do
       force: true,
       submit_for_review: true,
       automatic_release: false,
+      # API key: a fastlane key JSON file through APP_STORE_CONNECT_API_KEY_PATH
+      # (read automatically), or app_store_connect_api_key(...) before this call.
       # api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
-      # api_key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
-      # api_issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"]
     )
 
     UI.success("Successfully submitted to App Store for review!")

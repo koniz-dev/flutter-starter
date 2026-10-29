@@ -7,11 +7,10 @@
 # Or run: xcodebuild -showBuildSettings | grep DEVELOPMENT_TEAM
 team_id("YOUR_TEAM_ID") # TODO: Replace with your Apple Team ID
 
-# Your App Store Connect API Key ID (optional, for CI/CD)
-# api_key_id("YOUR_API_KEY_ID") # TODO: Uncomment and set if using API key authentication
-
-# Your App Store Connect Issuer ID (optional, for CI/CD)
-# api_issuer_id("YOUR_ISSUER_ID") # TODO: Uncomment and set if using API key authentication
+# App Store Connect API key (recommended for CI/CD): not an Appfile setting.
+# Either call app_store_connect_api_key(key_id:, issuer_id:, key_filepath:)
+# in the Fastfile before deliver/pilot, or set APP_STORE_CONNECT_API_KEY_PATH
+# to a fastlane API key JSON file - deliver and pilot read it by themselves.
 
 # App Identifier (Bundle ID)
 # This should match your Xcode project's Bundle Identifier

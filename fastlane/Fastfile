@@ -129,9 +129,10 @@ platform :android do
       skip_upload_metadata: true,
       skip_upload_images: true,
       skip_upload_screenshots: true,
-      # json_key: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"], # Uncomment if using JSON string
-      # json_key_file: "path/to/service-account.json", # Uncomment if using JSON file
-      # service_account_json_file: "path/to/service-account.json" # Alternative
+      # Credentials, if not set in the Appfile (json_key_file / json_key_data_raw)
+      # or through SUPPLY_JSON_KEY / SUPPLY_JSON_KEY_DATA:
+      # json_key_data: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"], # The JSON itself
+      # json_key: "path/to/service-account.json", # A path to the JSON file
     )
 
     UI.success("Successfully uploaded to Google Play Store (#{track} track)!")

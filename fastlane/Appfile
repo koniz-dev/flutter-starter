@@ -10,8 +10,9 @@ package_name("com.example.flutter_starter") # Set by the rename: fork-and-custom
 # json_key_file("path/to/service-account.json") # TODO: Uncomment and set path to service account JSON
 
 # Google Play Service Account JSON as string (alternative for CI/CD)
-# json_key_data("{\"type\":\"service_account\",...}") # TODO: Uncomment and set service account JSON string
+# json_key_data_raw("{\"type\":\"service_account\",...}") # TODO: Uncomment and set service account JSON string
 
-# Track to deploy to (default: production)
-# default_track("internal") # TODO: Uncomment and set default track (internal, alpha, beta, production)
+# Track to deploy to: not an Appfile setting. The Fastfile's upload lanes pass
+# it (`fastlane android upload track:internal`; upload_internal, upload_alpha,
+# upload_beta and upload_production fix their own).
 
