@@ -49,8 +49,8 @@ on:
         required: true
         default: 'production'
         type: choice
+        # No `development`: build_all.sh builds release artifacts and refuses it.
         options:
-          - development
           - staging
           - production
 
