@@ -541,28 +541,44 @@ Edit the placeholder `TalsecConfig` inside [`lib/core/security/infrastructure/fr
 
 #### Step 2: Override `raspServiceProvider` and start protection
 
-[`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) defaults to [`NoOpRaspService`](../../../lib/core/security/noop_rasp_service.dart). After you are ready to ship real RASP, override it when you build the [`ProviderContainer`](https://pub.dev/documentation/flutter_riverpod/latest/flutter_riverpod/ProviderContainer-class.html) in `main.dart`, then start listening:
+[`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) defaults to [`NoOpRaspService`](../../../lib/core/security/noop_rasp_service.dart). When you are ready to ship real RASP, override it in `createAppContainer` in `lib/main.dart` - the one container the app runs on - by adding it to the list that already holds `authModuleOverrides`:
 
 ```dart
-// lib/main.dart — excerpt after WidgetsFlutterBinding.ensureInitialized()
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// lib/main.dart
 import 'package:flutter_starter/core/security/infrastructure/freerasp_service_impl.dart';
 import 'package:flutter_starter/core/security/rasp_providers.dart';
 
-final container = ProviderContainer(
-  overrides: [
-    raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
-  ],
-);
+ProviderContainer createAppContainer({
+  List<Override> overrides = const <Override>[],
+}) {
+  return ProviderContainer(
+    retry: _neverRetry,
+    overrides: <Override>[
+      ...authModuleOverrides,
+      raspServiceProvider.overrideWithValue(FreeRaspServiceImpl()),
+      ...overrides,
+    ],
+  );
+}
+```
 
+Then start protection in `bootstrap()`, right after `final container = createContainer();`:
+
+```dart
 final rasp = container.read(raspServiceProvider);
 await rasp.startProtection();
 rasp.onThreatDetected.listen((threat) {
-  // Map SecurityThreat (privilegedAccess, emulator, debugger, …) to policy
+  // Map SecurityThreat (privilegedAccess, emulator, debugger, ...) to policy
 });
 ```
 
-Use the same `container` for `UncontrolledProviderScope` / `runApp` so the override applies app-wide.
+Do **not** build a second `ProviderContainer` for this. `createAppContainer`
+is what binds `authModuleOverrides` - the token refresher and the session
+termination sink - and `_neverRetry`; a container built without them loses 401
+refresh and forced logout without any error.
+
+<!-- symbol: lib/main.dart createAppContainer -->
+<!-- symbol: lib/features/auth/di/auth_providers.dart authModuleOverrides -->
 
 There is **no** `device_security.dart` in this starter; wire threat handling in your own module if you need blocking UI or forced logout.
 
