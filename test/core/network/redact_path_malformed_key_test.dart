@@ -45,7 +45,20 @@ class _OkAdapter implements HttpClientAdapter {
 
 void main() {
   group('redactPath', () {
-    for (final path in ['/v?a%=1', '/v?%zz=1', '/v?x=1&b%=2']) {
+    for (final path in [
+      '/v?a%=1',
+      '/v?%zz=1',
+      '/v?x=1&b%=2',
+      // Well-formed escapes that are not UTF-8, and raw non-ASCII: each made
+      // Uri.decodeQueryComponent throw too.
+      '/v?%E9=1',
+      '/v?%FF=1',
+      '/v?%C3=1',
+      '/v?%D8%00=1',
+      '/v?%ED%A0%80=1',
+      '/v?café=1',
+      '/v?\uD800=1',
+    ]) {
       test('does not throw on $path', () {
         expect(() => ApiLoggingInterceptor.redactPath(path), returnsNormally);
       });
@@ -60,6 +73,26 @@ void main() {
       expect(redacted, contains('page=2'));
     });
 
+    for (final key in ['%74oken', 'To%6Ben', 'TOKEN', 'access+token']) {
+      test('an escaped or re-cased sensitive key ($key) is still redacted', () {
+        expect(
+          ApiLoggingInterceptor.redactPath('/v?$key=SECRET'),
+          isNot(contains('SECRET')),
+        );
+      });
+    }
+
+    test('a sensitive key with an invalid byte inside is still redacted', () {
+      expect(
+        ApiLoggingInterceptor.redactPath('/v?tok%E9en=SECRET&page=2'),
+        allOf(isNot(contains('SECRET')), contains('page=2')),
+      );
+    });
+
+    test('a non-ASCII key that names nothing sensitive is kept', () {
+      expect(ApiLoggingInterceptor.redactPath('/v?café=1'), '/v?café=1');
+    });
+
     test('a readable sensitive key is still redacted', () {
       expect(
         ApiLoggingInterceptor.redactPath('/v?token=SECRET'),
@@ -71,7 +104,7 @@ void main() {
   // Wired as apiClientProvider wires it: the no-op performance service still
   // installs PerformanceInterceptor, which redacts every request's path.
   group('through ApiClient, with logging off', () {
-    for (final path in ['/v?a%=1', '/v?%zz=1']) {
+    for (final path in ['/v?a%=1', '/v?%zz=1', '/v?%E9=1', '/v?café=1']) {
       test('$path reaches the transport and succeeds', () async {
         final adapter = _OkAdapter();
         final client = ApiClient(
