@@ -112,6 +112,13 @@ void main() {
       ('wss://u:SE@CRET@h/s', 'CRET'),
       ('wss://u:SECRET@h:443x/s?token=T0KEN', 'SECRET'),
       ('wss://h/s?token=T0KEN', 'T0KEN'),
+      // Uri.parse - and dart:io, which sends it as credentials - reads
+      // userinfo in these too, though none has a literal `://`.
+      (r'ws:\\u:SECRET@h/s', 'SECRET'),
+      (r'ws:/\u:SECRET@h/s', 'SECRET'),
+      (r'ws:\/u:SECRET@h/s', 'SECRET'),
+      ('//u:SECRET@h/s', 'SECRET'),
+      ('//SECRET@h/x://y', 'SECRET'),
     ]) {
       test('removes the secret from $url', () {
         expect(ApiLoggingInterceptor.redactUrl(url), isNot(contains(secret)));
