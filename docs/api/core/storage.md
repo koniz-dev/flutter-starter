@@ -168,6 +168,25 @@ SecureStorageService();
 - Accessibility: `first_unlock_this_device`
 - Data is encrypted and protected by iOS security
 
+**Web:**
+- `SecureStorageService` passes no web options, so `flutter_secure_storage_web`
+  keeps every value - the access and refresh tokens included - in the page's
+  `window.localStorage`
+- Values are AES-GCM encrypted with WebCrypto, but with no wrap key the plugin
+  stores the AES key itself, raw, in the same `localStorage`. The encryption
+  therefore protects nothing from code running on the origin: **any script that
+  runs on the page (an XSS, a compromised dependency) can read both tokens**
+- There is no web equivalent of the Keystore or Keychain to fix this in the
+  client. What an adopter shipping web should do instead:
+  - send a strict Content-Security-Policy as a response header, so injected
+    script does not run in the first place (see the security implementation
+    guide, and mind Flutter's own CanvasKit and font origins)
+  - keep access tokens short-lived
+  - have the server keep the refresh token in an `httpOnly`, `Secure`,
+    `SameSite` cookie, so it never reaches `localStorage` at all
+- A `wrapKey` web option only moves the key into the JavaScript bundle, which
+  the same script can read; it is not a fix
+
 ### Usage Examples
 
 ```dart
