@@ -1,0 +1,36 @@
+origin/main 54c68951771cde3b3151f1151372247f39659c72 (#873 = 54c68951771)
+--- criterion 1: network section
+### Custom Network Configuration
+
+Add to `ApiClient`, do not replace it. Its constructor builds the client in
+`_createDio` (`lib/core/network/api_client.dart`): SSL pinning, the cache,
+`AuthInterceptor` (the bearer token and 401 refresh), retry, logging,
+performance and error mapping. A replacement class drops all of that, and
+`apiClientProvider` no longer compiles against it.
+
+To add an interceptor, insert it in the list `_createDio` installs. The order
+matters - dio runs `onRequest` and `onError` in registration order:
+
+```dart
+dio.interceptors.addAll([
+  cacheInterceptor,
+  authInterceptor,
+  // After AuthInterceptor if it needs the Authorization header; before
+  // ErrorInterceptor, which ends the error chain, if it handles errors.
+  MyTenantHeaderInterceptor(),
+  RetryInterceptor(/* ... */),
+  // ...
+  ErrorInterceptor(), // stays last
+]);
+```
+
+For a header on one call, pass it to that call:
+`apiClient.get('/reports', headers: {'X-Tenant': tenantId})`.
+
+<!-- symbol: lib/core/network/api_client.dart ApiClient._createDio -->
+
+### Custom Storage Implementation
+--- criterion 3: grep -n 'firebase_remote_config\|pub add go_router\|^class ApiClient'
+exit=1 (1 = no match)
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.

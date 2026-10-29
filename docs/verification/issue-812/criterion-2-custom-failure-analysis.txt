@@ -1,0 +1,4 @@
+Analyzed with test/docs/doc_snippets.dart's analyzeSnippets, both classes in one snippet:
+CustomFailure (as now documented): no problems
+OldCustomFailure (the previous doc's const CustomFailure(super.message) with no copyWith):
+ERROR|COMPILE_TIME_ERROR|NON_ABSTRACT_CLASS_INHERITS_ABSTRACT_MEMBER|snippet_0.dart|13|7|16|Missing concrete implementation of 'Failure.copyWith'.

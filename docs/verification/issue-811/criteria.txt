@@ -1,0 +1,22 @@
+origin/main 54c68951771cde3b3151f1151372247f39659c72 (#872 = 825c4369387)
+--- criterion 1: grep -rn 'remove debug signing\|Debug signing or missing' docs/guides/security
+exit=1 (1 = no match)
+--- criterion 2: every signing/ProGuard/R8 item in the README, checklist and audit lists
+docs/guides/security/README.md:54:- Your release keystore: the build never debug-signs, and refuses a release build until `android/key.properties` exists
+docs/guides/security/README.md:63:3. Release signing keystore (the refusal ships; supply your key)
+docs/guides/security/README.md:71:4. R8 keep rules, only if a release build breaks (R8 already runs)
+docs/guides/security/README.md:86:- **[Android Release Signing](./implementation.md#4-android-release-signing)** - the refusal ships; supply your keystore
+docs/guides/security/checklist.md:56:      `*.pem`, `*.key`, `*.pfx`, `*.p12`, `*.p8`, `*.jks`, `*.keystore`,
+docs/guides/security/checklist.md:61:      `.keystore`, `.mobileprovision`, `.provisionprofile`) be declared as a
+docs/guides/security/checklist.md:63:      `git ls-files | grep -iE '\.(pem|key|pfx|p12|p8|jks|keystore)$'` before a
+docs/guides/security/checklist.md:70:- [ ] **Create your upload keystore and `android/key.properties`** (the build never debug-signs; it refuses a release without them - see [Release signing](../../deployment/android-deployment.md#release-signing))
+docs/guides/security/checklist.md:73:- [ ] Add R8 keep rules only if a release build breaks (R8 already runs on release - see [R8 / ProGuard](./implementation.md#r8--proguard))
+docs/guides/security/audit.md:189:#### LOW: Release signing is enforced, but the keystore is yours to supply
+docs/guides/security/audit.md:193:`android/app/build.gradle.kts` signs `release` only with the keystore named in
+docs/guides/security/audit.md:200:**Recommendation:** Create the upload keystore and `android/key.properties`,
+docs/guides/security/audit.md:201:keep both out of version control, and back the keystore up. See
+docs/guides/security/audit.md:284:3. Release signing keystore (the refusal ships; supply your key)
+docs/guides/security/audit.md:292:4. R8 keep rules, only if a release build breaks (R8 already runs)
+docs/guides/security/audit.md:346:3. **Release signing keystore** - the build refuses a release until you supply it
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.
