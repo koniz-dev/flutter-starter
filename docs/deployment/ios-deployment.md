@@ -14,7 +14,7 @@ Archive an **IPA** and distribute via **App Store Connect** (TestFlight or App S
 
 1. **Signing in Xcode** — Open `ios/Runner.xcworkspace`, set **Signing & Capabilities** for Release.
 2. **App Store Connect API key** (recommended for CI) — Create an API key in App Store Connect; store key id, issuer id, and `.p8` path or secret in CI.
-3. **Fastlane** — Follow the iOS sections in [`fastlane/README.md`](../../fastlane/README.md) (`api_key_path`, `api_key_id`, `issuer_id`, or Apple ID flow for local use).
+3. **Fastlane** — Follow the iOS sections in [`fastlane/README.md`](../../fastlane/README.md) (`APP_STORE_CONNECT_API_KEY_PATH` or `app_store_connect_api_key(key_id:, issuer_id:, key_filepath:)`, or the Apple ID flow for local use).
 4. **CI** — Edit [`.github/workflows/deploy-ios.yml`](../../.github/workflows/deploy-ios.yml): add secrets and enable triggers when ready.
 
 ## References

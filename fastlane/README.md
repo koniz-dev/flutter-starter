@@ -144,16 +144,22 @@ app_identifier("com.example.flutterStarter") # Your bundle ID
 You need a Google Play Service Account JSON file. See [Android Deployment Guide](../docs/deployment/android-deployment.md) for setup instructions.
 
 Options:
-1. Set `json_key_file` in `Appfile`
-2. Set `json_key_data` in `Appfile` (for CI/CD)
-3. Use environment variable `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`
+1. Set `json_key_file` in `Appfile` (a path to the JSON file)
+2. Set `json_key_data_raw` in `Appfile` (the JSON itself, for CI/CD)
+3. Set `SUPPLY_JSON_KEY` (a path) or `SUPPLY_JSON_KEY_DATA` (the JSON) in the
+   environment - `upload_to_play_store` reads both by itself. To use another
+   variable such as `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`, uncomment the
+   `json_key_data:` line in `fastlane/Fastfile`
 
 ### App Store Connect
 
 You can use either:
 1. **App Store Connect API Key** (recommended for CI/CD):
-   - Set `api_key_path`, `api_key_id`, and `api_issuer_id` in `Appfile`
-   - Or use environment variables
+   - Not an `Appfile` setting. Set `APP_STORE_CONNECT_API_KEY_PATH` to a
+     [fastlane API key JSON file](https://docs.fastlane.tools/app-store-connect-api/) -
+     `deliver` and `pilot` read it by themselves - or call
+     `app_store_connect_api_key(key_id:, issuer_id:, key_filepath:)` in the
+     Fastfile before uploading
 
 2. **Apple ID Authentication** (for local use):
    - Set `apple_id` in `Appfile`
@@ -208,8 +214,8 @@ See [Deployment Documentation](../docs/deployment/) for CI/CD setup.
 ### Android Issues
 
 **Error: "Could not find service account JSON"**
-- Ensure `json_key_file` or `json_key_data` is set in `Appfile`
-- Or set `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` environment variable
+- Ensure `json_key_file` or `json_key_data_raw` is set in `Appfile`
+- Or set `SUPPLY_JSON_KEY` / `SUPPLY_JSON_KEY_DATA` in the environment
 
 **Error: "Package name mismatch"**
 - Update `PACKAGE_NAME` in `Fastfile` to match your `applicationId`

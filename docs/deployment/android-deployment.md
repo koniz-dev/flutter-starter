@@ -58,7 +58,7 @@ it only proves the release build compiles.
 
 1. **Signing** — Set up `android/key.properties` and the keystore as in [Release signing](#release-signing); do not commit either. In CI, keep them in secrets.
 2. **Play API access** — In Play Console, link a Google Cloud project and create a service account with release permissions; download the JSON key.
-3. **Fastlane** — Follow the Android sections in [`fastlane/README.md`](../../fastlane/README.md) (`json_key_file`, `json_key_data`, or `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`).
+3. **Fastlane** — Follow the Android sections in [`fastlane/README.md`](../../fastlane/README.md) (`json_key_file` or `json_key_data_raw` in the Appfile, or `SUPPLY_JSON_KEY` / `SUPPLY_JSON_KEY_DATA`).
 4. **CI** — Edit [`.github/workflows/deploy-android.yml`](../../.github/workflows/deploy-android.yml): add secrets (signing + Play JSON), then enable triggers when you are ready.
 
 ## References
