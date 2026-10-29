@@ -1,0 +1,5 @@
+$ lib/core/network/realtime/raw_websocket_client.dart replaced by its a65ecb124fe version (before #856), then:
+00:00 +0 -1: a cancelled handshake names the URL without its token [E]
+00:00 +0 -2: a failed handshake logs no token [E]
+00:00 +1 -2: Some tests failed.
+Failing tests:

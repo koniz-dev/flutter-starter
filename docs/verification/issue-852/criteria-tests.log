@@ -1,0 +1,12 @@
+origin/main 9a229f24612906e765297c5c945f014b96994335 (#856 = 9a229f24612)
+$ flutter test test/core/network/realtime/raw_websocket_url_redaction_test.dart
+00:00 +0: a cancelled handshake names the URL without its token
+00:00 +1: a failed handshake logs no token
+00:00 +2: a URL with no sensitive key is logged in full
+00:00 +3: All tests passed!
+--- every interpolation of the URL in the client
+93:    final safeUrl = ApiLoggingInterceptor.redactPath(url);
+95:    _logger.d('Connecting to WebSocket at: $safeUrl');
+106:        'Failed to open WebSocket connection to $safeUrl: '
+116:        'WebSocket connection to $safeUrl was superseded; closing it.',
+120:        'Connection to $safeUrl was cancelled before it opened.',

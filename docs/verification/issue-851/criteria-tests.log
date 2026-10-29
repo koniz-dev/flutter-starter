@@ -1,0 +1,13 @@
+origin/main 9a229f24612906e765297c5c945f014b96994335 (#854 = a65ecb124fe)
+$ flutter test test/core/network/redact_path_malformed_key_test.dart test/core/network/interceptors/path_query_redaction_test.dart test/core/network/interceptors/api_logging_redaction_rules_test.dart test/core/network/interceptors/performance_path_redaction_test.dart
+the recorded path is the one the logs show
+the Firebase template redacts the http_path it sends
+00:01 +39: All tests passed!
+00:00 +0: redactPath does not throw on /v?a%=1
+00:00 +1: redactPath does not throw on /v?%zz=1
+00:00 +2: redactPath does not throw on /v?x=1&b%=2
+00:00 +3: redactPath redacts the value of a key it cannot decode (fail closed)
+00:00 +4: redactPath a readable sensitive key is still redacted
+00:00 +5: through ApiClient, with logging off /v?a%=1 reaches the transport and succeeds
+00:00 +6: through ApiClient, with logging off /v?%zz=1 reaches the transport and succeeds
+00:00 +7: All tests passed!

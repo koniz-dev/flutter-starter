@@ -1,0 +1,9 @@
+$ lib/core/network/interceptors/api_logging_interceptor.dart replaced by its a069c88cbe1 version (#850, before #854), then:
+00:00 +0 -1: redactPath does not throw on /v?a%=1 [E]
+00:00 +0 -2: redactPath does not throw on /v?%zz=1 [E]
+00:00 +0 -3: redactPath does not throw on /v?x=1&b%=2 [E]
+00:00 +0 -4: redactPath redacts the value of a key it cannot decode (fail closed) [E]
+00:00 +1 -5: through ApiClient, with logging off /v?a%=1 reaches the transport and succeeds [E]
+00:00 +1 -6: through ApiClient, with logging off /v?%zz=1 reaches the transport and succeeds [E]
+00:00 +1 -6: Some tests failed.
+Failing tests:
