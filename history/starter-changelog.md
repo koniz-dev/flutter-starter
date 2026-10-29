@@ -38,12 +38,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PerformanceInterceptor` and the Firebase performance template record the
   request path redacted, as the logs do, so a `?token=` no longer reaches a
   trace attribute.
+- `RawWebSocketClientImpl` no longer exposes the connect URL's token or
+  userinfo: its log lines, the cancellation error and the error a failed
+  handshake rethrows are built from `ApiLoggingInterceptor.redactUrl` (new),
+  and an unparsable URL is reported redacted. The rethrown handshake error now
+  names the inner error type instead of quoting dart:io's message.
+- The default `NoOpRealtimeClient` prints only in debug builds, the URL
+  redacted, and a sent payload's type rather than its content.
 
 ### Fixed
 
 - **`LoggingService` writes logs in profile and release builds.** It relied on
   the logger package's default filter, which drops every event once asserts
   are off, so the production file and console outputs received nothing.
+- `ApiLoggingInterceptor.redactPath` no longer throws on a query key with
+  malformed or non-UTF-8 percent-encoding (`%zz`, `%E9`) or raw non-ASCII;
+  such a request used to fail in every build, because `PerformanceInterceptor`
+  redacts every path. A key it cannot read has its value redacted.
+- `build.yml`'s manual build defaults to `staging` and no longer offers
+  `development`; `scripts/ci/build_all.sh development` exits with an
+  explanation instead of building artifacts that refuse to start.
+- The fastlane Appfiles and Fastfile comments name only options fastlane has
+  (`json_key_data_raw`, `json_key`/`json_key_data`, `api_key_path`,
+  `app_store_connect_api_key`); several commented lines failed with
+  `NoMethodError` once uncommented. **If you uncommented** `json_key_data`,
+  `api_key_id`, `api_issuer_id` or `default_track` in an Appfile, replace them
+  as the comments now describe.
 
 - **The release-signing refusal's `key.properties` template is valid.** It
   showed `storeFile=upload-keystore.jks   # relative to android/, or absolute`;
@@ -65,6 +85,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/api/core/storage.md` gains a Web section: on Flutter web the tokens
   sit in `localStorage` with their AES key beside them, and what to do about
   it. The security audit lists it as an open item.
+- Security guide: a web CSP that lets CanvasKit and fallback fonts load, with
+  `X-Frame-Options`, `X-Content-Type-Options` and `Permissions-Policy` moved to
+  server response headers (browsers ignore them in `<meta>`); an Android
+  backup recipe covering Android 12+ `dataExtractionRules`; the RASP override
+  added in `createAppContainer` instead of a second container that dropped
+  `authModuleOverrides`.
+- `api-integration.md`, the auth `providers.md` quotes and the retry-policy
+  quote of `createAppContainer` match the code, and docs tests keep them so.
+- Troubleshooting: `--dart-define` works on web, and a new configuration key
+  goes into `DartDefines.values`.
+- Performance work uses `--profile`; release examples include the keystore step
+  and `ENVIRONMENT=production`.
 
 ## [2.0.0] - 2026-10-29
 
