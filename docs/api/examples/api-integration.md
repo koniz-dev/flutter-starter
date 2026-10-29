@@ -15,6 +15,7 @@ This guide covers common patterns for making API requests, handling responses, a
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/network/api_client.dart';
 
 class UserService {
   UserService(this.apiClient);
@@ -48,9 +49,10 @@ final userServiceProvider = Provider<UserService>((ref) {
   return UserService(apiClient);
 });
 
-// Usage
-final userService = ref.read(userServiceProvider);
-final profile = await userService.getUserProfile('123');
+// Usage, from anything holding a WidgetRef (a ConsumerWidget's build, say)
+Future<Map<String, dynamic>> loadProfile(WidgetRef ref) {
+  return ref.read(userServiceProvider).getUserProfile('123');
+}
 ```
 
 ### With Query Parameters
@@ -83,10 +85,11 @@ final response = await apiClient.get(
 
 ```dart
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/network/api_client.dart';
 
-Future<void> makeApiCall() async {
+Future<void> makeApiCall(ApiClient apiClient) async {
   try {
-    final response = await apiClient.get('/endpoint');
+    await apiClient.get('/endpoint');
     // Handle success
   } on ServerException catch (e) {
     // Handle server error (4xx, 5xx)
@@ -187,28 +190,18 @@ Future<Result<T>> executeWithRetry<T>(
   int maxRetries = 3,
   Duration delay = const Duration(seconds: 1),
 }) async {
-  int attempts = 0;
-  
-  while (attempts < maxRetries) {
+  var attempts = 0;
+  while (true) {
     final result = await operation();
-    
-    if (result.isSuccess) {
+    attempts++;
+
+    // Only a network failure is worth another try, and only while attempts
+    // remain; success and every other failure are returned as they are.
+    if (result.failureOrNull is! NetworkFailure || attempts >= maxRetries) {
       return result;
     }
-    
-    final failure = result.failureOrNull;
-    if (failure is NetworkFailure && attempts < maxRetries - 1) {
-      // Retry on network failure
-      await Future.delayed(delay * (attempts + 1));
-      attempts++;
-      continue;
-    }
-    
-    // Don't retry for other failure types
-    return result;
+    await Future<void>.delayed(delay * attempts);
   }
-  
-  return result;
 }
 
 // Usage
@@ -224,10 +217,10 @@ final result = await executeWithRetry(() => loginUseCase(email, password));
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/di/providers.dart';
-import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/shared/extensions/context_extensions.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -255,12 +248,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final loginUseCase = ref.read(loginUseCaseProvider);
     final result = await loginUseCase(email, password);
+    if (!mounted) return;
 
     setState(() => _isLoading = false);
 
     result.when(
       success: (user) {
-        context.showSuccessSnackBar('Welcome back, ${user.name}!');
+        context.showSuccessSnackBar('Welcome back, ${user.name ?? user.email}!');
         context.goToHome();
       },
       failureCallback: (failure) {
@@ -316,7 +310,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/di/providers.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 
 class AuthGuard extends ConsumerWidget {
   final Widget authenticatedChild;
