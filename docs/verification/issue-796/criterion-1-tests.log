@@ -1,0 +1,73 @@
+origin/main f7ae03d4ca6df226fc1020348e4aca085853f83d (PR #847 squash 664efdd6843)
+openssl: OpenSSL 3.6.4 25 Aug 2026 (Library: OpenSSL 3.6.4 25 Aug 2026)
+$ flutter test test/core/network/realtime/raw_websocket_pinning_test.dart test/core/network/ssl_pinning_test.dart
+with pinning in effect the handshake goes through a pinned client, a fresh one per connection
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:98:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:98:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+with pinning off the default transport is used
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:98:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+pinning requested without fingerprints pins nothing, as for the API client
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+createHttpClient and createAdapter agree on when pinning applies
+a real wss:// handshake (setUpAll)
+a real wss:// handshake a certificate the fingerprints do not name is refused
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+SSL Pinning failure for 127.0.0.1: 
+Expected one of: [0000000000000000000000000000000000000000000000000000000000000000]
+Got: 2fbd5fd109bdc9d01036223dd5efd26ae76adb715ecfe2503df87a2230be0fe5
+a real wss:// handshake a certificate the fingerprints do not name is refused
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:98:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+SslPinning builds a pinned adapter when fingerprints are present
+a real wss:// handshake the pinned certificate is accepted
+a real wss:// handshake the pinned certificate is accepted
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+a real wss:// handshake the pinned certificate is accepted
+a real wss:// handshake the pinned certificate is accepted
+SslPinning rejects a certificate whose fingerprint is not pinned
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+a real wss:// handshake the pinned certificate is accepted
+SslPinning rejects every certificate when the pin list is empty
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+a real wss:// handshake the pinned certificate is accepted
+SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+a real wss:// handshake the pinned certificate is accepted
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+401 replay transport installs the pinned adapter, and only when pinning is on
+a real wss:// handshake without pinning, the self-signed certificate is refused by the platform trust store
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+a real wss:// handshake without pinning, the self-signed certificate is refused by the platform trust store
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:98:15)[0m
+[38;5;196m│ #1   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+401 replay transport replays through the main client pinned adapter
+a real wss:// handshake (tearDownAll)
+a real wss:// handshake (tearDownAll)
+a real wss:// handshake (tearDownAll)
+00:00 +19: All tests passed!

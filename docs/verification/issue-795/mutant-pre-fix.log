@@ -1,0 +1,6 @@
+$ lib/core/network/interceptors/performance_interceptor.dart and lib/core/performance/infrastructure/firebase_performance_service.dart.template replaced by their 6028656d7fb versions (before #846), then:
+00:00 +0 -1: no trace name or attribute carries the secret [E]
+00:00 +0 -2: the recorded path is the one the logs show [E]
+00:00 +0 -3: the Firebase template redacts the http_path it sends [E]
+00:00 +0 -3: Some tests failed.
+Failing tests:

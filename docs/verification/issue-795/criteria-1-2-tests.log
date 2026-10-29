@@ -1,0 +1,6 @@
+origin/main 03f095e9f82a9dc0a2fb4c85b2be12f180a60682 (PR #846 squash 03f095e9f82)
+$ flutter test test/core/network/interceptors/performance_path_redaction_test.dart
+00:00 +0: no trace name or attribute carries the secret
+00:00 +1: the recorded path is the one the logs show
+00:00 +2: the Firebase template redacts the http_path it sends
+00:00 +3: All tests passed!

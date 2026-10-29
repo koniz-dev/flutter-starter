@@ -1,0 +1,50 @@
+origin/main f7ae03d4ca6df226fc1020348e4aca085853f83d (PR #848 squash f7ae03d4ca6)
+--- criterion 1: docs/api/core/storage.md, Web
+**Web:**
+- `SecureStorageService` passes no web options, so `flutter_secure_storage_web`
+  keeps every value - the access and refresh tokens included - in the page's
+  `window.localStorage`
+- Values are AES-GCM encrypted with WebCrypto, but with no wrap key the plugin
+  stores the AES key itself, raw, in the same `localStorage`. The encryption
+  therefore protects nothing from code running on the origin: **any script that
+  runs on the page (an XSS, a compromised dependency) can read both tokens**
+- There is no web equivalent of the Keystore or Keychain to fix this in the
+  client. What an adopter shipping web should do instead:
+  - send a strict Content-Security-Policy as a response header, so injected
+    script does not run in the first place (see the security implementation
+    guide, and mind Flutter's own CanvasKit and font origins)
+  - keep access tokens short-lived
+  - have the server keep the refresh token in an `httpOnly`, `Secure`,
+    `SameSite` cookie, so it never reaches `localStorage` at all
+- A `wrapKey` web option only moves the key into the JavaScript bundle, which
+  the same script can read; it is not a fix
+
+### Usage Examples
+--- criterion 2: docs/guides/security/audit.md
+#### MEDIUM: On web, tokens sit in localStorage beside their key
+
+**Status:** Open - an adopter decision for any app that ships the web target.
+
+`SecureStorageService` passes no web options, so on Flutter web
+`flutter_secure_storage_web` stores the tokens in `window.localStorage`,
+AES-GCM encrypted, with the raw AES key stored right beside them. Any script
+running on the origin reads and decrypts both the access and the refresh
+token. Native platforms are unaffected (Keystore, Keychain).
+
+**Recommendation:** for a web deployment, send a strict Content-Security-Policy
+response header, keep access tokens short-lived, and keep the refresh token in
+an `httpOnly`, `Secure`, `SameSite` cookie set by the server rather than in
+client storage. See [Storage - Web](../../api/core/storage.md#platform-specific-behavior).
+
+## 3. Code Security
+--- the facts, from the locked plugin source
+40:        : web.window.localStorage;
+183:            await _crypto.subtle.exportKey('raw', encryptionKey).toDart;
+--- SecureStorageService constructor (no webOptions)
+  SecureStorageService()
+    : _storage = const FlutterSecureStorage(
+        iOptions: iosOptions,
+        mOptions: macOsOptions,
+      );
+$ dart run tool/check_docs.dart
+OK: documentation checks passed.

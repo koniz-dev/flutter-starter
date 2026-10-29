@@ -1,0 +1,6 @@
+$ mutant: lib/core/network/realtime/raw_websocket_client.dart passes null instead of _sslPinning.createHttpClient() (the pre-fix transport)
+00:00 +0 -1: with pinning in effect the handshake goes through a pinned client, a fresh one per connection [E]
+00:00 +1 -2: pinning requested without fingerprints pins nothing, as for the API client [E]
+00:00 +3 -3: a real wss:// handshake the pinned certificate is accepted [E]
+00:00 +4 -3: Some tests failed.
+Failing tests:

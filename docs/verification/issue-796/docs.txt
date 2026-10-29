@@ -1,0 +1,7 @@
+--- network.md, Realtime Client
+352:- `RawWebSocketClientImpl`: Concrete class powered by the `web_socket_channel` package. Its handshake follows the same pinning policy as `ApiClient`: when pinning is in effect it connects through the pinned `HttpClient` from `SslPinning.createHttpClient()`, so a `wss://` server whose certificate the fingerprints do not name is refused. Pass `sslPinning:` to use a different policy.
+--- audit.md, SSL pinning entry
+93-routed through that callback rather than the platform trust store.
+94:`RawWebSocketClientImpl` opens its `wss://` handshake through the same pinned
+95-`HttpClient` (`SslPinning.createHttpClient()`). Settings
+96-come from `AppConfig.enableSslPinning` and `AppConfig.apiSslFingerprints`
