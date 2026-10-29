@@ -90,7 +90,9 @@ SHA-256s the presented certificate's DER bytes and compares it against the
 configured pin set (`SslPinning.createAdapter()` in
 `lib/core/network/ssl_pinning.dart`). The
 `HttpClient` is built with an empty `SecurityContext()`, so every connection is
-routed through that callback rather than the platform trust store. Settings
+routed through that callback rather than the platform trust store.
+`RawWebSocketClientImpl` opens its `wss://` handshake through the same pinned
+`HttpClient` (`SslPinning.createHttpClient()`). Settings
 come from `AppConfig.enableSslPinning` and `AppConfig.apiSslFingerprints`
 (`lib/core/config/app_config.dart`), which read `ENABLE_SSL_PINNING`
 and `API_SSL_FINGERPRINTS` from the environment (`.env.example:34-39`).
