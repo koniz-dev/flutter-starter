@@ -1,6 +1,12 @@
 # Performance Optimization Guide
 
-This document provides a comprehensive guide to the performance optimizations implemented in the Flutter Starter app, along with before/after metrics and best practices.
+How to keep a Flutter app built on this starter fast, and which of the starter's
+performance pieces already run. Only startup initialisation, the image cache
+limits and HTTP response caching are wired in as shipped; the other utilities
+below (`Debouncer`, `Throttler`, `PaginationHelper`, `LazyLoader`,
+`ProviderDisposal`, `OptimizedListView`, `OptimizedImage`) are building blocks
+no screen calls yet - see the [summary](./summary.md). No numbers on this page
+were measured on this starter; measure your own app.
 
 ## Table of Contents
 
@@ -49,14 +55,6 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
 #### Lazy Provider Initialization
 Providers are initialized only when needed, reducing initial memory footprint.
 
-### Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Cold Start Time | ~800ms | ~600ms | **25% faster** |
-| Warm Start Time | ~300ms | ~200ms | **33% faster** |
-| Initial Memory | ~45MB | ~35MB | **22% reduction** |
-
 ### Best Practices
 
 1. **Defer Heavy Operations**: Move non-critical initialization to after first frame
@@ -86,7 +84,6 @@ CacheInterceptor(
 )
 ```
 
-**Impact:** Reduces redundant network requests, improves offline experience. Cache hit rate: 65-75%.
 
 #### Request Debouncing
 **New Utility:** `Debouncer` for search and input operations
@@ -102,7 +99,6 @@ onChanged: (value) {
 }
 ```
 
-**Impact:** Reduces API calls by 60-80% for search operations.
 
 #### Request Throttling
 **New Utility:** `Throttler` for scroll and resize events
@@ -116,15 +112,6 @@ onScroll: () {
   });
 }
 ```
-
-### Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| API Calls (Search) | 10-15/sec | 2-3/sec | **80% reduction** |
-| Cache Hit Rate | 0% | 65-75% | **New feature** |
-| Average Response Time | 450ms | 180ms (cached) | **60% faster** |
-| Network Data Usage | 100% | 40-50% | **50% reduction** |
 
 ### Best Practices
 
@@ -194,20 +181,11 @@ class MyScreenState extends ConsumerState<MyScreen> with ProviderDisposal {
 **Features:**
 - Automatic resource disposal
 - Provider subscription tracking
-- Image cache management on low memory
+- It does **not** touch the image cache; clear that yourself (`ImageCacheHelper.clearCache()`) if your app needs to
 - Memory leak prevention
 
 #### Proper Resource Disposal
 All controllers and resources are properly disposed in widget lifecycle.
-
-### Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Memory Leaks | 2-3 detected | 0 detected | **100% fixed** |
-| Peak Memory Usage | ~180MB | ~120MB | **33% reduction** |
-| Image Cache Size | Unlimited | 100MB max | **Controlled** |
-| Memory Growth Rate | +5MB/min | +1MB/min | **80% reduction** |
 
 ### Best Practices
 
@@ -223,29 +201,19 @@ All controllers and resources are properly disposed in widget lifecycle.
 ### Optimizations Implemented
 
 #### Dependency Analysis
-Removed unused dependencies (already done in codebase):
-- `cached_network_image` (not used)
-- `flutter_screenutil` (not used)
-- `go_router` (not used)
-- `hive` (not used)
-- And more...
+Keep `pubspec.yaml` to what the app uses. The starter does not depend on
+`cached_network_image`, `flutter_screenutil` or `hive`; `go_router` *is* used -
+it is the app router. `flutter pub deps` and `dart pub outdated` show what you
+pull in.
 
 #### Code Splitting
-Use deferred imports for large features with the new `LazyLoader` utility:
+Dart splits code with deferred imports, declared in the importing file;
+`DeferredImportLoader` makes loading one idempotent:
 
 ```dart
-// Using LazyLoader
-final lazyLoader = LazyLoader<String, Widget>(
-  loader: (key) async {
-    final module = await import('package:app/features/$key.dart');
-    return module.createWidget();
-  },
-);
+// At the top of the file that uses the feature:
+// import 'package:my_app/features/heavy_feature.dart' deferred as heavy;
 
-// Load when needed
-final widget = await lazyLoader.load('feature_name');
-
-// Or use DeferredImportLoader
 final loader = DeferredImportLoader(
   loadFunction: () => heavy.loadLibrary(),
 );
@@ -278,14 +246,6 @@ await loader.load();
 - Dependency count analysis
 - Optimization recommendations
 - Asset size reporting
-
-### Metrics
-
-| Platform | Before | After | Improvement |
-|----------|--------|-------|-------------|
-| Android APK | ~25MB | ~18MB | **28% smaller** |
-| iOS IPA | ~30MB | ~22MB | **27% smaller** |
-| Web Bundle | ~2.5MB | ~1.8MB | **28% smaller** |
 
 ### Best Practices
 
@@ -367,15 +327,6 @@ if (paginationHelper.shouldPrefetch(scrollPosition)) {
 }
 ```
 
-### Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Average FPS | 52 FPS | 58 FPS | **12% improvement** |
-| Frame Build Time | 18ms | 12ms | **33% faster** |
-| Janky Frames | 8% | 2% | **75% reduction** |
-| Scroll Performance | Good | Excellent | **Smooth 60 FPS** |
-
 *Illustrative comparison only — profile on your own targets and devices.*
 
 ### Best Practices
@@ -444,13 +395,13 @@ What you can record when a real service is wired:
 1. **App Launch Time**
    ```bash
    # Use Flutter DevTools or:
-   adb shell am start -W -n com.example.app/.MainActivity
+   adb shell am start -W -n com.example.flutter_starter/.MainActivity
    ```
 
 2. **Memory Usage**
    ```bash
    # Use Flutter DevTools Memory tab
-   # Or: adb shell dumpsys meminfo com.example.app
+   # Or: adb shell dumpsys meminfo com.example.flutter_starter
    ```
 
 3. **Frame Rate**
