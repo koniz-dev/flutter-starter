@@ -2,12 +2,14 @@
 // RawWebSocketClientImpl writes - its log lines and the cancellation error a
 // caller may forward to crash reporting - used to carry the full URL.
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_starter/core/network/realtime/raw_websocket_client.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class _RecordingOutput extends LogOutput {
   final List<String> lines = [];
@@ -82,5 +84,36 @@ void main() {
     );
 
     expect(logs.lines.join('\n'), contains('/socket?room=lobby'));
+  });
+
+  // A server refusing the upgrade - what an expired token gets - makes
+  // dart:io throw an error quoting the full URL. connect() rethrew it.
+  test('a refused handshake rethrows an error without the token or the '
+      'userinfo password', () async {
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => server.close(force: true));
+    server.listen((request) {
+      request.response.statusCode = HttpStatus.forbidden;
+      unawaited(request.response.close());
+    });
+    final client = RawWebSocketClientImpl(sslPinning: _noPinning);
+
+    Object? thrown;
+    try {
+      await client.connect(
+        'ws://user:hunter2@127.0.0.1:${server.port}/s?token=SECRET&room=lobby',
+      );
+    } on Object catch (e) {
+      thrown = e;
+    }
+
+    expect(thrown, isA<WebSocketChannelException>());
+    expect('$thrown', isNot(contains('SECRET')));
+    expect('$thrown', isNot(contains('hunter2')));
+    // What the caller needs to diagnose it is kept.
+    expect('$thrown', contains('not upgraded'));
+    expect('$thrown', contains('room=lobby'));
+    expect((thrown! as WebSocketChannelException).inner, isNull);
+    expect(logs.lines.join('\n'), isNot(contains('hunter2')));
   });
 }
