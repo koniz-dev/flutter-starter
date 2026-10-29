@@ -1,6 +1,7 @@
 // Stripped baseline: keep bootstrap minimal (docs live in repo docs).
 // ignore_for_file: public_member_api_docs
 
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,9 +85,13 @@ Future<void> main() => bootstrap();
 /// one built by [createAppContainer] with overrides (a recording error
 /// reporter, say) and drives the real startup sequence through it. The
 /// startup failure screen's Try again re-runs it with the same factory.
+///
+/// [releaseMode] is `kReleaseMode` unless a test stands in for a release
+/// build, which a test run can never be.
 @visibleForTesting
 Future<void> bootstrap({
   ProviderContainer Function() createContainer = createAppContainer,
+  bool releaseMode = kReleaseMode,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -130,6 +135,13 @@ Future<void> bootstrap({
         'base URL would fall back to localhost and SSL pinning would be off.',
       );
     }
+    if (AppConfig.releaseBuiltAsDevelopment(releaseMode: releaseMode)) {
+      throw StateError(
+        'This release build is configured as ENVIRONMENT=development, which '
+        'registers the debug routes and turns HTTP logging on. Build it with '
+        'ENVIRONMENT=staging or production.',
+      );
+    }
 
     // Storage initialization runs the schema migrations. It is the one startup
     // step that can fail with the user's local data on the line.
@@ -164,7 +176,10 @@ Future<void> bootstrap({
     runApp(
       StartupFailureApp(
         error: error,
-        onRetry: () => bootstrap(createContainer: createContainer),
+        onRetry: () => bootstrap(
+          createContainer: createContainer,
+          releaseMode: releaseMode,
+        ),
       ),
     );
     return;
