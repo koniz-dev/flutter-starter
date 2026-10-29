@@ -78,16 +78,16 @@ void main() {
   });
 
   test(
-    'a development run reports both the APK and the comparison bundle',
+    'a staging run reports both the APK and the comparison bundle',
     () async {
-      final run = await _run('development');
+      final run = await _run('staging');
 
       expect(run.output, contains('APK Size:'));
       expect(run.output, contains('App Bundle Size:'));
     },
   );
 
-  for (final environment in ['production', 'staging', 'development']) {
+  for (final environment in ['production', 'staging']) {
     test('criterion 2 ($environment): every flutter build carries the '
         'ENVIRONMENT and BASE_URL defines', () async {
       final run = await _run(environment);
@@ -100,6 +100,37 @@ void main() {
       }
     });
   }
+
+  // Every artifact it builds is a release build, and a release build
+  // configured as development refuses to start.
+  test('development is refused before anything is built', () async {
+    final dir = Directory.systemTemp.createTempSync('build_all_dev_');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final bin = Directory('${dir.path}/bin')..createSync();
+    final stub = File('${bin.path}/flutter')..writeAsStringSync(_stubFlutter);
+    Process.runSync('chmod', ['+x', stub.path]);
+    Directory('${dir.path}/scripts/ci').createSync(recursive: true);
+    File(
+      'scripts/ci/build_all.sh',
+    ).copySync('${dir.path}/scripts/ci/build_all.sh');
+    final log = File('${dir.path}/flutter.log');
+
+    final result = await Process.run(
+      'bash',
+      ['scripts/ci/build_all.sh', 'development'],
+      workingDirectory: dir.path,
+      environment: {
+        'PATH': '${bin.path}:${Platform.environment['PATH']}',
+        'STUB_LOG': log.path,
+        'OSTYPE': 'linux-gnu',
+      },
+    );
+
+    expect(result.exitCode, isNot(0));
+    expect('${result.stdout}', contains('refuses to start'));
+    expect('${result.stdout}', contains('flutter run'));
+    expect(log.existsSync(), isFalse, reason: 'flutter was never called');
+  });
 
   test(
     'criterion 3: the script no longer claims an ABI split it never does',

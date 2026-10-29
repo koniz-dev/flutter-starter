@@ -32,12 +32,13 @@ on:
       # --flavor made `flutter build apk` fail with
       # "Task 'assembleDevelopmentRelease' not found".
       environment:
+        # No `development`: these jobs build release artifacts, and a release
+        # build configured as development refuses to start (lib/main.dart).
         description: 'Value passed as --dart-define=ENVIRONMENT'
         required: true
-        default: 'development'
+        default: 'staging'
         type: choice
         options:
-          - development
           - staging
           - production
       base_url:

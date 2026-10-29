@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
     *)
       echo -e "${RED}Unknown option: $1${NC}"
       echo "Usage: ./scripts/ci/build_all.sh [environment] [--analyze-size]"
-      echo "Valid environments: development, staging, production"
+      echo "Valid environments: staging, production"
       exit 1
       ;;
   esac
@@ -42,17 +42,22 @@ if [ -z "$ENVIRONMENT" ]; then
   ENVIRONMENT="production"
 fi
 
-if [ "$ENVIRONMENT" != "development" ] && [ "$ENVIRONMENT" != "staging" ] && [ "$ENVIRONMENT" != "production" ]; then
+# Every artifact below is a release build, and a release build configured as
+# development refuses to start (lib/main.dart): stop before building one.
+if [ "$ENVIRONMENT" == "development" ]; then
+    echo -e "${RED}Error: build_all.sh builds release artifacts, and a release build configured as development refuses to start.${NC}"
+    echo "Use staging or production here; for a development build, use flutter run (or --profile)."
+    exit 1
+fi
+
+if [ "$ENVIRONMENT" != "staging" ] && [ "$ENVIRONMENT" != "production" ]; then
     echo -e "${RED}Error: Invalid environment '$ENVIRONMENT'${NC}"
-    echo "Valid environments: development, staging, production"
+    echo "Valid environments: staging, production"
     exit 1
 fi
 
 # Set base URL based on environment
 case $ENVIRONMENT in
-    development)
-        BASE_URL="http://localhost:3000"
-        ;;
     staging)
         BASE_URL="${BASE_URL_STAGING:-https://api-staging.example.com}"
         ;;
