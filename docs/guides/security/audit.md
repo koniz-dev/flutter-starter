@@ -133,6 +133,21 @@ shapes. Redaction matches key names, so a token under an unexpected key is
 still logged. See
 [Security Implementation Guide](./implementation.md#3-log-sanitization).
 
+#### LOW: Android backup is left on by default
+
+**Status:** Open - an adopter decision. `android/app/src/main/AndroidManifest.xml`
+sets no `allowBackup`, `fullBackupContent` or `dataExtractionRules`, so Android's
+defaults apply: shared preferences go to cloud backup and to a device-to-device
+transfer. The tokens there are Keystore-wrapped ciphertext that cannot be
+decrypted on another device - `flutter_secure_storage` fails with
+`InvalidKeyException: Failed to unwrap key`, wipes it, and the user signs in
+again - but the plaintext preferences (the cached user, the unauthenticated
+HTTP cache) move as they are.
+
+**Recommendation:** exclude them from both cloud backup and D2D transfer, with
+`dataExtractionRules` for Android 12+ and `fullBackupContent` for earlier
+versions. See [Security Implementation Guide](./implementation.md#step-3-create-backup-rules).
+
 #### MEDIUM: On web, tokens sit in localStorage beside their key
 
 **Status:** Open - an adopter decision for any app that ships the web target.
