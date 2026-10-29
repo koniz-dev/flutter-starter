@@ -205,6 +205,10 @@ class ApiLoggingInterceptor extends Interceptor {
     return utf8.decode(bytes, allowMalformed: true);
   }
 
+  /// A backslash, spelled by code unit: `r'\'` reads to the docs tooling's
+  /// declaration scanner as an escaped quote that never closes.
+  static final String _backslash = String.fromCharCode(0x5C);
+
   /// Where an authority begins, as `Uri.parse` and dart:io see it: after an
   /// optional `scheme:`, two characters that are each `/` or `\`. So
   /// `ws:\\user:pass@host` and `//user:pass@host` have userinfo too - and
@@ -226,7 +230,7 @@ class ApiLoggingInterceptor extends Interceptor {
     if (authority != null) {
       final authorityStart = authority.end;
       var authorityEnd = text.length;
-      for (final delimiter in const ['/', r'\', '?', '#']) {
+      for (final delimiter in ['/', _backslash, '?', '#']) {
         final index = text.indexOf(delimiter, authorityStart);
         if (index >= 0 && index < authorityEnd) authorityEnd = index;
       }
