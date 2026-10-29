@@ -379,10 +379,30 @@ class AuthInterceptor extends Interceptor {
         return super.onError(err, handler);
       }
 
+      // A 401 for a request sent under a session that has since ended - its
+      // user signed out, and maybe someone else signed in - says nothing about
+      // the session that is current now. Refreshing would rotate the *current*
+      // user's credentials and replay the ended session's request as them, and
+      // with nothing stored it would log out whoever is signing in. Neither
+      // happens: the request just fails.
+      if (!_issuedUnderCurrentSession(err.requestOptions)) {
+        _reject(handler, err);
+        return;
+      }
+
       return await _handle401Error(err, handler);
     }
 
     super.onError(err, handler);
+  }
+
+  /// Whether [options] was sent under the session that is current now.
+  ///
+  /// [onRequest] stamps the generation on every API-origin request; one with
+  /// no stamp never went through it, and is judged by its 401 alone as before.
+  bool _issuedUnderCurrentSession(RequestOptions options) {
+    final issuedUnder = options.extra[_issuedUnderGenerationKey];
+    return issuedUnder is! int || _sessionGeneration.isCurrent(issuedUnder);
   }
 
   /// Whether [options] goes to the API's own origin - the scheme, host and
@@ -744,7 +764,12 @@ class AuthInterceptor extends Interceptor {
     _pendingRequests.clear();
 
     for (final pending in requests) {
-      if (newToken == null || !_sessionGeneration.isCurrent(generation)) {
+      // The last check covers a request that queued under an older session
+      // than the refresh's, which onError already turns away; kept here so the
+      // drain never replays one as the newer user whatever path queued it.
+      if (newToken == null ||
+          !_sessionGeneration.isCurrent(generation) ||
+          !_issuedUnderCurrentSession(pending.error.requestOptions)) {
         _reject(pending.handler, pending.error);
         continue;
       }
