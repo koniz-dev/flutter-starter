@@ -1,0 +1,17 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_logout_between_writes_test.dart
+00:00 +0: a logout during the access-token write leaves no token behind and fails the refresh
+00:00 +1: a logout during the refresh-token write fails the refresh
+00:00 +1 -1: a logout during the refresh-token write fails the refresh [E]
+  Expected: <Instance of 'ResultFailure<String>'>
+    Actual: Success<String>:<Success<String>(new-access)>
+     Which: is not an instance of 'ResultFailure<String>'
+  
+  package:matcher                                                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18                                  expect
+  test/features/auth/data/repositories/refresh_logout_between_writes_test.dart 89:5   main.expectStale
+  test/features/auth/data/repositories/refresh_logout_between_writes_test.dart 122:5  main.<fn>
+  
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_logout_between_writes_test.dart: a logout during the refresh-token write fails the refresh
