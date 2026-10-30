@@ -266,8 +266,10 @@ and [`docs/deployment/ios-deployment.md`](../../deployment/ios-deployment.md):
 ### With Obfuscation
 
 Always use obfuscation for production builds. A release build needs
-`ENVIRONMENT=production` (it refuses to start as `development`) and, on Android,
-the signing key in `android/key.properties`:
+`ENVIRONMENT=production` (it refuses to start as `development`), a non-empty
+`API_SSL_FINGERPRINTS` in `.env.production` (it refuses to start with pinning on
+and nothing to pin; see section 1) and, on Android, the signing key in
+`android/key.properties`:
 
 ```bash
 # Android APK

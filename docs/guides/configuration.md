@@ -413,6 +413,7 @@ flutter run \
 flutter build apk \
   --dart-define=ENVIRONMENT=production \
   --dart-define=BASE_URL=https://api.example.com \
+  --dart-define=API_SSL_FINGERPRINTS="$API_SSL_FINGERPRINTS" \
   --dart-define=ENABLE_ANALYTICS=true \
   --dart-define=ENABLE_CRASH_REPORTING=true
 ```
