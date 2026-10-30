@@ -46,7 +46,7 @@ The `freerasp` package is listed in `pubspec.yaml` for teams that want runtime a
 `ApiClient._createDio` installs an `IOHttpClientAdapter` whose
 `badCertificateCallback` SHA-256s the presented certificate's DER bytes and
 accepts the connection only if that digest is in the configured pin set
-(`lib/core/network/api_client.dart:75-101`). The `HttpClient` is constructed
+(`SslPinning.createAdapter()` in `lib/core/network/ssl_pinning.dart`). The `HttpClient` is constructed
 with an empty `SecurityContext()`, so the platform trust store is bypassed and
 every certificate goes through the callback.
 
@@ -61,7 +61,11 @@ stronger guarantees, enforce them on the server side, for example with HSTS
 and Certificate Transparency monitoring. There is no app-side substitute.
 
 The pin set and the on/off switch come from `AppConfig`
-(`lib/core/config/app_config.dart:110-141`):
+(`apiSslFingerprints` and `enableSslPinning` in `lib/core/config/app_config.dart`):
+
+<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning.createAdapter -->
+<!-- symbol: lib/core/config/app_config.dart AppConfig.apiSslFingerprints -->
+<!-- symbol: lib/core/config/app_config.dart AppConfig.enableSslPinning -->
 
 | Setting | Env variable | Default |
 |---|---|---|
@@ -93,7 +97,7 @@ API_SSL_FINGERPRINTS=aabbccddeeff...,bbccddeeffaa...
 ENABLE_SSL_PINNING=true
 ```
 
-`.env.example:34-39` already carries both keys, empty.
+`.env.example` already carries both keys, empty.
 
 #### Step 3: Verify it is actually on
 
