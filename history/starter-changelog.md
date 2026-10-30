@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`.env.production` and `.env.staging` are now git-ignored). `build.yml`'s
   manual input now defaults to `staging`, and `build_all.sh development`
   exits with an explanation.
+- **`freerasp` is no longer a dependency; RASP is opt-in.** It linked a
+  closed-source SDK and several Android permissions (`READ_GSERVICES`,
+  `USE_BIOMETRIC`, SMS/call package queries, ...) into every release, even
+  with RASP off. `FreeRaspServiceImpl` and its tests now ship as
+  `.dart.template` files. If you bound `FreeRaspServiceImpl`, run
+  `flutter pub add freerasp:^8.2.4` and rename the three templates back to
+  `.dart` (security implementation guide, section 7, step 1).
 - **A staging or production release needs `API_SSL_FINGERPRINTS`.** Pinning
   is on there by default, and a release with pinning on and no fingerprints
   used to run unpinned in silence; it now refuses to start through the
