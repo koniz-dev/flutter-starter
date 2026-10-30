@@ -64,6 +64,17 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# A percentage, e.g. 80 or 79.5. bc prints nothing for anything else, and an
+# empty (( )) is false, so the threshold check below would report a pass.
+is_percent() {
+  [[ "$1" =~ ^[0-9]+(\.[0-9]+)?$ ]]
+}
+
+if ! is_percent "$MIN_COVERAGE"; then
+  echo -e "${RED}--min must be a number (e.g. --min=80), got '${MIN_COVERAGE}'${NC}"
+  exit 1
+fi
+
 # Run tests with coverage (unless skipped)
 if [ "$SKIP_TEST" = false ]; then
 echo -e "${BLUE}Running tests with coverage...${NC}"
@@ -160,7 +171,10 @@ echo -e "${YELLOW}Calculating coverage...${NC}"
 
 # The same per-record line count CI uses: every file, all layers.
 read -r COVERED_LINES TOTAL_LINES <<< "$(bash "$LAYER_SCRIPT" --pattern='.' "$FILTERED")"
-if [ "$TOTAL_LINES" -gt 0 ]; then
+if ! [[ "$COVERED_LINES" =~ ^[0-9]+$ && "$TOTAL_LINES" =~ ^[0-9]+$ ]]; then
+  # Left unmeasured rather than 0, which a --min=0 run would pass.
+  COVERAGE_PERCENT="unmeasured"
+elif [ "$TOTAL_LINES" -gt 0 ]; then
   COVERAGE_PERCENT=$(awk "BEGIN {printf \"%.2f\", ($COVERED_LINES / $TOTAL_LINES) * 100}")
 else
   COVERAGE_PERCENT=0
@@ -261,11 +275,14 @@ if [ "$ANALYZE_COVERAGE" = true ]; then
 fi
 
 # Check against minimum threshold (after analysis if requested)
-  if (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
-    echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
+if ! is_percent "$COVERAGE_PERCENT"; then
+  echo -e "${RED}✗ Could not measure coverage (got '${COVERAGE_PERCENT}'), so the threshold check fails${NC}"
   EXIT_CODE=1
-  else
-    echo -e "${GREEN}✓ Coverage ${COVERAGE_PERCENT}% meets minimum threshold of ${MIN_COVERAGE}%${NC}"
+elif (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
+  echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
+  EXIT_CODE=1
+else
+  echo -e "${GREEN}✓ Coverage ${COVERAGE_PERCENT}% meets minimum threshold of ${MIN_COVERAGE}%${NC}"
   EXIT_CODE=0
 fi
 
