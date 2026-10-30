@@ -8,7 +8,7 @@ The logging layer provides:
 - `LoggingService` - Core logging management
 - `LogOutput` implementations - Console and file outputs (`lib/core/logging/log_output.dart`)
 - `IErrorReporter` - The crash reporting seam `LoggingService.error` forwards to (see [Error reporting](#error-reporting))
-- `JsonLogFormatter` - JSON log printer used outside development (`lib/core/logging/log_output.dart`)
+- `JsonLogFormatter` - JSON log printer used in production; staging and development use `PrettyPrinter` (`lib/core/logging/log_output.dart`)
 - `loggingServiceProvider` - Riverpod provider for dependency injection (`lib/core/logging/logging_providers.dart`)
 
 Worked examples - a use case, a repository and an API client logging with
