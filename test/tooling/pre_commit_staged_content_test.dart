@@ -109,6 +109,58 @@ void main() {
     );
   });
 
+  // A monorepo: the app depends on a package beside the repository through a
+  // relative `path:`, which pub records relative to .dart_tool/. Copied into
+  // the temporary export unchanged, it resolved to nothing and every commit
+  // failed analyze. The space checks the percent-encoded form too.
+  group('with a path dependency outside the repository', () {
+    setUp(() {
+      final shared = '${root.path}/shared lib';
+      write(
+        shared,
+        'pubspec.yaml',
+        'name: shared\nenvironment:\n  sdk: ^3.0.0\n',
+      );
+      write(shared, 'lib/shared.dart', 'int shared() => 1;\n');
+      write(
+        repo,
+        'pubspec.yaml',
+        'name: probe\nenvironment:\n  sdk: ^3.0.0\n'
+            'dependencies:\n  shared:\n    path: "../shared lib"\n',
+      );
+      write(
+        repo,
+        'lib/uses_shared.dart',
+        "import 'package:shared/shared.dart';\n\nint uses() => shared();\n",
+      );
+      git(['add', '.']);
+      git(['commit', '-q', '--no-verify', '-m', 'chore: depend on shared']);
+      pubGet(repo);
+    });
+
+    test('a clean staged change commits', () {
+      write(repo, 'lib/clean.dart', _formatted);
+      git(['add', 'lib/clean.dart']);
+
+      final result = git(['commit', '-m', 'feat: clean']);
+
+      expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    });
+
+    test('a staged format or analyze violation still fails', () {
+      write(repo, 'lib/probe.dart', _unformatted);
+      git(['add', 'lib/probe.dart']);
+      final format = git(['commit', '-m', 'feat: probe']);
+      expect(format.exitCode, isNot(0), reason: '${format.stdout}');
+
+      write(repo, 'lib/probe.dart', 'int probe() => nope;\n');
+      git(['add', 'lib/probe.dart']);
+      final analyze = git(['commit', '-m', 'feat: probe']);
+      expect(analyze.exitCode, isNot(0), reason: '${analyze.stdout}');
+      expect('${analyze.stderr}${analyze.stdout}', contains('flutter analyze'));
+    });
+  });
+
   test("inside a linked worktree it checks that worktree's index", () {
     final worktree = '${root.path}/wt';
     expect(git(['worktree', 'add', '-q', worktree]).exitCode, 0);
