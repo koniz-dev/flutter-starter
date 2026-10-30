@@ -99,7 +99,8 @@ class CacheConfig {
 /// Keys are a SHA-256 of the request URL ([cacheKeyFor]), never the URL
 /// itself, so a token in a query string is not written to disk as part of a
 /// key or of the key index. Entries written under the old verbatim-URL keys
-/// and listed in the index are removed the first time a GET passes through.
+/// and listed in the index are removed the first time a request passes
+/// through, with caching enabled or not.
 ///
 /// ## How an entry is aged
 ///
@@ -197,13 +198,16 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // First, and whether or not caching is on: entries an earlier version
+    // stored under a verbatim URL can hold a query-string secret, and with
+    // caching disabled nothing else would ever touch them again.
+    await _purgeLegacyEntries();
+
     // Only cache GET requests
     if (!_cacheConfig.enableCache ||
         !_cacheableMethods.contains(options.method.toUpperCase())) {
       return super.onRequest(options, handler);
     }
-
-    await _purgeLegacyEntries();
 
     // Check if request should bypass cache
     if (await _shouldBypassCache(options)) {
