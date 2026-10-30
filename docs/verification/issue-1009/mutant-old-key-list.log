@@ -1,0 +1,29 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/sensitive_key_sig_auth_test.dart
+00:00 +0: sig and auth are secrets; signal and author are not
+00:00 +0 -1: sig and auth are secrets; signal and author are not [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/sensitive_key_sig_auth_test.dart 18:5  main.<fn>
+  
+00:00 +0 -1: an Azure SAS GET is neither cached nor logged with its sig
+00:00 +0 -2: an Azure SAS GET is neither cached nor logged with its sig [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_bf7aa4907e38924f6f557f6df5e37a17e934820bb7e1f3ce3e2067d2847924c4',
+              'http_cache_timestamp_http_cache_bf7aa4907e38924f6f557f6df5e37a17e934820bb7e1f3ce3e2067d2847924c4',
+              'http_cache_index'
+            ]
+  no body, timestamp or index entry
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/network/interceptors/sensitive_key_sig_auth_test.dart 39:5  main.<fn>
+  
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/sensitive_key_sig_auth_test.dart: an Azure SAS GET is neither cached nor logged with its sig
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/sensitive_key_sig_auth_test.dart: sig and auth are secrets; signal and author are not

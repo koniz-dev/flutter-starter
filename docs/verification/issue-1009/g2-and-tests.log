@@ -1,0 +1,12 @@
+708001ded1c fix(security): treat sig and auth query keys as secrets in log redaction and the HTTP cache (#1014)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/sensitive_key_sig_auth_test.dart
+00:00 +0: sig and auth are secrets; signal and author are not
+00:00 +1: an Azure SAS GET is neither cached nor logged with its sig
+00:00 +2: All tests passed!
+tests exit=0
+865:- The request's query has no key that names a secret, by the same rule `ApiLoggingInterceptor` redacts with (`ApiLoggingInterceptor.isSensitiveKey`: `token`, `otp`, `signature`, `sig`, `auth`, `api_key` and the rest; see the redaction table). A verification or reset link, a one-time code or a presigned URL is about that secret, and the store is plaintext, so such a request neither reads from nor writes to the cache - **when its secret travels under one of those key names**. The rule judges key names only; a presigned URL whose signature parameter has another name is not recognised, and its key belongs in the list. A query that does not parse is treated the same way. Only query **keys** are judged: a secret in a path segment (`/reset/<token>`) is not recognised, as it is not by the log redaction, so do not put one there.
+975:| Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid`, `sig` (Azure SAS signature), `auth` (Firebase REST ID token) | `pin`, but not `shipping`; `sig`, but not `signal`; `auth`, but not `author` |
