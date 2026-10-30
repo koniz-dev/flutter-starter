@@ -47,6 +47,7 @@ class _Remote implements AuthRemoteDataSource {
 /// but not yet returned to the caller.
 class _Store extends InMemoryTokenStore {
   Future<void> Function()? onAccessWrite;
+  Future<void> Function()? onRefreshWrite;
 
   @override
   Future<bool> setAccessToken(String token) async {
@@ -56,29 +57,35 @@ class _Store extends InMemoryTokenStore {
     if (hook != null) await hook();
     return true;
   }
+
+  @override
+  Future<bool> setRefreshToken(String token) async {
+    refreshToken = token;
+    final hook = onRefreshWrite;
+    onRefreshWrite = null;
+    if (hook != null) await hook();
+    return true;
+  }
 }
 
 void main() {
-  test('a logout during the access-token write leaves no token behind and '
-      'fails the refresh', () async {
-    final tokens = _Store()
+  late _Store tokens;
+  late AuthRepositoryImpl repository;
+
+  setUp(() {
+    tokens = _Store()
       ..accessToken = 'old-access'
       ..refreshToken = 'old-refresh';
-    final repository = AuthRepositoryImpl(
+    repository = AuthRepositoryImpl(
       remoteDataSource: _Remote(),
       localDataSource: AuthLocalDataSourceImpl(
         storageService: InMemoryKeyValueStore(),
         tokenStore: tokens,
       ),
     );
-    tokens.onAccessWrite = () async {
-      await repository.logout();
-    };
+  });
 
-    final result = await repository.refreshToken();
-
-    expect(tokens.refreshToken, isNull, reason: 'signed out, so nothing left');
-    expect(tokens.accessToken, isNull);
+  void expectStale(Result<String> result) {
     expect(result, isA<ResultFailure<String>>());
     expect(
       (result as ResultFailure<String>).failure,
@@ -88,5 +95,30 @@ void main() {
         AuthErrorCodes.sessionTerminated,
       ),
     );
+  }
+
+  test('a logout during the access-token write leaves no token behind and '
+      'fails the refresh', () async {
+    tokens.onAccessWrite = () async {
+      await repository.logout();
+    };
+
+    final result = await repository.refreshToken();
+
+    expect(tokens.refreshToken, isNull, reason: 'signed out, so nothing left');
+    expect(tokens.accessToken, isNull);
+    expectStale(result);
+  });
+
+  test('a logout during the refresh-token write fails the refresh', () async {
+    tokens.onRefreshWrite = () async {
+      await repository.logout();
+    };
+
+    final result = await repository.refreshToken();
+
+    expect(tokens.refreshToken, isNull);
+    expect(tokens.accessToken, isNull);
+    expectStale(result);
   });
 }
