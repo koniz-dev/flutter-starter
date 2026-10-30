@@ -1,49 +1,54 @@
 #!/usr/bin/env bash
-# Installs repository hooks from .githooks/ into .git/hooks/
-# (.githooks/ is the single source of truth — do not duplicate hook bodies here.)
+# Points this repository's git hooks at .githooks/ (core.hooksPath).
+#
+# The hooks used to be copied into .git/hooks/, which git ignores whenever
+# core.hooksPath is set (a global setting, a husky-style setup): the script
+# printed "installed" and nothing ever ran. Copies also went stale - a fix to
+# .githooks/ never reached an existing clone. Pointing core.hooksPath at the
+# tracked directory runs the current hooks, in every worktree, and running
+# this twice changes nothing.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
-HOOK_SRC="$ROOT/.githooks"
-HOOK_DST="$ROOT/.git/hooks"
-
-if [ ! -d "$HOOK_SRC" ]; then
-  echo "❌ Missing $HOOK_SRC"
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "❌ Not inside a Git repository: $ROOT"
   exit 1
 fi
 
-if [ ! -d "$HOOK_DST" ]; then
-  echo "❌ Not a Git repository (no .git/hooks). Run from repo root."
-  exit 1
-fi
-
-required=(pre-commit commit-msg pre-push)
-for name in "${required[@]}"; do
-  if [ ! -f "$HOOK_SRC/$name" ]; then
-    echo "❌ Required hook missing: $HOOK_SRC/$name"
+for name in pre-commit commit-msg pre-push; do
+  if [ ! -x ".githooks/$name" ]; then
+    echo "❌ Required hook missing or not executable: .githooks/$name"
     exit 1
   fi
 done
 
-echo "🔧 Installing hooks from .githooks/ → .git/hooks/ ..."
-shopt -s nullglob
-for f in "$HOOK_SRC"/*; do
-  base="$(basename "$f")"
-  # Only executable hook scripts (no accidental README etc.)
-  case "$base" in
-    pre-commit|commit-msg|pre-push)
-      cp "$f" "$HOOK_DST/$base"
-      chmod 755 "$HOOK_DST/$base"
-      echo "   ✓ $base"
-      ;;
-  esac
-done
-shopt -u nullglob
+# A repository-local hooksPath somebody chose is theirs: say so, do not
+# overwrite it. A global one is overridden for this repository only.
+local_path="$(git config --local --get core.hooksPath || true)"
+if [ -n "$local_path" ] && [ "$local_path" != ".githooks" ]; then
+  echo "❌ This repository already sets core.hooksPath to '$local_path',"
+  echo "   so git runs the hooks there, not .githooks/. Either:"
+  echo "     git config --local core.hooksPath .githooks   # use this repo's hooks"
+  echo "   or call .githooks/* from your own hooks in '$local_path'."
+  exit 1
+fi
+global_path="$(git config --global --get core.hooksPath || true)"
 
-echo ""
-echo "✅ Git hooks installed."
+git config --local core.hooksPath .githooks
+
+# Verify with git itself: this is the directory it will run hooks from.
+resolved="$(git rev-parse --git-path hooks)"
+if [ "$resolved" != ".githooks" ]; then
+  echo "❌ git still resolves hooks to '$resolved', not .githooks/."
+  exit 1
+fi
+
+echo "✅ Git hooks active: core.hooksPath = .githooks"
+if [ -n "$global_path" ]; then
+  echo "   (overrides your global core.hooksPath '$global_path' for this repository)"
+fi
 echo "   pre-commit  → dart format (scoped) + flutter analyze"
 echo "   commit-msg  → Conventional Commits"
 echo "   pre-push    → flutter test (compact, timeout)"

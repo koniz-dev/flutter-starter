@@ -289,14 +289,19 @@ Hooks are **not** installed by a clone. Install them once:
 ./scripts/dev/setup_git_hooks.sh      # or setup_git_hooks.ps1 on Windows
 ```
 
-That copies `.githooks/*` into `.git/hooks/`: `pre-commit` runs the scoped
+That points this repository's `core.hooksPath` at `.githooks/`, so git runs
+the tracked hooks directly - a later fix to a hook needs no reinstall, and a
+global `core.hooksPath` (a husky-style setup) cannot silently bypass them; a
+repository-local one that points elsewhere makes the script stop and say so.
+`pre-commit` runs the scoped
 `dart format` check and `flutter analyze`, `commit-msg` enforces the format
 above, and `pre-push` runs `flutter test`. Skip them for one command with
 `git commit --no-verify` / `git push --no-verify` — which switches off *every*
 hook, not just the one in your way.
 
-**They are expected to work inside a `git worktree`.** `.git/hooks/` is shared
-by every worktree of a repository, so installing once covers all of them, and
+**They are expected to work inside a `git worktree`.** `core.hooksPath` lives
+in the configuration every worktree of a repository shares, so installing once
+covers all of them, and
 `pre-commit` and `pre-push` now scrub `GIT_DIR` and its siblings out of the
 environment before calling `flutter` or `dart`. Without that, git's exported
 `GIT_DIR` makes the Flutter SDK resolve its own version against *this*
