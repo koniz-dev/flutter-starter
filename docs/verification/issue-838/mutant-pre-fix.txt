@@ -1,0 +1,13 @@
+main @ ca540974182
+$ flutter test test/tooling/coverage_threshold_fail_closed_test.dart
+  test/tooling/coverage_threshold_fail_closed_test.dart 101:7  main.<fn>.<fn>
+  
+00:00 +1 -4: coverage.yml's check_threshold numbers still compare
+00:00 +2 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: coverage.yml's check_threshold a non-numeric target fails
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: coverage.yml's check_threshold an empty or non-numeric measured percentage fails
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: test_coverage.sh --min=abc exits non-zero and says why
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_threshold_fail_closed_test.dart: test_coverage.sh a percentage it cannot measure fails the check
+exit=1

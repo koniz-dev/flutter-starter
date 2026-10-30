@@ -1,0 +1,5 @@
+main @ ca540974182
+$ dart run tool/check_docs.dart
+
+OK: documentation checks passed.
+exit=0

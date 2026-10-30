@@ -1,0 +1,11 @@
+main @ ca540974182
+$ flutter test test/tooling/pre_commit_staged_content_test.dart
+  
+00:03 +0 -2: `git commit <path>` checks the content that path commits
+00:04 +1 -2: inside a linked worktree it checks that worktree's index
+00:07 +2 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: a staged unformatted file is rejected though the working copy is fixed
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: an unstaged broken file does not block a clean staged change
+exit=1

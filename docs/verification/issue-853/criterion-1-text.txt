@@ -1,0 +1,20 @@
+main @ ca540974182
+--- docs/guides/security/implementation.md
+324-
+325:A value in a **path segment** has no key name, so it is never redacted:
+326-`/reset/<token>`, `/invite/<code>` or `/files/<signed-id>` reach the logs, and
+327-the performance trace name, verbatim. Do not design routes that carry a secret
+328-in the path. Send it in a header, in the body, or as a query parameter whose key
+329-name is in the sensitive sets (`?token=...`) instead.
+330-
+--- docs/api/core/network.md
+997-
+998:A secret in a **path segment** is never redacted. Only a query string has key
+999-names to match; `/reset/<token>`, `/invite/<code>` and `/files/<signed-id>` are
+1000-logged, and recorded by `PerformanceInterceptor` as the trace name and
+1001:`http_path` attribute, exactly as written. Keep secrets out of path segments:
+1002-put them in a header, the body, or a query parameter with a sensitive key name.
+1003-
+1004-<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor -->
+1005-
+1006-One named residual: an OAuth **`code`** query parameter is *not* redacted. It is

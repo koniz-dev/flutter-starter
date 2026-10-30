@@ -1,0 +1,21 @@
+main @ ca540974182
+--- remaining pinning references (no line numbers) and their symbol markers
+docs/guides/security/audit.md:90:configured pin set (`SslPinning.createAdapter()` in
+docs/guides/security/audit.md:96:come from `AppConfig.enableSslPinning` and `AppConfig.apiSslFingerprints`
+docs/guides/security/audit.md:98:and `API_SSL_FINGERPRINTS` from the environment (both are in `.env.example`).
+docs/guides/security/audit.md:100:<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
+docs/guides/security/audit.md:105:`.env.example` ships, the adapter is never installed and traffic is **not**
+docs/guides/security/implementation.md:49:(`SslPinning.createAdapter()` in `lib/core/network/ssl_pinning.dart`). The `HttpClient` is constructed
+docs/guides/security/implementation.md:55:pin on Flutter web. There, `SslPinning.createAdapter()` returns `null` and
+docs/guides/security/implementation.md:64:(`apiSslFingerprints` and `enableSslPinning` in `lib/core/config/app_config.dart`):
+docs/guides/security/implementation.md:66:<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning.createAdapter -->
+docs/guides/security/implementation.md:67:<!-- symbol: lib/core/config/app_config.dart AppConfig.apiSslFingerprints -->
+docs/guides/security/implementation.md:68:<!-- symbol: lib/core/config/app_config.dart AppConfig.enableSslPinning -->
+docs/guides/security/implementation.md:72:| `AppConfig.apiSslFingerprints` | `API_SSL_FINGERPRINTS` | empty list |
+docs/guides/security/implementation.md:73:| `AppConfig.enableSslPinning` | `ENABLE_SSL_PINNING` | `true` in staging and production; in development `true` once `API_SSL_FINGERPRINTS` is set, `false` otherwise |
+docs/guides/security/implementation.md:100:`.env.example` already carries both keys, empty.
+docs/guides/security/implementation.md:104:Pinning is decided by `SslPinning.createAdapter()` in
+docs/guides/security/implementation.md:109:<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
+--- mutant: a misspelled marker fails check_docs
+docs/guides/security/implementation.md:66: `SslPinning.createAdapterX` is not declared in lib/core/network/ssl_pinning.dart
+1 problem(s) found.

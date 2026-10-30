@@ -1,0 +1,4 @@
+main @ ca540974182
+$ scripts/test/test_coverage.sh --no-test --min=abc   (in a scratch dir holding a one-record coverage/lcov.info)
+--min must be a number (e.g. --min=80), got 'abc'
+exit=1

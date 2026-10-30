@@ -1,0 +1,9 @@
+main @ ca540974182
+$ grep -n toEntity docs/guides/features/common-tasks.md
+exit=1 (1 = no match)
+main @ ca540974182
+   class ProductModel extends Product {
+     const ProductModel({
+       required super.id,
+96:         return Success(products); // a ProductModel is a Product
+186:       return Success(product);

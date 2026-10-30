@@ -1,0 +1,13 @@
+main @ ca540974182
+$ grep -n 'under 50 characters' CONTRIBUTING.md
+exit=1 (1 = no match)
+### Guidelines
+
+- Use present tense ("add" not "added")
+- Keep the subject short enough to read in `git log --oneline`; there is no
+  fixed limit, and the `commit-msg` hook checks only the format, not the length
+- Start the subject in lowercase, as the examples above do
+- No period at end of subject
+  
+
+### Git hooks

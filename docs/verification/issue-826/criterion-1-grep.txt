@@ -1,0 +1,3 @@
+main @ ca540974182
+$ grep -rn env.example:34-39\|api_client.dart:75-101\|app_config.dart:110-141 docs
+exit=1 (1 = no match)

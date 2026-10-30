@@ -1,0 +1,5 @@
+main @ ca540974182
+ApiLoggingInterceptor.redactPath on a path-segment token vs a query token (throwaway probe test, deleted after the run):
+/reset/s3cr3t-token -> /reset/s3cr3t-token
+/invite/abc123 -> /invite/abc123
+/verify?token=s3cr3t -> /verify?token=***REDACTED***
