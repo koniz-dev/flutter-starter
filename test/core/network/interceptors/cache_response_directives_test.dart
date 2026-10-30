@@ -132,7 +132,7 @@ void main() {
   );
 
   test('with caching disabled, legacy verbatim-URL entries are still removed '
-      'on the first request', () async {
+      'on the first request, whatever its method', () async {
     final disabled = CacheInterceptor(
       storageService: storage,
       cacheConfig: const CacheConfig(enableCache: false),
@@ -143,7 +143,15 @@ void main() {
       ..['http_cache_timestamp_$legacy'] = '2026-10-30T00:00:00.000Z';
     await storage.setStringList('http_cache_index', [legacy]);
 
-    await disabled.onRequest(_get('/anything'), _RequestHandler());
+    // A POST, so the purge is shown to run ahead of the method check too.
+    await disabled.onRequest(
+      RequestOptions(
+        path: '/auth/login',
+        method: 'POST',
+        baseUrl: 'https://api.example.com',
+      ),
+      _RequestHandler(),
+    );
 
     expect(storage.values.containsKey(legacy), isFalse);
     expect(storage.values.containsKey('http_cache_timestamp_$legacy'), isFalse);
