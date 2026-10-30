@@ -142,6 +142,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Quality gate runs the tests that read markdown on a docs-only pull
   request, and checks markdown links on every pull request, so renaming a
   file a document links to fails the gate.
+- The fastlane upload lanes (`upload_internal`, `upload_alpha`, `upload_beta`,
+  `upload_production`, `upload`, `upload_testflight`, `upload_appstore`,
+  `release`) find the artifact they just built. They passed the upload action
+  a path relative to `fastlane/`, which the action resolved from the project
+  root, and failed with "Could not find aab/ipa file".
 - `git-hooks.yml` and `release-scripts.yml` also run on pull requests that
   touch their paths (template repository only, as before), so a broken hook
   or release script no longer merges green.
