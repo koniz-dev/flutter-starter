@@ -1,0 +1,13 @@
+PR 983 head 44c916ad8664d3de0016b64049e9290138230b58, event pull_request
+release scripts (macos-latest): pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939155/job/124173935828
+pre-commit hook in a fresh clone: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087938972/job/124173935347
+Action pins: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087938984/job/124173934714
+Quality gate: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939019/job/124173935249
+Docs check: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939032/job/124173935232
+release scripts (ubuntu-latest): pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939155/job/124173935355
+Strip both-samples-removed + analyze + test: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939235/job/124173936864
+Strip tasks-removed + analyze + test: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939235/job/124173937104
+Strip feature-flags-removed + analyze + test: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939235/job/124173937314
+Strip renamed-both + analyze + test: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939235/job/124173936711
+Strip keep-samples + analyze + test: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087939235/job/124173937084
+Workflow lint: pass https://github.com/koniz-dev/flutter-starter/actions/runs/41087938984/job/124173935308

@@ -1,0 +1,10 @@
+PR 984 head d894ec5ff23 (touches only lib/features/auth and test/features/auth); check runs on that commit:
+Quality gate: success
+Strip feature-flags-removed + analyze + test: success
+Strip both-samples-removed + analyze + test: success
+Strip keep-samples + analyze + test: success
+Strip renamed-both + analyze + test: success
+Strip tasks-removed + analyze + test: success
+files:
+lib/features/auth/data/repositories/auth_repository_impl.dart
+test/features/auth/data/repositories/refresh_logout_between_writes_test.dart

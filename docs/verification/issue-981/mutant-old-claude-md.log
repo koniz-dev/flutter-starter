@@ -1,0 +1,51 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/claude_md_checks_table_test.dart
+00:00 +0: the trigger parser sees the workflows it should
+00:00 +1: criterion 3: the table has one row per PR-triggered workflow
+00:00 +1 -1: criterion 3: the table has one row per PR-triggered workflow [E]
+  Expected: Set:[
+              'strip-smoke.yml',
+              'docs-check.yml',
+              'release-scripts.yml',
+              'git-hooks.yml',
+              'ci.yml',
+              'action-pins.yml',
+              'build.yml'
+            ]
+    Actual: Set:[
+              'ci.yml',
+              'docs-check.yml',
+              'action-pins.yml',
+              'build.yml',
+              'strip-smoke.yml'
+            ]
+     Which: does not contain 'release-scripts.yml'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/claude_md_checks_table_test.dart 98:7  main.<fn>
+  
+00:00 +1 -1: criteria 1-2: each filtered row names every trigger path
+00:00 +1 -2: criteria 1-2: each filtered row names every trigger path [E]
+  Expected: empty
+    Actual: [
+              'release-scripts.yml: scripts/ci/generate_changelog.sh',
+              'release-scripts.yml: scripts/ci/release.sh',
+              'release-scripts.yml: scripts/ci/bump_version.sh',
+              'release-scripts.yml: scripts/test/release_scripts_test.sh',
+              'release-scripts.yml: .github/workflows/release-scripts.yml',
+              'git-hooks.yml: .githooks/**',
+              'git-hooks.yml: scripts/test/pre_commit_hook_test.sh',
+              'git-hooks.yml: .github/workflows/git-hooks.yml'
+            ]
+  CLAUDE.md rows omit: [release-scripts.yml: scripts/ci/generate_changelog.sh, release-scripts.yml: scripts/ci/release.sh, release-scripts.yml: scripts/ci/bump_version.sh, release-scripts.yml: scripts/test/release_scripts_test.sh, release-scripts.yml: .github/workflows/release-scripts.yml, git-hooks.yml: .githooks/**, git-hooks.yml: scripts/test/pre_commit_hook_test.sh, git-hooks.yml: .github/workflows/git-hooks.yml]
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/claude_md_checks_table_test.dart 111:7  main.<fn>
+  
+00:00 +1 -2: the Strip row counts the strip-smoke variants
+00:00 +2 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/claude_md_checks_table_test.dart: criteria 1-2: each filtered row names every trigger path
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/claude_md_checks_table_test.dart: criterion 3: the table has one row per PR-triggered workflow
