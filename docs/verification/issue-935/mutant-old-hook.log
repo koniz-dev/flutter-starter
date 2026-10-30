@@ -1,0 +1,41 @@
+--- hook output without pub get (exit 1) ---
+Running pre-commit checks...
+❌ Dependencies are not resolved (.dart_tool/package_config.json is missing).
+   Run: flutter pub get
+   Nothing was formatted or changed.
+---
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+FAIL  an unstaged format violation failed the hook (exit 1)
+Running pre-commit checks...
+📝 Checking code formatting...
+Formatted lib/main.dart
+Formatted 521 files (1 changed) in 1.63 seconds.
+❌ Code formatting check failed.
+   Fix: ./scripts/dev/format_dart.sh
+   Or: dart format lib test integration_test tool examples
+FAIL  a staged format violation did not fail the hook (exit 0)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+57 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing clone...                                              
+No issues found! (ran in 4.1s)
+✅ Pre-commit checks passed.
+
+2 case(s) failed.

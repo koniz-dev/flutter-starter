@@ -1,0 +1,21 @@
+[41002054977] pre-commit hook in a fresh clone	UNKNOWN STEP	2026-10-30T04:17:50.8114618Z ok    without pub get the hook exits non-zero
+[41002054977] pre-commit hook in a fresh clone	UNKNOWN STEP	2026-10-30T04:17:50.8125094Z ok    without pub get the hook tells the user to run flutter pub get
+[41002054977] pre-commit hook in a fresh clone	UNKNOWN STEP	2026-10-30T04:17:50.8370509Z ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+[41002054977] pre-commit hook in a fresh clone	UNKNOWN STEP	2026-10-30T04:18:14.2189522Z ok    with dependencies resolved the hook exits 0 on a clean tree
+[41002054977] pre-commit hook in a fresh clone	UNKNOWN STEP	2026-10-30T04:18:21.7308759Z FAIL  a real format violation did not fail the hook (exit 0)
+[41002054977] pre-commit hook in a fresh clone	UNKNOWN STEP	2026-10-30T04:18:21.7337176Z 1 case(s) failed.
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:46:32.4972202Z ok    without pub get the hook exits non-zero
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:46:32.4987069Z ok    without pub get the hook tells the user to run flutter pub get
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:46:32.5282772Z ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:46:57.7909617Z ok    with dependencies resolved the hook exits 0 on a clean tree
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:47:06.0910465Z ok    an unstaged format violation over a clean index does not fail the hook
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:47:07.6052669Z ok    with dependencies resolved the hook fails on a staged format violation
+[41083708408] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T15:47:07.6054015Z All pre-commit hook cases passed.
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:04.1639870Z ok    without pub get the hook exits non-zero
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:04.1648542Z ok    without pub get the hook tells the user to run flutter pub get
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:04.1880111Z ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:25.2568323Z ok    with dependencies resolved the hook exits 0 on a clean tree
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:32.0794203Z ok    an unstaged format violation over a clean index does not fail the hook
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:33.2705920Z ok    with dependencies resolved the hook fails on a staged format violation
+[41086082491] pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-10-30T16:02:33.2706826Z All pre-commit hook cases passed.
+{"conclusion":"success","event":"push","headBranch":"main","headSha":"aeb1bb30f79a15394ece5604cd3307c62357d6d7"}
