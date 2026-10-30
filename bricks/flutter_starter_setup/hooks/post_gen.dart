@@ -494,7 +494,8 @@ Future<void> _patchPlatformIdentifiers({
     // FreeRASP compares the *running* app's identity against these literals.
     // Left at the template values it flags the renamed app as repackaged, or -
     // worse, the check being a no-op by default - validates nothing at all.
-    'lib/core/security/infrastructure/freerasp_service_impl.dart',
+    // An opt-in template, renamed into place by adopters who enable RASP.
+    'lib/core/security/infrastructure/freerasp_service_impl.dart.template',
   ];
 
   final patched = <String>[];

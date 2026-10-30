@@ -13,8 +13,9 @@ What is in the box:
   complete slice each.
 - **Configuration** layered from `.env`, `--dart-define` and per-environment
   defaults ([Configuration](docs/guides/configuration.md)).
-- **Optional hardening**: certificate pinning, and RASP via `freerasp`, which
-  is a no-op until you wire it ([Security](docs/guides/security/implementation.md)).
+- **Optional hardening**: certificate pinning, and an opt-in RASP template for
+  `freerasp`, which is not a dependency until you add it
+  ([Security](docs/guides/security/implementation.md)).
 - **Tests** mirroring `lib/` (unit and widget), acceptance goldens, and Patrol
   end-to-end tests in `integration_test/`.
 - **Tooling**: Conventional Commits and format/analyze hooks, CI on every pull

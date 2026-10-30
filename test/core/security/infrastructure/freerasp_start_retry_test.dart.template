@@ -1,3 +1,5 @@
+// TEMPLATE: For use after renaming `freerasp_service_impl.dart.template` to
+// `.dart` and adding freerasp; rename this file to `.dart` with it.
 // A failed startProtection() must stay retryable, and concurrent calls must
 // start protection once.
 //
