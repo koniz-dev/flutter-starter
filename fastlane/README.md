@@ -175,13 +175,34 @@ Fastlane lanes support environment-specific builds:
 # Android
 fastlane android upload_production \
   environment:production \
-  base_url:https://api.example.com
+  base_url:https://api.example.com \
+  ssl_fingerprints:"$API_SSL_FINGERPRINTS"
 
 # iOS
 fastlane ios upload_appstore \
   environment:production \
-  base_url:https://api.example.com
+  base_url:https://api.example.com \
+  ssl_fingerprints:"$API_SSL_FINGERPRINTS"
 ```
+
+### Certificate pinning
+
+Pinning is on in staging and production, and a release built with pinning on
+and no fingerprints refuses to start. So every build lane (`build_bundle`,
+`build_apk`, `build_appstore`, `build_adhoc`, and the upload lanes that call
+them) needs one of:
+
+- `ssl_fingerprints:<list>`, or the `API_SSL_FINGERPRINTS` environment
+  variable: your server's SHA-256 fingerprints, comma-separated, colons
+  optional. Each must be 64 hex digits.
+- `ssl_pinning:false`, or `ENABLE_SSL_PINNING=false`: ship without pinning,
+  on purpose.
+
+With neither, a staging or production lane stops before it builds. The upload
+lanes pass both options on to the build lane. The rules live in
+[`ssl_pinning.rb`](ssl_pinning.rb), and match
+[`scripts/ci/ssl_pinning_defines.sh`](../scripts/ci/ssl_pinning_defines.sh),
+which the shell build paths use.
 
 ## 📝 Changelog
 
