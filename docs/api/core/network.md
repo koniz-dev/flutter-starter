@@ -363,8 +363,9 @@ realtimeClient.stream.listen((data) {
   print('Received real-time event: $data');
 });
 
-// Send payload
-realtimeClient.send({'type': 'ping'});
+// Send payload: a String or bytes - encode anything else yourself; the
+// client hands the value to the socket as is.
+realtimeClient.send(jsonEncode({'type': 'ping'}));
 
 // Disconnect
 realtimeClient.disconnect();
@@ -642,8 +643,11 @@ Every step of the teardown is independently guarded and best-effort, and no step
 
 **Excluded Endpoints:**
 
-Taken from `ApiEndpoints`, and matched with `path.contains(endpoint)` against
-the request path:
+Taken from `ApiEndpoints`, and matched **exactly** against the request's path
+relative to the base URL - the query string and a trailing slash ignored. Not
+`contains`: a route that merely contains one, such as
+`/users/auth/login-history`, is an ordinary authenticated route and refreshes
+like any other:
 
 - `/auth/login` (`ApiEndpoints.login`)
 - `/auth/register` (`ApiEndpoints.register`)
