@@ -30,7 +30,9 @@ abstract class IKeyValueStore {
 /// `AuthRepositoryImpl.refreshToken()` and `AuthInterceptor` check the session
 /// immediately before a write and rely on a logout's later clear removing it.
 /// `SecureTokenStore` queues its operations to guarantee this, because the
-/// platform store does not on every target. An in-memory store whose methods
+/// platform store does not on every target; its queue is shared by every
+/// store over the same `SecureStorageService`, so the components touching the
+/// tokens must use one service (or one store). An in-memory store whose methods
 /// complete synchronously meets it trivially.
 abstract class ITokenStore {
   Future<String?> getAccessToken();

@@ -443,7 +443,7 @@ AuthInterceptor({
 | Parameter | Required | Notes |
 |---|---|---|
 | `tokenStore` | no | Where tokens are read and written |
-| `secureStorageService` | no | Legacy alternative to `tokenStore`; wrapped in a `SecureTokenStore` |
+| `secureStorageService` | no | Legacy alternative to `tokenStore`; wrapped in a `SecureTokenStore`. Pass the same `SecureStorageService` the repository's token store uses: token operations are ordered per service, and a separate service would let a logout's clear land before a refresh write on web |
 | `refreshToken` | **yes** | Callback that mints a new access token |
 | `retryDioFactory` | no | Builds the client used to replay the original request; see [retryDioFactory](#retrydiofactory) |
 | `keyValueStore` | no | Non-sensitive store holding the cached user blob, cleared on forced logout |

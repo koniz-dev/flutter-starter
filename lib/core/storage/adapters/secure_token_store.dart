@@ -21,6 +21,15 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// applies, on every platform, without clearing anything a newer session
 /// wrote.
 ///
+/// The queue belongs to the [SecureStorageService] underneath, not to this
+/// object: every `SecureTokenStore` built over the same service shares it.
+/// It used to be a field of each store, so the store `AuthInterceptor` builds
+/// for itself from `secureStorageService:` and the one the repository uses
+/// ordered their own calls but not each other's - and a logout's clear on one
+/// could again land before a refresh write on the other. Two stores over two
+/// different `SecureStorageService` objects still do not share a queue, so the
+/// app builds one service (`secureStorageServiceProvider`).
+///
 /// The cost: one platform call that never completes holds every later token
 /// operation behind it, the token read on each request and a logout's clear
 /// included. Keychain and Keystore failures surface as errors, which do not
@@ -31,22 +40,30 @@ class SecureTokenStore implements ITokenStore {
 
   final SecureStorageService _secureStorageService;
 
-  /// Tail of the operation queue; null while idle.
-  Future<void>? _queue;
+  /// The operation queue of each backing service, shared by every store over
+  /// it.
+  static final Expando<_OperationQueue> _queues = Expando<_OperationQueue>(
+    'SecureTokenStore operation queue',
+  );
 
-  /// Runs [operation] once every operation issued before it has settled. A
-  /// failed operation does not wedge the queue.
+  _OperationQueue get _queue =>
+      _queues[_secureStorageService] ??= _OperationQueue();
+
+  /// Runs [operation] once every operation issued before it, through any
+  /// store over the same service, has settled. A failed operation does not
+  /// wedge the queue.
   Future<T> _inOrder<T>(Future<T> Function() operation) {
-    final previous = _queue;
+    final queue = _queue;
+    final previous = queue.tail;
     final done = Completer<void>();
-    _queue = done.future;
+    queue.tail = done.future;
     Future<T> run() async {
       try {
         if (previous != null) await previous;
         return await operation();
       } finally {
         done.complete();
-        if (identical(_queue, done.future)) _queue = null;
+        if (identical(queue.tail, done.future)) queue.tail = null;
       }
     }
 
@@ -110,4 +127,9 @@ class SecureTokenStore implements ITokenStore {
       throw CacheException('Failed to delete $key from secure storage');
     }
   }
+}
+
+/// Tail of one backing service's operation queue; null while idle.
+class _OperationQueue {
+  Future<void>? tail;
 }
