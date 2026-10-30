@@ -862,6 +862,7 @@ Only responses that satisfy **all** of these:
 - Method is `GET`.
 - Status is exactly `200`.
 - The request carries no `cache-control: no-cache` / `no-store`, and no `authorization` or `cookie` header the caller attached itself.
+- The **response** carries no `Cache-Control` `no-store` or `private` directive and no `Set-Cookie`. Those mark a body the server does not want in a shared or persistent cache - an anonymous email-verification or password-reset check, a presigned download - and it is passed through without being written.
 - **There is no session credential.** Before every cache read and every cache write, the interceptor asks the same `ITokenStore` that `AuthInterceptor` authenticates from whether an access token exists. If one does, the request neither reads from nor writes to the cache and goes straight to the network.
 
 **Authenticated responses are therefore never cached, and a response cached while signed out is never replayed to a signed-in request.** A signed-in app gets no HTTP response caching at all - that is deliberate, and it is the reason the plaintext store below is acceptable.
@@ -872,7 +873,7 @@ The credential check reads the token store rather than sniffing the outgoing `Au
 
 In `StorageService`, i.e. **`shared_preferences`** - `/data/data/<pkg>/shared_prefs/*.xml` on Android, the app's `NSUserDefaults` plist on iOS. That is **plaintext**: readable on a rooted or jailbroken device and included in unencrypted device backups. It is not `SecureStorageService`.
 
-Keys are `http_cache_<uri>_<queryParameters>` for the body and `http_cache_timestamp_<body key>` for the write time, plus `http_cache_index`, a `StringList` of every body key currently written.
+Keys are `http_cache_<sha256 of the request URL>` for the body and `http_cache_timestamp_<body key>` for the write time, plus `http_cache_index`, a `StringList` of every body key currently written. The URL is hashed, query included, so a token in a query string is never written to disk as a key or in the index. Entries an earlier version stored under the verbatim URL are removed the first time the cache is used.
 
 The write time is stored through `DateFormatter.formatIso8601`, so it is UTC and always carries the `Z` designator, and read back through `DateFormatter.parseIso8601`. Age is then the distance between two absolute instants and does not move when the device's UTC offset does - it used to be a bare local `DateTime.now().toIso8601String()`, which writes no designator at all, so a flight or a DST transition aged every earlier entry out by the offset. An offset-less entry already on the device is still read as local wall clock, exactly as before, and is rewritten in the new form on the first refetch.
 
