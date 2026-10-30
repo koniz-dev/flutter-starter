@@ -68,6 +68,12 @@ class DioExceptionMapper {
         );
 
       case DioExceptionType.unknown:
+        // A domain exception an interceptor already chose - AuthInterceptor's
+        // REQUEST_BODY_NOT_REPLAYABLE, say - is the answer; replacing it with
+        // UNKNOWN_NETWORK_ERROR threw away the reason the caller is told to
+        // check for.
+        final carried = exception.error;
+        if (carried is AppException) return carried;
         // Check if it's actually a network error
         if ((exception.message?.contains('SocketException') ?? false) ||
             (exception.message?.contains('Network is unreachable') ?? false)) {
