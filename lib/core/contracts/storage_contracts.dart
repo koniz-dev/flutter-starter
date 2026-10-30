@@ -24,6 +24,14 @@ abstract class IKeyValueStore {
 }
 
 /// Dedicated token/session storage contract.
+///
+/// An implementation must apply its operations in the order they are issued:
+/// a clear issued after a write lands after that write. The session guards in
+/// `AuthRepositoryImpl.refreshToken()` and `AuthInterceptor` check the session
+/// immediately before a write and rely on a logout's later clear removing it.
+/// `SecureTokenStore` queues its operations to guarantee this, because the
+/// platform store does not on every target. An in-memory store whose methods
+/// complete synchronously meets it trivially.
 abstract class ITokenStore {
   Future<String?> getAccessToken();
   Future<bool> setAccessToken(String token);

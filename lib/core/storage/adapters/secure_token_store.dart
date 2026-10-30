@@ -20,6 +20,11 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// browser. Queuing here makes the order the code issues the order the store
 /// applies, on every platform, without clearing anything a newer session
 /// wrote.
+///
+/// The cost: one platform call that never completes holds every later token
+/// operation behind it, the token read on each request and a logout's clear
+/// included. Keychain and Keystore failures surface as errors, which do not
+/// hold the queue; a call that hangs outright would.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   SecureTokenStore(this._secureStorageService);
