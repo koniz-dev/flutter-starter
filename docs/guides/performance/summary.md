@@ -2,131 +2,42 @@
 
 ## Overview
 
-This document provides a comprehensive summary of all performance optimizations implemented in the Flutter Starter app, including before/after metrics and implementation details.
+What this starter does for performance, split into two kinds:
 
-## Performance Metrics Summary
+- **Wired in** - runs in the app as shipped.
+- **Building blocks** - tested utilities and widgets for your own screens. No
+  screen in this starter calls them yet (see the "Exercised by a running
+  screen?" column in [design decisions](../../architecture/design-decisions.md)),
+  so they change nothing until you use them.
 
-### App Launch Time
+This page reports no before/after numbers. None were measured on this
+starter, and a building block nothing calls cannot have improved anything.
+Measure your own app with the steps under [Testing Performance](#testing-performance).
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Cold Start Time | ~800ms | ~600ms | **25% faster** |
-| Warm Start Time | ~300ms | ~200ms | **33% faster** |
-| Initial Memory | ~45MB | ~35MB | **22% reduction** |
+## Wired In
 
-**Optimizations:**
-- Parallel initialization of environment config and image cache
-- Image cache pre-configuration (100 images, 100MB limit)
-- Lazy provider initialization
-- RepaintBoundary optimizations
+| What | Where |
+|---|---|
+| Environment config and image cache initialised in parallel at startup | `bootstrap()` in `lib/main.dart` |
+| Image cache capped at 100 images / 100 MB | `_initializeImageCache()` in `lib/main.dart` |
+| HTTP response caching for unauthenticated GETs | `CacheInterceptor`, installed by `ApiClient` |
+| Optional HTTP timing traces | `PerformanceInterceptor`, when a performance service is wired |
+| Build size report | `scripts/ci/build_all.sh --analyze-size` |
 
-### Network Performance
+## Building Blocks (not called by any screen yet)
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| API Calls (Search) | 10-15/sec | 2-3/sec | **80% reduction** |
-| Cache Hit Rate | 0% | 65-75% | **New feature** |
-| Average Response Time | 450ms | 180ms (cached) | **60% faster** |
-| Network Data Usage | 100% | 40-50% | **50% reduction** |
+| Utility | Location |
+|---|---|
+| `OptimizedImage` | `lib/shared/widgets/optimized_image.dart` |
+| `OptimizedListView` (pagination, prefetch) | `lib/shared/widgets/optimized_list_view.dart` |
+| `PaginationHelper` | `lib/core/utils/pagination_helper.dart` |
+| `Debouncer`, `Throttler` | `lib/core/utils/debouncer.dart` |
+| `LazyLoader` (caching; deferred imports are yours to declare) | `lib/core/utils/lazy_loader.dart` |
+| `ProviderDisposal` mixin (disposal bookkeeping; it does **not** touch the image cache) | `lib/core/utils/provider_disposal.dart` |
+| `ImageCacheHelper`, `MemoryHelper` | `lib/core/utils/` |
+| `IPerformanceService` and helpers | `lib/core/performance/` (see also `examples/performance_examples.dart`) |
 
-**Optimizations:**
-- HTTP response caching (CacheInterceptor integrated in ApiClient)
-- Request debouncing (Debouncer utility)
-- Request throttling (Throttler utility)
-- Image optimization and caching
-
-### Memory Management
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Memory Leaks | 2-3 detected | 0 detected | **100% fixed** |
-| Peak Memory Usage | ~180MB | ~120MB | **33% reduction** |
-| Image Cache Size | Unlimited | 100MB max | **Controlled** |
-| Memory Growth Rate | +5MB/min | +1MB/min | **80% reduction** |
-
-**Optimizations:**
-- Image cache management (ImageCacheHelper)
-- Memory leak detection (ProviderDisposal mixin)
-- Proper resource disposal
-- Automatic cache clearing on low memory
-
-### Build Size
-
-| Platform | Before | After | Improvement |
-|----------|--------|-------|-------------|
-| Android APK | ~25MB | ~18MB | **28% smaller** |
-| iOS IPA | ~30MB | ~22MB | **27% smaller** |
-| Web Bundle | ~2.5MB | ~1.8MB | **28% smaller** |
-
-**Optimizations:**
-- Removed unused dependencies
-- Code splitting with deferred imports (LazyLoader utility)
-- Asset optimization guidelines
-- Build size analysis script (`scripts/ci/build_all.sh --analyze-size`)
-
-### UI Performance
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Average FPS | 52 FPS | 58 FPS | **12% improvement** |
-| Frame Build Time | 18ms | 12ms | **33% faster** |
-| Janky Frames | 8% | 2% | **75% reduction** |
-| Scroll Performance | Good | Excellent | **Smooth 60 FPS** |
-
-**Optimizations:**
-- Const constructors throughout
-- RepaintBoundary for complex widgets
-- OptimizedListView with pagination
-- Performance monitoring utilities
-
----
-
-## New Utilities & Widgets
-
-### Core Utilities
-
-1. **OptimizedImage** (`lib/shared/widgets/optimized_image.dart`)
-   - Efficient image loading with automatic caching
-   - Placeholder and error handling
-   - Memory-efficient loading with optional preloading
-
-2. **OptimizedListView** (`lib/shared/widgets/optimized_list_view.dart`)
-   - Built-in pagination support
-   - Automatic prefetching
-   - Loading and error states
-   - RepaintBoundary for each item
-
-3. **PaginationHelper** (`lib/core/utils/pagination_helper.dart`)
-   - Pagination state management
-   - Automatic prefetching based on scroll position
-   - Scroll position tracking extensions
-
-4. **LazyLoader** (`lib/core/utils/lazy_loader.dart`)
-   - Lazy loading with automatic caching
-   - Deferred import management
-   - Resource initialization helpers
-
-5. **ProviderDisposal** (`lib/core/utils/provider_disposal.dart`)
-   - Automatic resource disposal
-   - Provider lifecycle management
-   - Memory leak prevention
-   - Image cache management on low memory
-
-### Existing Utilities
-
-- `lib/core/network/interceptors/cache_interceptor.dart` - HTTP response caching
-- `lib/core/utils/debouncer.dart` - Debouncing and throttling utilities
-- `lib/core/utils/image_cache_helper.dart` - Image cache management
-- `lib/core/performance/` — `IPerformanceService`, mixins, and providers (see also `examples/performance_examples.dart`)
-- `lib/core/utils/memory_helper.dart` - Memory management utilities
-
-### Scripts
-
-1. **Build Size Analysis** (`scripts/ci/build_all.sh --analyze-size`)
-   - Automatic APK/App Bundle size analysis
-   - Dependency count analysis
-   - Optimization recommendations
-   - Asset size reporting
+<!-- symbol: lib/main.dart bootstrap -->
 
 ---
 
@@ -288,12 +199,12 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
 
 1. **App Launch Time**
    ```bash
-   adb shell am start -W -n com.example.app/.MainActivity
+   adb shell am start -W -n com.example.flutter_starter/.MainActivity
    ```
 
 2. **Memory Usage**
    ```bash
-   adb shell dumpsys meminfo com.example.app
+   adb shell dumpsys meminfo com.example.flutter_starter
    ```
 
 3. **Frame Rate**
@@ -320,7 +231,7 @@ imageCache.maximumSizeBytes = 100 << 20; // 100 MB
 - Monitor performance in debug mode
 - Optimize assets before adding to project
 - Remove unused dependencies regularly
-- Use deferred imports for large features
+- Use deferred imports (`import ... deferred as`) for large features
 
 ### DON'T
 - Don't call `setState` during build
