@@ -8,6 +8,7 @@
 # thing - the two files deliberately do not share a convention.
 
 require 'shellwords'
+require_relative '../../fastlane/ssl_pinning'
 
 # Default platform
 default_platform(:ios)
@@ -65,11 +66,16 @@ platform :ios do
 
     # Build IPA using Flutter. `--export-method app-store` is the default, but
     # stating it keeps this lane readable next to build_adhoc.
+    # Pinning: refused here, before building, when a staging or production
+    # build has neither fingerprints nor an explicit opt-out - such a release
+    # refuses to start. See fastlane/ssl_pinning.rb.
+    pinning = SslPinning.lane_defines(environment, options)
     sh("cd #{REPO_ROOT} && flutter build ipa " \
        "--release " \
        "--export-method app-store " \
        "--dart-define=ENVIRONMENT=#{Shellwords.escape(environment)} " \
-       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
+       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)} " \
+       "#{pinning}")
 
     # IPA path
     # Absolute: lane code runs in ios/fastlane/, but fastlane runs every
@@ -97,11 +103,16 @@ platform :ios do
 
     # Without --export-method the export is app-store, which is NOT installable
     # on the ad-hoc devices this lane exists to serve.
+    # Pinning: refused here, before building, when a staging or production
+    # build has neither fingerprints nor an explicit opt-out - such a release
+    # refuses to start. See fastlane/ssl_pinning.rb.
+    pinning = SslPinning.lane_defines(environment, options)
     sh("cd #{REPO_ROOT} && flutter build ipa " \
        "--release " \
        "--export-method ad-hoc " \
        "--dart-define=ENVIRONMENT=#{Shellwords.escape(environment)} " \
-       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
+       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)} " \
+       "#{pinning}")
 
     # Absolute: lane code runs in ios/fastlane/, but fastlane runs every
     # action from ios/, so the relative path would name a file outside the
@@ -128,7 +139,8 @@ platform :ios do
     skip_metadata = options.fetch(:skip_metadata, true)
 
     # Build IPA
-    ipa_path = build_appstore(environment: environment, base_url: base_url)
+    ipa_path = build_appstore(environment: environment, base_url: base_url,
+                              **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     # Upload to App Store Connect
     deliver(
@@ -153,7 +165,8 @@ platform :ios do
     groups = options[:groups] || ["Internal Testers"] # TestFlight groups
 
     # Build IPA
-    ipa_path = build_appstore(environment: environment, base_url: base_url)
+    ipa_path = build_appstore(environment: environment, base_url: base_url,
+                              **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     # Upload to TestFlight
     pilot(
@@ -176,7 +189,8 @@ platform :ios do
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     # Build and upload
-    ipa_path = build_appstore(environment: environment, base_url: base_url)
+    ipa_path = build_appstore(environment: environment, base_url: base_url,
+                              **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     # Upload and submit
     deliver(
