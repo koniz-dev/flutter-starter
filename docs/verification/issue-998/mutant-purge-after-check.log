@@ -1,0 +1,25 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart
+00:00 +0: a response the server marks as not for this cache is not stored Cache-Control: no-store
+00:00 +1: a response the server marks as not for this cache is not stored Cache-Control: private
+00:00 +2: a response the server marks as not for this cache is not stored Cache-Control: max-age=60, Private
+00:00 +3: a response the server marks as not for this cache is not stored Cache-Control: private="set-cookie"
+00:00 +4: a response the server marks as not for this cache is not stored Set-Cookie
+00:00 +5: a response the server marks as not for this cache is not stored Cache-Control: no-cache
+00:00 +6: a response the server marks as not for this cache is not stored Pragma: no-cache
+00:00 +7: a response the server marks as not for this cache is not stored while a response with no such directive is stored
+00:00 +8: a refusing response removes the entry an earlier one stored
+00:00 +9: a query value is in no stored key and not in the index
+00:00 +10: with caching disabled, legacy verbatim-URL entries are still removed on the first request
+00:00 +10 -1: with caching disabled, legacy verbatim-URL entries are still removed on the first request [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                        expect
+  test/core/network/interceptors/cache_response_directives_test.dart 148:5  main.<fn>
+  
+00:00 +10 -1: entries stored under a verbatim URL key are removed on first use, and the hashed ones kept
+00:00 +11 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: with caching disabled, legacy verbatim-URL entries are still removed on the first request

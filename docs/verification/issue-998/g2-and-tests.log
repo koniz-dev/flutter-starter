@@ -1,0 +1,21 @@
+36f278ab7cc fix(security): purge the legacy verbatim-URL cache entries even when caching is disabled (#1011)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart
+00:00 +0: a response the server marks as not for this cache is not stored Cache-Control: no-store
+00:00 +1: a response the server marks as not for this cache is not stored Cache-Control: private
+00:00 +2: a response the server marks as not for this cache is not stored Cache-Control: max-age=60, Private
+00:00 +3: a response the server marks as not for this cache is not stored Cache-Control: private="set-cookie"
+00:00 +4: a response the server marks as not for this cache is not stored Set-Cookie
+00:00 +5: a response the server marks as not for this cache is not stored Cache-Control: no-cache
+00:00 +6: a response the server marks as not for this cache is not stored Pragma: no-cache
+00:00 +7: a response the server marks as not for this cache is not stored while a response with no such directive is stored
+00:00 +8: a refusing response removes the entry an earlier one stored
+00:00 +9: a query value is in no stored key and not in the index
+00:00 +10: with caching disabled, legacy verbatim-URL entries are still removed on the first request, whatever its method
+00:00 +11: entries stored under a verbatim URL key are removed on first use, and the hashed ones kept
+00:00 +12: All tests passed!
+tests exit=0
+877:Keys are `http_cache_<sha256 of the request URL>` for the body and `http_cache_timestamp_<body key>` for the write time, plus `http_cache_index`, a `StringList` of every body key currently written. The URL is hashed, query included, so a token in a query string is never written to disk as a key or in the index. Entries an earlier version stored under the verbatim URL, and listed in `http_cache_index`, are removed the first time any request passes through, whether `CacheConfig.enableCache` is on or off; an entry written before the index existed cannot be found and stays until the app's data is cleared.
