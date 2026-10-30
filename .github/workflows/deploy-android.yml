@@ -117,6 +117,7 @@ jobs:
       # - name: Build App Bundle
       #   env:
       #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS }}
       #   run: |
       #     ENV="${{ steps.env.outputs.environment }}"
       #     if [ "$ENV" == "staging" ]; then
@@ -125,10 +126,18 @@ jobs:
       #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
       #     fi
           
+      #     # Refuses an empty API_SSL_FINGERPRINTS unless ENABLE_SSL_PINNING
+      #     # is false: a release with pinning on and nothing to pin refuses
+      #     # to start. env: above reads the fingerprints from the repository
+      #     # variable; set ENABLE_SSL_PINNING: 'false' there to ship unpinned.
+      #     . scripts/ci/ssl_pinning_defines.sh
+      #     ssl_pinning_defines "$ENV" || exit 1
+      #
       #     flutter build appbundle \
       #       --release \
       #       --dart-define=ENVIRONMENT="$ENV" \
-      #       --dart-define=BASE_URL="$BASE_URL"
+      #       --dart-define=BASE_URL="$BASE_URL" \
+      #       "${SSL_PINNING_DEFINES[@]}"
 
       # - name: Setup Google Play
       #   uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5

@@ -140,6 +140,7 @@ jobs:
       # - name: Build IPA
       #   env:
       #     BASE_URL: ${{ secrets.BASE_URL_PRODUCTION }}
+      #     API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS }}
       #     APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       #     APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -151,10 +152,18 @@ jobs:
       #       BASE_URL="${{ secrets.BASE_URL_PRODUCTION }}"
       #     fi
           
+      #     # Refuses an empty API_SSL_FINGERPRINTS unless ENABLE_SSL_PINNING
+      #     # is false: a release with pinning on and nothing to pin refuses
+      #     # to start. env: above reads the fingerprints from the repository
+      #     # variable; set ENABLE_SSL_PINNING: 'false' there to ship unpinned.
+      #     . scripts/ci/ssl_pinning_defines.sh
+      #     ssl_pinning_defines "$ENV" || exit 1
+      #
       #     flutter build ipa \
       #       --release \
       #       --dart-define=ENVIRONMENT="$ENV" \
-      #       --dart-define=BASE_URL="$BASE_URL"
+      #       --dart-define=BASE_URL="$BASE_URL" \
+      #       "${SSL_PINNING_DEFINES[@]}"
 
       # - name: Upload to App Store Connect
       #   env:

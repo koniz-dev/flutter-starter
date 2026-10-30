@@ -70,6 +70,21 @@ echo -e "${BLUE}Building for environment: $ENVIRONMENT${NC}"
 echo "Base URL: $BASE_URL"
 echo ""
 
+# Pinning is on in staging and production, and a release with pinning on and
+# no fingerprints refuses to start (lib/main.dart): pass API_SSL_FINGERPRINTS
+# through, or the explicit ENABLE_SSL_PINNING=false, and refuse otherwise -
+# before anything is cleaned or built.
+# shellcheck source=scripts/ci/ssl_pinning_defines.sh
+. "$(dirname "$0")/ssl_pinning_defines.sh"
+if ! ssl_pinning_defines "$ENVIRONMENT"; then
+    exit 1
+fi
+DEFINES=(
+    "--dart-define=ENVIRONMENT=$ENVIRONMENT"
+    "--dart-define=BASE_URL=$BASE_URL"
+    "${SSL_PINNING_DEFINES[@]}"
+)
+
 # Clean previous builds
 echo -e "${YELLOW}Cleaning previous builds...${NC}"
 flutter clean
@@ -114,13 +129,11 @@ echo -e "${YELLOW}Building Android...${NC}"
 if [ "$ENVIRONMENT" == "production" ]; then
     flutter build appbundle \
         --release \
-        --dart-define=ENVIRONMENT=$ENVIRONMENT \
-        --dart-define=BASE_URL=$BASE_URL
+        "${DEFINES[@]}"
     echo -e "${GREEN}✓ Android App Bundle built${NC}"
 else
     flutter build apk \
-        --dart-define=ENVIRONMENT=$ENVIRONMENT \
-        --dart-define=BASE_URL=$BASE_URL
+        "${DEFINES[@]}"
     echo -e "${GREEN}✓ Android APK built${NC}"
 fi
 echo ""
@@ -131,14 +144,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     if [ "$ENVIRONMENT" == "production" ]; then
         flutter build ipa \
             --release \
-            --dart-define=ENVIRONMENT=$ENVIRONMENT \
-            --dart-define=BASE_URL=$BASE_URL
+            "${DEFINES[@]}"
         echo -e "${GREEN}✓ iOS IPA built${NC}"
     else
         flutter build ios \
             --no-codesign \
-            --dart-define=ENVIRONMENT=$ENVIRONMENT \
-            --dart-define=BASE_URL=$BASE_URL
+            "${DEFINES[@]}"
         echo -e "${GREEN}✓ iOS build completed${NC}"
     fi
     echo ""
@@ -154,12 +165,10 @@ if [ "$ENVIRONMENT" == "production" ]; then
     # `flutter build web --help`); passing it now aborts the build.
     flutter build web \
         --release \
-        --dart-define=ENVIRONMENT=$ENVIRONMENT \
-        --dart-define=BASE_URL=$BASE_URL
+        "${DEFINES[@]}"
 else
     flutter build web \
-        --dart-define=ENVIRONMENT=$ENVIRONMENT \
-        --dart-define=BASE_URL=$BASE_URL
+        "${DEFINES[@]}"
 fi
 echo -e "${GREEN}✓ Web build completed${NC}"
 echo ""
@@ -184,8 +193,7 @@ if [ "$ANALYZE_SIZE" = true ]; then
     echo "📦 Building App Bundle (recommended for Play Store)..."
     flutter build appbundle \
         --release \
-        --dart-define=ENVIRONMENT=$ENVIRONMENT \
-        --dart-define=BASE_URL=$BASE_URL
+        "${DEFINES[@]}"
   fi
 
   size_bytes() {

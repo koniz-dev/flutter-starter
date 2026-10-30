@@ -103,8 +103,13 @@ jobs:
       # No `flutter pub get` step: build_all.sh runs `flutter clean` and
       # `flutter pub get` itself, and the point is to exercise the script
       # exactly as an adopter would.
+      # build_all.sh refuses a staging or production build with no
+      # fingerprints, because that release would refuse to start. Like the
+      # keystore above, this one is a throwaway: the artifacts are never run.
       - name: Run scripts/ci/build_all.sh
         shell: bash
+        env:
+          API_SSL_FINGERPRINTS: ${{ vars.API_SSL_FINGERPRINTS || '0000000000000000000000000000000000000000000000000000000000000000' }}
         run: |
           set -o pipefail
           ./scripts/ci/build_all.sh "${{ inputs.environment }}" 2>&1 \
