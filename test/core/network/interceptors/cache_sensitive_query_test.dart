@@ -66,6 +66,18 @@ void main() {
     });
   }
 
+  test('a query written into the path is caught as well', () async {
+    await respond(
+      RequestOptions(
+        path: '/auth/verify?token=s3cr3t',
+        method: 'GET',
+        baseUrl: 'https://api.example.com',
+      ),
+    );
+
+    expect(cacheKeys(), isEmpty);
+  });
+
   test('a non-sensitive query is still cached', () async {
     await respond(_get({'page': '2'}));
 
