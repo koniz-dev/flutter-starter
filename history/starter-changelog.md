@@ -61,6 +61,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   names the inner error type instead of quoting dart:io's message.
 - The default `NoOpRealtimeClient` prints only in debug builds, the URL
   redacted, and a sent payload's type rather than its content.
+- `AuthRepositoryImpl.refreshToken()` checks the session before each of its
+  two credential writes and before returning. A logout that landed during the
+  access-token write used to leave the new refresh token on a signed-out
+  device.
 
 ### Fixed
 
@@ -115,6 +119,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Quality gate runs the tests that read markdown on a docs-only pull
   request, and checks markdown links on every pull request, so renaming a
   file a document links to fails the gate.
+- `git-hooks.yml` and `release-scripts.yml` also run on pull requests that
+  touch their paths (template repository only, as before), so a broken hook
+  or release script no longer merges green.
 
 ### Documentation
 
