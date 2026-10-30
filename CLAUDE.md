@@ -96,8 +96,8 @@ make verification worthless.
 ### Which checks a PR gets
 
 The workflows below run on PRs. **Every PR reports Quality gate** - the
-minimum - and Docs check, Action pins and the JDK 25 Android job join only
-when their paths change.
+minimum - and Docs check, Action pins, the JDK 25 Android job, Git hooks
+and Release scripts join only when their paths change.
 While the sample strip is in the tree, every PR also reports its Strip jobs. <!-- strip:strip-tool line -->
 `test/tooling/claude_md_checks_table_test.dart` fails if this table and the
 workflows' `pull_request` triggers drift apart:
@@ -108,6 +108,8 @@ workflows' `pull_request` triggers drift apart:
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, `tool/doc_symbols.dart`, `tool/doc_env_runs.dart`, `tool/doc_dart_defines.dart`, `tool/doc_test_paths.dart`, `lib/core/config/dart_defines.dart`, or the workflow itself (`.github/workflows/docs-check.yml`) |
 | [`action-pins.yml`](.github/workflows/action-pins.yml) | Action pins, Workflow lint (actionlint + shellcheck) | any `.github/**` (so every Dependabot github-actions bump) or `tool/check_action_pins.dart`; asks the GitHub API, so it is not part of the offline `flutter test` suite |
 | [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
+| [`git-hooks.yml`](.github/workflows/git-hooks.yml) | pre-commit hook in a fresh clone | any `.githooks/**`, `scripts/test/pre_commit_hook_test.sh`, or the workflow itself (`.github/workflows/git-hooks.yml`); in a repository created from the template, the job reports as skipped |
+| [`release-scripts.yml`](.github/workflows/release-scripts.yml) | release scripts (ubuntu-latest), release scripts (macos-latest) | any `scripts/ci/generate_changelog.sh`, `scripts/ci/release.sh`, `scripts/ci/bump_version.sh`, `scripts/test/release_scripts_test.sh`, or the workflow itself (`.github/workflows/release-scripts.yml`); in a repository created from the template, the jobs report as skipped |
 | [`strip-smoke.yml`](.github/workflows/strip-smoke.yml) | Strip `<variant>` + analyze + test (x5) | **every** PR in the template repository (in a repository created from it, the job reports as skipped); strip, analyze and test are skipped inside each job when nothing outside `**/*.md` and `docs/**` changed <!-- strip:strip-tool line --> |
 
 `ci.yml` has no `paths-ignore`; it filters inside the job instead ("Decide
