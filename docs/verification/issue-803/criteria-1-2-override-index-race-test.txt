@@ -1,0 +1,8 @@
+main @ 409265235be
+$ flutter test test/features/feature_flags/data/datasources/override_index_race_test.dart -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/override_index_race_test.dart
+00:00 +0: two overrides set together are both listed
+00:00 +1: clearAllLocalOverrides clears both
+00:00 +2: an add and a remove issued together both take effect
+00:00 +3: All tests passed!
+exit=0

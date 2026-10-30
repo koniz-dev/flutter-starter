@@ -1,0 +1,19 @@
+main @ 409265235be
+The testability snippet from docs/architecture/overview.md, extracted verbatim to test/zz_overview_snippet_test.dart and run:
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/zz_overview_snippet_test.dart
+00:00 +0: LoginUseCase returns what the repository decided
+00:00 +1: All tests passed!
+exit=0
+--- lib/features/auth/domain/usecases/login_usecase.dart
+class LoginUseCase {
+  /// Creates a [LoginUseCase] with the given [repository]
+  LoginUseCase(this.repository);
+
+  /// Authentication repository for login operations
+  final AuthRepository repository;
+
+  /// Executes login with [email] and [password]
+  Future<Result<User>> call(String email, String password) async {
+    return await repository.login(email, password);
+  }
+}

@@ -1,0 +1,4 @@
+main @ 409265235be
+$ grep -n 'outside development' docs/api/core/logging.md
+exit=1 (1 = no match)
+11:- `JsonLogFormatter` - JSON log printer used in production; staging and development use `PrettyPrinter` (`lib/core/logging/log_output.dart`)

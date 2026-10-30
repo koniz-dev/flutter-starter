@@ -1,0 +1,15 @@
+main @ 409265235be
+$ grep -n COVERAGE_MIN_ docs/guides/testing/test-coverage.md
+123:  `scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL"`. Total
+124:  line coverage below `COVERAGE_MIN_TOTAL` fails the PR. It checks the total
+171:from the workflow's `env:` block (`COVERAGE_MIN_TOTAL`, `COVERAGE_MIN_DOMAIN`,
+172:`COVERAGE_MIN_DATA`, `COVERAGE_MIN_PRESENTATION`, `COVERAGE_MIN_CORE`). If coverage
+177:total floor, `COVERAGE_MIN_TOTAL` in
+186:1. **Update the per-PR floor** (`.github/workflows/ci.yml`), step **Enforce minimum coverage** — raise `COVERAGE_MIN_TOTAL`.
+188:2. **Update coverage workflow** (`.github/workflows/coverage.yml`) — change the `COVERAGE_MIN_*` values in its `env:` block (e.g. `COVERAGE_MIN_TOTAL: 80`, `COVERAGE_MIN_DOMAIN: 100`); the **Enforce coverage thresholds** step reads them.
+--- .github/workflows/coverage.yml env keys
+58:      COVERAGE_MIN_TOTAL: 80
+59:      COVERAGE_MIN_DOMAIN: 100
+60:      COVERAGE_MIN_DATA: 90
+61:      COVERAGE_MIN_PRESENTATION: 80
+62:      COVERAGE_MIN_CORE: 80

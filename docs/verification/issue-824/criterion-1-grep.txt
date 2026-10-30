@@ -1,0 +1,3 @@
+main @ 409265235be
+$ grep -n 'after `1.0.0`' docs/guides/migration/upgrading-this-starter.md
+exit=1 (1 = no match)

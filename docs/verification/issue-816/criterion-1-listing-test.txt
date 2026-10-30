@@ -1,0 +1,6 @@
+main @ 409265235be
+$ flutter test test/docs/local_database_listing_test.dart -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/local_database_listing_test.dart
+00:00 +0: storage.md lists every ILocalDatabase member as declared
+00:00 +1: All tests passed!
+exit=0

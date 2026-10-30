@@ -1,0 +1,8 @@
+main @ 409265235be
+--- docs/guides/onboarding/understanding-codebase.md: DI row and tree
+52:│   ├── di/                 # Dependency injection (providers)
+65:│       ├── di/            # The feature's own providers (auth_providers.dart)
+74:│       └── routing/       # The feature's routes (auth_routes.dart)
+109:### 2. Dependency Injection with Riverpod
+125:See [Dependency Injection Pattern](../../api/examples/common-patterns.md#dependency-injection-pattern) for more details.
+174:| **Dependency Injection** | core services: `lib/core/di/providers.dart`; a feature's own providers: `lib/features/<feature-name>/di/` (auth: `lib/features/auth/di/auth_providers.dart`) |

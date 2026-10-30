@@ -1,0 +1,6 @@
+main @ 409265235be
+$ flutter test test/features/feature_flags
+00:13 +206 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should display last updated time when available
+00:13 +207 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: (tearDownAll)
+00:13 +207 ~1: All tests passed!
+exit=0

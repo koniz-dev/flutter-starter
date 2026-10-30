@@ -1,0 +1,9 @@
+main @ 409265235be
+$ flutter test test/docs/testing_guide_snippets_test.dart -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart
+00:00 +0: criterion 1: every self-contained dart snippet in docs/guides/testing/guide.md analyzes with no error or warning
+00:06 +1: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+00:12 +2: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+00:18 +3: no snippet imports test/ through the package
+00:18 +4: All tests passed!
+exit=0

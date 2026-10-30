@@ -1,0 +1,6 @@
+main @ 409265235be
+$ flutter test test/docs/starter_version_marker_test.dart
+00:00 +0: the upgrade guide names one starter release, before its first section
+00:00 +1: Step 1 reads the marker, not pubspec.yaml
+00:00 +2: All tests passed!
+exit=0

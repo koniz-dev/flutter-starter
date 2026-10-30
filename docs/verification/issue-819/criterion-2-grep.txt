@@ -1,0 +1,3 @@
+main @ 409265235be
+$ grep -rnE 'From (GetX|BLoC|MVC)' docs
+exit=1 (1 = no match)

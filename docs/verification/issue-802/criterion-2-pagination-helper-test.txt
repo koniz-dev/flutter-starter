@@ -1,0 +1,6 @@
+main @ 409265235be
+$ flutter test test/core/utils/pagination_helper_test.dart
+Pagination error: Exception: network down
+00:01 +34: PaginationState.copyWith clearError drops an error that error: null cannot
+00:01 +35: All tests passed!
+exit=0

@@ -1,0 +1,11 @@
+main @ 409265235be
+$ flutter test test/docs/testing_guide_snippets_test.dart
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/testing_guide_snippets_test.dart 28:7     main.<fn>
+  
+00:12 +2 -1: no snippet imports test/ through the package
+00:12 +3 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+exit=1

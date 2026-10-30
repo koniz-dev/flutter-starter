@@ -1,0 +1,11 @@
+main @ 409265235be
+$ flutter test test/features/feature_flags/data/datasources/override_index_race_test.dart
+  test/features/feature_flags/data/datasources/override_index_race_test.dart 41:5  main.<fn>
+  
+00:00 +0 -2: an add and a remove issued together both take effect
+00:00 +1 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/override_index_race_test.dart: clearAllLocalOverrides clears both
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/override_index_race_test.dart: two overrides set together are both listed
+exit=1

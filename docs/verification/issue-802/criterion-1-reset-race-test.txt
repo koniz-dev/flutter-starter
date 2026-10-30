@@ -1,0 +1,8 @@
+main @ 409265235be
+$ flutter test test/core/utils/pagination_reset_race_test.dart -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_reset_race_test.dart
+00:00 +0: a stale page landing after the new one changes nothing
+00:00 +1: a stale page landing while the new load runs leaves it loading
+00:00 +2: a stale failure after reset sets no error
+00:00 +3: All tests passed!
+exit=0

@@ -1,0 +1,11 @@
+main @ 409265235be
+$ flutter test test/core/utils/pagination_reset_race_test.dart
+  test/core/utils/pagination_reset_race_test.dart 80:5  main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_reset_race_test.dart: a stale failure after reset sets no error
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_reset_race_test.dart: a stale page landing after the new one changes nothing
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_reset_race_test.dart: a stale page landing while the new load runs leaves it loading
+exit=1
