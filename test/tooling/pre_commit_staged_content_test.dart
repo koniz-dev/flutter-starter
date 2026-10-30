@@ -112,10 +112,10 @@ void main() {
   // A monorepo: the app depends on a package beside the repository through a
   // relative `path:`, which pub records relative to .dart_tool/. Copied into
   // the temporary export unchanged, it resolved to nothing and every commit
-  // failed analyze. The space checks the percent-encoded form too.
+  // failed analyze. The space and `#` check paths a URI must escape.
   group('with a path dependency outside the repository', () {
     setUp(() {
-      final shared = '${root.path}/shared lib';
+      final shared = '${root.path}/shared #lib';
       write(
         shared,
         'pubspec.yaml',
@@ -126,7 +126,7 @@ void main() {
         repo,
         'pubspec.yaml',
         'name: probe\nenvironment:\n  sdk: ^3.0.0\n'
-            'dependencies:\n  shared:\n    path: "../shared lib"\n',
+            'dependencies:\n  shared:\n    path: "../shared #lib"\n',
       );
       write(
         repo,

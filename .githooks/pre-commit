@@ -54,39 +54,19 @@ fi
 # block a clean commit. GIT_INDEX_FILE is inherited on purpose: for
 # `git commit <path>` and `git commit -a`, git builds a temporary index, and
 # that is the content the commit will hold. The working copy is never written.
+# The export sits beside the repository - same parent, same depth - so every
+# relative path resolves from it exactly as from the checkout: a monorepo's
+# `path: ../shared` in pubspec.yaml, and the rootUris pub wrote relative to
+# .dart_tool/. In the system temp directory those named nothing, and every
+# commit with such a dependency failed. A parent that cannot be written to
+# falls back to the temp directory.
 repo="$(pwd)"
-staged="$(mktemp -d)"
+staged="$(mktemp -d "$(dirname "$repo")/.$(basename "$repo")-pre-commit.XXXXXX" 2>/dev/null)" ||
+  staged="$(mktemp -d)"
 trap 'rm -rf "$staged"' EXIT
 git checkout-index --all --prefix="$staged/"
 mkdir -p "$staged/.dart_tool"
-# pub writes a path dependency's rootUri relative to .dart_tool/. Inside the
-# repository that relative path still names the right (exported) copy, but a
-# dependency outside it - `path: ../shared` in a monorepo - would resolve
-# beside the temporary tree and fail. Rewrite those to absolute file URIs.
-while IFS= read -r line; do
-  case "$line" in
-    *'"rootUri": "'*)
-      uri="${line#*\"rootUri\": \"}"
-      uri="${uri%%\"*}"
-      case "$uri" in
-        *:*) ;;
-        *)
-          # The URI is percent-encoded ("my%20lib"); cd needs the path.
-          path="$(printf '%b' "$(printf '%s' "$uri" | sed 's/%\([0-9A-Fa-f][0-9A-Fa-f]\)/\\x\1/g')")"
-          abs="$(cd "$repo/.dart_tool" 2>/dev/null && cd "$path" 2>/dev/null && pwd)" || abs=""
-          case "$abs" in
-            "" | "$repo" | "$repo"/*) ;;
-            *)
-              encoded="$(printf '%s' "$abs" | sed 's/%/%25/g; s/ /%20/g')"
-              line="${line%%\"rootUri\"*}\"rootUri\": \"file://$encoded/\"${line#*\"rootUri\": \""$uri"\"}"
-              ;;
-          esac
-          ;;
-      esac
-      ;;
-  esac
-  printf '%s\n' "$line"
-done < .dart_tool/package_config.json > "$staged/.dart_tool/package_config.json"
+cp -p .dart_tool/package_config.json "$staged/.dart_tool/"
 if [ -f .dart_tool/package_graph.json ]; then
   cp -p .dart_tool/package_graph.json "$staged/.dart_tool/"
 fi
@@ -101,18 +81,7 @@ if ! "${no_git_env[@]}" dart format --output=none --set-exit-if-changed lib test
 fi
 
 echo "🔍 Running flutter analyze (staged content)..."
-# --no-pub: the exported tree already has the resolved package_config above.
-# A pub get there would re-resolve path dependencies from the temporary
-# directory, where a relative `path:` outside the repository names nothing.
-# For the same reason only the Dart directories are analyzed, not
-# pubspec.yaml, whose `path:` entries would be reported missing from here;
-# the Quality gate analyzes the whole project.
-analyze_dirs=()
-for dir in lib test integration_test tool examples; do
-  [ -d "$dir" ] && analyze_dirs+=("$dir")
-done
-if [ "${#analyze_dirs[@]}" -gt 0 ] &&
-  ! "${no_git_env[@]}" flutter analyze --no-pub "${analyze_dirs[@]}"; then
+if ! "${no_git_env[@]}" flutter analyze; then
   echo "❌ flutter analyze failed for the staged content."
   exit 1
 fi
