@@ -1,6 +1,7 @@
-// TEMPLATE: Opt-in RASP. Run `flutter pub add freerasp`, rename this file to
-// `.dart` (and its two tests in test/core/security/infrastructure/), replace
-// the placeholder TalsecConfig, and bind it through raspServiceProvider. Not a
+// TEMPLATE: Opt-in RASP. Run `flutter pub add freerasp:8.2.4` (the version
+// this was checked against), rename this file to `.dart` (and its two tests
+// in test/core/security/infrastructure/), replace the placeholder
+// TalsecConfig, and bind it through raspServiceProvider. Not a
 // default dependency: freerasp links a closed-source SDK and adds Android
 // permissions and package queries even while RASP is unused. See
 // docs/guides/security/implementation.md, section 7.
