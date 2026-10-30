@@ -315,10 +315,12 @@ class AuthRepositoryImpl implements AuthRepository {
         ),
       );
       // Each check sits directly before the write it guards, with no await
-      // between them: a logout that starts after the check queues its clear
-      // behind that write. A single check before both writes let a logout
-      // landing during the first write clear the store, and the refresh token
-      // was then written after it.
+      // between them, so a logout that starts after the check issues its clear
+      // after that write. Where the platform store handles calls in order
+      // (flutter_secure_storage on Android and iOS), the clear also lands after
+      // it; elsewhere this narrows the window rather than closing it. A single
+      // check before both writes let a logout landing during the first write
+      // clear the store, and the refresh token was then written after it.
       if (!sessionGeneration.isCurrent(generation)) return stale;
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {
