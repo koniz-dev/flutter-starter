@@ -54,6 +54,10 @@ release builds; `.env.production` and `.env.staging` are git-ignored for that.
 A staging or production release also refuses to start with an empty
 `API_SSL_FINGERPRINTS`, because pinning is on there by default and would pin
 nothing; set the fingerprints, or `ENABLE_SSL_PINNING=false` to opt out.
+`ENABLE_SSL_PINNING` accepts `true`, `1`, `yes`, `on` and `false`, `0`,
+`no`, `off`, in any case. Any other value - a typo such as `ture`, or a blank -
+keeps the environment's default, and a release refuses to start on it rather
+than guess whether it should be pinned.
 Profile builds (`--profile`) are not refused.
 
 A release APK needs a signing key first; without `android/key.properties`

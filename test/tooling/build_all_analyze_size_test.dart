@@ -164,6 +164,43 @@ void main() {
     }
   });
 
+  // The app reads only the on and off spellings and refuses a release that
+  // carries anything else, so the build refuses it too.
+  for (final value in ['enabled', ' ']) {
+    test(
+      'ENABLE_SSL_PINNING="$value" is refused even with fingerprints',
+      () async {
+        final run = await _run(
+          'production',
+          env: {
+            'API_SSL_FINGERPRINTS': _fingerprints,
+            'ENABLE_SSL_PINNING': value,
+          },
+          expectSuccess: false,
+        );
+
+        expect(run.exitCode, isNot(0));
+        expect(run.output, contains('neither on'));
+        expect(run.calls, isEmpty);
+      },
+    );
+  }
+
+  test(
+    'a padded, upper-case opt-out still builds without fingerprints',
+    () async {
+      final run = await _run(
+        'production',
+        env: const {'ENABLE_SSL_PINNING': ' OFF '},
+      );
+
+      expect(
+        run.calls.where((c) => c.startsWith('flutter build ')),
+        isNotEmpty,
+      );
+    },
+  );
+
   // Read the way the app reads it: whitespace, colons and empty entries
   // dropped. A value the app would see as empty is empty here too.
   test('a fingerprint list of only separators is refused as empty', () async {
