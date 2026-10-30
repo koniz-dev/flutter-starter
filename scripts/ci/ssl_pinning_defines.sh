@@ -35,7 +35,10 @@ ssl_pinning_defines() {
   local environment="$1"
   # Trimmed and lowercased, as AppConfig.enableSslPinning reads it.
   local flag
-  flag=$(printf '%s' "${ENABLE_SSL_PINNING:-}" | tr -d ' \t\r\n' | tr '[:upper:]' '[:lower:]')
+  # Only the ends: "o n" must stay unrecognised, as it is in the app.
+  flag=$(printf '%s' "${ENABLE_SSL_PINNING:-}" |
+    sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' |
+    tr '[:upper:]' '[:lower:]')
 
   local count=0 entry
   local old_ifs="$IFS"

@@ -166,7 +166,7 @@ void main() {
 
   // The app reads only the on and off spellings and refuses a release that
   // carries anything else, so the build refuses it too.
-  for (final value in ['enabled', ' ']) {
+  for (final value in ['enabled', ' ', 'o n', 't r u e']) {
     test(
       'ENABLE_SSL_PINNING="$value" is refused even with fingerprints',
       () async {

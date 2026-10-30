@@ -403,6 +403,14 @@ class AppConfig {
       debugPrint('  SSL Pinning Requested: $enableSslPinning');
       debugPrint('  SSL Pinning Effective: $sslPinningEffective');
       debugPrint('  SSL Fingerprints Configured: ${apiSslFingerprints.length}');
+      if (sslPinningFlagUnrecognised) {
+        debugPrint(
+          '  !! ENABLE_SSL_PINNING is not one of '
+          '${sslPinningOnValues.join('/')} or '
+          '${sslPinningOffValues.join('/')} - the default applies, and a '
+          'release build refuses to start',
+        );
+      }
       if (sslPinningMisconfigured) {
         debugPrint(
           '  !! SSL PINNING MISCONFIGURED: requested but no fingerprints '
@@ -443,6 +451,7 @@ class AppConfig {
       'enableSslPinning': enableSslPinning,
       'sslPinningEffective': sslPinningEffective,
       'sslPinningMisconfigured': sslPinningMisconfigured,
+      'sslPinningFlagUnrecognised': sslPinningFlagUnrecognised,
       'apiSslFingerprintsCount': apiSslFingerprints.length,
       'enableLogging': enableLogging,
       'enableAnalytics': enableAnalytics,
