@@ -11,6 +11,7 @@
 # --flavor here fails with "Task 'assembleProductionRelease' not found".
 
 require 'shellwords'
+require_relative 'ssl_pinning'
 
 # Default platform
 default_platform(:android)
@@ -65,10 +66,15 @@ platform :android do
 
     # Build App Bundle using Flutter. Values are shell-escaped: they come from
     # lane options and CI secrets, both of which can contain shell metacharacters.
+    # Pinning: refused here, before building, when a staging or production
+    # build has neither fingerprints nor an explicit opt-out - such a release
+    # refuses to start. See ssl_pinning.rb.
+    pinning = SslPinning.lane_defines(environment, options)
     sh("cd .. && flutter build appbundle " \
        "--release " \
        "--dart-define=ENVIRONMENT=#{Shellwords.escape(environment)} " \
-       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
+       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)} " \
+       "#{pinning}")
 
     # App Bundle path (flavorless layout).
     # Absolute: lane code runs in fastlane/, but fastlane runs every action
@@ -96,10 +102,15 @@ platform :android do
     sh("cd .. && dart run tool/check_env_assets.dart")
 
     # Build APK using Flutter
+    # Pinning: refused here, before building, when a staging or production
+    # build has neither fingerprints nor an explicit opt-out - such a release
+    # refuses to start. See ssl_pinning.rb.
+    pinning = SslPinning.lane_defines(environment, options)
     sh("cd .. && flutter build apk " \
        "--release " \
        "--dart-define=ENVIRONMENT=#{Shellwords.escape(environment)} " \
-       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
+       "--dart-define=BASE_URL=#{Shellwords.escape(base_url)} " \
+       "#{pinning}")
 
     # APK path (flavorless layout)
     # Absolute, as bundle_path in build_bundle: actions run from the project
@@ -123,7 +134,8 @@ platform :android do
     track = options[:track] || "internal"
 
     # Build App Bundle
-    bundle_path = build_bundle(environment: environment, base_url: base_url)
+    bundle_path = build_bundle(environment: environment, base_url: base_url,
+                               **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     # Upload to Google Play Store
     upload_to_play_store(
@@ -150,7 +162,8 @@ platform :android do
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
 
     # Build and upload to alpha
-    bundle_path = build_bundle(environment: environment, base_url: base_url)
+    bundle_path = build_bundle(environment: environment, base_url: base_url,
+                               **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     upload_to_play_store(
       aab: bundle_path,
@@ -172,7 +185,8 @@ platform :android do
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
 
     # Build and upload to beta
-    bundle_path = build_bundle(environment: environment, base_url: base_url)
+    bundle_path = build_bundle(environment: environment, base_url: base_url,
+                               **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     upload_to_play_store(
       aab: bundle_path,
@@ -194,7 +208,8 @@ platform :android do
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     # Build and upload to production
-    bundle_path = build_bundle(environment: environment, base_url: base_url)
+    bundle_path = build_bundle(environment: environment, base_url: base_url,
+                               **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     upload_to_play_store(
       aab: bundle_path,
@@ -218,7 +233,8 @@ platform :android do
     track = options[:track] || (environment == "production" ? "production" : "internal")
 
     # Build App Bundle
-    bundle_path = build_bundle(environment: environment, base_url: base_url)
+    bundle_path = build_bundle(environment: environment, base_url: base_url,
+                               **options.slice(:ssl_fingerprints, :ssl_pinning))
 
     # Upload to Google Play Store
     upload_to_play_store(
