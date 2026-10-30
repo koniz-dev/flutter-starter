@@ -80,6 +80,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   names the inner error type instead of quoting dart:io's message.
 - The default `NoOpRealtimeClient` prints only in debug builds, the URL
   redacted, and a sent payload's type rather than its content.
+- `SecureTokenStore` applies its operations in the order they are issued. On
+  web, flutter_secure_storage let a logout's clear land before a pending
+  token write, leaving a live access token on a signed-out browser.
+  `ITokenStore` now documents the ordering an implementation must keep; a
+  custom store whose calls can complete out of order should queue them too.
 - `CacheInterceptor` no longer stores a response whose `Cache-Control` names
   `no-store`, `private` or `no-cache`, carries `Pragma: no-cache` or sets a
   cookie, and such a response evicts what an earlier one stored for that URL.
