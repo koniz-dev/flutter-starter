@@ -24,6 +24,18 @@ deploy job uploads its build with `if-no-files-found: error`, and each
 `deploy-web.yml` job ends in a "Fail while nothing is deployed" step - delete
 that step once its build and deploy steps are live.
 
+Android and iOS release builds need your server's certificate fingerprints:
+pinning is on in staging and production, and a release built with pinning on
+and no fingerprints refuses to start. Set the repository variable
+`API_SSL_FINGERPRINTS` (Settings -> Secrets and variables -> Actions ->
+Variables). The commented build steps in `deploy-android.yml` and
+`deploy-ios.yml` read it, and `build.yml` uses it unless you fill in its
+`ssl_fingerprints` input. Its `ssl_pinning: off` input, or
+`ENABLE_SSL_PINNING=false` elsewhere, ships without pinning on purpose. Every
+path runs [`scripts/ci/ssl_pinning_defines.sh`](../../scripts/ci/ssl_pinning_defines.sh),
+which refuses the build before it starts when neither is set. Web is exempt:
+pinning does not apply there.
+
 ## Related docs
 
 - [Configuration](../guides/configuration.md) — `BASE_URL`, flavors, and `dart-define`.

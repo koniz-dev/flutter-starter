@@ -18,7 +18,8 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 
 | Script | Purpose |
 |--------|---------|
-| [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`. No `--flavor`: this project has no Gradle product flavors and configures itself through `--dart-define`. |
+| [`build_all.sh`](ci/build_all.sh) | Android + iOS (macOS only) + Web build for one `ENVIRONMENT`. No `--flavor`: this project has no Gradle product flavors and configures itself through `--dart-define`. Needs `API_SSL_FINGERPRINTS` (or `ENABLE_SSL_PINNING=false`) in the environment, or it refuses before building. |
+| [`ssl_pinning_defines.sh`](ci/ssl_pinning_defines.sh) | Sourced by every mobile release build: turns `API_SSL_FINGERPRINTS` / `ENABLE_SSL_PINNING` into `--dart-define` arguments, and refuses a staging or production build that has neither. |
 | [`bump_version.sh`](ci/bump_version.sh) | Bump `version:` in `pubspec.yaml`. Handles both `1.0.0` and `1.0.0+1`, validates before writing, and leaves the file untouched on any error. |
 | [`generate_changelog.sh`](ci/generate_changelog.sh) | Build a CHANGELOG section from the commits since the last reachable tag, or since `--since <ref>`. Inserts it below `## [Unreleased]`, and refuses rather than dumping the whole history when no tag is reachable. No `sed -i`, so it behaves the same on GNU and BSD userlands. |
 | [`release.sh`](ci/release.sh) | Test, analyze, bump, changelog, branch, tag. If the bump or the changelog step fails it restores `pubspec.yaml` and `CHANGELOG.md`, so the tree is left as it started. For a first release with no tag, set `RELEASE_CHANGELOG_SINCE=<ref>`. |
