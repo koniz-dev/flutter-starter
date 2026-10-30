@@ -39,6 +39,11 @@ ios/fastlane/
    - Update `fastlane/Appfile` with your Android package name
    - Update `ios/fastlane/Appfile` with your iOS bundle ID and Team ID
 
+Every build and upload lane below needs your certificate fingerprints for a
+staging or production build - add `ssl_fingerprints:<list>` or set
+`API_SSL_FINGERPRINTS` - or it stops before building. See
+[Certificate pinning](#certificate-pinning).
+
 ### Android Deployment
 
 #### Build App Bundle

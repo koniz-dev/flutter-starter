@@ -14,7 +14,10 @@
 #
 # The fingerprints are read as AppConfig.apiSslFingerprints reads them: split on
 # commas, colons and whitespace dropped, empty entries skipped. Each remaining
-# entry must be 64 hex digits, in any environment.
+# entry must be 64 hex digits, in any environment. The opt-out is trimmed, as
+# the app's EnvConfig.getBool trims it. A lane option that is given wins over
+# the environment variable even when it is empty, so `ssl_fingerprints:""`
+# refuses rather than falling back.
 require "shellwords"
 
 module SslPinning
@@ -26,7 +29,7 @@ module SslPinning
     fingerprints = fingerprints.to_s
     pinning = pinning.to_s
     entries = fingerprints.split(",")
-                          .map { |e| e.delete(" \t\n:").downcase }
+                          .map { |e| e.delete(" \t\r\n:").downcase }
                           .reject(&:empty?)
     bad = entries.find { |e| e !~ /\A[0-9a-f]{64}\z/ }
     if bad
