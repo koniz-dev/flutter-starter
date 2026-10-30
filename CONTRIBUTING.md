@@ -277,7 +277,7 @@ test(auth): add login use case tests
 
 - Use present tense ("add" not "added")
 - Keep subject line under 50 characters
-- Capitalize first letter of subject
+- Start the subject in lowercase, as the examples above do
 - No period at end of subject
   
 
