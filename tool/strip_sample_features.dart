@@ -114,8 +114,13 @@ const _goldenExcludeBlock = '''
     - tool/golden/**
 ''';
 
-/// What `--remove-bricks` deletes: the Mason bricks and their registry.
-const _brickPaths = <String>['bricks', 'mason.yaml'];
+/// What `--remove-bricks` deletes: the Mason bricks, their registry, and the
+/// test of the bricks' input rules, which imports them.
+const _brickPaths = <String>[
+  'bricks',
+  'mason.yaml',
+  'test/tooling/brick_input_rules_test.dart',
+];
 
 String _markerStart(String tag) => '<!-- strip:$tag start -->';
 String _markerEnd(String tag) => '<!-- strip:$tag end -->';
