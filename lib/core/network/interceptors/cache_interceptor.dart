@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/json_helper.dart';
@@ -51,7 +52,9 @@ class CacheConfig {
 /// attempt at all.
 /// ## What is cached
 ///
-/// Only **unauthenticated** `GET` responses with status 200. Before touching
+/// Only **unauthenticated** `GET` responses with status 200, for a request
+/// whose query carries no key that [ApiLoggingInterceptor.isSensitiveKey]
+/// treats as a secret. Before touching
 /// the cache - on read and on write - the interceptor asks the [ITokenStore]
 /// whether a session credential exists. If one does, the request neither
 /// reads from nor writes to the cache and goes straight to the network.
@@ -301,6 +304,12 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       return true;
     }
 
+    // A secret in the query - a verification or reset token, a presigned
+    // URL's signature - means the response is about that secret, and the
+    // store is plaintext. Same rule as the log redaction, so the two lists
+    // cannot drift. A query that does not parse is treated the same way.
+    if (_querySecret(options)) return true;
+
     // Secondary guard: a credential the caller attached directly to the
     // request is visible here regardless of interceptor order.
     for (final header in _noCacheHeaders) {
@@ -311,6 +320,18 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
 
     // Primary guard: never touch the cache while a session credential exists.
     return await _hasSessionCredential();
+  }
+
+  /// Whether [options]' query has a key [ApiLoggingInterceptor.isSensitiveKey]
+  /// treats as a secret, or cannot be parsed.
+  static bool _querySecret(RequestOptions options) {
+    try {
+      return options.uri.queryParametersAll.keys.any(
+        ApiLoggingInterceptor.isSensitiveKey,
+      );
+    } on FormatException {
+      return true;
+    }
   }
 
   /// Returns true when a session credential exists in the token store.

@@ -110,21 +110,24 @@ void main() {
     expect(await storage.getStringList('http_cache_index') ?? [], isEmpty);
   });
 
+  // A query key that names a secret now keeps the request out of the cache
+  // altogether (cache_sensitive_query_test.dart). One that does not still has
+  // its values hashed out of the key: nothing in the URL is stored verbatim.
   test(
-    'a token in the query is in no stored key and not in the index',
+    'a query value is in no stored key and not in the index',
     () async {
       await interceptor.onResponse(
-        _ok(_get('/auth/verify-email', {'token': 's3cr3t-token'})),
+        _ok(_get('/invites/accept', {'invite': 'private-invite-code'})),
         _ResponseHandler(),
       );
 
       expect(cacheKeys(), isNotEmpty, reason: 'the response was cached');
       for (final key in storage.values.keys) {
-        expect(key, isNot(contains('s3cr3t-token')));
+        expect(key, isNot(contains('private-invite-code')));
       }
       final index = await storage.getStringList('http_cache_index');
       expect(index, isNotNull);
-      expect(index!.join(), isNot(contains('s3cr3t-token')));
+      expect(index!.join(), isNot(contains('private-invite-code')));
     },
   );
 
