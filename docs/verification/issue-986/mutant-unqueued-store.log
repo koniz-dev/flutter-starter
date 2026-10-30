@@ -1,0 +1,25 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart
+00:00 +0: a clear issued after a pending write lands after it
+00:00 +0 -1: a clear issued after a pending write lands after it [E]
+  Expected: null
+    Actual: 'late'
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/storage/adapters/secure_token_store_order_test.dart 122:5  main.<fn>
+  
+00:00 +0 -1: a logout during the refresh write leaves no token behind
+00:00 +0 -2: a logout during the refresh write leaves no token behind [E]
+  Expected: null
+    Actual: 'new-access'
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/storage/adapters/secure_token_store_order_test.dart 134:5  main.<fn>
+  
+00:00 +0 -2: a login completing after the stale refresh write keeps its own tokens
+00:00 +1 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a clear issued after a pending write lands after it
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a logout during the refresh write leaves no token behind
