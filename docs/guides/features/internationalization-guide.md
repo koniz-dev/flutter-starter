@@ -52,6 +52,7 @@ dependencies:
    - `app_en.arb` - English translations
    - `app_es.arb` - Spanish translations
    - `app_ar.arb` - Arabic translations
+   - `app_vi.arb` - Vietnamese translations
 
 ### Generating Localization Files
 
@@ -100,6 +101,7 @@ class MyWidget extends StatelessWidget {
 2. **Add translations to other languages**:
    - `lib/l10n/app_es.arb` for Spanish
    - `lib/l10n/app_ar.arb` for Arabic
+   - `lib/l10n/app_vi.arb` for Vietnamese
 
 3. **Generate localization files**:
    ```bash
