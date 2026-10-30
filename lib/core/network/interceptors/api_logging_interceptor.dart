@@ -122,7 +122,7 @@ class ApiLoggingInterceptor extends Interceptor {
   ///
   /// This is an exact-match list on purpose: header names are a closed,
   /// standardised namespace, so an explicit roster is auditable and cannot
-  /// redact an unrelated header by accident. [_isSensitiveKey] is applied as a
+  /// redact an unrelated header by accident. [isSensitiveKey] is applied as a
   /// second pass so a non-standard credential header still gets caught.
   static const _sensitiveHeaderKeys = <String>{
     'authorization',
@@ -268,7 +268,7 @@ class ApiLoggingInterceptor extends Interceptor {
       // A key that cannot be read cannot be cleared either: its value is
       // redacted.
       if (key == null) return '$rawKey=$_redacted';
-      return _isSensitiveKey(key) ? '$rawKey=$_redacted' : pair;
+      return isSensitiveKey(key) ? '$rawKey=$_redacted' : pair;
     });
     return '${path.substring(0, queryStart + 1)}${query.join('&')}'
         '${path.substring(queryEnd)}';
@@ -290,7 +290,11 @@ class ApiLoggingInterceptor extends Interceptor {
   /// key name that is not listed here is still logged, so these lists are the
   /// security boundary and must grow when an API invents a new credential
   /// parameter.
-  static bool _isSensitiveKey(String key) {
+  ///
+  /// Public because `CacheInterceptor` uses the same rule to keep a request
+  /// whose query carries a secret out of its plaintext store: one list, so
+  /// the two cannot drift.
+  static bool isSensitiveKey(String key) {
     final normalized = _normalizeKey(key);
     if (_sensitiveKeysExact.contains(normalized)) return true;
     return _sensitiveKeyFragments.any(normalized.contains);
@@ -304,7 +308,7 @@ class ApiLoggingInterceptor extends Interceptor {
       final key = entry.key.trim();
       sanitized[entry.key] =
           _sensitiveHeaderKeys.contains(key.toLowerCase()) ||
-              _isSensitiveKey(key)
+              isSensitiveKey(key)
           ? _redacted
           : entry.value;
     }
@@ -350,7 +354,7 @@ class ApiLoggingInterceptor extends Interceptor {
   /// Recursively sanitize a decoded value.
   dynamic _sanitizeValue(dynamic value) {
     if (value == null || value is num || value is bool || value is String) {
-      // Reached through a key that [_isSensitiveKey] already cleared.
+      // Reached through a key that [isSensitiveKey] already cleared.
       return value;
     }
     if (value is Map) return _sanitizeMap(value);
@@ -367,7 +371,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     for (final entry in map.entries) {
       final key = entry.key.toString();
-      sanitized[key] = _isSensitiveKey(key)
+      sanitized[key] = isSensitiveKey(key)
           ? _redacted
           : _sanitizeValue(entry.value);
     }
