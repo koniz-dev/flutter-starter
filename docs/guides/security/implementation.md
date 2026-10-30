@@ -277,10 +277,12 @@ flutter build ios --release --obfuscate --split-debug-info=./build/debug-info --
 
 ### Symbolicating Crashes
 
-To symbolicate a crash report:
+To symbolicate a crash report, pass the symbols **file** for the crashing
+architecture - `--split-debug-info` writes one per architecture, named
+`app.<arch>.symbols`; `-d` does not take the directory:
 
 ```bash
-flutter symbolize -i <crash-file> -d ./build/debug-info/
+flutter symbolize -i <crash-file> -d ./build/debug-info/app.android-arm64.symbols
 ```
 ```
 
