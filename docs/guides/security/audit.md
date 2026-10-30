@@ -95,7 +95,7 @@ routed through that callback rather than the platform trust store.
 `HttpClient` (`SslPinning.createHttpClient()`). Settings
 come from `AppConfig.enableSslPinning` and `AppConfig.apiSslFingerprints`
 (`lib/core/config/app_config.dart`), which read `ENABLE_SSL_PINNING`
-and `API_SSL_FINGERPRINTS` from the environment (`.env.example:34-39`).
+and `API_SSL_FINGERPRINTS` from the environment (both are in `.env.example`).
 
 <!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
 
