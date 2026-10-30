@@ -612,7 +612,7 @@ in Play's data-safety form. Check the list against your own build's
 with the freerasp version.
 
 ```bash
-flutter pub add freerasp:^8.2.4   # the version the template is written for
+flutter pub add freerasp:8.2.4   # exactly the version the template was checked against
 (cd lib/core/security/infrastructure && mv freerasp_service_impl.dart.template freerasp_service_impl.dart)
 (cd test/core/security/infrastructure && for f in freerasp_*.dart.template; do mv "$f" "${f%.template}"; done)
 ```
@@ -668,7 +668,7 @@ There is **no** `device_security.dart` in this starter; wire threat handling in 
 
 #### What the adapter forwards
 
-`FreeRaspServiceImpl` forwards **every** detection the pinned freerasp (8.2.4) reports. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Once only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
+`FreeRaspServiceImpl` forwards **every** detection freerasp 8.2.4 reports - the exact version step 1 adds, and the only one the adapter was checked against. Moving to another version means re-checking `ThreatCallback`, as below. Each freeRASP `Threat` reaches `onThreatDetected` as the `SecurityThreat` below, and malware, which freeRASP delivers on its own callback rather than as a `Threat`, arrives as `SecurityThreat.malware`. No detection is deliberately ignored. Once only 10 of the 23 callbacks were set, and freeRASP drops a detection whose callback is null without logging it.
 
 | freeRASP callback | `SecurityThreat` | Platforms | Kind |
 |---|---|---|---|
@@ -698,7 +698,9 @@ There is **no** `device_security.dart` in this starter; wire threat handling in 
 
 "Kind" is guidance for your policy, not something the adapter acts on. A **device posture** or **user action** signal fires on many legitimate devices: a developer phone has developer options and ADB on, and a corporate phone runs a system VPN. Forcing a logout on those locks out real users. Log them or warn, and save blocking for the **attack** rows.
 
-`test/core/security/infrastructure/freerasp_service_impl_test.dart.template` (renamed in step 1) drives each of freeRASP's `Threat` values through its mocked platform channel and fails if one is neither forwarded as this table says nor listed as deliberately ignored. A freerasp upgrade that adds a detection therefore fails `flutter test` until someone maps it, and the exhaustive `switch` in `FreeRaspServiceImpl.securityThreatFor` stops compiling first. A new `Threat` gets a row here, too.
+`test/core/security/infrastructure/freerasp_service_impl_test.dart.template` (renamed in step 1) drives each of freeRASP's `Threat` values through its mocked platform channel and fails if one is neither forwarded as this table says nor listed as deliberately ignored. A freerasp upgrade that adds a `Threat` value therefore fails `flutter test` until someone maps it, and the exhaustive `switch` in `FreeRaspServiceImpl.securityThreatFor` stops compiling first. A new `Threat` gets a row here, too.
+
+That guard covers new `Threat` values **only**. freeRASP also delivers some detections on a callback of their own (`onMalware` is one), and every `ThreatCallback` parameter is optional: a version that adds such a callback still compiles with the adapter leaving it null, and freeRASP then drops that detection without logging it. On every freerasp upgrade, compare `ThreatCallback`'s parameters with the ones `_start()` passes, by hand.
 
 ### 8. Session management (blueprint)
 
