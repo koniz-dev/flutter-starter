@@ -96,6 +96,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Cache keys are a SHA-256 of the URL, so a token in a query string is no
   longer written to `shared_preferences`; indexed entries under the old
   verbatim keys are removed on first use.
+- A `GET` whose query has a key the log redaction treats as a secret
+  (`token`, `otp`, `signature`, ...) bypasses `CacheInterceptor` entirely, so
+  its response body is not stored either. `ApiLoggingInterceptor.isSensitiveKey`
+  is now public; both use it.
 - `AuthRepositoryImpl.refreshToken()` checks the session before each of its
   two credential writes and before returning. A logout that landed during the
   access-token write used to leave the new refresh token on a signed-out
