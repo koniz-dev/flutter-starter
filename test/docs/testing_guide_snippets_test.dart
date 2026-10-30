@@ -18,6 +18,9 @@ void main() {
   for (final (name, path) in const [
     ('testing_guide', 'docs/guides/testing/guide.md'),
     ('contributing', 'CONTRIBUTING.md'),
+    // Its testability example once tested validation LoginUseCase does not
+    // do, with `await` in a non-async closure.
+    ('architecture_overview', 'docs/architecture/overview.md'),
   ]) {
     test('criterion 1: every self-contained dart snippet in $path analyzes '
         'with no error or warning', () {

@@ -184,12 +184,29 @@ an absolute purity the code has never had.
 Business logic lives in the domain layer, free of Flutter, Dio and Riverpod, making it easy to test:
 
 ```dart
-// Domain layer - no mocks needed for business logic
-test('LoginUseCase validates email format', () {
-  final useCase = LoginUseCase(mockRepository);
-  final result = await useCase('invalid-email', 'password');
-  expect(result, isA<ResultFailure<ValidationFailure>>());
-});
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _MockAuthRepository extends Mock implements AuthRepository {}
+
+void main() {
+  // Domain layer: no widget, no Dio, no Riverpod - only the contract.
+  test('LoginUseCase returns what the repository decided', () async {
+    final repository = _MockAuthRepository();
+    when(() => repository.login(any(), any())).thenAnswer(
+      (_) async => const ResultFailure<User>(AuthFailure('Invalid credentials')),
+    );
+
+    final result = await LoginUseCase(repository)('user@example.com', 'wrong');
+
+    expect(result.failureOrNull, isA<AuthFailure>());
+  });
+}
 ```
 
 **Without Clean Architecture:**
@@ -511,9 +528,8 @@ lib/
    - Best practices
 
 3. **Migration Guides** (`docs/guides/migration/`)
-   - From MVC to Clean Architecture
-   - From GetX to this setup
-   - From BLoC to Riverpod
+   - Upgrading this starter between releases
+   - Customizing it for your app
 
 ---
 
