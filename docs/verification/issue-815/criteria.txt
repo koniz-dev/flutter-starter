@@ -1,0 +1,11 @@
+origin/main 575101e1fcb2b5c47c18be521cb1936751134c78
+--- criterion 1
+exit=1 (1 = no match)
+273:  return ResultFailure(ExceptionToFailureMapper.map(e));
+--- criterion 2: both lists
+31:- `PermissionException` - Permission denied errors
+32:- `NotFoundException` - A resource that does not exist
+55:- `PermissionException` → `PermissionFailure`
+56:- `NotFoundException` → `NotFoundFailure`
+83:- `PermissionFailure` - Permission denied errors
+84:- `NotFoundFailure` - A resource that does not exist

@@ -1,0 +1,52 @@
+--- criterion 1: grep -n 'cleartextTraffic="' implementation.md
+exit=1 (1 = no match)
+--- criterion 2: the section as rewritten (no <domain-config> inside <debug-overrides>)
+#### Step 1: Create Network Security Config
+
+The attribute is `cleartextTrafficPermitted`, and `<debug-overrides>` may hold
+only `<trust-anchors>` - not a `<domain-config>`
+([Network security configuration](https://developer.android.com/privacy-and-security/security-config)).
+
+```xml
+<!-- android/app/src/main/res/xml/network_security_config.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Base configuration: Only allow HTTPS -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Domain-specific configuration for production API -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">api.example.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
+```
+
+To let **debug builds only** reach a local server over plain HTTP, give the
+debug source set its own copy of the file. Resources in `src/debug/res`
+replace the ones in `src/main/res` in a debug build, so release keeps the
+strict file above:
+
+```xml
+<!-- android/app/src/debug/res/xml/network_security_config.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
+```
+
+#### Step 2: Update AndroidManifest.xml
+--- source: developer.android.com/privacy-and-security/security-config, quoted
+base-config / domain-config: [cleartextTrafficPermitted]=["true" | "false"]
+<debug-overrides> can contain: 0 or 1 <trust-anchors>
+origin/main 575101e1fcb2b5c47c18be521cb1936751134c78 (merged; the file above was written from the branch, identical)

@@ -1,0 +1,7 @@
+origin/main 575101e1fcb2b5c47c18be521cb1936751134c78
+55:   - `app_vi.arb` - Vietnamese translations
+104:   - `lib/l10n/app_vi.arb` for Vietnamese
+lib/l10n/app_ar.arb
+lib/l10n/app_en.arb
+lib/l10n/app_es.arb
+lib/l10n/app_vi.arb

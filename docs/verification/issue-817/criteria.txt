@@ -1,0 +1,15 @@
+$ flutter symbolize --help | grep -A1 debug-info
+-d, --debug-info=</out/android/app.arm64.symbols>                        A path to the symbols file generated with "--split-debug-info".
+-u, --unit-id-debug-info=<2:/out/android/app.arm64.symbols-2.part.so>    A loading unit id and the path to the symbols file for that unit generated with "--split-debug-info".
+--- symbols file naming: flutter_tools lib/src/base/build.dart
+230:    final debugFilename = 'app.$archName.symbols';
+--- directory rejected: flutter_tools lib/src/commands/symbolize.dart
+85:        throw StateError('$fileName is a directory, not a file');
+--- the doc now
+285:flutter symbolize -i <crash-file> -d ./build/debug-info/app.android-arm64.symbols
+origin/main 575101e1fcb2b5c47c18be521cb1936751134c78
+--- criteria 1-2: the docs now name the symbols file
+282-`app.<arch>.symbols`; `-d` does not take the directory:
+283-
+284-```bash
+285:flutter symbolize -i <crash-file> -d ./build/debug-info/app.android-arm64.symbols

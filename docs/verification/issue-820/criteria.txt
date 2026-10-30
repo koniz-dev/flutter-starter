@@ -1,0 +1,15 @@
+origin/main 575101e1fcb2b5c47c18be521cb1936751134c78
+240:| `ENABLE_LOGGING` | bool | `true` | Master switch for logging; `false` turns every output off |
+241:| `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired** - the starter ships no analytics; gate yours on it |
+242:| `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired** - the starter ships no crash reporter; gate yours on it |
+253:ENABLE_LOGGING=true
+--- configuration.md rows
+487:| `ENABLE_LOGGING` | bool | `true` | Master switch for `LoggingService`; `false` turns every output off. See [Where logs go](#where-logs-go) |
+488:| `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableAnalytics`, but the starter ships no analytics, so nothing reads it. Gate your analytics SDK on it (default: true in staging/prod) |
+489:| `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired.** Parsed into `AppConfig.enableCrashReporting`, but the starter ships no crash reporter, so nothing reads it. Gate your crash reporter on it (default: true in staging/prod) |
+--- code default for ENABLE_LOGGING
+244:  static bool get enableLogging {
+245-    if (EnvConfig.has('ENABLE_LOGGING')) {
+246-      return EnvConfig.getBool('ENABLE_LOGGING');
+247-    }
+248-    return true;

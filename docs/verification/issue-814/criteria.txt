@@ -1,0 +1,12 @@
+origin/main 575101e1fcb2b5c47c18be521cb1936751134c78
+--- criterion 1: grep path.contains docs/api/core/network.md
+exit=1 (1 = no match)
+646:Taken from `ApiEndpoints`, and matched **exactly** against the request's path
+647-relative to the base URL - the query string and a trailing slash ignored. Not
+648-`contains`: a route that merely contains one, such as
+649-`/users/auth/login-history`, is an ordinary authenticated route and refreshes
+650-like any other:
+--- criterion 2: realtime send example
+366-// Send payload: a String or bytes - encode anything else yourself; the
+367-// client hands the value to the socket as is.
+368:realtimeClient.send(jsonEncode({'type': 'ping'}));
