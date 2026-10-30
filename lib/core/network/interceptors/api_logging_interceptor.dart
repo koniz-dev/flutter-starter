@@ -172,6 +172,11 @@ class ApiLoggingInterceptor extends Interceptor {
     'cvc',
     'session',
     'sessionid',
+    // Azure Storage SAS signature (`?sv=...&sig=...`): `signal` must stay.
+    'sig',
+    // Firebase Realtime Database REST ID token (`?auth=...`): `author`
+    // and `oauthprovider` must stay.
+    'auth',
   };
 
   /// A `%` not followed by two hex digits: an escape that names no byte.
