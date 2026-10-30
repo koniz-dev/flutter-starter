@@ -464,34 +464,45 @@ have the same mechanism.
 
 #### Step 1: Create Network Security Config
 
+The attribute is `cleartextTrafficPermitted`, and `<debug-overrides>` may hold
+only `<trust-anchors>` - not a `<domain-config>`
+([Network security configuration](https://developer.android.com/privacy-and-security/security-config)).
+
 ```xml
 <!-- android/app/src/main/res/xml/network_security_config.xml -->
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <!-- Base configuration: Only allow HTTPS -->
-    <base-config cleartextTraffic="false">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    
+
     <!-- Domain-specific configuration for production API -->
-    <domain-config cleartextTraffic="false">
+    <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">api.example.com</domain>
         <trust-anchors>
             <certificates src="system" />
-            <!-- Add pinned certificate if needed -->
         </trust-anchors>
     </domain-config>
-    
-    <!-- Debug overrides: Allow cleartext for localhost only -->
-    <debug-overrides>
-        <domain-config cleartextTraffic="true">
-            <domain includeSubdomains="true">localhost</domain>
-            <domain includeSubdomains="true">127.0.0.1</domain>
-            <domain includeSubdomains="true">10.0.2.2</domain>
-        </domain-config>
-    </debug-overrides>
+</network-security-config>
+```
+
+To let **debug builds only** reach a local server over plain HTTP, give the
+debug source set its own copy of the file. Resources in `src/debug/res`
+replace the ones in `src/main/res` in a debug build, so release keeps the
+strict file above:
+
+```xml
+<!-- android/app/src/debug/res/xml/network_security_config.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
 </network-security-config>
 ```
 
