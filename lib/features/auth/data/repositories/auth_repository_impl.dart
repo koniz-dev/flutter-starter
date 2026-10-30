@@ -308,18 +308,26 @@ class AuthRepositoryImpl implements AuthRepository {
       }
 
       final authResponse = await remoteDataSource.refreshToken(refreshToken);
-      if (!sessionGeneration.isCurrent(generation)) {
-        return const ResultFailure(
-          UnknownFailure(
-            'Session ended while the token refresh was in flight',
-            code: AuthErrorCodes.sessionTerminated,
-          ),
-        );
-      }
+      const stale = ResultFailure<String>(
+        UnknownFailure(
+          'Session ended while the token refresh was in flight',
+          code: AuthErrorCodes.sessionTerminated,
+        ),
+      );
+      // Each check sits directly before the write it guards, with no await
+      // between them, so a logout that starts after the check issues its clear
+      // after that write. Where the platform store handles calls in order
+      // (flutter_secure_storage on Android and iOS), the clear also lands after
+      // it; elsewhere this narrows the window rather than closing it. A single
+      // check before both writes let a logout landing during the first write
+      // clear the store, and the refresh token was then written after it.
+      if (!sessionGeneration.isCurrent(generation)) return stale;
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {
+        if (!sessionGeneration.isCurrent(generation)) return stale;
         await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
       }
+      if (!sessionGeneration.isCurrent(generation)) return stale;
       return Success(authResponse.token);
     } on AppException catch (e) {
       return ResultFailure(_mapRefreshFailure(e));
