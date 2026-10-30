@@ -13,8 +13,9 @@
 #
 #   1. No package_config.json: the hook exits non-zero, tells the user to run
 #      `flutter pub get`, and `git status --porcelain` stays empty.
-#   2. After `flutter pub get`: the hook exits 0 on the clean tree, and
-#      non-zero on a real format violation.
+#   2. After `flutter pub get`: the hook exits 0 on the clean tree. It
+#      checks the staged content, so it still exits 0 when a format violation
+#      is only in the working copy, and exits non-zero once it is staged.
 #
 # HOOK_UNDER_TEST=<file> points the tests at another copy of the hook, for
 # example an older revision, to show a case fails there.
@@ -92,10 +93,20 @@ fi
 printf '\nvoid   badlyFormatted( ){}\n' >>"$CLONE/lib/main.dart"
 run_hook
 status=$?
-if [ "$status" -ne 0 ] && grep -q "formatting check failed" "$WORK/hook.out"; then
-  pass "with dependencies resolved the hook fails on a real format violation"
+if [ "$status" -eq 0 ]; then
+  pass "an unstaged format violation over a clean index does not fail the hook"
 else
-  fail "a real format violation did not fail the hook (exit $status)"
+  fail "an unstaged format violation failed the hook (exit $status)"
+  tail -20 "$WORK/hook.out"
+fi
+
+git -C "$CLONE" add lib/main.dart
+run_hook
+status=$?
+if [ "$status" -ne 0 ] && grep -q "formatting check failed" "$WORK/hook.out"; then
+  pass "with dependencies resolved the hook fails on a staged format violation"
+else
+  fail "a staged format violation did not fail the hook (exit $status)"
   tail -20 "$WORK/hook.out"
 fi
 
