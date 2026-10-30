@@ -60,6 +60,20 @@ class AuthRepositoryImpl implements AuthRepository {
     code: 'INVALID_AUTH_RESPONSE',
   );
 
+  /// What a refresh body the app cannot parse fails with.
+  ///
+  /// Same cause as [_unreadableResponse] - a `TypeError` out of the generated
+  /// `fromJson` - which escaped `refreshToken()` and made
+  /// `AuthNotifier.refreshToken()` throw. An [UnknownFailure], not a
+  /// [ServerFailure], on purpose: `AuthInterceptor` keeps the session only for
+  /// failures known to be transport trouble, and a body that cannot be read
+  /// will not read better on the next attempt, so the session ends - fail
+  /// closed - rather than every 401 refreshing into the same wall.
+  static const _unreadableRefreshResponse = UnknownFailure(
+    'The server sent a token refresh response this app could not read.',
+    code: 'INVALID_AUTH_RESPONSE',
+  );
+
   /// Maps a failed sign-in or registration.
   ///
   /// An [AuthFailure] here is the server rejecting the credentials the user
@@ -311,6 +325,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return ResultFailure(_mapRefreshFailure(e));
     } on Exception catch (e) {
       return ResultFailure(ExceptionToFailureMapper.map(e));
+    } on Object catch (_) {
+      return const ResultFailure(_unreadableRefreshResponse);
     }
   }
 
