@@ -276,7 +276,8 @@ test(auth): add login use case tests
 ### Guidelines
 
 - Use present tense ("add" not "added")
-- Keep subject line under 50 characters
+- Keep the subject short enough to read in `git log --oneline`; there is no
+  fixed limit, and the `commit-msg` hook checks only the format, not the length
 - Start the subject in lowercase, as the examples above do
 - No period at end of subject
   
