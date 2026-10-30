@@ -229,12 +229,42 @@ to be caught in review, not something the harness will block.
 ### Phase order
 
 ```
-planner  ->  implementer  ->  qa  ->  security (risk-gated)  ->  close or hand off
+planner  ->  implementer  ->  review (pre-merge, surface-gated)  ->  merge
+         ->  qa  ->  security (risk-gated)  ->  close or hand off
 ```
 
 `security` runs only when the diff touches `lib/core/security/`,
 `lib/core/storage/`, `lib/core/network/`, `.env*`, dependency versions, or
 anything auth-related. Otherwise skip it.
+
+#### Pre-merge review
+
+A fix verified only against its own issue's criteria can still break the
+next thing over. The 2026-10-30 audit traced about 7 of its 69 findings to
+fixes merged in the cycle before it, among them a red `main`
+(koniz-dev/flutter-starter#935) and a hook that failed every commit in a
+monorepo (#936). All of them were visible in the diff. So before merging, a
+PR whose diff touches any of these surfaces gets an adversarial review:
+
+- the `security` risk surfaces above, plus `lib/features/auth/` and
+  `lib/core/session/`;
+- `.githooks/`, `scripts/`, `tool/`, `bricks/`, `.github/workflows/`,
+  `fastlane/`.
+
+The reviewer is a fresh subagent (`qa` or `general-purpose`, no worktree
+isolation). Its brief holds the PR number, the issue and the diff, but **not
+the implementer's own verdict**. It is asked what the change breaks beyond
+its criteria: other callers and request shapes, other platforms and shells
+(macOS bash 3.2, a monorepo, an adopter's repo rather than the template),
+whether each new test fails without the fix, and anything a workflow that
+does not run on PRs would catch only after merge.
+
+What it finds gets one of two answers:
+
+- **Fix it on the same branch** when it is a defect of this change.
+- **File it** when it is pre-existing or outside the issue's scope.
+
+The PR body names the review and its outcome. A docs-only diff is exempt.
 
 #### Who invokes each phase
 
@@ -264,6 +294,7 @@ What must be true before the next phase starts:
 | Gate | Before entering | Must be true |
 |---|---|---|
 | G1 | implementer | Issue has a `## Acceptance criteria` section with observable steps; scope fits one `epic:*`; issue is `status:in-progress` and assigned to this session (re-read confirmed) |
+| G1b | merge | The PR's checks are green; if the diff touches a pre-merge review surface, the review ran, its defects are fixed on the branch or filed, and the PR body says so |
 | G2 | qa | Change is merged to `main`; commits carry `Refs owner/repo#N` and no `Fixes`/`Closes`/`Resolves` (`$M/scripts/check_issue_refs.sh`); `./scripts/dev/audit_template.sh` exits 0; `dart run $M/scripts/check_epic_coverage.dart` and `$M/scripts/check_deliverable.sh HEAD` exit 0 |
 | G3 | security | G2 held and the diff touches a risk surface listed above |
 | G4 | close | Every criterion has a named artifact under `docs/verification/issue-<N>/` on the `evidence` branch; every PNG was opened and inspected by the closing session; evidence is committed and pushed; a `qa` pass or the self-QA checklist has run |
@@ -297,6 +328,32 @@ auditable. Precedents: koniz-dev/flutter-starter#25 and #84.
   redo it. Recipe: "Release a stale claim" in
   [`issue-workflow.md`](issue-workflow.md). Only release a claim you
   have reason to believe is dead; a live claim belongs to its holder.
+
+### Audits
+
+A deep audit fans out read-only lanes and samples the tree; it never covers
+all of it. The usual lanes are: the fixes since the last audit, security,
+`lib/` correctness, docs against code, and tooling/CI. Point each lane at
+the areas the previous audit covered least. Every finding is reproduced and
+deduped by the session before anything is filed, as always.
+
+- **P0, P1 and P2 findings** are filed one issue each.
+- **P3 findings** go into a single list issue per audit:
+  `chore: P3 findings from the <date> audit`, with `type:task`,
+  `epic:docs` or `epic:tooling-ci` by majority, and `priority:P3`. Each
+  finding is a checkbox carrying its file:line, its evidence and a one-line
+  criterion. Its `## Acceptance criteria` is that every box is either ticked
+  by a merged change or struck through with a reason. A box that grows into
+  real work is promoted to its own issue and linked. Nothing is dropped:
+  the list is the filing.
+- **Stop rule:** when an audit cycle produces no P0 or P1 finding, deep
+  audits stop. Run the next one only when something material changes: a
+  starter release, a major dependency or Flutter bump, a new feature slice
+  or tool, or a user request. A cycle that still finds a P1 means another
+  cycle is due once that cycle's P0/P1 issues are closed.
+
+The 2026-10-30 audit (koniz-dev/flutter-starter#912-#980) predates this rule,
+and its 47 P3 findings stay as individual issues.
 
 ### Tiebreaker priority order
 

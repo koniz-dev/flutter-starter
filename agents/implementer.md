@@ -64,8 +64,20 @@ implementer is active (see Parallelism in `process.md`).
    $M/scripts/check_issue_refs.sh --range origin/main..HEAD
    gh pr create --fill --body "Refs koniz-dev/flutter-starter#N"
    gh pr checks --watch     # after polling until checks register
+   # pre-merge review here when the diff touches a review surface (below)
    gh pr merge --squash --delete-branch
    ```
+
+   **Pre-merge review (gate G1b).** If the diff touches a surface listed under
+   "Pre-merge review" in `process.md` (auth, session, network, storage,
+   security, `.env*`, dependencies, `.githooks/`, `scripts/`, `tool/`,
+   `bricks/`, `.github/workflows/`, `fastlane/`), get a fresh reviewer
+   subagent to read the diff before you merge. Brief it with the PR, the
+   issue and the diff, not your own verdict. Fix on the branch what it finds
+   in this change, file what is pre-existing, and record the outcome in the PR
+   body. A workflow that never runs on PRs (`git-hooks.yml`, for example)
+   is dispatched on the branch (`gh workflow run <file> --ref <branch>`)
+   when its paths are touched.
 
    Every PR gets **Quality gate**, **Issue refs** and the three **Strip** jobs;
    markdown changes add **Docs check**. Zero checks means they have not
