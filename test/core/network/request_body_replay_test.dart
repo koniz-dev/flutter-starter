@@ -280,6 +280,12 @@ void main() {
           contains('can be read only once'),
         ),
       );
+      // The documented code reaches the caller; the mapper used to replace
+      // it with UNKNOWN_NETWORK_ERROR.
+      expect(
+        (thrown! as NetworkException).code,
+        RequestBodyReplay.notReplayableCode,
+      );
       expect(thrown.toString(), isNot(contains('StateError')));
       expect(adapter.hits, hasLength(1), reason: 'nothing is replayed');
     });

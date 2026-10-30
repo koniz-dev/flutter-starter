@@ -235,6 +235,30 @@ void main() {
       });
     });
 
+    group('Unknown carrying a domain exception', () {
+      test('returns the AppException an interceptor put in error', () {
+        final exception = DioException(
+          requestOptions: RequestOptions(path: '/x'),
+          error: const NetworkException('x', code: 'C'),
+        );
+
+        final result = DioExceptionMapper.map(exception);
+
+        expect(result, isA<NetworkException>());
+        expect(result.code, 'C');
+        expect(result.message, 'x');
+      });
+
+      test('a non-domain error is still mapped as before', () {
+        final exception = DioException(
+          requestOptions: RequestOptions(path: '/x'),
+          error: StateError('boom'),
+        );
+
+        expect(DioExceptionMapper.map(exception).code, 'UNKNOWN_NETWORK_ERROR');
+      });
+    });
+
     group('Unknown', () {
       test('should map unknown with SocketException to NetworkException', () {
         final dioException = DioException(
