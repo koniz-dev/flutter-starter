@@ -166,8 +166,10 @@ coverage, and a link to the detailed report.
 
 The **Coverage Analysis** workflow enforces an **80% minimum** overall, plus
 per-layer floors (domain 100%, data 90%, presentation 80%, core 80%) in its
-**Enforce coverage thresholds** step
-([`coverage.yml:139-171`](../../../.github/workflows/coverage.yml)). If coverage
+**Enforce coverage thresholds** step of
+[`coverage.yml`](../../../.github/workflows/coverage.yml), which reads them
+from the workflow's `env:` block (`COVERAGE_MIN_TOTAL`, `COVERAGE_MIN_DOMAIN`,
+`COVERAGE_MIN_DATA`, `COVERAGE_MIN_PRESENTATION`, `COVERAGE_MIN_CORE`). If coverage
 drops below any of them, that workflow run fails.
 
 Because that workflow is manual plus weekly, a per-layer target it misses does
@@ -183,7 +185,7 @@ To increase the minimum threshold:
 
 1. **Update the per-PR floor** (`.github/workflows/ci.yml`), step **Enforce minimum coverage** — raise `COVERAGE_MIN_TOTAL`.
 
-2. **Update coverage workflow** (`.github/workflows/coverage.yml`), step **Enforce coverage thresholds** — adjust the numeric targets in the `check_threshold` calls (e.g. total `80`, domain `100`, data `90`).
+2. **Update coverage workflow** (`.github/workflows/coverage.yml`) — change the `COVERAGE_MIN_*` values in its `env:` block (e.g. `COVERAGE_MIN_TOTAL: 80`, `COVERAGE_MIN_DOMAIN: 100`); the **Enforce coverage thresholds** step reads them.
 
 3. **Update coverage script** (`scripts/test/test_coverage.sh`):
    ```bash
