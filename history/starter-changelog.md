@@ -104,6 +104,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`token`, `otp`, `signature`, ...) bypasses `CacheInterceptor` entirely, so
   its response body is not stored either. `ApiLoggingInterceptor.isSensitiveKey`
   is now public; both use it.
+- `sig` (Azure SAS signature) and `auth` (Firebase REST ID token) are now
+  sensitive keys: redacted from logs and kept out of the HTTP cache.
 - `AuthRepositoryImpl.refreshToken()` checks the session before each of its
   two credential writes and before returning. A logout that landed during the
   access-token write used to leave the new refresh token on a signed-out
