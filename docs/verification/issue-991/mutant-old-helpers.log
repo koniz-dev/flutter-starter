@@ -1,0 +1,74 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint that is not 64 hex digits is refused anywhere
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a staging run reports both the APK and the comparison bundle
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a staging run reports both the APK and the comparison bundle
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a value that is not an opt-out is still refused
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:01 +7 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:01 +7 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: an unrecognised flag is refused even with fingerprints [E]
+  Expected: contains 'neither on'
+    Actual: '--dart-define\\=API_SSL_FINGERPRINTS\\=abababababababababababababababababababababababababababababababab --dart-define\\=ENABLE_SSL_PINNING\\=enabled'
+     Which: does not contain 'neither on'
+  "enabled"
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/fastlane_ssl_pinning_rb_test.dart 98:7  main.<fn>
+  
+00:01 +8 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:02 +9 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (staging): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:02 +10 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production without API_SSL_FINGERPRINTS is refused before anything is built
+00:02 +11 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production: every flutter build carries the fingerprints
+00:03 +12 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging without API_SSL_FINGERPRINTS is refused before anything is built
+00:03 +13 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging: every flutter build carries the fingerprints
+00:03 +14 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build
+00:04 +15 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="enabled" is refused even with fingerprints
+00:05 +15 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="enabled" is refused even with fingerprints [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 182:9  main.<fn>
+  
+00:05 +15 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=" " is refused even with fingerprints
+00:05 +15 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=" " is refused even with fingerprints [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 182:9  main.<fn>
+  
+00:05 +15 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a padded, upper-case opt-out still builds without fingerprints
+00:05 +15 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a padded, upper-case opt-out still builds without fingerprints [E]
+  Expected: <0>
+    Actual: <1>
+  [0;34mBuilding for environment: production[0m
+  Base URL: https://api.example.com
+  
+  Error: API_SSL_FINGERPRINTS is empty. Pinning is on in production,
+  and a release built without fingerprints refuses to start.
+  Set API_SSL_FINGERPRINTS, or ENABLE_SSL_PINNING=false to ship
+  without pinning.
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/build_all_analyze_size_test.dart 82:5  _run
+  
+00:05 +15 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a fingerprint list of only separators is refused as empty
+00:05 +16 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a fingerprint that is not 64 hex digits is refused
+00:05 +17 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=true without fingerprints is still refused
+00:05 +18 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: development is refused before anything is built
+00:06 +19 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 3: the script no longer claims an ABI split it never does
+00:06 +20 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=" " is refused even with fingerprints
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="enabled" is refused even with fingerprints
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a padded, upper-case opt-out still builds without fingerprints
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: an unrecognised flag is refused even with fingerprints

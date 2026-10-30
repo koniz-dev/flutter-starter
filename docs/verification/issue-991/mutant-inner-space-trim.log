@@ -1,0 +1,41 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart
+00:00 +0: criterion 1: production --analyze-size reports the AAB size
+00:00 +1: a staging run reports both the APK and the comparison bundle
+00:01 +2: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:01 +3: criterion 2 (staging): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:02 +4: production without API_SSL_FINGERPRINTS is refused before anything is built
+00:02 +5: production: every flutter build carries the fingerprints
+00:03 +6: staging without API_SSL_FINGERPRINTS is refused before anything is built
+00:03 +7: staging: every flutter build carries the fingerprints
+00:03 +8: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build
+00:04 +9: ENABLE_SSL_PINNING="enabled" is refused even with fingerprints
+00:04 +10: ENABLE_SSL_PINNING=" " is refused even with fingerprints
+00:04 +11: ENABLE_SSL_PINNING="o n" is refused even with fingerprints
+00:05 +11 -1: ENABLE_SSL_PINNING="o n" is refused even with fingerprints [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 182:9  main.<fn>
+  
+00:05 +11 -1: ENABLE_SSL_PINNING="t r u e" is refused even with fingerprints
+00:05 +11 -2: ENABLE_SSL_PINNING="t r u e" is refused even with fingerprints [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 182:9  main.<fn>
+  
+00:05 +11 -2: a padded, upper-case opt-out still builds without fingerprints
+00:06 +12 -2: a fingerprint list of only separators is refused as empty
+00:06 +13 -2: a fingerprint that is not 64 hex digits is refused
+00:06 +14 -2: ENABLE_SSL_PINNING=true without fingerprints is still refused
+00:06 +15 -2: development is refused before anything is built
+00:06 +16 -2: criterion 3: the script no longer claims an ABI split it never does
+00:06 +17 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="o n" is refused even with fingerprints
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING="t r u e" is refused even with fingerprints
