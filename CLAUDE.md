@@ -104,7 +104,7 @@ workflows' `pull_request` triggers drift apart:
 
 | Workflow | Check name(s) | Runs when |
 |---|---|---|
-| [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; the expensive steps are skipped inside the job when nothing outside `**/*.md` and `docs/**` changed |
+| [`ci.yml`](.github/workflows/ci.yml) | Quality gate | **every** PR; when nothing outside `**/*.md` and `docs/**` changed, format, analyze and the full suite are skipped inside the job and only the tests that read markdown run |
 | [`docs-check.yml`](.github/workflows/docs-check.yml) | Docs check | any `**/*.md`, `tool/check_docs.dart`, `tool/doc_signatures.dart`, `tool/doc_symbols.dart`, `tool/doc_env_runs.dart`, `tool/doc_dart_defines.dart`, `tool/doc_test_paths.dart`, `lib/core/config/dart_defines.dart`, or the workflow itself (`.github/workflows/docs-check.yml`) |
 | [`action-pins.yml`](.github/workflows/action-pins.yml) | Action pins, Workflow lint (actionlint + shellcheck) | any `.github/**` (so every Dependabot github-actions bump) or `tool/check_action_pins.dart`; asks the GitHub API, so it is not part of the offline `flutter test` suite |
 | [`build.yml`](.github/workflows/build.yml) | Android on JDK 25 (toolchain floor + debug build) | any `android/**`, `tool/check_android_toolchain.dart`, or the workflow itself (`.github/workflows/build.yml`); its manual Build Android/iOS/Web jobs report as skipped |
@@ -112,7 +112,9 @@ workflows' `pull_request` triggers drift apart:
 
 `ci.yml` has no `paths-ignore`; it filters inside the job instead ("Decide
 the gate scope"), so the check always posts a conclusion and can be a required status check, while
-a docs-only PR installs no Flutter toolchain.
+a docs-only PR runs only the tests that read markdown (`DOC_TESTS` in `ci.yml`;
+`test/tooling/ci_doc_tests_cover_markdown_readers_test.dart` keeps that list
+complete).
 `strip-smoke.yml` does the same ("Decide the strip scope"). <!-- strip:strip-tool line --> A PR reporting zero checks is the
 registration race, never a path exclusion. Poll until
 `gh pr checks --json name --jq 'length'` is non-zero before
@@ -120,8 +122,9 @@ registration race, never a path exclusion. Poll until
 gate entirely.
 
 **Read a green Quality gate or Strip check carefully on a docs-only PR.** It
-does not mean format, analyze and test passed - it means they did not run,
-because no changed path could have affected them. Each job summary states which
+does not mean format, analyze and the full suite passed - on the Quality gate
+only the tests that read markdown ran, and on Strip nothing ran, because no
+other changed path could have affected them. Each job summary states which
 of the two happened and lists every changed path. The skip set is `**/*.md` anywhere plus `docs/**`,
 minus `.dart`: `analysis_options.yaml` does not exclude `docs/`, so a `.dart`
 file committed under `docs/` is analyzed like any other source and forces the

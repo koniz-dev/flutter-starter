@@ -52,7 +52,13 @@ jobs:
       #   * `flutter analyze` over the package (minus analysis_options excludes)
       #   * `flutter test` over test/
       #
-      # `**/*.md` qualifies: no step reads markdown. `docs/**` mostly qualifies
+      # `**/*.md` and `docs/**` cannot change format or analyze, and most of the
+      # suite never reads them - but some tests do: they parse CLAUDE.md, the
+      # upgrade guide's version marker, strip markers, doc snippets and links.
+      # A docs-only change therefore still runs exactly those tests (the
+      # `DOC_TESTS` paths in the step below; test/tooling/
+      # ci_doc_tests_cover_markdown_readers_test.dart fails if a test that
+      # reads markdown lives outside them). `docs/**` mostly qualifies
       # - EXCEPT `docs/**/*.dart`. `analysis_options.yaml` does not exclude
       # `docs/`, so a Dart file committed under it is analyzed like any other.
       # Treating it as inert would let a broken one through the gate and turn
@@ -111,11 +117,16 @@ jobs:
               verdict="$(printf '%s\n' "$relevant" | wc -l | tr -d ' ') changed path(s) can affect this gate. Running format, analyze and test."
             else
               run=false
-              verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file), so nothing this gate checks could have changed. format, analyze and test were NOT run."
+              verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file). format, analyze and the full suite were NOT run; only the tests that read markdown were."
             fi
           fi
 
+          # A docs-only change still runs the tests that read markdown.
+          doc_tests=false
+          if [ "$run" = false ]; then doc_tests=true; fi
+
           echo "run=$run" >> "$GITHUB_OUTPUT"
+          echo "doc_tests=$doc_tests" >> "$GITHUB_OUTPUT"
 
           {
             echo "### Quality gate scope"
@@ -146,15 +157,34 @@ jobs:
       # clear the new lints on `main` first (do not chase it inside an unrelated
       # PR). This is what happened in run 32638785145 under stable-3.47.1.
       - name: Setup Flutter
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' || steps.scope.outputs.doc_tests == 'true'
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: 'stable'
           cache: true
 
       - name: Install dependencies
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' || steps.scope.outputs.doc_tests == 'true'
         run: flutter pub get
+
+      # Docs-only changes: the tests that read markdown, and nothing else. A
+      # doc they parse (the version marker, CLAUDE.md's checks table, strip
+      # markers, snippets) used to merge broken here and turn the next code
+      # pull request red. Every test that reads markdown must live under one
+      # of these paths; test/tooling/ci_doc_tests_cover_markdown_readers_test.dart
+      # checks it.
+      - name: Run the tests that read markdown
+        if: steps.scope.outputs.doc_tests == 'true'
+        env:
+          DOC_TESTS: >-
+            test/docs
+            test/tooling
+            test/core/config/enable_toggles_have_readers_test.dart
+            test/core/errors/http_status_failures_test.dart
+        run: |
+          # Word splitting is the point: DOC_TESTS is a list of paths.
+          # shellcheck disable=SC2086
+          flutter test --timeout=5m $DOC_TESTS
 
       # Generated code is committed, so it must match its sources: a provider
       # edited without re-running build_runner left stale hashes that the
