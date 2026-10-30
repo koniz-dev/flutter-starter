@@ -1,0 +1,13 @@
+ad28ebde94b fix(security): share the token-store queue across every store over one secure-storage service (#1013)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_shared_queue_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_shared_queue_test.dart: a clear through one store lands after a write pending on another store over the same service
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_shared_queue_test.dart: stores over different services do not wait for each other
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a clear issued after a pending write lands after it
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a logout during the refresh write leaves no token behind
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a login completing after the stale refresh write keeps its own tokens
+00:00 +5: All tests passed!
+tests exit=0
