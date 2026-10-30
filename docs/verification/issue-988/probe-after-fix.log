@@ -1,0 +1,38 @@
+== ref fix/fastlane-pass-fingerprints (0609965)
+== android, no fingerprints:  fastlane android build_bundle environment:production
+[03:05:20]:     71:	    # refuses to start. See ssl_pinning.rb.
+[!] API_SSL_FINGERPRINTS is empty. Pinning is on in production, and a release built without fingerprints refuses to start. Pass ssl_fingerprints:<list> (or set API_SSL_FINGERPRINTS), or ssl_pinning:false to ship without pinning.
+   flutter calls:
+     (none)
+== android, env fingerprints: API_SSL_FINGERPRINTS=abababababababababababababababababababababababababababababababab fastlane android build_bundle environment:production
+[03:05:22]: Step: cd .. && flutter build appbundle --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com --dart-define\=API_SSL_FINGERPRINTS\=abababababababababababababababababababababababababababababababab
+[03:05:22]: $ cd .. && flutter build appbundle --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com --dart-define\=API_SSL_FINGERPRINTS\=abababababababababababababababababababababababababababababababab
+   flutter calls:
+     flutter build appbundle --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com --dart-define=API_SSL_FINGERPRINTS=abababababababababababababababababababababababababababababababab
+== android, option forwarded by upload_internal:  fastlane android upload_internal environment:staging ssl_fingerprints:abababababababababababababababababababababababababababababababab
+[03:05:24]: Step: cd .. && flutter build appbundle --release --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define\=API_SSL_FINGERPRINTS\=abababababababababababababababababababababababababababababababab
+[03:05:24]: $ cd .. && flutter build appbundle --release --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define\=API_SSL_FINGERPRINTS\=abababababababababababababababababababababababababababababababab
+   flutter calls:
+     flutter build appbundle --release --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define=API_SSL_FINGERPRINTS=abababababababababababababababababababababababababababababababab
+== android, opt-out option:  fastlane android build_apk environment:production ssl_pinning:false
+   flutter calls:
+     flutter build apk --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com --dart-define=ENABLE_SSL_PINNING=false
+== android, bad fingerprint: API_SSL_FINGERPRINTS=AA:BB fastlane android build_bundle environment:production
+[03:05:28]:     71:	    # refuses to start. See ssl_pinning.rb.
+[!] API_SSL_FINGERPRINTS entry 'aabb' is not a SHA-256 fingerprint (64 hex digits, colons optional).
+   flutter calls:
+     (none)
+== ios, no fingerprints:  fastlane ios build_appstore environment:production
+[03:05:29]:     71:	    # refuses to start. See fastlane/ssl_pinning.rb.
+[!] API_SSL_FINGERPRINTS is empty. Pinning is on in production, and a release built without fingerprints refuses to start. Pass ssl_fingerprints:<list> (or set API_SSL_FINGERPRINTS), or ssl_pinning:false to ship without pinning.
+   flutter calls:
+     (none)
+== ios, option forwarded by upload_testflight:  fastlane ios upload_testflight environment:staging ssl_fingerprints:abababababababababababababababababababababababababababababababab
+[03:05:31]: Step: cd ../.. && flutter build ipa --release --export-method app-store --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define\=API_SSL_FINGERPRINTS\=abababababababababababababababababababababababababababababababab
+[03:05:31]: $ cd ../.. && flutter build ipa --release --export-method app-store --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define\=API_SSL_FINGERPRINTS\=abababababababababababababababababababababababababababababababab
+[!] No value found for 'username'
+   flutter calls:
+     flutter build ipa --release --export-method app-store --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define=API_SSL_FINGERPRINTS=abababababababababababababababababababababababababababababababab
+== ios, adhoc opt-out env: ENABLE_SSL_PINNING=false fastlane ios build_adhoc environment:staging
+   flutter calls:
+     flutter build ipa --release --export-method ad-hoc --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com --dart-define=ENABLE_SSL_PINNING=false

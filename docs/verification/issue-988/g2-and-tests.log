@@ -1,0 +1,20 @@
+9926cf6cd00 fix(release): pass API_SSL_FINGERPRINTS from the Fastfile release lanes, and refuse a build without it (#1000)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_pinning_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_pinning_test.dart: fastlane/Fastfile loads the pinning helper
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: valid fingerprints pass through as a define
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint that is not 64 hex digits is refused anywhere
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: the opt-out values the app reads as false build without fingerprints
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a value that is not an opt-out is still refused
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: development passes through with nothing set
+00:01 +12: All tests passed!
+tests exit=0
