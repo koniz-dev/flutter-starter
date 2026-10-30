@@ -188,6 +188,13 @@ jobs:
             local name=$1
             local current=$2
             local target=$3
+            # bc prints nothing for a non-number, and an empty (( )) is
+            # false, which would read as a pass.
+            local number='^[0-9]+(\.[0-9]+)?$'
+            if ! [[ "$current" =~ $number && "$target" =~ $number ]]; then
+              echo "❌ $name: not a number (coverage '${current}', target '${target}')"
+              return 1
+            fi
             if (( $(echo "$current < $target" | bc -l) )); then
               echo "❌ $name: ${current}% < ${target}%"
               return 1
