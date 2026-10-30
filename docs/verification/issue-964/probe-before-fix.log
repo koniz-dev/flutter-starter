@@ -1,0 +1,33 @@
+== ref main (9fe8de2)
+== android: fastlane android upload_internal
++------------------------------------------------------------------------------------+
+|                                  fastlane summary                                  |
++------+---------------------------------------------------------------+-------------+
+| Step | Action                                                        | Time (in s) |
++------+---------------------------------------------------------------+-------------+
+| 1    | default_platform                                              | 0           |
+| 2    | Switch to android build_bundle lane                           | 0           |
+| 3    | cd .. && dart run tool/check_env_assets.dart                  | 0           |
+| 4    | Switch to android get_version lane                            | 0           |
+| 5    | cd .. && flutter build appbundle --release --dart-define=ENVI | 0           |
++------+---------------------------------------------------------------+-------------+
+
+[02:44:53]: fastlane finished with errors
+
+[!] Could not find aab file at path '../build/app/outputs/bundle/release/app-release.aab'
+== ios: (cd ios && fastlane ios upload_testflight)
++------------------------------------------------------------------------------------+
+|                                  fastlane summary                                  |
++------+---------------------------------------------------------------+-------------+
+| Step | Action                                                        | Time (in s) |
++------+---------------------------------------------------------------+-------------+
+| 1    | default_platform                                              | 0           |
+| 2    | Switch to ios build_appstore lane                             | 0           |
+| 3    | cd ../.. && dart run tool/check_env_assets.dart               | 0           |
+| 4    | Switch to ios get_version lane                                | 0           |
+| 5    | cd ../.. && flutter build ipa --release --export-method app-s | 0           |
++------+---------------------------------------------------------------+-------------+
+
+[02:44:55]: fastlane finished with errors
+
+[!] Could not find ipa file at path '/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.ULup13lhkg/build/ios/ipa/Runner.ipa'

@@ -1,0 +1,26 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_artifact_paths_test.dart
+00:00 +0: fastlane/Fastfile builds every artifact path with File.expand_path
+00:00 +0 -1: fastlane/Fastfile builds every artifact path with File.expand_path [E]
+  Expected: a string starting with 'File.expand_path('
+    Actual: '"../build/app/outputs/bundle/release/app-release.aab"'
+  bundle_path in fastlane/Fastfile
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/fastlane_artifact_paths_test.dart 25:9  main.<fn>
+  
+00:00 +0 -1: ios/fastlane/Fastfile builds every artifact path with File.expand_path
+00:00 +0 -2: ios/fastlane/Fastfile builds every artifact path with File.expand_path [E]
+  Expected: a string starting with 'File.expand_path('
+    Actual: '"#{REPO_ROOT}/build/ios/ipa/Runner.ipa"'
+  ipa_path in ios/fastlane/Fastfile
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/fastlane_artifact_paths_test.dart 25:9  main.<fn>
+  
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_artifact_paths_test.dart: fastlane/Fastfile builds every artifact path with File.expand_path
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_artifact_paths_test.dart: ios/fastlane/Fastfile builds every artifact path with File.expand_path

@@ -1,0 +1,33 @@
+== ref fix/fastlane-upload-absolute-paths (0501797)
+== android: fastlane android upload_internal
+[02:45:43]: fastlane finished with errors
+
+Looking for related GitHub issues on fastlane/fastlane...
+
+Found no similar issues. To create a new issue, please visit:
+https://github.com/fastlane/fastlane/issues/new
+Run `fastlane env` to append the fastlane environment to your issue
+/Users/nguyenanhkiet/.local/share/gem/ruby/4.0.0/gems/googleauth-1.17.4/lib/googleauth/application_default.rb:60:in 'Google::Auth.get_application_default': [!] Your credentials were not found. To set up Application Default (Google::Auth::InitializationError)
+Credentials for your environment, see
+https://cloud.google.com/docs/authentication/external/set-up-adc
+
+/Users/nguyenanhkiet/.local/share/gem/ruby/4.0.0/gems/googleauth-1.17.4/lib/googleauth/application_default.rb:60:in 'Google::Auth.get_application_default': Your credentials were not found. To set up Application Default (Google::Auth::InitializationError)
+Credentials for your environment, see
+https://cloud.google.com/docs/authentication/external/set-up-adc
+
+== ios: (cd ios && fastlane ios upload_testflight)
+|                                  fastlane summary                                  |
++------+---------------------------------------------------------------+-------------+
+| Step | Action                                                        | Time (in s) |
++------+---------------------------------------------------------------+-------------+
+| 1    | default_platform                                              | 0           |
+| 2    | Switch to ios build_appstore lane                             | 0           |
+| 3    | cd ../.. && dart run tool/check_env_assets.dart               | 0           |
+| 4    | Switch to ios get_version lane                                | 0           |
+| 5    | cd ../.. && flutter build ipa --release --export-method app-s | 0           |
+| 💥   | pilot                                                         | 0           |
++------+---------------------------------------------------------------+-------------+
+
+[02:45:45]: fastlane finished with errors
+
+[!] No value found for 'username'

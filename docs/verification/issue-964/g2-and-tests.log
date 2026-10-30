@@ -1,0 +1,10 @@
+dc6a8af268d fix(release): pass the upload actions an absolute artifact path (#999)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_artifact_paths_test.dart
+00:00 +0: fastlane/Fastfile builds every artifact path with File.expand_path
+00:00 +1: ios/fastlane/Fastfile builds every artifact path with File.expand_path
+00:00 +2: All tests passed!
+tests exit=0
