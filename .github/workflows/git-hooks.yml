@@ -7,15 +7,20 @@
 # A fresh clone is the only state that shows
 # it, so this job makes one.
 #
-# Not a PR check: it runs on pushes to main that touch the hooks or this test,
-# and on demand (Actions -> Git hooks -> Run workflow, or
-# `gh workflow run git-hooks.yml --ref <branch>`) to verify a branch before
-# merging.
+# It runs on pull requests and pushes to main that touch the hooks or this
+# test, and on demand (Actions -> Git hooks -> Run workflow, or
+# `gh workflow run git-hooks.yml --ref <branch>`). It used to be push-only, so
+# a PR that broke the hook merged green and turned main red.
 name: Git hooks
 
 on:
   push:
     branches: [main]
+    paths:
+      - '.githooks/**'
+      - 'scripts/test/pre_commit_hook_test.sh'
+      - '.github/workflows/git-hooks.yml'
+  pull_request:
     paths:
       - '.githooks/**'
       - 'scripts/test/pre_commit_hook_test.sh'

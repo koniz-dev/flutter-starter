@@ -6,15 +6,22 @@
 # no longer uses `sed -i`, and this job keeps it that way: the same fixture
 # tests run on ubuntu-latest and on macos-latest, whose /bin/bash is 3.2.
 #
-# Not a PR check: it runs on pushes to main that touch the release scripts,
+# It runs on pull requests and pushes to main that touch the release scripts,
 # and on demand (Actions -> Release scripts -> Run workflow, or
-# `gh workflow run release-scripts.yml --ref <branch>`) to verify a branch
-# before merging. Needs no Flutter toolchain.
+# `gh workflow run release-scripts.yml --ref <branch>`). Needs no Flutter
+# toolchain.
 name: Release scripts
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'scripts/ci/generate_changelog.sh'
+      - 'scripts/ci/release.sh'
+      - 'scripts/ci/bump_version.sh'
+      - 'scripts/test/release_scripts_test.sh'
+      - '.github/workflows/release-scripts.yml'
+  pull_request:
     paths:
       - 'scripts/ci/generate_changelog.sh'
       - 'scripts/ci/release.sh'
