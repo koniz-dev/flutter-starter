@@ -1,0 +1,6 @@
+== opt-in recipe from docs/guides/security/implementation.md section 7, step 1, on 7076eb9
+Warning: Packages added when offline may not resolve to the latest compatible version available.
+== flutter analyze lib/core/security test/core/security
+No issues found! (ran in 1.6s)
+== flutter test test/core/security/infrastructure
+00:00 +29: All tests passed!

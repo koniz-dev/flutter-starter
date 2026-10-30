@@ -1,0 +1,12 @@
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/rasp_is_opt_in_test.dart
+00:00 +0: pubspec.yaml does not depend on freerasp
+00:00 +1: no lockfile resolves freerasp
+00:00 +2: no compiled source imports freerasp
+00:00 +3: the setup brick still rewrites the template identifiers
+00:00 +4: the adapter and its tests still ship as templates
+00:00 +5: All tests passed!
+tests exit=0

@@ -1,0 +1,25 @@
+== branch 8fb80cf7ad4, ./gradlew :app:processReleaseManifest --offline -PallowUnsignedRelease=true (JDK: Android Studio jbr)
+== permissions and queries in the merged release manifest (build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml):
+    <uses-permission android:name="android.permission.INTERNET" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+    <uses-permission android:name="com.example.flutter_starter.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+        <provider
+        </provider>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+== grep for the issue's entries (expect none):
+build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml:0
+build/app/outputs/logs/manifest-merger-release-report.txt:0
+== INTERNET (expect present, from the app's own manifest):
+uses-permission#android.permission.INTERNET
+ADDED from /Users/nguyenanhkiet/Playground/flutter-starter/android/app/src/main/AndroidManifest.xml:11:5-66
