@@ -108,10 +108,14 @@ transport. It installs the pinned adapter only when `ENABLE_SSL_PINNING` is on
 
 <!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
 
+<!-- symbol: lib/core/config/app_config.dart AppConfig.releasePinningMisconfigured -->
+
 Requesting pinning with no fingerprints does not fail quietly:
 `createAdapter()` logs `SSL PINNING MISCONFIGURED: ...` and trips an assertion
-in debug builds. A release build still runs unpinned, so the log line is all
-you get there. `AppConfig.printConfig()` prints `SSL Pinning Requested`,
+in debug builds. A release build refuses to start on it: `main()` checks
+`AppConfig.releasePinningMisconfigured` and shows the startup failure screen,
+naming `API_SSL_FINGERPRINTS`. Set `ENABLE_SSL_PINNING=false` to ship a
+release without pinning on purpose. `AppConfig.printConfig()` prints `SSL Pinning Requested`,
 `SSL Pinning Effective` and `SSL Fingerprints Configured`, and adds a
 `!! SSL PINNING MISCONFIGURED` line in that case. `Effective: true` is the only
 reading that means traffic is pinned. Pinning never applies on Flutter web,
@@ -150,8 +154,7 @@ case "$ENVIRONMENT" in
 esac
 
 # Pinning is on by default in staging and production. With an empty list,
-# SslPinning returns no adapter and the release falls back to the system
-# trust store, so refuse to build instead of shipping unpinned.
+# the release refuses to start, so refuse to build it in the first place.
 if [ -z "${API_SSL_FINGERPRINTS:-}" ]; then
   echo "API_SSL_FINGERPRINTS is empty: refusing to build an unpinned release" >&2
   exit 1

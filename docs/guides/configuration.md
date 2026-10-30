@@ -51,6 +51,9 @@ A release build refuses to start with `ENVIRONMENT=development` - the default,
 and what `.env.example` ships - because that registers the debug routes and
 turns HTTP logging on. Keep a copy set to `production` (or `staging`) for
 release builds; `.env.production` and `.env.staging` are git-ignored for that.
+A staging or production release also refuses to start with an empty
+`API_SSL_FINGERPRINTS`, because pinning is on there by default and would pin
+nothing; set the fingerprints, or `ENABLE_SSL_PINNING=false` to opt out.
 Profile builds (`--profile`) are not refused.
 
 A release APK needs a signing key first; without `android/key.properties`

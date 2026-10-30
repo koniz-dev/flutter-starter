@@ -221,6 +221,17 @@ class AppConfig {
   static bool get sslPinningMisconfigured =>
       !kIsWeb && enableSslPinning && apiSslFingerprints.isEmpty;
 
+  /// Whether a release build requests pinning it cannot enforce.
+  ///
+  /// [sslPinningMisconfigured] in a release build: the assertion that flags it
+  /// in debug is stripped, so the app would otherwise talk to the API through
+  /// the system trust store while every default says it is pinned. `main()`
+  /// refuses to start on it. Setting `ENABLE_SSL_PINNING=false` explicitly is
+  /// the opt-out. Profile builds are allowed, as for
+  /// [releaseBuiltAsDevelopment].
+  static bool releasePinningMisconfigured({bool releaseMode = kReleaseMode}) =>
+      releaseMode && sslPinningMisconfigured;
+
   // ==========================================================================
   // Feature Flags
   // ==========================================================================

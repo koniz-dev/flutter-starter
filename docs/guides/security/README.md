@@ -48,8 +48,9 @@ improvements still needed before production.
 ### Critical / high-attention items
 
 - SSL pinning ships but is inert until you set `API_SSL_FINGERPRINTS`. A
-  missing fingerprint list is logged and asserts in debug builds, but a release
-  build still runs unpinned
+  missing fingerprint list is logged and asserts in debug builds, and a
+  staging or production release build refuses to start without it (set
+  `ENABLE_SSL_PINNING=false` to opt out explicitly)
 - No code obfuscation in release (when you ship production)
 - Your release keystore: the build never debug-signs, and refuses a release build until `android/key.properties` exists
 - Verify **`ApiLoggingInterceptor`** redaction covers your tokens/payloads — see [audit](./audit.md)

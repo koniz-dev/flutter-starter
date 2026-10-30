@@ -22,7 +22,7 @@ them.
       `API_SSL_FINGERPRINTS` and `ENABLE_SSL_PINNING` in your environment.
       The adapter is built by `SslPinning.createAdapter()`; with no
       fingerprints it pins nothing, logs `SSL PINNING MISCONFIGURED` and
-      asserts in debug builds
+      asserts in debug builds, and a release build refuses to start
       <!-- symbol: lib/core/network/ssl_pinning.dart SslPinning -->
 - [ ] Encrypt sensitive data at rest (if required)
 - [ ] Remove sensitive data from crash reports

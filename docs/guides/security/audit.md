@@ -104,8 +104,8 @@ enabled by default in staging and production, but it also needs a non-empty
 fingerprint list. With `API_SSL_FINGERPRINTS` unset, which is how
 `.env.example` ships, the adapter is never installed and traffic is **not**
 pinned. That case is logged as `SSL PINNING MISCONFIGURED` and asserts in debug
-builds. The silent fail-open is fixed, but a release
-build still runs unpinned.
+builds, and a release build refuses to start on it through the startup
+failure screen. `ENABLE_SSL_PINNING=false` is the explicit opt-out.
 
 **Risk while unconfigured:** attackers could intercept and modify network
 traffic using a certificate the platform trust store accepts.
