@@ -161,6 +161,39 @@ void main() {
     });
   });
 
+  test('an hour-old export a killed run left beside the repository is '
+      'swept, a fresh one is kept', () {
+    final stale = Directory('${root.path}/.repo-pre-commit.stale1')
+      ..createSync();
+    final fresh = Directory('${root.path}/.repo-pre-commit.fresh1')
+      ..createSync();
+    Process.runSync('touch', ['-t', '202601010000', stale.path]);
+    write(repo, 'lib/clean.dart', _formatted);
+    git(['add', 'lib/clean.dart']);
+
+    final result = git(['commit', '-m', 'feat: clean']);
+
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    expect(stale.existsSync(), isFalse);
+    expect(fresh.existsSync(), isTrue);
+  });
+
+  test('a parent it cannot write to falls back to the temp directory and '
+      'says so', () {
+    Process.runSync('chmod', ['a-w', root.path]);
+    addTearDown(() => Process.runSync('chmod', ['u+w', root.path]));
+    write(repo, 'lib/clean.dart', _formatted);
+    git(['add', 'lib/clean.dart']);
+
+    final result = git(['commit', '-m', 'feat: clean']);
+
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    expect(
+      '${result.stdout}${result.stderr}',
+      contains('Cannot write beside the repository'),
+    );
+  });
+
   test("inside a linked worktree it checks that worktree's index", () {
     final worktree = '${root.path}/wt';
     expect(git(['worktree', 'add', '-q', worktree]).exitCode, 0);

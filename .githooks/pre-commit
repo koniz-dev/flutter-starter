@@ -61,8 +61,17 @@ fi
 # commit with such a dependency failed. A parent that cannot be written to
 # falls back to the temp directory.
 repo="$(pwd)"
-staged="$(mktemp -d "$(dirname "$repo")/.$(basename "$repo")-pre-commit.XXXXXX" 2>/dev/null)" ||
+parent="$(dirname "$repo")"
+prefix=".$(basename "$repo")-pre-commit."
+# An export an earlier run could not remove (the hook was killed) is swept
+# once it is an hour old; a younger one may belong to a commit in progress.
+find "$parent" -maxdepth 1 -type d -name "$prefix*" -mmin +60 \
+  -exec rm -rf {} + 2>/dev/null || true
+if ! staged="$(mktemp -d "$parent/${prefix}XXXXXX" 2>/dev/null)"; then
   staged="$(mktemp -d)"
+  echo "⚠️  Cannot write beside the repository; checking in $staged instead."
+  echo "   A relative path: dependency outside the repository will not resolve there."
+fi
 trap 'rm -rf "$staged"' EXIT
 git checkout-index --all --prefix="$staged/"
 mkdir -p "$staged/.dart_tool"
