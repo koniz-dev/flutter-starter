@@ -237,9 +237,11 @@ asset, and must not become one (see
 | `ENVIRONMENT` | String | `development` | Environment: `development`, `staging`, or `production` |
 | `BASE_URL` | String | Environment-aware | API base URL. Requests go to `BASE_URL` + `/v1` + the path (`https://api.example.com/v1/auth/login`); see [Connecting Your Backend](#connecting-your-backend) to change the `/v1` |
 | `API_TIMEOUT` | int | `30` | End-to-end deadline per request, in seconds, retries included (see [configuration](../configuration.md#environment-variables)) |
-| `ENABLE_LOGGING` | bool | Environment-aware | Enable logging |
-| `ENABLE_ANALYTICS` | bool | Environment-aware | Enable analytics |
-| `ENABLE_CRASH_REPORTING` | bool | Environment-aware | Enable crash reporting |
+| `ENABLE_LOGGING` | bool | `true` | Master switch for logging; `false` turns every output off |
+| `ENABLE_ANALYTICS` | bool | Environment-aware | **Reserved, not wired** - the starter ships no analytics; gate yours on it |
+| `ENABLE_CRASH_REPORTING` | bool | Environment-aware | **Reserved, not wired** - the starter ships no crash reporter; gate yours on it |
+
+The full list, with every default, is in [configuration](../configuration.md#environment-variables).
 
 <!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
 
