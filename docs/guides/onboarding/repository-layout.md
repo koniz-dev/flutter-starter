@@ -15,7 +15,7 @@ This document describes **template-owned directories** only. Flutter **platform*
 | [`examples/`](../../../examples/) | Non-shipping Dart snippets; see [`examples/README.md`](../../../examples/README.md). |
 | [`bricks/`](../../../bricks/) | Optional [Mason](https://pub.dev/packages/mason_cli) brick(s) for fork setup (rename package / native ids); see [`bricks/README.md`](../../../bricks/README.md) and [`mason.yaml`](../../../mason.yaml). If you rename manually and do not use Mason, you can remove both. <!-- strip:bricks line --> |
 | [`.github/workflows/`](../../../.github/workflows/) | CI, optional manual E2E, deploy templates. |
-| [`.githooks/`](../../../.githooks/) | Canonical hook scripts in repo; [`setup_git_hooks.sh`](../../../scripts/dev/setup_git_hooks.sh) copies them to `.git/hooks/`. |
+| [`.githooks/`](../../../.githooks/) | Canonical hook scripts in repo; [`setup_git_hooks.sh`](../../../scripts/dev/setup_git_hooks.sh) points `core.hooksPath` at them. |
 
 ## `lib/` structure
 

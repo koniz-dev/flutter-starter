@@ -1,43 +1,48 @@
 # setup_git_hooks.ps1
-# Git Hooks Installation Script for Windows (PowerShell)
+# Points this repository's git hooks at .githooks/ (core.hooksPath), as
+# setup_git_hooks.sh does - see that script for why the hooks are no longer
+# copied into .git/hooks/.
 
-Write-Host "[Git Hooks] Installing..." -ForegroundColor Cyan
+$ErrorActionPreference = 'Stop'
+Set-Location (Join-Path $PSScriptRoot '..\..')
 
-$gitHooksDir = Join-Path (Get-Location) ".git\hooks"
-$sourceHooksDir = Join-Path (Get-Location) ".githooks"
-
-if (!(Test-Path $sourceHooksDir)) {
-    Write-Host "[Error] .githooks directory not found!" -ForegroundColor Red
+git rev-parse --git-dir *> $null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[Error] Not inside a Git repository." -ForegroundColor Red
     exit 1
 }
 
-if (!(Test-Path $gitHooksDir)) {
-    Write-Host "[Error] .git/hooks directory not found. Are you in a Git repository?" -ForegroundColor Red
+foreach ($name in 'pre-commit', 'commit-msg', 'pre-push') {
+    if (!(Test-Path (Join-Path '.githooks' $name))) {
+        Write-Host "[Error] Required hook missing: .githooks/$name" -ForegroundColor Red
+        exit 1
+    }
+}
+
+$localPath = git config --local --get core.hooksPath
+if ($localPath -and $localPath -ne '.githooks') {
+    Write-Host "[Error] This repository already sets core.hooksPath to '$localPath'," -ForegroundColor Red
+    Write-Host "        so git runs the hooks there, not .githooks/. Either run"
+    Write-Host "          git config --local core.hooksPath .githooks"
+    Write-Host "        or call .githooks/* from your own hooks in '$localPath'."
+    exit 1
+}
+$globalPath = git config --global --get core.hooksPath
+
+git config --local core.hooksPath .githooks
+
+$resolved = git rev-parse --git-path hooks
+if ($resolved -ne '.githooks') {
+    Write-Host "[Error] git still resolves hooks to '$resolved', not .githooks/." -ForegroundColor Red
     exit 1
 }
 
-# Copy hooks to .git/hooks
-try {
-    # Remove existing hooks first to avoid PermissionDenied
-    if (Test-Path (Join-Path $gitHooksDir "pre-commit")) { Remove-Item (Join-Path $gitHooksDir "pre-commit") -Force }
-    if (Test-Path (Join-Path $gitHooksDir "commit-msg")) { Remove-Item (Join-Path $gitHooksDir "commit-msg") -Force }
-    if (Test-Path (Join-Path $gitHooksDir "pre-push")) { Remove-Item (Join-Path $gitHooksDir "pre-push") -Force }
-    
-    # Copy files
-    Copy-Item -Path (Join-Path $sourceHooksDir "*") -Destination $gitHooksDir -Force
-    
-    Write-Host "[Done] Git hooks installed successfully!" -ForegroundColor Green
-    Write-Host ""
-    Write-Host "Hooks installed:"
-    Write-Host "  - pre-commit: Format check + code analysis"
-    Write-Host "  - commit-msg: Conventional Commits validation"
-    Write-Host "  - pre-push: Run tests"
-    Write-Host ""
-    Write-Host "To skip hooks (when needed):"
-    Write-Host "  git commit --no-verify"
-    Write-Host "  git push --no-verify"
-} catch {
-    Write-Host "[Error] Error installing hooks: $($_.Exception.Message)" -ForegroundColor Red
-    exit 1
+Write-Host "[Done] Git hooks active: core.hooksPath = .githooks" -ForegroundColor Green
+if ($globalPath) {
+    Write-Host "       (overrides your global core.hooksPath '$globalPath' for this repository)"
 }
-
+Write-Host "  - pre-commit: Format check + code analysis"
+Write-Host "  - commit-msg: Conventional Commits validation"
+Write-Host "  - pre-push: Run tests"
+Write-Host ""
+Write-Host "To skip hooks (when needed): git commit --no-verify | git push --no-verify"
