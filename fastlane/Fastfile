@@ -70,8 +70,12 @@ platform :android do
        "--dart-define=ENVIRONMENT=#{Shellwords.escape(environment)} " \
        "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
 
-    # App Bundle path (flavorless layout)
-    bundle_path = "../build/app/outputs/bundle/release/app-release.aab"
+    # App Bundle path (flavorless layout).
+    # Absolute: lane code runs in fastlane/, but fastlane runs every action
+    # from the project root, so a relative path that File.exist? accepts
+    # here names a file outside the repository by the time the upload
+    # action reads it, and the upload fails with "Could not find ... file".
+    bundle_path = File.expand_path("../build/app/outputs/bundle/release/app-release.aab")
 
     UI.user_error!("App Bundle not found at #{bundle_path}") unless File.exist?(bundle_path)
 
@@ -98,7 +102,9 @@ platform :android do
        "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
 
     # APK path (flavorless layout)
-    apk_path = "../build/app/outputs/flutter-apk/app-release.apk"
+    # Absolute, as bundle_path in build_bundle: actions run from the project
+    # root, not from fastlane/.
+    apk_path = File.expand_path("../build/app/outputs/flutter-apk/app-release.apk")
 
     UI.user_error!("APK not found at #{apk_path}") unless File.exist?(apk_path)
 

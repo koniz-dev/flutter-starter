@@ -72,7 +72,10 @@ platform :ios do
        "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
 
     # IPA path
-    ipa_path = "#{REPO_ROOT}/build/ios/ipa/Runner.ipa"
+    # Absolute: lane code runs in ios/fastlane/, but fastlane runs every
+    # action from ios/, so the relative path would name a file outside the
+    # repository by the time upload_to_testflight / upload_to_app_store read it.
+    ipa_path = File.expand_path("#{REPO_ROOT}/build/ios/ipa/Runner.ipa")
 
     UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
 
@@ -100,7 +103,10 @@ platform :ios do
        "--dart-define=ENVIRONMENT=#{Shellwords.escape(environment)} " \
        "--dart-define=BASE_URL=#{Shellwords.escape(base_url)}")
 
-    ipa_path = "#{REPO_ROOT}/build/ios/ipa/Runner.ipa"
+    # Absolute: lane code runs in ios/fastlane/, but fastlane runs every
+    # action from ios/, so the relative path would name a file outside the
+    # repository by the time upload_to_testflight / upload_to_app_store read it.
+    ipa_path = File.expand_path("#{REPO_ROOT}/build/ios/ipa/Runner.ipa")
 
     UI.user_error!("IPA not found at #{ipa_path}") unless File.exist?(ipa_path)
 
