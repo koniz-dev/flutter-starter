@@ -80,6 +80,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       
+      # Every library under lib/ in lcov.info, with zero hits where no test ran
+      # it; otherwise an untested file never moved a layer's figure.
+      - name: Import every library for coverage
+        run: dart run tool/coverage_helper.dart
+
       - name: Run tests with coverage
         timeout-minutes: 20
         run: flutter test --coverage --timeout=5m

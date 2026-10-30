@@ -114,3 +114,6 @@ ios/fastlane/README.md
 
 # Antigravity AI
 .agent/
+
+# Written by tool/coverage_helper.dart before `flutter test --coverage`.
+test/coverage_helper_test.dart
