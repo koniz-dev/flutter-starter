@@ -142,6 +142,14 @@ Future<void> bootstrap({
         'ENVIRONMENT=staging or production.',
       );
     }
+    if (AppConfig.releasePinningMisconfigured(releaseMode: releaseMode)) {
+      throw StateError(
+        'SSL pinning is on for this release build, but API_SSL_FINGERPRINTS '
+        'is empty, so nothing would be pinned. Build it with '
+        'API_SSL_FINGERPRINTS set, or with ENABLE_SSL_PINNING=false to opt '
+        'out of pinning explicitly.',
+      );
+    }
 
     // Storage initialization runs the schema migrations. It is the one startup
     // step that can fail with the user's local data on the line.

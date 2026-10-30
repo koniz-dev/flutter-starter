@@ -480,6 +480,34 @@ void main() {
       expect(find.byType(app.MyApp), findsOneWidget);
     });
 
+    testWidgets('a release build with pinning on and no fingerprints boots '
+        'into the failure screen', (tester) async {
+      installSecureBackend(<String, String>{});
+      installEnvAsset('ENVIRONMENT=production\n');
+
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(releaseMode: true),
+      );
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expect(find.textContaining('API_SSL_FINGERPRINTS'), findsOneWidget);
+    });
+
+    testWidgets('a release build that opts out of pinning starts without '
+        'fingerprints', (tester) async {
+      installSecureBackend(<String, String>{});
+      installEnvAsset('ENVIRONMENT=production\nENABLE_SSL_PINNING=false\n');
+
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(releaseMode: true),
+      );
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsNothing);
+      expect(find.byType(app.MyApp), findsOneWidget);
+    });
+
     testWidgets('a non-release development build starts', (tester) async {
       installSecureBackend(<String, String>{});
 
