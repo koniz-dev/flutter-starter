@@ -100,6 +100,7 @@ const _selfPaths = <String>[
   '.github/workflows/strip-smoke.yml',
   'test/tooling/strip_markers_test.dart',
   'test/tooling/strip_sample_prose_test.dart',
+  'test/tooling/strip_unknown_flags_test.dart',
 ];
 
 /// The analyzer exclude for [_selfPaths]' golden tree, with its comment.
@@ -129,18 +130,48 @@ const _markdownWalkSkips = <String>{
   'node_modules',
 };
 
+/// Every flag the tool reads. `--tasks-only` and `--feature-flags-only` are
+/// the setup brick's spellings of the two remove flags.
+const _knownFlags = <String>{
+  '--apply',
+  '--remove-tasks',
+  '--remove-feature-flags',
+  '--tasks-only',
+  '--feature-flags-only',
+  '--keep-samples',
+  '--remove-bricks',
+};
+
+const _usage =
+    'Usage: dart run tool/strip_sample_features.dart --apply '
+    '[--remove-tasks] [--remove-feature-flags] | --keep-samples '
+    '[--remove-bricks]\n'
+    'Removes lib/features/tasks, lib/features/feature_flags and related '
+    'tests. Rewires entrypoints from '
+    'tool/golden/<variant>/. Keeps auth sample. --keep-samples removes '
+    'neither sample. --remove-bricks also deletes bricks/ and mason.yaml, '
+    'and the docs that link into them.';
+
 void main(List<String> args) {
-  if (!args.contains('--apply')) {
+  if (args.contains('--help') || args.contains('-h')) {
+    stdout.writeln(_usage);
+    return;
+  }
+  // Checked before anything else. Flags are read with `contains`, so an
+  // unknown one used to be dropped in silence: `--keep-sample` (one letter
+  // short) left neither sample flag set, which means "remove both", and the
+  // tool deleted both samples, bricks/ and itself.
+  final unknown = args.where((a) => !_knownFlags.contains(a)).toList();
+  if (unknown.isNotEmpty) {
     stderr.writeln(
-      'Usage: dart run tool/strip_sample_features.dart --apply '
-      '[--remove-tasks] [--remove-feature-flags] | --keep-samples '
-      '[--remove-bricks]\n'
-      'Removes lib/features/tasks, lib/features/feature_flags and related '
-      'tests. Rewires entrypoints from '
-      'tool/golden/<variant>/. Keeps auth sample. --keep-samples removes '
-      'neither sample. --remove-bricks also deletes bricks/ and mason.yaml, '
-      'and the docs that link into them.',
+      'Unknown option${unknown.length == 1 ? '' : 's'}: ${unknown.join(' ')}. '
+      'Nothing was deleted.\n$_usage',
     );
+    exitCode = 64;
+    return;
+  }
+  if (!args.contains('--apply')) {
+    stderr.writeln(_usage);
     exitCode = 1;
     return;
   }
