@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`.env.production` and `.env.staging` are now git-ignored). `build.yml`'s
   manual input now defaults to `staging`, and `build_all.sh development`
   exits with an explanation.
+- **`ENABLE_SSL_PINNING` accepts only `true`/`1`/`yes`/`on` and
+  `false`/`0`/`no`/`off`** (any case). Any other value used to read as false
+  and silently ship a release unpinned; it now keeps the default, and a
+  release refuses to start on it, as do the build helpers. Check your `.env`
+  copies and CI variables for another spelling.
 - **`freerasp` is no longer a dependency; RASP is opt-in.** It linked a
   closed-source SDK and several Android permissions (`READ_GSERVICES`,
   `USE_BIOMETRIC`, SMS/call package queries, ...) into every release, even
