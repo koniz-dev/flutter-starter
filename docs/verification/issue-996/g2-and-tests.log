@@ -1,0 +1,15 @@
+6239f4539f3 fix(security): keep a GET whose query carries a secret out of the HTTP cache (#1007)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart
+00:00 +0: ?token=... is neither written nor served from the cache
+00:00 +1: ?access_token=... is neither written nor served from the cache
+00:00 +2: ?X-Amz-Signature=... is neither written nor served from the cache
+00:00 +3: ?otp=... is neither written nor served from the cache
+00:00 +4: a query written into the path is caught as well
+00:00 +5: a non-sensitive query is still cached
+00:00 +6: the cache uses the logging redaction rule, not a copy
+00:00 +7: All tests passed!
+tests exit=0

@@ -1,0 +1,76 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart
+00:00 +0: ?token=... is neither written nor served from the cache
+00:00 +0 -1: ?token=... is neither written nor served from the cache [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_67d5682746353a16f365694901791ae019e99a5b9f03a3750d8fd1f440a318e3',
+              'http_cache_timestamp_http_cache_67d5682746353a16f365694901791ae019e99a5b9f03a3750d8fd1f440a318e3',
+              'http_cache_index'
+            ]
+  nothing written
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/network/interceptors/cache_sensitive_query_test.dart 55:7  main.<fn>
+  
+00:00 +0 -1: ?access_token=... is neither written nor served from the cache
+00:00 +0 -2: ?access_token=... is neither written nor served from the cache [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_4ce27c537b1e6a65273e321bf78f313e34cf2e335e87865812a6cf2730b0ed68',
+              'http_cache_timestamp_http_cache_4ce27c537b1e6a65273e321bf78f313e34cf2e335e87865812a6cf2730b0ed68',
+              'http_cache_index'
+            ]
+  nothing written
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/network/interceptors/cache_sensitive_query_test.dart 55:7  main.<fn>
+  
+00:00 +0 -2: ?X-Amz-Signature=... is neither written nor served from the cache
+00:00 +0 -3: ?X-Amz-Signature=... is neither written nor served from the cache [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_ce59e33e5b09348dab1d9b0a9f76c6861d3c289fa930bc0a33f377bed90d41ab',
+              'http_cache_timestamp_http_cache_ce59e33e5b09348dab1d9b0a9f76c6861d3c289fa930bc0a33f377bed90d41ab',
+              'http_cache_index'
+            ]
+  nothing written
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/network/interceptors/cache_sensitive_query_test.dart 55:7  main.<fn>
+  
+00:00 +0 -3: ?otp=... is neither written nor served from the cache
+00:00 +0 -4: ?otp=... is neither written nor served from the cache [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_883161cc5a08e0c4faf6710de485051e79ea5a59dda8fe366f17568cc9cdbfe8',
+              'http_cache_timestamp_http_cache_883161cc5a08e0c4faf6710de485051e79ea5a59dda8fe366f17568cc9cdbfe8',
+              'http_cache_index'
+            ]
+  nothing written
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/network/interceptors/cache_sensitive_query_test.dart 55:7  main.<fn>
+  
+00:00 +0 -4: a non-sensitive query is still cached
+00:00 +1 -4: the cache uses the logging redaction rule, not a copy
+00:00 +1 -5: the cache uses the logging redaction rule, not a copy [E]
+  Expected: <true>
+    Actual: <false>
+  token
+  
+  package:matcher                                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18                   expect
+  test/core/network/interceptors/cache_sensitive_query_test.dart 90:7  main.<fn>
+  
+00:00 +1 -5: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart: ?X-Amz-Signature=... is neither written nor served from the cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart: ?access_token=... is neither written nor served from the cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart: ?otp=... is neither written nor served from the cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart: ?token=... is neither written nor served from the cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_sensitive_query_test.dart: the cache uses the logging redaction rule, not a copy
