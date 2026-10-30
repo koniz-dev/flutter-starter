@@ -35,9 +35,21 @@ const _stubDart = '''#!/usr/bin/env bash
 exit 0
 ''';
 
+/// A stand-in fingerprint list, so a staging or production run is not
+/// refused for missing pinning.
+final String _fingerprints = [
+  List.filled(32, 'AB').join(':'),
+  'cd' * 32,
+].join(',');
+
 /// Runs build_all.sh for [environment] with --analyze-size in a scratch
-/// directory; returns the script's output and every stub flutter call.
-Future<({String output, List<String> calls})> _run(String environment) async {
+/// directory; returns the script's exit code, its output and every stub
+/// flutter call. [env] replaces the default pinning variables.
+Future<({int exitCode, String output, List<String> calls})> _run(
+  String environment, {
+  Map<String, String>? env,
+  bool expectSuccess = true,
+}) async {
   final dir = Directory.systemTemp.createTempSync('build_all_');
   addTearDown(() => dir.deleteSync(recursive: true));
   final bin = Directory('${dir.path}/bin')..createSync();
@@ -46,10 +58,10 @@ Future<({String output, List<String> calls})> _run(String environment) async {
     Process.runSync('chmod', ['+x', file.path]);
   }
   Directory('${dir.path}/scripts/ci').createSync(recursive: true);
-  File(
-    'scripts/ci/build_all.sh',
-  ).copySync('${dir.path}/scripts/ci/build_all.sh');
-  final log = '${dir.path}/flutter.log';
+  for (final script in ['build_all.sh', 'ssl_pinning_defines.sh']) {
+    File('scripts/ci/$script').copySync('${dir.path}/scripts/ci/$script');
+  }
+  final log = File('${dir.path}/flutter.log');
 
   final result = await Process.run(
     'bash',
@@ -57,15 +69,22 @@ Future<({String output, List<String> calls})> _run(String environment) async {
     workingDirectory: dir.path,
     environment: {
       'PATH': '${bin.path}:${Platform.environment['PATH']}',
-      'STUB_LOG': log,
+      'STUB_LOG': log.path,
       // Linux runners: skip the iOS branch, which only runs on macOS.
       'OSTYPE': 'linux-gnu',
+      // Not inherited from the machine running the tests.
+      'API_SSL_FINGERPRINTS': '',
+      'ENABLE_SSL_PINNING': '',
+      ...(env ?? {'API_SSL_FINGERPRINTS': _fingerprints}),
     },
   );
-  expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  if (expectSuccess) {
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  }
   return (
-    output: '${result.stdout}',
-    calls: File(log).readAsLinesSync(),
+    exitCode: result.exitCode,
+    output: '${result.stdout}${result.stderr}',
+    calls: log.existsSync() ? log.readAsLinesSync() : <String>[],
   );
 }
 
@@ -101,6 +120,90 @@ void main() {
     });
   }
 
+  // Pinning is on in staging and production, and a release built with
+  // pinning on and no fingerprints refuses to start.
+  for (final environment in ['production', 'staging']) {
+    test('$environment without API_SSL_FINGERPRINTS is refused before '
+        'anything is built', () async {
+      final run = await _run(environment, env: const {}, expectSuccess: false);
+
+      expect(run.exitCode, isNot(0));
+      expect(run.output, contains('API_SSL_FINGERPRINTS is empty'));
+      expect(run.calls, isEmpty, reason: 'flutter was never called');
+    });
+
+    test(
+      '$environment: every flutter build carries the fingerprints',
+      () async {
+        final run = await _run(environment);
+        final builds = run.calls.where((c) => c.startsWith('flutter build '));
+
+        expect(builds, isNotEmpty);
+        for (final call in builds) {
+          expect(
+            call,
+            contains('--dart-define=API_SSL_FINGERPRINTS=$_fingerprints'),
+          );
+        }
+      },
+    );
+  }
+
+  test('ENABLE_SSL_PINNING=false builds without fingerprints and passes the '
+      'opt-out to every build', () async {
+    final run = await _run(
+      'production',
+      env: const {'ENABLE_SSL_PINNING': 'false'},
+    );
+    final builds = run.calls.where((c) => c.startsWith('flutter build '));
+
+    expect(builds, isNotEmpty);
+    for (final call in builds) {
+      expect(call, contains('--dart-define=ENABLE_SSL_PINNING=false'));
+      expect(call, isNot(contains('API_SSL_FINGERPRINTS')));
+    }
+  });
+
+  // Read the way the app reads it: whitespace, colons and empty entries
+  // dropped. A value the app would see as empty is empty here too.
+  test('a fingerprint list of only separators is refused as empty', () async {
+    final run = await _run(
+      'production',
+      env: const {'API_SSL_FINGERPRINTS': ' , '},
+      expectSuccess: false,
+    );
+
+    expect(run.exitCode, isNot(0));
+    expect(run.output, contains('API_SSL_FINGERPRINTS is empty'));
+    expect(run.calls, isEmpty);
+  });
+
+  test('a fingerprint that is not 64 hex digits is refused', () async {
+    final run = await _run(
+      'production',
+      env: const {'API_SSL_FINGERPRINTS': 'AA:BB:CC'},
+      expectSuccess: false,
+    );
+
+    expect(run.exitCode, isNot(0));
+    expect(run.output, contains('is not a SHA-256'));
+    expect(run.calls, isEmpty);
+  });
+
+  test(
+    'ENABLE_SSL_PINNING=true without fingerprints is still refused',
+    () async {
+      final run = await _run(
+        'production',
+        env: const {'ENABLE_SSL_PINNING': 'true'},
+        expectSuccess: false,
+      );
+
+      expect(run.exitCode, isNot(0));
+      expect(run.calls, isEmpty);
+    },
+  );
+
   // Every artifact it builds is a release build, and a release build
   // configured as development refuses to start.
   test('development is refused before anything is built', () async {
@@ -110,9 +213,9 @@ void main() {
     final stub = File('${bin.path}/flutter')..writeAsStringSync(_stubFlutter);
     Process.runSync('chmod', ['+x', stub.path]);
     Directory('${dir.path}/scripts/ci').createSync(recursive: true);
-    File(
-      'scripts/ci/build_all.sh',
-    ).copySync('${dir.path}/scripts/ci/build_all.sh');
+    for (final script in ['build_all.sh', 'ssl_pinning_defines.sh']) {
+      File('scripts/ci/$script').copySync('${dir.path}/scripts/ci/$script');
+    }
     final log = File('${dir.path}/flutter.log');
 
     final result = await Process.run(

@@ -45,6 +45,21 @@ on:
         description: 'Override BASE_URL (optional)'
         required: false
         default: ''
+      # Pinning is on in staging and production, and a release built with
+      # pinning on and no fingerprints refuses to start (lib/main.dart).
+      # Empty falls back to the repository variable API_SSL_FINGERPRINTS.
+      ssl_fingerprints:
+        description: 'API_SSL_FINGERPRINTS (empty: the repository variable)'
+        required: false
+        default: ''
+      ssl_pinning:
+        description: 'off builds without pinning (ENABLE_SSL_PINNING=false)'
+        required: true
+        default: 'on'
+        type: choice
+        options:
+          - 'on'
+          - 'off'
 
 concurrency:
   group: build-${{ github.workflow }}-${{ github.ref }}-${{ inputs.platform }}-${{ inputs.environment }}
@@ -164,6 +179,8 @@ jobs:
         env:
           INPUT_ENVIRONMENT: ${{ inputs.environment }}
           INPUT_BASE_URL: ${{ inputs.base_url }}
+          API_SSL_FINGERPRINTS: ${{ inputs.ssl_fingerprints || vars.API_SSL_FINGERPRINTS }}
+          ENABLE_SSL_PINNING: ${{ inputs.ssl_pinning == 'off' && 'false' || '' }}
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
           BASE_URL="$INPUT_BASE_URL"
@@ -171,9 +188,15 @@ jobs:
             BASE_URL="http://localhost:3000"
           fi
 
+          # Refuses a staging or production build with no fingerprints and
+          # no explicit opt-out, before building.
+          . scripts/ci/ssl_pinning_defines.sh
+          ssl_pinning_defines "$ENVIRONMENT" || exit 1
+
           flutter build apk \
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \
-            --dart-define=BASE_URL="$BASE_URL"
+            --dart-define=BASE_URL="$BASE_URL" \
+            ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
       # Proves the APK is signed, and signed by the throwaway CI identity minted
       # above rather than by the Android debug key. The check itself lives in
@@ -229,6 +252,8 @@ jobs:
         env:
           INPUT_ENVIRONMENT: ${{ inputs.environment }}
           INPUT_BASE_URL: ${{ inputs.base_url }}
+          API_SSL_FINGERPRINTS: ${{ inputs.ssl_fingerprints || vars.API_SSL_FINGERPRINTS }}
+          ENABLE_SSL_PINNING: ${{ inputs.ssl_pinning == 'off' && 'false' || '' }}
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
           BASE_URL="$INPUT_BASE_URL"
@@ -236,10 +261,16 @@ jobs:
             BASE_URL="http://localhost:3000"
           fi
 
+          # Refuses a staging or production build with no fingerprints and
+          # no explicit opt-out, before building.
+          . scripts/ci/ssl_pinning_defines.sh
+          ssl_pinning_defines "$ENVIRONMENT" || exit 1
+
           flutter build ios \
             --no-codesign \
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \
-            --dart-define=BASE_URL="$BASE_URL"
+            --dart-define=BASE_URL="$BASE_URL" \
+            ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
   build-web:
     if: inputs.platform == 'all' || inputs.platform == 'web'
