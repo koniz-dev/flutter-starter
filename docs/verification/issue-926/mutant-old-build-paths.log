@@ -1,0 +1,93 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: the scan finds the release builds it should
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +1 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +1 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: every mobile release build carries the pinning defines [E]
+  Expected: empty
+    Actual: [
+              'scripts/ci/build_all.sh: flutter build appbundle \\ --release \\ --dart-define=ENVIRONMENT=$ENVIRONMENT \\ --dart-define=BASE_URL=$BASE_URL',
+              'scripts/ci/build_all.sh: flutter build apk \\ --dart-define=ENVIRONMENT=$ENVIRONMENT \\ --dart-define=BASE_URL=$BASE_URL',
+              'scripts/ci/build_all.sh: flutter build ipa \\ --release \\ --dart-define=ENVIRONMENT=$ENVIRONMENT \\ --dart-define=BASE_URL=$BASE_URL',
+              'scripts/ci/build_all.sh: flutter build ios \\ --no-codesign \\ --dart-define=ENVIRONMENT=$ENVIRONMENT \\ --dart-define=BASE_URL=$BASE_URL',
+              'scripts/ci/build_all.sh: flutter build appbundle \\ --release \\ --dart-define=ENVIRONMENT=$ENVIRONMENT \\ --dart-define=BASE_URL=$BASE_URL',
+              '.github/workflows/deploy-android.yml: flutter build appbundle \\ --release \\ --dart-define=ENVIRONMENT="$ENV" \\ --dart-define=BASE_URL="$BASE_URL"',
+              '.github/workflows/deploy-ios.yml: flutter build ipa \\ --release \\ --dart-define=ENVIRONMENT="$ENV" \\ --dart-define=BASE_URL="$BASE_URL"',
+              '.github/workflows/build.yml: flutter build apk \\ --dart-define=ENVIRONMENT="$ENVIRONMENT" \\ --dart-define=BASE_URL="$BASE_URL"',
+              '.github/workflows/build.yml: flutter build ios \\ --no-codesign \\ --dart-define=ENVIRONMENT="$ENVIRONMENT" \\ --dart-define=BASE_URL="$BASE_URL"'
+            ]
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/tooling/release_builds_pass_pinning_test.dart 74:5  main.<fn>
+  
+00:00 +2 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +3 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a staging run reports both the APK and the comparison bundle
+00:01 +4 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:01 +5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (staging): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:02 +6 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production without API_SSL_FINGERPRINTS is refused before anything is built
+00:03 +6 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production without API_SSL_FINGERPRINTS is refused before anything is built [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 127:7  main.<fn>
+  
+00:03 +6 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production: every flutter build carries the fingerprints
+00:03 +6 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production: every flutter build carries the fingerprints [E]
+  Expected: contains '--dart-define=API_SSL_FINGERPRINTS=AA:BB,CC:DD'
+    Actual: 'flutter build appbundle --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com'
+     Which: does not contain '--dart-define=API_SSL_FINGERPRINTS=AA:BB,CC:DD'
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/tooling/build_all_analyze_size_test.dart 140:11  main.<fn>
+  
+00:03 +6 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging without API_SSL_FINGERPRINTS is refused before anything is built
+00:04 +6 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging without API_SSL_FINGERPRINTS is refused before anything is built [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 127:7  main.<fn>
+  
+00:04 +6 -4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging: every flutter build carries the fingerprints
+00:04 +6 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging: every flutter build carries the fingerprints [E]
+  Expected: contains '--dart-define=API_SSL_FINGERPRINTS=AA:BB,CC:DD'
+    Actual: 'flutter build apk --dart-define=ENVIRONMENT=staging --dart-define=BASE_URL=https://api-staging.example.com'
+     Which: does not contain '--dart-define=API_SSL_FINGERPRINTS=AA:BB,CC:DD'
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/tooling/build_all_analyze_size_test.dart 140:11  main.<fn>
+  
+00:04 +6 -5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build
+00:05 +6 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build [E]
+  Expected: contains '--dart-define=ENABLE_SSL_PINNING=false'
+    Actual: 'flutter build appbundle --release --dart-define=ENVIRONMENT=production --dart-define=BASE_URL=https://api.example.com'
+     Which: does not contain '--dart-define=ENABLE_SSL_PINNING=false'
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 159:7  main.<fn>
+  
+00:05 +6 -6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=true without fingerprints is still refused
+00:06 +6 -7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=true without fingerprints is still refused [E]
+  Expected: not <0>
+    Actual: <0>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/build_all_analyze_size_test.dart 173:7  main.<fn>
+  
+00:06 +6 -7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: development is refused before anything is built
+00:06 +7 -7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 3: the script no longer claims an ABI split it never does
+00:06 +8 -7: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=true without fingerprints is still refused
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production without API_SSL_FINGERPRINTS is refused before anything is built
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production: every flutter build carries the fingerprints
+  ... and 3 more

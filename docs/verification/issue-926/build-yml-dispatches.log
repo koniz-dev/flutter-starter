@@ -1,0 +1,17 @@
+== run 41099939885
+head 8dda3d952aa conclusion failure
+== run 41102532014
+head 8dda3d952aa conclusion success
+== run 41098105355
+head 0d55756d148 conclusion success
+== refusal log (41099939885)
+Build Android	UNKNOWN STEP	2026-10-30T17:34:39.4979959Z Error: API_SSL_FINGERPRINTS is empty. Pinning is on in production,
+Build Android	UNKNOWN STEP	2026-10-30T17:34:39.4980228Z and a release built without fingerprints refuses to start.
+Build Android	UNKNOWN STEP	2026-10-30T17:34:39.4980454Z Set API_SSL_FINGERPRINTS, or ENABLE_SSL_PINNING=false to ship
+Build Android	UNKNOWN STEP	2026-10-30T17:34:39.4980642Z without pinning.
+== with fingerprints (41102532014)
+Build Android	UNKNOWN STEP	2026-10-30T17:56:46.1475249Z ^[[36;1m  ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}^[[0m
+Build Android	UNKNOWN STEP	2026-10-30T18:02:52.3936127Z ✓ Built build/app/outputs/flutter-apk/app-release.apk (118.4MB)
+== opt-out (41098105355, previous head 2nd commit)
+Build Android	UNKNOWN STEP	2026-10-30T17:23:35.7741179Z   ENABLE_SSL_PINNING: false
+Build Android	UNKNOWN STEP	2026-10-30T17:30:14.3492451Z ✓ Built build/app/outputs/flutter-apk/app-release.apk (118.4MB)

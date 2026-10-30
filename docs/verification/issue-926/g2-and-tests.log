@@ -1,0 +1,24 @@
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/release_builds_pass_pinning_test.dart: the scan finds the release builds it should
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 1: production --analyze-size reports the AAB size
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a staging run reports both the APK and the comparison bundle
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (production): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 2 (staging): every flutter build carries the ENVIRONMENT and BASE_URL defines
+00:02 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production without API_SSL_FINGERPRINTS is refused before anything is built
+00:02 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: production: every flutter build carries the fingerprints
+00:03 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging without API_SSL_FINGERPRINTS is refused before anything is built
+00:03 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: staging: every flutter build carries the fingerprints
+00:03 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=false builds without fingerprints and passes the opt-out to every build
+00:04 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a fingerprint list of only separators is refused as empty
+00:04 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: a fingerprint that is not 64 hex digits is refused
+00:04 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: ENABLE_SSL_PINNING=true without fingerprints is still refused
+00:04 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: development is refused before anything is built
+00:04 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/build_all_analyze_size_test.dart: criterion 3: the script no longer claims an ABI split it never does
+00:04 +17: All tests passed!
+tests exit=0
