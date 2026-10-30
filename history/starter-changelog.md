@@ -78,6 +78,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   names the inner error type instead of quoting dart:io's message.
 - The default `NoOpRealtimeClient` prints only in debug builds, the URL
   redacted, and a sent payload's type rather than its content.
+- `CacheInterceptor` no longer stores a response whose `Cache-Control` names
+  `no-store`, `private` or `no-cache`, carries `Pragma: no-cache` or sets a
+  cookie, and such a response evicts what an earlier one stored for that URL.
+  Cache keys are a SHA-256 of the URL, so a token in a query string is no
+  longer written to `shared_preferences`; indexed entries under the old
+  verbatim keys are removed on first use.
 - `AuthRepositoryImpl.refreshToken()` checks the session before each of its
   two credential writes and before returning. A logout that landed during the
   access-token write used to leave the new refresh token on a signed-out
