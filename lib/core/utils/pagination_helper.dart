@@ -153,6 +153,11 @@ class PaginationHelper<T> {
   /// Get current state
   PaginationState<T> get state => _state;
 
+  /// Bumped by [reset]. A load started before a reset - page 2 of the old
+  /// query - finishes after it, and used to append its items to the new
+  /// list, advance its page and clear the new load's `isLoading`.
+  int _generation = 0;
+
   /// The configuration this helper was built with
   PaginationConfig get config => _config;
 
@@ -169,12 +174,17 @@ class PaginationHelper<T> {
     }
 
     _state = _state.setLoading(loading: true);
+    final generation = _generation;
 
     try {
       final (items, hasMore) = await loadPage(_state.currentPage);
+      // Reset while this page was loading: it belongs to the list that is
+      // gone, so it changes nothing.
+      if (generation != _generation) return;
       _state = _state.appendPage(items, hasMore: hasMore);
       _state = _state.copyWith(clearError: true);
     } on Object catch (e) {
+      if (generation != _generation) return;
       _state = _state.setError(e.toString()).setLoading(loading: false);
       if (kDebugMode) {
         debugPrint('Pagination error: $e');
@@ -185,6 +195,7 @@ class PaginationHelper<T> {
   /// Reset pagination to initial state, back to
   /// [PaginationConfig.initialPage]
   void reset() {
+    _generation++;
     _state = _state.reset(initialPage: _config.initialPage);
   }
 
