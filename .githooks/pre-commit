@@ -20,10 +20,12 @@ fi
 # fails the `environment: sdk:` constraint in pubspec.yaml and rejects the
 # commit while `flutter analyze` run by hand in the same tree is clean.
 #
-# So run every Flutter and Dart command with the git variables removed. The
-# hook itself never calls git, so nothing else needs them. This resolves the
-# SDK rather than detecting the breakage and explaining it: there is no reason
-# to teach the hook a good error message for a state it can simply not be in.
+# So run every Flutter and Dart command with the git variables removed. Only
+# the hook's own git call (the export below) keeps them: it needs
+# GIT_INDEX_FILE, which names the index this commit is made from. This
+# resolves the SDK rather than detecting the breakage and explaining it: there
+# is no reason to teach the hook a good error message for a state it can
+# simply not be in.
 no_git_env=(
   env
   -u GIT_DIR
@@ -46,17 +48,33 @@ if [ ! -f .dart_tool/package_config.json ]; then
   exit 1
 fi
 
-echo "📝 Checking code formatting..."
-if ! "${no_git_env[@]}" dart format --set-exit-if-changed lib test integration_test tool examples; then
-  echo "❌ Code formatting check failed."
-  echo "   Fix: ./scripts/dev/format_dart.sh"
+# Check what is being committed, not the working copy: export the index to a
+# temporary tree and run there. Checking the working copy let a staged file
+# that was fixed but not restaged through, and let an unstaged broken file
+# block a clean commit. GIT_INDEX_FILE is inherited on purpose: for
+# `git commit <path>` and `git commit -a`, git builds a temporary index, and
+# that is the content the commit will hold. The working copy is never written.
+staged="$(mktemp -d)"
+trap 'rm -rf "$staged"' EXIT
+git checkout-index --all --prefix="$staged/"
+mkdir -p "$staged/.dart_tool"
+cp -p .dart_tool/package_config.json "$staged/.dart_tool/"
+if [ -f .dart_tool/package_graph.json ]; then
+  cp -p .dart_tool/package_graph.json "$staged/.dart_tool/"
+fi
+cd "$staged"
+
+echo "📝 Checking code formatting (staged content)..."
+if ! "${no_git_env[@]}" dart format --output=none --set-exit-if-changed lib test integration_test tool examples; then
+  echo "❌ Code formatting check failed for the staged content."
+  echo "   Fix: ./scripts/dev/format_dart.sh, then stage the result"
   echo "   Or: dart format lib test integration_test tool examples"
   exit 1
 fi
 
-echo "🔍 Running flutter analyze..."
+echo "🔍 Running flutter analyze (staged content)..."
 if ! "${no_git_env[@]}" flutter analyze; then
-  echo "❌ flutter analyze failed."
+  echo "❌ flutter analyze failed for the staged content."
   exit 1
 fi
 

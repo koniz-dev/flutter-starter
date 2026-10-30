@@ -294,7 +294,10 @@ the tracked hooks directly - a later fix to a hook needs no reinstall, and a
 global `core.hooksPath` (a husky-style setup) cannot silently bypass them; a
 repository-local one that points elsewhere makes the script stop and say so.
 `pre-commit` runs the scoped
-`dart format` check and `flutter analyze`, `commit-msg` enforces the format
+`dart format` check and `flutter analyze` on what is staged - the content the
+commit will hold, exported to a temporary directory - not on your working
+copy, so a fix you have not staged does not count and an unstaged broken file
+does not block the commit. `commit-msg` enforces the format
 above, and `pre-push` runs `flutter test`. Skip them for one command with
 `git commit --no-verify` / `git push --no-verify` — which switches off *every*
 hook, not just the one in your way.
