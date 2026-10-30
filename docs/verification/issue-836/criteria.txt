@@ -1,0 +1,16 @@
+origin/main 9c45817ee84d3feefc126134e159db7c7c828979
+00:03 +8: every deploy job uploads, failing on zero files deploy-android.yml
+00:03 +9: every deploy job uploads, failing on zero files deploy-ios.yml
+00:03 +10: every deploy job uploads, failing on zero files deploy-web.yml
+00:03 +11: every deploy job uploads, failing on zero files deploy-web.yml fails each job while it deploys nothing
+00:03 +15: All tests passed!
+--- deploy-web.yml guard steps
+128:      - name: Upload web build
+133:          if-no-files-found: error
+147:      - name: Fail while nothing is deployed
+207:      - name: Upload web build
+212:          if-no-files-found: error
+228:      - name: Fail while nothing is deployed
+288:      - name: Upload web build
+293:          if-no-files-found: error
+307:      - name: Fail while nothing is deployed

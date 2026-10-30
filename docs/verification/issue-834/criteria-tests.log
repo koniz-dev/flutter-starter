@@ -1,0 +1,6 @@
+origin/main 9c45817ee84d3feefc126134e159db7c7c828979
+00:00 +0: with a global core.hooksPath, the hooks still run afterwards
+00:01 +1: a repository-local core.hooksPath elsewhere is not overwritten
+00:01 +2: running it twice succeeds both times
+00:02 +3: inside a linked worktree it installs, and hooks run there
+00:03 +4: All tests passed!

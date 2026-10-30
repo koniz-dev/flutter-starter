@@ -1,0 +1,7 @@
+origin/main 9c45817ee84d3feefc126134e159db7c7c828979
+a multipart upload replayed after a 401 refresh a Stream body fails the replay with a NetworkException naming the reason, not a StateError
+a multipart upload replayed after a 401 refresh a Stream body fails the replay with a NetworkException naming the reason, not a StateError
+a multipart upload replayed after a 401 refresh a Stream body fails the replay with a NetworkException naming the reason, not a StateError
+a multipart upload replayed after a 401 refresh a Stream body fails the replay with a NetworkException naming the reason, not a StateError
+RetryInterceptor and request bodies a Stream body is not retried, and the caller gets the original failure
+00:00 +60: All tests passed!

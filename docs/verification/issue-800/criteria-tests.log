@@ -1,0 +1,7 @@
+origin/main 9c45817ee84d3feefc126134e159db7c7c828979
+00:00 +0: criterion 1 (an int user id): refreshToken returns INVALID_AUTH_RESPONSE and writes no token
+00:00 +1: criterion 2 (an int user id): AuthNotifier.refreshToken completes without throwing
+00:00 +2: criterion 1 (no token): refreshToken returns INVALID_AUTH_RESPONSE and writes no token
+00:00 +3: criterion 2 (no token): AuthNotifier.refreshToken completes without throwing
+00:00 +4: criterion 3: AuthInterceptor ends the session for that failure
+00:00 +5: All tests passed!
