@@ -306,7 +306,7 @@ drifts from the one the logs actually go through.
 <!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._sensitiveHeaderKeys -->
 <!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._sensitiveKeyFragments -->
 <!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._sensitiveKeysExact -->
-<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor._isSensitiveKey -->
+<!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor.isSensitiveKey -->
 <!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor.redactPath -->
 
 #### What ships
