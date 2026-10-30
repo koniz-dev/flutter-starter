@@ -6,7 +6,7 @@ This guide provides step-by-step instructions and code examples for implementing
 
 ## RASP / FreeRASP (optional)
 
-The `freerasp` package is listed in `pubspec.yaml` for teams that want runtime app shielding. By default the app uses a **no-op** implementation via [`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) (`NoOpRaspService`), so nothing is enforced until you override the provider with a concrete implementation (for example `FreeRaspServiceImpl` in `lib/core/security/infrastructure/freerasp_service_impl.dart`). Enabling real RASP requires FreeRASP configuration, platform setup, and usually a commercial agreement—see the [FreeRASP documentation](https://docs.talsec.app/freerasp).
+By default the app uses a **no-op** implementation via [`raspServiceProvider`](../../../lib/core/security/rasp_providers.dart) (`NoOpRaspService`), so nothing is enforced until you override the provider with a concrete implementation. A `freerasp` adapter, `FreeRaspServiceImpl`, ships as an opt-in template (`lib/core/security/infrastructure/freerasp_service_impl.dart.template`); `freerasp` itself is **not** a default dependency, because it links a closed-source SDK and adds Android permissions even while RASP is unused (section 7). Enabling real RASP requires FreeRASP configuration, platform setup, and usually a commercial agreement—see the [FreeRASP documentation](https://docs.talsec.app/freerasp).
 
 ---
 
@@ -598,11 +598,30 @@ otherwise move to the new device as they are.
 
 To implement enterprise-grade Runtime Application Self-Protection (RASP), we utilize `freerasp` which operates at a lower level than typical check plugins.
 
-#### Step 1: Initialize RASP Service
+#### Step 1: Add freerasp and rename the templates
 
-Ensure `freerasp` is configured with your production hashes and connected to the `raspServiceProvider` in `lib/core/security/`. 
+`freerasp` is not a default dependency. Adding it links freeRASP's
+closed-source SDK (`TalsecSecurity-Community-Flutter`, from a vendor Maven
+registry) into every Android build, and with it - whether or not RASP is
+started - the merged manifest gains `READ_GSERVICES` (from
+`fingerprint-android`), `USE_BIOMETRIC` (from `androidx.biometric`),
+`ACCESS_WIFI_STATE` and `RECEIVE_BOOT_COMPLETED` (from `truetime-android`),
+and `<queries>` for the SMS-received and outgoing-call intents. Declare those
+in Play's data-safety form. Check the list against your own build's
+`build/app/outputs/logs/manifest-merger-release-report.txt`, since it moves
+with the freerasp version.
 
-Edit the placeholder `TalsecConfig` inside [`lib/core/security/infrastructure/freerasp_service_impl.dart`](../../../lib/core/security/infrastructure/freerasp_service_impl.dart) (package names, signing cert hashes, team id, email, stores). The class **`FreeRaspServiceImpl`** already implements [`IRaspService`](../../../lib/core/security/i_rasp_service.dart).
+```bash
+flutter pub add freerasp:^8.2.4   # the version the template is written for
+(cd lib/core/security/infrastructure && mv freerasp_service_impl.dart.template freerasp_service_impl.dart)
+(cd test/core/security/infrastructure && for f in freerasp_*.dart.template; do mv "$f" "${f%.template}"; done)
+```
+
+Then edit the placeholder `TalsecConfig` inside
+[`freerasp_service_impl.dart.template`](../../../lib/core/security/infrastructure/freerasp_service_impl.dart.template),
+renamed as above (package names, signing cert hashes, team id, email,
+stores). The class **`FreeRaspServiceImpl`** already implements
+[`IRaspService`](../../../lib/core/security/i_rasp_service.dart).
 
 #### Step 2: Override `raspServiceProvider` and start protection
 
@@ -679,7 +698,7 @@ There is **no** `device_security.dart` in this starter; wire threat handling in 
 
 "Kind" is guidance for your policy, not something the adapter acts on. A **device posture** or **user action** signal fires on many legitimate devices: a developer phone has developer options and ADB on, and a corporate phone runs a system VPN. Forcing a logout on those locks out real users. Log them or warn, and save blocking for the **attack** rows.
 
-`test/core/security/infrastructure/freerasp_service_impl_test.dart` drives each of freeRASP's `Threat` values through its mocked platform channel and fails if one is neither forwarded as this table says nor listed as deliberately ignored. A freerasp upgrade that adds a detection therefore fails `flutter test` until someone maps it, and the exhaustive `switch` in `FreeRaspServiceImpl.securityThreatFor` stops compiling first. A new `Threat` gets a row here, too.
+`test/core/security/infrastructure/freerasp_service_impl_test.dart.template` (renamed in step 1) drives each of freeRASP's `Threat` values through its mocked platform channel and fails if one is neither forwarded as this table says nor listed as deliberately ignored. A freerasp upgrade that adds a detection therefore fails `flutter test` until someone maps it, and the exhaustive `switch` in `FreeRaspServiceImpl.securityThreatFor` stops compiling first. A new `Threat` gets a row here, too.
 
 ### 8. Session management (blueprint)
 

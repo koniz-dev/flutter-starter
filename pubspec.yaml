@@ -35,8 +35,9 @@ dependencies:
 
   # Storage - Secure key-value storage for sensitive data (tokens, passwords)
   flutter_secure_storage: ^11.2.0
-  # Security (optional) - FreeRASP concrete implementation
-  freerasp: ^8.2.4
+  # RASP is opt-in: `freerasp` is not a default dependency, because it links a
+  # closed-source SDK and adds Android permissions even when unused. See
+  # lib/core/security/infrastructure/freerasp_service_impl.dart.template.
 
   # Code Generation - Runtime annotations for Freezed immutable classes
   freezed_annotation: ^3.1.0

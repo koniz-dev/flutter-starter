@@ -32,7 +32,7 @@ Keep docs and examples pointing here unless the tree moves:
 | Routes | `lib/core/routing/app_router.dart`, `lib/core/routing/navigation_extensions.dart` |
 | Network | `lib/core/network/api_client.dart`, `lib/core/network/interceptors/` |
 | Performance | `lib/core/performance/`, [`examples/performance_examples.dart`](../examples/performance_examples.dart) |
-| RASP | `lib/core/security/rasp_providers.dart`, `lib/core/security/infrastructure/freerasp_service_impl.dart` |
+| RASP | `lib/core/security/rasp_providers.dart`, `lib/core/security/infrastructure/freerasp_service_impl.dart.template` (opt-in) |
 | Security (optional templates) | [`guides/security/blueprints.md`](guides/security/blueprints.md) |
 
 ## Documentation vs code (drift)
@@ -108,7 +108,7 @@ Navigate through the folders to dive deeper into the project modules:
 - **Freezed** & **Equatable** - Data models and code-generation
 
 ### Security & Storage
-- **freerasp** - RASP engine
+- **freerasp** - RASP engine, opt-in: not a default dependency (see the security implementation guide)
 - **flutter_secure_storage** - Encrypted key-values
 - **shared_preferences** - Simple key-value mapping
 

@@ -141,7 +141,7 @@ to mistype.
 | Module | Default | Concrete / notes | Override or template |
 | --- | --- | --- | --- |
 | Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@riverpod featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` <!-- strip:feature-flags line --> |
-| RASP | `NoOpRaspService` | `freerasp` (when you wire it) | `raspServiceProvider` in `lib/core/security/rasp_providers.dart` |
+| RASP | `NoOpRaspService` | `freerasp` (opt-in template; not a default dependency) | `raspServiceProvider` in `lib/core/security/rasp_providers.dart` |
 | Firebase Performance | No-op via performance providers | Firebase SDK | `lib/core/performance/performance_providers.dart` (see comments there) |
 | Crash / error reporting | `NoOpErrorReporter` (`lib/core/logging/noop_error_reporter.dart`) | Your `IErrorReporter` (`lib/core/logging/i_error_reporter.dart`); a Crashlytics example is `lib/core/logging/crashlytics_error_reporter_template.dart`. `LoggingService.error` forwards to it | Override `errorReporterProvider` in `lib/core/logging/error_reporter_providers.dart` |
 | GraphQL | Template | `lib/core/network/graphql_client_template.dart` | Copy/adapt; keep REST behind `INetworkClient` |

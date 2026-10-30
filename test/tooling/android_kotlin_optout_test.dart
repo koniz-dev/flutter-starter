@@ -2,7 +2,7 @@
 // resolved plugin still applies the Kotlin Gradle plugin (KGP) itself.
 //
 // The opt-out (`android.builtInKotlin=false`, `android.newDsl=false`) is what
-// `flutter create` writes today, and it cannot go while freerasp, patrol or
+// `flutter create` writes today, and it cannot go while patrol or
 // shared_preferences_android apply `kotlin-android`. Plugin versions are fixed
 // by pubspec.lock, so the moment that stops being true is the PR that bumps
 // them. This fails there, with the recipe, instead of leaving the opt-out to
@@ -93,8 +93,8 @@ void main() {
     });
 
     test('opt-out removed while a plugin still applies KGP', () {
-      final problem = mismatch(optedOut: false, kgpPlugins: const {'freerasp'});
-      expect(problem, contains('freerasp'));
+      final problem = mismatch(optedOut: false, kgpPlugins: const {'patrol'});
+      expect(problem, contains('patrol'));
     });
 
     test('agreement either way passes', () {

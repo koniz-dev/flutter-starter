@@ -205,10 +205,11 @@ keep both out of version control, and back the keystore up. See
 
 **Status:** Plumbing present, no-op by default.
 
-`freerasp` is in `pubspec.yaml` and `raspServiceProvider`
-(`lib/core/security/rasp_providers.dart`) resolves to `NoOpRaspService`, so
-**nothing is detected** until you override the provider with a real
-implementation. There is also no way to verify this in CI or in a host-VM
+`raspServiceProvider` (`lib/core/security/rasp_providers.dart`) resolves to
+`NoOpRaspService`, so **nothing is detected** until you override the provider
+with a real implementation. `freerasp` is not a default dependency: the
+adapter ships as an opt-in template, so a release that keeps RASP off carries
+neither its SDK nor the permissions it adds. There is also no way to verify this in CI or in a host-VM
 test - it only means anything on a physical device.
 
 **Recommendation:** Override the provider. See
