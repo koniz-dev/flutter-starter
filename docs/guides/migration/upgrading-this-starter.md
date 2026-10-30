@@ -344,9 +344,12 @@ Use this checklist for each upgrade:
 
 ## Version-Specific Guides
 
-No version-specific guides exist yet, because no version after `1.0.0` has been
-released. When one is, it will be added to this directory and listed here, and
-linked from the starter's changelog.
+What each release changes - every breaking change with what you have to do -
+is in its notes on the
+[releases page](https://github.com/koniz-dev/flutter-starter/releases); start
+from the release after the **Starter version** at the top of this file. A
+release that needs more than its notes can say gets a guide in this directory,
+listed here; none has needed one yet.
 
 ## Troubleshooting Upgrades
 
