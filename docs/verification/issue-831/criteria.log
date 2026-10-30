@@ -1,0 +1,7 @@
+origin/main 9233e4104912e21a7a9c5cf4dc3291d2483286f7
+$ flutter test test/tooling/strip_unknown_flags_test.dart
+00:00 +0: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +1: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:01 +2: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:02 +3: --help prints the usage and exits 0
+00:02 +4: All tests passed!

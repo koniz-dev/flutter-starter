@@ -1,0 +1,8 @@
+scratch clone of 7edd675d660 + the #833 changes
+--- with the helper (this change)
+baseline: Coverage: 96.06%
+after create_feature.sh user_profile, no new tests: Coverage: 95.45%
+user_profile files in lcov: 7 of 9
+--- without the helper (previous behaviour), same tree
+after create_feature.sh, old measurement: Coverage: 96.03%
+user_profile files in lcov: 3

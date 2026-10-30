@@ -1,0 +1,35 @@
+Demo PR https://github.com/koniz-dev/flutter-starter/pull/878 (draft, closed unmerged): a docs-only change dropping the v from the upgrade guide's version marker, on main after #875.
+Quality gate job: https://github.com/koniz-dev/flutter-starter/actions/runs/40979715780/job/123816433397
+
+--- checks
+fail Quality gate
+pass Docs check
+pass Strip both-samples-removed + analyze + test
+pass Strip tasks-removed + analyze + test
+pass Strip feature-flags-removed + analyze + test
+pass Strip renamed-both + analyze + test
+pass Strip keep-samples + analyze + test
+
+--- scope decision and the failing step (from the job log)
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1612208Z ^[[36;1m    verdict="Every changed path matches \`**/*.md\` or \`docs/**\` (and none is a \`.dart\` file). format, analyze and the full suite were NOT run; only the tests that read markdown were."^[[0m
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1614715Z ^[[36;1mdoc_tests=false^[[0m
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1615092Z ^[[36;1mif [ "$run" = false ]; then doc_tests=true; fi^[[0m
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1616300Z ^[[36;1mecho "doc_tests=$doc_tests" >> "$GITHUB_OUTPUT"^[[0m
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1619091Z ^[[36;1m  echo "- expensive steps run: \`$run\`"^[[0m
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1797533Z - expensive steps run: `false`
+Quality gate	Decide the gate scope	2026-10-30T00:26:45.1798511Z Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file). format, analyze and the full suite were NOT run; only the tests that read markdown were.
+Quality gate	Run the tests that read markdown	﻿2026-10-30T00:27:08.7124566Z ##[group]Run # Word splitting is the point: DOC_TESTS is a list of paths.
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7125205Z ^[[36;1m# Word splitting is the point: DOC_TESTS is a list of paths.^[[0m
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7125724Z ^[[36;1m# shellcheck disable=SC2086^[[0m
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7126138Z ^[[36;1mflutter test --timeout=5m $DOC_TESTS^[[0m
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7139687Z shell: /usr/bin/bash -e {0}
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7140139Z env:
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7140543Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.47.9-x64/flutter
+Quality gate	Run the tests that read markdown	2026-10-30T00:27:08.7141060Z   PUB_CACHE: /home/runner/.pub-cache
+
+--- the failure itself
+##[group]❌ /home/runner/work/flutter-starter/flutter-starter/test/docs/starter_version_marker_test.dart: the upgrade guide names one starter release, before its first section (failed)
+the tag form, e.g. **Starter version:** v2.0.0
+test/docs/starter_version_marker_test.dart 25:5     main.<fn>
+✅ /home/runner/work/flutter-starter/flutter-starter/test/docs/starter_version_marker_test.dart: Step 1 reads the marker, not pubspec.yaml
+##[error]Process completed with exit code 1.

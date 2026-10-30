@@ -1,0 +1,40 @@
+origin/main 9233e4104912e21a7a9c5cf4dc3291d2483286f7
+--- criterion 2: grep for the issue's patterns in docs/guides/performance
+exit=1 (1 = no match)
+--- criterion 1: no before/after table left; any percentage left?
+exit=1 (1 = none)
+--- criterion 3: the summary, as merged
+## Wired In
+
+| What | Where |
+|---|---|
+| Environment config and image cache initialised in parallel at startup | `bootstrap()` in `lib/main.dart` |
+| Image cache capped at 100 images / 100 MB | `_initializeImageCache()` in `lib/main.dart` |
+| HTTP response caching for unauthenticated GETs | `CacheInterceptor`, installed by `ApiClient` |
+| Optional HTTP timing traces | `PerformanceInterceptor`, when a performance service is wired |
+| Build size report | `scripts/ci/build_all.sh --analyze-size` |
+
+## Building Blocks (not called by any screen yet)
+
+| Utility | Location |
+|---|---|
+| `OptimizedImage` | `lib/shared/widgets/optimized_image.dart` |
+| `OptimizedListView` (pagination, prefetch) | `lib/shared/widgets/optimized_list_view.dart` |
+| `PaginationHelper` | `lib/core/utils/pagination_helper.dart` |
+| `Debouncer`, `Throttler` | `lib/core/utils/debouncer.dart` |
+| `LazyLoader` (caching; deferred imports are yours to declare) | `lib/core/utils/lazy_loader.dart` |
+| `ProviderDisposal` mixin (disposal bookkeeping; it does **not** touch the image cache) | `lib/core/utils/provider_disposal.dart` |
+| `ImageCacheHelper`, `MemoryHelper` | `lib/core/utils/` |
+| `IPerformanceService` and helpers | `lib/core/performance/` (see also `examples/performance_examples.dart`) |
+
+<!-- symbol: lib/main.dart bootstrap -->
+
+---
+--- call sites (none outside their own files)
+Debouncer: none
+Throttler: none
+PaginationHelper: none
+LazyLoader: none
+OptimizedListView: none
+OptimizedImage: none
+OK: documentation checks passed.

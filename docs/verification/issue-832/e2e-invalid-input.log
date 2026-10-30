@@ -1,0 +1,38 @@
+$ mason make flutter_starter_setup --package_name my-app --application_id com.acme.shop --ios_bundle_id com.acme.shop --app_display_name Shop --strip_sample_features false --on-conflict overwrite
+package_name "my-app" must be lowercase letters, digits and underscores, starting with a letter (for example my_app)
+An exception occurred while executing hook: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/brickrun/bricks/flutter_starter_setup/hooks/pre_gen.dart.
+Error: Invalid argument(s): flutter_starter_setup: invalid input, nothing was changed.
+exit=
+$ git status --porcelain | wc -l
+       0
+
+$ mason make flutter_starter_setup ... --ios_bundle_id com.acme.my_shop (underscore)
+ios_bundle_id "com.acme.my_shop" must be dot-separated segments of letters, digits and hyphens (for example com.example.myApp); underscores are not allowed
+An exception occurred while executing hook: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/brickrun/bricks/flutter_starter_setup/hooks/pre_gen.dart.
+Error: Invalid argument(s): flutter_starter_setup: invalid input, nothing was changed.
+exit=
+       0
+
+$ mason make feature_clean --feature_name user-profile --class_name UserProfile --include_tests true
+feature_name "user-profile" must be snake_case (for example user_profile)
+An exception occurred while executing hook: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/brickrun/bricks/feature_clean/hooks/pre_gen.dart.
+Error: Invalid argument(s): feature_clean: invalid input, nothing was generated.
+exit=
+$ git status --porcelain | wc -l
+       0
+--- exit codes (same invalid runs)
+setup my-app: exit=64
+feature_clean user-profile: exit=64
+porcelain lines: 0
+
+--- valid input still runs: mason make flutter_starter_setup --package_name acme_shop --application_id com.acme.shop --ios_bundle_id com.acme.shop ...
+Re-sorted imports and reformatted lib, test, integration_test, tool, examples, docs
+Setup complete. Next: flutter analyze && flutter test
+exit=0
+name: acme_shop
+changed files: 434
+--- valid feature: mason make feature_clean --feature_name user_profile
+exit=0
+data
+di
+domain

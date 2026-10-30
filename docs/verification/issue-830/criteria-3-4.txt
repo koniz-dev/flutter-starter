@@ -1,0 +1,20 @@
+origin/main 9233e4104912e21a7a9c5cf4dc3291d2483286f7
+$ flutter test test/tooling/ci_doc_tests_cover_markdown_readers_test.dart test/tooling/claude_md_checks_table_test.dart
+00:00 +5: All tests passed!
+--- ci.yml: scope output and the new step
+59:      # `DOC_TESTS` paths in the step below; test/tooling/
+60:      # ci_doc_tests_cover_markdown_readers_test.dart fails if a test that
+125:          doc_tests=false
+126:          if [ "$run" = false ]; then doc_tests=true; fi
+129:          echo "doc_tests=$doc_tests" >> "$GITHUB_OUTPUT"
+160:        if: steps.scope.outputs.run == 'true' || steps.scope.outputs.doc_tests == 'true'
+167:        if: steps.scope.outputs.run == 'true' || steps.scope.outputs.doc_tests == 'true'
+174:      # of these paths; test/tooling/ci_doc_tests_cover_markdown_readers_test.dart
+176:      - name: Run the tests that read markdown
+177:        if: steps.scope.outputs.doc_tests == 'true'
+179:          DOC_TESTS: >-
+185:          # Word splitting is the point: DOC_TESTS is a list of paths.
+187:          flutter test --timeout=5m $DOC_TESTS
+--- the corrected comments
+.github/workflows/ci.yml:56:      # suite never reads them - but some tests do: they parse CLAUDE.md, the
+.github/workflows/strip-smoke.yml:112:      # (images and other assets). Markdown is not truly inert - strip markers
