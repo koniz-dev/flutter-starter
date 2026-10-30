@@ -93,7 +93,7 @@ Follow these steps to add a complete feature following clean architecture:
      Future<Result<List<Product>>> getProducts() async {
        try {
          final products = await remoteDataSource.getProducts();
-         return Success(products.map((m) => m.toEntity()).toList());
+         return Success(products); // a ProductModel is a Product
        } on Exception catch (e) {
          return ResultFailure(ExceptionToFailureMapper.map(e));
        }
@@ -183,7 +183,7 @@ final _productsProvider = FutureProvider<List<Product>>((ref) async {
    Future<Result<Product>> getProductById(String id) async {
      try {
        final product = await remoteDataSource.getProductById(id);
-       return Success(product.toEntity());
+       return Success(product);
      } on Exception catch (e) {
        return ResultFailure(ExceptionToFailureMapper.map(e));
      }
