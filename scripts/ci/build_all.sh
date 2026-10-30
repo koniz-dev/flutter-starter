@@ -82,7 +82,7 @@ fi
 DEFINES=(
     "--dart-define=ENVIRONMENT=$ENVIRONMENT"
     "--dart-define=BASE_URL=$BASE_URL"
-    "${SSL_PINNING_DEFINES[@]}"
+    ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 )
 
 # Clean previous builds

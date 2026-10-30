@@ -137,7 +137,7 @@ jobs:
       #       --release \
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL" \
-      #       "${SSL_PINNING_DEFINES[@]}"
+      #       ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
       # - name: Setup Google Play
       #   uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5

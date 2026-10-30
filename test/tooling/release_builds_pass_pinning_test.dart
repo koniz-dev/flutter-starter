@@ -74,11 +74,14 @@ void main() {
     expect(missing, isEmpty);
   });
 
-  test('every file with such a build sources the pinning guard', () {
+  test('every file with such a build calls the pinning guard', () {
     final unguarded = <String>[
       for (final f in files)
         if (_mobileBuilds(f).any((c) => c.contains('DEFINES[@]')) &&
-            !f.readAsStringSync().contains('ssl_pinning_defines'))
+            !RegExp(
+              r'^\s*#?\s*(if !\s*)?ssl_pinning_defines "',
+              multiLine: true,
+            ).hasMatch(f.readAsStringSync()))
           f.path,
     ];
     expect(unguarded, isEmpty);

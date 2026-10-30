@@ -196,7 +196,7 @@ jobs:
           flutter build apk \
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL" \
-            "${SSL_PINNING_DEFINES[@]}"
+            ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
       # Proves the APK is signed, and signed by the throwaway CI identity minted
       # above rather than by the Android debug key. The check itself lives in
@@ -270,7 +270,7 @@ jobs:
             --no-codesign \
             --dart-define=ENVIRONMENT="$ENVIRONMENT" \
             --dart-define=BASE_URL="$BASE_URL" \
-            "${SSL_PINNING_DEFINES[@]}"
+            ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
   build-web:
     if: inputs.platform == 'all' || inputs.platform == 'web'

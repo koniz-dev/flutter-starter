@@ -163,7 +163,7 @@ jobs:
       #       --release \
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL" \
-      #       "${SSL_PINNING_DEFINES[@]}"
+      #       ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
       # - name: Upload to App Store Connect
       #   env:

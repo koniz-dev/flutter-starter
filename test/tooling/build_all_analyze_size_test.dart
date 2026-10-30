@@ -37,14 +37,17 @@ exit 0
 
 /// A stand-in fingerprint list, so a staging or production run is not
 /// refused for missing pinning.
-const _fingerprints = 'AA:BB,CC:DD';
+final String _fingerprints = [
+  List.filled(32, 'AB').join(':'),
+  'cd' * 32,
+].join(',');
 
 /// Runs build_all.sh for [environment] with --analyze-size in a scratch
 /// directory; returns the script's exit code, its output and every stub
 /// flutter call. [env] replaces the default pinning variables.
 Future<({int exitCode, String output, List<String> calls})> _run(
   String environment, {
-  Map<String, String> env = const {'API_SSL_FINGERPRINTS': _fingerprints},
+  Map<String, String>? env,
   bool expectSuccess = true,
 }) async {
   final dir = Directory.systemTemp.createTempSync('build_all_');
@@ -72,7 +75,7 @@ Future<({int exitCode, String output, List<String> calls})> _run(
       // Not inherited from the machine running the tests.
       'API_SSL_FINGERPRINTS': '',
       'ENABLE_SSL_PINNING': '',
-      ...env,
+      ...(env ?? {'API_SSL_FINGERPRINTS': _fingerprints}),
     },
   );
   if (expectSuccess) {
@@ -159,6 +162,32 @@ void main() {
       expect(call, contains('--dart-define=ENABLE_SSL_PINNING=false'));
       expect(call, isNot(contains('API_SSL_FINGERPRINTS')));
     }
+  });
+
+  // Read the way the app reads it: whitespace, colons and empty entries
+  // dropped. A value the app would see as empty is empty here too.
+  test('a fingerprint list of only separators is refused as empty', () async {
+    final run = await _run(
+      'production',
+      env: const {'API_SSL_FINGERPRINTS': ' , '},
+      expectSuccess: false,
+    );
+
+    expect(run.exitCode, isNot(0));
+    expect(run.output, contains('API_SSL_FINGERPRINTS is empty'));
+    expect(run.calls, isEmpty);
+  });
+
+  test('a fingerprint that is not 64 hex digits is refused', () async {
+    final run = await _run(
+      'production',
+      env: const {'API_SSL_FINGERPRINTS': 'AA:BB:CC'},
+      expectSuccess: false,
+    );
+
+    expect(run.exitCode, isNot(0));
+    expect(run.output, contains('is not a SHA-256'));
+    expect(run.calls, isEmpty);
   });
 
   test(
