@@ -95,7 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   cookie, and such a response evicts what an earlier one stored for that URL.
   Cache keys are a SHA-256 of the URL, so a token in a query string is no
   longer written to `shared_preferences`; indexed entries under the old
-  verbatim keys are removed on first use.
+  verbatim keys are removed on the first request, with caching enabled or
+  not.
 - A `GET` whose query has a key the log redaction treats as a secret
   (`token`, `otp`, `signature`, ...) bypasses `CacheInterceptor` entirely, so
   its response body is not stored either. `ApiLoggingInterceptor.isSensitiveKey`
