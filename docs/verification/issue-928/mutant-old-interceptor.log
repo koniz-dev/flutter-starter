@@ -1,0 +1,93 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart
+00:00 +0: a response the server marks as not for this cache is not stored Cache-Control: no-store
+00:00 +0 -1: a response the server marks as not for this cache is not stored Cache-Control: no-store [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_timestamp_http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 73:9  main.<fn>.<fn>
+  
+00:00 +0 -1: a response the server marks as not for this cache is not stored Cache-Control: private
+00:00 +0 -2: a response the server marks as not for this cache is not stored Cache-Control: private [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_timestamp_http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 73:9  main.<fn>.<fn>
+  
+00:00 +0 -2: a response the server marks as not for this cache is not stored Cache-Control: max-age=60, Private
+00:00 +0 -3: a response the server marks as not for this cache is not stored Cache-Control: max-age=60, Private [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_timestamp_http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 73:9  main.<fn>.<fn>
+  
+00:00 +0 -3: a response the server marks as not for this cache is not stored Cache-Control: private="set-cookie"
+00:00 +0 -4: a response the server marks as not for this cache is not stored Cache-Control: private="set-cookie" [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_timestamp_http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 73:9  main.<fn>.<fn>
+  
+00:00 +0 -4: a response the server marks as not for this cache is not stored Set-Cookie
+00:00 +0 -5: a response the server marks as not for this cache is not stored Set-Cookie [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_timestamp_http_cache_https://api.example.com/auth/verify-email_{}',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 73:9  main.<fn>.<fn>
+  
+00:00 +0 -5: a response the server marks as not for this cache is not stored while a response with no such directive is stored
+00:00 +1 -5: a token in the query is in no stored key and not in the index
+00:00 +1 -6: a token in the query is in no stored key and not in the index [E]
+  Expected: not contains 's3cr3t-token'
+    Actual: 'http_cache_https://api.example.com/auth/verify-email?token=s3cr3t-token_{token: s3cr3t-token}'
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 99:9  main.<fn>
+  
+00:00 +1 -6: entries stored under a verbatim URL key are removed on first use, and the hashed ones kept
+00:00 +1 -7: entries stored under a verbatim URL key are removed on first use, and the hashed ones kept [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                        expect
+  test/core/network/interceptors/cache_response_directives_test.dart 121:5  main.<fn>
+  
+00:00 +1 -7: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a response the server marks as not for this cache is not stored Cache-Control: max-age=60, Private
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a response the server marks as not for this cache is not stored Cache-Control: no-store
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a response the server marks as not for this cache is not stored Cache-Control: private
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a response the server marks as not for this cache is not stored Cache-Control: private="set-cookie"
+  ... and 3 more

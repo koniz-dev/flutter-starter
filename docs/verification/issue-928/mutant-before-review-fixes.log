@@ -1,0 +1,50 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart
+00:00 +0: a response the server marks as not for this cache is not stored Cache-Control: no-store
+00:00 +1: a response the server marks as not for this cache is not stored Cache-Control: private
+00:00 +2: a response the server marks as not for this cache is not stored Cache-Control: max-age=60, Private
+00:00 +3: a response the server marks as not for this cache is not stored Cache-Control: private="set-cookie"
+00:00 +4: a response the server marks as not for this cache is not stored Set-Cookie
+00:00 +5: a response the server marks as not for this cache is not stored Cache-Control: no-cache
+00:00 +5 -1: a response the server marks as not for this cache is not stored Cache-Control: no-cache [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_6f3e2d1335ea7e3855f84145021e737f7db80265847d343da6a34a92d4a619bf',
+              'http_cache_timestamp_http_cache_6f3e2d1335ea7e3855f84145021e737f7db80265847d343da6a34a92d4a619bf',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 79:9  main.<fn>.<fn>
+  
+00:00 +5 -1: a response the server marks as not for this cache is not stored Pragma: no-cache
+00:00 +5 -2: a response the server marks as not for this cache is not stored Pragma: no-cache [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_6f3e2d1335ea7e3855f84145021e737f7db80265847d343da6a34a92d4a619bf',
+              'http_cache_timestamp_http_cache_6f3e2d1335ea7e3855f84145021e737f7db80265847d343da6a34a92d4a619bf',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18                       expect
+  test/core/network/interceptors/cache_response_directives_test.dart 79:9  main.<fn>.<fn>
+  
+00:00 +5 -2: a response the server marks as not for this cache is not stored while a response with no such directive is stored
+00:00 +6 -2: a refusing response removes the entry an earlier one stored
+00:00 +6 -3: a refusing response removes the entry an earlier one stored [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                        expect
+  test/core/network/interceptors/cache_response_directives_test.dart 108:5  main.<fn>
+  
+00:00 +6 -3: a token in the query is in no stored key and not in the index
+00:00 +7 -3: entries stored under a verbatim URL key are removed on first use, and the hashed ones kept
+00:00 +8 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a refusing response removes the entry an earlier one stored
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a response the server marks as not for this cache is not stored Cache-Control: no-cache
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_response_directives_test.dart: a response the server marks as not for this cache is not stored Pragma: no-cache
