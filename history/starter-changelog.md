@@ -35,7 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   through `scripts/ci/ssl_pinning_defines.sh` and refuse to build without it:
   export `API_SSL_FINGERPRINTS` for `build_all.sh`, and set the repository
   variable `API_SSL_FINGERPRINTS` (or `build.yml`'s `ssl_fingerprints` input)
-  for the workflows.
+  for the workflows. The fastlane build and upload lanes take
+  `ssl_fingerprints:<list>` (or `API_SSL_FINGERPRINTS`) and `ssl_pinning:false`
+  the same way, and stop before building without either.
 - **Configured `API_SSL_FINGERPRINTS` now pin in development too**, unless
   `ENABLE_SSL_PINNING=false`. **What you change:** if you set fingerprints in
   a development `.env` and debug through a proxy, add
