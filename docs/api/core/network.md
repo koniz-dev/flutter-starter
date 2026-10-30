@@ -995,6 +995,12 @@ path used to be logged verbatim.
 it and keeps the rest of the path exactly as written. It applies to the
 request, response and error entries and to `RetryInterceptor`'s retry lines.
 
+A secret in a **path segment** is never redacted. Only a query string has key
+names to match; `/reset/<token>`, `/invite/<code>` and `/files/<signed-id>` are
+logged, and recorded by `PerformanceInterceptor` as the trace name and
+`http_path` attribute, exactly as written. Keep secrets out of path segments:
+put them in a header, the body, or a query parameter with a sensitive key name.
+
 <!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor -->
 
 One named residual: an OAuth **`code`** query parameter is *not* redacted. It is

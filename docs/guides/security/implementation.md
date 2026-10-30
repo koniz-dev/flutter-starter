@@ -322,6 +322,12 @@ replaces secrets with `***REDACTED***`:
 Redaction is decided by **key name only**, never by the shape of a value. A
 secret carried under a key name none of the sets matches is logged.
 
+A value in a **path segment** has no key name, so it is never redacted:
+`/reset/<token>`, `/invite/<code>` or `/files/<signed-id>` reach the logs, and
+the performance trace name, verbatim. Do not design routes that carry a secret
+in the path. Send it in a header, in the body, or as a query parameter whose key
+name is in the sensitive sets (`?token=...`) instead.
+
 #### Extending it
 
 Add the name to the matching set in `api_logging_interceptor.dart`:
