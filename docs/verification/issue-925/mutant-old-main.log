@@ -1,0 +1,71 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart
+00:00 +0: main() refuses a release build configured as development a release build with pinning on and no fingerprints boots into the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: production
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: https://api.example.com
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: true
+  SSL Pinning Effective: false
+  SSL Fingerprints Configured: 0
+  !! SSL PINNING MISCONFIGURED: requested but no fingerprints configured - nothing is pinned
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: true
+  Crash Reporting: true
+  Performance Monitoring: true
+  Debug Features: false
+  HTTP Logging: false
+═══════════════════════════════════════════════════════════
+{"timestamp":"2026-10-30T17:00:09.987228Z","level":"info","message":"Starting regular storage migration","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:09.993808Z","level":"info","message":"Starting storage migration | Context: {\"current_version\":1,\"target_version\":2,\"migrations_count\":1}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:09.994901Z","level":"info","message":"Executing migration: Migrate user preferences: rename keys and update data format | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:09.997749Z","level":"info","message":"Migration completed successfully | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:09.998603Z","level":"info","message":"All migrations completed successfully | Context: {\"final_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:09.998858Z","level":"info","message":"Starting secure storage migration","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:10.004175Z","level":"info","message":"Starting storage migration | Context: {\"current_version\":1,\"target_version\":2,\"migrations_count\":1}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:10.004739Z","level":"info","message":"Executing migration: Migrate user preferences: rename keys and update data format | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:10.009070Z","level":"info","message":"Migration completed successfully | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:10.010172Z","level":"info","message":"All migrations completed successfully | Context: {\"final_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:10.010512Z","level":"info","message":"All storage migrations completed | Context: {\"regular\":2,\"secure\":2}","error":null,"stackTrace":null}
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (ENABLE_SSL_PINNING=true) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+{"timestamp":"2026-10-30T17:00:10.515131Z","level":"info","message":"Navigation: Route Pushed | Context: {\"routeName\":\"login\",\"routePath\":\"login\"}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-30T17:00:11.375701Z","level":"error","message":"Uncaught Flutter error | Context: {\"library\":\"Flutter test framework\",\"silent\":false}","error":"Expected: exactly one matching candidate\n  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'startup_failure_body'>]: []>\n   Which: means none were found but one was expected\n","stackTrace":"#0      fail (package:matcher/src/expect/expect.dart:187:31)\n#1      _expect (package:matcher/src/expect/expect.dart:182:3)\n#2      expect (package:matcher/src/expect/expect.dart:65:3)\n#3      expect (package:flutter_test/src/widget_tester.dart:473:18)\n#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:493:7)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n#7      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)\n<asynchronous suspension>\n"}
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'startup_failure_body'>]: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:493:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart line 493
+The test description was:
+  a release build with pinning on and no fingerprints boots into the failure screen
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: main() refuses a release build configured as development a release build with pinning on and no fingerprints boots into the failure screen [E]
+  Test failed. See exception logs above.
+  The test description was: a release build with pinning on and no fingerprints boots into the failure screen
+  
+00:01 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() refuses a release build configured as development a release build with pinning on and no fingerprints boots into the failure screen
