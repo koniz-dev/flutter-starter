@@ -24,13 +24,14 @@ Use Riverpod notifiers as adapter implementations behind these contracts. UI com
 
 ## Implementation status
 
-This ADR is still **Proposed**, and the decision above describes an intended
-direction, not the shipped tree. As of the deletion of `ITasksController`:
+This ADR was never accepted: it went from Proposed to Superseded by 0006, and
+the decision above describes a direction that was tried, not the shipped tree.
+As of the deletion of `ITasksController`:
 
 | Contract | Implemented by | Consumed by |
 | --- | --- | --- |
-| `IAuthController` | `AuthNotifier` (`lib/features/auth/presentation/providers/auth_provider.dart:47`), bound to `authControllerProvider` (`:284`) | Nothing. That provider has zero readers in `lib/` and `test/`; the UI reads the generated `authProvider` directly. |
-| `ITasksController` | **Removed.** Deleting the contract also removed and `TasksStateSnapshot`; `grep -rn "ITasksController" lib` now returns nothing. | n/a |
+| `IAuthController` | `AuthNotifier` in `lib/features/auth/presentation/providers/auth_provider.dart`, bound to `authControllerProvider` in the same file | Nothing. That provider has zero readers in `lib/` and `test/`; the UI reads the generated `authProvider` directly. |
+| `ITasksController` | **Removed.** Deleting the contract also removed `TasksStateSnapshot`; `grep -rn "ITasksController" lib` now returns nothing. | n/a |
 
 So the "UI depends on controller contracts" half of this decision has not been
 carried out for `IAuthController`, and the tasks half of the decision was
@@ -44,6 +45,9 @@ or deleted in turn was answered by
 `authControllerProvider`. Do not read this ADR as a description of how the
 sample features are wired today; the current wiring is in
 [contracts-map.md](../contracts-map.md).
+
+<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart AuthNotifier -->
+<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart authControllerProvider -->
 
 ## Consequences
 ### Positive
