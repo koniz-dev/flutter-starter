@@ -61,12 +61,17 @@ lib/
 │       │   ├── datasources/    # Remote & local data sources
 │       │   ├── models/         # Data models
 │       │   └── repositories/   # Repository implementations
+│       ├── demo/          # Offline demo sign-in (debug builds, no BASE_URL)
+│       ├── di/            # The feature's own providers (auth_providers.dart)
 │       ├── domain/        # Domain layer
 │       │   ├── entities/      # Business entities
 │       │   ├── repositories/  # Repository interfaces
 │       │   └── usecases/      # Business logic (use cases)
-│       └── presentation/ # Presentation layer
-│           └── providers/     # State management (Riverpod)
+│       ├── presentation/  # Presentation layer
+│       │   ├── providers/     # State management (Riverpod)
+│       │   ├── screens/       # Screens
+│       │   └── widgets/       # The feature's widgets
+│       └── routing/       # The feature's routes (auth_routes.dart)
 │
 ├── shared/                # Shared components
 │   ├── extensions/        # Extension methods
@@ -166,7 +171,7 @@ See [Errors API](../../api/core/errors.md) for all error types.
 | **Utilities** | `lib/core/utils/` |
 | **Feature Code** | `lib/features/<feature-name>/` |
 | **Shared Components** | `lib/shared/` |
-| **Dependency Injection** | `lib/core/di/providers.dart` |
+| **Dependency Injection** | core services: `lib/core/di/providers.dart`; a feature's own providers: `lib/features/<feature-name>/di/` (auth: `lib/features/auth/di/auth_providers.dart`) |
 | **Tests** | `test/` |
 | **Examples** | `docs/api/examples/` |
 
