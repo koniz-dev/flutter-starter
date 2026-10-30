@@ -123,6 +123,15 @@ jobs:
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL"
 
+      # A run that built nothing must fail, not go green with zero artifacts
+      # while the build step above is still commented out.
+      - name: Upload web build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-firebase
+          path: build/web/
+          if-no-files-found: error
+
       # - name: Setup Firebase
       #   uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
       #   with:
@@ -131,6 +140,14 @@ jobs:
       #     projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
       #     channelId: live
       #     target: ${{ steps.env.outputs.environment }}
+
+      # Delete this step once the build and deploy steps above are uncommented
+      # and their secrets are set. Until then this job deploys nothing, and a
+      # green run titled "Deploy to Firebase" would say it had.
+      - name: Fail while nothing is deployed
+        run: |
+          echo "::error::The build and deploy steps of this job ship commented out, so nothing was deployed. Uncomment them, set the secrets, then delete this step."
+          exit 1
 
   deploy-netlify:
     name: Deploy to Netlify
@@ -185,6 +202,15 @@ jobs:
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL"
 
+      # A run that built nothing must fail, not go green with zero artifacts
+      # while the build step above is still commented out.
+      - name: Upload web build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-netlify
+          path: build/web/
+          if-no-files-found: error
+
       # - name: Deploy to Netlify
       #   uses: nwtgck/actions-netlify@5da65c9f74c7961c5501a3ba329b8d0912f39c03 # v2.0.0
       #   with:
@@ -195,6 +221,14 @@ jobs:
       #   env:
       #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      # Delete this step once the build and deploy steps above are uncommented
+      # and their secrets are set. Until then this job deploys nothing, and a
+      # green run titled "Deploy to Netlify" would say it had.
+      - name: Fail while nothing is deployed
+        run: |
+          echo "::error::The build and deploy steps of this job ship commented out, so nothing was deployed. Uncomment them, set the secrets, then delete this step."
+          exit 1
 
   deploy-vercel:
     name: Deploy to Vercel
@@ -249,6 +283,15 @@ jobs:
       #       --dart-define=ENVIRONMENT="$ENV" \
       #       --dart-define=BASE_URL="$BASE_URL"
 
+      # A run that built nothing must fail, not go green with zero artifacts
+      # while the build step above is still commented out.
+      - name: Upload web build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-vercel
+          path: build/web/
+          if-no-files-found: error
+
       # - name: Deploy to Vercel
       #   uses: amondnet/vercel-action@16e87c0a08142b0d0d33b76aeaf20823c381b9b9 # v25.2.0
       #   with:
@@ -257,3 +300,11 @@ jobs:
       #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
       #     vercel-args: '--prod'
       #     working-directory: ./
+
+      # Delete this step once the build and deploy steps above are uncommented
+      # and their secrets are set. Until then this job deploys nothing, and a
+      # green run titled "Deploy to Vercel" would say it had.
+      - name: Fail while nothing is deployed
+        run: |
+          echo "::error::The build and deploy steps of this job ship commented out, so nothing was deployed. Uncomment them, set the secrets, then delete this step."
+          exit 1

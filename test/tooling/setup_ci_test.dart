@@ -137,6 +137,41 @@ void main() {
     }
   });
 
+  // The check above passes vacuously for a workflow with no upload at all:
+  // deploy-web.yml had none, so its jobs went green having built and deployed
+  // nothing. Every job of every deploy workflow must upload, and fail on zero
+  // files.
+  group('every deploy job uploads, failing on zero files', () {
+    for (final f in _deployWorkflows) {
+      final name = f.uri.pathSegments.last;
+      final text = f.readAsStringSync();
+      final jobs = text
+          .substring(text.indexOf('\njobs:\n'))
+          .split(RegExp(r'\n  (?=[A-Za-z][\w-]*:\n)'))
+          .skip(1);
+      test(name, () {
+        expect(jobs, isNotEmpty);
+        for (final job in jobs) {
+          final id = job.substring(0, job.indexOf(':'));
+          expect(
+            job,
+            contains('uses: actions/upload-artifact@'),
+            reason: '$name job $id uploads nothing',
+          );
+          expect(job, contains('if-no-files-found: error'), reason: id);
+        }
+      });
+    }
+
+    test('deploy-web.yml fails each job while it deploys nothing', () {
+      final text = File('.github/workflows/deploy-web.yml').readAsStringSync();
+      expect(
+        RegExp('name: Fail while nothing is deployed').allMatches(text),
+        hasLength(3),
+      );
+    });
+  });
+
   group('criterion 3: commented artifact paths use the flavorless layout', () {
     for (final f in _deployWorkflows) {
       final name = f.uri.pathSegments.last;
