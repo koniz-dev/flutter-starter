@@ -28,6 +28,8 @@ Base exception class for all application exceptions.
 - `CacheException` - Local storage errors
 - `ValidationException` - Input validation errors
 - `AuthException` - Authentication/authorization errors
+- `PermissionException` - Permission denied errors
+- `NotFoundException` - A resource that does not exist
 
 **Example:**
 ```dart
@@ -79,6 +81,7 @@ Base class for all failures in the domain layer.
 - `AuthFailure` - Authentication/authorization errors
 - `ValidationFailure` - Input validation errors
 - `PermissionFailure` - Permission denied errors
+- `NotFoundFailure` - A resource that does not exist
 - `UnknownFailure` - Unclassified errors
 
 **Example:**
@@ -258,18 +261,20 @@ result.when(
 
 ### Creating Failures
 
+Let `ExceptionToFailureMapper` choose the failure, as the repositories do.
+Mapping by hand loses what it knows: a 401 `ServerException` becomes an
+`AuthFailure`, a 404 a `NotFoundFailure`, and so on (see above).
+
 ```dart
 // In repository implementation
 try {
   // Operation that may throw
-} on ServerException catch (e) {
-  return ResultFailure(ServerFailure(e.message, code: e.code));
-} on NetworkException catch (e) {
-  return ResultFailure(NetworkFailure(e.message, code: e.code));
 } on Exception catch (e) {
-  return ResultFailure(UnknownFailure(e.toString()));
+  return ResultFailure(ExceptionToFailureMapper.map(e));
 }
 ```
+
+<!-- symbol: lib/core/errors/exception_to_failure_mapper.dart ExceptionToFailureMapper.map -->
 
 ---
 
