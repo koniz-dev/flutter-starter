@@ -1,0 +1,6 @@
+main @ 7dcda9b8154
+$ flutter test test/tooling/claude_md_checks_table_test.dart
+00:00 +2: criteria 1-2: each filtered row names every trigger path
+00:00 +3: the Strip row counts the strip-smoke variants
+00:00 +4: All tests passed!
+exit=0

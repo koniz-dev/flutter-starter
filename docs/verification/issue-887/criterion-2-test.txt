@@ -1,0 +1,8 @@
+main @ 7dcda9b8154
+$ flutter test test/core/network/interceptors/auth_token_store_failure_test.dart -r expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_token_store_failure_test.dart
+00:00 +0: a failed read on an ordinary request fails it and keeps the session
+Cache credential check error: CacheException: keystore unavailable
+00:00 +1: a failed read on the refresh call ends the session
+00:00 +2: All tests passed!
+exit=0

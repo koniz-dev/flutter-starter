@@ -1,0 +1,9 @@
+main @ 7dcda9b8154
+$ flutter test test/core/network/interceptors/auth_token_store_failure_test.dart
+  test/core/network/interceptors/auth_token_store_failure_test.dart 124:11  main.<fn>
+  
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_token_store_failure_test.dart: a failed read on the refresh call ends the session
+exit=1

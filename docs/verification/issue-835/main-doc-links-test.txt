@@ -1,0 +1,6 @@
+main @ 7dcda9b8154
+$ flutter test test/docs/doc_links_test.dart
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_links_test.dart
+00:00 +0: every relative link and anchor in the markdown resolves
+00:00 +1: All tests passed!
+exit=0

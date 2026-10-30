@@ -1,0 +1,14 @@
+Draft PR #911 (closed unmerged): only 'git mv examples/logging_examples.dart examples/logging_samples.dart' on top of main f6dfaee740b+; no markdown changed.
+Quality gate run: https://github.com/koniz-dev/flutter-starter/actions/runs/41002124737
+--- gh pr checks 911
+Quality gate: fail
+Strip both-samples-removed + analyze + test: fail
+Strip feature-flags-removed + analyze + test: fail
+Strip keep-samples + analyze + test: fail
+Strip renamed-both + analyze + test: fail
+Strip tasks-removed + analyze + test: fail
+--- gh run view 41002124737 --log-failed (filtered)
+##[group]❌ /home/runner/work/flutter-starter/flutter-starter/test/docs/doc_links_test.dart: every relative link and anchor in the markdown resolves (failed)
+Running build hooks...Running build hooks...docs/api/core/logging.md:16: missing path -> ../../../examples/logging_examples.dart
+examples/README.md:8: missing path -> logging_examples.dart
+test/docs/doc_links_test.dart 21:5                  main.<fn>
