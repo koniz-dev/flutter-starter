@@ -613,8 +613,8 @@ with the freerasp version.
 
 ```bash
 flutter pub add freerasp:^8.2.4   # the version the template is written for
-cd lib/core/security/infrastructure && mv freerasp_service_impl.dart.template freerasp_service_impl.dart && cd -
-cd test/core/security/infrastructure && for f in freerasp_*.dart.template; do mv "$f" "${f%.template}"; done && cd -
+(cd lib/core/security/infrastructure && mv freerasp_service_impl.dart.template freerasp_service_impl.dart)
+(cd test/core/security/infrastructure && for f in freerasp_*.dart.template; do mv "$f" "${f%.template}"; done)
 ```
 
 Then edit the placeholder `TalsecConfig` inside

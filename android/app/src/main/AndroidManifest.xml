@@ -4,12 +4,10 @@
          and profile source sets, which is correct for an app that makes no
          network calls. This template does make them: lib/core/network/ and the
          auth flow post to AppConfig.baseUrl.
-         A release build happens to receive INTERNET transitively today, from an
-         Android library manifest in the dependency graph rather than from any
-         Flutter plugin's own manifest, as the merged release manifest shows.
-         Do not rely
-         on that: a permission the app needs for its own traffic must not vanish
-         when a dependency is dropped or bumped. -->
+         A release build once received INTERNET only transitively, from the
+         RASP SDK's library manifest, which is no longer a default dependency.
+         A permission the app needs for its own traffic must not vanish when a
+         dependency is dropped or bumped. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="flutter_starter"

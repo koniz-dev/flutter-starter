@@ -48,6 +48,16 @@ void main() {
     expect(importers, isEmpty);
   });
 
+  test('the setup brick still rewrites the template identifiers', () {
+    expect(
+      File('bricks/flutter_starter_setup/hooks/post_gen.dart')
+          .readAsStringSync(),
+      contains(
+        "'lib/core/security/infrastructure/freerasp_service_impl.dart.template'",
+      ),
+    );
+  });
+
   test('the adapter and its tests still ship as templates', () {
     for (final path in [
       'lib/core/security/infrastructure/freerasp_service_impl.dart.template',
