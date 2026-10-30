@@ -82,6 +82,13 @@ class CacheConfig {
 /// cache serves a fresh entry without asking the network, so it does not
 /// store one at all.
 ///
+/// The `Set-Cookie` rule has **no effect on Flutter web**. Browsers never
+/// expose `Set-Cookie` to script (the Fetch spec lists it as a forbidden
+/// response header), and dio's web adapter reads headers through
+/// `getAllResponseHeaders()`, so a cookie-setting response looks cookie-free
+/// here. On web, mark such responses `Cache-Control: private` or `no-store`
+/// on the server; those headers are visible and honoured.
+///
 /// ## Where it is stored
 ///
 /// In [StorageService], i.e. `shared_preferences` - plaintext, readable on a
