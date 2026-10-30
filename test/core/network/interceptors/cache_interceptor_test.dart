@@ -497,7 +497,7 @@ void main() {
       });
     });
 
-    group('_getCacheKey', () {
+    group('cache key lookup', () {
       test('should generate cache key from URI and query parameters', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();

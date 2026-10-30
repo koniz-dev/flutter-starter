@@ -69,11 +69,15 @@ class CacheConfig {
 ///
 /// ## What the server can refuse
 ///
-/// A response whose `Cache-Control` names `no-store` or `private`, or that
-/// sets a cookie, is passed through and never written. Those are the server
-/// saying the body is not for a shared or persistent cache - an anonymous
-/// email-verification or password-reset check, a presigned download - and the
-/// store below is both.
+/// A response whose `Cache-Control` names `no-store`, `private` or
+/// `no-cache` (or that carries `Pragma: no-cache`), or that sets a cookie, is
+/// passed through and never written, and any entry already stored for that
+/// URL is removed. `no-store` and `private` are the server saying the body is
+/// not for a shared or persistent cache - an anonymous email-verification or
+/// password-reset check, a presigned download - and the store below is both.
+/// `no-cache` allows storing only if every reuse is revalidated, and this
+/// cache serves a fresh entry without asking the network, so it does not
+/// store one at all.
 ///
 /// ## Where it is stored
 ///
@@ -85,7 +89,7 @@ class CacheConfig {
 /// Keys are a SHA-256 of the request URL ([cacheKeyFor]), never the URL
 /// itself, so a token in a query string is not written to disk as part of a
 /// key or of the key index. Entries written under the old verbatim-URL keys
-/// are removed the first time the cache is used.
+/// and listed in the index are removed the first time a GET passes through.
 ///
 /// ## How an entry is aged
 ///
@@ -189,12 +193,12 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       return super.onRequest(options, handler);
     }
 
+    await _purgeLegacyEntries();
+
     // Check if request should bypass cache
     if (await _shouldBypassCache(options)) {
       return super.onRequest(options, handler);
     }
-
-    await _purgeLegacyEntries();
 
     // Try to get cached response
     final cacheKey = cacheKeyFor(options);
@@ -264,13 +268,21 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       return super.onResponse(response, handler);
     }
 
-    // Check if response should be cached
-    if (_responseForbidsStorage(response) ||
-        await _shouldBypassCache(requestOptions)) {
+    await _purgeLegacyEntries();
+
+    // The server refused storage: drop whatever an earlier response left
+    // under this URL too, or it would keep being served, fresh and then as a
+    // stale fallback.
+    if (_responseForbidsStorage(response)) {
+      final cacheKey = cacheKeyFor(requestOptions);
+      await _evictEntry(cacheKey, '$_timestampKeyPrefix$cacheKey');
       return super.onResponse(response, handler);
     }
 
-    await _purgeLegacyEntries();
+    // Check if response should be cached
+    if (await _shouldBypassCache(requestOptions)) {
+      return super.onResponse(response, handler);
+    }
 
     // Cache the response
     final cacheKey = cacheKeyFor(requestOptions);
@@ -322,12 +334,17 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   }
 
   /// Whether the server marked [response] as not for this cache: a
-  /// `Cache-Control` of `no-store` or `private`, or a `Set-Cookie`.
+  /// `Cache-Control` of `no-store`, `private` or `no-cache`, a
+  /// `Pragma: no-cache`, or a `Set-Cookie`.
   static bool _responseForbidsStorage(Response<dynamic> response) {
-    final directives = (response.headers['cache-control'] ?? const <String>[])
-        .expand((value) => value.split(','))
-        .map((directive) => directive.trim().toLowerCase().split('=').first);
-    if (directives.any((d) => d == 'no-store' || d == 'private')) return true;
+    List<String> directives(String header) =>
+        (response.headers[header] ?? const <String>[])
+            .expand((value) => value.split(','))
+            .map((d) => d.trim().toLowerCase().split('=').first)
+            .toList();
+    const refusing = {'no-store', 'private', 'no-cache'};
+    if (directives('cache-control').any(refusing.contains)) return true;
+    if (directives('pragma').contains('no-cache')) return true;
     return response.headers['set-cookie']?.isNotEmpty ?? false;
   }
 

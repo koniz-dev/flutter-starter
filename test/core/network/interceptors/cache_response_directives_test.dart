@@ -61,6 +61,12 @@ void main() {
       'Set-Cookie': {
         'set-cookie': ['session=abc; HttpOnly'],
       },
+      'Cache-Control: no-cache': {
+        'cache-control': ['no-cache'],
+      },
+      'Pragma: no-cache': {
+        'pragma': ['no-cache'],
+      },
     };
 
     for (final MapEntry(key: label, value: headers) in refusals.entries) {
@@ -84,6 +90,24 @@ void main() {
 
       expect(cacheKeys(), isNotEmpty);
     });
+  });
+
+  test('a refusing response removes the entry an earlier one stored', () async {
+    final options = _get('/catalog');
+    await interceptor.onResponse(_ok(options), _ResponseHandler());
+    expect(cacheKeys(), isNotEmpty, reason: 'the first response was cached');
+
+    await interceptor.onResponse(
+      _ok(options, {
+        'cache-control': ['no-store'],
+      }),
+      _ResponseHandler(),
+    );
+
+    final key = CacheInterceptor.cacheKeyFor(options);
+    expect(storage.values.containsKey(key), isFalse);
+    expect(storage.values.containsKey('http_cache_timestamp_$key'), isFalse);
+    expect(await storage.getStringList('http_cache_index') ?? [], isEmpty);
   });
 
   test(
