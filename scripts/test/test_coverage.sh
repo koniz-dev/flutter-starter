@@ -68,6 +68,9 @@ done
 if [ "$SKIP_TEST" = false ]; then
 echo -e "${BLUE}Running tests with coverage...${NC}"
 echo ""
+# Imports every library under lib/, so a file no test loads still appears in
+# lcov.info (with zero hits) instead of being left out of the total.
+dart run tool/coverage_helper.dart
 flutter test --coverage
 else
   echo -e "${YELLOW}Skipping tests (using existing coverage data)${NC}"

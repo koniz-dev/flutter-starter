@@ -28,8 +28,16 @@ Test coverage measures how much of the codebase is executed during tests. We aim
 
 1. **Run tests with coverage:**
    ```bash
+   dart run tool/coverage_helper.dart
    flutter test --coverage
    ```
+
+   `flutter test --coverage` records only the libraries some test loads, so a
+   file no test imports would be missing from `lcov.info` and leave the total
+   untouched. `tool/coverage_helper.dart` writes a git-ignored
+   `test/coverage_helper_test.dart` that imports every library under `lib/`,
+   so untested files count with zero hits. `test_coverage.sh` (without
+   `--no-test`), the Quality gate and `coverage.yml` all run it first.
 
 2. **Generate HTML report:**
    ```bash

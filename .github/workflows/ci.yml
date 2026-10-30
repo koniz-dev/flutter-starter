@@ -212,6 +212,15 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         run: flutter analyze
 
+      # lcov.info lists only the libraries some test loads, so a file no test
+      # imports used to be absent from it: an untested screen left the total
+      # below unchanged. This writes a git-ignored test importing every
+      # library under lib/, so each one counts, with zero hits where nothing
+      # ran.
+      - name: Import every library for coverage
+        if: steps.scope.outputs.run == 'true'
+        run: dart run tool/coverage_helper.dart
+
       # The suite runs in a fresh random order on every PR, so a test that
       # only passes because of the tests before it fails here, not in a fork
       # months later. flutter
