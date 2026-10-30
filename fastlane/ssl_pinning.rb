@@ -22,6 +22,7 @@ require "shellwords"
 
 module SslPinning
   OPT_OUT = %w[false 0 no off].freeze
+  OPT_IN = %w[true 1 yes on].freeze
 
   # The --dart-define arguments for [environment], as one shell-escaped
   # string, or an ArgumentError saying why the build is refused.
@@ -41,8 +42,16 @@ module SslPinning
     defines << "--dart-define=API_SSL_FINGERPRINTS=#{fingerprints}" unless entries.empty?
     defines << "--dart-define=ENABLE_SSL_PINNING=#{pinning}" unless pinning.strip.empty?
 
+    flag = pinning.strip.downcase
+    if %w[staging production].include?(environment) && !pinning.empty? &&
+       !(OPT_IN + OPT_OUT).include?(flag)
+      raise ArgumentError, "ENABLE_SSL_PINNING / ssl_pinning is '#{pinning}', " \
+                           "which is neither on (#{OPT_IN.join('/')}) nor off " \
+                           "(#{OPT_OUT.join('/')})."
+    end
+
     if %w[staging production].include?(environment) && entries.empty? &&
-       !OPT_OUT.include?(pinning.strip.downcase)
+       !OPT_OUT.include?(flag)
       raise ArgumentError, "API_SSL_FINGERPRINTS is empty. Pinning is on in " \
                            "#{environment}, and a release built without " \
                            "fingerprints refuses to start. Pass " \

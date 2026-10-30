@@ -70,7 +70,7 @@ The pin set and the on/off switch come from `AppConfig`
 | Setting | Env variable | Default |
 |---|---|---|
 | `AppConfig.apiSslFingerprints` | `API_SSL_FINGERPRINTS` | empty list |
-| `AppConfig.enableSslPinning` | `ENABLE_SSL_PINNING` | `true` in staging and production; in development `true` once `API_SSL_FINGERPRINTS` is set, `false` otherwise |
+| `AppConfig.enableSslPinning` | `ENABLE_SSL_PINNING` (`true`/`1`/`yes`/`on` or `false`/`0`/`no`/`off`, any case; any other value keeps the default and a release refuses to start) | `true` in staging and production; in development `true` once `API_SSL_FINGERPRINTS` is set, `false` otherwise |
 
 Fingerprints are normalised on read: comma-separated, colons stripped,
 lowercased. Supply them in either form.

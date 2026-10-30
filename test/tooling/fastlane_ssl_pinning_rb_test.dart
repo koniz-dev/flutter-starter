@@ -93,6 +93,16 @@ void main() {
     }
   }, skip: skip);
 
+  test('an unrecognised flag is refused even with fingerprints', () {
+    for (final value in ['enabled', ' ', 'ture']) {
+      expect(
+        _defines('production', fp, value),
+        contains('neither on'),
+        reason: '"$value"',
+      );
+    }
+  }, skip: skip);
+
   test('development passes through with nothing set', () {
     expect(_defines('development', null, null), isEmpty);
   }, skip: skip);

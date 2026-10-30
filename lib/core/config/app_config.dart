@@ -181,12 +181,38 @@ class AppConfig {
   ///   fingerprints are a statement that this backend is pinned; ignoring them
   ///   because the environment says development shipped releases unpinned.
   ///
-  /// Can be overridden via .env: `ENABLE_SSL_PINNING=false`
+  /// Can be overridden via .env: `ENABLE_SSL_PINNING=false`. Only the
+  /// spellings in [sslPinningOnValues] and [sslPinningOffValues] (any case,
+  /// trimmed) override the default. Anything else - a typo such as `ture`,
+  /// `enabled`, or whitespace - keeps the default above rather than turning
+  /// pinning off, and [sslPinningFlagUnrecognised] reports it; a release
+  /// refuses to start on it.
   static bool get enableSslPinning {
-    if (EnvConfig.has('ENABLE_SSL_PINNING')) {
-      return EnvConfig.getBool('ENABLE_SSL_PINNING');
-    }
+    final flag = EnvConfig.get('ENABLE_SSL_PINNING').trim().toLowerCase();
+    if (sslPinningOnValues.contains(flag)) return true;
+    if (sslPinningOffValues.contains(flag)) return false;
     return isStaging || isProduction || apiSslFingerprints.isNotEmpty;
+  }
+
+  /// `ENABLE_SSL_PINNING` values that turn pinning on.
+  static const Set<String> sslPinningOnValues = {'true', '1', 'yes', 'on'};
+
+  /// `ENABLE_SSL_PINNING` values that turn pinning off.
+  static const Set<String> sslPinningOffValues = {'false', '0', 'no', 'off'};
+
+  /// Whether `ENABLE_SSL_PINNING` is set to something that is neither an on
+  /// nor an off spelling.
+  ///
+  /// It used to be read as false - any value but `true`, `1`, `yes` or `on`
+  /// - so a typo silently shipped a staging or production release unpinned.
+  /// [enableSslPinning] now ignores such a value, and `main()` refuses to
+  /// start a release that carries one.
+  static bool get sslPinningFlagUnrecognised {
+    final raw = EnvConfig.get('ENABLE_SSL_PINNING');
+    if (raw.isEmpty) return false;
+    final flag = raw.trim().toLowerCase();
+    return !sslPinningOnValues.contains(flag) &&
+        !sslPinningOffValues.contains(flag);
   }
 
   /// Whether a release build is configured as `development`.
@@ -377,6 +403,14 @@ class AppConfig {
       debugPrint('  SSL Pinning Requested: $enableSslPinning');
       debugPrint('  SSL Pinning Effective: $sslPinningEffective');
       debugPrint('  SSL Fingerprints Configured: ${apiSslFingerprints.length}');
+      if (sslPinningFlagUnrecognised) {
+        debugPrint(
+          '  !! ENABLE_SSL_PINNING is not one of '
+          '${sslPinningOnValues.join('/')} or '
+          '${sslPinningOffValues.join('/')} - the default applies, and a '
+          'release build refuses to start',
+        );
+      }
       if (sslPinningMisconfigured) {
         debugPrint(
           '  !! SSL PINNING MISCONFIGURED: requested but no fingerprints '
@@ -417,6 +451,7 @@ class AppConfig {
       'enableSslPinning': enableSslPinning,
       'sslPinningEffective': sslPinningEffective,
       'sslPinningMisconfigured': sslPinningMisconfigured,
+      'sslPinningFlagUnrecognised': sslPinningFlagUnrecognised,
       'apiSslFingerprintsCount': apiSslFingerprints.length,
       'enableLogging': enableLogging,
       'enableAnalytics': enableAnalytics,

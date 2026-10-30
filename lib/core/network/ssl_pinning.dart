@@ -48,7 +48,8 @@ class SslPinning {
 
   /// Message describing a misconfigured policy.
   static const String misconfiguredMessage =
-      'SSL pinning is enabled (ENABLE_SSL_PINNING=true) but '
+      'SSL pinning is enabled (by ENABLE_SSL_PINNING or the environment '
+      'default) but '
       'API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate '
       'the system trust store accepts would be accepted. Configure '
       'API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.';

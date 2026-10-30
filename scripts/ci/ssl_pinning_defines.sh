@@ -19,6 +19,10 @@
 #   API_SSL_FINGERPRINTS   the server's SHA-256 fingerprints, comma-separated
 #   ENABLE_SSL_PINNING     false (or 0, no, off) to ship without pinning
 #
+# ENABLE_SSL_PINNING, when set, must be one of true/1/yes/on/false/0/no/off
+# (any case): the app reads nothing else, and refuses a release that carries
+# another value.
+#
 # The fingerprints are read the way AppConfig.apiSslFingerprints reads them -
 # split on commas, colons and whitespace dropped, empty entries skipped - so a
 # value like " " or "," counts as empty here too, as it does in the app. Each
@@ -29,8 +33,12 @@
 
 ssl_pinning_defines() {
   local environment="$1"
-  local opt_out
-  opt_out=$(printf '%s' "${ENABLE_SSL_PINNING:-}" | tr '[:upper:]' '[:lower:]')
+  # Trimmed and lowercased, as AppConfig.enableSslPinning reads it.
+  local flag
+  # Only the ends: "o n" must stay unrecognised, as it is in the app.
+  flag=$(printf '%s' "${ENABLE_SSL_PINNING:-}" |
+    sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' |
+    tr '[:upper:]' '[:lower:]')
 
   local count=0 entry
   local old_ifs="$IFS"
@@ -60,10 +68,22 @@ ssl_pinning_defines() {
     staging|production) ;;
     *) return 0 ;;
   esac
+  # The app reads only these spellings; a release carrying anything else
+  # refuses to start, so refuse to build it.
+  if [ -n "${ENABLE_SSL_PINNING:-}" ]; then
+    case "$flag" in
+      true|1|yes|on|false|0|no|off) ;;
+      *)
+        echo "Error: ENABLE_SSL_PINNING is '$ENABLE_SSL_PINNING', which is" >&2
+        echo "neither on (true/1/yes/on) nor off (false/0/no/off)." >&2
+        return 1
+        ;;
+    esac
+  fi
   if [ "$count" -gt 0 ]; then
     return 0
   fi
-  case "$opt_out" in
+  case "$flag" in
     false|0|no|off) return 0 ;;
   esac
 

@@ -142,6 +142,16 @@ Future<void> bootstrap({
         'ENVIRONMENT=staging or production.',
       );
     }
+    if (releaseMode && AppConfig.sslPinningFlagUnrecognised) {
+      final flag = _shown(EnvConfig.get('ENABLE_SSL_PINNING'));
+      throw StateError(
+        'ENABLE_SSL_PINNING is "$flag", '
+        'which '
+        'is neither on (${AppConfig.sslPinningOnValues.join('/')}) nor off '
+        '(${AppConfig.sslPinningOffValues.join('/')}). Refusing to start '
+        'rather than guess whether this release should be pinned.',
+      );
+    }
     if (AppConfig.releasePinningMisconfigured(releaseMode: releaseMode)) {
       throw StateError(
         'SSL pinning is on for this release build, but API_SSL_FINGERPRINTS '
@@ -241,3 +251,8 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
+
+/// [value] cut to 32 characters, for a refusal shown on screen and in the
+/// logs: it is a config value, but one someone may have pasted a secret into.
+String _shown(String value) =>
+    value.length <= 32 ? value : '${value.substring(0, 32)}...';
