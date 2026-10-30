@@ -114,8 +114,8 @@ class _CapturingRequestHandler extends RequestInterceptorHandler {
   }
 }
 
-const String _cacheKey = 'http_cache_https://api.example.com/api/test_{}';
-const String _timestampKey = 'http_cache_timestamp_$_cacheKey';
+final String _cacheKey = CacheInterceptor.cacheKeyFor(_getRequest());
+final String _timestampKey = 'http_cache_timestamp_$_cacheKey';
 const String _indexKey = 'http_cache_index';
 const String _body = '{"key":"value"}';
 

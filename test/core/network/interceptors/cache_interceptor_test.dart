@@ -101,8 +101,8 @@ void main() {
       test('should return cached response when available and valid', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
-        const timestampKey = 'http_cache_timestamp_$cacheKey';
+        final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
         final timestamp = DateTime.now().subtract(const Duration(minutes: 30));
 
@@ -215,7 +215,7 @@ void main() {
       test('should return null when cache is not found', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
+        final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
 
         when(
           () => mockStorageService.getString(cacheKey),
@@ -231,8 +231,8 @@ void main() {
       test('should return null when timestamp is not found', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
-        const timestampKey = 'http_cache_timestamp_$cacheKey';
+        final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
 
         when(
@@ -252,8 +252,8 @@ void main() {
       test('should remove expired cache when too stale', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
-        const timestampKey = 'http_cache_timestamp_$cacheKey';
+        final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
         final oldTimestamp = DateTime.now().subtract(
           const Duration(days: 8),
@@ -285,8 +285,8 @@ void main() {
           'refetch, not serve it', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();
-        const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
-        const timestampKey = 'http_cache_timestamp_$cacheKey';
+        final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        final timestampKey = 'http_cache_timestamp_$cacheKey';
         const cachedData = '{"key": "value"}';
         // Older than maxAge (1 hour) but within maxStale (7 days)
         final staleTimestamp = DateTime.now().subtract(const Duration(days: 2));
@@ -320,8 +320,8 @@ void main() {
           data: {'key': 'value'},
         );
         final handler = TestResponseInterceptorHandler();
-        const cacheKey = 'http_cache_https://api.example.com/api/test_{}';
-        const timestampKey = 'http_cache_timestamp_$cacheKey';
+        final cacheKey = CacheInterceptor.cacheKeyFor(requestOptions);
+        final timestampKey = 'http_cache_timestamp_$cacheKey';
 
         when(
           () => mockStorageService.setString(any(), any()),
@@ -415,34 +415,19 @@ void main() {
         await expectLater(interceptor.onResponse(response, handler), completes);
       });
 
-      test('should include query parameters in cache key', () async {
-        // Arrange
-        final optionsWithQuery = RequestOptions(
+      test('keys a request by its query, without storing the URL', () async {
+        RequestOptions withPage(String page) => RequestOptions(
           path: '/api/test',
           method: 'GET',
-          queryParameters: {'page': '1', 'limit': '10'},
+          baseUrl: 'https://api.example.com',
+          queryParameters: {'page': page, 'token': 'secret'},
         );
-        final response = Response<dynamic>(
-          requestOptions: optionsWithQuery,
-          statusCode: 200,
-          data: {'key': 'value'},
-        );
-        final handler = TestResponseInterceptorHandler();
+        final first = CacheInterceptor.cacheKeyFor(withPage('1'));
 
-        when(
-          () => mockStorageService.setString(any(), any()),
-        ).thenAnswer((_) async => true);
-
-        // Act
-        await interceptor.onResponse(response, handler);
-
-        // Assert
-        // Cache saves data and timestamp, so setString is called twice
-        // Both should contain the query parameters in the key
-        verify(
-          () =>
-              mockStorageService.setString(any(that: contains('page')), any()),
-        ).called(2);
+        expect(first, isNot(CacheInterceptor.cacheKeyFor(withPage('2'))));
+        expect(first, CacheInterceptor.cacheKeyFor(withPage('1')));
+        expect(first, matches(RegExp(r'^http_cache_[0-9a-f]{64}$')));
+        expect(first, isNot(contains('secret')));
       });
     });
 
@@ -512,7 +497,7 @@ void main() {
       });
     });
 
-    group('_getCacheKey', () {
+    group('cache key lookup', () {
       test('should generate cache key from URI and query parameters', () async {
         // Arrange
         final handler = TestRequestInterceptorHandler();

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
@@ -65,12 +67,29 @@ class CacheConfig {
 /// a secondary guard for credentials a caller attaches by hand through
 /// `Options(headers: ...)`, which *are* already present this early.
 ///
+/// ## What the server can refuse
+///
+/// A response whose `Cache-Control` names `no-store`, `private` or
+/// `no-cache` (or that carries `Pragma: no-cache`), or that sets a cookie, is
+/// passed through and never written, and any entry already stored for that
+/// URL is removed. `no-store` and `private` are the server saying the body is
+/// not for a shared or persistent cache - an anonymous email-verification or
+/// password-reset check, a presigned download - and the store below is both.
+/// `no-cache` allows storing only if every reuse is revalidated, and this
+/// cache serves a fresh entry without asking the network, so it does not
+/// store one at all.
+///
 /// ## Where it is stored
 ///
 /// In [StorageService], i.e. `shared_preferences` - plaintext, readable on a
 /// rooted or jailbroken device and included in unencrypted device backups.
 /// That is acceptable only because nothing authenticated ever lands there. Do
 /// not relax the credential check without moving to encrypted storage.
+///
+/// Keys are a SHA-256 of the request URL ([cacheKeyFor]), never the URL
+/// itself, so a token in a query string is not written to disk as part of a
+/// key or of the key index. Entries written under the old verbatim-URL keys
+/// and listed in the index are removed the first time a GET passes through.
 ///
 /// ## How an entry is aged
 ///
@@ -152,6 +171,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   /// Headers that should not be cached
   static const List<String> _noCacheHeaders = ['authorization', 'cookie'];
 
+  /// A key written by [cacheKeyFor]; anything else under [_cacheKeyPrefix] in
+  /// the index is a verbatim-URL key from before keys were hashed.
+  static final RegExp _hashedKey = RegExp(r'^http_cache_[0-9a-f]{64}$');
+
+  /// The one-off removal of verbatim-URL entries; see [_purgeLegacyEntries].
+  Future<void>? _legacyPurge;
+
   /// `RequestOptions.extra` key carrying a stale entry while its refetch is
   /// in flight; see [onError].
   static const String _staleFallbackKey = 'http_cache_stale_fallback';
@@ -167,13 +193,15 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       return super.onRequest(options, handler);
     }
 
+    await _purgeLegacyEntries();
+
     // Check if request should bypass cache
     if (await _shouldBypassCache(options)) {
       return super.onRequest(options, handler);
     }
 
     // Try to get cached response
-    final cacheKey = _getCacheKey(options);
+    final cacheKey = cacheKeyFor(options);
     final cachedData = await _getCachedResponse(cacheKey);
 
     if (cachedData != null) {
@@ -240,13 +268,24 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       return super.onResponse(response, handler);
     }
 
+    await _purgeLegacyEntries();
+
+    // The server refused storage: drop whatever an earlier response left
+    // under this URL too, or it would keep being served, fresh and then as a
+    // stale fallback.
+    if (_responseForbidsStorage(response)) {
+      final cacheKey = cacheKeyFor(requestOptions);
+      await _evictEntry(cacheKey, '$_timestampKeyPrefix$cacheKey');
+      return super.onResponse(response, handler);
+    }
+
     // Check if response should be cached
     if (await _shouldBypassCache(requestOptions)) {
       return super.onResponse(response, handler);
     }
 
     // Cache the response
-    final cacheKey = _getCacheKey(requestOptions);
+    final cacheKey = cacheKeyFor(requestOptions);
     await _cacheResponse(cacheKey, response.data, response.headers.map);
 
     super.onResponse(response, handler);
@@ -294,11 +333,54 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     }
   }
 
-  /// Gets the cache key for the request
-  String _getCacheKey(RequestOptions options) {
-    final uri = options.uri.toString();
-    final queryParams = options.queryParameters.toString();
-    return '$_cacheKeyPrefix${uri}_$queryParams';
+  /// Whether the server marked [response] as not for this cache: a
+  /// `Cache-Control` of `no-store`, `private` or `no-cache`, a
+  /// `Pragma: no-cache`, or a `Set-Cookie`.
+  static bool _responseForbidsStorage(Response<dynamic> response) {
+    List<String> directives(String header) =>
+        (response.headers[header] ?? const <String>[])
+            .expand((value) => value.split(','))
+            .map((d) => d.trim().toLowerCase().split('=').first)
+            .toList();
+    const refusing = {'no-store', 'private', 'no-cache'};
+    if (directives('cache-control').any(refusing.contains)) return true;
+    if (directives('pragma').contains('no-cache')) return true;
+    return response.headers['set-cookie']?.isNotEmpty ?? false;
+  }
+
+  /// The storage key for [options]: a SHA-256 of the full request URL, query
+  /// included, so the URL itself - and any token in it - is never stored.
+  @visibleForTesting
+  static String cacheKeyFor(RequestOptions options) =>
+      '$_cacheKeyPrefix'
+      '${sha256.convert(utf8.encode(options.uri.toString()))}';
+
+  /// Removes every entry still stored under a verbatim-URL key, once per
+  /// interceptor. Those keys can hold a query-string secret, and nothing would
+  /// otherwise ever read or evict them again.
+  Future<void> _purgeLegacyEntries() {
+    return _legacyPurge ??=
+        _serializedIndexUpdate(() async {
+          final index = await _readIndex();
+          final legacy = index
+              .where((key) => !_hashedKey.hasMatch(key))
+              .toList();
+          if (legacy.isEmpty) return;
+          for (final cacheKey in legacy) {
+            await _storageService.remove(cacheKey);
+            await _storageService.remove('$_timestampKeyPrefix$cacheKey');
+          }
+          final kept = index.where(_hashedKey.hasMatch).toList();
+          if (kept.isEmpty) {
+            await _storageService.remove(_indexKey);
+          } else {
+            await _storageService.setStringList(_indexKey, kept);
+          }
+        }).catchError((Object e) {
+          if (AppConfig.isDebugMode) {
+            debugPrint('Cache legacy purge error: $e');
+          }
+        });
   }
 
   /// Gets cached response if available and not expired
