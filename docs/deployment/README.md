@@ -18,6 +18,12 @@ Store and CI deployment for this starter are **templates**: workflows default to
 2. Configure signing, bundle IDs, and store API keys (see Android / iOS pages above).
 3. Open the workflow you need in GitHub **Actions** and use **Run workflow** (or enable `push` / `tags` triggers in the YAML when ready).
 
+The build and deploy steps ship commented out. Until you uncomment them, a run
+fails on purpose rather than going green having deployed nothing: every
+deploy job uploads its build with `if-no-files-found: error`, and each
+`deploy-web.yml` job ends in a "Fail while nothing is deployed" step - delete
+that step once its build and deploy steps are live.
+
 ## Related docs
 
 - [Configuration](../guides/configuration.md) — `BASE_URL`, flavors, and `dart-define`.
