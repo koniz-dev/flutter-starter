@@ -131,6 +131,25 @@ void main() {
     },
   );
 
+  test('with caching disabled, legacy verbatim-URL entries are still removed '
+      'on the first request', () async {
+    final disabled = CacheInterceptor(
+      storageService: storage,
+      cacheConfig: const CacheConfig(enableCache: false),
+    );
+    const legacy = 'http_cache_https://api.example.com/verify?token=old_{}';
+    storage.values
+      ..[legacy] = '{"ok":true}'
+      ..['http_cache_timestamp_$legacy'] = '2026-10-30T00:00:00.000Z';
+    await storage.setStringList('http_cache_index', [legacy]);
+
+    await disabled.onRequest(_get('/anything'), _RequestHandler());
+
+    expect(storage.values.containsKey(legacy), isFalse);
+    expect(storage.values.containsKey('http_cache_timestamp_$legacy'), isFalse);
+    expect(await storage.getStringList('http_cache_index'), isNull);
+  });
+
   test('entries stored under a verbatim URL key are removed on first use, '
       'and the hashed ones kept', () async {
     const legacy =
