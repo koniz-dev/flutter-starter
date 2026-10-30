@@ -23,6 +23,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ENABLE_SSL_PINNING=false`. **What you change:** if you set fingerprints in
   a development `.env` and debug through a proxy, add
   `ENABLE_SSL_PINNING=false` there.
+- **Coverage now counts every library under `lib/`**, including files no test
+  imports (`tool/coverage_helper.dart` generates a git-ignored test that
+  imports them all, and the Quality gate, `coverage.yml` and
+  `test_coverage.sh` run it before measuring). An untested file used to be
+  missing from `lcov.info` and never lowered the total. **What you change:**
+  if your total drops below `COVERAGE_MIN_TOTAL`, add tests or lower the
+  floor deliberately.
+- **`deploy-web.yml` fails until you fill in its deploy steps.** It used to go
+  green while building and deploying nothing. **What you change:** fill in a
+  deploy target, then delete the "Fail while nothing is deployed" step.
+- **Re-run `./scripts/dev/setup_git_hooks.sh`** (or `.ps1`). It now points
+  the repository's `core.hooksPath` at `.githooks/` instead of copying the
+  hooks into `.git/hooks/`, which git ignores whenever `core.hooksPath` is set
+  (globally, by husky-style setups). An older copy in `.git/hooks/` keeps
+  running the old hooks until you do. It refuses, and says so, when the
+  repository already points `core.hooksPath` somewhere else.
 
 ### Security
 
@@ -72,7 +88,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   If your `android/key.properties` came from that template, remove the text
   after `storeFile`'s value.
 
+- `AuthRepositoryImpl.refreshToken()` returns a failure
+  (`INVALID_AUTH_RESPONSE`) for a refresh body it cannot parse, instead of
+  letting a `TypeError` escape its `Result`; `AuthInterceptor` ends the
+  session for it.
+- `DioExceptionMapper` keeps an `AppException` an interceptor put in
+  `DioException.error`, so it reaches the caller as itself instead of as
+  `UNKNOWN_NETWORK_ERROR`. A custom `ITokenStore` that throws
+  `CacheException` while the refresh call goes out now ends the session
+  (documented and pinned by a test); the shipped store catches its own
+  errors.
+- `PaginationHelper`: a page requested before `reset()` no longer lands after
+  it, mixing the old query's items into the new list.
+- Feature flags: concurrent `setLocalOverride` calls no longer drop a key from
+  the override index, which left that override active and unlisted after
+  `clearAllLocalOverrides()`.
+- `strip_sample_features.dart` refuses an unknown flag before deleting
+  anything, and `--remove-bricks` also removes the test that imports them.
+- The `feature_clean` brick validates its input in `pre_gen`, before anything
+  is written.
+- The pre-commit hook checks the staged content (exported to a temporary
+  directory), not the working copy, and no longer rewrites files in place.
+- `test_coverage.sh` rejects a non-numeric `--min`, and both it and
+  `coverage.yml` fail on a coverage figure that is not a number instead of
+  passing.
+- The Quality gate runs the tests that read markdown on a docs-only pull
+  request, and checks markdown links on every pull request, so renaming a
+  file a document links to fails the gate.
+
 ### Documentation
+
+- A pass over the guides: snippets that did not compile (API integration,
+  testing, architecture overview, common tasks, customization) now do, and
+  several are compiled by tests; stale `file:line` references were replaced
+  by checked symbol markers; the error, storage, logging, network, i18n,
+  coverage, upgrading, onboarding, ADR 0005 and CONTRIBUTING pages were
+  corrected against the code.
+- `docs/guides/security/implementation.md` and `docs/api/core/network.md`:
+  a secret in a URL path segment is never redacted from logs or traces; put
+  it in a header, the body, or a sensitively named query parameter.
 
 - `docs/deployment/android-deployment.md`: the same `key.properties` example,
   fixed the same way.
