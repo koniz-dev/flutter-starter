@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`.env.production` and `.env.staging` are now git-ignored). `build.yml`'s
   manual input now defaults to `staging`, and `build_all.sh development`
   exits with an explanation.
+- **A staging or production release needs `API_SSL_FINGERPRINTS`.** Pinning
+  is on there by default, and a release with pinning on and no fingerprints
+  used to run unpinned in silence; it now refuses to start through the
+  startup failure screen. Set your server's SHA-256 fingerprints, or
+  `ENABLE_SSL_PINNING=false` to ship unpinned on purpose. `build_all.sh`,
+  `build.yml` and the Android and iOS deploy templates now pass the value
+  through `scripts/ci/ssl_pinning_defines.sh` and refuse to build without it:
+  export `API_SSL_FINGERPRINTS` for `build_all.sh`, and set the repository
+  variable `API_SSL_FINGERPRINTS` (or `build.yml`'s `ssl_fingerprints` input)
+  for the workflows.
 - **Configured `API_SSL_FINGERPRINTS` now pin in development too**, unless
   `ENABLE_SSL_PINNING=false`. **What you change:** if you set fingerprints in
   a development `.env` and debug through a proxy, add
