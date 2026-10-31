@@ -82,7 +82,7 @@ integration_test/    # At the repository root, not under test/: Patrol E2E
 - **Quality gate** on every push/PR to `main` ([`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml)): format → analyze → unit tests on **one** runner (keeps GitHub Actions minutes low; branch protection can require **Quality gate**).
 - Every PR's **Quality gate** fails when total line coverage drops below `COVERAGE_MIN_TOTAL` in [`ci.yml`](../../../.github/workflows/ci.yml).
 - Per-layer thresholds (overall ≥80%, domain 100%, data ≥90%, presentation/core ≥80%) run in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) (manual **Run workflow** and weekly schedule), not on every PR.
-- Codecov upload and optional PR comments live in that coverage workflow when you enable triggers that include pull requests.
+- That workflow uploads to Codecov and writes its table to the run's job summary; it posts no PR comment.
 
 ### E2E on GitHub Actions (manual only)
 

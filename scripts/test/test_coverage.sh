@@ -64,10 +64,17 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# A percentage, e.g. 80 or 79.5. bc prints nothing for anything else, and an
-# empty (( )) is false, so the threshold check below would report a pass.
+# A percentage, e.g. 80 or 79.5. Anything else is refused before it reaches a
+# comparison.
 is_percent() {
   [[ "$1" =~ ^[0-9]+(\.[0-9]+)?$ ]]
+}
+
+# Whether percentage $1 is below $2. In awk rather than bc: bash compares
+# only integers, and with bc missing `(( $(echo ... | bc -l) ))` is an empty
+# (( )), which is false, so a failing coverage read as a pass.
+below() {
+  awk -v a="$1" -v b="$2" 'BEGIN { exit !(a + 0 < b + 0) }'
 }
 
 if ! is_percent "$MIN_COVERAGE"; then
@@ -212,9 +219,9 @@ if [ "$ANALYZE_COVERAGE" = true ]; then
       echo -e "${CYAN}$name:${NC} $covered_lines/$total_lines lines ($percent%)"
 
       # Color code based on coverage
-      if (( $(echo "$percent >= 80" | bc -l) )); then
+      if ! below "$percent" 80; then
         echo -e "  ${GREEN}✓ Good coverage${NC}"
-      elif (( $(echo "$percent >= 60" | bc -l) )); then
+      elif ! below "$percent" 60; then
         echo -e "  ${YELLOW}⚠ Needs improvement${NC}"
       else
         echo -e "  ${RED}✗ Low coverage${NC}"
@@ -282,7 +289,7 @@ fi
 if ! is_percent "$COVERAGE_PERCENT"; then
   echo -e "${RED}✗ Could not measure coverage (got '${COVERAGE_PERCENT}'), so the threshold check fails${NC}"
   EXIT_CODE=1
-elif (( $(echo "$COVERAGE_PERCENT < $MIN_COVERAGE" | bc -l) )); then
+elif below "$COVERAGE_PERCENT" "$MIN_COVERAGE"; then
   echo -e "${RED}✗ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of ${MIN_COVERAGE}%${NC}"
   EXIT_CODE=1
 else
