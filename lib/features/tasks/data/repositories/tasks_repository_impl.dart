@@ -95,8 +95,13 @@ class TasksRepositoryImpl implements TasksRepository {
       });
 
       final updated = updatedTaskModel;
+      // NotFoundFailure, not CacheFailure: storage worked, the task is just
+      // not there, and the user should be told that rather than that
+      // storage failed. (getTaskById answers Success(null) by contract,
+      // updateTask is an upsert and deleteTask is idempotent, so this is the
+      // one path with a missing task to report.)
       if (updated == null) {
-        return const ResultFailure(CacheFailure('Task not found'));
+        return const ResultFailure(NotFoundFailure('Task not found'));
       }
       return Success(updated.toEntity());
     } on AppException catch (e) {

@@ -298,7 +298,7 @@ void main() {
         expect(stored.single.isCompleted, isTrue);
       });
 
-      test('should return CacheFailure when task not found', () async {
+      test('should return NotFoundFailure when task not found', () async {
         // Arrange
         const taskId = 'non-existent';
         stubMutateTasks(mockLocalDataSource);
@@ -307,7 +307,7 @@ void main() {
         final result = await repository.toggleTaskCompletion(taskId);
 
         // Assert
-        expectResultFailureType(result, CacheFailure);
+        expectResultFailureType(result, NotFoundFailure);
         result.when(
           success: (_) => fail('Expected failure'),
           failureCallback: (failure) =>
