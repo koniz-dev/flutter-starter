@@ -268,8 +268,12 @@ class TasksListScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            // Disabled while a mutation for this task is pending:
+            // TasksNotifier.deleteTask ignores a delete for a pending id, so
+            // an enabled item dropped the request without a word.
             PopupMenuItem(
               value: 'delete',
+              enabled: !isPending,
               child: Row(
                 children: [
                   const Icon(Icons.delete, size: 20, color: Colors.red),

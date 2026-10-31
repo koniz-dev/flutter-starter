@@ -71,6 +71,59 @@ void main() {
       );
     }
 
+    // TasksNotifier.deleteTask ignores a delete for a task whose toggle is in
+    // flight, so an enabled Delete dropped the request without a word.
+    testWidgets('Delete is disabled while a toggle of that task is pending', (
+      tester,
+    ) async {
+      final task = createTask(id: 'a', title: 'Pending task');
+      when(
+        () => mockGetAllTasksUseCase(),
+      ).thenAnswer((_) async => Success<List<Task>>([task]));
+      final toggle = Completer<Result<Task>>();
+      when(
+        () => mockToggleTaskCompletionUseCase(any()),
+      ).thenAnswer((_) => toggle.future);
+
+      await tester.pumpWidget(
+        createWidgetWithOverrides([
+          getAllTasksUseCaseProvider.overrideWithValue(mockGetAllTasksUseCase),
+          createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
+          deleteTaskUseCaseProvider.overrideWithValue(mockDeleteTaskUseCase),
+          toggleTaskCompletionUseCaseProvider.overrideWithValue(
+            mockToggleTaskCompletionUseCase,
+          ),
+        ]),
+      );
+      await tester.pumpAndSettle();
+
+      PopupMenuItem<String> deleteItem() => tester
+          .widgetList<PopupMenuItem<String>>(
+            find.byWidgetPredicate(
+              (w) => w is PopupMenuItem<String> && w.value == 'delete',
+            ),
+          )
+          .single;
+
+      await tester.tap(find.byType(PopupMenuButton<String>));
+      await tester.pumpAndSettle();
+      expect(deleteItem().enabled, isTrue, reason: 'idle: enabled');
+      await tester.tapAt(Offset.zero);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(Checkbox));
+      await tester.pump();
+      // The pending toggle shows a progress indicator, which never settles.
+      await tester.tap(find.byType(PopupMenuButton<String>));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(deleteItem().enabled, isFalse, reason: 'toggle pending');
+
+      await tester.tapAt(Offset.zero);
+      await tester.pump(const Duration(milliseconds: 500));
+      toggle.complete(Success(task.toggleCompletion()));
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('should display loading indicator when loading', (
       tester,
     ) async {

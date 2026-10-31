@@ -155,14 +155,23 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
       return [];
     }
 
+    // Undecodable is a failure, not "no tasks": read as empty, the next save
+    // wrote `[new]` over the stored list and lost it without a word. Every
+    // read and mutation now fails until the user clears the tasks.
     final tasksList = JsonHelper.decodeList(tasksJson);
     if (tasksList == null) {
-      return [];
+      throw const FormatException('Stored tasks are not a JSON list');
     }
 
-    return tasksList
-        .map((json) => TaskModel.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return [
+      for (final json in tasksList)
+        if (json is Map<String, dynamic>)
+          TaskModel.fromJson(json)
+        else
+          throw FormatException(
+            'Stored task is not a JSON object, got ${json.runtimeType}',
+          ),
+    ];
   }
 
   Future<void> _writeTasks(List<TaskModel> tasks) async {

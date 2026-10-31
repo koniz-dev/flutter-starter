@@ -65,12 +65,18 @@ class TaskModel extends Task {
   /// is not a string, or does not parse - including an out-of-range calendar
   /// date such as `'2024-02-30T00:00:00Z'`, which `DateTime.parse` would
   /// silently roll over to 1 March.
+  ///
+  /// A wrong-typed `id`, `title`, `description` or `is_completed` is a
+  /// [FormatException] too. These used to be `as` casts, whose `TypeError` is
+  /// an `Error` rather than an `Exception`: it passed every `on Exception`
+  /// handler, escaped the repository's `Result`, and left the task list
+  /// loading forever.
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String?,
-      isCompleted: json['is_completed'] as bool? ?? false,
+      id: _field<String>(json, 'id'),
+      title: _field<String>(json, 'title'),
+      description: _field<String?>(json, 'description'),
+      isCompleted: _field<bool?>(json, 'is_completed') ?? false,
       createdAt: _parseTimestamp(json, 'created_at'),
       updatedAt: _parseTimestamp(json, 'updated_at'),
     );
@@ -85,6 +91,15 @@ class TaskModel extends Task {
       isCompleted: task.isCompleted,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
+    );
+  }
+
+  /// [json]'s [key] as a [T], or a [FormatException] naming the field.
+  static T _field<T>(Map<String, dynamic> json, String key) {
+    final value = json[key];
+    if (value is T) return value;
+    throw FormatException(
+      'Task JSON field "$key" must be a $T, got ${value.runtimeType}',
     );
   }
 
