@@ -157,6 +157,7 @@ flutter:
       '.env-staging',
       '.env_prod',
       '.envrc',
+      '.envrc.local',
     ];
 
     test('secretAssetReason flags each, and not near misses', () {
@@ -172,6 +173,29 @@ flutter:
       ]) {
         expect(secretAssetReason(name), isNull, reason: name);
       }
+    });
+
+    test('an acknowledgement naming a new-style file covers it', () {
+      final root = Directory.systemTemp.createTempSync('check_env_names_');
+      addTearDown(() => root.deleteSync(recursive: true));
+      for (final name in ['production.env', '.envrc']) {
+        File('${root.path}/assets/config/$name')
+          ..createSync(recursive: true)
+          ..writeAsStringSync('PUBLIC=1\n');
+      }
+      const pubspec = '''
+flutter:
+  assets:
+    - assets/config/ # env-asset-ack: production.env, .envrc - public values
+''';
+
+      final findings = findBundledDirectorySecrets(
+        pubspec,
+        projectRoot: root.path,
+      );
+
+      expect(findings, hasLength(2));
+      expect(findings.every((f) => f.acknowledged), isTrue);
     });
 
     for (final name in envNames) {
