@@ -32,7 +32,7 @@ override it with a real datasource before using the slice.
 | Variable | Default | Effect |
 |---|---|---|
 | `feature_name` | `profile` | snake_case folder name under `lib/features/` and `test/features/` |
-| `class_name` | `Profile` | PascalCase prefix for the generated classes |
+| `class_name` | `Profile` | UpperCamelCase (PascalCase) prefix for the generated classes |
 | `include_tests` | `true` | When `false`, **no** test file is generated — the conditional is on the file name, so no empty file is left behind |
 
 ## Guarantees
@@ -43,8 +43,9 @@ clean, and the generated test compiles and passes.
 
 Four things keep that true:
 
-- A `pre_gen` hook (`hooks/pre_gen.dart`) refuses an invalid `feature_name`
-  through `hooks/input_rules.dart` before anything is written. After changing
+- A `pre_gen` hook (`hooks/pre_gen.dart`) refuses a `feature_name` that is
+  not snake_case or a `class_name` that is not UpperCamelCase, through
+  `hooks/input_rules.dart`, before anything is written. After changing
   any file under `hooks/`, run `dart pub get` in `bricks/feature_clean/hooks/`.
 - A `post_gen` hook (`hooks/post_gen.dart`) runs
   `dart fix --apply --code=directives_ordering` and `dart format` on the

@@ -38,6 +38,17 @@ no_git_env=(
   -u GIT_PREFIX
 )
 
+# git runs a hook from the top of the working tree. With the app in a
+# subdirectory of a larger repository (a monorepo), that is not the app, and
+# `flutter test` found no test/ there. This file is <app>/.githooks/pre-push;
+# a copy run from outside the working tree (a shared hooks directory) tests
+# the top, as it always has.
+top="$(pwd -P)"
+app="$(cd "$(dirname "$0")/.." && pwd -P)"
+case "$app" in
+  "$top"/*) cd "$app" ;;
+esac
+
 echo "🧱 Running flutter test (compact reporter, 15m timeout)..."
 if ! "${no_git_env[@]}" flutter test --reporter compact --timeout 15m; then
   echo "❌ flutter test failed."

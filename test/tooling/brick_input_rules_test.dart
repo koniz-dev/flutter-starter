@@ -98,6 +98,60 @@ void main() {
     }
   });
 
+  group('feature_clean class_name', () {
+    for (final name in ['Profile', 'UserProfile', 'SettingsV2', 'X1']) {
+      test('accepts $name', () {
+        expect(feature.classNameProblem(name), isNull);
+      });
+    }
+    for (final name in [
+      'user_profile',
+      'Order Item',
+      'profile',
+      'User-Profile',
+      'User_Profile',
+      '1Profile',
+      '',
+    ]) {
+      test('rejects "$name"', () {
+        expect(feature.classNameProblem(name), isNotNull);
+      });
+    }
+  });
+
+  test('feature_clean pre_gen refuses a bad class_name', () {
+    final dir = Directory.systemTemp.createTempSync('feature_pre_gen_');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final hook = File('bricks/feature_clean/hooks/pre_gen.dart').absolute.uri;
+    final script = File('${dir.path}/run_pre_gen.dart')
+      ..writeAsStringSync('''
+import 'package:mason/mason.dart';
+import '$hook' as hook;
+
+class _Context implements HookContext {
+  @override
+  Map<String, dynamic> vars = {
+    'feature_name': 'user_profile',
+    'class_name': 'user_profile',
+    'include_tests': true,
+  };
+
+  @override
+  final Logger logger = Logger();
+}
+
+void main() => hook.run(_Context());
+''');
+
+    final result = Process.runSync('dart', [
+      '--packages=${File('.dart_tool/package_config.json').absolute.path}',
+      script.path,
+    ], workingDirectory: dir.path);
+
+    expect(result.exitCode, isNot(0));
+    expect('${result.stdout}${result.stderr}', contains('UpperCamelCase'));
+  }, timeout: const Timeout(Duration(minutes: 2)));
+
   group('displayNameProblem', () {
     test('accepts any printable name', () {
       expect(setup.displayNameProblem('Tom & "Jerry": #1'), isNull);

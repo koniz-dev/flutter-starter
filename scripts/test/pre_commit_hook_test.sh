@@ -16,6 +16,9 @@
 #   2. After `flutter pub get`: the hook exits 0 on the clean tree. It
 #      checks the staged content, so it still exits 0 when a format violation
 #      is only in the working copy, and exits non-zero once it is staged.
+#   3. The app in a subdirectory of a larger repository (a monorepo): git runs
+#      the hook from the top, as <app>/.githooks/pre-commit. It checks the
+#      app, so it exits 0 on a clean tree and non-zero on a staged violation.
 #
 # HOOK_UNDER_TEST=<file> points the tests at another copy of the hook, for
 # example an older revision, to show a case fails there.
@@ -107,6 +110,45 @@ if [ "$status" -ne 0 ] && grep -q "formatting check failed" "$WORK/hook.out"; th
   pass "with dependencies resolved the hook fails on a staged format violation"
 else
   fail "a staged format violation did not fail the hook (exit $status)"
+  tail -20 "$WORK/hook.out"
+fi
+
+# --- Case 3: the app in a subdirectory of a larger repository --------------
+# A copy of the resolved clone, without its .git, as mono/app. The hook under
+# test is copied into the app's .githooks/ - this repository is a fixture,
+# so that dirties nothing - and run from the top, the way git runs it.
+MONO="$WORK/mono"
+mkdir -p "$MONO"
+git -C "$MONO" init -q
+git -C "$CLONE" reset -q
+git -C "$CLONE" checkout -q -- lib/main.dart
+cp -R "$CLONE" "$MONO/app"
+rm -rf "$MONO/app/.git"
+cp "$HOOK" "$MONO/app/.githooks/pre-commit"
+git -C "$MONO" add -A
+git -C "$MONO" -c user.email=t@example.com -c user.name=t commit -q --no-verify -m "chore: monorepo fixture"
+
+run_mono_hook() {
+  (cd "$MONO" && bash app/.githooks/pre-commit) >"$WORK/hook.out" 2>&1
+}
+
+run_mono_hook
+status=$?
+if [ "$status" -eq 0 ]; then
+  pass "in a monorepo the hook checks the app and exits 0 on a clean tree"
+else
+  fail "in a monorepo the hook exited $status on a clean tree"
+  tail -20 "$WORK/hook.out"
+fi
+
+printf '\nvoid   badlyFormatted( ){}\n' >>"$MONO/app/lib/main.dart"
+git -C "$MONO" add app/lib/main.dart
+run_mono_hook
+status=$?
+if [ "$status" -ne 0 ] && grep -q "formatting check failed" "$WORK/hook.out"; then
+  pass "in a monorepo the hook fails on a staged format violation in the app"
+else
+  fail "in a monorepo a staged format violation did not fail the hook (exit $status)"
   tail -20 "$WORK/hook.out"
 fi
 

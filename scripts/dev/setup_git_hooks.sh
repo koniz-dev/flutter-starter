@@ -24,13 +24,21 @@ for name in pre-commit commit-msg pre-push; do
   fi
 done
 
+# A relative core.hooksPath is read from the top of the working tree, not
+# from here. With the app in a subdirectory of a larger repository (a
+# monorepo), a bare `.githooks` named a directory that does not exist there,
+# so no hook ran at all. Prefix it with this directory's path from the top.
+hooks_path="$(git rev-parse --show-prefix).githooks"
+
 # A repository-local hooksPath somebody chose is theirs: say so, do not
-# overwrite it. A global one is overridden for this repository only.
+# overwrite it. A bare `.githooks` is this script's own (an earlier version
+# wrote it, even in a monorepo, where it named nothing), so it is replaced.
+# A global one is overridden for this repository only.
 local_path="$(git config --local --get core.hooksPath || true)"
-if [ -n "$local_path" ] && [ "$local_path" != ".githooks" ]; then
+if [ -n "$local_path" ] && [ "$local_path" != "$hooks_path" ] && [ "$local_path" != ".githooks" ]; then
   echo "❌ This repository already sets core.hooksPath to '$local_path',"
   echo "   so git runs the hooks there, not .githooks/. Either:"
-  echo "     git config --local core.hooksPath .githooks   # use this repo's hooks"
+  echo "     git config --local core.hooksPath '$hooks_path'   # use this repo's hooks"
   echo "   or call .githooks/* from your own hooks in '$local_path'."
   exit 1
 fi
@@ -51,16 +59,24 @@ if [ -d "$common_hooks" ]; then
   done
 fi
 
-git config --local core.hooksPath .githooks
+git config --local core.hooksPath "$hooks_path"
 
-# Verify with git itself: this is the directory it will run hooks from.
+# Verify with git itself: this is the directory it will run hooks from
+# (printed relative to this directory). On a mismatch, put the previous
+# setting back rather than leave one that runs no hook.
 resolved="$(git rev-parse --git-path hooks)"
 if [ "$resolved" != ".githooks" ]; then
+  if [ -n "$local_path" ]; then
+    git config --local core.hooksPath "$local_path"
+  else
+    git config --local --unset core.hooksPath
+  fi
   echo "❌ git still resolves hooks to '$resolved', not .githooks/."
+  echo "   core.hooksPath was restored to what it was before."
   exit 1
 fi
 
-echo "✅ Git hooks active: core.hooksPath = .githooks"
+echo "✅ Git hooks active: core.hooksPath = $hooks_path"
 if [ -n "$global_path" ]; then
   echo "   (overrides your global core.hooksPath '$global_path' for this repository)"
 fi
