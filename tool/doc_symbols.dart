@@ -287,13 +287,16 @@ bool declaresMember(String source, String type, String member) {
   }
 
   final m = RegExp.escape(member);
-  // What follows `=` or `=>`, up to the next `;`, `{` or `}`, is an
+  // What follows `=` or `=>`, up to the next `;`, `,`, `{` or `}`, is an
   // initializer or an expression body, not a declaration:
   // `final int y = helper(2);` names `helper` without declaring it. Stopping
   // at a brace keeps a constructor's `: _dio = _createDio(...) {}` from
-  // swallowing the declarations after it. `==`, `!=`, `<=` and `>=` stay.
+  // swallowing the declarations after it, and at a comma the next declarator
+  // in `int z = 0, w = 1;` (nested brackets are already gone from the body,
+  // so a comma here separates declarators). An operator such as `==` or `<=`
+  // loses only its own text, which never names a member.
   final body = topLevel.toString().replaceAll(
-    RegExp('(?<![=!<>])=(?!=)>?[^;{}]*'),
+    RegExp('=>?[^;,{}]*'),
     '',
   );
   return [

@@ -274,6 +274,9 @@ class Foo {
   int get x => compute(1);
   static int _make() => 1;
   bool operator ==(Object other) => identical(this, other);
+  bool operator <=(Foo other) => lessOrEqual(other);
+  int z = 0, w = 1;
+  int afterOperators() => 0;
 }
 ''';
       expect(declaresMember(source, 'Foo', 'helper'), isFalse);
@@ -283,6 +286,11 @@ class Foo {
       expect(declaresMember(source, 'Foo', 'x'), isTrue);
       expect(declaresMember(source, 'Foo', '_a'), isTrue);
       expect(declaresMember(source, 'Foo', '_make'), isTrue);
+      // A second declarator, and members after `operator <=`.
+      expect(declaresMember(source, 'Foo', 'z'), isTrue);
+      expect(declaresMember(source, 'Foo', 'w'), isTrue);
+      expect(declaresMember(source, 'Foo', 'lessOrEqual'), isFalse);
+      expect(declaresMember(source, 'Foo', 'afterOperators'), isTrue);
     });
 
     test('reads each member form, at the type body top level only', () {
