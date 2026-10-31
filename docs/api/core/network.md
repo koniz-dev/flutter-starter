@@ -971,11 +971,17 @@ reduce to `accesstoken`. It is then matched:
 
 | Rule | Entries | Example match |
 |---|---|---|
-| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode`, `jwt` | `refresh_token`, `client_secret`, `jwt`, `id_jwt` |
-| Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid`, `sig` (Azure SAS signature), `auth` (Firebase REST ID token) | `pin`, but not `shipping`; `sig`, but not `signal`; `auth`, but not `author` |
+| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode`, `jwt`, `accesskey`, `appkey`, `clientkey`, `hmac` | `refresh_token`, `client_secret`, `jwt`, `id_jwt`, `access_key`, `app_key` |
+| Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid`, `sig` (Azure SAS signature), `auth` (Firebase REST ID token), `bearer`, `sign` (signed CDN URLs), `key` (Google APIs key) | `pin`, but not `shipping`; `sig`, but not `signal`; `auth`, but not `author`; `sign`, but not `signup`; `key`, but not `monkey` |
 
 The exact-match list exists because these names are too short to use as
 fragments: `pin` occurs inside `shipping`, `cvc` inside `cvcNote`.
+
+**Deliberately not covered: `code`.** It is the error or status code in most
+response bodies (`{"code": 404}`), so redacting it would blind every error log.
+An OAuth authorization code in a callback's `?code=` is therefore logged, and
+such a request is not kept out of the HTTP cache. If your app handles OAuth
+callbacks through `ApiClient`, add a name your backend uses only for that.
 
 **Headers** additionally carry an explicit roster - `authorization`,
 `proxy-authorization`, `cookie`, `set-cookie`, `x-api-key`, `api-key`,
