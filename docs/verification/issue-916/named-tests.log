@@ -1,0 +1,5 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: optimized_list_view_controller_test.dart: a controller passed after the first build drives the list and prefetch
++1: optimized_list_view_controller_test.dart: an internally created controller is disposed when replaced
++2: optimized_list_view_controller_test.dart: a swapped-out controller loses the prefetch listener
++3: optimized_list_view_controller_test.dart: All tests passed!

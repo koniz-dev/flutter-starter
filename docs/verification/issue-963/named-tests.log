@@ -1,0 +1,5 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: format_currency_default_test.dart: every supported locale gets its own country currency
++1: format_currency_default_test.dart: ar_SA does not print Egyptian pounds
++2: format_currency_default_test.dart: an explicit code still wins
++3: format_currency_default_test.dart: All tests passed!

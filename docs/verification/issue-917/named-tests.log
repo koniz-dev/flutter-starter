@@ -1,0 +1,4 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: datetime_dst_test.dart: yesterday and tomorrow are calendar days across a DST change
++1: datetime_dst_test.dart: the getters still answer for the current day
++2: datetime_dst_test.dart: All tests passed!

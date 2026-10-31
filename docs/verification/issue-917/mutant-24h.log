@@ -1,0 +1,7 @@
+# datetime_dst_test with the old 24-hour arithmetic behind the new methods
++0 -1: yesterday and tomorrow are calendar days across a DST change [E]
+  Expected: 'true,false,true,false'
+    Actual: 'false,true,false,true'
+            Expected: true,false ...
+              Actual: false,true ...
++1 -1: Some tests failed.

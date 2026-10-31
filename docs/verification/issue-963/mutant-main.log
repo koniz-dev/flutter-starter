@@ -1,0 +1,9 @@
+# format_currency_default_test against origin/main's localized_formatters.dart
++0 -1: every supported locale gets its own country currency [E]
+  Expected: '‏1,234.56 Riyal'
+    Actual: '‏1,234.56 E£'
+            Expected: ‏1,234.56 Riyal
+              Actual: ‏1,234.56 E£
++0 -2: ar_SA does not print Egyptian pounds [E]
+  Expected: not contains 'E£'
+    Actual: '‏1,234.56 E£'

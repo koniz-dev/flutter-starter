@@ -1,0 +1,5 @@
+# startup_reachability_test (userinfo refusal) against origin/main's lib/main.dart
+Expected: no matching candidates
+  Actual: _TextContainingWidgetFinder:<Found 1 widget with text containing admin: [
++0 -1: main() refuses a release build configured as development the http BASE_URL refusal shows the URL without its userinfo [E]
++0 -1: Some tests failed.

@@ -1,0 +1,3 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
++1: api_logging_error_object_test.dart: All tests passed!

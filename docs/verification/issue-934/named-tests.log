@@ -1,0 +1,11 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: userinfo_redaction_test.dart: the request entry redacts userinfo in baseUrl and an absolute path
++1: userinfo_redaction_test.dart: the retry log line redacts an absolute URL with userinfo
++2: userinfo_redaction_test.dart: redactUrl removes userinfo after leading whitespace
++3: userinfo_redaction_test.dart: a realtime URL with leading whitespace fails without its userinfo
++4: userinfo_redaction_test.dart: All tests passed!
++0: performance_path_redaction_test.dart: no trace name or attribute carries the secret
++1: performance_path_redaction_test.dart: an absolute URL loses its userinfo in the trace
++2: performance_path_redaction_test.dart: the recorded path is the one the logs show
++3: performance_path_redaction_test.dart: the Firebase template redacts the http_path it sends
++4: performance_path_redaction_test.dart: All tests passed!

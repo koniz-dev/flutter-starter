@@ -1,0 +1,5 @@
+# main 71a83062e9f: docs/guides/configuration.md, where logs go
+538:| Build | Console | `logs/app.log` (app cache directory) | Level, format |
+544:The log file lives in the app's cache directory (`getApplicationCacheDirectory`),
+548:sign-out, and the operating system may clear the cache directory when storage
+550:sign-out, delete the `logs` directory there yourself.

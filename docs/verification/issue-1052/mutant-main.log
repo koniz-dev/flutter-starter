@@ -1,0 +1,5 @@
+# raw_websocket_redirect_test against origin/main's raw_websocket_client.dart and ssl_pinning.dart
++0 -1: a production release refuses a redirect to cleartext [E]
+  Expected: not null
+    Actual: <null>
++2 -1: Some tests failed.

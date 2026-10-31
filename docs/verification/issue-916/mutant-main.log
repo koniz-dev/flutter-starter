@@ -1,0 +1,11 @@
+# optimized_list_view_controller_test against origin/main's optimized_list_view.dart
+Expected: true
+  Actual: <false>
++0 -1: a controller passed after the first build drives the list and prefetch [E]
+Expected: throws <Instance of 'FlutterError'>
+  Actual: <Closure: () => void>
++0 -2: an internally created controller is disposed when replaced [E]
+Expected: false
+  Actual: <true>
++0 -3: a swapped-out controller loses the prefetch listener [E]
++0 -3: Some tests failed.

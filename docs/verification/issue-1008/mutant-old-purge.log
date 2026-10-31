@@ -1,0 +1,5 @@
+# cache_rule_version_test with the rule check disabled and the failed-purge reset removed (the behaviour of main)
++1 -1: entries cached under an older rule are dropped on the first request [E]
++1 -2: entries with no recorded rule are dropped too [E]
++1 -3: a purge that fails runs again on the next request [E]
++1 -3: Some tests failed.

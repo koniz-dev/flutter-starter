@@ -1,0 +1,7 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: cache_rule_version_test.dart: the key rules match their version
++1: cache_rule_version_test.dart: entries cached under an older rule are dropped on the first request
++2: cache_rule_version_test.dart: entries with no recorded rule are dropped too
++3: cache_rule_version_test.dart: a purge that fails runs again on the next request
++4: cache_rule_version_test.dart: the first cached entry records the current rule, and survives a new interceptor
++5: cache_rule_version_test.dart: All tests passed!

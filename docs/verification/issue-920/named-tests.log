@@ -1,0 +1,20 @@
+# main 71a83062e9f: flutter test -r expanded, test lines only
++0: feature_flags_debug_screen_failure_test.dart: (setUpAll)
++0: feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
++1: feature_flags_debug_screen_failure_test.dart: a failed clear of one override shows the error
++2: feature_flags_debug_screen_failure_test.dart: a failed clear of all overrides shows the error
++3: feature_flags_debug_screen_failure_test.dart: a repository that cannot list the flags shows the error and its retry, not an empty list
++4: feature_flags_debug_screen_failure_test.dart: (tearDownAll)
++4: feature_flags_debug_screen_failure_test.dart: All tests passed!
++0: feature_flags_providers_test.dart: Feature Flags Providers Data Source Providers featureFlagsLocalDataSourceProvider should provide FeatureFlagsLocalDataSource
++1: feature_flags_providers_test.dart: Feature Flags Providers Data Source Providers featureFlagsRemoteDataSourceProvider should provide FeatureFlagsRemoteDataSource
++2: feature_flags_providers_test.dart: Feature Flags Providers Repository Provider featureFlagsRepositoryProvider should provide FeatureFlagsRepository
++3: feature_flags_providers_test.dart: Feature Flags Providers Manager Provider featureFlagsManagerProvider should provide FeatureFlagsManager
++4: feature_flags_providers_test.dart: Feature Flags Providers Initialization Provider featureFlagsInitializationProvider completes
++5: feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers isFeatureEnabledProvider falls back to the compile-time default
++6: feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers isFeatureEnabledProvider honours a local override
++7: feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers featureFlagProvider returns null for an unset flag
++8: feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers featureFlagProvider reports the overriding source
++9: feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers allFeatureFlagsProvider exposes stored overrides
++10: feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers allFeatureFlagsProvider is in an error state carrying the failure
++11: feature_flags_providers_test.dart: All tests passed!

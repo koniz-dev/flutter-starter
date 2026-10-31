@@ -1,0 +1,6 @@
+# userinfo_redaction_test against origin/main's api_logging, retry and performance interceptors
++0 -1: the request entry redacts userinfo in baseUrl and an absolute path [E]
++0 -2: the retry log line redacts an absolute URL with userinfo [E]
++0 -3: redactUrl removes userinfo after leading whitespace [E]
++0 -4: a realtime URL with leading whitespace fails without its userinfo [E]
++0 -4: Some tests failed.
