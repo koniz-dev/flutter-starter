@@ -566,14 +566,17 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     return _serializedIndexUpdate(() async {
       final index = await _readIndex();
       if (index.contains(cacheKey)) return;
+      await _storageService.setStringList(_indexKey, [...index, cacheKey]);
       if (index.isEmpty) {
         // The rule this entry was cached under; see _purgeLegacyEntries.
+        // After the index write: a failure here then leaves an indexed entry
+        // with no stamp, which the next launch purges, rather than a body no
+        // index lists.
         await _storageService.setInt(
           _ruleVersionKey,
           ApiLoggingInterceptor.sensitiveKeyRuleVersion,
         );
       }
-      await _storageService.setStringList(_indexKey, [...index, cacheKey]);
     });
   }
 

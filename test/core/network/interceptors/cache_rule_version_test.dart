@@ -14,6 +14,8 @@ import '../../../helpers/in_memory_stores.dart';
 
 class _RequestHandler extends RequestInterceptorHandler {}
 
+class _ResponseHandler extends ResponseInterceptorHandler {}
+
 RequestOptions _get(String path) => RequestOptions(
   path: path,
   method: 'GET',
@@ -103,5 +105,28 @@ void main() {
 
     await interceptor.onRequest(_get('/b'), _RequestHandler());
     expect(storage.values.containsKey(legacy), isFalse);
+  });
+
+  test('the first cached entry records the current rule, and survives a new '
+      'interceptor', () async {
+    final storage = InMemoryStorage();
+    final options = _get('/catalog');
+    await CacheInterceptor(storageService: storage).onResponse(
+      Response<dynamic>(requestOptions: options, statusCode: 200, data: '{}'),
+      _ResponseHandler(),
+    );
+    final key = CacheInterceptor.cacheKeyFor(options);
+    expect(storage.values.containsKey(key), isTrue);
+    expect(
+      storage.values['cache_rule_version'],
+      ApiLoggingInterceptor.sensitiveKeyRuleVersion,
+    );
+
+    // Another launch: the matching record keeps the entry.
+    await CacheInterceptor(
+      storageService: storage,
+    ).onRequest(_get('/anything'), _RequestHandler());
+
+    expect(storage.values.containsKey(key), isTrue);
   });
 }
