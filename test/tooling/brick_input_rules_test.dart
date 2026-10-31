@@ -95,4 +95,17 @@ void main() {
       });
     }
   });
+
+  group('displayNameProblem', () {
+    test('accepts any printable name', () {
+      expect(setup.displayNameProblem('Tom & "Jerry": #1'), isNull);
+      expect(setup.displayNameProblem('Café Ünïcode 名前'), isNull);
+    });
+
+    test('rejects a blank name or a control character', () {
+      for (final bad in ['', '   ', 'two\nlines', 'tab\there', 'nul\x00']) {
+        expect(setup.displayNameProblem(bad), isNotNull, reason: bad);
+      }
+    });
+  });
 }

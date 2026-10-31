@@ -105,7 +105,7 @@ copyright line) becomes everything in `application_id` before its last segment.
 | `package_name` | `pubspec.yaml` `name` and `package:` imports |
 | `application_id` | Android `namespace` + `applicationId` + Kotlin package |
 | `ios_bundle_id` | Replaces `com.example.flutterStarter` in the iOS and macOS `project.pbxproj`, `ios/ExportOptions.plist`, and both fastlane iOS configs |
-| `app_display_name` | `android:label` in `AndroidManifest.xml`, `patrol.app_name`, every `Flutter Starter` literal in the Apple/fastlane configs, and the Dart-side name listed above |
+| `app_display_name` | `android:label` in `AndroidManifest.xml`, `patrol.app_name`, every `Flutter Starter` literal in the Apple/fastlane configs, and the Dart-side name listed above. Each is escaped for its file (XML entities, a quoted YAML string, a Ruby string), so `Salt & Pepper` is safe; a blank name or one with a line break or other control character is refused before anything changes |
 | `include_tasks_sample` | If false, removes the sample tasks (CRUD) module |
 | `include_feature_flags_sample` | If false, removes the sample feature flags module |
 | `strip_sample_features` | Legacy switch; if true, removes both tasks + feature_flags (see tool script) |

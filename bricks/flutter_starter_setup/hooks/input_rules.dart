@@ -6,6 +6,8 @@
 /// files into a tree a second run could not repair.
 library;
 
+import 'dart:convert';
+
 /// Words a Dart package name cannot be, because the name becomes an
 /// identifier (`package:<name>/...` and the generated localizations).
 const _reservedWords = <String>{
@@ -79,3 +81,32 @@ String? iosBundleIdProblem(String id) {
   }
   return null;
 }
+
+/// Why [name] cannot be the app's display name, or `null` if it can: it must
+/// not be blank, and must not hold a control character, which XML 1.0 (the
+/// Android manifest, Info.plist) cannot carry even escaped.
+String? displayNameProblem(String name) {
+  if (name.trim().isEmpty) return 'app_display_name must not be blank';
+  if (RegExp(r'[\x00-\x1f\x7f]').hasMatch(name)) {
+    return 'app_display_name must not contain a line break, tab or other '
+        'control character';
+  }
+  return null;
+}
+
+/// [text] escaped for an XML attribute value or element content.
+String xmlEscaped(String text) => text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;');
+
+/// [text] as a double-quoted YAML scalar, quotes included. JSON's string
+/// syntax is a subset of YAML's double-quoted style.
+String yamlQuoted(String text) => jsonEncode(text);
+
+/// [text] escaped for the inside of a Ruby double-quoted string: `"`, `\`
+/// and the `#` that would start an interpolation.
+String rubyDoubleQuotedEscaped(String text) =>
+    text.replaceAll(r'\', r'\\').replaceAll('"', r'\"').replaceAll('#', r'\#');

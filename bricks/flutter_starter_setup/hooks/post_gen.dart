@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:mason/mason.dart';
 
+import 'input_rules.dart';
+
 Future<void> run(HookContext context) async {
   final logger = context.logger;
   // Mason sets the process working directory to the generation output folder
@@ -48,12 +50,12 @@ Future<void> run(HookContext context) async {
   await _renameDartPackage(rootPath, packageName, logger);
   await _applyDisplayNameToDart(rootPath, appDisplayName, logger);
   await _patchAndroidGradle(rootPath, applicationId);
-  await _patchAndroidManifest(rootPath, appDisplayName);
+  await patchAndroidManifest(rootPath, appDisplayName);
   await _relocateMainActivity(rootPath, applicationId, logger);
   await _relocateMainActivityTest(rootPath, applicationId, logger);
   await _patchIosBundleIds(rootPath, iosBundleId, logger);
-  await _patchPatrolConfig(rootPath, applicationId, appDisplayName, logger);
-  await _patchPlatformIdentifiers(
+  await patchPatrolConfig(rootPath, applicationId, appDisplayName, logger);
+  await patchPlatformIdentifiers(
     rootPath: rootPath,
     packageName: packageName,
     applicationId: applicationId,
@@ -260,14 +262,14 @@ Future<void> _patchAndroidGradle(String rootPath, String applicationId) async {
   await file.writeAsString(s);
 }
 
-Future<void> _patchAndroidManifest(String rootPath, String displayName) async {
+/// Sets the Android launcher label to [displayName], XML-escaped.
+Future<void> patchAndroidManifest(String rootPath, String displayName) async {
   final file = File('$rootPath/android/app/src/main/AndroidManifest.xml');
   if (!file.existsSync()) return;
   var s = await file.readAsString();
-  final safeName = displayName.replaceAll('"', "'");
   s = s.replaceFirst(
     RegExp('android:label="[^"]*"'),
-    'android:label="$safeName"',
+    'android:label="${xmlEscaped(displayName)}"',
   );
   await file.writeAsString(s);
 }
@@ -384,7 +386,7 @@ Future<void> _patchIosBundleIds(
 /// `patrol test` installs and instruments `android.package_name`. Left at the
 /// template value it instruments a package that is no longer installed, which
 /// surfaces as a test run against nothing rather than as an error.
-Future<void> _patchPatrolConfig(
+Future<void> patchPatrolConfig(
   String rootPath,
   String applicationId,
   String appDisplayName,
@@ -396,7 +398,7 @@ Future<void> _patchPatrolConfig(
   final before = s;
   s = s.replaceFirst(
     RegExp(r'^(\s*)app_name:\s*flutter_starter\s*$', multiLine: true),
-    '  app_name: $appDisplayName',
+    '  app_name: ${yamlQuoted(appDisplayName)}',
   );
   s = s.replaceFirst(
     RegExp(
@@ -445,7 +447,7 @@ Future<int> rewriteFeatureBrickImports(
 
 /// `com.example.flutter_starter` is consumed before the bare `flutter_starter`
 /// inside it.
-Future<void> _patchPlatformIdentifiers({
+Future<void> patchPlatformIdentifiers({
   required String rootPath,
   required String packageName,
   required String applicationId,
@@ -462,7 +464,7 @@ Future<void> _patchPlatformIdentifiers({
   final replacements = <String, String>{
     'com.example.flutterStarter': iosBundleId,
     'com.example.flutter_starter': applicationId,
-    'Flutter Starter': appDisplayName,
+    'Flutter Starter': _displayNameMarker,
     'flutter_starter': packageName,
     'com.example': organization,
   };
@@ -507,10 +509,35 @@ Future<void> _patchPlatformIdentifiers({
     for (final entry in replacements.entries) {
       s = s.replaceAll(entry.key, entry.value);
     }
+    s = s.replaceAll(
+      _displayNameMarker,
+      displayNameFor(relative, appDisplayName),
+    );
     if (s != before) {
       await file.writeAsString(s);
       patched.add(relative);
     }
   }
   logger.info('Rewrote identifiers in ${patched.length} platform file(s)');
+}
+
+/// Stands in for the display name until the identifier replacements are done,
+/// so that a name containing `flutter_starter` or `com.example` is not
+/// rewritten by the entries after it.
+const _displayNameMarker = '\u0000display-name\u0000';
+
+/// [name] escaped for where [relative] puts the display name: XML content
+/// in a plist, scheme, HTML or XML file, a JSON string's inside in a `.json`
+/// file, a Ruby double-quoted string in a Fastfile, as is elsewhere.
+String displayNameFor(String relative, String name) {
+  final file = relative.split('/').last;
+  if (RegExp(r'\.(plist|xcscheme|html|xml)$').hasMatch(file)) {
+    return xmlEscaped(name);
+  }
+  if (file.endsWith('.json')) {
+    final quoted = jsonEncode(name);
+    return quoted.substring(1, quoted.length - 1);
+  }
+  if (file == 'Fastfile') return rubyDoubleQuotedEscaped(name);
+  return name;
 }
