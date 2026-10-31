@@ -75,10 +75,25 @@ mixin DisposalTracker<T extends StatefulWidget> on State<T> {
     _disposables.add(disposable);
   }
 
+  /// Calls every registered disposable, then `super.dispose()`, even when
+  /// one of them throws: stopping at the first failure leaked the rest and
+  /// skipped the state's own teardown. Each failure is reported through
+  /// [FlutterError.reportError].
   @override
   void dispose() {
     for (final disposable in _disposables) {
-      disposable();
+      try {
+        disposable();
+      } on Object catch (error, stack) {
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception: error,
+            stack: stack,
+            library: 'memory_helper',
+            context: ErrorDescription('while running a registered disposable'),
+          ),
+        );
+      }
     }
     _disposables.clear();
     super.dispose();
