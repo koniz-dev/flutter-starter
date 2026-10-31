@@ -8,6 +8,7 @@ import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
 import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
@@ -94,14 +95,10 @@ class AuthRepositoryImpl implements AuthRepository {
     // A different credential set is about to land. Any refresh already in
     // flight belongs to the session being replaced and must not overwrite it.
     sessionGeneration.invalidate();
+    final generation = sessionGeneration.current;
     try {
       final authResponse = await remoteDataSource.login(email, password);
-      await localDataSource.cacheUser(authResponse.user);
-      await localDataSource.cacheToken(authResponse.token);
-      if (authResponse.refreshToken != null) {
-        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
-      }
-      return Success(authResponse.user);
+      return await _persistSignIn(authResponse, generation);
     } on Exception catch (e) {
       return ResultFailure(_signInFailure(e));
     } on Object catch (_) {
@@ -117,18 +114,14 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     // Same reason as [login]: this writes a new credential set.
     sessionGeneration.invalidate();
+    final generation = sessionGeneration.current;
     try {
       final authResponse = await remoteDataSource.register(
         email,
         password,
         name,
       );
-      await localDataSource.cacheUser(authResponse.user);
-      await localDataSource.cacheToken(authResponse.token);
-      if (authResponse.refreshToken != null) {
-        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
-      }
-      return Success(authResponse.user);
+      return await _persistSignIn(authResponse, generation);
     } on Exception catch (e) {
       return ResultFailure(_signInFailure(e));
     } on Object catch (_) {
@@ -286,6 +279,38 @@ class AuthRepositoryImpl implements AuthRepository {
       Success<User?>(:final data) => Success(data != null),
       ResultFailure<User?>(:final failure) => ResultFailure<bool>(failure),
     };
+  }
+
+  /// Stores a sign-in's user and credentials, checking before each write
+  /// that the session [generation] is still current.
+  ///
+  /// A logout, a forced logout or another sign-in that lands during the
+  /// round trip ends this attempt's session; its writes would otherwise land
+  /// after that teardown and re-persist a credential set the app had just
+  /// removed, or let the slower of two logins win. A stale attempt fails with
+  /// [AuthErrorCodes.sessionTerminated] and clears nothing - the session that
+  /// replaced it owns what is in the store.
+  Future<Result<User>> _persistSignIn(
+    AuthResponseModel authResponse,
+    int generation,
+  ) async {
+    const stale = ResultFailure<User>(
+      UnknownFailure(
+        'Session ended while the sign-in was in flight',
+        code: AuthErrorCodes.sessionTerminated,
+      ),
+    );
+    if (!sessionGeneration.isCurrent(generation)) return stale;
+    await localDataSource.cacheUser(authResponse.user);
+    if (!sessionGeneration.isCurrent(generation)) return stale;
+    await localDataSource.cacheToken(authResponse.token);
+    final refreshToken = authResponse.refreshToken;
+    if (refreshToken != null) {
+      if (!sessionGeneration.isCurrent(generation)) return stale;
+      await localDataSource.cacheRefreshToken(refreshToken);
+    }
+    if (!sessionGeneration.isCurrent(generation)) return stale;
+    return Success(authResponse.user);
   }
 
   /// Exchanges the stored refresh token for a new credential pair.
