@@ -17,6 +17,8 @@
 
 import 'dart:io';
 
+import 'doc_fences.dart';
+
 /// One setup sequence that copies `.env` and then runs without it.
 class EnvRunProblem {
   /// Creates a problem record.
@@ -39,21 +41,16 @@ class EnvRunProblem {
 
 final RegExp _copyEnv = RegExp(r'\bcp\s+\.env\.example\s+\.env\b');
 final RegExp _flutterRunOrBuild = RegExp(r'\bflutter\s+(?:run|build)\b');
-final RegExp _fence = RegExp(r'^\s*(`{3,}|~{3,})');
 
 /// Problems in one markdown [source], reported against [file].
 List<EnvRunProblem> findEnvRunProblems(String source, {String file = ''}) {
   final problems = <EnvRunProblem>[];
   final lines = source.split('\n');
-  var inFence = false;
+  final fences = FenceTracker();
   var awaitingRun = false;
 
   for (var i = 0; i < lines.length; i++) {
-    if (_fence.hasMatch(lines[i])) {
-      inFence = !inFence;
-      continue;
-    }
-    if (!inFence) continue;
+    if (fences.isFence(lines[i]) || !fences.inFence) continue;
 
     final start = i;
     var command = lines[i].trimRight();
@@ -61,7 +58,7 @@ List<EnvRunProblem> findEnvRunProblems(String source, {String file = ''}) {
     // say) swallowed its closing fence, and every fence after it flipped.
     while (command.endsWith(r'\') &&
         i + 1 < lines.length &&
-        !_fence.hasMatch(lines[i + 1])) {
+        !fenceLike.hasMatch(lines[i + 1])) {
       i++;
       command =
           '${command.substring(0, command.length - 1).trimRight()} '

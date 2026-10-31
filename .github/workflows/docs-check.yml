@@ -26,6 +26,7 @@ on:
       - 'tool/doc_env_runs.dart'
       - 'tool/doc_dart_defines.dart'
       - 'tool/doc_test_paths.dart'
+      - 'tool/doc_fences.dart'
       - 'lib/core/config/dart_defines.dart'
       - '.github/workflows/docs-check.yml'
   pull_request:
@@ -38,6 +39,7 @@ on:
       - 'tool/doc_env_runs.dart'
       - 'tool/doc_dart_defines.dart'
       - 'tool/doc_test_paths.dart'
+      - 'tool/doc_fences.dart'
       - 'lib/core/config/dart_defines.dart'
       - '.github/workflows/docs-check.yml'
   workflow_dispatch:

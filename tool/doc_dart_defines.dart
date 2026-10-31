@@ -17,6 +17,8 @@
 
 import 'dart:io';
 
+import 'doc_fences.dart';
+
 /// The table every documented key is checked against.
 const String dartDefinesPath = 'lib/core/config/dart_defines.dart';
 
@@ -49,7 +51,6 @@ final RegExp _tableEntry = RegExp(
 final RegExp _dartDefine = RegExp(
   r'''--dart-define(?:=|\s+)\\?["']?([A-Za-z_][A-Za-z0-9_]*)=''',
 );
-final RegExp _fence = RegExp(r'^\s*(`{3,}|~{3,})');
 
 /// The keys of `DartDefines.values`, parsed from [source] of
 /// [dartDefinesPath].
@@ -66,14 +67,10 @@ List<UnknownDartDefine> findUnknownDartDefines(
 }) {
   final problems = <UnknownDartDefine>[];
   final lines = source.split('\n');
-  var inFence = false;
+  final fences = FenceTracker();
 
   for (var i = 0; i < lines.length; i++) {
-    if (_fence.hasMatch(lines[i])) {
-      inFence = !inFence;
-      continue;
-    }
-    if (!inFence) continue;
+    if (fences.isFence(lines[i]) || !fences.inFence) continue;
 
     for (final match in _dartDefine.allMatches(lines[i])) {
       final key = match.group(1)!;

@@ -70,6 +70,27 @@ void main() {
       );
     });
 
+    test(
+      'a fence inside a longer or other-character fence does not close it',
+      () {
+        const source =
+            '~~~markdown\n'
+            '```bash\n'
+            '```\n'
+            'flutter run --dart-define=NOPE_TILDE=1\n'
+            '~~~\n'
+            '````\n'
+            '```\n'
+            'flutter run --dart-define=NOPE_LONG=1\n'
+            '````\n';
+
+        expect(
+          findUnknownDartDefines(source, known).map((p) => p.key),
+          ['NOPE_TILDE', 'NOPE_LONG'],
+        );
+      },
+    );
+
     test('reads a quoted key, in either quote style or escaped', () {
       const source =
           '```bash\n'
