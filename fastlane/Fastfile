@@ -12,6 +12,7 @@
 
 require 'shellwords'
 require_relative 'ssl_pinning'
+require_relative 'release_environment'
 
 # Default platform
 default_platform(:android)
@@ -33,11 +34,13 @@ platform :android do
   desc "Get version from pubspec.yaml"
   lane :get_version do
     pubspec = File.read("../pubspec.yaml")
-    version_match = pubspec.match(/version:\s*([\d.]+)\+(\d+)/)
+    version_match = pubspec.match(/^version:\s*([\d.]+)(?:\+(\d+))?/)
     UI.user_error!("Could not parse version from pubspec.yaml") unless version_match
 
     version_name = version_match[1]
-    version_code = version_match[2]
+    # Without "+N" Flutter builds with build number 1; say the same here
+    # rather than abort, since bump_version.sh writes that form too.
+    version_code = version_match[2] || "1"
     UI.message("Version: #{version_name}, Version Code: #{version_code}")
     # NOT `return`: a lane body is a block, and `return` inside one raises
     # LocalJumpError, which fastlane reports as an error in the lane that
@@ -51,7 +54,7 @@ platform :android do
 
   desc "Build App Bundle for Play Store"
   lane :build_bundle do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     UI.message("Building App Bundle - Environment: #{environment}")
@@ -91,7 +94,7 @@ platform :android do
 
   desc "Build APK for testing"
   lane :build_apk do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     UI.message("Building APK - Environment: #{environment}")
