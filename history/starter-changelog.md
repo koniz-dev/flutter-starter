@@ -132,6 +132,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   operation: the wait is bounded by `operationTimeout` (10 s).
   `SecureStorageService.clear()` is documented as unsuitable for sign-out.
 
+- `SecureTokenStore`: a token write or delete that outlives the queue's wait
+  bound and lands after a newer one (a refresh write landing after a
+  sign-out's clear) is followed by a repair that puts the newer state back.
+  A repair that fails three times is logged as a warning naming the key,
+  never the value; reads of that key then answer from memory with the newer
+  state, the next write (or, for a cleared key, the next delete) re-applies
+  it, and a sign-out's clear never writes a token. `tokenStoreProvider`
+  passes the app logger to the store.
+
 ### Fixed
 
 - **`LoggingService` writes logs in profile and release builds.** It relied on
@@ -215,8 +224,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   release that refuses to start. `get_version` accepts a pubspec version
   without `+build` (build number 1) and refuses a prerelease.
 
+- The setup brick escapes `app_display_name` for each file it lands in (XML
+  in the manifest and Info.plist, a quoted YAML string for
+  `patrol.app_name`, a Ruby string in the Fastfiles), so `Salt & Pepper` no
+  longer produces files that fail to parse. `pre_gen` refuses a blank name,
+  control characters, `{`/`}` and a leading `@` or `?`.
+- `tool/check_env_assets.dart` also flags `*.env`, `.env-*`, `.env_*` and
+  `.envrc*` files, by name in the asset list or inside a declared directory.
+- The accessibility test helpers can fail: `AccessibilityMatchers` match the
+  node from `tester.getSemantics(finder)`, `AccessibilityTestHelpers.isEnabled`
+  reads the enabled state correctly, and `verifyInteractiveElementsHaveLabels`
+  runs Flutter's `labeledTapTargetGuideline`.
+- `setup_brick_feature_rename_test` reads only tracked brick files, so a local
+  `mason make` (which leaves compiled hooks) no longer fails it.
+
 ### Documentation
 
+- Getting started: the remove-the-demo steps name every file that uses the
+  demo (including `AppConfig.hasBackend` and its test), so following them
+  leaves `flutter analyze` and `flutter test` green.
+- Storage migration guide: the migration test snippet stamps the store's
+  version before `execute()`, so it passes as written.
 - A pass over the guides: snippets that did not compile (API integration,
   testing, architecture overview, common tasks, customization) now do, and
   several are compiled by tests; stale `file:line` references were replaced
