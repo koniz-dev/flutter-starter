@@ -199,6 +199,11 @@ final formatted = LocalizedFormatters.formatTime(time, locale: locale);
 
 ### Number Formatting
 
+The output comments below are what `LocalizedFormatters` prints for each
+`SupportedLocale`, checked by `test/docs/i18n_formatter_outputs_test.dart`.
+They leave out the invisible direction marks intl adds around `ar_SA` text,
+and show a non-breaking space as a plain one.
+
 ```dart
 final number = 1234.56;
 final formatted = LocalizedFormatters.formatNumber(
@@ -206,9 +211,10 @@ final formatted = LocalizedFormatters.formatNumber(
   locale: locale,
   decimalDigits: 2,
 );
-// English: "1,234.56"
-// Spanish: "1.234,56"
-// Arabic: "١٬٢٣٤٫٥٦"
+// en_US: "1,234.56"
+// es_ES: "1.234,56"
+// ar_SA: "1,234.56"
+// vi_VN: "1.234,56"
 ```
 
 ### Currency Formatting
@@ -220,10 +226,15 @@ final formatted = LocalizedFormatters.formatCurrency(
   locale: locale,
   currencyCode: 'USD',
 );
-// English: "$1,234.56"
-// Spanish: "1.234,56 €"
-// Arabic: "ر.س ١٬٢٣٤٫٥٦"
+// en_US: "$1,234.56"
+// es_ES: "1.234,56 $"
+// ar_SA: "1,234.56 $"
+// vi_VN: "1.234,56 $"
 ```
+
+`currencyCode` picks the currency, and the locale picks only how it is
+written: US dollars stay dollars in every locale. `ar_SA` prints Latin
+digits, as intl's `ar_SA` data specifies.
 
 Without `currencyCode`, `formatCurrency` uses the currency of the locale's
 country (`USD`, `EUR`, `SAR`, `VND` for the four supported locales), from a
@@ -248,7 +259,10 @@ final formatted = LocalizedFormatters.formatCompactNumber(
   number,
   locale: locale,
 );
-// "1.2M" (English)
+// en_US: "1.23M"
+// es_ES: "1,23 M"
+// ar_SA: "1.23 مليون"
+// vi_VN: "1,23 Tr"
 ```
 
 ### Relative Time Formatting
