@@ -291,7 +291,8 @@ class AuthRepositoryImpl implements AuthRepository {
   /// [AuthErrorCodes.sessionTerminated], writes nothing further and clears
   /// nothing - the session that replaced it owns what is in the store. A
   /// write already in flight when the session ended may still land: the
-  /// token store orders it before a later clear, but the cached user blob has
+  /// token store makes a later clear win over it (by order, or by a repair if
+  /// the write outlived the store's wait bound), but the cached user blob has
   /// no such queue.
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
@@ -354,10 +355,11 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       // Each check sits directly before the write it guards, with no await
       // between them, so a logout that starts after the check issues its clear
-      // after that write - and the token store applies its operations in the
-      // order they are issued (SecureTokenStore queues them; on web the
-      // plugin alone would let the clear land first), so the clear also lands
-      // after it. A single check before both writes let a logout landing
+      // after that write - and the token store leaves the effect of the order
+      // they were issued (SecureTokenStore queues them, and repairs a write
+      // that outlived its wait bound and landed late; on web the plugin alone
+      // would let the clear land first), so the clear wins. A single check
+      // before both writes let a logout landing
       // during the first write clear the store, and the refresh token was then
       // written after it.
       if (!sessionGeneration.isCurrent(generation)) return stale;
