@@ -40,8 +40,9 @@ abstract class IKeyValueStore {
 /// failing is retried a bounded number of times, then reported to the logger
 /// by key; reads of that key then answer from memory with the newer state,
 /// and the next write through the same service (or, for a key whose newer
-/// state is a delete, the next delete) re-applies it. The marker is in
-/// memory, so if the app stops first, the next launch reads the late value.
+/// state is a delete, the next delete or read of it) re-applies it. The
+/// marker is in memory, so if the app stops first, the next launch reads the
+/// late value.
 /// Its queue is shared by every store over the same `SecureStorageService`,
 /// so the components touching the tokens must use one service (or one store).
 /// An in-memory store whose methods complete synchronously meets it

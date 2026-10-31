@@ -2,6 +2,10 @@
 // left stale: the device holds the late value. Reads used to return it, so a
 // signed-out app kept sending that token. And the flush that re-applies stale
 // keys could write a refresh token from inside a sign-out's clear.
+//
+// A stale cleared key also stayed on the device until the next write or
+// delete, which a signed-out app may never issue; the next launch read the
+// late token. A read of it now retries the delete once.
 
 import 'dart:async';
 
@@ -37,6 +41,7 @@ class _Backing {
     when(() => storage.remove(any())).thenAnswer((i) async {
       final key = i.positionalArguments[0] as String;
       if (slowDeletes.remove(key)) await gate.future;
+      if (hangDeletes.contains(key)) await Completer<void>().future;
       if (gate.isCompleted && failRemove.contains(key)) return false;
       values.remove(key);
       return true;
@@ -51,6 +56,7 @@ class _Backing {
   final writes = <String>[];
   final gate = Completer<void>();
   final slowDeletes = <String>{};
+  final hangDeletes = <String>{};
   final failRemove = <String>{};
   final failSet = <String>{};
 }
@@ -115,5 +121,77 @@ void main() {
     expect(backing.writes, isEmpty, reason: 'the sign-out wrote a token');
     expect(backing.values, isEmpty);
     expect(await store.getRefreshToken(), isNull);
+  });
+
+  /// A store whose access token key is stale after a clear, with the late
+  /// token still on the device.
+  Future<(_Backing, SecureTokenStore)> staleClearedAccessToken() async {
+    final backing = _Backing()..failRemove.add(AppConstants.tokenKey);
+    final store = SecureTokenStore(backing.storage, operationTimeout: _bound);
+    final write = store.setAccessToken(_late);
+    await store.clearAllTokens();
+    backing.gate.complete();
+    await write;
+    await _settle();
+    expect(backing.values[AppConstants.tokenKey], _late);
+    return (backing, store);
+  }
+
+  test('a read of a stale cleared key retries the delete, and the key is no '
+      'longer stale once it lands', () async {
+    final (backing, store) = await staleClearedAccessToken();
+    backing.failRemove.clear(); // the platform delete works again
+    backing.writes.clear();
+
+    expect(await store.getAccessToken(), isNull);
+
+    expect(backing.values.containsKey(AppConstants.tokenKey), isFalse);
+    expect(backing.writes, isEmpty, reason: 'a read never writes');
+    // No longer stale: the next read goes to the device.
+    backing.values[AppConstants.tokenKey] = 'written-elsewhere';
+    expect(await store.getAccessToken(), 'written-elsewhere');
+  });
+
+  test('a read whose retried delete fails leaves the key stale and still '
+      'answers null', () async {
+    final (backing, store) = await staleClearedAccessToken();
+
+    expect(await store.getAccessToken(), isNull);
+    expect(backing.values[AppConstants.tokenKey], _late);
+    expect(await store.getAccessToken(), isNull, reason: 'still stale');
+  });
+
+  test('a read whose retried delete hangs returns within the bound', () async {
+    final (backing, store) = await staleClearedAccessToken();
+    backing
+      ..failRemove.clear()
+      ..hangDeletes.add(AppConstants.tokenKey);
+
+    final read = Stopwatch()..start();
+    expect(await store.getAccessToken(), isNull);
+    expect(read.elapsed, lessThan(_bound * 4));
+  });
+
+  test('while a retried delete hangs, later reads answer at once and start '
+      'no other delete', () async {
+    final (backing, store) = await staleClearedAccessToken();
+    backing
+      ..failRemove.clear()
+      ..hangDeletes.add(AppConstants.tokenKey);
+    var removes = 0;
+    when(() => backing.storage.remove(any())).thenAnswer((i) async {
+      removes++;
+      await Completer<void>().future; // hangs
+      return true;
+    });
+
+    expect(await store.getAccessToken(), isNull); // waits one bound
+    final later = Stopwatch()..start();
+    for (var i = 0; i < 3; i++) {
+      expect(await store.getAccessToken(), isNull);
+    }
+
+    expect(later.elapsed, lessThan(_bound), reason: 'no read waited a bound');
+    expect(removes, 1, reason: 'one delete in flight');
   });
 }
