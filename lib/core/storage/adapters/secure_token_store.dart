@@ -29,15 +29,14 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// A call that outlives the bound may land after operations issued later.
 /// Writes and deletes are numbered when issued, and one that lands over a
 /// newer one of the same key is followed by a repair that puts the newer
-/// state back (the older value is at
-/// rest in between). A repair is tried [repairAttempts] times; if all fail,
-/// the key is marked stale and the logger is warned, naming the key, never the
-/// value. A stale key reads from memory - the newer state, `null` after a
-/// clear - and is re-applied by the next write through the service, or, if
-/// its newer state is a delete, by the next delete or a read of it (never by
-/// a write from inside a sign-out's clear: a read or delete never writes).
-/// The stale marker is in memory: if the app stops first, the next launch
-/// reads the late value.
+/// state back (the older value is at rest in between). A repair is tried
+/// [repairAttempts] times; if all fail, the key is marked stale and the
+/// logger is warned, naming the key, never the value. A stale key reads
+/// from memory - the newer state, `null` after a clear - and is re-applied
+/// by the next write through the service, or, if its newer state is a
+/// delete, by the next delete or a read of it (never by a write from inside
+/// a sign-out's clear: a read or delete never writes). The stale marker is
+/// in memory: if the app stops first, the next launch reads the late value.
 ///
 /// Once everything settles and no repair has failed, every key holds what
 /// its last-issued successful write or delete left.
