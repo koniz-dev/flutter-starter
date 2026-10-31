@@ -1,0 +1,4 @@
+# fastlane_ssl_pinning_rb_test against origin/main's fastlane/ssl_pinning.rb (33031ceae83)
++3 -1: a space-separated fingerprint is refused, as the app could never match it [E]
++3 -2: a fingerprint with a line break inside is refused [E]
++8 -2: Some tests failed.

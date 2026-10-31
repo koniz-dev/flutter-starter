@@ -1,0 +1,14 @@
+# raw_websocket_release_wss_test with the refusal block removed (the releaseMode parameter kept so the test compiles)
++0 -1: a staging release refuses ws://realtime.example.com/socket and opens nothing [E]
++0 -2: a staging release refuses http://realtime.example.com/socket and opens nothing [E]
++0 -3: a staging release refuses /socket and opens nothing [E]
++0 -4: a staging release refuses realtime.example.com/socket and opens nothing [E]
++4 -5: a production release refuses ws://realtime.example.com/socket and opens nothing [E]
++4 -6: a production release refuses http://realtime.example.com/socket and opens nothing [E]
++4 -7: a production release refuses /socket and opens nothing [E]
++4 -8: a production release refuses realtime.example.com/socket and opens nothing [E]
++9 -8: Some tests failed.
+# raw_websocket_release_wss_test with disconnect() moved back above the URL check (the old order)
++7 -1: a staging release a refused URL keeps the current connection [E]
++15 -2: a production release a refused URL keeps the current connection [E]
++17 -2: Some tests failed.

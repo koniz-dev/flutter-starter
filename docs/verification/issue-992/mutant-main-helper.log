@@ -1,0 +1,4 @@
+# release_builds_pass_pinning_test against origin/main's scripts/ci/ssl_pinning_defines.sh (6fb2bcaea8f)
++4 -1: ssl_pinning_defines.sh validates what the app parses a space-separated fingerprint is refused [E]
++4 -2: ssl_pinning_defines.sh validates what the app parses a fingerprint with a line break inside is refused [E]
++4 -2: Some tests failed.

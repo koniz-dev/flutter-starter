@@ -1,0 +1,18 @@
+# Pre-push full flutter test on branch fix/sensitive-key-names-2 (2228cc46d5e, without the #990 fix), 2026-10-31: the crash in the wild
+00:11 +36 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_helper_imports_every_library_test.dart: the generated helper imports every library under lib/ [E]                  
+Expected: <0>
+Actual: <1>
+Running build hooks...Running build hooks...Exception: Failed to get install name for dylib file:///Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/lib/objective_c.dylib: error: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool-classic: can't open file: /Users/nguyenanhkiet/Playground/flutter-starter/.dart_tool/lib/objective_c.dylib (No such file or directory)
+
+#0      _getInstallName (package:dartdev/src/native_assets_macos.dart:45)
+<asynchronous suspension>
+#1      rewriteInstallNames.<anonymous closure> (package:dartdev/src/native_assets_macos.dart:27)
+<asynchronous suspension>
+#2      Future.wait.<anonymous closure> (dart:async/future.dart:567)
+<asynchronous suspension>
+#3      rewriteInstallNames (package:dartdev/src/native_assets_macos.dart:19)
+<asynchronous suspension>
+#4      _copyAssets (package:dartdev/src/native_assets_bundling.dart:90)
+<asynchronous suspension>
+#5      bundleNativeAssets (package:dartdev/src/native_assets_bundling.dart:27)
+<asynchronous suspension>

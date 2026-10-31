@@ -1,0 +1,12 @@
+# api_logging_redaction_rules_test against origin/main's api_logging_interceptor.dart (33031ceae83)
++15 -1: criterion 1: every key rule redacts its realistic key accesskey -> "access_key" [E]
++15 -2: criterion 1: every key rule redacts its realistic key appkey -> "app_key" [E]
++15 -3: criterion 1: every key rule redacts its realistic key clientkey -> "client_key" [E]
++15 -4: criterion 1: every key rule redacts its realistic key hmac -> "x-hmac-sha256" [E]
++21 -5: criterion 1: every key rule redacts its realistic key bearer -> "bearer" [E]
++21 -6: criterion 1: every key rule redacts its realistic key sign -> "sign" [E]
++21 -7: criterion 1: every key rule redacts its realistic key key -> "key" [E]
++24 -7: Some tests failed.
+# sensitive_key_api_key_query_test against origin/main's api_logging_interceptor.dart
++0 -1: a Google APIs GET is neither cached nor logged with its key [E]
++1 -1: Some tests failed.

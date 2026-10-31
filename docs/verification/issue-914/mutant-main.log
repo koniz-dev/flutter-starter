@@ -1,0 +1,4 @@
+# image_cache_helper_cached_test against origin/main's image_cache_helper.dart (test timeout 20s)
+00:02 +0 -1: preloading an image already in the cache succeeds at once [E]
+  TimeoutException after 0:00:20.000000: Test timed out after 20 seconds.
+00:20 +0 -1: Some tests failed.

@@ -1,0 +1,17 @@
+# Criterion 1: main 6447951, the dart-run-spawning tests together at -j 8, 15 rounds; .dart_tool/ native assets wiped before each round so every dart run rebuilds them
+round 1: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 2: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 3: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 4: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 5: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 6: dartdev otool crashes=0, failed=1, last:   /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/c990-main/test/tooling/coverage_helper_imports_every_library_test.dart: the generated helper imports every library under lib/
+round 7: dartdev otool crashes=0, failed=1, last:   /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/c990-main/test/docs/doc_links_test.dart: every relative link and anchor in the markdown resolves
+round 8: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 9: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 10: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 11: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 12: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 13: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 14: dartdev otool crashes=0, failed=0, last: All tests passed!
+round 15: dartdev otool crashes=0, failed=0, last: All tests passed!
+total: 0 crash line(s) across 15 rounds, 2 failed round(s)

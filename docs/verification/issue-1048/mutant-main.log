@@ -1,0 +1,13 @@
+# the new tests with the new names removed and the query-only set emptied (the behaviour of origin/main, keeping isSensitiveQueryKey so the tests compile)
+criterion 1: every key rule redacts its realistic key subscriptionkey -> "Ocp-Apim-Subscription-Key" [E]
+an Azure Functions ?code= GET is not cached [E]
+criterion 1: every key rule redacts its realistic key functionskey -> "x-functions-key" [E]
+criterion 1: every key rule redacts its realistic key sessionkey -> "session_key" [E]
+criterion 1: every key rule redacts its realistic key authkey -> "auth_key" [E]
+criterion 1: every key rule redacts its realistic key masterkey -> "master_key" [E]
+criterion 1: every key rule redacts its realistic key licensekey -> "license_key" [E]
+criterion 1: every key rule redacts its realistic key access -> "access" [E]
+criterion 1: every key rule redacts its realistic key refresh -> "refresh" [E]
+a SimpleJWT login response logs neither token [E]
+code is a secret in a query string only a query code is redacted in the path and the query parameters [E]
++34 -11: Some tests failed.
