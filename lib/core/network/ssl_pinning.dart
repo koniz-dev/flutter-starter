@@ -107,7 +107,9 @@ class SslPinning {
   /// For an `HttpClient.connectionFactory`, which replaces the client's own
   /// connection set-up - TLS and the certificate check included.
   Future<ConnectionTask<Socket>> secureConnect(String host, int port) {
-    if (_pinnedClientFactory() == null) {
+    // isEffective, not _pinnedClientFactory: no repeat of the
+    // misconfiguration warning on every hop of a handshake.
+    if (!isEffective) {
       return SecureSocket.startConnect(host, port);
     }
     final accepted = List<String>.unmodifiable(fingerprints);

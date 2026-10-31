@@ -21,6 +21,45 @@ import 'package:flutter_test/flutter_test.dart';
 
 const _assetChannel = 'flutter/assets';
 
+/// Sends every request through the proxy at [port], as HTTPS_PROXY would.
+class _ProxyOverrides extends HttpOverrides {
+  _ProxyOverrides(this.port);
+
+  final int port;
+
+  @override
+  String findProxyFromEnvironment(Uri url, Map<String, String>? environment) =>
+      'PROXY 127.0.0.1:$port';
+}
+
+/// A CONNECT proxy: answers 200 and then pipes bytes both ways.
+Future<(ServerSocket, List<String>)> _connectProxy() async {
+  final requests = <String>[];
+  final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+  server.listen((client) {
+    var piped = false;
+    final buffer = <int>[];
+    Socket? upstream;
+    client.listen((data) async {
+      if (piped) {
+        upstream!.add(data);
+        return;
+      }
+      buffer.addAll(data);
+      final head = latin1.decode(buffer);
+      if (!head.contains('\r\n\r\n')) return;
+      piped = true;
+      final line = head.split('\r\n').first;
+      requests.add(line);
+      final target = line.split(' ')[1].split(':');
+      upstream = await Socket.connect(target[0], int.parse(target[1]));
+      upstream!.listen(client.add, onDone: client.destroy);
+      client.add(latin1.encode('HTTP/1.1 200 Connection established\r\n\r\n'));
+    }, onDone: () => upstream?.destroy());
+  });
+  return (server, requests);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -171,4 +210,22 @@ void main() {
     expect(realtime.isConnected, isTrue);
     expect(plainRequests, 1);
   });
+
+  test(
+    'a production release still goes through a configured proxy, pinned',
+    () async {
+      await loadEnv('production');
+      final (proxy, requests) = await _connectProxy();
+      addTearDown(proxy.close);
+      HttpOverrides.global = _ProxyOverrides(proxy.port);
+      addTearDown(() => HttpOverrides.global = null);
+      final realtime = client(releaseMode: true);
+      addTearDown(realtime.disconnect);
+
+      await realtime.connect(wss('/socket'));
+
+      expect(realtime.isConnected, isTrue);
+      expect(requests.single, startsWith('CONNECT 127.0.0.1:${secure.port}'));
+    },
+  );
 }

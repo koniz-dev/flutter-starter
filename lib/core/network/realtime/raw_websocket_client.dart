@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show HttpClient;
+import 'dart:io' show HttpClient, Socket;
 
 import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:flutter_starter/core/config/app_config.dart';
@@ -197,8 +197,6 @@ class RawWebSocketClientImpl implements IRealtimeClient {
     _channel!.sink.add(data);
   }
 
-  /// Closes the open connection and cancels any [connect] still awaiting its
-  /// handshake.
   /// The [HttpClient] the handshake goes through, or null for the default.
   ///
   /// In a staging or production release the handshake must stay on TLS end
@@ -221,6 +219,12 @@ class RawWebSocketClientImpl implements IRealtimeClient {
             ),
           );
         }
+        // Through a proxy (HTTPS_PROXY on desktop), dart:io sends CONNECT
+        // over this socket and then secures it with the client's own,
+        // pinned, context: hand it the plain connection to the proxy.
+        if (proxyHost != null && proxyPort != null) {
+          return Socket.startConnect(proxyHost, proxyPort);
+        }
         return _sslPinning.secureConnect(uri.host, uri.port);
       };
   }
@@ -228,6 +232,8 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   bool get _refusesCleartext =>
       _releaseMode && (AppConfig.isStaging || AppConfig.isProduction);
 
+  /// Closes the open connection and cancels any [connect] still awaiting its
+  /// handshake.
   @override
   void disconnect() {
     _generation++;
