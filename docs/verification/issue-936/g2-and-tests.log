@@ -1,0 +1,16 @@
+f69c62cc627 fix(tooling): let the pre-commit hook resolve a path dependency outside the repository (#1016)
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_commit_staged_content_test.dart
+00:00 +0: a staged unformatted file is rejected though the working copy is fixed
+00:01 +1: an unstaged broken file does not block a clean staged change
+00:03 +2: `git commit <path>` checks the content that path commits
+00:04 +3: with a path dependency outside the repository a clean staged change commits
+00:07 +4: with a path dependency outside the repository a staged format or analyze violation still fails
+00:11 +5: an hour-old export a killed run left beside the repository is swept, a fresh one is kept
+00:14 +6: a parent it cannot write to falls back to the temp directory and says so
+00:16 +7: inside a linked worktree it checks that worktree's index
+00:20 +8: All tests passed!
+tests exit=0

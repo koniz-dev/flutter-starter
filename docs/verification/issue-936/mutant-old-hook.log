@@ -1,0 +1,32 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_commit_staged_content_test.dart
+00:00 +0: a staged unformatted file is rejected though the working copy is fixed
+00:01 +1: an unstaged broken file does not block a clean staged change
+00:03 +2: `git commit <path>` checks the content that path commits
+00:04 +3: with a path dependency outside the repository a clean staged change commits
+00:05 +3 -1: with a path dependency outside the repository a clean staged change commits [E]
+  Expected: <0>
+    Actual: <1>
+  Running pre-commit checks...
+  📝 Checking code formatting (staged content)...
+  No file or directory found at "test".
+  No file or directory found at "integration_test".
+  No file or directory found at "tool".
+  No file or directory found at "examples".
+  Formatted 3 files (0 changed) in 0.00 seconds.
+  🔍 Running flutter analyze (staged content)...
+  Resolving dependencies...
+  Because probe depends on shared from path which doesn't exist (could not find package shared at "../shared #lib"), version solving failed.
+  Failed to update packages.
+  ❌ flutter analyze failed for the staged content.
+  
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/tooling/pre_commit_staged_content_test.dart 147:7  main.<fn>.<fn>
+  
+00:05 +3 -1: with a path dependency outside the repository a staged format or analyze violation still fails
+00:07 +4 -1: inside a linked worktree it checks that worktree's index
+00:10 +5 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/pre_commit_staged_content_test.dart: with a path dependency outside the repository a clean staged change commits
