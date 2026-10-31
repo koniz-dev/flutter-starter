@@ -154,8 +154,11 @@ Before opening a PR, run (same scope as CI for Dart — no platform builds):
 
 This runs scoped `dart format --check`, `flutter analyze`, and `flutter test`. On Windows without Bash, run the commands in [docs/guides/testing/testing-summary.md](docs/guides/testing/testing-summary.md) manually.
 
-If your change touches markdown, also run the docs checker - `ci.yml` skips
-docs, so the **Docs check** workflow is what gates them:
+If your change touches markdown, also run the docs checker. The **Quality
+gate** runs on every pull request, a markdown-only one included, but for those
+it runs only the tests that read markdown (snippets, quoted code, test paths);
+the link, anchor and symbol checks below run in the separate **Docs check**
+workflow:
 
 ```bash
 dart run tool/check_docs.dart
