@@ -41,10 +41,15 @@ Documentation integrity checker. Seven checks, all of which had silently rotted:
   table a define reaches the app through. Added after the security guide
   built production with a key nothing read.
 - **`flutter test` paths** (`doc_test_paths.dart`): every path argument of
-  `flutter test` in a fenced block of `README.md`, `CONTRIBUTING.md` or `docs/`
+  `flutter test` in a fenced block of `README.md`, `CONTRIBUTING.md`, `CLAUDE.md` or `docs/`
   exists, after joining continued lines and skipping flags, `:line` suffixes and
   placeholders (`<...>`, `path/to`). Added after CONTRIBUTING named a test
   file that did not exist.
+
+The `.env`-run, `--dart-define` and test-path checks find fenced blocks
+through `doc_fences.dart`: a fence closes only on a line of its opening
+character, at least as long, with nothing else on it, so a ```` ``` ```` line
+inside a `~~~` or four-backtick block is content.
 
 ```bash
 dart run tool/check_docs.dart               # all checks

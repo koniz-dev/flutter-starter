@@ -1,9 +1,14 @@
-// Fenced code blocks in markdown, tracked the way CommonMark does.
+// Fenced code blocks in markdown, opened and closed by CommonMark's rules for
+// the fence itself.
 //
 // The docs scanners toggled their "inside a fence" state on every line that
 // started with three backticks or tildes. A ``` line inside a `~~~` block, or
 // inside a four-backtick block, flipped them, and every command after it was
 // read as prose and every paragraph as a command.
+//
+// Indentation is not modelled: a fence inside a list item is indented by the
+// item's content, which only a full CommonMark parser could measure, so any
+// indent is accepted.
 
 /// A line that looks like a fence: three or more backticks or tildes.
 final RegExp fenceLike = RegExp(r'^\s*(`{3,}|~{3,})');
@@ -26,7 +31,13 @@ class FenceTracker {
     if (open == null) {
       final match = fenceLike.firstMatch(line);
       if (match == null) return false;
-      _open = match.group(1);
+      final run = match.group(1)!;
+      // A backtick fence's info string cannot hold a backtick: "```dart```"
+      // is inline code, not a fence.
+      if (run[0] == '`' && line.substring(match.end).contains('`')) {
+        return false;
+      }
+      _open = run;
       return true;
     }
     final run = _closing.firstMatch(line)?.group(1);
