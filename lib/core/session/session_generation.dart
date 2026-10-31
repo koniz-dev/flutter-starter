@@ -25,8 +25,11 @@ import 'dart:async';
 /// A stale refresh **skips** its writes and clears nothing: the store may
 /// already hold the session that replaced it.
 ///
-/// Everything here is synchronous; the window it guards is an `await`, so a
-/// plain `int` suffices.
+/// ## Threading
+///
+/// [current], [invalidate] and [isCurrent] are synchronous and cannot
+/// interleave; the window this guards is an `await`, so a plain `int`
+/// suffices.
 ///
 /// ## Teardowns
 ///

@@ -280,13 +280,12 @@ class AuthRepositoryImpl implements AuthRepository {
   ///
   /// A logout, a forced logout or another sign-in during the round trip ends
   /// this attempt's session, and its writes must not land after that. A stale
-  /// attempt fails with
-  /// [AuthErrorCodes.sessionTerminated], writes nothing further and clears
-  /// nothing - the session that replaced it owns what is in the store. A
-  /// write already in flight when the session ended may still land: the
-  /// token store makes a later clear win over it (by order, or by a repair if
-  /// the write outlived the store's wait bound), but the cached user blob has
-  /// no such queue.
+  /// attempt fails with [AuthErrorCodes.sessionTerminated], writes nothing
+  /// further and clears nothing - the session that replaced it owns what is in
+  /// the store. A write already in flight when the session ended may still
+  /// land: the token store makes a later clear win over it (by order, or by a
+  /// repair if the write outlived the store's wait bound), but the cached user
+  /// blob has no such queue.
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
     int generation,
@@ -342,9 +341,11 @@ class AuthRepositoryImpl implements AuthRepository {
         ),
       );
       // Each check sits directly before the write it guards, with no await
-      // between: a logout that starts after the check issues its clear after
-      // the write, and the token store applies them in that order, so the
-      // clear wins.
+      // between, so a logout that starts after a check issues its clear after
+      // that write. A single check before both writes would let a logout land
+      // between them. This relies on the `ITokenStore` applying writes and
+      // clears in the order they were issued: `SecureTokenStore` queues them
+      // and repairs a late write; on web the plugin alone would not.
       if (!sessionGeneration.isCurrent(generation)) return stale;
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {

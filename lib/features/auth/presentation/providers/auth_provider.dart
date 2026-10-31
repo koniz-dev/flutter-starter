@@ -158,9 +158,9 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// Logs out the current user.
   ///
   /// The session is dropped on **both** paths: `AuthRepository.logout()`
-  /// tears the local session down unconditionally, so a failure means the
-  /// server was not told, not that the user is still signed in. The failure
-  /// message is still surfaced.
+  /// tears the local session down unconditionally, so a failure (the server
+  /// was not told, or a local step failed) does not keep the user signed in.
+  /// The failure message is still surfaced.
   @override
   Future<void> logout() async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
