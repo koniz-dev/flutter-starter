@@ -1,0 +1,41 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_helper_cleanup_test.dart
+00:00 +0: the helper test is gone after a run whose tests passes
+00:00 +0 -1: the helper test is gone after a run whose tests passes [E]
+  Expected: false
+    Actual: <true>
+  exit 0: [0;34mRunning tests with coverage...[0m
+  
+  [0;32m✓ Tests completed[0m
+  
+  [1;33mCalculating coverage...[0m
+  [0;34mCoverage Statistics:[0m
+    Total lines: 1
+    Covered lines: 1
+    Coverage: 100.00%
+  
+  [0;32m✓ Coverage 100.00% meets minimum threshold of 0%[0m
+  
+  [0;32mCoverage report complete![0m
+  
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/coverage_helper_cleanup_test.dart 64:7  main.<fn>
+  
+00:00 +0 -1: the helper test is gone after a run whose tests fails
+00:01 +0 -2: the helper test is gone after a run whose tests fails [E]
+  Expected: false
+    Actual: <true>
+  exit 1: [0;34mRunning tests with coverage...[0m
+  
+  
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/coverage_helper_cleanup_test.dart 64:7  main.<fn>
+  
+00:01 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_helper_cleanup_test.dart: the helper test is gone after a run whose tests fails
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/coverage_helper_cleanup_test.dart: the helper test is gone after a run whose tests passes
