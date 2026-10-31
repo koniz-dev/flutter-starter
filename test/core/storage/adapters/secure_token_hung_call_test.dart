@@ -5,7 +5,6 @@
 import 'dart:async';
 
 import 'package:flutter_starter/core/constants/app_constants.dart';
-import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,8 +13,8 @@ import 'package:mocktail/mocktail.dart';
 class _MockSecureStorage extends Mock implements SecureStorageService {}
 
 void main() {
-  test('a write that never completes fails after the bound, and the reads '
-      'and the clear behind it still run', () async {
+  test('a write that never completes stops holding the read and the clear '
+      'behind it after the bound', () async {
     final values = <String, String>{AppConstants.tokenKey: 'old'};
     final storage = _MockSecureStorage();
     when(
@@ -33,12 +32,12 @@ void main() {
       operationTimeout: const Duration(milliseconds: 100),
     );
 
-    final write = store.setAccessToken('new');
+    // The hung write stays hung for its own caller only.
+    unawaited(store.setAccessToken('new'));
     final read = store.getAccessToken();
     final clear = store.clearAllTokens();
 
-    await expectLater(write, throwsA(isA<CacheException>()));
-    expect(await read, 'old', reason: 'the read ran once the write gave up');
+    expect(await read, 'old', reason: 'the read ran after the bound');
     await clear;
     expect(values, isEmpty, reason: 'the logout clear ran');
   });

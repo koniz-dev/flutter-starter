@@ -30,14 +30,14 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// different `SecureStorageService` objects still do not share a queue, so the
 /// app builds one service (`secureStorageServiceProvider`).
 ///
-/// Each operation is bounded by [operationTimeout] (10 seconds by default).
+/// The wait is bounded by [operationTimeout] (10 seconds by default).
 /// Without the bound, one platform call that never completed held every later
 /// token operation behind it - the token read on each request and a logout's
-/// clear included - until the app was restarted. Past the bound the
-/// operation fails with [CacheException] and the queue moves on. The
-/// residual: the abandoned platform call may still land later, out of order;
-/// that needs a call to hang for the whole bound and then complete, where
-/// before any hang wedged the app.
+/// clear included - until the app was restarted. Now an operation queued
+/// behind one that has not settled within the bound runs anyway; the hung
+/// call stays hung only for its own caller. The residual: if that call later
+/// completes, it lands out of order - which needs a call to hang for the whole
+/// bound and then succeed, where before any hang wedged the app.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   SecureTokenStore(
@@ -47,8 +47,8 @@ class SecureTokenStore implements ITokenStore {
 
   final SecureStorageService _secureStorageService;
 
-  /// How long one read, write or delete may take before it fails with
-  /// [CacheException] and the operations queued behind it run.
+  /// How long an operation waits for the one queued ahead of it before it
+  /// runs anyway.
   final Duration operationTimeout;
 
   /// The operation queue of each backing service, shared by every store over
@@ -70,13 +70,14 @@ class SecureTokenStore implements ITokenStore {
     queue.tail = done.future;
     Future<T> run() async {
       try {
-        if (previous != null) await previous;
-        return await operation().timeout(
-          operationTimeout,
-          onTimeout: () => throw CacheException(
-            'Secure storage did not answer within $operationTimeout',
-          ),
-        );
+        // Bounded: a predecessor that never settles - a hung platform call -
+        // stops holding this operation after [operationTimeout]. The bound is
+        // on the wait, not on the platform call, so an operation with nothing
+        // queued ahead of it starts no timer.
+        if (previous != null) {
+          await previous.timeout(operationTimeout, onTimeout: () {});
+        }
+        return await operation();
       } finally {
         done.complete();
         if (identical(queue.tail, done.future)) queue.tail = null;
