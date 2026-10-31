@@ -351,6 +351,30 @@ The project provides an abstract interface `IRealtimeClient` for handling persis
 - `NoOpRealtimeClient`: A mocked dummy client injected by default to prevent connection errors where real-time is not needed.
 - `RawWebSocketClientImpl`: Concrete class powered by the `web_socket_channel` package. Its handshake follows the same pinning policy as `ApiClient`: when pinning is in effect it connects through the pinned `HttpClient` from `SslPinning.createHttpClient()`, so a `wss://` server whose certificate the fingerprints do not name is refused. Pass `sslPinning:` to use a different policy. Its log lines and every error `connect` throws name the URL redacted - userinfo and query values whose key names a secret replaced - so a realtime token does not reach a crash report. In a staging or production release, `connect` refuses any URL that is not `wss://` (a `WebSocketChannelException`, nothing opened), as `main()` refuses a non-`https` `BASE_URL`; development, debug and profile builds still accept `ws://`. The same release refuses a handshake redirect that leaves TLS (a `wss://` server answering `302 -> http://...`), which dart:io would otherwise follow into cleartext; a redirect to another `https` URL is followed, pinned as the first hop is.
 
+### Client certificates (mutual TLS)
+
+The starter presents no client certificate of its own. Where one would come
+from depends on pinning and on the build:
+
+- **Pinning in effect:** both `ApiClient` and the realtime handshake build
+  their TLS context fresh, with an empty trust store so every certificate goes
+  through the fingerprint check (`SslPinning`). That context holds no client
+  certificate, so none is presented. Mutual TLS together with pinning means
+  adding your chain and key to those contexts in `SslPinning`.
+- **Pinning off:** both transports use `SecurityContext.defaultContext`. Load
+  the client certificate there at startup
+  (`SecurityContext.defaultContext.useCertificateChainBytes(...)` and
+  `usePrivateKeyBytes(...)`), and both present it.
+- **A context installed through `HttpOverrides`** reaches `ApiClient`, but
+  not the realtime handshake in a staging or production release. There the
+  handshake opens each TLS hop itself, with `SslPinning.secureConnect`, so
+  that it can refuse a redirect that leaves TLS. That hop uses
+  `SecurityContext.defaultContext` when pinning is off, so put the
+  certificate there rather than only in your override.
+
+<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning.secureConnect -->
+<!-- symbol: lib/core/network/realtime/raw_websocket_client.dart RawWebSocketClientImpl._transport -->
+
 ### Usage Example
 ```dart
 final realtimeClient = ref.read(realtimeClientProvider);
