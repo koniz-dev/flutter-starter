@@ -62,9 +62,13 @@ Map<String, String?> readAndroidToolchain(Directory root) {
   }
 
   // Commented-out lines are skipped: a version kept in a comment (a previous
-  // pin, a note) was read instead of the live declaration below it.
-  final wrapper = _uncommented(read(_wrapperPath), '#');
-  final settings = _uncommented(read(_settingsPath), '//');
+  // pin, a note) was read instead of the live declaration below it. A
+  // .properties comment starts with `#` or `!`; Kotlin also has `/* */`.
+  final wrapper = _uncommented(read(_wrapperPath), ['#', '!']);
+  final settings = _uncommented(
+    read(_settingsPath).replaceAll(RegExp(r'/\*.*?\*/', dotAll: true), ''),
+    ['//'],
+  );
   return {
     'Gradle': _gradle.firstMatch(wrapper)?.group(1),
     'Android Gradle Plugin': _agp.firstMatch(settings)?.group(1),
@@ -72,10 +76,11 @@ Map<String, String?> readAndroidToolchain(Directory root) {
   };
 }
 
-/// [text] without the lines whose first non-blank characters are [marker].
-String _uncommented(String text, String marker) => text
+/// [text] without the lines whose first non-blank characters are one of
+/// [markers].
+String _uncommented(String text, List<String> markers) => text
     .split('\n')
-    .where((line) => !line.trimLeft().startsWith(marker))
+    .where((line) => !markers.any(line.trimLeft().startsWith))
     .join('\n');
 
 /// One message per version that is unreadable or below its floor.

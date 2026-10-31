@@ -92,6 +92,7 @@ void main() {
       ..createSync(recursive: true)
       ..writeAsStringSync(
         [
+          r'! distributionUrl=https\://services.gradle.org/distributions/gradle-98.0-all.zip',
           r'# distributionUrl=https\://services.gradle.org/distributions/gradle-99.0-all.zip',
           r'distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip',
           '',
@@ -101,6 +102,10 @@ void main() {
       ..createSync(recursive: true)
       ..writeAsStringSync('''
 plugins {
+    /*
+    id("com.android.application") version "98.0.0" apply false
+    id("org.jetbrains.kotlin.android") version "98.0.0" apply false
+    */
     // id("com.android.application") version "99.0.0" apply false
     id("com.android.application") version "8.1.0" apply false
     // id("org.jetbrains.kotlin.android") version "99.0.0" apply false
