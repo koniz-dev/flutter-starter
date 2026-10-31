@@ -5,6 +5,7 @@
 // An anonymous user never logs out, so nothing ever cleared it.
 
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -169,6 +170,11 @@ void main() {
       ..[current] = '{"ok":true}'
       ..['http_cache_timestamp_$current'] = '2026-10-30T00:00:00.000Z';
     await storage.setStringList('http_cache_index', [legacy, current]);
+    // Cached under the current key rule, so the rule-change purge keeps it.
+    await storage.setInt(
+      'cache_rule_version',
+      ApiLoggingInterceptor.sensitiveKeyRuleVersion,
+    );
 
     await interceptor.onRequest(_get('/anything'), _RequestHandler());
 
