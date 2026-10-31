@@ -205,7 +205,10 @@ summary() { # fixture-name deploy-workflow-content -> release.sh output, push de
         (cd "$repo" && git_q add -A && git_q commit -q -m "ci: deploy workflow")
     fi
     (cd "$repo" && git_q tag v1.0.0 && git_q commit -q --allow-empty -m "feat: something new")
-    (cd "$repo" && printf 'n' | PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch 2>&1)
+    # release.sh commits and tags: give it an identity, as a CI runner has none.
+    (cd "$repo" && printf 'n' | GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com \
+        GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com \
+        PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch 2>&1)
 }
 out=$(summary commented "$(printf 'on:\n  workflow_dispatch:\n  # push:\n  #   tags:\n  #     - v*')")
 if printf '%s' "$out" | grep -q "No deploy workflow runs on a tag yet" && ! printf '%s' "$out" | grep -q "automatically"; then
