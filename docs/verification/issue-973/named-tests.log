@@ -1,0 +1,11 @@
+# main 43bb3f9e9c0: flutter test -r expanded, test lines only
++0: strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
++1: strip_rerun_test.dart: (b) a re-run after a partial strip completes
++2: strip_rerun_test.dart: (c) a run from a subdirectory refuses and writes nothing
++3: strip_rerun_test.dart: All tests passed!
++0: strip_markers_test.dart: an unclosed sample marker aborts before anything is deleted
++1: strip_markers_test.dart: a sample end marker with no start aborts too
++2: strip_markers_test.dart: a line marker drops only its line, and only for a stripped tag
++3: strip_markers_test.dart: --remove-bricks deletes bricks/ and mason.yaml, and the prose linking to them
++4: strip_markers_test.dart: --remove-bricks without the flag, bricks and their prose stay
++5: strip_markers_test.dart: All tests passed!

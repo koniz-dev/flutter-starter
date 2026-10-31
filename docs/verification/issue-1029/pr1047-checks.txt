@@ -1,0 +1,8 @@
+PR #1047 head c6989b699aa1d3ce6a7a300f15f8a43f895e7f54 merged as 2cb5e7d74e55a855f691535d1589c35de7103995
+Docs check: pass
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass

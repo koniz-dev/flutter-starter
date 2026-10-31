@@ -1,0 +1,4 @@
+# api_logging_error_object_test against origin/main's api_logging_interceptor.dart
++0 -1: a failed request reaches neither the log nor the reporter with its query secrets or userinfo [E]
+  Expected: not contains 'SECRET1'
++0 -1: Some tests failed.

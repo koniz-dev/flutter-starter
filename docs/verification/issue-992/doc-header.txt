@@ -1,0 +1,9 @@
+# main 43bb3f9e9c0: scripts/ci/ssl_pinning_defines.sh header
+# The fingerprints are read the way AppConfig.apiSslFingerprints reads them -
+# split on commas, each entry trimmed at its ends only, colons removed, empty
+# entries skipped - so a value like " " or "," counts as empty here too, as it
+# does in the app. Each remaining entry must then be exactly 64 hex digits (a
+# SHA-256): space-separated hex or an embedded line break leaves an entry the
+# app can never match, and a mistyped fingerprint would build and then refuse
+# every connection, so it is refused in any environment. Any other environment
+# passes through whatever is set. Works on bash 3.2.

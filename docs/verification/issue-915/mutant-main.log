@@ -1,0 +1,5 @@
+# lazy_loader_sync_throw_test against origin/main's lazy_loader.dart
++0 -1: LazyLoader calls the loader again after it threw synchronously [E]
++0 -2: LazyInitializer calls the initializer again after it threw synchronously [E]
++0 -3: DeferredImportLoader calls the load function again after it threw synchronously [E]
++0 -3: Some tests failed.

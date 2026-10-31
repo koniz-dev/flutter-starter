@@ -1,0 +1,8 @@
+# main 43bb3f9e9c0: flutter test -r expanded, test lines only
++0: release_builds_pass_pinning_test.dart: the scan finds the release builds it should
++1: release_builds_pass_pinning_test.dart: every mobile release build carries the pinning defines
++2: release_builds_pass_pinning_test.dart: every file with such a build calls the pinning guard
++3: release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint, trimmed or colon-separated, is accepted
++4: release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a space-separated fingerprint is refused
++5: release_builds_pass_pinning_test.dart: ssl_pinning_defines.sh validates what the app parses a fingerprint with a line break inside is refused
++6: release_builds_pass_pinning_test.dart: All tests passed!

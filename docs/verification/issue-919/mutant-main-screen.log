@@ -1,0 +1,6 @@
+# feature_flags_debug_screen_failure_test with main's debug screen and providers (the manager keeps its new Result signature so the test compiles)
++0 -1: a failed override write shows the error, not success [E]
++0 -2: a failed clear of one override shows the error [E]
++0 -3: a failed clear of all overrides shows the error [E]
++0 -4: a repository that cannot list the flags shows the error and its retry, not an empty list [E]
++0 -4: Some tests failed.

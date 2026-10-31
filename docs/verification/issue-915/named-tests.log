@@ -1,0 +1,5 @@
+# main 43bb3f9e9c0: flutter test -r expanded, test lines only
++0: lazy_loader_sync_throw_test.dart: LazyLoader calls the loader again after it threw synchronously
++1: lazy_loader_sync_throw_test.dart: LazyInitializer calls the initializer again after it threw synchronously
++2: lazy_loader_sync_throw_test.dart: DeferredImportLoader calls the load function again after it threw synchronously
++3: lazy_loader_sync_throw_test.dart: All tests passed!

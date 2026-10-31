@@ -1,0 +1,5 @@
+# disposal_tracker_throw_test against origin/main's memory_helper.dart
+Expected: ['first', 'third']
+  Actual: ['first']
++0 -1: a throwing disposable does not stop the others or super.dispose() [E]
++0 -1: Some tests failed.

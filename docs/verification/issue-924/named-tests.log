@@ -1,0 +1,4 @@
+# main 43bb3f9e9c0: flutter test -r expanded, test lines only
++0: throttler_monotonic_test.dart: calls are spaced by elapsed monotonic time, whatever the wall clock does
++1: throttler_monotonic_test.dart: the default source is a running stopwatch
++2: throttler_monotonic_test.dart: All tests passed!

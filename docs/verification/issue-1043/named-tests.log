@@ -1,0 +1,12 @@
+# main 43bb3f9e9c0: flutter test -r expanded, test lines only
++0: fastlane_ssl_pinning_rb_test.dart: staging and production without fingerprints are refused
++1: fastlane_ssl_pinning_rb_test.dart: valid fingerprints pass through as a define
++2: fastlane_ssl_pinning_rb_test.dart: a fingerprint that is not 64 hex digits is refused anywhere
++3: fastlane_ssl_pinning_rb_test.dart: a space-separated fingerprint is refused, as the app could never match it
++4: fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
++5: fastlane_ssl_pinning_rb_test.dart: an entry is trimmed at its ends, as the app trims it
++6: fastlane_ssl_pinning_rb_test.dart: the opt-out values the app reads as false build without fingerprints
++7: fastlane_ssl_pinning_rb_test.dart: a value that is not an opt-out is still refused
++8: fastlane_ssl_pinning_rb_test.dart: an unrecognised flag is refused even with fingerprints
++9: fastlane_ssl_pinning_rb_test.dart: development passes through with nothing set
++10: fastlane_ssl_pinning_rb_test.dart: All tests passed!

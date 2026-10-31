@@ -1,0 +1,7 @@
+PR #1045 head 9f46f5a4e3680c56c2d3c3274877f398c3e0557a merged as 64479510035e39c9d2c261ff7030a982934a1737
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass

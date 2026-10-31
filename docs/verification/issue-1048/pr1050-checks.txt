@@ -1,0 +1,8 @@
+PR #1050 head 07c6fb4e34606ce1c68c161e6556cf5338f2497a merged as 924e5b021360837a3fc3d407733bc89d5c8bcf76
+Docs check: pass
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass
