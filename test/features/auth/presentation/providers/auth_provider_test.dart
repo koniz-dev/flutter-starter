@@ -107,6 +107,50 @@ void main() {
         expect(container.read(authProvider).isLoading, isFalse);
       });
 
+      for (final (label, answer) in <(String, Result<User>)>[
+        ('a successful', const Success(User(id: 'a', email: 'a@b.c'))),
+        ('a failed', const ResultFailure(UnknownFailure('no'))),
+      ]) {
+        test('$label login no longer counts as in flight', () async {
+          when(
+            () => mockLoginUseCase(any(), any()),
+          ).thenAnswer((_) async => answer);
+          final notifier = container.read(authProvider.notifier);
+          await notifier.login('a@b.c', 'pw');
+          notifier.clearSession();
+
+          expect(container.read(authProvider).isLoading, isFalse);
+        });
+
+        test('$label register no longer counts as in flight', () async {
+          when(
+            () => mockRegisterUseCase(any(), any(), any()),
+          ).thenAnswer((_) async => answer);
+          final notifier = container.read(authProvider.notifier);
+          await notifier.register('a@b.c', 'pw', 'A');
+          notifier.clearSession();
+
+          expect(container.read(authProvider).isLoading, isFalse);
+        });
+      }
+
+      test('a register in flight keeps its spinner too, and a throwing one '
+          'stops counting', () async {
+        final reply = Completer<Result<User>>();
+        when(
+          () => mockRegisterUseCase(any(), any(), any()),
+        ).thenAnswer((_) => reply.future);
+        final notifier = container.read(authProvider.notifier);
+        final signUp = notifier.register('a@b.c', 'pw', 'A');
+        notifier.clearSession();
+        expect(container.read(authProvider).isLoading, isTrue);
+        reply.completeError(StateError('boom'));
+        await signUp;
+
+        notifier.clearSession();
+        expect(container.read(authProvider).isLoading, isFalse);
+      });
+
       test(
         'a failed or throwing sign-in no longer counts as in flight',
         () async {
