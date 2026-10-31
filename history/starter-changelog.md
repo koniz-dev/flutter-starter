@@ -179,6 +179,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of the console.
 - `.gitignore` ignores `.env` and every `.env.*` except `.env.example`
   (`.env.dev`, `.env.prod`, `.env.test` used to be committable).
+- A sign-in cut off by a logout (its session ended before its tokens were
+  stored) asks the server to revoke its refresh token, best effort, and only
+  when no other session could be carried on the request.
 
 ### Fixed
 
@@ -331,6 +334,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   web-only library, so one such library no longer fails the coverage run.
 - Docs checks: a quoted `--dart-define="KEY=..."` is read, and the Android
   toolchain check ignores commented-out versions.
+- **A sign-in waits for any logout still tearing down** - a user's logout
+  (`AuthRepositoryImpl.logout`) or `AuthInterceptor`'s forced logout - so the
+  teardown can no longer delete the credentials of the sign-in that followed
+  it. `SessionGeneration` gains `trackTeardown` and `teardownsSettled`; the
+  wait is bounded by `AuthRepositoryImpl.pendingLogoutLimit` (30 s), after
+  which the sign-in fails with the new `AuthErrorCodes.signOutInProgress`. A
+  sign-in also still invalidates the session synchronously, so a logout
+  called right after it ends it.
+- `SecureTokenStore`: a read of a token key left stale after a failed repair,
+  whose newer state is a delete, retries that delete (bounded, one retry per
+  key at a time, never a write), so a signed-out app does not leave the late
+  token for the next launch. The repair warning names every way a stale key
+  is re-applied.
+- Docs tooling: the test-path, `.env`-run, `--dart-define`, link/anchor,
+  symbol and signature checks share one fence tracker (`tool/doc_fences.dart`):
+  a fence closes only on its own character at least as long, so a ``` line
+  inside a `~~~` or four-backtick block no longer flips them; a continued
+  line never joins across a fence; a quoted or escaped `--dart-define` key is
+  read; `/* */` and `!` comments are ignored by the Android toolchain check;
+  string interpolations no longer hide declarations from `doc_symbols`.
 
 ### Documentation
 
@@ -381,6 +404,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `core.hooksPath`, every `scripts/test/` script and what each `pre_gen`
   checks.
 - The coverage guides describe the job summary, not a PR comment.
+- `docs/api/core/network.md`: where a mutual-TLS client certificate has to go
+  for `ApiClient` and the release realtime handshake (pinning on, off, and
+  through `HttpOverrides`).
+- `docs/guides/security/implementation.md`: the Log Sanitization, Android
+  Release Signing and R8 / ProGuard sections render again on GitHub (a nested
+  fence had turned them into code).
 
 
 ## [2.0.0] - 2026-10-29
