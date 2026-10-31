@@ -990,7 +990,12 @@ authorization code or an Azure Functions key, and is redacted - in logged
 paths and URLs, the logged `queryParameters`, and the cache bypass
 (`ApiLoggingInterceptor.isSensitiveQueryKey`). In a body it is the error or
 status code of most APIs (`{"code": 404}`) and stays readable, since redacting
-it would blind every error log.
+it would blind every error log. Only a top-level query key counts: a nested
+query map (`{'filter': {'code': 'x'}}`, sent as `filter[code]=x`) is judged
+by the ordinary rule, so its `code` is not redacted. The other exact keys
+(`access`, `refresh` and the rest) apply everywhere - headers and bodies
+included - so a response header `Refresh` or a body flag `refresh: true` is
+redacted too.
 
 **Headers** additionally carry an explicit roster - `authorization`,
 `proxy-authorization`, `cookie`, `set-cookie`, `x-api-key`, `api-key`,
