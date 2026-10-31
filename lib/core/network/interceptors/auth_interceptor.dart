@@ -775,7 +775,8 @@ class AuthInterceptor extends Interceptor {
   ///
   /// Clears the tokens, the cached user blob and the HTTP response cache, so
   /// this forced logout leaves exactly the state `AuthRepository.logout()`
-  /// leaves.
+  /// leaves: a leftover blob would read as a session with no token, and
+  /// leftover cached bodies would outlive the session.
   ///
   /// The last step tells the **running app**, which renders the in-memory
   /// session, *after* storage is emptied, so any listener reacting to the
