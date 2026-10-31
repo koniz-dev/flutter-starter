@@ -44,7 +44,7 @@ final class AuthNotifierProvider
   }
 }
 
-String _$authNotifierHash() => r'c5f934f5a621fdc252c442fdd188f6df2ee3cff0';
+String _$authNotifierHash() => r'55437892a0ffaa30a42a8f97cfc6d6a0e30451be';
 
 /// Authentication provider (Riverpod 3.0 - using Notifier)
 
