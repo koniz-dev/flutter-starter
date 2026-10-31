@@ -1,0 +1,8 @@
+# main 99d457ad4f6: docs/guides/configuration.md
+56-nothing; set the fingerprints, or `ENABLE_SSL_PINNING=false` to opt out.
+57:It also refuses a `BASE_URL` that is not `https`: web, Windows, Linux and macOS
+58-do not block cleartext the way Android and iOS do, and tokens would travel
+59-unencrypted. A relative `BASE_URL` such as `/api` is refused too, since the
+60-page, not the app, would then decide the scheme.
+61-`ENABLE_SSL_PINNING` accepts `true`, `1`, `yes`, `on` and `false`, `0`,
+530:> **Android emulator:** `localhost` there is the emulator itself, not your machine. A backend running on your machine is reached at `http://10.0.2.2:<port>` (for example `BASE_URL=http://10.0.2.2:3000`). The iOS Simulator, desktop and web builds use `localhost` as shown. An `http` URL like these is for development and debug builds only: a staging or production release refuses to start on it.

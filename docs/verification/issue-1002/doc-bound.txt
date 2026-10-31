@@ -1,0 +1,10 @@
+# main 99d457ad4f6: SecureTokenStore class doc, the bound
+33:/// The wait is bounded by [operationTimeout] (10 seconds by default).
+34-/// Without the bound, one platform call that never completed held every later
+35-/// token operation behind it - the token read on each request and a logout's
+36-/// clear included - until the app was restarted. Now an operation queued
+37-/// behind one that has not settled within the bound runs anyway; the hung
+38-/// call stays hung only for its own caller. The residual: if that call later
+39-/// completes, it lands out of order - which needs a call to hang for the whole
+40-/// bound and then succeed, where before any hang wedged the app.
+41-class SecureTokenStore implements ITokenStore {

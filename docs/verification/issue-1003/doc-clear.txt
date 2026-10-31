@@ -1,0 +1,16 @@
+# main 99d457ad4f6: SecureStorageService.clear() doc
+168-      await _storage.delete(key: key);
+169-      return true;
+170-    } on Exception {
+171-      return false;
+172-    }
+173-  }
+174-
+175-  /// Deletes every key, outside `SecureTokenStore`'s operation queue.
+176-  ///
+177-  /// Do not end a session with this: on web the delete lands at once while a
+178-  /// token write already in flight lands after it, re-storing a token on a
+179-  /// signed-out device. Sign out through `ITokenStore.clearAllTokens`, which
+180-  /// waits for pending token writes.
+181-  @override
+182:  Future<bool> clear() async {

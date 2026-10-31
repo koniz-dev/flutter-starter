@@ -1,0 +1,5 @@
+# main 99d457ad4f6: grep -n -i logout docs/api/features/auth/models.md
+156:| Logout | `POST /auth/logout` | `refresh_token` (the stored one, so the server can revoke it; no body when none is stored) | ignored |
+157-
+158-The `user` object is `id`, `email`, and the optional `name` and `avatar_url`.
+159-`refresh_token` is optional in a response. When it is missing, no refresh token
