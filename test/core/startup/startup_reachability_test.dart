@@ -554,6 +554,39 @@ void main() {
       });
     }
 
+    testWidgets('the http BASE_URL refusal shows the URL without its '
+        'userinfo', (tester) async {
+      // Cutting the shown value to 32 characters kept `admin:s3cr3t`, which
+      // sits at the front of the URL.
+      installSecureBackend(<String, String>{});
+      installEnvAsset(
+        'ENVIRONMENT=staging\nBASE_URL=http://admin:s3cr3t@api.example.com\n'
+        'API_SSL_FINGERPRINTS=${'a' * 64}\n',
+      );
+      final reporter = _RecordingReporter();
+
+      await bootRealMain(
+        tester,
+        entry: () => app.bootstrap(
+          releaseMode: true,
+          createContainer: () => app.createAppContainer(
+            overrides: [errorReporterProvider.overrideWithValue(reporter)],
+          ),
+        ),
+      );
+
+      expect(find.textContaining('is not https'), findsOneWidget);
+      expect(find.textContaining('api.example'), findsOneWidget);
+      expect(find.textContaining('admin'), findsNothing);
+      expect(find.textContaining('s3cr3t'), findsNothing);
+      final reported = reporter.reports
+          .map((r) => '${r.message} ${r.error}')
+          .join('\n');
+      expect(reported, isNot(contains('admin')));
+      expect(reported, isNot(contains('s3cr3t')));
+      expect(reported, contains('api.example'));
+    });
+
     testWidgets('a debug build with an http BASE_URL starts', (tester) async {
       installSecureBackend(<String, String>{});
       installEnvAsset(
