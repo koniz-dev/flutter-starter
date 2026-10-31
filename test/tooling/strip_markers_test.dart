@@ -12,7 +12,14 @@ void main() {
   final tool = File('tool/strip_sample_features.dart').absolute.path;
   late Directory fixture;
 
-  setUp(() => fixture = Directory.systemTemp.createTempSync('strip_markers_'));
+  setUp(() {
+    fixture = Directory.systemTemp.createTempSync('strip_markers_');
+    // The tool refuses to run anywhere but a project root.
+    File('${fixture.path}/pubspec.yaml').writeAsStringSync('name: fixture\n');
+    File('${fixture.path}/tool/strip_sample_features.dart')
+      ..createSync(recursive: true)
+      ..writeAsStringSync('// placeholder\n');
+  });
   tearDown(() => fixture.deleteSync(recursive: true));
 
   File doc(String body) => File('${fixture.path}/docs/a.md')
