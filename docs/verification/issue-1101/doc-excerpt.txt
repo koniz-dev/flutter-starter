@@ -1,0 +1,13 @@
+== main 9de6ee6adb9
+171-with `AuthErrorCodes.signOutInProgress` and stores nothing.
+172-
+173-A sign-in whose session ends before it stores its tokens - a logout during
+174:its round trip - fails with `AuthErrorCodes.sessionTerminated` and discards
+175-them. They are not revoked on the server; that session expires on its own.
+176-
+177-The clearing steps themselves are not bounded. A step that never completes - a
+178-storage implementation that hangs - keeps every later sign-in failing that way
+179-until the app restarts. Bounding them is not safe without more machinery: a
+180-step abandoned by a timeout keeps running, and landing after the next sign-in
+--- references to the removed members in lib/ test/ docs/ tool/
+(none)

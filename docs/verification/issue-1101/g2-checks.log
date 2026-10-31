@@ -1,0 +1,9 @@
+== main 9de6ee6adb96b13d85c1f74f3fe3026bc3a6f8dd
+== check_epic_coverage
+Epic coverage OK: every tracked surface maps to one epic.
+== check_deliverable HEAD
+Deliverable: HEAD carries nothing that only serves the upstream process.
+== exit codes
+audit=0
+epic=0
+deliverable=0

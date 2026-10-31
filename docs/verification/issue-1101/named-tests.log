@@ -1,0 +1,11 @@
+== main 9de6ee6adb9: flutter test --reporter expanded test/features/auth/data/repositories/sign_in_session_guard_test.dart
++0: a logout during the login round trip leaves nothing stored
++1: a logout during the register round trip leaves nothing stored
++2: of two overlapping logins, the second one stays signed in
++3: a sign-in cut off by a logout stores nothing and revokes nothing
++4: a sign-in during a pending logout keeps its credentials
++5: a sign-in waits for every pending logout, not only the latest
++6: a logout called right after a login ends that login
++7: a sign-in gives up after the bound when a logout never finishes
++8: a sign-in started by a session listener during a logout waits for its teardown
++9: All tests passed!

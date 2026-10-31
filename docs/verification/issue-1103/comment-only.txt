@@ -1,0 +1,2 @@
+== #1108 squash 9de6ee6adb9 against its parent
+lib/core/network/interceptors/auth_interceptor.dart: non-comment changed lines: 0; comment lines 387 -> 357

@@ -1,0 +1,5 @@
+== lib/features/auth/data/repositories/auth_repository_impl.dart before #1105 (bf8e637e53b^, the revoke present); test from main
+00:00 +0 -1: a sign-in cut off by a logout stores nothing and revokes nothing [E]
+  Expected: [null]
+    Actual: [null, 'a-refresh']
+00:00 +0 -1: Some tests failed.

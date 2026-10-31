@@ -1,0 +1,4 @@
+== #1107 squash d80efdaf373 against its parent
+lib/features/auth/data/repositories/auth_repository_impl.dart: non-comment changed lines: 0; comment lines 209 -> 156
+lib/features/auth/presentation/providers/auth_provider.dart: non-comment changed lines: 0; comment lines 160 -> 148
+lib/core/session/session_generation.dart: non-comment changed lines: 0; comment lines 95 -> 77
