@@ -182,6 +182,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A sign-in cut off by a logout (its session ended before its tokens were
   stored) asks the server to revoke its refresh token, best effort, and only
   when no other session could be carried on the request.
+- `AppConfig.printConfig()` (debug builds) prints `BASE_URL` through
+  `ApiLoggingInterceptor.redactUrl`, so userinfo and secret query values no
+  longer reach the debug console.
 
 ### Fixed
 
