@@ -4,15 +4,14 @@
 // overlapping logins the slower one won. Each write is now checked against
 // the session the call started.
 //
-// A sign-in cut off that way discarded tokens the server had issued, and
-// nothing revoked them; it now asks the server to. And a sign-in completed
-// while a logout's server call was still pending had its fresh credentials
-// deleted by that logout's teardown; it now waits for the teardown.
+// A sign-in cut off that way discards its tokens, which expire on the
+// server. And a sign-in completed while a logout's server call was still
+// pending had its fresh credentials deleted by that logout's teardown; it now
+// waits for the teardown.
 
 import 'dart:async';
 
 import 'package:flutter_starter/core/errors/failures.dart';
-import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -70,7 +69,7 @@ class _Remote implements AuthRemoteDataSource {
       throw UnimplementedError();
 }
 
-/// Lets fire-and-forget work (the revoke) run.
+/// Lets queued microtasks and zero-delay timers run.
 Future<void> _settle() async {
   for (var i = 0; i < 20; i++) {
     await Future<void>.delayed(Duration.zero);
@@ -145,7 +144,7 @@ void main() {
   });
 
   test(
-    'a sign-in cut off by a logout asks the server to revoke its token',
+    'a sign-in cut off by a logout stores nothing and revokes nothing',
     () async {
       final signIn = repository.login('a@b.c', 'pw');
       await Future<void>.delayed(Duration.zero);
@@ -155,60 +154,10 @@ void main() {
       expectStale(await signIn);
       await _settle();
 
-      // The logout revoked what was stored then (nothing); the discarded
-      // sign-in revokes its own refresh token.
-      expect(remote.logouts, [null, 'a-refresh']);
+      // Only the logout's own request: the discarded tokens expire on the
+      // server.
+      expect(remote.logouts, [null]);
       expect(tokens.accessToken, isNull);
-    },
-  );
-
-  test('a sign-in that is not cut off revokes nothing', () async {
-    final signIn = repository.login('a@b.c', 'pw');
-    await Future<void>.delayed(Duration.zero);
-    remote.replies.single.complete(_pair('a'));
-
-    expect(await signIn, isA<Success<Object?>>());
-    await _settle();
-    expect(remote.logouts, isEmpty);
-  });
-
-  test(
-    'a sign-in replaced by another one does not revoke as the winner',
-    () async {
-      final first = repository.login('first@b.c', 'pw');
-      await Future<void>.delayed(Duration.zero);
-      final second = repository.login('second@b.c', 'pw');
-      await Future<void>.delayed(Duration.zero);
-      remote.replies[1].complete(_pair('second'));
-      await second;
-      remote.replies[0].complete(_pair('first'));
-
-      expectStale(await first);
-      await _settle();
-      // The store holds the second session, whose access token the revoke
-      // would carry: it is not sent.
-      expect(remote.logouts, isEmpty);
-      expect(tokens.accessToken, 'second-access');
-    },
-  );
-
-  test(
-    'a sign-in replaced before the newer one stores does not revoke either',
-    () async {
-      final first = repository.login('first@b.c', 'pw');
-      await _settle();
-      final second = repository.login('second@b.c', 'pw');
-      await _settle();
-      // Both answer in the same tick, the first one first: when it finds
-      // itself stale, the store is still empty, but a later sign-in has
-      // started, and the revoke would go out with its token.
-      remote.replies[0].complete(_pair('first'));
-      remote.replies[1].complete(_pair('second'));
-
-      expectStale(await first);
-      expect(await second, isA<Success<Object?>>());
-      await _settle();
-      expect(remote.logouts, isEmpty);
     },
   );
 
@@ -276,54 +225,6 @@ void main() {
     expectStale(await signIn);
     expect(remote.replies, isEmpty, reason: 'it never reached the server');
     expect(tokens.accessToken, isNull);
-  });
-
-  test('a revoke waits for a logout still tearing down', () async {
-    tokens
-      ..accessToken = 'old-access'
-      ..refreshToken = 'old-refresh';
-    remote.holdLogouts = true;
-    final signIn = repository.login('a@b.c', 'pw');
-    await _settle();
-    final logout = repository.logout();
-    await _settle();
-    // The sign-in's reply arrives while the logout's server call is held:
-    // the old session's token is still stored.
-    remote.replies.single.complete(_pair('a'));
-    expectStale(await signIn);
-    await _settle();
-    expect(remote.logouts, ['old-refresh'], reason: 'not sent yet');
-
-    remote.holds.single.complete();
-    await logout;
-    await _settle();
-
-    expect(remote.logouts, ['old-refresh', 'a-refresh']);
-  });
-
-  test('no revoke goes out while a session still holds the store', () async {
-    // The interceptor's forced logout ends the session through the shared
-    // generation, and clears the store only afterwards.
-    final generation = SessionGeneration();
-    final shared = AuthRepositoryImpl(
-      remoteDataSource: remote,
-      localDataSource: AuthLocalDataSourceImpl(
-        storageService: storage,
-        tokenStore: tokens,
-      ),
-      sessionGeneration: generation,
-    );
-    final signIn = shared.login('a@b.c', 'pw');
-    await _settle();
-    tokens
-      ..accessToken = 'other-access'
-      ..refreshToken = 'other-refresh';
-    generation.invalidate();
-    remote.replies.single.complete(_pair('a'));
-
-    expectStale(await signIn);
-    await _settle();
-    expect(remote.logouts, isEmpty, reason: 'it would carry other-access');
   });
 
   test(

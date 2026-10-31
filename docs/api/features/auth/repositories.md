@@ -170,6 +170,10 @@ calls the server, so the clearing cannot delete the new session. The wait is
 bounded by `pendingLogoutLimit` (30 s by default); past it, the sign-in fails
 with `AuthErrorCodes.signOutInProgress` and stores nothing.
 
+A sign-in whose session ends before it stores its tokens - a logout during
+its round trip - fails with `AuthErrorCodes.sessionTerminated` and discards
+them. They are not revoked on the server; that session expires on its own.
+
 The clearing steps themselves are not bounded. A step that never completes - a
 storage implementation that hangs - keeps every later sign-in failing that way
 until the app restarts. Bounding them is not safe without more machinery: a
