@@ -17,6 +17,8 @@
 
 import 'dart:io';
 
+import 'doc_fences.dart';
+
 /// One documented `flutter test` path that does not exist.
 class MissingTestPath {
   /// Creates a problem record.
@@ -36,7 +38,6 @@ class MissingTestPath {
       '$file:$line: `flutter test $path` names no file or directory';
 }
 
-final RegExp _fence = RegExp(r'^\s*(`{3,}|~{3,})');
 final RegExp _flutterTest = RegExp(r'\bflutter\s+test\b(.*)');
 final RegExp _commandEnd = RegExp(r'&&|\|\||\||;|\s#');
 
@@ -100,14 +101,10 @@ List<MissingTestPath> findMissingTestPaths(
 }) {
   final problems = <MissingTestPath>[];
   final lines = source.split('\n');
-  var inFence = false;
+  final fences = FenceTracker();
 
   for (var i = 0; i < lines.length; i++) {
-    if (_fence.hasMatch(lines[i])) {
-      inFence = !inFence;
-      continue;
-    }
-    if (!inFence) continue;
+    if (fences.isFence(lines[i]) || !fences.inFence) continue;
 
     // Join a backslash-continued command onto one line.
     final start = i;
@@ -116,7 +113,7 @@ List<MissingTestPath> findMissingTestPaths(
     // say) swallowed its closing fence, and every fence after it flipped.
     while (line.trimRight().endsWith(r'\') &&
         i + 1 < lines.length &&
-        !_fence.hasMatch(lines[i + 1])) {
+        !fenceLike.hasMatch(lines[i + 1])) {
       final trimmed = line.trimRight();
       line = '${trimmed.substring(0, trimmed.length - 1)} ${lines[++i]}';
     }

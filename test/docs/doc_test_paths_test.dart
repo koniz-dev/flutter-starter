@@ -18,6 +18,33 @@ void main() {
     for (final p in findMissingTestPaths(markdown, real)) p.path,
   ];
 
+  test(
+    'a fence inside a longer or other-character fence does not close it',
+    () {
+      // CommonMark: a ``` line inside a ~~~ or ```` block is content, so the
+      // commands below are inside a fence and are checked.
+      const source =
+          '~~~markdown\n'
+          '```bash\n'
+          'flutter test test/a_test.dart\n'
+          '```\n'
+          '~~~\n'
+          '\n'
+          '````\n'
+          '```\n'
+          'flutter test test/b_test.dart\n'
+          '```\n'
+          '````\n';
+
+      final missing = findMissingTestPaths(source, (_) => false);
+
+      expect(missing.map((m) => m.path), [
+        'test/a_test.dart',
+        'test/b_test.dart',
+      ]);
+    },
+  );
+
   test('a block ending in a backslash does not swallow its closing fence', () {
     // ASCII art whose last line ends in `\\`, then prose, then a command.
     const source =

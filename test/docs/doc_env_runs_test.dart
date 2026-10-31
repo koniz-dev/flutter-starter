@@ -59,6 +59,23 @@ void main() {
     });
 
     test(
+      'a fence inside a longer or other-character fence does not close it',
+      () {
+        const source =
+            '~~~markdown\n'
+            '```bash\n'
+            'cp .env.example .env\n'
+            '```\n'
+            'flutter run\n'
+            '~~~\n';
+
+        // Still inside the ~~~ block: the copy is followed by a run that
+        // ignores it.
+        expect(findEnvRunProblems(source).map((p) => p.line), [5]);
+      },
+    );
+
+    test(
       'a block ending in a backslash does not swallow its closing fence',
       () {
         const source =
