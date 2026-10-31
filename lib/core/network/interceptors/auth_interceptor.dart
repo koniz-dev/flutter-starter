@@ -214,12 +214,9 @@ class AuthInterceptor extends Interceptor {
         () => host.httpClientAdapter,
       );
       // And the host's logging and performance tracing, in the host's
-      // order. A successful replay is resolved from onError, which in dio
-      // ends the host chain: no interceptor there sees the replay's
-      // response, so without these the replayed response was never logged
-      // and the request's trace recorded the
-      // 401 or was never stopped. ApiLoggingInterceptor redacts the
-      // replay's fresh Authorization header like any other.
+      // order: a replay resolved from onError ends the host chain, so only
+      // these see its response. ApiLoggingInterceptor redacts the replay's
+      // fresh Authorization header like any other.
       dio.interceptors.addAll(
         host.interceptors.where(
           (i) => i is ApiLoggingInterceptor || i is PerformanceInterceptor,
@@ -478,11 +475,7 @@ class AuthInterceptor extends Interceptor {
   ) async {
     // No retry-count check: the replay goes through `retryDio()`, which has
     // no `AuthInterceptor`, so a replay answered 401 cannot re-enter this
-    // method - it surfaces from `_retryRequest` below and logs out there. The
-    // `X-Retry-Count: 1` header that used to guard this could never be seen on
-    // a replay, so the branch only ever fired for a caller that set the header
-    // itself, logging it out without trying a refresh, and the header went to
-    // the server on every replay.
+    // method - it surfaces from `_retryRequest` below and logs out there.
 
     // If refresh is already in progress, queue this request
     if (_isRefreshing) {
@@ -562,10 +555,7 @@ class AuthInterceptor extends Interceptor {
       // Its own `try`, because a failed replay is not a failed refresh. The
       // token is fresh and stored, so a transient replay failure (a 503, a
       // timeout) fails this one request and nothing else: the session stays,
-      // and the `finally` drain still replays the queued requests with the
-      // fresh token, exactly as a failed *queued* replay does. Sharing the
-      // outer catch used to log the user out and reject every queued request
-      // over a single 503.
+      // and the `finally` drain still replays the queued requests.
       //
       // A replay answered 401 is the one exception: the server refused a token
       // it just issued, so the session really is unusable.
@@ -580,9 +570,8 @@ class AuthInterceptor extends Interceptor {
         _reject(handler, _asDioException(err, e));
       }
     }
-    // Catches Error as well as Exception on purpose: a TypeError thrown while
-    // parsing a malformed refresh response used to escape, leaving
-    // _isRefreshing stuck true and every later 401 queued forever.
+    // Catches Error as well as Exception on purpose: a TypeError from a
+    // malformed refresh response must not leave _isRefreshing stuck true.
     on Object catch (e) {
       refreshedToken = null;
       await _logoutUser();
@@ -597,34 +586,20 @@ class AuthInterceptor extends Interceptor {
 
   /// Fails the request with [error] **without ending the error chain**.
   ///
-  /// In dio's error chain, a bare `handler.reject(error)` stops it outright:
-  /// every interceptor registered after this one is skipped (`dio_mixin.dart`
-  /// only runs the next error callback for a `next` or `rejectCallFollowing`
-  /// state). `reject(error, true)` requests the latter since dio 5.10, but
-  /// `next` already continues the chain on every dio 5.x and needs no flag
-  /// that a later edit could drop, so this keeps using it. `ApiClient`
-  /// registers `RetryInterceptor`, `ApiLoggingInterceptor`
-  /// and, last, `ErrorInterceptor` after this one, so a rejected 401 reached
-  /// the caller with no domain error inside. `DioNetworkClient` and
-  /// `ApiClient._send` then turned it into `NetworkException("Instance of
-  /// 'NetworkError'")`: a 401 reported as a connectivity failure, with an
-  /// unreadable message, and never logged.
-  ///
-  /// `next` hands the error on instead, so a 401 this interceptor gives up on
-  /// is logged and then mapped by `ErrorInterceptor` - which ends the chain
-  /// itself - exactly like any other failing status. Every failure exit in
-  /// this class goes through here; a bare `handler.reject(...)` would
-  /// reintroduce the bug on that one path.
+  /// In dio's error chain, a bare `handler.reject(error)` skips every
+  /// interceptor registered after this one - `RetryInterceptor`,
+  /// `ApiLoggingInterceptor` and `ErrorInterceptor` in `ApiClient` - so the
+  /// 401 would reach the caller unlogged and unmapped. `next` hands it on
+  /// (on every dio 5.x, with no flag a later edit could drop), so it is
+  /// logged and mapped like any other failing status. Every failure exit in
+  /// this class goes through here.
   ///
   /// Forwarded, but **never re-sent**. The error is marked with
   /// [RetryInterceptor.retryExtraKey] `= false` before it moves on, so
   /// `RetryInterceptor` passes it through instead of replaying it. Every exit
   /// that reaches here has already ended the request's session or given up on
   /// it, and a failed replay's options carry the bearer token minted for the
-  /// session that was just torn down: re-sending it put that token on the wire
-  /// after the forced logout and handed the caller a success.
-  /// An early `reject` once made the same guarantee by accident; this states
-  /// it on purpose.
+  /// session that was just torn down, which must not go back on the wire.
   void _reject(ErrorInterceptorHandler handler, DioException error) {
     error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
     handler.next(error);
@@ -800,17 +775,12 @@ class AuthInterceptor extends Interceptor {
   ///
   /// Clears the tokens, the cached user blob and the HTTP response cache, so
   /// this forced logout leaves exactly the state `AuthRepository.logout()`
-  /// leaves. Clearing only the tokens used to leave a user blob behind that
-  /// `isAuthenticated()` read as a live session with no token to send, and
-  /// leaving the response cache behind let bodies cached before the session
-  /// ended outlive it on the path the user does not control.
+  /// leaves.
   ///
-  /// The last step tells the **running app**. Storage is what the next launch
-  /// reads; the in-memory session is what this launch renders, and once
-  /// nothing dropped it, so the authenticated shell stayed up with no
-  /// credentials behind it. The app is told *after* storage is emptied, so any
-  /// listener reacting to the state change (the router guard, a screen
-  /// refetching) already sees a device with no session on it.
+  /// The last step tells the **running app**, which renders the in-memory
+  /// session, *after* storage is emptied, so any listener reacting to the
+  /// change (the router guard, a screen refetching) already sees a device
+  /// with no session on it.
   ///
   /// Each step is guarded separately and no step is reachable only through
   /// another: cleanup must never stop a handler from being completed, and a
@@ -856,9 +826,8 @@ class AuthInterceptor extends Interceptor {
 
     // Drop cached response bodies: they are local session state too.
     //
-    // Guarded rather than early-returned. An `if (x == null) return;` here
-    // reads harmlessly while this is the last step and silently skips every
-    // step added after it - which is exactly a bug this once had.
+    // Guarded rather than early-returned, so a step added after this one is
+    // never skipped.
     final responseCache = _responseCache;
     if (responseCache != null) {
       try {
