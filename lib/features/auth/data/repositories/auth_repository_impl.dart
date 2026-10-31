@@ -114,7 +114,6 @@ class AuthRepositoryImpl implements AuthRepository {
     // replaced, and a logout called right after this one ends this sign-in.
     sessionGeneration.invalidate();
     final generation = sessionGeneration.current;
-    final signIn = ++_signInsStarted;
     // A logout still tearing down would delete what this sign-in stores.
     if (!await _afterPendingLogouts()) {
       return const ResultFailure(_signOutInProgress);
@@ -124,16 +123,13 @@ class AuthRepositoryImpl implements AuthRepository {
     }
     try {
       final authResponse = await request();
-      return await _persistSignIn(authResponse, generation, signIn);
+      return await _persistSignIn(authResponse, generation);
     } on Exception catch (e) {
       return ResultFailure(_signInFailure(e));
     } on Object catch (_) {
       return const ResultFailure(_unreadableResponse);
     }
   }
-
-  /// How many sign-ins have started; see [_revokeDiscarded].
-  int _signInsStarted = 0;
 
   static const _signInSessionEnded = UnknownFailure(
     'Session ended while the sign-in was in flight',
@@ -334,60 +330,21 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
     int generation,
-    int signIn,
   ) async {
-    Future<Result<User>> stale() async {
-      unawaited(_revokeDiscarded(authResponse, signIn));
-      return const ResultFailure<User>(_signInSessionEnded);
-    }
-
-    if (!sessionGeneration.isCurrent(generation)) return await stale();
+    // The discarded tokens are not revoked: the server session they belong
+    // to expires on its own.
+    const stale = ResultFailure<User>(_signInSessionEnded);
+    if (!sessionGeneration.isCurrent(generation)) return stale;
     await localDataSource.cacheUser(authResponse.user);
-    if (!sessionGeneration.isCurrent(generation)) return await stale();
+    if (!sessionGeneration.isCurrent(generation)) return stale;
     await localDataSource.cacheToken(authResponse.token);
     final refreshToken = authResponse.refreshToken;
     if (refreshToken != null) {
-      if (!sessionGeneration.isCurrent(generation)) return await stale();
+      if (!sessionGeneration.isCurrent(generation)) return stale;
       await localDataSource.cacheRefreshToken(refreshToken);
     }
-    if (!sessionGeneration.isCurrent(generation)) return await stale();
+    if (!sessionGeneration.isCurrent(generation)) return stale;
     return Success(authResponse.user);
-  }
-
-  /// Asks the server to revoke the refresh token of sign-in number [signIn],
-  /// whose session ended before its tokens could be stored. Best effort, and
-  /// not awaited: the sign-in has already failed.
-  ///
-  /// Its tokens are discarded, so nothing else would ever revoke them: a
-  /// logout that ran during the round trip revoked the token stored *then*,
-  /// and the server session stayed live until it expired.
-  ///
-  /// The request goes through `ApiClient`, whose `AuthInterceptor` attaches
-  /// the stored access token, and it must not go out as a newer session. So
-  /// it is sent only once no logout is tearing down, no later sign-in has
-  /// started, and no access token is stored; a sign-in replaced by a newer
-  /// one is left to expire on the server. A sign-in that starts in the
-  /// moments while the request is being sent can still store its token
-  /// before the interceptor reads one; on a backend that revokes the
-  /// *bearer's* session at `/auth/logout`, rather than the `refresh_token`
-  /// sent, that would end the newer session.
-  Future<void> _revokeDiscarded(
-    AuthResponseModel authResponse,
-    int signIn,
-  ) async {
-    final refreshToken = authResponse.refreshToken;
-    if (refreshToken == null) return;
-    try {
-      if (!await _afterPendingLogouts()) return;
-      if (_signInsStarted != signIn) return;
-      final stored = await localDataSource.getToken();
-      if (stored != null && stored.isNotEmpty) return;
-      if (_signInsStarted != signIn) return;
-      await remoteDataSource.logout(refreshToken: refreshToken);
-    } on Object {
-      // Best effort: the sign-in has already failed, and the token was never
-      // stored on this device.
-    }
   }
 
   /// Exchanges the stored refresh token for a new credential pair.
