@@ -85,6 +85,36 @@ void main() {
     ]);
   });
 
+  test('a commented-out version is ignored for the live one', () {
+    final root = Directory.systemTemp.createTempSync('toolchain_comment_');
+    addTearDown(() => root.deleteSync(recursive: true));
+    File('${root.path}/android/gradle/wrapper/gradle-wrapper.properties')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(
+        [
+          r'# distributionUrl=https\://services.gradle.org/distributions/gradle-99.0-all.zip',
+          r'distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip',
+          '',
+        ].join('\n'),
+      );
+    File('${root.path}/android/settings.gradle.kts')
+      ..createSync(recursive: true)
+      ..writeAsStringSync('''
+plugins {
+    // id("com.android.application") version "99.0.0" apply false
+    id("com.android.application") version "8.1.0" apply false
+    // id("org.jetbrains.kotlin.android") version "99.0.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+}
+''');
+
+    expect(readAndroidToolchain(root), {
+      'Gradle': '8.14',
+      'Android Gradle Plugin': '8.1.0',
+      'Kotlin': '1.9.0',
+    });
+  });
+
   test('criterion 2: passes on the real android/ files', () {
     final found = readAndroidToolchain(Directory.current);
     expect(found.values, everyElement(isNotNull), reason: '$found');

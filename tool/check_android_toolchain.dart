@@ -61,14 +61,22 @@ Map<String, String?> readAndroidToolchain(Directory root) {
     return file.existsSync() ? file.readAsStringSync() : '';
   }
 
-  final wrapper = read(_wrapperPath);
-  final settings = read(_settingsPath);
+  // Commented-out lines are skipped: a version kept in a comment (a previous
+  // pin, a note) was read instead of the live declaration below it.
+  final wrapper = _uncommented(read(_wrapperPath), '#');
+  final settings = _uncommented(read(_settingsPath), '//');
   return {
     'Gradle': _gradle.firstMatch(wrapper)?.group(1),
     'Android Gradle Plugin': _agp.firstMatch(settings)?.group(1),
     'Kotlin': _kotlin.firstMatch(settings)?.group(1),
   };
 }
+
+/// [text] without the lines whose first non-blank characters are [marker].
+String _uncommented(String text, String marker) => text
+    .split('\n')
+    .where((line) => !line.trimLeft().startsWith(marker))
+    .join('\n');
 
 /// One message per version that is unreadable or below its floor.
 List<String> androidToolchainProblems(Directory root) {
