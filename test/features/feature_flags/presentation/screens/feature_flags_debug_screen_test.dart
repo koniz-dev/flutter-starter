@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
 import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
@@ -32,13 +33,13 @@ void main() {
       when(() => mockManager.refresh()).thenAnswer((_) async => {});
       when(
         () => mockManager.clearAllLocalOverrides(),
-      ).thenAnswer((_) async => {});
+      ).thenAnswer((_) async => const Success(null));
       when(
         () => mockManager.setLocalOverride(any(), value: any(named: 'value')),
-      ).thenAnswer((_) async => {});
+      ).thenAnswer((_) async => const Success(null));
       when(
         () => mockManager.clearLocalOverride(any()),
-      ).thenAnswer((_) async => {});
+      ).thenAnswer((_) async => const Success(null));
     });
 
     Widget createTestWidget({
@@ -323,7 +324,7 @@ void main() {
       const flagsValue = AsyncValue.data(<String, FeatureFlag?>{
         'test_flag': flag,
       });
-      final inFlight = Completer<void>();
+      final inFlight = Completer<Result<void>>();
       when(
         () => mockManager.setLocalOverride(any(), value: any(named: 'value')),
       ).thenAnswer((_) => inFlight.future);
@@ -342,7 +343,7 @@ void main() {
       await tester.tap(switchWidget);
       await tester.pump();
       await tester.pumpWidget(const SizedBox.shrink());
-      inFlight.complete();
+      inFlight.complete(const Success(null));
       await tester.pump();
       await tester.pump();
 

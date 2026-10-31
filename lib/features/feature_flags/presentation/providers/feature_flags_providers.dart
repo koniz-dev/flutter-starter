@@ -81,6 +81,8 @@ Future<Map<String, FeatureFlag?>> allFeatureFlags(Ref ref) async {
         ),
       ...flags,
     },
-    failureCallback: (_) => <String, FeatureFlag?>{},
+    // An error state, not an empty map: the debug screen then shows the
+    // failure and its retry, rather than "no flags".
+    failureCallback: Future<Map<String, FeatureFlag?>>.error,
   );
 }

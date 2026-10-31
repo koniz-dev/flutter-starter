@@ -68,23 +68,21 @@ class FeatureFlagsManager {
     await _repository.refreshRemoteFlags();
   }
 
-  /// Set a local override for a feature flag
-  Future<void> setLocalOverride(
+  /// Set a local override for a feature flag.
+  ///
+  /// Returns the repository's result, so a failed write reaches the caller.
+  Future<Result<void>> setLocalOverride(
     FeatureFlagKey key, {
     required bool value,
-  }) async {
-    await _repository.setLocalOverride(key.value, value: value);
-  }
+  }) => _repository.setLocalOverride(key.value, value: value);
 
-  /// Clear a local override for a feature flag
-  Future<void> clearLocalOverride(FeatureFlagKey key) async {
-    await _repository.clearLocalOverride(key.value);
-  }
+  /// Clear a local override for a feature flag; see [setLocalOverride].
+  Future<Result<void>> clearLocalOverride(FeatureFlagKey key) =>
+      _repository.clearLocalOverride(key.value);
 
-  /// Clear all local overrides
-  Future<void> clearAllLocalOverrides() async {
-    await _repository.clearAllLocalOverrides();
-  }
+  /// Clear all local overrides; see [setLocalOverride].
+  Future<Result<void>> clearAllLocalOverrides() =>
+      _repository.clearAllLocalOverrides();
 }
 
 /// Feature flag key definition

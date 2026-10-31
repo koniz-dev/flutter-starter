@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
+import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
 import 'package:flutter_starter/features/feature_flags/domain/feature_flags_manager.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart';
@@ -74,7 +76,7 @@ class _FeatureFlagsDebugScreenState
               );
 
               if (confirmed ?? false) {
-                await ref
+                final result = await ref
                     .read(featureFlagsManagerProvider)
                     .clearAllLocalOverrides();
                 // The screen can be popped while the await above is in
@@ -82,7 +84,11 @@ class _FeatureFlagsDebugScreenState
                 if (!mounted) return;
                 _flagsChanged();
                 messenger.showSnackBar(
-                  SnackBar(content: Text(l10n.featureFlagsAllOverridesCleared)),
+                  SnackBar(
+                    content: Text(
+                      _outcome(result, l10n.featureFlagsAllOverridesCleared),
+                    ),
+                  ),
                 );
               }
             },
@@ -97,7 +103,11 @@ class _FeatureFlagsDebugScreenState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(l10n.featureFlagsErrorMessage(error.toString())),
+              Text(
+                l10n.featureFlagsErrorMessage(
+                  error is Failure ? error.message : error.toString(),
+                ),
+              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -204,7 +214,7 @@ class _FeatureFlagsDebugScreenState
       trailing: Switch(
         value: flag.value,
         onChanged: (value) async {
-          await ref
+          final result = await ref
               .read(featureFlagsManagerProvider)
               .setLocalOverride(flagKey, value: value);
           // The screen can be popped while the await above is in flight;
@@ -214,9 +224,12 @@ class _FeatureFlagsDebugScreenState
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                value
-                    ? l10n.featureFlagsFlagEnabled(flag.key)
-                    : l10n.featureFlagsFlagDisabled(flag.key),
+                _outcome(
+                  result,
+                  value
+                      ? l10n.featureFlagsFlagEnabled(flag.key)
+                      : l10n.featureFlagsFlagDisabled(flag.key),
+                ),
               ),
               duration: const Duration(seconds: 1),
             ),
@@ -225,17 +238,31 @@ class _FeatureFlagsDebugScreenState
       ),
       onLongPress: () async {
         // Long press to clear override
-        await ref.read(featureFlagsManagerProvider).clearLocalOverride(flagKey);
+        final result = await ref
+            .read(featureFlagsManagerProvider)
+            .clearLocalOverride(flagKey);
         // The screen can be popped while the await above is in flight;
         // `ref` is unusable past disposal, so guard first.
         if (!mounted) return;
         _flagsChanged();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.featureFlagsOverrideCleared(flag.key))),
+          SnackBar(
+            content: Text(
+              _outcome(result, l10n.featureFlagsOverrideCleared(flag.key)),
+            ),
+          ),
         );
       },
     );
   }
+
+  /// [success] when [result] succeeded, else the failure's message: a
+  /// failed write used to show the success text.
+  String _outcome(Result<void> result, String success) => result.when(
+    success: (_) => success,
+    failureCallback: (failure) =>
+        context.l10n.featureFlagsErrorMessage(failure.message),
+  );
 
   Widget _buildSourceChip(FeatureFlagSource source) {
     final color = switch (source) {
