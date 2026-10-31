@@ -13,8 +13,10 @@
 #   ssl_pinning / ENABLE_SSL_PINNING          false (or 0, no, off) to opt out
 #
 # The fingerprints are read as AppConfig.apiSslFingerprints reads them: split on
-# commas, colons and whitespace dropped, empty entries skipped. Each remaining
-# entry must be 64 hex digits, in any environment. The opt-out is trimmed, as
+# commas, each entry trimmed at its ends only, colons removed, empty entries
+# skipped. Each remaining entry must then be exactly 64 hex digits, in any
+# environment: space-separated hex or an embedded line break leaves an entry
+# the app can never match, so it is refused. The opt-out is trimmed, as
 # the app's EnvConfig.getBool trims it. A lane option that is given wins over
 # the environment variable even when it is empty, so `ssl_fingerprints:""`
 # refuses rather than falling back.
@@ -30,7 +32,7 @@ module SslPinning
     fingerprints = fingerprints.to_s
     pinning = pinning.to_s
     entries = fingerprints.split(",")
-                          .map { |e| e.delete(" \t\r\n:").downcase }
+                          .map { |e| e.strip.delete(":").downcase }
                           .reject(&:empty?)
     bad = entries.find { |e| e !~ /\A[0-9a-f]{64}\z/ }
     if bad
