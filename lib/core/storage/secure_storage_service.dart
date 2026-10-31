@@ -177,7 +177,8 @@ class SecureStorageService implements IStorageService, IStrictStringRead {
   /// Do not end a session with this: on web the delete lands at once while a
   /// token write already in flight lands after it, re-storing a token on a
   /// signed-out device. Sign out through `ITokenStore.clearAllTokens`, which
-  /// waits for pending token writes.
+  /// waits for pending token writes. `SecureTokenStore` also does not see this
+  /// delete: a token key it holds as stale keeps answering from memory.
   @override
   Future<bool> clear() async {
     try {
