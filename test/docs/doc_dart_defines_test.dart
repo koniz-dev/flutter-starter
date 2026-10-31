@@ -70,15 +70,17 @@ void main() {
       );
     });
 
-    test('reads a quoted key, in either quote style', () {
+    test('reads a quoted key, in either quote style or escaped', () {
       const source =
           '```bash\n'
           'flutter run --dart-define="NOPE_DOUBLE=a b"\n'
           "flutter run --dart-define='NOPE_SINGLE=a b'\n"
+          r'bash -c "flutter run --dart-define=\"NOPE_ESCAPED=a b\""'
+          '\n'
           '```\n';
       expect(
         findUnknownDartDefines(source, known).map((p) => p.key),
-        ['NOPE_DOUBLE', 'NOPE_SINGLE'],
+        ['NOPE_DOUBLE', 'NOPE_SINGLE', 'NOPE_ESCAPED'],
       );
     });
 
