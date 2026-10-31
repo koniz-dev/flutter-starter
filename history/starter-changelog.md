@@ -157,6 +157,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   space-separated fingerprint or one with a line break inside is refused
   instead of building a release that refuses every connection.
 
+- `ApiLoggingInterceptor` passes a `RedactedDioException` to the logger and
+  the error reporter instead of the `DioException`: the original's text ended
+  with dart:io's `HttpException`, which quotes the full request URI. The
+  logged `baseUrl`, `RetryInterceptor`'s lines and `PerformanceInterceptor`'s
+  trace also go through `redactUrl`, which now trims leading whitespace, so an
+  absolute URL's userinfo is removed everywhere.
+- The HTTP cache records the sensitive-key rule version
+  (`ApiLoggingInterceptor.sensitiveKeyRuleVersion`) and empties itself once
+  when it changes, dropping responses cached for URLs a newer rule treats as
+  secret. **On the first request after upgrading, the cache is emptied once.**
+  If you change the key sets, bump the version (a test fails until you do).
+
 ### Fixed
 
 - **`LoggingService` writes logs in profile and release builds.** It relied on
@@ -269,6 +281,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   project root.
 - Tests that run a Dart file use `dart --packages=...` instead of `dart run`,
   whose concurrent native-asset bundling crashed `dartdev` at random.
+
+- `OptimizedListView` follows a `ScrollController` passed or swapped after its
+  first build; `DateTimeExtensions.isYesterday`/`isTomorrow` count calendar
+  days, so they are right across a daylight-saving change.
+- `LocalizedFormatters.formatCurrency` without a currency code uses the
+  currency of the locale's country (SAR for `ar_SA`, not Egyptian pounds).
+- Log files are written to the app's cache directory instead of its
+  documents (iCloud-backed on iOS, the shared `~/Documents` on desktop).
+  Files written before stay in the old `logs/` directory.
 
 ### Documentation
 
