@@ -98,27 +98,32 @@ void main() {
       });
 
       test('a refused URL keeps the current connection', () async {
-        final live = client(releaseMode: true);
-        await live
-            .connect('wss://realtime.example.com/socket')
-            .catchError((Object _) {});
-        // The fake handshake to a closed port fails, so open a pending one
-        // and check it is not cancelled by the refused connect.
-        final pending = live.connect('wss://realtime.example.com/again');
+        // A real local WebSocket server, so the first connection opens.
+        final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+        addTearDown(() => server.close(force: true));
+        server.listen((request) async {
+          final socket = await WebSocketTransformer.upgrade(request);
+          socket.listen((_) {});
+        });
+        final live = RawWebSocketClientImpl(
+          sslPinning: const SslPinning(enabled: false, fingerprints: []),
+          // Whatever the URL says, open the local server: the scheme check
+          // under test runs before the connector is reached.
+          connectChannel: (_, _) => WebSocketChannel.connect(
+            Uri.parse('ws://127.0.0.1:${server.port}'),
+          ),
+          releaseMode: true,
+        );
+        addTearDown(live.disconnect);
+        await live.connect('wss://realtime.example.com/socket');
+        expect(live.isConnected, isTrue);
+
         await expectLater(
           live.connect('ws://realtime.example.com/socket'),
           throwsA(isA<WebSocketChannelException>()),
         );
-        await expectLater(
-          pending,
-          throwsA(
-            isA<WebSocketChannelException>().having(
-              (e) => '$e',
-              'message',
-              isNot(contains('cancelled')),
-            ),
-          ),
-        );
+
+        expect(live.isConnected, isTrue);
       });
 
       test('the refusal names the URL redacted', () async {
