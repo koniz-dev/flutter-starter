@@ -7,6 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 // avoid_relative_lib_imports cares about.
 import '../../tool/check_env_assets.dart';
 
+/// The repository's package config: `dart <file>` with it skips `dart run`'s
+/// build-hook step, whose native-asset bundling crashed when several tests
+/// ran it at once.
+final String _packages = File(
+  '.dart_tool/package_config.json',
+).absolute.path;
+
 void main() {
   group('findDeclaredSecretAssets', () {
     test('flags a bare .env in the flutter asset list', () {
@@ -869,7 +876,7 @@ flutter:
         ..writeAsStringSync('flutter:\n  assets:\n    - path: .env\n');
 
       final result = await Process.run('dart', <String>[
-        'run',
+        '--packages=$_packages',
         'tool/check_env_assets.dart',
         pubspec.path,
       ]);

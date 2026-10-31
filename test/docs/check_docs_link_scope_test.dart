@@ -6,6 +6,13 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+/// The repository's package config: `dart <file>` with it skips `dart run`'s
+/// build-hook step, whose native-asset bundling crashed when several tests
+/// ran it at once.
+final String _packages = File(
+  '.dart_tool/package_config.json',
+).absolute.path;
+
 void main() {
   final checker = File('tool/check_docs.dart').absolute.path;
   late Directory sandbox;
@@ -29,7 +36,7 @@ void main() {
   }
 
   ProcessResult links() => Process.runSync('dart', [
-    'run',
+    '--packages=$_packages',
     checker,
     '--links',
   ], workingDirectory: repo.path);
