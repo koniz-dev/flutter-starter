@@ -971,23 +971,26 @@ reduce to `accesstoken`. It is then matched:
 
 | Rule | Entries | Example match |
 |---|---|---|
-| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode`, `jwt`, `accesskey`, `appkey`, `clientkey`, `hmac` | `refresh_token`, `client_secret`, `jwt`, `id_jwt`, `access_key`, `app_key` |
-| Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid`, `sig` (Azure SAS signature), `auth` (Firebase REST ID token), `bearer`, `sign` (signed CDN URLs), `key` (Google APIs key) | `pin`, but not `shipping`; `sig`, but not `signal`; `auth`, but not `author`; `sign`, but not `signup`; `key`, but not `monkey` |
+| Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode`, `jwt`, `accesskey`, `appkey`, `clientkey`, `hmac`, `subscriptionkey`, `functionskey`, `sessionkey`, `authkey`, `masterkey`, `licensekey` | `refresh_token`, `client_secret`, `jwt`, `id_jwt`, `access_key`, `app_key`, `Ocp-Apim-Subscription-Key` |
+| Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid`, `sig` (Azure SAS signature), `auth` (Firebase REST ID token), `bearer`, `sign` (signed CDN URLs), `key` (Google APIs key), `access` and `refresh` (Django REST Framework SimpleJWT) | `pin`, but not `shipping`; `sig`, but not `signal`; `auth`, but not `author`; `sign`, but not `signup`; `key`, but not `monkey`; `refresh`, but not `refreshInterval` |
+| In a **query string** only, normalized key *equals* the entry | `code` (an OAuth authorization code, an Azure Functions key) | `?code=...`, but not a body's `{"code": 404}` |
 
 The exact-match list exists because these names are too short to use as
 fragments: `pin` occurs inside `shipping`, `cvc` inside `cvcNote`.
 
 Because the same rule decides the HTTP cache's bypass, a GET with a literal
-`key`, `sign` or `bearer` query parameter (a Google APIs `?key=`, a signed CDN
-URL) is no longer cached, and its value is logged as `***REDACTED***`. An
+`key`, `sign`, `bearer`, `access`, `refresh` or `code` query parameter (a
+Google APIs `?key=`, a signed CDN URL, an Azure Functions `?code=`, a
+`?refresh=true`) is not cached, and its value is logged as `***REDACTED***`. An
 endpoint that uses `key` for something public - a feature flag or a
 translation key - loses caching too; rename the parameter if that matters.
 
-**Deliberately not covered: `code`.** It is the error or status code in most
-response bodies (`{"code": 404}`), so redacting it would blind every error log.
-An OAuth authorization code in a callback's `?code=` is therefore logged, and
-such a request is not kept out of the HTTP cache. If your app handles OAuth
-callbacks through `ApiClient`, add a name your backend uses only for that.
+**`code` in a query string only.** In a query, `code` is an OAuth
+authorization code or an Azure Functions key, and is redacted - in logged
+paths and URLs, the logged `queryParameters`, and the cache bypass
+(`ApiLoggingInterceptor.isSensitiveQueryKey`). In a body it is the error or
+status code of most APIs (`{"code": 404}`) and stays readable, since redacting
+it would blind every error log.
 
 **Headers** additionally carry an explicit roster - `authorization`,
 `proxy-authorization`, `cookie`, `set-cookie`, `x-api-key`, `api-key`,

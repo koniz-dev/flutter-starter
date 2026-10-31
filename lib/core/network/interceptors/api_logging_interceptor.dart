@@ -34,7 +34,10 @@ class ApiLoggingInterceptor extends Interceptor {
       'baseUrl': options.baseUrl,
       'headers': _sanitizeHeaders(options.headers),
       if (options.queryParameters.isNotEmpty)
-        'queryParameters': _sanitizeMap(options.queryParameters),
+        'queryParameters': _sanitizeMap(
+          options.queryParameters,
+          isSensitive: isSensitiveQueryKey,
+        ),
       if (options.data != null) 'body': _sanitizeBody(options.data),
     };
 
@@ -164,6 +167,15 @@ class ApiLoggingInterceptor extends Interceptor {
     'clientkey',
     // A request HMAC (`hmac=`, `x-hmac-sha256`).
     'hmac',
+    // Azure APIM `subscription-key` / `Ocp-Apim-Subscription-Key`, Azure
+    // Functions `x-functions-key`, and `session_key`, `auth_key`,
+    // `master_key`, `license_key`. No ordinary field name contains these.
+    'subscriptionkey',
+    'functionskey',
+    'sessionkey',
+    'authkey',
+    'masterkey',
+    'licensekey',
   };
 
   /// Keys that must match the normalised key *exactly*.
@@ -190,10 +202,18 @@ class ApiLoggingInterceptor extends Interceptor {
     'sign',
     // The Google APIs key (`?key=AIza...`): `monkey` and `keyword` must stay.
     'key',
-    // Not `code`: it is the error or status code in most response bodies, so
-    // redacting it would blind every error log. An OAuth callback's `?code=`
-    // is not recognised; see docs/api/core/network.md.
+    // Django REST Framework SimpleJWT's token fields: `accessLevel` and
+    // `refreshInterval` must stay.
+    'access',
+    'refresh',
   };
+
+  /// Keys that name a secret in a query string only, matched exactly.
+  ///
+  /// `code` is an OAuth authorization code or an Azure Functions key in a
+  /// query (`?code=...`), but the error or status code in most response
+  /// bodies (`{"code": 404}`), where redacting it would blind every error log.
+  static const _sensitiveQueryOnlyKeys = <String>{'code'};
 
   /// A `%` not followed by two hex digits: an escape that names no byte.
   static final RegExp _malformedPercent = RegExp('%(?![0-9A-Fa-f]{2})');
@@ -289,7 +309,7 @@ class ApiLoggingInterceptor extends Interceptor {
       // A key that cannot be read cannot be cleared either: its value is
       // redacted.
       if (key == null) return '$rawKey=$_redacted';
-      return isSensitiveKey(key) ? '$rawKey=$_redacted' : pair;
+      return isSensitiveQueryKey(key) ? '$rawKey=$_redacted' : pair;
     });
     return '${path.substring(0, queryStart + 1)}${query.join('&')}'
         '${path.substring(queryEnd)}';
@@ -320,6 +340,15 @@ class ApiLoggingInterceptor extends Interceptor {
     if (_sensitiveKeysExact.contains(normalized)) return true;
     return _sensitiveKeyFragments.any(normalized.contains);
   }
+
+  /// Whether a query parameter key names a secret: [isSensitiveKey], plus
+  /// the names that are secrets only in a query string (`code`).
+  ///
+  /// Used for every query - [redactPath], [redactUrl], the logged
+  /// `queryParameters` - and for `CacheInterceptor`'s secret-query bypass.
+  static bool isSensitiveQueryKey(String key) =>
+      isSensitiveKey(key) ||
+      _sensitiveQueryOnlyKeys.contains(_normalizeKey(key));
 
   /// Sanitize headers to remove sensitive information
   Map<String, dynamic> _sanitizeHeaders(Map<String, dynamic> headers) {
@@ -387,12 +416,18 @@ class ApiLoggingInterceptor extends Interceptor {
   }
 
   /// Sanitize a map of keyed values - a JSON object or a query parameter map.
-  Map<String, dynamic> _sanitizeMap(Map<dynamic, dynamic> map) {
+  ///
+  /// [isSensitive] judges the top-level keys: [isSensitiveQueryKey] for a
+  /// query parameter map. Nested maps use [isSensitiveKey].
+  Map<String, dynamic> _sanitizeMap(
+    Map<dynamic, dynamic> map, {
+    bool Function(String key) isSensitive = isSensitiveKey,
+  }) {
     final sanitized = <String, dynamic>{};
 
     for (final entry in map.entries) {
       final key = entry.key.toString();
-      sanitized[key] = isSensitiveKey(key)
+      sanitized[key] = isSensitive(key)
           ? _redacted
           : _sanitizeValue(entry.value);
     }
