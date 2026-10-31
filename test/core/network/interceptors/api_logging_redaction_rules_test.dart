@@ -39,6 +39,10 @@ const _fragmentKeys = <String, String>{
   'pincode': 'pin_code',
   'otpcode': 'otp_code',
   'jwt': 'jwt',
+  'accesskey': 'access_key',
+  'appkey': 'app_key',
+  'clientkey': 'client_key',
+  'hmac': 'x-hmac-sha256',
 };
 
 const _exactKeys = <String, String>{
@@ -48,6 +52,9 @@ const _exactKeys = <String, String>{
   'cvc': 'cvc',
   'session': 'session',
   'sessionid': 'sessionId',
+  'bearer': 'bearer',
+  'sign': 'sign',
+  'key': 'key',
 };
 
 void main() {
@@ -87,12 +94,31 @@ void main() {
       });
     }
 
+    test('near misses of the short names stay readable', () {
+      for (final key in [
+        'monkey',
+        'keyword',
+        'signal',
+        'signup',
+        'code',
+        'error_code',
+        'bearing',
+      ]) {
+        expect(
+          ApiLoggingInterceptor.isSensitiveKey(key),
+          isFalse,
+          reason: key,
+        );
+      }
+    });
+
     test('the table covers both rule sets with no duplicates', () {
-      // 15 fragment rules + 6 exact rules, as declared in
+      // 19 fragment rules + 9 exact rules (plus sig and auth, pinned in the
+      // path redaction tests), as declared in
       // api_logging_interceptor.dart; growing either set without a row here
       // leaves the new rule unpinned.
-      expect(_fragmentKeys, hasLength(15));
-      expect(_exactKeys, hasLength(6));
+      expect(_fragmentKeys, hasLength(19));
+      expect(_exactKeys, hasLength(9));
       expect(
         {..._fragmentKeys.values, ..._exactKeys.values},
         hasLength(_fragmentKeys.length + _exactKeys.length),

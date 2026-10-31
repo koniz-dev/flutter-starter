@@ -158,6 +158,12 @@ class ApiLoggingInterceptor extends Interceptor {
     'otpcode',
     // Strapi returns its session token as `jwt`.
     'jwt',
+    // AWS-style `access_key`, Firebase/Baidu-style `app_key`, `client_key`.
+    'accesskey',
+    'appkey',
+    'clientkey',
+    // A request HMAC (`hmac=`, `x-hmac-sha256`).
+    'hmac',
   };
 
   /// Keys that must match the normalised key *exactly*.
@@ -177,6 +183,16 @@ class ApiLoggingInterceptor extends Interceptor {
     // Firebase Realtime Database REST ID token (`?auth=...`): `author`
     // and `oauthprovider` must stay.
     'auth',
+    // A raw bearer token passed as a parameter.
+    'bearer',
+    // Alibaba- and CDN-style signed URLs (`?sign=...`): `signal` and `signup`
+    // must stay.
+    'sign',
+    // The Google APIs key (`?key=AIza...`): `monkey` and `keyword` must stay.
+    'key',
+    // Not `code`: it is the error or status code in most response bodies, so
+    // redacting it would blind every error log. An OAuth callback's `?code=`
+    // is not recognised; see docs/api/core/network.md.
   };
 
   /// A `%` not followed by two hex digits: an escape that names no byte.
