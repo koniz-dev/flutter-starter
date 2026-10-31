@@ -65,7 +65,7 @@ Usage: dart run scripts/dev/setup_ci.dart [options]
   --deploy-trigger=<tags|branch>
                             Also enable that push trigger on the deploy
                             workflows.
-  --help                    Print this message.''';
+  -h, --help                Print this message.''';
 
 void main(List<String> args) {
   if (args.contains('--help') || args.contains('-h')) {
@@ -78,6 +78,14 @@ void main(List<String> args) {
   for (var i = 0; i < args.length; i++) {
     final arg = args[i];
     if (arg == '--dir') {
+      // A --dir with no value fell back to .github/workflows and wrote the
+      // real workflows.
+      if (i + 1 >= args.length || args[i + 1].startsWith('-')) {
+        print('Error: --dir needs a path. Nothing was written.');
+        print(_usage);
+        exitCode = 64;
+        return;
+      }
       i++; // its value
     } else if (arg != '--dry-run' &&
         arg != '--yes' &&

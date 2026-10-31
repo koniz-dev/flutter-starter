@@ -72,6 +72,22 @@ void main() {
     }
   });
 
+  test('a --dir with no path exits 64 and writes nothing', () async {
+    final before = {
+      for (final f in copy.listSync().whereType<File>())
+        f.path: f.readAsStringSync(),
+    };
+
+    // setupCi passes --dir <copy> first; this second --dir has no value.
+    final result = await setupCi(['--yes', '--deploy-trigger=tags', '--dir']);
+
+    expect(result.exitCode, 64);
+    expect('${result.stdout}', contains('--dir needs a path'));
+    for (final MapEntry(key: path, value: text) in before.entries) {
+      expect(File(path).readAsStringSync(), text, reason: path);
+    }
+  });
+
   test('--help prints the usage and exits 0', () async {
     final result = await Process.run('dart', [
       'scripts/dev/setup_ci.dart',
