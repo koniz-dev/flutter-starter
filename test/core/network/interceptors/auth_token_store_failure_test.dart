@@ -24,14 +24,22 @@ import '../../../helpers/in_memory_stores.dart';
 
 class _MockSecureStorageService extends Mock implements SecureStorageService {}
 
-/// Reads the access token normally until [failReads] is set.
+/// Reads the tokens normally until [failReads] (access) or
+/// [failRefreshReads] (refresh) is set.
 class _FailingStore extends InMemoryTokenStore {
   bool failReads = false;
+  bool failRefreshReads = false;
 
   @override
   Future<String?> getAccessToken() async {
     if (failReads) throw const CacheException('keystore unavailable');
     return accessToken;
+  }
+
+  @override
+  Future<String?> getRefreshToken() async {
+    if (failRefreshReads) throw const CacheException('keystore unavailable');
+    return refreshToken;
   }
 }
 
@@ -133,5 +141,24 @@ void main() {
     expect(sink.calls, 1, reason: 'the running app was told');
     expect(tokens.accessToken, isNull);
     expect(tokens.refreshToken, isNull);
+  });
+
+  test('a failed refresh-token read during a 401 ends the session, as the '
+      'token store documents', () async {
+    // The access token reads fine and the request goes out; its 401 starts a
+    // refresh, whose refresh-token read fails.
+    tokens.failRefreshReads = true;
+    final adapter = _Adapter((_) {});
+
+    await expectLater(
+      client(adapter).get('/me'),
+      throwsA(
+        isA<ServerException>().having((e) => e.statusCode, 'status', 401),
+      ),
+    );
+
+    expect(adapter.paths, ['/me'], reason: 'no refresh call could be made');
+    expect(sink.calls, 1, reason: 'a forced logout was emitted');
+    expect(tokens.accessToken, isNull);
   });
 }

@@ -123,7 +123,13 @@ class SecureTokenStore implements ITokenStore {
   /// same as a missing token, so a transient failure (an iOS Keychain read
   /// before first unlock) sent a request unauthenticated, its 401 found "no
   /// refresh token", and the user was signed out. The strict read tells the
-  /// two apart: the caller fails the one request and keeps the session.
+  /// two apart: an ordinary request fails and the session is kept.
+  ///
+  /// A failed read *during a 401 refresh* is different: the refresh fails
+  /// with a `CacheFailure`, and `AuthInterceptor` ends the session on any
+  /// refresh failure that is not transport trouble, so the user is signed
+  /// out. That is deliberate (fail closed): a session that cannot be
+  /// refreshed would otherwise stay up with every request failing.
   @override
   Future<String?> getAccessToken() =>
       _inOrder(() => _read(AppConstants.tokenKey));
@@ -136,8 +142,9 @@ class SecureTokenStore implements ITokenStore {
   @override
   Future<void> clearAccessToken() => _remove(AppConstants.tokenKey);
 
-  /// Throws [CacheException] if the Keychain/Keystore read fails; see
-  /// [getAccessToken].
+  /// Throws [CacheException] if the Keychain/Keystore read fails. It is read
+  /// only to refresh after a 401 (and to revoke it at logout), so a failure
+  /// here ends the session; see [getAccessToken].
   @override
   Future<String?> getRefreshToken() =>
       _inOrder(() => _read(AppConstants.refreshTokenKey));
