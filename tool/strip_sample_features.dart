@@ -823,8 +823,17 @@ List<String> _withoutIgnored(Directory repoRoot, List<String> violations) {
       if (line.trim().isNotEmpty)
         p.normalize(p.absolute(repoRoot.path, line.trim())),
   };
-  return [
+  final kept = [
     for (final v in violations)
       if (!ignored.contains(p.normalize(p.absolute(v.split(': ').first)))) v,
   ];
+  final skipped = violations.length - kept.length;
+  if (skipped > 0) {
+    stdout.writeln(
+      'Skipped $skipped forbidden reference(s) in git-ignored files (a '
+      'generated file such as the coverage helper is regenerated, not '
+      'stripped); flutter analyze still reads them if they are not excluded.',
+    );
+  }
+  return kept;
 }
