@@ -977,6 +977,12 @@ reduce to `accesstoken`. It is then matched:
 The exact-match list exists because these names are too short to use as
 fragments: `pin` occurs inside `shipping`, `cvc` inside `cvcNote`.
 
+Because the same rule decides the HTTP cache's bypass, a GET with a literal
+`key`, `sign` or `bearer` query parameter (a Google APIs `?key=`, a signed CDN
+URL) is no longer cached, and its value is logged as `***REDACTED***`. An
+endpoint that uses `key` for something public - a feature flag or a
+translation key - loses caching too; rename the parameter if that matters.
+
 **Deliberately not covered: `code`.** It is the error or status code in most
 response bodies (`{"code": 404}`), so redacting it would blind every error log.
 An OAuth authorization code in a callback's `?code=` is therefore logged, and
