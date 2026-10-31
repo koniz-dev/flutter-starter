@@ -225,6 +225,11 @@ final formatted = LocalizedFormatters.formatCurrency(
 // Arabic: "ر.س ١٬٢٣٤٫٥٦"
 ```
 
+Without `currencyCode`, `formatCurrency` uses the currency of the locale's
+country (`USD`, `EUR`, `SAR`, `VND` for the four supported locales), from a
+table in `LocalizedFormatters`; add the country of any locale you add, or intl
+falls back to the language's default currency (Egyptian pounds for `ar`).
+
 ### Percentage Formatting
 
 ```dart

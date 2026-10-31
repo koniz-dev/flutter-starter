@@ -88,7 +88,12 @@ class LocalizedFormatters {
     String? currencyCode,
     int? decimalDigits,
   }) {
-    if (currencyCode == null) {
+    // Without a code, the currency of the locale's country. intl falls back
+    // to the language's default otherwise, and printed Egyptian pounds for
+    // ar_SA. A country not in [_countryCurrencies] keeps intl's default.
+    final effectiveCode =
+        currencyCode ?? _countryCurrencies[locale.countryCode?.toUpperCase()];
+    if (effectiveCode == null) {
       return NumberFormat.simpleCurrency(
         locale: locale.toString(),
         decimalDigits: decimalDigits,
@@ -102,10 +107,20 @@ class LocalizedFormatters {
     // `150.000 VND` instead of `150.000 ₫`.
     return NumberFormat.simpleCurrency(
       locale: locale.toString(),
-      name: currencyCode,
+      name: effectiveCode,
       decimalDigits: decimalDigits,
     ).format(amount);
   }
+
+  /// The currency [formatCurrency] uses for a locale's country when no code
+  /// is given: one entry per country of a `SupportedLocale`. Add the country
+  /// of any locale you add.
+  static const Map<String, String> _countryCurrencies = {
+    'US': 'USD',
+    'ES': 'EUR',
+    'SA': 'SAR',
+    'VN': 'VND',
+  };
 
   /// Format percentage to localized string
   ///
