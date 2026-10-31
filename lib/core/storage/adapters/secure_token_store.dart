@@ -54,7 +54,9 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// with the newer state - `null` after a clear - never with the late value
 /// on the device. The next write through any store over the same service
 /// re-applies every stale key first; the next delete re-applies only stale
-/// deletes, so a sign-out never writes a token. Once everything settles and no
+/// deletes, so a sign-out never writes a token. A read of a stale key whose
+/// newer state is a delete retries that delete once, bounded like any
+/// operation; a read never writes. Once everything settles and no
 /// repair has failed, every key holds what its last-issued successful write
 /// or delete left. The stale marker lives in memory: if the app stops before
 /// a stale key is re-applied, the late value is what the next launch reads.
@@ -171,7 +173,27 @@ class SecureTokenStore implements ITokenStore {
     // The device holds a late value a failed repair could not undo; memory
     // holds what the last-issued successful write or delete left.
     final queue = _queue;
-    if (queue.stale.contains(key)) return queue.landed[key]!.value;
+    if (queue.stale.contains(key)) {
+      final newest = queue.landed[key]!;
+      // A cleared key still holding a late token: try the delete once more,
+      // so a signed-out app that never writes or deletes again does not leave
+      // that token for the next launch to read. Never a write: a read must
+      // not store a credential. Bounded, and a failure leaves the key stale.
+      if (newest.value == null) {
+        try {
+          await _apply(
+            queue,
+            key,
+            newest.number,
+            null,
+            flushStale: false,
+          ).timeout(operationTimeout);
+        } on Object {
+          // Still stale; memory still answers.
+        }
+      }
+      return newest.value;
+    }
     try {
       return await _secureStorageService.getStringOrThrow(key);
     } on Exception catch (e) {
