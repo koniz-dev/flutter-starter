@@ -260,7 +260,7 @@ Add to your platform deployment guides,
 [`docs/deployment/android-deployment.md`](../../deployment/android-deployment.md)
 and [`docs/deployment/ios-deployment.md`](../../deployment/ios-deployment.md):
 
-```markdown
+````markdown
 ## Production Builds
 
 ### With Obfuscation
@@ -293,7 +293,7 @@ architecture - `--split-debug-info` writes one per architecture, named
 ```bash
 flutter symbolize -i <crash-file> -d ./build/debug-info/app.android-arm64.symbols
 ```
-```
+````
 
 ---
 
