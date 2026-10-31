@@ -43,6 +43,11 @@ ssl_pinning_defines() {
 
   local count=0 entry
   local old_ifs="$IFS"
+  # The split below is unquoted on purpose (split on commas); -f keeps a
+  # value such as * from expanding to file names in the current directory.
+  local restore_glob=1
+  case $- in *f*) restore_glob=0 ;; esac
+  set -f
   IFS=','
   for entry in ${API_SSL_FINGERPRINTS:-}; do
     # Only the ends, as the app's trim(): interior whitespace stays and fails.
@@ -54,6 +59,7 @@ ssl_pinning_defines() {
     # so "garbage<newline><64 hex>" passed.
     if ! [[ "$entry" =~ ^[0-9a-f]{64}$ ]]; then
       IFS="$old_ifs"
+      [ "$restore_glob" = 1 ] && set +f
       echo "Error: API_SSL_FINGERPRINTS entry '$entry' is not a SHA-256" >&2
       echo "fingerprint (64 hex digits, colons optional)." >&2
       return 1
@@ -61,6 +67,7 @@ ssl_pinning_defines() {
     count=$((count + 1))
   done
   IFS="$old_ifs"
+  [ "$restore_glob" = 1 ] && set +f
 
   SSL_PINNING_DEFINES=()
   if [ "$count" -gt 0 ]; then
