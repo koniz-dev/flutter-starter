@@ -81,6 +81,10 @@ echo -e "${BLUE}Running tests with coverage...${NC}"
 echo ""
 # Imports every library under lib/, so a file no test loads still appears in
 # lcov.info (with zero hits) instead of being left out of the total.
+# The generated file is removed on any exit: it is git-ignored, so a copy left
+# behind went unnoticed until the next rename under lib/ turned its imports
+# stale and broke flutter analyze, flutter test and the pre-push hook.
+trap 'rm -f test/coverage_helper_test.dart' EXIT
 dart run tool/coverage_helper.dart
 flutter test --coverage
 else

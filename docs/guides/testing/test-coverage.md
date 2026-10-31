@@ -30,6 +30,7 @@ Test coverage measures how much of the codebase is executed during tests. We aim
    ```bash
    dart run tool/coverage_helper.dart
    flutter test --coverage
+   rm test/coverage_helper_test.dart
    ```
 
    `flutter test --coverage` records only the libraries some test loads, so a
@@ -37,7 +38,11 @@ Test coverage measures how much of the codebase is executed during tests. We aim
    untouched. `tool/coverage_helper.dart` writes a git-ignored
    `test/coverage_helper_test.dart` that imports every library under `lib/`,
    so untested files count with zero hits. `test_coverage.sh` (without
-   `--no-test`), the Quality gate and `coverage.yml` all run it first.
+   `--no-test`), the Quality gate and `coverage.yml` all run it first;
+   `test_coverage.sh` removes the file again when it exits. Remove it yourself
+   after a manual run, as above: it is git-ignored, so a copy left behind goes
+   unnoticed until a rename under `lib/` makes its imports stale and breaks
+   `flutter analyze` and `flutter test`.
 
 2. **Generate HTML report:**
    ```bash
