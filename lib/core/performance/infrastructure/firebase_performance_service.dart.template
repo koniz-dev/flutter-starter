@@ -143,7 +143,7 @@ class FirebasePerformanceService implements IPerformanceService {
       // directly must not leak a `?token=` either. Idempotent.
       trace
         ..putAttribute('http_method', method)
-        ..putAttribute('http_path', ApiLoggingInterceptor.redactPath(path));
+        ..putAttribute('http_path', ApiLoggingInterceptor.redactUrl(path));
     }
     return trace;
   }

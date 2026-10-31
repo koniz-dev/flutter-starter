@@ -53,6 +53,18 @@ void main() {
     }
   });
 
+  test('an absolute URL loses its userinfo in the trace', () {
+    PerformanceInterceptor(performanceService: service).onRequest(
+      RequestOptions(path: 'https://usrX:pwY@api.example.com/x'),
+      _Handler(),
+    );
+
+    final recorded = [traceNames.single, ...attributes.values].join(' ');
+    expect(recorded, isNot(contains('usrX')));
+    expect(recorded, isNot(contains('pwY')));
+    expect(recorded, contains('api.example.com'));
+  });
+
   test('the recorded path is the one the logs show', () {
     PerformanceInterceptor(
       performanceService: service,
@@ -73,7 +85,7 @@ void main() {
 
     expect(
       template,
-      contains("putAttribute('http_path', ApiLoggingInterceptor.redactPath("),
+      contains("putAttribute('http_path', ApiLoggingInterceptor.redactUrl("),
     );
     expect(template, isNot(contains("putAttribute('http_path', path)")));
   });

@@ -116,7 +116,7 @@ class RetryInterceptor extends Interceptor {
       if (_shouldRetry(err) && retryCount < maxRetries) {
         loggingService?.debug(
           'Not retrying '
-          '[${ApiLoggingInterceptor.redactPath(err.requestOptions.path)}]: '
+          '[${ApiLoggingInterceptor.redactUrl(err.requestOptions.path)}]: '
           '${RequestBodyReplay.reason(err.requestOptions.data)}',
         );
       }
@@ -131,7 +131,7 @@ class RetryInterceptor extends Interceptor {
 
       loggingService?.debug(
         'Retrying request '
-        '[${ApiLoggingInterceptor.redactPath(err.requestOptions.path)}] '
+        '[${ApiLoggingInterceptor.redactUrl(err.requestOptions.path)}] '
         '(attempt $retryCount of $maxRetries) in ${delay.inMilliseconds}ms',
       );
 

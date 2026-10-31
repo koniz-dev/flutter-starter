@@ -32,7 +32,8 @@ class ApiLoggingInterceptor extends Interceptor {
     final context = <String, dynamic>{
       'method': options.method,
       'path': redactUrl(options.path),
-      'baseUrl': options.baseUrl,
+      // A BASE_URL with userinfo is sent as Basic auth by dart:io.
+      'baseUrl': redactUrl(options.baseUrl),
       'headers': _sanitizeHeaders(options.headers),
       if (options.queryParameters.isNotEmpty)
         'queryParameters': _sanitizeMap(
@@ -270,7 +271,10 @@ class ApiLoggingInterceptor extends Interceptor {
   /// normalises it (`%2f` to `%2F`, `%41` to `A`) and so misses the original,
   /// and which cannot parse a malformed URL at all.
   static String redactUrl(String url) {
-    var text = url;
+    // Leading whitespace kept the authority pattern, anchored at the start,
+    // from matching, and the userinfo went out unredacted; such a URL is
+    // invalid anyway, so it is logged trimmed.
+    var text = url.trimLeft();
     final authority = _authorityStart.firstMatch(text);
     if (authority != null) {
       final authorityStart = authority.end;
