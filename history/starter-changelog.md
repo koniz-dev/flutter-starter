@@ -169,6 +169,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `release`) find the artifact they just built. They passed the upload action
   a path relative to `fastlane/`, which the action resolved from the project
   root, and failed with "Could not find aab/ipa file".
+- The pre-commit hook works with a relative `path:` dependency outside the
+  repository (a monorepo's `../shared`). It now exports the staged content
+  to a hidden `.<repo>-pre-commit.*` directory beside the repository instead
+  of the system temp directory, and removes it afterwards.
 - `git-hooks.yml` and `release-scripts.yml` also run on pull requests that
   touch their paths (template repository only, as before), so a broken hook
   or release script no longer merges green.
