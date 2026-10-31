@@ -818,7 +818,14 @@ class AuthInterceptor extends Interceptor {
   /// `await` below, so anything still in flight for the ending session - a
   /// refresh, a token write - is already stale by the time it reaches its own
   /// check, rather than racing the teardown it is about to undo.
-  Future<void> _logoutUser() async {
+  Future<void> _logoutUser() {
+    final teardown = _tearDownSession();
+    // A sign-in waits for it, so these steps cannot delete its credentials.
+    _sessionGeneration.trackTeardown(teardown);
+    return teardown;
+  }
+
+  Future<void> _tearDownSession() async {
     // Nothing in flight may write a credential for the session being ended.
     // Unguarded on purpose: it is a synchronous integer increment that cannot
     // throw, and a try/catch here would suggest it might.

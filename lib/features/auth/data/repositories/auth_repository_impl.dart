@@ -169,36 +169,20 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Result<void>> logout() {
     final run = _logout();
-    final settled = run.then<void>((_) {}, onError: (Object _) {});
-    _pendingLogouts.add(settled);
-    unawaited(settled.whenComplete(() => _pendingLogouts.remove(settled)));
+    sessionGeneration.trackTeardown(run);
     return run;
   }
 
-  /// Every [logout] still tearing down.
+  /// Waits until no logout is tearing down - this repository's or
+  /// `AuthInterceptor`'s forced one, both tracked on [sessionGeneration] -
+  /// and false if that takes longer than [pendingLogoutLimit].
   ///
-  /// A sign-in waits for all of them. A logout's teardown runs after its
-  /// server call, so a sign-in that completed while that call was pending (a
-  /// slow network) had its fresh credentials deleted by the teardown, and the
-  /// user was signed out on the next token read. All of them, not the latest:
-  /// an earlier logout still pending tears down just the same.
-  final Set<Future<void>> _pendingLogouts = {};
-
-  /// Waits until no logout is tearing down; false if that takes longer than
-  /// [pendingLogoutLimit].
-  Future<bool> _afterPendingLogouts() async {
-    final waited = Stopwatch()..start();
-    while (_pendingLogouts.isNotEmpty) {
-      final left = pendingLogoutLimit - waited.elapsed;
-      if (left <= Duration.zero) return false;
-      try {
-        await Future.wait(_pendingLogouts.toList()).timeout(left);
-      } on TimeoutException {
-        return false;
-      }
-    }
-    return true;
-  }
+  /// A logout's teardown deletes the stored credentials when its steps run,
+  /// so a sign-in that stored its own while one was still running (a slow
+  /// server call, a slow keychain) lost them after reporting success. All of
+  /// them, not the latest: an earlier one still running tears down the same.
+  Future<bool> _afterPendingLogouts() =>
+      sessionGeneration.teardownsSettled(pendingLogoutLimit);
 
   Future<Result<void>> _logout() async {
     // First, and synchronously, ahead of every await below: the user has asked
