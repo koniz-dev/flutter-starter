@@ -89,7 +89,7 @@ Navigate through the folders to dive deeper into the project modules:
 - **HTTP Layer:** Dio-based `ApiClient` and interceptor pipeline.
 
 ### Optional / Pluggable (safe to replace or skip)
-- **Feature Flags Remote:** Firebase Remote Config integration is optional; default flow can run with local/no-op remote flags. <!-- strip:feature-flags line -->
+- **Feature Flags Remote:** only a no-op remote source ships (`NoOpFeatureFlagsRemoteDataSource`), so flags come from local values and defaults. For Firebase Remote Config or any other service, implement `FeatureFlagsRemoteDataSource` and override its provider. <!-- strip:feature-flags line -->
 - **RASP:** FreeRASP implementation is opt-in via provider override.
 - **Performance Monitoring:** Default uses no-op performance service; Firebase performance is opt-in.
 - **Firebase setup:** Firebase dependencies are intentionally not present in `pubspec.yaml` by default; opt in by adding packages and wiring the optional templates/providers in docs.

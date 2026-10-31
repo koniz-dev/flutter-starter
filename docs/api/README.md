@@ -108,7 +108,7 @@ See [Errors](core/errors.md) for details.
 - Core storage (`StorageService`, `SecureStorageService`) used by auth/session flow.
 
 ### Optional APIs (pluggable)
-- Remote feature flags provider implementations (Firebase or custom provider override).
+- Remote feature flags: only `NoOpFeatureFlagsRemoteDataSource` ships; implement `FeatureFlagsRemoteDataSource` for Firebase Remote Config or another service and override its provider. <!-- strip:feature-flags line -->
 - RASP provider implementations (FreeRASP or custom/no-op).
 - Crashlytics output template for logging.
 - GraphQL template client.
