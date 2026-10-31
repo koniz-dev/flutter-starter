@@ -169,6 +169,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `release`) find the artifact they just built. They passed the upload action
   a path relative to `fastlane/`, which the action resolved from the project
   root, and failed with "Could not find aab/ipa file".
+- `scripts/test/test_coverage.sh` removes the generated, git-ignored
+  `test/coverage_helper_test.dart` when it exits. A copy left behind broke
+  `flutter analyze`, `flutter test` and pre-push after the next rename under
+  `lib/`. Delete any copy you already have.
 - The pre-commit hook works with a relative `path:` dependency outside the
   repository (a monorepo's `../shared`). It now exports the staged content
   to a hidden `.<repo>-pre-commit.*` directory beside the repository instead
