@@ -73,17 +73,32 @@ class Throttler {
   /// Creates a [Throttler] with the given [duration]
   ///
   /// [duration] - The minimum duration between function calls
-  Throttler({required Duration duration}) : _duration = duration;
+  ///
+  /// Time is measured monotonically, by a [Stopwatch] started here, never by
+  /// the wall clock: a backward step of the system time (an NTP correction,
+  /// the user changing it) made `DateTime.now()` differences negative and
+  /// suppressed every call until the clock caught up again. [elapsed] is a
+  /// seam for tests.
+  Throttler({required Duration duration, Duration Function()? elapsed})
+    : _duration = duration,
+      _elapsed = elapsed ?? _monotonic();
 
   final Duration _duration;
-  DateTime? _lastRun;
+  final Duration Function() _elapsed;
+  Duration? _lastRun;
+
+  /// Time since this call, from a running [Stopwatch].
+  static Duration Function() _monotonic() {
+    final stopwatch = Stopwatch()..start();
+    return () => stopwatch.elapsed;
+  }
 
   /// Executes the callback if enough time has passed since the last execution
   ///
   /// If called before the duration expires, the callback is ignored.
   void run(VoidCallback callback) {
-    final now = DateTime.now();
-    if (_lastRun == null || now.difference(_lastRun!) >= _duration) {
+    final now = _elapsed();
+    if (_lastRun == null || now - _lastRun! >= _duration) {
       _lastRun = now;
       callback();
     }
