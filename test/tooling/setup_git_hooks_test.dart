@@ -117,4 +117,37 @@ void main() {
     ], cwd: worktree);
     expect(bad.exitCode, isNot(0));
   });
+
+  test("names a hook in the repository's hooks directory that will stop "
+      'running', () {
+    final hooks = Directory('${root.path}/repo/.git/hooks')
+      ..createSync(recursive: true);
+    for (final name in ['post-checkout', 'pre-commit', 'pre-rebase.sample']) {
+      final hook = File('${hooks.path}/$name')
+        ..writeAsStringSync('#!/usr/bin/env bash\nexit 0\n');
+      Process.runSync('chmod', ['+x', hook.path]);
+    }
+
+    final result = setup();
+
+    expect(result.exitCode, 0, reason: '${result.stderr}');
+    final out = '${result.stdout}';
+    expect(out, contains('no longer run'));
+    // Only post-checkout: .githooks/ has a pre-commit, and a sample never
+    // runs anyway.
+    final listed = out
+        .split('\n')
+        .firstWhere((line) => line.contains('instead: '))
+        .split('instead: ')
+        .last
+        .trim();
+    expect(listed, 'post-checkout');
+  });
+
+  test('says nothing about hooks when there are none to lose', () {
+    final result = setup();
+
+    expect(result.exitCode, 0, reason: '${result.stderr}');
+    expect('${result.stdout}', isNot(contains('no longer run')));
+  });
 }
