@@ -1,0 +1,5 @@
+== lib/core/config/app_config.dart at origin/main 1d1751ba466; test from this branch
+00:00 +0 -1: printConfig shows BASE_URL without its userinfo or query secret [E]
+  Expected: not contains 's3cr3t'
+    Actual: '  Base URL: https://user:s3cr3t@api.example.com/v1?token=T0KEN'
+00:00 +0 -1: Some tests failed.

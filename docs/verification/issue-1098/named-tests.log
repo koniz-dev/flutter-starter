@@ -1,0 +1,3 @@
+== main 44ed13fe6d1: flutter test --reporter expanded test/core/config/print_config_redaction_test.dart
++0: printConfig shows BASE_URL without its userinfo or query secret
++1: All tests passed!
