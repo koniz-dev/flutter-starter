@@ -71,6 +71,9 @@ void main() {
       ..writeAsStringSync(
         "import 'dart:js_interop';\n\nJSString web = 'x'.toJS;\n",
       );
+    File('${root.path}/lib/reexport.dart').writeAsStringSync(
+      "export 'dart:js_interop' show JSString;\n",
+    );
     File('${root.path}/lib/conditional.dart').writeAsStringSync(
       "import 'plain.dart' if (dart.library.js_interop) 'web/web_only.dart';\n",
     );
@@ -88,5 +91,7 @@ void main() {
     expect(generated, isNot(contains("'package:scratch/web/web_only.dart'")));
     expect(generated, contains('Left out, web-only'));
     expect(generated, contains('lib/web/web_only.dart'));
+    expect(generated, isNot(contains("'package:scratch/reexport.dart'")));
+    expect(generated, contains('lib/reexport.dart'));
   });
 }

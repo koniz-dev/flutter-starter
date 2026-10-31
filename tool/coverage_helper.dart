@@ -87,12 +87,14 @@ void main(List<String> args) {
   stdout.writeln('Wrote $output (${libraries.length} libraries).');
 }
 
-/// Imports that exist only on the web.
+/// Imports or exports of a library that exists only on the web. An export
+/// loads the library just as an import does.
 final RegExp _webOnlyImport = RegExp(
-  r'''^\s*import\s+['"](dart:(html|js|js_util|js_interop|js_interop_unsafe|ui_web|indexed_db|web_gl|web_audio|svg)['"]|package:web/)''',
+  r'''^\s*(?:import|export)\s+['"](dart:(html|js|js_util|js_interop|js_interop_unsafe|ui_web|indexed_db|web_gl|web_audio|svg)['"]|package:web/)''',
   multiLine: true,
 );
 
-/// Whether the library at [path] imports a web-only library directly.
+/// Whether the library at [path] imports or exports a web-only library
+/// directly.
 bool isWebOnlyLibrary(String path) =>
     _webOnlyImport.hasMatch(File(path).readAsStringSync());
