@@ -48,17 +48,23 @@ void main() {
   });
 
   test('only the files the steps delete or edit use the demo', () {
+    // Tracked files only: CI generates a git-ignored coverage helper that
+    // imports every library, the demo included.
+    final tracked = Process.runSync('git', [
+      'ls-files',
+      'lib',
+      'test',
+      'integration_test',
+      'docs',
+    ]);
+    expect(tracked.exitCode, 0, reason: '${tracked.stderr}');
     final strays = <String>[];
-    for (final root in ['lib', 'test', 'integration_test', 'docs']) {
-      for (final entity in Directory(root).listSync(recursive: true)) {
-        if (entity is! File) continue;
-        final path = entity.path.replaceAll(r'\', '/');
-        if (!path.endsWith('.dart') && !path.endsWith('.md')) continue;
-        if (_deleted.any(path.startsWith) || _edited.containsKey(path)) {
-          continue;
-        }
-        if (_usesDemo.hasMatch(entity.readAsStringSync())) strays.add(path);
+    for (final path in (tracked.stdout as String).trim().split('\n')) {
+      if (!path.endsWith('.dart') && !path.endsWith('.md')) continue;
+      if (_deleted.any(path.startsWith) || _edited.containsKey(path)) {
+        continue;
       }
+      if (_usesDemo.hasMatch(File(path).readAsStringSync())) strays.add(path);
     }
     expect(strays, isEmpty, reason: 'delete or edit these in $_guide too');
   });
