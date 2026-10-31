@@ -70,6 +70,11 @@ class LazyLoader<K, T> {
     final generation = _generation;
     _evictedWhileLoading.remove(key);
     final future = () async {
+      // Yield before calling the loader, so the caller stores this future
+      // first: a loader that throws before returning one would otherwise
+      // clear the entry here before it is stored, and the stored failure
+      // would be returned forever.
+      await null;
       try {
         final value = await _loader(key);
         // Cache the result - unless the cache was cleared, or this key
@@ -179,6 +184,11 @@ class DeferredImportLoader {
     }
 
     return await (_loadingFuture = () async {
+      // Yield before calling the loader, so the caller stores this future
+      // first: a loader that throws before returning one would otherwise
+      // clear the entry here before it is stored, and the stored failure
+      // would be returned forever.
+      await null;
       try {
         await _loadFunction();
         _isLoaded = true;
@@ -238,6 +248,11 @@ class LazyInitializer<T> {
     }
 
     _initFuture = () async {
+      // Yield before calling the loader, so the caller stores this future
+      // first: a loader that throws before returning one would otherwise
+      // clear the entry here before it is stored, and the stored failure
+      // would be returned forever.
+      await null;
       try {
         final value = await _initializer();
         _instance = value;

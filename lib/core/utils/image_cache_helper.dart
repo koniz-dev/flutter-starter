@@ -89,7 +89,12 @@ class ImageCacheHelper {
         }
       },
     );
-    stream = provider.resolve(ImageConfiguration.empty)..addListener(listener);
+    // Assigned before the listener is added: for an image already in the
+    // cache, addListener calls it synchronously, and it removes itself from
+    // `stream`.
+    final resolved = provider.resolve(ImageConfiguration.empty);
+    stream = resolved;
+    resolved.addListener(listener);
     return completer.future.timeout(
       timeout,
       onTimeout: () {
