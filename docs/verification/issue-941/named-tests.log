@@ -1,0 +1,8 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/setup_git_hooks_test.dart
++0: with a global core.hooksPath, the hooks still run afterwards
++1: a repository-local core.hooksPath elsewhere is not overwritten
++2: running it twice succeeds both times
++3: inside a linked worktree it installs, and hooks run there
++4: names a hook in the repository's hooks directory that will stop running
++5: says nothing about hooks when there are none to lose
++6: All tests passed!

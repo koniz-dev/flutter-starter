@@ -1,0 +1,64 @@
+== main c30c6a62786
+--- getting-started.md
+224-
+225-- **Hot Reload** (`r` in the terminal running `flutter run`): fast refresh for UI changes
+226-- **Hot Restart** (`R` in that terminal): restarts the app's Dart state
+227-
+228:Neither picks up a configuration change. `.env` arrives as dart-defines through
+229-`--dart-define-from-file`, which are compiled in when `flutter run` starts:
+230-after editing `.env` or a `--dart-define`, stop the app and run `flutter run`
+231-again.
+232-
+--- configuration.md troubleshooting
+569: ## Best Practices & Troubleshooting
+570: 
+571: 1. **Never commit `.env` files**: They contain sensitive information and are gitignored
+572: 2. **Never bundle `.env` as an asset**: assets are not build-mode scoped, so it ships to every user. See [Never ship a secret in the bundle](#never-ship-a-secret-in-the-bundle)
+573: 3. **Use `.env.example` as a template**: Commit this file with placeholder values
+574: 4. **Use `--dart-define-from-file=.env` for local development**: same file, same convenience, nothing bundled
+575: 5. **Use `--dart-define` for CI/CD**: keeps values out of the asset list; supply them from the CI secret store, never from a committed file
+576: 6. **Keep real secrets out of every client build**: on web that is not a preference but a fact - serve them from your backend instead
+577: 7. **Set environment-specific defaults**: Let the system handle defaults based on environment via `AppConfig`.
+578: 
+579: ### Troubleshooting missing configuration
+580: - **`.env` values ignored?** Expected: `.env` is not an asset, on purpose. Pass `--dart-define-from-file=.env` instead, and check the keys exist in `lib/core/config/dart_defines.dart`. Declaring `.env` under `flutter: assets:` would make `flutter_dotenv` find it - and publish it in every build; `dart run tool/check_env_assets.dart` fails if you do.
+581: - **`--dart-define` value ignored?** Check that the key exists in `lib/core/config/dart_defines.dart`. A key missing from that table is ignored on every platform, web included. `--dart-define` values are baked in at compile time: change one and you must rebuild, not hot reload.
+582: - Changed `.env` or a `--dart-define`? Hot reload and hot restart keep the old values: stop the app and run `flutter run` again.
+583: - `AppConfig.printConfig()`, which `main()` calls in debug builds, prints the values in effect: check its output in the console.
+--- diff of this change (55186ea2dee) in these two files
+diff --git a/docs/guides/configuration.md b/docs/guides/configuration.md
+index 2b9bd1b95dc..b974306c2c8 100644
+--- a/docs/guides/configuration.md
++++ b/docs/guides/configuration.md
+@@ -577,9 +577,7 @@ personal data out of log messages and contexts.
+ 7. **Set environment-specific defaults**: Let the system handle defaults based on environment via `AppConfig`.
+ 
+ ### Troubleshooting missing configuration
+-- Ensure `EnvConfig.load()` is called in `main()` before `runApp()`.
+ - **`.env` values ignored?** Expected: `.env` is not an asset, on purpose. Pass `--dart-define-from-file=.env` instead, and check the keys exist in `lib/core/config/dart_defines.dart`. Declaring `.env` under `flutter: assets:` would make `flutter_dotenv` find it - and publish it in every build; `dart run tool/check_env_assets.dart` fails if you do.
+ - **`--dart-define` value ignored?** Check that the key exists in `lib/core/config/dart_defines.dart`. A key missing from that table is ignored on every platform, web included. `--dart-define` values are baked in at compile time: change one and you must rebuild, not hot reload.
+-- Hot reload doesn't reload system-level environment variables - do a full app restart.
+-- Run `flutter pub get` after pulling dependencies or updating flags to rebuild the configuration tree.
+-- Run `AppConfig.printConfig()` to inspect parsed fallback maps logic.
++- Changed `.env` or a `--dart-define`? Hot reload and hot restart keep the old values: stop the app and run `flutter run` again.
++- `AppConfig.printConfig()`, which `main()` calls in debug builds, prints the values in effect: check its output in the console.
+diff --git a/docs/guides/onboarding/getting-started.md b/docs/guides/onboarding/getting-started.md
+index 012dd24876b..89d4e79e81e 100644
+--- a/docs/guides/onboarding/getting-started.md
++++ b/docs/guides/onboarding/getting-started.md
+@@ -222,8 +222,13 @@ flutter run -d windows
+ 
+ ### Hot Reload and Hot Restart
+ 
+-- **Hot Reload** (`r` in terminal or `Ctrl+S` / `Cmd+S` in IDE): Fast refresh for UI changes
+-- **Hot Restart** (`R` in terminal or `Ctrl+Shift+S` / `Cmd+Shift+S` in IDE): Full restart (needed for configuration changes)
++- **Hot Reload** (`r` in the terminal running `flutter run`): fast refresh for UI changes
++- **Hot Restart** (`R` in that terminal): restarts the app's Dart state
++
++Neither picks up a configuration change. `.env` arrives as dart-defines through
++`--dart-define-from-file`, which are compiled in when `flutter run` starts:
++after editing `.env` or a `--dart-define`, stop the app and run `flutter run`
++again.
+ 
+ ## Environment Configuration
+ 

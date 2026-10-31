@@ -1,0 +1,47 @@
+== main c30c6a62786
+--- lib/core/utils/image_cache_helper.dart (grep -n -E 'debugPrint', 3 lines of context)
+50-          context,
+51-          onError: (e, stack) {
+52-            failed = true;
+53:            debugPrint('Preload error: ${_describe(e)}');
+54-          },
+55-        ).timeout(
+56-          timeout,
+57-          onTimeout: () {
+58-            failed = true;
+59:            debugPrint(
+60-              'Preload timed out after $timeout: '
+61-              '${ApiLoggingInterceptor.redactUrl(url)}',
+62-            );
+--
+66-      }
+67-      return await _preloadViaImageStream(imageProvider, timeout);
+68-    } on Object catch (e) {
+69:      debugPrint(
+70-        'Failed to preload image: ${ApiLoggingInterceptor.redactUrl(url)}, '
+71-        'error: ${_describe(e)}',
+72-      );
+--
+76-
+77-  /// [error] described by its type, and for an HTTP failure its status: an
+78-  /// image load error's own text quotes the full URL - a presigned signature
+79:  /// or a `?token=` - and debugPrint prints in release builds too.
+80-  static String _describe(Object error) => switch (error) {
+81-    NetworkImageLoadException(:final statusCode) =>
+82-      'NetworkImageLoadException (HTTP $statusCode)',
+--
+99-      },
+100-      onError: (exception, stackTrace) {
+101-        stream.removeListener(listener);
+102:        debugPrint('Preload error: ${_describe(exception)}');
+103-        if (!completer.isCompleted) {
+104-          completer.complete(false);
+105-        }
+--
+115-      timeout,
+116-      onTimeout: () {
+117-        stream.removeListener(listener);
+118:        debugPrint('Preload timed out after $timeout');
+119-        return false;
+120-      },
+121-    );

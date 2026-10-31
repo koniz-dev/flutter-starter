@@ -1,0 +1,3 @@
+# coverage_helper_imports_every_library_test with the web-only exclusion removed
++1 -1: a library importing a web-only library is left out, and named [E]
++1 -1: Some tests failed.

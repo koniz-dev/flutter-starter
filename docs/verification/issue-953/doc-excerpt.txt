@@ -1,0 +1,10 @@
+== brick.yaml vars
+  package_name:
+  application_id:
+  ios_bundle_id:
+  app_display_name:
+  strip_sample_features:
+  include_tasks_sample:
+  include_feature_flags_sample:
+== fork-and-customize.md mentions
+37:Answer the prompts for `package_name`, Android `application_id`, iOS `ios_bundle_id`, `app_display_name`, and whether to include optional samples (`tasks`, `feature_flags`).

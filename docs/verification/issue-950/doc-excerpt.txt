@@ -1,0 +1,10 @@
+== main c30c6a62786
+--- docs/api/examples/adding-features.md (grep -n -E 'class_name', 3 lines of context)
+10-./scripts/dev/create_feature.sh notes
+11-```
+12-
+13:`mason make feature_clean --feature_name notes --class_name Notes` produces the
+14:same files if you use Mason. `class_name` is not derived from `feature_name`:
+15-leave it out and the brick prompts for it, defaulting to `Profile`. Either way you get:
+16-
+17-| File | What it is |

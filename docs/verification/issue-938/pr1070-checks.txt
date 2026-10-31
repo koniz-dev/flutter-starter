@@ -1,0 +1,6 @@
+Quality gate	pass	7m40s	https://github.com/koniz-dev/flutter-starter/actions/runs/41193839340/job/124515902469	
+Strip both-samples-removed + analyze + test	pass	5m49s	https://github.com/koniz-dev/flutter-starter/actions/runs/41193839426/job/124515903135	
+Strip feature-flags-removed + analyze + test	pass	4m49s	https://github.com/koniz-dev/flutter-starter/actions/runs/41193839426/job/124515903117	
+Strip keep-samples + analyze + test	pass	5m13s	https://github.com/koniz-dev/flutter-starter/actions/runs/41193839426/job/124515903172	
+Strip renamed-both + analyze + test	pass	4m27s	https://github.com/koniz-dev/flutter-starter/actions/runs/41193839426/job/124515903088	
+Strip tasks-removed + analyze + test	pass	5m25s	https://github.com/koniz-dev/flutter-starter/actions/runs/41193839426/job/124515902921	

@@ -1,0 +1,18 @@
+== main c30c6a62786
+55:# Every .env file is local configuration and may hold secrets - per-
+56:# environment build inputs such as --dart-define-from-file=.env.production,
+57:# .env.dev, .env.test - except .env.example, the committed template.
+58:.env
+59:.env.*
+60:!.env.example
+86:# above, under its Windows name. tool/check_env_assets.dart already refuses to
+99:# of tool/check_env_assets.dart, which leaves .cer, .crt and .der out of its
+.env: ignored
+.env.development: ignored
+.env.dev: ignored
+.env.prod: ignored
+.env.test: ignored
+.env.staging: ignored
+.env.production: ignored
+.env.local: ignored
+.env.example: NOT ignored

@@ -1,0 +1,48 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/brick_input_rules_test.dart
++0: flutter_starter_setup package_name accepts my_app
++1: flutter_starter_setup package_name accepts acme
++2: flutter_starter_setup package_name accepts shop2
++3: flutter_starter_setup package_name accepts a_b_c
++4: flutter_starter_setup package_name rejects "my-app"
++5: flutter_starter_setup package_name rejects "MyApp"
++6: flutter_starter_setup package_name rejects "1app"
++7: flutter_starter_setup package_name rejects "_app"
++8: flutter_starter_setup package_name rejects "my app"
++9: flutter_starter_setup package_name rejects ""
++10: flutter_starter_setup package_name rejects "class"
++11: flutter_starter_setup package_name rejects "void"
++12: flutter_starter_setup application_id accepts com.example.my_app
++13: flutter_starter_setup application_id accepts io.acme.Shop2
++14: flutter_starter_setup application_id rejects "myapp"
++15: flutter_starter_setup application_id rejects "com.example.my-app"
++16: flutter_starter_setup application_id rejects "com..app"
++17: flutter_starter_setup application_id rejects "com.1app"
++18: flutter_starter_setup application_id rejects ".com.app"
++19: flutter_starter_setup application_id rejects "com.app."
++20: flutter_starter_setup ios_bundle_id accepts com.example.myApp
++21: flutter_starter_setup ios_bundle_id accepts com.example.my-app
++22: flutter_starter_setup ios_bundle_id accepts io.acme.Shop2
++23: flutter_starter_setup ios_bundle_id rejects "myApp"
++24: flutter_starter_setup ios_bundle_id rejects "com.example.my_app"
++25: flutter_starter_setup ios_bundle_id rejects "com..app"
++26: flutter_starter_setup ios_bundle_id rejects "com.app."
++27: flutter_starter_setup ios_bundle_id rejects "com.my app"
++28: feature_clean feature_name accepts profile
++29: feature_clean feature_name accepts user_profile
++30: feature_clean feature_name accepts settings_v2
++31: feature_clean feature_name accepts x1
++32: feature_clean feature_name rejects "user-profile"
++33: feature_clean feature_name rejects "UserProfile"
++34: feature_clean feature_name rejects "1abc"
++35: feature_clean feature_name rejects "user__profile"
++36: feature_clean feature_name rejects "_x"
++37: feature_clean feature_name rejects "a b"
++38: feature_clean feature_name rejects ""
++39: displayNameProblem accepts any printable name
++40: displayNameProblem rejects what cannot be escaped where the name lands
++41: flutter_starter_setup package_name against the dependencies the lock file lists the project's dependencies
++42: flutter_starter_setup package_name against the dependencies crypto, a dependency, is refused
++43: flutter_starter_setup package_name against the dependencies clock, a dependency, is refused
++44: flutter_starter_setup package_name against the dependencies a name no dependency uses is accepted
++45: pre_gen refuses a dependency name before anything is written
++46: All tests passed!

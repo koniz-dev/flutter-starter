@@ -1,0 +1,4 @@
+00:00 +5 -1: a commented-out version is ignored for the live one [E]
+  Expected: {'Gradle': '8.14', 'Android Gradle Plugin': '8.1.0', 'Kotlin': '1.9.0'}
+    Actual: {'Gradle': '99.0', 'Android Gradle Plugin': '99.0.0', 'Kotlin': '99.0.0'}
+00:00 +6 -1: Some tests failed.

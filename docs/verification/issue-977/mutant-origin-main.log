@@ -1,0 +1,4 @@
+00:00 +0 -1: identifiers are cased with the invariant culture [E]
+  Expected: contains '[System.Globalization.CultureInfo]::InvariantCulture'
+    Actual: '# Scaffolds a Clean Architecture feature slice under lib/features/, plus its\n'
+00:00 +0 -1: Some tests failed.

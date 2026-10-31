@@ -1,0 +1,7 @@
+00:01 +0 -1: an unknown flag exits 64 and writes nothing [E]
+  Expected: <64>
+    Actual: <0>
+00:02 +0 -2: --help prints the usage and exits 0 [E]
+  Expected: contains 'Usage:'
+    Actual: '--- GitHub Actions Configuration ---\n'
+00:08 +15 -2: Some tests failed.

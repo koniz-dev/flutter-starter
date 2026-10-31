@@ -1,0 +1,4 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/coverage_helper_imports_every_library_test.dart
++0: the generated helper imports every library under lib/
++1: a library importing a web-only library is left out, and named
++2: All tests passed!

@@ -1,0 +1,3 @@
+# setup_git_hooks_test against origin/main's setup_git_hooks.sh
++4 -1: names a hook in the repository's hooks directory that will stop running [E]
++5 -1: Some tests failed.

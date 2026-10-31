@@ -1,0 +1,2 @@
+00:01 +1 -1: a --dir with no path exits 64 and writes nothing [E]
+00:05 +17 -1: Some tests failed.

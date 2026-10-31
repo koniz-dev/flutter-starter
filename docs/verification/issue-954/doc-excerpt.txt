@@ -1,0 +1,17 @@
+== main c30c6a62786
+--- scripts/README.md (grep -n -E 'setup_git_hooks|hooksPath', 3 lines of context)
+8-|--------|---------|
+9-| [`format_dart.sh`](dev/format_dart.sh) | Format only `lib`, `test`, `integration_test`, `tool`, `examples` (avoids scanning `build/`). Use `--check` for CI-style verification, or `--print-paths` to read the scope. Not `bricks/`: it holds Mason templates whose mustache is not valid Dart, so `dart format` exits 65 on it. |
+10-| [`audit_template.sh`](dev/audit_template.sh) | Full non-platform gate: env asset guard, generated code up to date (`AUDIT_SKIP_CODEGEN=1` skips it), format check, `flutter analyze`, `flutter test`. The script header lists what the CI Quality gate adds. |
+11:| [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Point this repository's `core.hooksPath` at `.githooks/`, so the committed hooks run in place (nothing is copied into `.git/hooks/`). Refuses, and says so, when `core.hooksPath` already points elsewhere. |
+12-| [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
+13-| [`create_feature.sh`](dev/create_feature.sh) | Scaffold a feature slice under `lib/features/<name>/` plus its mirrored test under `test/features/<name>/`. Output passes `flutter analyze` and `dart format --set-exit-if-changed` as generated. |
+14-| [`create_feature.ps1`](dev/create_feature.ps1) | Windows equivalent of `create_feature.sh`. Writes byte-identical files (LF, UTF-8 without BOM); the parity is checked by the `scaffold-parity` job in [`scripts-smoke.yml`](../.github/workflows/scripts-smoke.yml). |
+== scripts/test/ files vs README rows
+scripts/test/calculate_layer_coverage.sh: 1
+scripts/test/format_check_test.sh: 1
+scripts/test/pre_commit_hook_test.sh: 1
+scripts/test/release_scripts_test.sh: 1
+scripts/test/run_e2e_tests.sh: 1
+scripts/test/test_coverage.ps1: 1
+scripts/test/test_coverage.sh: 2

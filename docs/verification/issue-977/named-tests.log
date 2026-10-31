@@ -1,0 +1,3 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/create_feature_ps1_culture_test.dart
++0: identifiers are cased with the invariant culture
++1: All tests passed!

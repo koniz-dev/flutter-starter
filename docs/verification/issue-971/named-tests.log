@@ -1,0 +1,10 @@
+== main c30c6a62786: flutter test --reporter expanded test/docs/doc_dart_defines_test.dart
++0: findUnknownDartDefines criterion 2: fails on CERTIFICATE_FINGERPRINTS, naming file, line and key
++1: findUnknownDartDefines criterion 2: passes on API_SSL_FINGERPRINTS
++2: findUnknownDartDefines reads the space-separated form too
++3: findUnknownDartDefines reads a quoted key, in either quote style
++4: findUnknownDartDefines checks every flag on a line
++5: findUnknownDartDefines ignores --dart-define-from-file and prose outside fences
++6: the keys parsed from source are exactly DartDefines.values
++7: criterion 3: the real README.md and docs/ name only known keys
++8: All tests passed!

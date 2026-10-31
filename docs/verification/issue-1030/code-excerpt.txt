@@ -1,0 +1,34 @@
+== main c30c6a62786
+--- lib/main.dart (grep -n -E 'redactUrl|String _shown|cutting|Cutting', 3 lines of context)
+160-    }
+161-    if (AppConfig.releaseWithoutHttps(releaseMode: releaseMode)) {
+162-      // Redacted, not cut short: userinfo and query secrets are removed, and
+163:      // cutting to 32 characters would hide the host.
+164:      final url = ApiLoggingInterceptor.redactUrl(AppConfig.baseUrl);
+165-      throw StateError(
+166-        'BASE_URL "$url" is not https. Refusing to start a '
+167-        '${AppConfig.environment} release that would send its tokens in '
+--
+279-}
+280-
+281-/// [value] cut to 32 characters, for a refusal shown on screen and in the
+282:/// logs. Cutting keeps the message short; it does not remove a secret, which
+283-/// can sit in the first 32 characters (`http://user:pass@...`), so a URL is
+284:/// shown through `ApiLoggingInterceptor.redactUrl` instead.
+285:String _shown(String value) =>
+286-    value.length <= 32 ? value : '${value.substring(0, 32)}...';
+--- tool/golden/stripped/lib/main.dart (grep -n -E 'redactUrl|String _shown', 3 lines of context)
+161-    if (AppConfig.releaseWithoutHttps(releaseMode: releaseMode)) {
+162-      // Redacted, not cut short: userinfo and query secrets are removed, and
+163-      // cutting to 32 characters would hide the host.
+164:      final url = ApiLoggingInterceptor.redactUrl(AppConfig.baseUrl);
+165-      throw StateError(
+166-        'BASE_URL "$url" is not https. Refusing to start a '
+167-        '${AppConfig.environment} release that would send its tokens in '
+--
+281-/// [value] cut to 32 characters, for a refusal shown on screen and in the
+282-/// logs. Cutting keeps the message short; it does not remove a secret, which
+283-/// can sit in the first 32 characters (`http://user:pass@...`), so a URL is
+284:/// shown through `ApiLoggingInterceptor.redactUrl` instead.
+285:String _shown(String value) =>
+286-    value.length <= 32 ? value : '${value.substring(0, 32)}...';

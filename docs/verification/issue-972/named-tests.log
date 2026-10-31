@@ -1,0 +1,9 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/android_toolchain_floor_test.dart
++0: compareVersions orders dotted versions numerically
++1: criterion 2: fails on a fixture with gradle-8.14, naming it
++2: fails on AGP and Kotlin below their floors, one message each
++3: a version exactly at the floor passes
++4: an unreadable version is a problem, not a pass
++5: a commented-out version is ignored for the live one
++6: criterion 2: passes on the real android/ files
++7: All tests passed!

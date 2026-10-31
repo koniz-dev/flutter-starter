@@ -1,0 +1,113 @@
+== main c30c6a62786
+--- tool/README.md (grep -n -E 'flutter test|Docs check|block', 3 lines of context)
+14-  including duplicate `-1` suffixes).
+15-- **Emoji** in `docs/`, `CLAUDE.md` and `.claude/`, per the convention stated in
+16-  `CLAUDE.md`. `README.md` and `CONTRIBUTING.md` are exempt (they predate it).
+17:- **Constructor signatures** (`doc_signatures.dart`): any fenced block preceded
+18-  by `<!-- signature: <source path> <ConstructorName> -->` must list exactly the
+19-  parameters that constructor declares - positional, `[optional]` and
+20-  `{named}`, on one line or many - in order, with the same types, `required`
+--
+36-  ignores the file it just told the reader to fill in. Added after README's
+37-  Quick Start and CONTRIBUTING did exactly that.
+38-- **`--dart-define` keys** (`doc_dart_defines.dart`): every
+39:  `--dart-define=<KEY>=` in a fenced block of `README.md` or `docs/` names a
+40-  key of `DartDefines.values` (`lib/core/config/dart_defines.dart`), the only
+41-  table a define reaches the app through. Added after the security guide
+42-  built production with a key nothing read.
+43:- **`flutter test` paths** (`doc_test_paths.dart`): every path argument of
+44:  `flutter test` in a fenced block of `README.md`, `CONTRIBUTING.md` or `docs/`
+45-  exists, after joining continued lines and skipping flags, `:line` suffixes and
+46-  placeholders (`<...>`, `path/to`). Added after CONTRIBUTING named a test
+47-  file that did not exist.
+--
+54-dart run tool/check_docs.dart --symbols     # symbol existence only
+55-dart run tool/check_docs.dart --env-runs    # .env setup runs only
+56-dart run tool/check_docs.dart --dart-defines  # --dart-define keys only
+57:dart run tool/check_docs.dart --test-paths  # flutter test paths only
+58-```
+59-
+60-Exits 1 and prints `file:line` for every problem. CI runs it whole as
+61:**Docs check** (`.github/workflows/docs-check.yml`) on any PR touching
+62:markdown. Every check except the emoji one also runs under `flutter test` -
+63-links and anchors (`test/docs/doc_links_test.dart`), signatures
+64-(`doc_signatures_test.dart`), symbols (`doc_symbols_test.dart`), `.env` runs
+65-(`doc_env_runs_test.dart`), `--dart-define` keys (`doc_dart_defines_test.dart`)
+--
+67-and the **Quality gate** fail on them too, a markdown-only PR included (the
+68-gate runs the tests that read markdown). That is deliberate: a constructor
+69-gaining a parameter, or an identifier deleted from `lib/`, is a `lib/` change
+70:Docs check never sees. Only the emoji check is Docs check's alone.
+71-
+72-### The `symbol:` directive
+73-
+--
+77-```
+78-
+79-One directive per asserted identifier: a top-level name, or `Type.member` for a
+80:member. It takes no fenced block and says
+81-nothing about the shape of the declaration - only that the name is declared in
+82-that file. Accepted forms: `class` in every modifier spelling, `mixin`, `enum`,
+83-`extension`, `extension type`, `typedef`, a top-level
+--
+97-  drown the author in false positives. The directive is verbose and exact,
+98-  which is the right trade for a document whose whole job is being exact.
+99-
+100:Directives inside a fenced block are ignored, so this section does not check
+101-itself.
+102-
+103-<!-- strip:strip-tool start -->
+--
+131-
+132-Exits 1 and prints `file:line: uses: <target>` for every unpinned action, and
+133-for every `uses: ./<path>` that has no `action.yml` / `action.yaml`.
+134:`test/tooling/workflow_action_pins_test.dart` runs it under `flutter test`, so
+135-the Quality gate enforces it.
+136-
+137-```bash
+--
+142-(annotated tags peeled) and fails when the pinned SHA is not that tag's commit,
+143-for example a commit pushed only to a fork of the action. Exits 1 on a
+144-mismatch or a missing tag, 2 when the API cannot be asked. It needs `gh`
+145:logged in, so it is not part of `flutter test`; the **Action pins** workflow
+146-(`.github/workflows/action-pins.yml`) runs it on any change under `.github/`.
+147-
+148-## `strip_sample_features.dart`
+--
+155-dart run tool/strip_sample_features.dart --apply
+156-flutter pub get
+157-flutter analyze
+158:flutter test
+159-```
+160-
+161-`--keep-samples` removes neither sample. On its own it does nothing; with
+--
+176-
+177-Prose about the feature-flags sample sits between `<!-- strip:feature-flags start -->` and
+178-`<!-- strip:feature-flags end -->`, and the tasks sample uses
+179:`strip:tasks`. Each block goes only when its sample does. For a single line,
+180-such as a table row where a marker line would end the table, put
+181-`<!-- strip:<tag> line -->` anywhere on the line.
+182-`test/tooling/strip_sample_prose_test.dart` fails if a kept markdown file
+--
+190-
+191-Edit **`tool/golden/stripped/`** when the stripped baseline should change (e.g. new `AppRoutes`, `main` bootstrap). Mirrored paths include `lib/`, `test/core/routing/` (`app_router_test.dart`, `app_routes_test.dart`), and `integration_test/`. The tree is **excluded from** `flutter analyze` via `analysis_options.yaml` so it does not conflict with the real `lib/`.
+192-
+193:CI runs **Strip smoke** (`.github/workflows/strip-smoke.yml`): apply strip on a fresh checkout, then `flutter analyze` and `flutter test`. It runs on its own only in the template repository; in a repository created from the template, run it from the Actions tab when you change the strip tool or its goldens.
+194-<!-- strip:strip-tool end -->
+195-
+196-See also [Fork and customize](../docs/guides/onboarding/fork-and-customize.md) and [Contracts map](../docs/architecture/contracts-map.md) (stripped vs full starter).
+--
+200-## After stripping
+201-
+202-- **Patrol:** Golden `integration_test/` targets **auth → home** (`#e2e_home_content` on `HomeScreen`). Run `patrol test --target integration_test/app_e2e_test.dart` after strip.
+203:- Re-run **`flutter analyze`** and **`flutter test`**; the script’s guard should catch most stale imports.
+204-<!-- strip:strip-tool end -->
+--- CONTRIBUTING.md (grep -n -E 'ci.yml', 3 lines of context)
+177-1. Repository **Settings** → **Rules** → **Rulesets** (or **Branches** → **Branch protection rules**, depending on your org).
+178-2. Add a rule for `main` (or your default branch).
+179-3. Enable **Require status checks to pass before merging**.
+180:4. Add the check named **Quality gate** (the single job in `.github/workflows/ci.yml`: format, analyze, then unit tests on **one** runner to limit Actions minutes).
+181-
+182-If you later split CI into parallel jobs for speed, you can require each job or add an aggregate job again for one required check.
+183-

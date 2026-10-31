@@ -1,0 +1,5 @@
+# brick_input_rules_test with the dependency check removed from packageNameProblem
++42 -1: flutter_starter_setup package_name against the dependencies crypto, a dependency, is refused [E]
++42 -2: flutter_starter_setup package_name against the dependencies clock, a dependency, is refused [E]
++43 -3: pre_gen refuses a dependency name before anything is written [E]
++43 -3: Some tests failed.

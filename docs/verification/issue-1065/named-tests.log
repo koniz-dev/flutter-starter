@@ -1,0 +1,6 @@
+== main c30c6a62786: flutter test --reporter expanded test/core/utils/image_cache_helper_redaction_test.dart
++0: without a context, the timeout path prints no secret
++1: without a context, the error path prints no secret
++2: with a context, the timeout path prints no secret
++3: with a context, the error path prints no secret
++4: All tests passed!

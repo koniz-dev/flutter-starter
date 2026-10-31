@@ -1,0 +1,2 @@
+0
+files named image_cache_helper under tool/golden (0 = no counterpart)

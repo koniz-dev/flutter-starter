@@ -1,0 +1,11 @@
+Android on JDK 25 (toolchain floor + debug build)	pass	4m23s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194382998/job/124517484848	
+Docs check	pass	34s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383093/job/124517485077	
+Quality gate	pass	9m27s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383165/job/124517485398	
+Strip both-samples-removed + analyze + test	pass	6m0s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383011/job/124517485078	
+Strip feature-flags-removed + analyze + test	pass	5m44s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383011/job/124517485011	
+Strip keep-samples + analyze + test	pass	5m28s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383011/job/124517485040	
+Strip renamed-both + analyze + test	pass	5m2s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383011/job/124517484770	
+Strip tasks-removed + analyze + test	pass	5m17s	https://github.com/koniz-dev/flutter-starter/actions/runs/41194383011/job/124517485030	
+Build Android	skipping	0	https://github.com/koniz-dev/flutter-starter/actions/runs/41194382998/job/124517485883	
+Build Web	skipping	0	https://github.com/koniz-dev/flutter-starter/actions/runs/41194382998/job/124517485669	
+Build iOS (no codesign)	skipping	0	https://github.com/koniz-dev/flutter-starter/actions/runs/41194382998/job/124517485840	

@@ -1,0 +1,30 @@
+== main c30c6a62786
+--- CONTRIBUTING.md (grep -n -E 'Quality gate|Docs check', 3 lines of context)
+157-If your change touches markdown, also run the docs checker. The **Quality
+158-gate** runs on every pull request, a markdown-only one included, but for those
+159-it runs only the tests that read markdown (snippets, quoted code, test paths);
+160:the link, anchor and symbol checks below run in the separate **Docs check**
+161-workflow:
+162-
+163-```bash
+--
+172-
+173-### GitHub branch protection (recommended)
+174-
+175:On the default branch (for example `main`), you can require the **Quality gate** status before merge:
+176-
+177-1. Repository **Settings** → **Rules** → **Rulesets** (or **Branches** → **Branch protection rules**, depending on your org).
+178-2. Add a rule for `main` (or your default branch).
+179-3. Enable **Require status checks to pass before merging**.
+180:4. Add the check named **Quality gate** (the single job in `.github/workflows/ci.yml`: format, analyze, then unit tests on **one** runner to limit Actions minutes).
+181-
+182-If you later split CI into parallel jobs for speed, you can require each job or add an aggregate job again for one required check.
+183-
+--
+495-
+496-### What to Expect
+497-
+498:1. **Automated Checks** - GitHub Actions runs **Quality gate** (format → analyze → tests on one Ubuntu runner) for branch protection
+499-2. **Code Review** - A teammate reviews your code
+500-3. **Feedback** - You may receive suggestions for improvements
+501-4. **Iteration** - You may need to make changes based on feedback

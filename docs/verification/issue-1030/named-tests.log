@@ -1,0 +1,26 @@
+== main c30c6a62786: flutter test --reporter expanded test/core/startup/startup_reachability_test.dart
++0: startup container surfaces failures instead of hanging a real migration failure reaches the awaiting caller within 5s
++1: startup container surfaces failures instead of hanging a downgrade refusal reaches the awaiting caller within 5s
++2: startup container surfaces failures instead of hanging a plain Exception from storage init is not retried away
++3: startup container surfaces failures instead of hanging a session restoration failure is not retried away
++4: startup container surfaces failures instead of hanging a healthy startup still completes normally
++5: startup container surfaces failures instead of hanging the default container still hangs - the opt-out is load-bearing
++6: main() renders StartupFailureApp end to end a failed version stamp boots into the failure screen
++7: main() renders StartupFailureApp end to end the caught startup failure is reported once, with its stack
++8: main() renders StartupFailureApp end to end a downgrade refusal boots into the failure screen
++9: main() refuses an unknown ENVIRONMENT ENVIRONMENT=prod boots into the failure screen, naming the value and the known environments
++10: a bootstrap called while one is running joins it
++11: main() refuses a release build configured as development a release build with ENVIRONMENT=development boots into the failure screen
++12: main() refuses a release build configured as development a release build with ENVIRONMENT=production starts
++13: main() refuses a release build configured as development a release build with pinning on and no fingerprints boots into the failure screen
++14: main() refuses a release build configured as development a release build with an unrecognised ENABLE_SSL_PINNING boots into the failure screen, naming the value
++15: main() refuses a release build configured as development a staging release with an http BASE_URL boots into the failure screen
++16: main() refuses a release build configured as development a production release with an http BASE_URL boots into the failure screen
++17: main() refuses a release build configured as development the http BASE_URL refusal shows the URL without its userinfo
++18: main() refuses a release build configured as development a debug build with an http BASE_URL starts
++19: main() refuses a release build configured as development a release build that opts out of pinning starts without fingerprints
++20: main() refuses a release build configured as development a non-release development build starts
++21: main() and the uncaught-error handlers a healthy startup installs both handlers
++22: main() and the uncaught-error handlers Try again after a startup failure installs them once, so an uncaught error is reported once
++23: main() boots MyApp end to end on a healthy startup a healthy startup hands MyApp to runApp, not the failure screen
++24: All tests passed!

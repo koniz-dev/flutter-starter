@@ -1,0 +1,8 @@
+== main c30c6a62786: flutter test --reporter expanded test/core/network/realtime/raw_websocket_redirect_test.dart
++0: (setUpAll)
++0: a production release refuses a redirect to cleartext
++1: a production release still follows a redirect that stays on TLS
++2: a debug build follows the redirect as before
++3: a production release still goes through a configured proxy, pinned
++4: (tearDownAll)
++4: All tests passed!

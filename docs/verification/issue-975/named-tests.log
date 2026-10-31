@@ -1,0 +1,20 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/setup_ci_test.dart
++0: an unknown flag exits 64 and writes nothing
++1: a --dir with no path exits 64 and writes nothing
++2: --help prints the usage and exits 0
++3: there are deploy workflows to check
++4: criterion 1: setup_ci.dart enables exactly one deploy option without --deploy-trigger, no deploy workflow gets a push trigger
++5: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=tags enables tags and not branches
++6: criterion 1: setup_ci.dart enables exactly one deploy option --deploy-trigger=branch enables branches and not tags
++7: criterion 1: setup_ci.dart enables exactly one deploy option an unknown value is refused and writes nothing
++8: criterion 2: every deploy upload fails on zero files deploy-android.yml
++9: criterion 2: every deploy upload fails on zero files deploy-ios.yml
++10: criterion 2: every deploy upload fails on zero files deploy-web.yml
++11: every deploy job uploads, failing on zero files deploy-android.yml
++12: every deploy job uploads, failing on zero files deploy-ios.yml
++13: every deploy job uploads, failing on zero files deploy-web.yml
++14: every deploy job uploads, failing on zero files deploy-web.yml fails each job while it deploys nothing
++15: criterion 3: commented artifact paths use the flavorless layout deploy-android.yml
++16: criterion 3: commented artifact paths use the flavorless layout deploy-ios.yml
++17: criterion 3: commented artifact paths use the flavorless layout deploy-web.yml
++18: All tests passed!

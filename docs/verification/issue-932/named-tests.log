@@ -1,0 +1,3 @@
+== main c30c6a62786: flutter test --reporter expanded test/tooling/gitignore_env_files_test.dart
++0: every .env file is ignored except .env.example
++1: All tests passed!

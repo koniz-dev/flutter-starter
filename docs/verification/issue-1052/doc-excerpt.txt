@@ -1,0 +1,39 @@
+== main c30c6a62786
+--- docs/api/core/network.md (grep -n -E '[Rr]edirect', 3 lines of context)
+349-
+350-### Implementations
+351-- `NoOpRealtimeClient`: A mocked dummy client injected by default to prevent connection errors where real-time is not needed.
+352:- `RawWebSocketClientImpl`: Concrete class powered by the `web_socket_channel` package. Its handshake follows the same pinning policy as `ApiClient`: when pinning is in effect it connects through the pinned `HttpClient` from `SslPinning.createHttpClient()`, so a `wss://` server whose certificate the fingerprints do not name is refused. Pass `sslPinning:` to use a different policy. Its log lines and every error `connect` throws name the URL redacted - userinfo and query values whose key names a secret replaced - so a realtime token does not reach a crash report. In a staging or production release, `connect` refuses any URL that is not `wss://` (a `WebSocketChannelException`, nothing opened), as `main()` refuses a non-`https` `BASE_URL`; development, debug and profile builds still accept `ws://`. The same release refuses a handshake redirect that leaves TLS (a `wss://` server answering `302 -> http://...`), which dart:io would otherwise follow into cleartext; a redirect to another `https` URL is followed, pinned as the first hop is.
+353-
+354-### Usage Example
+355-```dart
+--
+638-
+639-A fourth step then tells the **running app**. Clearing storage only fixes the next launch; the session this launch is rendering lives in memory, in `AuthNotifier`. The interceptor reaches it through `ISessionTerminationSink` (`lib/core/contracts/state_boundary_contracts.dart`), implemented by `RiverpodSessionTerminationSink` in the auth feature, which reaches the interceptor through `sessionTerminationSinkProvider` - the second seam `authModuleOverrides` fills - so neither `lib/core/network` nor `lib/core/di` imports the feature that owns the session. The sink resolves the notifier lazily, at the moment a session is terminated rather than at construction, which is what keeps the edge notifier -> use case -> repository -> remote data source -> `ApiClient` -> interceptor from closing into a cycle. It is optional for the same reason the cache is.
+640-
+641:The app is **not** navigated anywhere from here. The interceptor only drops the session; the existing guard in `lib/core/routing/app_router.dart` reacts to the state change through its `refreshListenable` and performs the redirect to `/login`. Keeping navigation in one place is what lets the guard's deep-link round trip and its "no `/login` flash while the session restores" behaviour keep working.
+642-
+643-Every step of the teardown is independently guarded and best-effort, and no step is nested inside another's null check: a dependency that was never wired skips only its own step. A step that throws must never leave the 401 handler uncompleted, so the error still surfaces to the caller either way. `sessionSink.onSessionTerminated()` swallowing its errors is load-bearing rather than lazy - a background request can 401 after the app's `ProviderContainer` is gone, and resolving a disposed provider throws. In particular, notifying the sink is wrapped: a background request can 401 after the app's `ProviderContainer` is gone, and resolving a provider from a disposed container throws.
+644-
+--- lib/core/network/realtime/raw_websocket_client.dart (grep -n -E '[Rr]edirect', 3 lines of context)
+36-/// `main()` refuses a `BASE_URL` that is not `https`: web and desktop do not
+37-/// block cleartext, and the realtime token and every message would travel
+38-/// unencrypted, where pinning cannot apply. The same release refuses a
+39:/// handshake redirect that leaves TLS (`302 -> http://...`), which dart:io
+40:/// would otherwise follow; a redirect that stays on TLS is followed, pinned
+41:/// like the first hop. On web the browser follows no handshake redirect.
+42-class RawWebSocketClientImpl implements IRealtimeClient {
+43-  /// Creates a client whose [connect] gives up after [connectTimeout].
+44-  ///
+--
+200-  /// The [HttpClient] the handshake goes through, or null for the default.
+201-  ///
+202-  /// In a staging or production release the handshake must stay on TLS end
+203:  /// to end: dart:io follows a redirect during the WebSocket handshake, so a
+204-  /// `wss://` server answering `302 -> http://...` downgraded the connection
+205-  /// to cleartext. The client's connection factory refuses any hop that is
+206-  /// not `https`, and opens the rest as [SslPinning.secureConnect] does. Web
+207:  /// is left to the browser, which follows no handshake redirect.
+208-  HttpClient? _transport() {
+209-    final pinned = _sslPinning.createHttpClient();
+210-    if (kIsWeb || !_refusesCleartext) return pinned;

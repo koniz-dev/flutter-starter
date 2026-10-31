@@ -1,0 +1,22 @@
+== main c30c6a62786
+--- bricks/README.md (grep -n -E 'format|hooks/|pre_gen|post_gen|input_rules', 3 lines of context)
+32-
+33-## Developing or changing a brick
+34-
+35:- Hook code lives under `bricks/<name>/hooks/` (a small Dart package) in both bricks: `pre_gen.dart` validates the input through `input_rules.dart` before anything is written, and `post_gen.dart` runs after generation.
+36:- After editing any file under a brick's `hooks/` (`pre_gen.dart`, `post_gen.dart`, `input_rules.dart` or `pubspec.yaml`), run `dart pub get` inside that brick's `hooks/` folder - `bricks/flutter_starter_setup/hooks/` or `bricks/feature_clean/hooks/` - so analysis and Mason resolve dependencies locally.
+37:- `brick.yaml` `environment.mason` and `hooks/pubspec.yaml` should stay aligned with the root `pubspec.yaml` **`mason`** dev_dependency (currently the stable `^0.1.x` line from [pub.dev](https://pub.dev/packages/mason)).
+--- bricks/flutter_starter_setup/README.md (grep -n -E 'pre_gen|validat', 3 lines of context)
+122-with non-default answers and then `flutter analyze` and `flutter test`. It is
+123-manual, like the rest of that workflow. Run it after touching the hook.
+124-
+125:Invalid input is refused before anything is written: `hooks/pre_gen.dart`
+126-checks `package_name` (a pub name, not a Dart reserved word),
+127-`application_id` (two or more segments of letters, digits and underscores),
+128-`ios_bundle_id` (letters, digits and hyphens) and `app_display_name` (see the
+129-table above) through `hooks/input_rules.dart`.
+130-
+131:After changing any file under `hooks/` (`pre_gen.dart`, `post_gen.dart`,
+132-`input_rules.dart` or `pubspec.yaml`):
+133-
+134-```bash
