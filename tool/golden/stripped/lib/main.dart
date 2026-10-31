@@ -88,10 +88,25 @@ Future<void> main() => bootstrap();
 ///
 /// [releaseMode] is `kReleaseMode` unless a test stands in for a release
 /// build, which a test run can never be.
+///
+/// A call made while one is still running joins it rather than starting a
+/// second: two taps on Try again used to start two bootstraps, each building
+/// a container and running the storage migrations against the same stores,
+/// and the one that lost the race was never disposed.
 @visibleForTesting
 Future<void> bootstrap({
   ProviderContainer Function() createContainer = createAppContainer,
   bool releaseMode = kReleaseMode,
+}) => _bootstrapping ??= _bootstrap(
+  createContainer: createContainer,
+  releaseMode: releaseMode,
+).whenComplete(() => _bootstrapping = null);
+
+Future<void>? _bootstrapping;
+
+Future<void> _bootstrap({
+  required ProviderContainer Function() createContainer,
+  required bool releaseMode,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
