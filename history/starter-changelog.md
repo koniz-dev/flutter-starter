@@ -168,6 +168,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   when it changes, dropping responses cached for URLs a newer rule treats as
   secret. **On the first request after upgrading, the cache is emptied once.**
   If you change the key sets, bump the version (a test fails until you do).
+- The startup refusal of a non-https `BASE_URL` shows the URL through
+  `ApiLoggingInterceptor.redactUrl`, so userinfo and secret query values no
+  longer reach the failure screen or the error reporter.
+- In a staging or production release, the realtime client refuses a
+  WebSocket handshake redirect that leaves TLS (`wss://` answering
+  `302 -> http://`). A redirect that stays on TLS is still followed, pinned.
+- `ImageCacheHelper`'s debug prints name an image URL through `redactUrl` and
+  an error by its type, so presigned signatures and `?token=` values stay out
+  of the console.
+- `.gitignore` ignores `.env` and every `.env.*` except `.env.example`
+  (`.env.dev`, `.env.prod`, `.env.test` used to be committable).
 
 ### Fixed
 
@@ -290,6 +301,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log files are written to the app's cache directory instead of its
   documents (iCloud-backed on iOS, the shared `~/Documents` on desktop).
   Files written before stay in the old `logs/` directory.
+- **`coverage.yml` no longer has a PR-comment step**, nor the
+  `pull-requests: write` scope it needed. No trigger reached it as shipped;
+  if you enabled `pull_request`, read the run's job summary or install the
+  Codecov app for PR comments.
+- `scripts/test/test_coverage.sh` compares percentages in awk, so a missing
+  `bc` no longer turns a failing threshold into a pass, and
+  `test_coverage.ps1` runs `tool/coverage_helper.dart` first and exits
+  non-zero when tests fail.
+- `scripts/ci/release.sh` refuses before changing anything when the release
+  branch or tag already exists (also for a `version:` line with a trailing
+  comment), and its summary claims a deploy only when a deploy workflow has
+  a live `on: push: tags:` trigger.
+- `scripts/dev/setup_ci.dart` exits 64 on an unknown flag, or a `--dir` with
+  no path, and writes nothing (`--dryrun` used to write the workflows); `-h`
+  and `--help` print the usage. `--dir=<path>` was never read and is now
+  refused: pass `--dir <path>`.
+- `scripts/dev/setup_git_hooks.sh` (and `.ps1`) works with the app in a
+  subdirectory of a larger repository: `core.hooksPath` is set relative to
+  the top, a failed check restores the previous value, and `pre-commit` and
+  `pre-push` run in the app. It also names hooks in `.git/hooks` that stop
+  running once `core.hooksPath` points at `.githooks/`.
+- The `feature_clean` brick refuses a `class_name` that is not UpperCamelCase;
+  the setup brick refuses a `package_name` that is already a dependency in
+  `pubspec.lock`, before anything is written.
+- `create_feature.ps1` cases identifiers with the invariant culture (a
+  Turkish locale produced an invalid identifier).
+- `tool/coverage_helper.dart` leaves out a library that imports or exports a
+  web-only library, so one such library no longer fails the coverage run.
+- Docs checks: a quoted `--dart-define="KEY=..."` is read, and the Android
+  toolchain check ignores commented-out versions.
 
 ### Documentation
 
@@ -331,6 +372,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   goes into `DartDefines.values`.
 - Performance work uses `--profile`; release examples include the keystore step
   and `ENVIRONMENT=production`.
+- CONTRIBUTING says what the Quality gate runs for a markdown-only PR and what
+  Docs check adds; `tool/README.md` says the same for each docs check.
+- `adding-features.md` passes `--class_name`; getting started and the
+  configuration guide say a `.env` or `--dart-define` change needs `flutter
+  run` again; fork-and-customize names the setup brick's real variables.
+- `scripts/README.md`, `bricks/README.md` and both brick READMEs describe
+  `core.hooksPath`, every `scripts/test/` script and what each `pre_gen`
+  checks.
+- The coverage guides describe the job summary, not a PR comment.
+
 
 ## [2.0.0] - 2026-10-29
 
