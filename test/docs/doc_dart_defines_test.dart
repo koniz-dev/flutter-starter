@@ -70,6 +70,18 @@ void main() {
       );
     });
 
+    test('reads a quoted key, in either quote style', () {
+      const source =
+          '```bash\n'
+          'flutter run --dart-define="NOPE_DOUBLE=a b"\n'
+          "flutter run --dart-define='NOPE_SINGLE=a b'\n"
+          '```\n';
+      expect(
+        findUnknownDartDefines(source, known).map((p) => p.key),
+        ['NOPE_DOUBLE', 'NOPE_SINGLE'],
+      );
+    });
+
     test('checks every flag on a line', () {
       const source =
           '```bash\n'

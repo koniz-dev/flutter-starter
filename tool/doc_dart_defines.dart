@@ -43,8 +43,11 @@ class UnknownDartDefine {
 final RegExp _tableEntry = RegExp(
   r"""['"]([A-Za-z_][A-Za-z0-9_]*)['"]\s*:\s*String\.fromEnvironment\(""",
 );
+// An optional quote before the key: `--dart-define="KEY=value"` and
+// `--dart-define='KEY=value'` are the forms a shell needs for a value with
+// spaces.
 final RegExp _dartDefine = RegExp(
-  r'--dart-define(?:=|\s+)([A-Za-z_][A-Za-z0-9_]*)=',
+  r'''--dart-define(?:=|\s+)["']?([A-Za-z_][A-Za-z0-9_]*)=''',
 );
 final RegExp _fence = RegExp(r'^\s*(`{3,}|~{3,})');
 
