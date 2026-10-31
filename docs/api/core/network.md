@@ -1007,6 +1007,16 @@ headers in a case-insensitive map that preserves the caller's original casing,
 so the `Authorization` key written by `AuthInterceptor` is redacted just like a
 lowercase `authorization`.
 
+**The error object** passed to `LoggingService.error` - and through it to the
+error reporter - is a `RedactedDioException`, not the `DioException` itself.
+The original's text ends with the underlying error's, and dart:io writes the
+full request URI into an `HttpException` (`..., uri = <URL>`), query secrets
+and userinfo included. The stand-in keeps the error type, the redacted path,
+the status code, and the underlying error's type and reason, with an
+`HttpException`'s URI through `redactUrl`; any other underlying error is named
+by its type only. Paths logged in the request, response and error entries go
+through `redactUrl` as well, so an absolute URL loses its userinfo.
+
 **Query parameters** go through exactly the same key rule as bodies. They used
 to be logged raw while the body of the same request was sanitized, which leaked
 password-reset tokens, `?access_token=` values and `?api_key=` credentials.

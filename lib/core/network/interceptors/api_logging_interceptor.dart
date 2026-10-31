@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show HttpException, SocketException;
 
 import 'package:dio/dio.dart';
 
@@ -30,7 +31,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     final context = <String, dynamic>{
       'method': options.method,
-      'path': redactPath(options.path),
+      'path': redactUrl(options.path),
       'baseUrl': options.baseUrl,
       'headers': _sanitizeHeaders(options.headers),
       if (options.queryParameters.isNotEmpty)
@@ -42,7 +43,7 @@ class ApiLoggingInterceptor extends Interceptor {
     };
 
     _loggingService.debug(
-      'API Request: ${options.method} ${redactPath(options.path)}',
+      'API Request: ${options.method} ${redactUrl(options.path)}',
       context: context,
     );
 
@@ -61,7 +62,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     final context = <String, dynamic>{
       'statusCode': response.statusCode,
-      'path': redactPath(response.requestOptions.path),
+      'path': redactUrl(response.requestOptions.path),
       'headers': _sanitizeHeaders(response.headers.map),
       if (response.data != null) 'body': _sanitizeBody(response.data),
     };
@@ -70,13 +71,13 @@ class ApiLoggingInterceptor extends Interceptor {
     if (response.statusCode! >= 400) {
       _loggingService.warning(
         'API Response: ${response.statusCode} '
-        '${redactPath(response.requestOptions.path)}',
+        '${redactUrl(response.requestOptions.path)}',
         context: context,
       );
     } else {
       _loggingService.info(
         'API Response: ${response.statusCode} '
-        '${redactPath(response.requestOptions.path)}',
+        '${redactUrl(response.requestOptions.path)}',
         context: context,
       );
     }
@@ -93,7 +94,7 @@ class ApiLoggingInterceptor extends Interceptor {
 
     final context = <String, dynamic>{
       'type': err.type.toString(),
-      'path': redactPath(err.requestOptions.path),
+      'path': redactUrl(err.requestOptions.path),
       'method': err.requestOptions.method,
       'statusCode': err.response?.statusCode,
       if (err.response?.data != null)
@@ -103,9 +104,12 @@ class ApiLoggingInterceptor extends Interceptor {
     };
 
     _loggingService.error(
-      'API Error: ${err.type} ${redactPath(err.requestOptions.path)}',
+      'API Error: ${err.type} ${redactUrl(err.requestOptions.path)}',
       context: context,
-      error: err,
+      // Not `err`: its toString ends with the underlying error's, and dart:io
+      // writes the full request URI - query secrets and userinfo - into an
+      // HttpException. The logger prints it and the error reporter uploads it.
+      error: RedactedDioException(err),
       stackTrace: err.stackTrace,
     );
 
@@ -434,4 +438,55 @@ class ApiLoggingInterceptor extends Interceptor {
 
     return sanitized;
   }
+}
+
+/// A [DioException] as the logger and the error reporter may see it: its
+/// type, redacted path and status code, and the underlying error described
+/// from known parts only.
+///
+/// The underlying error's own text is never copied: an `HttpException`
+/// quotes the full request URI, and scrubbing free text proved unreliable
+/// for the WebSocket client. An `HttpException` keeps its reason and its URI
+/// through [ApiLoggingInterceptor.redactUrl]; a `SocketException` its reason
+/// and OS error; anything else its type.
+class RedactedDioException implements Exception {
+  /// Describes [exception] without anything it may carry of a secret.
+  RedactedDioException(DioException exception)
+    : type = exception.type,
+      path = ApiLoggingInterceptor.redactUrl(exception.requestOptions.path),
+      statusCode = exception.response?.statusCode,
+      cause = _describe(exception.error);
+
+  /// The [DioExceptionType] of the original exception.
+  final DioExceptionType type;
+
+  /// The request path (an absolute URL included), userinfo and query
+  /// secrets redacted.
+  final String path;
+
+  /// The response status code, when there was a response.
+  final int? statusCode;
+
+  /// The underlying error, described from its type and known fields; null
+  /// when there was none.
+  final String? cause;
+
+  static String? _describe(Object? error) => switch (error) {
+    null => null,
+    HttpException(:final message, :final uri) =>
+      'HttpException: $message'
+          '${uri == null ? '' : ', uri = ${_redactedUri(uri)}'}',
+    SocketException(:final message, :final osError) =>
+      'SocketException: $message${osError == null ? '' : ' ($osError)'}',
+    _ => '${error.runtimeType}',
+  };
+
+  static String _redactedUri(Uri uri) =>
+      ApiLoggingInterceptor.redactUrl(uri.toString());
+
+  @override
+  String toString() =>
+      'DioException [$type] $path'
+      '${statusCode == null ? '' : ' (status $statusCode)'}'
+      '${cause == null ? '' : ': $cause'}';
 }
