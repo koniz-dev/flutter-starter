@@ -7,6 +7,13 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+/// The repository's package config: `dart <file>` with it skips `dart run`'s
+/// build-hook step, whose native-asset bundling crashed when several tests
+/// ran it at once.
+final String _packages = File(
+  '.dart_tool/package_config.json',
+).absolute.path;
+
 void main() {
   test('the generated helper imports every library under lib/', () {
     final out = File(
@@ -16,7 +23,7 @@ void main() {
     addTearDown(() => out.parent.deleteSync(recursive: true));
 
     final result = Process.runSync('dart', [
-      'run',
+      '--packages=$_packages',
       'tool/coverage_helper.dart',
       out.path,
     ]);
