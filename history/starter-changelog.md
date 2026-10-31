@@ -354,6 +354,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   line never joins across a fence; a quoted or escaped `--dart-define` key is
   read; `/* */` and `!` comments are ignored by the Android toolchain check;
   string interpolations no longer hide declarations from `doc_symbols`.
+- `check_docs` reports a malformed `<!-- symbol: -->` or `<!-- signature: -->`
+  directive (it used to skip it), no longer counts an initializer, an
+  expression body, a comment or a string as a declaration, and checks
+  `CLAUDE.md`'s links, `flutter test` paths and `.env` runs.
 
 ### Documentation
 
@@ -410,6 +414,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/guides/security/implementation.md`: the Log Sanitization, Android
   Release Signing and R8 / ProGuard sections render again on GitHub (a nested
   fence had turned them into code).
+- The coverage guides match the workflows (no figures the gates forbid, the
+  Codecov upload that is active, coverage commands that run
+  `coverage_helper.dart` first); `utils.md` lists `DateFormatter`'s ISO-8601
+  pair and every validator; the i18n guide shows what `LocalizedFormatters`
+  really prints per locale; ADR 0006 names symbols instead of line numbers;
+  the touch-target snippet compiles and runs; the testing troubleshooting
+  names Riverpod's real `No ProviderScope found`; only a no-op remote
+  feature-flag source ships, and the READMEs say so.
 
 
 ## [2.0.0] - 2026-10-29
