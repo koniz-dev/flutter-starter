@@ -4,7 +4,7 @@ This guide explains how test coverage is measured, enforced, and improved in the
 
 ## Overview
 
-Test coverage measures how much of the codebase is executed during tests. We aim for **80%+ overall coverage** with higher targets for critical layers.
+Test coverage measures how much of the codebase is executed during tests. Two gates enforce it: every pull request's **Quality gate** checks total line coverage against `COVERAGE_MIN_TOTAL` in `ci.yml`, and the manual and weekly `coverage.yml` checks a total and a floor per layer (see [Coverage Enforcement](#coverage-enforcement)).
 
 ## Coverage Goals
 
@@ -14,13 +14,17 @@ Test coverage measures how much of the codebase is executed during tests. We aim
 |-------|--------|-----------|
 | **Domain** | 100% | Business logic must be fully tested |
 | **Data** | 90%+ | Data transformations and error handling are critical |
-| **Core** | 80%+ | Matches CI gate; raise locally if your team wants stricter core coverage |
+| **Core** | 80%+ | Checked by `coverage.yml` only; no pull-request gate checks a layer |
 | **Presentation** | 80%+ | UI logic should be well-tested |
-| **Shared** | 80%+ | Shared utilities used across features |
+| **Shared** | 80%+ | A goal only: no gate checks `lib/shared/` on its own |
+
+Domain, data, presentation and core are the `COVERAGE_MIN_*` values in
+`coverage.yml`.
 
 ### Overall Target
 
-**Minimum: 80%** overall coverage
+The per-PR floor is `COVERAGE_MIN_TOTAL` in `ci.yml`, which starts a little
+below what this starter measures. `coverage.yml` checks its own, lower total.
 
 ## Measuring Coverage
 
@@ -89,8 +93,9 @@ uses, so the layer percentages match CI's exactly. The overall percentage
 counts executable lines the same way; CI's overall figure comes from
 `lcov --summary` and can differ from it in the first decimal.
 
-`scripts/test/test_coverage.ps1` (Windows) only runs `flutter test --coverage`
-and prints how to render the HTML report. It does not support `--html`,
+`scripts/test/test_coverage.ps1` (Windows) runs `tool/coverage_helper.dart`
+and `flutter test --coverage`, fails when a test fails, and prints how to
+render the HTML report. It does not support `--html`,
 `--min`, `--exclude`, `--analyze` or `--no-test`; use the bash script under
 Git Bash or WSL for those.
 
@@ -145,10 +150,14 @@ Both drop the same files before counting: `coverage.yml` with `lcov --remove`,
 
 ### Codecov Integration
 
-1. **Sign up:** https://codecov.io
-2. **Add repository:** Connect your GitHub repo
-3. **Get token:** Copy your Codecov token
-4. **Add secret:** Add `CODECOV_TOKEN` to GitHub Secrets
+`coverage.yml` uploads with its **Upload to Codecov (Public)** step, which
+passes no token: a public repository needs only the repository added at
+https://codecov.io.
+
+For a private repository, add `CODECOV_TOKEN` to the repository's Actions
+secrets, then in `coverage.yml` comment out **Upload to Codecov (Public)** and
+uncomment the **Upload to Codecov (Private)** block above it, which passes
+the token.
 
 Coverage reports are available at:
 ```
@@ -230,7 +239,6 @@ To increase the minimum threshold:
 
 3. **Verify coverage:**
    ```bash
-   flutter test --coverage
    ./scripts/test/test_coverage.sh
    ```
 
@@ -356,77 +364,14 @@ Coverage reports help identify:
 - Review coverage trends
 - Fix coverage regressions
 
-## Files with Low Coverage (By Design)
+## Files That Are Not Counted
 
-Our project maintains **~80% overall coverage**, which is above our minimum threshold. However, some files show lower coverage percentages due to intentional design decisions rather than testing gaps. This section documents these files and explains why their coverage is lower.
-
-### Constants Files (~46% coverage)
-
-**Files:**
-- `api_endpoints.dart`
-- `app_constants.dart`
-
-**Coverage:** ~46%
-
-**Reason:** These files contain private constructors that cannot be executed during tests. All constant values are tested through their usage in other parts of the codebase.
-
-**Status:** All constant values are verified through integration tests and usage in production code.
-
-### Localization Generated Files (0-50% coverage)
-
-**Files:**
-- `app_localizations_*.dart` (all generated localization files)
-
-**Coverage:** 0-50%
-
-**Reason:** These are auto-generated files from Flutter's localization system (`flutter gen-l10n`). Generated code should not be tested directly as it's maintained by the framework.
-
-**Status:** Localization functionality is tested through integration tests and UI tests that verify correct string display.
-
-### Main Entry Point (~56% coverage)
-
-**File:**
-- `main.dart`
-
-**Coverage:** ~56%
-
-**Reason:** The `runApp()` function is the application entry point and cannot be meaningfully tested in isolation. Initialization functions and setup logic are tested separately in dedicated test files.
-
-**Status:** All initialization logic and setup functions are covered by separate unit tests.
-
-### Task Use Cases (56-58% coverage)
-
-**Files:**
-- Task use cases: `delete`, `update`, `get_all`, `get_by_id`, `toggle`
-
-**Coverage:** 56-58%
-
-**Reason:** Lower coverage percentages are due to blank lines and comments in the code. All executable code paths are fully tested.
-
-**Status:** Each use case has 12-13 comprehensive test cases covering all business logic, error handling, and edge cases.
-
-### Environment Configuration (~36% coverage)
-
-**File:**
-- `env_config.dart`
-
-**Coverage:** ~36%
-
-**Reason:** The `dotenv.load()` function looks for files in the assets directory, which is difficult to test in unit test environments. The parsing and validation functions are tested via default values and mock scenarios.
-
-**Status:** All parsing logic and configuration handling is tested through default values and integration tests.
-
-## Summary
-
-These low-coverage files are **intentional design decisions**, not testing gaps:
-
-- All executable business logic is tested
-- All constant values are verified through usage
-- Generated code is excluded (as per best practices)
-- Entry points are tested through integration tests
-- Configuration parsing is tested via defaults
-
-When reviewing coverage reports, focus on **executable code coverage** rather than raw percentages. Our **~80% overall coverage** reflects comprehensive testing of all critical paths and business logic.
+Both gates drop generated code (`*.g.dart`, `*.freezed.dart`, `*.config.dart`,
+`generated/`), the generated localizations under `l10n/`, `main.dart` and test
+code before counting; the list is `lcov --remove` in `coverage.yml` and the
+same filter in `test_coverage.sh`.
+Every other file under `lib/` counts, at the figure it measures: run
+`./scripts/test/test_coverage.sh --analyze` to see the files below 60%.
 
 ## Troubleshooting
 
@@ -442,7 +387,7 @@ When reviewing coverage reports, focus on **executable code coverage** rather th
 
 ### Coverage Too Low
 
-**Problem:** Coverage below 80%
+**Problem:** Coverage below a `COVERAGE_MIN_*` floor
 
 **Solutions:**
 1. Identify gaps: `./scripts/test/calculate_layer_coverage.sh`
@@ -456,7 +401,7 @@ When reviewing coverage reports, focus on **executable code coverage** rather th
 
 **Solutions:**
 - Read the failing step's output in the run log
-- Review coverage report in artifacts
+- Reproduce it locally: `./scripts/test/test_coverage.sh --analyze`
 - Add missing tests
 - Temporarily lower threshold if needed (with justification)
 
@@ -464,7 +409,8 @@ When reviewing coverage reports, focus on **executable code coverage** rather th
 
 ### Flutter Test
 
-Built-in coverage:
+Built-in coverage. On its own it counts only the libraries some test loads;
+see [Local Coverage](#local-coverage) for the helper CI runs first.
 ```bash
 flutter test --coverage
 ```

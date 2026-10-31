@@ -28,7 +28,8 @@ flutter test
 
 ### With Coverage
 ```bash
-flutter test --coverage
+# Runs tool/coverage_helper.dart first, as CI does, so untested files count
+./scripts/test/test_coverage.sh
 ```
 
 ### Using Coverage Scripts

@@ -498,8 +498,12 @@ flutter test
 ### Run Tests with Coverage
 
 ```bash
-flutter test --coverage
+./scripts/test/test_coverage.sh
 ```
+
+Like CI, it runs `tool/coverage_helper.dart` first, so a file no test imports
+still counts. Coverage collected without the helper leaves such files out and
+reads higher than the gate.
 
 ### Generate HTML Coverage Report
 
@@ -545,7 +549,7 @@ For the full picture, see [Testing summary](testing-summary.md).
 ### Viewing Coverage
 
 1. **Local**: Run `./scripts/test/test_coverage.sh --html --open`
-2. **CI**: Run the **Coverage Analysis** workflow and download artifacts, or use Codecov if configured
+2. **CI**: Run the **Coverage Analysis** workflow and read its job summary, or use Codecov if configured
 3. **Codecov**: https://codecov.io/gh/[your-repo] (when the repo is connected)
 
 ## Best Practices
@@ -674,11 +678,20 @@ testWidgets('should handle user input', (tester) async {
 
 ## Troubleshooting
 
-### Tests Failing Due to Provider Not Found
+### Tests Failing Because of Providers
 
-**Problem**: `ProviderNotFoundException`
+**Problem**: `Bad state: No ProviderScope found`
 
-**Solution**: Ensure all required providers are overridden:
+The widget under test reads a provider (a `ConsumerWidget`, a `Consumer`, a
+`ref.watch`) but was pumped without a `ProviderScope` above it.
+
+**Solution**: Pump it with `pumpApp` (`test/helpers/pump_app.dart`), which
+wraps it in a `ProviderScope`, or wrap it in one yourself.
+
+**Problem**: a provider reaches real platform code in the test, for example a
+`MissingPluginException` from storage, or a real network call.
+
+**Solution**: Override the provider that does it:
 
 ```dart
 await pumpApp(

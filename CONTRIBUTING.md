@@ -438,8 +438,8 @@ version that ships.
 # Run all tests
 flutter test
 
-# Run tests with coverage
-flutter test --coverage
+# Run tests with coverage, counting untested files as CI does
+./scripts/test/test_coverage.sh
 
 # Run specific test file
 flutter test test/features/auth/domain/usecases/login_usecase_test.dart
