@@ -77,6 +77,7 @@ void main() {
       final result = _strip(root, root, ['--remove-tasks']);
 
       expect(result.exitCode, 0, reason: _out(result));
+      expect('${result.stdout}', contains('git-ignored files'));
       expect(
         Directory('${root.path}/lib/features/tasks').existsSync(),
         isFalse,
