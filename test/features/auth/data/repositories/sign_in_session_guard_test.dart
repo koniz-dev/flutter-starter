@@ -12,6 +12,7 @@
 import 'dart:async';
 
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -271,10 +272,58 @@ void main() {
     remote.holds.single.complete();
     await logout;
     await _settle();
-    if (remote.replies.isNotEmpty) remote.replies.single.complete(_pair('a'));
 
     expectStale(await signIn);
+    expect(remote.replies, isEmpty, reason: 'it never reached the server');
     expect(tokens.accessToken, isNull);
+  });
+
+  test('a revoke waits for a logout still tearing down', () async {
+    tokens
+      ..accessToken = 'old-access'
+      ..refreshToken = 'old-refresh';
+    remote.holdLogouts = true;
+    final signIn = repository.login('a@b.c', 'pw');
+    await _settle();
+    final logout = repository.logout();
+    await _settle();
+    // The sign-in's reply arrives while the logout's server call is held:
+    // the old session's token is still stored.
+    remote.replies.single.complete(_pair('a'));
+    expectStale(await signIn);
+    await _settle();
+    expect(remote.logouts, ['old-refresh'], reason: 'not sent yet');
+
+    remote.holds.single.complete();
+    await logout;
+    await _settle();
+
+    expect(remote.logouts, ['old-refresh', 'a-refresh']);
+  });
+
+  test('no revoke goes out while a session still holds the store', () async {
+    // The interceptor's forced logout ends the session through the shared
+    // generation, and clears the store only afterwards.
+    final generation = SessionGeneration();
+    final shared = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      localDataSource: AuthLocalDataSourceImpl(
+        storageService: storage,
+        tokenStore: tokens,
+      ),
+      sessionGeneration: generation,
+    );
+    final signIn = shared.login('a@b.c', 'pw');
+    await _settle();
+    tokens
+      ..accessToken = 'other-access'
+      ..refreshToken = 'other-refresh';
+    generation.invalidate();
+    remote.replies.single.complete(_pair('a'));
+
+    expectStale(await signIn);
+    await _settle();
+    expect(remote.logouts, isEmpty, reason: 'it would carry other-access');
   });
 
   test(
