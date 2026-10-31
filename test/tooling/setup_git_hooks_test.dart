@@ -95,6 +95,87 @@ void main() {
     );
   });
 
+  test('with the app in a subdirectory of a larger repository, hooks run', () {
+    // A monorepo: the git repository is one level above the app.
+    final mono = Directory('${root.path}/mono')..createSync();
+    git(['init', '-q'], cwd: mono.path);
+    final copied = Process.runSync('cp', [
+      '-R',
+      '${root.path}/repo',
+      '${mono.path}/app',
+    ]);
+    expect(copied.exitCode, 0, reason: '${copied.stderr}');
+    Directory('${mono.path}/app/.git').deleteSync(recursive: true);
+    git(['add', '.'], cwd: mono.path);
+    git([
+      'commit',
+      '-q',
+      '--no-verify',
+      '-m',
+      'chore: initial',
+    ], cwd: mono.path);
+
+    final result = setup(cwd: '${mono.path}/app');
+
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    final hooksPath = git([
+      'config',
+      '--local',
+      '--get',
+      'core.hooksPath',
+    ], cwd: mono.path);
+    expect('${hooksPath.stdout}'.trim(), 'app/.githooks');
+    for (final cwd in [mono.path, '${mono.path}/app']) {
+      final bad = git([
+        'commit',
+        '--allow-empty',
+        '-m',
+        'not conventional',
+      ], cwd: cwd);
+      expect(bad.exitCode, isNot(0), reason: 'commit-msg must run from $cwd');
+    }
+  });
+
+  test('a failed verification puts the previous core.hooksPath back', () {
+    // A command-scope setting outranks the local one, so git keeps resolving
+    // hooks elsewhere after the script writes its own.
+    final override = {
+      ...env,
+      'GIT_CONFIG_COUNT': '1',
+      'GIT_CONFIG_KEY_0': 'core.hooksPath',
+      'GIT_CONFIG_VALUE_0': '${root.path}/elsewhere',
+    };
+    String? local() {
+      final got = git(['config', '--local', '--get', 'core.hooksPath']);
+      return got.exitCode == 0 ? '${got.stdout}'.trim() : null;
+    }
+
+    ProcessResult failingSetup() => Process.runSync(
+      'bash',
+      ['scripts/dev/setup_git_hooks.sh'],
+      workingDirectory: '${root.path}/repo',
+      environment: override,
+    );
+
+    final unset = failingSetup();
+    expect(unset.exitCode, isNot(0));
+    expect('${unset.stdout}', contains('restored'));
+    expect(local(), isNull);
+
+    git(['config', '--local', 'core.hooksPath', '.githooks']);
+    expect(failingSetup().exitCode, isNot(0));
+    expect(local(), '.githooks');
+  });
+
+  test('the PowerShell twin prefixes the path and restores on failure', () {
+    // No PowerShell runs here; this reads the script.
+    final ps1 = File('scripts/dev/setup_git_hooks.ps1').readAsStringSync();
+    expect(ps1, contains("(git rev-parse --show-prefix) + '.githooks'"));
+    expect(ps1, contains(r'git config --local core.hooksPath $hooksPath'));
+    expect(ps1, contains('git config --local --unset core.hooksPath'));
+    expect(ps1, contains(r'git config --local core.hooksPath $localPath'));
+  });
+
   test('running it twice succeeds both times', () {
     expect(setup().exitCode, 0);
     expect(setup().exitCode, 0);
