@@ -43,6 +43,8 @@
 
 import 'dart:io';
 
+import 'doc_fences.dart';
+
 /// One `<!-- signature: ... -->` directive found in a markdown file.
 class SignatureDirective {
   /// Creates a directive record.
@@ -86,8 +88,6 @@ final RegExp _directivePattern = RegExp(
   r'^\s*<!--\s*signature:\s*(\S+)\s+([A-Za-z_][A-Za-z0-9_.]*)\s*-->\s*$',
 );
 
-final RegExp _fencePattern = RegExp(r'^\s*(`{3,}|~{3,})');
-
 /// A line that opens a signature directive, outside inline code. One that
 /// does not then match [_directivePattern] in full used to be skipped without
 /// a word, so the signature it named went unchecked.
@@ -121,19 +121,9 @@ int checkSignatures(Directory root, {bool verbose = true}) {
     final lines = file.readAsLinesSync();
     // Directives written *inside* a fenced block are documentation about the
     // directive syntax itself, not directives. Track fences and skip them.
-    String? openFence;
+    final fences = FenceTracker();
     for (var i = 0; i < lines.length; i++) {
-      final fence = _fencePattern.firstMatch(lines[i]);
-      if (fence != null) {
-        final marker = fence.group(1)![0];
-        if (openFence == null) {
-          openFence = marker;
-        } else if (openFence == marker) {
-          openFence = null;
-        }
-        continue;
-      }
-      if (openFence != null) continue;
+      if (fences.isFence(lines[i]) || fences.inFence) continue;
 
       final match = _directivePattern.firstMatch(lines[i]);
       if (match == null) {
@@ -255,16 +245,12 @@ String? _fencedBlockAfter(List<String> lines, int directiveIndex) {
     i++;
   }
   if (i >= lines.length) return null;
-  final open = _fencePattern.firstMatch(lines[i]);
-  if (open == null) return null;
-  final marker = open.group(1)![0];
+  final fences = FenceTracker();
+  if (!fences.isFence(lines[i])) return null;
 
   final body = StringBuffer();
   for (var j = i + 1; j < lines.length; j++) {
-    final close = _fencePattern.firstMatch(lines[j]);
-    if (close != null && close.group(1)![0] == marker) {
-      return body.toString();
-    }
+    if (fences.isFence(lines[j])) return body.toString();
     body.writeln(lines[j]);
   }
   return null;

@@ -111,6 +111,27 @@ final realProvider = Provider<int>((ref) => 1);
     );
   });
 
+  test('a directive inside an inner fence of a four-backtick block is '
+      'an example, not a directive', () {
+    final root = Directory.systemTemp.createTempSync('doc_symbols_nested_');
+    addTearDown(() => root.deleteSync(recursive: true));
+    File('${root.path}/docs/a.md')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(
+        '````markdown\n'
+        '```bash\n'
+        '<!-- symbol: lib/nope.dart Nope -->\n'
+        '```\n'
+        'echo\n'
+        '````\n',
+      );
+
+    final result = collectSymbolProblems(root);
+
+    expect(result.directives, isEmpty);
+    expect(result.problems, isEmpty);
+  });
+
   group('malformed directives', () {
     test('are reported with file and line; inline code and fences are not', () {
       final root = Directory.systemTemp.createTempSync('doc_symbols_bad_');

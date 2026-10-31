@@ -62,6 +62,41 @@ void main() {
     expect(result.stdout, contains('in 2 file(s); 0 broken'));
   });
 
+  test('a link inside an inner fence of a four-backtick block is code', () {
+    write(
+      'docs/nested.md',
+      '````markdown\n'
+          '```bash\n'
+          '[gone](missing.md)\n'
+          '```\n'
+          'echo\n'
+          '````\n',
+    );
+
+    final result = links();
+
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  });
+
+  test('a heading inside an inner fence of a four-backtick block is no '
+      'anchor', () {
+    write(
+      'docs/nested.md',
+      '[jump](#android-apk)\n'
+          '\n'
+          '````markdown\n'
+          '```bash\n'
+          '# Android APK\n'
+          '```\n'
+          '````\n',
+    );
+
+    final result = links();
+
+    expect(result.exitCode, 1, reason: 'the heading is code, not an anchor');
+    expect(result.stderr, contains('docs/nested.md:1'));
+  });
+
   test('criterion 1: root files and every listed directory are scanned', () {
     const scanned = [
       'README.md',

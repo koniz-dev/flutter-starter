@@ -44,6 +44,7 @@ import 'dart:io';
 
 import 'doc_dart_defines.dart';
 import 'doc_env_runs.dart';
+import 'doc_fences.dart';
 import 'doc_signatures.dart';
 import 'doc_symbols.dart';
 import 'doc_test_paths.dart';
@@ -261,24 +262,15 @@ bool _isExternal(String target) {
 /// heading scanning never sees sample code. Line numbering is preserved.
 String _stripCodeBlocks(String source, {bool stripInline = true}) {
   final out = StringBuffer();
-  var inFence = false;
-  String? fenceMarker;
+  final fences = FenceTracker();
   for (final line in source.split('\n')) {
-    final trimmed = line.trimLeft();
-    final fence = RegExp('^(`{3,}|~{3,})').firstMatch(trimmed);
-    if (fence != null) {
-      final marker = fence.group(1)![0];
-      if (!inFence) {
-        inFence = true;
-        fenceMarker = marker;
-      } else if (marker == fenceMarker) {
-        inFence = false;
-        fenceMarker = null;
-      }
+    if (fences.isFence(line)) {
       out.writeln();
       continue;
     }
-    out.writeln(inFence ? '' : (stripInline ? _stripInlineCode(line) : line));
+    out.writeln(
+      fences.inFence ? '' : (stripInline ? _stripInlineCode(line) : line),
+    );
   }
   return out.toString();
 }

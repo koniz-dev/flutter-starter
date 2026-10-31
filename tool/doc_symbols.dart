@@ -27,6 +27,8 @@
 
 import 'dart:io';
 
+import 'doc_fences.dart';
+
 /// One `<!-- symbol: ... -->` directive found in a markdown file.
 class SymbolDirective {
   /// Creates a directive record.
@@ -71,8 +73,6 @@ final RegExp _directivePattern = RegExp(
   r'^\s*<!--\s*symbol:\s*(\S+)\s+'
   r'([A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)?)\s*-->\s*$',
 );
-
-final RegExp _fencePattern = RegExp(r'^\s*(`{3,}|~{3,})');
 
 /// A line that opens a symbol directive, outside inline code. One that does
 /// not then match [_directivePattern] in full - a missing identifier, a third
@@ -145,19 +145,9 @@ SymbolCheckResult collectSymbolProblems(Directory root) {
     final lines = file.readAsLinesSync();
     // A directive written inside a fenced block is documentation about the
     // syntax, not a directive.
-    String? openFence;
+    final fences = FenceTracker();
     for (var i = 0; i < lines.length; i++) {
-      final fence = _fencePattern.firstMatch(lines[i]);
-      if (fence != null) {
-        final marker = fence.group(1)![0];
-        if (openFence == null) {
-          openFence = marker;
-        } else if (openFence == marker) {
-          openFence = null;
-        }
-        continue;
-      }
-      if (openFence != null) continue;
+      if (fences.isFence(lines[i]) || fences.inFence) continue;
 
       final match = _directivePattern.firstMatch(lines[i]);
       if (match == null) {
