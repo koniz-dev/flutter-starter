@@ -317,8 +317,9 @@ class SecureTokenStore implements ITokenStore {
     try {
       queue.logger?.warning(
         'Secure token store: a late write or delete of $key could not be '
-        'undone; reads of it answer from memory until the next write, or the '
-        'next delete of that key, re-applies it',
+        'undone; reads of it answer from memory until it is re-applied - by '
+        'the next write through this service, or, if its newer state is a '
+        'delete, by the next delete or the next read of it',
         context: {
           'key': key,
           'attempts': repairAttempts,
