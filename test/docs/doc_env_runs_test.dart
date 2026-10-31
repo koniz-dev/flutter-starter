@@ -110,12 +110,15 @@ void main() {
     });
   });
 
-  test('covers README.md and CONTRIBUTING.md as well as docs/', () {
+  test('covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/', () {
     final paths = envRunFiles(
       Directory.current,
     ).map((f) => f.path.substring(Directory.current.path.length + 1)).toList();
 
-    expect(paths, containsAll(<String>['README.md', 'CONTRIBUTING.md']));
+    expect(
+      paths,
+      containsAll(<String>['README.md', 'CONTRIBUTING.md', 'CLAUDE.md']),
+    );
     expect(paths.where((p) => p.startsWith('docs/')), isNotEmpty);
   });
 
