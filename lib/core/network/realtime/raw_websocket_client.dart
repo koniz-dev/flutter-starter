@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io' show HttpClient;
 
+import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/realtime/i_realtime_client.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -29,17 +31,26 @@ WebSocketChannel _connect(Uri uri, HttpClient? pinnedClient) =>
 /// refused for any certificate the fingerprints do not name. Otherwise -
 /// pinning off, or on web, where the browser owns TLS - it uses the default
 /// transport.
+///
+/// A staging or production release refuses any URL that is not `wss://`, as
+/// `main()` refuses a `BASE_URL` that is not `https`: web and desktop do not
+/// block cleartext, and the realtime token and every message would travel
+/// unencrypted, where pinning cannot apply.
 class RawWebSocketClientImpl implements IRealtimeClient {
   /// Creates a client whose [connect] gives up after [connectTimeout].
   ///
   /// [sslPinning] defaults to [SslPinning.fromConfig], the policy `ApiClient`
-  /// uses. [connectChannel] is a seam for tests.
+  /// uses. [connectChannel] and [releaseMode] are seams for tests.
   RawWebSocketClientImpl({
     this.connectTimeout = const Duration(seconds: 10),
     SslPinning? sslPinning,
     WebSocketConnector connectChannel = _connect,
+    bool releaseMode = kReleaseMode,
   }) : _sslPinning = sslPinning ?? SslPinning.fromConfig(),
-       _connectChannel = connectChannel;
+       _connectChannel = connectChannel,
+       _releaseMode = releaseMode;
+
+  final bool _releaseMode;
 
   final SslPinning _sslPinning;
 
@@ -78,6 +89,9 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   ///   `WebSocketChannelException`);
   /// - the handshake does not finish within [connectTimeout]
   ///   (a [TimeoutException]);
+  /// - this is a staging or production release and [url] is not `wss://`
+  ///   (a `WebSocketChannelException`; nothing is opened, and an existing
+  ///   connection is kept);
   /// - [disconnect] or another [connect] is called before the handshake
   ///   finishes (a `WebSocketChannelException`); the abandoned connection is
   ///   closed, never adopted.
@@ -85,8 +99,6 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   /// No error escapes as an unhandled async error.
   @override
   Future<void> connect(String url) async {
-    if (isConnected || _pending != null) disconnect();
-    final generation = _generation;
     // Realtime endpoints often authenticate with a query token
     // (`wss://host/socket?token=...`), sometimes with userinfo. What this
     // class writes or throws - log lines, and every error a caller may
@@ -101,6 +113,19 @@ class RawWebSocketClientImpl implements IRealtimeClient {
       // Its own message quotes the whole URL.
       throw FormatException('Invalid WebSocket URL: $safeUrl');
     }
+    if (_releaseMode &&
+        (AppConfig.isStaging || AppConfig.isProduction) &&
+        uri.scheme.toLowerCase() != 'wss') {
+      _logger.e('Refused a non-wss WebSocket URL in a release: $safeUrl');
+      throw WebSocketChannelException(
+        'Refusing $safeUrl: a ${AppConfig.environment} release connects '
+        'only to wss:// URLs',
+      );
+    }
+    // Only a URL that can be opened replaces the current connection: a
+    // refused or unparsable one above leaves it alone.
+    if (isConnected || _pending != null) disconnect();
+    final generation = _generation;
     final channel = _connectChannel(uri, _sslPinning.createHttpClient());
     _pending = channel;
     try {
