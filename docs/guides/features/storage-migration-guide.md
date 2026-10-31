@@ -226,16 +226,27 @@ Future<bool> canMigrate(IStorageService storage) async {
 
 ### 4. Test Your Migrations
 
-Always write tests for your migrations:
+Always write tests for your migrations. `execute` refuses to run unless the
+stored version is the migration's `fromVersion`, and an empty store reads as
+version 1, so stamp it first:
 
 ```dart
 test('migration renames key correctly', () async {
-  await storage.setString('old_key', 'value');
   final migration = MigrationV2ToV3();
+  await storage.setString(
+    StorageVersion.versionKey,
+    '${migration.fromVersion}',
+  );
+  await storage.setString('old_key', 'value');
+
   await migration.execute(storage);
-  
+
   expect(await storage.getString('new_key'), equals('value'));
   expect(await storage.containsKey('old_key'), isFalse);
+  expect(
+    await storage.getString(StorageVersion.versionKey),
+    '${migration.toVersion}',
+  );
 });
 ```
 
