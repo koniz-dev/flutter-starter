@@ -173,6 +173,17 @@ void main() {
     final logged = '${captured[0]} ${captured[1]}';
     expect(logged, contains(_key));
     expect(logged, isNot(contains(_token)));
+    // It names every way the key is re-applied, as the class doc does.
+    expect(
+      '${captured[0]}',
+      allOf(
+        contains('next write'),
+        contains('next delete'),
+        contains('next read'),
+        // Reads and deletes re-apply only a delete, never a write.
+        contains('if its newer state is a delete'),
+      ),
+    );
     verifyNever(
       () => logger.error(
         any(),
