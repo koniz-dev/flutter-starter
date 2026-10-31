@@ -1,0 +1,3 @@
+== main 0c91eaac26b
+docs/README.md:92:- **Feature Flags Remote:** only a no-op remote source ships (`NoOpFeatureFlagsRemoteDataSource`), so flags come from local values and defaults. For Firebase Remote Config or any other service, implement `FeatureFlagsRemoteDataSource` and override its provider. <!-- strip:feature-flags line -->
+docs/api/README.md:111:- Remote feature flags: only `NoOpFeatureFlagsRemoteDataSource` ships; implement `FeatureFlagsRemoteDataSource` for Firebase Remote Config or another service and override its provider. <!-- strip:feature-flags line -->

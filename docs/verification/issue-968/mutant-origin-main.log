@@ -1,0 +1,6 @@
+== tool/doc_symbols.dart and tool/doc_signatures.dart at origin/main c30c6a62786, tests from this branch
+00:00 +7 -1: a malformed signature directive is reported, not skipped [E]
+00:00 +16 -2: malformed directives are reported with file and line; inline code and fences are not [E]
+00:00 +18 -3: declaresSymbol ignores a declaration inside a block comment or a string [E]
+00:00 +22 -4: declaresMember an initializer or expression body declares nothing [E]
+00:00 +23 -4: Some tests failed.

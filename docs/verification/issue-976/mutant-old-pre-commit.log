@@ -1,0 +1,9 @@
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+ok    an unstaged format violation over a clean index does not fail the hook
+ok    with dependencies resolved the hook fails on a staged format violation
+FAIL  in a monorepo the hook exited 1 on a clean tree
+FAIL  in a monorepo a staged format violation did not fail the hook (exit 1)
+2 case(s) failed.

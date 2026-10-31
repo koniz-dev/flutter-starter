@@ -1,0 +1,4 @@
+== main 0c91eaac26b: flutter test --reporter expanded test/docs/accessibility_touch_target_snippet_test.dart
++0: button meets minimum touch target
++1: the guide shows the test this file runs
++2: All tests passed!

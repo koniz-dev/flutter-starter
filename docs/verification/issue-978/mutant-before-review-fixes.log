@@ -1,0 +1,5 @@
+FAIL  an existing tag stops release.sh with a clean tree (exit 128, branch main, status:  M CHANGELOG.md  M pubspec.yaml)
+FAIL  an existing tag is caught before the tests run
+FAIL  with a live tag trigger, the summary says the tag deploys once pushed, got:   1. The pushed tag starts the deploy workflows   2. Monitor GitHub Actions fo
+FAIL  a tags: key outside on.push is not a tag trigger, got:   1. The pushed tag starts the deploy workflows   2. Monitor GitHub Actions for build status   3. A
+4 release-script test(s) failed.

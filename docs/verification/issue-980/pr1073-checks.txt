@@ -1,0 +1,11 @@
+Action pins	pass	40s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373125/job/124529049151	
+Docs check	pass	36s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373122/job/124529049024	
+Quality gate	pass	9m55s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373172/job/124529049100	
+Strip both-samples-removed + analyze + test	pass	6m3s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373101/job/124529049067	
+Strip feature-flags-removed + analyze + test	pass	5m22s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373101/job/124529049428	
+Strip keep-samples + analyze + test	pass	5m42s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373101/job/124529048790	
+Strip renamed-both + analyze + test	pass	5m15s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373101/job/124529048996	
+Strip tasks-removed + analyze + test	pass	5m1s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373101/job/124529049005	
+Workflow lint	pass	5s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373125/job/124529049295	
+release scripts (macos-latest)	pass	8s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373156/job/124529049238	
+release scripts (ubuntu-latest)	pass	5s	https://github.com/koniz-dev/flutter-starter/actions/runs/41198373156/job/124529049086	

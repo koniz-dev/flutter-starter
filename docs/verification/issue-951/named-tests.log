@@ -1,0 +1,6 @@
+== main 0c91eaac26b: flutter test --reporter expanded test/docs/i18n_formatter_outputs_test.dart
++0: the formatNumber outputs are what it prints for each locale
++1: the formatCurrency outputs are what it prints for each locale
++2: the formatCompactNumber outputs are what it prints for each locale
++3: no output comment is left in the old language-name form
++4: All tests passed!

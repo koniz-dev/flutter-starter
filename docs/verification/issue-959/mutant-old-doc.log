@@ -1,0 +1,4 @@
+00:00 +0 -1: utils.md lists every public static of DateFormatter [E]
+00:00 +0 -2: utils.md lists every public static of Validators [E]
+00:00 +0 -3: utils.md gives the UTC caveat for the display pair [E]
+00:00 +0 -3: Some tests failed.

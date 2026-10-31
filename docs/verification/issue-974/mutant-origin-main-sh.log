@@ -1,0 +1,4 @@
+00:00 +2 -1: test_coverage.sh the threshold holds with bc missing from PATH [E]
+  Expected: not <0>
+    Actual: <0>
+00:00 +6 -1: Some tests failed.

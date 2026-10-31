@@ -1,0 +1,3 @@
+00:00 +0 -1: every native command is followed by a LASTEXITCODE check [E]
+00:00 +0 -2: the coverage helper runs before the tests and is removed after [E]
+00:00 +0 -2: Some tests failed.

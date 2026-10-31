@@ -1,0 +1,17 @@
+== main 0c91eaac26b: flutter test --reporter expanded test/tooling/workflow_unreachable_pr_steps_test.dart
++0: the trigger reader sees the triggers
++1: strip-smoke.yml gates no step on a pull_request event it never gets
++2: coverage.yml gates no step on a pull_request event it never gets
++3: deploy-android.yml gates no step on a pull_request event it never gets
++4: docs-check.yml gates no step on a pull_request event it never gets
++5: release-scripts.yml gates no step on a pull_request event it never gets
++6: deploy-web.yml gates no step on a pull_request event it never gets
++7: deploy-ios.yml gates no step on a pull_request event it never gets
++8: e2e-android.yml gates no step on a pull_request event it never gets
++9: git-hooks.yml gates no step on a pull_request event it never gets
++10: scripts-smoke.yml gates no step on a pull_request event it never gets
++11: ci.yml gates no step on a pull_request event it never gets
++12: action-pins.yml gates no step on a pull_request event it never gets
++13: build.yml gates no step on a pull_request event it never gets
++14: coverage.yml asks for no pull-requests scope
++15: All tests passed!

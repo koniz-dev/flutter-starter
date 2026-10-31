@@ -1,0 +1,10 @@
+== main 0c91eaac26b: bash scripts/test/pre_commit_hook_test.sh
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+ok    an unstaged format violation over a clean index does not fail the hook
+ok    with dependencies resolved the hook fails on a staged format violation
+ok    in a monorepo the hook checks the app and exits 0 on a clean tree
+ok    in a monorepo the hook fails on a staged format violation in the app
+All pre-commit hook cases passed.

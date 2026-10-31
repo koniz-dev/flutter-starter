@@ -1,0 +1,3 @@
+== main 0c91eaac26b: flutter test --reporter expanded test/docs/adr_line_references_test.dart
++0: no ADR cites a Dart file by line number
++1: All tests passed!

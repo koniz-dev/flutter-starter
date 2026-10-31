@@ -1,0 +1,3 @@
+00:00 +2 -1: coverage.yml gates no step on a pull_request event it never gets [E]
+00:00 +13 -2: coverage.yml asks for no pull-requests scope [E]
+00:00 +13 -2: Some tests failed.

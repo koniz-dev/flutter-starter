@@ -1,0 +1,4 @@
+== probe: '[gone](does/not/exist.md)' appended to CLAUDE.md, then flutter test test/docs/doc_links_test.dart (this branch's tools)
+00:01 +0 -1: every relative link and anchor in the markdown resolves [E]
+  CLAUDE.md:158: missing path -> does/not/exist.md
+00:01 +0 -1: Some tests failed.

@@ -1,0 +1,35 @@
+== old ADR 0006, this branch's test
+00:00 +0 -1: no ADR cites a Dart file by line number [E]
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:44: | `INetworkClient` | `ApiClient._networkClient` (`lib/core/
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:45: | `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/featur
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:46: | `ITokenStore` | `AuthInterceptor` (`lib/core/network/inte
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:47: | `IHttpResponseCache` | `AuthInterceptor._responseCache` (
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:48: | `ISessionTerminationSink` | `AuthInterceptor._sessionSink
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:65: (`lib/features/auth/presentation/providers/auth_provider.da
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:66: `implements IAuthController` clause on `AuthNotifier` (`:48
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:95: // lib/shared/theme/app_theme.dart:7',
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:102: (`lib/core/contracts/design_tokens_contracts.dart:7`) and'
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:104: (`lib/shared/design_system/tokens/default_design_tokens.da
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:139: | `di/` | A slice\'s wiring lives in `di/<slice>_providers
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:163: returns `NetworkResponse<dynamic>` (`api_client.dart:169`,
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:164: `:242`) and `_sendWithCompatibility`, which rebuilt a Dio 
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:165: `NetworkResponse`, is gone. `Dio get dio` (`:151`) is **ke
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:229: | Remove `IAuthController` | auth slice | Delete `IAuthCon
+              'docs/architecture/adr/0006-contract-status-and-slice-shape.md:230: | Wire `AppDesignTokens` | design system | Type `AppTheme.
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:44: | `INetworkClient` | `ApiClient._networkClient` (`lib/core/network/api_c
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:45: | `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/features/auth/data/
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:46: | `ITokenStore` | `AuthInterceptor` (`lib/core/network/interceptors/auth
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:47: | `IHttpResponseCache` | `AuthInterceptor._responseCache` (`auth_interce
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:48: | `ISessionTerminationSink` | `AuthInterceptor._sessionSink` (`auth_inte
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:65: (`lib/features/auth/presentation/providers/auth_provider.dart:289`) and 
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:66: `implements IAuthController` clause on `AuthNotifier` (`:48`).
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:95: // lib/shared/theme/app_theme.dart:7
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:102: (`lib/core/contracts/design_tokens_contracts.dart:7`) and
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:104: (`lib/shared/design_system/tokens/default_design_tokens.dart:9`), and n
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:139: | `di/` | A slice's wiring lives in `di/<slice>_providers.dart`. | conf
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:163: returns `NetworkResponse<dynamic>` (`api_client.dart:169`, `:192`, `:21
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:164: `:242`) and `_sendWithCompatibility`, which rebuilt a Dio `Response` ou
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:165: `NetworkResponse`, is gone. `Dio get dio` (`:151`) is **kept, undepreca
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:229: | Remove `IAuthController` | auth slice | Delete `IAuthController`, `Au
+  docs/architecture/adr/0006-contract-status-and-slice-shape.md:230: | Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `
+00:00 +0 -1: Some tests failed.

@@ -1,0 +1,14 @@
+== main 0c91eaac26b
+--- every coverage command in the docs
+test/README.md:32:./scripts/test/test_coverage.sh
+test/README.md:38:./scripts/test/test_coverage.sh --html
+test/README.md:44:./scripts/test/test_coverage.sh --html --open
+CONTRIBUTING.md:442:./scripts/test/test_coverage.sh
+docs/guides/testing/testing-summary.md:22:Optional (slower, counts coverage as the CI gates do): `./scripts/test/test_coverage.sh`, which runs `tool/coverage_helper.dart` before `flutter test --covera
+docs/guides/testing/testing-summary.md:33:./scripts/test/test_coverage.sh --html
+docs/guides/testing/testing-summary.md:77:- **Coverage Script:** `scripts/test/test_coverage.sh`
+docs/guides/testing/testing-summary.md:108:./scripts/test/test_coverage.sh
+docs/guides/testing/testing-summary.md:111:./scripts/test/test_coverage.sh --html --open
+docs/guides/testing/guide.md:501:./scripts/test/test_coverage.sh
+docs/guides/testing/guide.md:511:./scripts/test/test_coverage.sh --html
+docs/guides/testing/guide.md:551:1. **Local**: Run `./scripts/test/test_coverage.sh --html --open`

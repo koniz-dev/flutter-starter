@@ -1,0 +1,13 @@
+== old internationalization-guide.md, this branch's test
+00:00 +0 -1: the formatNumber outputs are what it prints for each locale [E]
+  Expected: Set:['en_US', 'es_ES', 'ar_SA', 'vi_VN']
+    Actual: Set:['English', 'Spanish', 'Arabic']
+00:00 +0 -2: the formatCurrency outputs are what it prints for each locale [E]
+  Expected: Set:['en_US', 'es_ES', 'ar_SA', 'vi_VN']
+    Actual: Set:['English', 'Spanish', 'Arabic']
+00:00 +0 -3: the formatCompactNumber outputs are what it prints for each locale [E]
+  Bad state: No element
+00:00 +0 -4: no output comment is left in the old language-name form [E]
+  Expected: not contains <RegExp: pattern=^// (English|Spanish|Arabic): flags=m>
+    Actual: '# Internationalization (i18n) Implementation Guide\n'
+00:00 +0 -4: Some tests failed.

@@ -1,0 +1,5 @@
+== tool/check_docs.dart, doc_test_paths.dart, doc_env_runs.dart at origin/main c30c6a62786; tests from this branch
+00:00 +8 -2: covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/ [E]
+00:00 +12 -2: covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/ [E]
+00:02 +16 -3: criterion 1: root files and every listed directory are scanned [E]
+00:02 +17 -3: Some tests failed.

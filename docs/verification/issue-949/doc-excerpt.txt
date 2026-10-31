@@ -1,0 +1,25 @@
+== main 0c91eaac26b
+--- test-coverage.md Codecov section
+### Codecov Integration
+
+`coverage.yml` uploads with its **Upload to Codecov (Public)** step, which
+passes no token: a public repository needs only the repository added at
+https://codecov.io.
+
+For a private repository, add `CODECOV_TOKEN` to the repository's Actions
+secrets, then in `coverage.yml` comment out **Upload to Codecov (Public)** and
+uncomment the **Upload to Codecov (Private)** block above it, which passes
+the token.
+
+Coverage reports are available at:
+```
+https://codecov.io/gh/[your-username]/[your-repo]
+```
+
+### PR Comments
+--- coverage.yml upload steps
+225:      # - name: Upload to Codecov (Private)
+232:      #     token: ${{ secrets.CODECOV_TOKEN }}
+235:      - name: Upload to Codecov (Public)
+--- artifact / Comment PR mentions anywhere
+(none)

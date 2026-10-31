@@ -1,0 +1,31 @@
+== main 0c91eaac26b
+--- coverage.yml: steps, permissions, pull_request
+1:name: Coverage Analysis
+12:#   pull_request:
+18:#   pull_request:
+32:permissions:
+37:    name: Coverage Analysis
+55:      - name: Checkout code
+60:      - name: Setup Flutter
+70:      - name: Install dependencies
+75:      - name: Import every library for coverage
+78:      - name: Run tests with coverage
+82:      - name: Install lcov
+87:      - name: Remove generated files from coverage
+102:      - name: Generate coverage report
+106:      - name: Calculate coverage by layer (architecture gates)
+120:      - name: Calculate coverage metrics
+152:      - name: Write coverage summary
+167:      - name: Enforce coverage thresholds
+185:              echo "❌ $name: not a number (coverage '${current}', target '${target}')"
+189:              echo "❌ $name: ${current}% < ${target}%"
+192:              echo "✅ $name: ${current}% >= ${target}%"
+225:      # - name: Upload to Codecov (Private)
+230:      #     name: codecov-umbrella
+235:      - name: Upload to Codecov (Public)
+240:          name: codecov-umbrella
+--- docs mentioning a coverage PR comment
+docs/guides/testing/test-coverage.md:167:### PR Comments
+docs/guides/testing/test-coverage.md:169:`coverage.yml` posts no PR comment. Its results go to the run's job summary
+docs/guides/testing/test-coverage.md:428:- Automatic PR comments
+docs/guides/testing/testing-summary.md:85:- That workflow uploads to Codecov and writes its table to the run's job summary; it posts no PR comment.

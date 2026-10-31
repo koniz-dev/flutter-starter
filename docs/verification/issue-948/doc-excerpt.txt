@@ -1,0 +1,94 @@
+== main 0c91eaac26b
+--- test-coverage.md: headings
+1:# Test Coverage Guide
+5:## Overview
+9:## Coverage Goals
+11:### Layer-Specific Targets
+24:### Overall Target
+29:## Measuring Coverage
+31:### Local Coverage
+61:### Coverage Scripts
+63:#### test_coverage.sh
+68:# Basic coverage check
+71:# Generate HTML report
+74:# Open HTML report automatically
+77:# Set minimum threshold
+80:# Exclude paths from coverage (repeatable; drops every file whose path contains it)
+83:# Per-layer breakdown and the files below 60%, without re-running the tests
+102:#### calculate_layer_coverage.sh
+125:## CI/CD Coverage
+127:### GitHub Actions
+151:### Codecov Integration
+167:### PR Comments
+173:## Coverage Enforcement
+175:### Minimum Threshold
+192:### Increasing Threshold
+207:## Improving Coverage
+209:### Identifying Gaps
+226:### Adding Tests for Uncovered Code
+245:### Common Coverage Gaps
+247:#### 1. Error Handling
+263:#### 2. Edge Cases
+279:#### 3. Null Safety
+295:#### 4. Configuration
+308:## Coverage Metrics
+310:### Understanding Coverage Types
+318:### Coverage Reports
+320:#### LCOV Format
+328:#### HTML Report
+336:## Best Practices
+338:### 1. Test Critical Paths First
+346:### 2. Don't Obsess Over 100%
+353:### 3. Use Coverage to Guide Testing
+360:### 4. Maintain Coverage Over Time
+367:## Files That Are Not Counted
+376:## Troubleshooting
+378:### Coverage Not Updating
+388:### Coverage Too Low
+398:### CI Failing on Coverage
+408:## Coverage Tools
+410:### Flutter Test
+418:### LCOV
+425:### Codecov
+433:## Additional Resources
+--- figures and thresholds
+7:Test coverage measures how much of the codebase is executed during tests. Two gates enforce it: every pull request's **Quality gate** checks total line coverage against `COVERAGE_MIN_TOTAL` in `ci.yml`, and the manual and weekly `coverage.yml` checks a total and a floor per layer (see [Coverage Enforcement](#coverage-enforcement)).
+17:| **Core** | 80%+ | Checked by `coverage.yml` only; no pull-request gate checks a layer |
+18:| **Presentation** | 80%+ | UI logic should be well-tested |
+19:| **Shared** | 80%+ | A goal only: no gate checks `lib/shared/` on its own |
+21:Domain, data, presentation and core are the `COVERAGE_MIN_*` values in
+26:The per-PR floor is `COVERAGE_MIN_TOTAL` in `ci.yml`, which starts a little
+133:  `scripts/test/test_coverage.sh --no-test --min="$COVERAGE_MIN_TOTAL"`. Total
+134:  line coverage below `COVERAGE_MIN_TOTAL` fails the PR. It checks the total
+147:Both drop the same files before counting: `coverage.yml` with `lcov --remove`,
+177:The **Coverage Analysis** workflow enforces an **80% minimum** overall, plus
+178:per-layer floors (domain 100%, data 90%, presentation 80%, core 80%) in its
+181:from the workflow's `env:` block (`COVERAGE_MIN_TOTAL`, `COVERAGE_MIN_DOMAIN`,
+182:`COVERAGE_MIN_DATA`, `COVERAGE_MIN_PRESENTATION`, `COVERAGE_MIN_CORE`). If coverage
+187:total floor, `COVERAGE_MIN_TOTAL` in
+196:1. **Update the per-PR floor** (`.github/workflows/ci.yml`), step **Enforce minimum coverage** — raise `COVERAGE_MIN_TOTAL`.
+198:2. **Update coverage workflow** (`.github/workflows/coverage.yml`) — change the `COVERAGE_MIN_*` values in its `env:` block (e.g. `COVERAGE_MIN_TOTAL: 80`, `COVERAGE_MIN_DOMAIN: 100`); the **Enforce coverage thresholds** step reads them.
+367:## Files That Are Not Counted
+371:code before counting; the list is `lcov --remove` in `coverage.yml` and the
+390:**Problem:** Coverage below a `COVERAGE_MIN_*` floor
+396:4. Set incremental goals (e.g., 75% → 80% → 85%)
+--- coverage.yml lcov --remove list
+          lcov --remove coverage/lcov.info --ignore-errors unused \
+            '**/*.g.dart' \
+            '**/*.freezed.dart' \
+            '**/*.config.dart' \
+            '**/generated/**' \
+            '**/l10n/**' \
+            '**/main.dart' \
+            'test/**' \
+            '**/*_test.dart' \
+            '**/test_helpers.dart' \
+            '**/test_fixtures.dart' \
+            -o coverage/lcov.info
+--- COVERAGE_MIN values
+.github/workflows/ci.yml:262:          COVERAGE_MIN_TOTAL: 94
+.github/workflows/coverage.yml:48:      COVERAGE_MIN_TOTAL: 80
+.github/workflows/coverage.yml:49:      COVERAGE_MIN_DOMAIN: 100
+.github/workflows/coverage.yml:50:      COVERAGE_MIN_DATA: 90
+.github/workflows/coverage.yml:51:      COVERAGE_MIN_PRESENTATION: 80
+.github/workflows/coverage.yml:52:      COVERAGE_MIN_CORE: 80

@@ -1,0 +1,7 @@
+FAIL  an existing tag stops release.sh with a clean tree (exit 128, branch release/v1.0.1, status: )
+FAIL  an existing tag is caught before the tests run
+FAIL  an existing branch stops release.sh with a clean tree (exit 128, branch main, status:  M CHANGELOG.md  M pubspec.yaml)
+FAIL  an existing branch is caught before the tests run
+FAIL  with the tag trigger commented out, the summary claims no deploy, got:   1. CI/CD will automatically build and deploy   2. Monitor GitHub Actions for build status  
+FAIL  with a live tag trigger, the summary says the tag deploys, got:   1. CI/CD will automatically build and deploy   2. Monitor GitHub Actions for build status   3. Aft
+6 release-script test(s) failed.

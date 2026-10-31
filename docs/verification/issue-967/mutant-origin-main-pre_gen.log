@@ -1,0 +1,4 @@
+00:13 +0 -1: feature_clean pre_gen refuses a bad class_name [E]
+  Expected: not <0>
+    Actual: <0>
+00:13 +0 -1: Some tests failed.

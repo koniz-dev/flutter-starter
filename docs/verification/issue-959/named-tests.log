@@ -1,0 +1,5 @@
+== main 0c91eaac26b: flutter test --reporter expanded test/docs/utils_doc_statics_test.dart
++0: utils.md lists every public static of DateFormatter
++1: utils.md lists every public static of Validators
++2: utils.md gives the UTC caveat for the display pair
++3: All tests passed!

@@ -1,0 +1,31 @@
+== main 0c91eaac26b
+### Tests Failing Because of Providers
+
+**Problem**: `Bad state: No ProviderScope found`
+
+The widget under test reads a provider (a `ConsumerWidget`, a `Consumer`, a
+`ref.watch`) but was pumped without a `ProviderScope` above it.
+
+**Solution**: Pump it with `pumpApp` (`test/helpers/pump_app.dart`), which
+wraps it in a `ProviderScope`, or wrap it in one yourself.
+
+**Problem**: a provider reaches real platform code in the test, for example a
+`MissingPluginException` from storage, or a real network call.
+
+**Solution**: Override the provider that does it:
+
+```dart
+await pumpApp(
+  tester,
+  const MyWidget(),
+  overrides: [
+    requiredProvider.overrideWithValue(mockValue),
+  ],
+);
+```
+
+### Tests Timing Out
+--- ProviderNotFoundException anywhere
+docs/guides/support/troubleshooting.md:96:when a widget reads a provider. (`ProviderNotFoundException` is
+--- flutter_riverpod 3.4.3 (pubspec.lock), lib/src/core/provider_scope.dart
+105:       throw StateError('No ProviderScope found');

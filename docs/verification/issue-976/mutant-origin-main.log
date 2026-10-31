@@ -1,0 +1,3 @@
+00:02 +2 -1: with the app in a subdirectory of a larger repository, hooks run [E]
+00:03 +2 -2: a failed verification puts the previous core.hooksPath back [E]
+00:06 +6 -2: Some tests failed.
