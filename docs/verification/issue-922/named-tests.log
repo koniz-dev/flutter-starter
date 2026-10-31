@@ -1,0 +1,30 @@
+# main 99d457ad4f6: flutter test -r expanded test/features/tasks/presentation/screens/tasks_list_screen_test.dart
+TasksListScreen Delete is disabled while a toggle of that task is pending
+TasksListScreen should display loading indicator when loading
+TasksListScreen should display empty state when no tasks
+TasksListScreen should display tasks list
+TasksListScreen should display error message on error
+TasksListScreen should show add task dialog when FAB is tapped
+TasksListScreen should create task when form is submitted
+TasksListScreen should toggle task completion when checkbox is tapped
+TasksListScreen should refresh when refresh button is tapped
+TasksListScreen should show delete confirmation dialog
+TasksListScreen should handle pull-to-refresh
+TasksListScreen should disable refresh button when loading
+TasksListScreen should display completed and incomplete tasks separately
+TasksListScreen should handle error retry button
+TasksListScreen should handle canceling add task dialog
+TasksListScreen should display task with description
+TasksListScreen should display task without description
+TasksListScreen should display completed task with strikethrough
+TasksListScreen should create task with description in dialog
+TasksListScreen should validate title in add task dialog
+TasksListScreen rejects a whitespace-only title in add task dialog
+TasksListScreen mutation races and refresh double-tapping a checkbox toggles exactly once
+TasksListScreen mutation races and refresh a failed mutation keeps the loaded list on screen
+TasksListScreen mutation races and refresh pull-to-refresh works in the empty state
+TasksListScreen mutation races and refresh pull-to-refresh works in the error state
+TasksListScreen date rendering every task row renders its createdAt via DateFormatter
+TasksListScreen date rendering the date is rendered, not the raw DateTime.toString()
+TasksListScreen date rendering a row without a description still shows its date
+All tests passed!

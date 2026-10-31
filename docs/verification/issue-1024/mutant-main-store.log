@@ -1,0 +1,13 @@
+# secure_token_late_landing_test against origin/main's secure_token_store.dart (99d457ad4f6)
+00:00 +0 -1: a write that lands after the bound and after a clear is undone [E]
+  Expected: empty
+    Actual: {'auth_token': 'refreshed'}
+00:00 +0 -2: a delete that lands after a newer write puts the newer token back [E]
+  Expected: 'signed-in-again'
+    Actual: <null>
+00:00 +0 -3: a late write overtaken by a newer write leaves the newer value [E]
+  Expected: 'second'
+    Actual: 'first'
+            Expected: second
+              Actual: first
+00:01 +1 -3: Some tests failed.

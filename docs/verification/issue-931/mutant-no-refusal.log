@@ -1,0 +1,210 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart
+00:00 +0: main() refuses a release build configured as development a staging release with an http BASE_URL boots into the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: staging
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://api.example.com
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: true
+  SSL Pinning Effective: true
+  SSL Fingerprints Configured: 1
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: true
+  Crash Reporting: true
+  Performance Monitoring: true
+  Debug Features: false
+  HTTP Logging: false
+═══════════════════════════════════════════════════════════
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting regular storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting secure storage migration[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All migrations completed successfully | Context: {"final_version":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:79:22)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 All storage migrations completed | Context: {"regular":2,"secure":2}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;196m│ Expected: exactly one matching candidate[0m
+[38;5;196m│   Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'startup_failure_body'>]: []>[0m
+[38;5;196m│    Which: means none were found but one was expected[0m
+[38;5;196m│ [0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ #0   fail (package:matcher/src/expect/expect.dart:187:31)[0m
+[38;5;196m│ #1   _expect (package:matcher/src/expect/expect.dart:182:3)[0m
+[38;5;196m│ #2   expect (package:matcher/src/expect/expect.dart:65:3)[0m
+[38;5;196m│ #3   expect (package:flutter_test/src/widget_tester.dart:473:18)[0m
+[38;5;196m│ #4   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:552:9)[0m
+[38;5;196m│ #5   <asynchronous suspension>[0m
+[38;5;196m│ #6   testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)[0m
+[38;5;196m│ #7   <asynchronous suspension>[0m
+[38;5;196m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;196m│ ⛔ Uncaught Flutter error | Context: {"library":"Flutter test framework","silent":false}[0m
+[38;5;196m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'startup_failure_body'>]: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:552:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart line 552
+The test description was:
+  a staging release with an http BASE_URL boots into the failure screen
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: main() refuses a release build configured as development a staging release with an http BASE_URL boots into the failure screen [E]
+  Test failed. See exception logs above.
+  The test description was: a staging release with an http BASE_URL boots into the failure screen
+  
+00:01 +0 -1: main() refuses a release build configured as development a production release with an http BASE_URL boots into the failure screen
+═══════════════════════════════════════════════════════════
+📱 App Configuration
+═══════════════════════════════════════════════════════════
+Environment: production
+Debug Mode: true
+Release Mode: false
+
+🌐 API Configuration:
+  Base URL: http://api.example.com
+  Timeout: 30s
+  Connect Timeout: 10s
+  Receive Timeout: 30s
+  Send Timeout: 30s
+  SSL Pinning Requested: true
+  SSL Pinning Effective: true
+  SSL Fingerprints Configured: 1
+
+🚩 Feature Flags:
+  Logging: true
+  Analytics: true
+  Crash Reporting: true
+  Performance Monitoring: true
+  Debug Features: false
+  HTTP Logging: false
+═══════════════════════════════════════════════════════════
+{"timestamp":"2026-10-31T02:18:41.367729Z","level":"info","message":"Starting regular storage migration","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.369909Z","level":"info","message":"Starting storage migration | Context: {\"current_version\":1,\"target_version\":2,\"migrations_count\":1}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.370395Z","level":"info","message":"Executing migration: Migrate user preferences: rename keys and update data format | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.371081Z","level":"info","message":"Migration completed successfully | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.371319Z","level":"info","message":"All migrations completed successfully | Context: {\"final_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.371465Z","level":"info","message":"Starting secure storage migration","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.372249Z","level":"info","message":"Starting storage migration | Context: {\"current_version\":1,\"target_version\":2,\"migrations_count\":1}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.372452Z","level":"info","message":"Executing migration: Migrate user preferences: rename keys and update data format | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.375224Z","level":"info","message":"Migration completed successfully | Context: {\"from_version\":1,\"to_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.375823Z","level":"info","message":"All migrations completed successfully | Context: {\"final_version\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.376112Z","level":"info","message":"All storage migrations completed | Context: {\"regular\":2,\"secure\":2}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.391115Z","level":"info","message":"Navigation: Route Pushed | Context: {\"routeName\":\"login\",\"routePath\":\"login\"}","error":null,"stackTrace":null}
+{"timestamp":"2026-10-31T02:18:41.493358Z","level":"error","message":"Uncaught Flutter error | Context: {\"library\":\"Flutter test framework\",\"silent\":false}","error":"Expected: exactly one matching candidate\n  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'startup_failure_body'>]: []>\n   Which: means none were found but one was expected\n","stackTrace":"#0      fail (package:matcher/src/expect/expect.dart:187:31)\n#1      _expect (package:matcher/src/expect/expect.dart:182:3)\n#2      expect (package:matcher/src/expect/expect.dart:65:3)\n#3      expect (package:flutter_test/src/widget_tester.dart:473:18)\n#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:552:9)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n#7      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)\n<asynchronous suspension>\n"}
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _KeyWidgetFinder:<Found 0 widgets with key [<'startup_failure_body'>]: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart:552:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart line 552
+The test description was:
+  a production release with an http BASE_URL boots into the failure screen
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -2: main() refuses a release build configured as development a production release with an http BASE_URL boots into the failure screen [E]
+  Test failed. See exception logs above.
+  The test description was: a production release with an http BASE_URL boots into the failure screen
+  
+00:02 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() refuses a release build configured as development a production release with an http BASE_URL boots into the failure screen
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/startup/startup_reachability_test.dart: main() refuses a release build configured as development a staging release with an http BASE_URL boots into the failure screen

@@ -1,0 +1,5 @@
+Epic coverage OK: every tracked surface maps to one epic.
+check_epic_coverage exit=0
+Deliverable: HEAD carries nothing that only serves the upstream process.
+check_deliverable exit=0
+main 99d457ad4f66ae00f5c9c3a7a558b05c66ee765e

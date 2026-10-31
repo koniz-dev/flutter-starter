@@ -1,0 +1,13 @@
+# main 99d457ad4f6: flutter test -r expanded test/tooling/fastlane_release_environment_test.dart
+only staging and production pass, trimmed and lowercased
+every lane in fastlane/Fastfile validates its environment
+get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+get_version in fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+get_version in fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match
+every lane in ios/fastlane/Fastfile validates its environment
+get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+get_version in ios/fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+get_version in ios/fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match
+All tests passed!

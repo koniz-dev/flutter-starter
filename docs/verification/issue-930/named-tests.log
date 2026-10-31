@@ -1,0 +1,7 @@
+# main 99d457ad4f6: flutter test -r expanded test/core/storage/adapters/secure_token_read_failure_test.dart
+a failed read is a CacheException, not a missing token
+a request made while the Keychain cannot be read fails, and the session is kept
+Cache credential check error: CacheException: Failed to read auth_token from secure storage: Exception: errSecInteractionNotAllowed
+the cache treats an unreadable token store as signed in
+Cache credential check error: CacheException: Failed to read auth_token from secure storage: Exception: errSecInteractionNotAllowed
+All tests passed!

@@ -1,0 +1,27 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart
+00:00 +0: logout sends the stored refresh token and tears down (server accepts)
+00:00 +0 -1: logout sends the stored refresh token and tears down (server accepts) [E]
+  Expected: 'the-refresh-token'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18                              expect
+  test/features/auth/data/repositories/logout_sends_refresh_token_test.dart 66:7  main.<fn>
+  
+00:00 +0 -1: logout sends the stored refresh token and tears down (server answers 401)
+00:00 +0 -2: logout sends the stored refresh token and tears down (server answers 401) [E]
+  Expected: 'the-refresh-token'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18                              expect
+  test/features/auth/data/repositories/logout_sends_refresh_token_test.dart 66:7  main.<fn>
+  
+00:00 +0 -2: the logout body field is redacted in logs
+00:00 +1 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart: logout sends the stored refresh token and tears down (server accepts)
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart: logout sends the stored refresh token and tears down (server answers 401)

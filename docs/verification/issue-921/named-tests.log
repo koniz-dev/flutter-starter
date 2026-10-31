@@ -1,0 +1,36 @@
+# main 99d457ad4f6: flutter test -r expanded test/features/tasks/data/repositories/toggle_missing_task_test.dart test/features/tasks/data/repositories/tasks_repository_impl_test.dart
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/toggle_missing_task_test.dart: toggling a task that is not stored is a NotFoundFailure
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: (setUpAll)
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl should create instance with localDataSource
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl should have localDataSource property
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl getAllTasks should return list of tasks when data source succeeds
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl getAllTasks should return empty list when data source returns empty
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl getAllTasks should return CacheFailure when data source throws CacheException
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl getTaskById should return task when data source succeeds
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl getTaskById should return null when task not found
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl getTaskById should return CacheFailure when data source throws exception
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl createTask should create task successfully
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl createTask should return CacheFailure when data source throws exception
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl updateTask should update task successfully
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl updateTask should return CacheFailure when data source throws exception
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl deleteTask should delete task successfully
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl deleteTask should return CacheFailure when data source throws exception
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl toggleTaskCompletion should toggle task completion successfully
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl toggleTaskCompletion should return NotFoundFailure when task not found
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl toggleTaskCompletion should return CacheFailure when mutateTasks throws exception
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl toggleTaskCompletion should toggle from completed to incomplete
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl toggleTaskCompletion should update updatedAt when toggling
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Error handling should handle generic Exception in getAllTasks
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Error handling should handle generic Exception in getTaskById
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Error handling should handle generic Exception in createTask
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Error handling should handle generic Exception in updateTask
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Error handling should handle generic Exception in deleteTask
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Error handling should handle generic Exception in toggleTaskCompletion
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Edge cases should handle getAllTasks with large list
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Edge cases should handle createTask with task having all fields
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Edge cases should handle updateTask with task having null description
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Edge cases should handle deleteTask with empty string ID
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Edge cases should handle getTaskById with empty string ID
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: TasksRepositoryImpl Edge cases should handle toggleTaskCompletion with task already completed
+/Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/tasks_repository_impl_test.dart: (tearDownAll)
+All tests passed!

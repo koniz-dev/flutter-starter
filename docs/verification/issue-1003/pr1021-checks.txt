@@ -1,0 +1,7 @@
+PR #1021 head 8be5d78a982ae0498803105f2005309ba716c185 merged as f01e91da9c01927459eb4104b89b0a90d6b3c344
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass

@@ -1,0 +1,40 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_read_failure_test.dart
+00:00 +0: a failed read is a CacheException, not a missing token
+00:00 +0 -1: a failed read is a CacheException, not a missing token [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<String?>'>
+     Which: emitted <null>
+  
+  package:matcher                                                       expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                     expectLater
+  test/core/storage/adapters/secure_token_read_failure_test.dart 78:11  main.<fn>
+  
+00:00 +0 -1: a request made while the Keychain cannot be read fails, and the session is kept
+00:00 +0 -2: a request made while the Keychain cannot be read fails, and the session is kept [E]
+  Expected: throws <Instance of 'CacheException'>
+    Actual: <Instance of 'Future<NetworkResponse<dynamic>>'>
+     Which: emitted <Instance of 'NetworkResponse<dynamic>'>
+  
+  package:matcher                                                        expectLater
+  package:flutter_test/src/widget_tester.dart 507:8                      expectLater
+  test/core/storage/adapters/secure_token_read_failure_test.dart 100:11  main.<fn>
+  
+00:00 +0 -2: the cache treats an unreadable token store as signed in
+00:00 +0 -3: the cache treats an unreadable token store as signed in [E]
+  Expected: empty
+    Actual: WhereIterable<String>:[
+              'http_cache_56a820ece82d81e48b0bea29cd64f2297f451f91dd723ebc515b65f9d22fb9e3',
+              'http_cache_timestamp_http_cache_56a820ece82d81e48b0bea29cd64f2297f451f91dd723ebc515b65f9d22fb9e3',
+              'http_cache_index'
+            ]
+  
+  package:matcher                                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18                    expect
+  test/core/storage/adapters/secure_token_read_failure_test.dart 124:5  main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_read_failure_test.dart: a failed read is a CacheException, not a missing token
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_read_failure_test.dart: a request made while the Keychain cannot be read fails, and the session is kept
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_read_failure_test.dart: the cache treats an unreadable token store as signed in

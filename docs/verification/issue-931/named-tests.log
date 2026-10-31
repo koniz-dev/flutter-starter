@@ -1,0 +1,42 @@
+# main 99d457ad4f6: flutter test -r expanded, test lines only
++0: startup_reachability_test.dart: startup container surfaces failures instead of hanging a real migration failure reaches the awaiting caller within 5s
++1: startup_reachability_test.dart: startup container surfaces failures instead of hanging a downgrade refusal reaches the awaiting caller within 5s
++2: startup_reachability_test.dart: startup container surfaces failures instead of hanging a plain Exception from storage init is not retried away
++3: startup_reachability_test.dart: startup container surfaces failures instead of hanging a session restoration failure is not retried away
++4: startup_reachability_test.dart: startup container surfaces failures instead of hanging a healthy startup still completes normally
++5: startup_reachability_test.dart: startup container surfaces failures instead of hanging the default container still hangs - the opt-out is load-bearing
++6: startup_reachability_test.dart: main() renders StartupFailureApp end to end a failed version stamp boots into the failure screen
++7: startup_reachability_test.dart: main() renders StartupFailureApp end to end the caught startup failure is reported once, with its stack
++8: startup_reachability_test.dart: main() renders StartupFailureApp end to end a downgrade refusal boots into the failure screen
++9: startup_reachability_test.dart: main() refuses an unknown ENVIRONMENT ENVIRONMENT=prod boots into the failure screen, naming the value and the known environments
++10: startup_reachability_test.dart: a bootstrap called while one is running joins it
++11: startup_reachability_test.dart: main() refuses a release build configured as development a release build with ENVIRONMENT=development boots into the failure screen
++12: startup_reachability_test.dart: main() refuses a release build configured as development a release build with ENVIRONMENT=production starts
++13: startup_reachability_test.dart: main() refuses a release build configured as development a release build with pinning on and no fingerprints boots into the failure screen
++14: startup_reachability_test.dart: main() refuses a release build configured as development a release build with an unrecognised ENABLE_SSL_PINNING boots into the failure screen, naming the value
++15: startup_reachability_test.dart: main() refuses a release build configured as development a staging release with an http BASE_URL boots into the failure screen
++16: startup_reachability_test.dart: main() refuses a release build configured as development a production release with an http BASE_URL boots into the failure screen
++17: startup_reachability_test.dart: main() refuses a release build configured as development a debug build with an http BASE_URL starts
++18: startup_reachability_test.dart: main() refuses a release build configured as development a release build that opts out of pinning starts without fingerprints
++19: startup_reachability_test.dart: main() refuses a release build configured as development a non-release development build starts
++20: startup_reachability_test.dart: main() and the uncaught-error handlers a healthy startup installs both handlers
++21: startup_reachability_test.dart: main() and the uncaught-error handlers Try again after a startup failure installs them once, so an uncaught error is reported once
++22: startup_reachability_test.dart: main() boots MyApp end to end on a healthy startup a healthy startup hands MyApp to runApp, not the failure screen
++23: startup_reachability_test.dart: All tests passed!
++0: release_without_https_test.dart: a staging release refuses http://api.example.com
++1: release_without_https_test.dart: a staging release refuses http://10.0.2.2:3000
++2: release_without_https_test.dart: a staging release refuses api.example.com
++3: release_without_https_test.dart: a staging release refuses /api
++4: release_without_https_test.dart: a staging release refuses localhost:3000
++5: release_without_https_test.dart: a staging release accepts https://api.example.com
++6: release_without_https_test.dart: a staging release accepts HTTPS://api.example.com
++7: release_without_https_test.dart: a production release refuses http://api.example.com
++8: release_without_https_test.dart: a production release refuses http://10.0.2.2:3000
++9: release_without_https_test.dart: a production release refuses api.example.com
++10: release_without_https_test.dart: a production release refuses /api
++11: release_without_https_test.dart: a production release refuses localhost:3000
++12: release_without_https_test.dart: a production release accepts https://api.example.com
++13: release_without_https_test.dart: a production release accepts HTTPS://api.example.com
++14: release_without_https_test.dart: a development release is not this check's concern
++15: release_without_https_test.dart: (tearDownAll)
++15: release_without_https_test.dart: All tests passed!

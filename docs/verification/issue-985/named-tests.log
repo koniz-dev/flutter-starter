@@ -1,0 +1,5 @@
+# main 99d457ad4f6: flutter test -r expanded test/features/auth/data/repositories/sign_in_session_guard_test.dart
+a logout during the login round trip leaves nothing stored
+a logout during the register round trip leaves nothing stored
+of two overlapping logins, the second one stays signed in
+All tests passed!

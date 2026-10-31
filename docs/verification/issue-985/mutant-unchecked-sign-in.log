@@ -1,0 +1,39 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart
+00:00 +0: a logout during the login round trip leaves nothing stored
+00:00 +0 -1: a logout during the login round trip leaves nothing stored [E]
+  Expected: null
+    Actual: 'a-access'
+  
+  package:matcher                                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18                         expect
+  test/features/auth/data/repositories/sign_in_session_guard_test.dart 96:9  main.<fn>
+  
+00:00 +0 -1: a logout during the register round trip leaves nothing stored
+00:00 +0 -2: a logout during the register round trip leaves nothing stored [E]
+  Expected: null
+    Actual: 'a-access'
+  
+  package:matcher                                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18                         expect
+  test/features/auth/data/repositories/sign_in_session_guard_test.dart 96:9  main.<fn>
+  
+00:00 +0 -2: of two overlapping logins, the second one stays signed in
+00:00 +0 -3: of two overlapping logins, the second one stays signed in [E]
+  Expected: 'second-access'
+    Actual: 'first-access'
+     Which: is different.
+            Expected: second-acc ...
+              Actual: first-acce ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/sign_in_session_guard_test.dart 116:5  main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the register round trip leaves nothing stored
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: of two overlapping logins, the second one stays signed in

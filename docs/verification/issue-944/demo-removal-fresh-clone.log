@@ -1,0 +1,54 @@
+# Following docs/guides/onboarding/getting-started.md 'To remove it entirely' on a fresh clone of d44fd3ad5ef
+pub get: ok
+## Step 1
+  D  lib/features/auth/demo/demo_auth.dart
+  D  lib/features/auth/demo/demo_sign_in_card.dart
+  D  test/acceptance/goldens/login_demo_dark.png
+  D  test/acceptance/goldens/login_demo_light.png
+  D  test/acceptance/login_demo_acceptance_test.dart
+  D  test/core/config/app_config_has_backend_test.dart
+  D  test/features/auth/demo/demo_auth_test.dart
+  D  test/features/auth/demo/demo_sign_in_card_contrast_test.dart
+  D  test/flutter_test_config.dart
+  D  test/tooling/demo_removal_steps_test.dart
+## Step 2: git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo -e hasBackend lib test integration_test docs
+docs/api/features/auth/providers.md:57:      if (DemoAuth.enabled) return DemoAuthRemoteDataSource();
+docs/guides/configuration.md:520:  (`AppConfig.hasBackend` is false): a debug build then signs in with the
+docs/guides/onboarding/getting-started.md:142:One rule decides whether there is a backend: `AppConfig.hasBackend`, true
+docs/guides/onboarding/getting-started.md:148:<!-- symbol: lib/core/config/app_config.dart AppConfig.hasBackend --> A demo session stays signed in after that switch until you sign out, so
+docs/guides/onboarding/getting-started.md:150:<!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
+docs/guides/onboarding/getting-started.md:153:1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/`,
+docs/guides/onboarding/getting-started.md:160:   `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo -e hasBackend lib test integration_test docs`
+docs/guides/onboarding/getting-started.md:162:   imports and the `if (DemoAuth.enabled)` block in `login_screen.dart`;
+docs/guides/onboarding/getting-started.md:163:   `hasBackend` and `hasBackendFor` in `app_config.dart`, which only the demo
+lib/core/config/app_config.dart:85:  ///   no backend ([hasBackend]) and signs in offline instead
+lib/core/config/app_config.dart:118:  static bool get hasBackend => hasBackendFor(
+lib/core/config/app_config.dart:123:  /// The rule behind [hasBackend], with every input explicit.
+lib/core/config/app_config.dart:124:  static bool hasBackendFor({
+lib/features/auth/di/auth_providers.dart:11:import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
+lib/features/auth/di/auth_providers.dart:44:      if (DemoAuth.enabled) return DemoAuthRemoteDataSource();
+lib/features/auth/presentation/screens/login_screen.dart:8:import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
+lib/features/auth/presentation/screens/login_screen.dart:9:import 'package:flutter_starter/features/auth/demo/demo_sign_in_card.dart';
+lib/features/auth/presentation/screens/login_screen.dart:61:              if (DemoAuth.enabled) ...[
+lib/features/auth/presentation/screens/login_screen.dart:62:                DemoSignInCard(
+lib/features/auth/presentation/screens/login_screen.dart:64:                    _emailController.text = DemoAuth.email;
+lib/features/auth/presentation/screens/login_screen.dart:65:                    _passwordController.text = DemoAuth.password;
+## Step 3: delete the section
+  section removed
+## git grep after steps 2 and 3
+  (no matches)
+## edits
+   docs/api/features/auth/providers.md                |  1 -
+   docs/guides/configuration.md                       |  6 +----
+   docs/guides/onboarding/getting-started.md          | 30 ----------------------
+   lib/core/config/app_config.dart                    | 23 +----------------
+   lib/features/auth/di/auth_providers.dart           |  2 --
+   .../auth/presentation/screens/login_screen.dart    | 11 --------
+   6 files changed, 2 insertions(+), 71 deletions(-)
+## flutter analyze
+Analyzing demo944...                                            
+No issues found! (ran in 3.8s)
+## flutter test
+04:14 +3809 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/demo944/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+04:18 +3810 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/demo944/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+04:18 +3811 ~13: All tests passed!

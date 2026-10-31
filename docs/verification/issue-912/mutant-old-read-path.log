@@ -1,0 +1,143 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/tasks_corrupt_storage_test.dart
+00:00 +0: TaskModel.fromJson a wrong-typed id is a FormatException
+00:00 +0 -1: TaskModel.fromJson a wrong-typed id is a FormatException [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => TaskModel>
+     Which: threw _TypeError:<type 'int' is not a subtype of type 'String' in type cast>
+            stack package:flutter_starter/features/tasks/data/models/task_model.dart 70:22  new TaskModel.fromJson
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 56:27            main.<fn>.<fn>.<fn>
+                  package:matcher                                                           expect
+                  package:flutter_test/src/widget_tester.dart 473:18                        expect
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9             main.<fn>.<fn>
+                  
+            which is not an instance of 'FormatException'
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9  main.<fn>.<fn>
+  
+00:00 +0 -1: TaskModel.fromJson a wrong-typed title is a FormatException
+00:00 +0 -2: TaskModel.fromJson a wrong-typed title is a FormatException [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => TaskModel>
+     Which: threw _TypeError:<type 'Null' is not a subtype of type 'String' in type cast>
+            stack package:flutter_starter/features/tasks/data/models/task_model.dart 71:28  new TaskModel.fromJson
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 56:27            main.<fn>.<fn>.<fn>
+                  package:matcher                                                           expect
+                  package:flutter_test/src/widget_tester.dart 473:18                        expect
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9             main.<fn>.<fn>
+                  
+            which is not an instance of 'FormatException'
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9  main.<fn>.<fn>
+  
+00:00 +0 -2: TaskModel.fromJson a wrong-typed description is a FormatException
+00:00 +0 -3: TaskModel.fromJson a wrong-typed description is a FormatException [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => TaskModel>
+     Which: threw _TypeError:<type 'int' is not a subtype of type 'String?' in type cast>
+            stack package:flutter_starter/features/tasks/data/models/task_model.dart 72:40  new TaskModel.fromJson
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 56:27            main.<fn>.<fn>.<fn>
+                  package:matcher                                                           expect
+                  package:flutter_test/src/widget_tester.dart 473:18                        expect
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9             main.<fn>.<fn>
+                  
+            which is not an instance of 'FormatException'
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9  main.<fn>.<fn>
+  
+00:00 +0 -3: TaskModel.fromJson a wrong-typed is_completed is a FormatException
+00:00 +0 -4: TaskModel.fromJson a wrong-typed is_completed is a FormatException [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => TaskModel>
+     Which: threw _TypeError:<type 'int' is not a subtype of type 'bool?' in type cast>
+            stack package:flutter_starter/features/tasks/data/models/task_model.dart 73:41  new TaskModel.fromJson
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 56:27            main.<fn>.<fn>.<fn>
+                  package:matcher                                                           expect
+                  package:flutter_test/src/widget_tester.dart 473:18                        expect
+                  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9             main.<fn>.<fn>
+                  
+            which is not an instance of 'FormatException'
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/features/tasks/data/tasks_corrupt_storage_test.dart 55:9  main.<fn>.<fn>
+  
+00:00 +0 -4: a stored list with an int id fails reads with a CacheFailure instead of throwing
+00:00 +0 -5: a stored list with an int id fails reads with a CacheFailure instead of throwing [E]
+  type 'int' is not a subtype of type 'String' in type cast
+  package:flutter_starter/features/tasks/data/models/task_model.dart 70:22                    new TaskModel.fromJson
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 164:34  TasksLocalDataSourceImpl._readTasks.<fn>
+  dart:_internal                                                                              ListIterable.toList
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 165:10  TasksLocalDataSourceImpl._readTasks
+  
+00:00 +0 -5: a stored list with an int id leaves the task list settled with a failure, and every mutation fails without overwriting the stored list
+00:30 +0 -6: a stored list with an int id leaves the task list settled with a failure, and every mutation fails without overwriting the stored list [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:30 +0 -6: a stored list with a null title fails reads with a CacheFailure instead of throwing
+00:30 +0 -7: a stored list with a null title fails reads with a CacheFailure instead of throwing [E]
+  type 'Null' is not a subtype of type 'String' in type cast
+  package:flutter_starter/features/tasks/data/models/task_model.dart 71:28                    new TaskModel.fromJson
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 164:34  TasksLocalDataSourceImpl._readTasks.<fn>
+  dart:_internal                                                                              ListIterable.toList
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 165:10  TasksLocalDataSourceImpl._readTasks
+  
+00:30 +0 -7: a stored list with a null title leaves the task list settled with a failure, and every mutation fails without overwriting the stored list
+01:00 +0 -8: a stored list with a null title leaves the task list settled with a failure, and every mutation fails without overwriting the stored list [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+01:00 +0 -8: a stored list with is_completed: 1 fails reads with a CacheFailure instead of throwing
+01:00 +0 -9: a stored list with is_completed: 1 fails reads with a CacheFailure instead of throwing [E]
+  type 'int' is not a subtype of type 'bool?' in type cast
+  package:flutter_starter/features/tasks/data/models/task_model.dart 73:41                    new TaskModel.fromJson
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 164:34  TasksLocalDataSourceImpl._readTasks.<fn>
+  dart:_internal                                                                              ListIterable.toList
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 165:10  TasksLocalDataSourceImpl._readTasks
+  
+01:00 +0 -9: a stored list with is_completed: 1 leaves the task list settled with a failure, and every mutation fails without overwriting the stored list
+01:30 +0 -10: a stored list with is_completed: 1 leaves the task list settled with a failure, and every mutation fails without overwriting the stored list [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+01:30 +0 -10: a stored list with a non-object element fails reads with a CacheFailure instead of throwing
+01:30 +0 -11: a stored list with a non-object element fails reads with a CacheFailure instead of throwing [E]
+  type 'int' is not a subtype of type 'Map<String, dynamic>' in type cast
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 164:48  TasksLocalDataSourceImpl._readTasks.<fn>
+  dart:_internal                                                                              ListIterable.toList
+  package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart 165:10  TasksLocalDataSourceImpl._readTasks
+  
+01:30 +0 -11: a stored list with a non-object element leaves the task list settled with a failure, and every mutation fails without overwriting the stored list
+02:00 +0 -12: a stored list with a non-object element leaves the task list settled with a failure, and every mutation fails without overwriting the stored list [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+02:00 +0 -12: a stored list with an undecodable list fails reads with a CacheFailure instead of throwing
+02:00 +0 -13: a stored list with an undecodable list fails reads with a CacheFailure instead of throwing [E]
+  Expected: <Instance of 'ResultFailure<Object?>'>
+    Actual: Success<List<Task>>:<Success<List<Task>>([])>
+     Which: is not an instance of 'ResultFailure<Object?>'
+  
+  package:matcher                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18             expect
+  test/features/tasks/data/tasks_corrupt_storage_test.dart 80:9  main.<fn>.<fn>
+  
+02:00 +0 -13: a stored list with an undecodable list leaves the task list settled with a failure, and every mutation fails without overwriting the stored list
+02:30 +0 -14: a stored list with an undecodable list leaves the task list settled with a failure, and every mutation fails without overwriting the stored list [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+02:30 +0 -14: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/tasks_corrupt_storage_test.dart: TaskModel.fromJson a wrong-typed description is a FormatException
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/tasks_corrupt_storage_test.dart: TaskModel.fromJson a wrong-typed id is a FormatException
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/tasks_corrupt_storage_test.dart: TaskModel.fromJson a wrong-typed is_completed is a FormatException
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/tasks_corrupt_storage_test.dart: TaskModel.fromJson a wrong-typed title is a FormatException
+  ... and 10 more

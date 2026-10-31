@@ -1,0 +1,7 @@
+# main 99d457ad4f6: flutter test -r expanded test/core/storage/adapters/secure_token_hung_call_test.dart test/core/storage/adapters/secure_token_store_order_test.dart
+/Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_hung_call_test.dart: a write that never completes stops holding the read and the clear behind it after the bound
+/Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_hung_call_test.dart: operations that complete in time keep their order
+/Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a clear issued after a pending write lands after it
+/Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a logout during the refresh write leaves no token behind
+/Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_store_order_test.dart: a login completing after the stale refresh write keeps its own tokens
+All tests passed!

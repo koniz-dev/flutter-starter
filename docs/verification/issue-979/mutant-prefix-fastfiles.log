@@ -1,0 +1,12 @@
+== Fastfiles from HEAD
+00:00 +1 -1: every lane in fastlane/Fastfile validates its environment [E]
+00:00 +4 -2: get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match [E]
+00:00 +4 -3: every lane in ios/fastlane/Fastfile validates its environment [E]
+00:01 +7 -4: get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match [E]
+00:01 +7 -4: Some tests failed.
+== Fastfiles from origin/main
+00:00 +1 -1: every lane in fastlane/Fastfile validates its environment [E]
+00:00 +1 -2: get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1 [E]
+00:00 +4 -3: every lane in ios/fastlane/Fastfile validates its environment [E]
+00:00 +4 -4: get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1 [E]
+00:01 +7 -4: Some tests failed.

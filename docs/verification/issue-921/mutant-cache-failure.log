@@ -1,0 +1,15 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/toggle_missing_task_test.dart
+00:00 +0: toggling a task that is not stored is a NotFoundFailure
+00:00 +0 -1: toggling a task that is not stored is a NotFoundFailure [E]
+  Expected: <Instance of 'NotFoundFailure'>
+    Actual: CacheFailure:<CacheFailure(Task not found, null)>
+     Which: is not an instance of 'NotFoundFailure'
+  
+  package:matcher                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                        expect
+  test/features/tasks/data/repositories/toggle_missing_task_test.dart 23:5  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/data/repositories/toggle_missing_task_test.dart: toggling a task that is not stored is a NotFoundFailure

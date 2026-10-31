@@ -1,0 +1,5 @@
+# main 99d457ad4f6: flutter test -r expanded test/features/auth/data/repositories/logout_sends_refresh_token_test.dart
+logout sends the stored refresh token and tears down (server accepts)
+logout sends the stored refresh token and tears down (server answers 401)
+the logout body field is redacted in logs
+All tests passed!

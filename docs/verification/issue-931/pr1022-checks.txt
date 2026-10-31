@@ -1,0 +1,14 @@
+PR #1022 head 57ab79a765fc6b5ef4580a8bafe7e13606cd8479 merged as 614a8f925032b77d042f030757b4af487307798a
+Action pins: pass
+Android on JDK 25 (toolchain floor + debug build): pass
+Build Android: skipping
+Build Web: skipping
+Build iOS (no codesign): skipping
+Docs check: pass
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass
+Workflow lint: pass

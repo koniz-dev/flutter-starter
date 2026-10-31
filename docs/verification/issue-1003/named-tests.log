@@ -1,0 +1,3 @@
+# main 99d457ad4f6: flutter test -r expanded test/tooling/secure_storage_clear_not_on_logout_test.dart
+no code in lib/ calls clear() on a secure storage service
+All tests passed!

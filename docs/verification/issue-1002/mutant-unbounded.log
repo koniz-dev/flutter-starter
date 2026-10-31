@@ -1,0 +1,11 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_hung_call_test.dart
+00:00 +0: a write that never completes stops holding the read and the clear behind it after the bound
+00:15 +0 -1: a write that never completes stops holding the read and the clear behind it after the bound [E]
+  TimeoutException after 0:00:15.000000: Test timed out after 15 seconds.
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:15 +0 -1: operations that complete in time keep their order
+00:15 +1 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_hung_call_test.dart: a write that never completes stops holding the read and the clear behind it after the bound
