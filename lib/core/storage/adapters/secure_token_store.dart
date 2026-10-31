@@ -202,13 +202,15 @@ class SecureTokenStore implements ITokenStore {
       for (final stale in queue.stale.where((k) => k != key).toList()) {
         final newest = queue.landed[stale]!;
         try {
+          // Bounded like the queue's own wait, so a hung platform call here
+          // holds this operation no longer than one queued ahead of it would.
           await _apply(
             queue,
             stale,
             newest.number,
             newest.value,
             flushStale: false,
-          );
+          ).timeout(operationTimeout);
         } on Object {
           // Still stale; the next write or delete tries again.
         }
@@ -254,16 +256,20 @@ class SecureTokenStore implements ITokenStore {
       }
     }
     queue.stale.add(key);
-    queue.logger?.warning(
-      'Secure token store: a late write or delete of $key could not be '
-      'undone; the key may hold an outdated value until the next token '
-      'write or delete',
-      context: {
-        'key': key,
-        'attempts': repairAttempts,
-        if (lastError != null) 'error': lastError.runtimeType.toString(),
-      },
-    );
+    try {
+      queue.logger?.warning(
+        'Secure token store: a late write or delete of $key could not be '
+        'undone; the key may hold an outdated value until the next token '
+        'write or delete',
+        context: {
+          'key': key,
+          'attempts': repairAttempts,
+          if (lastError != null) 'error': lastError.runtimeType.toString(),
+        },
+      );
+    } on Object {
+      // Nothing to report to: this runs unawaited.
+    }
   }
 }
 

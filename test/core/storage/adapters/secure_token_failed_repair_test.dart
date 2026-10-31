@@ -121,6 +121,29 @@ void main() {
     expect(backing.values, isEmpty);
   });
 
+  test('a flush whose platform call hangs holds the next operation only '
+      'up to the bound', () async {
+    final backing = _Backing();
+    final store = SecureTokenStore(backing.storage, operationTimeout: _bound);
+
+    backing.removeResults.addAll([
+      true,
+      ...List.filled(SecureTokenStore.repairAttempts, false),
+    ]);
+    await _lateWriteOverClear(backing, store);
+    await _settle();
+    expect(backing.values[_key], _token);
+
+    // From now on, deleting the stale key never completes.
+    when(() => backing.storage.remove(_key)).thenAnswer(
+      (_) => Completer<bool>().future,
+    );
+
+    final write = store.setRefreshToken('r');
+    await expectLater(write.timeout(_bound * 4), completion(isTrue));
+    expect(backing.values[AppConstants.refreshTokenKey], 'r');
+  });
+
   test('a failed repair is logged as a warning naming the key, never the '
       'value', () async {
     final backing = _Backing();
