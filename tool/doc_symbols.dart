@@ -258,19 +258,7 @@ bool declaresMember(String source, String type, String member) {
       continue;
     }
     if (c == "'" || c == '"') {
-      final quote = source.startsWith(c * 3, i) ? c * 3 : c;
-      // `r'...'`: a backslash is an ordinary character, so `r'\'` closes
-      // on its second quote. Reading it as an escape ran on through the rest
-      // of the body and hid every declaration after it.
-      final raw =
-          i > 0 &&
-          source[i - 1] == 'r' &&
-          (i < 2 || !RegExp(r'[A-Za-z0-9_$]').hasMatch(source[i - 2]));
-      var j = i + quote.length;
-      while (j < source.length && !source.startsWith(quote, j)) {
-        j += !raw && source[j] == r'\' ? 2 : 1;
-      }
-      i = j + quote.length;
+      i = _stringEnd(source, i);
       if (depth == 1) topLevel.write('""');
       continue;
     }
@@ -431,18 +419,7 @@ String _blankCommentsAndStrings(String source) {
       continue;
     }
     if (c == "'" || c == '"') {
-      final quote = source.startsWith(c * 3, i) ? c * 3 : c;
-      final raw =
-          i > 0 &&
-          source[i - 1] == 'r' &&
-          (i < 2 || !RegExp(r'[A-Za-z0-9_$]').hasMatch(source[i - 2]));
-      var j = i + quote.length;
-      while (j < source.length && !source.startsWith(quote, j)) {
-        j += !raw && source[j] == r'\' ? 2 : 1;
-      }
-      final end = j + quote.length > source.length
-          ? source.length
-          : j + quote.length;
+      final end = _stringEnd(source, i);
       out.write(blank(source.substring(i, end)));
       i = end;
       continue;
@@ -451,6 +428,52 @@ String _blankCommentsAndStrings(String source) {
     i++;
   }
   return out.toString();
+}
+
+/// The index just past the string literal that opens at [start], or the end
+/// of [source] when it never closes.
+///
+/// `r'...'` is raw: a backslash is an ordinary character, so `r'\'` closes
+/// on its second quote; reading it as an escape ran on through the rest of
+/// the source and hid every declaration after it. In any other string a
+/// `${...}` interpolation is an expression that can hold strings of its own,
+/// so it is skipped as one: `'${"'"}'` is one literal, not an unclosed one.
+int _stringEnd(String source, int start) {
+  final c = source[start];
+  final quote = source.startsWith(c * 3, start) ? c * 3 : c;
+  final raw =
+      start > 0 &&
+      source[start - 1] == 'r' &&
+      (start < 2 || !RegExp(r'[A-Za-z0-9_$]').hasMatch(source[start - 2]));
+  var j = start + quote.length;
+  while (j < source.length && !source.startsWith(quote, j)) {
+    if (!raw && source[j] == r'\') {
+      j += 2;
+    } else if (!raw && source.startsWith(r'${', j)) {
+      j = _interpolationEnd(source, j + 2);
+    } else {
+      j++;
+    }
+  }
+  return j + quote.length > source.length ? source.length : j + quote.length;
+}
+
+/// The index just past the `}` that closes the interpolation whose body
+/// starts at [start].
+int _interpolationEnd(String source, int start) {
+  var depth = 1;
+  var j = start;
+  while (j < source.length) {
+    final c = source[j];
+    if (c == "'" || c == '"') {
+      j = _stringEnd(source, j);
+      continue;
+    }
+    if (c == '{') depth++;
+    if (c == '}' && --depth == 0) return j + 1;
+    j++;
+  }
+  return j;
 }
 
 String _rel(Directory root, String path) => path.startsWith('${root.path}/')

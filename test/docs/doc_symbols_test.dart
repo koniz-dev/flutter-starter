@@ -210,6 +210,19 @@ final realProvider = Provider<int>((ref) => 1);
         declaresSymbol("/* c */\nconst x = r'\\';\nclass After {}", 'After'),
         isTrue,
       );
+      // An interpolation holding an odd number of quotes.
+      expect(
+        declaresSymbol("final s = '\${\"'\"}';\nclass After {}", 'After'),
+        isTrue,
+      );
+      expect(
+        declaresSymbol(
+          r'''final s = 'a ${b('${c("x")}')} d';'''
+              '\nclass After {}',
+          'After',
+        ),
+        isTrue,
+      );
     });
 
     test('does not match a longer identifier that contains the name', () {
@@ -291,6 +304,14 @@ class Foo {
       expect(declaresMember(source, 'Foo', 'w'), isTrue);
       expect(declaresMember(source, 'Foo', 'lessOrEqual'), isFalse);
       expect(declaresMember(source, 'Foo', 'afterOperators'), isTrue);
+      expect(
+        declaresMember(
+          "class Q {\n  final s = '\${\"'\"}';\n  int after() => 1;\n}",
+          'Q',
+          'after',
+        ),
+        isTrue,
+      );
     });
 
     test('reads each member form, at the type body top level only', () {
