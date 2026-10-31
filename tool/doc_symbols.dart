@@ -74,6 +74,13 @@ final RegExp _directivePattern = RegExp(
 
 final RegExp _fencePattern = RegExp(r'^\s*(`{3,}|~{3,})');
 
+/// A line that opens a symbol directive, outside inline code. One that does
+/// not then match [_directivePattern] in full - a missing identifier, a third
+/// word, text after `-->` - used to be skipped without a word, so the symbol
+/// it named went unchecked.
+bool _looksLikeDirective(String line) =>
+    line.replaceAll(RegExp('`[^`]*`'), '').contains(RegExp(r'<!--\s*symbol:'));
+
 /// Outcome of a scan: what was asserted, and what did not hold.
 class SymbolCheckResult {
   /// Creates a result record.
@@ -153,7 +160,19 @@ SymbolCheckResult collectSymbolProblems(Directory root) {
       if (openFence != null) continue;
 
       final match = _directivePattern.firstMatch(lines[i]);
-      if (match == null) continue;
+      if (match == null) {
+        if (_looksLikeDirective(lines[i])) {
+          problems.add(
+            SymbolProblem(
+              '$relative:${i + 1}',
+              'malformed directive; expected '
+                  '`<!-- symbol: <source path> <identifier> -->` alone on '
+                  'its line',
+            ),
+          );
+        }
+        continue;
+      }
 
       final directive = SymbolDirective(
         docFile: relative,
@@ -268,7 +287,15 @@ bool declaresMember(String source, String type, String member) {
   }
 
   final m = RegExp.escape(member);
-  final body = topLevel.toString();
+  // What follows `=` or `=>`, up to the next `;`, `{` or `}`, is an
+  // initializer or an expression body, not a declaration:
+  // `final int y = helper(2);` names `helper` without declaring it. Stopping
+  // at a brace keeps a constructor's `: _dio = _createDio(...) {}` from
+  // swallowing the declarations after it. `==`, `!=`, `<=` and `>=` stay.
+  final body = topLevel.toString().replaceAll(
+    RegExp('(?<![=!<>])=(?!=)>?[^;{}]*'),
+    '',
+  );
   return [
     // Named or factory constructor: `Type.member(`.
     RegExp('\\b$t\\.$m\\s*\\('),
@@ -298,7 +325,11 @@ bool declaresMember(String source, String type, String member) {
 /// a line, which is what keeps a mention inside a `//` or `///` comment from
 /// counting: a comment line begins with the slashes, not with `class` or
 /// `final`.
+///
+/// Block comments and string literals are blanked first, newlines kept, so
+/// `class Ghost {}` inside `/* */` or a `'''` string is not a declaration.
 bool declaresSymbol(String source, String name) {
+  final code = _blankCommentsAndStrings(source);
   final n = RegExp.escape(name);
   final patterns = <RegExp>[
     // abstract / base / interface / final / sealed / mixin class
@@ -356,7 +387,67 @@ bool declaresSymbol(String source, String name) {
       multiLine: true,
     ),
   ];
-  return patterns.any((p) => p.hasMatch(source));
+  return patterns.any((p) => p.hasMatch(code));
+}
+
+/// [source] with every block comment and string literal replaced by spaces,
+/// newlines kept so line-anchored patterns still see the same lines. `//`
+/// comments are left alone: the patterns are anchored, and a comment line
+/// starts with its slashes.
+String _blankCommentsAndStrings(String source) {
+  final out = StringBuffer();
+  String blank(String text) => text.replaceAll(RegExp('[^\n]'), ' ');
+  var i = 0;
+  while (i < source.length) {
+    final c = source[i];
+    if (source.startsWith('//', i)) {
+      final end = source.indexOf('\n', i);
+      final stop = end < 0 ? source.length : end;
+      out.write(source.substring(i, stop));
+      i = stop;
+      continue;
+    }
+    if (source.startsWith('/*', i)) {
+      // Dart block comments nest.
+      var depth = 0;
+      var j = i;
+      while (j < source.length) {
+        if (source.startsWith('/*', j)) {
+          depth++;
+          j += 2;
+        } else if (source.startsWith('*/', j)) {
+          depth--;
+          j += 2;
+          if (depth == 0) break;
+        } else {
+          j++;
+        }
+      }
+      out.write(blank(source.substring(i, j)));
+      i = j;
+      continue;
+    }
+    if (c == "'" || c == '"') {
+      final quote = source.startsWith(c * 3, i) ? c * 3 : c;
+      final raw =
+          i > 0 &&
+          source[i - 1] == 'r' &&
+          (i < 2 || !RegExp(r'[A-Za-z0-9_$]').hasMatch(source[i - 2]));
+      var j = i + quote.length;
+      while (j < source.length && !source.startsWith(quote, j)) {
+        j += !raw && source[j] == r'\' ? 2 : 1;
+      }
+      final end = j + quote.length > source.length
+          ? source.length
+          : j + quote.length;
+      out.write(blank(source.substring(i, end)));
+      i = end;
+      continue;
+    }
+    out.write(c);
+    i++;
+  }
+  return out.toString();
 }
 
 String _rel(Directory root, String path) => path.startsWith('${root.path}/')

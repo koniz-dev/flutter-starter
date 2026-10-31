@@ -88,6 +88,13 @@ final RegExp _directivePattern = RegExp(
 
 final RegExp _fencePattern = RegExp(r'^\s*(`{3,}|~{3,})');
 
+/// A line that opens a signature directive, outside inline code. One that
+/// does not then match [_directivePattern] in full used to be skipped without
+/// a word, so the signature it named went unchecked.
+bool _looksLikeDirective(String line) => line
+    .replaceAll(RegExp('`[^`]*`'), '')
+    .contains(RegExp(r'<!--\s*signature:'));
+
 /// Checks every signature directive under [root], printing results.
 ///
 /// Returns the number of problems found; 0 means clean.
@@ -129,7 +136,19 @@ int checkSignatures(Directory root, {bool verbose = true}) {
       if (openFence != null) continue;
 
       final match = _directivePattern.firstMatch(lines[i]);
-      if (match == null) continue;
+      if (match == null) {
+        if (_looksLikeDirective(lines[i])) {
+          problems.add(
+            SignatureProblem(
+              '$relative:${i + 1}',
+              'malformed directive; expected '
+                  '`<!-- signature: <source path> <ConstructorName> -->` '
+                  'alone on its line',
+            ),
+          );
+        }
+        continue;
+      }
       final directive = SignatureDirective(
         docFile: relative,
         line: i + 1,

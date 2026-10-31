@@ -134,6 +134,26 @@ void main() {
     });
   });
 
+  test('a malformed signature directive is reported, not skipped', () {
+    final root = Directory.systemTemp.createTempSync('doc_signatures_bad_');
+    addTearDown(() => root.deleteSync(recursive: true));
+    File('${root.path}/docs/a.md')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(
+        [
+          '<!-- signature: lib/nope.dart -->',
+          '<!-- signature: lib/nope.dart Foo --> trailing prose',
+          'Write a `<!-- signature: <path> <Name> -->` directive.',
+          '```',
+          '<!-- signature: lib/nope.dart -->',
+          '```',
+          '',
+        ].join('\n'),
+      );
+
+    expect(checkSignatures(root, verbose: false), 2);
+  });
+
   group('doc_signatures parser', () {
     List<String>? texts(String source, String name) =>
         parameters(source, name)?.map((p) => p.toString()).toList();

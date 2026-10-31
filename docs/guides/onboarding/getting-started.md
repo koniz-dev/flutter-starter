@@ -145,7 +145,8 @@ is anything but `development`. Demo mode is on exactly when it is false in a deb
 build, so it turns itself off with a `BASE_URL` - a local server included,
 which therefore needs `BASE_URL=http://localhost:3000` spelled out - and in
 every profile or release build.
-<!-- symbol: lib/core/config/app_config.dart AppConfig.hasBackend --> A demo session stays signed in after that switch until you sign out, so
+<!-- symbol: lib/core/config/app_config.dart AppConfig.hasBackend -->
+A demo session stays signed in after that switch until you sign out, so
 sign out (or clear the app's data) before pointing the app at a real backend.
 <!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
 To remove it entirely:
