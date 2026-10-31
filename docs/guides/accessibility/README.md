@@ -74,6 +74,8 @@ The app provides accessible widget wrappers:
 ### Testing
 
 - `AccessibilityTestHelpers` - Automated testing utilities
+- `AccessibilityMatchers` - matchers for the node `tester.getSemantics(finder)`
+  returns: `hasSemanticLabel`, `isButton`, `isEnabled`, `hasMinTouchTarget`
 - Unit tests for accessibility helpers
 - Widget tests for semantic labels
 - Manual testing procedures
