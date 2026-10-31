@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 
 /// Application configuration with environment-aware defaults
 ///
@@ -407,7 +408,9 @@ class AppConfig {
       debugPrint('Release Mode: $isReleaseMode');
       debugPrint('');
       debugPrint('🌐 API Configuration:');
-      debugPrint('  Base URL: $baseUrl');
+      // Through redactUrl, as the startup refusal shows it: a BASE_URL can
+      // carry userinfo or a token in its query.
+      debugPrint('  Base URL: ${ApiLoggingInterceptor.redactUrl(baseUrl)}');
       debugPrint('  Timeout: ${apiTimeout}s');
       debugPrint('  Connect Timeout: ${apiConnectTimeout}s');
       debugPrint('  Receive Timeout: ${apiReceiveTimeout}s');
