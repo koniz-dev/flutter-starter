@@ -215,10 +215,10 @@ final realProvider = Provider<int>((ref) => 1);
         declaresSymbol("final s = '\${\"'\"}';\nclass After {}", 'After'),
         isTrue,
       );
+      // A quote inside a comment inside an interpolation.
       expect(
         declaresSymbol(
-          r'''final s = 'a ${b('${c("x")}')} d';'''
-              '\nclass After {}',
+          "final s = '''\${ x // it's\n }''';\nclass After {}",
           'After',
         ),
         isTrue,

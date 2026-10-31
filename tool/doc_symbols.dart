@@ -469,6 +469,17 @@ int _interpolationEnd(String source, int start) {
       j = _stringEnd(source, j);
       continue;
     }
+    // A comment in the expression can hold a quote of its own.
+    if (source.startsWith('//', j)) {
+      final end = source.indexOf('\n', j);
+      j = end < 0 ? source.length : end;
+      continue;
+    }
+    if (source.startsWith('/*', j)) {
+      final end = source.indexOf('*/', j + 2);
+      j = end < 0 ? source.length : end + 2;
+      continue;
+    }
     if (c == '{') depth++;
     if (c == '}' && --depth == 0) return j + 1;
     j++;

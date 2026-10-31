@@ -101,7 +101,11 @@ void main() {
     File('${root.path}/android/settings.gradle.kts')
       ..createSync(recursive: true)
       ..writeAsStringSync('''
+val libs = fileTree("libs") { include("**/*.jar") } // a `/*` in a string
 plugins {
+    /* outer /* nested */
+    id("com.android.application") version "97.0.0" apply false
+    */
     /*
     id("com.android.application") version "98.0.0" apply false
     id("org.jetbrains.kotlin.android") version "98.0.0" apply false
@@ -111,6 +115,7 @@ plugins {
     // id("org.jetbrains.kotlin.android") version "99.0.0" apply false
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
 }
+val out = "build/**/" // closes nothing: the `/*` above was in a string
 ''');
 
     expect(readAndroidToolchain(root), {

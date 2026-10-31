@@ -65,15 +65,61 @@ Map<String, String?> readAndroidToolchain(Directory root) {
   // pin, a note) was read instead of the live declaration below it. A
   // .properties comment starts with `#` or `!`; Kotlin also has `/* */`.
   final wrapper = _uncommented(read(_wrapperPath), ['#', '!']);
-  final settings = _uncommented(
-    read(_settingsPath).replaceAll(RegExp(r'/\*.*?\*/', dotAll: true), ''),
-    ['//'],
-  );
+  final settings = _uncommented(_withoutBlockComments(read(_settingsPath)), [
+    '//',
+  ]);
   return {
     'Gradle': _gradle.firstMatch(wrapper)?.group(1),
     'Android Gradle Plugin': _agp.firstMatch(settings)?.group(1),
     'Kotlin': _kotlin.firstMatch(settings)?.group(1),
   };
+}
+
+/// Kotlin [source] with its `/* */` comments removed, newlines kept.
+///
+/// Scanned rather than matched: Kotlin block comments nest, and a `/*` inside
+/// a string (`include("**/*.jar")`) or a `//` comment opens nothing.
+String _withoutBlockComments(String source) {
+  final out = StringBuffer();
+  var i = 0;
+  while (i < source.length) {
+    if (source.startsWith('//', i)) {
+      final end = source.indexOf('\n', i);
+      final stop = end < 0 ? source.length : end;
+      out.write(source.substring(i, stop));
+      i = stop;
+    } else if (source.startsWith('/*', i)) {
+      var depth = 0;
+      while (i < source.length) {
+        if (source.startsWith('/*', i)) {
+          depth++;
+          i += 2;
+        } else if (source.startsWith('*/', i)) {
+          depth--;
+          i += 2;
+          if (depth == 0) break;
+        } else {
+          if (source[i] == '\n') out.write('\n');
+          i++;
+        }
+      }
+    } else if (source[i] == '"') {
+      final quote = source.startsWith('"""', i) ? '"""' : '"';
+      var j = i + quote.length;
+      while (j < source.length && !source.startsWith(quote, j)) {
+        j += quote == '"' && source[j] == r'\' ? 2 : 1;
+      }
+      final end = j + quote.length > source.length
+          ? source.length
+          : j + quote.length;
+      out.write(source.substring(i, end));
+      i = end;
+    } else {
+      out.write(source[i]);
+      i++;
+    }
+  }
+  return out.toString();
 }
 
 /// [text] without the lines whose first non-blank characters are one of
