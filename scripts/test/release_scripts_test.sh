@@ -24,7 +24,7 @@ WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 # Work from outside any repository: a fixture command that loses its
 # directory then fails, instead of committing to the checkout running this.
-cd "$WORK"
+cd "$WORK" || exit 1
 
 FAILURES=0
 pass() { echo "ok    $1"; }
