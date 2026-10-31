@@ -149,6 +149,70 @@ flutter:
     });
   });
 
+  group('every spelling of an env file', () {
+    const envNames = [
+      'production.env',
+      'app_config.env',
+      'prod.ENV',
+      '.env-staging',
+      '.env_prod',
+      '.envrc',
+    ];
+
+    test('secretAssetReason flags each, and not near misses', () {
+      for (final name in envNames) {
+        expect(secretAssetReason(name), 'environment file', reason: name);
+      }
+      for (final name in [
+        '.env.example',
+        'environment.dart',
+        'my.envelope',
+        'dotenv.md',
+        'env.json',
+      ]) {
+        expect(secretAssetReason(name), isNull, reason: name);
+      }
+    });
+
+    for (final name in envNames) {
+      test('$name named in the asset list is flagged', () {
+        final pubspec =
+            '''
+flutter:
+  assets:
+    - .env.example
+    - assets/$name
+''';
+
+        final findings = findDeclaredSecretAssets(pubspec);
+
+        expect(findings, hasLength(1));
+        expect(findings.single.entry, 'assets/$name');
+      });
+
+      test('$name inside a declared directory is flagged', () {
+        final root = Directory.systemTemp.createTempSync('check_env_names_');
+        addTearDown(() => root.deleteSync(recursive: true));
+        File('${root.path}/assets/config/$name')
+          ..createSync(recursive: true)
+          ..writeAsStringSync('API_KEY=live-secret\n');
+        const pubspec = '''
+flutter:
+  assets:
+    - assets/config/
+''';
+
+        final findings = findBundledDirectorySecrets(
+          pubspec,
+          projectRoot: root.path,
+        );
+
+        expect(findings, hasLength(1), reason: name);
+        expect(findings.single.acknowledged, isFalse);
+      });
+    }
+  });
+
   group('parseAcknowledgedNames', () {
     // The grammar is the contract a reviewer reads a comment against, so every
     // clause of it gets a case. It used to be a

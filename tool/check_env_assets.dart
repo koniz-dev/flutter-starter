@@ -217,7 +217,15 @@ String? secretAssetReason(String fileName) {
   if (name == allowedEnvAsset) {
     return null;
   }
-  if (name == '.env' || name.startsWith('.env.')) {
+  // `.env` and its variants (`.env.production`, `.env-staging`, `.env_prod`,
+  // `.envrc`), and any `<name>.env` such as `production.env` or
+  // `app_config.env`.
+  if (name == '.env' ||
+      name.startsWith('.env.') ||
+      name.startsWith('.env-') ||
+      name.startsWith('.env_') ||
+      name.startsWith('.envrc') ||
+      name.endsWith('.env')) {
     return 'environment file';
   }
 
