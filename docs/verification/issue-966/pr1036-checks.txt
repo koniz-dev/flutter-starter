@@ -1,0 +1,8 @@
+PR #1036 head bbbaf1f7f3e50b74da69d2e8f3b3f14ccb0d99c7 merged as f141285c7e6b688b4839d0efc9ee0d639889aac9
+Docs check: pass
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass

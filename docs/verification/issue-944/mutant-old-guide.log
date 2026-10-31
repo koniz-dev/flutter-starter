@@ -1,0 +1,5 @@
+# demo_removal_steps_test with getting-started.md and app_config_has_backend_test.dart from 1d6fa5c62d7 (before the fix)
++0 -1: the guide names every path it relies on [E]
+  Expected: contains '`test/acceptance/login_demo_acceptance_test.dart`'
+    Actual: '# Getting Started\n'
++1 -1: Some tests failed.

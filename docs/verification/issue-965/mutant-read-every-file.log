@@ -1,0 +1,4 @@
+# setup_brick_feature_rename_test with the source read reverted to the old recursive read of every file (compiled hook planted)
+00:00 +0 -1: (setUpAll) [E]
+  FileSystemException: Failed to decode data using encoding 'utf-8', path = 'bricks/feature_clean/hooks/build/hooks/post_gen/post_gen_test.aot'
+00:00 +0 -1: Some tests failed.

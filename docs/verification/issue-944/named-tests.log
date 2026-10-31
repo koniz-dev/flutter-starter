@@ -1,0 +1,4 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: demo_removal_steps_test.dart: the guide names every path it relies on
++1: demo_removal_steps_test.dart: only the files the steps delete or edit use the demo
++2: demo_removal_steps_test.dart: All tests passed!

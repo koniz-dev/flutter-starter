@@ -1,0 +1,6 @@
+# secure_token_stale_reads_test with the fix minus the delete-only flush rule
++1 -1: a sign-out writes no token, even with a stale key whose newer state is a write [E]
+  Expected: empty
+    Actual: ['refresh_token']
+  the sign-out wrote a token
++1 -1: Some tests failed.

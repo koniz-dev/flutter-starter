@@ -1,0 +1,4 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: migration_test_snippet_test.dart: migration renames key correctly
++1: migration_test_snippet_test.dart: the guide shows the test above, for its own migration
++2: migration_test_snippet_test.dart: All tests passed!

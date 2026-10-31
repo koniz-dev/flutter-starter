@@ -1,0 +1,10 @@
+# secure_token_failed_repair_test against 1d6fa5c62d7's secure_token_store.dart, with only a no-op logger parameter and the repairAttempts constant added so the test compiles
+00:00 +0 -1: a repair whose first attempt fails is retried and lands [E]
+  Expected: empty
+    Actual: {'auth_token': 'live-access-token-value'}
+00:00 +0 -2: a repair that keeps failing stops after a bounded number of attempts, and the next write or delete re-applies it [E]
+  Expected: <4>
+    Actual: <2>
+00:01 +0 -3: clearAllTokens re-applies a stale key [E]
+00:01 +0 -4: a failed repair is logged as a warning naming the key, never the value [E]
+00:01 +0 -4: Some tests failed.

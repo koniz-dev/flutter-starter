@@ -1,4 +1,4 @@
-# Following docs/guides/onboarding/getting-started.md 'To remove it entirely' on a fresh clone of d44fd3ad5ef
+# Following docs/guides/onboarding/getting-started.md 'To remove it entirely' on a fresh clone of main 6fb2bcaea8f
 pub get: ok
 ## Step 1
   D  lib/features/auth/demo/demo_auth.dart
@@ -13,7 +13,7 @@ pub get: ok
   D  test/tooling/demo_removal_steps_test.dart
 ## Step 2: git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo -e hasBackend lib test integration_test docs
 docs/api/features/auth/providers.md:57:      if (DemoAuth.enabled) return DemoAuthRemoteDataSource();
-docs/guides/configuration.md:520:  (`AppConfig.hasBackend` is false): a debug build then signs in with the
+docs/guides/configuration.md:524:  (`AppConfig.hasBackend` is false): a debug build then signs in with the
 docs/guides/onboarding/getting-started.md:142:One rule decides whether there is a backend: `AppConfig.hasBackend`, true
 docs/guides/onboarding/getting-started.md:148:<!-- symbol: lib/core/config/app_config.dart AppConfig.hasBackend --> A demo session stays signed in after that switch until you sign out, so
 docs/guides/onboarding/getting-started.md:150:<!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
@@ -47,8 +47,5 @@ lib/features/auth/presentation/screens/login_screen.dart:65:                    
    6 files changed, 2 insertions(+), 71 deletions(-)
 ## flutter analyze
 Analyzing demo944...                                            
-No issues found! (ran in 3.8s)
+No issues found! (ran in 4.3s)
 ## flutter test
-04:14 +3809 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/demo944/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
-04:18 +3810 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/demo944/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
-04:18 +3811 ~13: All tests passed!

@@ -1,0 +1,92 @@
+# main 6fb2bcaea8f: SecureTokenStore class doc
+/// Secure token store implementation backed by [SecureStorageService].
+///
+/// ## Operations take effect in the order they were issued
+///
+/// Each read, write and delete waits for the ones issued before it to settle,
+/// up to a bound (below).
+/// The session guards in `AuthRepositoryImpl.refreshToken()` and
+/// `AuthInterceptor` check the session immediately before a write, which only
+/// helps if a logout's clear, issued after that check, also *lands* after the
+/// write. flutter_secure_storage does not promise that on every platform: on
+/// web, a write awaits WebCrypto encryption before it reaches `localStorage`,
+/// while a delete removes the key at once, so a clear issued after a pending
+/// write ran before it and the write then re-stored a token on a signed-out
+/// browser. Queuing here makes the order the code issues the order the store
+/// applies, on every platform, without clearing anything a newer session
+/// wrote - except for a call that outlives the bound, which the repair below
+/// covers.
+///
+/// The queue belongs to the [SecureStorageService] underneath, not to this
+/// object: every `SecureTokenStore` built over the same service shares it.
+/// It used to be a field of each store, so the store `AuthInterceptor` builds
+/// for itself from `secureStorageService:` and the one the repository uses
+/// ordered their own calls but not each other's - and a logout's clear on one
+/// could again land before a refresh write on the other. Two stores over two
+/// different `SecureStorageService` objects still do not share a queue, so the
+/// app builds one service (`secureStorageServiceProvider`).
+///
+/// The wait is bounded by [operationTimeout] (10 seconds by default).
+/// Without the bound, one platform call that never completed held every later
+/// token operation behind it - the token read on each request and a logout's
+/// clear included - until the app was restarted. Now an operation queued
+/// behind one that has not settled within the bound runs anyway; the hung
+/// call stays hung only for its own caller.
+///
+/// A call that outlives the bound and then succeeds lands after operations
+/// issued later. For a write or delete, that would leave the older state on
+/// the device - a refresh's token write landing after a logout's clear would
+/// re-store a credential on a signed-out device. So each write and delete is
+/// numbered when it is issued, and one that lands after a newer write or
+/// delete of the same key has landed is followed by a repair that puts the
+/// newer state back, queued like any other operation. Between the late
+/// landing and the repair the older value is briefly at rest. A repair that
+/// fails is retried, up to three attempts; if every attempt fails, the key is
+/// marked stale and a warning naming the key (never its value) goes to the
+/// logger. Until it is re-applied, a read of a stale key answers from memory
+/// with the newer state - `null` after a clear - never with the late value
+/// on the device. The next write through any store over the same service
+/// re-applies every stale key first; the next delete re-applies only stale
+/// deletes, so a sign-out never writes a token. Once everything settles and no
+/// repair has failed, every key holds what its last-issued successful write
+/// or delete left. The stale marker lives in memory: if the app stops before
+/// a stale key is re-applied, the late value is what the next launch reads.
+/// A read that outlived the bound returns what the store held when it ran.
+class SecureTokenStore implements ITokenStore {
+
+# main 6fb2bcaea8f: ITokenStore contract
+/// Dedicated token/session storage contract.
+///
+/// Once its operations settle, an implementation must hold what they would
+/// leave applied in the order they were issued: a successful clear issued
+/// after a write removes that write's token, even if the write's platform
+/// call completes later. A clear that fails throws, so its caller knows the
+/// token may remain. The session guards in `AuthRepositoryImpl.refreshToken()`
+/// and `AuthInterceptor` check the session immediately before a write and
+/// rely on a logout's later clear removing it.
+///
+/// `SecureTokenStore` queues its operations to guarantee this, because the
+/// platform store does not on every target. A call that outlives its wait
+/// bound and lands late is followed by a repair, so the older value is at
+/// rest only until that repair lands. A repair whose platform call keeps
+/// failing is retried a bounded number of times, then reported to the logger
+/// by key; reads of that key then answer from memory with the newer state,
+/// and the next write through the same service (or, for a key whose newer
+/// state is a delete, the next delete) re-applies it. The marker is in
+/// memory, so if the app stops first, the next launch reads the late value.
+/// Its queue is shared by every store over the same `SecureStorageService`,
+/// so the components touching the tokens must use one service (or one store).
+/// An in-memory store whose methods complete synchronously meets it
+/// trivially.
+abstract class ITokenStore {
+
+# main 6fb2bcaea8f: auth_repository_impl.dart comments
+294:  /// token store makes a later clear win over it (by order, or by a repair if
+295-  /// the write outlived the store's wait bound), but the cached user blob has
+296-  /// no such queue.
+297-  Future<Result<User>> _persistSignIn(
+--
+358:      // after that write - and the token store leaves the effect of the order
+359-      // they were issued (SecureTokenStore queues them, and repairs a write
+360-      // that outlived its wait bound and landed late; on web the plugin alone
+361-      // would let the clear land first), so the clear wins. A single check

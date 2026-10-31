@@ -1,0 +1,7 @@
+# setup_brick_display_name_test with xmlEscaped, yamlQuoted and rubyDoubleQuotedEscaped returning the name unescaped (the old behaviour; the manifest used to swap " for ' only)
++0 -1: the AndroidManifest parses and carries the name [E]
++0 -2: the Info.plist parses and carries the name [E]
++0 -3: pubspec's patrol app_name parses back to the name [E]
++0 -4: fastlane/Fastfile APP_NAME evaluates to the name [E]
++0 -5: ios/fastlane/Fastfile APP_NAME evaluates to the name [E]
++2 -5: Some tests failed.

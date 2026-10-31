@@ -1,0 +1,70 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: check_env_assets_test.dart: findDeclaredSecretAssets flags a bare .env in the flutter asset list
++1: check_env_assets_test.dart: findDeclaredSecretAssets does not flag .env.example
++2: check_env_assets_test.dart: findDeclaredSecretAssets flags any other env variant, including per-environment files
++3: check_env_assets_test.dart: findDeclaredSecretAssets flags named key material and credential files too
++4: check_env_assets_test.dart: findDeclaredSecretAssets treats an inline acknowledgement as reviewed, not as a failure
++5: check_env_assets_test.dart: findDeclaredSecretAssets ignores a commented-out example asset list
++6: check_env_assets_test.dart: findDeclaredSecretAssets ignores an assets list belonging to another top-level key
++7: check_env_assets_test.dart: findDeclaredSecretAssets stops at the end of the asset list
++8: check_env_assets_test.dart: secretAssetReason matches env files, key material and credential stores
++9: check_env_assets_test.dart: secretAssetReason leaves .env.example and ordinary configuration alone
++10: check_env_assets_test.dart: every spelling of an env file secretAssetReason flags each, and not near misses
++11: check_env_assets_test.dart: every spelling of an env file an acknowledgement naming a new-style file covers it
++12: check_env_assets_test.dart: every spelling of an env file production.env named in the asset list is flagged
++13: check_env_assets_test.dart: every spelling of an env file production.env inside a declared directory is flagged
++14: check_env_assets_test.dart: every spelling of an env file app_config.env named in the asset list is flagged
++15: check_env_assets_test.dart: every spelling of an env file app_config.env inside a declared directory is flagged
++16: check_env_assets_test.dart: every spelling of an env file prod.ENV named in the asset list is flagged
++17: check_env_assets_test.dart: every spelling of an env file prod.ENV inside a declared directory is flagged
++18: check_env_assets_test.dart: every spelling of an env file .env-staging named in the asset list is flagged
++19: check_env_assets_test.dart: every spelling of an env file .env-staging inside a declared directory is flagged
++20: check_env_assets_test.dart: every spelling of an env file .env_prod named in the asset list is flagged
++21: check_env_assets_test.dart: every spelling of an env file .env_prod inside a declared directory is flagged
++22: check_env_assets_test.dart: every spelling of an env file .envrc named in the asset list is flagged
++23: check_env_assets_test.dart: every spelling of an env file .envrc inside a declared directory is flagged
++24: check_env_assets_test.dart: every spelling of an env file .envrc.local named in the asset list is flagged
++25: check_env_assets_test.dart: every spelling of an env file .envrc.local inside a declared directory is flagged
++26: check_env_assets_test.dart: parseAcknowledgedNames returns nothing when there is no marker
++27: check_env_assets_test.dart: parseAcknowledgedNames takes the leading comma-separated run of bare file names
++28: check_env_assets_test.dart: parseAcknowledgedNames stops at the first comma segment that is not a file name
++29: check_env_assets_test.dart: parseAcknowledgedNames allows trailing prose after a semicolon or a dash
++30: check_env_assets_test.dart: parseAcknowledgedNames reads a comment that opens with prose as naming nothing
++31: check_env_assets_test.dart: parseAcknowledgedNames does not accept a path, only a bare file name
++32: check_env_assets_test.dart: findBundledDirectorySecrets catches a .env the asset list never names - the gap this closes
++33: check_env_assets_test.dart: findBundledDirectorySecrets passes on the directories as they ship, holding only .gitkeep
++34: check_env_assets_test.dart: findBundledDirectorySecrets flags key material and credential files, not ordinary config
++35: check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement naming the file is reviewed, not a failure
++36: check_env_assets_test.dart: findBundledDirectorySecrets an acknowledgement for one file does not cover another
++37: check_env_assets_test.dart: findBundledDirectorySecrets an ack naming .env.example does not also cover a real .env
++38: check_env_assets_test.dart: findBundledDirectorySecrets an ack naming several files covers each of them
++39: check_env_assets_test.dart: findBundledDirectorySecrets an ack with prose after a dash still names its file
++40: check_env_assets_test.dart: findBundledDirectorySecrets prose that merely mentions a file does not acknowledge it
++41: check_env_assets_test.dart: findBundledDirectorySecrets matches the acknowledged name case-insensitively
++42: check_env_assets_test.dart: findBundledDirectorySecrets does not report a sub-directory Flutter would not bundle
++43: check_env_assets_test.dart: findBundledDirectorySecrets tolerates a declared directory that does not exist
++44: check_env_assets_test.dart: findStaleAcknowledgements reports a name no file in the directory matches
++45: check_env_assets_test.dart: findStaleAcknowledgements says nothing when the acknowledged file is there
++46: check_env_assets_test.dart: findStaleAcknowledgements treats every name on a missing directory as stale
++47: check_env_assets_test.dart: findStaleAcknowledgements ignores a file entry, whose ack names nothing by design
++48: check_env_assets_test.dart: every asset spelling Flutter accepts criterion 2: the failure advice does not claim web lacks dart-defines
++49: check_env_assets_test.dart: every asset spelling Flutter accepts a map-form `- path: .env` entry fails the check
++50: check_env_assets_test.dart: every asset spelling Flutter accepts a map-form directory with a .env inside fails the check
++51: check_env_assets_test.dart: every asset spelling Flutter accepts a flow-style `assets: [.env]` list fails the check
++52: check_env_assets_test.dart: every asset spelling Flutter accepts a map-form entry whose `path:` is not its first key still counts
++53: check_env_assets_test.dart: every asset spelling Flutter accepts a deferred component asset list is checked too
++54: check_env_assets_test.dart: every asset spelling Flutter accepts the acknowledgement works on a map-form `path:` line
++55: check_env_assets_test.dart: every asset spelling Flutter accepts the acknowledgement on a map-form directory names its file
++56: check_env_assets_test.dart: every asset spelling Flutter accepts an acknowledgement on the wrong line of a map entry covers nothing
++57: check_env_assets_test.dart: every asset spelling Flutter accepts one comment on a flow list does not cover every file in it
++58: check_env_assets_test.dart: every asset spelling Flutter accepts a quoted path holding a `#` does not open a comment
++59: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read invalid YAML: exit 2, never 0
++60: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read assets is a string: exit 2, never 0
++61: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read map entry without path: exit 2, never 0
++62: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read entry is not a string: exit 2, never 0
++63: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read empty entry: exit 2, never 0
++64: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read flutter is a list: exit 2, never 0
++65: check_env_assets_test.dart: every asset spelling Flutter accepts fails closed on what it cannot read a pubspec with no flutter section is still clean
++66: check_env_assets_test.dart: every asset spelling Flutter accepts `main` itself exits 1 on a map-form .env
++67: check_env_assets_test.dart: this repository's pubspec.yaml bundles no secrets file
++68: check_env_assets_test.dart: All tests passed!

@@ -1,0 +1,8 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: setup_brick_feature_rename_test.dart: (setUpAll)
++0: setup_brick_feature_rename_test.dart: the feature_clean templates import the template package today
++1: setup_brick_feature_rename_test.dart: criterion 1-2: the rewrite leaves no package:flutter_starter/ under bricks/feature_clean
++2: setup_brick_feature_rename_test.dart: mustache tags and filenames survive the rewrite
++3: setup_brick_feature_rename_test.dart: the setup hook calls the rewrite when it renames the package
++4: setup_brick_feature_rename_test.dart: (tearDownAll)
++4: setup_brick_feature_rename_test.dart: All tests passed!

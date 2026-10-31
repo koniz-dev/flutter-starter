@@ -1,0 +1,7 @@
+# accessibility_test_helpers_test against origin/main's helpers (99d457ad4f6), with only hasSemanticLabel's parameter made optional so the test compiles
+00:00 +0 -1: AccessibilityMatchers hasSemanticLabel [E]
+00:01 +0 -2: AccessibilityMatchers isButton and isEnabled [E]
+00:01 +0 -3: AccessibilityMatchers hasMinTouchTarget [E]
+00:01 +1 -4: AccessibilityTestHelpers isButton and isEnabled [E]
+00:01 +5 -5: AccessibilityTestHelpers verifyInteractiveElementsHaveLabels fails an unlabelled tap target [E]
+00:01 +6 -5: Some tests failed.

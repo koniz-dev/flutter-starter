@@ -1,0 +1,15 @@
+# check_env_assets_test against origin/main's tool/check_env_assets.dart (e296ad4e536)
++10 -1: every spelling of an env file secretAssetReason flags each, and not near misses [E]
++10 -2: every spelling of an env file production.env named in the asset list is flagged [E]
++10 -3: every spelling of an env file production.env inside a declared directory is flagged [E]
++10 -4: every spelling of an env file app_config.env named in the asset list is flagged [E]
++10 -5: every spelling of an env file app_config.env inside a declared directory is flagged [E]
++10 -6: every spelling of an env file prod.ENV named in the asset list is flagged [E]
++10 -7: every spelling of an env file prod.ENV inside a declared directory is flagged [E]
++10 -8: every spelling of an env file .env-staging named in the asset list is flagged [E]
++10 -9: every spelling of an env file .env-staging inside a declared directory is flagged [E]
++10 -10: every spelling of an env file .env_prod named in the asset list is flagged [E]
++10 -11: every spelling of an env file .env_prod inside a declared directory is flagged [E]
++10 -12: every spelling of an env file .envrc named in the asset list is flagged [E]
++10 -13: every spelling of an env file .envrc inside a declared directory is flagged [E]
++52 -13: Some tests failed.

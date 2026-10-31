@@ -1,0 +1,3 @@
+# migration_test_snippet_test with docs/guides/features/storage-migration-guide.md from 99d457ad4f6 (before the fix)
+00:00 +1 -1: the guide shows the test above, for its own migration [E]
+00:00 +1 -1: Some tests failed.

@@ -1,0 +1,8 @@
+PR #1032 head 71e3cf5d83c11d0662cacf0b991239fcb32659f3 merged as e296ad4e536e785f6228839fcf9cb85447f8320c
+Docs check: pass
+Quality gate: pass
+Strip both-samples-removed + analyze + test: pass
+Strip feature-flags-removed + analyze + test: pass
+Strip keep-samples + analyze + test: pass
+Strip renamed-both + analyze + test: pass
+Strip tasks-removed + analyze + test: pass

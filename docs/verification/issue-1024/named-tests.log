@@ -1,0 +1,13 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: secure_token_late_landing_test.dart: a write that lands after the bound and after a clear is undone
++1: secure_token_late_landing_test.dart: a delete that lands after a newer write puts the newer token back
++2: secure_token_late_landing_test.dart: a late write overtaken by a newer write leaves the newer value
++3: secure_token_late_landing_test.dart: a late write that nothing overtook on its key stays
++4: secure_token_late_landing_test.dart: All tests passed!
++0: secure_token_hung_call_test.dart: a write that never completes stops holding the read and the clear behind it after the bound
++1: secure_token_hung_call_test.dart: operations that complete in time keep their order
++2: secure_token_hung_call_test.dart: All tests passed!
++0: secure_token_store_order_test.dart: a clear issued after a pending write lands after it
++1: secure_token_store_order_test.dart: a logout during the refresh write leaves no token behind
++2: secure_token_store_order_test.dart: a login completing after the stale refresh write keeps its own tokens
++3: secure_token_store_order_test.dart: All tests passed!

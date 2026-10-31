@@ -1,0 +1,51 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: setup_brick_display_name_test.dart: (setUpAll)
++0: setup_brick_display_name_test.dart: the AndroidManifest parses and carries the name
++1: setup_brick_display_name_test.dart: the Info.plist parses and carries the name
++2: setup_brick_display_name_test.dart: pubspec's patrol app_name parses back to the name
++3: setup_brick_display_name_test.dart: fastlane/Fastfile APP_NAME evaluates to the name
++4: setup_brick_display_name_test.dart: ios/fastlane/Fastfile APP_NAME evaluates to the name
++5: setup_brick_display_name_test.dart: (tearDownAll)
++5: setup_brick_display_name_test.dart: All tests passed!
++0: brick_input_rules_test.dart: flutter_starter_setup package_name accepts my_app
++1: brick_input_rules_test.dart: flutter_starter_setup package_name accepts acme
++2: brick_input_rules_test.dart: flutter_starter_setup package_name accepts shop2
++3: brick_input_rules_test.dart: flutter_starter_setup package_name accepts a_b_c
++4: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "my-app"
++5: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "MyApp"
++6: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "1app"
++7: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "_app"
++8: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "my app"
++9: brick_input_rules_test.dart: flutter_starter_setup package_name rejects ""
++10: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "class"
++11: brick_input_rules_test.dart: flutter_starter_setup package_name rejects "void"
++12: brick_input_rules_test.dart: flutter_starter_setup application_id accepts com.example.my_app
++13: brick_input_rules_test.dart: flutter_starter_setup application_id accepts io.acme.Shop2
++14: brick_input_rules_test.dart: flutter_starter_setup application_id rejects "myapp"
++15: brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com.example.my-app"
++16: brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com..app"
++17: brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com.1app"
++18: brick_input_rules_test.dart: flutter_starter_setup application_id rejects ".com.app"
++19: brick_input_rules_test.dart: flutter_starter_setup application_id rejects "com.app."
++20: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id accepts com.example.myApp
++21: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id accepts com.example.my-app
++22: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id accepts io.acme.Shop2
++23: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "myApp"
++24: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com.example.my_app"
++25: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com..app"
++26: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com.app."
++27: brick_input_rules_test.dart: flutter_starter_setup ios_bundle_id rejects "com.my app"
++28: brick_input_rules_test.dart: feature_clean feature_name accepts profile
++29: brick_input_rules_test.dart: feature_clean feature_name accepts user_profile
++30: brick_input_rules_test.dart: feature_clean feature_name accepts settings_v2
++31: brick_input_rules_test.dart: feature_clean feature_name accepts x1
++32: brick_input_rules_test.dart: feature_clean feature_name rejects "user-profile"
++33: brick_input_rules_test.dart: feature_clean feature_name rejects "UserProfile"
++34: brick_input_rules_test.dart: feature_clean feature_name rejects "1abc"
++35: brick_input_rules_test.dart: feature_clean feature_name rejects "user__profile"
++36: brick_input_rules_test.dart: feature_clean feature_name rejects "_x"
++37: brick_input_rules_test.dart: feature_clean feature_name rejects "a b"
++38: brick_input_rules_test.dart: feature_clean feature_name rejects ""
++39: brick_input_rules_test.dart: displayNameProblem accepts any printable name
++40: brick_input_rules_test.dart: displayNameProblem rejects what cannot be escaped where the name lands
++41: brick_input_rules_test.dart: All tests passed!

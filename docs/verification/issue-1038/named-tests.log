@@ -1,0 +1,4 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: secure_token_stale_reads_test.dart: a stale cleared key reads as null, through any store over the service, and a later request carries no token
++1: secure_token_stale_reads_test.dart: a sign-out writes no token, even with a stale key whose newer state is a write
++2: secure_token_stale_reads_test.dart: All tests passed!

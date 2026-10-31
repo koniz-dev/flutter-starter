@@ -1,0 +1,13 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: accessibility_test_helpers_test.dart: AccessibilityMatchers hasSemanticLabel
++1: accessibility_test_helpers_test.dart: AccessibilityMatchers isButton and isEnabled
++2: accessibility_test_helpers_test.dart: AccessibilityMatchers hasMinTouchTarget
++3: accessibility_test_helpers_test.dart: AccessibilityTestHelpers hasSemanticLabel, getSemanticLabel and getSemanticHint
++4: accessibility_test_helpers_test.dart: AccessibilityTestHelpers isButton and isEnabled
++5: accessibility_test_helpers_test.dart: AccessibilityTestHelpers isHeader and isImage
++6: accessibility_test_helpers_test.dart: AccessibilityTestHelpers hasMinTouchTarget
++7: accessibility_test_helpers_test.dart: AccessibilityTestHelpers hasSufficientContrast and verifyTextContrast
++8: accessibility_test_helpers_test.dart: AccessibilityTestHelpers verifyInteractiveElementsHaveLabels passes a labelled button
++9: accessibility_test_helpers_test.dart: AccessibilityTestHelpers verifyInteractiveElementsHaveLabels fails an unlabelled tap target
++10: accessibility_test_helpers_test.dart: AccessibilityTestHelpers verifyMinTouchTargets
++11: accessibility_test_helpers_test.dart: All tests passed!

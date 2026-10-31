@@ -1,0 +1,9 @@
+# main 6fb2bcaea8f: flutter test -r expanded, test lines only
++0: secure_token_failed_repair_test.dart: (setUpAll)
++0: secure_token_failed_repair_test.dart: a repair whose first attempt fails is retried and lands
++1: secure_token_failed_repair_test.dart: a repair that keeps failing stops after a bounded number of attempts, and the next write or delete re-applies it
++2: secure_token_failed_repair_test.dart: clearAllTokens re-applies a stale key
++3: secure_token_failed_repair_test.dart: a flush whose platform call hangs holds the next operation only up to the bound
++4: secure_token_failed_repair_test.dart: a failed repair is logged as a warning naming the key, never the value
++5: secure_token_failed_repair_test.dart: (tearDownAll)
++5: secure_token_failed_repair_test.dart: All tests passed!

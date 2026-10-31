@@ -1,0 +1,8 @@
+# secure_token_stale_reads_test against 4ab11704b59's secure_token_store.dart
++0 -1: a stale cleared key reads as null, through any store over the service, and a later request carries no token [E]
+  Expected: null
+    Actual: 'late-landed-token'
++0 -2: a sign-out writes no token, even with a stale key whose newer state is a write [E]
+  Expected: 'signed-in-again'
+    Actual: <null>
++0 -2: Some tests failed.
