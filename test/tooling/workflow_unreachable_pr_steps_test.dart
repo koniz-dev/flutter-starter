@@ -8,11 +8,21 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// The events in a workflow's top-level `on:` block, comments ignored.
+/// The events in a workflow's top-level `on:`, comments ignored: a block
+/// (`on:` then indented events), a list (`on: [push, pull_request]`) or a
+/// single event (`on: push`), with the key quoted or not.
 Set<String> _triggers(String workflow) {
   final lines = workflow.split('\n');
-  final start = lines.indexWhere((l) => RegExp(r'^on:\s*$').hasMatch(l));
+  final key = RegExp(r"""^(?:on|'on'|"on"):\s*(.*?)\s*(?:#.*)?$""");
+  final start = lines.indexWhere(key.hasMatch);
   if (start == -1) return {};
+  final inline = key.firstMatch(lines[start])!.group(1)!;
+  if (inline.isNotEmpty) {
+    return {
+      for (final event in inline.replaceAll(RegExp(r'[\[\]]'), '').split(','))
+        if (event.trim().isNotEmpty) event.trim(),
+    };
+  }
   return {
     for (final line
         in lines
@@ -44,6 +54,8 @@ void main() {
       _triggers('on:\n  # pull_request:\n  push:\n    branches: [main]\n'),
       {'push'},
     );
+    expect(_triggers('on: [push, pull_request]\n'), {'push', 'pull_request'});
+    expect(_triggers("'on': pull_request\n"), {'pull_request'});
   });
 
   for (final workflow in workflows) {
@@ -56,6 +68,8 @@ void main() {
         multiLine: true,
       ).allMatches(text);
       final triggers = _triggers(text);
+      // A reusable workflow sees its caller's event.
+      if (triggers.contains('workflow_call')) return;
       for (final check in checked) {
         expect(
           triggers,

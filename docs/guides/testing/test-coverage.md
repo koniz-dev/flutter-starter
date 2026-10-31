@@ -455,7 +455,7 @@ When reviewing coverage reports, focus on **executable code coverage** rather th
 **Problem:** CI fails due to low coverage
 
 **Solutions:**
-- Check PR comment for details
+- Read the failing step's output in the run log
 - Review coverage report in artifacts
 - Add missing tests
 - Temporarily lower threshold if needed (with justification)
