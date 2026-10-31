@@ -62,6 +62,22 @@ void main() {
     expect(result.stdout, contains('in 2 file(s); 0 broken'));
   });
 
+  test('a link inside an inner fence of a four-backtick block is code', () {
+    write(
+      'docs/nested.md',
+      '````markdown\n'
+          '```bash\n'
+          '[gone](missing.md)\n'
+          '```\n'
+          'echo\n'
+          '````\n',
+    );
+
+    final result = links();
+
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  });
+
   test('criterion 1: root files and every listed directory are scanned', () {
     const scanned = [
       'README.md',

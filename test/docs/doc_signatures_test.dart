@@ -134,6 +134,24 @@ void main() {
     });
   });
 
+  test('a directive inside an inner fence of a four-backtick block is '
+      'an example, not a directive', () {
+    final root = Directory.systemTemp.createTempSync('doc_signatures_nested_');
+    addTearDown(() => root.deleteSync(recursive: true));
+    File('${root.path}/docs/a.md')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(
+        '````markdown\n'
+        '```bash\n'
+        '<!-- signature: lib/nope.dart -->\n'
+        '```\n'
+        'echo\n'
+        '````\n',
+      );
+
+    expect(checkSignatures(root, verbose: false), 0);
+  });
+
   test('a malformed signature directive is reported, not skipped', () {
     final root = Directory.systemTemp.createTempSync('doc_signatures_bad_');
     addTearDown(() => root.deleteSync(recursive: true));
