@@ -21,22 +21,26 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// service (`secureStorageServiceProvider`).
 ///
 /// The wait is bounded by [operationTimeout] (10 seconds by default), so one
-/// hung platform call does not hold every later token operation.
+/// hung platform call does not hold every later token operation. A read that
+/// outlived the bound returns what the store held when it ran.
 ///
 /// ## A call that outlives the bound
 ///
-/// It may land after operations issued later. Writes and deletes are numbered
-/// when issued, and one that lands over a newer one of the same key is
-/// followed by a repair that puts the newer state back (the older value is at
+/// A call that outlives the bound may land after operations issued later.
+/// Writes and deletes are numbered when issued, and one that lands over a
+/// newer one of the same key is followed by a repair that puts the newer
+/// state back (the older value is at
 /// rest in between). A repair is tried [repairAttempts] times; if all fail,
 /// the key is marked stale and the logger is warned, naming the key, never the
 /// value. A stale key reads from memory - the newer state, `null` after a
 /// clear - and is re-applied by the next write through the service, or, if
-/// its newer state is a delete, by the next delete or a read of it. A read
-/// never writes. The stale marker is in memory: if the app stops first, the
-/// next launch reads the late value.
+/// its newer state is a delete, by the next delete or a read of it (never by
+/// a write from inside a sign-out's clear: a read or delete never writes).
+/// The stale marker is in memory: if the app stops first, the next launch
+/// reads the late value.
 ///
-/// A read that outlived the bound returns what the store held when it ran.
+/// Once everything settles and no repair has failed, every key holds what
+/// its last-issued successful write or delete left.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   ///
@@ -154,8 +158,9 @@ class SecureTokenStore implements ITokenStore {
     if (queue.stale.contains(key)) {
       final newest = queue.landed[key]!;
       // A cleared key still holding a late token: retry the delete, so a
-      // signed-out app does not leave it for the next launch. Bounded, one
-      // retry per key at a time, and never a write.
+      // signed-out app does not leave it for the next launch. Bounded and
+      // never a write; while a retry is pending, a read answers from memory at
+      // once, and a failed retry leaves the key stale.
       if (newest.value == null && !queue.retryingDeletes.containsKey(key)) {
         final attempt = _apply(
           queue,
