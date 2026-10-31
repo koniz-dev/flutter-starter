@@ -6,6 +6,8 @@
 /// files into a tree a second run could not repair.
 library;
 
+import 'dart:convert';
+
 /// Words a Dart package name cannot be, because the name becomes an
 /// identifier (`package:<name>/...` and the generated localizations).
 const _reservedWords = <String>{
@@ -79,3 +81,47 @@ String? iosBundleIdProblem(String id) {
   }
   return null;
 }
+
+/// Why [name] cannot be the app's display name, or `null` if it can.
+///
+/// Everything else is escaped where it lands; these cannot be:
+/// - a blank name;
+/// - a control character, a line or paragraph separator, or U+FFFE/U+FFFF,
+///   which XML 1.0 (the Android manifest, Info.plist) cannot carry;
+/// - `{` or `}`, which the name's ARB entry would read as ICU syntax, so
+///   `flutter gen-l10n` fails;
+/// - a leading `@` or `?`, which `android:label` reads as a resource
+///   reference.
+String? displayNameProblem(String name) {
+  if (name.trim().isEmpty) return 'app_display_name must not be blank';
+  if (RegExp('[\x00-\x1f\x7f\x85\u2028\u2029\ufffe\uffff]').hasMatch(name)) {
+    return 'app_display_name must not contain a line break, tab or other '
+        'control character';
+  }
+  if (name.contains('{') || name.contains('}')) {
+    return 'app_display_name must not contain { or }: the localizations '
+        'read them as ICU syntax';
+  }
+  if (name.startsWith('@') || name.startsWith('?')) {
+    return 'app_display_name must not start with @ or ?: Android reads that '
+        'as a resource reference';
+  }
+  return null;
+}
+
+/// [text] escaped for an XML attribute value or element content.
+String xmlEscaped(String text) => text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;');
+
+/// [text] as a double-quoted YAML scalar, quotes included. JSON's string
+/// syntax is a subset of YAML's double-quoted style.
+String yamlQuoted(String text) => jsonEncode(text);
+
+/// [text] escaped for the inside of a Ruby double-quoted string: `"`, `\`
+/// and the `#` that would start an interpolation.
+String rubyDoubleQuotedEscaped(String text) =>
+    text.replaceAll(r'\', r'\\').replaceAll('"', r'\"').replaceAll('#', r'\#');

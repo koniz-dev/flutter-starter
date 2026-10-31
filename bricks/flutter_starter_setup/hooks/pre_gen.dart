@@ -8,6 +8,7 @@ void run(HookContext context) {
     packageNameProblem(context.vars['package_name'] as String),
     applicationIdProblem(context.vars['application_id'] as String),
     iosBundleIdProblem(context.vars['ios_bundle_id'] as String),
+    displayNameProblem(context.vars['app_display_name'] as String),
   ].whereType<String>().toList();
   if (problems.isEmpty) return;
   problems.forEach(context.logger.err);
