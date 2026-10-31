@@ -49,13 +49,16 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// newer state back, queued like any other operation. Between the late
 /// landing and the repair the older value is briefly at rest. A repair that
 /// fails is retried, up to three attempts; if every attempt fails, the key is
-/// marked stale, a warning naming the key (never its value) goes to the
-/// logger, and the next write or delete through any store over the same
-/// service re-applies the newer state first. Once everything settles and no
+/// marked stale and a warning naming the key (never its value) goes to the
+/// logger. Until it is re-applied, a read of a stale key answers from memory
+/// with the newer state - `null` after a clear - never with the late value
+/// on the device. The next write through any store over the same service
+/// re-applies every stale key first; the next delete re-applies only stale
+/// deletes, so a sign-out never writes a token. Once everything settles and no
 /// repair has failed, every key holds what its last-issued successful write
-/// or delete left; after a failed repair, the late value stays until that
-/// next write or delete. Reads are not repaired: a read that outlived the
-/// bound returns what the store held when it ran.
+/// or delete left. The stale marker lives in memory: if the app stops before
+/// a stale key is re-applied, the late value is what the next launch reads.
+/// A read that outlived the bound returns what the store held when it ran.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   ///
@@ -165,6 +168,10 @@ class SecureTokenStore implements ITokenStore {
   }
 
   Future<String?> _read(String key) async {
+    // The device holds a late value a failed repair could not undo; memory
+    // holds what the last-issued successful write or delete left.
+    final queue = _queue;
+    if (queue.stale.contains(key)) return queue.landed[key]!.value;
     try {
       return await _secureStorageService.getStringOrThrow(key);
     } on Exception catch (e) {
@@ -201,6 +208,9 @@ class SecureTokenStore implements ITokenStore {
     if (flushStale) {
       for (final stale in queue.stale.where((k) => k != key).toList()) {
         final newest = queue.landed[stale]!;
+        // A delete re-applies only deletes: re-writing a token from inside a
+        // sign-out's clear could land after it.
+        if (value == null && newest.value != null) continue;
         try {
           // Bounded like the queue's own wait, so a hung platform call here
           // holds this operation no longer than one queued ahead of it would.

@@ -38,8 +38,11 @@ abstract class IKeyValueStore {
 /// bound and lands late is followed by a repair, so the older value is at
 /// rest only until that repair lands. A repair whose platform call keeps
 /// failing is retried a bounded number of times, then reported to the logger
-/// by key, and the late value stays until the next write or delete through
-/// the same service re-applies the newer state. Its queue is
+/// by key; reads of that key then answer from memory with the newer state,
+/// and the next write through the same service (or, for a key whose newer
+/// state is a delete, the next delete) re-applies it. The marker is in
+/// memory, so if the app stops first, the next launch reads the late value.
+/// Its queue is
 /// shared by every store over the same `SecureStorageService`, so the
 /// components touching the tokens must use one service (or one store). An
 /// in-memory store whose methods complete synchronously meets it trivially.
