@@ -5,9 +5,9 @@
 // the session the call started.
 //
 // A sign-in cut off that way discards its tokens, which expire on the
-// server. And a sign-in completed
-// while a logout's server call was still pending had its fresh credentials
-// deleted by that logout's teardown; it now waits for the teardown.
+// server. And a sign-in completed while a logout's server call was still
+// pending had its fresh credentials deleted by that logout's teardown; it now
+// waits for the teardown.
 
 import 'dart:async';
 
@@ -69,7 +69,7 @@ class _Remote implements AuthRemoteDataSource {
       throw UnimplementedError();
 }
 
-/// Lets fire-and-forget work (the revoke) run.
+/// Lets queued microtasks and zero-delay timers run.
 Future<void> _settle() async {
   for (var i = 0; i < 20; i++) {
     await Future<void>.delayed(Duration.zero);
