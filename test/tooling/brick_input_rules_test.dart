@@ -4,6 +4,8 @@
 // not repair; feature_clean accepted `user-profile` and generated files the
 // analyzer rejected.
 
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../bricks/feature_clean/hooks/input_rules.dart' as feature;
@@ -120,4 +122,71 @@ void main() {
       }
     });
   });
+
+  group('flutter_starter_setup package_name against the dependencies', () {
+    final locked = setup.lockedPackages(
+      File('pubspec.lock').readAsStringSync(),
+    );
+
+    test("the lock file lists the project's dependencies", () {
+      expect(locked, containsAll(<String>['crypto', 'clock', 'dio']));
+      expect(locked, isNot(contains('packages')));
+    });
+
+    for (final name in ['crypto', 'clock']) {
+      test('$name, a dependency, is refused', () {
+        expect(
+          setup.packageNameProblem(name, dependencies: locked),
+          contains('depends on'),
+        );
+      });
+    }
+
+    test('a name no dependency uses is accepted', () {
+      expect(
+        setup.packageNameProblem('acme_shop', dependencies: locked),
+        isNull,
+      );
+    });
+  });
+
+  test('pre_gen refuses a dependency name before anything is written', () {
+    // The real hook, in a scratch project holding this project's lock file.
+    final dir = Directory.systemTemp.createTempSync('pre_gen_clash_');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    File('pubspec.lock').copySync('${dir.path}/pubspec.lock');
+    final hook = File(
+      'bricks/flutter_starter_setup/hooks/pre_gen.dart',
+    ).absolute.uri;
+    final script = File('${dir.path}/run_pre_gen.dart')
+      ..writeAsStringSync('''
+import 'package:mason/mason.dart';
+import '$hook' as hook;
+
+class _Context implements HookContext {
+  @override
+  Map<String, dynamic> vars = {
+    'package_name': 'crypto',
+    'application_id': 'com.acme.shop',
+    'ios_bundle_id': 'com.acme.shop',
+    'app_display_name': 'Shop',
+  };
+
+  @override
+  final Logger logger = Logger();
+}
+
+void main() => hook.run(_Context());
+''');
+    final before = dir.listSync().map((e) => e.path).toSet();
+
+    final result = Process.runSync('dart', [
+      '--packages=${File('.dart_tool/package_config.json').absolute.path}',
+      script.path,
+    ], workingDirectory: dir.path);
+
+    expect(result.exitCode, isNot(0));
+    expect('${result.stdout}${result.stderr}', contains('depends on'));
+    expect(dir.listSync().map((e) => e.path).toSet(), before);
+  }, timeout: const Timeout(Duration(minutes: 2)));
 }

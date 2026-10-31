@@ -36,6 +36,21 @@ if [ -n "$local_path" ] && [ "$local_path" != ".githooks" ]; then
 fi
 global_path="$(git config --global --get core.hooksPath || true)"
 
+# Hooks already in the repository's own hooks directory stop running once
+# core.hooksPath points elsewhere. Name the ones .githooks/ does not replace,
+# so nobody loses a post-checkout or pre-rebase hook without knowing.
+common_hooks="$(git rev-parse --git-common-dir)/hooks"
+orphaned=()
+if [ -d "$common_hooks" ]; then
+  for hook in "$common_hooks"/*; do
+    [ -f "$hook" ] && [ -x "$hook" ] || continue
+    name="$(basename "$hook")"
+    case "$name" in *.sample) continue ;; esac
+    [ -e ".githooks/$name" ] && continue
+    orphaned+=("$name")
+  done
+fi
+
 git config --local core.hooksPath .githooks
 
 # Verify with git itself: this is the directory it will run hooks from.
@@ -48,6 +63,11 @@ fi
 echo "✅ Git hooks active: core.hooksPath = .githooks"
 if [ -n "$global_path" ]; then
   echo "   (overrides your global core.hooksPath '$global_path' for this repository)"
+fi
+if [ "${#orphaned[@]}" -gt 0 ]; then
+  echo "⚠️  These hooks in $common_hooks will no longer run, because"
+  echo "   git now reads .githooks/ instead: ${orphaned[*]}"
+  echo "   Move them into .githooks/ (or call them from there) to keep them."
 fi
 echo "   pre-commit  → dart format (scoped) + flutter analyze"
 echo "   commit-msg  → Conventional Commits"

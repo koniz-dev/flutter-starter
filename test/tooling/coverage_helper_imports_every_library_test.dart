@@ -7,6 +7,9 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+// Relative import: tool/ is not part of the published library.
+import '../../tool/coverage_helper.dart';
+
 /// The repository's package config: `dart <file>` with it skips `dart run`'s
 /// build-hook step, whose native-asset bundling crashed when several tests
 /// ran it at once.
@@ -42,7 +45,9 @@ void main() {
         )
         .where(
           (p) => !File(p).readAsLinesSync().any((l) => l.startsWith('part of')),
-        );
+        )
+        // A library importing a web-only library does not load on the VM.
+        .where((p) => !isWebOnlyLibrary(p));
 
     final missing = [
       for (final path in libraries)
@@ -52,5 +57,41 @@ void main() {
     ];
     expect(missing, isEmpty);
     expect(generated, isNot(contains('.g.dart')));
+  });
+
+  test('a library importing a web-only library is left out, and named', () {
+    final root = Directory.systemTemp.createTempSync('coverage_helper_web_');
+    addTearDown(() => root.deleteSync(recursive: true));
+    File('${root.path}/pubspec.yaml').writeAsStringSync('name: scratch\n');
+    File('${root.path}/lib/plain.dart')
+      ..createSync(recursive: true)
+      ..writeAsStringSync('int plain = 1;\n');
+    File('${root.path}/lib/web/web_only.dart')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(
+        "import 'dart:js_interop';\n\nJSString web = 'x'.toJS;\n",
+      );
+    File('${root.path}/lib/reexport.dart').writeAsStringSync(
+      "export 'dart:js_interop' show JSString;\n",
+    );
+    File('${root.path}/lib/conditional.dart').writeAsStringSync(
+      "import 'plain.dart' if (dart.library.js_interop) 'web/web_only.dart';\n",
+    );
+
+    final result = Process.runSync('dart', [
+      '--packages=$_packages',
+      File('tool/coverage_helper.dart').absolute.path,
+      'out_test.dart',
+    ], workingDirectory: root.path);
+    expect(result.exitCode, 0, reason: '${result.stderr}');
+
+    final generated = File('${root.path}/out_test.dart').readAsStringSync();
+    expect(generated, contains("'package:scratch/plain.dart'"));
+    expect(generated, contains("'package:scratch/conditional.dart'"));
+    expect(generated, isNot(contains("'package:scratch/web/web_only.dart'")));
+    expect(generated, contains('Left out, web-only'));
+    expect(generated, contains('lib/web/web_only.dart'));
+    expect(generated, isNot(contains("'package:scratch/reexport.dart'")));
+    expect(generated, contains('lib/reexport.dart'));
   });
 }
