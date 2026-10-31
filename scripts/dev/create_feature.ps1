@@ -28,11 +28,13 @@ if ((Test-Path $BaseDir) -or (Test-Path $TestDir)) {
     exit 1
 }
 
-# snake_case -> PascalCase (test_feature -> TestFeature). `Get-Culture`, not
-# `Culture`: the latter is not a cmdlet and aborted this script on line 1.
-$FeaturePascal = (Get-Culture).TextInfo.ToTitleCase($FeatureName.Replace('_', ' ')).Replace(' ', '')
+# snake_case -> PascalCase (test_feature -> TestFeature). The invariant
+# culture, not the current one: under a Turkish culture `i` title-cases to a
+# dotted capital I, which is not a valid Dart identifier.
+$Invariant = [System.Globalization.CultureInfo]::InvariantCulture
+$FeaturePascal = $Invariant.TextInfo.ToTitleCase($FeatureName.Replace('_', ' ')).Replace(' ', '')
 # PascalCase -> camelCase (TestFeature -> testFeature)
-$FeatureCamel = $FeaturePascal.Substring(0, 1).ToLower() + $FeaturePascal.Substring(1)
+$FeatureCamel = $FeaturePascal.Substring(0, 1).ToLowerInvariant() + $FeaturePascal.Substring(1)
 
 Write-Host "Creating feature: $FeatureName"
 
