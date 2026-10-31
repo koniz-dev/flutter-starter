@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 
 /// Helper class for managing image caching
 ///
@@ -49,23 +50,38 @@ class ImageCacheHelper {
           context,
           onError: (e, stack) {
             failed = true;
-            debugPrint('Preload error: $e');
+            debugPrint('Preload error: ${_describe(e)}');
           },
         ).timeout(
           timeout,
           onTimeout: () {
             failed = true;
-            debugPrint('Preload timed out after $timeout: $url');
+            debugPrint(
+              'Preload timed out after $timeout: '
+              '${ApiLoggingInterceptor.redactUrl(url)}',
+            );
           },
         );
         return !failed;
       }
       return await _preloadViaImageStream(imageProvider, timeout);
     } on Object catch (e) {
-      debugPrint('Failed to preload image: $url, error: $e');
+      debugPrint(
+        'Failed to preload image: ${ApiLoggingInterceptor.redactUrl(url)}, '
+        'error: ${_describe(e)}',
+      );
       return false;
     }
   }
+
+  /// [error] described by its type, and for an HTTP failure its status: an
+  /// image load error's own text quotes the full URL - a presigned signature
+  /// or a `?token=` - and debugPrint prints in release builds too.
+  static String _describe(Object error) => switch (error) {
+    NetworkImageLoadException(:final statusCode) =>
+      'NetworkImageLoadException (HTTP $statusCode)',
+    _ => '${error.runtimeType}',
+  };
 
   static Future<bool> _preloadViaImageStream(
     ImageProvider<Object> provider,
@@ -83,7 +99,7 @@ class ImageCacheHelper {
       },
       onError: (exception, stackTrace) {
         stream.removeListener(listener);
-        debugPrint('Preload error: $exception');
+        debugPrint('Preload error: ${_describe(exception)}');
         if (!completer.isCompleted) {
           completer.complete(false);
         }
