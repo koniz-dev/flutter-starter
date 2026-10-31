@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
@@ -73,6 +75,96 @@ void main() {
 
     tearDown(() {
       container.dispose();
+    });
+
+    group('clearSession during a sign-in', () {
+      test('keeps the spinner of a sign-in still in flight', () async {
+        final reply = Completer<Result<User>>();
+        when(
+          () => mockLoginUseCase(any(), any()),
+        ).thenAnswer((_) => reply.future);
+        final notifier = container.read(authProvider.notifier);
+
+        final signIn = notifier.login('a@b.c', 'pw');
+        // A forced logout's teardown ends by clearing the session.
+        notifier.clearSession();
+
+        expect(container.read(authProvider).isLoading, isTrue);
+        expect(container.read(authProvider).user, isNull);
+
+        const user = User(id: 'a', email: 'a@b.c');
+        reply.complete(const Success(user));
+        await signIn;
+        expect(container.read(authProvider).isLoading, isFalse);
+        expect(container.read(authProvider).user, user);
+      });
+
+      test('with no sign-in in flight, it clears the spinner', () async {
+        container.read(authProvider.notifier)
+          ..state = const AuthState(isLoading: true)
+          ..clearSession();
+
+        expect(container.read(authProvider).isLoading, isFalse);
+      });
+
+      for (final (label, answer) in <(String, Result<User>)>[
+        ('a successful', const Success(User(id: 'a', email: 'a@b.c'))),
+        ('a failed', const ResultFailure(UnknownFailure('no'))),
+      ]) {
+        test('$label login no longer counts as in flight', () async {
+          when(
+            () => mockLoginUseCase(any(), any()),
+          ).thenAnswer((_) async => answer);
+          final notifier = container.read(authProvider.notifier);
+          await notifier.login('a@b.c', 'pw');
+          notifier.clearSession();
+
+          expect(container.read(authProvider).isLoading, isFalse);
+        });
+
+        test('$label register no longer counts as in flight', () async {
+          when(
+            () => mockRegisterUseCase(any(), any(), any()),
+          ).thenAnswer((_) async => answer);
+          final notifier = container.read(authProvider.notifier);
+          await notifier.register('a@b.c', 'pw', 'A');
+          notifier.clearSession();
+
+          expect(container.read(authProvider).isLoading, isFalse);
+        });
+      }
+
+      test('a register in flight keeps its spinner too, and a throwing one '
+          'stops counting', () async {
+        final reply = Completer<Result<User>>();
+        when(
+          () => mockRegisterUseCase(any(), any(), any()),
+        ).thenAnswer((_) => reply.future);
+        final notifier = container.read(authProvider.notifier);
+        final signUp = notifier.register('a@b.c', 'pw', 'A');
+        notifier.clearSession();
+        expect(container.read(authProvider).isLoading, isTrue);
+        reply.completeError(StateError('boom'));
+        await signUp;
+
+        notifier.clearSession();
+        expect(container.read(authProvider).isLoading, isFalse);
+      });
+
+      test(
+        'a failed or throwing sign-in no longer counts as in flight',
+        () async {
+          when(
+            () => mockLoginUseCase(any(), any()),
+          ).thenThrow(StateError('boom'));
+          final notifier = container.read(authProvider.notifier);
+          await notifier.login('a@b.c', 'pw');
+
+          notifier.clearSession();
+
+          expect(container.read(authProvider).isLoading, isFalse);
+        },
+      );
     });
 
     group('login', () {

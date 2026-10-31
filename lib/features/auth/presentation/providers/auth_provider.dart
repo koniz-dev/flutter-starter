@@ -65,6 +65,14 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   @override
   AuthState build() => const AuthState();
 
+  /// How many [login] and [register] calls are still waiting for a result.
+  ///
+  /// A sign-in that starts during a forced logout waits for that teardown,
+  /// whose last step is [clearSession]; resetting `isLoading` there stopped
+  /// the spinner of a sign-in still in flight, and the button took a second
+  /// tap that cancelled the first.
+  int _signInsInFlight = 0;
+
   /// Attempts to login with the given [email] and [password]
   @override
   Future<void> login(String email, String password) async {
@@ -72,9 +80,11 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
 
     final loginUseCase = ref.read(loginUseCaseProvider);
     final Result<User> result;
+    _signInsInFlight++;
     try {
       result = await loginUseCase(email, password);
     } on Object catch (_) {
+      _signInsInFlight--;
       // The use case is meant to return a Result, never throw. If one
       // escapes anyway, the screen must not stay loading forever.
       state = state.copyWith(
@@ -84,6 +94,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       );
       return;
     }
+    _signInsInFlight--;
 
     result.when(
       success: (user) {
@@ -111,9 +122,11 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
 
     final registerUseCase = ref.read(registerUseCaseProvider);
     final Result<User> result;
+    _signInsInFlight++;
     try {
       result = await registerUseCase(email, password, name);
     } on Object catch (_) {
+      _signInsInFlight--;
       // The use case is meant to return a Result, never throw. If one
       // escapes anyway, the screen must not stay loading forever.
       state = state.copyWith(
@@ -123,6 +136,7 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
       );
       return;
     }
+    _signInsInFlight--;
 
     result.when(
       success: (user) {
@@ -178,11 +192,13 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   ///
   /// Resets to the initial state rather than only nulling `user`: a forced
   /// logout can land mid-flight, and leaving `isLoading` true would spin a
-  /// screen forever over a session that no longer exists. `error` is left null
-  /// on purpose - the caller's own failed request surfaces its error, and the
-  /// router is about to replace this screen with `/login` regardless.
+  /// screen forever over a session that no longer exists. The one exception
+  /// is a sign-in still in flight: it clears `isLoading` itself when its
+  /// result arrives, so its spinner stays up. `error` is left null on purpose
+  /// - the caller's own failed request surfaces its error, and the router is
+  /// about to replace this screen with `/login` regardless.
   void clearSession() {
-    state = const AuthState();
+    state = AuthState(isLoading: _signInsInFlight > 0);
   }
 
   /// Drops the last sign-in or registration error.
