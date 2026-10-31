@@ -54,7 +54,24 @@ fi
 # block a clean commit. GIT_INDEX_FILE is inherited on purpose: for
 # `git commit <path>` and `git commit -a`, git builds a temporary index, and
 # that is the content the commit will hold. The working copy is never written.
-staged="$(mktemp -d)"
+# The export sits beside the repository - same parent, same depth - so every
+# relative path resolves from it exactly as from the checkout: a monorepo's
+# `path: ../shared` in pubspec.yaml, and the rootUris pub wrote relative to
+# .dart_tool/. In the system temp directory those named nothing, and every
+# commit with such a dependency failed. A parent that cannot be written to
+# falls back to the temp directory.
+repo="$(pwd)"
+parent="$(dirname "$repo")"
+prefix=".$(basename "$repo")-pre-commit."
+# An export an earlier run could not remove (the hook was killed) is swept
+# once it is an hour old; a younger one may belong to a commit in progress.
+find "$parent" -maxdepth 1 -type d -name "$prefix*" -mmin +60 \
+  -exec rm -rf {} + 2>/dev/null || true
+if ! staged="$(mktemp -d "$parent/${prefix}XXXXXX" 2>/dev/null)"; then
+  staged="$(mktemp -d)"
+  echo "⚠️  Cannot write beside the repository; checking in $staged instead."
+  echo "   A relative path: dependency outside the repository will not resolve there."
+fi
 trap 'rm -rf "$staged"' EXIT
 git checkout-index --all --prefix="$staged/"
 mkdir -p "$staged/.dart_tool"

@@ -296,7 +296,9 @@ global `core.hooksPath` (a husky-style setup) cannot silently bypass them; a
 repository-local one that points elsewhere makes the script stop and say so.
 `pre-commit` runs the scoped
 `dart format` check and `flutter analyze` on what is staged - the content the
-commit will hold, exported to a temporary directory - not on your working
+commit will hold, exported to a hidden `.<repo>-pre-commit.*` directory beside
+the repository, so a relative `path:` dependency resolves as it does in the
+checkout, and removed afterwards - not on your working
 copy, so a fix you have not staged does not count and an unstaged broken file
 does not block the commit. `commit-msg` enforces the format
 above, and `pre-push` runs `flutter test`. Skip them for one command with
