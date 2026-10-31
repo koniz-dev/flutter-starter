@@ -82,14 +82,29 @@ String? iosBundleIdProblem(String id) {
   return null;
 }
 
-/// Why [name] cannot be the app's display name, or `null` if it can: it must
-/// not be blank, and must not hold a control character, which XML 1.0 (the
-/// Android manifest, Info.plist) cannot carry even escaped.
+/// Why [name] cannot be the app's display name, or `null` if it can.
+///
+/// Everything else is escaped where it lands; these cannot be:
+/// - a blank name;
+/// - a control character, a line or paragraph separator, or U+FFFE/U+FFFF,
+///   which XML 1.0 (the Android manifest, Info.plist) cannot carry;
+/// - `{` or `}`, which the name's ARB entry would read as ICU syntax, so
+///   `flutter gen-l10n` fails;
+/// - a leading `@` or `?`, which `android:label` reads as a resource
+///   reference.
 String? displayNameProblem(String name) {
   if (name.trim().isEmpty) return 'app_display_name must not be blank';
-  if (RegExp(r'[\x00-\x1f\x7f]').hasMatch(name)) {
+  if (RegExp('[\x00-\x1f\x7f\x85\u2028\u2029\ufffe\uffff]').hasMatch(name)) {
     return 'app_display_name must not contain a line break, tab or other '
         'control character';
+  }
+  if (name.contains('{') || name.contains('}')) {
+    return 'app_display_name must not contain { or }: the localizations '
+        'read them as ICU syntax';
+  }
+  if (name.startsWith('@') || name.startsWith('?')) {
+    return 'app_display_name must not start with @ or ?: Android reads that '
+        'as a resource reference';
   }
   return null;
 }

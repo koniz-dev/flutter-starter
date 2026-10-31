@@ -100,10 +100,22 @@ void main() {
     test('accepts any printable name', () {
       expect(setup.displayNameProblem('Tom & "Jerry": #1'), isNull);
       expect(setup.displayNameProblem('Café Ünïcode 名前'), isNull);
+      expect(setup.displayNameProblem("Tom's App @ home?"), isNull);
     });
 
-    test('rejects a blank name or a control character', () {
-      for (final bad in ['', '   ', 'two\nlines', 'tab\there', 'nul\x00']) {
+    test('rejects what cannot be escaped where the name lands', () {
+      for (final bad in [
+        '',
+        '   ',
+        'two\nlines',
+        'tab\there',
+        'nul\x00',
+        'line\u2028separator',
+        'ICU {placeholder}',
+        'brace }',
+        '@string/app_name',
+        '?attr/name',
+      ]) {
         expect(setup.displayNameProblem(bad), isNotNull, reason: bad);
       }
     });

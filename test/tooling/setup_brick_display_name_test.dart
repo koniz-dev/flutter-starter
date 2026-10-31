@@ -16,7 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:yaml/yaml.dart';
 
 const _hookPath = 'bricks/flutter_starter_setup/hooks/post_gen.dart';
-const _name = 'Tom & "Jerry": #1 <\'x\'> \\ #{oops}';
+const _name = 'Tom & "Jerry": #1 <\'x\'> \\ #(oops)';
 
 const _files = [
   'android/app/src/main/AndroidManifest.xml',
