@@ -24,12 +24,13 @@
 # another value.
 #
 # The fingerprints are read the way AppConfig.apiSslFingerprints reads them -
-# split on commas, colons and whitespace dropped, empty entries skipped - so a
-# value like " " or "," counts as empty here too, as it does in the app. Each
-# remaining entry must be 64 hex digits (a SHA-256): a mistyped fingerprint
-# would build and then refuse every connection, so it is refused in any
-# environment. Any other environment passes through whatever is set. Works on
-# bash 3.2.
+# split on commas, each entry trimmed at its ends only, colons removed, empty
+# entries skipped - so a value like " " or "," counts as empty here too, as it
+# does in the app. Each remaining entry must then be exactly 64 hex digits (a
+# SHA-256): space-separated hex or an embedded line break leaves an entry the
+# app can never match, and a mistyped fingerprint would build and then refuse
+# every connection, so it is refused in any environment. Any other environment
+# passes through whatever is set. Works on bash 3.2.
 
 ssl_pinning_defines() {
   local environment="$1"
@@ -42,12 +43,23 @@ ssl_pinning_defines() {
 
   local count=0 entry
   local old_ifs="$IFS"
+  # The split below is unquoted on purpose (split on commas); -f keeps a
+  # value such as * from expanding to file names in the current directory.
+  local restore_glob=1
+  case $- in *f*) restore_glob=0 ;; esac
+  set -f
   IFS=','
   for entry in ${API_SSL_FINGERPRINTS:-}; do
-    entry=$(printf '%s' "$entry" | tr -d ' \t:' | tr 'A-F' 'a-f')
+    # Only the ends, as the app's trim(): interior whitespace stays and fails.
+    entry="${entry#"${entry%%[![:space:]]*}"}"
+    entry="${entry%"${entry##*[![:space:]]}"}"
+    entry=$(printf '%s' "$entry" | tr -d ':' | tr 'A-F' 'a-f')
     [ -z "$entry" ] && continue
-    if ! printf '%s' "$entry" | grep -Eq '^[0-9a-f]{64}$'; then
+    # [[ =~ ]] anchors at the ends of the whole value; grep matched per line,
+    # so "garbage<newline><64 hex>" passed.
+    if ! [[ "$entry" =~ ^[0-9a-f]{64}$ ]]; then
       IFS="$old_ifs"
+      [ "$restore_glob" = 1 ] && set +f
       echo "Error: API_SSL_FINGERPRINTS entry '$entry' is not a SHA-256" >&2
       echo "fingerprint (64 hex digits, colons optional)." >&2
       return 1
@@ -55,6 +67,7 @@ ssl_pinning_defines() {
     count=$((count + 1))
   done
   IFS="$old_ifs"
+  [ "$restore_glob" = 1 ] && set +f
 
   SSL_PINNING_DEFINES=()
   if [ "$count" -gt 0 ]; then

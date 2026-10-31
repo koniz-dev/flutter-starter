@@ -86,4 +86,48 @@ void main() {
     ];
     expect(unguarded, isEmpty);
   });
+
+  group('ssl_pinning_defines.sh validates what the app parses', () {
+    // The app trims each comma-separated entry at its ends and drops colons
+    // (AppConfig.apiSslFingerprints), then matches a SHA-256 exactly. The
+    // helper deleted every space and grepped per line, so a value the app can
+    // never match passed and the release refused every connection.
+    final hex = 'ab' * 32;
+
+    ProcessResult defines(String fingerprints) => Process.runSync(
+      'bash',
+      [
+        '-c',
+        '. scripts/ci/ssl_pinning_defines.sh && ssl_pinning_defines production',
+      ],
+      environment: {
+        'API_SSL_FINGERPRINTS': fingerprints,
+        'ENABLE_SSL_PINNING': '',
+      },
+    );
+
+    test('a fingerprint, trimmed or colon-separated, is accepted', () {
+      for (final value in [
+        hex,
+        '  $hex\n',
+        List.generate(32, (_) => 'AB').join(':'),
+        '$hex, ${'cd' * 32}',
+      ]) {
+        final result = defines(value);
+        expect(result.exitCode, 0, reason: '$value: ${result.stderr}');
+      }
+    });
+
+    test('a space-separated fingerprint is refused', () {
+      final result = defines(List.filled(32, 'ab').join(' '));
+      expect(result.exitCode, isNot(0));
+      expect('${result.stderr}', contains('is not a SHA-256'));
+    });
+
+    test('a fingerprint with a line break inside is refused', () {
+      final result = defines('garbage\n$hex');
+      expect(result.exitCode, isNot(0));
+      expect('${result.stderr}', contains('is not a SHA-256'));
+    });
+  });
 }
