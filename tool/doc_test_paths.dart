@@ -5,8 +5,8 @@
 // is `login_usecase_test.dart`, so the command failed for everyone who copied
 // it, and nothing noticed.
 //
-// The rule: inside a fenced code block of README.md, CONTRIBUTING.md or
-// `docs/`, every path argument
+// The rule: inside a fenced code block of README.md, CONTRIBUTING.md,
+// CLAUDE.md or `docs/`, every path argument
 // of `flutter test` must exist as a file or directory. Backslash-continued
 // lines are joined first. Flags are skipped, with the value of a flag that
 // takes one (`--tags golden`, `-r expanded`). A path with a `:<line>` suffix
@@ -128,10 +128,11 @@ List<MissingTestPath> findMissingTestPaths(
   return problems;
 }
 
-/// Markdown files the rule covers: README.md, CONTRIBUTING.md and `docs/`.
+/// Markdown files the rule covers: README.md, CONTRIBUTING.md, CLAUDE.md
+/// and `docs/`.
 List<File> testPathFiles(Directory root) {
   final files = <File>[
-    for (final name in const ['README.md', 'CONTRIBUTING.md'])
+    for (final name in const ['README.md', 'CONTRIBUTING.md', 'CLAUDE.md'])
       if (File('${root.path}/$name').existsSync()) File('${root.path}/$name'),
   ];
   final docs = Directory('${root.path}/docs');

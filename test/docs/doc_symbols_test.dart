@@ -111,6 +111,43 @@ final realProvider = Provider<int>((ref) => 1);
     );
   });
 
+  group('malformed directives', () {
+    test('are reported with file and line; inline code and fences are not', () {
+      final root = Directory.systemTemp.createTempSync('doc_symbols_bad_');
+      addTearDown(() => root.deleteSync(recursive: true));
+      File('${root.path}/lib/a.dart')
+        ..createSync(recursive: true)
+        ..writeAsStringSync('final fooProvider = 1;\n');
+      File('${root.path}/docs/a.md')
+        ..createSync(recursive: true)
+        ..writeAsStringSync(
+          [
+            '<!-- symbol: lib/a.dart fooProvider -->',
+            '<!-- symbol: lib/nope.dart -->',
+            '<!-- symbol: lib/nope.dart fooProvider extra -->',
+            '<!-- symbol: lib/nope.dart fooProvider --> see above',
+            '<!-- symbol: lib/nope.dart foo-provider -->',
+            'Write a `<!-- symbol: <path> <name> -->` directive.',
+            '```',
+            '<!-- symbol: lib/nope.dart -->',
+            '```',
+            '',
+          ].join('\n'),
+        );
+
+      final result = collectSymbolProblems(root);
+
+      expect(result.directives, hasLength(1));
+      expect(
+        result.problems.map((p) => p.location),
+        ['docs/a.md:2', 'docs/a.md:3', 'docs/a.md:4', 'docs/a.md:5'],
+      );
+      for (final problem in result.problems) {
+        expect(problem.message, contains('malformed directive'));
+      }
+    });
+  });
+
   group('declaresSymbol', () {
     test('accepts every declaration form this repository uses', () {
       expect(declaresSymbol('class Foo {}', 'Foo'), isTrue);
@@ -150,6 +187,29 @@ final realProvider = Provider<int>((ref) => 1);
       expect(declaresSymbol('final bar = ref.read(foo);', 'foo'), isFalse);
       expect(declaresSymbol('class Bar {}', 'Foo'), isFalse);
       expect(declaresSymbol('', 'foo'), isFalse);
+    });
+
+    test('ignores a declaration inside a block comment or a string', () {
+      expect(declaresSymbol('/*\nclass Ghost {}\n*/', 'Ghost'), isFalse);
+      expect(
+        declaresSymbol('/* outer /* inner */\nclass Ghost {}\n*/', 'Ghost'),
+        isFalse,
+      );
+      expect(
+        declaresSymbol(
+          "const doc = '''\nfinal phantomProvider = 1;\n''';",
+          'phantomProvider',
+        ),
+        isFalse,
+      );
+      expect(
+        declaresSymbol('const s = "class Ghost {}";\nclass Real {}', 'Real'),
+        isTrue,
+      );
+      expect(
+        declaresSymbol("/* c */\nconst x = r'\\';\nclass After {}", 'After'),
+        isTrue,
+      );
     });
 
     test('does not match a longer identifier that contains the name', () {
@@ -203,6 +263,34 @@ final realProvider = Provider<int>((ref) => 1);
 
     test('criterion 2: UserModel.toEntity does not', () {
       expect(declaresMember(userModel, 'UserModel', 'toEntity'), isFalse);
+    });
+
+    test('an initializer or expression body declares nothing', () {
+      const source = '''
+class Foo {
+  Foo() : _a = _make() {}
+  final int _a;
+  final int y = helper(2);
+  int get x => compute(1);
+  static int _make() => 1;
+  bool operator ==(Object other) => identical(this, other);
+  bool operator <=(Foo other) => lessOrEqual(other);
+  int z = 0, w = 1;
+  int afterOperators() => 0;
+}
+''';
+      expect(declaresMember(source, 'Foo', 'helper'), isFalse);
+      expect(declaresMember(source, 'Foo', 'compute'), isFalse);
+      expect(declaresMember(source, 'Foo', 'identical'), isFalse);
+      expect(declaresMember(source, 'Foo', 'y'), isTrue);
+      expect(declaresMember(source, 'Foo', 'x'), isTrue);
+      expect(declaresMember(source, 'Foo', '_a'), isTrue);
+      expect(declaresMember(source, 'Foo', '_make'), isTrue);
+      // A second declarator, and members after `operator <=`.
+      expect(declaresMember(source, 'Foo', 'z'), isTrue);
+      expect(declaresMember(source, 'Foo', 'w'), isTrue);
+      expect(declaresMember(source, 'Foo', 'lessOrEqual'), isFalse);
+      expect(declaresMember(source, 'Foo', 'afterOperators'), isTrue);
     });
 
     test('reads each member form, at the type body top level only', () {

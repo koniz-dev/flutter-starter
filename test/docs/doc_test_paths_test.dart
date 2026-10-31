@@ -1,5 +1,7 @@
 // `flutter test <path>` in the docs must name a real file.
 
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../tool/doc_test_paths.dart';
@@ -15,6 +17,18 @@ void main() {
   List<String> missing(String markdown) => [
     for (final p in findMissingTestPaths(markdown, real)) p.path,
   ];
+
+  test('covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/', () {
+    final paths = testPathFiles(
+      Directory.current,
+    ).map((f) => f.path.substring(Directory.current.path.length + 1)).toList();
+
+    expect(
+      paths,
+      containsAll(<String>['README.md', 'CONTRIBUTING.md', 'CLAUDE.md']),
+    );
+    expect(paths.where((p) => p.startsWith('docs/')), isNotEmpty);
+  });
 
   test('criterion 2: the path CONTRIBUTING used to name fails', () {
     const before = '''

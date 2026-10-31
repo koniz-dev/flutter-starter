@@ -67,6 +67,7 @@ void main() {
       'README.md',
       'CONTRIBUTING.md',
       'CHANGELOG.md',
+      'CLAUDE.md',
       'test/a/x.md',
       'scripts/x.md',
       'tool/x.md',

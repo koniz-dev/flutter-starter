@@ -12,7 +12,8 @@
 // the step the instructions present as "now run it". A line ending in `\` is
 // joined with its continuation, so a multi-line command counts as one.
 //
-// Run by `tool/check_docs.dart` over README.md, CONTRIBUTING.md and `docs/`.
+// Run by `tool/check_docs.dart` over README.md, CONTRIBUTING.md, CLAUDE.md
+// and `docs/`.
 
 import 'dart:io';
 
@@ -79,10 +80,11 @@ List<EnvRunProblem> findEnvRunProblems(String source, {String file = ''}) {
   return problems;
 }
 
-/// Markdown files the rule covers: README.md, CONTRIBUTING.md and `docs/`.
+/// Markdown files the rule covers: README.md, CONTRIBUTING.md, CLAUDE.md
+/// and `docs/`.
 List<File> envRunFiles(Directory root) {
   final files = <File>[
-    for (final name in ['README.md', 'CONTRIBUTING.md'])
+    for (final name in ['README.md', 'CONTRIBUTING.md', 'CLAUDE.md'])
       if (File('${root.path}/$name').existsSync()) File('${root.path}/$name'),
   ];
   final docs = Directory('${root.path}/docs');

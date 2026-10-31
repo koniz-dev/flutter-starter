@@ -190,6 +190,8 @@ const List<String> _linkScanRootFiles = [
   'README.md',
   'CONTRIBUTING.md',
   'CHANGELOG.md',
+  // Ships to adopters, and is what a coding agent reads first.
+  'CLAUDE.md',
 ];
 
 /// Directories whose markdown, at any depth, has its links checked.
