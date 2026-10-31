@@ -445,7 +445,16 @@ void main() {
           () => mockLoggingService.error(
             any(that: contains('API Error')),
             context: any(named: 'context'),
-            error: dioException,
+            // A redacted stand-in, never the raw exception: its toString can
+            // carry the full request URI.
+            error: any(
+              named: 'error',
+              that: isA<RedactedDioException>().having(
+                (e) => e.type,
+                'type',
+                dioException.type,
+              ),
+            ),
             stackTrace: any(named: 'stackTrace'),
           ),
         ).called(1);
