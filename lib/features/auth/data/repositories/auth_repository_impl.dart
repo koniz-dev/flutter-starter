@@ -288,8 +288,11 @@ class AuthRepositoryImpl implements AuthRepository {
   /// round trip ends this attempt's session; its writes would otherwise land
   /// after that teardown and re-persist a credential set the app had just
   /// removed, or let the slower of two logins win. A stale attempt fails with
-  /// [AuthErrorCodes.sessionTerminated] and clears nothing - the session that
-  /// replaced it owns what is in the store.
+  /// [AuthErrorCodes.sessionTerminated], writes nothing further and clears
+  /// nothing - the session that replaced it owns what is in the store. A
+  /// write already in flight when the session ended may still land: the
+  /// token store orders it before a later clear, but the cached user blob has
+  /// no such queue.
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
     int generation,
