@@ -49,3 +49,6 @@ lib/features/auth/presentation/screens/login_screen.dart:65:                    
 Analyzing demo944...                                            
 No issues found! (ran in 4.3s)
 ## flutter test
+05:23 +3883 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/demo944/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+05:30 +3884 ~13: /private/tmp/claude-501/-Users-nguyenanhkiet-Playground-flutter-starter/4be34029-b2ba-40fa-ac13-abb5ab9cf7b6/scratchpad/demo944/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+05:30 +3885 ~13: All tests passed!
