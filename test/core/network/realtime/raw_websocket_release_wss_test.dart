@@ -97,6 +97,30 @@ void main() {
         expect(opened, hasLength(1));
       });
 
+      test('a refused URL keeps the current connection', () async {
+        final live = client(releaseMode: true);
+        await live
+            .connect('wss://realtime.example.com/socket')
+            .catchError((Object _) {});
+        // The fake handshake to a closed port fails, so open a pending one
+        // and check it is not cancelled by the refused connect.
+        final pending = live.connect('wss://realtime.example.com/again');
+        await expectLater(
+          live.connect('ws://realtime.example.com/socket'),
+          throwsA(isA<WebSocketChannelException>()),
+        );
+        await expectLater(
+          pending,
+          throwsA(
+            isA<WebSocketChannelException>().having(
+              (e) => '$e',
+              'message',
+              isNot(contains('cancelled')),
+            ),
+          ),
+        );
+      });
+
       test('the refusal names the URL redacted', () async {
         Object? error;
         try {

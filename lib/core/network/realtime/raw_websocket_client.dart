@@ -90,7 +90,8 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   /// - the handshake does not finish within [connectTimeout]
   ///   (a [TimeoutException]);
   /// - this is a staging or production release and [url] is not `wss://`
-  ///   (a `WebSocketChannelException`; nothing is opened);
+  ///   (a `WebSocketChannelException`; nothing is opened, and an existing
+  ///   connection is kept);
   /// - [disconnect] or another [connect] is called before the handshake
   ///   finishes (a `WebSocketChannelException`); the abandoned connection is
   ///   closed, never adopted.
@@ -98,8 +99,6 @@ class RawWebSocketClientImpl implements IRealtimeClient {
   /// No error escapes as an unhandled async error.
   @override
   Future<void> connect(String url) async {
-    if (isConnected || _pending != null) disconnect();
-    final generation = _generation;
     // Realtime endpoints often authenticate with a query token
     // (`wss://host/socket?token=...`), sometimes with userinfo. What this
     // class writes or throws - log lines, and every error a caller may
@@ -123,6 +122,10 @@ class RawWebSocketClientImpl implements IRealtimeClient {
         'only to wss:// URLs',
       );
     }
+    // Only a URL that can be opened replaces the current connection: a
+    // refused or unparsable one above leaves it alone.
+    if (isConnected || _pending != null) disconnect();
+    final generation = _generation;
     final channel = _connectChannel(uri, _sslPinning.createHttpClient());
     _pending = channel;
     try {
