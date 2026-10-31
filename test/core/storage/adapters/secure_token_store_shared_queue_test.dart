@@ -18,7 +18,7 @@ class _MockSecureStorage extends Mock implements SecureStorageService {}
 /// Writes land after an asynchronous step (web encryption), deletes at once.
 _MockSecureStorage _webLike(Map<String, String> values) {
   final storage = _MockSecureStorage();
-  when(() => storage.getString(any())).thenAnswer(
+  when(() => storage.getStringOrThrow(any())).thenAnswer(
     (i) async => values[i.positionalArguments[0] as String],
   );
   when(() => storage.setString(any(), any())).thenAnswer((i) async {

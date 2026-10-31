@@ -84,7 +84,7 @@ void main() {
         final handler = RequestInterceptorHandler();
 
         when(
-          () => mockSecureStorage.getString(AppConstants.tokenKey),
+          () => mockSecureStorage.getStringOrThrow(AppConstants.tokenKey),
         ).thenAnswer((_) async => token);
 
         await interceptor.onRequest(options, handler);
@@ -97,7 +97,7 @@ void main() {
         final handler = RequestInterceptorHandler();
 
         when(
-          () => mockSecureStorage.getString(AppConstants.tokenKey),
+          () => mockSecureStorage.getStringOrThrow(AppConstants.tokenKey),
         ).thenAnswer((_) async => null);
 
         await interceptor.onRequest(options, handler);
@@ -110,7 +110,7 @@ void main() {
         final handler = RequestInterceptorHandler();
 
         when(
-          () => mockSecureStorage.getString(AppConstants.tokenKey),
+          () => mockSecureStorage.getStringOrThrow(AppConstants.tokenKey),
         ).thenAnswer((_) async => '');
 
         await interceptor.onRequest(options, handler);
@@ -416,7 +416,7 @@ void main() {
         final handler = RequestInterceptorHandler();
 
         when(
-          () => mockSecureStorage.getString(AppConstants.tokenKey),
+          () => mockSecureStorage.getStringOrThrow(AppConstants.tokenKey),
         ).thenAnswer((_) async => token);
 
         await interceptor.onRequest(options, handler);
@@ -430,7 +430,7 @@ void main() {
         final handler = RequestInterceptorHandler();
 
         when(
-          () => mockSecureStorage.getString(AppConstants.tokenKey),
+          () => mockSecureStorage.getStringOrThrow(AppConstants.tokenKey),
         ).thenAnswer((_) async => longToken);
 
         await interceptor.onRequest(options, handler);
@@ -444,7 +444,7 @@ void main() {
         final handler = RequestInterceptorHandler();
 
         when(
-          () => mockSecureStorage.getString(AppConstants.tokenKey),
+          () => mockSecureStorage.getStringOrThrow(AppConstants.tokenKey),
         ).thenAnswer((_) async => token);
 
         await interceptor.onRequest(options, handler);

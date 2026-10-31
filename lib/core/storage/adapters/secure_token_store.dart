@@ -70,10 +70,16 @@ class SecureTokenStore implements ITokenStore {
     return run();
   }
 
+  /// Throws [CacheException] if the Keychain/Keystore read fails.
+  ///
+  /// [SecureStorageService.getString] answers a failed read with `null`, the
+  /// same as a missing token, so a transient failure (an iOS Keychain read
+  /// before first unlock) sent a request unauthenticated, its 401 found "no
+  /// refresh token", and the user was signed out. The strict read tells the
+  /// two apart: the caller fails the one request and keeps the session.
   @override
-  Future<String?> getAccessToken() => _inOrder(
-    () => _secureStorageService.getString(AppConstants.tokenKey),
-  );
+  Future<String?> getAccessToken() =>
+      _inOrder(() => _read(AppConstants.tokenKey));
 
   @override
   Future<bool> setAccessToken(String token) => _inOrder(
@@ -85,10 +91,11 @@ class SecureTokenStore implements ITokenStore {
   Future<void> clearAccessToken() =>
       _inOrder(() => _remove(AppConstants.tokenKey));
 
+  /// Throws [CacheException] if the Keychain/Keystore read fails; see
+  /// [getAccessToken].
   @override
-  Future<String?> getRefreshToken() => _inOrder(
-    () => _secureStorageService.getString(AppConstants.refreshTokenKey),
-  );
+  Future<String?> getRefreshToken() =>
+      _inOrder(() => _read(AppConstants.refreshTokenKey));
 
   @override
   Future<bool> setRefreshToken(String token) => _inOrder(
@@ -118,6 +125,14 @@ class SecureTokenStore implements ITokenStore {
       }
     }
     if (first != null) Error.throwWithStackTrace(first.$1, first.$2);
+  }
+
+  Future<String?> _read(String key) async {
+    try {
+      return await _secureStorageService.getStringOrThrow(key);
+    } on Exception catch (e) {
+      throw CacheException('Failed to read $key from secure storage: $e');
+    }
   }
 
   /// [SecureStorageService.remove] reports a failed delete as `false` rather
