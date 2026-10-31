@@ -449,6 +449,30 @@ void main() {
   // `development` is the default and what `.env.example` ships, so a release
   // built from an unedited `.env` was a development build in a release
   // binary: debug routes registered, pinning ignored, without a word.
+  // Two taps on Try again ran two bootstraps at once: two containers, two
+  // migration runs against the same stores, and the loser never disposed.
+  testWidgets('a bootstrap called while one is running joins it', (
+    tester,
+  ) async {
+    installSecureBackend(<String, String>{});
+    var containers = 0;
+    ProviderContainer counting() {
+      containers++;
+      return app.createAppContainer();
+    }
+
+    await bootRealMain(
+      tester,
+      entry: () => Future.wait([
+        app.bootstrap(createContainer: counting),
+        app.bootstrap(createContainer: counting),
+      ]),
+    );
+
+    expect(containers, 1);
+    expect(find.byType(app.MyApp), findsOneWidget);
+  });
+
   group('main() refuses a release build configured as development', () {
     testWidgets('a release build with ENVIRONMENT=development boots into the '
         'failure screen', (tester) async {

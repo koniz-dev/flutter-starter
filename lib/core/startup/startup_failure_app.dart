@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 /// localization. All three are initialized *after* the step that failed, so
 /// none of them can be relied on here, which is why the copy is hard-coded
 /// English rather than an `AppLocalizations` lookup.
-class StartupFailureApp extends StatelessWidget {
+class StartupFailureApp extends StatefulWidget {
   /// Creates a [StartupFailureApp] describing [error]
   ///
   /// [onRetry] is invoked when the user taps Try again; pass null to hide the
@@ -33,14 +33,36 @@ class StartupFailureApp extends StatelessWidget {
   static const retryKey = ValueKey<String>('startup_failure_retry');
 
   @override
+  State<StartupFailureApp> createState() => _StartupFailureAppState();
+}
+
+class _StartupFailureAppState extends State<StartupFailureApp> {
+  /// A retry is in flight. Try again is disabled meanwhile: a second tap
+  /// started a second bootstrap alongside the first.
+  bool _retrying = false;
+
+  Future<void> _retry() async {
+    setState(() => _retrying = true);
+    try {
+      await widget.onRetry!();
+    } finally {
+      // A successful retry replaces this app; a failed one shows a new
+      // failure screen. Either way this state may already be gone.
+      if (mounted) setState(() => _retrying = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final error = widget.error;
+    final onRetry = widget.onRetry;
     return MaterialApp(
       title: 'Flutter Starter',
       home: Scaffold(
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              key: bodyKey,
+              key: StartupFailureApp.bodyKey,
               padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -64,9 +86,9 @@ class StartupFailureApp extends StatelessWidget {
                   if (onRetry != null) ...[
                     const SizedBox(height: 24),
                     FilledButton(
-                      key: retryKey,
-                      onPressed: () => unawaited(onRetry!()),
-                      child: const Text('Try again'),
+                      key: StartupFailureApp.retryKey,
+                      onPressed: _retrying ? null : () => unawaited(_retry()),
+                      child: Text(_retrying ? 'Retrying...' : 'Try again'),
                     ),
                   ],
                 ],
