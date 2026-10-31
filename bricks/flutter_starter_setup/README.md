@@ -122,7 +122,14 @@ CI cover: the `setup-brick` job of
 with non-default answers and then `flutter analyze` and `flutter test`. It is
 manual, like the rest of that workflow. Run it after touching the hook.
 
-After changing `hooks/post_gen.dart` or `hooks/pubspec.yaml`:
+Invalid input is refused before anything is written: `hooks/pre_gen.dart`
+checks `package_name` (a pub name, not a Dart reserved word),
+`application_id` (two or more segments of letters, digits and underscores),
+`ios_bundle_id` (letters, digits and hyphens) and `app_display_name` (see the
+table above) through `hooks/input_rules.dart`.
+
+After changing any file under `hooks/` (`pre_gen.dart`, `post_gen.dart`,
+`input_rules.dart` or `pubspec.yaml`):
 
 ```bash
 cd bricks/flutter_starter_setup/hooks
