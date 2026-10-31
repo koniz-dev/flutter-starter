@@ -39,6 +39,30 @@ if [ "$BUMP_TYPE" != "major" ] && [ "$BUMP_TYPE" != "minor" ] && [ "$BUMP_TYPE" 
     exit 1
 fi
 
+# The release branch and tag names are known before anything changes: the
+# bump is computed on a copy of pubspec.yaml. If either already exists (a
+# re-run after a declined push, say), stop here. Found at step 5 or 7, the
+# failure used to leave pubspec.yaml and CHANGELOG.md rewritten.
+PROBE_PUBSPEC=$(mktemp)
+cp pubspec.yaml "$PROBE_PUBSPEC"
+if ! PUBSPEC_PATH="$PROBE_PUBSPEC" ./scripts/ci/bump_version.sh "$BUMP_TYPE" >/dev/null; then
+    rm -f "$PROBE_PUBSPEC"
+    echo -e "${RED}Version bump failed. Aborting release.${NC}"
+    exit 1
+fi
+NEXT_VERSION=$(grep "^version:" "$PROBE_PUBSPEC" | sed 's/version: //' | cut -d'+' -f1)
+rm -f "$PROBE_PUBSPEC"
+if git show-ref --verify --quiet "refs/heads/release/v$NEXT_VERSION"; then
+    echo -e "${RED}Error: branch release/v$NEXT_VERSION already exists. Nothing was changed.${NC}"
+    echo "Delete it (git branch -D release/v$NEXT_VERSION) or release from it."
+    exit 1
+fi
+if git show-ref --verify --quiet "refs/tags/v$NEXT_VERSION"; then
+    echo -e "${RED}Error: tag v$NEXT_VERSION already exists. Nothing was changed.${NC}"
+    echo "Delete it (git tag -d v$NEXT_VERSION) or bump past it."
+    exit 1
+fi
+
 echo -e "${BLUE}Starting release process...${NC}"
 echo ""
 
@@ -137,7 +161,16 @@ echo ""
 echo -e "${GREEN}Release preparation complete!${NC}"
 echo ""
 echo "Next steps:"
-echo "  1. CI/CD will automatically build and deploy"
+# The deploy workflows ship with their push triggers commented out, so a
+# pushed tag deploys only once setup_ci.dart --deploy-trigger=tags enabled
+# one.
+if grep -qE '^[[:space:]]+tags:' .github/workflows/deploy-*.yml 2>/dev/null; then
+    echo "  1. The pushed tag starts the deploy workflows"
+else
+    echo "  1. No deploy workflow runs on a tag yet: dispatch them from the"
+    echo "     Actions tab, or enable the trigger with"
+    echo "     dart run scripts/dev/setup_ci.dart --deploy-trigger=tags"
+fi
 echo "  2. Monitor GitHub Actions for build status"
 echo "  3. After successful deployment, merge release branch:"
 echo "     git checkout main"

@@ -161,6 +161,55 @@ else
     fail "no release branch or tag was created (branch=$branch tags=$tags)"
 fi
 
+# --- 5. release.sh stops before changing anything when the branch or tag exists
+for existing in "tag v1.0.1" "branch release/v1.0.1"; do
+    repo=$(new_repo "exists-${existing%% *}")
+    # A previous release, so that without the check the run gets as far as
+    # step 5 or 7 with pubspec.yaml and CHANGELOG.md already rewritten.
+    (cd "$repo" && git_q tag v1.0.0 && git_q commit -q --allow-empty -m "feat: something new" && git_q $existing)
+    head_before=$(cd "$repo" && git rev-parse HEAD)
+    out=$(cd "$repo" && PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch < /dev/null 2>&1); rc=$?
+    status=$(cd "$repo" && git status --short)
+    branch=$(cd "$repo" && git rev-parse --abbrev-ref HEAD)
+    head_after=$(cd "$repo" && git rev-parse HEAD)
+    if [ $rc -ne 0 ] && [ -z "$status" ] && [ "$branch" = "main" ] && [ "$head_before" = "$head_after" ] \
+        && printf '%s' "$out" | grep -q "already exists. Nothing was changed"; then
+        pass "an existing ${existing%% *} stops release.sh with a clean tree"
+    else
+        fail "an existing ${existing%% *} stops release.sh with a clean tree (exit $rc, branch $branch, status: $(printf '%s' "$status" | tr '\n' ' '))"
+    fi
+    if printf '%s' "$out" | grep -q "Step 1"; then
+        fail "an existing ${existing%% *} is caught before the tests run"
+    else
+        pass "an existing ${existing%% *} is caught before the tests run"
+    fi
+done
+
+# --- 6. the summary claims an automatic deploy only when a tag trigger is live
+summary() { # deploy-workflow-content -> release.sh output, push declined
+    local repo
+    repo=$(new_repo "summary-$RANDOM")
+    if [ -n "$1" ]; then
+        mkdir -p "$repo/.github/workflows"
+        printf '%s\n' "$1" > "$repo/.github/workflows/deploy-web.yml"
+        (cd "$repo" && git_q add -A && git_q commit -q -m "ci: deploy workflow")
+    fi
+    (cd "$repo" && git_q tag v1.0.0 && git_q commit -q --allow-empty -m "feat: something new")
+    (cd "$repo" && printf 'n' | PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch 2>&1)
+}
+out=$(summary "$(printf 'on:\n  workflow_dispatch:\n  # push:\n  #   tags:\n  #     - v*')")
+if printf '%s' "$out" | grep -q "No deploy workflow runs on a tag yet" && ! printf '%s' "$out" | grep -q "automatically"; then
+    pass "with the tag trigger commented out, the summary claims no deploy"
+else
+    fail "with the tag trigger commented out, the summary claims no deploy, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
+fi
+out=$(summary "$(printf 'on:\n  push:\n    tags:\n      - v*')")
+if printf '%s' "$out" | grep -q "The pushed tag starts the deploy workflows"; then
+    pass "with a live tag trigger, the summary says the tag deploys"
+else
+    fail "with a live tag trigger, the summary says the tag deploys, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
+fi
+
 # --- bump_version.sh keeps a trailing comment
 bump_fixture() { # pubspec-version-line -> echoes the rewritten line
     local dir="$WORK/bump-$RANDOM"
