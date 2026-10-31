@@ -7,9 +7,10 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 
 /// Secure token store implementation backed by [SecureStorageService].
 ///
-/// ## Every operation runs in the order it was issued
+/// ## Operations take effect in the order they were issued
 ///
-/// Each read, write and delete waits for the ones issued before it to settle.
+/// Each read, write and delete waits for the ones issued before it to settle,
+/// up to a bound (below).
 /// The session guards in `AuthRepositoryImpl.refreshToken()` and
 /// `AuthInterceptor` check the session immediately before a write, which only
 /// helps if a logout's clear, issued after that check, also *lands* after the
@@ -19,7 +20,8 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// write ran before it and the write then re-stored a token on a signed-out
 /// browser. Queuing here makes the order the code issues the order the store
 /// applies, on every platform, without clearing anything a newer session
-/// wrote.
+/// wrote - except for a call that outlives the bound, which the repair below
+/// covers.
 ///
 /// The queue belongs to the [SecureStorageService] underneath, not to this
 /// object: every `SecureTokenStore` built over the same service shares it.
@@ -35,9 +37,19 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// token operation behind it - the token read on each request and a logout's
 /// clear included - until the app was restarted. Now an operation queued
 /// behind one that has not settled within the bound runs anyway; the hung
-/// call stays hung only for its own caller. The residual: if that call later
-/// completes, it lands out of order - which needs a call to hang for the whole
-/// bound and then succeed, where before any hang wedged the app.
+/// call stays hung only for its own caller.
+///
+/// A call that outlives the bound and then succeeds lands after operations
+/// issued later. For a write or delete, that would leave the older state on
+/// the device - a refresh's token write landing after a logout's clear would
+/// re-store a credential on a signed-out device. So each write and delete is
+/// numbered when it is issued, and one that lands after a newer write or
+/// delete of the same key has landed is followed by a repair that puts the
+/// newer state back, queued like any other operation. Between the late
+/// landing and the repair the older value is briefly at rest; once both
+/// settle, every key holds what its last-issued successful write or delete
+/// left. Reads are not repaired: a read that outlived the bound returns what
+/// the store held when it ran.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   SecureTokenStore(
@@ -99,14 +111,12 @@ class SecureTokenStore implements ITokenStore {
       _inOrder(() => _read(AppConstants.tokenKey));
 
   @override
-  Future<bool> setAccessToken(String token) => _inOrder(
-    () => _secureStorageService.setString(AppConstants.tokenKey, token),
-  );
+  Future<bool> setAccessToken(String token) =>
+      _mutate(AppConstants.tokenKey, token);
 
   /// Throws [CacheException] if the Keychain/Keystore delete fails.
   @override
-  Future<void> clearAccessToken() =>
-      _inOrder(() => _remove(AppConstants.tokenKey));
+  Future<void> clearAccessToken() => _remove(AppConstants.tokenKey);
 
   /// Throws [CacheException] if the Keychain/Keystore read fails; see
   /// [getAccessToken].
@@ -115,17 +125,12 @@ class SecureTokenStore implements ITokenStore {
       _inOrder(() => _read(AppConstants.refreshTokenKey));
 
   @override
-  Future<bool> setRefreshToken(String token) => _inOrder(
-    () => _secureStorageService.setString(
-      AppConstants.refreshTokenKey,
-      token,
-    ),
-  );
+  Future<bool> setRefreshToken(String token) =>
+      _mutate(AppConstants.refreshTokenKey, token);
 
   /// Throws [CacheException] if the Keychain/Keystore delete fails.
   @override
-  Future<void> clearRefreshToken() =>
-      _inOrder(() => _remove(AppConstants.refreshTokenKey));
+  Future<void> clearRefreshToken() => _remove(AppConstants.refreshTokenKey);
 
   /// Deletes both tokens, attempting the second even when the first fails.
   ///
@@ -155,13 +160,64 @@ class SecureTokenStore implements ITokenStore {
   /// [SecureStorageService.remove] reports a failed delete as `false` rather
   /// than throwing. Ignoring that bool made a failed delete invisible.
   Future<void> _remove(String key) async {
-    if (!await _secureStorageService.remove(key)) {
+    if (!await _mutate(key, null)) {
       throw CacheException('Failed to delete $key from secure storage');
+    }
+  }
+
+  /// Writes [value] to [key], or deletes [key] when [value] is null, in
+  /// order. Returns whether the platform call succeeded.
+  Future<bool> _mutate(String key, String? value) {
+    final queue = _queue;
+    final number = ++queue.issued;
+    return _inOrder(() => _apply(queue, key, number, value));
+  }
+
+  Future<bool> _apply(
+    _OperationQueue queue,
+    String key,
+    int number,
+    String? value,
+  ) async {
+    final succeeded = value == null
+        ? await _secureStorageService.remove(key)
+        : await _secureStorageService.setString(key, value);
+    if (!succeeded) return false;
+    final newest = queue.landed[key];
+    if (newest == null || newest.number < number) {
+      queue.landed[key] = (number: number, value: value);
+    } else if (newest.number > number) {
+      // This call outlived the wait and landed over a newer one.
+      unawaited(_repair(queue, key));
+    }
+    return true;
+  }
+
+  /// Re-applies the newest landed state of [key]. Runs in the queue, so it
+  /// reads that state when its turn comes; a repair overtaken in turn is
+  /// repaired again by [_apply]. A failed repair has no caller to report to,
+  /// so it is dropped: the late value stays, as it would have without one.
+  Future<void> _repair(_OperationQueue queue, String key) async {
+    try {
+      await _inOrder(() {
+        final newest = queue.landed[key]!;
+        return _apply(queue, key, newest.number, newest.value);
+      });
+    } on Object {
+      // See above.
     }
   }
 }
 
-/// Tail of one backing service's operation queue; null while idle.
+/// One backing service's operation queue.
 class _OperationQueue {
+  /// Tail of the queue; null while idle.
   Future<void>? tail;
+
+  /// How many writes and deletes have been issued; numbers each one.
+  int issued = 0;
+
+  /// The newest write or delete that has landed, per key: its number and
+  /// the value it left, null for a delete.
+  final Map<String, ({int number, String? value})> landed = {};
 }
