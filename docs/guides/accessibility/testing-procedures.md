@@ -97,22 +97,23 @@ Test that interactive elements meet minimum size requirements:
 testWidgets('button meets minimum touch target', (tester) async {
   await tester.pumpWidget(
     MaterialApp(
-      home: AccessibleButton(
-        label: 'Submit',
-        onPressed: () {},
+      home: Scaffold(
+        body: Center(
+          child: AccessibleButton(label: 'Submit', onPressed: () {}),
+        ),
       ),
     ),
   );
 
-  final renderObject = tester.getRenderObject(
-    find.byType(AccessibleButton),
-  );
-  final size = renderObject?.size;
-  
-  expect(size?.width, greaterThanOrEqualTo(48.0));
-  expect(size?.height, greaterThanOrEqualTo(48.0));
+  final size = tester.getSize(find.byType(AccessibleButton));
+  expect(size.width, greaterThanOrEqualTo(48.0));
+  expect(size.height, greaterThanOrEqualTo(48.0));
 });
 ```
+
+`Center` lets the button take its own size; as the `home` of a
+`MaterialApp` it would be stretched to the whole screen and pass whatever its
+size. `test/docs/accessibility_touch_target_snippet_test.dart` runs this test.
 
 ### Widget Tests for Contrast Ratios
 

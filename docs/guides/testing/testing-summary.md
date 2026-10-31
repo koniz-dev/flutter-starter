@@ -19,7 +19,7 @@ flutter analyze
 flutter test
 ```
 
-Optional (slower, matches coverage job): `flutter test --coverage --timeout=5m`. See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for full contribution flow.
+Optional (slower, counts coverage as the CI gates do): `./scripts/test/test_coverage.sh`, which runs `tool/coverage_helper.dart` before `flutter test --coverage` so untested files count too. See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for full contribution flow.
 
 ## Quick Start
 
@@ -104,8 +104,8 @@ Patrol E2E **does not block PRs**. To run on CI: open **Actions → [E2E Android
 # Run all tests
 flutter test
 
-# Run with coverage
-flutter test --coverage
+# Run with coverage, counting untested files as CI does
+./scripts/test/test_coverage.sh
 
 # Generate HTML report
 ./scripts/test/test_coverage.sh --html --open

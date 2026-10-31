@@ -278,24 +278,47 @@ Date formatting utilities using intl package.
 
 **Location:** `lib/core/utils/date_formatter.dart`
 
+It has two pairs with different contracts:
+
+- **Display:** `formatDate` / `formatDateTime` / `formatTime` write
+  wall-clock digits with **no timezone marker**, and `parseDate` /
+  `parseDateTime` read them back as **local** time. This pair is for showing
+  and re-reading a date a person typed. It is **lossy for a UTC `DateTime`**:
+  `DateTime.utc(2024, 1, 15, 14, 30, 45)` formats as `2024-01-15 14:30:45`,
+  which parses back on a UTC+7 device as an instant seven hours off.
+- **Storage and transport:** `formatIso8601` / `parseIso8601` always go
+  through UTC and always carry the `Z` designator, so no instant shifts. Use
+  this pair for anything stored, sent to a server, or compared.
+
+Every `parse*` method returns `null` for an out-of-range field
+(`2024-02-30`, `T25:61`) instead of rolling it over.
+
 ### Methods
 
 ```dart
 /// Format date to string (yyyy-MM-dd)
 static String formatDate(DateTime date);
 
-/// Format date and time to string (yyyy-MM-dd HH:mm:ss)
+/// Format date and time to string (yyyy-MM-dd HH:mm:ss), no timezone marker
 static String formatDateTime(DateTime dateTime);
 
 /// Format time to string (HH:mm:ss)
 static String formatTime(DateTime dateTime);
 
-/// Parse string to date
+/// Parse string to date (local time)
 static DateTime? parseDate(String dateString);
 
-/// Parse string to date and time
+/// Parse string to date and time (local time)
 static DateTime? parseDateTime(String dateTimeString);
+
+/// Format as ISO-8601 in UTC, always ending in `Z` (lossless)
+static String formatIso8601(DateTime dateTime);
+
+/// Parse ISO-8601 into a UTC DateTime
+static DateTime? parseIso8601(String value);
 ```
+<!-- symbol: lib/core/utils/date_formatter.dart DateFormatter.formatIso8601 -->
+<!-- symbol: lib/core/utils/date_formatter.dart DateFormatter.parseIso8601 -->
 
 ### Usage Examples
 
@@ -310,6 +333,10 @@ final timeStr = DateFormatter.formatTime(now); // "10:30:45"
 // Parse dates
 final date = DateFormatter.parseDate("2024-01-15");
 final dateTime = DateFormatter.parseDateTime("2024-01-15 10:30:45");
+
+// Store or send an instant: the lossless pair
+final stored = DateFormatter.formatIso8601(now); // "2024-01-15T03:30:45.000Z"
+final instant = DateFormatter.parseIso8601(stored); // a UTC DateTime
 ```
 
 ---
@@ -331,6 +358,17 @@ static bool isValidPhone(String phone);
 
 /// Validate password (at least 8 characters)
 static bool isValidPassword(String password);
+
+/// 8+ characters with an uppercase letter, a lowercase letter, a digit and
+/// a character outside [A-Za-z0-9]. Opt-in: the auth screens use
+/// isValidPassword.
+static bool isStrongPassword(String password);
+
+/// Digits only, with an optional leading minus (`-12`)
+static bool isNumeric(String s);
+
+/// ASCII letters and digits only
+static bool isAlphaNumeric(String s);
 
 /// Validate URL
 static bool isValidUrl(String url);
