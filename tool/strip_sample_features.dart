@@ -100,6 +100,7 @@ const _selfPaths = <String>[
   '.github/workflows/strip-smoke.yml',
   'test/tooling/strip_markers_test.dart',
   'test/tooling/strip_sample_prose_test.dart',
+  'test/tooling/strip_rerun_test.dart',
   'test/tooling/strip_unknown_flags_test.dart',
 ];
 
@@ -194,6 +195,23 @@ void main(List<String> args) {
   // so the documented way to drop them is this flag, which takes their
   // `strip:bricks` prose along.
   final removeBricks = args.contains('--remove-bricks');
+  // The tree to strip is the current directory, and only a project root
+  // qualifies: run from test/, the tool wrote test/lib/... and
+  // test/test/... and crashed halfway.
+  final root = Directory.current;
+  final scriptDir = File.fromUri(Platform.script).parent;
+  if (!File(p.join(root.path, 'pubspec.yaml')).existsSync() ||
+      !File(p.join(root.path, 'tool/strip_sample_features.dart'))
+          .existsSync()) {
+    stderr.writeln(
+      'Run this from the project root (the directory holding pubspec.yaml '
+      'and tool/strip_sample_features.dart); ${root.path} is not one. '
+      'Nothing was deleted.',
+    );
+    exitCode = 2;
+    return;
+  }
+
   if (keepSamples && (tasksFlag || featureFlagsFlag)) {
     stderr.writeln(
       '--keep-samples keeps both samples; it cannot be combined with '
@@ -205,7 +223,7 @@ void main(List<String> args) {
   if (keepSamples) {
     // Validated in every mode, so a bad marker is reported even by a run that
     // would remove nothing.
-    final markerProblems = _validateMarkers(Directory.current);
+    final markerProblems = _validateMarkers(root);
     if (markerProblems.isNotEmpty) {
       stderr.writeln(
         'Strip markers are unbalanced; nothing was deleted:\n'
@@ -221,8 +239,8 @@ void main(List<String> args) {
       );
       return;
     }
-    _removeBricks(Directory.current);
-    _stripMarkdownRegions(Directory.current, const [_bricksTag]);
+    _removeBricks(root);
+    _stripMarkdownRegions(root, const [_bricksTag]);
     stdout.writeln(
       'Bricks removed; both samples kept. '
       'Run: flutter pub get && flutter analyze && flutter test',
@@ -238,8 +256,6 @@ void main(List<String> args) {
   final removeTasks = removeBoth || tasksFlag;
   final removeFeatureFlags = removeBoth || featureFlagsFlag;
 
-  final root = Directory.current;
-  final scriptDir = File.fromUri(Platform.script).parent;
   final goldenVariant = removeBoth
       ? 'stripped'
       : tasksFlag
@@ -624,6 +640,7 @@ void _stripMarkdownRegions(Directory repoRoot, List<String> tags) {
 
 void _patchTestFixtures(String path) {
   final file = File(path);
+  if (!file.existsSync()) return;
   var s = file.readAsStringSync().replaceAll('\r\n', '\n');
   s = s.replaceAll(
     "import 'package:flutter_starter/features/tasks/data/models/task_model.dart';\n",
@@ -636,13 +653,15 @@ void _patchTestFixtures(String path) {
   const marker =
       '// ============================================================================\n// Task Fixtures';
   final idx = s.indexOf(marker);
-  if (idx == -1) {
-    throw StateError('Task Fixtures section not found in test_fixtures.dart');
-  }
-  file.writeAsStringSync('${s.substring(0, idx).trimRight()}\n');
+  // Already gone on a re-run after a partial strip; any task reference left
+  // is still caught by the forbidden-reference scan.
+  file.writeAsStringSync(
+    idx == -1 ? s : '${s.substring(0, idx).trimRight()}\n',
+  );
 }
 
 void _patchMockFactories(String path) {
+  if (!File(path).existsSync()) return;
   var s = File(path).readAsStringSync().replaceAll('\r\n', '\n');
   s = s.replaceAll(
     RegExp(r"import 'package:flutter_starter/features/tasks/[^']+';\n"),
@@ -668,6 +687,7 @@ void _patchMockFactories(String path) {
 }
 
 void _patchProvidersTest(String path) {
+  if (!File(path).existsSync()) return;
   var lines = File(path).readAsLinesSync();
   lines = lines
       .where((l) => !l.contains('package:flutter_starter/features/tasks/'))
@@ -676,7 +696,12 @@ void _patchProvidersTest(String path) {
   final end = lines.indexWhere(
     (l) => l.contains("group('Provider Instance Types'"),
   );
-  if (start == -1 || end == -1 || start >= end) {
+  if (start == -1) {
+    // Already removed by an earlier, partial run.
+    File(path).writeAsStringSync('${lines.join('\n')}\n');
+    return;
+  }
+  if (end == -1 || start >= end) {
     throw StateError(
       'Could not locate Tasks provider groups in providers_test.dart',
     );
@@ -771,5 +796,44 @@ List<String> _collectStrippedViolations(
     }
   }
 
-  return violations;
+  return _withoutIgnored(repoRoot, violations);
+}
+
+/// [violations] minus those in files git ignores: a generated, git-ignored
+/// file (the coverage helper imports every library) is not part of the tree
+/// being stripped, and failing on one left a half-stripped tree. Outside a git
+/// repository nothing is dropped.
+List<String> _withoutIgnored(Directory repoRoot, List<String> violations) {
+  if (violations.isEmpty) return violations;
+  final paths = {for (final v in violations) v.split(': ').first};
+  final ProcessResult result;
+  try {
+    result = Process.runSync('git', [
+      'check-ignore',
+      '--',
+      ...paths,
+    ], workingDirectory: repoRoot.path);
+  } on ProcessException {
+    return violations;
+  }
+  // 0: some ignored; 1: none ignored; anything else: not a repository.
+  if (result.exitCode != 0) return violations;
+  final ignored = {
+    for (final line in (result.stdout as String).split('\n'))
+      if (line.trim().isNotEmpty)
+        p.normalize(p.absolute(repoRoot.path, line.trim())),
+  };
+  final kept = [
+    for (final v in violations)
+      if (!ignored.contains(p.normalize(p.absolute(v.split(': ').first)))) v,
+  ];
+  final skipped = violations.length - kept.length;
+  if (skipped > 0) {
+    stdout.writeln(
+      'Skipped $skipped forbidden reference(s) in git-ignored files (a '
+      'generated file such as the coverage helper is regenerated, not '
+      'stripped); flutter analyze still reads them if they are not excluded.',
+    );
+  }
+  return kept;
 }
