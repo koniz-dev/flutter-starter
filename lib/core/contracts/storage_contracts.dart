@@ -36,8 +36,10 @@ abstract class IKeyValueStore {
 /// `SecureTokenStore` queues its operations to guarantee this, because the
 /// platform store does not on every target. A call that outlives its wait
 /// bound and lands late is followed by a repair, so the older value is at
-/// rest only until that repair lands; a repair whose own platform call fails
-/// has no caller to tell and leaves the late value in place. Its queue is
+/// rest only until that repair lands. A repair whose platform call keeps
+/// failing is retried a bounded number of times, then reported to the logger
+/// by key, and the late value stays until the next write or delete through
+/// the same service re-applies the newer state. Its queue is
 /// shared by every store over the same `SecureStorageService`, so the
 /// components touching the tokens must use one service (or one store). An
 /// in-memory store whose methods complete synchronously meets it trivially.

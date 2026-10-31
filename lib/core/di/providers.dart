@@ -41,7 +41,10 @@ final keyValueStoreProvider = Provider<IKeyValueStore>((ref) {
 /// Backward-compat alias: token store for auth.
 final tokenStoreProvider = Provider<ITokenStore>((ref) {
   final secureStorage = ref.watch(secureStorageServiceProvider);
-  return SecureTokenStore(secureStorage);
+  return SecureTokenStore(
+    secureStorage,
+    logger: ref.read(loggingServiceProvider),
+  );
 });
 
 /// Backward-compat alias: same instance as [apiClientProvider], typed for auth

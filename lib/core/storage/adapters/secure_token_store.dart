@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 
 /// Secure token store implementation backed by [SecureStorageService].
@@ -46,16 +47,30 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// numbered when it is issued, and one that lands after a newer write or
 /// delete of the same key has landed is followed by a repair that puts the
 /// newer state back, queued like any other operation. Between the late
-/// landing and the repair the older value is briefly at rest; once both
-/// settle, every key holds what its last-issued successful write or delete
-/// left. Reads are not repaired: a read that outlived the bound returns what
-/// the store held when it ran.
+/// landing and the repair the older value is briefly at rest. A repair that
+/// fails is retried, up to three attempts; if every attempt fails, the key is
+/// marked stale, a warning naming the key (never its value) goes to the
+/// logger, and the next write or delete through any store over the same
+/// service re-applies the newer state first. Once everything settles and no
+/// repair has failed, every key holds what its last-issued successful write
+/// or delete left; after a failed repair, the late value stays until that
+/// next write or delete. Reads are not repaired: a read that outlived the
+/// bound returns what the store held when it ran.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
+  ///
+  /// [logger] receives the warning for a repair that could not land. Stores
+  /// over the same service share it, so one store given a logger is enough.
   SecureTokenStore(
     this._secureStorageService, {
     this.operationTimeout = const Duration(seconds: 10),
-  });
+    LoggingService? logger,
+  }) {
+    if (logger != null) _queue.logger ??= logger;
+  }
+
+  /// How many times a repair is attempted before its key is left stale.
+  static const repairAttempts = 3;
 
   final SecureStorageService _secureStorageService;
 
@@ -173,38 +188,87 @@ class SecureTokenStore implements ITokenStore {
     return _inOrder(() => _apply(queue, key, number, value));
   }
 
+  /// Applies one write ([value] non-null) or delete of [key], numbered
+  /// [number]. Unless [flushStale] is false, first re-applies the newest
+  /// state of every other key a failed repair left stale.
   Future<bool> _apply(
     _OperationQueue queue,
     String key,
     int number,
-    String? value,
-  ) async {
+    String? value, {
+    bool flushStale = true,
+  }) async {
+    if (flushStale) {
+      for (final stale in queue.stale.where((k) => k != key).toList()) {
+        final newest = queue.landed[stale]!;
+        try {
+          // Bounded like the queue's own wait, so a hung platform call here
+          // holds this operation no longer than one queued ahead of it would.
+          await _apply(
+            queue,
+            stale,
+            newest.number,
+            newest.value,
+            flushStale: false,
+          ).timeout(operationTimeout);
+        } on Object {
+          // Still stale; the next write or delete tries again.
+        }
+      }
+    }
     final succeeded = value == null
         ? await _secureStorageService.remove(key)
         : await _secureStorageService.setString(key, value);
     if (!succeeded) return false;
     final newest = queue.landed[key];
-    if (newest == null || newest.number < number) {
+    if (newest == null || newest.number <= number) {
       queue.landed[key] = (number: number, value: value);
-    } else if (newest.number > number) {
+      queue.stale.remove(key);
+    } else {
       // This call outlived the wait and landed over a newer one.
       unawaited(_repair(queue, key));
     }
     return true;
   }
 
-  /// Re-applies the newest landed state of [key]. Runs in the queue, so it
-  /// reads that state when its turn comes; a repair overtaken in turn is
-  /// repaired again by [_apply]. A failed repair has no caller to report to,
-  /// so it is dropped: the late value stays, as it would have without one.
+  /// Re-applies the newest landed state of [key], up to [repairAttempts]
+  /// times. Runs in the queue, so it reads that state when its turn comes; a
+  /// repair overtaken in turn is repaired again by [_apply]. When every
+  /// attempt fails, [key] is left stale for the next write or delete to
+  /// re-apply, and the logger is warned: there is no caller to report to.
   Future<void> _repair(_OperationQueue queue, String key) async {
+    Object? lastError;
+    for (var attempt = 0; attempt < repairAttempts; attempt++) {
+      try {
+        final repaired = await _inOrder(() {
+          final newest = queue.landed[key]!;
+          return _apply(
+            queue,
+            key,
+            newest.number,
+            newest.value,
+            flushStale: false,
+          );
+        });
+        if (repaired) return;
+      } on Object catch (e) {
+        lastError = e;
+      }
+    }
+    queue.stale.add(key);
     try {
-      await _inOrder(() {
-        final newest = queue.landed[key]!;
-        return _apply(queue, key, newest.number, newest.value);
-      });
+      queue.logger?.warning(
+        'Secure token store: a late write or delete of $key could not be '
+        'undone; the key may hold an outdated value until the next token '
+        'write or delete',
+        context: {
+          'key': key,
+          'attempts': repairAttempts,
+          if (lastError != null) 'error': lastError.runtimeType.toString(),
+        },
+      );
     } on Object {
-      // See above.
+      // Nothing to report to: this runs unawaited.
     }
   }
 }
@@ -220,4 +284,10 @@ class _OperationQueue {
   /// The newest write or delete that has landed, per key: its number and
   /// the value it left, null for a delete.
   final Map<String, ({int number, String? value})> landed = {};
+
+  /// Keys whose repair failed: what is stored may be older than [landed].
+  final Set<String> stale = {};
+
+  /// Where a failed repair is reported; set by the first store given one.
+  LoggingService? logger;
 }
