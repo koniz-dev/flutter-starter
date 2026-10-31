@@ -82,7 +82,7 @@ class DemoAuthRemoteDataSource implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> logout() async {}
+  Future<void> logout({String? refreshToken}) async {}
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async {

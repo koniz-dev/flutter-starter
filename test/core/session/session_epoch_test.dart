@@ -41,7 +41,7 @@ class _AcceptingRemote implements AuthRemoteDataSource {
   ) async => const AuthResponseModel(user: _user, token: 'access');
 
   @override
-  Future<void> logout() async {}
+  Future<void> logout({String? refreshToken}) async {}
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async =>

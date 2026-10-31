@@ -141,7 +141,7 @@ class _ScriptedRemote implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> logout() async {
+  Future<void> logout({String? refreshToken}) async {
     logoutCalls++;
   }
 

@@ -31,7 +31,8 @@ class _Remote implements AuthRemoteDataSource {
   /// Offline: the remote logout fails at once, so the local teardown runs
   /// while the refresh's first write is still pending.
   @override
-  Future<void> logout() async => throw Exception('offline');
+  Future<void> logout({String? refreshToken}) async =>
+      throw Exception('offline');
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async =>
