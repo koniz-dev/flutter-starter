@@ -31,7 +31,7 @@ void main() {
     documents = await Directory.systemTemp.createTemp('production_logging');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_pathProvider, (call) async {
-          if (call.method == 'getApplicationDocumentsDirectory') {
+          if (call.method == 'getApplicationCacheDirectory') {
             return documents.path;
           }
           return null;

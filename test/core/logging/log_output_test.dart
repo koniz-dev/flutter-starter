@@ -12,7 +12,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   // Every test gets a real, empty documents directory. Without one,
-  // getApplicationDocumentsDirectory threw, init() swallowed it, no file was
+  // getApplicationCacheDirectory threw, init() swallowed it, no file was
   // ever written, and the assertions below sat behind `if
   // (logFiles.isNotEmpty)` guards that never ran.
   late Directory documentsDir;
@@ -20,7 +20,7 @@ void main() {
     documentsDir = await Directory.systemTemp.createTemp('log_output_docs');
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_pathProviderChannel, (call) async {
-          if (call.method == 'getApplicationDocumentsDirectory') {
+          if (call.method == 'getApplicationCacheDirectory') {
             return documentsDir.path;
           }
           return null;
@@ -1604,7 +1604,7 @@ void main() {
         tempRoot = await Directory.systemTemp.createTemp('log_output_test');
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(_pathProviderChannel, (call) async {
-              if (call.method == 'getApplicationDocumentsDirectory') {
+              if (call.method == 'getApplicationCacheDirectory') {
                 return tempRoot.path;
               }
               return null;
