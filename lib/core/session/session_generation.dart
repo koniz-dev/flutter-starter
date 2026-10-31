@@ -46,6 +46,14 @@ import 'dart:async';
 /// window this guards is an `await`, not a preemption, which is why an
 /// ordinary `int` is sufficient and no lock is involved.
 ///
+/// ## Teardowns
+///
+/// Ending a session is synchronous ([invalidate]); clearing what it stored is
+/// not. Each logout path registers its clearing with [trackTeardown] before
+/// it invalidates, and a sign-in waits on [teardownsSettled] before it calls
+/// the server, so a teardown still running cannot delete the credentials of
+/// the sign-in that followed it.
+///
 /// ## Observing a session change
 ///
 /// Every [invalidate] also notifies the listeners added with [addListener].
@@ -100,4 +108,35 @@ class SessionGeneration {
   ///
   /// False once anything has called [invalidate] since [generation] was read.
   bool isCurrent(int generation) => generation == _current;
+
+  final Set<Future<void>> _teardowns = {};
+
+  /// Records [teardown] - the clearing that follows an [invalidate] - until
+  /// it settles, so a sign-in can wait for it with [teardownsSettled].
+  ///
+  /// A teardown deletes whatever credentials are stored when its steps run.
+  /// A sign-in that stored its own while one was still running - a user
+  /// logout waiting on its server call, or `AuthInterceptor`'s forced logout
+  /// waiting on a slow keychain - had them deleted, after reporting success.
+  void trackTeardown(Future<void> teardown) {
+    final settled = teardown.then<void>((_) {}, onError: (Object _) {});
+    _teardowns.add(settled);
+    unawaited(settled.whenComplete(() => _teardowns.remove(settled)));
+  }
+
+  /// Waits until no tracked teardown is running, including one tracked while
+  /// waiting. False when that takes longer than [limit].
+  Future<bool> teardownsSettled(Duration limit) async {
+    final waited = Stopwatch()..start();
+    while (_teardowns.isNotEmpty) {
+      final left = limit - waited.elapsed;
+      if (left <= Duration.zero) return false;
+      try {
+        await Future.wait(_teardowns.toList()).timeout(left);
+      } on TimeoutException {
+        return false;
+      }
+    }
+    return true;
+  }
 }

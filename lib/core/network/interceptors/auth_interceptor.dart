@@ -1,3 +1,5 @@
+import 'dart:async';
+
 // Constructor preserves backward-compatible parameter ordering/signature.
 // ignore_for_file: always_put_required_named_parameters_first, lines_longer_than_80_chars
 
@@ -814,11 +816,22 @@ class AuthInterceptor extends Interceptor {
   /// another: cleanup must never stop a handler from being completed, and a
   /// failure - or absence - of one step must not skip the rest.
   ///
-  /// The generation is advanced *first*, synchronously, ahead of every
-  /// `await` below, so anything still in flight for the ending session - a
-  /// refresh, a token write - is already stale by the time it reaches its own
-  /// check, rather than racing the teardown it is about to undo.
-  Future<void> _logoutUser() async {
+  /// The teardown is registered with the [SessionGeneration] before anything
+  /// else, so a sign-in - even one a session listener starts - waits for it
+  /// rather than storing credentials these steps would then delete. The
+  /// generation is then advanced, synchronously, ahead of every `await` in
+  /// [_tearDownSession], so anything still in flight for the ending session -
+  /// a refresh, a token write - is already stale by the time it reaches its
+  /// own check, rather than racing the teardown it is about to undo.
+  Future<void> _logoutUser() {
+    final done = Completer<void>();
+    _sessionGeneration.trackTeardown(done.future);
+    final teardown = _tearDownSession();
+    done.complete(teardown);
+    return teardown;
+  }
+
+  Future<void> _tearDownSession() async {
     // Nothing in flight may write a credential for the session being ended.
     // Unguarded on purpose: it is a synchronous integer increment that cannot
     // throw, and a try/catch here would suggest it might.
