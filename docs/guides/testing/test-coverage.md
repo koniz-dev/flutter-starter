@@ -157,13 +157,9 @@ https://codecov.io/gh/[your-username]/[your-repo]
 
 ### PR Comments
 
-The workflow has a **Comment PR with coverage** step, but it is guarded by
-`if: github.event_name == 'pull_request'`
-([`coverage.yml:226`](../../../.github/workflows/coverage.yml)). With only
-`workflow_dispatch` and `schedule` enabled, that condition is never true and
-**no PR ever receives a coverage comment**. Enable the `pull_request` trigger
-first; then each PR gets a comment showing overall percentage, per-layer
-coverage, and a link to the detailed report.
+`coverage.yml` posts no PR comment. Its results go to the run's job summary
+and, if configured, to Codecov. Codecov can comment on pull requests itself
+once its GitHub app is installed.
 
 ## Coverage Enforcement
 

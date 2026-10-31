@@ -37,19 +37,9 @@ jobs:
     name: Coverage Analysis
     runs-on: ubuntu-latest
 
-    # `pull-requests: write` is needed by the "Comment coverage summary" step.
-    # It MUST live here (job level) or at workflow level - GitHub rejects
-    # `permissions:` on an individual step, and an unparseable workflow file
-    # fails at startup on every push while ignoring its own `on:` triggers.
-    # Job-level permissions replace the workflow-level block wholesale, so
-    # `contents: read` is restated rather than inherited.
-    permissions:
-      contents: read
-      pull-requests: write
-
-    # The coverage targets, in one place. The
-    # enforcement step, the job summary and the PR comment all read these, so
-    # the table can no longer promise a target the gate does not enforce.
+    # The coverage targets, in one place. The enforcement step and the job
+    # summary both read these, so the table can no longer promise a target the
+    # gate does not enforce.
     #
     # Domain is 100%: keep it there by writing namespace classes as
     # `abstract final class X { static const ... }` rather than with a private
@@ -250,49 +240,3 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
           # No token needed for public repositories
-      
-      - name: Generate coverage badge
-        id: badge
-        run: |
-          COVERAGE=${{ steps.metrics.outputs.overall }}
-          COLOR="red"
-          if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
-            COLOR="brightgreen"
-          elif (( $(echo "$COVERAGE >= 80" | bc -l) )); then
-            COLOR="green"
-          elif (( $(echo "$COVERAGE >= 70" | bc -l) )); then
-            COLOR="yellowgreen"
-          elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
-            COLOR="yellow"
-          fi
-          
-          echo "color=$COLOR" >> "$GITHUB_OUTPUT"
-      
-      # Runs only once a `pull_request:` trigger is enabled above - this
-      # workflow ships with schedule and workflow_dispatch only, so on this
-      # repository the job summary is where the table appears.
-      - name: Comment coverage summary
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
-        with:
-          recreate: true
-          message: |
-            ## 📊 Coverage Analysis
-            
-            ### Overall Coverage
-            **${{ steps.metrics.outputs.overall }}%** ${{ steps.metrics.outputs.overall >= env.COVERAGE_MIN_TOTAL && '✅' || '⚠️' }} (badge colour: ${{ steps.badge.outputs.color }})
-
-            ### Coverage by Layer
-            | Layer | Coverage | Target |
-            |-------|----------|--------|
-            | Domain | ${{ steps.layer_coverage.outputs.domain }}% | ${{ env.COVERAGE_MIN_DOMAIN }}% |
-            | Data | ${{ steps.layer_coverage.outputs.data }}% | ${{ env.COVERAGE_MIN_DATA }}% |
-            | Presentation | ${{ steps.layer_coverage.outputs.presentation }}% | ${{ env.COVERAGE_MIN_PRESENTATION }}% |
-            | Core | ${{ steps.layer_coverage.outputs.core }}% | ${{ env.COVERAGE_MIN_CORE }}% |
-            
-            📈 View detailed report: [Codecov](https://codecov.io/gh/${{ github.repository }})
-            
-            > **Note:** Codecov link only works if repository is public or Codecov token is configured.
-            
-            📥 Download HTML report from workflow artifacts.
-

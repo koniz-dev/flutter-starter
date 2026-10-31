@@ -538,7 +538,7 @@ Platform builds are **not** part of that PR gate by default; use [`.github/workf
 
 ### Coverage Enforcement
 
-Every PR's **Quality gate** fails when total line coverage drops below `COVERAGE_MIN_TOTAL` in [`ci.yml`](../../../.github/workflows/ci.yml). Layer and overall thresholds (e.g. overall **≥80%**) are enforced in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) via **manual** runs and a **weekly** schedule—not on every PR by default. That workflow can upload to Codecov and (if you enable pull-request triggers) comment on PRs.
+Every PR's **Quality gate** fails when total line coverage drops below `COVERAGE_MIN_TOTAL` in [`ci.yml`](../../../.github/workflows/ci.yml). Layer and overall thresholds (e.g. overall **≥80%**) are enforced in [`.github/workflows/coverage.yml`](../../../.github/workflows/coverage.yml) via **manual** runs and a **weekly** schedule—not on every PR by default. That workflow uploads to Codecov and writes its table to the run's job summary.
 
 For the full picture, see [Testing summary](testing-summary.md).
 
