@@ -72,6 +72,32 @@ void main() {
     }
   }, skip: skip);
 
+  test('a space-separated fingerprint is refused, as the app could never '
+      'match it', () {
+    expect(
+      _defines('production', List.filled(32, 'ab').join(' '), null),
+      startsWith('REFUSED: '),
+    );
+  }, skip: skip);
+
+  test('a fingerprint with a line break inside is refused', () {
+    expect(
+      _defines('production', 'garbage\n$fp', null),
+      startsWith('REFUSED: '),
+    );
+    expect(
+      _defines('production', '${'ab' * 16}\n${'ab' * 16}', null),
+      startsWith('REFUSED: '),
+    );
+  }, skip: skip);
+
+  test('an entry is trimmed at its ends, as the app trims it', () {
+    expect(
+      _defines('production', '  $fp\r\n', null),
+      contains('API_SSL_FINGERPRINTS'),
+    );
+  }, skip: skip);
+
   test('the opt-out values the app reads as false build without '
       'fingerprints', () {
     for (final value in ['false', 'FALSE', '0', 'no', 'off', ' off ']) {
