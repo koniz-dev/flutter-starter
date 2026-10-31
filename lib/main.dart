@@ -16,6 +16,7 @@ import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
 import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/routing/app_router.dart';
 import 'package:flutter_starter/core/startup/startup_failure_app.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
@@ -158,10 +159,13 @@ Future<void> _bootstrap({
       );
     }
     if (AppConfig.releaseWithoutHttps(releaseMode: releaseMode)) {
+      // Redacted, not cut short: userinfo and query secrets are removed, and
+      // cutting to 32 characters would hide the host.
+      final url = ApiLoggingInterceptor.redactUrl(AppConfig.baseUrl);
       throw StateError(
-        'BASE_URL "${_shown(AppConfig.baseUrl)}" is not https. Refusing to '
-        'start a ${AppConfig.environment} release that would send its '
-        'tokens in cleartext.',
+        'BASE_URL "$url" is not https. Refusing to start a '
+        '${AppConfig.environment} release that would send its tokens in '
+        'cleartext.',
       );
     }
     if (releaseMode && AppConfig.sslPinningFlagUnrecognised) {
@@ -275,6 +279,8 @@ class MyApp extends ConsumerWidget {
 }
 
 /// [value] cut to 32 characters, for a refusal shown on screen and in the
-/// logs: it is a config value, but one someone may have pasted a secret into.
+/// logs. Cutting keeps the message short; it does not remove a secret, which
+/// can sit in the first 32 characters (`http://user:pass@...`), so a URL is
+/// shown through `ApiLoggingInterceptor.redactUrl` instead.
 String _shown(String value) =>
     value.length <= 32 ? value : '${value.substring(0, 32)}...';
