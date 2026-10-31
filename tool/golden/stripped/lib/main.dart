@@ -157,6 +157,13 @@ Future<void> _bootstrap({
         'ENVIRONMENT=staging or production.',
       );
     }
+    if (AppConfig.releaseWithoutHttps(releaseMode: releaseMode)) {
+      throw StateError(
+        'BASE_URL "${_shown(AppConfig.baseUrl)}" is not https. Refusing to '
+        'start a ${AppConfig.environment} release that would send its '
+        'tokens in cleartext.',
+      );
+    }
     if (releaseMode && AppConfig.sslPinningFlagUnrecognised) {
       final flag = _shown(EnvConfig.get('ENABLE_SSL_PINNING'));
       throw StateError(

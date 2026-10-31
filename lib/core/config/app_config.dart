@@ -247,6 +247,18 @@ class AppConfig {
   static bool get sslPinningMisconfigured =>
       !kIsWeb && enableSslPinning && apiSslFingerprints.isEmpty;
 
+  /// Whether a staging or production release talks to a non-`https`
+  /// [baseUrl].
+  ///
+  /// Android and iOS block cleartext by default, but web, Windows, Linux and
+  /// macOS do not: an `http` BASE_URL sent bearer and refresh tokens in
+  /// cleartext, and pinning means nothing without TLS. `main()` refuses to
+  /// start on it. Development and debug or profile builds are not affected.
+  static bool releaseWithoutHttps({bool releaseMode = kReleaseMode}) =>
+      releaseMode &&
+      (isStaging || isProduction) &&
+      Uri.tryParse(baseUrl)?.scheme.toLowerCase() != 'https';
+
   /// Whether a release build requests pinning it cannot enforce.
   ///
   /// [sslPinningMisconfigured] in a release build: the assertion that flags it
