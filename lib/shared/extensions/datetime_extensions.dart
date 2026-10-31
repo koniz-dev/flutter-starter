@@ -7,20 +7,26 @@ extension DateTimeExtensions on DateTime {
   }
 
   /// Check if date is yesterday
-  bool get isYesterday {
-    final yesterday = DateTime.now().subtract(const Duration(days: 1));
-    return year == yesterday.year &&
-        month == yesterday.month &&
-        day == yesterday.day;
-  }
+  bool get isYesterday => isYesterdayRelativeTo(DateTime.now());
 
   /// Check if date is tomorrow
-  bool get isTomorrow {
-    final tomorrow = DateTime.now().add(const Duration(days: 1));
-    return year == tomorrow.year &&
-        month == tomorrow.month &&
-        day == tomorrow.day;
-  }
+  bool get isTomorrow => isTomorrowRelativeTo(DateTime.now());
+
+  /// Whether this date is the calendar day before [now]'s.
+  ///
+  /// Calendar arithmetic, not `now - 24h`: around a daylight-saving change a
+  /// day lasts 23 or 25 hours, and subtracting 24 hours landed on the wrong
+  /// date for an hour.
+  bool isYesterdayRelativeTo(DateTime now) =>
+      _isSameDay(DateTime(now.year, now.month, now.day - 1));
+
+  /// Whether this date is the calendar day after [now]'s; see
+  /// [isYesterdayRelativeTo].
+  bool isTomorrowRelativeTo(DateTime now) =>
+      _isSameDay(DateTime(now.year, now.month, now.day + 1));
+
+  bool _isSameDay(DateTime other) =>
+      year == other.year && month == other.month && day == other.day;
 
   /// Get start of day
   DateTime get startOfDay {
