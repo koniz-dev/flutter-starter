@@ -39,7 +39,7 @@ class _RejectingRemote implements AuthRemoteDataSource {
   ) async => throw _rejected;
 
   @override
-  Future<void> logout() async {}
+  Future<void> logout({String? refreshToken}) async {}
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async =>

@@ -169,9 +169,19 @@ class AuthRepositoryImpl implements AuthRepository {
     // `on Object`: the remote call can throw an Error as well as an Exception
     // (a missing platform plugin, a decode failure), and neither may skip the
     // teardown below.
+    // Read before the teardown below deletes it, so the server can revoke
+    // it. A read that fails still signs out: the logout must not depend on
+    // reaching the token.
+    String? refreshToken;
+    try {
+      refreshToken = await localDataSource.getRefreshToken();
+    } on Object {
+      refreshToken = null;
+    }
+
     Object? remoteError;
     try {
-      await remoteDataSource.logout();
+      await remoteDataSource.logout(refreshToken: refreshToken);
     } on Object catch (e) {
       remoteError = e;
     }

@@ -16,7 +16,7 @@ abstract class AuthRemoteDataSource {
   );
 
   /// Logs out the current user
-  Future<void> logout();
+  Future<void> logout({String? refreshToken});
 
   /// Refreshes the authentication token using [refreshToken]
   Future<AuthResponseModel> refreshToken(String refreshToken);
@@ -63,10 +63,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return AuthResponseModel.fromJson(data);
   }
 
+  /// Posts [refreshToken] as `refresh_token` - the same field the refresh
+  /// call sends - so the server can revoke it. Without it the server could
+  /// not tell which refresh token to revoke, and one copied earlier stayed
+  /// valid after sign-out. `ApiLoggingInterceptor` redacts the field.
   @override
-  Future<void> logout() async {
+  Future<void> logout({String? refreshToken}) async {
     // Error interceptor handles DioException conversion automatically
-    await _post(ApiEndpoints.logout, null);
+    await _post(
+      ApiEndpoints.logout,
+      refreshToken == null
+          ? null
+          : <String, dynamic>{'refresh_token': refreshToken},
+    );
   }
 
   @override

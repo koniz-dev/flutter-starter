@@ -47,7 +47,7 @@ class _BodyRemoteDataSource implements AuthRemoteDataSource {
       throw UnimplementedError();
 
   @override
-  Future<void> logout() async {}
+  Future<void> logout({String? refreshToken}) async {}
 }
 
 /// The issue's body: a numeric user id, as many backends send.

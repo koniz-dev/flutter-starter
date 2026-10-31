@@ -24,7 +24,7 @@ const _secureChannel = MethodChannel(
 
 class _NoopRemote implements AuthRemoteDataSource {
   @override
-  Future<void> logout() async {}
+  Future<void> logout({String? refreshToken}) async {}
 
   @override
   dynamic noSuchMethod(Invocation invocation) =>

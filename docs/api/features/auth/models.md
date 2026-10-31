@@ -153,7 +153,7 @@ API), so login is `<BASE_URL>/v1/auth/login`:
 | Login | `POST /auth/login` | `email`, `password` | `user`, `token`, `refresh_token` |
 | Register | `POST /auth/register` | `email`, `password`, `name` | `user`, `token`, `refresh_token` |
 | Refresh | `POST /auth/refresh` | `refresh_token` | `user`, `token`, `refresh_token` |
-| Logout | `POST /auth/logout` | none | ignored |
+| Logout | `POST /auth/logout` | `refresh_token` (the stored one, so the server can revoke it; no body when none is stored) | ignored |
 
 The `user` object is `id`, `email`, and the optional `name` and `avatar_url`.
 `refresh_token` is optional in a response. When it is missing, no refresh token

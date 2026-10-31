@@ -141,7 +141,7 @@ class _FailingRemoteDataSource implements AuthRemoteDataSource {
   int logoutCalls = 0;
 
   @override
-  Future<void> logout() async {
+  Future<void> logout({String? refreshToken}) async {
     logoutCalls++;
     // Rethrowing whatever the caller supplied is the point: the failure shapes
     // under test include an Error, which `only_throw_errors` does not model.
@@ -357,7 +357,7 @@ void main() {
 
 class _SucceedingRemoteDataSource implements AuthRemoteDataSource {
   @override
-  Future<void> logout() async {}
+  Future<void> logout({String? refreshToken}) async {}
 
   @override
   Future<AuthResponseModel> login(String email, String password) async =>
