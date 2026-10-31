@@ -2,27 +2,15 @@ import 'dart:async';
 
 /// Identifies which sign-in the credentials on this device belong to.
 ///
-/// A token refresh is a read-modify-write that spans a full network round
-/// trip, and the thing it writes back - the access and refresh tokens - is
-/// shared mutable state that a logout, a forced logout, or a fresh sign-in can
-/// replace while that round trip is still open. Nothing in the refresh path
-/// used to notice, so a logout that landed mid-refresh was silently undone:
-/// the response came back and re-persisted a live credential pair onto a
-/// device the user had just signed out of.
+/// A token refresh spans a network round trip, and a logout, a forced logout
+/// or a fresh sign-in can replace the credentials meanwhile; its response must
+/// then not be persisted. A caller reads [current] **before** the round trip
+/// and checks [isCurrent] **immediately before** each write; any [invalidate]
+/// in between makes the check fail and the write is dropped.
 ///
-/// This is the marker that makes such a write detectable. A caller reads
-/// [current] **before** it starts the round trip and checks [isCurrent]
-/// **immediately before** it persists anything. Any call to [invalidate] in
-/// between makes that check fail, and the write is dropped.
-///
-/// ## Why a counter rather than a `terminated` flag
-///
-/// A boolean answers "is there a session right now", which is the wrong
-/// question. Signing back in while an old refresh is still in flight sets it
-/// false again and the stale response lands on top of the **new** user's
-/// tokens. A monotonically increasing counter answers the right question -
-/// "is this still the same session I started under" - and a generation that
-/// has been left behind can never become current again.
+/// A counter, not a `terminated` flag: a flag would read "signed in" again
+/// after a new sign-in, and an old refresh would land on the new user's
+/// tokens. A generation left behind never becomes current again.
 ///
 /// ## What must invalidate
 ///
@@ -34,17 +22,14 @@ import 'dart:async';
 /// - `AuthRepositoryImpl.login()` / `register()` - a *different* credential
 ///   set is about to be written, and an older refresh must not overwrite it.
 ///
-/// Note what is deliberately absent: a stale refresh **skips** its writes, it
-/// does not undo them. Clearing the store on detection would destroy the
-/// tokens of a session that started during the refresh, which is the very case
-/// the counter exists to protect.
+/// A stale refresh **skips** its writes and clears nothing: the store may
+/// already hold the session that replaced it.
 ///
 /// ## Threading
 ///
-/// Dart is single-threaded per isolate, so [current], [invalidate] and
-/// [isCurrent] are all synchronous and cannot interleave with each other. The
-/// window this guards is an `await`, not a preemption, which is why an
-/// ordinary `int` is sufficient and no lock is involved.
+/// [current], [invalidate] and [isCurrent] are synchronous and cannot
+/// interleave; the window this guards is an `await`, so a plain `int`
+/// suffices.
 ///
 /// ## Teardowns
 ///
@@ -61,10 +46,9 @@ import 'dart:async';
 /// it - learns the user changed and resets.
 /// Most callers should listen through `sessionEpochProvider` rather than here.
 ///
-/// A plain listener list rather than a `ChangeNotifier`, on purpose: there is
-/// no disposed state. A forced logout can land after the provider container
-/// that owned this instance is gone, and it must then notify nobody
-/// rather than trip a use-after-dispose assertion.
+/// A plain listener list rather than a `ChangeNotifier`: a forced logout can
+/// land after the owning provider container is gone, and must then notify
+/// nobody instead of tripping a use-after-dispose assertion.
 class SessionGeneration {
   int _current = 0;
   final List<void Function()> _listeners = [];
@@ -114,10 +98,8 @@ class SessionGeneration {
   /// Records [teardown] - the clearing that follows an [invalidate] - until
   /// it settles, so a sign-in can wait for it with [teardownsSettled].
   ///
-  /// A teardown deletes whatever credentials are stored when its steps run.
-  /// A sign-in that stored its own while one was still running - a user
-  /// logout waiting on its server call, or `AuthInterceptor`'s forced logout
-  /// waiting on a slow keychain - had them deleted, after reporting success.
+  /// A teardown deletes whatever credentials are stored when its steps run,
+  /// so a sign-in must not store its own while one is still running.
   void trackTeardown(Future<void> teardown) {
     final settled = teardown.then<void>((_) {}, onError: (Object _) {});
     _teardowns.add(settled);
