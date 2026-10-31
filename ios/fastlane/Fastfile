@@ -34,7 +34,7 @@ platform :ios do
   desc "Get version from pubspec.yaml"
   lane :get_version do
     pubspec = File.read("#{REPO_ROOT}/pubspec.yaml")
-    version_match = pubspec.match(/^version:\s*([\d.]+)(?:\+(\d+))?/)
+    version_match = pubspec.match(/^version:\s*([\d.]+)(?:\+(\d+))?\s*(?:#.*)?$/)
     UI.user_error!("Could not parse version from pubspec.yaml") unless version_match
 
     version_name = version_match[1]
@@ -134,7 +134,7 @@ platform :ios do
 
   desc "Upload to App Store Connect"
   lane :upload_appstore do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
     # `options[:x] || true` is always true - fetch with a default is the only way
     # to let a caller pass false.
@@ -163,7 +163,7 @@ platform :ios do
 
   desc "Upload to TestFlight"
   lane :upload_testflight do |options|
-    environment = options[:environment] || "staging"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
     groups = options[:groups] || ["Internal Testers"] # TestFlight groups
 
@@ -188,7 +188,7 @@ platform :ios do
 
   desc "Upload to App Store Connect and submit for review"
   lane :release do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     # Build and upload

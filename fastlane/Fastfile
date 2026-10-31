@@ -34,7 +34,7 @@ platform :android do
   desc "Get version from pubspec.yaml"
   lane :get_version do
     pubspec = File.read("../pubspec.yaml")
-    version_match = pubspec.match(/^version:\s*([\d.]+)(?:\+(\d+))?/)
+    version_match = pubspec.match(/^version:\s*([\d.]+)(?:\+(\d+))?\s*(?:#.*)?$/)
     UI.user_error!("Could not parse version from pubspec.yaml") unless version_match
 
     version_name = version_match[1]
@@ -132,7 +132,7 @@ platform :android do
 
   desc "Upload to Google Play Store (Internal track)"
   lane :upload_internal do |options|
-    environment = options[:environment] || "staging"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
     track = options[:track] || "internal"
 
@@ -161,7 +161,7 @@ platform :android do
 
   desc "Upload to Google Play Store (Alpha track)"
   lane :upload_alpha do |options|
-    environment = options[:environment] || "staging"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
 
     # Build and upload to alpha
@@ -184,7 +184,7 @@ platform :android do
 
   desc "Upload to Google Play Store (Beta track)"
   lane :upload_beta do |options|
-    environment = options[:environment] || "staging"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
 
     # Build and upload to beta
@@ -207,7 +207,7 @@ platform :android do
 
   desc "Upload to Google Play Store (Production track)"
   lane :upload_production do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     # Build and upload to production
@@ -231,7 +231,7 @@ platform :android do
 
   desc "Upload to Google Play Store with automatic track selection"
   lane :upload do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
     track = options[:track] || (environment == "production" ? "production" : "internal")
 
