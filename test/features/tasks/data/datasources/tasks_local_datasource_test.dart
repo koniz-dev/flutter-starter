@@ -70,17 +70,16 @@ void main() {
         expect(result, isEmpty);
       });
 
-      test('should return empty list when JSON decode fails', () async {
-        // Arrange
+      // Read as empty, an undecodable list was overwritten by the next save.
+      test('should throw CacheException when JSON decode fails', () async {
         when(
           () => mockStorageService.getString(any()),
         ).thenAnswer((_) async => 'invalid-json');
 
-        // Act
-        final result = await dataSource.getAllTasks();
-
-        // Assert
-        expect(result, isEmpty);
+        await expectLater(
+          dataSource.getAllTasks(),
+          throwsA(isA<CacheException>()),
+        );
       });
 
       test(
