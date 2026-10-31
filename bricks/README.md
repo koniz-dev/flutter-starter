@@ -28,10 +28,10 @@ Then `flutter pub get && flutter analyze && flutter test`.
 
 You can remove the whole **`bricks/`** folder and **`mason.yaml`** after you finish renaming manually (see [Fork and customize](../docs/guides/onboarding/fork-and-customize.md)).
 Use `dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks`, which also drops the docs that link into them. <!-- strip:strip-tool line -->
-That shrinks the tree; CI still formats any remaining `bricks/` path only if the folder exists.
+That shrinks the tree.
 
 ## Developing or changing a brick
 
-- Hook code lives under `bricks/<name>/hooks/` (a small Dart package).
-- After editing hooks, run `dart pub get` inside `bricks/flutter_starter_setup/hooks/` so analysis and Mason resolve dependencies locally.
+- Hook code lives under `bricks/<name>/hooks/` (a small Dart package) in both bricks: `pre_gen.dart` validates the input through `input_rules.dart` before anything is written, and `post_gen.dart` runs after generation.
+- After editing any file under a brick's `hooks/` (`pre_gen.dart`, `post_gen.dart`, `input_rules.dart` or `pubspec.yaml`), run `dart pub get` inside that brick's `hooks/` folder - `bricks/flutter_starter_setup/hooks/` or `bricks/feature_clean/hooks/` - so analysis and Mason resolve dependencies locally.
 - `brick.yaml` `environment.mason` and `hooks/pubspec.yaml` should stay aligned with the root `pubspec.yaml` **`mason`** dev_dependency (currently the stable `^0.1.x` line from [pub.dev](https://pub.dev/packages/mason)).

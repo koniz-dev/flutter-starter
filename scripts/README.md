@@ -8,7 +8,7 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 |--------|---------|
 | [`format_dart.sh`](dev/format_dart.sh) | Format only `lib`, `test`, `integration_test`, `tool`, `examples` (avoids scanning `build/`). Use `--check` for CI-style verification, or `--print-paths` to read the scope. Not `bricks/`: it holds Mason templates whose mustache is not valid Dart, so `dart format` exits 65 on it. |
 | [`audit_template.sh`](dev/audit_template.sh) | Full non-platform gate: env asset guard, generated code up to date (`AUDIT_SKIP_CODEGEN=1` skips it), format check, `flutter analyze`, `flutter test`. The script header lists what the CI Quality gate adds. |
-| [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Copy `.githooks/*` â†’ `.git/hooks/` (single source of truth in repo). |
+| [`setup_git_hooks.sh`](dev/setup_git_hooks.sh) | Point this repository's `core.hooksPath` at `.githooks/`, so the committed hooks run in place (nothing is copied into `.git/hooks/`). Refuses, and says so, when `core.hooksPath` already points elsewhere. |
 | [`setup_branding.sh`](dev/setup_branding.sh) | Splash / launcher assets (see root README). |
 | [`create_feature.sh`](dev/create_feature.sh) | Scaffold a feature slice under `lib/features/<name>/` plus its mirrored test under `test/features/<name>/`. Output passes `flutter analyze` and `dart format --set-exit-if-changed` as generated. |
 | [`create_feature.ps1`](dev/create_feature.ps1) | Windows equivalent of `create_feature.sh`. Writes byte-identical files (LF, UTF-8 without BOM); the parity is checked by the `scaffold-parity` job in [`scripts-smoke.yml`](../.github/workflows/scripts-smoke.yml). |
@@ -33,6 +33,8 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 | [`calculate_layer_coverage.sh`](test/calculate_layer_coverage.sh) | Layer breakdown (used by CI). |
 | [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests. |
 | [`release_scripts_test.sh`](test/release_scripts_test.sh) | Fixture-repo tests for `generate_changelog.sh` and `release.sh`. Needs no Flutter. Run in CI on Ubuntu and macOS by [`release-scripts.yml`](../.github/workflows/release-scripts.yml) - automatically only in the template repository, by hand (Actions tab) in a project created from it. |
+| [`format_check_test.sh`](test/format_check_test.sh) | Tests the format check the hooks and CI share. |
+| [`test_coverage.ps1`](test/test_coverage.ps1) | `test_coverage.sh` for Windows PowerShell. |
 | [`pre_commit_hook_test.sh`](test/pre_commit_hook_test.sh) | Runs the real `.githooks/pre-commit` in a fresh local clone: before `flutter pub get` it must refuse and rewrite nothing; after, pass a clean tree, ignore a format violation that is only in the working copy, and fail one that is staged. Needs Flutter. Run in CI by [`git-hooks.yml`](../.github/workflows/git-hooks.yml) - automatically only in the template repository, by hand (Actions tab) in a project created from it. |
 
 ## Conventions

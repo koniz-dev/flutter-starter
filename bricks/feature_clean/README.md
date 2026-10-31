@@ -41,8 +41,11 @@ The generated slice passes this repository's own gates as-is:
 `flutter analyze` reports no issues, `dart format --set-exit-if-changed` is
 clean, and the generated test compiles and passes.
 
-Three things keep that true:
+Four things keep that true:
 
+- A `pre_gen` hook (`hooks/pre_gen.dart`) refuses an invalid `feature_name`
+  through `hooks/input_rules.dart` before anything is written. After changing
+  any file under `hooks/`, run `dart pub get` in `bricks/feature_clean/hooks/`.
 - A `post_gen` hook (`hooks/post_gen.dart`) runs
   `dart fix --apply --code=directives_ordering` and `dart format` on the
   generated folders. The templates write imports in the order sorted for

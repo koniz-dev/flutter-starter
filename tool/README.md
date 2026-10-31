@@ -57,16 +57,17 @@ dart run tool/check_docs.dart --dart-defines  # --dart-define keys only
 dart run tool/check_docs.dart --test-paths  # flutter test paths only
 ```
 
-Exits 1 and prints `file:line` for every problem. CI runs it as **Docs check**
-(`.github/workflows/docs-check.yml`) on any PR touching markdown - exactly the
-set of changes the Quality gate treats as inert and skips. The signature and
-symbol checks additionally run under `flutter test`
-(`test/docs/doc_signatures_test.dart`, `test/docs/doc_symbols_test.dart`), as
-does the `.env` rule (`test/docs/doc_env_runs_test.dart`, with fixtures),
-because a constructor gaining a parameter, or an identifier being deleted from
-`lib/`, is a `lib/` change that Docs check never sees. It is deliberately
-**not** part of `scripts/dev/audit_template.sh`: that script gates code changes,
-and a broken doc link should not block an unrelated `lib/` fix.
+Exits 1 and prints `file:line` for every problem. CI runs it whole as
+**Docs check** (`.github/workflows/docs-check.yml`) on any PR touching
+markdown. Every check except the emoji one also runs under `flutter test` -
+links and anchors (`test/docs/doc_links_test.dart`), signatures
+(`doc_signatures_test.dart`), symbols (`doc_symbols_test.dart`), `.env` runs
+(`doc_env_runs_test.dart`), `--dart-define` keys (`doc_dart_defines_test.dart`)
+and test paths (`doc_test_paths_test.dart`) - so `scripts/dev/audit_template.sh`
+and the **Quality gate** fail on them too, a markdown-only PR included (the
+gate runs the tests that read markdown). That is deliberate: a constructor
+gaining a parameter, or an identifier deleted from `lib/`, is a `lib/` change
+Docs check never sees. Only the emoji check is Docs check's alone.
 
 ### The `symbol:` directive
 

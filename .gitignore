@@ -52,13 +52,12 @@ app.*.map.json
 /android/app/release
 
 # Environment configuration files
-# .env.example should be committed as a template
+# Every .env file is local configuration and may hold secrets - per-
+# environment build inputs such as --dart-define-from-file=.env.production,
+# .env.dev, .env.test - except .env.example, the committed template.
 .env
-.env.local
-.env.*.local
-# Per-environment build inputs, e.g. --dart-define-from-file=.env.production
-.env.production
-.env.staging
+.env.*
+!.env.example
 
 # fastlane run artifacts (both fastlane/ and ios/fastlane/). fastlane also
 # regenerates its own README.md on every run; that one is not tracked either.
