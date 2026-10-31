@@ -67,10 +67,8 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
 
   /// How many [login] and [register] calls are still waiting for a result.
   ///
-  /// A sign-in that starts during a forced logout waits for that teardown,
-  /// whose last step is [clearSession]; resetting `isLoading` there stopped
-  /// the spinner of a sign-in still in flight, and the button took a second
-  /// tap that cancelled the first.
+  /// [clearSession] keeps `isLoading` while one is: a sign-in that starts
+  /// during a forced logout waits for it, and its spinner must stay up.
   int _signInsInFlight = 0;
 
   /// Attempts to login with the given [email] and [password]
@@ -159,12 +157,10 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
 
   /// Logs out the current user.
   ///
-  /// The session is dropped on **both** paths. `AuthRepository.logout()` tears
-  /// the local session down unconditionally - tokens and cached user - and only
-  /// then reports whether the server was told, so keeping `state.user` on the
-  /// failure path left the app showing an authenticated UI with no credentials
-  /// behind it and no way back to `/login`. The failure message is still
-  /// surfaced, so the user learns the server was not reached.
+  /// The session is dropped on **both** paths: `AuthRepository.logout()`
+  /// tears the local session down unconditionally, so a failure means the
+  /// server was not told, not that the user is still signed in. The failure
+  /// message is still surfaced.
   @override
   Future<void> logout() async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
@@ -185,28 +181,20 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// Drops the in-memory session, without touching persisted state.
   ///
   /// The counterpart to [logout] for a session the user did not end: the
-  /// transport already cleared the tokens, the cached user and the response
-  /// cache before calling this, so repeating that work here - or calling the
-  /// logout endpoint, which would post credentials that no longer exist -
-  /// would be wrong.
+  /// transport has already cleared the stored credentials and calls no
+  /// logout endpoint.
   ///
-  /// Resets to the initial state rather than only nulling `user`: a forced
-  /// logout can land mid-flight, and leaving `isLoading` true would spin a
-  /// screen forever over a session that no longer exists. The one exception
-  /// is a sign-in still in flight: it clears `isLoading` itself when its
-  /// result arrives, so its spinner stays up. `error` is left null on purpose
-  /// - the caller's own failed request surfaces its error, and the router is
-  /// about to replace this screen with `/login` regardless.
+  /// Resets the whole state, so no screen spins over an ended session -
+  /// except `isLoading` while a sign-in is in flight, which clears it itself.
+  /// `error` stays null: the failed request reports its own error.
   void clearSession() {
     state = AuthState(isLoading: _signInsInFlight > 0);
   }
 
   /// Drops the last sign-in or registration error.
   ///
-  /// Both auth screens render this one keepAlive state, so an error raised on
-  /// the login screen was still showing when the user moved to registration,
-  /// and the other way round. Each screen
-  /// clears it as the user follows its link to the other one.
+  /// Both auth screens render this one keepAlive state, so each screen clears
+  /// it as the user follows its link to the other one.
   ///
   /// Not cleared when a screen merely appears: a failed logout lands on the
   /// login screen with its error on purpose, and that must stay.
