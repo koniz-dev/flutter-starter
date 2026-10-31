@@ -1020,6 +1020,11 @@ void main() {
         () => storageService.getStringList(any()),
       ).thenAnswer((_) async => null);
       when(() => storageService.remove(any())).thenAnswer((_) async => true);
+      // The cache stamps its key-rule version with the first entry.
+      when(
+        () => storageService.setInt(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(() => storageService.getInt(any())).thenAnswer((_) async => null);
     });
 
     ApiClient buildClient(_RecordingAdapter adapter) {
@@ -1147,6 +1152,11 @@ void main() {
         () => storageService.getStringList(any()),
       ).thenAnswer((_) async => null);
       when(() => storageService.remove(any())).thenAnswer((_) async => true);
+      // The cache stamps its key-rule version with the first entry.
+      when(
+        () => storageService.setInt(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(() => storageService.getInt(any())).thenAnswer((_) async => null);
     });
 
     ApiClient buildClient(_RecordingAdapter adapter) {
@@ -1352,6 +1362,11 @@ void main() {
         () => storageService.getStringList(any()),
       ).thenAnswer((_) async => null);
       when(() => storageService.remove(any())).thenAnswer((_) async => true);
+      // The cache stamps its key-rule version with the first entry.
+      when(
+        () => storageService.setInt(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(() => storageService.getInt(any())).thenAnswer((_) async => null);
     });
 
     ApiClient buildClient(ITokenStore tokenStore, _RecordingAdapter adapter) {

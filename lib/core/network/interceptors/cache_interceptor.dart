@@ -186,8 +186,15 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
   /// the index is a verbatim-URL key from before keys were hashed.
   static final RegExp _hashedKey = RegExp(r'^http_cache_[0-9a-f]{64}$');
 
-  /// The one-off removal of verbatim-URL entries; see [_purgeLegacyEntries].
+  /// The one-off removal of verbatim-URL entries and of entries cached under
+  /// an older key rule; see [_purgeLegacyEntries].
   Future<void>? _legacyPurge;
+
+  /// The [ApiLoggingInterceptor.sensitiveKeyRuleVersion] the stored entries
+  /// were cached under, written with the first entry and removed by
+  /// [clearCache]. Outside the `http_cache_` prefix: it is bookkeeping, not a
+  /// cached response.
+  static const String _ruleVersionKey = 'cache_rule_version';
 
   /// `RequestOptions.extra` key carrying a stale entry while its refetch is
   /// in flight; see [onError].
@@ -388,28 +395,52 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
       '$_cacheKeyPrefix'
       '${sha256.convert(utf8.encode(options.uri.toString()))}';
 
-  /// Removes every entry still stored under a verbatim-URL key, once per
-  /// interceptor. Those keys can hold a query-string secret, and nothing would
-  /// otherwise ever read or evict them again.
+  /// Removes, once per interceptor, every entry no request would read or
+  /// evict again:
+  ///
+  /// - entries stored under a verbatim-URL key, which can hold a query-string
+  ///   secret;
+  /// - every entry cached under an older sensitive-key rule
+  ///   ([ApiLoggingInterceptor.sensitiveKeyRuleVersion]): a key that joined
+  ///   the rule turns its URLs into secret queries, which bypass the cache,
+  ///   so their old responses would stay in plaintext storage for good. The
+  ///   URL is hashed, so which entries those are cannot be told; the cache is
+  ///   disposable, and all of it goes.
+  ///
+  /// A purge that fails is forgotten, so the next request tries again.
   Future<void> _purgeLegacyEntries() {
     return _legacyPurge ??=
         _serializedIndexUpdate(() async {
           final index = await _readIndex();
-          final legacy = index
-              .where((key) => !_hashedKey.hasMatch(key))
-              .toList();
-          if (legacy.isEmpty) return;
-          for (final cacheKey in legacy) {
+          // Nothing cached, nothing to judge: the stamp is written with the
+          // first entry (_addToIndex).
+          if (index.isEmpty) return;
+          final storedVersion = await _storageService.getInt(_ruleVersionKey);
+          final ruleChanged =
+              storedVersion != ApiLoggingInterceptor.sensitiveKeyRuleVersion;
+          final stale = ruleChanged
+              ? index
+              : index.where((key) => !_hashedKey.hasMatch(key)).toList();
+          for (final cacheKey in stale) {
             await _storageService.remove(cacheKey);
             await _storageService.remove('$_timestampKeyPrefix$cacheKey');
           }
-          final kept = index.where(_hashedKey.hasMatch).toList();
-          if (kept.isEmpty) {
-            await _storageService.remove(_indexKey);
-          } else {
-            await _storageService.setStringList(_indexKey, kept);
+          if (stale.isNotEmpty) {
+            final kept = index.where((key) => !stale.contains(key)).toList();
+            if (kept.isEmpty) {
+              await _storageService.remove(_indexKey);
+            } else {
+              await _storageService.setStringList(_indexKey, kept);
+            }
+          }
+          if (ruleChanged) {
+            await _storageService.setInt(
+              _ruleVersionKey,
+              ApiLoggingInterceptor.sensitiveKeyRuleVersion,
+            );
           }
         }).catchError((Object e) {
+          _legacyPurge = null;
           if (AppConfig.isDebugMode) {
             debugPrint('Cache legacy purge error: $e');
           }
@@ -535,6 +566,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     return _serializedIndexUpdate(() async {
       final index = await _readIndex();
       if (index.contains(cacheKey)) return;
+      if (index.isEmpty) {
+        // The rule this entry was cached under; see _purgeLegacyEntries.
+        await _storageService.setInt(
+          _ruleVersionKey,
+          ApiLoggingInterceptor.sensitiveKeyRuleVersion,
+        );
+      }
       await _storageService.setStringList(_indexKey, [...index, cacheKey]);
     });
   }
@@ -569,6 +607,7 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
           await _storageService.remove('$_timestampKeyPrefix$cacheKey');
         }
         await _storageService.remove(_indexKey);
+        await _storageService.remove(_ruleVersionKey);
       });
     } on Exception catch (e) {
       if (AppConfig.isDebugMode) {

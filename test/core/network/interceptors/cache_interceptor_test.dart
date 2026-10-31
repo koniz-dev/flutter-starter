@@ -93,6 +93,12 @@ void main() {
         () => mockStorageService.setStringList(any(), any()),
       ).thenAnswer((_) async => true);
       when(
+        () => mockStorageService.setInt(any(), any()),
+      ).thenAnswer((_) async => true);
+      when(
+        () => mockStorageService.getInt(any()),
+      ).thenAnswer((_) async => null);
+      when(
         () => mockStorageService.remove(any()),
       ).thenAnswer((_) async => true);
     });

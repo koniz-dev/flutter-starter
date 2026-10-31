@@ -25,6 +25,7 @@
 // seven hours away computes for an entry written seconds earlier as 7:00:00.
 
 import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
@@ -181,6 +182,9 @@ void main() {
     storage.values[_cacheKey] = _body;
     storage.values[_timestampKey] = timestamp;
     storage.values[_indexKey] = <String>[_cacheKey];
+    // Cached under the current key rule, so the rule-change purge keeps it.
+    storage.values['cache_rule_version'] =
+        ApiLoggingInterceptor.sensitiveKeyRuleVersion;
   }
 
   Future<bool> readIsServed(CacheInterceptor interceptor) async {

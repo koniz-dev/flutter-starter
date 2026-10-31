@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show HttpException, SocketException;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
@@ -211,6 +212,24 @@ class ApiLoggingInterceptor extends Interceptor {
     'access',
     'refresh',
   };
+
+  /// The version of the key rules below ([_sensitiveKeyFragments],
+  /// [_sensitiveKeysExact], [_sensitiveQueryOnlyKeys]).
+  ///
+  /// `CacheInterceptor` stores it, and drops every cached response when it
+  /// changes: a response cached before a key joined the rules was cached for
+  /// a URL that now names a secret, and is never read or evicted again.
+  /// Bump it with every change to those sets;
+  /// `sensitive_key_rule_version_test.dart` fails until you do.
+  static const int sensitiveKeyRuleVersion = 1;
+
+  /// The key rules as one comparable string, for the version test.
+  @visibleForTesting
+  static String get debugKeyRuleFingerprint => [
+    (_sensitiveKeyFragments.toList()..sort()).join(','),
+    (_sensitiveKeysExact.toList()..sort()).join(','),
+    (_sensitiveQueryOnlyKeys.toList()..sort()).join(','),
+  ].join('|');
 
   /// Keys that name a secret in a query string only, matched exactly.
   ///
