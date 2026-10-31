@@ -44,7 +44,7 @@ class PerformanceInterceptor extends Interceptor {
 
     // The path as the logs show it: `get('/verify?token=X')` is a normal
     // call, and a trace attribute leaves the device just like a log line.
-    final path = ApiLoggingInterceptor.redactPath(options.path);
+    final path = ApiLoggingInterceptor.redactUrl(options.path);
 
     // Store trace in request options for use in onResponse/onError
     final trace = _performanceService.startHttpTrace(options.method, path);

@@ -53,12 +53,24 @@ void main() {
     }
   });
 
+  test('an absolute URL loses its userinfo in the trace', () {
+    PerformanceInterceptor(performanceService: service).onRequest(
+      RequestOptions(path: 'https://usrX:pwY@api.example.com/x'),
+      _Handler(),
+    );
+
+    final recorded = [traceNames.single, ...attributes.values].join(' ');
+    expect(recorded, isNot(contains('usrX')));
+    expect(recorded, isNot(contains('pwY')));
+    expect(recorded, contains('api.example.com'));
+  });
+
   test('the recorded path is the one the logs show', () {
     PerformanceInterceptor(
       performanceService: service,
     ).onRequest(RequestOptions(path: _path), _Handler());
 
-    final logged = ApiLoggingInterceptor.redactPath(_path);
+    final logged = ApiLoggingInterceptor.redactUrl(_path);
     expect(attributes[PerformanceAttributes.httpPath], logged);
     expect(traceNames.single, logged);
     // A parameter that names no secret is kept, as in the logs.
@@ -73,7 +85,7 @@ void main() {
 
     expect(
       template,
-      contains("putAttribute('http_path', ApiLoggingInterceptor.redactPath("),
+      contains("putAttribute('http_path', ApiLoggingInterceptor.redactUrl("),
     );
     expect(template, isNot(contains("putAttribute('http_path', path)")));
   });
