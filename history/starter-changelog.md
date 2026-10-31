@@ -141,6 +141,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it, and a sign-out's clear never writes a token. `tokenStoreProvider`
   passes the app logger to the store.
 
+- Log redaction and the HTTP cache's secret-query bypass treat more names
+  as secrets: `access_key`, `app_key`, `client_key`, `hmac`, the Azure
+  `subscription-key` and `x-functions-key`, `session_key`, `auth_key`,
+  `master_key`, `license_key`, and exactly `bearer`, `sign`, `key` (Google
+  APIs) and `access`/`refresh` (Django REST Framework SimpleJWT). `code` is a
+  secret in a query string only (an OAuth code, an Azure Functions key); a
+  body's `{"code": 404}` stays readable. A GET carrying any of these as a
+  query parameter is no longer cached.
+- `RawWebSocketClientImpl` refuses a realtime URL that is not `wss://` in a
+  staging or production release, as `main()` refuses a non-`https`
+  `BASE_URL`; a refused URL leaves a live connection alone.
+- `scripts/ci/ssl_pinning_defines.sh` and the fastlane pinning helper
+  validate `API_SSL_FINGERPRINTS` entries the way the app parses them: a
+  space-separated fingerprint or one with a line break inside is refused
+  instead of building a release that refuses every connection.
+
 ### Fixed
 
 - **`LoggingService` writes logs in profile and release builds.** It relied on
@@ -237,6 +253,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   runs Flutter's `labeledTapTargetGuideline`.
 - `setup_brick_feature_rename_test` reads only tracked brick files, so a local
   `mason make` (which leaves compiled hooks) no longer fails it.
+
+- Feature flags: a failed override write shows an error on the debug screen
+  instead of the success message (`FeatureFlagsManager`'s override methods
+  return the `Result`), and a failed flag listing shows the error and its
+  retry instead of "no flags".
+- Core utils: `ImageCacheHelper.preloadImage` without a context handles an
+  already-cached image; `LazyLoader`, `LazyInitializer` and
+  `DeferredImportLoader` retry a loader that threw synchronously;
+  `DisposalTracker` runs every disposable and `super.dispose()` when one
+  throws; `Throttler` measures time monotonically, so a backward clock step
+  no longer suppresses calls.
+- `tool/strip_sample_features.dart` can be re-run after a failure, ignores
+  git-ignored files in its reference scan, and refuses to run outside the
+  project root.
+- Tests that run a Dart file use `dart --packages=...` instead of `dart run`,
+  whose concurrent native-asset bundling crashed `dartdev` at random.
 
 ### Documentation
 
