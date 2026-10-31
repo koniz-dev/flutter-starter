@@ -29,7 +29,7 @@ void main() {
     logs = Directory('${documents.path}/logs')..createSync();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_pathProvider, (call) async {
-          return call.method == 'getApplicationDocumentsDirectory'
+          return call.method == 'getApplicationCacheDirectory'
               ? documents.path
               : null;
         });

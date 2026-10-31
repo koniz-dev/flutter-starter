@@ -535,11 +535,19 @@ the row is updated.
 
 With `ENABLE_LOGGING` unset, `LoggingService` writes to:
 
-| Build | Console | `logs/app.log` (app documents directory) | Level, format |
+| Build | Console | `logs/app.log` (app cache directory) | Level, format |
 |---|---|---|---|
 | Any debug build | yes | production only | debug and up, pretty; production: info and up, JSON |
 | Production release | no | yes | info and up, JSON |
 | Staging or development release | yes, as the platform log | no | debug and up, pretty |
+
+The log file lives in the app's cache directory (`getApplicationCacheDirectory`),
+not its documents: the cache is private to the app and excluded from device
+backups, where iOS backs documents up to iCloud and Windows and Linux share
+them as the user's `~/Documents`. Files rotate by size; nothing deletes them on
+sign-out, and the operating system may clear the cache directory when storage
+runs low. Logs are redacted, but if your app must not keep them past a
+sign-out, delete the `logs` directory there yourself.
 
 Production used to default `ENABLE_LOGGING` to `false`, so the file output it
 was meant to use never ran and every production error was dropped.

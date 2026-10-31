@@ -133,7 +133,11 @@ class FileLogOutput extends LogOutput {
   /// Initialize the log file
   Future<void> _initializeLogFile() async {
     try {
-      final directory = await getApplicationDocumentsDirectory();
+      // The app's cache directory, not its documents: iOS backs documents up
+      // to iCloud, and on Windows and Linux they are the user's shared
+      // ~/Documents. Logs are disposable, and a cache directory is excluded
+      // from backup and private to the app.
+      final directory = await getApplicationCacheDirectory();
       _logDirectory = path.join(directory.path, 'logs');
 
       // Create logs directory if it doesn't exist
