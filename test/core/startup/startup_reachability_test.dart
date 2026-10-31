@@ -535,6 +535,37 @@ void main() {
       expect(find.textContaining('"enabled"'), findsOneWidget);
     });
 
+    for (final environment in ['staging', 'production']) {
+      testWidgets('a $environment release with an http BASE_URL boots into '
+          'the failure screen', (tester) async {
+        installSecureBackend(<String, String>{});
+        installEnvAsset(
+          'ENVIRONMENT=$environment\nBASE_URL=http://api.example.com\n'
+          'API_SSL_FINGERPRINTS=${'a' * 64}\n',
+        );
+
+        await bootRealMain(
+          tester,
+          entry: () => app.bootstrap(releaseMode: true),
+        );
+
+        expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+        expect(find.textContaining('is not https'), findsOneWidget);
+      });
+    }
+
+    testWidgets('a debug build with an http BASE_URL starts', (tester) async {
+      installSecureBackend(<String, String>{});
+      installEnvAsset(
+        'ENVIRONMENT=production\nBASE_URL=http://localhost:3000\n'
+        'API_SSL_FINGERPRINTS=${'a' * 64}\n',
+      );
+
+      await bootRealMain(tester);
+
+      expect(find.byKey(StartupFailureApp.bodyKey), findsNothing);
+    });
+
     testWidgets('a release build that opts out of pinning starts without '
         'fingerprints', (tester) async {
       installSecureBackend(<String, String>{});

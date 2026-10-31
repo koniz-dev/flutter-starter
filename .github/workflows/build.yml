@@ -184,8 +184,13 @@ jobs:
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
           BASE_URL="$INPUT_BASE_URL"
+          # A staging or production release refuses a non-https BASE_URL
+          # (lib/main.dart), so the fallback is AppConfig's https default.
           if [ -z "$BASE_URL" ]; then
-            BASE_URL="http://localhost:3000"
+            case "$ENVIRONMENT" in
+              staging) BASE_URL="https://api-staging.example.com" ;;
+              *) BASE_URL="https://api.example.com" ;;
+            esac
           fi
 
           # Refuses a staging or production build with no fingerprints and
@@ -257,8 +262,13 @@ jobs:
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
           BASE_URL="$INPUT_BASE_URL"
+          # A staging or production release refuses a non-https BASE_URL
+          # (lib/main.dart), so the fallback is AppConfig's https default.
           if [ -z "$BASE_URL" ]; then
-            BASE_URL="http://localhost:3000"
+            case "$ENVIRONMENT" in
+              staging) BASE_URL="https://api-staging.example.com" ;;
+              *) BASE_URL="https://api.example.com" ;;
+            esac
           fi
 
           # Refuses a staging or production build with no fingerprints and
@@ -306,8 +316,13 @@ jobs:
         run: |
           ENVIRONMENT="$INPUT_ENVIRONMENT"
           BASE_URL="$INPUT_BASE_URL"
+          # A staging or production release refuses a non-https BASE_URL
+          # (lib/main.dart), so the fallback is AppConfig's https default.
           if [ -z "$BASE_URL" ]; then
-            BASE_URL="http://localhost:3000"
+            case "$ENVIRONMENT" in
+              staging) BASE_URL="https://api-staging.example.com" ;;
+              *) BASE_URL="https://api.example.com" ;;
+            esac
           fi
 
           flutter build web \
