@@ -137,7 +137,7 @@ class ApiClient {
     // CacheInterceptor should be early to intercept requests before network
     // AuthInterceptor handles token injection and 401 refresh
     // RetryInterceptor retries transient failures (timeouts, 5xx)
-    // ApiLoggingInterceptor logs the raw DioException before it is mapped
+    // ApiLoggingInterceptor logs a redacted stand-in for the DioException
     // (omitted if loggingService is null)
     // PerformanceInterceptor sits after Auth and Retry so its trace records
     // how the request finally ended - a refreshed-and-replayed 401 is the
