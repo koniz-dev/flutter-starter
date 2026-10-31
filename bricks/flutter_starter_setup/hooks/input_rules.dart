@@ -47,7 +47,12 @@ const _reservedWords = <String>{
 };
 
 /// Why [name] is not a valid pub package name, or `null` if it is.
-String? packageNameProblem(String name) {
+///
+/// [dependencies] are the packages the project already resolves (see
+/// [lockedPackages]): a package cannot depend on one with its own name, so
+/// renaming to `crypto` or `clock` failed at `flutter pub get` - after the
+/// hook had rewritten the tree.
+String? packageNameProblem(String name, {Set<String> dependencies = const {}}) {
   if (!RegExp(r'^[a-z][a-z0-9_]*$').hasMatch(name)) {
     return 'package_name "$name" must be lowercase letters, digits and '
         'underscores, starting with a letter (for example my_app)';
@@ -55,8 +60,21 @@ String? packageNameProblem(String name) {
   if (_reservedWords.contains(name)) {
     return 'package_name "$name" is a Dart reserved word';
   }
+  if (dependencies.contains(name)) {
+    return 'package_name "$name" is the name of a package this project '
+        'depends on (see pubspec.lock); pick another';
+  }
   return null;
 }
+
+/// The package names listed under `packages:` in a `pubspec.lock`'s text.
+Set<String> lockedPackages(String lockText) => {
+  for (final match in RegExp(
+    r'^  ([a-z][a-z0-9_]*):\s*$',
+    multiLine: true,
+  ).allMatches(lockText))
+    match.group(1)!,
+};
 
 /// Why [id] is not a valid Android applicationId, or `null` if it is: at
 /// least two dot-separated segments, each starting with a letter and holding
