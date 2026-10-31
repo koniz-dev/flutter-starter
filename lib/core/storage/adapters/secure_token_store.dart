@@ -55,11 +55,12 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// on the device. The next write through any store over the same service
 /// re-applies every stale key first; the next delete re-applies only stale
 /// deletes, so a sign-out never writes a token. A read of a stale key whose
-/// newer state is a delete retries that delete once, bounded like any
-/// operation; a read never writes. Once everything settles and no
-/// repair has failed, every key holds what its last-issued successful write
-/// or delete left. The stale marker lives in memory: if the app stops before
-/// a stale key is re-applied, the late value is what the next launch reads.
+/// newer state is a delete retries that delete, bounded like any operation
+/// and one retry per key at a time; a read never writes. Once everything
+/// settles and no repair has failed, every key holds what its last-issued
+/// successful write or delete left. The stale marker lives in memory: if the
+/// app stops before a stale key is re-applied, the late value is what the
+/// next launch reads.
 /// A read that outlived the bound returns what the store held when it ran.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
@@ -179,15 +180,29 @@ class SecureTokenStore implements ITokenStore {
       // so a signed-out app that never writes or deletes again does not leave
       // that token for the next launch to read. Never a write: a read must
       // not store a credential. Bounded, and a failure leaves the key stale.
-      if (newest.value == null) {
+      // One retry per key at a time: while a hung delete is pending, a read
+      // answers from memory at once instead of waiting a bound of its own
+      // and leaving another delete behind it.
+      if (newest.value == null && !queue.retryingDeletes.containsKey(key)) {
+        final attempt = _apply(
+          queue,
+          key,
+          newest.number,
+          null,
+          flushStale: false,
+        );
+        queue.retryingDeletes[key] = attempt;
+        unawaited(
+          attempt
+              .then<void>((_) {}, onError: (Object _) {})
+              .whenComplete(
+                () => queue.retryingDeletes.removeWhere(
+                  (k, pending) => k == key && identical(pending, attempt),
+                ),
+              ),
+        );
         try {
-          await _apply(
-            queue,
-            key,
-            newest.number,
-            null,
-            flushStale: false,
-          ).timeout(operationTimeout);
+          await attempt.timeout(operationTimeout);
         } on Object {
           // Still stale; memory still answers.
         }
@@ -323,6 +338,10 @@ class _OperationQueue {
 
   /// Keys whose repair failed: what is stored may be older than [landed].
   final Set<String> stale = {};
+
+  /// A stale delete a read is retrying, per key, until its platform call
+  /// settles.
+  final Map<String, Future<bool>> retryingDeletes = {};
 
   /// Where a failed repair is reported; set by the first store given one.
   LoggingService? logger;

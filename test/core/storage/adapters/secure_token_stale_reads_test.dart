@@ -171,4 +171,27 @@ void main() {
     expect(await store.getAccessToken(), isNull);
     expect(read.elapsed, lessThan(_bound * 4));
   });
+
+  test('while a retried delete hangs, later reads answer at once and start '
+      'no other delete', () async {
+    final (backing, store) = await staleClearedAccessToken();
+    backing
+      ..failRemove.clear()
+      ..hangDeletes.add(AppConstants.tokenKey);
+    var removes = 0;
+    when(() => backing.storage.remove(any())).thenAnswer((i) async {
+      removes++;
+      await Completer<void>().future; // hangs
+      return true;
+    });
+
+    expect(await store.getAccessToken(), isNull); // waits one bound
+    final later = Stopwatch()..start();
+    for (var i = 0; i < 3; i++) {
+      expect(await store.getAccessToken(), isNull);
+    }
+
+    expect(later.elapsed, lessThan(_bound), reason: 'no read waited a bound');
+    expect(removes, 1, reason: 'one delete in flight');
+  });
 }
