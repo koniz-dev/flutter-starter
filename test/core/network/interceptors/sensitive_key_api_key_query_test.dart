@@ -59,4 +59,24 @@ void main() {
       isNotEmpty,
     );
   });
+
+  test('an Azure Functions ?code= GET is not cached', () async {
+    final storage = InMemoryStorage();
+    final options = RequestOptions(
+      path: '/api/HttpTrigger',
+      method: 'GET',
+      baseUrl: 'https://app.azurewebsites.net',
+      queryParameters: {'code': 'FUNCTION-KEY'},
+    );
+
+    await CacheInterceptor(storageService: storage).onResponse(
+      Response<dynamic>(requestOptions: options, statusCode: 200, data: '{}'),
+      _ResponseHandler(),
+    );
+
+    expect(
+      storage.values.keys.where((k) => k.startsWith('http_cache_')),
+      isEmpty,
+    );
+  });
 }

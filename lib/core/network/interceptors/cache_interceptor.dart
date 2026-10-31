@@ -53,7 +53,7 @@ class CacheConfig {
 /// ## What is cached
 ///
 /// Only **unauthenticated** `GET` responses with status 200, for a request
-/// whose query carries no key that [ApiLoggingInterceptor.isSensitiveKey]
+/// whose query carries no key that [ApiLoggingInterceptor.isSensitiveQueryKey]
 /// treats as a secret. Before touching
 /// the cache - on read and on write - the interceptor asks the [ITokenStore]
 /// whether a session credential exists. If one does, the request neither
@@ -333,12 +333,13 @@ class CacheInterceptor extends Interceptor implements IHttpResponseCache {
     return await _hasSessionCredential();
   }
 
-  /// Whether [options]' query has a key [ApiLoggingInterceptor.isSensitiveKey]
+  /// Whether [options]' query has a key
+  /// [ApiLoggingInterceptor.isSensitiveQueryKey]
   /// treats as a secret, or cannot be parsed.
   static bool _querySecret(RequestOptions options) {
     try {
       return options.uri.queryParametersAll.keys.any(
-        ApiLoggingInterceptor.isSensitiveKey,
+        ApiLoggingInterceptor.isSensitiveQueryKey,
       );
     } on FormatException {
       return true;
