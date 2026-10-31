@@ -152,12 +152,18 @@ To remove it entirely:
 
 1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/`,
    `test/flutter_test_config.dart`, the demo login golden test
-   `test/acceptance/login_demo_acceptance_test.dart` and its
-   `test/acceptance/goldens/login_demo_*.png`.
-2. Delete the lines
-   `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo lib test integration_test`
-   still lists: one import and one line in `auth_providers.dart`, two
-   imports and the `if (DemoAuth.enabled)` block in `login_screen.dart`.
+   `test/acceptance/login_demo_acceptance_test.dart` with its
+   `test/acceptance/goldens/login_demo_*.png`, and two tests of this setup:
+   `test/core/config/app_config_has_backend_test.dart` and
+   `test/tooling/demo_removal_steps_test.dart`.
+2. Delete or reword what
+   `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo -e hasBackend lib test integration_test docs`
+   still lists: one import and one line in `auth_providers.dart`; two
+   imports and the `if (DemoAuth.enabled)` block in `login_screen.dart`;
+   `hasBackend` and `hasBackendFor` in `app_config.dart`, which only the demo
+   reads, and the `baseUrl` comment naming them; the same demo line quoted in
+   `docs/api/features/auth/providers.md`; and the no-backend sentence in
+   `docs/guides/configuration.md`.
 3. Delete this section.
 
 `flutter analyze` and `flutter test` then pass; the `demoMode*` strings in

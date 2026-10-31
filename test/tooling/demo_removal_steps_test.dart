@@ -1,7 +1,8 @@
 // getting-started.md tells an adopter how to remove the offline demo sign-in
-// and promises flutter analyze passes afterwards. That holds only while every
-// file that uses the demo is one the steps delete or edit; a test that
-// imports the demo from anywhere else breaks analyze after the removal.
+// and promises flutter analyze and flutter test pass afterwards. That holds
+// only while every file that uses the demo is one the steps delete or edit;
+// a test that imports the demo from anywhere else breaks analyze after the
+// removal, and an unread hasBackend fails app_config_getters_used_test.
 
 import 'dart:io';
 
@@ -15,16 +16,24 @@ const _deleted = [
   'test/features/auth/demo/',
   'test/flutter_test_config.dart',
   'test/acceptance/login_demo_acceptance_test.dart',
+  'test/core/config/app_config_has_backend_test.dart',
+  'test/tooling/demo_removal_steps_test.dart',
 ];
 
 /// Files the steps edit, by the name the guide uses.
-const _edited = {
+const Map<String, String> _edited = {
   'lib/features/auth/di/auth_providers.dart': 'auth_providers.dart',
   'lib/features/auth/presentation/screens/login_screen.dart':
       'login_screen.dart',
+  'lib/core/config/app_config.dart': 'app_config.dart',
+  'docs/api/features/auth/providers.md': 'docs/api/features/auth/providers.md',
+  'docs/guides/configuration.md': 'docs/guides/configuration.md',
+  // The section itself, which step 3 deletes.
+  _guide: _guide,
 };
 
-final _usesDemo = RegExp('DemoAuth|DemoSignInCard|auth/demo');
+/// The terms of the guide's own `git grep`.
+final _usesDemo = RegExp('DemoAuth|DemoSignInCard|auth/demo|hasBackend');
 
 void main() {
   final guide = File(_guide).readAsStringSync();
@@ -33,21 +42,21 @@ void main() {
     for (final path in _deleted) {
       expect(guide, contains('`$path`'), reason: path);
     }
-    for (final name in _edited.values) {
+    for (final name in _edited.values.where((n) => n != _guide)) {
       expect(guide, contains('`$name`'), reason: name);
     }
   });
 
   test('only the files the steps delete or edit use the demo', () {
     final strays = <String>[];
-    for (final root in ['lib', 'test', 'integration_test']) {
+    for (final root in ['lib', 'test', 'integration_test', 'docs']) {
       for (final entity in Directory(root).listSync(recursive: true)) {
-        if (entity is! File || !entity.path.endsWith('.dart')) continue;
+        if (entity is! File) continue;
         final path = entity.path.replaceAll(r'\', '/');
+        if (!path.endsWith('.dart') && !path.endsWith('.md')) continue;
         if (_deleted.any(path.startsWith) || _edited.containsKey(path)) {
           continue;
         }
-        if (path == 'test/tooling/demo_removal_steps_test.dart') continue;
         if (_usesDemo.hasMatch(entity.readAsStringSync())) strays.add(path);
       }
     }
