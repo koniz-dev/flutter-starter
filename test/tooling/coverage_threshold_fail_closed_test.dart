@@ -28,6 +28,17 @@ String _checkThreshold() {
       .join('\n');
 }
 
+/// What test_coverage.sh calls with `--no-test`, and nothing else.
+const _scriptTools = [
+  'bash',
+  'awk',
+  'dirname',
+  'head',
+  'mkdir',
+  'mktemp',
+  'rm',
+];
+
 void main() {
   final repo = Directory.current.path;
   late Directory workdir;
@@ -62,6 +73,43 @@ void main() {
       final script = '$repo/scripts/test/test_coverage.sh';
       expect(run(script, ['--min=50']).exitCode, 0);
       expect(run(script, ['--min=50.5']).exitCode, isNot(0));
+    });
+
+    test('the threshold holds with bc missing from PATH', () {
+      // Only the commands the script needs, so `bc` is not on PATH.
+      final bin = Directory('${workdir.path}/bin')..createSync();
+      for (final tool in _scriptTools) {
+        final found = Process.runSync('which', [tool]);
+        expect(found.exitCode, 0, reason: '$tool is not installed');
+        Link('${bin.path}/$tool').createSync('${found.stdout}'.trim());
+      }
+      ProcessResult runWithoutBc(List<String> args) => Process.runSync(
+        '${bin.path}/bash',
+        ['$repo/scripts/test/test_coverage.sh', '--no-test', ...args],
+        workingDirectory: workdir.path,
+        environment: {'PATH': bin.path},
+        includeParentEnvironment: false,
+      );
+      expect(
+        Process.runSync(
+          '${bin.path}/bash',
+          [
+            '-c',
+            'command -v bc',
+          ],
+          environment: {'PATH': bin.path},
+        ).exitCode,
+        isNot(0),
+      );
+
+      final failing = runWithoutBc(['--min=50.5']);
+      expect(failing.exitCode, isNot(0), reason: '${failing.stdout}');
+      expect('${failing.stdout}', contains('below minimum threshold'));
+      expect('${failing.stderr}', isNot(contains('command not found')));
+
+      final passing = runWithoutBc(['--min=50']);
+      expect(passing.exitCode, 0, reason: '${passing.stderr}');
+      expect('${passing.stderr}', isNot(contains('command not found')));
     });
 
     test('a percentage it cannot measure fails the check', () {

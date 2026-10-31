@@ -8,7 +8,25 @@
 $ErrorActionPreference = "Stop"
 
 Write-Host "[Test] Running tests with coverage..." -ForegroundColor Cyan
-flutter test --coverage
+# The helper imports every library under lib/, so a file no test loads still
+# counts in the total, as it does in test_coverage.sh and CI. It is removed
+# again however the run ends.
+try {
+    dart run tool/coverage_helper.dart
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[Error] tool/coverage_helper.dart failed (exit $LASTEXITCODE)" -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
+    # $ErrorActionPreference does not stop on a native command's exit code:
+    # without this check, failing tests ended in "Tests completed" and exit 0.
+    flutter test --coverage
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[Error] flutter test failed (exit $LASTEXITCODE)" -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
+} finally {
+    Remove-Item -Force -ErrorAction SilentlyContinue "test/coverage_helper_test.dart"
+}
 
 if (!(Test-Path "coverage/lcov.info")) {
     Write-Host "[Error] coverage/lcov.info not found!" -ForegroundColor Red
