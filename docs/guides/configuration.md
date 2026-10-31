@@ -577,9 +577,7 @@ personal data out of log messages and contexts.
 7. **Set environment-specific defaults**: Let the system handle defaults based on environment via `AppConfig`.
 
 ### Troubleshooting missing configuration
-- Ensure `EnvConfig.load()` is called in `main()` before `runApp()`.
 - **`.env` values ignored?** Expected: `.env` is not an asset, on purpose. Pass `--dart-define-from-file=.env` instead, and check the keys exist in `lib/core/config/dart_defines.dart`. Declaring `.env` under `flutter: assets:` would make `flutter_dotenv` find it - and publish it in every build; `dart run tool/check_env_assets.dart` fails if you do.
 - **`--dart-define` value ignored?** Check that the key exists in `lib/core/config/dart_defines.dart`. A key missing from that table is ignored on every platform, web included. `--dart-define` values are baked in at compile time: change one and you must rebuild, not hot reload.
-- Hot reload doesn't reload system-level environment variables - do a full app restart.
-- Run `flutter pub get` after pulling dependencies or updating flags to rebuild the configuration tree.
-- Run `AppConfig.printConfig()` to inspect parsed fallback maps logic.
+- Changed `.env` or a `--dart-define`? Hot reload and hot restart keep the old values: stop the app and run `flutter run` again.
+- `AppConfig.printConfig()`, which `main()` calls in debug builds, prints the values in effect: check its output in the console.

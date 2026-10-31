@@ -34,7 +34,7 @@ with `mason: command not found`. Add the directory to your shell profile to
 keep it, or run the commands as `dart pub global run mason_cli:mason get` and
 `dart pub global run mason_cli:mason make flutter_starter_setup` instead.
 
-Answer the prompts for `package_name`, Android `application_id`, iOS `bundle_identifier`, `app_display_name`, and whether to include optional samples (`tasks`, `feature_flags`).
+Answer the prompts for `package_name`, Android `application_id`, iOS `ios_bundle_id`, `app_display_name`, and whether to include optional samples (`tasks`, `feature_flags`).
 
 **Option B — Manual**
 
