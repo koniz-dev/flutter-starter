@@ -70,7 +70,7 @@ void main() {
       performanceService: service,
     ).onRequest(RequestOptions(path: _path), _Handler());
 
-    final logged = ApiLoggingInterceptor.redactPath(_path);
+    final logged = ApiLoggingInterceptor.redactUrl(_path);
     expect(attributes[PerformanceAttributes.httpPath], logged);
     expect(traceNames.single, logged);
     // A parameter that names no secret is kept, as in the logs.
