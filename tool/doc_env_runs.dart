@@ -57,7 +57,11 @@ List<EnvRunProblem> findEnvRunProblems(String source, {String file = ''}) {
 
     final start = i;
     var command = lines[i].trimRight();
-    while (command.endsWith(r'\') && i + 1 < lines.length) {
+    // Never across a fence: a block whose last line ends in `\` (ASCII art,
+    // say) swallowed its closing fence, and every fence after it flipped.
+    while (command.endsWith(r'\') &&
+        i + 1 < lines.length &&
+        !_fence.hasMatch(lines[i + 1])) {
       i++;
       command =
           '${command.substring(0, command.length - 1).trimRight()} '

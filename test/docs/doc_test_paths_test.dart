@@ -18,6 +18,23 @@ void main() {
     for (final p in findMissingTestPaths(markdown, real)) p.path,
   ];
 
+  test('a block ending in a backslash does not swallow its closing fence', () {
+    // ASCII art whose last line ends in `\\`, then prose, then a command.
+    const source =
+        '```text\n  /____\\\n```\n'
+        '\n'
+        'Prose: `flutter test --coverage`, as CI does.\n'
+        '\n'
+        '```bash\n'
+        'flutter test test/nope_test.dart\n'
+        '```\n';
+
+    final missing = findMissingTestPaths(source, (_) => false);
+
+    expect(missing.map((m) => m.path), ['test/nope_test.dart']);
+    expect(missing.single.line, 8);
+  });
+
   test('covers README.md, CONTRIBUTING.md and CLAUDE.md as well as docs/', () {
     final paths = testPathFiles(
       Directory.current,
