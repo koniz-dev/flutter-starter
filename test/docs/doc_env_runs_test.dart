@@ -58,6 +58,25 @@ void main() {
       expect(findEnvRunProblems(_readmeAfter), isEmpty);
     });
 
+    test(
+      'a block ending in a backslash does not swallow its closing fence',
+      () {
+        const source =
+            '```text\n  /____\\\n```\n'
+            '\n'
+            'Prose: cp .env.example .env, then flutter run.\n'
+            '\n'
+            '```bash\n'
+            'cp .env.example .env\n'
+            'flutter run\n'
+            '```\n';
+
+        final problems = findEnvRunProblems(source);
+
+        expect(problems.map((p) => p.line), [9]);
+      },
+    );
+
     test('flags flutter build too', () {
       const source = '```bash\ncp .env.example .env\nflutter build apk\n```\n';
       expect(findEnvRunProblems(source), hasLength(1));

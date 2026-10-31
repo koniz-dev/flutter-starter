@@ -112,7 +112,11 @@ List<MissingTestPath> findMissingTestPaths(
     // Join a backslash-continued command onto one line.
     final start = i;
     var line = lines[i];
-    while (line.trimRight().endsWith(r'\') && i + 1 < lines.length) {
+    // Never across a fence: a block whose last line ends in `\` (ASCII art,
+    // say) swallowed its closing fence, and every fence after it flipped.
+    while (line.trimRight().endsWith(r'\') &&
+        i + 1 < lines.length &&
+        !_fence.hasMatch(lines[i + 1])) {
       final trimmed = line.trimRight();
       line = '${trimmed.substring(0, trimmed.length - 1)} ${lines[++i]}';
     }
