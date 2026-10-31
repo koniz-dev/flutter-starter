@@ -100,6 +100,26 @@ class SslPinning {
               _accepts(cert, host, accepted);
   }
 
+  /// Opens a TLS connection to [host]:[port] the way [createHttpClient]'s
+  /// client would: pinned to [fingerprints] when pinning is in effect, the
+  /// platform's trust store otherwise.
+  ///
+  /// For an `HttpClient.connectionFactory`, which replaces the client's own
+  /// connection set-up - TLS and the certificate check included.
+  Future<ConnectionTask<Socket>> secureConnect(String host, int port) {
+    if (_pinnedClientFactory() == null) {
+      return SecureSocket.startConnect(host, port);
+    }
+    final accepted = List<String>.unmodifiable(fingerprints);
+    return SecureSocket.startConnect(
+      host,
+      port,
+      // Empty trusted roots, as in _pinnedClientFactory.
+      context: SecurityContext(),
+      onBadCertificate: (cert) => _accepts(cert, host, accepted),
+    );
+  }
+
   /// Whether [cert] matches one of [fingerprints].
   ///
   /// This is the exact decision the pinned adapter installs on its

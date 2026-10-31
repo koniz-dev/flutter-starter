@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io' show HttpClient;
 
-import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/network/realtime/i_realtime_client.dart';
@@ -35,7 +35,10 @@ WebSocketChannel _connect(Uri uri, HttpClient? pinnedClient) =>
 /// A staging or production release refuses any URL that is not `wss://`, as
 /// `main()` refuses a `BASE_URL` that is not `https`: web and desktop do not
 /// block cleartext, and the realtime token and every message would travel
-/// unencrypted, where pinning cannot apply.
+/// unencrypted, where pinning cannot apply. The same release refuses a
+/// handshake redirect that leaves TLS (`302 -> http://...`), which dart:io
+/// would otherwise follow; a redirect that stays on TLS is followed, pinned
+/// like the first hop. On web the browser follows no handshake redirect.
 class RawWebSocketClientImpl implements IRealtimeClient {
   /// Creates a client whose [connect] gives up after [connectTimeout].
   ///
@@ -113,9 +116,7 @@ class RawWebSocketClientImpl implements IRealtimeClient {
       // Its own message quotes the whole URL.
       throw FormatException('Invalid WebSocket URL: $safeUrl');
     }
-    if (_releaseMode &&
-        (AppConfig.isStaging || AppConfig.isProduction) &&
-        uri.scheme.toLowerCase() != 'wss') {
+    if (_refusesCleartext && uri.scheme.toLowerCase() != 'wss') {
       _logger.e('Refused a non-wss WebSocket URL in a release: $safeUrl');
       throw WebSocketChannelException(
         'Refusing $safeUrl: a ${AppConfig.environment} release connects '
@@ -126,7 +127,7 @@ class RawWebSocketClientImpl implements IRealtimeClient {
     // refused or unparsable one above leaves it alone.
     if (isConnected || _pending != null) disconnect();
     final generation = _generation;
-    final channel = _connectChannel(uri, _sslPinning.createHttpClient());
+    final channel = _connectChannel(uri, _transport());
     _pending = channel;
     try {
       await channel.ready.timeout(connectTimeout);
@@ -198,6 +199,35 @@ class RawWebSocketClientImpl implements IRealtimeClient {
 
   /// Closes the open connection and cancels any [connect] still awaiting its
   /// handshake.
+  /// The [HttpClient] the handshake goes through, or null for the default.
+  ///
+  /// In a staging or production release the handshake must stay on TLS end
+  /// to end: dart:io follows a redirect during the WebSocket handshake, so a
+  /// `wss://` server answering `302 -> http://...` downgraded the connection
+  /// to cleartext. The client's connection factory refuses any hop that is
+  /// not `https`, and opens the rest as [SslPinning.secureConnect] does. Web
+  /// is left to the browser, which follows no handshake redirect.
+  HttpClient? _transport() {
+    final pinned = _sslPinning.createHttpClient();
+    if (kIsWeb || !_refusesCleartext) return pinned;
+    return (pinned ?? HttpClient())
+      ..connectionFactory = (uri, proxyHost, proxyPort) {
+        if (uri.scheme != 'https') {
+          return Future.error(
+            WebSocketChannelException(
+              'Refusing a cleartext hop to '
+              '${ApiLoggingInterceptor.redactUrl(uri.toString())} during the '
+              'WebSocket handshake of a ${AppConfig.environment} release',
+            ),
+          );
+        }
+        return _sslPinning.secureConnect(uri.host, uri.port);
+      };
+  }
+
+  bool get _refusesCleartext =>
+      _releaseMode && (AppConfig.isStaging || AppConfig.isProduction);
+
   @override
   void disconnect() {
     _generation++;
