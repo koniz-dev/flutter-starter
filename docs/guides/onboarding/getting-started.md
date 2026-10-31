@@ -150,10 +150,13 @@ sign out (or clear the app's data) before pointing the app at a real backend.
 <!-- symbol: lib/features/auth/demo/demo_auth.dart DemoAuth -->
 To remove it entirely:
 
-1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/` and
-   `test/flutter_test_config.dart`.
-2. Delete the lines `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo lib`
-   still lists: two imports and one line in `auth_providers.dart`, two
+1. Delete `lib/features/auth/demo/`, `test/features/auth/demo/`,
+   `test/flutter_test_config.dart`, the demo login golden test
+   `test/acceptance/login_demo_acceptance_test.dart` and its
+   `test/acceptance/goldens/login_demo_*.png`.
+2. Delete the lines
+   `git grep -n -e DemoAuth -e DemoSignInCard -e auth/demo lib test integration_test`
+   still lists: one import and one line in `auth_providers.dart`, two
    imports and the `if (DemoAuth.enabled)` block in `login_screen.dart`.
 3. Delete this section.
 

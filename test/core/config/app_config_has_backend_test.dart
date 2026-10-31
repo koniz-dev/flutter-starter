@@ -1,9 +1,9 @@
 // AppConfig.hasBackend is the one rule for "is there a backend": demo auth
-// keys on it, and the development baseUrl fallback is only reachable when it
-// is false outside a debug build.
+// keys on it (pinned beside the demo, so that removing the demo removes
+// that test too), and the development baseUrl fallback is only reachable
+// when it is false outside a debug build.
 
 import 'package:flutter_starter/core/config/app_config.dart';
-import 'package:flutter_starter/features/auth/demo/demo_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -36,28 +36,6 @@ void main() {
           isTrue,
         );
       });
-    }
-  });
-
-  test('demo auth is on exactly when a debug build has no backend', () {
-    for (final environment in ['development', 'staging', 'production']) {
-      for (final baseUrl in ['', 'http://localhost:3000']) {
-        for (final debugBuild in [true, false]) {
-          expect(
-            DemoAuth.isEnabledFor(
-              debugBuild: debugBuild,
-              environment: environment,
-              baseUrl: baseUrl,
-            ),
-            debugBuild &&
-                !AppConfig.hasBackendFor(
-                  environment: environment,
-                  baseUrl: baseUrl,
-                ),
-            reason: '$environment, BASE_URL="$baseUrl", debug=$debugBuild',
-          );
-        }
-      }
     }
   });
 
