@@ -1,0 +1,6 @@
+== mutant: no decrement after a returned result (login and register)
+00:00 +2 -1: AuthNotifier clearSession during a sign-in a successful login no longer counts as in flight [E]
+00:00 +2 -2: AuthNotifier clearSession during a sign-in a successful register no longer counts as in flight [E]
+00:00 +2 -3: AuthNotifier clearSession during a sign-in a failed login no longer counts as in flight [E]
+00:00 +2 -4: AuthNotifier clearSession during a sign-in a failed register no longer counts as in flight [E]
+00:00 +36 -4: Some tests failed.

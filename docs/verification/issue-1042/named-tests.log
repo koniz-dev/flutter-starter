@@ -1,0 +1,8 @@
+== main 1d1751ba466: flutter test --reporter expanded test/core/storage/adapters/secure_token_stale_reads_test.dart
++0: a stale cleared key reads as null, through any store over the service, and a later request carries no token
++1: a sign-out writes no token, even with a stale key whose newer state is a write
++2: a read of a stale cleared key retries the delete, and the key is no longer stale once it lands
++3: a read whose retried delete fails leaves the key stale and still answers null
++4: a read whose retried delete hangs returns within the bound
++5: while a retried delete hangs, later reads answer at once and start no other delete
++6: All tests passed!

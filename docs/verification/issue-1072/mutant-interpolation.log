@@ -1,0 +1,8 @@
+== tool/doc_symbols.dart before this change (HEAD 461f4d0b1db); tests from this branch
+00:00 +7 -1: declaresSymbol ignores a declaration inside a block comment or a string [E]
+  Expected: true
+    Actual: <false>
+00:00 +11 -2: declaresMember an initializer or expression body declares nothing [E]
+  Expected: true
+    Actual: <false>
+00:00 +12 -2: Some tests failed.

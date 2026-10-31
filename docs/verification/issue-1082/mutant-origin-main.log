@@ -1,0 +1,11 @@
+== tool/doc_test_paths.dart, doc_env_runs.dart, doc_dart_defines.dart at origin/main 0e26820cf87; tests from this branch
+00:00 +5 -3: a fence inside a longer or other-character fence does not close it [E]
+  Expected: ['test/a_test.dart', 'test/b_test.dart']
+    Actual: MappedListIterable<MissingTestPath, String>:[]
+00:00 +5 -3: findEnvRunProblems a fence inside a longer or other-character fence does not close it [E]
+  Expected: [5]
+    Actual: MappedListIterable<EnvRunProblem, int>:[]
+00:00 +7 -3: findUnknownDartDefines a fence inside a longer or other-character fence does not close it [E]
+  Expected: ['NOPE_TILDE', 'NOPE_LONG']
+    Actual: MappedListIterable<UnknownDartDefine, String>:['NOPE_TILDE']
+00:00 +26 -3: Some tests failed.

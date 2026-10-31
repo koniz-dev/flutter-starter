@@ -1,0 +1,11 @@
+== pre-push run of the full suite on fix/auth-spinner-during-forced-logout (based on main b58a209e6c1), the failing test's report
+01:41 +868 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo [E]
+  Expected: contains 'Connection closed'
+    Actual: '┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n'
+              '│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)\n'
+              '│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)\n'
+              '├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\n'
+              '│ 🐛 API Request: GET http://***REDACTED***@127.0.0.1:60827/callback?code=***REDACTED***&access_token=***REDACTED***&page=3 | Context: {"method":"GET","path":"http://***REDACTED***@127.0.0.1:60827/callback?code=***REDACTED***&access_token=***REDACTED***&page=3","baseUrl":"","headers":{}}\n'
+              '└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n'
+              '\x1B[38;5;196m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\x1B[0m\n'
+              '\x1B[38;5;196m│ DioException [DioExceptionType.unknown] http://***REDACTED***@127.0.0.1:60827/callback?code=***REDACTED***&access_token=***REDACTED***&page=3: HttpException: Connection reset by peer, uri = http://***REDACTED***@127.0.0.1:60827/callback?code=***REDACTED***&access_token=***REDACTED***&page=3\x1B[0m\n'

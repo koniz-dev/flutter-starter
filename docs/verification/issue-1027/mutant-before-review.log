@@ -1,0 +1,4 @@
+== lib/features/auth/data/repositories/auth_repository_impl.dart as first pushed on this PR (HEAD 67d138809d4), before the review fixes; tests from this branch
+00:00 +0 -1: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart [E]
+  Compilation failed for testPath=test/features/auth/data/repositories/sign_in_session_guard_test.dart:289:9: Error: No named parameter with the name 'pendingLogoutLimit'.
+00:00 +0 -1: Some tests failed.

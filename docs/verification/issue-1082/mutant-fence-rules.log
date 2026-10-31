@@ -1,0 +1,14 @@
+== mutant: no length rule
+00:00 +0 -1: a fence closes on the same character and at least its length [E]
+00:00 +3 -1: Some tests failed.
+== mutant: no character rule
+00:00 +0 -1: a fence closes on the same character and at least its length [E]
+00:00 +3 -1: Some tests failed.
+== mutant: a closer may carry text
+00:00 +4: All tests passed!
+== mutant: backtick info strings allowed
+00:00 +2 -1: a backtick opener with a backtick in its info string is no fence [E]
+00:00 +3 -1: Some tests failed.
+== mutant: a closer may carry text
+00:00 +1 -1: a closing line carries nothing else [E]
+00:00 +3 -1: Some tests failed.

@@ -1,0 +1,16 @@
+== tool/check_docs.dart tool/doc_symbols.dart tool/doc_signatures.dart at origin/main a5ff797f106; tests from this branch
+00:00 +3 -1: a directive after an inner fence inside a four-backtick block is an example, not a directive [E]
+  Expected: <0>
+    Actual: <1>
+00:00 +17 -2: a directive after an inner fence inside a four-backtick block is an example, not a directive [E]
+  Expected: empty
+    Actual: [Instance of 'SymbolDirective']
+00:01 +29 -3: a link after an inner fence inside a four-backtick block is code [E]
+  Expected: <0>
+    Actual: <1>
+00:02 +31 -3: Some tests failed.
+== tool/check_docs.dart at origin/main a5ff797f106; anchor test from this branch
+00:00 +0 -1: a heading inside an inner fence of a four-backtick block is no anchor [E]
+  Expected: <1>
+    Actual: <0>
+00:00 +0 -1: Some tests failed.

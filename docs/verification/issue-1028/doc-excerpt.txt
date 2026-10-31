@@ -1,0 +1,24 @@
+== main 1d1751ba466
+129-  /// two apart: an ordinary request fails and the session is kept.
+130-  ///
+131:  /// A failed read *during a 401 refresh* is different: the refresh fails
+132-  /// with a `CacheFailure`, and `AuthInterceptor` ends the session on any
+133-  /// refresh failure that is not transport trouble, so the user is signed
+134-  /// out. That is deliberate (fail closed): a session that cannot be
+135-  /// refreshed would otherwise stay up with every request failing.
+136-  @override
+137-  Future<String?> getAccessToken() =>
+138-      _inOrder(() => _read(AppConstants.tokenKey));
+139-
+--
+146-  Future<void> clearAccessToken() => _remove(AppConstants.tokenKey);
+147-
+148:  /// Throws [CacheException] if the Keychain/Keystore read fails. It is read
+149-  /// only to refresh after a 401 (and to revoke it at logout), so a failure
+150-  /// here ends the session; see [getAccessToken].
+151-  @override
+152-  Future<String?> getRefreshToken() =>
+153-      _inOrder(() => _read(AppConstants.refreshTokenKey));
+154-
+155-  @override
+156-  Future<bool> setRefreshToken(String token) =>

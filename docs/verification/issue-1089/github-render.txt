@@ -1,0 +1,7 @@
+== origin/main: headings GitHub renders (gh api markdown -f mode=gfm)
+32:Test Log Sanitization
+== HEAD-worktree: headings GitHub renders (gh api markdown -f mode=gfm)
+14:3. Log Sanitization
+17:4. Android Release Signing
+19:R8 / ProGuard
+37:Test Log Sanitization

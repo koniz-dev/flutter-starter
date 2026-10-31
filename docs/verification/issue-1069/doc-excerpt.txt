@@ -1,0 +1,26 @@
+== main 1d1751ba466
+### Client certificates (mutual TLS)
+
+The starter presents no client certificate of its own. Where one would come
+from depends on pinning and on the build:
+
+- **Pinning in effect:** both `ApiClient` and the realtime handshake build
+  their TLS context fresh, with an empty trust store so every certificate goes
+  through the fingerprint check (`SslPinning`). That context holds no client
+  certificate, so none is presented. Mutual TLS together with pinning means
+  adding your chain and key to those contexts in `SslPinning`.
+- **Pinning off:** both transports use `SecurityContext.defaultContext`. Load
+  the client certificate there at startup
+  (`SecurityContext.defaultContext.useCertificateChainBytes(...)` and
+  `usePrivateKeyBytes(...)`), and both present it.
+- **A context installed through `HttpOverrides`** reaches `ApiClient`, but
+  not the realtime handshake in a staging or production release. There the
+  handshake opens each TLS hop itself, with `SslPinning.secureConnect`, so
+  that it can refuse a redirect that leaves TLS. That hop uses
+  `SecurityContext.defaultContext` when pinning is off, so put the
+  certificate there rather than only in your override.
+
+<!-- symbol: lib/core/network/ssl_pinning.dart SslPinning.secureConnect -->
+<!-- symbol: lib/core/network/realtime/raw_websocket_client.dart RawWebSocketClientImpl._transport -->
+
+### Usage Example

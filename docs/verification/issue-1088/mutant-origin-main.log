@@ -1,0 +1,5 @@
+== lib/features/auth/presentation/providers/auth_provider.dart (and .g.dart) at origin/main b58a209e6c1; tests from this branch
+00:00 +0 -1: AuthNotifier clearSession during a sign-in keeps the spinner of a sign-in still in flight [E]
+  Expected: true
+    Actual: <false>
+00:00 +34 -1: Some tests failed.

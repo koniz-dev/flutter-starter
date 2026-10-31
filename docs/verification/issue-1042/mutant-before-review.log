@@ -1,0 +1,5 @@
+== lib/core/storage/adapters/secure_token_store.dart as first pushed on this PR (HEAD f28a24adb74); tests from this branch
+00:02 +5 -1: while a retried delete hangs, later reads answer at once and start no other delete [E]
+  Expected: a value less than Duration:<0:00:00.050000>
+    Actual: Duration:<0:00:00.156670>
+00:02 +5 -1: Some tests failed.

@@ -1,0 +1,9 @@
+== mutant M4
+00:00 +11 -1: no revoke goes out while a session still holds the store [E]
+00:00 +12 -1: Some tests failed.
+== mutant M5
+00:00 +10 -1: a revoke waits for a logout still tearing down [E]
+00:00 +12 -1: Some tests failed.
+== mutant M7
+00:30 +9 -1: a logout called right after a login ends that login [E]
+00:30 +12 -1: Some tests failed.

@@ -1,0 +1,38 @@
+== main 1d1751ba466: flutter test --reporter expanded test/features/auth/presentation/providers/auth_provider_test.dart
++0: AuthNotifier clearSession during a sign-in keeps the spinner of a sign-in still in flight
++1: AuthNotifier clearSession during a sign-in with no sign-in in flight, it clears the spinner
++2: AuthNotifier clearSession during a sign-in a successful login no longer counts as in flight
++3: AuthNotifier clearSession during a sign-in a successful register no longer counts as in flight
++4: AuthNotifier clearSession during a sign-in a failed login no longer counts as in flight
++5: AuthNotifier clearSession during a sign-in a failed register no longer counts as in flight
++6: AuthNotifier clearSession during a sign-in a register in flight keeps its spinner too, and a throwing one stops counting
++7: AuthNotifier clearSession during a sign-in a failed or throwing sign-in no longer counts as in flight
++8: AuthNotifier login should update state with user on success
++9: AuthNotifier login should update state with error on failure
++11: AuthNotifier register should update state with user on success
++12: AuthNotifier register should update state with error on failure
++13: AuthNotifier logout should clear user on success
++14: AuthNotifier logout should handle logout failure
++15: AuthNotifier logout should clear the user when the remote logout fails
++16: AuthNotifier refreshToken should not change state on success
++17: AuthNotifier refreshToken should logout on refresh token expiry
++18: AuthNotifier refreshToken should clear the session when the code says the refresh token died
++19: AuthNotifier refreshToken should keep the session when an unrelated failure mentions refresh
++20: AuthNotifier refreshToken should keep the session when a newer session ended the refresh
++21: AuthNotifier getCurrentUser should update state with user on success
++22: AuthNotifier getCurrentUser should handle null user
++23: AuthNotifier isAuthenticated should return true when authenticated
++24: AuthNotifier isAuthenticated should return false when not authenticated
++25: AuthNotifier isAuthenticated should return false on failure
++26: AuthNotifier Edge Cases should handle initial state correctly
++27: AuthNotifier Edge Cases should clear error on successful login after failure
++28: AuthNotifier Edge Cases should handle multiple rapid login attempts
++29: AuthNotifier Edge Cases should handle empty email in login
++30: AuthNotifier Edge Cases should handle empty password in login
++31: AuthNotifier Edge Cases should handle empty name in register
++32: AuthNotifier Edge Cases should preserve user on refresh token success
++33: AuthNotifier Edge Cases should handle getCurrentUser failure
++34: AuthNotifier Edge Cases should not logout on an untagged failure naming refresh
++35: AuthNotifier Edge Cases should handle refreshToken with non-refresh failure
++39: a refresh rejected with 400 invalid_grant logs the user out
++40: All tests passed!

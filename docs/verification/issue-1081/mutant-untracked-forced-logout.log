@@ -1,0 +1,5 @@
+== mutant: the interceptor forced logout not tracked
+00:00 +0 -1: a sign-in during a forced logout waits for its teardown and keeps its credentials [E]
+  Expected: empty
+    Actual: [Instance of '_AsyncCompleter<AuthResponseModel>']
+00:00 +0 -1: Some tests failed.

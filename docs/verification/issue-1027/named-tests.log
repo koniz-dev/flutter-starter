@@ -1,0 +1,16 @@
+== main 1d1751ba466: flutter test --reporter expanded test/features/auth/data/repositories/sign_in_session_guard_test.dart
++0: a logout during the login round trip leaves nothing stored
++1: a logout during the register round trip leaves nothing stored
++2: of two overlapping logins, the second one stays signed in
++3: a sign-in cut off by a logout asks the server to revoke its token
++4: a sign-in that is not cut off revokes nothing
++5: a sign-in replaced by another one does not revoke as the winner
++6: a sign-in replaced before the newer one stores does not revoke either
++7: a sign-in during a pending logout keeps its credentials
++8: a sign-in waits for every pending logout, not only the latest
++9: a logout called right after a login ends that login
++10: a revoke waits for a logout still tearing down
++11: no revoke goes out while a session still holds the store
++12: a sign-in gives up after the bound when a logout never finishes
++13: a sign-in started by a session listener during a logout waits for its teardown
++14: All tests passed!

@@ -1,0 +1,6 @@
+== main 1d1751ba466
+319:        'Secure token store: a late write or delete of $key could not be '
+320-        'undone; reads of it answer from memory until it is re-applied - by '
+321-        'the next write through this service, or, if its newer state is a '
+322-        'delete, by the next delete or the next read of it',
+323-        context: {

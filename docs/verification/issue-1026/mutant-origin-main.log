@@ -1,0 +1,4 @@
+== lib/features/auth/data/repositories/auth_repository_impl.dart at origin/main c0c6d5e14a5; tests from this branch
+00:00 +3 -1: a sign-in cut off by a logout asks the server to revoke its token [E]
+00:00 +5 -2: a sign-in during a pending logout keeps its credentials [E]
+00:00 +5 -2: Some tests failed.

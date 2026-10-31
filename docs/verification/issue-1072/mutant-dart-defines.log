@@ -1,0 +1,5 @@
+== tool/doc_dart_defines.dart before this change (HEAD 34672266a2f); test from this branch
+00:00 +3 -1: findUnknownDartDefines reads a quoted key, in either quote style or escaped [E]
+  Expected: ['NOPE_DOUBLE', 'NOPE_SINGLE', 'NOPE_ESCAPED']
+    Actual: MappedListIterable<UnknownDartDefine, String>:['NOPE_DOUBLE', 'NOPE_SINGLE']
+00:00 +7 -1: Some tests failed.

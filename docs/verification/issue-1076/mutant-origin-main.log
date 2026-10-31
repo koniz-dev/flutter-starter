@@ -1,0 +1,8 @@
+== tool/doc_test_paths.dart and doc_env_runs.dart at origin/main 0c91eaac26b; tests from this branch
+00:00 +2 -2: a block ending in a backslash does not swallow its closing fence [E]
+  Expected: ['test/nope_test.dart']
+    Actual: MappedListIterable<MissingTestPath, String>:['as', 'CI', 'does.']
+00:00 +2 -2: findEnvRunProblems a block ending in a backslash does not swallow its closing fence [E]
+  Expected: [9]
+    Actual: MappedListIterable<EnvRunProblem, int>:[]
+00:00 +16 -2: Some tests failed.

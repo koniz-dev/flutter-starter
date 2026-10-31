@@ -1,0 +1,6 @@
+== probe on main 4271149f401 (the doc branch changes no code): unpinned staging/production release realtime handshake (RawWebSocketClientImpl, releaseMode: true, ENVIRONMENT=production) against a loopback TLS server that asks for a client certificate. Source: probe-source.dart.txt
+PROBE overrides-only: connected=false; server saw a request with a client certificate: []; error: WebSocketChannelException: Failed to open WebSocket connection to wss://127.0.0.1:57508/s (HandshakeException)
+PROBE defaultContext: connected=true; server saw a request with a client certificate: [true]; error: null
+PROBE socket defaultContext: TLS ok, peer /CN=127.0.0.1
+PROBE socket own context: TLS ok, peer /CN=127.0.0.1
+00:00 +3: All tests passed!

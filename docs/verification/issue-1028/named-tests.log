@@ -1,0 +1,5 @@
+== main 1d1751ba466: flutter test --reporter expanded test/core/network/interceptors/auth_token_store_failure_test.dart
++0: a failed read on an ordinary request fails it and keeps the session
++1: a failed read on the refresh call ends the session
++2: a failed refresh-token read during a 401 ends the session, as the token store documents
++3: All tests passed!

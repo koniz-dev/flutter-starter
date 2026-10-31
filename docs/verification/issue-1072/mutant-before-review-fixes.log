@@ -1,0 +1,8 @@
+== tool/check_android_toolchain.dart and doc_symbols.dart before the review fixes (HEAD 731aab8330c); tests from this branch
+00:00 +5 -1: a commented-out version is ignored for the live one [E]
+  Expected: {'Gradle': '8.14', 'Android Gradle Plugin': '8.1.0', 'Kotlin': '1.9.0'}
+    Actual: {'Gradle': '8.14', 'Android Gradle Plugin': '97.0.0', 'Kotlin': '1.9.0'}
+00:00 +13 -2: declaresSymbol ignores a declaration inside a block comment or a string [E]
+  Expected: true
+    Actual: <false>
+00:00 +19 -2: Some tests failed.

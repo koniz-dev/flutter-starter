@@ -1,0 +1,141 @@
+// Throwaway probe, not committed: which client certificate reaches the
+// staging/production release realtime handshake with pinning off.
+@TestOn('!windows')
+library;
+
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_starter/core/config/env_config.dart';
+import 'package:flutter_starter/core/network/realtime/raw_websocket_client.dart';
+import 'package:flutter_starter/core/network/ssl_pinning.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late Directory dir;
+  late HttpServer server;
+  final seen = <bool>[];
+
+  void ssl(List<String> a) {
+    final r = Process.runSync('openssl', a, workingDirectory: dir.path);
+    expect(r.exitCode, 0, reason: '${r.stderr}');
+  }
+
+  setUpAll(() async {
+    HttpOverrides.global = null;
+    dir = Directory.systemTemp.createTempSync('mtls_probe_');
+    ssl(['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-days', '1',
+      '-subj', '/CN=ca', '-keyout', 'ca.key', '-out', 'ca.pem']);
+    for (final n in ['server', 'client']) {
+      ssl(['req', '-newkey', 'rsa:2048', '-nodes',
+        '-subj', '/CN=${n == 'server' ? '127.0.0.1' : 'client'}',
+        '-keyout', '$n.key', '-out', '$n.csr']);
+      File('${dir.path}/$n.ext').writeAsStringSync(n == 'server'
+          ? 'subjectAltName=IP:127.0.0.1\nextendedKeyUsage=serverAuth\n'
+          : 'extendedKeyUsage=clientAuth\n');
+      ssl(['x509', '-req', '-in', '$n.csr', '-CA', 'ca.pem', '-CAkey',
+        'ca.key', '-CAcreateserial', '-days', '1', '-extfile', '$n.ext',
+        '-out', '$n.pem']);
+    }
+    final ctx = SecurityContext()
+      ..useCertificateChain('${dir.path}/server.pem')
+      ..usePrivateKey('${dir.path}/server.key')
+      ..setTrustedCertificates('${dir.path}/ca.pem');
+    server = await HttpServer.bindSecure(
+      InternetAddress.loopbackIPv4,
+      0,
+      ctx,
+      requestClientCertificate: true,
+    )
+      ..listen((request) async {
+        seen.add(request.certificate != null);
+        if (request.certificate == null) {
+          request.response.statusCode = 403;
+          await request.response.close();
+          return;
+        }
+        final socket = await WebSocketTransformer.upgrade(request);
+        socket.add('hi');
+      });
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMessageHandler('flutter/assets', (m) async {
+      final b = Uint8List.fromList(utf8.encode('ENVIRONMENT=production\n'));
+      return ByteData.view(b.buffer);
+    });
+    await EnvConfig.load(fileName: 'env_probe');
+  });
+
+  tearDownAll(() async {
+    await server.close(force: true);
+    dir.deleteSync(recursive: true);
+  });
+
+  RawWebSocketClientImpl client() => RawWebSocketClientImpl(
+        sslPinning: SslPinning(enabled: false, fingerprints: const []),
+        releaseMode: true,
+      );
+
+  Future<String> attempt(String label) async {
+    seen.clear();
+    final c = client();
+    Object? error;
+    try {
+      await c.connect('wss://127.0.0.1:${server.port}/s');
+    } on Object catch (e) {
+      error = e;
+    }
+    final line = 'PROBE $label: connected=${c.isConnected}; server saw a '
+        'request with a client certificate: $seen; error: $error';
+    // ignore: avoid_print
+    print(line);
+    if (c.isConnected) c.disconnect();
+    return line;
+  }
+
+  test('a context installed only through HttpOverrides', () async {
+    final own = SecurityContext()
+      ..setTrustedCertificates('${dir.path}/ca.pem')
+      ..useCertificateChain('${dir.path}/client.pem')
+      ..usePrivateKey('${dir.path}/client.key');
+    HttpOverrides.global = _Ctx(own);
+    addTearDown(() => HttpOverrides.global = null);
+    await attempt('overrides-only');
+  });
+
+  test('a client certificate in SecurityContext.defaultContext', () async {
+    SecurityContext.defaultContext
+      ..setTrustedCertificates('${dir.path}/ca.pem')
+      ..useCertificateChain('${dir.path}/client.pem')
+      ..usePrivateKey('${dir.path}/client.key');
+    await attempt('defaultContext');
+  });
+  test('plain SecureSocket with defaultContext and with an own context', () async {
+    for (final (label, ctx) in [
+      ('defaultContext', null),
+      ('own context', SecurityContext()
+        ..setTrustedCertificates('${dir.path}/ca.pem')
+        ..useCertificateChain('${dir.path}/client.pem')
+        ..usePrivateKey('${dir.path}/client.key')),
+    ]) {
+      try {
+        final s = await SecureSocket.connect('127.0.0.1', server.port, context: ctx);
+        // ignore: avoid_print
+        print('PROBE socket $label: TLS ok, peer ${s.peerCertificate?.subject}');
+        s.destroy();
+      } on Object catch (e) {
+        // ignore: avoid_print
+        print('PROBE socket $label: $e');
+      }
+    }
+  });
+}
+
+class _Ctx extends HttpOverrides {
+  _Ctx(this.ctx);
+  final SecurityContext ctx;
+  @override
+  HttpClient createHttpClient(SecurityContext? context) =>
+      super.createHttpClient(ctx);
+}
