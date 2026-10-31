@@ -29,7 +29,7 @@ class _MockSecureStorage extends Mock implements SecureStorageService {}
 /// plugin's encryption) and whose deletes land at once.
 class _WebLikeStorage {
   _WebLikeStorage() {
-    when(() => mock.getString(any())).thenAnswer(
+    when(() => mock.getStringOrThrow(any())).thenAnswer(
       (i) async => values[i.positionalArguments[0] as String],
     );
     when(() => mock.setString(any(), any())).thenAnswer((i) async {

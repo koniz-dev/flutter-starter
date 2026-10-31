@@ -17,10 +17,12 @@ void main() {
     });
 
     test('getAccessToken should read AppConstants.tokenKey', () async {
-      when(() => secureStorage.getString(any())).thenAnswer((_) async => 't');
+      when(() => secureStorage.getStringOrThrow(any()))
+          .thenAnswer((_) async => 't');
       final token = await store.getAccessToken();
       expect(token, 't');
-      verify(() => secureStorage.getString(AppConstants.tokenKey)).called(1);
+      verify(() => secureStorage.getStringOrThrow(AppConstants.tokenKey))
+          .called(1);
     });
 
     test('setAccessToken should write AppConstants.tokenKey', () async {
@@ -41,11 +43,12 @@ void main() {
     });
 
     test('getRefreshToken should read AppConstants.refreshTokenKey', () async {
-      when(() => secureStorage.getString(any())).thenAnswer((_) async => 'rt');
+      when(() => secureStorage.getStringOrThrow(any()))
+          .thenAnswer((_) async => 'rt');
       final token = await store.getRefreshToken();
       expect(token, 'rt');
       verify(
-        () => secureStorage.getString(AppConstants.refreshTokenKey),
+        () => secureStorage.getStringOrThrow(AppConstants.refreshTokenKey),
       ).called(1);
     });
 

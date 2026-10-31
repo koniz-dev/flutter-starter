@@ -30,15 +30,26 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// different `SecureStorageService` objects still do not share a queue, so the
 /// app builds one service (`secureStorageServiceProvider`).
 ///
-/// The cost: one platform call that never completes holds every later token
-/// operation behind it, the token read on each request and a logout's clear
-/// included. Keychain and Keystore failures surface as errors, which do not
-/// hold the queue; a call that hangs outright would.
+/// The wait is bounded by [operationTimeout] (10 seconds by default).
+/// Without the bound, one platform call that never completed held every later
+/// token operation behind it - the token read on each request and a logout's
+/// clear included - until the app was restarted. Now an operation queued
+/// behind one that has not settled within the bound runs anyway; the hung
+/// call stays hung only for its own caller. The residual: if that call later
+/// completes, it lands out of order - which needs a call to hang for the whole
+/// bound and then succeed, where before any hang wedged the app.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
-  SecureTokenStore(this._secureStorageService);
+  SecureTokenStore(
+    this._secureStorageService, {
+    this.operationTimeout = const Duration(seconds: 10),
+  });
 
   final SecureStorageService _secureStorageService;
+
+  /// How long an operation waits for the one queued ahead of it before it
+  /// runs anyway.
+  final Duration operationTimeout;
 
   /// The operation queue of each backing service, shared by every store over
   /// it.
@@ -59,7 +70,13 @@ class SecureTokenStore implements ITokenStore {
     queue.tail = done.future;
     Future<T> run() async {
       try {
-        if (previous != null) await previous;
+        // Bounded: a predecessor that never settles - a hung platform call -
+        // stops holding this operation after [operationTimeout]. The bound is
+        // on the wait, not on the platform call, so an operation with nothing
+        // queued ahead of it starts no timer.
+        if (previous != null) {
+          await previous.timeout(operationTimeout, onTimeout: () {});
+        }
         return await operation();
       } finally {
         done.complete();
@@ -70,10 +87,16 @@ class SecureTokenStore implements ITokenStore {
     return run();
   }
 
+  /// Throws [CacheException] if the Keychain/Keystore read fails.
+  ///
+  /// [SecureStorageService.getString] answers a failed read with `null`, the
+  /// same as a missing token, so a transient failure (an iOS Keychain read
+  /// before first unlock) sent a request unauthenticated, its 401 found "no
+  /// refresh token", and the user was signed out. The strict read tells the
+  /// two apart: the caller fails the one request and keeps the session.
   @override
-  Future<String?> getAccessToken() => _inOrder(
-    () => _secureStorageService.getString(AppConstants.tokenKey),
-  );
+  Future<String?> getAccessToken() =>
+      _inOrder(() => _read(AppConstants.tokenKey));
 
   @override
   Future<bool> setAccessToken(String token) => _inOrder(
@@ -85,10 +108,11 @@ class SecureTokenStore implements ITokenStore {
   Future<void> clearAccessToken() =>
       _inOrder(() => _remove(AppConstants.tokenKey));
 
+  /// Throws [CacheException] if the Keychain/Keystore read fails; see
+  /// [getAccessToken].
   @override
-  Future<String?> getRefreshToken() => _inOrder(
-    () => _secureStorageService.getString(AppConstants.refreshTokenKey),
-  );
+  Future<String?> getRefreshToken() =>
+      _inOrder(() => _read(AppConstants.refreshTokenKey));
 
   @override
   Future<bool> setRefreshToken(String token) => _inOrder(
@@ -118,6 +142,14 @@ class SecureTokenStore implements ITokenStore {
       }
     }
     if (first != null) Error.throwWithStackTrace(first.$1, first.$2);
+  }
+
+  Future<String?> _read(String key) async {
+    try {
+      return await _secureStorageService.getStringOrThrow(key);
+    } on Exception catch (e) {
+      throw CacheException('Failed to read $key from secure storage: $e');
+    }
   }
 
   /// [SecureStorageService.remove] reports a failed delete as `false` rather
