@@ -43,7 +43,9 @@ class AuthInterceptor extends Interceptor {
     IKeyValueStore? keyValueStore,
     ISessionTerminationSink? sessionSink,
     SessionGeneration? sessionGeneration,
-  }) : _retryDioFactory = retryDioFactory,
+    Duration teardownStepTimeout = const Duration(seconds: 10),
+  }) : _teardownStepTimeout = teardownStepTimeout,
+       _retryDioFactory = retryDioFactory,
        _keyValueStore = keyValueStore,
        _sessionSink = sessionSink,
        _sessionGeneration = sessionGeneration ?? SessionGeneration(),
@@ -58,6 +60,11 @@ class AuthInterceptor extends Interceptor {
 
   /// Token storage for retrieving and storing authentication tokens
   final ITokenStore _tokenStore;
+
+  /// The longest each step of a forced logout's teardown may take before
+  /// the next one runs. A sign-in waits for the teardown, so a step that
+  /// never completed used to fail every sign-in after it.
+  final Duration _teardownStepTimeout;
 
   /// The token store this interceptor authenticates from.
   ///
@@ -839,7 +846,7 @@ class AuthInterceptor extends Interceptor {
 
     // Clear tokens from secure storage
     try {
-      await _tokenStore.clearAllTokens();
+      await _tokenStore.clearAllTokens().timeout(_teardownStepTimeout);
     } on Object catch (_) {
       // Never let cleanup failure stop a handler from being completed.
     }
@@ -848,7 +855,9 @@ class AuthInterceptor extends Interceptor {
     final keyValueStore = _keyValueStore;
     if (keyValueStore != null) {
       try {
-        await keyValueStore.remove(AppConstants.userDataKey);
+        await keyValueStore
+            .remove(AppConstants.userDataKey)
+            .timeout(_teardownStepTimeout);
       } on Object catch (_) {
         // Same reason as above: cleanup is best-effort, completion is not.
       }
@@ -862,7 +871,7 @@ class AuthInterceptor extends Interceptor {
     final responseCache = _responseCache;
     if (responseCache != null) {
       try {
-        await responseCache.clearCache();
+        await responseCache.clearCache().timeout(_teardownStepTimeout);
       } on Object catch (_) {
         // Same reason again. A cache that cannot be emptied must not strand
         // the 401 that triggered this logout.

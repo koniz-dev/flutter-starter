@@ -383,4 +383,30 @@ void main() {
     expect(await signIn, isA<Success<Object?>>());
     expect(tokens.accessToken, 'a-access');
   });
+
+  test('a logout step that never completes is bounded, so a later sign-in '
+      'succeeds', () async {
+    final bounded = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      localDataSource: AuthLocalDataSourceImpl(
+        storageService: storage,
+        tokenStore: tokens,
+      ),
+      teardownStepTimeout: const Duration(milliseconds: 20),
+    );
+    tokens
+      ..accessToken = 'old-access'
+      ..refreshToken = 'old-refresh';
+    remote.holdLogouts = true; // the server call never returns
+
+    final logout = await bounded.logout();
+    expect(logout, isA<ResultFailure<void>>(), reason: 'the server timed out');
+    expect(tokens.accessToken, isNull, reason: 'the local teardown still ran');
+
+    final signIn = bounded.login('a@b.c', 'pw');
+    await _settle();
+    remote.replies.single.complete(_pair('a'));
+    expect(await signIn, isA<Success<Object?>>());
+    expect(tokens.accessToken, 'a-access');
+  });
 }

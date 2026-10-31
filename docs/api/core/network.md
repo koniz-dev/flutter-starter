@@ -461,6 +461,7 @@ AuthInterceptor({
   IKeyValueStore? keyValueStore,
   ISessionTerminationSink? sessionSink,
   SessionGeneration? sessionGeneration,
+  Duration teardownStepTimeout = const Duration(seconds: 10),
 });
 ```
 
@@ -473,6 +474,7 @@ AuthInterceptor({
 | `keyValueStore` | no | Non-sensitive store holding the cached user blob, cleared on forced logout |
 | `sessionSink` | no | Told the session is over, so the running app drops in-memory session state |
 | `sessionGeneration` | no | Marks which sign-in a credential write belongs to; see [Refreshing across a logout](#refreshing-across-a-logout). Defaults to a private instance |
+| `teardownStepTimeout` | no | The longest each step of a forced logout's teardown (the token clear, the cached user, the response cache) may take before the next runs. A sign-in waits for that teardown, so an unbounded step could fail every sign-in after it. Default 10 s |
 
 **Exactly one of `tokenStore` or `secureStorageService` must be supplied.**
 Both are individually optional in the signature, but passing neither throws

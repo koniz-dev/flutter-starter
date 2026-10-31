@@ -41,6 +41,12 @@ class _SlowClearStore extends InMemoryTokenStore {
   }
 }
 
+/// A key-value store whose remove never completes, as a stuck platform call.
+class _HungRemoveStore extends InMemoryKeyValueStore {
+  @override
+  Future<bool> remove(String key) => Completer<bool>().future;
+}
+
 class _Sink implements ISessionTerminationSink {
   int calls = 0;
 
@@ -162,5 +168,53 @@ void main() {
     expect(tokens.accessToken, 'a-access');
     expect(tokens.refreshToken, 'a-refresh');
     expect((await repository.getCurrentUser()).dataOrNull, isNotNull);
+  });
+
+  test('a forced-logout step that never completes is bounded, so a later '
+      'sign-in succeeds', () async {
+    final generation = SessionGeneration();
+    final tokens = InMemoryTokenStore()..accessToken = 'old-access';
+    final sink = _Sink();
+    final apiClient = ApiClient(
+      storageService: InMemoryStorage(),
+      secureStorageService: _MockSecureStorageService(),
+      authInterceptor: AuthInterceptor(
+        tokenStore: tokens,
+        keyValueStore: _HungRemoveStore(),
+        sessionSink: sink,
+        sessionGeneration: generation,
+        teardownStepTimeout: const Duration(milliseconds: 20),
+        refreshToken: () async => const ResultFailure(
+          UnknownFailure(
+            'No refresh token available',
+            code: AuthErrorCodes.refreshTokenExpired,
+          ),
+        ),
+      ),
+    )..dio.httpClientAdapter = _Unauthorized();
+    final remote = _Remote();
+    final repository = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      localDataSource: AuthLocalDataSourceImpl(
+        storageService: InMemoryKeyValueStore(),
+        tokenStore: tokens,
+      ),
+      sessionGeneration: generation,
+      pendingLogoutLimit: const Duration(seconds: 5),
+    );
+
+    await apiClient.get('/me').then<void>((_) {}, onError: (Object _) {});
+    expect(sink.calls, 1, reason: 'the teardown ran past the hung step');
+
+    final signIn = repository.login('a@b.c', 'pw');
+    await _settle();
+    remote.replies.single.complete(
+      AuthResponseModel.fromJson({
+        'user': {'id': 'a', 'email': 'a@b.c'},
+        'token': 'a-access',
+        'refresh_token': 'a-refresh',
+      }),
+    );
+    expect(await signIn, isA<Success<Object?>>());
   });
 }

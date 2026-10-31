@@ -25,7 +25,16 @@ class AuthRepositoryImpl implements AuthRepository {
     this.httpCache,
     SessionGeneration? sessionGeneration,
     this.pendingLogoutLimit = const Duration(seconds: 30),
+    this.teardownStepTimeout = const Duration(seconds: 10),
   }) : sessionGeneration = sessionGeneration ?? SessionGeneration();
+
+  /// The longest each step of [logout] - the refresh-token read, the server
+  /// call, each clear - may take before it counts as failed and the next runs.
+  ///
+  /// A sign-in waits for a logout's teardown to finish, so one step that never
+  /// completed (a custom data source, a stuck platform call) used to fail
+  /// every sign-in after it.
+  final Duration teardownStepTimeout;
 
   /// How long a sign-in waits for a pending logout to finish tearing down
   /// before it fails with [AuthErrorCodes.signOutInProgress].
@@ -204,14 +213,18 @@ class AuthRepositoryImpl implements AuthRepository {
     // reaching the token.
     String? refreshToken;
     try {
-      refreshToken = await localDataSource.getRefreshToken();
+      refreshToken = await localDataSource.getRefreshToken().timeout(
+        teardownStepTimeout,
+      );
     } on Object {
       refreshToken = null;
     }
 
     Object? remoteError;
     try {
-      await remoteDataSource.logout(refreshToken: refreshToken);
+      await remoteDataSource
+          .logout(refreshToken: refreshToken)
+          .timeout(teardownStepTimeout);
     } on Object catch (e) {
       remoteError = e;
     }
@@ -231,7 +244,7 @@ class AuthRepositoryImpl implements AuthRepository {
     Object? localError;
 
     try {
-      await localDataSource.clearCache();
+      await localDataSource.clearCache().timeout(teardownStepTimeout);
     } on Object catch (e) {
       localError = e;
     }
@@ -242,7 +255,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final cache = httpCache;
     if (cache != null) {
       try {
-        await cache.clearCache();
+        await cache.clearCache().timeout(teardownStepTimeout);
       } on Object catch (e) {
         localError ??= e;
       }
