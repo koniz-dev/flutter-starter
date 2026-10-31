@@ -12,3 +12,16 @@ String? featureNameProblem(String name) {
   }
   return null;
 }
+
+/// Why [name] is not an UpperCamelCase class name, or `null` if it is.
+///
+/// Every generated type is named from it (`Get{{class_name}}ByIdUseCase`), so
+/// `user_profile` generated code that failed `camel_case_types`, and
+/// `Order Item` generated code that did not parse.
+String? classNameProblem(String name) {
+  if (!RegExp(r'^[A-Z][A-Za-z0-9]*$').hasMatch(name)) {
+    return 'class_name "$name" must be UpperCamelCase (for example '
+        'UserProfile)';
+  }
+  return null;
+}
