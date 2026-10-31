@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
@@ -92,6 +94,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Result<User>> login(String email, String password) async {
+    await _afterPendingLogout();
     // A different credential set is about to land. Any refresh already in
     // flight belongs to the session being replaced and must not overwrite it.
     sessionGeneration.invalidate();
@@ -112,6 +115,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
     String name,
   ) async {
+    await _afterPendingLogout();
     // Same reason as [login]: this writes a new credential set.
     sessionGeneration.invalidate();
     final generation = sessionGeneration.current;
@@ -151,7 +155,32 @@ class AuthRepositoryImpl implements AuthRepository {
   /// session still sitting on the device is the more serious of the two, and it
   /// is the one the caller must not paper over.
   @override
-  Future<Result<void>> logout() async {
+  Future<Result<void>> logout() {
+    final run = _logout();
+    final settled = run.then<void>((_) {}, onError: (Object _) {});
+    _pendingLogout = settled;
+    unawaited(
+      settled.whenComplete(() {
+        if (identical(_pendingLogout, settled)) _pendingLogout = null;
+      }),
+    );
+    return run;
+  }
+
+  /// The [logout] still tearing down, or null.
+  ///
+  /// A sign-in waits for it. Its teardown runs after its server call, so a
+  /// sign-in that completed while that call was pending (a slow network) had
+  /// its fresh credentials deleted by the teardown, and the user was signed
+  /// out on the next token read.
+  Future<void>? _pendingLogout;
+
+  Future<void> _afterPendingLogout() async {
+    final pending = _pendingLogout;
+    if (pending != null) await pending;
+  }
+
+  Future<Result<void>> _logout() async {
     // First, and synchronously, ahead of every await below: the user has asked
     // to be signed out, so a refresh already in flight is stale from this
     // instant. Doing it after the teardown would leave the whole remote call
@@ -298,23 +327,53 @@ class AuthRepositoryImpl implements AuthRepository {
     AuthResponseModel authResponse,
     int generation,
   ) async {
-    const stale = ResultFailure<User>(
-      UnknownFailure(
-        'Session ended while the sign-in was in flight',
-        code: AuthErrorCodes.sessionTerminated,
-      ),
-    );
-    if (!sessionGeneration.isCurrent(generation)) return stale;
+    Future<Result<User>> stale() async {
+      await _revokeDiscarded(authResponse);
+      return const ResultFailure<User>(
+        UnknownFailure(
+          'Session ended while the sign-in was in flight',
+          code: AuthErrorCodes.sessionTerminated,
+        ),
+      );
+    }
+
+    if (!sessionGeneration.isCurrent(generation)) return await stale();
     await localDataSource.cacheUser(authResponse.user);
-    if (!sessionGeneration.isCurrent(generation)) return stale;
+    if (!sessionGeneration.isCurrent(generation)) return await stale();
     await localDataSource.cacheToken(authResponse.token);
     final refreshToken = authResponse.refreshToken;
     if (refreshToken != null) {
-      if (!sessionGeneration.isCurrent(generation)) return stale;
+      if (!sessionGeneration.isCurrent(generation)) return await stale();
       await localDataSource.cacheRefreshToken(refreshToken);
     }
-    if (!sessionGeneration.isCurrent(generation)) return stale;
+    if (!sessionGeneration.isCurrent(generation)) return await stale();
     return Success(authResponse.user);
+  }
+
+  /// Asks the server to revoke the refresh token of a sign-in whose session
+  /// ended before it could be stored, best effort.
+  ///
+  /// Its tokens are discarded, so nothing else would ever revoke them: a
+  /// logout that ran during the round trip revoked the token stored *then*,
+  /// and the server session stayed live until it expired.
+  ///
+  /// Only when no session holds the store, after any pending logout has
+  /// finished: the request goes through `ApiClient`, whose `AuthInterceptor`
+  /// attaches the stored access token, and the revoke must not go out as
+  /// another session that a newer sign-in stored. That newer-sign-in case is
+  /// left to expire on the server.
+  Future<void> _revokeDiscarded(AuthResponseModel authResponse) async {
+    final refreshToken = authResponse.refreshToken;
+    if (refreshToken == null) return;
+    try {
+      await _afterPendingLogout();
+      final stored = await localDataSource.getToken();
+      if (stored != null && stored.isNotEmpty) return;
+      await remoteDataSource.logout(refreshToken: refreshToken);
+    } on Object {
+      // Best effort: the sign-in has already failed, and the token was never
+      // stored on this device.
+    }
   }
 
   /// Exchanges the stored refresh token for a new credential pair.
