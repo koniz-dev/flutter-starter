@@ -56,7 +56,42 @@ enum DeployTrigger {
   branch,
 }
 
+const String _usage = '''
+Usage: dart run scripts/dev/setup_ci.dart [options]
+
+  --dry-run                 Show what would change; write nothing.
+  --yes                     Do not ask for confirmation.
+  --dir <path>              Workflows directory (default: .github/workflows).
+  --deploy-trigger=<tags|branch>
+                            Also enable that push trigger on the deploy
+                            workflows.
+  --help                    Print this message.''';
+
 void main(List<String> args) {
+  if (args.contains('--help') || args.contains('-h')) {
+    print(_usage);
+    return;
+  }
+  // An unknown flag used to be ignored, so a typo such as --dryrun wrote the
+  // workflows it was meant to only preview.
+  final unknown = <String>[];
+  for (var i = 0; i < args.length; i++) {
+    final arg = args[i];
+    if (arg == '--dir') {
+      i++; // its value
+    } else if (arg != '--dry-run' &&
+        arg != '--yes' &&
+        !arg.startsWith('--deploy-trigger=')) {
+      unknown.add(arg);
+    }
+  }
+  if (unknown.isNotEmpty) {
+    print('Error: unknown option ${unknown.join(' ')}. Nothing was written.');
+    print(_usage);
+    exitCode = 64;
+    return;
+  }
+
   final dryRun = args.contains('--dry-run');
   final assumeYes = args.contains('--yes') || dryRun;
 
