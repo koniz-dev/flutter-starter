@@ -41,11 +41,29 @@ Nine boundary contracts have existed across that review. Here is each one.
 
 | Contract | Named production consumer | Implementation |
 |---|---|---|
-| `INetworkClient` | `ApiClient._networkClient` (`lib/core/network/api_client.dart:138`), called from `_send` (`:259`), which every verb method routes through | `DioNetworkClient` (`lib/core/network/adapters/dio_network_client.dart:5`) |
-| `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/features/auth/data/datasources/auth_local_datasource.dart:54`) and every sample slice's local data source, `AuthInterceptor` (`lib/core/network/interceptors/auth_interceptor.dart:67`) | `StorageService` (`lib/core/storage/storage_service.dart:47`) |
-| `ITokenStore` | `AuthInterceptor` (`lib/core/network/interceptors/auth_interceptor.dart:52`), `CacheInterceptor` (`lib/core/network/interceptors/cache_interceptor.dart:115`), `AuthLocalDataSourceImpl` (`auth_local_datasource.dart:57`) | `SecureTokenStore` (`lib/core/storage/adapters/secure_token_store.dart:6`) |
-| `IHttpResponseCache` | `AuthInterceptor._responseCache` (`auth_interceptor.dart:118`), `AuthRepositoryImpl.httpCache` (`lib/features/auth/data/repositories/auth_repository_impl.dart:35`), exposed as `ApiClient.responseCache` (`api_client.dart:160`) | `CacheInterceptor` (`lib/core/network/interceptors/cache_interceptor.dart:97`) |
-| `ISessionTerminationSink` | `AuthInterceptor._sessionSink` (`auth_interceptor.dart:87`), declared as a port at `lib/core/di/providers.dart:156` and filled by `authModuleOverrides` | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart:277`) |
+| `INetworkClient` | `ApiClient._networkClient` (`lib/core/network/api_client.dart`), called from `ApiClient._send`, which every verb method routes through | `DioNetworkClient` (`lib/core/network/adapters/dio_network_client.dart`) |
+| `IKeyValueStore` | `AuthLocalDataSourceImpl` (`lib/features/auth/data/datasources/auth_local_datasource.dart`) and every sample slice's local data source, `AuthInterceptor` (`lib/core/network/interceptors/auth_interceptor.dart`) | `StorageService` (`lib/core/storage/storage_service.dart`) |
+| `ITokenStore` | `AuthInterceptor`, `CacheInterceptor` (`lib/core/network/interceptors/cache_interceptor.dart`), `AuthLocalDataSourceImpl` | `SecureTokenStore` (`lib/core/storage/adapters/secure_token_store.dart`) |
+| `IHttpResponseCache` | `AuthInterceptor._responseCache`, `AuthRepositoryImpl.httpCache` (`lib/features/auth/data/repositories/auth_repository_impl.dart`), exposed as `ApiClient.responseCache` | `CacheInterceptor` |
+| `ISessionTerminationSink` | `AuthInterceptor._sessionSink`, declared as a port in `lib/core/di/providers.dart` and filled by `authModuleOverrides` | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart`) |
+
+<!-- symbol: lib/core/network/api_client.dart ApiClient._networkClient -->
+<!-- symbol: lib/core/network/api_client.dart ApiClient._send -->
+<!-- symbol: lib/core/network/api_client.dart ApiClient.responseCache -->
+<!-- symbol: lib/core/network/api_client.dart ApiClient.dio -->
+<!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->
+<!-- symbol: lib/features/auth/data/datasources/auth_local_datasource.dart AuthLocalDataSourceImpl -->
+<!-- symbol: lib/core/network/interceptors/auth_interceptor.dart AuthInterceptor -->
+<!-- symbol: lib/core/network/interceptors/auth_interceptor.dart AuthInterceptor._responseCache -->
+<!-- symbol: lib/core/network/interceptors/auth_interceptor.dart AuthInterceptor._sessionSink -->
+<!-- symbol: lib/core/storage/storage_service.dart StorageService -->
+<!-- symbol: lib/core/network/interceptors/cache_interceptor.dart CacheInterceptor -->
+<!-- symbol: lib/core/storage/adapters/secure_token_store.dart SecureTokenStore -->
+<!-- symbol: lib/features/auth/data/repositories/auth_repository_impl.dart AuthRepositoryImpl.httpCache -->
+<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart RiverpodSessionTerminationSink -->
+<!-- symbol: lib/core/contracts/design_tokens_contracts.dart AppDesignTokens -->
+<!-- symbol: lib/shared/design_system/tokens/default_design_tokens.dart DefaultDesignTokens -->
+<!-- symbol: lib/shared/theme/app_theme.dart AppTheme._tokens -->
 
 `IKeyValueStore` and `ITokenStore` are listed separately here even though
 contracts-map.md pairs them: they have different implementations and different
@@ -62,8 +80,8 @@ consumer sets, and a verdict is per contract.
 
 **`IAuthController` is to be removed**, with `AuthStateSnapshot`,
 `ControllerStateSnapshot`, `authControllerProvider`
-(`lib/features/auth/presentation/providers/auth_provider.dart:289`) and the
-`implements IAuthController` clause on `AuthNotifier` (`:48`).
+(`lib/features/auth/presentation/providers/auth_provider.dart`) and the
+`implements IAuthController` clause on `AuthNotifier`.
 
 `AuthNotifier` does implement it, so this is not the `ITasksController` case
 exactly - but `authControllerProvider` has **zero readers** in `lib/` and
@@ -92,16 +110,16 @@ below.
 field on the abstraction instead of the concrete class:
 
 ```dart
-// lib/shared/theme/app_theme.dart:7
+// lib/shared/theme/app_theme.dart, AppTheme
 static const _tokens = DefaultDesignTokens();        // today
 static const AppDesignTokens _tokens = DefaultDesignTokens();   // decided
 ```
 
 Nothing in `lib/` is currently typed on `AppDesignTokens`: `grep -rn
 "AppDesignTokens" lib` returns the declaration
-(`lib/core/contracts/design_tokens_contracts.dart:7`) and
+(`lib/core/contracts/design_tokens_contracts.dart`) and
 `DefaultDesignTokens implements AppDesignTokens`
-(`lib/shared/design_system/tokens/default_design_tokens.dart:9`), and nothing
+(`lib/shared/design_system/tokens/default_design_tokens.dart`), and nothing
 else. So the swap [0004-theme-token-boundary.md](0004-theme-token-boundary.md)
 promises requires editing `app_theme.dart`, not overriding anything.
 
@@ -136,7 +154,7 @@ network boundary. Per axis:
 
 | Axis | Rule | tasks | feature_flags |
 |---|---|---|---|
-| `di/` | A slice's wiring lives in `di/<slice>_providers.dart`. | conforms | **must conform.** `feature_flags_providers.dart:7-9` produces the only `presentation/` -> `data/` import edges in `lib/`; moving the file to `di/` removes them without changing a line of logic |
+| `di/` | A slice's wiring lives in `di/<slice>_providers.dart`. | conforms | **must conform.** the imports at the top of `feature_flags_providers.dart` produce the only `presentation/` -> `data/` import edges in `lib/`; moving the file to `di/` removes them without changing a line of logic |
 | `domain/usecases/` | A slice exposes its operations as use cases, not as repository calls from a notifier. | conforms (6) | **legitimately differs.** Feature flags has no orchestration to put in a use case: every operation is a single repository read or write, and `FeatureFlagsManager` (`domain/feature_flags_manager.dart`) is the policy layer. A use case per flag read would be a pass-through |
 | `data/models/` | A slice that crosses a serialization boundary has models distinct from its entities. | conforms | **legitimately differs.** `FeatureFlag` is persisted as-is through `IKeyValueStore` with no wire format to map, so a model would duplicate the entity |
 | `routing/` | A slice that owns screens declares them in `routing/<slice>_routes.dart`. | conforms | conforms |
@@ -160,9 +178,9 @@ here because an ADR that omits them leaves a reader guessing.
 
 **`ApiClient`'s Dio surface.** The
 `Response`-returning overloads are **removed**: every verb on `ApiClient` now
-returns `NetworkResponse<dynamic>` (`api_client.dart:169`, `:192`, `:217`,
-`:242`) and `_sendWithCompatibility`, which rebuilt a Dio `Response` out of a
-`NetworkResponse`, is gone. `Dio get dio` (`:151`) is **kept, undeprecated**, as
+returns `NetworkResponse<dynamic>` (`get`, `post`, `put` and `delete` in
+`api_client.dart`) and `_sendWithCompatibility`, which rebuilt a Dio `Response` out of a
+`NetworkResponse`, is gone. `Dio get dio` is **kept, undeprecated**, as
 a documented escape hatch that is deliberately not on any request path - for
 swapping `Dio.httpClientAdapter`, inspecting `Dio.interceptors` or reading
 `BaseOptions`. Typing a data source on what it returns puts `package:dio` back
@@ -226,8 +244,8 @@ picked up directly.
 
 | What | Area | Change |
 |---|---|---|
-| Remove `IAuthController` | auth slice | Delete `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` from `lib/core/contracts/state_boundary_contracts.dart`; delete `authControllerProvider` (`auth_provider.dart:289`) and the `implements IAuthController` clause (`:48`); drop the row and the `<!-- symbol: ... authControllerProvider -->` directive from contracts-map.md |
-| Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart:7`); update the contracts-map.md row from "No production consumer" to "Live" |
+| Remove `IAuthController` | auth slice | Delete `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` from `lib/core/contracts/state_boundary_contracts.dart`; delete `authControllerProvider` and the `implements IAuthController` clause on `AuthNotifier` (both in `auth_provider.dart`); drop the row and the `<!-- symbol: ... authControllerProvider -->` directive from contracts-map.md |
+| Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart`); update the contracts-map.md row from "No production consumer" to "Live" |
 | Teach the brick `routing/` | tooling | Add `routing/{{feature_name}}_routes.dart` to `bricks/feature_clean/__brick__`, matching the auth slice |
 
 ## Compatibility
