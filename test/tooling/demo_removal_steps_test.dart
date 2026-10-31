@@ -61,6 +61,8 @@ void main() {
     final strays = <String>[];
     for (final path in (tracked.stdout as String).trim().split('\n')) {
       if (!path.endsWith('.dart') && !path.endsWith('.md')) continue;
+      // A tree the strip tool has run on still lists the files it deleted.
+      if (!File(path).existsSync()) continue;
       if (_deleted.any(path.startsWith) || _edited.containsKey(path)) {
         continue;
       }
