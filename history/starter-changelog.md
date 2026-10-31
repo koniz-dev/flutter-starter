@@ -64,6 +64,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   running the old hooks until you do. It refuses, and says so, when the
   repository already points `core.hooksPath` somewhere else.
 
+- **`AuthRemoteDataSource.logout` takes `{String? refreshToken}`** and posts
+  it as `{"refresh_token": ...}`, so the server can revoke the session; it
+  used to send nothing. **What you change:** add the parameter to your own
+  `AuthRemoteDataSource` implementations and test fakes, and accept the body
+  on your `/auth/logout` endpoint.
+- **A staging or production release refuses a `BASE_URL` that is not
+  `https`**, a relative or scheme-less value included: web and desktop do not
+  block cleartext, so tokens would travel unencrypted. `build.yml` falls back
+  to the https defaults per environment. **What you change:** use an `https`
+  URL in release builds; `http://10.0.2.2` and `localhost` stay for
+  development and debug builds.
+
 ### Security
 
 - `AuthInterceptor` attaches the access token only to the API's own origin
@@ -110,6 +122,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   two credential writes and before returning. A logout that landed during the
   access-token write used to leave the new refresh token on a signed-out
   device.
+
+- `AuthRepositoryImpl.login()` and `register()` re-check the session before
+  each credential write, so a logout during the round trip is no longer
+  undone by the sign-in's later writes.
+- `SecureTokenStore` reads strictly: a failed Keychain/Keystore read throws
+  `CacheException` instead of reading as "no token", which signed the user
+  out. A predecessor call that hangs no longer blocks every later token
+  operation: the wait is bounded by `operationTimeout` (10 s).
+  `SecureStorageService.clear()` is documented as unsuitable for sign-out.
 
 ### Fixed
 
@@ -180,6 +201,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `git-hooks.yml` and `release-scripts.yml` also run on pull requests that
   touch their paths (template repository only, as before), so a broken hook
   or release script no longer merges green.
+
+- Tasks: a stored task with a wrong-typed field, or an undecodable list,
+  fails as a `CacheFailure` instead of escaping as a `TypeError` or reading
+  as no tasks (which the next save overwrote). Toggling a task that is not
+  stored returns `NotFoundFailure`; Delete is disabled while a toggle of the
+  same task is pending.
+- Startup: tapping Try again twice no longer runs two bootstraps at once;
+  `bootstrap()` shares the one in flight and the button is disabled while it
+  runs.
+- fastlane: every lane accepts only `environment:staging` or `production`
+  (trimmed, any case) and stops on anything else, which used to build a
+  release that refuses to start. `get_version` accepts a pubspec version
+  without `+build` (build number 1) and refuses a prerelease.
 
 ### Documentation
 
