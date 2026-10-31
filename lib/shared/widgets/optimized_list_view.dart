@@ -111,20 +111,48 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   /// that silently stopped growing.
   String? _loadMoreError;
 
+  /// Whether [_scrollController] was created here, and so is disposed here.
+  late bool _ownsController;
+
   @override
   void initState() {
     super.initState();
-    _scrollController = widget.scrollController ?? ScrollController();
+    _attach(widget.scrollController);
+  }
+
+  /// Adopts [external], or a controller of this state's own when null, and
+  /// listens to it for prefetch.
+  void _attach(ScrollController? external) {
+    _ownsController = external == null;
+    _scrollController = external ?? ScrollController();
     _scrollController.addListener(_onScroll);
   }
 
-  @override
-  void dispose() {
-    if (widget.scrollController == null) {
+  /// Stops listening to the current controller, disposing it if it was
+  /// created here.
+  void _detach() {
+    if (_ownsController) {
       _scrollController.dispose();
     } else {
       _scrollController.removeListener(_onScroll);
     }
+  }
+
+  @override
+  void didUpdateWidget(OptimizedListView<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // A controller passed, removed or swapped after the first build: the list
+    // used to keep the first one, so the parent's controller had no clients
+    // and prefetch kept listening to the old one.
+    if (widget.scrollController != oldWidget.scrollController) {
+      _detach();
+      _attach(widget.scrollController);
+    }
+  }
+
+  @override
+  void dispose() {
+    _detach();
     super.dispose();
   }
 
