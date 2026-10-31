@@ -69,7 +69,12 @@ void main() {
     }
     // What is left stays useful.
     expect(everything, contains('HttpException'));
-    expect(everything, contains('Connection closed'));
+    // The reason survives, in the platform's wording: dart:io reports a
+    // socket closed before the response as a close, or under load a reset.
+    expect(
+      everything,
+      anyOf(contains('Connection closed'), contains('Connection reset')),
+    );
     expect(everything, contains('page=3'));
   });
 }
