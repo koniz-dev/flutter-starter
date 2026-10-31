@@ -138,7 +138,7 @@ What counts as a secrets file, by name only - nothing reads file contents:
 
 | Matched | Not matched |
 |---|---|
-| `.env` and `.env.*` (except `.env.example`) | `.env.example` |
+| `.env`, `.env.*`, `.env-*`, `.env_*`, `.envrc*` and any `*.env` such as `production.env` (except `.env.example`) | `.env.example`, and names that only start alike: `.envelope`, `environment.dart`, `env.json` |
 | `.pem`, `.key`, `.p12`, `.pfx`, `.p8`, `.jks`, `.keystore`, `.mobileprovision`, `.provisionprofile` | `.cer`, `.crt`, `.der` - a certificate is public by design, and a pinning setup may legitimately ship one |
 | `secrets.{json,yaml,yml}`, `credentials.json`, `service-account.json`, `key.properties`, `google-services.json`, `GoogleService-Info.plist` | `config.json`, `app_config.yaml` and other ordinary configuration |
 

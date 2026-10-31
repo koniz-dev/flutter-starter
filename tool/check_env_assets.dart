@@ -113,8 +113,9 @@ final RegExp _ackProseSeparator = RegExp(r'[;\u2014\u2013]|\s-{1,2}(\s|$)');
 /// One bare file name in an acknowledgement: no spaces, no path, no quotes.
 ///
 /// It must contain a dot, which costs nothing: every name [secretAssetReason]
-/// can flag has one (`.env`, `.env.*`, an extension from
-/// [secretAssetExtensions], a name from [secretAssetNames]). Requiring it is
+/// can flag has one (`.env` and its `.env.*`, `.env-*`, `.env_*`, `.envrc*`
+/// and `*.env` spellings, an extension from [secretAssetExtensions], a name
+/// from [secretAssetNames]). Requiring it is
 /// what lets a one-word comma segment such as `reviewed` read as prose rather
 /// than as the name of a file that will never exist.
 final RegExp _ackName = RegExp(r'^[A-Za-z0-9_+-]*\.[A-Za-z0-9._+-]*$');
@@ -217,7 +218,15 @@ String? secretAssetReason(String fileName) {
   if (name == allowedEnvAsset) {
     return null;
   }
-  if (name == '.env' || name.startsWith('.env.')) {
+  // `.env` and its variants (`.env.production`, `.env-staging`, `.env_prod`,
+  // `.envrc`), and any `<name>.env` such as `production.env` or
+  // `app_config.env`.
+  if (name == '.env' ||
+      name.startsWith('.env.') ||
+      name.startsWith('.env-') ||
+      name.startsWith('.env_') ||
+      name.startsWith('.envrc') ||
+      name.endsWith('.env')) {
     return 'environment file';
   }
 
