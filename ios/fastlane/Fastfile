@@ -9,6 +9,7 @@
 
 require 'shellwords'
 require_relative '../../fastlane/ssl_pinning'
+require_relative '../../fastlane/release_environment'
 
 # Default platform
 default_platform(:ios)
@@ -33,11 +34,13 @@ platform :ios do
   desc "Get version from pubspec.yaml"
   lane :get_version do
     pubspec = File.read("#{REPO_ROOT}/pubspec.yaml")
-    version_match = pubspec.match(/version:\s*([\d.]+)\+(\d+)/)
+    version_match = pubspec.match(/^version:\s*([\d.]+)(?:\+(\d+))?\s*(?:#.*)?$/)
     UI.user_error!("Could not parse version from pubspec.yaml") unless version_match
 
     version_name = version_match[1]
-    build_number = version_match[2]
+    # Without "+N" Flutter builds with build number 1; say the same here
+    # rather than abort, since bump_version.sh writes that form too.
+    build_number = version_match[2] || "1"
     UI.message("Version: #{version_name}, Build: #{build_number}")
     # NOT `return`: a lane body is a block, and `return` inside one raises
     # LocalJumpError, which fastlane reports as an error in the lane that
@@ -51,7 +54,7 @@ platform :ios do
 
   desc "Build IPA for App Store"
   lane :build_appstore do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     UI.message("Building for App Store - Environment: #{environment}")
@@ -91,7 +94,7 @@ platform :ios do
 
   desc "Build IPA for Ad Hoc distribution"
   lane :build_adhoc do |options|
-    environment = options[:environment] || "staging"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
 
     UI.message("Building for Ad Hoc - Environment: #{environment}")
@@ -131,7 +134,7 @@ platform :ios do
 
   desc "Upload to App Store Connect"
   lane :upload_appstore do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
     # `options[:x] || true` is always true - fetch with a default is the only way
     # to let a caller pass false.
@@ -160,7 +163,7 @@ platform :ios do
 
   desc "Upload to TestFlight"
   lane :upload_testflight do |options|
-    environment = options[:environment] || "staging"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
     base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
     groups = options[:groups] || ["Internal Testers"] # TestFlight groups
 
@@ -185,7 +188,7 @@ platform :ios do
 
   desc "Upload to App Store Connect and submit for review"
   lane :release do |options|
-    environment = options[:environment] || "production"
+    environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
     base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
 
     # Build and upload
