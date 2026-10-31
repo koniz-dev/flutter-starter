@@ -342,6 +342,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   which the sign-in fails with the new `AuthErrorCodes.signOutInProgress`. A
   sign-in also still invalidates the session synchronously, so a logout
   called right after it ends it.
+- A forced logout that lands while a sign-in is waiting on it no longer
+  stops that sign-in's spinner: `AuthNotifier.clearSession()` keeps
+  `isLoading` while a `login`/`register` is in flight, so the button cannot
+  start a second sign-in that cancels the first.
 - `SecureTokenStore`: a read of a token key left stale after a failed repair,
   whose newer state is a delete, retries that delete (bounded, one retry per
   key at a time, never a write), so a signed-out app does not leave the late
