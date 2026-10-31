@@ -24,7 +24,12 @@ class AuthRepositoryImpl implements AuthRepository {
     required this.localDataSource,
     this.httpCache,
     SessionGeneration? sessionGeneration,
+    this.pendingLogoutLimit = const Duration(seconds: 30),
   }) : sessionGeneration = sessionGeneration ?? SessionGeneration();
+
+  /// How long a sign-in waits for a pending logout to finish tearing down
+  /// before it fails with [AuthErrorCodes.signOutInProgress].
+  final Duration pendingLogoutLimit;
 
   /// Remote data source for API calls
   final AuthRemoteDataSource remoteDataSource;
@@ -93,15 +98,33 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<User>> login(String email, String password) async {
-    await _afterPendingLogout();
-    // A different credential set is about to land. Any refresh already in
-    // flight belongs to the session being replaced and must not overwrite it.
+  Future<Result<User>> login(String email, String password) =>
+      _signIn(() => remoteDataSource.login(email, password));
+
+  @override
+  Future<Result<User>> register(String email, String password, String name) =>
+      _signIn(() => remoteDataSource.register(email, password, name));
+
+  /// Signs in through [request] ([login] and [register]).
+  Future<Result<User>> _signIn(
+    Future<AuthResponseModel> Function() request,
+  ) async {
+    // Synchronously, before any await: a different credential set is about
+    // to land, so a refresh already in flight belongs to the session being
+    // replaced, and a logout called right after this one ends this sign-in.
     sessionGeneration.invalidate();
     final generation = sessionGeneration.current;
+    final signIn = ++_signInsStarted;
+    // A logout still tearing down would delete what this sign-in stores.
+    if (!await _afterPendingLogouts()) {
+      return const ResultFailure(_signOutInProgress);
+    }
+    if (!sessionGeneration.isCurrent(generation)) {
+      return const ResultFailure(_signInSessionEnded);
+    }
     try {
-      final authResponse = await remoteDataSource.login(email, password);
-      return await _persistSignIn(authResponse, generation);
+      final authResponse = await request();
+      return await _persistSignIn(authResponse, generation, signIn);
     } on Exception catch (e) {
       return ResultFailure(_signInFailure(e));
     } on Object catch (_) {
@@ -109,29 +132,18 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  @override
-  Future<Result<User>> register(
-    String email,
-    String password,
-    String name,
-  ) async {
-    await _afterPendingLogout();
-    // Same reason as [login]: this writes a new credential set.
-    sessionGeneration.invalidate();
-    final generation = sessionGeneration.current;
-    try {
-      final authResponse = await remoteDataSource.register(
-        email,
-        password,
-        name,
-      );
-      return await _persistSignIn(authResponse, generation);
-    } on Exception catch (e) {
-      return ResultFailure(_signInFailure(e));
-    } on Object catch (_) {
-      return const ResultFailure(_unreadableResponse);
-    }
-  }
+  /// How many sign-ins have started; see [_revokeDiscarded].
+  int _signInsStarted = 0;
+
+  static const _signInSessionEnded = UnknownFailure(
+    'Session ended while the sign-in was in flight',
+    code: AuthErrorCodes.sessionTerminated,
+  );
+
+  static const _signOutInProgress = UnknownFailure(
+    'Still signing out of the previous session; try again',
+    code: AuthErrorCodes.signOutInProgress,
+  );
 
   /// Logs the current user out.
   ///
@@ -158,26 +170,34 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<void>> logout() {
     final run = _logout();
     final settled = run.then<void>((_) {}, onError: (Object _) {});
-    _pendingLogout = settled;
-    unawaited(
-      settled.whenComplete(() {
-        if (identical(_pendingLogout, settled)) _pendingLogout = null;
-      }),
-    );
+    _pendingLogouts.add(settled);
+    unawaited(settled.whenComplete(() => _pendingLogouts.remove(settled)));
     return run;
   }
 
-  /// The [logout] still tearing down, or null.
+  /// Every [logout] still tearing down.
   ///
-  /// A sign-in waits for it. Its teardown runs after its server call, so a
-  /// sign-in that completed while that call was pending (a slow network) had
-  /// its fresh credentials deleted by the teardown, and the user was signed
-  /// out on the next token read.
-  Future<void>? _pendingLogout;
+  /// A sign-in waits for all of them. A logout's teardown runs after its
+  /// server call, so a sign-in that completed while that call was pending (a
+  /// slow network) had its fresh credentials deleted by the teardown, and the
+  /// user was signed out on the next token read. All of them, not the latest:
+  /// an earlier logout still pending tears down just the same.
+  final Set<Future<void>> _pendingLogouts = {};
 
-  Future<void> _afterPendingLogout() async {
-    final pending = _pendingLogout;
-    if (pending != null) await pending;
+  /// Waits until no logout is tearing down; false if that takes longer than
+  /// [pendingLogoutLimit].
+  Future<bool> _afterPendingLogouts() async {
+    final waited = Stopwatch()..start();
+    while (_pendingLogouts.isNotEmpty) {
+      final left = pendingLogoutLimit - waited.elapsed;
+      if (left <= Duration.zero) return false;
+      try {
+        await Future.wait(_pendingLogouts.toList()).timeout(left);
+      } on TimeoutException {
+        return false;
+      }
+    }
+    return true;
   }
 
   Future<Result<void>> _logout() async {
@@ -326,15 +346,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
     int generation,
+    int signIn,
   ) async {
     Future<Result<User>> stale() async {
-      await _revokeDiscarded(authResponse);
-      return const ResultFailure<User>(
-        UnknownFailure(
-          'Session ended while the sign-in was in flight',
-          code: AuthErrorCodes.sessionTerminated,
-        ),
-      );
+      unawaited(_revokeDiscarded(authResponse, signIn));
+      return const ResultFailure<User>(_signInSessionEnded);
     }
 
     if (!sessionGeneration.isCurrent(generation)) return await stale();
@@ -350,25 +366,35 @@ class AuthRepositoryImpl implements AuthRepository {
     return Success(authResponse.user);
   }
 
-  /// Asks the server to revoke the refresh token of a sign-in whose session
-  /// ended before it could be stored, best effort.
+  /// Asks the server to revoke the refresh token of sign-in number [signIn],
+  /// whose session ended before its tokens could be stored. Best effort, and
+  /// not awaited: the sign-in has already failed.
   ///
   /// Its tokens are discarded, so nothing else would ever revoke them: a
   /// logout that ran during the round trip revoked the token stored *then*,
   /// and the server session stayed live until it expired.
   ///
-  /// Only when no session holds the store, after any pending logout has
-  /// finished: the request goes through `ApiClient`, whose `AuthInterceptor`
-  /// attaches the stored access token, and the revoke must not go out as
-  /// another session that a newer sign-in stored. That newer-sign-in case is
-  /// left to expire on the server.
-  Future<void> _revokeDiscarded(AuthResponseModel authResponse) async {
+  /// The request goes through `ApiClient`, whose `AuthInterceptor` attaches
+  /// the stored access token, and it must not go out as a newer session. So
+  /// it is sent only once no logout is tearing down, no later sign-in has
+  /// started, and no access token is stored; a sign-in replaced by a newer
+  /// one is left to expire on the server. A sign-in that starts in the
+  /// moments while the request is being sent can still store its token
+  /// before the interceptor reads one; on a backend that revokes the
+  /// *bearer's* session at `/auth/logout`, rather than the `refresh_token`
+  /// sent, that would end the newer session.
+  Future<void> _revokeDiscarded(
+    AuthResponseModel authResponse,
+    int signIn,
+  ) async {
     final refreshToken = authResponse.refreshToken;
     if (refreshToken == null) return;
     try {
-      await _afterPendingLogout();
+      if (!await _afterPendingLogouts()) return;
+      if (_signInsStarted != signIn) return;
       final stored = await localDataSource.getToken();
       if (stored != null && stored.isNotEmpty) return;
+      if (_signInsStarted != signIn) return;
       await remoteDataSource.logout(refreshToken: refreshToken);
     } on Object {
       // Best effort: the sign-in has already failed, and the token was never

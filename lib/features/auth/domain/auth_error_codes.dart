@@ -27,4 +27,11 @@ abstract final class AuthErrorCodes {
   /// tore it down, and a newer sign-in may already own the credentials on the
   /// device.
   static const String sessionTerminated = 'SESSION_TERMINATED';
+
+  /// A sign-in gave up waiting for a sign-out that was still tearing down.
+  ///
+  /// The sign-in waits so the sign-out's teardown cannot delete the new
+  /// credentials, and stops waiting after a bound so it cannot hang behind a
+  /// sign-out that never finishes. Nothing was stored; the user can retry.
+  static const String signOutInProgress = 'SIGN_OUT_IN_PROGRESS';
 }
