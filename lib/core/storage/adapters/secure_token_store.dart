@@ -10,58 +10,36 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 ///
 /// ## Operations take effect in the order they were issued
 ///
-/// Each read, write and delete waits for the ones issued before it to settle,
-/// up to a bound (below).
-/// The session guards in `AuthRepositoryImpl.refreshToken()` and
-/// `AuthInterceptor` check the session immediately before a write, which only
-/// helps if a logout's clear, issued after that check, also *lands* after the
-/// write. flutter_secure_storage does not promise that on every platform: on
-/// web, a write awaits WebCrypto encryption before it reaches `localStorage`,
-/// while a delete removes the key at once, so a clear issued after a pending
-/// write ran before it and the write then re-stored a token on a signed-out
-/// browser. Queuing here makes the order the code issues the order the store
-/// applies, on every platform, without clearing anything a newer session
-/// wrote - except for a call that outlives the bound, which the repair below
-/// covers.
+/// Each read, write and delete waits for the ones issued before it, so a
+/// logout's clear issued after a refresh's write also lands after it. The
+/// session guards in `AuthRepositoryImpl.refreshToken()` and `AuthInterceptor`
+/// rely on that; flutter_secure_storage does not promise it on every platform
+/// (on web a write awaits encryption while a delete is immediate).
 ///
-/// The queue belongs to the [SecureStorageService] underneath, not to this
-/// object: every `SecureTokenStore` built over the same service shares it.
-/// It used to be a field of each store, so the store `AuthInterceptor` builds
-/// for itself from `secureStorageService:` and the one the repository uses
-/// ordered their own calls but not each other's - and a logout's clear on one
-/// could again land before a refresh write on the other. Two stores over two
-/// different `SecureStorageService` objects still do not share a queue, so the
-/// app builds one service (`secureStorageServiceProvider`).
+/// The queue belongs to the [SecureStorageService], so every store over the
+/// same service shares it. Stores over different services do not: build one
+/// service (`secureStorageServiceProvider`).
 ///
-/// The wait is bounded by [operationTimeout] (10 seconds by default).
-/// Without the bound, one platform call that never completed held every later
-/// token operation behind it - the token read on each request and a logout's
-/// clear included - until the app was restarted. Now an operation queued
-/// behind one that has not settled within the bound runs anyway; the hung
-/// call stays hung only for its own caller.
+/// The wait is bounded by [operationTimeout] (10 seconds by default), so one
+/// hung platform call does not hold every later token operation. A read that
+/// outlived the bound returns what the store held when it ran.
 ///
-/// A call that outlives the bound and then succeeds lands after operations
-/// issued later. For a write or delete, that would leave the older state on
-/// the device - a refresh's token write landing after a logout's clear would
-/// re-store a credential on a signed-out device. So each write and delete is
-/// numbered when it is issued, and one that lands after a newer write or
-/// delete of the same key has landed is followed by a repair that puts the
-/// newer state back, queued like any other operation. Between the late
-/// landing and the repair the older value is briefly at rest. A repair that
-/// fails is retried, up to three attempts; if every attempt fails, the key is
-/// marked stale and a warning naming the key (never its value) goes to the
-/// logger. Until it is re-applied, a read of a stale key answers from memory
-/// with the newer state - `null` after a clear - never with the late value
-/// on the device. The next write through any store over the same service
-/// re-applies every stale key first; the next delete re-applies only stale
-/// deletes, so a sign-out never writes a token. A read of a stale key whose
-/// newer state is a delete retries that delete, bounded like any operation
-/// and one retry per key at a time; a read never writes. Once everything
-/// settles and no repair has failed, every key holds what its last-issued
-/// successful write or delete left. The stale marker lives in memory: if the
-/// app stops before a stale key is re-applied, the late value is what the
-/// next launch reads.
-/// A read that outlived the bound returns what the store held when it ran.
+/// ## A call that outlives the bound
+///
+/// A call that outlives the bound may land after operations issued later.
+/// Writes and deletes are numbered when issued, and one that lands over a
+/// newer one of the same key is followed by a repair that puts the newer
+/// state back (the older value is at rest in between). A repair is tried
+/// [repairAttempts] times; if all fail, the key is marked stale and the
+/// logger is warned, naming the key, never the value. A stale key reads
+/// from memory - the newer state, `null` after a clear - and is re-applied
+/// by the next write through the service, or, if its newer state is a
+/// delete, by the next delete or a read of it (never by a write from inside
+/// a sign-out's clear: a read or delete never writes). The stale marker is
+/// in memory: if the app stops first, the next launch reads the late value.
+///
+/// Once everything settles and no repair has failed, every key holds what
+/// its last-issued successful write or delete left.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   ///
@@ -120,19 +98,14 @@ class SecureTokenStore implements ITokenStore {
     return run();
   }
 
-  /// Throws [CacheException] if the Keychain/Keystore read fails.
+  /// Throws [CacheException] if the Keychain/Keystore read fails, rather
+  /// than answering `null` as for a missing token: an ordinary request then
+  /// fails and the session is kept (an iOS Keychain read before first unlock,
+  /// say).
   ///
-  /// [SecureStorageService.getString] answers a failed read with `null`, the
-  /// same as a missing token, so a transient failure (an iOS Keychain read
-  /// before first unlock) sent a request unauthenticated, its 401 found "no
-  /// refresh token", and the user was signed out. The strict read tells the
-  /// two apart: an ordinary request fails and the session is kept.
-  ///
-  /// A failed read *during a 401 refresh* is different: the refresh fails
-  /// with a `CacheFailure`, and `AuthInterceptor` ends the session on any
-  /// refresh failure that is not transport trouble, so the user is signed
-  /// out. That is deliberate (fail closed): a session that cannot be
-  /// refreshed would otherwise stay up with every request failing.
+  /// A failed read during a 401 refresh ends the session: the refresh fails
+  /// with a `CacheFailure`, and `AuthInterceptor` fails closed on any refresh
+  /// failure that is not transport trouble.
   @override
   Future<String?> getAccessToken() =>
       _inOrder(() => _read(AppConstants.tokenKey));
@@ -183,13 +156,10 @@ class SecureTokenStore implements ITokenStore {
     final queue = _queue;
     if (queue.stale.contains(key)) {
       final newest = queue.landed[key]!;
-      // A cleared key still holding a late token: try the delete once more,
-      // so a signed-out app that never writes or deletes again does not leave
-      // that token for the next launch to read. Never a write: a read must
-      // not store a credential. Bounded, and a failure leaves the key stale.
-      // One retry per key at a time: while a hung delete is pending, a read
-      // answers from memory at once instead of waiting a bound of its own
-      // and leaving another delete behind it.
+      // A cleared key still holding a late token: retry the delete, so a
+      // signed-out app does not leave it for the next launch. Bounded and
+      // never a write; while a retry is pending, a read answers from memory at
+      // once, and a failed retry leaves the key stale.
       if (newest.value == null && !queue.retryingDeletes.containsKey(key)) {
         final attempt = _apply(
           queue,
@@ -223,8 +193,9 @@ class SecureTokenStore implements ITokenStore {
     }
   }
 
-  /// [SecureStorageService.remove] reports a failed delete as `false` rather
-  /// than throwing. Ignoring that bool made a failed delete invisible.
+  /// [SecureStorageService.remove] reports a failed delete as `false`; this
+  /// turns it into a [CacheException], so the caller knows the token may
+  /// remain.
   Future<void> _remove(String key) async {
     if (!await _mutate(key, null)) {
       throw CacheException('Failed to delete $key from secure storage');
