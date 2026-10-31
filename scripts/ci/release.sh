@@ -39,6 +39,14 @@ if [ "$BUMP_TYPE" != "major" ] && [ "$BUMP_TYPE" != "minor" ] && [ "$BUMP_TYPE" 
     exit 1
 fi
 
+# The version in a pubspec, without its build number or a trailing comment
+# (`version: 1.0.1 # note` is valid, and bump_version.sh keeps the comment).
+version_of() {
+    grep -m1 '^version:' "$1" \
+        | sed -e 's/^version:[[:space:]]*//' -e 's/[[:space:]]*#.*$//' -e 's/[[:space:]]*$//' -e 's/\r$//' \
+        | cut -d'+' -f1
+}
+
 # The release branch and tag names are known before anything changes: the
 # bump is computed on a copy of pubspec.yaml. If either already exists (a
 # re-run after a declined push, say), stop here. Found at step 5 or 7, the
@@ -50,7 +58,7 @@ if ! PUBSPEC_PATH="$PROBE_PUBSPEC" ./scripts/ci/bump_version.sh "$BUMP_TYPE" >/d
     echo -e "${RED}Version bump failed. Aborting release.${NC}"
     exit 1
 fi
-NEXT_VERSION=$(grep "^version:" "$PROBE_PUBSPEC" | sed 's/version: //' | cut -d'+' -f1)
+NEXT_VERSION=$(version_of "$PROBE_PUBSPEC")
 rm -f "$PROBE_PUBSPEC"
 if git show-ref --verify --quiet "refs/heads/release/v$NEXT_VERSION"; then
     echo -e "${RED}Error: branch release/v$NEXT_VERSION already exists. Nothing was changed.${NC}"
@@ -108,7 +116,7 @@ if ! ./scripts/ci/bump_version.sh "$BUMP_TYPE"; then
     rollback_release_files
     exit 1
 fi
-NEW_VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
+NEW_VERSION=$(version_of pubspec.yaml)
 echo -e "${GREEN}✓ Version bumped to $NEW_VERSION${NC}"
 echo ""
 
@@ -146,7 +154,9 @@ echo ""
 echo -e "${YELLOW}Step 8: Pushing to remote...${NC}"
 read -p "Push release branch and tag? (y/n) " -n 1 -r
 echo
+PUSHED=false
 if [[ $REPLY =~ ^[Yy]$ ]]; then
+    PUSHED=true
     git push origin $RELEASE_BRANCH
     git push origin "v$NEW_VERSION"
     echo -e "${GREEN}✓ Pushed to remote${NC}"
@@ -163,9 +173,27 @@ echo ""
 echo "Next steps:"
 # The deploy workflows ship with their push triggers commented out, so a
 # pushed tag deploys only once setup_ci.dart --deploy-trigger=tags enabled
-# one.
-if grep -qE '^[[:space:]]+tags:' .github/workflows/deploy-*.yml 2>/dev/null; then
-    echo "  1. The pushed tag starts the deploy workflows"
+# one. Only `tags:` under `on: push:` counts: an input or a docker step can
+# have a `tags:` key too.
+tag_triggered() {
+    awk '
+        /^on:[[:space:]]*$/ { on = 1; next }
+        on && /^[^[:space:]#]/ { on = 0 }
+        on && /^  [A-Za-z_]+:/ { push = ($0 ~ /^  push:/) }
+        on && push && /^    tags:/ { found = 1 }
+        END { exit !found }
+    ' "$1"
+}
+TAG_DEPLOYS=""
+for workflow in .github/workflows/deploy-*.yml; do
+    [ -f "$workflow" ] && tag_triggered "$workflow" && TAG_DEPLOYS="$TAG_DEPLOYS $(basename "$workflow")"
+done
+if [ -n "$TAG_DEPLOYS" ]; then
+    if [ "$PUSHED" = true ]; then
+        echo "  1. The pushed tag starts:$TAG_DEPLOYS"
+    else
+        echo "  1. Once pushed, the tag starts:$TAG_DEPLOYS"
+    fi
 else
     echo "  1. No deploy workflow runs on a tag yet: dispatch them from the"
     echo "     Actions tab, or enable the trigger with"

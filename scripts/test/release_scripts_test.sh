@@ -22,6 +22,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SCRIPTS="${SCRIPTS_UNDER_TEST:-$ROOT/scripts/ci}"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
+# Work from outside any repository: a fixture command that loses its
+# directory then fails, instead of committing to the checkout running this.
+cd "$WORK"
 
 FAILURES=0
 pass() { echo "ok    $1"; }
@@ -162,8 +165,15 @@ else
 fi
 
 # --- 5. release.sh stops before changing anything when the branch or tag exists
-for existing in "tag v1.0.1" "branch release/v1.0.1"; do
-    repo=$(new_repo "exists-${existing%% *}")
+# The third pubspec shape has no build number and a trailing comment, which
+# bump_version.sh keeps: the version read must still be 1.0.1.
+for existing in "tag v1.0.1" "branch release/v1.0.1" "tag v1.0.1 comment"; do
+    repo=$(new_repo "exists-$(printf '%s' "$existing" | tr ' /' '--')")
+    if [ "${existing##* }" = comment ]; then
+        existing="${existing% comment}"
+        printf 'name: fixture\nversion: 1.0.0 # app version\n' > "$repo/pubspec.yaml"
+        (cd "$repo" && git_q commit -q -am "chore: version with a comment")
+    fi
     # A previous release, so that without the check the run gets as far as
     # step 5 or 7 with pubspec.yaml and CHANGELOG.md already rewritten.
     (cd "$repo" && git_q tag v1.0.0 && git_q commit -q --allow-empty -m "feat: something new" && git_q $existing)
@@ -186,28 +196,34 @@ for existing in "tag v1.0.1" "branch release/v1.0.1"; do
 done
 
 # --- 6. the summary claims an automatic deploy only when a tag trigger is live
-summary() { # deploy-workflow-content -> release.sh output, push declined
+summary() { # fixture-name deploy-workflow-content -> release.sh output, push declined
     local repo
-    repo=$(new_repo "summary-$RANDOM")
-    if [ -n "$1" ]; then
+    repo=$(new_repo "summary-$1")
+    if [ -n "$2" ]; then
         mkdir -p "$repo/.github/workflows"
-        printf '%s\n' "$1" > "$repo/.github/workflows/deploy-web.yml"
+        printf '%s\n' "$2" > "$repo/.github/workflows/deploy-web.yml"
         (cd "$repo" && git_q add -A && git_q commit -q -m "ci: deploy workflow")
     fi
     (cd "$repo" && git_q tag v1.0.0 && git_q commit -q --allow-empty -m "feat: something new")
     (cd "$repo" && printf 'n' | PATH="$WORK/bin:$PATH" bash scripts/ci/release.sh patch 2>&1)
 }
-out=$(summary "$(printf 'on:\n  workflow_dispatch:\n  # push:\n  #   tags:\n  #     - v*')")
+out=$(summary commented "$(printf 'on:\n  workflow_dispatch:\n  # push:\n  #   tags:\n  #     - v*')")
 if printf '%s' "$out" | grep -q "No deploy workflow runs on a tag yet" && ! printf '%s' "$out" | grep -q "automatically"; then
     pass "with the tag trigger commented out, the summary claims no deploy"
 else
     fail "with the tag trigger commented out, the summary claims no deploy, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
 fi
-out=$(summary "$(printf 'on:\n  push:\n    tags:\n      - v*')")
-if printf '%s' "$out" | grep -q "The pushed tag starts the deploy workflows"; then
-    pass "with a live tag trigger, the summary says the tag deploys"
+out=$(summary live "$(printf 'on:\n  push:\n    tags:\n      - v*')")
+if printf '%s' "$out" | grep -q "Once pushed, the tag starts: deploy-web.yml"; then
+    pass "with a live tag trigger, the summary says the tag deploys once pushed"
 else
-    fail "with a live tag trigger, the summary says the tag deploys, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
+    fail "with a live tag trigger, the summary says the tag deploys once pushed, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
+fi
+out=$(summary other-tags "$(printf 'on:\n  workflow_dispatch:\n    inputs:\n      tags:\n        type: string\njobs:\n  d:\n    steps:\n      - uses: docker/metadata-action\n        with:\n          tags: type=sha')")
+if printf '%s' "$out" | grep -q "No deploy workflow runs on a tag yet"; then
+    pass "a tags: key outside on.push is not a tag trigger"
+else
+    fail "a tags: key outside on.push is not a tag trigger, got: $(printf '%s' "$out" | tail -8 | tr '\n' ' ')"
 fi
 
 # --- bump_version.sh keeps a trailing comment
