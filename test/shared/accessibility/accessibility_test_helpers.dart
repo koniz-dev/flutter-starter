@@ -1,3 +1,5 @@
+import 'dart:ui' show Tristate;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
@@ -28,9 +30,7 @@ class AccessibilityTestHelpers {
   /// Check if a widget is enabled
   static bool isEnabled(WidgetTester tester, Finder finder) {
     final semantics = tester.getSemantics(finder);
-    final enabled = semantics.flagsCollection.isEnabled;
-    // Tristate: checked means enabled, unchecked means disabled
-    return enabled.toString().contains('checked');
+    return semantics.flagsCollection.isEnabled == Tristate.isTrue;
   }
 
   /// Check if a widget has minimum touch target size
@@ -78,22 +78,13 @@ class AccessibilityTestHelpers {
 
   /// Verify all interactive elements have semantic labels
   ///
-  /// Finds all buttons, links, and other interactive elements and verifies
-  /// they have proper semantic labels.
+  /// Fails the test when a node with a tap or long-press action has no
+  /// label, using Flutter's [labeledTapTargetGuideline]. Semantics must be on:
+  /// call `tester.ensureSemantics()` before pumping.
   static Future<void> verifyInteractiveElementsHaveLabels(
     WidgetTester tester,
   ) async {
-    final semantics = RendererBinding.instance.rootPipelineOwner.semanticsOwner;
-    if (semantics == null) {
-      throw TestFailure(
-        'Semantics not enabled. Enable with '
-        'RendererBinding.instance.rootPipelineOwner.semanticsOwner = '
-        'SemanticsOwner()',
-      );
-    }
-
-    // This is a simplified check - in practice, you'd traverse the semantics
-    // tree to find all interactive elements and verify they have labels
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
   }
 
   /// Verify minimum touch target sizes
@@ -150,79 +141,72 @@ class AccessibilityTestHelpers {
 }
 
 /// Custom matchers for accessibility testing
+///
+/// Each matches the [SemanticsNode] of a widget, as returned by
+/// `tester.getSemantics(finder)`:
+///
+/// ```dart
+/// expect(
+///   tester.getSemantics(find.text('Submit')),
+///   AccessibilityMatchers.isButton(),
+/// );
+/// ```
 class AccessibilityMatchers {
   AccessibilityMatchers._();
 
-  /// Matcher for widgets with semantic labels
-  static Matcher hasSemanticLabel(String? label) {
-    return _SemanticLabelMatcher(label);
-  }
+  /// Matches a node whose label is [label], or any non-empty label when
+  /// [label] is null.
+  static Matcher hasSemanticLabel([String? label]) =>
+      label == null ? const _NonEmptyLabelMatcher() : isSemantics(label: label);
 
-  /// Matcher for widgets that are buttons
-  static Matcher isButton() {
-    return _ButtonMatcher();
-  }
+  /// Matches a node flagged as a button.
+  static Matcher isButton() => isSemantics(isButton: true);
 
-  /// Matcher for widgets that are enabled
-  static Matcher isEnabled() {
-    return _EnabledMatcher();
-  }
+  /// Matches a node that has an enabled state and is enabled.
+  static Matcher isEnabled() =>
+      isSemantics(hasEnabledState: true, isEnabled: true);
 
-  /// Matcher for widgets with minimum touch target size
-  static Matcher hasMinTouchTarget() {
-    return _MinTouchTargetMatcher();
-  }
+  /// Matches a node at least [AccessibilityConstants.minTouchTargetSize]
+  /// logical pixels wide and high.
+  static Matcher hasMinTouchTarget() => const _MinTouchTargetMatcher();
 }
 
-class _SemanticLabelMatcher extends Matcher {
-  _SemanticLabelMatcher(this.expectedLabel);
-
-  final String? expectedLabel;
+class _NonEmptyLabelMatcher extends Matcher {
+  const _NonEmptyLabelMatcher();
 
   @override
-  bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
-    // This would need to be implemented based on your testing framework
-    return true;
-  }
+  bool matches(dynamic item, Map<dynamic, dynamic> matchState) =>
+      item is SemanticsNode && item.label.isNotEmpty;
 
   @override
-  Description describe(Description description) {
-    return description.add('has semantic label: $expectedLabel');
-  }
-}
-
-class _ButtonMatcher extends Matcher {
-  @override
-  bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
-    return true;
-  }
-
-  @override
-  Description describe(Description description) {
-    return description.add('is a button');
-  }
-}
-
-class _EnabledMatcher extends Matcher {
-  @override
-  bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
-    return true;
-  }
-
-  @override
-  Description describe(Description description) {
-    return description.add('is enabled');
-  }
+  Description describe(Description description) =>
+      description.add('a semantics node with a non-empty label');
 }
 
 class _MinTouchTargetMatcher extends Matcher {
+  const _MinTouchTargetMatcher();
+
   @override
   bool matches(dynamic item, Map<dynamic, dynamic> matchState) {
-    return true;
+    if (item is! SemanticsNode) return false;
+    final size = item.rect.size;
+    return size.width >= AccessibilityConstants.minTouchTargetSize &&
+        size.height >= AccessibilityConstants.minTouchTargetSize;
   }
 
   @override
-  Description describe(Description description) {
-    return description.add('has minimum touch target size');
-  }
+  Description describe(Description description) => description.add(
+    'a semantics node at least '
+    '${AccessibilityConstants.minTouchTargetSize} logical pixels square',
+  );
+
+  @override
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) => item is SemanticsNode
+      ? mismatchDescription.add('is ${item.rect.size}')
+      : mismatchDescription.add('is not a SemanticsNode');
 }
