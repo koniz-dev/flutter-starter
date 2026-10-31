@@ -23,11 +23,13 @@ foreach ($name in 'pre-commit', 'commit-msg', 'pre-push') {
 # ran no hook with the app in a subdirectory of a larger repository.
 $hooksPath = (git rev-parse --show-prefix) + '.githooks'
 
+# A bare .githooks is this script's own (an earlier version wrote it, even in
+# a monorepo, where it named nothing), so it is replaced.
 $localPath = git config --local --get core.hooksPath
-if ($localPath -and $localPath -ne $hooksPath) {
+if ($localPath -and $localPath -ne $hooksPath -and $localPath -ne '.githooks') {
     Write-Host "[Error] This repository already sets core.hooksPath to '$localPath'," -ForegroundColor Red
     Write-Host "        so git runs the hooks there, not .githooks/. Either run"
-    Write-Host "          git config --local core.hooksPath $hooksPath"
+    Write-Host "          git config --local core.hooksPath '$hooksPath'"
     Write-Host "        or call .githooks/* from your own hooks in '$localPath'."
     exit 1
 }

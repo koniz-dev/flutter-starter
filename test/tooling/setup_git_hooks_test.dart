@@ -118,13 +118,15 @@ void main() {
     final result = setup(cwd: '${mono.path}/app');
 
     expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
-    final hooksPath = git([
-      'config',
-      '--local',
-      '--get',
-      'core.hooksPath',
-    ], cwd: mono.path);
-    expect('${hooksPath.stdout}'.trim(), 'app/.githooks');
+    String hooksPath() =>
+        '${git([
+              'config',
+              '--local',
+              '--get',
+              'core.hooksPath',
+            ], cwd: mono.path).stdout}'
+            .trim();
+    expect(hooksPath(), 'app/.githooks');
     for (final cwd in [mono.path, '${mono.path}/app']) {
       final bad = git([
         'commit',
@@ -134,6 +136,13 @@ void main() {
       ], cwd: cwd);
       expect(bad.exitCode, isNot(0), reason: 'commit-msg must run from $cwd');
     }
+
+    // An earlier version wrote a bare `.githooks` here, which named nothing:
+    // a re-run replaces it rather than refusing it as someone else's.
+    git(['config', '--local', 'core.hooksPath', '.githooks'], cwd: mono.path);
+    final rerun = setup(cwd: '${mono.path}/app');
+    expect(rerun.exitCode, 0, reason: '${rerun.stdout}${rerun.stderr}');
+    expect(hooksPath(), 'app/.githooks');
   });
 
   test('a failed verification puts the previous core.hooksPath back', () {
@@ -173,6 +182,7 @@ void main() {
     expect(ps1, contains("(git rev-parse --show-prefix) + '.githooks'"));
     expect(ps1, contains(r'git config --local core.hooksPath $hooksPath'));
     expect(ps1, contains('git config --local --unset core.hooksPath'));
+    expect(ps1, contains(r"$localPath -ne '.githooks'"));
     expect(ps1, contains(r'git config --local core.hooksPath $localPath'));
   });
 

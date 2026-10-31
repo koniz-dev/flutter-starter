@@ -31,12 +31,14 @@ done
 hooks_path="$(git rev-parse --show-prefix).githooks"
 
 # A repository-local hooksPath somebody chose is theirs: say so, do not
-# overwrite it. A global one is overridden for this repository only.
+# overwrite it. A bare `.githooks` is this script's own (an earlier version
+# wrote it, even in a monorepo, where it named nothing), so it is replaced.
+# A global one is overridden for this repository only.
 local_path="$(git config --local --get core.hooksPath || true)"
-if [ -n "$local_path" ] && [ "$local_path" != "$hooks_path" ]; then
+if [ -n "$local_path" ] && [ "$local_path" != "$hooks_path" ] && [ "$local_path" != ".githooks" ]; then
   echo "❌ This repository already sets core.hooksPath to '$local_path',"
   echo "   so git runs the hooks there, not .githooks/. Either:"
-  echo "     git config --local core.hooksPath $hooks_path   # use this repo's hooks"
+  echo "     git config --local core.hooksPath '$hooks_path'   # use this repo's hooks"
   echo "   or call .githooks/* from your own hooks in '$local_path'."
   exit 1
 fi

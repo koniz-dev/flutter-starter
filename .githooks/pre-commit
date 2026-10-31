@@ -37,6 +37,23 @@ no_git_env=(
   -u GIT_PREFIX
 )
 
+# git runs a hook from the top of the working tree. With the app in a
+# subdirectory of a larger repository (a monorepo), that is not the app: the
+# checks below run in the app, found from this file's own path
+# (<app>/.githooks/pre-commit). Not `git rev-parse --show-prefix`: in a linked
+# worktree git exports GIT_DIR, and git then takes the current directory for
+# the top, so the prefix always read as empty. The physical paths (`pwd -P`)
+# keep a symlinked checkout from looking like a subdirectory.
+top="$(pwd -P)"
+app="$(cd "$(dirname "$0")/.." && pwd -P)"
+# A copy run from outside the working tree (a shared hooks directory) checks
+# the top, as it always has.
+case "$app" in
+  "$top"/*) app_prefix="${app#"$top"/}/" ;;
+  *) app="$top" app_prefix="" ;;
+esac
+cd "$app"
+
 # Without resolved dependencies `dart format` cannot read the
 # very_good_analysis include in analysis_options.yaml, formats with the wrong
 # settings, and rewrites ~100 untouched files in place before failing.
@@ -60,7 +77,9 @@ fi
 # .dart_tool/. In the system temp directory those named nothing, and every
 # commit with such a dependency failed. A parent that cannot be written to
 # falls back to the temp directory.
-repo="$(pwd)"
+# The whole working tree is exported, so the app sits at the same depth in the
+# export as in the checkout.
+repo="$top"
 parent="$(dirname "$repo")"
 prefix=".$(basename "$repo")-pre-commit."
 # An export an earlier run could not remove (the hook was killed) is swept
@@ -73,13 +92,13 @@ if ! staged="$(mktemp -d "$parent/${prefix}XXXXXX" 2>/dev/null)"; then
   echo "   A relative path: dependency outside the repository will not resolve there."
 fi
 trap 'rm -rf "$staged"' EXIT
-git checkout-index --all --prefix="$staged/"
-mkdir -p "$staged/.dart_tool"
-cp -p .dart_tool/package_config.json "$staged/.dart_tool/"
+(cd "$top" && git checkout-index --all --prefix="$staged/")
+mkdir -p "$staged/$app_prefix.dart_tool"
+cp -p .dart_tool/package_config.json "$staged/$app_prefix.dart_tool/"
 if [ -f .dart_tool/package_graph.json ]; then
-  cp -p .dart_tool/package_graph.json "$staged/.dart_tool/"
+  cp -p .dart_tool/package_graph.json "$staged/$app_prefix.dart_tool/"
 fi
-cd "$staged"
+cd "$staged/$app_prefix"
 
 echo "📝 Checking code formatting (staged content)..."
 if ! "${no_git_env[@]}" dart format --output=none --set-exit-if-changed lib test integration_test tool examples; then
