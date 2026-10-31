@@ -351,4 +351,36 @@ void main() {
       expect(tokens.accessToken, isNull);
     },
   );
+
+  test('a sign-in started by a session listener during a logout waits for '
+      'its teardown', () async {
+    tokens
+      ..accessToken = 'old-access'
+      ..refreshToken = 'old-refresh';
+    remote.holdLogouts = true;
+    Future<Result<Object?>>? signIn;
+    var started = false;
+    void startSignIn() {
+      // The sign-in invalidates too, which calls this again: start once.
+      if (started) return;
+      started = true;
+      signIn = repository.login('a@b.c', 'pw');
+    }
+
+    repository.sessionGeneration.addListener(startSignIn);
+    addTearDown(() => repository.sessionGeneration.removeListener(startSignIn));
+
+    final logout = repository.logout(); // its invalidate starts the sign-in
+    await _settle();
+    expect(signIn, isNotNull);
+    expect(remote.replies, isEmpty, reason: 'it waits for the teardown');
+
+    remote.holds.single.complete();
+    await logout;
+    await _settle();
+    remote.replies.single.complete(_pair('a'));
+
+    expect(await signIn, isA<Success<Object?>>());
+    expect(tokens.accessToken, 'a-access');
+  });
 }

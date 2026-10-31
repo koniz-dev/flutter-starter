@@ -168,8 +168,12 @@ class AuthRepositoryImpl implements AuthRepository {
   /// is the one the caller must not paper over.
   @override
   Future<Result<void>> logout() {
+    // Registered before `_logout` invalidates, so a sign-in started by a
+    // session listener already sees it.
+    final done = Completer<void>();
+    sessionGeneration.trackTeardown(done.future);
     final run = _logout();
-    sessionGeneration.trackTeardown(run);
+    done.complete(run.then<void>((_) {}));
     return run;
   }
 

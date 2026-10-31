@@ -46,6 +46,14 @@ import 'dart:async';
 /// window this guards is an `await`, not a preemption, which is why an
 /// ordinary `int` is sufficient and no lock is involved.
 ///
+/// ## Teardowns
+///
+/// Ending a session is synchronous ([invalidate]); clearing what it stored is
+/// not. Each logout path registers its clearing with [trackTeardown] before
+/// it invalidates, and a sign-in waits on [teardownsSettled] before it calls
+/// the server, so a teardown still running cannot delete the credentials of
+/// the sign-in that followed it.
+///
 /// ## Observing a session change
 ///
 /// Every [invalidate] also notifies the listeners added with [addListener].
