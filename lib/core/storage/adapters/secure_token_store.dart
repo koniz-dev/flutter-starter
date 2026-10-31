@@ -30,15 +30,26 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// different `SecureStorageService` objects still do not share a queue, so the
 /// app builds one service (`secureStorageServiceProvider`).
 ///
-/// The cost: one platform call that never completes holds every later token
-/// operation behind it, the token read on each request and a logout's clear
-/// included. Keychain and Keystore failures surface as errors, which do not
-/// hold the queue; a call that hangs outright would.
+/// Each operation is bounded by [operationTimeout] (10 seconds by default).
+/// Without the bound, one platform call that never completed held every later
+/// token operation behind it - the token read on each request and a logout's
+/// clear included - until the app was restarted. Past the bound the
+/// operation fails with [CacheException] and the queue moves on. The
+/// residual: the abandoned platform call may still land later, out of order;
+/// that needs a call to hang for the whole bound and then complete, where
+/// before any hang wedged the app.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
-  SecureTokenStore(this._secureStorageService);
+  SecureTokenStore(
+    this._secureStorageService, {
+    this.operationTimeout = const Duration(seconds: 10),
+  });
 
   final SecureStorageService _secureStorageService;
+
+  /// How long one read, write or delete may take before it fails with
+  /// [CacheException] and the operations queued behind it run.
+  final Duration operationTimeout;
 
   /// The operation queue of each backing service, shared by every store over
   /// it.
@@ -60,7 +71,12 @@ class SecureTokenStore implements ITokenStore {
     Future<T> run() async {
       try {
         if (previous != null) await previous;
-        return await operation();
+        return await operation().timeout(
+          operationTimeout,
+          onTimeout: () => throw CacheException(
+            'Secure storage did not answer within $operationTimeout',
+          ),
+        );
       } finally {
         done.complete();
         if (identical(queue.tail, done.future)) queue.tail = null;
