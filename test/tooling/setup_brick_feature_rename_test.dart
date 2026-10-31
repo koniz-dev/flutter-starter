@@ -44,11 +44,38 @@ String? _skipReason() {
   return null;
 }
 
-/// Files under [dir], keyed by their path relative to it.
+/// The tracked files under [dir], keyed by their path relative to it.
+///
+/// Tracked only: `mason make` leaves compiled hooks (`hooks/build/**.aot`,
+/// git-ignored) in the brick, and reading one as text threw.
+Map<String, String> _trackedContents(Directory dir) {
+  final listed = Process.runSync('git', ['ls-files', '--', dir.path]);
+  expect(listed.exitCode, 0, reason: '${listed.stderr}');
+  return {
+    for (final path in (listed.stdout as String).trim().split('\n'))
+      if (File(path).existsSync())
+        path.substring(dir.path.length + 1): File(path).readAsStringSync(),
+  };
+}
+
+/// Every file under [dir], a copy made from [_trackedContents], keyed by its
+/// path relative to it.
 Map<String, String> _contents(Directory dir) => {
   for (final f in dir.listSync(recursive: true).whereType<File>())
     f.path.substring(dir.path.length + 1): f.readAsStringSync(),
 };
+
+/// Plants a compiled hook like the one `mason make` leaves, so the test
+/// always runs with one present. Returns what to delete afterwards: the
+/// `hooks/build` directory when this created it, else nothing.
+Directory? _plantCompiledHook() {
+  final build = Directory('bricks/feature_clean/hooks/build');
+  if (build.existsSync()) return null;
+  File('${build.path}/hooks/post_gen/post_gen_test.aot')
+    ..createSync(recursive: true)
+    ..writeAsBytesSync([0xff, 0xfe, 0x00, 0xc3, 0x28]);
+  return build;
+}
 
 void main() {
   final skip = _skipReason();
@@ -64,8 +91,10 @@ void main() {
 
   setUpAll(() async {
     root = Directory.systemTemp.createTempSync('setup_brick_rename_');
+    final planted = _plantCompiledHook();
+    addTearDown(() => planted?.deleteSync(recursive: true));
     final source = Directory('bricks/feature_clean');
-    before = _contents(source);
+    before = _trackedContents(source);
     final brick = Directory('${root.path}/bricks/feature_clean');
     before.forEach((relative, text) {
       File('${brick.path}/$relative')
