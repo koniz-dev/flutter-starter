@@ -57,12 +57,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// What a login or register body the app cannot parse fails with.
   ///
-  /// The generated `fromJson` casts with `as String`, so an int user id or a
-  /// missing `token` throws a `TypeError` - an [Error], which the
-  /// `on Exception` clauses never caught. It escaped the `Result` contract
-  /// and left the login screen loading forever.
-  /// Nothing has been cached at that point:
-  /// parsing happens before the first write.
+  /// The generated `fromJson` throws a `TypeError` (an [Error], not an
+  /// [Exception]) for an int user id or a missing `token`; it is caught and
+  /// reported as this. Nothing has been cached at that point: parsing
+  /// happens before the first write.
   static const _unreadableResponse = ServerFailure(
     'The server sent a response this app could not read.',
     code: 'INVALID_AUTH_RESPONSE',
@@ -70,13 +68,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// What a refresh body the app cannot parse fails with.
   ///
-  /// Same cause as [_unreadableResponse] - a `TypeError` out of the generated
-  /// `fromJson` - which escaped `refreshToken()` and made
-  /// `AuthNotifier.refreshToken()` throw. An [UnknownFailure], not a
+  /// Same cause as [_unreadableResponse]. An [UnknownFailure], not a
   /// [ServerFailure], on purpose: `AuthInterceptor` keeps the session only for
-  /// failures known to be transport trouble, and a body that cannot be read
-  /// will not read better on the next attempt, so the session ends - fail
-  /// closed - rather than every 401 refreshing into the same wall.
+  /// transport trouble, and a body that cannot be read will not read better
+  /// next time, so the session ends (fail closed).
   static const _unreadableRefreshResponse = UnknownFailure(
     'The server sent a token refresh response this app could not read.',
     code: 'INVALID_AUTH_RESPONSE',
@@ -143,25 +138,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Logs the current user out.
   ///
-  /// Local teardown is **unconditional**: the remote call is best-effort and
-  /// the teardown - [AuthLocalDataSource.clearCache], which drops the cached
-  /// user blob *and* every token, refresh token included, plus the HTTP
-  /// response cache - runs even when it throws. Sequencing
-  /// the teardown after the network call inside one `try` is what used to leave
-  /// a live refresh token on the device whenever the server was unreachable, a
-  /// 500, or had no `/auth/logout` route at all.
+  /// The local teardown - [AuthLocalDataSource.clearCache] (the cached user
+  /// and every token) and the HTTP response cache - is **unconditional**: it
+  /// runs whatever the best-effort server call does, and each step runs even
+  /// when another fails or is absent, so an unreachable server or one failed
+  /// step never leaves a credential on the device.
   ///
-  /// The teardown's own steps are independent of each other for the same
-  /// reason: each is guarded separately and a failure - or absence - of one
-  /// must not skip the rest. Making them unconditional relative to the
-  /// *remote* call but still coupled to *each other* left the same outcome
-  /// reachable one layer down.
-  ///
-  /// The returned [Result] still reports a remote failure, so a caller can
-  /// never mistake an unreachable server for a clean server-side sign-out. If
-  /// the local teardown *also* fails, that failure is the one returned: a
-  /// session still sitting on the device is the more serious of the two, and it
-  /// is the one the caller must not paper over.
+  /// The returned [Result] reports a remote failure, so an unreachable server
+  /// is not mistaken for a clean server-side sign-out. A local failure wins
+  /// over a remote one: a session still on the device is the more serious.
   @override
   Future<Result<void>> logout() {
     // Registered before `_logout` invalidates, so a sign-in started by a
@@ -177,27 +162,19 @@ class AuthRepositoryImpl implements AuthRepository {
   /// `AuthInterceptor`'s forced one, both tracked on [sessionGeneration] -
   /// and false if that takes longer than [pendingLogoutLimit].
   ///
-  /// A logout's teardown deletes the stored credentials when its steps run,
-  /// so a sign-in that stored its own while one was still running (a slow
-  /// server call, a slow keychain) lost them after reporting success. All of
-  /// them, not the latest: an earlier one still running tears down the same.
+  /// A teardown deletes whatever credentials are stored when its steps run,
+  /// so a sign-in must not store its own while any teardown is running.
   Future<bool> _afterPendingLogouts() =>
       sessionGeneration.teardownsSettled(pendingLogoutLimit);
 
   Future<Result<void>> _logout() async {
-    // First, and synchronously, ahead of every await below: the user has asked
-    // to be signed out, so a refresh already in flight is stale from this
-    // instant. Doing it after the teardown would leave the whole remote call
-    // plus `clearCache()` as a window in which that refresh could still land
-    // and re-persist the pair being removed.
+    // Synchronously, before any await: a refresh already in flight is stale
+    // from this instant and must not re-persist the pair being removed.
     sessionGeneration.invalidate();
 
-    // `on Object`: the remote call can throw an Error as well as an Exception
-    // (a missing platform plugin, a decode failure), and neither may skip the
-    // teardown below.
-    // Read before the teardown below deletes it, so the server can revoke
-    // it. A read that fails still signs out: the logout must not depend on
-    // reaching the token.
+    // Read before the teardown deletes it, so the server can revoke it. A
+    // failed read still signs out. `on Object` here and below: an Error must
+    // not skip the teardown either.
     String? refreshToken;
     try {
       refreshToken = await localDataSource.getRefreshToken();
@@ -212,18 +189,9 @@ class AuthRepositoryImpl implements AuthRepository {
       remoteError = e;
     }
 
-    // Every teardown step below is guarded on its own, and no step is
-    // reachable only through another - the same discipline
-    // `AuthInterceptor._logoutUser()` has always applied to the forced path.
-    // Chaining these two as sequential awaits inside one `try` meant a
-    // throwing `clearCache()` skipped the HTTP cache entirely, leaving every
-    // `http_cache_*` body in plaintext shared_preferences on a device whose
-    // user had just asked to be signed out.
-    //
-    // The first failure is the one reported: it is the step whose state the
-    // caller most needs to know survived, and reporting later ones would hide
-    // it. Nothing here returns early - a `return` inside a teardown sequence
-    // has already caused skipped teardown steps twice.
+    // Each step is guarded on its own and none returns early, so a failing
+    // step never skips the next (as in `AuthInterceptor._logoutUser()`). The
+    // first failure is the one reported.
     Object? localError;
 
     try {
@@ -266,14 +234,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// The user of the session this device can actually use, or null.
   ///
-  /// Requires a non-empty access token **as well as** the cached user blob.
-  /// The two are written together by [login]/[register] and dropped together
-  /// by [logout], but they live in different stores - the user in
-  /// [IKeyValueStore], the token in [ITokenStore] - and `AuthInterceptor`'s
-  /// forced logout can clear the token while the blob survives a failed
-  /// removal. Returning the blob alone is what let a cold start promote a
-  /// tokenless device straight into the authenticated shell: the user
-  /// saw home, then every request 401'd.
+  /// Requires a non-empty access token **as well as** the cached user blob:
+  /// they live in different stores, and a forced logout can clear the token
+  /// while the blob survives a failed removal. The blob alone would boot a
+  /// tokenless device into the authenticated shell.
   ///
   /// The token is read first and deliberately not inspected beyond
   /// "present and non-empty" - see [isAuthenticated].
@@ -294,11 +258,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Whether a usable session is present on this device.
   ///
-  /// Defined as `getCurrentUser() != null` and implemented by delegating to it,
-  /// so the boot path (which reads the user) and every guard (which reads this
-  /// predicate) cannot disagree about whether a device is signed in. Requiring
-  /// a token here but not there is exactly the split that once let the two
-  /// disagree.
+  /// Defined as `getCurrentUser() != null`, so the boot path (which reads the
+  /// user) and every guard (which reads this predicate) cannot disagree.
   ///
   /// "Present and non-empty" is the whole test. Whether the token is *expired*
   /// is not decidable here: [ITokenStore] holds opaque strings with no expiry
@@ -317,16 +278,14 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Stores a sign-in's user and credentials, checking before each write
   /// that the session [generation] is still current.
   ///
-  /// A logout, a forced logout or another sign-in that lands during the
-  /// round trip ends this attempt's session; its writes would otherwise land
-  /// after that teardown and re-persist a credential set the app had just
-  /// removed, or let the slower of two logins win. A stale attempt fails with
-  /// [AuthErrorCodes.sessionTerminated], writes nothing further and clears
-  /// nothing - the session that replaced it owns what is in the store. A
-  /// write already in flight when the session ended may still land: the
-  /// token store makes a later clear win over it (by order, or by a repair if
-  /// the write outlived the store's wait bound), but the cached user blob has
-  /// no such queue.
+  /// A logout, a forced logout or another sign-in during the round trip ends
+  /// this attempt's session, and its writes must not land after that. A stale
+  /// attempt fails with [AuthErrorCodes.sessionTerminated], writes nothing
+  /// further and clears nothing - the session that replaced it owns what is in
+  /// the store. A write already in flight when the session ended may still
+  /// land: the token store makes a later clear win over it (by order, or by a
+  /// repair if the write outlived the store's wait bound), but the cached user
+  /// blob has no such queue.
   Future<Result<User>> _persistSignIn(
     AuthResponseModel authResponse,
     int generation,
@@ -349,12 +308,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Exchanges the stored refresh token for a new credential pair.
   ///
-  /// Both writes below are conditional on the session still being the one this
-  /// call started under. A refresh is a read-modify-write across a full
-  /// network round trip, and [logout] - or a forced logout in
-  /// `AuthInterceptor`, or a fresh [login] - can replace the credential set
-  /// while that round trip is open. Writing unconditionally is what re-armed a
-  /// signed-out device with a live access *and* refresh token.
+  /// Both writes are conditional on the session still being the one this call
+  /// started under: [logout], a forced logout or a fresh [login] can replace
+  /// the credential set during the round trip, and an unconditional write
+  /// would re-arm a signed-out device.
   ///
   /// A stale refresh reports failure rather than [Success]: it did not produce
   /// a token this session can use. It deliberately does not *clear* anything -
@@ -384,14 +341,11 @@ class AuthRepositoryImpl implements AuthRepository {
         ),
       );
       // Each check sits directly before the write it guards, with no await
-      // between them, so a logout that starts after the check issues its clear
-      // after that write - and the token store leaves the effect of the order
-      // they were issued (SecureTokenStore queues them, and repairs a write
-      // that outlived its wait bound and landed late; on web the plugin alone
-      // would let the clear land first), so the clear wins. A single check
-      // before both writes let a logout landing
-      // during the first write clear the store, and the refresh token was then
-      // written after it.
+      // between, so a logout that starts after a check issues its clear after
+      // that write. A single check before both writes would let a logout land
+      // between them. This relies on the `ITokenStore` applying writes and
+      // clears in the order they were issued: `SecureTokenStore` queues them
+      // and repairs a late write; on web the plugin alone would not.
       if (!sessionGeneration.isCurrent(generation)) return stale;
       await localDataSource.cacheToken(authResponse.token);
       if (authResponse.refreshToken != null) {
@@ -426,20 +380,13 @@ class AuthRepositoryImpl implements AuthRepository {
   ///   a revoked or expired refresh token with `400 invalid_grant`.
   /// - **403** is what many servers send for a token they refuse.
   ///
-  /// Tagging only 401 left the other two indistinguishable from a 503, so a
-  /// dead refresh token never ended the session.
-  ///
   /// Everything else is transport trouble and must leave the session alone:
   /// a timeout, a connection error, any 5xx, and the two 4xx statuses that
   /// mean "try again later" rather than "never" - 408 Request Timeout and
   /// 429 Too Many Requests.
   ///
-  /// The tag is set *here*, in the layer that knows what the round trip meant,
-  /// because the caller cannot tell. The decision used to be made a layer up by
-  /// substring-matching `failure.message`,
-  /// which fired on unrelated errors and still missed this one: the default
-  /// message for a 401 is "Unauthorized. Please login again." and contains no
-  /// "refresh" at all.
+  /// The tag is set here, in the layer that knows what the round trip meant;
+  /// a caller must not infer it from `failure.message`.
   Failure _mapRefreshFailure(AppException exception) {
     final rejected =
         exception is AuthException ||
