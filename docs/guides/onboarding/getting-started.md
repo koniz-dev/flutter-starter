@@ -222,8 +222,13 @@ flutter run -d windows
 
 ### Hot Reload and Hot Restart
 
-- **Hot Reload** (`r` in terminal or `Ctrl+S` / `Cmd+S` in IDE): Fast refresh for UI changes
-- **Hot Restart** (`R` in terminal or `Ctrl+Shift+S` / `Cmd+Shift+S` in IDE): Full restart (needed for configuration changes)
+- **Hot Reload** (`r` in the terminal running `flutter run`): fast refresh for UI changes
+- **Hot Restart** (`R` in that terminal): restarts the app's Dart state
+
+Neither picks up a configuration change. `.env` arrives as dart-defines through
+`--dart-define-from-file`, which are compiled in when `flutter run` starts:
+after editing `.env` or a `--dart-define`, stop the app and run `flutter run`
+again.
 
 ## Environment Configuration
 
