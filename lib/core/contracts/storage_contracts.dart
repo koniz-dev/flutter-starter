@@ -42,10 +42,10 @@ abstract class IKeyValueStore {
 /// and the next write through the same service (or, for a key whose newer
 /// state is a delete, the next delete) re-applies it. The marker is in
 /// memory, so if the app stops first, the next launch reads the late value.
-/// Its queue is
-/// shared by every store over the same `SecureStorageService`, so the
-/// components touching the tokens must use one service (or one store). An
-/// in-memory store whose methods complete synchronously meets it trivially.
+/// Its queue is shared by every store over the same `SecureStorageService`,
+/// so the components touching the tokens must use one service (or one store).
+/// An in-memory store whose methods complete synchronously meets it
+/// trivially.
 abstract class ITokenStore {
   Future<String?> getAccessToken();
   Future<bool> setAccessToken(String token);

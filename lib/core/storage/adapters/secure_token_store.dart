@@ -247,6 +247,7 @@ class SecureTokenStore implements ITokenStore {
   /// attempt fails, [key] is left stale for the next write or delete to
   /// re-apply, and the logger is warned: there is no caller to report to.
   Future<void> _repair(_OperationQueue queue, String key) async {
+    final target = queue.landed[key]!.number;
     Object? lastError;
     for (var attempt = 0; attempt < repairAttempts; attempt++) {
       try {
@@ -265,12 +266,15 @@ class SecureTokenStore implements ITokenStore {
         lastError = e;
       }
     }
+    // A newer write or delete of this key that landed meanwhile already put
+    // the device in step with memory.
+    if (queue.landed[key]!.number != target) return;
     queue.stale.add(key);
     try {
       queue.logger?.warning(
         'Secure token store: a late write or delete of $key could not be '
-        'undone; the key may hold an outdated value until the next token '
-        'write or delete',
+        'undone; reads of it answer from memory until the next write, or the '
+        'next delete of that key, re-applies it',
         context: {
           'key': key,
           'attempts': repairAttempts,
