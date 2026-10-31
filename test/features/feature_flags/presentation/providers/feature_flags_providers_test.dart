@@ -145,11 +145,14 @@ void main() {
         expect(flags[FeatureFlags.newFeature.value]!.value, isTrue);
       }, timeout: const Timeout(Duration(seconds: 5)));
 
-      test('allFeatureFlagsProvider returns an empty map on failure', () async {
-        // The old version of this test never produced a failure, so the
-        // failureCallback branch it claimed to cover never ran. Overriding the
-        // repository with one that fails is what actually exercises it.
+      test('allFeatureFlagsProvider is in an error state carrying the '
+          'failure', () async {
+        // It used to resolve to an empty map, so the debug screen showed "no
+        // flags" and never reached its error and retry state.
         final failingContainer = ProviderContainer(
+          // As the app's container: no automatic retry, which would rebuild
+          // the failed provider and discard the error.
+          retry: (_, _) => null,
           overrides: [
             featureFlagsRepositoryProvider.overrideWithValue(
               _FailingFeatureFlagsRepository(),
@@ -158,11 +161,20 @@ void main() {
         );
         addTearDown(failingContainer.dispose);
 
-        final flags = await failingContainer.read(
-          allFeatureFlagsProvider.future,
+        final subscription = failingContainer.listen(
+          allFeatureFlagsProvider,
+          (_, _) {},
         );
+        addTearDown(subscription.close);
 
-        expect(flags, isEmpty);
+        await expectLater(
+          failingContainer.read(allFeatureFlagsProvider.future),
+          throwsA(isA<Failure>()),
+        );
+        expect(
+          failingContainer.read(allFeatureFlagsProvider).error,
+          isA<UnknownFailure>(),
+        );
       }, timeout: const Timeout(Duration(seconds: 5)));
     });
   });
