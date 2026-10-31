@@ -180,6 +180,8 @@ void main() {
         contains('next write'),
         contains('next delete'),
         contains('next read'),
+        // Reads and deletes re-apply only a delete, never a write.
+        contains('if its newer state is a delete'),
       ),
     );
     verifyNever(
