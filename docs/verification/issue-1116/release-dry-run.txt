@@ -1,0 +1,20 @@
+release v3.0.1 -> 3a21fc1103379ad0c774729df2be89990cdf93aa
+
+Nothing to change in your project. A new README for projects created from
+the template, and one layout fix.
+
+### Fixed
+
+- **The home screen's welcome heading is centered on a phone.** It wrapped
+  flush against the left screen edge; it is now centered and inset 24 px,
+  like the hint under it.
+
+### Documentation
+
+- **The root README is a landing page.** It now opens with badges, a "Use
+  this template" link and iOS Simulator screenshots, followed by "Why this
+  starter", a quick start, a "What you get" table, tech stack, project
+  structure and quality gates. "Using this template" lists the parts that
+  describe the template rather than your app (badges, screenshots, "Why this
+  starter", Support) so a new project can delete them; a project that already
+  has its own README needs nothing.
