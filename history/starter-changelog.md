@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-11-01
+
+Nothing to change in your project. A new README for projects created from
+the template, and one layout fix.
+
 ### Fixed
 
 - **The home screen's welcome heading is centered on a phone.** It wrapped
