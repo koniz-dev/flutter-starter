@@ -22,26 +22,30 @@ class HomeScreen extends ConsumerWidget {
       body: RepaintBoundary(
         key: UiKeys.homeContent,
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Semantics(
-                header: true,
-                child: Text(
-                  l10n.welcome,
-                  style: Theme.of(context).textTheme.headlineMedium,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Semantics(
+                  header: true,
+                  child: Text(
+                    l10n.welcome,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                l10n.homeAddScreensHint,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                const SizedBox(height: 24),
+                Text(
+                  l10n.homeAddScreensHint,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
