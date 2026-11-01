@@ -230,7 +230,9 @@ git -C "$WS" checkout -q -- app/lib/main.dart
 # pub on Windows writes workspaceRoot with JSON-escaped backslashes.
 ref="$WS/app/.dart_tool/pub/workspace_ref.json"
 cp "$ref" "$WORK/workspace_ref.json.bak"
-printf '{\n  "workspaceRoot": "..\\\\..\\\\..\\\\.."\n}\n' >"$ref"
+# The same path pub wrote here, with each / as an escaped backslash.
+sed 's#/#\\\\#g' "$WORK/workspace_ref.json.bak" >"$ref"
+grep -qF '..\\..' "$ref" || fail "the Windows-style workspace_ref.json fixture has no escaped backslash"
 run_ws_hook
 status=$?
 if [ "$status" -eq 0 ]; then
