@@ -1,0 +1,5 @@
+# main at a189adca640
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart
+00:00 +0: the placeholder the brick writes is deleted
+00:26 +1: a file of the same name the brick did not write is kept
+00:52 +2: All tests passed!

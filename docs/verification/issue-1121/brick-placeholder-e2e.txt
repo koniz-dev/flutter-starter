@@ -1,0 +1,10 @@
+# BEFORE: fresh clone of main 0ebdc60 after mason make flutter_starter_setup (smoke job's answers: acme_shop, samples kept)
+-rw-r--r--@ 1 nguyenanhkiet  wheel  231 Nov  1 16:09 _mason_hook_only.md
+smoke step condition [ -e _mason_hook_only.md ] -> true -> step fails
+
+# AFTER: fresh clone of fix/1121-remove-hook-placeholder (first commit, same hook deletion) with the same answers
+12:Removed _mason_hook_only.md
+ls: _mason_hook_only.md: No such file or directory
+git status --short (untracked only):
+?? android/app/src/androidTest/java/com/acme/
+?? android/app/src/main/kotlin/com/acme/

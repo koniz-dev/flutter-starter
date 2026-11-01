@@ -1,0 +1,34 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart
+00:00 +0: the placeholder the brick writes is deleted
+00:07 +0 -1: the placeholder the brick writes is deleted [E]
+  Expected: <0>
+    Actual: <254>
+  
+  /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/placeholder_hook_YBuL6g/run_hook.dart:4:10: Error: Method not found: 'removeHookPlaceholder'.
+      hook.removeHookPlaceholder(args[0], Logger());
+           ^^^^^^^^^^^^^^^^^^^^^
+  
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/setup_brick_placeholder_test.dart 38:3  _removeIn
+  
+00:07 +0 -1: a file of the same name the brick did not write is kept
+00:15 +0 -2: a file of the same name the brick did not write is kept [E]
+  Expected: <0>
+    Actual: <254>
+  
+  /var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/placeholder_hook_yXkNM9/run_hook.dart:4:10: Error: Method not found: 'removeHookPlaceholder'.
+      hook.removeHookPlaceholder(args[0], Logger());
+           ^^^^^^^^^^^^^^^^^^^^^
+  
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/tooling/setup_brick_placeholder_test.dart 38:3  _removeIn
+  
+00:15 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder the brick writes is deleted
