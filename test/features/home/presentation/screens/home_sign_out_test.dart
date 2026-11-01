@@ -21,6 +21,8 @@ void main() {
     expect(find.byType(LoginScreen), findsOneWidget);
     expect(find.byType(HomeScreen), findsNothing);
     expect(app.container.read(authProvider).user, isNull);
+    // The stored session, not only the in-memory one, is gone.
+    expect(app.session, isA<InMemorySessionDataSource>());
     expect(app.session.token, isNull);
     expect(app.session.refresh, isNull);
     expect(app.session.user, isNull);

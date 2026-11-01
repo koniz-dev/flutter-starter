@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_starter/core/constants/ui_keys.dart';
+import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/routing/routes_registry.dart';
-import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 
@@ -31,7 +31,7 @@ class HomeScreen extends ConsumerWidget {
             icon: const Icon(Icons.logout),
             tooltip: l10n.signOut,
             // The router redirects to sign-in once the session is gone.
-            onPressed: () => ref.read(authProvider.notifier).logout(),
+            onPressed: () => ref.read(signOutProvider)(),
           ),
         ],
       ),

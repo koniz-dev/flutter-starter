@@ -101,6 +101,10 @@ final List<Override> authModuleOverrides = <Override>[
   sessionTerminationSinkProvider.overrideWith(
     RiverpodSessionTerminationSink.new,
   ),
+  signOutProvider.overrideWith(
+    (ref) =>
+        () => ref.read(authProvider.notifier).logout(),
+  ),
 ];
 
 // ============================================================================

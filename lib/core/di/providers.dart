@@ -158,6 +158,25 @@ final Provider<TokenRefresher> tokenRefresherProvider =
 final Provider<ISessionTerminationSink?> sessionTerminationSinkProvider =
     Provider<ISessionTerminationSink?>((ref) => null);
 
+/// Ends the signed-in session at the user's request.
+///
+/// Screens outside the auth feature - the home app bar's sign-out action -
+/// call this rather than importing the feature's notifier, which the
+/// architecture rules forbid. The auth slice overrides it with its notifier's
+/// `logout()`; the router then redirects to sign-in.
+typedef SignOut = Future<void> Function();
+
+/// What a sign-out action calls; see [SignOut].
+///
+/// Defaults to a [StateError] naming the missing override: a sign-out button
+/// that silently does nothing would leave the user signed in.
+final Provider<SignOut> signOutProvider = Provider<SignOut>((ref) {
+  return () async => throw StateError(
+    'No sign-out is registered. Add authModuleOverrides from '
+    'lib/features/auth/di/auth_providers.dart to your ProviderScope.',
+  );
+});
+
 /// Provider for [AuthInterceptor] instance
 ///
 /// Handles authentication token injection and automatic token refresh on
