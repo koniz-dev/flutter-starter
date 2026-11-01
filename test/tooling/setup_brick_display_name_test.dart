@@ -10,6 +10,7 @@
 @Timeout(Duration(minutes: 3))
 library;
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +25,17 @@ const _files = [
   'pubspec.yaml',
   'fastlane/Fastfile',
   'ios/fastlane/Fastfile',
+];
+
+/// The sources applyDisplayNameToDart rewrites: every locale's strings, and
+/// the tests that find the `welcome` sentence.
+final List<String> _dartSideFiles = [
+  ...Directory('lib/l10n')
+      .listSync()
+      .map((e) => e.path)
+      .where((p) => p.endsWith('.arb')),
+  'test/main_test.dart',
+  'test/widget_test.dart',
 ];
 
 String? _skipReason() {
@@ -53,7 +65,7 @@ void main() {
   setUpAll(() async {
     if (skip != null) return;
     root = Directory.systemTemp.createTempSync('setup_brick_display_name_');
-    for (final relative in _files) {
+    for (final relative in [..._files, ..._dartSideFiles]) {
       File('${root.path}/$relative')
         ..createSync(recursive: true)
         ..writeAsStringSync(File(relative).readAsStringSync());
@@ -68,6 +80,7 @@ void main() {
         '  final name = args[1];\n'
         '  final logger = Logger();\n'
         '  await hook.patchAndroidManifest(root, name);\n'
+        '  await hook.applyDisplayNameToDart(root, name, logger);\n'
         "  await hook.patchPatrolConfig(root, 'com.acme.shop', name, logger);\n"
         '  await hook.patchPlatformIdentifiers(\n'
         '    rootPath: root,\n'
@@ -129,6 +142,32 @@ void main() {
   test("pubspec's patrol app_name parses back to the name", () {
     final yaml = loadYaml(read('pubspec.yaml')) as YamlMap;
     expect((yaml['patrol'] as YamlMap)['app_name'], _name);
+  }, skip: skip);
+
+  test('every locale names the app, in appTitle and in welcome', () {
+    final arbs = _dartSideFiles.where((p) => p.endsWith('.arb')).toList();
+    expect(arbs, hasLength(greaterThanOrEqualTo(4)));
+    for (final arb in arbs) {
+      final text = read(arb);
+      expect(text, isNot(contains('Flutter Starter')), reason: arb);
+      final strings = jsonDecode(text) as Map<String, dynamic>;
+      expect(strings['appTitle'], _name, reason: arb);
+      expect(strings['welcome'] as String, contains(_name), reason: arb);
+    }
+    final en = jsonDecode(read('lib/l10n/app_en.arb')) as Map<String, dynamic>;
+    expect(en['welcome'], 'Welcome to $_name with Clean Architecture!');
+  }, skip: skip);
+
+  test('the tests that find the welcome sentence still parse', () {
+    for (final test in _dartSideFiles.where((p) => p.endsWith('.dart'))) {
+      expect(read(test), isNot(contains('Flutter Starter')), reason: test);
+      final format = _run('dart', [
+        'format',
+        '--output=none',
+        '${root.path}/$test',
+      ]);
+      expect(format.exitCode, 0, reason: '$test: ${format.stderr}');
+    }
   }, skip: skip);
 
   for (final fastfile in _files.sublist(3)) {

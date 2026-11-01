@@ -241,7 +241,9 @@ jobs:
             echo "root markdown above still imports package:flutter_starter/" >&2
             exit 1
           fi
-          if grep -rn "'Flutter Starter'\|\"appTitle\": \"Flutter Starter\"" lib test integration_test tool/golden \
+          # Every mention, not only the title: the welcome sentence in each
+          # locale names the app too.
+          if grep -rn "Flutter Starter" lib test integration_test tool/golden \
               --include='*.dart' --include='*.arb'; then
             echo "the template title survived the rename" >&2
             exit 1
