@@ -66,9 +66,11 @@ GitHub issues are the single source of truth. Full spec:
    pushing: `$M/scripts/check_issue_refs.sh --range origin/main..HEAD`.
 9. Ship via feature branch + PR (`CONTRIBUTING.md` naming, Conventional
    Commits), wait for the checks the PR actually gets (see "Which checks a PR
-   gets" below), merge `--squash --delete-branch`. `main` is **not** protected -
-   a direct push would succeed - so the branch-and-PR rule is discipline, not
-   enforcement. Never test that.
+   gets" below), merge `--squash --delete-branch`. `main` is protected:
+   Quality gate and the five Strip jobs are required status checks, enforced
+   for admins too, so a direct push or a merge on a red PR is rejected. No
+   review is required and the other checks (Docs check, Action pins, ...) are
+   not required, so reading them is still the session's job.
 10. Done means closed AND evidence-backed. One issue at a time.
 11. **Dependabot PRs** (`chore(deps)` / `chore(ci)`, from `.github/dependabot.yml`
     on `main`) have no issue and their commits carry no `Refs`. They are
