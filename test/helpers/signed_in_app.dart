@@ -94,9 +94,11 @@ typedef SignedInApp = ({
 
 /// Pumps the whole app - router, redirect and all - signed in.
 ///
-/// [overrides] are added after the session overrides.
+/// [remote] replaces the server, which otherwise accepts only the logout
+/// call. [overrides] are added after the session overrides.
 Future<SignedInApp> pumpSignedInApp(
   WidgetTester tester, {
+  AuthRemoteDataSource? remote,
   List<Override> overrides = const <Override>[],
 }) async {
   SharedPreferences.setMockInitialValues(<String, Object>{});
@@ -104,7 +106,9 @@ Future<SignedInApp> pumpSignedInApp(
   final container = createAppContainer(
     overrides: [
       authLocalDataSourceProvider.overrideWithValue(session),
-      authRemoteDataSourceProvider.overrideWithValue(_LogoutOnlyRemote()),
+      authRemoteDataSourceProvider.overrideWithValue(
+        remote ?? _LogoutOnlyRemote(),
+      ),
       ...overrides,
     ],
   );

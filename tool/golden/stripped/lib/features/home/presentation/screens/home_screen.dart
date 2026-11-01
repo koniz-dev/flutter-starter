@@ -24,16 +24,7 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appTitle),
-        actions: [
-          const LanguageSwitcher(),
-          IconButton(
-            key: UiKeys.homeSignOut,
-            icon: const Icon(Icons.logout),
-            tooltip: l10n.signOut,
-            // The router redirects to sign-in once the session is gone.
-            onPressed: () => ref.read(signOutProvider)(),
-          ),
-        ],
+        actions: const [LanguageSwitcher(), _SignOutButton()],
       ),
       body: RepaintBoundary(
         key: UiKeys.homeContent,
@@ -86,6 +77,42 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Signs out once per tap: disabled until the sign-out it started settles.
+///
+/// The user stays on home while the logout call is in flight, so without the
+/// guard a second tap sends the same refresh token again, and a server that
+/// rejects the replay surfaces an error for a sign-out that worked.
+class _SignOutButton extends ConsumerStatefulWidget {
+  const _SignOutButton();
+
+  @override
+  ConsumerState<_SignOutButton> createState() => _SignOutButtonState();
+}
+
+class _SignOutButtonState extends ConsumerState<_SignOutButton> {
+  bool _signingOut = false;
+
+  Future<void> _signOut() async {
+    setState(() => _signingOut = true);
+    try {
+      // The router redirects to sign-in once the session is gone.
+      await ref.read(signOutProvider)();
+    } finally {
+      if (mounted) setState(() => _signingOut = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      key: UiKeys.homeSignOut,
+      icon: const Icon(Icons.logout),
+      tooltip: AppLocalizations.of(context)!.signOut,
+      onPressed: _signingOut ? null : _signOut,
     );
   }
 }

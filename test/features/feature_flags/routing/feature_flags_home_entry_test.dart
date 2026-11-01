@@ -1,4 +1,9 @@
+// Run this file twice to see both sides of the debug gate:
+//   flutter test <this file>
+//   flutter test <this file> --dart-define=ENABLE_DEBUG_FEATURES=false
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/routing/routes_registry.dart';
 import 'package:flutter_starter/features/feature_flags/presentation/screens/feature_flags_debug_screen.dart';
@@ -24,37 +29,20 @@ void main() {
     );
   });
 
-  testWidgets('with debug routes on, home opens the flags screen', (
-    tester,
-  ) async {
-    await pumpSignedInApp(
-      tester,
-      overrides: [
-        homeDestinationsProvider.overrideWithValue(
-          buildHomeDestinations(debugRoutes: true),
-        ),
-      ],
-    );
+  // Home and the router both read AppConfig.enableDebugFeatures, so the app
+  // as built shows the entry exactly when the route exists.
+  testWidgets('home shows the flags entry exactly when the route is '
+      'registered (enableDebugFeatures=${AppConfig.enableDebugFeatures}), '
+      'and the entry opens it', (tester) async {
+    await pumpSignedInApp(tester);
+    expect(find.byType(HomeScreen), findsOneWidget);
 
+    if (!AppConfig.enableDebugFeatures) {
+      expect(find.byKey(_entry), findsNothing);
+      return;
+    }
     await tester.tap(find.byKey(_entry));
     await tester.pumpAndSettle();
-
     expect(find.byType(FeatureFlagsDebugScreen), findsOneWidget);
-  });
-
-  testWidgets('with debug routes off, home shows no entry for it', (
-    tester,
-  ) async {
-    await pumpSignedInApp(
-      tester,
-      overrides: [
-        homeDestinationsProvider.overrideWithValue(
-          buildHomeDestinations(debugRoutes: false),
-        ),
-      ],
-    );
-
-    expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.byKey(_entry), findsNothing);
   });
 }
