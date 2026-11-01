@@ -165,6 +165,9 @@ fi
 WS="$WORK/ws"
 mkdir -p "$WS"
 git -C "$WS" init -q
+# Undo case 3's staged violation first, or the fixture starts dirty.
+git -C "$MONO" reset -q
+git -C "$MONO" checkout -q -- app/lib/main.dart
 cp -R "$MONO/app" "$WS/app"
 rm -rf "$WS/app/.dart_tool" "$WS/app/pubspec.lock"
 env_block="$(sed -n '/^environment:/,/^[^[:space:]]/p' "$WS/app/pubspec.yaml" | sed '$d')"
