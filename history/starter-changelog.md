@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   replaces every mention of the template name in the Dart and ARB sources,
   as the manual rename already did. A project already set up with the brick
   can fix it by hand: replace `Flutter Starter` in `lib/l10n/app_*.arb` and
-  run `flutter gen-l10n`.
+  in the two tests that find the sentence (`test/main_test.dart`,
+  `test/widget_test.dart`), then run `flutter gen-l10n`.
 
 ## [3.0.1] - 2026-11-01
 
