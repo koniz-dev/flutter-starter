@@ -1,0 +1,7 @@
+== home_screen.dart from 735caee2e49 (before), test from 65561231219
+Expected: TextAlign:<TextAlign.center>
+  Actual: <null>
+00:01 +0 -1: Some tests failed.
+== main 65561231219
+00:03 +20 ~1: All tests passed!
+00:13 +13: All tests passed!
