@@ -63,6 +63,9 @@ config_dir="$app"
 workspace_ref=".dart_tool/pub/workspace_ref.json"
 if [ ! -f .dart_tool/package_config.json ] && [ -f "$workspace_ref" ]; then
   root_rel="$(sed -n 's/.*"workspaceRoot"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$workspace_ref" | head -n 1)"
+  # On Windows pub writes the path with backslashes, JSON-escaped (`..\\..`);
+  # every shell here takes forward slashes.
+  root_rel="$(printf '%s' "$root_rel" | sed 's#\\\\#/#g; s#\\#/#g')"
   if [ -n "$root_rel" ] && root_dir="$(cd ".dart_tool/pub/$root_rel" 2>/dev/null && pwd -P)"; then
     config_dir="$root_dir"
   fi
@@ -74,7 +77,7 @@ fi
 # Refuse before anything runs. In a workspace, `flutter pub get` in the app
 # resolves the whole workspace.
 if [ ! -f "$config_dir/.dart_tool/package_config.json" ]; then
-  echo "❌ Dependencies are not resolved (.dart_tool/package_config.json is missing)."
+  echo "❌ Dependencies are not resolved ($config_dir/.dart_tool/package_config.json is missing)."
   echo "   Run: flutter pub get"
   echo "   Nothing was formatted or changed."
   exit 1
@@ -86,9 +89,11 @@ case "$config_dir" in
   "$top") config_prefix="" ;;
   "$top"/*) config_prefix="${config_dir#"$top"/}/" ;;
   *)
-    echo "❌ The pub workspace root ($config_dir) is outside this git repository,"
-    echo "   so the staged content cannot be checked against its dependencies."
-    echo "   Commit from a repository that contains the workspace root."
+    echo "❌ The pub workspace root ($config_dir) is outside this git repository"
+    echo "   (a submodule, or a repository nested in the workspace), so the staged"
+    echo "   content cannot be checked against its dependencies here."
+    echo "   Run the checks by hand - dart format and flutter analyze in $app -"
+    echo "   then commit with: git commit --no-verify"
     exit 1
     ;;
 esac
@@ -125,10 +130,6 @@ mkdir -p "$staged/$config_prefix.dart_tool"
 cp -p "$config_dir/.dart_tool/package_config.json" "$staged/$config_prefix.dart_tool/"
 if [ -f "$config_dir/.dart_tool/package_graph.json" ]; then
   cp -p "$config_dir/.dart_tool/package_graph.json" "$staged/$config_prefix.dart_tool/"
-fi
-if [ "$config_dir" != "$app" ]; then
-  mkdir -p "$staged/$app_prefix.dart_tool/pub"
-  cp -p "$workspace_ref" "$staged/$app_prefix.dart_tool/pub/"
 fi
 cd "$staged/$app_prefix"
 

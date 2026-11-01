@@ -23,8 +23,9 @@
 #      `workspace:`, the app with `resolution: workspace`): pub writes
 #      package_config.json only at the workspace root, so the app has none of
 #      its own. The hook still exits 0 on a clean tree and non-zero on a
-#      staged violation; with the workspace unresolved it refuses, and after
-#      the `flutter pub get` it advises, it passes.
+#      staged violation, also with a Windows-style (backslash) workspaceRoot;
+#      with the workspace unresolved it refuses, and after the
+#      `flutter pub get` it advises, it passes.
 #
 # HOOK_UNDER_TEST=<file> points the tests at another copy of the hook, for
 # example an older revision, to show a case fails there.
@@ -191,8 +192,14 @@ if [ -f "$WS/.dart_tool/package_config.json" ] && [ ! -f "$WS/app/.dart_tool/pac
 else
   fail "the workspace fixture did not resolve as a pub workspace"
 fi
+# As in any real workspace, the root's resolved state is not committed - so
+# the hook's export has no config until the hook copies the root's in.
+echo ".dart_tool/" >"$WS/.gitignore"
 git -C "$WS" add -A
 git -C "$WS" -c user.email=t@example.com -c user.name=t commit -q --no-verify -m "chore: workspace fixture"
+if git -C "$WS" ls-files | grep -q '\.dart_tool/'; then
+  fail "the workspace fixture committed a .dart_tool/ directory"
+fi
 
 run_ws_hook() {
   (cd "$WS" && bash app/.githooks/pre-commit) >"$WORK/hook.out" 2>&1
@@ -219,6 +226,21 @@ else
 fi
 git -C "$WS" reset -q
 git -C "$WS" checkout -q -- app/lib/main.dart
+
+# pub on Windows writes workspaceRoot with JSON-escaped backslashes.
+ref="$WS/app/.dart_tool/pub/workspace_ref.json"
+cp "$ref" "$WORK/workspace_ref.json.bak"
+printf '{\n  "workspaceRoot": "..\\\\..\\\\..\\\\.."\n}\n' >"$ref"
+run_ws_hook
+status=$?
+if [ "$status" -eq 0 ]; then
+  pass "in a pub workspace the hook follows a Windows-style workspaceRoot"
+else
+  fail "with a Windows-style workspaceRoot the hook exited $status on a clean tree"
+  cat "$ref"
+  tail -20 "$WORK/hook.out"
+fi
+cp "$WORK/workspace_ref.json.bak" "$ref"
 
 rm -f "$WS/.dart_tool/package_config.json"
 run_ws_hook
