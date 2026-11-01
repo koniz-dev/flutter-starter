@@ -1,0 +1,1 @@
+{"checks":["Quality gate","Strip both-samples-removed + analyze + test","Strip feature-flags-removed + analyze + test","Strip tasks-removed + analyze + test","Strip keep-samples + analyze + test","Strip renamed-both + analyze + test"],"enforce_admins":true,"reviews":0,"strict":false}

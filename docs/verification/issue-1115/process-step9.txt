@@ -1,0 +1,10 @@
+== maintainers b9e8e9701fc process.md step 9
+9. Ship via feature branch + PR (`CONTRIBUTING.md` naming, Conventional
+   Commits), wait for the checks the PR actually gets (see "Which checks a PR
+   gets" below), merge `--squash --delete-branch`. `main` is protected:
+   Quality gate and the five Strip jobs are required status checks, enforced
+   for admins too, so a direct push or a merge on a red PR is rejected. No
+   review is required and the other checks (Docs check, Action pins, ...) are
+   not required, so reading them is still the session's job.
+== other claims of an unprotected main (excluding history/)
+(none)
