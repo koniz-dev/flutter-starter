@@ -1,0 +1,12 @@
+# fresh clone of main 0ebdc60 after: mason make flutter_starter_setup --package_name acme_shop --application_id com.acme.shop --ios_bundle_id com.acme.shop --app_display_name 'Acme Shop' --strip_sample_features false --include_tasks_sample true --include_feature_flags_sample true (rename not committed)
+name: acme_shop
+## BEFORE: test/tooling/strip_rerun_test.dart from 0ebdc60, with the package:flutter_starter/ -> package:acme_shop/ rewrite the brick applies
+00:03 +0 -1: (a) a git-ignored file importing the sample does not fail the strip [E]
+  Expected: contains 'git-ignored files'
+    Actual: 'Dropped 1 marked section(s) or line(s) from docs/README.md.\n'
+00:06 +0 -2: (b) a re-run after a partial strip completes [E]
+  Expected: <3>
+    Actual: <0>
+00:08 +1 -2: Some tests failed.
+## AFTER: test/tooling/strip_rerun_test.dart from 60b67d79e53
+00:10 +3: All tests passed!

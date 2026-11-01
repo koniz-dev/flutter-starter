@@ -1,0 +1,6 @@
+# unrenamed template, main at 60b67d79e53
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart
+00:00 +0: (a) a git-ignored file importing the sample does not fail the strip
+00:03 +1: (b) a re-run after a partial strip completes
+00:09 +2: (c) a run from a subdirectory refuses and writes nothing
+00:11 +3: All tests passed!
