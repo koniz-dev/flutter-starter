@@ -27,7 +27,7 @@ final class FeatureFlagsLocalDataSourceProvider
         argument: null,
         retry: null,
         name: r'featureFlagsLocalDataSourceProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -56,7 +56,7 @@ final class FeatureFlagsLocalDataSourceProvider
 }
 
 String _$featureFlagsLocalDataSourceHash() =>
-    r'b434d71945023fb007a5e780a33cfdf867591c3a';
+    r'b48c95abbd03a952050ac6e1b65dea64bbfc0876';
 
 @ProviderFor(featureFlagsRemoteDataSource)
 final featureFlagsRemoteDataSourceProvider =
@@ -76,7 +76,7 @@ final class FeatureFlagsRemoteDataSourceProvider
         argument: null,
         retry: null,
         name: r'featureFlagsRemoteDataSourceProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -105,7 +105,7 @@ final class FeatureFlagsRemoteDataSourceProvider
 }
 
 String _$featureFlagsRemoteDataSourceHash() =>
-    r'4cb08139f8b25263f3fa2b499c0c1eafce6c586f';
+    r'11a9a1e7c807f548d90cbf2d9828748c99551883';
 
 @ProviderFor(featureFlagsRepository)
 final featureFlagsRepositoryProvider = FeatureFlagsRepositoryProvider._();
@@ -124,7 +124,7 @@ final class FeatureFlagsRepositoryProvider
         argument: null,
         retry: null,
         name: r'featureFlagsRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -153,7 +153,7 @@ final class FeatureFlagsRepositoryProvider
 }
 
 String _$featureFlagsRepositoryHash() =>
-    r'd0730b681f2e1924a27b654e5cf6ff8eed542708';
+    r'6e10a57ee934b44c50961e37292ac69acb232626';
 
 @ProviderFor(featureFlagsManager)
 final featureFlagsManagerProvider = FeatureFlagsManagerProvider._();
@@ -172,7 +172,7 @@ final class FeatureFlagsManagerProvider
         argument: null,
         retry: null,
         name: r'featureFlagsManagerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -201,22 +201,39 @@ final class FeatureFlagsManagerProvider
 }
 
 String _$featureFlagsManagerHash() =>
-    r'85723c5f453bdae6e014b3f196f99c4dd2a3a94b';
+    r'ed650be829fabbec0cd4f99dafa0e7aef30efd51';
+
+/// Initializes and fetches the remote source once per container.
+///
+/// Every flag read awaits it, so the first read starts it and no read sees
+/// the remote source before it is ready. It never fails: a remote that cannot
+/// initialize is logged and the flags resolve from local values and defaults.
 
 @ProviderFor(featureFlagsInitialization)
 final featureFlagsInitializationProvider =
     FeatureFlagsInitializationProvider._();
 
+/// Initializes and fetches the remote source once per container.
+///
+/// Every flag read awaits it, so the first read starts it and no read sees
+/// the remote source before it is ready. It never fails: a remote that cannot
+/// initialize is logged and the flags resolve from local values and defaults.
+
 final class FeatureFlagsInitializationProvider
     extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
     with $FutureModifier<void>, $FutureProvider<void> {
+  /// Initializes and fetches the remote source once per container.
+  ///
+  /// Every flag read awaits it, so the first read starts it and no read sees
+  /// the remote source before it is ready. It never fails: a remote that cannot
+  /// initialize is logged and the flags resolve from local values and defaults.
   FeatureFlagsInitializationProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'featureFlagsInitializationProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -236,7 +253,7 @@ final class FeatureFlagsInitializationProvider
 }
 
 String _$featureFlagsInitializationHash() =>
-    r'8eab227c2ec9162c70758bdf3064c98bdb4c8c11';
+    r'0b98c4dbb7c127d24ff2d3c342789a81c34a7432';
 
 @ProviderFor(isFeatureEnabled)
 final isFeatureEnabledProvider = IsFeatureEnabledFamily._();
@@ -287,7 +304,7 @@ final class IsFeatureEnabledProvider
   }
 }
 
-String _$isFeatureEnabledHash() => r'9e727ad59f1fb4b335e047a4735b2659a0cb3414';
+String _$isFeatureEnabledHash() => r'e5defaf639878d8849f88c2d8ea5786be3f0cf4a';
 
 final class IsFeatureEnabledFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<bool>, FeatureFlagKey> {
@@ -362,7 +379,7 @@ final class FeatureFlagProvider
   }
 }
 
-String _$featureFlagHash() => r'fe2e8b6f686aa4aa32d0a9b3d19c8d91382169ba';
+String _$featureFlagHash() => r'33b747aafa7c8e53348eb8ef154448542efcb2ca';
 
 final class FeatureFlagFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<FeatureFlag?>, FeatureFlagKey> {
@@ -441,4 +458,4 @@ final class AllFeatureFlagsProvider
   }
 }
 
-String _$allFeatureFlagsHash() => r'703a18e33adf783e4ab2f5c40a023c14cd5be51d';
+String _$allFeatureFlagsHash() => r'd19e27938a41e95857f0e7b04bbbc620c7d80e37';
