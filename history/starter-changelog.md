@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   can fix it by hand: replace `Flutter Starter` in `lib/l10n/app_*.arb` and
   in the two tests that find the sentence (`test/main_test.dart`,
   `test/widget_test.dart`), then run `flutter gen-l10n`.
+- **`flutter test` passes right after the setup brick.** With the samples
+  kept and the rename not yet committed, two cases in
+  `test/tooling/strip_rerun_test.dart` failed. Committing the rename already
+  made them pass; nothing to change otherwise.
 
 ## [3.0.1] - 2026-11-01
 
