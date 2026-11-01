@@ -284,15 +284,24 @@ abstract class ILocalDatabase {
 
 ### Isar Implementation Template
 
-The recommended implementation is **Isar** (high-performance NoSQL for Flutter).
+A ready-to-uncomment implementation on **Isar** (high-performance NoSQL for
+Flutter), through the community-maintained Isar 3 packages.
 
 **Location:** `lib/core/storage/isar_database_template.dart`
 
 #### Setup
 
-1. Run: `flutter pub add isar isar_flutter_libs`
-2. Run: `flutter pub add --dev isar_generator`
-3. Follow the instructions within the template file to define your collections and open the database.
+1. Run: `flutter pub add isar_community isar_community_flutter_libs`
+2. Run: `flutter pub add --dev isar_community_generator`
+3. Uncomment the imports and code in the template file, define your
+   collections (a class annotated `@collection`, in a file with
+   `part '<file>.g.dart';`), list their schemas in `Isar.open`, and run
+   `dart run build_runner build --delete-conflicting-outputs`.
+
+Use these packages rather than the original `isar` / `isar_generator` 3.x:
+their generator needs `source_gen` 1.x, while this project's `freezed` 4
+needs `source_gen` 3 or later, so `flutter pub add --dev isar_generator`
+fails version solving here.
 
 The default starter does not bind `ILocalDatabase` in DI, so this remains fully optional.
 
