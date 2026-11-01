@@ -14,7 +14,7 @@
 // the line above it, with a reason:
 //
 //     // l10n-literal-ok: brand name, never translated
-//     Text('Flutter Starter'),
+//     Text('Acme'),
 
 import 'dart:io';
 
@@ -127,11 +127,11 @@ Column(
 
     test('honours the allow-list comment on the line or the line above', () {
       expect(
-        scan("// $_allowMarker brand name\nText('Flutter Starter')"),
+        scan("// $_allowMarker brand name\nText('Acme')"),
         isEmpty,
       );
       expect(
-        scan("Text('Flutter Starter'), // $_allowMarker brand name"),
+        scan("Text('Acme'), // $_allowMarker brand name"),
         isEmpty,
       );
     });

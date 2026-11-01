@@ -62,19 +62,21 @@ committed. The hook therefore runs, in the repository root:
 
 ### The display name on the Dart side
 
-`app_display_name` replaces the exact template name, never a sentence that
-mentions it:
+`app_display_name` replaces every `Flutter Starter` in the Dart and ARB
+sources, as the manual rename in
+[Fork and customize](../../docs/guides/onboarding/fork-and-customize.md) does:
 
 | File | What changes |
 | --- | --- |
 | `lib/main.dart` | `MaterialApp(title:)` |
 | `lib/core/startup/startup_failure_app.dart` | `MaterialApp(title:)` |
 | `lib/core/constants/app_constants.dart` | `AppConstants.appName` |
-| `lib/l10n/app_*.arb` | `appTitle` in every locale, then regenerated |
-| `test/`, `integration_test/` | the whole-string `'Flutter Starter'` literals that assert the above |
+| `lib/l10n/app_*.arb` | `appTitle` and the `welcome` sentence in every locale, then regenerated |
+| `test/`, `integration_test/` | the literals that assert the above |
 
-The `welcome` sentence ("Welcome to Flutter Starter with Clean
-Architecture!") is left as it is in each locale; reword it yourself.
+The `welcome` sentence then reads "Welcome to My App with Clean
+Architecture!" in each locale for a display name of `My App`; reword it as
+you like.
 
 It also rewrites the template identifiers in these non-Dart files:
 

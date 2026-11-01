@@ -48,7 +48,7 @@ Future<void> run(HookContext context) async {
   }
 
   await _renameDartPackage(rootPath, packageName, logger);
-  await _applyDisplayNameToDart(rootPath, appDisplayName, logger);
+  await applyDisplayNameToDart(rootPath, appDisplayName, logger);
   await _patchAndroidGradle(rootPath, applicationId);
   await patchAndroidManifest(rootPath, appDisplayName);
   await _relocateMainActivity(rootPath, applicationId, logger);
@@ -142,24 +142,29 @@ Future<void> _run(
   }
 }
 
-/// Puts [displayName] where the Dart side shows the app's name.
+/// Puts [displayName] wherever the Dart side names the app.
 ///
-/// Only the exact template name is replaced: the whole-string `'Flutter
-/// Starter'` literal (in `MaterialApp.title`, `StartupFailureApp`,
-/// `AppConstants.appName`, and the tests that assert them) and the `appTitle`
-/// entry of every ARB file. Sentences that merely mention the template, such
-/// as `welcome`, are left alone. The generated `app_localizations*.dart` are
-/// rebuilt from the ARB files by `flutter gen-l10n` in
+/// Every `Flutter Starter` in the Dart and ARB sources is replaced, the same
+/// as the manual rename in `fork-and-customize.md` does: the whole-string
+/// literal (in `MaterialApp.title`, `StartupFailureApp`,
+/// `AppConstants.appName`, and the tests that assert them), and the template
+/// name inside a sentence, such as each locale's `welcome` and the tests that
+/// find it. Left alone, `welcome` greeted the adopter's users with the
+/// template's name on the first screen. The generated `app_localizations*.dart`
+/// are rebuilt from the ARB files by `flutter gen-l10n` in
 /// [_repairRenamedSources].
-Future<void> _applyDisplayNameToDart(
+Future<void> applyDisplayNameToDart(
   String rootPath,
   String displayName,
   Logger logger,
 ) async {
   const templateName = 'Flutter Starter';
+  // In these sources the template name sits inside single-quoted Dart
+  // strings and JSON strings, so the name is escaped for the inside of one.
   final dartLiteral = _dartSingleQuoted(displayName);
-  final arbEntry = RegExp(r'"appTitle"\s*:\s*"Flutter Starter"');
-  final arbValue = '"appTitle": ${jsonEncode(displayName)}';
+  final dartInside = dartLiteral.substring(1, dartLiteral.length - 1);
+  final jsonLiteral = jsonEncode(displayName);
+  final jsonInside = jsonLiteral.substring(1, jsonLiteral.length - 1);
 
   var changed = 0;
   // tool/golden holds the copies tool/strip_sample_features.dart writes over
@@ -174,9 +179,10 @@ Future<void> _applyDisplayNameToDart(
       final isArb = path.endsWith('.arb');
       if (!isDart && !isArb) continue;
       final text = await entity.readAsString();
-      final updated = isDart
-          ? text.replaceAll("'$templateName'", dartLiteral)
-          : text.replaceAll(arbEntry, arbValue);
+      final updated = text.replaceAll(
+        templateName,
+        isDart ? dartInside : jsonInside,
+      );
       if (updated != text) {
         await entity.writeAsString(updated);
         changed++;
