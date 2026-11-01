@@ -496,6 +496,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get failureUnknown => 'Algo salió mal. Inténtalo de nuevo.';
 
   @override
+  String get signOut => 'Cerrar sesión';
+
+  @override
   String get homeAddScreensHint => 'Añade pantallas en lib/features/.';
 
   @override

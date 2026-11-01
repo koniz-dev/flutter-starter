@@ -386,6 +386,7 @@
   "failureStorage": "Không thể đọc hoặc lưu dữ liệu trên thiết bị này.",
   "failureServer": "Đã xảy ra lỗi ở máy chủ. Vui lòng thử lại sau.",
   "failureUnknown": "Đã xảy ra lỗi. Vui lòng thử lại.",
+  "signOut": "Đăng xuất",
   "homeAddScreensHint": "Thêm màn hình trong lib/features/.",
   "@homeAddScreensHint": {
     "description": "Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated"

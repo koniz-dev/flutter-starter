@@ -798,6 +798,12 @@ abstract class AppLocalizations {
   /// **'Something went wrong. Please try again.'**
   String get failureUnknown;
 
+  /// Tooltip of the home app bar action that ends the session and returns to sign-in
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
   /// Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated
   ///
   /// In en, this message translates to:

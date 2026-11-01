@@ -574,6 +574,10 @@
   "@failureUnknown": {
     "description": "Failure message shown to the user. Used for any other failure"
   },
+  "signOut": "Sign out",
+  "@signOut": {
+    "description": "Tooltip of the home app bar action that ends the session and returns to sign-in"
+  },
   "homeAddScreensHint": "Add screens under lib/features/.",
   "@homeAddScreensHint": {
     "description": "Hint on the home screen telling a developer where new screens go. Keep the path lib/features/ untranslated"

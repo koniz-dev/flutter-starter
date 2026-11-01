@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
+import 'package:flutter_starter/core/routing/home_destination.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/task_detail_screen.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
@@ -32,3 +34,11 @@ List<RouteBase> buildTasksRoutes(Ref ref) {
     ),
   ];
 }
+
+/// The home screen's entry to the tasks list.
+final HomeDestination tasksHomeDestination = HomeDestination(
+  id: 'tasks',
+  icon: Icons.checklist,
+  label: (l10n) => l10n.tasks,
+  location: AppRoutes.tasks,
+);

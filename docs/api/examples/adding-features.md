@@ -126,20 +126,30 @@ Four edits make the screen reachable once signed in. The
    (before `buildHomeRoute(ref)`). A route that is not registered here is a
    404, whatever constants exist.
 
-4. **Navigate to it** with the navigation extensions and the constant, never
-   a hard-coded path. For example, a button on `HomeScreen`:
+4. **Link it from home.** The home screen names no feature: it lists the
+   `HomeDestination`s that `buildHomeDestinations` in `routes_registry.dart`
+   returns. Declare one beside the route module, in `notes_routes.dart`:
 
    ```dart
-   FilledButton(
-     onPressed: () => context.pushRoute(AppRoutes.notes),
-     child: Text(context.l10n.notesTitle),
-   ),
+   /// The home screen's entry to the notes screen.
+   final HomeDestination notesHomeDestination = HomeDestination(
+     id: 'notes',
+     icon: Icons.note_outlined,
+     label: (l10n) => l10n.notesTitle,
+     location: AppRoutes.notes,
+   );
    ```
 
-   That needs `core/routing/app_routes.dart`,
-   `core/routing/navigation_extensions.dart` and
-   `core/localization/localization_extensions.dart` imported. Visible text goes
-   through `AppLocalizations`: add `"notesTitle": "Notes"`
+   That needs `package:flutter/material.dart` and
+   `core/routing/home_destination.dart` imported. Then add
+   `notesHomeDestination,` to the list in `buildHomeDestinations`, next to the
+   other features' entries (or to `_debugHomeDestinations` for a debug-only
+   screen). Home renders it as a button keyed `UiKeys.homeDestination('notes')`
+   that pushes the route. Elsewhere, navigate with the navigation extensions
+   and the constant, never a hard-coded path:
+   `context.pushRoute(AppRoutes.notes)`.
+
+   Visible text goes through `AppLocalizations`: add `"notesTitle": "Notes"`
    to `lib/l10n/app_en.arb` and its translations to the other `app_*.arb`
    files (`flutter pub get` regenerates the localizations).
    `test/tooling/text_literal_guard_test.dart` fails on a bare
@@ -149,17 +159,20 @@ The router's redirect already keeps every route except sign-in and
 registration behind authentication, so `/notes` needs no guard of its own.
 
 <!-- symbol: lib/core/routing/routes_registry.dart buildAppRoutes -->
+<!-- symbol: lib/core/routing/routes_registry.dart buildHomeDestinations -->
+<!-- symbol: lib/core/routing/home_destination.dart HomeDestination -->
+<!-- symbol: lib/core/constants/ui_keys.dart UiKeys.homeDestination -->
 <!-- symbol: lib/core/routing/navigation_extensions.dart NavigationExtensions -->
 
 ## Step 5: Test it
 
 The scaffold's repository test already runs. Add a route test that signs a
 user in, pumps the app's router (`pumpAppRouter` in
-`test/helpers/pump_app.dart`) and follows the button from home, as
+`test/helpers/pump_app.dart`) and follows the home entry, as
 `test/features/notes/notes_route_test.dart`:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/features/auth/domain/entities/user.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/features/notes/presentation/screens/notes_screen.dart';
@@ -185,7 +198,7 @@ void main() {
         sessionRestorationProvider.overrideWith((ref) async {}),
       ],
     );
-    await tester.tap(find.widgetWithText(FilledButton, 'Notes'));
+    await tester.tap(find.byKey(UiKeys.homeDestination('notes')));
     await tester.pumpAndSettle();
     expect(find.byType(NotesScreen), findsOneWidget);
   });
@@ -206,7 +219,7 @@ flutter analyze && flutter test
 - [ ] Route constants in `AppRoutes`
 - [ ] `lib/features/<name>/routing/<name>_routes.dart` module
 - [ ] Module registered in `buildAppRoutes`
-- [ ] Navigation from an existing screen, with localized text
+- [ ] `HomeDestination` beside the route module, listed in `buildHomeDestinations`, with localized text
 - [ ] Route test; `flutter analyze` and `flutter test` pass
 
 ---

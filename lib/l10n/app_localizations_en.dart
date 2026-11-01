@@ -486,6 +486,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failureUnknown => 'Something went wrong. Please try again.';
 
   @override
+  String get signOut => 'Sign out';
+
+  @override
   String get homeAddScreensHint => 'Add screens under lib/features/.';
 
   @override

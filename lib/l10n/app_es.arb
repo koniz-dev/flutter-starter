@@ -195,6 +195,7 @@
   "failureStorage": "No se pudieron leer ni guardar datos en este dispositivo.",
   "failureServer": "Algo salió mal en el servidor. Inténtalo de nuevo más tarde.",
   "failureUnknown": "Algo salió mal. Inténtalo de nuevo.",
+  "signOut": "Cerrar sesión",
   "homeAddScreensHint": "Añade pantallas en lib/features/.",
   "demoModeTitle": "Modo demo",
   "demoModeBody": "No hay un backend configurado (BASE_URL está vacío), así que el inicio de sesión se simula en este dispositivo. Usa {email} / {password}, o registra cualquier cuenta.",
