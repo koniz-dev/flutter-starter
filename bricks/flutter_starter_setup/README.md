@@ -16,7 +16,7 @@ mason get
 mason make flutter_starter_setup
 ```
 
-Answer the prompts. The brick adds a root-level `_mason_hook_only.md` (Mason requires a `__brick__` file); delete it after generation if you do not want it in the repo.
+Answer the prompts. Mason writes a root-level `_mason_hook_only.md` (it requires a `__brick__` file); the hook deletes it when setup finishes, so it is left behind only if the hook stopped early.
 
 The hook finishes with `flutter pub get`, `flutter gen-l10n`,
 `dart fix --apply --code=directives_ordering` and `dart format` (see
