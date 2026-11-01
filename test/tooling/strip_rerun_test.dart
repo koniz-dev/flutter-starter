@@ -48,11 +48,23 @@ String _out(ProcessResult r) => 'exit ${r.exitCode}\n${r.stdout}${r.stderr}';
 
 /// A Dart file importing the tasks sample. Built from parts so this file,
 /// which the strip scans too, never holds the import path itself.
-final String _importsTasks = [
-  "import 'package:flutter_starter/features/",
-  "tasks/domain/entities/task.dart';\n",
-  'void main() {}\n',
-].join();
+///
+/// The package is the one [root]'s pubspec names, not a literal: after the
+/// setup brick renames the working tree, this file names the new package
+/// while [_copyOfHead] still holds the committed, unrenamed one, and an
+/// import of a package the copy does not have is not a sample reference.
+String _importsTasks(Directory root) {
+  final pubspec = File('${root.path}/pubspec.yaml').readAsStringSync();
+  final name = RegExp(
+    r'^name:\s*(\S+)\s*$',
+    multiLine: true,
+  ).firstMatch(pubspec)!.group(1);
+  return [
+    "import 'package:$name/features/",
+    "tasks/domain/entities/task.dart';\n",
+    'void main() {}\n',
+  ].join();
+}
 
 void main() {
   final skip = File('tool/strip_sample_features.dart').existsSync()
@@ -72,7 +84,7 @@ void main() {
     () {
       // The coverage helper is generated and git-ignored.
       File('${root.path}/test/coverage_helper_test.dart')
-          .writeAsStringSync(_importsTasks);
+          .writeAsStringSync(_importsTasks(root));
 
       final result = _strip(root, root, ['--remove-tasks']);
 
@@ -90,7 +102,7 @@ void main() {
     // A tracked-looking stray reference stops the first run after it has
     // deleted the feature and patched the helpers.
     final stray = File('${root.path}/test/stray_test.dart')
-      ..writeAsStringSync(_importsTasks);
+      ..writeAsStringSync(_importsTasks(root));
     final first = _strip(root, root, ['--remove-tasks']);
     expect(first.exitCode, 3, reason: _out(first));
 
