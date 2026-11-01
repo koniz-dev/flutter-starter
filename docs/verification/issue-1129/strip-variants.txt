@@ -1,0 +1,15 @@
+## strip --apply (exit 0)
+No issues found! (ran in 7.6s)
+00:12 +83: All tests passed!
+9
+## strip --apply --remove-tasks (exit 0)
+tasks: removed; feature_flags: kept
+No issues found! (ran in 7.8s)
+00:14 +94: All tests passed!
+## strip --apply --remove-feature-flags (exit 0)
+tasks: kept; feature_flags: removed
+No issues found! (ran in 8.1s)
+00:13 +91: All tests passed!
+## strip --apply at dd4c9974827 (exit 0), after the sign-out seam change: analyze, then test/core + test/features/home
+No issues found! (ran in 6.7s)
+02:00 +2269 ~5: All tests passed!

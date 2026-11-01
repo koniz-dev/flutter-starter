@@ -1,0 +1,43 @@
+# main at 168e26a839f
+00:00 +1: test/features/home/presentation/screens/home_sign_out_test.dart: signing out from home clears the session and lands on login
+00:00 +1: test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:00 +1: test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:01 +1: test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +1: test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:01 +1: test/features/home/presentation/screens/home_sign_out_test.dart: signing out from home clears the session and lands on login
+00:01 +2: test/features/home/presentation/screens/home_sign_out_test.dart: signing out from home clears the session and lands on login
+00:02 +3: test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:02 +4: test/features/home/presentation/screens/home_sign_out_test.dart: a second tap while signing out sends no second logout
+00:02 +5: test/core/di/sign_out_provider_test.dart: without the auth module, sign-out fails loudly instead of doing nothing
+00:03 +6: test/core/routing/home_destinations_test.dart: every home destination opens a registered route (debug routes on)
+00:03 +7: test/core/routing/home_destinations_test.dart: every home destination opens a registered route (debug routes off)
+00:03 +8: test/core/routing/home_destinations_test.dart: the home screen reads the registry by default
+00:03 +9: All tests passed!
+
+# same flags-entry test with --dart-define=ENABLE_DEBUG_FEATURES=false
+00:00 +0: the entry is listed only when debug routes are on
+00:00 +1: home shows the flags entry exactly when the route is registered (enableDebugFeatures=false), and the entry opens it
+00:01 +2: All tests passed!
+
+# signOut, tasks, featureFlagsDebug in every ARB
+lib/l10n/app_es.arb:  "signOut": "Cerrar sesión",
+lib/l10n/app_vi.arb:  "signOut": "Đăng xuất",
+lib/l10n/app_ar.arb:  "signOut": "تسجيل الخروج",
+lib/l10n/app_en.arb:  "signOut": "Sign out",
+lib/l10n/app_es.arb:  "tasks": "Tareas",
+lib/l10n/app_vi.arb:  "tasks": "Nhiệm vụ",
+lib/l10n/app_ar.arb:  "tasks": "المهام",
+lib/l10n/app_en.arb:  "tasks": "Tasks",
+lib/l10n/app_ar.arb:  "featureFlagsDebug": "تصحيح Feature Flags",
+lib/l10n/app_es.arb:  "featureFlagsDebug": "Depuración de Feature Flags",
+lib/l10n/app_en.arb:  "featureFlagsDebug": "Feature Flags Debug",
+lib/l10n/app_vi.arb:  "featureFlagsDebug": "Gỡ lỗi Feature Flags",
+
+# PR #1135 checks on head 64ce4a5
+Quality gate: SUCCESS
+Docs check: SUCCESS
+Strip both-samples-removed + analyze + test: SUCCESS
+Strip feature-flags-removed + analyze + test: SUCCESS
+Strip renamed-both + analyze + test: SUCCESS
+Strip keep-samples + analyze + test: SUCCESS
+Strip tasks-removed + analyze + test: SUCCESS

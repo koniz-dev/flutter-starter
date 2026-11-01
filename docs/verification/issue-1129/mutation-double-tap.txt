@@ -1,0 +1,4 @@
+Expected: null
+  Actual: <Closure: () => Future<void> from Function '_signOut@28154438':.>
+00:02 +1 -1: a second tap while signing out sends no second logout [E]
+00:02 +1 -1: Some tests failed.

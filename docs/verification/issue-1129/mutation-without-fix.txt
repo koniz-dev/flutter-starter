@@ -1,0 +1,8 @@
+# New widget tests against origin/main's HomeScreen (fix reverted, rest of the branch kept) - branch head dd4c9974827
+The finder "Found 0 widgets with key [<'e2e_home_sign_out'>]: []" (used in a call to "tap()") could
+00:01 +1 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/home/presentation/screens/home_sign_out_test.dart: signing out from home clears the session and lands on login [E]
+The finder "Found 0 widgets with key [<'e2e_home_destination_tasks'>]: []" (used in a call to
+00:01 +1 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home [E]
+The finder "Found 0 widgets with key [<'e2e_home_destination_feature_flags'>]: []" (used in a call
+00:01 +1 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: with debug routes on, home opens the flags screen [E]
+00:01 +2 -3: Some tests failed.
