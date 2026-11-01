@@ -193,6 +193,8 @@ Bugs and questions go to
 [GitHub issues](https://github.com/koniz-dev/flutter-starter/issues); every
 release and its upgrade notes are on the
 [Releases](https://github.com/koniz-dev/flutter-starter/releases) page.
+Report a vulnerability privately from the repository's **Security** tab, not
+in a public issue.
 
 ## License
 
