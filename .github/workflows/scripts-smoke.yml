@@ -221,6 +221,15 @@ jobs:
             --include_feature_flags_sample true \
             --on-conflict overwrite
 
+      - name: The brick's placeholder file is gone
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -e _mason_hook_only.md ]; then
+            echo "the setup brick left _mason_hook_only.md in the project" >&2
+            exit 1
+          fi
+
       - name: Nothing still names the template package or title
         shell: bash
         run: |
