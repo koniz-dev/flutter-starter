@@ -3,7 +3,7 @@
 This guide helps you upgrade your Flutter starter project to newer versions and
 handle breaking changes.
 
-**Starter version:** v2.0.0
+**Starter version:** v3.0.0
 
 That line records which release of the starter this copy of the template came
 from. It is not your app's version (`version:` in `pubspec.yaml` is yours), and
@@ -35,13 +35,13 @@ grep -m1 'Starter version' docs/guides/migration/upgrading-this-starter.md
 ```
 
 Every release is tagged upstream, so you can list and diff what changed since
-yours (`v2.0.0` below stands for the version that line shows):
+yours (`v3.0.0` below stands for the version that line shows):
 
 ```bash
 git remote add upstream https://github.com/koniz-dev/flutter-starter.git
 git fetch upstream --tags
-git log --oneline v2.0.0..upstream/main      # every upstream commit since
-git diff --stat v2.0.0 upstream/main -- lib  # what changed in the code
+git log --oneline v3.0.0..upstream/main      # every upstream commit since
+git diff --stat v3.0.0 upstream/main -- lib  # what changed in the code
 ```
 
 Then read the [release notes](https://github.com/koniz-dev/flutter-starter/releases) from your version onwards. Your own
