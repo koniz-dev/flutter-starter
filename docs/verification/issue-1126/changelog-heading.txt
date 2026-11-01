@@ -1,0 +1,7 @@
+$ git -C $M log -1 --oneline origin/maintainers
+f8420ffd72f changelog: release 3.0.2
+
+$ git -C $M show origin/maintainers:history/starter-changelog.md | grep -n "^## \["  | head -3
+8:## [Unreleased]
+10:## [3.0.2] - 2026-11-01
+35:## [3.0.1] - 2026-11-01

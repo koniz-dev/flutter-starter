@@ -1,0 +1,24 @@
+release v3.0.2 -> 8e9f4ea828e0b642064f03c2ba2f49e7e2a86b9b
+
+Nothing to change in a project you have not set up yet. If you already ran
+the setup brick, two leftovers are worth a minute: see the first and last
+entries below.
+
+### Fixed
+
+- **The setup brick puts your app's name in the welcome sentence.** After
+  `mason make flutter_starter_setup`, the home screen still said "Welcome to
+  Flutter Starter with Clean Architecture!" in every locale; the brick now
+  replaces every mention of the template name in the Dart and ARB sources,
+  as the manual rename already did. A project already set up with the brick
+  can fix it by hand: replace `Flutter Starter` in `lib/l10n/app_*.arb` and
+  in the two tests that find the sentence (`test/main_test.dart`,
+  `test/widget_test.dart`), then run `flutter gen-l10n`.
+- **`flutter test` passes right after the setup brick.** With the samples
+  kept and the rename not yet committed, two cases in
+  `test/tooling/strip_rerun_test.dart` failed. Committing the rename already
+  made them pass; nothing to change otherwise.
+- **The setup brick no longer leaves `_mason_hook_only.md` behind.** Mason
+  needs one template file, which the brick used to leave at the project root
+  for you to delete. Its hook now deletes it when setup finishes. If yours is
+  still there from an earlier setup, delete it.

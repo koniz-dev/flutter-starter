@@ -1,0 +1,17 @@
+$ $M/scripts/release_starter.sh v3.0.2   (run by the maintainer; commit defaulted to origin/main)
+release v3.0.2 -> 8e9f4ea828e0b642064f03c2ba2f49e7e2a86b9b
+https://github.com/koniz-dev/flutter-starter/releases/tag/v3.0.2
+
+$ git rev-parse "v3.0.2^{commit}" origin/main
+8e9f4ea828e0b642064f03c2ba2f49e7e2a86b9b
+8e9f4ea828e0b642064f03c2ba2f49e7e2a86b9b
+
+$ gh release list --limit 2
+v3.0.2	Latest	v3.0.2	2026-11-01T11:57:09Z
+v3.0.1		v3.0.1	2026-11-01T06:19:29Z
+
+$ gh release view v3.0.2 --json tagName,isDraft,isPrerelease,publishedAt,url
+{"isDraft":false,"isPrerelease":false,"publishedAt":"2026-11-01T11:57:09Z","tagName":"v3.0.2","url":"https://github.com/koniz-dev/flutter-starter/releases/tag/v3.0.2"}
+
+$ diff <(release body) <(changelog [3.0.2] section), whitespace-trimmed
+identical

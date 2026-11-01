@@ -1,0 +1,8 @@
+$ gh pr view 1127 --json state,mergedAt,mergeCommit
+MERGED 2026-11-01T10:51:34Z 8e9f4ea828e0b642064f03c2ba2f49e7e2a86b9b
+
+$ sed -n 6p docs/guides/migration/upgrading-this-starter.md   (origin/main)
+**Starter version:** v3.0.2
+
+$ flutter test test/docs/starter_version_marker_test.dart
+00:00 +2: All tests passed!
