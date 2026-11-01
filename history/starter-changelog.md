@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The Isar template's setup works.** Its second step, `flutter pub add
+  --dev isar_generator`, failed version solving against `freezed` 4. The
+  template and `docs/api/core/storage.md` now use the community-maintained
+  `isar_community` packages, put collections in
+  `lib/core/storage/collections/` with their generated code excluded from
+  analysis (Isar's output fails `very_good_analysis`), and say that Isar 3
+  runs on Android, iOS and desktop but not on the web. Nothing to change
+  unless you started on the old steps; if you did, switch to the
+  `isar_community*` packages.
+
 - **Home links to the samples and can sign out.** The home screen listed
   nothing, so the tasks sample and the debug flags screen could be reached
   only by typing a URL on the web, and nothing signed out. Each feature now declares a
