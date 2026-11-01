@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **A remote feature-flag source now takes effect.** Overriding
+  `featureFlagsRemoteDataSourceProvider` with your own remote source (Firebase
+  Remote Config, LaunchDarkly, an endpoint of your own) had no effect: nothing
+  initialized it, and the auto-disposed providers would have thrown the
+  initialization away. The flag providers now live as long as the
+  `ProviderContainer`, the first flag read initializes and fetches the remote
+  once, and a remote that fails to initialize is logged as a warning while
+  flags fall back to local values. Nothing to change in your code; if you
+  worked around this by reading `featureFlagsInitializationProvider` yourself,
+  that still works and is now redundant.
+
 ## [3.0.2] - 2026-11-01
 
 Nothing to change in a project you have not set up yet. If you already ran
