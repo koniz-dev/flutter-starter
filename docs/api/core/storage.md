@@ -285,7 +285,11 @@ abstract class ILocalDatabase {
 ### Isar Implementation Template
 
 A ready-to-uncomment implementation on **Isar** (high-performance NoSQL for
-Flutter), through the community-maintained Isar 3 packages.
+Flutter), through the community-maintained Isar 3 packages
+([publisher](https://pub.dev/publishers/isar-community.dev/packages)). It
+runs on Android, iOS, macOS, Windows and Linux, **not on the web**: Isar 3
+cannot open a database in the browser, so a web build of an app that wires
+this template in throws at `init()`.
 
 **Location:** `lib/core/storage/isar_database_template.dart`
 
@@ -293,15 +297,28 @@ Flutter), through the community-maintained Isar 3 packages.
 
 1. Run: `flutter pub add isar_community isar_community_flutter_libs`
 2. Run: `flutter pub add --dev isar_community_generator`
-3. Uncomment the imports and code in the template file, define your
-   collections (a class annotated `@collection`, in a file with
-   `part '<file>.g.dart';`), list their schemas in `Isar.open`, and run
-   `dart run build_runner build --delete-conflicting-outputs`.
+3. Put your collections in `lib/core/storage/collections/` (a documented
+   class annotated `@collection`, in a file with `part '<file>.g.dart';`).
+   Isar's generated code is not clean under `very_good_analysis`, so exclude
+   it in `analysis_options.yaml`:
+
+   ```yaml
+   analyzer:
+     exclude:
+       - lib/core/storage/collections/*.g.dart
+   ```
+
+   Then run `dart run build_runner build --delete-conflicting-outputs`.
+4. Uncomment the imports and code in the template file and list your schemas
+   in `Isar.open`.
+5. Delete `test/docs/isar_template_setup_test.dart`, which checks these
+   instructions, and replace `test/core/storage/isar_database_template_test.dart`,
+   which tests the inactive template, with tests of your collections.
 
 Use these packages rather than the original `isar` / `isar_generator` 3.x:
 their generator needs `source_gen` 1.x, while this project's `freezed` 4
 needs `source_gen` 3 or later, so `flutter pub add --dev isar_generator`
-fails version solving here.
+fails version solving here. `isar_community_generator` resolves from 3.4.1.
 
 The default starter does not bind `ILocalDatabase` in DI, so this remains fully optional.
 

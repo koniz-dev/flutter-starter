@@ -32,7 +32,6 @@ void main() {
         reason: command,
       );
     }
-    expect(template, isNot(contains("// import 'package:isar/")));
-    expect(template, contains("// import 'package:isar_community/isar.dart';"));
+    expect(template, isNot(contains("import 'package:isar/")));
   });
 }

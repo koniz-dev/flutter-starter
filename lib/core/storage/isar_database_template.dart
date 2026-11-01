@@ -1,18 +1,27 @@
 // TEMPLATE: Opt-in local DB; replace usage of no-op/local persistence when ready.
 import 'package:flutter_starter/core/storage/local_database.dart';
 
-// To enable this Isar local database:
+// To enable this Isar local database (Android, iOS, macOS, Windows, Linux;
+// not web - Isar 3 cannot open a database in the browser):
 // 1. Run: flutter pub add isar_community isar_community_flutter_libs
 // 2. Run: flutter pub add --dev isar_community_generator
-// 3. Uncomment the imports and code below, and list your collection schemas
-//    in Isar.open (a class annotated `@collection` in a file with
-//    `part '<file>.g.dart';`, then run
-//    `dart run build_runner build --delete-conflicting-outputs`).
+// 3. Put your collections in lib/core/storage/collections/ (a documented
+//    class annotated `@collection`, in a file with `part '<file>.g.dart';`)
+//    and exclude their generated code from analysis, which very_good_analysis
+//    would otherwise fail on, in analysis_options.yaml under analyzer/exclude:
+//      - lib/core/storage/collections/*.g.dart
+//    Then run `dart run build_runner build --delete-conflicting-outputs`.
+// 4. Uncomment the imports and code below and list your schemas in
+//    Isar.open.
+// 5. Delete test/docs/isar_template_setup_test.dart, which checks these
+//    instructions, and replace test/core/storage/isar_database_template_test.dart,
+//    which tests the inactive template, with tests of your collections.
 //
-// These are the community-maintained Isar 3 packages. The original `isar` /
-// `isar_generator` 3.x packages cannot be added to this project: their
-// generator needs `source_gen` 1.x, and `freezed` 4 needs `source_gen` 3 or
-// later, so `pub add` fails version solving.
+// These are the community-maintained Isar 3 packages (publisher
+// isar-community.dev; 3.4.1 or later resolves alongside freezed 4). The
+// original `isar` / `isar_generator` 3.x cannot be added to this project:
+// their generator needs `source_gen` 1.x, and `freezed` 4 needs `source_gen`
+// 3 or later, so `pub add` fails version solving.
 //
 // import 'package:isar_community/isar.dart';
 // import 'package:path_provider/path_provider.dart';
