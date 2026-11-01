@@ -1,0 +1,16 @@
+# /bin/bash 3.2.57(1)-release, branch a5607bfdd67, new hook
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+ok    an unstaged format violation over a clean index does not fail the hook
+ok    with dependencies resolved the hook fails on a staged format violation
+ok    in a monorepo the hook checks the app and exits 0 on a clean tree
+ok    in a monorepo the hook fails on a staged format violation in the app
+ok    the workspace fixture resolves at its root only (the layout under test)
+ok    in a pub workspace the hook exits 0 on a clean tree
+ok    in a pub workspace the hook fails on a staged format violation
+ok    in a pub workspace the hook follows a Windows-style workspaceRoot
+ok    with the workspace unresolved the hook refuses and advises flutter pub get
+ok    after the advised flutter pub get the hook passes in the workspace
+All pre-commit hook cases passed.

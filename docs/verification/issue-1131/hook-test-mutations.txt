@@ -1,0 +1,24 @@
+# HOOK_UNDER_TEST = origin/main's hook
+ok    the workspace fixture resolves at its root only (the layout under test)
+FAIL  in a pub workspace the hook exited 1 on a clean tree
+FAIL  in a pub workspace a staged format violation did not fail the hook (exit 1)
+FAIL  with a Windows-style workspaceRoot the hook exited 1 on a clean tree
+ok    with the workspace unresolved the hook refuses and advises flutter pub get
+FAIL  after flutter pub get the hook still exited 1 in the workspace
+
+# HOOK_UNDER_TEST = M1 new hook without the root-config copy
+ok    the workspace fixture resolves at its root only (the layout under test)
+FAIL  in a pub workspace the hook exited 1 on a clean tree
+ok    in a pub workspace the hook fails on a staged format violation
+FAIL  with a Windows-style workspaceRoot the hook exited 1 on a clean tree
+ok    with the workspace unresolved the hook refuses and advises flutter pub get
+FAIL  after flutter pub get the hook still exited 1 in the workspace
+
+# HOOK_UNDER_TEST = M2 new hook without the backslash normalization
+ok    the workspace fixture resolves at its root only (the layout under test)
+ok    in a pub workspace the hook exits 0 on a clean tree
+ok    in a pub workspace the hook fails on a staged format violation
+FAIL  with a Windows-style workspaceRoot the hook exited 1 on a clean tree
+ok    with the workspace unresolved the hook refuses and advises flutter pub get
+ok    after the advised flutter pub get the hook passes in the workspace
+

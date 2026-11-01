@@ -1,0 +1,16 @@
+# Git hooks workflow run 41331366473 (ubuntu-latest) on PR #1137 head a5607bfdd67
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:25:39.9444075Z ok    without pub get the hook exits non-zero
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:25:39.9444965Z ok    without pub get the hook tells the user to run flutter pub get
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:25:39.9738297Z ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:07.8346802Z ok    with dependencies resolved the hook exits 0 on a clean tree
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:16.5865005Z ok    an unstaged format violation over a clean index does not fail the hook
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:18.1650873Z ok    with dependencies resolved the hook fails on a staged format violation
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:26.9824794Z ok    in a monorepo the hook checks the app and exits 0 on a clean tree
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:28.6059239Z ok    in a monorepo the hook fails on a staged format violation in the app
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:31.8050138Z ok    the workspace fixture resolves at its root only (the layout under test)
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:50.4007222Z ok    in a pub workspace the hook exits 0 on a clean tree
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:26:52.0602194Z ok    in a pub workspace the hook fails on a staged format violation
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:27:01.3798661Z ok    in a pub workspace the hook follows a Windows-style workspaceRoot
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:27:01.3932202Z ok    with the workspace unresolved the hook refuses and advises flutter pub get
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:27:11.5794729Z ok    after the advised flutter pub get the hook passes in the workspace
+pre-commit hook in a fresh clone	Run the pre-commit hook tests	2026-11-01T17:27:11.5795604Z All pre-commit hook cases passed.

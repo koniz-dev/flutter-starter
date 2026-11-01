@@ -1,0 +1,18 @@
+# main at ef4ee12039b
+$ check_deliverable.sh HEAD
+Deliverable: HEAD carries nothing that only serves the upstream process.
+$ check_epic_coverage.dart
+Epic coverage OK: every tracked surface maps to one epic.
+$ check_issue_refs
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+$ shellcheck .githooks/pre-commit scripts/test/pre_commit_hook_test.sh
+clean
+
+# PR #1137 checks on head a5607bf
+Quality gate: SUCCESS
+pre-commit hook in a fresh clone: SUCCESS
+Strip both-samples-removed + analyze + test: SUCCESS
+Strip tasks-removed + analyze + test: SUCCESS
+Strip feature-flags-removed + analyze + test: SUCCESS
+Strip renamed-both + analyze + test: SUCCESS
+Strip keep-samples + analyze + test: SUCCESS
