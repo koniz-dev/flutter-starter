@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The setup brick puts your app's name in the welcome sentence.** After
+  `mason make flutter_starter_setup`, the home screen still said "Welcome to
+  Flutter Starter with Clean Architecture!" in every locale; the brick now
+  replaces every mention of the template name in the Dart and ARB sources,
+  as the manual rename already did. A project already set up with the brick
+  can fix it by hand: replace `Flutter Starter` in `lib/l10n/app_*.arb` and
+  run `flutter gen-l10n`.
+
 ## [3.0.1] - 2026-11-01
 
 Nothing to change in your project. A new README for projects created from
