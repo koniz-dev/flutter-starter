@@ -1,0 +1,7 @@
+# main at f81ac5d2ade
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart
+00:00 +0: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:00 +1: an overridden remote flag source is built and initialized once across many reads
+00:00 +2: an overridden remote flag source is the instance a manual refresh fetches again
+00:00 +3: an overridden remote flag source that fails to initialize is logged, and flags fall back to their defaults
+00:00 +4: All tests passed!

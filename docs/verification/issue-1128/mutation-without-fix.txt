@@ -1,0 +1,14 @@
+# New test against origin/main's providers (fix reverted)
+00:00 +0 -1: an overridden remote flag source serves its value to the first flag read, with no manual initialization [E]
+  Expected: true
+    Actual: <false>
+00:00 +0 -2: an overridden remote flag source is built and initialized once across many reads [E]
+  Expected: true
+    Actual: <false>
+00:00 +0 -3: an overridden remote flag source is the instance a manual refresh fetches again [E]
+  Expected: <1>
+    Actual: <2>
+00:00 +0 -4: an overridden remote flag source that fails to initialize is logged, and flags fall back to their defaults [E]
+  Expected: an object with length of <1>
+    Actual: []
+00:00 +0 -4: Some tests failed.

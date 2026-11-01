@@ -1,0 +1,10 @@
+# main at f81ac5d2ade: every feature_flags test
+00:14 +215 ~1: All tests passed!
+
+# PR #1133 checks on head
+Quality gate: SUCCESS
+Strip tasks-removed + analyze + test: SUCCESS
+Strip feature-flags-removed + analyze + test: SUCCESS
+Strip renamed-both + analyze + test: SUCCESS
+Strip keep-samples + analyze + test: SUCCESS
+Strip both-samples-removed + analyze + test: SUCCESS

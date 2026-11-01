@@ -1,0 +1,8 @@
+$ $M/scripts/check_deliverable.sh HEAD
+Deliverable: HEAD carries nothing that only serves the upstream process.
+exit 0
+$ dart run $M/scripts/check_epic_coverage.dart
+Epic coverage OK: every tracked surface maps to one epic.
+$ check_issue_refs (f81ac5d)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
