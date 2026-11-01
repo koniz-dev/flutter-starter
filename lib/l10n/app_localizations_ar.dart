@@ -521,6 +521,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get failureUnknown => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
 
   @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
   String get homeAddScreensHint => 'أضف الشاشات ضمن lib/features/.';
 
   @override

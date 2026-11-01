@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/routing/home_destination.dart';
 import 'package:flutter_starter/core/routing/session_status.dart';
 import 'package:flutter_starter/features/auth/routing/auth_routes.dart';
 import 'package:flutter_starter/features/feature_flags/routing/feature_flags_routes.dart';
@@ -36,6 +37,28 @@ List<RouteBase> buildAppRoutes(Ref ref, {bool? debugRoutes}) {
 List<RouteBase> _buildDebugRoutes(Ref ref) => <RouteBase>[
   ...buildFeatureFlagsRoutes(ref),
 ];
+
+/// The entries the home screen lists, one per registered feature that
+/// declares a [HomeDestination].
+///
+/// Keep it beside [buildAppRoutes]: an entry whose route is not registered
+/// is a dead link. Debug-only destinations follow the same rule as the
+/// debug routes, and [debugRoutes] replaces the [AppConfig] check, for tests.
+List<HomeDestination> buildHomeDestinations({
+  bool? debugRoutes,
+}) => <HomeDestination>[
+  tasksHomeDestination,
+  if (debugRoutes ?? AppConfig.enableDebugFeatures) ..._debugHomeDestinations(),
+];
+
+/// Debug-only home entries; see [buildHomeDestinations].
+List<HomeDestination> _debugHomeDestinations() => <HomeDestination>[
+  featureFlagsHomeDestination,
+];
+
+/// What the home screen reads; see [buildHomeDestinations].
+final Provider<List<HomeDestination>> homeDestinationsProvider =
+    Provider<List<HomeDestination>>((ref) => buildHomeDestinations());
 
 /// The session state the redirect in `app_router.dart` reads.
 ///

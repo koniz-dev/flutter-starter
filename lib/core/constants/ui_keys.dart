@@ -18,4 +18,11 @@ abstract final class UiKeys {
 
   /// Home body after authentication (works for full and stripped home UIs).
   static const homeContent = ValueKey<String>('e2e_home_content');
+
+  /// Sign-out action in the home app bar.
+  static const homeSignOut = ValueKey<String>('e2e_home_sign_out');
+
+  /// Home entry that opens the destination with this id.
+  static ValueKey<String> homeDestination(String id) =>
+      ValueKey<String>('e2e_home_destination_$id');
 }
