@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- **The root README is a landing page.** It now opens with badges, a "Use
+  this template" link and iOS Simulator screenshots, followed by "Why this
+  starter", a quick start, a "What you get" table, tech stack, project
+  structure and quality gates. "Using this template" lists the parts that
+  describe the template rather than your app (badges, screenshots, "Why this
+  starter", Support) so a new project can delete them; a project that already
+  has its own README needs nothing.
+
 ## [3.0.0] - 2026-11-01
 
 If your project was created from v2.0.0 or earlier, read every **Breaking**
