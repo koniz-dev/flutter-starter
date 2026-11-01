@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The pre-commit hook works in a pub workspace.** With the app as a member
+  of a Dart pub workspace (a root `pubspec.yaml` with `workspace:`, the app
+  with `resolution: workspace`), the hook refused every commit with
+  "Dependencies are not resolved", and the `flutter pub get` it advised did
+  not help: pub writes `package_config.json` only at the workspace root. The
+  hook now finds the root through `.dart_tool/pub/workspace_ref.json`. If you
+  copied the hook into your project, take `.githooks/pre-commit` again.
+
 - **The Isar template's setup works.** Its second step, `flutter pub add
   --dev isar_generator`, failed version solving against `freezed` 4. The
   template and `docs/api/core/storage.md` now use the community-maintained
