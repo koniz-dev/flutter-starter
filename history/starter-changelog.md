@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Home links to the samples and can sign out.** The home screen listed
+  nothing, so on a device the tasks sample and the debug flags screen could
+  only be reached by URL, and nothing signed out. Each feature now declares a
+  `HomeDestination` beside its routes, `buildHomeDestinations` in
+  `routes_registry.dart` lists them, and home renders them plus a sign-out
+  action in the app bar. Sign-out goes through a new core seam,
+  `signOutProvider`, which `authModuleOverrides` fills. If you added your own
+  buttons to `HomeScreen`, move them into a `HomeDestination` (see
+  `docs/api/examples/adding-features.md`, Step 4) or keep them; a container
+  built without `authModuleOverrides` now throws on sign-out instead of doing
+  nothing.
+
 - **A remote feature-flag source now takes effect.** Overriding
   `featureFlagsRemoteDataSourceProvider` with your own remote source (Firebase
   Remote Config, LaunchDarkly, an endpoint of your own) had no effect: nothing
