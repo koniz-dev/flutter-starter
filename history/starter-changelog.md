@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Home links to the samples and can sign out.** The home screen listed
-  nothing, so on a device the tasks sample and the debug flags screen could
-  only be reached by URL, and nothing signed out. Each feature now declares a
+  nothing, so the tasks sample and the debug flags screen could be reached
+  only by typing a URL on the web, and nothing signed out. Each feature now declares a
   `HomeDestination` beside its routes, `buildHomeDestinations` in
   `routes_registry.dart` lists them, and home renders them plus a sign-out
   action in the app bar. Sign-out goes through a new core seam,
