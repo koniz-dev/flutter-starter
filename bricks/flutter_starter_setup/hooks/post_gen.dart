@@ -78,9 +78,15 @@ Future<void> run(HookContext context) async {
 const hookPlaceholder = '_mason_hook_only.md';
 
 /// Deletes [hookPlaceholder] from [rootPath] if Mason wrote it there.
+///
+/// A file of that name the brick did not write - kept by `--on-conflict skip`
+/// or a declined overwrite - is left alone: only one opening with the
+/// placeholder's heading is deleted.
 Future<void> removeHookPlaceholder(String rootPath, Logger logger) async {
   final file = File('$rootPath/$hookPlaceholder');
   if (!file.existsSync()) return;
+  final text = await file.readAsString();
+  if (!text.startsWith('# Mason hook-only brick\n')) return;
   await file.delete();
   logger.info('Removed $hookPlaceholder');
 }
