@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.2] - 2026-11-01
+
+Nothing to change in a project you have not set up yet. If you already ran
+the setup brick, two leftovers are worth a minute: see the first and last
+entries below.
+
 ### Fixed
 
 - **The setup brick puts your app's name in the welcome sentence.** After
