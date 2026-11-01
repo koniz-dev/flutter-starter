@@ -1,0 +1,5 @@
+# test/docs/isar_template_setup_test.dart against main's template and guide (fix reverted)
+00:00 +1 -1: no setup step adds the original isar packages [E]
+  Expected: every element(a string starting with 'isar_community')
+    Actual: WhereIterable<String>:['isar', 'isar_flutter_libs']
+00:00 +1 -1: Some tests failed.

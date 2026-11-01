@@ -1,0 +1,18 @@
+# main at f848ef8909a
+$ check_deliverable.sh HEAD
+Deliverable: HEAD carries nothing that only serves the upstream process.
+$ check_epic_coverage.dart
+Epic coverage OK: every tracked surface maps to one epic.
+$ check_issue_refs
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
+$ flutter test test/docs/isar_template_setup_test.dart test/core/storage/isar_database_template_test.dart
+00:00 +11: All tests passed!
+
+# PR #1136 checks on head f5fcb70
+Quality gate: SUCCESS
+Docs check: SUCCESS
+Strip both-samples-removed + analyze + test: SUCCESS
+Strip tasks-removed + analyze + test: SUCCESS
+Strip feature-flags-removed + analyze + test: SUCCESS
+Strip renamed-both + analyze + test: SUCCESS
+Strip keep-samples + analyze + test: SUCCESS

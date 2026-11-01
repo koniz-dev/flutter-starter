@@ -1,0 +1,12 @@
+# On a clean checkout of main (168e26a839f), the OLD documented step 2:
+$ flutter pub add --dev isar_generator --dry-run
+And because isar_generator >=1.0.0 <2.1.0 depends on source_gen ^1.0.5 and isar_generator >=2.1.0 <3.0.0-dev.0 depends on source_gen ^1.2.1, isar_generator <3.0.0-dev.0 requires source_gen ^1.0.0.
+And because isar_generator >=3.0.0-dev.0 depends on source_gen ^1.2.2 and freezed >=3.2.3 depends on source_gen >=3.0.0 <5.0.0, freezed >=3.2.3 is incompatible with isar_generator.
+So, because flutter_starter depends on both freezed ^4.0.1 and isar_generator any, version solving failed.
+
+# The NEW documented steps 1 and 2 together:
+$ flutter pub add isar_community isar_community_flutter_libs dev:isar_community_generator --dry-run
++ isar_community 3.4.1
++ isar_community_flutter_libs 3.4.1
++ isar_community_generator 3.4.1
+Would change 7 dependencies.
