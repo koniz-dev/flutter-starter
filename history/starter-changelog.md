@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-01
+
+If your project was created from v2.0.0 or earlier, read every **Breaking**
+entry below; each says what to change. Several concern release builds, which now
+refuse to start misconfigured: an `https` `BASE_URL` and `API_SSL_FINGERPRINTS`
+(or pinning turned off) are required for staging and production. Upgrade path:
+`docs/guides/migration/upgrading-this-starter.md`.
+
 ### Breaking
 
 - **A release build configured as `ENVIRONMENT=development` refuses to
