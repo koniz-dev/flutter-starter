@@ -1,0 +1,7 @@
+== main 3a21fc11033
+**Starter version:** v3.0.1
+00:00 +2: All tests passed!
+== changelog headings
+8:## [Unreleased]
+10:## [3.0.1] - 2026-11-01
+31:## [3.0.0] - 2026-11-01
