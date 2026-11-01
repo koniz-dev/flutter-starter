@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **The home screen's welcome heading is centered on a phone.** It wrapped
+  flush against the left screen edge; it is now centered and inset 24 px,
+  like the hint under it.
+
 ### Documentation
 
 - **The root README is a landing page.** It now opens with badges, a "Use
