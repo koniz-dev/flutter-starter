@@ -1,0 +1,6 @@
+== gh release list
+v3.0.0	Latest	v3.0.0	2026-11-01T03:46:37Z
+v2.0.0		v2.0.0	2026-10-28T22:49:42Z
+== tag
+735caee2e49c1b10f513f4b6f3af7ff263b0fb0d
+{"isDraft":false,"isPrerelease":false,"name":"v3.0.0","tagName":"v3.0.0","targetCommitish":"735caee2e49c1b10f513f4b6f3af7ff263b0fb0d","url":"https://github.com/koniz-dev/flutter-starter/releases/tag/v3.0.0"}
