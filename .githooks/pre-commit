@@ -54,16 +54,44 @@ case "$app" in
 esac
 cd "$app"
 
+# Where pub wrote the resolved package config. Normally the app's own
+# .dart_tool/. In a pub workspace (a root pubspec.yaml listing the app under
+# `workspace:`, the app declaring `resolution: workspace`), pub writes it only
+# at the workspace root, and the app gets .dart_tool/pub/workspace_ref.json,
+# whose workspaceRoot is relative to that file's directory.
+config_dir="$app"
+workspace_ref=".dart_tool/pub/workspace_ref.json"
+if [ ! -f .dart_tool/package_config.json ] && [ -f "$workspace_ref" ]; then
+  root_rel="$(sed -n 's/.*"workspaceRoot"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$workspace_ref" | head -n 1)"
+  if [ -n "$root_rel" ] && root_dir="$(cd ".dart_tool/pub/$root_rel" 2>/dev/null && pwd -P)"; then
+    config_dir="$root_dir"
+  fi
+fi
+
 # Without resolved dependencies `dart format` cannot read the
 # very_good_analysis include in analysis_options.yaml, formats with the wrong
 # settings, and rewrites ~100 untouched files in place before failing.
-# Refuse before anything runs.
-if [ ! -f .dart_tool/package_config.json ]; then
+# Refuse before anything runs. In a workspace, `flutter pub get` in the app
+# resolves the whole workspace.
+if [ ! -f "$config_dir/.dart_tool/package_config.json" ]; then
   echo "❌ Dependencies are not resolved (.dart_tool/package_config.json is missing)."
   echo "   Run: flutter pub get"
   echo "   Nothing was formatted or changed."
   exit 1
 fi
+
+# The export below holds the git working tree, so the config has to sit
+# inside it to be copied to the same place.
+case "$config_dir" in
+  "$top") config_prefix="" ;;
+  "$top"/*) config_prefix="${config_dir#"$top"/}/" ;;
+  *)
+    echo "❌ The pub workspace root ($config_dir) is outside this git repository,"
+    echo "   so the staged content cannot be checked against its dependencies."
+    echo "   Commit from a repository that contains the workspace root."
+    exit 1
+    ;;
+esac
 
 # Check what is being committed, not the working copy: export the index to a
 # temporary tree and run there. Checking the working copy let a staged file
@@ -93,10 +121,14 @@ if ! staged="$(mktemp -d "$parent/${prefix}XXXXXX" 2>/dev/null)"; then
 fi
 trap 'rm -rf "$staged"' EXIT
 (cd "$top" && git checkout-index --all --prefix="$staged/")
-mkdir -p "$staged/$app_prefix.dart_tool"
-cp -p .dart_tool/package_config.json "$staged/$app_prefix.dart_tool/"
-if [ -f .dart_tool/package_graph.json ]; then
-  cp -p .dart_tool/package_graph.json "$staged/$app_prefix.dart_tool/"
+mkdir -p "$staged/$config_prefix.dart_tool"
+cp -p "$config_dir/.dart_tool/package_config.json" "$staged/$config_prefix.dart_tool/"
+if [ -f "$config_dir/.dart_tool/package_graph.json" ]; then
+  cp -p "$config_dir/.dart_tool/package_graph.json" "$staged/$config_prefix.dart_tool/"
+fi
+if [ "$config_dir" != "$app" ]; then
+  mkdir -p "$staged/$app_prefix.dart_tool/pub"
+  cp -p "$workspace_ref" "$staged/$app_prefix.dart_tool/pub/"
 fi
 cd "$staged/$app_prefix"
 

@@ -19,6 +19,12 @@
 #   3. The app in a subdirectory of a larger repository (a monorepo): git runs
 #      the hook from the top, as <app>/.githooks/pre-commit. It checks the
 #      app, so it exits 0 on a clean tree and non-zero on a staged violation.
+#   4. The app as a member of a pub workspace (root pubspec.yaml with
+#      `workspace:`, the app with `resolution: workspace`): pub writes
+#      package_config.json only at the workspace root, so the app has none of
+#      its own. The hook still exits 0 on a clean tree and non-zero on a
+#      staged violation; with the workspace unresolved it refuses, and after
+#      the `flutter pub get` it advises, it passes.
 #
 # HOOK_UNDER_TEST=<file> points the tests at another copy of the hook, for
 # example an older revision, to show a case fails there.
@@ -149,6 +155,84 @@ if [ "$status" -ne 0 ] && grep -q "formatting check failed" "$WORK/hook.out"; th
   pass "in a monorepo the hook fails on a staged format violation in the app"
 else
   fail "in a monorepo a staged format violation did not fail the hook (exit $status)"
+  tail -20 "$WORK/hook.out"
+fi
+
+# --- Case 4: the app as a member of a pub workspace ------------------------
+# The monorepo again, now with a root pubspec.yaml declaring the workspace and
+# the app resolving through it. The root takes the app's own environment, so
+# the same SDK resolves both.
+WS="$WORK/ws"
+mkdir -p "$WS"
+git -C "$WS" init -q
+cp -R "$MONO/app" "$WS/app"
+rm -rf "$WS/app/.dart_tool" "$WS/app/pubspec.lock"
+env_block="$(sed -n '/^environment:/,/^[^[:space:]]/p' "$WS/app/pubspec.yaml" | sed '$d')"
+{
+  echo "name: workspace_root"
+  echo "publish_to: none"
+  printf '%s\n' "$env_block"
+  echo "workspace:"
+  echo "  - app"
+} >"$WS/pubspec.yaml"
+# `resolution: workspace` goes right after the environment block.
+awk '
+  /^environment:/ { in_env = 1; print; next }
+  in_env && !/^[[:space:]]/ { print "resolution: workspace"; in_env = 0 }
+  { print }
+' "$WS/app/pubspec.yaml" >"$WS/app/pubspec.yaml.new" && mv "$WS/app/pubspec.yaml.new" "$WS/app/pubspec.yaml"
+(cd "$WS/app" && flutter pub get >/dev/null 2>&1) || fail "flutter pub get failed in the workspace member"
+if [ -f "$WS/.dart_tool/package_config.json" ] && [ ! -f "$WS/app/.dart_tool/package_config.json" ] \
+  && [ -f "$WS/app/.dart_tool/pub/workspace_ref.json" ]; then
+  pass "the workspace fixture resolves at its root only (the layout under test)"
+else
+  fail "the workspace fixture did not resolve as a pub workspace"
+fi
+git -C "$WS" add -A
+git -C "$WS" -c user.email=t@example.com -c user.name=t commit -q --no-verify -m "chore: workspace fixture"
+
+run_ws_hook() {
+  (cd "$WS" && bash app/.githooks/pre-commit) >"$WORK/hook.out" 2>&1
+}
+
+run_ws_hook
+status=$?
+if [ "$status" -eq 0 ]; then
+  pass "in a pub workspace the hook exits 0 on a clean tree"
+else
+  fail "in a pub workspace the hook exited $status on a clean tree"
+  tail -20 "$WORK/hook.out"
+fi
+
+printf '\nvoid   badlyFormatted( ){}\n' >>"$WS/app/lib/main.dart"
+git -C "$WS" add app/lib/main.dart
+run_ws_hook
+status=$?
+if [ "$status" -ne 0 ] && grep -q "formatting check failed" "$WORK/hook.out"; then
+  pass "in a pub workspace the hook fails on a staged format violation"
+else
+  fail "in a pub workspace a staged format violation did not fail the hook (exit $status)"
+  tail -20 "$WORK/hook.out"
+fi
+git -C "$WS" reset -q
+git -C "$WS" checkout -q -- app/lib/main.dart
+
+rm -f "$WS/.dart_tool/package_config.json"
+run_ws_hook
+status=$?
+if [ "$status" -ne 0 ] && grep -q "flutter pub get" "$WORK/hook.out"; then
+  pass "with the workspace unresolved the hook refuses and advises flutter pub get"
+else
+  fail "with the workspace unresolved the hook did not refuse with advice (exit $status)"
+  tail -20 "$WORK/hook.out"
+fi
+(cd "$WS/app" && flutter pub get >/dev/null 2>&1) || fail "flutter pub get failed in the workspace member"
+run_ws_hook
+status=$?
+if [ "$status" -eq 0 ]; then
+  pass "after the advised flutter pub get the hook passes in the workspace"
+else
+  fail "after flutter pub get the hook still exited $status in the workspace"
   tail -20 "$WORK/hook.out"
 fi
 
