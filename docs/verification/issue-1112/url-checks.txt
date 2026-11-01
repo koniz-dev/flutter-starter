@@ -1,0 +1,12 @@
+200 https://github.com/koniz-dev/flutter-starter/actions/workflows/ci.yml
+200 https://github.com/koniz-dev/flutter-starter/actions/workflows/ci.yml/badge.svg
+200 https://img.shields.io/badge/Flutter-3.47%2B-02569B?logo=flutter
+200 https://img.shields.io/badge/platforms-Android_%7C_iOS_%7C_Web_%7C_Desktop-blue
+200 https://img.shields.io/badge/style-very__good__analysis-B22C89
+200 https://img.shields.io/github/license/koniz-dev/flutter-starter
+200 https://img.shields.io/github/v/release/koniz-dev/flutter-starter
+200 https://raw.githubusercontent.com/koniz-dev/flutter-starter/readme-assets/ios-feature-flags-dark.png
+200 https://raw.githubusercontent.com/koniz-dev/flutter-starter/readme-assets/ios-login-light.png
+200 https://raw.githubusercontent.com/koniz-dev/flutter-starter/readme-assets/ios-task-detail-dark.png
+200 https://raw.githubusercontent.com/koniz-dev/flutter-starter/readme-assets/ios-tasks-light.png
+5e18b4081938fd0c23fcd92b46cdec1a0c18cb72	refs/heads/readme-assets
