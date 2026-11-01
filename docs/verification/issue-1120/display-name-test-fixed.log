@@ -1,0 +1,11 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart
+00:00 +0: (setUpAll)
+00:10 +0: the AndroidManifest parses and carries the name
+00:10 +1: the Info.plist parses and carries the name
+00:11 +2: pubspec's patrol app_name parses back to the name
+00:11 +3: every locale names the app, in appTitle and in welcome
+00:11 +4: the tests that find the welcome sentence still parse
+00:11 +5: fastlane/Fastfile APP_NAME evaluates to the name
+00:11 +6: ios/fastlane/Fastfile APP_NAME evaluates to the name
+00:11 +7: (tearDownAll)
+00:11 +7: All tests passed!

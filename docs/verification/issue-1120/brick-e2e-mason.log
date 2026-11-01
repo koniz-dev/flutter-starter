@@ -1,0 +1,13 @@
+⠋ Making flutter_starter_setup...✓ Generated 1 file. (39ms)
+  created _mason_hook_only.md
+Running strip_sample_features...
+Rewrote 8 feature_clean brick template(s)
+Renamed Dart package to acme_shop
+Applied "Acme Shop" to 16 Dart/ARB file(s)
+Moved MainActivity to match com.acme.shop
+Moved MainActivityTest to match com.acme.shop
+Updated iOS PRODUCT_BUNDLE_IDENTIFIER to com.acme.shop
+Updated patrol config to com.acme.shop
+Rewrote identifiers in 21 platform file(s)
+Re-sorted imports and reformatted lib, test, integration_test, tool, examples, docs
+Setup complete. Next: flutter analyze && flutter test

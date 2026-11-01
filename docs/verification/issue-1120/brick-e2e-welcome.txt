@@ -1,0 +1,18 @@
+# fresh clone of fix/1120-brick-welcome-name (= tree merged as 53a84558d4d), mason make flutter_starter_setup --package_name acme_shop --application_id com.acme.shop --ios_bundle_id com.acme.shop --app_display_name 'Acme Shop' --strip_sample_features true --include_tasks_sample false --include_feature_flags_sample false
+## welcome in each ARB
+lib/l10n/app_ar.arb:  "welcome": "مرحباً بك في Acme Shop مع Clean Architecture!",
+lib/l10n/app_es.arb:  "welcome": "¡Bienvenido a Acme Shop con Arquitectura Limpia!",
+lib/l10n/app_en.arb:  "welcome": "Welcome to Acme Shop with Clean Architecture!",
+lib/l10n/app_vi.arb:  "welcome": "Chào mừng đến với Acme Shop với Clean Architecture!",
+## welcome in generated localizations
+lib/l10n/app_localizations_ar.dart:  String get welcome => 'مرحباً بك في Acme Shop مع Clean Architecture!';
+lib/l10n/app_localizations_ar.dart-
+lib/l10n/app_localizations_es.dart:  String get welcome => '¡Bienvenido a Acme Shop con Arquitectura Limpia!';
+lib/l10n/app_localizations_es.dart-
+lib/l10n/app_localizations_en.dart:  String get welcome => 'Welcome to Acme Shop with Clean Architecture!';
+lib/l10n/app_localizations_en.dart-
+lib/l10n/app_localizations_vi.dart:  String get welcome => 'Chào mừng đến với Acme Shop với Clean Architecture!';
+lib/l10n/app_localizations_vi.dart-
+## git grep 'Flutter Starter' -- lib test integration_test (expect nothing)
+test/README.md:3:This directory contains the comprehensive test suite for the Flutter Starter project.
+exit 0 (1 = no match)
