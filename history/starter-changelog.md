@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Code findings from the 2026-11-01 audit.**
+  - **Secondary text is visibly secondary.** The themes now set
+    `onSurfaceVariant` to the `textSecondary` tokens. Before, it fell back to
+    `onSurface`, so text such as home's hint line and text field labels
+    rendered in the primary text colour. If your own widgets use
+    `onSurfaceVariant`, they now render grey.
+  - **Store lanes need a real API URL.** The Fastfile lanes no longer default
+    to `https://api.example.com`. Pass `base_url:` or set
+    `BASE_URL_PRODUCTION` / `BASE_URL_STAGING`; otherwise the lane stops
+    before it builds.
+  - **Configuration refusals say so.** A build-configuration refusal at
+    startup (bad `ENVIRONMENT`, non-https `BASE_URL`, misconfigured
+    pinning) throws `StartupConfigurationError`. The failure screen now
+    says to rebuild and offers no retry.
+  - **`AppConfig.getDebugInfo()` redacts `baseUrl`.**
+  - **`LazyInitializer` and `DeferredImportLoader` handle `reset()`.** They
+    ignore a call that finishes after `reset()`.
+  - **Tasks sample:**
+    - The row's checkbox and menu name their task; the menu uses a new ARB
+      key, `taskActions`.
+    - Row colours meet WCAG AA.
+    - A missing title shows `taskTitleRequired`.
+
 - **Hooks and tooling from the 2026-11-01 audit.** If you copied any of
   these, take them again:
   - `.githooks/commit-msg` reads the subject git commits: it skips leading
