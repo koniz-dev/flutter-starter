@@ -131,6 +131,11 @@ cp -p "$config_dir/.dart_tool/package_config.json" "$staged/$config_prefix.dart_
 if [ -f "$config_dir/.dart_tool/package_graph.json" ]; then
   cp -p "$config_dir/.dart_tool/package_graph.json" "$staged/$config_prefix.dart_tool/"
 fi
+# checkout-index just wrote pubspec.yaml and pubspec.lock, so the copied config
+# (its mtime kept by cp -p) looks older than them, and flutter analyze
+# re-resolves - downloading if the cache is cold - on every commit. The
+# dependencies are the ones resolved in the working tree; mark them current.
+touch "$staged/$config_prefix.dart_tool/"*.json
 cd "$staged/$app_prefix"
 
 echo "📝 Checking code formatting (staged content)..."

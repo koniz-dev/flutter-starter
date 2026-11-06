@@ -150,7 +150,8 @@ const _knownFlags = <String>{
 
 const _usage =
     'Usage: dart run tool/strip_sample_features.dart --apply '
-    '[--remove-tasks] [--remove-feature-flags] | --keep-samples '
+    '[--remove-tasks] [--remove-feature-flags] [--remove-bricks]\n'
+    '       dart run tool/strip_sample_features.dart --apply --keep-samples '
     '[--remove-bricks]\n'
     'Removes lib/features/tasks, lib/features/feature_flags and related '
     'tests. Rewires entrypoints from '

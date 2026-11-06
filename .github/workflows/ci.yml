@@ -103,7 +103,7 @@ jobs:
             verdict="Could not resolve a diff range for a '$EVENT_NAME' event. Running the full gate."
             changed=''
           else
-            changed="$(git diff --name-only "$range")"
+            changed="$(git diff --name-only --no-renames "$range")"
             # Everything outside the inert set, plus every .dart file wherever
             # it lives.
             relevant="$(

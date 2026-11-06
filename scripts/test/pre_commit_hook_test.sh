@@ -99,6 +99,11 @@ else
   fail "with dependencies resolved the hook exited $status on a clean tree"
   tail -20 "$WORK/hook.out"
 fi
+if grep -q "Resolving dependencies" "$WORK/hook.out"; then
+  fail "the hook re-resolved dependencies in its export"
+else
+  pass "the hook analyzes its export without re-resolving dependencies"
+fi
 
 printf '\nvoid   badlyFormatted( ){}\n' >>"$CLONE/lib/main.dart"
 run_hook
@@ -212,6 +217,11 @@ if [ "$status" -eq 0 ]; then
 else
   fail "in a pub workspace the hook exited $status on a clean tree"
   tail -20 "$WORK/hook.out"
+fi
+if grep -q "Resolving dependencies" "$WORK/hook.out"; then
+  fail "in a pub workspace the hook re-resolved dependencies in its export"
+else
+  pass "in a pub workspace the hook analyzes its export without re-resolving"
 fi
 
 printf '\nvoid   badlyFormatted( ){}\n' >>"$WS/app/lib/main.dart"

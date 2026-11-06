@@ -63,6 +63,18 @@ void main() {
     expect(File('${root.path}/$_placeholder').existsSync(), isFalse);
   }, skip: skip);
 
+  test('the placeholder is deleted from a CRLF checkout too', () async {
+    // What a Windows clone with core.autocrlf=true writes into __brick__/.
+    final lf = File('$_brick/__brick__/$_placeholder').readAsStringSync();
+    File(
+      '${root.path}/$_placeholder',
+    ).writeAsStringSync(lf.replaceAll('\n', '\r\n'));
+
+    await _removeIn(root);
+
+    expect(File('${root.path}/$_placeholder').existsSync(), isFalse);
+  }, skip: skip);
+
   test('a file of the same name the brick did not write is kept', () async {
     final own = File('${root.path}/$_placeholder')
       ..writeAsStringSync('# My notes\n');

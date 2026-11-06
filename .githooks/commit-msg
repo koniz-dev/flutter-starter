@@ -3,7 +3,15 @@
 set -euo pipefail
 
 msg_file="${1:?commit-msg hook requires message file path}"
-commit_msg="$(head -n 1 "$msg_file")"
+# The file holds the message before git cleans it up, so its first line can be
+# a `#` comment (a commit.template, or a squash merge's notes) or blank. The
+# subject is the first line that is neither, which is the one git commits.
+comment_char="$(git config --get core.commentChar 2>/dev/null || true)"
+case "$comment_char" in
+  '' | auto) comment_char='#' ;;
+esac
+commit_msg="$(awk -v c="$comment_char" \
+  'index($0, c) != 1 && $0 !~ /^[[:space:]]*$/ { print; exit }' "$msg_file")"
 
 # Subjects Git itself generates, or that exist only to be autosquashed. None of
 # them is under the author's control, so rejecting them forced --no-verify,
@@ -14,7 +22,8 @@ commit_msg="$(head -n 1 "$msg_file")"
 #   fixup! feat: x            git commit --fixup
 #   squash! feat: x           git commit --squash
 #   amend! feat: x            git commit --fixup=amend
-if echo "$commit_msg" | grep -qE '^(Merge |Revert "|(fixup|squash|amend)! )'; then
+#   Squashed commit of the following:   git merge --squash, then git commit
+if echo "$commit_msg" | grep -qE '^(Merge |Revert "|(fixup|squash|amend)! |Squashed commit of the following:)'; then
   exit 0
 fi
 

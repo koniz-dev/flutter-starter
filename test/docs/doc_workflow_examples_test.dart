@@ -12,6 +12,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../tool/doc_fences.dart';
+
 /// `uses: owner/action@vN...` or, pinned, `uses: owner/action@<sha> # vN...`.
 final RegExp _uses = RegExp(
   r'uses:\s*([\w.-]+/[\w.-]+)@(?:(v\d+)\S*|[0-9a-f]{40}\s+#\s+(v\d+)\S*)',
@@ -19,8 +21,6 @@ final RegExp _uses = RegExp(
 
 /// The major a [_uses] match names: its tag, or the release in its comment.
 String _major(RegExpMatch m) => (m.group(2) ?? m.group(3))!;
-final RegExp _fence = RegExp(r'^\s*(`{3,}|~{3,})');
-
 List<File> _docs() => [
   for (final name in const ['README.md', 'CONTRIBUTING.md'])
     if (File(name).existsSync()) File(name),
@@ -32,18 +32,34 @@ List<File> _docs() => [
 
 /// `(line, text)` of every line inside a fenced block of [source].
 Iterable<(int, String)> _fencedLines(String source) sync* {
-  var inFence = false;
+  final fences = FenceTracker();
   final lines = source.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    if (_fence.hasMatch(lines[i])) {
-      inFence = !inFence;
-      continue;
-    }
-    if (inFence) yield (i + 1, lines[i]);
+    if (fences.isFence(lines[i])) continue;
+    if (fences.inFence) yield (i + 1, lines[i]);
   }
 }
 
 void main() {
+  test('a fence nested in a longer fence does not end it', () {
+    const source = '''
+````markdown
+```yaml
+- uses: inner/action@v1
+```
+- uses: still/fenced@v2
+````
+prose uses: not/fenced@v3
+''';
+    // The inner fence lines are content of the outer block.
+    expect(_fencedLines(source).map((l) => l.$2), [
+      '```yaml',
+      '- uses: inner/action@v1',
+      '```',
+      '- uses: still/fenced@v2',
+    ]);
+  });
+
   final workflowMajors = <String, Set<String>>{};
   for (final f in Directory('.github/workflows').listSync().whereType<File>()) {
     for (final m in _uses.allMatches(f.readAsStringSync())) {
