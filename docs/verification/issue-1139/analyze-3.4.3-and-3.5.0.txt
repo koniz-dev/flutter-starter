@@ -1,0 +1,19 @@
+# Clone of fix/riverpod-exists-deprecation at 522965916cb; flutter analyze per resolution
+$ committed lock
+No issues found! (ran in 14.8s)
+exit 0
+$ after pub upgrade riverpod flutter_riverpod (lock still held both at 3.4.3; not a 3.5.0 run)
+No issues found! (ran in 5.4s)
+exit 0
+00:02 +4: All tests passed!
+$ after flutter pub upgrade (no lock pins)
+  flutter_riverpod:
+    version: "3.5.0"
+  riverpod:
+    version: "3.5.0"
+No issues found! (ran in 11.2s)
+exit 0
+00:03 +4: All tests passed!
+$ same lock, test file from main (before the fix)
+   info • 'exists' is deprecated and shouldn't be used. Use `ref.read/watch/listen(provider.exist)` instead. Try replacing the use of the deprecated member with the replacement • test/core/network/forced_logout_session_test.dart:207:21 • deprecated_member_use
+1 issue found. (ran in 7.6s)

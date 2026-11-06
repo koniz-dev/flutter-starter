@@ -1,0 +1,28 @@
+# main at 4fbb5698208. Mutation: the session termination sink reads authProvider eagerly
+diff --git a/lib/features/auth/di/auth_providers.dart b/lib/features/auth/di/auth_providers.dart
+index 20b387e84f2..0159735d6ae 100644
+--- a/lib/features/auth/di/auth_providers.dart
++++ b/lib/features/auth/di/auth_providers.dart
+@@ -98,9 +98,10 @@ final List<Override> authModuleOverrides = <Override>[
+   ),
+   // The feature implements the contract and hands it down; `lib/core/network`
+   // never learns that a Riverpod notifier is what it just cleared.
+-  sessionTerminationSinkProvider.overrideWith(
+-    RiverpodSessionTerminationSink.new,
+-  ),
++  sessionTerminationSinkProvider.overrideWith((ref) {
++    ref.read(authProvider);
++    return RiverpodSessionTerminationSink(ref);
++  }),
+   signOutProvider.overrideWith(
+     (ref) =>
+         () => ref.read(authProvider.notifier).logout(),
+$ flutter test test/core/network/forced_logout_session_test.dart (mutated)
+00:00 +1 -1: no DI cycle is introduced building the API client does not build the auth notifier [E]
+  Expected: not contains AuthNotifierProvider:<authProvider>
+    Actual: [
+00:02 +3 -1: Some tests failed.
+$ same test, restored
+00:01 +4: All tests passed!
+$ grep -n "exists(" test/core/network/forced_logout_session_test.dart
+(none)
