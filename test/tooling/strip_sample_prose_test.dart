@@ -17,6 +17,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../tool/doc_fences.dart';
+
 class _Sample {
   const _Sample(this.tag, this.dirs, this.deletedDocs, this.extraTokens);
 
@@ -144,7 +146,7 @@ List<File> _markdown() {
 /// whether each is inside a fenced code block.
 Iterable<(int, String, bool)> _unmarkedLines(String source, String tag) sync* {
   var inRegion = false;
-  var inFence = false;
+  final fences = FenceTracker();
   var number = 0;
   for (final line in source.split('\n')) {
     number++;
@@ -157,21 +159,37 @@ Iterable<(int, String, bool)> _unmarkedLines(String source, String tag) sync* {
       inRegion = false;
       continue;
     }
-    if (RegExp('^(`{3,}|~{3,})').hasMatch(trimmed)) {
-      inFence = !inFence;
-      continue;
-    }
+    if (fences.isFence(line)) continue;
     if (inRegion || line.contains('<!-- strip:$tag line -->')) continue;
     // Symbol and signature directives go with the files they name.
     if (trimmed.startsWith('<!-- symbol:') ||
         trimmed.startsWith('<!-- signature:')) {
       continue;
     }
-    yield (number, line, inFence);
+    yield (number, line, fences.inFence);
   }
 }
 
 void main() {
+  test('a fence nested in a longer fence does not end it', () {
+    const source = '''
+````markdown
+```dart
+inner();
+```
+stillFenced();
+````
+prose
+''';
+    final fenced = {
+      for (final (_, line, inFence) in _unmarkedLines(source, 'tasks'))
+        line: inFence,
+    };
+    expect(fenced['inner();'], isTrue);
+    expect(fenced['stillFenced();'], isTrue);
+    expect(fenced['prose'], isFalse);
+  });
+
   final root = Directory.current.path;
 
   for (final sample in _samples) {

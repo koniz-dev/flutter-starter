@@ -86,7 +86,9 @@ Future<void> removeHookPlaceholder(String rootPath, Logger logger) async {
   final file = File('$rootPath/$hookPlaceholder');
   if (!file.existsSync()) return;
   final text = await file.readAsString();
-  if (!text.startsWith('# Mason hook-only brick\n')) return;
+  // `\r?`: a Windows checkout with core.autocrlf=true gives the brick file
+  // CRLF line endings, and Mason copies them as they are.
+  if (!RegExp(r'^# Mason hook-only brick\r?\n').hasMatch(text)) return;
   await file.delete();
   logger.info('Removed $hookPlaceholder');
 }
