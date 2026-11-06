@@ -19,10 +19,29 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$ROOT"
 
+# A SHA-256 tool: shasum on macOS, sha256sum on most Linux images. Without
+# either, both hash lists came out empty and the generated-code check passed
+# whatever build_runner rewrote, so it is required.
+if command -v shasum >/dev/null 2>&1; then
+  sha256=(shasum -a 256)
+elif command -v sha256sum >/dev/null 2>&1; then
+  sha256=(sha256sum)
+else
+  echo "❌ Neither shasum nor sha256sum is installed; the generated-code check needs one." >&2
+  exit 1
+fi
+
 # Content hashes of every generated file in the working tree, tracked or not.
+# A tracked file deleted from the working tree (removed to regenerate it, or by
+# build_runner -d) is listed by ls-files but has nothing to hash: it is left
+# out, so the comparison reports it rather than the hash tool failing.
 generated_hashes() {
   git ls-files -z --cached --others --exclude-standard -- '*.g.dart' '*.freezed.dart' |
-    sort -z | xargs -0 shasum -a 256 2>/dev/null || true
+    sort -z -u |
+    while IFS= read -r -d '' file; do
+      if [ -f "$file" ]; then printf '%s\0' "$file"; fi
+    done |
+    xargs -0 "${sha256[@]}"
 }
 
 echo "==> env asset guard"

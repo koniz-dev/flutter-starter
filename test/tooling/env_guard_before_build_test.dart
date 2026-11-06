@@ -69,6 +69,16 @@ List<String> _unguardedLaneBuilds(File fastfile) {
   return problems;
 }
 
+/// A directory of its own for one test's fixture, removed after the test.
+///
+/// A fixed name under the system temp directory collided when two `flutter
+/// test` processes ran this file at once: one deleted the other's fixture.
+Directory _scratch() {
+  final dir = Directory.systemTemp.createTempSync('env_guard_');
+  addTearDown(() => dir.deleteSync(recursive: true));
+  return dir;
+}
+
 void main() {
   final workflows =
       Directory('.github/workflows')
@@ -98,7 +108,7 @@ void main() {
   test('the scan sees the builds it should', () {
     // Guards the parser: build.yml does build, and an unguarded fixture is
     // caught.
-    final fixture = File('${Directory.systemTemp.path}/unguarded_fixture.yml')
+    final fixture = File('${_scratch().path}/unguarded_fixture.yml')
       ..writeAsStringSync('''
 jobs:
   build:
@@ -110,7 +120,6 @@ jobs:
       - run: $_guard
       - run: flutter build apk
 ''');
-    addTearDown(fixture.deleteSync);
 
     final problems = _unguardedBuilds(fixture);
     expect(problems, hasLength(1));
@@ -134,7 +143,7 @@ jobs:
     }
 
     test('the lane scan catches an unguarded lane', () {
-      final fixture = File('${Directory.systemTemp.path}/unguarded_Fastfile')
+      final fixture = File('${_scratch().path}/unguarded_Fastfile')
         ..writeAsStringSync('''
 platform :android do
   lane :safe do
@@ -148,7 +157,6 @@ platform :android do
   end
 end
 ''');
-      addTearDown(fixture.deleteSync);
 
       final problems = _unguardedLaneBuilds(fixture);
       expect(problems, hasLength(1));
