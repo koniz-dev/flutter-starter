@@ -1,0 +1,34 @@
+=== NEW hook (fix/p3-audit-tooling 2c9c31bd7da + the #1139 test fix)
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+ok    the hook analyzes its export without re-resolving dependencies
+ok    an unstaged format violation over a clean index does not fail the hook
+ok    with dependencies resolved the hook fails on a staged format violation
+ok    in a monorepo the hook checks the app and exits 0 on a clean tree
+ok    in a monorepo the hook fails on a staged format violation in the app
+ok    the workspace fixture resolves at its root only (the layout under test)
+ok    in a pub workspace the hook exits 0 on a clean tree
+ok    in a pub workspace the hook analyzes its export without re-resolving
+ok    in a pub workspace the hook fails on a staged format violation
+ok    in a pub workspace the hook follows a Windows-style workspaceRoot
+ok    with the workspace unresolved the hook refuses and advises flutter pub get
+ok    after the advised flutter pub get the hook passes in the workspace
+=== OLD hook (main) under the same test script and fixtures
+ok    without pub get the hook exits non-zero
+ok    without pub get the hook tells the user to run flutter pub get
+ok    without pub get the hook rewrites nothing (git status --porcelain is empty)
+ok    with dependencies resolved the hook exits 0 on a clean tree
+FAIL  the hook re-resolved dependencies in its export
+ok    an unstaged format violation over a clean index does not fail the hook
+ok    with dependencies resolved the hook fails on a staged format violation
+ok    in a monorepo the hook checks the app and exits 0 on a clean tree
+ok    in a monorepo the hook fails on a staged format violation in the app
+ok    the workspace fixture resolves at its root only (the layout under test)
+ok    in a pub workspace the hook exits 0 on a clean tree
+FAIL  in a pub workspace the hook re-resolved dependencies in its export
+ok    in a pub workspace the hook fails on a staged format violation
+ok    in a pub workspace the hook follows a Windows-style workspaceRoot
+ok    with the workspace unresolved the hook refuses and advises flutter pub get
+ok    after the advised flutter pub get the hook passes in the workspace
