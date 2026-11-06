@@ -219,6 +219,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String taskActions(String taskTitle) {
+    return 'إجراءات \"$taskTitle\"';
+  }
+
+  @override
   String get save => 'حفظ';
 
   @override

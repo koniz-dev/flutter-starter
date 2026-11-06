@@ -148,6 +148,20 @@ void main() {
       light.colorScheme.surface,
       ratio: 6.21,
     ),
+    // Secondary text, such as a completed task in the tasks sample.
+    _Pair(
+      'onSurfaceVariant on surface',
+      light.colorScheme.onSurfaceVariant,
+      light.colorScheme.surface,
+      ratio: 15.43,
+    ),
+    // A popup menu's surface, where the tasks sample shows Delete in error.
+    _Pair(
+      'error as text on surfaceContainer',
+      light.colorScheme.error,
+      light.colorScheme.surfaceContainer,
+      ratio: 5.61,
+    ),
     _Pair(
       'labelLarge on surface',
       light.textTheme.labelLarge!.color!,
@@ -248,6 +262,20 @@ void main() {
       dark.textTheme.bodyMedium!.color!,
       dark.colorScheme.surface,
       ratio: 8.03,
+    ),
+    // Secondary text, such as a completed task in the tasks sample.
+    _Pair(
+      'onSurfaceVariant on surface',
+      dark.colorScheme.onSurfaceVariant,
+      dark.colorScheme.surface,
+      ratio: 16.67,
+    ),
+    // A popup menu's surface, where the tasks sample shows Delete in error.
+    _Pair(
+      'error as text on surfaceContainer',
+      dark.colorScheme.error,
+      dark.colorScheme.surfaceContainer,
+      ratio: 6.01,
     ),
     _Pair(
       'appBar foreground on appBar background',

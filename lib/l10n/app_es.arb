@@ -87,6 +87,7 @@
   "delete": "Eliminar",
   "deleteTask": "Eliminar Tarea",
   "deleteTaskConfirmation": "¿Estás seguro de que deseas eliminar \"{taskTitle}\"?",
+  "taskActions": "Acciones de \"{taskTitle}\"",
   "@deleteTaskConfirmation": {
     "placeholders": {
       "taskTitle": {

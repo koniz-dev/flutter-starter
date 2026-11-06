@@ -217,6 +217,11 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String taskActions(String taskTitle) {
+    return 'Thao tác cho \"$taskTitle\"';
+  }
+
+  @override
   String get save => 'Lưu';
 
   @override

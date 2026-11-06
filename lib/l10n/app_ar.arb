@@ -87,6 +87,7 @@
   "delete": "حذف",
   "deleteTask": "حذف المهمة",
   "deleteTaskConfirmation": "هل أنت متأكد من أنك تريد حذف \"{taskTitle}\"؟",
+  "taskActions": "إجراءات \"{taskTitle}\"",
   "@deleteTaskConfirmation": {
     "placeholders": {
       "taskTitle": {
