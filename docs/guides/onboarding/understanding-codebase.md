@@ -6,24 +6,28 @@ This guide explains the architecture, code organization, and key patterns used i
 
 This project follows **Clean Architecture** principles with clear separation of concerns:
 
+Arrows point from a layer to what it depends on. Domain is the centre:
+presentation and data both depend on it, and it depends on neither.
+
 ```
 ┌─────────────────────────────────────┐
 │      Presentation Layer (UI)        │
 │  - Screens, Widgets, Providers      │
 └──────────────┬──────────────────────┘
-               │
+               │ depends on
 ┌──────────────▼──────────────────────┐
 │         Domain Layer                │
-│ - Entities, Use Cases, Repositories │
+│ - Entities, Use Cases, Repository   │
+│   interfaces                        │
 │ - Business Logic (Framework-free)   │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────▼──────────────────────┐
+└──────────────▲──────────────────────┘
+               │ depends on (implements the interfaces)
+┌──────────────┴──────────────────────┐
 │         Data Layer                  │
 │ - Models, Data Sources, Repository  │
-│ - Implementations                   │
+│   implementations                   │
 └──────────────┬──────────────────────┘
-               │
+               │ uses
 ┌──────────────▼──────────────────────┐
 │         Core Layer                  │
 │  - Network, Storage, Config, Utils  │
@@ -81,7 +85,7 @@ lib/
 
 docs/
 ├── api/                   # API documentation
-├── architecture/          # Architecture docs (if available)
+├── architecture/          # Architecture docs
 └── guides/               # Guides (this file)
 ```
 
