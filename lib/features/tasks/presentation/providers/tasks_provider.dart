@@ -34,7 +34,7 @@ class TasksState {
   /// Error message if operation failed, null otherwise.
   ///
   /// This is [Failure.message]: English text built for logs. Screens render
-  /// [failure] through `localizedMessage` instead.
+  /// [failure] through `taskMessage` instead.
   final String? error;
 
   /// The failure behind [error], kept so a screen can show it in the user's

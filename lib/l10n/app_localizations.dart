@@ -456,6 +456,12 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete \"{taskTitle}\"?'**
   String deleteTaskConfirmation(String taskTitle);
 
+  /// Tooltip and screen-reader label of a task row's menu
+  ///
+  /// In en, this message translates to:
+  /// **'Actions for \"{taskTitle}\"'**
+  String taskActions(String taskTitle);
+
   /// Save button label
   ///
   /// In en, this message translates to:

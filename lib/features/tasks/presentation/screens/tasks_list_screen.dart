@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+import 'package:flutter_starter/features/tasks/presentation/task_failure_messages.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Tasks list screen
@@ -75,7 +75,7 @@ class TasksListScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                state.failure?.localizedMessage(l10n) ?? state.error!,
+                state.failure?.taskMessage(l10n) ?? state.error!,
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
@@ -168,7 +168,7 @@ class TasksListScreen extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                state.failure?.localizedMessage(l10n) ?? state.error!,
+                state.failure?.taskMessage(l10n) ?? state.error!,
                 style: TextStyle(color: colorScheme.onErrorContainer),
               ),
             ),
@@ -202,10 +202,21 @@ class TasksListScreen extends ConsumerWidget {
     // second tap cannot be computed against the pre-mutation value, and so a
     // tap aimed at the disabled checkbox does not fall through to the tile.
     final isPending = state.pendingTaskIds.contains(task.id);
+    final colors = Theme.of(context).colorScheme;
+    // onSurfaceVariant (the theme's secondary text), not Colors.grey: grey is
+    // 2.68:1 on white, below WCAG AA; the contrast suite holds the token to
+    // 4.5:1.
+    final completedStyle = TextStyle(
+      decoration: TextDecoration.lineThrough,
+      color: colors.onSurfaceVariant,
+    );
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         leading: Checkbox(
+          // Without a label a screen reader announces a bare "checkbox",
+          // with nothing to say which task it completes.
+          semanticLabel: task.title,
           value: task.isCompleted,
           onChanged: isPending
               ? null
@@ -213,12 +224,7 @@ class TasksListScreen extends ConsumerWidget {
         ),
         title: Text(
           task.title,
-          style: task.isCompleted
-              ? const TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  color: Colors.grey,
-                )
-              : null,
+          style: task.isCompleted ? completedStyle : null,
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,12 +235,7 @@ class TasksListScreen extends ConsumerWidget {
                 task.description!,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: task.isCompleted
-                    ? const TextStyle(
-                        decoration: TextDecoration.lineThrough,
-                        color: Colors.grey,
-                      )
-                    : null,
+                style: task.isCompleted ? completedStyle : null,
               ),
             // `createdAt` arrives from `TaskModel.fromJson` already converted
             // to local time, so the local wall-clock formatter is the right
@@ -250,6 +251,8 @@ class TasksListScreen extends ConsumerWidget {
           ],
         ),
         trailing: PopupMenuButton<String>(
+          // The default "Show menu" names no task.
+          tooltip: l10n.taskActions(task.title),
           onSelected: (value) {
             if (value == 'edit') {
               context.pushRoute('${AppRoutes.tasks}/${task.id}');
@@ -276,9 +279,10 @@ class TasksListScreen extends ConsumerWidget {
               enabled: !isPending,
               child: Row(
                 children: [
-                  const Icon(Icons.delete, size: 20, color: Colors.red),
+                  // colorScheme.error, not Colors.red (3.68:1 on white).
+                  Icon(Icons.delete, size: 20, color: colors.error),
                   const SizedBox(width: 8),
-                  Text(l10n.delete, style: const TextStyle(color: Colors.red)),
+                  Text(l10n.delete, style: TextStyle(color: colors.error)),
                 ],
               ),
             ),
@@ -322,6 +326,9 @@ class TasksListScreen extends ConsumerWidget {
             onPressed: () => Navigator.of(context).pop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
+              // The button theme's white foreground is 2.78:1 on the dark
+              // theme's error; onError on error is a checked pair.
+              foregroundColor: Theme.of(context).colorScheme.onError,
             ),
             child: Text(l10n.delete),
           ),

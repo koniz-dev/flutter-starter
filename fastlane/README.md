@@ -180,15 +180,20 @@ Fastlane lanes support environment-specific builds:
 # Android
 fastlane android upload_production \
   environment:production \
-  base_url:https://api.example.com \
+  base_url:"$BASE_URL_PRODUCTION" \
   ssl_fingerprints:"$API_SSL_FINGERPRINTS"
 
 # iOS
 fastlane ios upload_appstore \
   environment:production \
-  base_url:https://api.example.com \
+  base_url:"$BASE_URL_PRODUCTION" \
   ssl_fingerprints:"$API_SSL_FINGERPRINTS"
 ```
+
+Every build lane needs the API base URL: `base_url:<url>`, or
+`BASE_URL_PRODUCTION` / `BASE_URL_STAGING` in the environment. Without one,
+or with the starter's `example.com` placeholder, the lane stops before
+building.
 
 ### Certificate pinning
 

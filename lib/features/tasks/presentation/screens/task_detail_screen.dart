@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
-import 'package:flutter_starter/core/localization/failure_localizations.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+import 'package:flutter_starter/features/tasks/presentation/task_failure_messages.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 
 /// Task detail/edit screen
@@ -169,7 +169,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                _error!.localizedMessage(l10n),
+                _error!.taskMessage(l10n),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
@@ -236,7 +236,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
           children: [
             if (_saveError != null) ...[
               Text(
-                _saveError!.localizedMessage(l10n),
+                _saveError!.taskMessage(l10n),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
               const SizedBox(height: 16),

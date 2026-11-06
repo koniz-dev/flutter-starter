@@ -48,6 +48,14 @@ class _RecordingReporter implements IErrorReporter {
   }
 }
 
+/// The failure screen for a build-configuration refusal: it points at the
+/// build, and offers no retry, which would refuse the same way.
+void expectConfigurationRefusal() {
+  expect(find.textContaining('has to be rebuilt'), findsOneWidget);
+  expect(find.textContaining('Local data could not be prepared'), findsNothing);
+  expect(find.byKey(StartupFailureApp.retryKey), findsNothing);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -438,6 +446,7 @@ void main() {
       await bootRealMain(tester);
 
       expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expectConfigurationRefusal();
       expect(find.textContaining('"prod"'), findsOneWidget);
       expect(
         find.textContaining('development, staging, production'),
@@ -484,6 +493,7 @@ void main() {
       );
 
       expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expectConfigurationRefusal();
       expect(find.textContaining('ENVIRONMENT=development'), findsOneWidget);
     });
 
@@ -515,6 +525,7 @@ void main() {
       );
 
       expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expectConfigurationRefusal();
       expect(find.textContaining('API_SSL_FINGERPRINTS'), findsOneWidget);
     });
 
@@ -532,6 +543,7 @@ void main() {
       );
 
       expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+      expectConfigurationRefusal();
       expect(find.textContaining('"enabled"'), findsOneWidget);
     });
 
@@ -550,6 +562,7 @@ void main() {
         );
 
         expect(find.byKey(StartupFailureApp.bodyKey), findsOneWidget);
+        expectConfigurationRefusal();
         expect(find.textContaining('is not https'), findsOneWidget);
       });
     }

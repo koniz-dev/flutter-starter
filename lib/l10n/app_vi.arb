@@ -253,6 +253,7 @@
     "description": "Delete task dialog title"
   },
   "deleteTaskConfirmation": "Bạn có chắc chắn muốn xóa \"{taskTitle}\"?",
+  "taskActions": "Thao tác cho \"{taskTitle}\"",
   "@deleteTaskConfirmation": {
     "description": "Delete task confirmation message",
     "placeholders": {

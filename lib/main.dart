@@ -145,14 +145,14 @@ Future<void> _bootstrap({
     // start instead, through the same failure screen as any other startup
     // error.
     if (AppConfig.environmentMisconfigured) {
-      throw StateError(
+      throw StartupConfigurationError(
         'ENVIRONMENT "${AppConfig.environment}" is not one of '
         '${AppConfig.knownEnvironments.join(', ')}. Refusing to start: the '
         'base URL would fall back to localhost and SSL pinning would be off.',
       );
     }
     if (AppConfig.releaseBuiltAsDevelopment(releaseMode: releaseMode)) {
-      throw StateError(
+      throw StartupConfigurationError(
         'This release build is configured as ENVIRONMENT=development, which '
         'registers the debug routes and turns HTTP logging on. Build it with '
         'ENVIRONMENT=staging or production.',
@@ -162,7 +162,7 @@ Future<void> _bootstrap({
       // Redacted, not cut short: userinfo and query secrets are removed, and
       // cutting to 32 characters would hide the host.
       final url = ApiLoggingInterceptor.redactUrl(AppConfig.baseUrl);
-      throw StateError(
+      throw StartupConfigurationError(
         'BASE_URL "$url" is not https. Refusing to start a '
         '${AppConfig.environment} release that would send its tokens in '
         'cleartext.',
@@ -170,7 +170,7 @@ Future<void> _bootstrap({
     }
     if (releaseMode && AppConfig.sslPinningFlagUnrecognised) {
       final flag = _shown(EnvConfig.get('ENABLE_SSL_PINNING'));
-      throw StateError(
+      throw StartupConfigurationError(
         'ENABLE_SSL_PINNING is "$flag", '
         'which '
         'is neither on (${AppConfig.sslPinningOnValues.join('/')}) nor off '
@@ -179,7 +179,7 @@ Future<void> _bootstrap({
       );
     }
     if (AppConfig.releasePinningMisconfigured(releaseMode: releaseMode)) {
-      throw StateError(
+      throw StartupConfigurationError(
         'SSL pinning is on for this release build, but API_SSL_FINGERPRINTS '
         'is empty, so nothing would be pinned. Build it with '
         'API_SSL_FINGERPRINTS set, or with ENABLE_SSL_PINNING=false to opt '

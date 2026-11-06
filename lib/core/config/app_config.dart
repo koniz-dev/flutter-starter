@@ -446,7 +446,10 @@ class AppConfig {
 
   /// Get configuration as a map for debugging
   ///
-  /// Returns a map containing all configuration values
+  /// Returns a map containing all configuration values. `baseUrl` goes
+  /// through [ApiLoggingInterceptor.redactUrl], as in [printConfig]: the map
+  /// ends up in logs and bug reports, and a BASE_URL can carry userinfo or a
+  /// secret query value.
   static Map<String, dynamic> getDebugInfo() {
     return {
       'environment': environment,
@@ -456,7 +459,7 @@ class AppConfig {
       'isProduction': isProduction,
       'isDebugMode': isDebugMode,
       'isReleaseMode': isReleaseMode,
-      'baseUrl': baseUrl,
+      'baseUrl': ApiLoggingInterceptor.redactUrl(baseUrl),
       'apiTimeout': apiTimeout,
       'apiConnectTimeout': apiConnectTimeout,
       'apiReceiveTimeout': apiReceiveTimeout,

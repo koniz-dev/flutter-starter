@@ -2,6 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+/// A startup refusal caused by how the app was built - its ENVIRONMENT,
+/// BASE_URL or SSL pinning settings - rather than by anything on the device.
+///
+/// Retrying or reinstalling the same build cannot fix it, so the failure
+/// screen says to rebuild with corrected configuration and offers no retry.
+class StartupConfigurationError extends StateError {
+  /// Creates a [StartupConfigurationError] explaining the refusal.
+  StartupConfigurationError(super.message);
+}
+
 /// Minimal app shown when startup initialization fails
 ///
 /// Startup runs storage migrations before the first frame. When that throws,
@@ -75,15 +85,23 @@ class _StartupFailureAppState extends State<StartupFailureApp> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Local data could not be prepared. Nothing has been '
-                    'deleted. Try again, and if this keeps happening, '
-                    'reinstalling the app will start from empty local data.',
+                  Text(
+                    error is StartupConfigurationError
+                        ? 'This build of the app is configured incorrectly, '
+                              'so it refuses to start. Nothing has been '
+                              'deleted. Trying again or reinstalling this '
+                              'build will not help: it has to be rebuilt with '
+                              'the setting below corrected.'
+                        : 'Local data could not be prepared. Nothing has '
+                              'been deleted. Try again, and if this keeps '
+                              'happening, reinstalling the app will start '
+                              'from empty local data.',
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   Text('$error', textAlign: TextAlign.center),
-                  if (onRetry != null) ...[
+                  if (onRetry != null &&
+                      error is! StartupConfigurationError) ...[
                     const SizedBox(height: 24),
                     FilledButton(
                       key: StartupFailureApp.retryKey,

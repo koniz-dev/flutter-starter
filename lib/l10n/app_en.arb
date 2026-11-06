@@ -261,6 +261,15 @@
       }
     }
   },
+  "taskActions": "Actions for \"{taskTitle}\"",
+  "@taskActions": {
+    "description": "Tooltip and screen-reader label of a task row's menu",
+    "placeholders": {
+      "taskTitle": {
+        "type": "String"
+      }
+    }
+  },
   "save": "Save",
   "@save": {
     "description": "Save button label"

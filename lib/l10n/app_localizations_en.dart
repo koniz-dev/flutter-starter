@@ -214,6 +214,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String taskActions(String taskTitle) {
+    return 'Actions for \"$taskTitle\"';
+  }
+
+  @override
   String get save => 'Save';
 
   @override

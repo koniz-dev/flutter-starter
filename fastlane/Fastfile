@@ -55,7 +55,7 @@ platform :android do
   desc "Build App Bundle for Play Store"
   lane :build_bundle do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
 
     UI.message("Building App Bundle - Environment: #{environment}")
 
@@ -95,7 +95,7 @@ platform :android do
   desc "Build APK for testing"
   lane :build_apk do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
 
     UI.message("Building APK - Environment: #{environment}")
 
@@ -133,7 +133,7 @@ platform :android do
   desc "Upload to Google Play Store (Internal track)"
   lane :upload_internal do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
-    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_STAGING"], "BASE_URL_STAGING")
     track = options[:track] || "internal"
 
     # Build App Bundle
@@ -162,7 +162,7 @@ platform :android do
   desc "Upload to Google Play Store (Alpha track)"
   lane :upload_alpha do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
-    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_STAGING"], "BASE_URL_STAGING")
 
     # Build and upload to alpha
     bundle_path = build_bundle(environment: environment, base_url: base_url,
@@ -185,7 +185,7 @@ platform :android do
   desc "Upload to Google Play Store (Beta track)"
   lane :upload_beta do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
-    base_url = options[:base_url] || ENV["BASE_URL_STAGING"] || "https://api-staging.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_STAGING"], "BASE_URL_STAGING")
 
     # Build and upload to beta
     bundle_path = build_bundle(environment: environment, base_url: base_url,
@@ -208,7 +208,7 @@ platform :android do
   desc "Upload to Google Play Store (Production track)"
   lane :upload_production do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
 
     # Build and upload to production
     bundle_path = build_bundle(environment: environment, base_url: base_url,
@@ -232,7 +232,7 @@ platform :android do
   desc "Upload to Google Play Store with automatic track selection"
   lane :upload do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = options[:base_url] || ENV["BASE_URL_PRODUCTION"] || "https://api.example.com"
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
     track = options[:track] || (environment == "production" ? "production" : "internal")
 
     # Build App Bundle

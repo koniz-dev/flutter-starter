@@ -173,6 +173,11 @@ class DeferredImportLoader {
   /// Future for the loading operation
   Future<void>? _loadingFuture;
 
+  /// Advanced by [reset]; a load that finishes under an older value changes
+  /// nothing, so a load in flight across a reset cannot mark the library
+  /// loaded or clear the next load's future.
+  int _generation = 0;
+
   /// Load the deferred library
   Future<void> load() async {
     if (_isLoaded) {
@@ -183,6 +188,7 @@ class DeferredImportLoader {
       return await _loadingFuture;
     }
 
+    final generation = _generation;
     return await (_loadingFuture = () async {
       // Yield before calling the loader, so the caller stores this future
       // first: a loader that throws before returning one would otherwise
@@ -191,10 +197,12 @@ class DeferredImportLoader {
       await null;
       try {
         await _loadFunction();
-        _isLoaded = true;
-        _loadingFuture = null;
+        if (generation == _generation) {
+          _isLoaded = true;
+          _loadingFuture = null;
+        }
       } catch (error) {
-        _loadingFuture = null;
+        if (generation == _generation) _loadingFuture = null;
         rethrow;
       }
     }());
@@ -207,6 +215,7 @@ class DeferredImportLoader {
   void reset() {
     _isLoaded = false;
     _loadingFuture = null;
+    _generation++;
   }
 }
 
@@ -237,6 +246,11 @@ class LazyInitializer<T> {
   /// Future for the initialization
   Future<T>? _initFuture;
 
+  /// Advanced by [reset]; an initialization that finishes under an older
+  /// value does not cache its instance, so a call in flight across a reset
+  /// cannot bring the pre-reset value back.
+  int _generation = 0;
+
   /// Get the instance, initializing if necessary
   Future<T> get() async {
     if (_instance != null) {
@@ -247,6 +261,7 @@ class LazyInitializer<T> {
       return await _initFuture!;
     }
 
+    final generation = _generation;
     _initFuture = () async {
       // Yield before calling the loader, so the caller stores this future
       // first: a loader that throws before returning one would otherwise
@@ -255,11 +270,13 @@ class LazyInitializer<T> {
       await null;
       try {
         final value = await _initializer();
-        _instance = value;
-        _initFuture = null;
+        if (generation == _generation) {
+          _instance = value;
+          _initFuture = null;
+        }
         return value;
       } catch (error) {
-        _initFuture = null;
+        if (generation == _generation) _initFuture = null;
         rethrow;
       }
     }();
@@ -274,5 +291,6 @@ class LazyInitializer<T> {
   void reset() {
     _instance = null;
     _initFuture = null;
+    _generation++;
   }
 }

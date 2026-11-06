@@ -180,6 +180,12 @@ void main() {
     }
 
     expect(error, isNotNull);
+    // The refusal itself, not just a failed connection: without the scheme
+    // check the hop is opened with TLS against the plaintext server and the
+    // handshake fails anyway, as a HandshakeException. The client keeps only
+    // the original error's type, and the refusal is a
+    // WebSocketChannelException raised by the connection factory.
+    expect('$error', endsWith('(WebSocketChannelException)'));
     expect(realtime.isConnected, isFalse);
     expect(plainRequests, 0, reason: 'nothing reached the cleartext server');
     expect(received, isEmpty);

@@ -51,8 +51,50 @@ void main() {
     }
   }, skip: skip);
 
+  test('a lane base URL must be set and not the example.com placeholder', () {
+    String check(String value) => _ruby(
+      'begin; '
+      'print ReleaseEnvironment.base_url($value, "BASE_URL_PRODUCTION"); '
+      'rescue ArgumentError => e; print "refused: #{e.message}"; end',
+    );
+    expect(check('" https://api.acme.io "'), 'https://api.acme.io');
+    expect(
+      check('"https://example.company.com/v1"'),
+      'https://example.company.com/v1',
+    );
+    for (final value in [
+      'nil',
+      '""',
+      '"https://api.example.com"',
+      '"https://api-staging.example.com/"',
+      '"https://user:pw@EXAMPLE.com"',
+      '"https://api.example.com./v1"',
+      '"api.acme.io"',
+      '"//api.acme.io"',
+    ]) {
+      expect(check(value), startsWith('refused: '), reason: value);
+    }
+    expect(check('nil'), contains('BASE_URL_PRODUCTION'));
+  }, skip: skip);
+
   for (final path in _fastfiles) {
     final source = File(path).readAsStringSync();
+
+    test('every lane in $path validates its base URL', () {
+      final assignments = RegExp(
+        r'^\s*base_url = (.+)$',
+        multiLine: true,
+      ).allMatches(source).toList();
+      expect(assignments, isNotEmpty);
+      for (final assignment in assignments) {
+        expect(
+          assignment.group(1),
+          startsWith('ReleaseEnvironment.lane_base_url('),
+          reason: assignment.group(0),
+        );
+      }
+      expect(source, isNot(contains('example.com')));
+    });
 
     test('every lane in $path validates its environment', () {
       final assignments = RegExp(

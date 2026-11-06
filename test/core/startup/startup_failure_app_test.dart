@@ -30,6 +30,21 @@ void main() {
       expect(find.textContaining('Nothing has been deleted'), findsOneWidget);
     });
 
+    testWidgets('a configuration refusal points at the build and offers no '
+        'retry', (tester) async {
+      await tester.pumpWidget(
+        StartupFailureApp(
+          error: StartupConfigurationError('BASE_URL is not https'),
+          onRetry: () async {},
+        ),
+      );
+
+      expect(find.textContaining('BASE_URL is not https'), findsOneWidget);
+      expect(find.textContaining('has to be rebuilt'), findsOneWidget);
+      expect(find.textContaining('reinstalling the app'), findsNothing);
+      expect(find.byKey(StartupFailureApp.retryKey), findsNothing);
+    });
+
     testWidgets('offers a retry that calls back', (tester) async {
       var retries = 0;
 
