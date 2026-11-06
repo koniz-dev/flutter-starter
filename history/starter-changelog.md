@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Hooks and tooling from the 2026-11-01 audit.** If you copied any of
+  these, take them again:
+  - `.githooks/commit-msg` reads the subject git commits: it skips leading
+    comment lines (`core.commentString`, then `core.commentChar`) and blank
+    lines, so a `commit.template` no longer gets a valid subject rejected.
+    It also accepts an unedited `git merge --squash` message.
+  - `.githooks/pre-commit` runs `flutter analyze --no-pub` on its export
+    unless a staged `pubspec.yaml` or `pubspec.lock` differs from the working
+    tree. Before, every commit re-resolved dependencies.
+  - `ci.yml` and `strip-smoke.yml` decide their scope with
+    `git diff --no-renames`. A `.dart` file renamed to a `.md` under `docs/`
+    no longer makes a PR count as docs-only.
+  - `scripts/dev/audit_template.sh` falls back to `sha256sum`, and refuses to
+    run when neither hash tool is installed. Before, it reported generated
+    code as matching without hashing anything.
+  - `setup_git_hooks.ps1` warns about hooks left in `.git/hooks`, as the
+    `.sh` does.
+  - The setup brick removes its placeholder from a CRLF checkout.
+
+- **Docs corrections.**
+  - `.env.example`: logging is on in every environment.
+  - The upgrade guide uses `flutter pub add` to raise a constraint.
+  - The onboarding layer diagram points data at domain.
+  - The RASP recipe subscribes to `onThreatDetected` before calling
+    `startProtection()`, so threats raised while it starts reach the listener.
+
 - **`flutter analyze` stays clean on Riverpod 3.5.** Riverpod 3.5.0
   deprecates `ProviderContainer.exists`, and one test
   (`test/core/network/forced_logout_session_test.dart`) called it, so
