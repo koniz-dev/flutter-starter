@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **`flutter analyze` stays clean on Riverpod 3.5.** Riverpod 3.5.0
+  deprecates `ProviderContainer.exists`, and one test
+  (`test/core/network/forced_logout_session_test.dart`) called it, so
+  `flutter pub upgrade` left a tree that failed analyze on the deprecation
+  info. The test now records built providers with a `ProviderObserver`.
+  If you upgraded and hit the warning, take that test file again.
+
 - **The pre-commit hook works in a pub workspace.** With the app as a member
   of a Dart pub workspace (a root `pubspec.yaml` with `workspace:`, the app
   with `resolution: workspace`), the hook refused every commit with
