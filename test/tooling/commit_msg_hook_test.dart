@@ -46,6 +46,23 @@ void main() {
     );
   });
 
+  test('core.commentString sets the comment prefix', () {
+    final repo = Directory('${dir.path}/repo')..createSync();
+    Process.runSync('git', ['init', '-q'], workingDirectory: repo.path);
+    Process.runSync('git', [
+      'config',
+      'core.commentString',
+      ';',
+    ], workingDirectory: repo.path);
+    final file = File('${dir.path}/MSG')
+      ..writeAsStringSync('; Subject: <type>: <summary>\n\nfeat: x\n');
+    final result = Process.runSync('bash', [
+      '${Directory.current.path}/.githooks/commit-msg',
+      file.path,
+    ], workingDirectory: repo.path);
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  });
+
   test('a message of only comments is rejected', () {
     expect(exitFor('# nothing but a comment\n\n'), isNot(0));
   });

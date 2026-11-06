@@ -32,9 +32,16 @@ else
 fi
 
 # Content hashes of every generated file in the working tree, tracked or not.
+# A tracked file deleted from the working tree (removed to regenerate it, or by
+# build_runner -d) is listed by ls-files but has nothing to hash: it is left
+# out, so the comparison reports it rather than the hash tool failing.
 generated_hashes() {
   git ls-files -z --cached --others --exclude-standard -- '*.g.dart' '*.freezed.dart' |
-    sort -z | xargs -0 "${sha256[@]}"
+    sort -z -u |
+    while IFS= read -r -d '' file; do
+      if [ -f "$file" ]; then printf '%s\0' "$file"; fi
+    done |
+    xargs -0 "${sha256[@]}"
 }
 
 echo "==> env asset guard"

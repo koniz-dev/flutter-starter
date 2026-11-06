@@ -49,7 +49,9 @@ void main() {
     '.github/workflows/ci.yml',
     '.github/workflows/strip-smoke.yml',
   ]) {
-    test('$workflow lists both sides of a rename', () {
+    // The sample strip deletes strip-smoke.yml along with itself.
+    final skip = File(workflow).existsSync() ? null : '$workflow was removed';
+    test('$workflow lists both sides of a rename', skip: skip, () {
       final command = _diffCommand(
         workflow,
       ).replaceAll(r'"$range"', 'HEAD~1..HEAD');

@@ -6,7 +6,9 @@ msg_file="${1:?commit-msg hook requires message file path}"
 # The file holds the message before git cleans it up, so its first line can be
 # a `#` comment (a commit.template, or a squash merge's notes) or blank. The
 # subject is the first line that is neither, which is the one git commits.
-comment_char="$(git config --get core.commentChar 2>/dev/null || true)"
+# core.commentString (git 2.45+) takes precedence over core.commentChar.
+comment_char="$(git config --get core.commentString 2>/dev/null ||
+  git config --get core.commentChar 2>/dev/null || true)"
 case "$comment_char" in
   '' | auto) comment_char='#' ;;
 esac
@@ -46,7 +48,8 @@ if ! echo "$commit_msg" | grep -qE "$pattern"; then
   echo "     feat(api)!: drop the v1 endpoints (breaking)"
   echo "     docs(readme): update install steps"
   echo ""
-  echo "   Also accepted: Merge..., Revert \"...\", fixup!/squash!/amend! ..."
+  echo "   Also accepted: Merge..., Revert \"...\", fixup!/squash!/amend! ...,"
+  echo "   Squashed commit of the following: (git merge --squash)"
   echo ""
   echo "   Bypass (rare): git commit --no-verify"
   exit 1

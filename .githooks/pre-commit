@@ -131,11 +131,16 @@ cp -p "$config_dir/.dart_tool/package_config.json" "$staged/$config_prefix.dart_
 if [ -f "$config_dir/.dart_tool/package_graph.json" ]; then
   cp -p "$config_dir/.dart_tool/package_graph.json" "$staged/$config_prefix.dart_tool/"
 fi
-# checkout-index just wrote pubspec.yaml and pubspec.lock, so the copied config
-# (its mtime kept by cp -p) looks older than them, and flutter analyze
-# re-resolves - downloading if the cache is cold - on every commit. The
-# dependencies are the ones resolved in the working tree; mark them current.
-touch "$staged/$config_prefix.dart_tool/"*.json
+# flutter analyze runs pub get first unless told not to, and in this export it
+# always did: checkout-index writes pubspec.yaml after pubspec.lock, and
+# .dart_tool/version is not copied, so the resolution looked stale and every
+# commit re-resolved, downloading on a cold cache. The copied config is the
+# working tree's resolution, which fits the staged content unless a staged
+# pubspec differs from the working tree's; only then does pub resolve.
+pub_flag=--no-pub
+if ! (cd "$top" && git diff --quiet -- ':(glob)**/pubspec.yaml' ':(glob)**/pubspec.lock'); then
+  pub_flag=--pub
+fi
 cd "$staged/$app_prefix"
 
 echo "📝 Checking code formatting (staged content)..."
@@ -147,7 +152,7 @@ if ! "${no_git_env[@]}" dart format --output=none --set-exit-if-changed lib test
 fi
 
 echo "🔍 Running flutter analyze (staged content)..."
-if ! "${no_git_env[@]}" flutter analyze; then
+if ! "${no_git_env[@]}" flutter analyze "$pub_flag"; then
   echo "❌ flutter analyze failed for the staged content."
   exit 1
 fi
