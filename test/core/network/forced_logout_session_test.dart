@@ -187,7 +187,9 @@ void main() {
         // defers reading the notifier to call time, so assembling the client
         // must leave the notifier untouched. If this ever fails, the graph is
         // one refactor away from a CircularDependencyError at boot.
+        final built = _BuiltProviders();
         final container = ProviderContainer(
+          observers: [built],
           overrides: [
             // Same seam wiring `createAppContainer()` applies in production:
             // core declares the 401-refresh ports and the auth slice fills
@@ -204,8 +206,8 @@ void main() {
         container.read(apiClientProvider);
 
         expect(
-          container.exists(authNotifierProvider),
-          isFalse,
+          built.providers,
+          isNot(contains(authNotifierProvider)),
           reason: 'the sink must resolve the notifier lazily, not eagerly',
         );
       },
@@ -299,4 +301,16 @@ void main() {
       expect(storage.values.containsKey(AppConstants.userDataKey), isFalse);
     });
   });
+}
+
+/// Records every provider a container builds.
+///
+/// Stands in for `ProviderContainer.exists`, which Riverpod 3.5 deprecates.
+final class _BuiltProviders extends ProviderObserver {
+  final List<Object> providers = [];
+
+  @override
+  void didAddProvider(ProviderObserverContext context, Object? value) {
+    providers.add(context.provider);
+  }
 }
