@@ -152,7 +152,7 @@ logged in, so it is not part of `flutter test`; the **Action pins** workflow
 
 ## `strip_sample_features.dart`
 
-Removes sample **`tasks`** and **`feature_flags`** modules (and related tests) and **copies rewired sources from `tool/golden/stripped/`** (mirrors `lib/`, `test/`, `integration_test/`). Keeps **auth** and core infrastructure.
+Removes sample **`tasks`** and **`feature_flags`** modules (and related tests) and **copies rewired sources from `tool/golden/<variant>/`**: `stripped/` when both samples go (mirrors files under `lib/` and `integration_test/`), `no_tasks/` or `no_feature_flags/` when only one does (mirror files under `lib/core/routing/`). Keeps **auth** and core infrastructure.
 
 Guards: after file operations the script scans `lib/`, `test/`, `integration_test/`, and `examples/` for leftover imports of the removed modules and exits with code **3** if any remain.
 
@@ -193,7 +193,7 @@ Prose about the Mason bricks uses `strip:bricks` and goes with
 
 ### Golden tree
 
-Edit **`tool/golden/stripped/`** when the stripped baseline should change (e.g. new `AppRoutes`, `main` bootstrap). Mirrored paths include `lib/`, `test/core/routing/` (`app_router_test.dart`, `app_routes_test.dart`), and `integration_test/`. The tree is **excluded from** `flutter analyze` via `analysis_options.yaml` so it does not conflict with the real `lib/`.
+Edit **`tool/golden/<variant>/`** when a stripped baseline should change (e.g. new `AppRoutes`, `main` bootstrap). `stripped/` mirrors files under `lib/` (`lib/core/routing/`, `lib/features/home/`, `lib/main.dart`) and `integration_test/`; `no_tasks/` and `no_feature_flags/` mirror files under `lib/core/routing/` only. Every file in a variant overwrites the same path under the project root. The tree is **excluded from** `flutter analyze` via `analysis_options.yaml` so it does not conflict with the real `lib/`.
 
 CI runs **Strip smoke** (`.github/workflows/strip-smoke.yml`): apply strip on a fresh checkout, then `flutter analyze` and `flutter test`. It runs on its own only in the template repository; in a repository created from the template, run it from the Actions tab when you change the strip tool or its goldens.
 <!-- strip:strip-tool end -->

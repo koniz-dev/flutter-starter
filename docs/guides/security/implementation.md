@@ -650,10 +650,12 @@ Then start protection in `bootstrap()`, right after `final container = createCon
 
 ```dart
 final rasp = container.read(raspServiceProvider);
-await rasp.startProtection();
+// Subscribe first: onThreatDetected is a broadcast stream, so a threat
+// raised while startProtection() runs reaches only existing listeners.
 rasp.onThreatDetected.listen((threat) {
   // Map SecurityThreat (privilegedAccess, emulator, debugger, ...) to policy
 });
+await rasp.startProtection();
 ```
 
 Do **not** build a second `ProviderContainer` for this. `createAppContainer`
