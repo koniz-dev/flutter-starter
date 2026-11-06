@@ -78,8 +78,8 @@ flutter upgrade
 # Update dependencies
 flutter pub upgrade
 
-# Or update to specific version
-flutter pub upgrade flutter_riverpod:^3.0.3
+# Or raise one constraint (pub upgrade never changes pubspec.yaml constraints)
+flutter pub add flutter_riverpod:^3.4.3
 ```
 
 ### Step 5: Run Migration Scripts (if any)
@@ -158,7 +158,7 @@ final counterProvider = NotifierProvider<CounterNotifier, int>(
 1. Replace `StateNotifierProvider` with `NotifierProvider`
 2. Replace `StateNotifier` with `Notifier`
 3. Update `build()` method signature
-4. Replace `ref.read(provider.notifier)` with `ref.read(provider.notifier)`
+4. Leave `ref.read(provider.notifier)` call sites as they are: they work unchanged with `Notifier`
 
 **Script:** none ships; the steps above are manual.
 
@@ -187,26 +187,6 @@ result.when(
 2. Replace `failure:` with `failureCallback:`
 
 **Script:** none ships; the steps above are manual.
-
-### Version 2.1.0 (Hypothetical Future Version)
-
-#### Configuration System Update
-
-**Breaking Change:** `AppConfig` API updated
-
-**Before:**
-```dart
-final baseUrl = AppConfig.get('BASE_URL');
-```
-
-**After:**
-```dart
-final baseUrl = AppConfig.baseUrl;
-```
-
-**Migration Steps:**
-1. Replace `AppConfig.get('KEY')` with typed getters
-2. Update all configuration access points
 
 ## Migration Scripts
 
