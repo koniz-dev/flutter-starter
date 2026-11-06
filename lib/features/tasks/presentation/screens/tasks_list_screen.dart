@@ -203,8 +203,9 @@ class TasksListScreen extends ConsumerWidget {
     // tap aimed at the disabled checkbox does not fall through to the tile.
     final isPending = state.pendingTaskIds.contains(task.id);
     final colors = Theme.of(context).colorScheme;
-    // onSurfaceVariant, not Colors.grey: grey is 2.68:1 on white, below
-    // WCAG AA; the contrast suite holds the theme token to 4.5:1.
+    // onSurfaceVariant (the theme's secondary text), not Colors.grey: grey is
+    // 2.68:1 on white, below WCAG AA; the contrast suite holds the token to
+    // 4.5:1.
     final completedStyle = TextStyle(
       decoration: TextDecoration.lineThrough,
       color: colors.onSurfaceVariant,

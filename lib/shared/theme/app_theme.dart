@@ -27,6 +27,9 @@ class AppTheme {
         // 3.29:1, below AA for normal text.
         onSecondary: _tokens.textOnPrimary,
         onSurface: _tokens.textPrimary,
+        // Secondary text (a completed task, a date). Unset, it fell back to
+        // onSurface, so secondary text looked the same as primary text.
+        onSurfaceVariant: _tokens.textSecondary,
         onError: _tokens.textOnPrimary,
       ),
       scaffoldBackgroundColor: _tokens.background,
@@ -89,6 +92,7 @@ class AppTheme {
         // Set from tokens rather than inheriting the Material dark baseline,
         // which knows nothing about this palette.
         onSurface: _tokens.textOnPrimary,
+        onSurfaceVariant: _tokens.textSecondaryOnDark,
         onError: _darkBackground,
       ),
       scaffoldBackgroundColor: _darkBackground,

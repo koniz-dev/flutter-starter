@@ -68,6 +68,9 @@ void main() {
       '"https://api.example.com"',
       '"https://api-staging.example.com/"',
       '"https://user:pw@EXAMPLE.com"',
+      '"https://api.example.com./v1"',
+      '"api.acme.io"',
+      '"//api.acme.io"',
     ]) {
       expect(check(value), startsWith('refused: '), reason: value);
     }

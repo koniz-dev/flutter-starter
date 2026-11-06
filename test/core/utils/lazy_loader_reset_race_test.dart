@@ -69,4 +69,60 @@ void main() {
     await Future.wait([second, third]);
     expect(loader.isLoaded, isTrue);
   });
+
+  test('LazyInitializer: a stale get failing after reset leaves the newer '
+      'initialization shared', () async {
+    final pending = <Completer<String>>[];
+    final initializer = LazyInitializer<String>(
+      initializer: () {
+        final completer = Completer<String>();
+        pending.add(completer);
+        return completer.future;
+      },
+    );
+
+    final first = initializer.get();
+    await pumpEventQueue();
+    initializer.reset();
+    final second = initializer.get();
+    await pumpEventQueue();
+
+    pending[0].completeError(StateError('stale'));
+    await expectLater(first, throwsStateError);
+    final third = initializer.get();
+    await pumpEventQueue();
+    expect(pending, hasLength(2), reason: 'third joins the pending call');
+
+    pending[1].complete('new');
+    expect(await second, 'new');
+    expect(await third, 'new');
+  });
+
+  test('DeferredImportLoader: a stale load failing after reset leaves the '
+      'newer load shared', () async {
+    final pending = <Completer<void>>[];
+    final loader = DeferredImportLoader(
+      loadFunction: () {
+        final completer = Completer<void>();
+        pending.add(completer);
+        return completer.future;
+      },
+    );
+
+    final first = loader.load();
+    await pumpEventQueue();
+    loader.reset();
+    final second = loader.load();
+    await pumpEventQueue();
+
+    pending[0].completeError(StateError('stale'));
+    await expectLater(first, throwsStateError);
+    final third = loader.load();
+    await pumpEventQueue();
+    expect(pending, hasLength(2), reason: 'third joins the pending load');
+
+    pending[1].complete();
+    await Future.wait([second, third]);
+    expect(loader.isLoaded, isTrue);
+  });
 }

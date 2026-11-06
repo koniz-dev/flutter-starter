@@ -36,7 +36,13 @@ module ReleaseEnvironment
     if url.empty?
       raise ArgumentError, "No API base URL: pass base_url:<url> or set #{source}."
     end
-    host = url[%r{\A[a-z][a-z0-9+.-]*://(?:[^@/]*@)?([^/:?#]+)}i, 1].to_s.downcase
+    host = url[%r{\A[a-z][a-z0-9+.-]*://(?:[^@/]*@)?([^/:?#]+)}i, 1]
+    if host.nil?
+      raise ArgumentError, "base_url #{url} is not an absolute URL " \
+                           "(https://host/...)."
+    end
+    # A trailing dot names the same host (api.example.com.).
+    host = host.downcase.chomp('.')
     if host == 'example.com' || host.end_with?('.example.com')
       raise ArgumentError, "base_url #{url} is the starter's placeholder " \
                            "host. Pass base_url:<url> or set #{source} to " \

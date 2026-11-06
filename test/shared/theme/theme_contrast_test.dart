@@ -153,7 +153,14 @@ void main() {
       'onSurfaceVariant on surface',
       light.colorScheme.onSurfaceVariant,
       light.colorScheme.surface,
-      ratio: 15.43,
+      ratio: 6.21,
+    ),
+    // A text field's label and hint sit on the page background.
+    _Pair(
+      'onSurfaceVariant on background',
+      light.colorScheme.onSurfaceVariant,
+      light.scaffoldBackgroundColor,
+      ratio: 5.89,
     ),
     // A popup menu's surface, where the tasks sample shows Delete in error.
     _Pair(
@@ -268,7 +275,14 @@ void main() {
       'onSurfaceVariant on surface',
       dark.colorScheme.onSurfaceVariant,
       dark.colorScheme.surface,
-      ratio: 16.67,
+      ratio: 8.03,
+    ),
+    // A text field's label and hint sit on the page background.
+    _Pair(
+      'onSurfaceVariant on background',
+      dark.colorScheme.onSurfaceVariant,
+      dark.scaffoldBackgroundColor,
+      ratio: 9.03,
     ),
     // A popup menu's surface, where the tasks sample shows Delete in error.
     _Pair(
