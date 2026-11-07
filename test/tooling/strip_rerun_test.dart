@@ -28,8 +28,22 @@ Directory _copyOfHead() {
   final unpacked = Process.runSync('tar', ['-xf', archive, '-C', root.path]);
   expect(unpacked.exitCode, 0, reason: '${unpacked.stderr}');
   File(archive).deleteSync();
-  File('${root.path}/tool/strip_sample_features.dart').writeAsBytesSync(
-    File('tool/strip_sample_features.dart').readAsBytesSync(),
+  // Keep deletion-target cases meaningful after an adopter has committed a
+  // bricks-only strip: their HEAD no longer contains the original bricks.
+  final brickReadme = File('${root.path}/bricks/README.md');
+  if (!brickReadme.existsSync()) {
+    brickReadme.parent.createSync(recursive: true);
+    brickReadme.writeAsStringSync('Fixture brick\n');
+  }
+  // A setup rename can change the working tree without changing HEAD. Keep
+  // the current tool under test, but use the archived fixture's package name.
+  final currentPackage = _packageName(Directory.current);
+  final fixturePackage = _packageName(root);
+  File('${root.path}/tool/strip_sample_features.dart').writeAsStringSync(
+    File('tool/strip_sample_features.dart').readAsStringSync().replaceAll(
+      'package:$currentPackage/',
+      'package:$fixturePackage/',
+    ),
   );
   final init = Process.runSync('git', [
     'init',
@@ -66,6 +80,14 @@ ProcessResult _strip(Directory cwd, Directory root, List<String> args) =>
 
 String _out(ProcessResult r) => 'exit ${r.exitCode}\n${r.stdout}${r.stderr}';
 
+String _packageName(Directory root) {
+  final pubspec = File('${root.path}/pubspec.yaml').readAsStringSync();
+  return RegExp(
+    r'^name:\s*(\S+)\s*$',
+    multiLine: true,
+  ).firstMatch(pubspec)!.group(1)!;
+}
+
 /// A Dart file importing the tasks sample. Built from parts so this file,
 /// which the strip scans too, never holds the import path itself.
 ///
@@ -74,11 +96,7 @@ String _out(ProcessResult r) => 'exit ${r.exitCode}\n${r.stdout}${r.stderr}';
 /// while [_copyOfHead] still holds the committed, unrenamed one, and an
 /// import of a package the copy does not have is not a sample reference.
 String _importsTasks(Directory root) {
-  final pubspec = File('${root.path}/pubspec.yaml').readAsStringSync();
-  final name = RegExp(
-    r'^name:\s*(\S+)\s*$',
-    multiLine: true,
-  ).firstMatch(pubspec)!.group(1);
+  final name = _packageName(root);
   return [
     "import 'package:$name/features/",
     "tasks/domain/entities/task.dart';\n",
