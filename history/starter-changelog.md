@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Release lanes choose API URLs by environment.** Android and iOS lanes now select `BASE_URL_STAGING` or `BASE_URL_PRODUCTION` from the resolved `environment:`, regardless of lane name. An explicit `base_url:` still wins.
+
 - **Uncaught error reports redact URL credentials.** Framework image errors and platform errors now remove URL userinfo and sensitive query values before file logging and crash reporting, including secrets following valid URL apostrophes. Ordinary errors and stack traces are preserved.
 
 - **Code findings from the 2026-11-01 audit.**
