@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Sample stripping protects uncommitted work.** Both strip modes refuse dirty or unverifiable Git trees and edited overwrite targets, including hidden index changes. `--force` is an explicit override. Run stripping before customization: committed edits can still be replaced by golden files.
+
 - **Optional GraphQL template uses configured pinning and memory-only caching.** The native example refuses insecure release endpoints and misconfigured pins, clears its session cache and closes its transport on disposal. Documentation explicitly requires browser adaptation and application-provided refresh/replay/logout handling.
 
 - **Git hook setup warns about shadowed same-name hooks.** Both setup scripts now name every old hook that will stop running, including Git LFS pre-push, and advise merging or chaining its commands without overwriting tracked hooks.
