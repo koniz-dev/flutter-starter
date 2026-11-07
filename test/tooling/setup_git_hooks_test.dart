@@ -184,6 +184,9 @@ void main() {
     expect(ps1, contains('git config --local --unset core.hooksPath'));
     expect(ps1, contains(r"$localPath -ne '.githooks'"));
     expect(ps1, contains(r'git config --local core.hooksPath $localPath'));
+    expect(ps1, isNot(contains("if (Test-Path (Join-Path '.githooks'")));
+    expect(ps1, contains('Merge or chain their commands'));
+    expect(ps1, contains('do not overwrite those hooks'));
   });
 
   test('running it twice succeeds both times', () {
@@ -213,7 +216,12 @@ void main() {
       'running', () {
     final hooks = Directory('${root.path}/repo/.git/hooks')
       ..createSync(recursive: true);
-    for (final name in ['post-checkout', 'pre-commit', 'pre-rebase.sample']) {
+    for (final name in [
+      'post-checkout',
+      'pre-commit',
+      'pre-push',
+      'pre-rebase.sample',
+    ]) {
       final hook = File('${hooks.path}/$name')
         ..writeAsStringSync('#!/usr/bin/env bash\nexit 0\n');
       Process.runSync('chmod', ['+x', hook.path]);
@@ -224,15 +232,16 @@ void main() {
     expect(result.exitCode, 0, reason: '${result.stderr}');
     final out = '${result.stdout}';
     expect(out, contains('no longer run'));
-    // Only post-checkout: .githooks/ has a pre-commit, and a sample never
-    // runs anyway.
+    // Same-named hooks are shadowed too; samples never run.
     final listed = out
         .split('\n')
         .firstWhere((line) => line.contains('instead: '))
         .split('instead: ')
         .last
         .trim();
-    expect(listed, 'post-checkout');
+    expect(listed, 'post-checkout pre-commit pre-push');
+    expect(out, contains('Merge or chain their commands'));
+    expect(out, contains('do not overwrite those hooks'));
   });
 
   test('says nothing about hooks when there are none to lose', () {

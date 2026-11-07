@@ -36,15 +36,14 @@ if ($localPath -and $localPath -ne $hooksPath -and $localPath -ne '.githooks') {
 $globalPath = git config --global --get core.hooksPath
 
 # Hooks already in the repository's own hooks directory stop running once
-# core.hooksPath points elsewhere. Name the ones .githooks/ does not replace,
-# so nobody loses a post-checkout or pre-rebase hook without knowing. Windows
+# core.hooksPath points elsewhere, including matching names in .githooks/.
+# Name them so custom commands (such as Git LFS) are not lost silently. Windows
 # has no executable bit, so every file other than a *.sample counts.
 $commonHooks = Join-Path (git rev-parse --git-common-dir) 'hooks'
 $orphaned = @()
 if (Test-Path $commonHooks -PathType Container) {
     foreach ($hook in Get-ChildItem -LiteralPath $commonHooks -File) {
         if ($hook.Name -like '*.sample') { continue }
-        if (Test-Path (Join-Path '.githooks' $hook.Name)) { continue }
         $orphaned += $hook.Name
     }
 }
@@ -71,7 +70,7 @@ if ($globalPath) {
 if ($orphaned.Count -gt 0) {
     Write-Host "[Warning] These hooks in $commonHooks will no longer run, because" -ForegroundColor Yellow
     Write-Host "          git now reads .githooks/ instead: $($orphaned -join ' ')"
-    Write-Host "          Move them into .githooks/ (or call them from there) to keep them."
+    Write-Host "          Merge or chain their commands from .githooks/; do not overwrite those hooks."
 }
 Write-Host "  - pre-commit: Format check + code analysis"
 Write-Host "  - commit-msg: Conventional Commits validation"

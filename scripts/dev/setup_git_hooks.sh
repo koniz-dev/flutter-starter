@@ -45,8 +45,8 @@ fi
 global_path="$(git config --global --get core.hooksPath || true)"
 
 # Hooks already in the repository's own hooks directory stop running once
-# core.hooksPath points elsewhere. Name the ones .githooks/ does not replace,
-# so nobody loses a post-checkout or pre-rebase hook without knowing.
+# core.hooksPath points elsewhere, including hooks with matching names in
+# .githooks/. Name them so custom commands (such as Git LFS) are not lost silently.
 common_hooks="$(git rev-parse --git-common-dir)/hooks"
 orphaned=()
 if [ -d "$common_hooks" ]; then
@@ -54,7 +54,6 @@ if [ -d "$common_hooks" ]; then
     [ -f "$hook" ] && [ -x "$hook" ] || continue
     name="$(basename "$hook")"
     case "$name" in *.sample) continue ;; esac
-    [ -e ".githooks/$name" ] && continue
     orphaned+=("$name")
   done
 fi
@@ -83,7 +82,7 @@ fi
 if [ "${#orphaned[@]}" -gt 0 ]; then
   echo "⚠️  These hooks in $common_hooks will no longer run, because"
   echo "   git now reads .githooks/ instead: ${orphaned[*]}"
-  echo "   Move them into .githooks/ (or call them from there) to keep them."
+  echo "   Merge or chain their commands from .githooks/; do not overwrite those hooks."
 fi
 echo "   pre-commit  → dart format (scoped) + flutter analyze"
 echo "   commit-msg  → Conventional Commits"
