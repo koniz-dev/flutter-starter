@@ -37,6 +37,7 @@ void main() {
     '--packages=$_packages',
     tool,
     '--apply',
+    '--force',
     '--keep-samples',
     if (removeBricks) '--remove-bricks',
   ], workingDirectory: fixture.path);
