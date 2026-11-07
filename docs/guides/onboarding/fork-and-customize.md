@@ -150,6 +150,15 @@ yours, so delete that workflow or leave it. The `welcome` string in each `lib/l1
 
 Removing **`tasks`** and **`feature_flags`** gives a smaller tree while keeping **`auth`** and core infrastructure.
 
+Run this before customizing routes, entrypoints or home: the tool replaces
+selected files with golden versions. Even committed customizations in those
+files can be replaced; a clean commit gives you a recovery point. Review and
+commit or stash existing edits first. The tool refuses a dirty Git tree and
+modified overwrite targets before deleting anything. `--force` explicitly
+bypasses that check and can discard your work. A Git repository with a committed
+baseline is required unless you use `--force`.
+
+
 - **With Mason:** set `include_tasks_sample` and/or `include_feature_flags_sample` to `false` when running `mason make flutter_starter_setup`.
 - **Without Mason:** from repo root:
 

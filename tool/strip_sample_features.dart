@@ -11,6 +11,7 @@
 // with the documentation that links into them. --keep-samples removes neither
 // sample, so with --remove-bricks it drops only the Mason bricks.
 //
+// Use --force only to intentionally bypass the clean-tree safety check.
 // Then:
 //   flutter pub get && flutter analyze && flutter test
 //
@@ -140,6 +141,7 @@ const _markdownWalkSkips = <String>{
 /// the setup brick's spellings of the two remove flags.
 const _knownFlags = <String>{
   '--apply',
+  '--force',
   '--remove-tasks',
   '--remove-feature-flags',
   '--tasks-only',
@@ -150,14 +152,15 @@ const _knownFlags = <String>{
 
 const _usage =
     'Usage: dart run tool/strip_sample_features.dart --apply '
-    '[--remove-tasks] [--remove-feature-flags] [--remove-bricks]\n'
+    '[--remove-tasks] [--remove-feature-flags] [--remove-bricks] [--force]\n'
     '       dart run tool/strip_sample_features.dart --apply --keep-samples '
-    '[--remove-bricks]\n'
+    '[--remove-bricks] [--force]\n'
     'Removes lib/features/tasks, lib/features/feature_flags and related '
     'tests. Rewires entrypoints from '
     'tool/golden/<variant>/. Keeps auth sample. --keep-samples removes '
     'neither sample. --remove-bricks also deletes bricks/ and mason.yaml, '
-    'and the docs that link into them.';
+    'and the docs that link into them. Refuses uncommitted changes; '
+    '--force explicitly bypasses the Git safety check.';
 
 void main(List<String> args) {
   if (args.contains('--help') || args.contains('-h')) {
@@ -240,6 +243,9 @@ void main(List<String> args) {
       );
       return;
     }
+    if (!_checkWorkingTree(root, const [], force: args.contains('--force'))) {
+      return;
+    }
     _removeBricks(root);
     _stripMarkdownRegions(root, const [_bricksTag]);
     stdout.writeln(
@@ -291,6 +297,10 @@ void main(List<String> args) {
       '${markerProblems.join('\n')}',
     );
     exitCode = 2;
+    return;
+  }
+
+  if (!_checkWorkingTree(root, overrides, force: args.contains('--force'))) {
     return;
   }
 
@@ -837,4 +847,71 @@ List<String> _withoutIgnored(Directory repoRoot, List<String> violations) {
     );
   }
   return kept;
+}
+
+// Status catches staged, unstaged and untracked files. Explicit normalized
+// blob comparisons also catch edited overwrite targets hidden from status by
+// assume-unchanged/skip-worktree, without flagging clean Windows CRLF files.
+bool _checkWorkingTree(
+  Directory root,
+  List<String> overwritten, {
+  required bool force,
+}) {
+  if (force) return true;
+  ProcessResult git(List<String> args) {
+    final result = Process.runSync('git', args, workingDirectory: root.path);
+    if (result.exitCode != 0) {
+      throw ProcessException('git', args, '${result.stderr}', result.exitCode);
+    }
+    return result;
+  }
+
+  try {
+    git(['rev-parse', '--verify', 'HEAD']);
+    final prefix = '${git(['rev-parse', '--show-prefix']).stdout}'.trimRight();
+    final status =
+        '${git([
+              'status',
+              '--porcelain',
+              '--untracked-files=normal',
+            ]).stdout}'
+            .trimRight();
+    final changes = <String>[if (status.isNotEmpty) status];
+    for (final relative in overwritten) {
+      final file = File(p.join(root.path, relative));
+      if (!file.existsSync()) {
+        changes.add('$relative (overwrite target missing)');
+        continue;
+      }
+      final path = '$prefix$relative';
+      final committed = '${git(['rev-parse', '--verify', 'HEAD:$path']).stdout}'
+          .trim();
+      final working =
+          '${git([
+                'hash-object',
+                '--path=$relative',
+                file.absolute.path,
+              ]).stdout}'
+              .trim();
+      if (committed != working) {
+        changes.add('$relative (modified overwrite target)');
+      }
+    }
+    if (changes.isEmpty) return true;
+    stderr.writeln(
+      'Refusing to strip an edited working tree. '
+      'Nothing was deleted:\n${changes.join('\n')}',
+    );
+  } on ProcessException catch (error) {
+    stderr.writeln(
+      'Cannot verify the Git working tree or committed baseline. '
+      'Nothing was deleted: ${error.message}',
+    );
+  }
+  stderr.writeln(
+    'Commit or stash your changes first. Use --force only if '
+    'you intentionally accept overwriting or deleting them.',
+  );
+  exitCode = 2;
+  return false;
 }

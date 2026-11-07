@@ -60,7 +60,7 @@ jobs:
           # Renamed first, then stripped: the golden files are renamed with the
           # tree but keep the import order sorted for flutter_starter.
           - variant: renamed-both
-            flags: ''
+            flags: '--force'
           # Both samples kept; the bricks
           # step below then drops the Mason bricks.
           - variant: keep-samples
@@ -245,7 +245,7 @@ jobs:
           test -d lib/features/tasks && test -d lib/features/feature_flags
           ./scripts/dev/create_feature.sh profile
           git add lib/features/profile test/features/profile
-          dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks
+          dart run tool/strip_sample_features.dart --apply --keep-samples --remove-bricks --force
           # No `| head` here: under pipefail its early exit SIGPIPEs the
           # writer and fails the step with exit 141.
           printf 'features: %s\n' "$(cd lib/features && echo *)"

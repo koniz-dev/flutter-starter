@@ -291,7 +291,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          dart run tool/strip_sample_features.dart --apply
+          dart run tool/strip_sample_features.dart --apply --force
           grep -n "title: 'Acme Shop'," lib/main.dart
           if grep -rn "'Flutter Starter'" lib test --include='*.dart'; then
             echo "the strip put the template title back" >&2

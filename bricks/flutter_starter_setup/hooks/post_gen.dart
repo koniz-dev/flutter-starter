@@ -24,6 +24,8 @@ Future<void> run(HookContext context) async {
   final shouldStripFeatureFlagsOnly =
       !strip && includeTasks && !includeFeatureFlags;
 
+  await removeHookPlaceholder(rootPath, logger);
+
   if (shouldStripAll || shouldStripTasksOnly || shouldStripFeatureFlagsOnly) {
     logger.info('Running strip_sample_features...');
     final stripArgs = <String>[
@@ -68,7 +70,6 @@ Future<void> run(HookContext context) async {
   // localizations in place. Without it the tree analyzed clean before the
   // rename and red after it.
   await _repairRenamedSources(rootPath, logger);
-  await removeHookPlaceholder(rootPath, logger);
 
   logger.alert('Setup complete. Next: flutter analyze && flutter test');
 }
