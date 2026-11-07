@@ -200,13 +200,10 @@ and its tests - since it cannot run twice; `--keep-samples` keeps it.
 
 ## 4. Remove auth sample (advanced)
 
-There is no one-click script for removing `auth` (router redirects, DI, and tests are tightly coupled). If you drop auth:
-
-- Rewrite `goRouterProvider` redirect rules in `lib/core/routing/app_router.dart`.
-- Remove `lib/features/auth` (its providers live in `lib/features/auth/di/` and go with it), `buildAuthRoutes` in `lib/core/routing/routes_registry.dart`, and auth tests.
-- Update `main.dart`: drop `authModuleOverrides`, and any storage or init that only served auth.
-
-Use [contracts-map.md](../../architecture/contracts-map.md) to keep `ITokenStore` / `IKeyValueStore` if you still need tokens for APIs.
+Follow the canonical [Remove Authentication Feature procedure](../migration/customization-guide.md#remove-authentication-feature).
+It covers the session notifier, composition-root restoration, sign-out binding
+or action removal, shared test helpers, and documentation consumers. Deleting
+only the feature and its tests leaves live dependencies behind.
 
 ## 5. Entry documentation
 

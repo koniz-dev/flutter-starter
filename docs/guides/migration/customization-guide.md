@@ -28,23 +28,60 @@ ls lib/core/
 
 #### Remove Authentication Feature
 
-If you don't need authentication:
+There is no auth strip flag. Use this procedure whether you are making an
+anonymous app or replacing the sample with another authentication system:
 
-There is no strip flag for auth: the router guard, the composition root and
-the route tree all reference it. Deleting the directory breaks exactly these
-files, so update them in the same change:
+1. In `lib/core/routing/routes_registry.dart`, remove the auth routing import
+   and `buildAuthRoutes(ref)`. Replace `AuthSessionStatusNotifier` as the factory
+   for `sessionStatusProvider` with your own `Notifier<SessionStatus>`.
+   For an anonymous app its `build()` returns `SessionStatus.signedIn`.
+   Keep the notifier-provider contract; a plain `Provider` returning a status
+   is not a replacement. The redirect in `app_router.dart` already reads this
+   core session seam and imports no auth feature, so it needs no auth-import
+   removal or redirect rewrite.
+2. In `lib/main.dart`, remove the two auth imports, the
+   `...authModuleOverrides` composition-root binding, and the bootstrap await
+   of `sessionRestorationProvider.future`. Keep storage, localization,
+   logging and startup handling still used by the rest of your app. If keeping
+   authenticated REST calls with a replacement auth system, supply its own
+   restoration and the `tokenRefresherProvider` /
+   `sessionTerminationSinkProvider` bindings used by the core interceptor.
+3. Handle the home sign-out action explicitly. A replacement auth system
+   binds `signOutProvider.overrideWith(...)` to its own logout operation at
+   the composition root. An anonymous app removes the sign-out app-bar action
+   in `lib/features/home/presentation/screens/home_screen.dart` and adapts
+   the related tests. Core's default `signOutProvider` throws `StateError`;
+   leaving the action after removing its binding causes an unhandled error.
+4. Remove the sample implementation and its feature tests:
 
-```bash
-rm -rf lib/features/auth test/features/auth
-```
+   ```bash
+   rm -rf lib/features/auth test/features/auth
+   ```
 
-- `lib/core/routing/routes_registry.dart` - drop `buildAuthRoutes`, and
-  point `sessionStatusProvider` at your own sign-in state (or return
-  `SessionStatus.signedIn` to turn the login redirect off).
-- `lib/main.dart` - drop `authModuleOverrides` and the session-restore wiring.
+5. Adapt or remove shared consumers, not just the feature test directory:
+   `test/helpers/signed_in_app.dart`, `test/helpers/mock_factories.dart`,
+   `test/helpers/test_fixtures.dart` and its `helpers_test.dart` consumers,
+   `test/acceptance/acceptance_helpers.dart`, and the demo import in
+   `test/flutter_test_config.dart`. Review auth-dependent acceptance,
+   core/session, startup, network, home/tasks/feature-flags routing and session,
+   and login-theme tests too. Replace their auth-specific setup with your new
+   session implementation, or remove tests for behavior your app removed.
+6. Find remaining imports, provider wiring and documentation references:
 
-Auth's providers live in `lib/features/auth/di/auth_providers.dart` and go with
-the directory; `lib/core/di/providers.dart` holds no feature providers.
+   ```bash
+   rg -n 'features/auth/|authModuleOverrides|authProvider|sessionRestorationProvider' lib test integration_test docs
+   ```
+
+   Some consumers read source files rather than importing them:
+   `test/docs/auth_providers_quotes_test.dart` reads the deleted provider
+   file, and documentation symbol directives point into auth sources.
+   Remove or adapt those tests, auth API guides, source directives, quotations
+   and inbound links. Documentation describing the removal itself can remain.
+7. Run `flutter analyze`, `flutter test`, and `dart run tool/check_docs.dart`.
+   Resolve remaining references before treating the removal as complete.
+
+If your replacement still needs API credentials, keep the core token/storage
+contracts it uses; see [Contracts and adapter map](../../architecture/contracts-map.md).
 
 #### Remove Feature Flags
 
