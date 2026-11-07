@@ -1,0 +1,42 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 597 files (0 changed) in 2.24 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.5s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart
+00:00 +0: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: build failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   _ThrowsInBuild.build (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:35:41)
+│ #1   StatelessElement.build (package:flutter/src/widgets/framework.dart:5902:49)
+│ #2   ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5830:15)
+│ #3   Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+│ #4   ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5812:5)
+│ #5   ComponentElement.mount (package:flutter/src/widgets/framework.dart:5806:5)
+│ #6   Element.inflateWidget (package:flutter/src/widgets/framework.dart:4600:20)
+│ #7   Element.updateChild (package:flutter/src/widgets/framework.dart:4066:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"widgets library","silent":false}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +1: an async error that escaped every zone is reported once, with its stack, and marked handled
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: async failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:93:30)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +2: uncaught image and platform URL secrets are absent from reporter and file log
+00:00 +3: the returned callback restores the previous handlers
+00:00 +4: All tests passed!
