@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/widgets/optimized_image.dart';
@@ -77,6 +78,8 @@ final Uint8List _kTestPng = Uint8List.fromList(<int>[
   0x82,
 ]);
 
+Uint8List _responsePng = _kTestPng;
+
 class _TestHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -108,7 +111,7 @@ class _TestHttpClientRequest implements HttpClientRequest {
     final shouldFail = _url.host.contains('invalid-url-that-will-fail.com');
     return _TestHttpClientResponse(
       statusCode: shouldFail ? HttpStatus.notFound : HttpStatus.ok,
-      body: shouldFail ? Uint8List(0) : _kTestPng,
+      body: shouldFail ? Uint8List(0) : _responsePng,
     );
   }
 
@@ -169,6 +172,7 @@ void main() {
   // real path.
   late List<String> preloaded;
   setUp(() {
+    _responsePng = _kTestPng;
     preloaded = <String>[];
     OptimizedImage.debugPreloader = (url, {context}) async {
       preloaded.add(url);
@@ -176,6 +180,57 @@ void main() {
     };
   });
   tearDown(() => OptimizedImage.debugPreloader = null);
+
+  for (final bothDimensions in [true, false]) {
+    testWidgets('400x200 decode keeps aspect ratio with '
+        '${bothDimensions ? 'both dimensions' : 'width only'}', (tester) async {
+      _responsePng = (await tester.runAsync(() async {
+        final recorder = ui.PictureRecorder();
+        ui.Canvas(recorder).drawRect(
+          const ui.Rect.fromLTWH(0, 0, 400, 200),
+          ui.Paint()..color = Colors.blue,
+        );
+        final picture = recorder.endRecording();
+        final image = await picture.toImage(400, 200);
+        final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+        image.dispose();
+        picture.dispose();
+        return bytes!.buffer.asUint8List();
+      }))!;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: OptimizedImage(
+              imageUrl: 'https://example.com/wide-$bothDimensions.png',
+              width: 100,
+              height: bothDimensions ? 100 : null,
+            ),
+          ),
+        ),
+      );
+      final provider = tester.widget<Image>(find.byType(Image)).image;
+      final decoded = await tester.runAsync(() async {
+        final result = Completer<ImageInfo>();
+        final stream = provider.resolve(ImageConfiguration.empty);
+        final listener = ImageStreamListener(
+          (image, synchronousCall) => result.complete(image.clone()),
+          onError: result.completeError,
+        );
+        stream.addListener(listener);
+        try {
+          return await result.future.timeout(const Duration(seconds: 5));
+        } finally {
+          stream.removeListener(listener);
+        }
+      });
+      expect(decoded, isNotNull);
+      addTearDown(decoded!.dispose);
+      expect(decoded.image.width, 100);
+      expect(decoded.image.height, 50);
+    });
+  }
 
   group('OptimizedImage', () {
     testWidgets('should display image with URL', (tester) async {

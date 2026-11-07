@@ -115,8 +115,18 @@ class _OptimizedImageState extends State<OptimizedImage> {
     // `devicePixelRatio` times too small - visibly blurry on any modern phone.
     final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    return Image.network(
-      widget.imageUrl,
+    final cacheWidth = _physicalPixels(widget.width, devicePixelRatio);
+    final cacheHeight = _physicalPixels(widget.height, devicePixelRatio);
+    final networkImage = NetworkImage(widget.imageUrl);
+    return Image(
+      image: cacheWidth == null && cacheHeight == null
+          ? networkImage
+          : ResizeImage(
+              networkImage,
+              width: cacheWidth,
+              height: cacheHeight,
+              policy: ResizeImagePolicy.fit,
+            ),
       width: widget.width,
       height: widget.height,
       fit: widget.fit,
@@ -143,8 +153,6 @@ class _OptimizedImageState extends State<OptimizedImage> {
               color: Theme.of(context).colorScheme.error,
             );
       },
-      cacheWidth: _physicalPixels(widget.width, devicePixelRatio),
-      cacheHeight: _physicalPixels(widget.height, devicePixelRatio),
     );
   }
 
