@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **OptimizedListView renders returned pages.** The widget now appends the items returned by `onLoadMore` and honours its `hasMore`. Equal input rebuilds preserve pages; changed input resets pagination and ignores stale requests.
+
 - **Release lanes choose API URLs by environment.** Android and iOS lanes now select `BASE_URL_STAGING` or `BASE_URL_PRODUCTION` from the resolved `environment:`, regardless of lane name. An explicit `base_url:` still wins.
 
 - **Uncaught error reports redact URL credentials.** Framework image errors and platform errors now remove URL userinfo and sensitive query values before file logging and crash reporting, including secrets following valid URL apostrophes. Ordinary errors and stack traces are preserved.
