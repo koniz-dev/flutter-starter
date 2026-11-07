@@ -1,0 +1,21 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 598 files (0 changed) in 2.00 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 7.3s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with a global core.hooksPath, the hooks still run afterwards
+00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/shellcheck_test.dart: shellcheck -S warning passes on scripts/ and .githooks/
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: a repository-local core.hooksPath elsewhere is not overwritten
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: with the app in a subdirectory of a larger repository, hooks run
+00:03 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: a failed verification puts the previous core.hooksPath back
+00:04 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: the PowerShell twin prefixes the path and restores on failure
+00:04 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: running it twice succeeds both times
+00:06 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: inside a linked worktree it installs, and hooks run there
+00:07 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: names a hook in the repository's hooks directory that will stop running
+00:08 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_git_hooks_test.dart: says nothing about hooks when there are none to lose
+00:08 +10: All tests passed!

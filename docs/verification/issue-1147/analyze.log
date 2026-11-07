@@ -1,0 +1,11 @@
+$ flutter analyze
+
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+│ To update to the latest version, run "flutter upgrade". │
+└─────────────────────────────────────────────────────────┘
+Analyzing flutter-starter...                                    
+No issues found! (ran in 19.5s)
+exit: 0

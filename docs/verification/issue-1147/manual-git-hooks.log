@@ -1,0 +1,57 @@
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* codex/warn-shadowed-git-hooks Git hooks koniz-dev/flutter-starter#1158 · 42394873509
+Triggered via workflow_dispatch about 1 minute ago
+
+JOBS
+* pre-commit hook in a fresh clone (ID 128469985913)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  * Run the pre-commit hook tests
+  * Post Setup Flutter
+  * Post Checkout code
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* codex/warn-shadowed-git-hooks Git hooks koniz-dev/flutter-starter#1158 · 42394873509
+Triggered via workflow_dispatch about 1 minute ago
+
+JOBS
+* pre-commit hook in a fresh clone (ID 128469985913)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  * Run the pre-commit hook tests
+  * Post Setup Flutter
+  * Post Checkout code
+Refreshing run status every 30 seconds. Press Ctrl+C to quit.
+
+* codex/warn-shadowed-git-hooks Git hooks koniz-dev/flutter-starter#1158 · 42394873509
+Triggered via workflow_dispatch about 2 minutes ago
+
+JOBS
+* pre-commit hook in a fresh clone (ID 128469985913)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  ✓ Run the pre-commit hook tests
+  ✓ Post Setup Flutter
+  ✓ Post Checkout code
+  ✓ Complete job
+✓ codex/warn-shadowed-git-hooks Git hooks koniz-dev/flutter-starter#1158 · 42394873509
+Triggered via workflow_dispatch about 2 minutes ago
+
+JOBS
+✓ pre-commit hook in a fresh clone in 2m4s (ID 128469985913)
+  ✓ Set up job
+  ✓ Checkout code
+  ✓ Setup Flutter
+  ✓ Run the pre-commit hook tests
+  ✓ Post Setup Flutter
+  ✓ Post Checkout code
+  ✓ Complete job
+
+ANNOTATIONS
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+pre-commit hook in a fresh clone: .github#1
+
