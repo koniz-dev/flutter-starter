@@ -181,17 +181,40 @@ void main() {
   });
   tearDown(() => OptimizedImage.debugPreloader = null);
 
-  for (final bothDimensions in [true, false]) {
-    testWidgets('400x200 decode keeps aspect ratio with '
-        '${bothDimensions ? 'both dimensions' : 'width only'}', (tester) async {
+  for (final (
+        sourceWidth,
+        sourceHeight,
+        boundWidth,
+        boundHeight,
+        targetWidth,
+        targetHeight,
+      )
+      in [
+        (400, 200, 100, 100, 100, 50),
+        (400, 200, 100, null, 100, 50),
+        (400, 200, null, 100, 200, 100),
+        (400, 1, 100, 100, 100, 1),
+        (400, 1, 100, null, 100, 1),
+        (400, 1, null, 100, 400, 1),
+        (1, 400, 100, 100, 1, 100),
+        (1, 400, 100, null, 1, 400),
+        (1, 400, null, 100, 1, 100),
+      ]) {
+    testWidgets('${sourceWidth}x$sourceHeight decode into '
+        '${boundWidth}x$boundHeight respects bounds', (tester) async {
       _responsePng = (await tester.runAsync(() async {
         final recorder = ui.PictureRecorder();
         ui.Canvas(recorder).drawRect(
-          const ui.Rect.fromLTWH(0, 0, 400, 200),
+          ui.Rect.fromLTWH(
+            0,
+            0,
+            sourceWidth.toDouble(),
+            sourceHeight.toDouble(),
+          ),
           ui.Paint()..color = Colors.blue,
         );
         final picture = recorder.endRecording();
-        final image = await picture.toImage(400, 200);
+        final image = await picture.toImage(sourceWidth, sourceHeight);
         final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
         image.dispose();
         picture.dispose();
@@ -203,9 +226,10 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: OptimizedImage(
-              imageUrl: 'https://example.com/wide-$bothDimensions.png',
-              width: 100,
-              height: bothDimensions ? 100 : null,
+              imageUrl:
+                  'https://example.com/${sourceWidth}x$sourceHeight-${boundWidth}x$boundHeight.png',
+              width: boundWidth?.toDouble(),
+              height: boundHeight?.toDouble(),
             ),
           ),
         ),
@@ -227,8 +251,8 @@ void main() {
       });
       expect(decoded, isNotNull);
       addTearDown(decoded!.dispose);
-      expect(decoded.image.width, 100);
-      expect(decoded.image.height, 50);
+      expect(decoded.image.width, targetWidth);
+      expect(decoded.image.height, targetHeight);
     });
   }
 

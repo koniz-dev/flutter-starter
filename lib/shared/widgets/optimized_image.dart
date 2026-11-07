@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/utils/image_cache_helper.dart';
@@ -121,11 +123,10 @@ class _OptimizedImageState extends State<OptimizedImage> {
     return Image(
       image: cacheWidth == null && cacheHeight == null
           ? networkImage
-          : ResizeImage(
+          : _AspectPreservingResizeImage(
               networkImage,
               width: cacheWidth,
               height: cacheHeight,
-              policy: ResizeImagePolicy.fit,
             ),
       width: widget.width,
       height: widget.height,
@@ -161,6 +162,42 @@ class _OptimizedImageState extends State<OptimizedImage> {
       return null;
     }
     return (logical * devicePixelRatio).round();
+  }
+}
+
+// ResizeImage keeps the provider/cache/loading machinery. Its fit decoder can
+// round an extreme aspect ratio down to a zero-sized axis, so supply a bounded
+// target size directly from the intrinsic dimensions and keep each axis >= 1.
+class _AspectPreservingResizeImage extends ResizeImage {
+  const _AspectPreservingResizeImage(
+    super.imageProvider, {
+    super.width,
+    super.height,
+  }) : super(policy: ResizeImagePolicy.fit);
+
+  @override
+  ImageStreamCompleter loadImage(
+    ResizeImageKey key,
+    ImageDecoderCallback decode,
+  ) {
+    return super.loadImage(key, (buffer, {getTargetSize}) {
+      return decode(
+        buffer,
+        getTargetSize: (intrinsicWidth, intrinsicHeight) {
+          var scale = 1.0;
+          if (width != null) {
+            scale = math.min(scale, width! / intrinsicWidth);
+          }
+          if (height != null) {
+            scale = math.min(scale, height! / intrinsicHeight);
+          }
+          return ui.TargetImageSize(
+            width: math.max(1, (intrinsicWidth * scale).floor()),
+            height: math.max(1, (intrinsicHeight * scale).floor()),
+          );
+        },
+      );
+    });
   }
 }
 
