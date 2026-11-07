@@ -60,7 +60,7 @@ VoidCallback installUncaughtErrorHandlers(
 Object _redactError(Object error) {
   final original = error.toString();
   final redacted = original.replaceAllMapped(
-    RegExp(r'''(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"']+'''),
+    RegExp(r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'),
     (match) => ApiLoggingInterceptor.redactUrl(match[0]!),
   );
   if (original == redacted) return error;

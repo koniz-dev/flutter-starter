@@ -128,20 +128,26 @@ void main() {
     final stack = StackTrace.current;
     const url =
         'https://PRIVATEUSER:PRIVATEPASS@cdn.example.com/a.png'
-        '?X-Amz-Signature=SECRETSIG&token=SECRETTOK&width=100';
-    FlutterError.reportError(
-      FlutterErrorDetails(
-        exception: NetworkImageLoadException(
-          statusCode: 403,
-          uri: Uri.parse(url),
+        "?download=it's&X-Amz-Signature=SECRETSIG&token=SECRETTOK&width=100";
+    for (final imageUrl in [
+      url,
+      url.replaceFirst('PRIVATEUSER:PRIVATEPASS@', ''),
+    ]) {
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: NetworkImageLoadException(
+            statusCode: 403,
+            uri: Uri.parse(imageUrl),
+          ),
+          stack: stack,
         ),
-        stack: stack,
-      ),
-    );
+      );
+    }
     PlatformDispatcher.instance.onError!(StateError('failed $url'), stack);
     await output.destroy();
 
-    expect(reporter.reports, hasLength(2));
+    expect(reporter.reports, hasLength(3));
+    expect(reporter.reports[1].error, isA<NetworkImageLoadException>());
     expect(reporter.reports.first.error, isA<NetworkImageLoadException>());
     final fileText = latin1.decode(
       File('${directory.path}/logs/app.log').readAsBytesSync(),
