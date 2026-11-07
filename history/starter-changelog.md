@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Uncaught error reports redact URL credentials.** Framework image errors and platform errors now remove URL userinfo and sensitive query values before file logging and crash reporting, including secrets following valid URL apostrophes. Ordinary errors and stack traces are preserved.
+
 - **Code findings from the 2026-11-01 audit.**
   - **Secondary text is visibly secondary.** The themes now set
     `onSurfaceVariant` to the `textSecondary` tokens. Before, it fell back to
