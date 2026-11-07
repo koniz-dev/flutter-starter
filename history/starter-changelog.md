@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Git hook setup warns about shadowed same-name hooks.** Both setup scripts now name every old hook that will stop running, including Git LFS pre-push, and advise merging or chaining its commands without overwriting tracked hooks.
+
 - **OptimizedImage preserves proportions while bounding decode size.** A ResizeImage adapter computes aspect-preserving physical-pixel sizes and clamps both axes to at least one pixel, so non-square images keep their proportions and very thin images still decode.
 
 - **OptimizedListView renders returned pages.** The widget now appends the items returned by `onLoadMore` and honours its `hasMore`. Equal input rebuilds preserve pages; changed input resets pagination and ignores stale requests.
