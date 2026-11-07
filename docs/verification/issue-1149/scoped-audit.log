@@ -1,0 +1,41 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 599 files (0 changed) in 1.56 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.4s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:02 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:02 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:03 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:03 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:04 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (a) a git-ignored file importing the sample does not fail the strip
+00:06 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder the brick writes is deleted
+00:13 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder the brick writes is deleted
+00:14 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: (c) a run from a subdirectory refuses and writes nothing
+00:16 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder is deleted from a CRLF checkout too
+00:19 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder is deleted from a CRLF checkout too
+00:22 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder is deleted from a CRLF checkout too
+00:24 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: refuses untracked edits before deleting or overwriting anything
+00:26 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+00:29 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+00:33 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+00:34 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: refuses unrelated edits before deleting or overwriting anything
+00:36 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: force permits an intentional overwrite of a dirty tree
+00:40 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: clean CRLF overwrite targets do not trigger the guard
+00:45 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: bricks-only removal also refuses a dirty tree
+00:48 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a missing Git baseline refuses unless force is explicit
+00:53 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: a clean app nested in a monorepo resolves committed override paths
+00:59 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: protects assume-unchanged edits in a brick deletion target
+01:03 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: protects assume-unchanged edits in a sample deletion target
+01:06 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: protects skip-worktree edits in a brick deletion target
+01:09 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: protects skip-worktree edits in a sample deletion target
+01:13 +30: All tests passed!

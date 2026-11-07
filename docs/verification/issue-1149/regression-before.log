@@ -1,0 +1,38 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart
+00:00 +0: refuses unstaged edits before deleting or overwriting anything
+00:11 +0 -1: refuses unstaged edits before deleting or overwriting anything [E]
+  Expected: <2>
+    Actual: <0>
+  exit 0
+  Dropped 1 marked section(s) or line(s) from docs/README.md.
+  Dropped 4 marked section(s) or line(s) from docs/architecture/design-decisions.md.
+  Dropped 1 marked section(s) or line(s) from docs/api/features/auth/models.md.
+  Dropped 3 marked section(s) or line(s) from README.md.
+  Dropped 1 marked section(s) or line(s) from bricks/README.md.
+  Dropped 1 marked section(s) or line(s) from bricks/flutter_starter_setup/README.md.
+  Dropped 1 marked section(s) or line(s) from integration_test/README.md.
+  Dropped 1 marked section(s) or line(s) from docs/architecture/super-starter-hub.md.
+  Dropped 1 marked section(s) or line(s) from docs/architecture/contracts-map.md.
+  Dropped 1 marked section(s) or line(s) from docs/guides/migration/customization-guide.md.
+  Dropped 3 marked section(s) or line(s) from docs/guides/onboarding/fork-and-customize.md.
+  Dropped 2 marked section(s) or line(s) from README.md.
+  Dropped 4 marked section(s) or line(s) from CLAUDE.md.
+  Dropped 3 marked section(s) or line(s) from tool/README.md.
+  Removed tool/strip_sample_features.dart: it only serves this strip.
+  Removed tool/golden: it only serves this strip.
+  Removed .github/workflows/strip-smoke.yml: it only serves this strip.
+  Removed test/tooling/strip_markers_test.dart: it only serves this strip.
+  Removed test/tooling/strip_sample_prose_test.dart: it only serves this strip.
+  Removed test/tooling/strip_rerun_test.dart: it only serves this strip.
+  Removed test/tooling/strip_unknown_flags_test.dart: it only serves this strip.
+  Strip complete. Run: flutter pub get && flutter analyze && flutter test
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_rerun_test.dart 188:7            main.<fn>
+  
+00:12 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_rerun_test.dart: refuses unstaged edits before deleting or overwriting anything

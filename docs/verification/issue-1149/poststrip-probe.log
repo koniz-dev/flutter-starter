@@ -1,0 +1,6 @@
+Probe: bricks-only strip applied and committed; bricks absent. Latest test source copied and committed; SDK dependency metadata copied for --no-pub execution.
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/strip_committed_bricks_1149_qio9cusc/test/tooling/strip_rerun_test.dart
+00:00 +0: bricks-only removal also refuses a dirty tree
+00:04 +1: protects assume-unchanged edits in a brick deletion target
+00:09 +2: protects skip-worktree edits in a brick deletion target
+00:13 +3: All tests passed!

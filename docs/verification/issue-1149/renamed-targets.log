@@ -1,0 +1,24 @@
+Command: ['/Users/nguyenanhkiet/.pub-cache/bin/mason', 'get']
+⠋ Getting bricks...
+✓ Got bricks (8.0s)
+Command: ['/Users/nguyenanhkiet/.pub-cache/bin/mason', 'make', 'flutter_starter_setup', '--package_name', 'acme_shop', '--application_id', 'com.acme.shop', '--ios_bundle_id', 'com.acme.shop', '--app_display_name', 'Acme Shop', '--strip_sample_features', 'false', '--include_tasks_sample', 'true', '--include_feature_flags_sample', 'true', '--on-conflict', 'overwrite']
+⠋ Making flutter_starter_setup...
+✓ Generated 1 file. (26ms)
+  created _mason_hook_only.md
+Removed _mason_hook_only.md
+Rewrote 8 feature_clean brick template(s)
+Renamed Dart package to acme_shop
+Applied "Acme Shop" to 17 Dart/ARB file(s)
+Moved MainActivity to match com.acme.shop
+Moved MainActivityTest to match com.acme.shop
+Updated iOS PRODUCT_BUNDLE_IDENTIFIER to com.acme.shop
+Updated patrol config to com.acme.shop
+Rewrote identifiers in 21 platform file(s)
+Re-sorted imports and reformatted lib, test, integration_test, tool, examples, docs
+Setup complete. Next: flutter analyze && flutter test
+Command: ['flutter', 'test', '--no-pub', 'test/tooling/strip_rerun_test.dart', '--name', '^\\([ab]\\)']
+00:00 +0: loading /private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/pr1160-rename-review-_tz66xte/test/tooling/strip_rerun_test.dart
+00:00 +0: (a) a git-ignored file importing the sample does not fail the strip
+00:05 +1: (b) a re-run after a partial strip completes
+00:12 +2: All tests passed!
+Targeted test exit: 0

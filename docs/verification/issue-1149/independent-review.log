@@ -1,0 +1,4 @@
+exit: 2
+Refusing to strip an edited working tree. Nothing was deleted:
+bricks/README.md (modified tracked file)
+Commit or stash your changes first. Use --force only if you intentionally accept overwriting or deleting them.
