@@ -1,0 +1,13 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: 400x200 decode into 100x100 respects bounds
+00:01 +1: 400x200 decode into 100xnull respects bounds
+00:01 +2: 400x200 decode into nullx100 respects bounds
+00:01 +3: 400x1 decode into 100x100 respects bounds
+00:01 +4: 400x1 decode into 100xnull respects bounds
+00:01 +5: 400x1 decode into nullx100 respects bounds
+00:01 +6: 1x400 decode into 100x100 respects bounds
+00:01 +7: 1x400 decode into 100xnull respects bounds
+00:01 +8: 1x400 decode into nullx100 respects bounds
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!

@@ -1,0 +1,4 @@
+Commits in cb4a20dd6ca..HEAD
+  ok    643ab010 fix(widgets): preserve aspect ratio while decoding images (#1157)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

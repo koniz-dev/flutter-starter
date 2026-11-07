@@ -1,0 +1,48 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 598 files (0 changed) in 2.57 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.8s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: (setUpAll)
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage decode size decodes at logical size * devicePixelRatio
+00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 400x200 decode into 100x100 respects bounds
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 400x200 decode into 100x100 respects bounds
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage decode size an unsized image is not resized
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 400x200 decode into 100xnull respects bounds
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage semantics forwards semanticLabel and stays in the semantics tree
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 400x200 decode into nullx100 respects bounds
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage semantics an unlabeled image is excluded rather than left unlabeled
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 400x1 decode into 100x100 respects bounds
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage preload fires once per URL, not once per rebuild
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage preload fires once per URL, not once per rebuild
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage preload fires once per URL, not once per rebuild
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 1x400 decode into 100x100 respects bounds
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage preload fires again when the URL changes
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 1x400 decode into 100xnull respects bounds
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_decoding_test.dart: OptimizedImage preload does not fire when preload is false or the URL is empty
+00:01 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: 1x400 decode into nullx100 respects bounds
+00:01 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should display image with URL
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should show placeholder while loading
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should show error widget on load failure
+00:01 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should support width and height constraints
+00:01 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should support custom fit
+00:01 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should preload image when preload is true
+00:01 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should not preload when imageUrl is empty
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should not preload when preload is false
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should forward a semantic label
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should handle null width and height for cache
+00:01 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage should convert width and height to int for cache
+00:02 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedAspectImage should maintain aspect ratio
+00:02 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedAspectImage should support custom fit
+00:02 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedAspectImage should support placeholder and error widget
+00:02 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedAspectImage should forward a semantic label
+00:02 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage - Error Builder Coverage should use default error widget when errorWidget is null
+00:02 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage - Error Builder Coverage should handle preload when imageUrl is not empty
+00:02 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: OptimizedImage - Error Builder Coverage should not preload when preload is false
+00:02 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_image_test.dart: (tearDownAll)
+00:02 +35: All tests passed!
