@@ -1,0 +1,26 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart
+00:00 +0: uncaught image and platform URL secrets are absent from reporter and file log
+00:00 +0 -1: uncaught image and platform URL secrets are absent from reporter and file log [E]
+  Expected: not contains 'PRIVATEUSER'
+    Actual: '\x1B[38;5;196mââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[0m\n'
+              '\x1B[38;5;196mâ HTTP request failed, statusCode: 403, https://PRIVATEUSER:PRIVATEPASS@cdn.example.com/a.png?X-Amz-Signature=SECRETSIG&token=SECRETTOK&width=100\x1B[0m\n'
+              '\x1B[38;5;196mââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[0m\n'
+              '\x1B[38;5;196mâ Bad state: failed https://PRIVATEUSER:PRIVATEPASS@cdn.example.com/a.png?X-Amz-Signature=SECRETSIG&token=SECRETTOK&width=100\x1B[0m\n'
+              '\x1B[38;5;196mâââââââââââââââââââââ\x1B[38;5;196mâ #2   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)\x1B[0m\n'
+              '\x1B[38;5;196mâ #3   <asynchronous suspension>\x1B[0m\n'
+              '\x1B[38;5;196mâ #4   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)\x1B[0m\n'
+              '\x1B[38;5;196mâ #5   <asynchronous suspension>\x1B[0m\n'
+              '\x1B[38;5;196mâ #6   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)\x1B[0m\n'
+              '\x1B[38;5;196mâ #7   <asynchronous suspension>\x1B[0m\n'
+              '\x1B[38;5;196mâââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[38;5;196mâ #6   Invoker._waitForOu\x1B[38;5;196mâ â Uncaught Flutter error | Context: {"library":"Flutter framework","silent":\x1B[38;5;196m\x1B[38;5;196mââââââââââ\x1B[38;5;196mââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[0m\n'
+              '\x1B[38;5;196mâ â Uncaught platform error\x1B[0m\n'
+              ''
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  test/core/logging/uncaught_error_handlers_test.dart 161:9  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: uncaught image and platform URL secrets are absent from reporter and file log
