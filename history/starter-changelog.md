@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **OptimizedImage preserves proportions while bounding decode size.** A ResizeImage adapter computes aspect-preserving physical-pixel sizes and clamps both axes to at least one pixel, so non-square images keep their proportions and very thin images still decode.
+
 - **OptimizedListView renders returned pages.** The widget now appends the items returned by `onLoadMore` and honours its `hasMore`. Equal input rebuilds preserve pages; changed input resets pagination and ignores stale requests.
 
 - **Release lanes choose API URLs by environment.** Android and iOS lanes now select `BASE_URL_STAGING` or `BASE_URL_PRODUCTION` from the resolved `environment:`, regardless of lane name. An explicit `base_url:` still wins.
