@@ -59,6 +59,11 @@ OptimizedImage(
 
 ### Using OptimizedListView with Pagination
 
+The callback returns only the next page. The widget appends that page and
+stops requesting pages when the returned `hasMore` is false. Replacing the
+input items' contents or changing the input `hasMore` starts a new pagination
+sequence; a result from the previous sequence is ignored.
+
 ```dart
 OptimizedListView<Item>(
   items: items,

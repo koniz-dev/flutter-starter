@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/core/utils/pagination_helper.dart'
@@ -25,7 +26,7 @@ import 'package:flutter_starter/shared/widgets/error_widget.dart';
 /// ```dart
 /// OptimizedListView<Item>(
 ///   items: items,
-///   itemBuilder: (context, item) => ItemWidget(item),
+///   itemBuilder: (context, item, index) => ItemWidget(item),
 ///   onLoadMore: () async {
 ///     final moreItems = await loadMoreItems();
 ///     return (moreItems, hasMore);
@@ -52,7 +53,7 @@ class OptimizedListView<T> extends StatefulWidget {
     super.key,
   });
 
-  /// List of items to display
+  /// Initial items to display. Replacing their contents resets pagination.
   final List<T> items;
 
   /// Builder for each item
@@ -60,10 +61,11 @@ class OptimizedListView<T> extends StatefulWidget {
 
   /// Callback to load more items
   ///
-  /// Should return a tuple of (items, hasMore)
+  /// Returns the next page and whether another page exists. The widget appends
+  /// the returned items and honours the returned hasMore value.
   final Future<(List<T>, bool)> Function()? onLoadMore;
 
-  /// Whether there are more items to load
+  /// Initial pagination availability. Changing it resets pagination.
   final bool hasMore;
 
   /// Whether currently loading more items
@@ -104,6 +106,10 @@ class OptimizedListView<T> extends StatefulWidget {
 class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   late ScrollController _scrollController;
   bool _isLoadingMore = false;
+  late List<T> _items;
+  late List<T> _inputItems;
+  late bool _hasMore;
+  int _generation = 0;
 
   /// Failure from the last prefetch, shown inline until a retry succeeds.
   ///
@@ -117,6 +123,9 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   @override
   void initState() {
     super.initState();
+    _items = List<T>.of(widget.items);
+    _inputItems = List<T>.of(widget.items);
+    _hasMore = widget.hasMore;
     _attach(widget.scrollController);
   }
 
@@ -141,6 +150,15 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   @override
   void didUpdateWidget(OptimizedListView<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (!listEquals(_inputItems, widget.items) ||
+        oldWidget.hasMore != widget.hasMore) {
+      _items = List<T>.of(widget.items);
+      _inputItems = List<T>.of(widget.items);
+      _hasMore = widget.hasMore;
+      _loadMoreError = null;
+      _isLoadingMore = false;
+      _generation++;
+    }
     // A controller passed, removed or swapped after the first build: the list
     // used to keep the first one, so the parent's controller had no clients
     // and prefetch kept listening to the old one.
@@ -157,7 +175,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   }
 
   void _onScroll() {
-    if (!widget.enablePrefetch || _isLoadingMore || !widget.hasMore) {
+    if (!widget.enablePrefetch || _isLoadingMore || !_hasMore) {
       return;
     }
 
@@ -168,7 +186,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   }
 
   Future<void> _loadMore() async {
-    if (_isLoadingMore || !widget.hasMore || widget.onLoadMore == null) {
+    if (_isLoadingMore || !_hasMore || widget.onLoadMore == null) {
       return;
     }
 
@@ -177,17 +195,26 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
       _loadMoreError = null;
     });
 
+    final generation = _generation;
     try {
-      await widget.onLoadMore!();
+      final (items, hasMore) = await widget.onLoadMore!();
+      if (mounted && generation == _generation) {
+        setState(() {
+          _items.addAll(items);
+          _hasMore = hasMore;
+        });
+      }
     } on Object catch (error, stackTrace) {
-      if (mounted) {
+      if (mounted && generation == _generation) {
         setState(() {
           _loadMoreError = error.toString();
         });
       }
-      widget.onLoadMoreError?.call(error, stackTrace);
+      if (mounted && generation == _generation) {
+        widget.onLoadMoreError?.call(error, stackTrace);
+      }
     } finally {
-      if (mounted) {
+      if (mounted && generation == _generation) {
         setState(() {
           _isLoadingMore = false;
         });
@@ -199,7 +226,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
   Widget build(BuildContext context) {
     final effectiveError = widget.error ?? _loadMoreError;
 
-    if (widget.items.isEmpty && !widget.isLoading && !_isLoadingMore) {
+    if (_items.isEmpty && !widget.isLoading && !_isLoadingMore) {
       // "Failed, so there is nothing to show" and "loaded, genuinely empty"
       // must not render identically: an empty list with an error shows the
       // error and a retry affordance, never the empty state.
@@ -216,18 +243,17 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
       controller: _scrollController,
       padding: widget.padding,
       itemExtent: widget.itemExtent,
-      itemCount: widget.items.length + _buildTrailingWidgetsCount(),
+      itemCount: _items.length + _buildTrailingWidgetsCount(),
       itemBuilder: (context, index) {
         // Show items
-        if (index < widget.items.length) {
+        if (index < _items.length) {
           return RepaintBoundary(
-            child: widget.itemBuilder(context, widget.items[index], index),
+            child: widget.itemBuilder(context, _items[index], index),
           );
         }
 
         // Show loading indicator
-        if (index == widget.items.length &&
-            (widget.isLoading || _isLoadingMore)) {
+        if (index == _items.length && (widget.isLoading || _isLoadingMore)) {
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(16),
@@ -237,7 +263,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
         }
 
         // Show error, including one raised by a failed prefetch
-        if (index == widget.items.length && effectiveError != null) {
+        if (index == _items.length && effectiveError != null) {
           final onRetry = _effectiveOnRetry;
           return Center(
             child: Padding(
@@ -265,9 +291,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
         }
 
         // Show load more button
-        if (index == widget.items.length &&
-            widget.hasMore &&
-            !widget.isLoading) {
+        if (index == _items.length && _hasMore && !widget.isLoading) {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -293,7 +317,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
     if (widget.onRetry != null) {
       return widget.onRetry;
     }
-    if (widget.onLoadMore != null && widget.hasMore) {
+    if (widget.onLoadMore != null && _hasMore) {
       return _retry;
     }
     return null;
@@ -318,7 +342,7 @@ class _OptimizedListViewState<T> extends State<OptimizedListView<T>> {
       return 1;
     }
 
-    if (widget.hasMore) {
+    if (_hasMore) {
       return 1;
     }
 
