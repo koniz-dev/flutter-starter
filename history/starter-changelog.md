@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Optional GraphQL template uses configured pinning and memory-only caching.** The native example refuses insecure release endpoints and misconfigured pins, clears its session cache and closes its transport on disposal. Documentation explicitly requires browser adaptation and application-provided refresh/replay/logout handling.
+
 - **Git hook setup warns about shadowed same-name hooks.** Both setup scripts now name every old hook that will stop running, including Git LFS pre-push, and advise merging or chaining its commands without overwriting tracked hooks.
 
 - **OptimizedImage preserves proportions while bounding decode size.** A ResizeImage adapter computes aspect-preserving physical-pixel sizes and clamps both axes to at least one pixel, so non-square images keep their proportions and very thin images still decode.
