@@ -1,0 +1,33 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/graphql_transport_template_test.dart
+00:00 +0: opt-in template retains pinning, HTTPS refusal and memory-only cache
+00:00 +0 -1: opt-in template retains pinning, HTTPS refusal and memory-only cache [E]
+  Expected: contains 'SslPinning.fromConfig()'
+    Actual: 'String endpoint, Future<String?> Function() getAuthToken) {\n'
+              '    /*\n'
+              '    final httpLink = HttpLink(endpoint);\n'
+              '\n'
+              '    final authLink = AuthLink(\n'
+              '      getToken: () async {\n'
+              '        final token = await getAuthToken();\n'
+              '        return token != null ? \'Bearer $token\' : null;\n'
+              '      },\n'
+              '    );\n'
+              '\n'
+              '    final link = authLink.concat(httpLink);\n'
+              '\n'
+              '    _client = GraphQLClient(\n'
+              '      cache: GraphQLCache(store: HiveStore()),\n'
+              '      link: link,\n'
+              '    );\n'
+              '    '
+     Which: does not contain 'SslPinning.fromConfig()'
+  SslPinning.fromConfig()
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test/docs/graphql_transport_template_test.dart 21:9  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/graphql_transport_template_test.dart: opt-in template retains pinning, HTTPS refusal and memory-only cache

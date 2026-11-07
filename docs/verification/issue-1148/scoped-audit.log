@@ -1,0 +1,18 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 599 files (0 changed) in 1.99 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 14.0s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/graphql_client_template_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/graphql_client_template_test.dart: GraphQLClient Template Tests should construct successfully
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/graphql_transport_template_test.dart: opt-in template retains pinning, HTTPS refusal and memory-only cache
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/graphql_transport_template_test.dart: opt-in template retains pinning, HTTPS refusal and memory-only cache
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/graphql_transport_template_test.dart: opt-in template retains pinning, HTTPS refusal and memory-only cache
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/graphql_transport_template_test.dart: opt-in template retains pinning, HTTPS refusal and memory-only cache
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_links_test.dart: every relative link and anchor in the markdown resolves
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/ci_doc_tests_cover_markdown_readers_test.dart: every test that reads markdown runs on a docs-only change
+00:01 +7: All tests passed!

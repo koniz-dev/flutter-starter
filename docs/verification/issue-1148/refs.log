@@ -1,0 +1,4 @@
+Commits in 90e534be0cb7a3baec2b11db81a89207bbc43cc7..HEAD
+  ok    bfe4395d fix(security): harden optional GraphQL transport template (#1159)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

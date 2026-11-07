@@ -1,0 +1,5 @@
+Enabled template (all optional imports/fields/bodies uncommented; stub returns removed).
+Command: flutter analyze lib/graphql_client_template.dart
+Resolved dependencies: {"graphql_flutter": "5.3.0", "graphql": "5.2.4", "gql_http_link": "1.2.0", "http": "1.6.0"}
+Analyzing graphql_client_template.dart...                       
+No issues found! (ran in 4.0s)
