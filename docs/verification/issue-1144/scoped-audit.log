@@ -1,0 +1,26 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 597 files (0 changed) in 1.56 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 4.3s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_release_environment_test.dart
+00:00 +0: only staging and production pass, trimmed and lowercased
+00:00 +1: a lane base URL must be set and not the example.com placeholder
+00:01 +2: resolved environment chooses its URL with both variables set
+00:01 +3: every lane in fastlane/Fastfile validates its base URL
+00:01 +4: every lane in fastlane/Fastfile validates its environment
+00:01 +5: get_version in fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:01 +6: get_version in fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:01 +7: get_version in fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:02 +8: get_version in fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:02 +9: every lane in ios/fastlane/Fastfile validates its base URL
+00:02 +10: every lane in ios/fastlane/Fastfile validates its environment
+00:02 +11: get_version in ios/fastlane/Fastfile reads "1.2.3" as 1.2.3 1
+00:02 +12: get_version in ios/fastlane/Fastfile reads "1.2.3+45" as 1.2.3 45
+00:02 +13: get_version in ios/fastlane/Fastfile reads "1.2.3+45 # bumped" as 1.2.3 45
+00:02 +14: get_version in ios/fastlane/Fastfile reads "1.0.0-beta+7" as no match
+00:02 +15: All tests passed!
