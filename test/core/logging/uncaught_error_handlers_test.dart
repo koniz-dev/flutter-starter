@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/logging/error_reporter_providers.dart';
 import 'package:flutter_starter/core/logging/i_error_reporter.dart';
+import 'package:flutter_starter/core/logging/log_output.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
 import 'package:flutter_starter/core/logging/uncaught_error_handlers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -95,6 +100,72 @@ void main() {
     expect(reporter.reports.single.message, 'Uncaught platform error');
     expect(reporter.reports.single.error, same(error));
     expect(reporter.reports.single.stack, same(stack));
+  });
+
+  test('uncaught image and platform URL secrets are absent from reporter '
+      'and file log', () async {
+    final directory = Directory.systemTemp.createTempSync('uncaught_log_');
+    const channel = MethodChannel('plugins.flutter.io/path_provider');
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          ..setMockMethodCallHandler(channel, (_) async => directory.path);
+    addTearDown(() {
+      messenger.setMockMethodCallHandler(channel, null);
+      directory.deleteSync(recursive: true);
+    });
+    final output = FileLogOutput();
+    await output.init();
+    final logger = LoggingService(
+      enableLogging: true,
+      errorReporter: reporter,
+      output: output,
+    );
+    final savedFlutter = FlutterError.onError;
+    FlutterError.onError = (_) {};
+    addTearDown(() => FlutterError.onError = savedFlutter);
+    final restore = installUncaughtErrorHandlers(logger);
+    addTearDown(restore);
+    final stack = StackTrace.current;
+    const url =
+        'https://PRIVATEUSER:PRIVATEPASS@cdn.example.com/a.png'
+        '?X-Amz-Signature=SECRETSIG&token=SECRETTOK&width=100';
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: NetworkImageLoadException(
+          statusCode: 403,
+          uri: Uri.parse(url),
+        ),
+        stack: stack,
+      ),
+    );
+    PlatformDispatcher.instance.onError!(StateError('failed $url'), stack);
+    await output.destroy();
+
+    expect(reporter.reports, hasLength(2));
+    expect(reporter.reports.first.error, isA<NetworkImageLoadException>());
+    final fileText = latin1.decode(
+      File('${directory.path}/logs/app.log').readAsBytesSync(),
+    );
+    expect(fileText, contains('cdn.example.com'));
+    for (final text in [
+      fileText,
+      for (final report in reporter.reports)
+        '${report.message} ${report.error}',
+    ]) {
+      for (final secret in [
+        'PRIVATEUSER',
+        'PRIVATEPASS',
+        'SECRETSIG',
+        'SECRETTOK',
+      ]) {
+        expect(text, isNot(contains(secret)));
+      }
+      expect(text, contains('width=100'));
+    }
+    expect(reporter.reports.last.error.toString(), contains('StateError'));
+    for (final report in reporter.reports) {
+      expect(report.stack, same(stack));
+    }
   });
 
   test('the returned callback restores the previous handlers', () {
