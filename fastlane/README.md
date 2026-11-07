@@ -191,7 +191,10 @@ fastlane ios upload_appstore \
 ```
 
 Every build lane needs the API base URL: `base_url:<url>`, or
-`BASE_URL_PRODUCTION` / `BASE_URL_STAGING` in the environment. Without one,
+`BASE_URL_<ENVIRONMENT>` for the resolved `environment:` (trimmed and
+lowercased), regardless of the lane name. Thus `environment:staging` reads
+`BASE_URL_STAGING`, and `environment:production` reads `BASE_URL_PRODUCTION`.
+An explicit `base_url:` always wins. Without one,
 or with the starter's `example.com` placeholder, the lane stops before
 building.
 

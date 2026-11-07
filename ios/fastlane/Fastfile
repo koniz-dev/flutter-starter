@@ -55,7 +55,7 @@ platform :ios do
   desc "Build IPA for App Store"
   lane :build_appstore do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url], environment)
 
     UI.message("Building for App Store - Environment: #{environment}")
 
@@ -95,7 +95,7 @@ platform :ios do
   desc "Build IPA for Ad Hoc distribution"
   lane :build_adhoc do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
-    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_STAGING"], "BASE_URL_STAGING")
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url], environment)
 
     UI.message("Building for Ad Hoc - Environment: #{environment}")
 
@@ -135,7 +135,7 @@ platform :ios do
   desc "Upload to App Store Connect"
   lane :upload_appstore do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url], environment)
     # `options[:x] || true` is always true - fetch with a default is the only way
     # to let a caller pass false.
     skip_screenshots = options.fetch(:skip_screenshots, true)
@@ -164,7 +164,7 @@ platform :ios do
   desc "Upload to TestFlight"
   lane :upload_testflight do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "staging")
-    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_STAGING"], "BASE_URL_STAGING")
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url], environment)
     groups = options[:groups] || ["Internal Testers"] # TestFlight groups
 
     # Build IPA
@@ -189,7 +189,7 @@ platform :ios do
   desc "Upload to App Store Connect and submit for review"
   lane :release do |options|
     environment = ReleaseEnvironment.lane_value(options[:environment] || "production")
-    base_url = ReleaseEnvironment.lane_base_url(options[:base_url] || ENV["BASE_URL_PRODUCTION"], "BASE_URL_PRODUCTION")
+    base_url = ReleaseEnvironment.lane_base_url(options[:base_url], environment)
 
     # Build and upload
     ipa_path = build_appstore(environment: environment, base_url: base_url,

@@ -77,6 +77,35 @@ void main() {
     expect(check('nil'), contains('BASE_URL_PRODUCTION'));
   }, skip: skip);
 
+  test('resolved environment chooses its URL with both variables set', () {
+    const variables =
+        'ENV["BASE_URL_STAGING"] = "https://staging.acme.io"; '
+        'ENV["BASE_URL_PRODUCTION"] = "https://production.acme.io"; ';
+    for (final environment in ['staging', 'production']) {
+      expect(
+        _ruby(
+          '$variables print ReleaseEnvironment.for_environment("$environment")',
+        ),
+        'https://$environment.acme.io',
+      );
+    }
+    expect(
+      _ruby(
+        '$variables print ReleaseEnvironment.for_environment( '
+        '" Staging ", "https://override.acme.io")',
+      ),
+      'https://override.acme.io',
+    );
+    expect(
+      _ruby(
+        'ENV.delete("BASE_URL_STAGING"); '
+        'begin; ReleaseEnvironment.for_environment("staging"); '
+        'rescue ArgumentError => e; print e.message; end',
+      ),
+      contains('BASE_URL_STAGING'),
+    );
+  }, skip: skip);
+
   for (final path in _fastfiles) {
     final source = File(path).readAsStringSync();
 
@@ -94,6 +123,13 @@ void main() {
         );
       }
       expect(source, isNot(contains('example.com')));
+      expect(source, isNot(matches('BASE_URL_(STAGING|PRODUCTION)')));
+      for (final assignment in assignments) {
+        expect(
+          assignment.group(1),
+          contains('options[:base_url], environment'),
+        );
+      }
     });
 
     test('every lane in $path validates its environment', () {
