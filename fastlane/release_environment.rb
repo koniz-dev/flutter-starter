@@ -51,9 +51,15 @@ module ReleaseEnvironment
     url
   end
 
-  # [base_url], failing the lane with the message.
-  def self.lane_base_url(value, source)
-    base_url(value, source)
+  # Explicit lane option wins; otherwise use the resolved environment's URL.
+  def self.for_environment(environment, value = nil)
+    source = "BASE_URL_#{normalize(environment).upcase}"
+    base_url(value || ENV[source], source)
+  end
+
+  # [for_environment], failing the lane with the message.
+  def self.lane_base_url(value, environment)
+    for_environment(environment, value)
   rescue ArgumentError => e
     FastlaneCore::UI.user_error!(e.message)
   end
