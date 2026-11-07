@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 
 /// Routes errors nothing else caught to [logger], so the `IErrorReporter`
 /// behind `LoggingService.error` sees crashes as well as handled errors.
@@ -27,7 +29,7 @@ VoidCallback installUncaughtErrorHandlers(
   FlutterError.onError = (details) {
     logger.error(
       'Uncaught Flutter error',
-      error: details.exception,
+      error: _redactError(details.exception),
       stackTrace: details.stack,
       context: {
         if (details.library != null) 'library': details.library,
@@ -40,7 +42,7 @@ VoidCallback installUncaughtErrorHandlers(
   platform.onError = (error, stackTrace) {
     logger.error(
       'Uncaught platform error',
-      error: error,
+      error: _redactError(error),
       stackTrace: stackTrace,
     );
     previousPlatform?.call(error, stackTrace);
@@ -51,4 +53,32 @@ VoidCallback installUncaughtErrorHandlers(
     FlutterError.onError = previousFlutter;
     platform.onError = previousPlatform;
   };
+}
+
+// Keep the original object for ordinary errors. URL-bearing errors get a safe
+// representation without retaining the raw object in anything sent to a sink.
+Object _redactError(Object error) {
+  final original = error.toString();
+  final redacted = original.replaceAllMapped(
+    RegExp(r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'),
+    (match) => ApiLoggingInterceptor.redactUrl(match[0]!),
+  );
+  if (original == redacted) return error;
+  if (error is NetworkImageLoadException) {
+    return NetworkImageLoadException(
+      statusCode: error.statusCode,
+      uri: Uri.parse(ApiLoggingInterceptor.redactUrl(error.uri.toString())),
+    );
+  }
+  return _RedactedError(error.runtimeType.toString(), redacted);
+}
+
+class _RedactedError implements Exception {
+  const _RedactedError(this.type, this.description);
+
+  final String type;
+  final String description;
+
+  @override
+  String toString() => '$type: $description';
 }
