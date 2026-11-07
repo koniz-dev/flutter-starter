@@ -850,8 +850,9 @@ List<String> _withoutIgnored(Directory repoRoot, List<String> violations) {
 }
 
 // Status catches staged, unstaged and untracked files. Explicit normalized
-// blob comparisons also catch edited overwrite targets hidden from status by
-// assume-unchanged/skip-worktree, without flagging clean Windows CRLF files.
+// blob comparisons cover overwrite targets and every tracked file hidden by
+// assume-unchanged/skip-worktree, including deletion and patch targets. Git
+// filters prevent clean Windows CRLF files from being flagged.
 bool _checkWorkingTree(
   Directory root,
   List<String> overwritten, {
@@ -877,24 +878,34 @@ bool _checkWorkingTree(
             ]).stdout}'
             .trimRight();
     final changes = <String>[if (status.isNotEmpty) status];
-    for (final relative in overwritten) {
-      final file = File(p.join(root.path, relative));
-      if (!file.existsSync()) {
-        changes.add('$relative (overwrite target missing)');
-        continue;
+    if (status.isEmpty) {
+      final targets = <String>{...overwritten};
+      final entries = '${git(['ls-files', '-v', '-z']).stdout}'.split('\u0000');
+      for (final entry in entries) {
+        if (entry.length >= 3 &&
+            (entry[0] == 'S' || entry[0] == entry[0].toLowerCase())) {
+          targets.add(entry.substring(2));
+        }
       }
-      final path = '$prefix$relative';
-      final committed = '${git(['rev-parse', '--verify', 'HEAD:$path']).stdout}'
-          .trim();
-      final working =
-          '${git([
-                'hash-object',
-                '--path=$relative',
-                file.absolute.path,
-              ]).stdout}'
-              .trim();
-      if (committed != working) {
-        changes.add('$relative (modified overwrite target)');
+      for (final relative in targets) {
+        final file = File(p.join(root.path, relative));
+        if (!file.existsSync()) {
+          changes.add('$relative (overwrite target missing)');
+          continue;
+        }
+        final path = '$prefix$relative';
+        final committed =
+            '${git(['rev-parse', '--verify', 'HEAD:$path']).stdout}'.trim();
+        final working =
+            '${git([
+                  'hash-object',
+                  '--path=$relative',
+                  file.absolute.path,
+                ]).stdout}'
+                .trim();
+        if (committed != working) {
+          changes.add('$relative (modified tracked file)');
+        }
       }
     }
     if (changes.isEmpty) return true;

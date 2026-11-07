@@ -334,4 +334,48 @@ void main() {
     },
     skip: skip,
   );
+
+  for (final flag in ['assume-unchanged', 'skip-worktree']) {
+    for (final bricksOnly in [true, false]) {
+      test('protects $flag edits in a ${bricksOnly ? 'brick' : 'sample'} '
+          'deletion target', () {
+        final path = bricksOnly
+            ? 'bricks/README.md'
+            : 'lib/features/tasks/domain/entities/task.dart';
+        expect(
+          Process.runSync('git', [
+            'update-index',
+            '--$flag',
+            path,
+          ], workingDirectory: root.path).exitCode,
+          0,
+        );
+        final target = File('${root.path}/$path');
+        final edited = '${target.readAsStringSync()}\n// custom work\n';
+        target.writeAsStringSync(edited);
+        expect(
+          Process.runSync('git', [
+            'status',
+            '--porcelain',
+          ], workingDirectory: root.path).stdout,
+          isEmpty,
+        );
+        final result = _strip(
+          root,
+          root,
+          bricksOnly
+              ? ['--keep-samples', '--remove-bricks']
+              : ['--remove-tasks'],
+        );
+        expect(result.exitCode, 2, reason: _out(result));
+        expect('${result.stderr}', contains(path));
+        expect(target.readAsStringSync(), edited);
+        expect(Directory('${root.path}/bricks').existsSync(), isTrue);
+        expect(
+          Directory('${root.path}/lib/features/tasks').existsSync(),
+          isTrue,
+        );
+      }, skip: skip);
+    }
+  }
 }
