@@ -1,0 +1,5 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart
+00:00 +0: returned page renders and false hasMore stops pagination
+00:01 +1: equal input rebuilds preserve pages; changed input resets them
+00:01 +2: reset ignores an old page while allowing the new load
+00:02 +3: All tests passed!

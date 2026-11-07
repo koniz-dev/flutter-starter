@@ -1,0 +1,14 @@
+docs/guides/performance/summary.md:
+ The widget appends that page and
+stops requesting pages when the returned `hasMore` is false. Replacing the
+input items' contents or changing the input `hasMore` starts a new pagination
+sequence; a result from the previous sequence is ignored.
+
+
+
+docs/guides/performance/optimization-guide.md:
+ The widget appends that page and
+stops requesting pages when the returned `hasMore` is false. Replacing the
+input items' contents or changing the input `hasMore` starts a new pagination
+sequence; a result from the previous sequence is ignored.
+

@@ -1,0 +1,41 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 598 files (0 changed) in 1.82 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.5s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_test.dart: OptimizedListView should display items
+00:01 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: returned page renders and false hasMore stops pagination
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: returned page renders and false hasMore stops pagination
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: returned page renders and false hasMore stops pagination
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: returned page renders and false hasMore stops pagination
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: returned page renders and false hasMore stops pagination
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: a controller passed after the first build drives the list and prefetch
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: a controller passed after the first build drives the list and prefetch
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: a controller passed after the first build drives the list and prefetch
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: a controller passed after the first build drives the list and prefetch
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: a controller passed after the first build drives the list and prefetch
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: reset ignores an old page while allowing the new load
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_pagination_test.dart: reset ignores an old page while allowing the new load
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: an internally created controller is disposed when replaced
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_test.dart: OptimizedListView should handle scroll to trigger prefetch
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_controller_test.dart: a swapped-out controller loses the prefetch listener
+00:03 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_error_test.dart: OptimizedListView empty vs failed empty + error renders the error and a retry, not the empty state
+00:04 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi OptimizedListView empty state is localized
+00:04 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi OptimizedListView empty state is localized
+00:04 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi OptimizedListView empty state is localized
+00:04 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_error_test.dart: OptimizedListView empty vs failed non-empty + error shows the error below the items
+00:04 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi OptimizedListView error, retry and load-more are localized
+00:05 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_error_test.dart: OptimizedListView prefetch failure a throwing prefetch surfaces inline and to the parent
+00:05 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_error_test.dart: OptimizedListView prefetch failure a throwing prefetch surfaces inline and to the parent
+00:05 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi AppErrorWidget announces its message exactly once
+00:05 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/optimized_list_view_error_test.dart: OptimizedListView prefetch failure a failed load-more shows the error inline, and retrying clears it
+00:05 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi AccessibleButton state words are localized
+00:05 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi AccessibleProgressIndicator label and value are localized
+00:05 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi LanguageSwitcher hint is localized
+00:05 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/localized_strings_test.dart: lib/shared strings under vi LanguageSelectionScreen shows endonyms, not English
+00:05 +30: All tests passed!
