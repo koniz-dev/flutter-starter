@@ -405,7 +405,7 @@ The project provides an interface `IGraphQLClient` and a structured template for
 
 ### Setup
 
-1. Run: `flutter pub add graphql_flutter`
+1. Run: `flutter pub add graphql_flutter http`
 2. Follow the setup instructions at the top of the file to uncomment the logic.
 
 This integration is optional and is not wired in the default dependency graph.
@@ -424,11 +424,27 @@ abstract class IGraphQLClient {
 }
 ```
 
-### Features
+### Transport and session behavior
 
-- **Auth Injection**: Demonstrates how to tie Auth repository tokens into GraphQL headers.
-- **Link Concatenation**: Example for concatenating HttpLink with AuthLink for secure communication.
-- **Error Handling**: Template for mapping GraphQL exceptions into domain exceptions.
+The native example passes the HTTP client created by `SslPinning.fromConfig()`
+to `IOClient`, so it uses `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS`.
+Misconfigured pinning is refused explicitly. Its own endpoint must use HTTPS
+in a staging or production release; this check does not rely on the separate
+REST `BASE_URL`. The example disables link redirects.
+
+This is a native-only template. A web adapter needs a browser HTTP client;
+the browser owns TLS and cannot enforce this application's certificate pins.
+
+`GraphQLCache` uses `InMemoryStore`, keeping authenticated results out of a
+plaintext disk store. Use one client/cache per session: stop or cancel pending
+work, detach its consumers, await `dispose()`, and create a new instance for the
+next session. Disposal clears the cache and closes the HTTP link.
+
+The auth link reads the current token for each request. It provides **no token
+refresh, 401 replay, or forced logout**; REST's `AuthInterceptor` is not part of
+this transport. Add those behaviors through your application's auth/session
+contracts before using it for authenticated production traffic. Map GraphQL
+errors to domain failures in that adapter.
 
 
 ---

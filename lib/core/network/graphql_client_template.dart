@@ -1,9 +1,16 @@
 // TEMPLATE: Not wired into the default app; copy/adapt when adding GraphQL.
 //
 // IMPORTANT: To enable GraphQL support
-// 1. Run: flutter pub add graphql_flutter
-// 2. Uncomment the import below
+// 1. Run: flutter pub add graphql_flutter http
+// 2. Uncomment all imports, fields and block-commented method bodies below.
+//    Remove the stub `return null` statements from query and mutate.
+// 3. This is a native-only transport example; web needs a browser client and
+//    cannot enforce application certificate pins.
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter_starter/core/config/app_config.dart';
+// import 'package:flutter_starter/core/network/ssl_pinning.dart';
 // import 'package:graphql_flutter/graphql_flutter.dart';
+// import 'package:http/io_client.dart';
 
 /// An interface for GraphQL Client
 abstract class IGraphQLClient {
@@ -14,16 +21,45 @@ abstract class IGraphQLClient {
   Future<dynamic> mutate(String document, {Map<String, dynamic>? variables});
 }
 
-/// A Template for setting up a production-ready GraphQL client.
-/// This matches the Clean Architecture approach already using `Dio`.
+/// Optional native GraphQL adapter template; method bodies stay disabled.
+///
+/// The enabled example uses the app's pinning policy and an in-memory cache.
+/// Token injection does not provide refresh or forced logout. Stop in-flight
+/// work and dispose this instance at a session boundary, then create a new one.
 class GraphQLClientTemplate implements IGraphQLClient {
-  // late final GraphQLClient _client;
+  // GraphQLClient? _client;
+  // HttpLink? _httpLink;
 
   // Example initialized from the DI container passing an Auth Token Getter
   /// Initializes the GraphQL client with the given endpoint and token getter.
   void init(String endpoint, Future<String?> Function() getAuthToken) {
     /*
-    final httpLink = HttpLink(endpoint);
+    if (kIsWeb) {
+      throw UnsupportedError('This GraphQL transport template is native-only');
+    }
+    if (_client != null) {
+      throw StateError('Dispose the previous GraphQL session before init');
+    }
+    final endpointUri = Uri.parse(endpoint);
+    if (!endpointUri.hasAuthority || endpointUri.host.isEmpty) {
+      throw ArgumentError('GraphQL endpoint must be an absolute HTTP URL');
+    }
+    if (kReleaseMode &&
+        (AppConfig.isStaging || AppConfig.isProduction) &&
+        endpointUri.scheme.toLowerCase() != 'https') {
+      throw StateError('GraphQL endpoint must use HTTPS in this release');
+    }
+    final pinning = SslPinning.fromConfig();
+    if (pinning.isMisconfigured) {
+      throw StateError(SslPinning.misconfiguredMessage);
+    }
+    final httpLink = HttpLink(
+      endpoint,
+      httpClient: IOClient(pinning.createHttpClient()),
+      // ignore: avoid_redundant_argument_values - explicit security policy.
+      followRedirects: false,
+    );
+    _httpLink = httpLink;
 
     final authLink = AuthLink(
       getToken: () async {
@@ -35,7 +71,7 @@ class GraphQLClientTemplate implements IGraphQLClient {
     final link = authLink.concat(httpLink);
 
     _client = GraphQLClient(
-      cache: GraphQLCache(store: HiveStore()),
+      cache: GraphQLCache(store: InMemoryStore()),
       link: link,
     );
     */
@@ -52,7 +88,8 @@ class GraphQLClientTemplate implements IGraphQLClient {
       variables: variables ?? {},
     );
 
-    final result = await _client.query(options);
+    final client = _client ?? (throw StateError('Call init first'));
+    final result = await client.query(options);
 
     if (result.hasException) {
       throw Exception(result.exception.toString());
@@ -74,7 +111,8 @@ class GraphQLClientTemplate implements IGraphQLClient {
       variables: variables ?? {},
     );
 
-    final result = await _client.mutate(options);
+    final client = _client ?? (throw StateError('Call init first'));
+    final result = await client.mutate(options);
 
     if (result.hasException) {
       throw Exception(result.exception.toString());
@@ -83,5 +121,19 @@ class GraphQLClientTemplate implements IGraphQLClient {
     return result.data;
     */
     return null;
+  }
+
+  /// Clears session data and closes the transport.
+  ///
+  /// Callers must stop their in-flight work first.
+  Future<void> dispose() async {
+    /*
+    final client = _client;
+    final httpLink = _httpLink;
+    _client = null;
+    _httpLink = null;
+    client?.cache.store.reset();
+    await httpLink?.dispose();
+    */
   }
 }
