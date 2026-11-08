@@ -1,0 +1,121 @@
+$ flutter test --timeout=5m --reporter compact
+
+00:13 +43 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markers_test.dart: --remove-bricks without the flag, bricks and their prose stay [E]                                  
+  Expected: <0>
+    Actual: <1>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/strip_markers_test.dart 130:7          main.<fn>.<fn>
+  
+
+To run this test again: /usr/local/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_markers_test.dart -p vm --plain-name '--remove-bricks without the flag, bricks and their prose stay'
+02:30 +532 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/di/providers_test.dart: Providers storageInitializationProvider stamps both stores at the current schema version              
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:60:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting regular storage migration
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:121:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Migration completed successfully | Context: {"from_version":1,"to_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:186:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 All migrations completed successfully | Context: {"final_version":2}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   StorageMigrationService.migrateAll (package:flutter_starter/core/storage/storage_migration_service.dart:70:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting secure storage migration
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:64:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Starting storage migration | Context: {"current_version":1,"target_version":2,"migrations_count":1}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   MigrationExecutor.execute (package:flutter_starter/core/storage/migration/migration_executor.dart:111:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Executing migration: Migrate user preferences: rename keys and update data format | Context: {"from_version":1,"to_version":2}
+[... 961 lines elided ...]
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [DioExceptionType.badResponse] /users/me (status 401): UnmountedRefException
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)
+│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:71:35)
+│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:46:21)
+│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)
+│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)
+│ #5   main.drive401 (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:146:17)
+│ #6   main.<anonymous closure>.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/forced_logout_session_test.dart:293:35)
+│ #7   AutomatedTestWidgetsFlutterBinding.runAsync.<anonymous closure> (package:flutter_test/src/binding.dart:2308:17)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"error":"token expired"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+03:45 +1388 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/request_body_replay_test.dart: a multipart upload replayed after a 401 refresh reaches the transport again with the file, and the caller gets the 200
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+03:45 +1389 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/request_body_replay_test.dart: a multipart upload replayed after a 401 refresh two uploads queued behind one refresh each carry their own file
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+03:45 +1390 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/request_body_replay_test.dart: a multipart upload replayed after a 401 refresh a Stream body fails the replay with a NetworkException naming the reason, not a StateError
+Cache legacy purge error: type 'Null' is not a subtype of type 'Future<List<String>?>'
+03:46 +1399 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects a certificate whose fingerprint is not pinned                           
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+03:46 +1400 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects every certificate when the pin list is empty                            
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+03:46 +1401 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning fails loudly when enabled with no fingerprints                                  
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (by ENABLE_SSL_PINNING or the environment default) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+03:54 +1615 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationHelper should handle load errors                                             
+Pagination error: Exception: Load error
+03:56 +1634 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/pagination_helper_test.dart: PaginationHelper config plumbing an error is cleared by the next successful page       
+Pagination error: Exception: network down
+04:02 +1676 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage should return false for invalid URL format              
+Preload error: NetworkImageLoadException (HTTP 400)
+04:02 +1677 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImage reports failure when given a context                    
+Preload error: NetworkImageLoadException (HTTP 400)
+Preload error: NetworkImageLoadException (HTTP 400)
+04:02 +1680 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/image_cache_helper_test.dart: ImageCacheHelper preloadImages counts only the URLs that loaded                       
+Preload error: NetworkImageLoadException (HTTP 400)
+Preload error: NetworkImageLoadException (HTTP 400)
+04:08 +1810 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should force GC in debug mode                                                 
+Memory: Attempting to free memory
+04:08 +1816 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper should dispose resources                                                      
+Memory: Attempting to free memory
+04:08 +1817 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/memory_helper_test.dart: MemoryHelper disposeResources empties a populated image cache                              
+Memory: Attempting to free memory
+04:14 +1919 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_read_failure_test.dart: a request made while the Keychain cannot be read fails, and the session is kept
+Cache credential check error: CacheException: Failed to read auth_token from secure storage: Exception: errSecInteractionNotAllowed
+04:14 +1920 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_read_failure_test.dart: the cache treats an unreadable token store as signed in             
+Cache credential check error: CacheException: Failed to read auth_token from secure storage: Exception: errSecInteractionNotAllowed
+04:20 +1956 ~5 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/adapters/secure_token_delete_failure_test.dart: criterion 1: AuthRepositoryImpl.logout surfaces the failure a refresh token that survived is a ResultFailure
+VS logout=ResultFailure<void>(Cache

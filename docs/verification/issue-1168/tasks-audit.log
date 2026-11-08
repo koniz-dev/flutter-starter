@@ -1,0 +1,121 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (build_runner build -d)
+Generated code matches its sources.
+==> format (lib test integration_test tool examples)
+Formatted 604 files (0 changed) in 1.91 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 8.1s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/di/tasks_providers_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/di/tasks_providers_test.dart: tasks_providers (smoke) should build tasks providers with default DI
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: AppRoutes tasks constants paths and names are the ones the route module registers
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: buildTasksRoutes is composed into the app route tree
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:01 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_home_entry_test.dart: home opens the tasks list, and back returns home
+00:02 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/routing/tasks_routes_test.dart: tasks routes are reachable from the running app goToTasks renders the tasks list screen
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+[... 565 lines elided ...]
+│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:26 +377: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a failed update stays on the detail screen with the edit
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:26 +378: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: a failed save keeps the editor open a successful retry after a failure still pops to the list
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"tasks","routePath":"tasks","previousRouteName":"home","previousRoutePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Popped | Context: {"routeName":"task-detail","routePath":"task-detail","previousRouteName":"tasks","previousRoutePath":"tasks"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:26 +379: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_navigation_test.dart: (tearDownAll)
+00:26 +379: All tests passed!

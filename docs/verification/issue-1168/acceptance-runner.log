@@ -1,0 +1,1 @@
+Low host disk capacity caused scratch-fixture ENOSPC. Acceptance runner copied from maintainers/scripts/run_acceptance.sh; only full test command changed to add --concurrency=1. Format/analyze/full test scope unchanged; no goldens requested. The exact test command appears in tests.log.

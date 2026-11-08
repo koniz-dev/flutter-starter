@@ -1,0 +1,6 @@
+Removed only confirmed generated scratch copies from earlier flutter-starter checks:
+/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/audit_domain_8tgw2a4d
+/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/strip_committed_bricks_1149_qio9cusc
+/private/var/folders/pt/95h6qj2s155fz6f9vsk5gfkw0000gn/T/tmp.WyuoggR2t5
+Source, candidate backup, evidence and existing APK outputs preserved.
+Removed generated Android build/app/intermediates cache (2.5 GiB); preserved all APK outputs and source. Cache will be rebuilt for the required Android debug build.

@@ -1,0 +1,10 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+00:00 +0: criterion 1: a failed delete falls back to an empty list, so B sees none of A's tasks, now or on a reload
+00:00 +1: criterion 1: when the fallback write fails too, the list is held empty until a wipe succeeds
+00:00 +2: a rejected task write reports failure instead of success
+00:00 +3: false storage results protect the next session (fallback fails: false)
+00:00 +4: false storage results protect the next session (fallback fails: true)
+00:00 +5: screen never renders the previous user after false storage (fallback fails: false)
+00:05 +6: screen never renders the previous user after false storage (fallback fails: true)
+00:06 +7: criterion 2: each failure is logged, and none escapes to the zone
+00:06 +8: All tests passed!
