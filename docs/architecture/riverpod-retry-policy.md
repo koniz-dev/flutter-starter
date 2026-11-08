@@ -53,9 +53,10 @@ ProviderContainer createAppContainer({
 <!-- symbol: lib/main.dart createAppContainer -->
 <!-- symbol: lib/features/auth/di/auth_providers.dart authModuleOverrides -->
 
-`authModuleOverrides` binds the auth slice's token refresher and session
-termination sink to the seams core declares; a container built without it
-loses 401 refresh and forced logout.
+`authModuleOverrides` binds three core seams: the auth slice's token refresher,
+session termination sink, and home sign-out callback. A container built
+without it loses 401 refresh and in-memory session termination; its default
+sign-out action throws `StateError`.
 
 That same container is handed to `runApp` inside an `UncontrolledProviderScope`
 at the end of `main()`. It is not a startup-only container and it is never

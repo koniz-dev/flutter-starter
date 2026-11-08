@@ -6,21 +6,31 @@ Riverpod providers for authentication dependency injection.
 
 Authentication providers live in `lib/features/auth/di/auth_providers.dart`. Import that file directly - `lib/core/di/providers.dart` used to re-export it, and no longer does: core naming a feature was half of an import cycle, and the re-export was the other half.
 
-`authInterceptorProvider` moved the other way, into `lib/core/di/providers.dart`, because `apiClientProvider` installs it. The two things it needs from this feature arrive as overrides:
+`authInterceptorProvider` moved the other way, into `lib/core/di/providers.dart`, because `apiClientProvider` installs it. Core declares three seams for this module. The interceptor consumes the token
+refresher and session termination sink; home's sign-out action consumes
+`signOutProvider`. The module binds all three through these overrides:
 
 ```dart
 /// Plugs this slice into the authentication seams core declares.
 final List<Override> authModuleOverrides = <Override>[
   tokenRefresherProvider.overrideWith(
-    (ref) => () => ref.read(authRepositoryProvider).refreshToken(),
+    (ref) =>
+        () => ref.read(authRepositoryProvider).refreshToken(),
   ),
+  // The feature implements the contract and hands it down; `lib/core/network`
+  // never learns that a Riverpod notifier is what it just cleared.
   sessionTerminationSinkProvider.overrideWith(
     RiverpodSessionTerminationSink.new,
+  ),
+  signOutProvider.overrideWith(
+    (ref) =>
+        () => ref.read(authProvider.notifier).logout(),
   ),
 ];
 ```
 
-`createAppContainer()` in `lib/main.dart` applies them, so an app built the normal way needs no extra wiring. A **test** that builds its own `ProviderContainer` and drives a real 401 through `apiClientProvider` must pass `...authModuleOverrides` itself; without them the container still resolves every provider, it just cannot refresh a session or clear the in-memory one.
+`createAppContainer()` in `lib/main.dart` applies them, so an app built the normal way needs no extra wiring. A **test** that builds its own `ProviderContainer` and drives a real 401 through `apiClientProvider` must pass `...authModuleOverrides` itself; without them the container still resolves every provider, it just cannot refresh a session or clear the in-memory one. A home sign-out
+action using the unbound default `signOutProvider` throws `StateError`.
 
 ---
 

@@ -62,6 +62,7 @@ documentation of one.
 | `IKeyValueStore` | **Live** | `StorageService` (`lib/core/storage/storage_service.dart`) | `keyValueStoreProvider` (`lib/core/di/providers.dart`), read at `lib/features/auth/di/auth_providers.dart` and by each feature's DI; fields typed on the contract at `lib/features/auth/data/datasources/auth_local_datasource.dart` and each feature's local data source | Provider override to your store |
 | `ITokenStore` | **Live** | `SecureTokenStore` (`lib/core/storage/adapters/secure_token_store.dart`) | `tokenStoreProvider` (`lib/core/di/providers.dart`), read at `lib/features/auth/di/auth_providers.dart` and `lib/core/di/providers.dart`; fields typed on the contract at `lib/core/network/interceptors/auth_interceptor.dart` and `lib/features/auth/data/datasources/auth_local_datasource.dart` | Provider override |
 | `ISessionTerminationSink` | **Live** | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart`) | Bound to `sessionTerminationSinkProvider` by `authModuleOverrides` (`lib/features/auth/di/auth_providers.dart`) and read into `AuthInterceptor` at `lib/core/di/providers.dart`; held at `lib/core/network/interceptors/auth_interceptor.dart` and invoked on forced logout | Implement the contract and pass it in the same place |
+| `SignOut` / `signOutProvider` | **Live** | Default callback throws `StateError`; the auth module binds it to `AuthNotifier.logout` | Bound by `authModuleOverrides` (`lib/features/auth/di/auth_providers.dart`); consumed by the home app-bar sign-out action (`lib/features/home/presentation/screens/home_screen.dart`) | Override `signOutProvider` at the composition root, or remove the action in an anonymous app |
 | Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart`) over `go_router` | Every screen that navigates, e.g. `lib/features/auth/presentation/screens/login_screen.dart` and `register_screen.dart`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |
 | `AppDesignTokens` | **No production consumer** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`) | Nowhere, and there is no provider. `AppTheme` binds the **concrete** class at compile time: `static const _tokens = DefaultDesignTokens();` (`lib/shared/theme/app_theme.dart`). Nothing in `lib/` is typed on `AppDesignTokens`. | Edit `lib/shared/theme/app_theme.dart` to construct your own token class (and update the theme building that reads `_tokens`). There is no override point. |
 | `IAuthController` | **No production consumer** | `AuthNotifier` (`lib/features/auth/presentation/providers/auth_provider.dart`) | `authControllerProvider` (`lib/features/auth/presentation/providers/auth_provider.dart`) binds it, but that identifier has **zero readers** in `lib/` and `test/` - the UI reads the generated `authProvider` directly. | Rebinding `authControllerProvider` to your orchestrator has no effect until something reads it |
@@ -114,15 +115,18 @@ name it guards moves or disappears.
 <!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart AuthNotifier -->
 <!-- symbol: lib/features/auth/di/auth_providers.dart authModuleOverrides -->
 <!-- symbol: lib/core/di/providers.dart sessionTerminationSinkProvider -->
+<!-- symbol: lib/core/di/providers.dart SignOut -->
+<!-- symbol: lib/core/di/providers.dart signOutProvider -->
+<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart AuthNotifier.logout -->
 <!-- symbol: lib/core/routing/navigation_extensions.dart NavigationExtensions -->
 <!-- symbol: lib/shared/design_system/tokens/default_design_tokens.dart DefaultDesignTokens -->
 <!-- symbol: lib/shared/theme/app_theme.dart AppTheme._tokens -->
 <!-- symbol: lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart NoOpFeatureFlagsRemoteDataSource -->
 <!-- symbol: lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart FeatureFlagsRemoteDataSource -->
 
-Two of those paths end in `.g.dart` on purpose. `goRouterProvider`,
+Those `.g.dart` paths are intentional. `goRouterProvider`,
 `authProvider` and `featureFlagsRemoteDataSourceProvider` are generated from
-`@riverpod` annotations and exist nowhere else, so a checker that skipped
+Riverpod annotations and exist nowhere else, so a checker that skipped
 generated output would skip exactly the identifiers an adopter is most likely
 to mistype.
 
@@ -140,7 +144,7 @@ to mistype.
 
 | Module | Default | Concrete / notes | Override or template |
 | --- | --- | --- | --- |
-| Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@riverpod featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` <!-- strip:feature-flags line --> |
+| Remote feature flags | `NoOpFeatureFlagsRemoteDataSource` (`lib/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart`) | **No Firebase implementation ships in this repository.** Write your own `FeatureFlagsRemoteDataSource` (the contract is in the same file) | Override `featureFlagsRemoteDataSourceProvider`, generated from the `@Riverpod(keepAlive: true) featureFlagsRemoteDataSource` function at `lib/features/feature_flags/presentation/providers/feature_flags_providers.dart` <!-- strip:feature-flags line --> |
 | RASP | `NoOpRaspService` | `freerasp` (opt-in template; not a default dependency) | `raspServiceProvider` in `lib/core/security/rasp_providers.dart` |
 | Firebase Performance | No-op via performance providers | Firebase SDK | `lib/core/performance/performance_providers.dart` (see comments there) |
 | Crash / error reporting | `NoOpErrorReporter` (`lib/core/logging/noop_error_reporter.dart`) | Your `IErrorReporter` (`lib/core/logging/i_error_reporter.dart`); a Crashlytics example is `lib/core/logging/crashlytics_error_reporter_template.dart`. `LoggingService.error` forwards to it | Override `errorReporterProvider` in `lib/core/logging/error_reporter_providers.dart` |
