@@ -21,6 +21,7 @@ import '../../../../helpers/in_memory_stores.dart';
 class _HeldRemote implements FeatureFlagsRemoteDataSource {
   Completer<void> gate = Completer<void>();
   bool fail = false;
+  Completer<void>? fetchGate;
   int initializes = 0;
   int fetches = 0;
   int reads = 0;
@@ -36,6 +37,7 @@ class _HeldRemote implements FeatureFlagsRemoteDataSource {
   @override
   Future<void> fetchAndActivate() async {
     fetches++;
+    await fetchGate?.future;
     ready = true;
   }
 
@@ -100,9 +102,15 @@ void main() {
           featureFlagProvider(FeatureFlags.debugMenu).future,
         );
         final all = container.read(allFeatureFlagsProvider.future);
-        expect(await enabled, FeatureFlags.newFeature.defaultValue);
-        expect((await flag)?.source, FeatureFlagSource.buildMode);
-        final flags = await all;
+        expect(
+          await enabled.timeout(const Duration(milliseconds: 500)),
+          FeatureFlags.newFeature.defaultValue,
+        );
+        expect(
+          (await flag.timeout(const Duration(milliseconds: 500)))?.source,
+          FeatureFlagSource.buildMode,
+        );
+        final flags = await all.timeout(const Duration(milliseconds: 500));
         expect(flags['local_override']?.value, isTrue);
         expect(flags[FeatureFlags.debugMenu.value]?.value, isTrue);
         expect(
@@ -145,6 +153,35 @@ void main() {
       expect(remote.fetches, 2);
     },
   );
+
+  test('timed-out fetch cannot overlap a newer activation', () async {
+    remote.gate.complete();
+    remote.fetchGate = Completer<void>();
+    expect(
+      (await repository.initialize().timeout(const Duration(milliseconds: 500)))
+          .isFailure,
+      isTrue,
+    );
+    expect(remote.fetches, 1);
+    expect((await repository.refreshRemoteFlags()).isFailure, isTrue);
+    expect(remote.initializes, 1);
+    expect(remote.fetches, 1);
+    remote.fetchGate!.complete();
+    await pumpEventQueue();
+    expect((await repository.getFlag('remote')).isFailure, isTrue);
+    expect(
+      remote.reads,
+      0,
+      reason: 'late SDK completion cannot re-enable reads',
+    );
+    expect((await repository.refreshRemoteFlags()).isSuccess, isTrue);
+    expect(remote.initializes, 2);
+    expect(remote.fetches, 2);
+    expect(
+      (await repository.getFlag('remote')).dataOrNull?.source,
+      FeatureFlagSource.remoteConfig,
+    );
+  });
 
   testWidgets(
     'FeatureFlagBuilder stops spinning when initialization times out',

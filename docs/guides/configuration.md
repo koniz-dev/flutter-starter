@@ -295,7 +295,9 @@ The async `isFeatureEnabledProvider`, `featureFlagProvider` and
 shipped repository bounds initialization and refresh to ten seconds. On failure
 or timeout, reads skip the unavailable remote and retain local overrides,
 local definitions and key defaults. Refresh retries initialization after a
-failure. An SDK future that timed out cannot re-enable remote reads later.
+failure. A timed-out SDK operation cannot re-enable remote reads later. While
+that operation is still pending, refresh returns local fallback without starting
+an overlapping SDK activation; retry initialization once it settles.
 
 Direct manager access requires initialization first:
 
