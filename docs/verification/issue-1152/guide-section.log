@@ -1,0 +1,7 @@
+## Adding Custom Features
+
+Follow [Adding a New Feature](../../api/examples/adding-features.md) for the
+complete procedure: scaffold the slice, connect its data source and dependency
+injection, add localized UI, register its route and home destination, and test
+the feature.
+
