@@ -2,6 +2,10 @@
 // ignore_for_file: public_member_api_docs
 
 /// Generic key-value storage contract for non-sensitive values.
+///
+/// Mutations can report failure by returning `false` as well as by throwing.
+/// Callers must check the result before reporting success, deleting source
+/// data during a migration, or treating session cleanup as complete.
 abstract class IKeyValueStore {
   Future<String?> getString(String key);
   Future<bool> setString(String key, String value);
