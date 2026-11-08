@@ -1,0 +1,20 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 604 files (0 changed) in 1.82 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 6.1s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/helpers_test.dart
+00:00 +0: fixtures createUserModel fills defaults and takes overrides
+00:00 +1: fixtures createAuthResponse wraps a user model and both tokens
+00:00 +2: fixtures createCacheException carries its message
+00:00 +3: fixtures createServerException defaults to a 500
+00:00 +4: result assertions expectResultSuccess passes on a Success with that data
+00:00 +5: result assertions expectResultFailure passes on that failure
+00:00 +6: in-memory stores InMemoryKeyValueStore round-trips, removes and clears
+00:00 +7: pumping createTestApp hosts a widget under a Scaffold
+00:00 +8: pumping pumpAppAndSettle pumps and settles animations
+00:01 +9: All tests passed!

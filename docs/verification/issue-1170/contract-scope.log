@@ -1,0 +1,11 @@
+// Lightweight boundary contract file; repetitive per-member docs are omitted.
+// ignore_for_file: public_member_api_docs
+
+/// Generic key-value storage contract for non-sensitive values.
+///
+/// Mutations can report failure by returning `false` as well as by throwing.
+/// Callers must check the result before reporting success, deleting source
+/// data during a migration, or treating session cleanup as complete.
+
+PASS: non-documentation source is byte-identical to base.
+SHA256: 138544d4d2653cdce13156350bbeb00edac8d9d14be609f46918fe956aa58438
