@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Task persistence rejects false storage results.** Failed writes reach callers as failures, failed deletion triggers cleanup fallback, and the next session stays empty if both fail. Task creation settles a pending wipe before writing, so storage recovery cannot report success then delete the newly created task.
+
 - **Auth reports rejected profile cache mutations.** A false profile write or deletion now raises CacheException. Rejected profile deletion still attempts token cleanup, so access and refresh tokens are cleared independently before failure is reported.
 
 - **Storage migrations stop after rejected writes or deletions.** Migration v1 to v2 checks every mutation result before deleting source keys or advancing the schema. Partially applied migrations can retry safely after storage recovers.
