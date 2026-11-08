@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Complete the remaining runtime and tooling audit fixes.** Task dates follow the screen locale, nullable lazy initializers cache null, remote feature flags have bounded fallback and safe refresh retries, and native staging/production API redirects stay on HTTPS. Generated feature tests cover the domain layer; deploy and Fastlane examples now use valid credentials/release-note formats and explicit setup paths.
+
 - **One canonical feature creation guide.** Customization now links to Adding a New Feature instead of duplicating an incomplete tutorial that omitted localization and navigation.
 
 - **Authentication DI documentation matches all three seams.** Provider, security and retry guides now include sign-out alongside refresh and session termination, and the contracts map reflects the live sign-out and feature-flag declarations.
