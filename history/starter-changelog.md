@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Storage migrations stop after rejected writes or deletions.** Migration v1 to v2 checks every mutation result before deleting source keys or advancing the schema. Partially applied migrations can retry safely after storage recovers.
+
 - **Complete the remaining runtime and tooling audit fixes.** Task dates follow the screen locale, nullable lazy initializers cache null, remote feature flags have bounded fallback and safe refresh retries, and native staging/production API redirects stay on HTTPS. Generated feature tests cover the domain layer; deploy and Fastlane examples now use valid credentials/release-note formats and explicit setup paths.
 
 - **One canonical feature creation guide.** Customization now links to Adding a New Feature instead of duplicating an incomplete tutorial that omitted localization and navigation.
