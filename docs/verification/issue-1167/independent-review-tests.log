@@ -1,0 +1,121 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_storage_rejection_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_storage_rejection_test.dart: a rejected user write is reported to the sign-in caller
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_storage_rejection_test.dart: a rejected user deletion still clears both tokens and reports failure
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should cache token in secure storage
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should retrieve token from secure storage
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Token Storage should return null when token does not exist
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Refresh Token Storage should cache refresh token in secure storage
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Refresh Token Storage should retrieve refresh token from secure storage
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Refresh Token Storage should return null when refresh token does not exist
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should cache user in regular storage
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should retrieve cached user from regular storage
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl User Data Storage should return null when user does not exist
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Data Separation should store tokens in secure storage and user data in regular storage
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Clear Cache should clear all cached data from both storages
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when token caching fails
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when secure storage write fails
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when user caching fails
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when getCachedUser fails
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when cacheRefreshToken fails
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Error Handling should throw CacheException when clearCache fails
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle empty token
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle empty refresh token
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle very long token
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle user with all optional fields
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle user with minimal fields
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle multiple cache operations
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle clearCache when no data exists
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getToken when token does not exist
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getRefreshToken when refresh token does not exist
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: AuthLocalDataSourceImpl Edge Cases should handle getCachedUser when user does not exist
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently a user-blob removal throwing an Exception must still clear the tokens
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently a user-blob removal throwing an Error must still clear the tokens
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently a token clear throwing an Error is reported as a CacheException
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_local_datasource_test.dart: clearCache tears its two stores down independently when both steps fail the first failure is the one reported
+00:02 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:02 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return User when login succeeds
+00:02 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:02 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:02 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:02 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should tag a missing refresh token as REFRESH_TOKEN_EXPIRED
+00:02 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the register round trip leaves nothing stored
+00:02 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should tag a 401 from the refresh endpoint as REFRESH_TOKEN_EXPIRED
+00:02 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: of two overlapping logins, the second one stays signed in
+00:02 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: of two overlapping logins, the second one stays signed in
+00:02 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 1: a 400 from the refresh endpoint is tagged REFRESH_TOKEN_EXPIRED
+00:02 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in cut off by a logout stores nothing and revokes nothing
+00:02 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in cut off by a logout stores nothing and revokes nothing
+00:02 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in cut off by a logout stores nothing and revokes nothing
+00:02 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 408 from the refresh endpoint is not tagged
+00:02 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in during a pending logout keeps its credentials
+00:02 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in during a pending logout keeps its credentials
+00:02 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 500 from the refresh endpoint is not tagged
+00:02 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in waits for every pending logout, not only the latest
+00:02 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in waits for every pending logout, not only the latest
+00:02 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in waits for every pending logout, not only the latest
+00:02 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 504 from the refresh endpoint is not tagged
+00:02 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout called right after a login ends that login
+00:02 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout called right after a login ends that login
+00:02 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a NetworkException (CONNECTION_ERROR) is not tagged
+00:02 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in gives up after the bound when a logout never finishes
+[... 108 lines elided ...]
+00:11 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user an unreadable token store lands on /login without throwing
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:11 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user a token store throwing an Error lands on /login without throwing
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:11 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: cold start requires a token, not just a cached user a cached user with a readable token still lands on /
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:11 +108: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: deep link survives the login round trip bounce to /login carries the destination, and returns to it
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:11 +109: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/session_restore_test.dart: deep link survives the login round trip an off-site redirect target is ignored
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:12 +110: All tests passed!

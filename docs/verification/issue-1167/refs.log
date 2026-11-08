@@ -1,0 +1,4 @@
+Commits in 19f361876fe265915da3fe4a24fb00771ea8a471..HEAD
+  ok    47f635e2 fix(auth): report rejected user cache mutations (#1174)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
