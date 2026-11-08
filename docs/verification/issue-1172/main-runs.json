@@ -1,0 +1,34 @@
+[
+  {
+    "conclusion": "success",
+    "databaseId": 42493449663,
+    "headSha": "b1d2d49184abd019aa8036d96ac38605d3fe1ada",
+    "name": "Strip smoke",
+    "status": "completed",
+    "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42493449663"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 42493449559,
+    "headSha": "b1d2d49184abd019aa8036d96ac38605d3fe1ada",
+    "name": "Docs check",
+    "status": "completed",
+    "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42493449559"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 42493449574,
+    "headSha": "b1d2d49184abd019aa8036d96ac38605d3fe1ada",
+    "name": "CI",
+    "status": "completed",
+    "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42493449574"
+  },
+  {
+    "conclusion": "success",
+    "databaseId": 42492887505,
+    "headSha": "2c186982eb0d54b0946911cbcc37c073f9913e03",
+    "name": "Strip smoke",
+    "status": "completed",
+    "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42492887505"
+  }
+]

@@ -1,0 +1,7 @@
+Before freeze: maintainers commit 16693474de0, all six fix entries under Unreleased.
+After freeze: maintainers commit fbb405cdc48, section [4.0.0] - 2026-11-08.
+Verified retained entries: Storage migrations stop, Auth reports rejected, Task persistence rejects, Task reads respect, Key-value storage documents, Android builds leave
+Breaking entries include API URL configuration and custom sign-out binding.
+Semver rationale: https://github.com/koniz-dev/flutter-starter/issues/1172#issuecomment-6723108543
+Marker PR: https://github.com/koniz-dev/flutter-starter/pull/1183
+Frozen notes: release-notes.md

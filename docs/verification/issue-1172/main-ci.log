@@ -1,0 +1,121 @@
+Quality gate	Set up job	﻿2026-11-08T15:10:47.4397826Z Current runner version: '2.338.2'
+Quality gate	Set up job	2026-11-08T15:10:47.4425074Z ##[group]Runner Image Provisioner
+Quality gate	Set up job	2026-11-08T15:10:47.4426053Z Hosted Compute Agent
+Quality gate	Set up job	2026-11-08T15:10:47.4426701Z Version: 20261028.624
+Quality gate	Set up job	2026-11-08T15:10:47.4427632Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+Quality gate	Set up job	2026-11-08T15:10:47.4428659Z Build Date: 2026-10-28T21:51:42Z
+Quality gate	Set up job	2026-11-08T15:10:47.4429395Z Worker ID: {11aef287-2321-4bf4-8731-f7707fe79bea}
+Quality gate	Set up job	2026-11-08T15:10:47.4430136Z Region: eastus2
+Quality gate	Set up job	2026-11-08T15:10:47.4430699Z Cloud: Azure
+Quality gate	Set up job	2026-11-08T15:10:47.4431259Z ##[endgroup]
+Quality gate	Set up job	2026-11-08T15:10:47.4432805Z ##[group]Operating System
+Quality gate	Set up job	2026-11-08T15:10:47.4433494Z Ubuntu
+Quality gate	Set up job	2026-11-08T15:10:47.4434073Z 26.04.1
+Quality gate	Set up job	2026-11-08T15:10:47.4434602Z LTS
+Quality gate	Set up job	2026-11-08T15:10:47.4435102Z ##[endgroup]
+Quality gate	Set up job	2026-11-08T15:10:47.4435688Z ##[group]Runner Image
+Quality gate	Set up job	2026-11-08T15:10:47.4436328Z Image: ubuntu-26.04
+Quality gate	Set up job	2026-11-08T15:10:47.4436868Z Version: 20261101.186.1
+Quality gate	Set up job	2026-11-08T15:10:47.4438326Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+Quality gate	Set up job	2026-11-08T15:10:47.4440235Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+Quality gate	Set up job	2026-11-08T15:10:47.4441249Z ##[endgroup]
+Quality gate	Set up job	2026-11-08T15:10:47.4442406Z ##[group]GITHUB_TOKEN Permissions
+Quality gate	Set up job	2026-11-08T15:10:47.4444500Z Contents: read
+Quality gate	Set up job	2026-11-08T15:10:47.4445226Z Metadata: read
+Quality gate	Set up job	2026-11-08T15:10:47.4445853Z ##[endgroup]
+Quality gate	Set up job	2026-11-08T15:10:47.4448219Z Secret source: Actions
+Quality gate	Set up job	2026-11-08T15:10:47.4449247Z Cache mode: write
+Quality gate	Set up job	2026-11-08T15:10:47.4450285Z Prepare workflow directory
+Quality gate	Set up job	2026-11-08T15:10:47.4908845Z Prepare all required actions
+Quality gate	Set up job	2026-11-08T15:10:47.4956689Z Getting action download info
+Quality gate	Set up job	2026-11-08T15:10:47.6586397Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Quality gate	Set up job	2026-11-08T15:10:47.8013501Z Download action repository 'subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+Quality gate	Set up job	2026-11-08T15:10:48.0413076Z Getting action download info
+Quality gate	Set up job	2026-11-08T15:10:48.1131357Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+Quality gate	Set up job	2026-11-08T15:10:48.3008555Z Complete job name: Quality gate
+Quality gate	Checkout code	﻿2026-11-08T15:10:48.4163717Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Quality gate	Checkout code	2026-11-08T15:10:48.4166853Z with:
+Quality gate	Checkout code	2026-11-08T15:10:48.4168461Z   fetch-depth: 0
+Quality gate	Checkout code	2026-11-08T15:10:48.4170235Z   repository: koniz-dev/flutter-starter
+Quality gate	Checkout code	2026-11-08T15:10:48.4187465Z   token: ***
+Quality gate	Checkout code	2026-11-08T15:10:48.4188419Z   ssh-strict: true
+Quality gate	Checkout code	2026-11-08T15:10:48.4189285Z   ssh-user: git
+Quality gate	Checkout code	2026-11-08T15:10:48.4190161Z   persist-credentials: true
+Quality gate	Checkout code	2026-11-08T15:10:48.4191162Z   clean: true
+Quality gate	Checkout code	2026-11-08T15:10:48.4192034Z   sparse-checkout-cone-mode: true
+Quality gate	Checkout code	2026-11-08T15:10:48.4193088Z   fetch-tags: false
+Quality gate	Checkout code	2026-11-08T15:10:48.4193966Z   show-progress: true
+Quality gate	Checkout code	2026-11-08T15:10:48.4194847Z   lfs: false
+Quality gate	Checkout code	2026-11-08T15:10:48.4195649Z   submodules: false
+Quality gate	Checkout code	2026-11-08T15:10:48.4196643Z   set-safe-directory: true
+Quality gate	Checkout code	2026-11-08T15:10:48.4197938Z   allow-unsafe-pr-checkout: false
+Quality gate	Checkout code	2026-11-08T15:10:48.4199435Z ##[endgroup]
+Quality gate	Checkout code	2026-11-08T15:10:48.9177810Z Syncing repository: koniz-dev/flutter-starter
+Quality gate	Checkout code	2026-11-08T15:10:48.9179862Z ##[group]Getting Git version info
+Quality gate	Checkout code	2026-11-08T15:10:48.9180661Z Working directory is '/home/runner/work/flutter-starter/flutter-starter'
+Quality gate	Checkout code	2026-11-08T15:10:48.9245148Z [command]/usr/bin/git version
+Quality gate	Checkout code	2026-11-08T15:10:48.9310834Z git version 2.56.0
+Quality gate	Checkout code	2026-11-08T15:10:48.9330035Z ##[endgroup]
+Quality gate	Checkout code	2026-11-08T15:10:48.9347808Z Temporarily overriding HOME='/home/runner/work/_temp/c442cf5d-8da6-45d5-bba6-ce24c9901611' before making global git config changes
+Quality gate	Checkout code	2026-11-08T15:10:48.9351564Z Adding repository directory to the temporary git global config as a safe directory
+[... 1053 lines elided ...]
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:20.7107716Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_CRASH_REPORTING: marked reserved, and nothing reads it
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:20.7335084Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_PERFORMANCE_MONITORING: has a reader of AppConfig.enablePerformanceMonitoring
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:20.7529601Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_DEBUG_FEATURES: has a reader of AppConfig.enableDebugFeatures
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:20.7689324Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/config/enable_toggles_have_readers_test.dart: ENABLE_HTTP_LOGGING: has a reader of AppConfig.enableHttpLogging
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5364419Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 401 -> AuthFailure
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5382866Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 403 -> PermissionFailure
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5407641Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 404 -> NotFoundFailure
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5427790Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures 422 -> ValidationFailure
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5482979Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures any other status stays a ServerFailure and keeps its status
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5519265Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures a 500 and a 503 with the same message are no longer equal
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5536315Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 1: the four statuses map to their typed failures copyWith keeps the status
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:21.5668248Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/core/errors/http_status_failures_test.dart: criterion 3: every failure type docs/api/core/errors.md documents is reachable from a real producer
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:25.1091965Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder the brick writes is deleted
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:33.3584369Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: the placeholder is deleted from a CRLF checkout too
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:41.5035307Z ✅ /home/runner/work/flutter-starter/flutter-starter/test/tooling/setup_brick_placeholder_test.dart: a file of the same name the brick did not write is kept
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:41.5194055Z ##[endgroup]
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:41.5194244Z 
+Quality gate	Run the tests that read markdown	2026-11-08T15:13:41.5202560Z 🎉 654 tests passed, 2 skipped.
+Quality gate	Post Setup Flutter	﻿2026-11-08T15:13:41.6232598Z Post job cleanup.
+Quality gate	Post Setup Flutter	2026-11-08T15:13:41.6236456Z ##[start-action display=Cache pub dependencies;id=__e54c7027-610a-473b-af08-62fa8daa4ef9.cache-pub]
+Quality gate	Post Setup Flutter	2026-11-08T15:13:41.7931533Z Post job cleanup.
+Quality gate	Post Setup Flutter	2026-11-08T15:13:41.9232210Z Cache hit occurred on the primary key flutter-pub-linux-stable-3.47.9-x64-c197ca5199e9ee5661e865596c9c07294dfab51c-f6c0a916e7e6f8eb3caa35a82f312678cfc0d7c800f8f4dc70dc22b71760107c, not saving cache.
+Quality gate	Post Setup Flutter	2026-11-08T15:13:41.9332453Z ##[end-action id=__e54c7027-610a-473b-af08-62fa8daa4ef9.cache-pub;outcome=success;conclusion=success;duration_ms=309]
+Quality gate	Post Setup Flutter	2026-11-08T15:13:41.9335044Z ##[start-action display=Cache Flutter;id=__e54c7027-610a-473b-af08-62fa8daa4ef9.cache-flutter]
+Quality gate	Post Setup Flutter	2026-11-08T15:13:41.9373138Z Post job cleanup.
+Quality gate	Post Setup Flutter	2026-11-08T15:13:42.0686168Z Cache hit occurred on the primary key flutter-linux-stable-3.47.9-x64-c197ca5199e9ee5661e865596c9c07294dfab51c, not saving cache.
+Quality gate	Post Setup Flutter	2026-11-08T15:13:42.0755106Z ##[end-action id=__e54c7027-610a-473b-af08-62fa8daa4ef9.cache-flutter;outcome=success;conclusion=success;duration_ms=141]
+Quality gate	Post Checkout code	﻿2026-11-08T15:13:42.0858126Z Post job cleanup.
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1809592Z [command]/usr/bin/git version
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1884245Z git version 2.56.0
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1949992Z Temporarily overriding HOME='/home/runner/work/_temp/ca0dac8e-78d8-4539-9a23-7790cec752a8' before making global git config changes
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1956548Z Adding repository directory to the temporary git global config as a safe directory
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1957911Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1990500Z Removing SSH command configuration
+Quality gate	Post Checkout code	2026-11-08T15:13:42.1998299Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2040949Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2376490Z Removing HTTP extra header
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2382272Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2429988Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2734097Z Removing includeIf entries pointing to credentials config files
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2741987Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2770275Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2771225Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2772327Z includeif.gitdir:/github/workspace/.git.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2773181Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2781531Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2807446Z /home/runner/work/_temp/git-credentials-3629d131-e54e-4db3-a9a7-5238b8151783.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2817416Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-3629d131\-e54e\-4db3\-a9a7\-5238b8151783\.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2856895Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2888686Z /home/runner/work/_temp/git-credentials-3629d131-e54e-4db3-a9a7-5238b8151783.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2898570Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-3629d131\-e54e\-4db3\-a9a7\-5238b8151783\.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2934156Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2960406Z /github/runner_temp/git-credentials-3629d131-e54e-4db3-a9a7-5238b8151783.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.2968528Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-3629d131\-e54e\-4db3\-a9a7\-5238b8151783\.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.3001630Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Quality gate	Post Checkout code	2026-11-08T15:13:42.3026125Z /github/runner_temp/git-credentials-3629d131-e54e-4db3-a9a7-5238b8151783.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.3032911Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-3629d131\-e54e\-4db3\-a9a7\-5238b8151783\.config
+Quality gate	Post Checkout code	2026-11-08T15:13:42.3067956Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Quality gate	Post Checkout code	2026-11-08T15:13:42.3339429Z Removing credentials config '/home/runner/work/_temp/git-credentials-3629d131-e54e-4db3-a9a7-5238b8151783.config'
+Quality gate	Complete job	﻿2026-11-08T15:13:42.3492759Z Cleaning up orphan processes

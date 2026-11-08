@@ -1,0 +1,12 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 604 files (0 changed) in 1.80 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 6.1s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_links_test.dart
+00:00 +0: every relative link and anchor in the markdown resolves
+00:00 +1: All tests passed!

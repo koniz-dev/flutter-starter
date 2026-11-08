@@ -1,0 +1,121 @@
+Strip feature-flags-removed + analyze + test	Set up job	﻿2026-11-08T15:10:30.6104659Z Current runner version: '2.338.2'
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6143259Z ##[group]Runner Image Provisioner
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6144751Z Hosted Compute Agent
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6145647Z Version: 20261028.624
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6146785Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6147932Z Build Date: 2026-10-28T21:51:42Z
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6149075Z Worker ID: {aeae7490-b643-40b4-ae12-1dece2f581a7}
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6150118Z Region: eastus
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6150985Z Cloud: Azure
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6151835Z ##[endgroup]
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6153836Z ##[group]Operating System
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6155105Z Ubuntu
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6155864Z 26.04.1
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6156755Z LTS
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6157573Z ##[endgroup]
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6158465Z ##[group]Runner Image
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6159389Z Image: ubuntu-26.04
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6160223Z Version: 20261101.186.1
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6161907Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6164920Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6166419Z ##[endgroup]
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6168168Z ##[group]GITHUB_TOKEN Permissions
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6170788Z Contents: read
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6171835Z Metadata: read
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6172679Z ##[endgroup]
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6175947Z Secret source: Actions
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6177318Z Cache mode: write
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6178907Z Prepare workflow directory
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6514212Z Prepare all required actions
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.6564081Z Getting action download info
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.7935037Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:30.9038184Z Download action repository 'subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2' (SHA:1a449444c387b1966244ae4d4f8c696479add0b2)
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:31.1899715Z Getting action download info
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:31.2473770Z Download action repository 'actions/cache@v5' (SHA:caa296126883cff596d87d8935842f9db880ef25)
+Strip feature-flags-removed + analyze + test	Set up job	2026-11-08T15:10:31.4056488Z Complete job name: Strip feature-flags-removed + analyze + test
+Strip feature-flags-removed + analyze + test	Checkout code	﻿2026-11-08T15:10:31.4905966Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4906849Z with:
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4907220Z   fetch-depth: 0
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4907630Z   repository: koniz-dev/flutter-starter
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4910986Z   token: ***
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4911378Z   ssh-strict: true
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4911771Z   ssh-user: git
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4912172Z   persist-credentials: true
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4912629Z   clean: true
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4913024Z   sparse-checkout-cone-mode: true
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4913474Z   fetch-tags: false
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4913861Z   show-progress: true
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4914399Z   lfs: false
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4914771Z   submodules: false
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4915163Z   set-safe-directory: true
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4915628Z   allow-unsafe-pr-checkout: false
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.4916227Z ##[endgroup]
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7190270Z Syncing repository: koniz-dev/flutter-starter
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7192771Z ##[group]Getting Git version info
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7194080Z Working directory is '/home/runner/work/flutter-starter/flutter-starter'
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7195908Z [command]/usr/bin/git version
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7196708Z git version 2.56.0
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7215243Z ##[endgroup]
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7227204Z Temporarily overriding HOME='/home/runner/work/_temp/192c4216-fd0c-440e-81ae-7b341fadd152' before making global git config changes
+Strip feature-flags-removed + analyze + test	Checkout code	2026-11-08T15:10:31.7229426Z Adding repository directory to the temporary git global config as a safe directory
+[... 1210 lines elided ...]
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3974926Z shell: /usr/bin/bash -e {0}
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3975228Z env:
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3975685Z   EVENT_NAME: push
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3975913Z   PR_BASE_SHA: 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3976123Z   PR_HEAD_SHA: 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3976371Z   PUSH_BEFORE: 2c186982eb0d54b0946911cbcc37c073f9913e03
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3976888Z   PUSH_AFTER: b1d2d49184abd019aa8036d96ac38605d3fe1ada
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3977182Z   VARIANT: both-samples-removed
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.3977417Z ##[endgroup]
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4156434Z Strip smoke [both-samples-removed]: SKIPPED (docs-only) - Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4177666Z ### Strip smoke scope - `both-samples-removed`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4178073Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4178249Z **SKIPPED (docs-only)**
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4178494Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4178633Z - event: `push`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4179228Z - range: `2c186982eb0d54b0946911cbcc37c073f9913e03..b1d2d49184abd019aa8036d96ac38605d3fe1ada`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4179986Z - strip, analyze and test run: `false`
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4180266Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4181052Z Every changed path matches `**/*.md` or `docs/**` (and none is a `.dart` file), so no strip variant could have been affected. strip, analyze and test were NOT run, and Flutter was NOT installed.
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4181626Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4181760Z <details><summary>Changed paths</summary>
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4181947Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4182038Z ```
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4182281Z docs/guides/migration/upgrading-this-starter.md
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4182572Z ```
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4182682Z 
+Strip both-samples-removed + analyze + test	Decide the strip scope	2026-11-08T15:10:34.4182776Z </details>
+Strip both-samples-removed + analyze + test	Post Checkout code	﻿2026-11-08T15:10:34.4384229Z Post job cleanup.
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5074506Z [command]/usr/bin/git version
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5143802Z git version 2.56.0
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5172832Z Temporarily overriding HOME='/home/runner/work/_temp/87e5cc8c-f3c0-4a32-bac3-59efc49c130b' before making global git config changes
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5173857Z Adding repository directory to the temporary git global config as a safe directory
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5177094Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/flutter-starter/flutter-starter
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5212918Z Removing SSH command configuration
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5218773Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5252459Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5515144Z Removing HTTP extra header
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5520286Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5554791Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5816569Z Removing includeIf entries pointing to credentials config files
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5821691Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5845654Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5846604Z includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5847318Z includeif.gitdir:/github/workspace/.git.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5847888Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5853371Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5874813Z /home/runner/work/_temp/git-credentials-f74a496e-5b86-4d5a-9b06-b1f435fa339f.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5882929Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-f74a496e\-5b86\-4d5a\-9b06\-b1f435fa339f\.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5913908Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5938144Z /home/runner/work/_temp/git-credentials-f74a496e-5b86-4d5a-9b06-b1f435fa339f.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5944896Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/flutter-starter/flutter-starter/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-f74a496e\-5b86\-4d5a\-9b06\-b1f435fa339f\.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5974734Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.5995567Z /github/runner_temp/git-credentials-f74a496e-5b86-4d5a-9b06-b1f435fa339f.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.6002293Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-f74a496e\-5b86\-4d5a\-9b06\-b1f435fa339f\.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.6032349Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.6052020Z /github/runner_temp/git-credentials-f74a496e-5b86-4d5a-9b06-b1f435fa339f.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.6057734Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-f74a496e\-5b86\-4d5a\-9b06\-b1f435fa339f\.config
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.6087333Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Strip both-samples-removed + analyze + test	Post Checkout code	2026-11-08T15:10:34.6319200Z Removing credentials config '/home/runner/work/_temp/git-credentials-f74a496e-5b86-4d5a-9b06-b1f435fa339f.config'
+Strip both-samples-removed + analyze + test	Complete job	﻿2026-11-08T15:10:34.6450538Z Cleaning up orphan processes
