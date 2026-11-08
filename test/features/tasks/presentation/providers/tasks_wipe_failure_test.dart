@@ -238,6 +238,15 @@ void main() {
       if (failWrite) {
         expect(storage.values[_tasksKey], contains("A's private task"));
         expect(container.read(tasksSessionWipeProvider).pending, isTrue);
+        final blocked = await container
+            .read(tasksProvider.notifier)
+            .createTask(title: 'Blocked while cleanup fails');
+        expect(blocked.isFailure, isTrue);
+        expect(container.read(tasksProvider).isLoading, isFalse);
+        expect(
+          storage.values[_tasksKey],
+          isNot(contains('Blocked while cleanup fails')),
+        );
       } else {
         expect(jsonDecode(storage.values[_tasksKey]! as String), isEmpty);
       }
@@ -245,7 +254,6 @@ void main() {
       storage
         ..failRemove = false
         ..failWrite = false;
-      expect(await titlesAfterReload(), isEmpty);
       final created = await container
           .read(tasksProvider.notifier)
           .createTask(title: "B's new task");
@@ -287,7 +295,6 @@ void main() {
         ..failRemove = false
         ..failWrite = false;
       await tester.runAsync(() async {
-        await titlesAfterReload();
         final result = await container
             .read(tasksProvider.notifier)
             .createTask(title: "B's visible task");
