@@ -1,0 +1,1 @@
+Fresh review_1150 verified source-backed routing/notifier behavior, bootstrap, all three DI seams, throwing sign-out default, shared/source-reading consumers and canonical onboarding link. No actionable findings. Read-only source review; no destructive auth removal or additional test run claimed.
