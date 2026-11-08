@@ -659,9 +659,10 @@ await rasp.startProtection();
 ```
 
 Do **not** build a second `ProviderContainer` for this. `createAppContainer`
-is what binds `authModuleOverrides` - the token refresher and the session
-termination sink - and `_neverRetry`; a container built without them loses 401
-refresh and forced logout without any error.
+applies `_neverRetry` and `authModuleOverrides`: the token refresher, session
+termination sink, and home sign-out callback. Without those three bindings,
+401 refresh and in-memory session termination do not work, and the default
+sign-out action throws `StateError`.
 
 <!-- symbol: lib/main.dart createAppContainer -->
 <!-- symbol: lib/features/auth/di/auth_providers.dart authModuleOverrides -->

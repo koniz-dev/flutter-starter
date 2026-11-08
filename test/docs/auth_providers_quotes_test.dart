@@ -12,9 +12,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// The code lines of the `final ... [name] = ...;` declaration in [text],
 /// without comments, blank lines or indentation.
-String? _declaration(String text, String name) {
+String? _declaration(String text, String name, {bool list = false}) {
+  final end = list ? r'\];' : r'\s*\}\);';
   final match = RegExp(
-    '^final [^\\n]*\\b$name =[\\s\\S]*?\\n\\s*\\}\\);',
+    '^final [^\\n]*\\b$name =[\\s\\S]*?\\n$end',
     multiLine: true,
   ).firstMatch(text);
   return match
@@ -50,6 +51,14 @@ void main() {
       );
     },
   );
+
+  test('authModuleOverrides quote includes every declared binding', () {
+    final declared = _declaration(source, 'authModuleOverrides', list: true);
+    final documented = _declaration(doc, 'authModuleOverrides', list: true);
+    expect(declared, isNotNull);
+    expect(documented, isNotNull);
+    expect(documented, declared);
+  });
 
   for (final name in quoted) {
     test('$name is quoted as auth_providers.dart declares it', () {
