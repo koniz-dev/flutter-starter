@@ -257,6 +257,32 @@ class TasksNotifier extends _$TasksNotifier {
   }) async {
     state = state.copyWith(isLoading: true, clearError: true);
 
+    // Settle the previous session's cleanup before issuing any new write.
+    // Otherwise the success reload would retry that cleanup and delete the
+    // task we just reported as created.
+    final wipe = ref.read(tasksSessionWipeProvider);
+    if (wipe.pending) {
+      final epoch = ref.read(sessionEpochProvider);
+      await wipe.run();
+      if (!ref.mounted || epoch != ref.read(sessionEpochProvider)) {
+        return const ResultFailure(
+          CacheFailure('Task session changed while cleanup was pending'),
+        );
+      }
+      if (wipe.pending) {
+        const failure = CacheFailure(
+          'Tasks could not be cleared from the previous session',
+        );
+        state = state.copyWith(
+          tasks: const [],
+          isLoading: false,
+          error: failure.message,
+          failure: failure,
+        );
+        return const ResultFailure(failure);
+      }
+    }
+
     final createTaskUseCase = ref.read(createTaskUseCaseProvider);
     final result = await createTaskUseCase(
       title: title,
