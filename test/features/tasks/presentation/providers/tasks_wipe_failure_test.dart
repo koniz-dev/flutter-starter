@@ -54,9 +54,16 @@ class _FailingStorage extends InMemoryStorage {
   bool failRemove = false;
   bool failWrite = false;
   bool returnFalse = false;
+  Completer<void>? heldRemoval;
+  int taskRemovals = 0;
 
   @override
   Future<bool> remove(String key) async {
+    if (key == _tasksKey) {
+      taskRemovals++;
+      final gate = heldRemoval;
+      if (gate != null) await gate.future;
+    }
     if (key == _tasksKey && failRemove) {
       if (returnFalse) return false;
       throw Exception('remove failed');
@@ -205,6 +212,33 @@ void main() {
         .createTask(title: "B's task");
     expect(created.isSuccess, isTrue);
     expect(await titlesAfterReload(), ["B's task"]);
+  });
+
+  test('concurrent session wipes share a single deletion', () async {
+    final gate = storage.heldRemoval = Completer<void>();
+    final wipe = container.read(tasksSessionWipeProvider);
+    final first = wipe.run();
+    final second = wipe.run();
+    try {
+      await pumpEventQueue();
+      expect(storage.taskRemovals, 1);
+    } finally {
+      gate.complete();
+      await Future.wait([first, second]);
+    }
+    expect(storage.taskRemovals, 1);
+    expect(wipe.pending, isFalse);
+  });
+
+  test('detail reads cannot bypass a failed session wipe', () async {
+    await guarded(() => handOverToB(failWrite: true));
+    final rows = jsonDecode(storage.values[_tasksKey]! as String) as List;
+    final id = (rows.first as Map<String, dynamic>)['id'] as String;
+    final result = await container.read(tasksProvider.notifier).taskById(id);
+    result.when(
+      success: (task) => expect(task, isNull),
+      failureCallback: (failure) => fail(failure.message),
+    );
   });
 
   test('a rejected task write reports failure instead of success', () async {
