@@ -115,7 +115,8 @@ jobs:
       #     python3 - <<'PY'
       #     import base64, json, os
       #     path = os.path.join(os.environ["RUNNER_TEMP"], "app-store-connect-api.json")
-      #     key = base64.b64decode(os.environ["APP_STORE_CONNECT_API_KEY_BASE64"], validate=True).decode()
+      #     encoded = "".join(os.environ["APP_STORE_CONNECT_API_KEY_BASE64"].split())
+      #     key = base64.b64decode(encoded, validate=True).decode()
       #     descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
       #     os.chmod(path, 0o600)
       #     with os.fdopen(descriptor, "w") as output:

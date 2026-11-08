@@ -41,7 +41,9 @@ void main() {
         'RUNNER_TEMP': dir.path,
         'APP_STORE_CONNECT_KEY_ID': 'test-id',
         'APP_STORE_CONNECT_ISSUER_ID': 'test-issuer',
-        'APP_STORE_CONNECT_API_KEY_BASE64': base64.encode(utf8.encode(key)),
+        'APP_STORE_CONNECT_API_KEY_BASE64':
+            '${base64.encode(utf8.encode(key)).substring(0, 20)}\n'
+            '${base64.encode(utf8.encode(key)).substring(20)}\n',
       },
     );
     expect(result.exitCode, 0, reason: '${result.stderr}');
