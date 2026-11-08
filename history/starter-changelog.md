@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **One canonical feature creation guide.** Customization now links to Adding a New Feature instead of duplicating an incomplete tutorial that omitted localization and navigation.
+
 - **Authentication DI documentation matches all three seams.** Provider, security and retry guides now include sign-out alongside refresh and session termination, and the contracts map reflects the live sign-out and feature-flag declarations.
 
 - **Auth removal documentation covers every shared seam.** The canonical procedure now covers the session notifier, bootstrap and REST bindings, sign-out action, shared test helpers and source-reading documentation consumers. Onboarding links to it instead of prescribing obsolete router edits.
