@@ -1,0 +1,4 @@
+Commits in 659b9df73c227e66af191808daaec646b0905685..HEAD
+  ok    19f36187 fix(storage): stop migration after rejected mutations (#1173)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

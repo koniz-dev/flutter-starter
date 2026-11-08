@@ -1,0 +1,6 @@
+Selected rejected-mutation matrix cases from completed storage audit.
+00:10 +150: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:10 +151: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:10 +152: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:10 +153: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/storage/migration/migrations/migration_rejected_write_test.dart: a rejected username mutation prevents advancing the schema
+00:13 +231: All tests passed!

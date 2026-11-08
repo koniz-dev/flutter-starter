@@ -1,0 +1,14 @@
+Verified in PR #1173.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| All seven rejected key mutations throw MigrationException without advancing schema version 1 | PASS — [migration-matrix.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/migration-matrix.log). The test matrix rejects username, user_name, theme_mode, theme, user_tags, sync_interval_minutes and old_setting_1; each asserts version remains 1. |
+| A rejected destination write preserves user_name or theme source | PASS — [migration-matrix.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/migration-matrix.log). Both destination-write cases assert the original source value remains. |
+| A healthy retry over leftover values reaches version 2 with migrated username, theme_mode and tags | PASS — [migration-matrix.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/migration-matrix.log). Each matrix case copies the actual leftover state to a healthy store, retries and checks all migrated values. |
+| The regression fails without the production fix | PASS — [regression-before.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/regression-before.log). All seven new cases fail against the original migration implementation. |
+| IStorageService documents false mutation results as failure | PASS — [storage-contract.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/storage-contract.log). The interface requires checking false results before deleting migration sources. |
+| The local audit exits 0 | PASS — [storage-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/storage-audit.log). Format and analyzer pass; scoped storage suite passes 231 tests. Full acceptance is recorded separately in tests.log. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/tests.log). All PR checks passed. The acceptance run used the exact source tree merged to main; [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/tree-parity.log) records equality.
+
+Independent pre-merge and post-merge security reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or a device/backend/store claim.
