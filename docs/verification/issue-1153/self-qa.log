@@ -1,0 +1,14 @@
+PASS inspected: /tmp/1153-audit.log | No issues found!, All tests passed!
+PASS inspected: /tmp/1153-docs.log | OK: documentation checks passed.
+PASS inspected: /tmp/1153-codegen.log | Built with build_runner/aot
+PASS inspected: /tmp/1153-scaffold.log | PASS: shell and Mason generate complete domain coverage
+PASS inspected: /tmp/1153-review-regressions.log | +2: All tests passed!
+PASS inspected: /tmp/1153-race-before.log | Some tests failed.
+PASS inspected: /tmp/1153-wrapped-key-before.log | Only base64 data is allowed
+PASS inspected: /tmp/1153-wrapped-key-after.log | +2: All tests passed!
+PASS inspected: /tmp/1153-acceptance-regressions.log | +6: All tests passed!
+PASS inspected: /tmp/1153-timeout-race.log | +6: All tests passed!
+PASS Windows final-head source and completed success
+PASS final local acceptance format
+PASS final local acceptance analyze
+PASS final local acceptance tests

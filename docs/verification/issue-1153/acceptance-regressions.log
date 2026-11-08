@@ -1,0 +1,14 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: nullable initialization caches null until reset
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/utils/lazy_loader_reset_race_test.dart: a stale null completion cannot initialize the new generation
+00:00 +2: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart
+00:03 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering Vietnamese task dates use the resolved screen locale
+00:07 +3: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart
+00:11 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (setUpAll)
+00:11 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task formats both detail timestamps for vi_VN
+00:17 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: (tearDownAll)
+00:17 +4: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+00:18 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: debug refresh waits for held initialization before fetching
+00:21 +5: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart
+00:22 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: Google Play release notes are staged under the locale filename
+00:22 +6: All tests passed!

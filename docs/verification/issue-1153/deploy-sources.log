@@ -1,0 +1,5 @@
+Primary references checked for deploy examples:
+https://docs.fastlane.tools/actions/deliver/ — api_key_path is the App Store Connect API Key JSON file.
+https://docs.fastlane.tools/app-store-connect-api/#using-fastlane-api-key-json-file — JSON contains key_id, issuer_id and key (PEM content).
+https://github.com/r0adkll/upload-google-play/tree/e738b9dd8f2476ea806d921b64aacd24f34515a5 — pinned action expects whatsnew-<BCP47 locale>, not Fastlane default.txt.
+Local executable examples: test/tooling/deploy_upload_examples_test.dart creates dummy key JSON with preserved PEM and mode0600, and stages release notes then verifies exact content/filename. No secrets, certificates or store access are used.

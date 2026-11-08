@@ -1,0 +1,37 @@
+import "package:flutter_starter/core/utils/result.dart";
+import 'dart:async';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_local_datasource.dart';
+import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart';
+import 'package:flutter_starter/features/feature_flags/data/repositories/feature_flags_repository_impl.dart';
+import '/Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/in_memory_stores.dart';
+class Remote implements FeatureFlagsRemoteDataSource {
+  final firstFetch = Completer<void>();
+  int fetches = 0;
+  bool activeValue = false;
+  Future<void> initialize() async {}
+  Future<void> fetchAndActivate() async {
+    final call = ++fetches;
+    if (call == 1) await firstFetch.future;
+    activeValue = call != 1;
+  }
+  Future<bool?> getRemoteFlag(String key) async => activeValue;
+  Future<Map<String,bool>> getAllRemoteFlags() async => {'remote':activeValue};
+  Future<void> setDefaults(Map<String,dynamic> defaults) async {}
+}
+void main() {
+ for(final lateError in [false,true]) {
+ test('pending SDK operation blocks retry; lateError=$lateError', () async {
+   final remote = Remote();
+   final repo = FeatureFlagsRepositoryImpl(remoteDataSource:remote,localDataSource:FeatureFlagsLocalDataSourceImpl(storageService:InMemoryKeyValueStore()),remoteTimeout:const Duration(milliseconds:20));
+   expect((await repo.initialize()).isFailure, true);
+   expect((await repo.refreshRemoteFlags()).isFailure, true);
+   expect(remote.fetches,1);
+   if(lateError) {remote.firstFetch.completeError(StateError('late SDK failure'));} else {remote.firstFetch.complete();}
+   await pumpEventQueue();
+   expect((await repo.getFlag('remote')).isFailure,true);
+   expect((await repo.refreshRemoteFlags()).isSuccess,true);
+   expect((await repo.getFlag('remote')).dataOrNull?.value,true);
+ });
+ }
+}

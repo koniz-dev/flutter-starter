@@ -1,0 +1,8 @@
+Run: https://github.com/koniz-dev/flutter-starter/actions/runs/42436129397
+Head: 42aaaa18522529c300f0c1b36521e09195375a39
+Conclusion: success
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-11-08T01:55:10.5604414Z ^[[36;1mecho "create_feature.ps1 output is identical to create_feature.sh"^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Compare the two outputs	2026-11-08T01:55:10.7033963Z create_feature.ps1 output is identical to create_feature.sh
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-11-08T01:55:10.7256998Z ^[[36;1mecho "Generated domain coverage: $covered/$total"^[[0m
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-11-08T01:55:38.9790238Z No issues found! (ran in 25.1s)
+create_feature.sh == create_feature.ps1 (Windows)	Gate the generated slice	2026-11-08T01:55:53.5091122Z Generated domain coverage: 5/5

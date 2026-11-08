@@ -1,0 +1,33 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning is effective only when enabled with fingerprints
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects a certificate whose fingerprint is not pinned
+SSL Pinning failure for api.example.com: 
+Expected one of: [0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef]
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning rejects every certificate when the pin list is empty
+SSL Pinning failure for : 
+Expected one of: []
+Got: fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (setUpAll)
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/ssl_pinning_test.dart: SslPinning fails loudly when enabled with no fingerprints
+SSL PINNING MISCONFIGURED: SSL pinning is enabled (by ENABLE_SSL_PINNING or the environment default) but API_SSL_FINGERPRINTS is empty. Nothing is pinned: every certificate the system trust store accepts would be accepted. Configure API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:04 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: staging release rejects HTTPS to HTTP before the plain request
+00:04 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release follows HTTPS to HTTPS with the same pins
+00:04 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: debug retains HTTP redirect behavior
+00:04 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: HTTPS through CONNECT retains pinning and redirect scheme checks
+00:04 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: scheme guard also applies without pinning to an initial HTTP URL
+00:04 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: (tearDownAll)
+00:04 +20: All tests passed!

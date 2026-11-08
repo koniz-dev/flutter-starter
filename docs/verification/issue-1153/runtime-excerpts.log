@@ -1,0 +1,25 @@
+Selected assertions from the completed scoped audit; full command and validation in scoped-audit.log.
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release rejects HTTPS to HTTP before the plain request
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: staging release rejects HTTPS to HTTP before the plain request
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: production release follows HTTPS to HTTPS with the same pins
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: debug retains HTTP redirect behavior
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: HTTPS through CONNECT retains pinning and redirect scheme checks
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/api_client_redirect_test.dart: scheme guard also applies without pinning to an initial HTTP URL
+00:13 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/task_detail_screen_test.dart: TaskDetailScreen editing existing task formats both detail timestamps for en_US
+00:13 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering every task row renders its createdAt using the screen locale
+00:13 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering the date is rendered, not the raw DateTime.toString()
+00:13 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering Vietnamese task dates use the resolved screen locale
+00:14 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/screens/tasks_list_screen_test.dart: TasksListScreen date rendering a row without a description still shows its date
+00:26 +265 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: flag providers settle locally after timeout
+00:26 +266 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: flag providers settle locally after timeout
+00:26 +267 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: flag providers settle locally after timeout
+00:26 +268 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: flag providers settle locally after timeout
+00:27 +269 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: flag providers settle locally after failure
+00:27 +270 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: refresh after timeout retries initialization and restores remote reads
+00:27 +271 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: timed-out fetch cannot overlap a newer activation
+00:27 +272 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: FeatureFlagBuilder stops spinning when initialization times out
+00:42 +287 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:42 +288 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:42 +289 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:42 +290 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content
+00:45 +306 ~1: All tests passed!

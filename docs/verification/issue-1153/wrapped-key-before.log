@@ -1,0 +1,22 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart
+00:00 +0: iOS upload receives private JSON with PEM content
+00:00 +0 -1: iOS upload receives private JSON with PEM content [E]
+  Expected: <0>
+    Actual: <1>
+  Traceback (most recent call last):
+    File "<stdin>", line 3, in <module>
+    File "/usr/local/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/base64.py", line 85, in b64decode
+      return binascii.a2b_base64(s, strict_mode=validate)
+             ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  binascii.Error: Only base64 data is allowed
+  
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/tooling/deploy_upload_examples_test.dart 49:5  main.<fn>
+  
+00:00 +0 -1: Google Play release notes are staged under the locale filename
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/deploy_upload_examples_test.dart: iOS upload receives private JSON with PEM content

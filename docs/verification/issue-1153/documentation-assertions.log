@@ -1,0 +1,10 @@
+PASS: removed nonexistent future-upgrade section reference
+PASS: design example go_router: ^18.1.1 matches pubspec
+PASS: design example dio: ^5.11.1 matches pubspec
+PASS: every iOS command names working directory:
+(cd ios && fastlane ios build_appstore environment:production)
+(cd ios && fastlane ios upload_testflight environment:staging)
+(cd ios && fastlane ios upload_appstore environment:production)
+(cd ios && fastlane ios release environment:production)
+(cd ios && fastlane ios upload_appstore \
+PASS: unsigned Android build first copies .env.example to .env
