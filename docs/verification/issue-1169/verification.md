@@ -1,0 +1,14 @@
+Verified in PR #1180.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| The next session sees no tasks while deletion is held open | PASS — [session-wipe-regressions.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/session-wipe-regressions.log). A signs out and B signs in while removal waits on a Completer; the task snapshot remains empty until cleanup completes. |
+| Detail reads after a failed wipe return Success(null) | PASS — [session-wipe-regressions.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/session-wipe-regressions.log). Reading the actual ID from the retained previous-user blob cannot bypass the pending wipe. |
+| Concurrent wipe calls perform one deletion | PASS — [session-wipe-regressions.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/session-wipe-regressions.log). The held storage counts one removal across both concurrent calls, including after both futures complete. |
+| Held-delete and detail regressions fail without the provider fix | PASS — [regression-before.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/regression-before.log). All three new cases fail against the original provider, including the two required privacy cases. |
+| Existing tasks tests still pass | PASS — [tasks-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/tasks-audit.log). All 382 task tests pass, preserving the real-screen direct-recovery and cleanup-before-create checks from the previous fix. |
+| The local audit exits 0 | PASS — [tasks-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/tasks-audit.log). Generated code matches its sources; format and analyzer pass with the tasks suite. Full host acceptance is recorded separately with two-worker concurrency. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/tests.log). All PR checks passed. The acceptance run used the exact source tree merged to main; [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/tree-parity.log) records equality.
+
+Independent pre-merge and post-merge security reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or a device/backend/store claim.

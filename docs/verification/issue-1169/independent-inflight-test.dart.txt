@@ -1,0 +1,64 @@
+import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/session/session_providers.dart';
+import 'package:flutter_starter/core/logging/logging_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
+import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_all_tasks_usecase.dart';
+import 'package:flutter_starter/features/tasks/domain/usecases/get_task_by_id_usecase.dart';
+import 'package:flutter_starter/features/tasks/data/datasources/tasks_local_datasource.dart';
+import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'file:///Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/test_fixtures.dart';
+class All extends Mock implements GetAllTasksUseCase {}
+class ById extends Mock implements GetTaskByIdUseCase {}
+class DS extends Mock implements TasksLocalDataSource {}
+void main() {
+  late All all;
+  late ById byId;
+  late ProviderContainer c;
+  setUp(() {
+    all = All(); byId = ById();
+    when(() => all()).thenAnswer((_) async => const Success([]));
+    c = ProviderContainer(overrides: [
+      getAllTasksUseCaseProvider.overrideWithValue(all),
+      getTaskByIdUseCaseProvider.overrideWithValue(byId),
+      tasksSessionWipeProvider.overrideWithValue(TasksSessionWipe(DS(), LoggingService(enableLogging:false))),
+    ]);
+  });
+  tearDown(() { try { c.dispose(); } catch (_) {} });
+  test('review: old detail future after epoch yields null', () async {
+    final gate=Completer<Result<Task?>>();
+    when(() => byId('a')).thenAnswer((_) => gate.future);
+    final n=c.read(tasksProvider.notifier);
+    final result=n.taskById('a');
+    c.read(sessionGenerationProvider).invalidate();
+    gate.complete(Success(createTask(id:'a')));
+    expect((await result).dataOrNull, isNull);
+    await pumpEventQueue();
+  });
+  test('review: old detail future after disposal yields null', () async {
+    final gate=Completer<Result<Task?>>();
+    when(() => byId('a')).thenAnswer((_) => gate.future);
+    final n=c.read(tasksProvider.notifier);
+    final result=n.taskById('a');
+    c.dispose();
+    gate.complete(Success(createTask(id:'a')));
+    expect((await result).dataOrNull, isNull);
+  });
+  test('review: old list future after epoch cannot repopulate state', () async {
+    final gate=Completer<Result<List<Task>>>();
+    var calls=0;
+    when(() => all()).thenAnswer((_) => ++calls == 1 ? gate.future : Future.value(const Success([])));
+    c.read(tasksProvider);
+    await pumpEventQueue();
+    c.read(sessionGenerationProvider).invalidate();
+    gate.complete(Success([createTask(id:'a')]));
+    await pumpEventQueue();
+    expect(c.read(tasksProvider).tasks,isEmpty);
+    await pumpEventQueue();
+    expect(c.read(tasksProvider).tasks,isEmpty);
+  });
+}

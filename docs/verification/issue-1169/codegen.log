@@ -1,0 +1,12 @@
+W These options have been removed and were ignored: --delete-conflicting-outputs
+  0s riverpod_generator on 594 inputs; integration_test/app_e2e_test.dart
+  0s riverpod_generator on 594 inputs: 1 skipped; lib/core/accessibility/accessibility_constants.dart
+  9s riverpod_generator on 594 inputs: 60 skipped, 1 same; spent 7s analyzing, 1s resolving; lib/core/routing/app_routes.dart
+  9s riverpod_generator on 594 inputs: 583 skipped, 1 output, 2 same, 8 no-op; spent 7s analyzing, 1s resolving
+  0s freezed on 594 inputs; integration_test/app_e2e_test.dart
+  0s freezed on 594 inputs: 583 skipped, 11 no-op
+  0s json_serializable on 1188 inputs; integration_test/app_e2e_test.dart
+  0s json_serializable on 1188 inputs: 1124 skipped, 64 no-op
+  0s source_gen:combining_builder on 1188 inputs; integration_test/app_e2e_test.dart
+  0s source_gen:combining_builder on 1188 inputs: 1185 skipped, 1 output, 2 same
+  Built with build_runner/aot in 10s; wrote 6 outputs.

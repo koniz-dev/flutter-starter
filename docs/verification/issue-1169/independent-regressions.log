@@ -1,0 +1,8 @@
+00:00 +0: loading /tmp/1169_review_test.dart
+00:00 +0: review: create waits for pending wipe and succeeds in same epoch
+00:00 +1: All tests passed!
+00:00 +0: loading /tmp/1169_inflight_review_test.dart
+00:00 +0: review: old detail future after epoch yields null
+00:00 +1: review: old detail future after disposal yields null
+00:00 +2: review: old list future after epoch cannot repopulate state
+00:00 +3: All tests passed!

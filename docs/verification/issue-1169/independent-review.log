@@ -1,0 +1,17 @@
+00:00 +0: loading /tmp/1169_review_test.dart
+00:00 +0: review: create waits for pending wipe and succeeds in same epoch
+00:00 +1: All tests passed!
+00:00 +0: loading /tmp/1169_inflight_review_test.dart
+00:00 +0: review: old detail future after epoch yields null
+00:00 +1: review: old detail future after disposal yields null
+00:00 +2: review: old list future after epoch cannot repopulate state
+00:00 +3: All tests passed!
+
+Adversarial read-only review: PR #1180 / issue #1169
+Reviewed HEAD be0f3f30bb70446362b964afc646d8aae323590b against origin/main.
+Read issue #1169, #1168 and PR body through connected GitHub; reviewed full diff, session epoch notifier and generation, datasource serialization, repository and detail caller.
+No actionable findings found.
+Pending flag is set before asynchronous cleanup starts; callers share a single cleanup future. Epoch rebuild drops snapshots and advances load token; detail reads check epoch after storage and check mounted before touching disposed refs.
+Independent scratch regressions (4 total) passed: new-session create held behind pending cleanup succeeds and persists only B task; old detail result after epoch is null; old detail result after disposal is null; old list future after epoch cannot repopulate snapshot.
+Inspected /tmp/1169-before.log: all three submitted new regressions fail with reverted production code (pending exposure, duplicate deletion, failed-wipe detail leak).
+No tracked files changed or external writes performed. Full acceptance/audit remain owned by root.

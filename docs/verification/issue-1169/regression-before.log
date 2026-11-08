@@ -1,0 +1,37 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_session_reset_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_session_reset_test.dart: the next session cannot see tasks while deletion is pending
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_session_reset_test.dart: the next session cannot see tasks while deletion is pending [E]
+  Expected: empty
+    Actual: ['A\'s private task']
+  
+  package:matcher                                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18                              expect
+  test/features/tasks/presentation/providers/tasks_session_reset_test.dart 222:7  main.<fn>
+  
+00:00 +0 -1: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+00:01 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart: concurrent session wipes share a single deletion
+00:01 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart: concurrent session wipes share a single deletion [E]
+  Expected: <1>
+    Actual: <2>
+  
+  package:matcher                                                                expect
+  package:flutter_test/src/widget_tester.dart 473:18                             expect
+  test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart 229:5  main.<fn>
+  
+00:01 +0 -2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart: detail reads cannot bypass a failed session wipe
+00:01 +0 -3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart: detail reads cannot bypass a failed session wipe [E]
+  Expected: null
+    Actual: <Instance of 'TaskModel'>
+  
+  package:matcher                                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18                              expect
+  test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart 239:26  main.<fn>.<fn>
+  package:flutter_starter/core/utils/result.dart 198:41                           ResultExtensions.when
+  test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart 238:12  main.<fn>
+  
+00:01 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_session_reset_test.dart: the next session cannot see tasks while deletion is pending
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart: concurrent session wipes share a single deletion
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart: detail reads cannot bypass a failed session wipe
