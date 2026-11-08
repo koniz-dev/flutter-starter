@@ -62,7 +62,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       if (userJson == null) {
         throw const CacheException('Failed to encode user data');
       }
-      await storageService.setString(AppConstants.userDataKey, userJson);
+      if (!await storageService.setString(AppConstants.userDataKey, userJson)) {
+        throw const CacheException('Storage rejected the user write');
+      }
     } on Exception catch (e) {
       throw CacheException('Failed to cache user: $e');
     }
@@ -151,7 +153,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
     // Clear user data from regular storage
     try {
-      await storageService.remove(AppConstants.userDataKey);
+      if (!await storageService.remove(AppConstants.userDataKey)) {
+        throw const CacheException('Storage rejected the user deletion');
+      }
     } on Object catch (e) {
       firstError = e;
     }
