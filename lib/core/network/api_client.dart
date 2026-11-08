@@ -43,6 +43,7 @@ class ApiClient {
   /// [retryInitialDelay] and [retryMaxJitter] - Override
   /// [RetryInterceptor]'s backoff, so a test that walks the retry path does
   /// not sleep through it
+  /// [releaseMode] lets host tests exercise the native release HTTPS guard.
   ApiClient({
     required StorageService storageService,
     required SecureStorageService secureStorageService,
@@ -53,6 +54,7 @@ class ApiClient {
     CacheConfig? cacheConfig,
     @visibleForTesting Duration? retryInitialDelay,
     @visibleForTesting Duration? retryMaxJitter,
+    @visibleForTesting bool releaseMode = kReleaseMode,
   }) : _dio = _createDio(
          storageService,
          secureStorageService,
@@ -63,6 +65,7 @@ class ApiClient {
          cacheConfig,
          retryInitialDelay,
          retryMaxJitter,
+         releaseMode,
        ) {
     _networkClient = DioNetworkClient(
       _dio,
@@ -81,6 +84,7 @@ class ApiClient {
     CacheConfig? cacheConfig,
     Duration? retryInitialDelay,
     Duration? retryMaxJitter,
+    bool releaseMode,
   ) {
     final dio = Dio(
       BaseOptions(
@@ -97,9 +101,13 @@ class ApiClient {
 
     // SSL Pinning Configuration.
     //
-    // Returns null when pinning is off; when it is requested without
-    // fingerprints, SslPinning logs and asserts instead of degrading quietly.
-    final pinnedAdapter = sslPinning.createAdapter();
+    // Native staging/production releases guard every redirect hop against
+    // cleartext. Pinning remains independent of that scheme requirement;
+    // requesting pins without fingerprints logs and asserts eagerly.
+    final pinnedAdapter = sslPinning.createAdapter(
+      requireHttps:
+          releaseMode && (AppConfig.isStaging || AppConfig.isProduction),
+    );
     if (pinnedAdapter != null) {
       dio.httpClientAdapter = pinnedAdapter;
     }

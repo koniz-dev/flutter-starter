@@ -887,7 +887,7 @@ The subsections below are **illustrative migration sketches** (hypothetical file
    ```yaml
    # pubspec.yaml
    dependencies:
-     # go_router: ^17.0.0  # Remove this
+     # go_router: ^18.1.1  # Remove this
    ```
 
 2. **Create Navigator wrapper**
@@ -1029,7 +1029,7 @@ See the migration guidance in `docs/guides/migration/README.md` and apply equiva
 1. **Replace dependencies**
    ```yaml
    dependencies:
-     # dio: ^5.9.0  # Remove
+     # dio: ^5.11.1  # Remove
      http: ^1.0.0  # Add
    ```
 

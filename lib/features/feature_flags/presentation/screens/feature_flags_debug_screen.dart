@@ -45,6 +45,8 @@ class _FeatureFlagsDebugScreenState
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () async {
+              await ref.read(featureFlagsInitializationProvider.future);
+              if (!mounted) return;
               await ref.read(featureFlagsManagerProvider).refresh();
               if (!mounted) return;
               _flagsChanged();

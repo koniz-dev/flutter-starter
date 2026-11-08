@@ -13,8 +13,7 @@ Each release is a tag on the upstream repository with notes on
 
 `scripts/dev/migration/` **does not exist** in this repository - it is the
 convention this guide proposes for migration scripts you or a future release
-may add. The "Version 2.1.0 (Hypothetical Future Version)" section below is an
-illustration of the format, not a record of changes.
+may add.
 
 ## Overview
 

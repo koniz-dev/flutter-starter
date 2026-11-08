@@ -111,9 +111,18 @@ jobs:
       #     APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       #     APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       #   run: |
-      #     mkdir -p ~/private_keys
-      #     echo "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 -d > ~/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8
-      #     chmod 600 ~/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8
+      #     # deliver expects the API-key JSON format, including PEM content.
+      #     python3 - <<'PY'
+      #     import base64, json, os
+      #     path = os.path.join(os.environ["RUNNER_TEMP"], "app-store-connect-api.json")
+      #     key = base64.b64decode(os.environ["APP_STORE_CONNECT_API_KEY_BASE64"], validate=True).decode()
+      #     descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+      #     os.chmod(path, 0o600)
+      #     with os.fdopen(descriptor, "w") as output:
+      #         json.dump({"key_id": os.environ["APP_STORE_CONNECT_KEY_ID"],
+      #                    "issuer_id": os.environ["APP_STORE_CONNECT_ISSUER_ID"],
+      #                    "key": key}, output)
+      #     PY
 
       # - name: Setup certificates and profiles
       #   env:
@@ -177,9 +186,7 @@ jobs:
       #       --skip_screenshots \
       #       --skip_metadata \
       #       --force \
-      #       --api_key_path ~/private_keys/AuthKey_${APP_STORE_CONNECT_KEY_ID}.p8 \
-      #       --api_key_id ${APP_STORE_CONNECT_KEY_ID} \
-      #       --api_issuer ${APP_STORE_CONNECT_ISSUER_ID}
+      #       --api_key_path "$RUNNER_TEMP/app-store-connect-api.json"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

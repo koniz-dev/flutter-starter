@@ -47,6 +47,7 @@ To check that a release build compiles before you have a keystore, build an
 **unsigned** release for a local smoke test:
 
 ```bash
+cp .env.example .env
 flutter build apk --release --dart-define-from-file=.env -PallowUnsignedRelease=true
 ```
 

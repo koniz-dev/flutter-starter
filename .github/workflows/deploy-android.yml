@@ -139,6 +139,12 @@ jobs:
       #       --dart-define=BASE_URL="$BASE_URL" \
       #       ${SSL_PINNING_DEFINES[@]+"${SSL_PINNING_DEFINES[@]}"}
 
+      # - name: Stage Google Play release notes
+      #   run: |
+      #     mkdir -p distribution/whatsnew
+      #     cp fastlane/metadata/android/en-US/changelogs/default.txt distribution/whatsnew/whatsnew-en-US
+      #     # Add whatsnew-<BCP-47-locale> for each additional translation.
+
       # - name: Setup Google Play
       #   uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1.1.5
       #   with:
@@ -150,7 +156,7 @@ jobs:
       #     track: ${{ steps.env.outputs.environment == 'production' && 'production' || 'internal' }}
       #     status: completed
       #     inAppUpdatePriority: 2
-      #     whatsNewDirectory: fastlane/metadata/android/en-US/changelogs
+      #     whatsNewDirectory: distribution/whatsnew
 
       - name: Upload artifacts
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

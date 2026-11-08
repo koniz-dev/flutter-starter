@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
-import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
 import 'package:flutter_starter/features/tasks/presentation/task_failure_messages.dart';
@@ -237,13 +237,13 @@ class TasksListScreen extends ConsumerWidget {
                 overflow: TextOverflow.ellipsis,
                 style: task.isCompleted ? completedStyle : null,
               ),
-            // `createdAt` arrives from `TaskModel.fromJson` already converted
-            // to local time, so the local wall-clock formatter is the right
-            // half of `DateFormatter`: `formatIso8601` would render a UTC
-            // instant with a `Z`, which is a storage format, not a display
-            // one.
+            // Models already convert timestamps to local time; display that
+            // wall clock using the screen's locale.
             Text(
-              DateFormatter.formatDate(task.createdAt),
+              LocalizedFormatters.formatDate(
+                task.createdAt,
+                locale: Localizations.localeOf(context),
+              ),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),

@@ -182,7 +182,13 @@ jobs:
           dart format --set-exit-if-changed --output=none \
             lib/features/smoke_feature test/features/smoke_feature
           flutter analyze
-          flutter test test/features/smoke_feature
+          flutter test --coverage test/features/smoke_feature
+          # Normalize Windows LCOV paths before using the shared counter.
+          sed 's@\\@/@g' coverage/lcov.info > coverage/scaffold.info
+          read -r covered total <<< "$(bash scripts/test/calculate_layer_coverage.sh coverage/scaffold.info --pattern='/smoke_feature/domain/')"
+          test "$total" -gt 0
+          test "$covered" -eq "$total"
+          echo "Generated domain coverage: $covered/$total"
 
   setup-brick:
     if: inputs.job == 'all' || inputs.job == 'setup-brick'

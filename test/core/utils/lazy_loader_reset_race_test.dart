@@ -10,6 +10,53 @@ import 'package:flutter_starter/core/utils/lazy_loader.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('nullable initialization caches null until reset', () async {
+    var calls = 0;
+    final initializer = LazyInitializer<String?>(
+      initializer: () async {
+        calls++;
+        return null;
+      },
+    );
+    expect(initializer.isInitialized, isFalse);
+    expect(await initializer.get(), isNull);
+    expect(await initializer.get(), isNull);
+    expect(initializer.isInitialized, isTrue);
+    expect(calls, 1);
+    initializer.reset();
+    expect(initializer.isInitialized, isFalse);
+    expect(await initializer.get(), isNull);
+    expect(calls, 2);
+  });
+
+  test(
+    'a stale null completion cannot initialize the new generation',
+    () async {
+      final pending = <Completer<String?>>[];
+      final initializer = LazyInitializer<String?>(
+        initializer: () {
+          final completer = Completer<String?>();
+          pending.add(completer);
+          return completer.future;
+        },
+      );
+      final first = initializer.get();
+      await pumpEventQueue();
+      initializer.reset();
+      final second = initializer.get();
+      await pumpEventQueue();
+      pending.first.complete();
+      expect(await first, isNull);
+      expect(initializer.isInitialized, isFalse);
+      final third = initializer.get();
+      pending.last.complete();
+      expect(await second, isNull);
+      expect(await third, isNull);
+      expect(initializer.isInitialized, isTrue);
+      expect(pending, hasLength(2));
+    },
+  );
+
   test('LazyInitializer: a get in flight across reset does not return '
       'the old value to later callers', () async {
     final pending = <Completer<String>>[];
