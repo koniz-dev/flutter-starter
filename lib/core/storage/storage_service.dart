@@ -2,6 +2,9 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Abstract interface for storage operations
+///
+/// A mutation returning `false` failed. Check its result even when no exception
+/// was thrown, especially before deleting a migration's source data.
 abstract class IStorageService {
   /// Retrieves a string value from storage by [key]
   Future<String?> getString(String key);
