@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [4.0.0] - 2026-11-08
+
+### Breaking
+
+- **Configure a real API URL before using Fastlane build or store lanes.** Pass `base_url:` explicitly or set `BASE_URL_STAGING` / `BASE_URL_PRODUCTION` for the selected `environment:`. The lanes no longer fall back to `https://api.example.com`; copy the updated Fastfile and release environment helper together.
+- **Bind sign-out when customizing authentication.** A container without `authModuleOverrides` now throws when sign-out is invoked. Keep those overrides or provide your own `signOutProvider` binding; declare custom home navigation through `HomeDestination` when adopting the updated home screen.
+
+### Fixed
+
 - **Android builds leave Kotlin session caches untracked.** The Android ignore rules now exclude `.kotlin/`, preventing generated compiler session data from being committed.
 
 - **Key-value storage documents mutation failures.** IKeyValueStore now tells callers to check false results before reporting success, deleting migration source data or considering session cleanup complete.
