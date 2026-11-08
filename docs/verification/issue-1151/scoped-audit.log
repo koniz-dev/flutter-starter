@@ -1,0 +1,41 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 599 files (0 changed) in 3.29 seconds.
+==> flutter analyze
+Analyzing flutter-starter...                                    
+No issues found! (ran in 12.0s)
+==> flutter test
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_providers_quotes_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/feature_di_docs_test.dart: coreDiInstructionLines flags each instruction form the guides once used
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_providers_quotes_test.dart: the doc quotes at least the two providers this test was written for
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols every <!-- symbol: --> directive resolves
+Shell: symbols: checked 114 directive(s); 0 unresolved
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols contracts-map.md still carries its directives
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols a directive naming a missing identifier fails, with file and line
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: documented symbols a directive inside a fenced block is documentation, not a directive
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: a directive inside an inner fence of a four-backtick block is an example, not a directive
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: malformed directives are reported with file and line; inline code and fences are not
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol accepts every declaration form this repository uses
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol rejects a mention that is not a declaration
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol ignores a declaration inside a block comment or a string
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol does not match a longer identifier that contains the name
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresSymbol finds the real providers in this repository, including generated
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember criterion 2: UserModel.fromJson and UserModel.toJson resolve
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember criterion 2: UserModel.toEntity does not
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember an initializer or expression body declares nothing
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/doc_symbols_test.dart: declaresMember reads each member form, at the type body top level only
+00:00 +29: All tests passed!

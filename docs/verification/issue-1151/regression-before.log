@@ -1,0 +1,38 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_providers_quotes_test.dart
+00:00 +0: authModuleOverrides quote includes every declared binding
+00:00 +0 -1: authModuleOverrides quote includes every declared binding [E]
+  Expected: 'final List<Override> authModuleOverrides = <Override>[\n'
+              'tokenRefresherProvider.overrideWith(\n'
+              '(ref) =>\n'
+              '() => ref.read(authRepositoryProvider).refreshToken(),\n'
+              '),\n'
+              'sessionTerminationSinkProvider.overrideWith(\n'
+              'RiverpodSessionTerminationSink.new,\n'
+              '),\n'
+              'signOutProvider.overrideWith(\n'
+              '(ref) =>\n'
+              '() => ref.read(authProvider.notifier).logout(),\n'
+              '),\n'
+              '];'
+    Actual: 'final List<Override> authModuleOverrides = <Override>[\n'
+              'tokenRefresherProvider.overrideWith(\n'
+              '(ref) => () => ref.read(authRepositoryProvider).refreshToken(),\n'
+              '),\n'
+              'sessionTerminationSinkProvider.overrideWith(\n'
+              'RiverpodSessionTerminationSink.new,\n'
+              '),\n'
+              '];'
+     Which: is different.
+            Expected: ... \n(ref) =>\n() => re ...
+              Actual: ... \n(ref) => () => ref ...
+                                    ^
+             Differ at offset 102
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/auth_providers_quotes_test.dart 60:5      main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/auth_providers_quotes_test.dart: authModuleOverrides quote includes every declared binding
