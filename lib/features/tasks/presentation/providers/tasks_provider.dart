@@ -75,11 +75,9 @@ class TasksState {
 /// [sessionEpochProvider] is the signal that
 /// crosses that boundary.
 ///
-/// The stored blob is deleted first and [tasksProvider] is invalidated only
-/// once that has finished. Reads are not queued behind the delete, so
-/// invalidating first would let the rebuilt notifier reload the previous
-/// user's tasks; invalidating also drops a load that was still in flight for
-/// the old session.
+/// [TasksNotifier] watches the epoch to clear its snapshot immediately, and
+/// reads wait for [TasksSessionWipe] while deletion is pending. Once cleanup
+/// settles the provider is invalidated to reload only the new session's data.
 ///
 /// Read once at startup by the tasks routes, which the app router builds
 /// eagerly, so the listener exists even if the tasks screen was never opened
@@ -122,12 +120,22 @@ class TasksSessionWipe {
   final TasksLocalDataSource _dataSource;
   final LoggingService _logger;
 
-  /// Whether the last [run] failed to clear the stored tasks either way.
+  /// Whether cleanup is running or failed to clear the stored tasks either way.
   bool get pending => _pending;
   bool _pending = false;
+  Future<void>? _running;
 
   /// Clears the stored tasks; see the class doc for the fallbacks.
-  Future<void> run() async {
+  Future<void> run() {
+    final running = _running;
+    if (running != null) return running;
+    // Block reads from the instant cleanup starts, including while its
+    // platform call is still pending. Share that cleanup with waiting reads.
+    _pending = true;
+    return _running = _run().whenComplete(() => _running = null);
+  }
+
+  Future<void> _run() async {
     try {
       await _dataSource.deleteAllTasks();
       _pending = false;
@@ -168,6 +176,10 @@ final tasksSessionWipeProvider = Provider<TasksSessionWipe>(
 class TasksNotifier extends _$TasksNotifier {
   @override
   TasksState build() {
+    // Clear the in-memory snapshot as soon as the session changes, before
+    // the old stored blob finishes deleting. Also invalidate older loads.
+    ref.watch(sessionEpochProvider);
+    _loadToken++;
     // Load tasks when provider is initialized
     // Use Future.microtask to ensure state is available before accessing it
     unawaited(Future.microtask(_loadTasks));
@@ -242,9 +254,21 @@ class TasksNotifier extends _$TasksNotifier {
   /// The result is returned rather than
   /// written to [state] because a single opened task is a per-screen concern -
   /// folding it into the shared snapshot would make every list rebuild on it.
-  Future<Result<Task?>> taskById(String id) {
+  Future<Result<Task?>> taskById(String id) async {
+    final epoch = ref.read(sessionEpochProvider);
+    final wipe = ref.read(tasksSessionWipeProvider);
+    if (wipe.pending) await wipe.run();
+    if (!ref.mounted ||
+        wipe.pending ||
+        epoch != ref.read(sessionEpochProvider)) {
+      return const Success<Task?>(null);
+    }
     final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
-    return getTaskByIdUseCase(id);
+    final result = await getTaskByIdUseCase(id);
+    if (!ref.mounted || epoch != ref.read(sessionEpochProvider)) {
+      return const Success<Task?>(null);
+    }
+    return result;
   }
 
   /// Creates a new task with [title] and optional [description].

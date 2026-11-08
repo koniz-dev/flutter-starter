@@ -213,6 +213,19 @@ void main() {
     expect(container.read(tasksProvider).tasks, isEmpty);
   });
 
+  test('the next session cannot see tasks while deletion is pending', () async {
+    await userACreatesATask();
+    storage.tasksRemoval = Completer<void>();
+    try {
+      await logout();
+      await signIn('b@example.com');
+      expect(await tasksSeenByNextUser(), isEmpty);
+    } finally {
+      storage.tasksRemoval!.complete();
+      await pumpEventQueue();
+    }
+  });
+
   test('tasks created in the new session are kept', () async {
     await userACreatesATask();
     await logout();
