@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Android builds leave Kotlin session caches untracked.** The Android ignore rules now exclude `.kotlin/`, preventing generated compiler session data from being committed.
+
 - **Key-value storage documents mutation failures.** IKeyValueStore now tells callers to check false results before reporting success, deleting migration source data or considering session cleanup complete.
 
 - **Task reads respect pending session cleanup.** Cleanup becomes pending immediately, concurrent wipes share one deletion, and epoch changes clear the in-memory snapshot. Detail reads wait for cleanup and reject stale session results, preventing the next user from loading the prior user's tasks while deletion runs or after it fails.
