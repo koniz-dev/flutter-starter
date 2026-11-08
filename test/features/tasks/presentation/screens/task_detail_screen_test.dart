@@ -5,8 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
+import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
-import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
@@ -33,7 +33,11 @@ class MockGetAllTasksUseCase extends Mock implements GetAllTasksUseCase {}
 
 class MockTasksRepository extends Mock implements TasksRepository {}
 
-Widget createTestWidget({required Widget child, dynamic overrides}) {
+Widget createTestWidget({
+  required Widget child,
+  dynamic overrides,
+  Locale? locale,
+}) {
   // Create a simple GoRouter for navigation (needed for context.pop())
   // Use a builder function to ensure router is properly initialized
   final router = GoRouter(
@@ -52,6 +56,7 @@ Widget createTestWidget({required Widget child, dynamic overrides}) {
     overrides: overrides ?? <Never>[],
     child: MaterialApp.router(
       routerConfig: router,
+      locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -1108,54 +1113,79 @@ void main() {
         expect(find.text('Retry'), findsNothing);
       });
 
-      testWidgets('should format date time correctly', (tester) async {
-        // Arrange
-        final task = createTask(
-          id: 'task-1',
-          createdAt: DateTime(2024, 3, 15, 9, 5),
-          updatedAt: DateTime(2024, 3, 16, 14, 30),
-        );
-        when(
-          () => mockGetTaskByIdUseCase(any<String>()),
-        ).thenAnswer((_) async => Success(task));
-        when(
-          () => mockUpdateTaskUseCase(any()),
-        ).thenAnswer((_) async => Success(task));
+      for (final locale in [
+        const Locale('en', 'US'),
+        const Locale('vi', 'VN'),
+      ]) {
+        testWidgets('formats both detail timestamps for $locale', (
+          tester,
+        ) async {
+          // Arrange
+          final task = createTask(
+            id: 'task-1',
+            createdAt: DateTime(2024, 3, 15, 9, 5),
+            updatedAt: DateTime(2024, 3, 16, 14, 30),
+          );
+          when(
+            () => mockGetTaskByIdUseCase(any<String>()),
+          ).thenAnswer((_) async => Success(task));
+          when(
+            () => mockUpdateTaskUseCase(any()),
+          ).thenAnswer((_) async => Success(task));
 
-        await tester.pumpWidget(
-          createWidgetWithOverrides(const TaskDetailScreen(taskId: 'task-1'), [
-            getTaskByIdUseCaseProvider.overrideWithValue(
-              mockGetTaskByIdUseCase,
+          await tester.pumpWidget(
+            createTestWidget(
+              locale: locale,
+              child: const TaskDetailScreen(taskId: 'task-1'),
+              overrides: [
+                getTaskByIdUseCaseProvider.overrideWithValue(
+                  mockGetTaskByIdUseCase,
+                ),
+                createTaskUseCaseProvider.overrideWithValue(
+                  mockCreateTaskUseCase,
+                ),
+                updateTaskUseCaseProvider.overrideWithValue(
+                  mockUpdateTaskUseCase,
+                ),
+                getAllTasksUseCaseProvider.overrideWithValue(
+                  mockGetAllTasksUseCase,
+                ),
+              ],
             ),
-            createTaskUseCaseProvider.overrideWithValue(mockCreateTaskUseCase),
-            updateTaskUseCaseProvider.overrideWithValue(mockUpdateTaskUseCase),
-            getAllTasksUseCaseProvider.overrideWithValue(
-              mockGetAllTasksUseCase,
+          );
+
+          // Act
+          await tester.pumpAndSettle();
+
+          final resolvedLocale = Localizations.localeOf(
+            tester.element(find.byType(TaskDetailScreen)),
+          );
+          expect(
+            find.text(
+              LocalizedFormatters.formatDateTime(
+                task.createdAt,
+                locale: resolvedLocale,
+              ),
             ),
-          ]),
-        );
-
-        // Act
-        await tester.pumpAndSettle();
-
-        // Assert - the detail rows render the dates through
-        // `DateFormatter.formatDateTime`, not a hand-rolled padLeft chain.
-        // Asserted with
-        // `find.text()` because a golden renders every glyph as an opaque
-        // block and cannot show a date.
-        expect(
-          find.text(DateFormatter.formatDateTime(task.createdAt)),
-          findsOneWidget,
-        );
-        expect(
-          find.text(DateFormatter.formatDateTime(task.updatedAt)),
-          findsOneWidget,
-        );
-        // The exact digits, so the test fails if `formatDateTime` ever stops
-        // producing `yyyy-MM-dd HH:mm:ss`.
-        expect(find.text('2024-03-15 09:05:00'), findsOneWidget);
-        expect(find.text('2024-03-16 14:30:00'), findsOneWidget);
-      });
+            findsOneWidget,
+          );
+          expect(
+            find.text(
+              LocalizedFormatters.formatDateTime(
+                task.updatedAt,
+                locale: resolvedLocale,
+              ),
+            ),
+            findsOneWidget,
+          );
+          if (locale.languageCode == 'vi') {
+            expect(find.text('15/3/2024 9:05'), findsOneWidget);
+            expect(find.text('16/3/2024 14:30'), findsOneWidget);
+          }
+          expect(find.text('2024-03-15 09:05:00'), findsNothing);
+          expect(find.text('2024-03-16 14:30:00'), findsNothing);
+        });
+      }
     });
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -14,6 +16,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   FeatureFlagsRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    this.remoteTimeout = const Duration(seconds: 10),
   });
 
   /// Remote data source for fetching flags from Firebase Remote Config
@@ -21,6 +24,77 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
 
   /// Local data source for storing and retrieving local overrides
   final FeatureFlagsLocalDataSource localDataSource;
+
+  /// Upper bound for each remote initialization or refresh attempt.
+  final Duration remoteTimeout;
+
+  // Direct repository callers may supply an already initialized source.
+  // After an initialization/refresh attempt fails, reads must stay local.
+  bool _remoteAvailable = true;
+  Future<Result<void>>? _remoteOperation;
+  Future<void>? _sdkOperation;
+  int _remoteGeneration = 0;
+
+  Future<Result<void>> _updateRemote({required bool initialize}) {
+    if (_remoteOperation != null) return _remoteOperation!;
+    // A timeout cannot cancel a vendor SDK fetch. Do not overlap another
+    // activation with it: the older fetch could overwrite the newer cache.
+    if (_sdkOperation != null) {
+      return Future.value(
+        const ResultFailure(
+          NetworkFailure('Remote feature flags update is still in progress'),
+        ),
+      );
+    }
+    final generation = ++_remoteGeneration;
+    _remoteAvailable = false;
+    _remoteOperation =
+        _runRemote(initialize: initialize, generation: generation).whenComplete(
+          () {
+            _remoteOperation = null;
+          },
+        );
+    return _remoteOperation!;
+  }
+
+  Future<Result<void>> _runRemote({
+    required bool initialize,
+    required int generation,
+  }) async {
+    try {
+      final operation = (() async {
+        if (initialize) await remoteDataSource.initialize();
+        // A timed-out initialization cannot start a late fetch while a
+        // newer attempt is running. SDK futures themselves are not cancelable.
+        if (generation != _remoteGeneration) return;
+        await remoteDataSource.fetchAndActivate();
+      })();
+      _sdkOperation = operation;
+      void settled() {
+        if (identical(_sdkOperation, operation)) _sdkOperation = null;
+      }
+
+      // Consume late errors as well as success, without re-enabling reads.
+      unawaited(
+        operation.then<void>(
+          (_) => settled(),
+          onError: (Object error, StackTrace trace) {
+            settled();
+          },
+        ),
+      );
+      await operation.timeout(remoteTimeout);
+      _remoteAvailable = true;
+      return const Success(null);
+    } on Object catch (error) {
+      _remoteGeneration++;
+      return ResultFailure(
+        error is Exception
+            ? ExceptionToFailureMapper.map(error)
+            : UnknownFailure('Unexpected error: $error', code: 'UNKNOWN_ERROR'),
+      );
+    }
+  }
 
   @override
   Future<Result<FeatureFlag>> getFlag(String key) async {
@@ -39,7 +113,9 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       }
 
       // Priority 2: Remote config
-      final remoteValue = await remoteDataSource.getRemoteFlag(key);
+      final remoteValue = _remoteAvailable
+          ? await remoteDataSource.getRemoteFlag(key)
+          : null;
       if (remoteValue != null) {
         return Success(
           FeatureFlag(
@@ -113,7 +189,9 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       }
 
       // Get remote flags
-      final remoteFlags = await remoteDataSource.getAllRemoteFlags();
+      final remoteFlags = _remoteAvailable
+          ? await remoteDataSource.getAllRemoteFlags()
+          : <String, bool>{};
       for (final entry in remoteFlags.entries) {
         // Only add if not already in flags (local override takes precedence)
         if (!flags.containsKey(entry.key)) {
@@ -147,18 +225,8 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   }
 
   @override
-  Future<Result<void>> refreshRemoteFlags() async {
-    try {
-      await remoteDataSource.fetchAndActivate();
-      return const Success(null);
-    } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    } on Object catch (e) {
-      return ResultFailure(
-        UnknownFailure('Unexpected error: $e', code: 'UNKNOWN_ERROR'),
-      );
-    }
-  }
+  Future<Result<void>> refreshRemoteFlags() =>
+      _updateRemote(initialize: !_remoteAvailable);
 
   @override
   Future<Result<void>> setLocalOverride(
@@ -220,17 +288,5 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   }
 
   @override
-  Future<Result<void>> initialize() async {
-    try {
-      await remoteDataSource.initialize();
-      await remoteDataSource.fetchAndActivate();
-      return const Success(null);
-    } on Exception catch (e) {
-      return ResultFailure(ExceptionToFailureMapper.map(e));
-    } on Object catch (e) {
-      return ResultFailure(
-        UnknownFailure('Unexpected error: $e', code: 'UNKNOWN_ERROR'),
-      );
-    }
-  }
+  Future<Result<void>> initialize() => _updateRemote(initialize: true);
 }

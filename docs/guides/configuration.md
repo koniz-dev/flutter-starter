@@ -290,6 +290,23 @@ What does decide a local flag, highest first:
 5. The flag's `FeatureFlagKey.defaultValue` in `FeatureFlags`, when nothing
    above sets it.
 
+The async `isFeatureEnabledProvider`, `featureFlagProvider` and
+`allFeatureFlagsProvider` initialize the remote source automatically. The
+shipped repository bounds initialization and refresh to ten seconds. On failure
+or timeout, reads skip the unavailable remote and retain local overrides,
+local definitions and key defaults. Refresh retries initialization after a
+failure. A timed-out SDK operation cannot re-enable remote reads later. While
+that operation is still pending, refresh returns local fallback without starting
+an overlapping SDK activation; retry initialization once it settles.
+
+Direct manager access requires initialization first:
+
+```dart
+await ref.read(featureFlagsInitializationProvider.future);
+final enabled = await ref.read(featureFlagsManagerProvider)
+    .isEnabled(FeatureFlags.newFeature);
+```
+
 `FeatureFlagsManager.isEnabled`, `isFeatureEnabledProvider` and the debug
 screen all resolve a flag through this one order, so they cannot disagree
 about it. The debug screen lists every

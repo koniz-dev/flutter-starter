@@ -1,14 +1,49 @@
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/{{feature_name}}/data/datasources/{{feature_name}}_remote_datasource.dart';
 import 'package:flutter_starter/features/{{feature_name}}/data/repositories/{{feature_name}}_repository_impl.dart';
+import 'package:flutter_starter/features/{{feature_name}}/domain/entities/{{feature_name}}.dart';
+import 'package:flutter_starter/features/{{feature_name}}/domain/repositories/{{feature_name}}_repository.dart';
+import 'package:flutter_starter/features/{{feature_name}}/domain/usecases/get_{{feature_name}}_by_id_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _Mock{{class_name}}RemoteDataSource extends Mock
     implements {{class_name}}RemoteDataSource {}
 
+class _Mock{{class_name}}Repository extends Mock
+    implements {{class_name}}Repository {}
+
 void main() {
+  group('{{class_name}}Entity', () {
+    test('exposes its id and compares by id', () {
+      for (final id in ['first', 'second']) {
+        final entity = {{class_name}}Entity(id: id);
+        expect(entity.id, id);
+        expect(entity.props, [id]);
+        expect(entity, {{class_name}}Entity(id: id));
+        expect(entity, isNot({{class_name}}Entity(id: '${id}_other')));
+      }
+    });
+  });
+
+  group('Get{{class_name}}ByIdUseCase', () {
+    test('delegates the id and preserves success and failure results', () async {
+      final repository = _Mock{{class_name}}Repository();
+      final useCase = Get{{class_name}}ByIdUseCase(repository);
+      for (final expected in <Result<{{class_name}}Entity>>[
+        const Success({{class_name}}Entity(id: 'found')),
+        const ResultFailure(NetworkFailure('offline')),
+      ]) {
+        when(() => repository.getById('requested-id'))
+            .thenAnswer((_) async => expected);
+        expect(await useCase('requested-id'), same(expected));
+        verify(() => repository.getById('requested-id')).called(1);
+      }
+    });
+  });
+
   group('{{class_name}}RepositoryImpl', () {
     test('returns Success when the data source returns JSON', () async {
       final remote = _Mock{{class_name}}RemoteDataSource();

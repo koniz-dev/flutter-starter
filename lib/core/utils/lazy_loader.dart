@@ -243,6 +243,8 @@ class LazyInitializer<T> {
   /// Cached instance
   T? _instance;
 
+  bool _isInitialized = false;
+
   /// Future for the initialization
   Future<T>? _initFuture;
 
@@ -253,8 +255,8 @@ class LazyInitializer<T> {
 
   /// Get the instance, initializing if necessary
   Future<T> get() async {
-    if (_instance != null) {
-      return _instance!;
+    if (_isInitialized) {
+      return _instance as T;
     }
 
     if (_initFuture != null) {
@@ -272,6 +274,7 @@ class LazyInitializer<T> {
         final value = await _initializer();
         if (generation == _generation) {
           _instance = value;
+          _isInitialized = true;
           _initFuture = null;
         }
         return value;
@@ -285,11 +288,12 @@ class LazyInitializer<T> {
   }
 
   /// Check if initialized
-  bool get isInitialized => _instance != null;
+  bool get isInitialized => _isInitialized;
 
   /// Reset the initializer (useful for testing)
   void reset() {
     _instance = null;
+    _isInitialized = false;
     _initFuture = null;
     _generation++;
   }

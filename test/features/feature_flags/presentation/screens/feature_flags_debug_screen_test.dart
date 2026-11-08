@@ -56,6 +56,7 @@ void main() {
             ),
           ),
           featureFlagsManagerProvider.overrideWithValue(mockManager),
+          featureFlagsInitializationProvider.overrideWith((ref) async {}),
         ],
         child: MaterialApp(
           locale: locale,

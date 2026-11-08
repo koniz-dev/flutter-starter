@@ -77,6 +77,7 @@ ApiClient({
   CacheConfig? cacheConfig,
   @visibleForTesting Duration? retryInitialDelay,
   @visibleForTesting Duration? retryMaxJitter,
+  @visibleForTesting bool releaseMode = kReleaseMode,
 });
 ```
 
@@ -89,6 +90,7 @@ ApiClient({
 | `performanceService` | no | **Passing it is what installs `PerformanceInterceptor`.** Omit it and no HTTP trace is ever started |
 | `cacheConfig` | no | `CacheInterceptor`'s freshness policy (`maxAge`, `maxStale`, `enableCache`); defaults to `CacheConfig()` |
 | `sslPinning` | no | Certificate pinning policy; defaults to `SslPinning.fromConfig()`, which reads `ENABLE_SSL_PINNING` and `API_SSL_FINGERPRINTS` . **Ignored on Flutter web**, where the browser owns TLS: `createAdapter()` returns `null` and Dio keeps its browser transport |
+| `releaseMode` | no | Host-test seam, default `kReleaseMode`. Native staging/production releases refuse every non-HTTPS socket destination, including redirects; HTTPS redirects keep the pinning policy |
 | `retryInitialDelay`, `retryMaxJitter` | no | Test-only overrides of `RetryInterceptor`'s backoff (defaults 1s and 500ms). Pass `Duration.zero` for both so a test that walks the retry path does not sleep through it |
 
 The two optional services are installed conditionally in `ApiClient._createDio`

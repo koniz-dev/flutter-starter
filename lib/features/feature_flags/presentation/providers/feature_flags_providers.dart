@@ -48,9 +48,10 @@ FeatureFlagsManager featureFlagsManager(Ref ref) {
 
 /// Initializes and fetches the remote source once per container.
 ///
-/// Every flag read awaits it, so the first read starts it and no read sees
-/// the remote source before it is ready. It never fails: a remote that cannot
-/// initialize is logged and the flags resolve from local values and defaults.
+/// The three asynchronous flag providers await it before reading. Direct
+/// manager callers must await this provider explicitly. The shipped repository
+/// bounds remote initialization to ten seconds; failure is logged and reads
+/// resolve from local values and defaults.
 @Riverpod(keepAlive: true)
 Future<void> featureFlagsInitialization(Ref ref) async {
   final repository = ref.watch(featureFlagsRepositoryProvider);
@@ -64,7 +65,7 @@ Future<void> featureFlagsInitialization(Ref ref) async {
     problem = error;
     stackTrace = trace;
   }
-  if (problem != null) {
+  if (problem != null && ref.mounted) {
     ref
         .read(loggingServiceProvider)
         .warning(
@@ -77,15 +78,15 @@ Future<void> featureFlagsInitialization(Ref ref) async {
 
 @riverpod
 Future<bool> isFeatureEnabled(Ref ref, FeatureFlagKey key) async {
-  await ref.watch(featureFlagsInitializationProvider.future);
   final manager = ref.watch(featureFlagsManagerProvider);
+  await ref.watch(featureFlagsInitializationProvider.future);
   return await manager.isEnabled(key);
 }
 
 @riverpod
 Future<FeatureFlag?> featureFlag(Ref ref, FeatureFlagKey key) async {
-  await ref.watch(featureFlagsInitializationProvider.future);
   final manager = ref.watch(featureFlagsManagerProvider);
+  await ref.watch(featureFlagsInitializationProvider.future);
   return await manager.getFlag(key);
 }
 
@@ -97,8 +98,8 @@ Future<FeatureFlag?> featureFlag(Ref ref, FeatureFlagKey key) async {
 /// actually gates on.
 @riverpod
 Future<Map<String, FeatureFlag?>> allFeatureFlags(Ref ref) async {
-  await ref.watch(featureFlagsInitializationProvider.future);
   final repository = ref.watch(featureFlagsRepositoryProvider);
+  await ref.watch(featureFlagsInitializationProvider.future);
   final result = await repository.getAllFlags();
   return await result.when(
     success: (flags) => <String, FeatureFlag?>{

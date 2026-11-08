@@ -255,16 +255,51 @@ class ${FeaturePascal}Screen extends ConsumerWidget {
 
 Write-GeneratedFile "test/features/$($FeatureName)/$($FeatureName)_repository_impl_test.dart" @"
 import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/${FeatureName}/data/datasources/${FeatureName}_remote_datasource.dart';
 import 'package:flutter_starter/features/${FeatureName}/data/repositories/${FeatureName}_repository_impl.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/entities/${FeatureName}.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/repositories/${FeatureName}_repository.dart';
+import 'package:flutter_starter/features/${FeatureName}/domain/usecases/get_${FeatureName}_by_id_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _Mock${FeaturePascal}RemoteDataSource extends Mock
     implements ${FeaturePascal}RemoteDataSource {}
 
+class _Mock${FeaturePascal}Repository extends Mock
+    implements ${FeaturePascal}Repository {}
+
 void main() {
+  group('${FeaturePascal}Entity', () {
+    test('exposes its id and compares by id', () {
+      for (final id in ['first', 'second']) {
+        final entity = ${FeaturePascal}Entity(id: id);
+        expect(entity.id, id);
+        expect(entity.props, [id]);
+        expect(entity, ${FeaturePascal}Entity(id: id));
+        expect(entity, isNot(${FeaturePascal}Entity(id: '`${id}_other')));
+      }
+    });
+  });
+
+  group('Get${FeaturePascal}ByIdUseCase', () {
+    test('delegates the id and preserves success and failure results', () async {
+      final repository = _Mock${FeaturePascal}Repository();
+      final useCase = Get${FeaturePascal}ByIdUseCase(repository);
+      for (final expected in <Result<${FeaturePascal}Entity>>[
+        const Success(${FeaturePascal}Entity(id: 'found')),
+        const ResultFailure(NetworkFailure('offline')),
+      ]) {
+        when(() => repository.getById('requested-id'))
+            .thenAnswer((_) async => expected);
+        expect(await useCase('requested-id'), same(expected));
+        verify(() => repository.getById('requested-id')).called(1);
+      }
+    });
+  });
+
   group('${FeaturePascal}RepositoryImpl', () {
     test('returns Success when the data source returns JSON', () async {
       final remote = _Mock${FeaturePascal}RemoteDataSource();

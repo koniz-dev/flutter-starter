@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
-import 'package:flutter_starter/core/utils/date_formatter.dart';
+import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/di/tasks_providers.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
@@ -29,7 +29,11 @@ class MockDeleteTaskUseCase extends Mock implements DeleteTaskUseCase {}
 class MockToggleTaskCompletionUseCase extends Mock
     implements ToggleTaskCompletionUseCase {}
 
-Widget createTestWidget({required Widget child, dynamic overrides}) {
+Widget createTestWidget({
+  required Widget child,
+  dynamic overrides,
+  Locale? locale,
+}) {
   return ProviderScope(
     // Override type is not exported from riverpod package.
     // When overrides is provided, it's already List<Override> from
@@ -38,6 +42,7 @@ Widget createTestWidget({required Widget child, dynamic overrides}) {
     // ignore: argument_type_not_assignable
     overrides: overrides ?? <Never>[],
     child: MaterialApp(
+      locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -976,7 +981,7 @@ void main() {
     });
   });
   // The row date must come from
-  // `DateFormatter`, and it is asserted with `find.text()` rather than a
+  // the screen locale, and it is asserted with `find.text()` rather than a
   // golden - the acceptance goldens render every glyph as an opaque block and
   // so cannot show a date at all.
   group('TasksListScreen date rendering', () {
@@ -992,13 +997,18 @@ void main() {
       mockToggleTaskCompletionUseCase = MockToggleTaskCompletionUseCase();
     });
 
-    Future<void> pumpWithTasks(WidgetTester tester, List<Task> tasks) async {
+    Future<void> pumpWithTasks(
+      WidgetTester tester,
+      List<Task> tasks, {
+      Locale? locale,
+    }) async {
       when(
         () => mockGetAllTasksUseCase(),
       ).thenAnswer((_) async => Success<List<Task>>(tasks));
       await tester.pumpWidget(
         createTestWidget(
           child: const TasksListScreen(),
+          locale: locale,
           overrides: [
             getAllTasksUseCaseProvider.overrideWithValue(
               mockGetAllTasksUseCase,
@@ -1014,47 +1024,55 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('every task row renders its createdAt via DateFormatter', (
-      tester,
-    ) async {
-      final tasks = [
-        createTask(
-          id: 'a',
-          title: 'Alpha',
-          createdAt: DateTime(2024, 3, 15, 9, 5),
-          updatedAt: DateTime(2024, 3, 15, 9, 5),
-        ),
-        createTask(
-          id: 'b',
-          title: 'Beta',
-          description: 'has a description too',
-          createdAt: DateTime(2023, 11, 2, 23, 59),
-          updatedAt: DateTime(2023, 11, 2, 23, 59),
-        ),
-        createTask(
-          id: 'c',
-          title: 'Gamma',
-          isCompleted: true,
-          createdAt: DateTime(2022, 1, 7),
-          updatedAt: DateTime(2022, 1, 7),
-        ),
-      ];
+    testWidgets(
+      'every task row renders its createdAt using the screen locale',
+      (
+        tester,
+      ) async {
+        final tasks = [
+          createTask(
+            id: 'a',
+            title: 'Alpha',
+            createdAt: DateTime(2024, 3, 15, 9, 5),
+            updatedAt: DateTime(2024, 3, 15, 9, 5),
+          ),
+          createTask(
+            id: 'b',
+            title: 'Beta',
+            description: 'has a description too',
+            createdAt: DateTime(2023, 11, 2, 23, 59),
+            updatedAt: DateTime(2023, 11, 2, 23, 59),
+          ),
+          createTask(
+            id: 'c',
+            title: 'Gamma',
+            isCompleted: true,
+            createdAt: DateTime(2022, 1, 7),
+            updatedAt: DateTime(2022, 1, 7),
+          ),
+        ];
 
-      await pumpWithTasks(tester, tasks);
+        await pumpWithTasks(tester, tasks);
 
-      for (final task in tasks) {
-        expect(
-          find.text(DateFormatter.formatDate(task.createdAt)),
-          findsOneWidget,
-          reason: 'row for ${task.title} should show its formatted createdAt',
-        );
-      }
-      // The exact digits, so the test fails if `formatDate` ever stops
-      // producing `yyyy-MM-dd`.
-      expect(find.text('2024-03-15'), findsOneWidget);
-      expect(find.text('2023-11-02'), findsOneWidget);
-      expect(find.text('2022-01-07'), findsOneWidget);
-    });
+        for (final task in tasks) {
+          expect(
+            find.text(
+              LocalizedFormatters.formatDate(
+                task.createdAt,
+                locale: Localizations.localeOf(
+                  tester.element(find.byType(TasksListScreen)),
+                ),
+              ),
+            ),
+            findsOneWidget,
+            reason: 'row for ${task.title} should show its formatted createdAt',
+          );
+        }
+        expect(find.text('3/15/2024'), findsOneWidget);
+        expect(find.text('11/2/2023'), findsOneWidget);
+        expect(find.text('1/7/2022'), findsOneWidget);
+      },
+    );
 
     testWidgets('the date is rendered, not the raw DateTime.toString()', (
       tester,
@@ -1068,8 +1086,17 @@ void main() {
 
       await pumpWithTasks(tester, [task]);
 
-      expect(find.text('2024-03-15'), findsOneWidget);
+      expect(find.text('3/15/2024'), findsOneWidget);
       expect(find.text(task.createdAt.toString()), findsNothing);
+    });
+
+    testWidgets('Vietnamese task dates use the resolved screen locale', (
+      tester,
+    ) async {
+      final task = createTask(createdAt: DateTime(2024, 3, 15, 9, 5));
+      await pumpWithTasks(tester, [task], locale: const Locale('vi', 'VN'));
+      expect(find.text('15/3/2024'), findsOneWidget);
+      expect(find.text('2024-03-15'), findsNothing);
     });
 
     testWidgets('a row without a description still shows its date', (
@@ -1086,7 +1113,14 @@ void main() {
 
       expect(find.text('No description'), findsOneWidget);
       expect(
-        find.text(DateFormatter.formatDate(task.createdAt)),
+        find.text(
+          LocalizedFormatters.formatDate(
+            task.createdAt,
+            locale: Localizations.localeOf(
+              tester.element(find.byType(TasksListScreen)),
+            ),
+          ),
+        ),
         findsOneWidget,
       );
     });

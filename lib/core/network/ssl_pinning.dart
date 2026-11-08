@@ -54,8 +54,11 @@ class SslPinning {
       'the system trust store accepts would be accepted. Configure '
       'API_SSL_FINGERPRINTS or set ENABLE_SSL_PINNING=false.';
 
-  /// Builds the pinned [HttpClientAdapter], or `null` when pinning is not
-  /// effective and the default transport should be used.
+  /// Builds a pinned or HTTPS-only [HttpClientAdapter], or `null` when
+  /// neither policy is requested and the default transport should be used.
+  ///
+  /// With [requireHttps], native connections refuse every non-HTTPS hop,
+  /// including redirects, even when certificate pinning is disabled.
   ///
   /// When [isMisconfigured], this logs an error and trips an assertion in
   /// debug builds rather than degrading to an unpinned client in silence.
@@ -64,8 +67,8 @@ class SslPinning {
   /// throws `Unsupported operation: SecurityContext constructor` on the first
   /// request, so a web build configured with the mobile fingerprints would
   /// send nothing at all.
-  HttpClientAdapter? createAdapter() {
-    final pinnedClient = _pinnedClientFactory();
+  HttpClientAdapter? createAdapter({bool requireHttps = false}) {
+    final pinnedClient = _transportFactory(requireHttps: requireHttps);
     if (pinnedClient == null) return null;
     return IOHttpClientAdapter(createHttpClient: pinnedClient);
   }
@@ -74,9 +77,37 @@ class SslPinning {
   /// `RawWebSocketClientImpl`'s handshake - or `null` exactly when
   /// [createAdapter] would be, with the same misconfiguration report.
   ///
+  /// [requireHttps] enforces the same per-hop scheme policy as [createAdapter].
+  ///
   /// A WebSocket opened without it trusts every certificate the platform
   /// does, whatever the fingerprints say.
-  HttpClient? createHttpClient() => _pinnedClientFactory()?.call();
+  HttpClient? createHttpClient({bool requireHttps = false}) =>
+      _transportFactory(requireHttps: requireHttps)?.call();
+
+  HttpClient Function()? _transportFactory({required bool requireHttps}) {
+    final pinned = _pinnedClientFactory();
+    if (kIsWeb || !requireHttps) return pinned;
+    return () =>
+        (pinned?.call() ?? HttpClient())
+          ..connectionFactory = (uri, proxyHost, proxyPort) {
+            // dart:io follows redirects below Dio's interceptor chain. Check
+            // every socket destination before opening anything, including the
+            // first URL and a redirect through a proxy.
+            if (uri.scheme != 'https') {
+              return Future.error(
+                const HandshakeException(
+                  'Refusing a non-HTTPS connection in a release',
+                ),
+              );
+            }
+            // HttpClient sends CONNECT and upgrades this raw proxy socket with
+            // its own TLS context, which retains the certificate pin policy.
+            if (proxyHost != null && proxyPort != null) {
+              return Socket.startConnect(proxyHost, proxyPort);
+            }
+            return secureConnect(uri.host, uri.port);
+          };
+  }
 
   /// The factory both transports share, or `null` when pinning is not
   /// effective.

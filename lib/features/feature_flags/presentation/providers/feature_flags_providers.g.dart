@@ -205,9 +205,10 @@ String _$featureFlagsManagerHash() =>
 
 /// Initializes and fetches the remote source once per container.
 ///
-/// Every flag read awaits it, so the first read starts it and no read sees
-/// the remote source before it is ready. It never fails: a remote that cannot
-/// initialize is logged and the flags resolve from local values and defaults.
+/// The three asynchronous flag providers await it before reading. Direct
+/// manager callers must await this provider explicitly. The shipped repository
+/// bounds remote initialization to ten seconds; failure is logged and reads
+/// resolve from local values and defaults.
 
 @ProviderFor(featureFlagsInitialization)
 final featureFlagsInitializationProvider =
@@ -215,18 +216,20 @@ final featureFlagsInitializationProvider =
 
 /// Initializes and fetches the remote source once per container.
 ///
-/// Every flag read awaits it, so the first read starts it and no read sees
-/// the remote source before it is ready. It never fails: a remote that cannot
-/// initialize is logged and the flags resolve from local values and defaults.
+/// The three asynchronous flag providers await it before reading. Direct
+/// manager callers must await this provider explicitly. The shipped repository
+/// bounds remote initialization to ten seconds; failure is logged and reads
+/// resolve from local values and defaults.
 
 final class FeatureFlagsInitializationProvider
     extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
     with $FutureModifier<void>, $FutureProvider<void> {
   /// Initializes and fetches the remote source once per container.
   ///
-  /// Every flag read awaits it, so the first read starts it and no read sees
-  /// the remote source before it is ready. It never fails: a remote that cannot
-  /// initialize is logged and the flags resolve from local values and defaults.
+  /// The three asynchronous flag providers await it before reading. Direct
+  /// manager callers must await this provider explicitly. The shipped repository
+  /// bounds remote initialization to ten seconds; failure is logged and reads
+  /// resolve from local values and defaults.
   FeatureFlagsInitializationProvider._()
     : super(
         from: null,
@@ -253,7 +256,7 @@ final class FeatureFlagsInitializationProvider
 }
 
 String _$featureFlagsInitializationHash() =>
-    r'0b98c4dbb7c127d24ff2d3c342789a81c34a7432';
+    r'f1e5a921e10581d61c4000651dfa836253e3b7cb';
 
 @ProviderFor(isFeatureEnabled)
 final isFeatureEnabledProvider = IsFeatureEnabledFamily._();
@@ -304,7 +307,7 @@ final class IsFeatureEnabledProvider
   }
 }
 
-String _$isFeatureEnabledHash() => r'e5defaf639878d8849f88c2d8ea5786be3f0cf4a';
+String _$isFeatureEnabledHash() => r'aeaf0d8725031633664c13185a38e7265c02f22b';
 
 final class IsFeatureEnabledFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<bool>, FeatureFlagKey> {
@@ -379,7 +382,7 @@ final class FeatureFlagProvider
   }
 }
 
-String _$featureFlagHash() => r'33b747aafa7c8e53348eb8ef154448542efcb2ca';
+String _$featureFlagHash() => r'6f2123394eea6c0567fea61fbc68054e261c1a50';
 
 final class FeatureFlagFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<FeatureFlag?>, FeatureFlagKey> {
@@ -458,4 +461,4 @@ final class AllFeatureFlagsProvider
   }
 }
 
-String _$allFeatureFlagsHash() => r'd19e27938a41e95857f0e7b04bbbc620c7d80e37';
+String _$allFeatureFlagsHash() => r'2d60c6bc06c531240fb668d3b263ca16476111ed';

@@ -76,23 +76,22 @@ fastlane android upload environment:production track:beta
 
 #### Build IPA
 ```bash
-cd ios/fastlane
-fastlane ios build_appstore environment:production
+(cd ios && fastlane ios build_appstore environment:production)
 ```
 
 #### Upload to TestFlight
 ```bash
-fastlane ios upload_testflight environment:staging
+(cd ios && fastlane ios upload_testflight environment:staging)
 ```
 
 #### Upload to App Store
 ```bash
-fastlane ios upload_appstore environment:production
+(cd ios && fastlane ios upload_appstore environment:production)
 ```
 
 #### Submit for Review
 ```bash
-fastlane ios release environment:production
+(cd ios && fastlane ios release environment:production)
 ```
 
 ## 📋 Available Lanes
@@ -184,10 +183,10 @@ fastlane android upload_production \
   ssl_fingerprints:"$API_SSL_FINGERPRINTS"
 
 # iOS
-fastlane ios upload_appstore \
+(cd ios && fastlane ios upload_appstore \
   environment:production \
   base_url:"$BASE_URL_PRODUCTION" \
-  ssl_fingerprints:"$API_SSL_FINGERPRINTS"
+  ssl_fingerprints:"$API_SSL_FINGERPRINTS")
 ```
 
 Every build lane needs the API base URL: `base_url:<url>`, or

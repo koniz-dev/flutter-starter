@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
-import 'package:flutter_starter/core/utils/date_formatter.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/tasks/domain/entities/task.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
@@ -293,14 +293,20 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                       _buildDetailRow(
                         context,
                         l10n.createdAt,
-                        DateFormatter.formatDateTime(_task!.createdAt),
+                        LocalizedFormatters.formatDateTime(
+                          _task!.createdAt,
+                          locale: Localizations.localeOf(context),
+                        ),
                         Icons.calendar_today,
                       ),
                       const SizedBox(height: 8),
                       _buildDetailRow(
                         context,
                         l10n.updatedAt,
-                        DateFormatter.formatDateTime(_task!.updatedAt),
+                        LocalizedFormatters.formatDateTime(
+                          _task!.updatedAt,
+                          locale: Localizations.localeOf(context),
+                        ),
                         Icons.update,
                       ),
                     ],
