@@ -29,8 +29,11 @@ class MigrationV1ToV2 extends StorageMigration {
     // Old key: 'user_name' -> New key: 'username'
     final oldUserName = await storage.getString('user_name');
     if (oldUserName != null) {
-      await storage.setString('username', oldUserName);
-      await storage.remove('user_name');
+      await _requirePersisted(
+        storage.setString('username', oldUserName),
+        'username',
+      );
+      await _requirePersisted(storage.remove('user_name'), 'user_name');
     }
 
     // Example 2: Transform data format
@@ -47,8 +50,11 @@ class MigrationV1ToV2 extends StorageMigration {
         default:
           newTheme = 'system'; // Default for unknown values
       }
-      await storage.setString('theme_mode', newTheme);
-      await storage.remove('theme');
+      await _requirePersisted(
+        storage.setString('theme_mode', newTheme),
+        'theme_mode',
+      );
+      await _requirePersisted(storage.remove('theme'), 'theme');
     }
 
     // Example 3: Migrate list data
@@ -68,7 +74,10 @@ class MigrationV1ToV2 extends StorageMigration {
       final tagsList = oldTags.isEmpty
           ? <String>[]
           : oldTags.split(',').map((e) => e.trim()).toList();
-      await storage.setStringList('user_tags', tagsList);
+      await _requirePersisted(
+        storage.setStringList('user_tags', tagsList),
+        'user_tags',
+      );
     }
 
     // Example 4: Add default values for new keys
@@ -81,7 +90,10 @@ class MigrationV1ToV2 extends StorageMigration {
     // lost to an English preference nobody had made.
     final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
     if (!hasSyncInterval) {
-      await storage.setInt('sync_interval_minutes', 15);
+      await _requirePersisted(
+        storage.setInt('sync_interval_minutes', 15),
+        'sync_interval_minutes',
+      );
     }
 
     // Example 5: Clean up deprecated keys
@@ -89,7 +101,7 @@ class MigrationV1ToV2 extends StorageMigration {
 
     for (final key in deprecatedKeys) {
       if (await storage.containsKey(key)) {
-        await storage.remove(key);
+        await _requirePersisted(storage.remove(key), key);
       }
     }
 
@@ -106,8 +118,16 @@ class MigrationV1ToV2 extends StorageMigration {
         // await storage.remove('user_data');
       } on Exception {
         // If parsing fails, remove corrupted data
-        await storage.remove('user_data');
+        await _requirePersisted(storage.remove('user_data'), 'user_data');
       }
+    }
+  }
+
+  // Never delete a source key or advance the schema after a rejected write.
+  // Secure storage reports platform failures as false rather than throwing.
+  Future<void> _requirePersisted(Future<bool> result, String key) async {
+    if (!await result) {
+      throw MigrationException('Storage rejected migration mutation of $key');
     }
   }
 
