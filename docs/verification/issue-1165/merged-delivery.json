@@ -1,0 +1,72 @@
+[
+  {
+    "issue": 1166,
+    "pr": 1173,
+    "mergeCommit": {
+      "oid": "19f361876fe265915da3fe4a24fb00771ea8a471"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1173",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1166/verification.md"
+  },
+  {
+    "issue": 1167,
+    "pr": 1174,
+    "mergeCommit": {
+      "oid": "47f635e2f142f6395e7a9514d11cf653a0c9d231"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1174",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1167/verification.md"
+  },
+  {
+    "issue": 1168,
+    "pr": 1175,
+    "mergeCommit": {
+      "oid": "d0a48a36131fd219b5f944f8618382f45c4fd499"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1175",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1168/verification.md"
+  },
+  {
+    "issue": 1169,
+    "pr": 1180,
+    "mergeCommit": {
+      "oid": "6ecb5debf102748c4d6ea9fac80eca0a9229baac"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1180",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1169/verification.md"
+  },
+  {
+    "issue": 1170,
+    "pr": 1181,
+    "mergeCommit": {
+      "oid": "cb3292e51e9109ae9ad878eb80081fc62cd44531"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1181",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1170/verification.md"
+  },
+  {
+    "issue": 1171,
+    "pr": 1182,
+    "mergeCommit": {
+      "oid": "2c186982eb0d54b0946911cbcc37c073f9913e03"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1182",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1171/verification.md"
+  },
+  {
+    "issue": 1172,
+    "pr": 1183,
+    "mergeCommit": {
+      "oid": "b1d2d49184abd019aa8036d96ac38605d3fe1ada"
+    },
+    "state": "MERGED",
+    "url": "https://github.com/koniz-dev/flutter-starter/pull/1183",
+    "evidence": "https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1172/verification.md"
+  }
+]

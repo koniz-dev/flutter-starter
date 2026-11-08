@@ -1,0 +1,44 @@
+[
+  {
+    "number": 1166,
+    "title": "fix(storage): migration v1 to v2 deletes source keys after a rejected write",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1166"
+  },
+  {
+    "number": 1167,
+    "title": "fix(auth): auth local data source reports rejected storage writes as success",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1167"
+  },
+  {
+    "number": 1168,
+    "title": "fix(tasks): tasks data source reports rejected writes and deletions as success",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1168"
+  },
+  {
+    "number": 1169,
+    "title": "fix(tasks): the next user can read the previous user's tasks while the session wipe is pending",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1169"
+  },
+  {
+    "number": 1170,
+    "title": "docs(contracts): state that IKeyValueStore mutations can fail by returning false",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1170"
+  },
+  {
+    "number": 1171,
+    "title": "chore(android): ignore the Kotlin compiler cache directory android/.kotlin/",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1171"
+  },
+  {
+    "number": 1172,
+    "title": "chore(release): publish the next starter release",
+    "state": "closed",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/issues/1172"
+  }
+]

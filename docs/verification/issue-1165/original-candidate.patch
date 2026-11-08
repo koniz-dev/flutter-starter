@@ -1,0 +1,528 @@
+diff --git a/android/.gitignore b/android/.gitignore
+index 78c56f8fb15..759c394fb2f 100644
+--- a/android/.gitignore
++++ b/android/.gitignore
+@@ -1,5 +1,6 @@
+ gradle-wrapper.jar
+ /.gradle
++/.kotlin/
+ /captures/
+ /gradlew
+ /gradlew.bat
+diff --git a/lib/core/contracts/storage_contracts.dart b/lib/core/contracts/storage_contracts.dart
+index 90a4f454c26..a64c9581144 100644
+--- a/lib/core/contracts/storage_contracts.dart
++++ b/lib/core/contracts/storage_contracts.dart
+@@ -2,6 +2,10 @@
+ // ignore_for_file: public_member_api_docs
+ 
+ /// Generic key-value storage contract for non-sensitive values.
++///
++/// Mutations can report failure by returning `false` as well as by throwing.
++/// Callers must check the result before reporting success, deleting source
++/// data during a migration, or treating session cleanup as complete.
+ abstract class IKeyValueStore {
+   Future<String?> getString(String key);
+   Future<bool> setString(String key, String value);
+diff --git a/lib/core/storage/migration/migrations/migration_v1_to_v2.dart b/lib/core/storage/migration/migrations/migration_v1_to_v2.dart
+index dadf753b6e8..779844faa23 100644
+--- a/lib/core/storage/migration/migrations/migration_v1_to_v2.dart
++++ b/lib/core/storage/migration/migrations/migration_v1_to_v2.dart
+@@ -29,8 +29,11 @@ class MigrationV1ToV2 extends StorageMigration {
+     // Old key: 'user_name' -> New key: 'username'
+     final oldUserName = await storage.getString('user_name');
+     if (oldUserName != null) {
+-      await storage.setString('username', oldUserName);
+-      await storage.remove('user_name');
++      await _requirePersisted(
++        storage.setString('username', oldUserName),
++        'username',
++      );
++      await _requirePersisted(storage.remove('user_name'), 'user_name');
+     }
+ 
+     // Example 2: Transform data format
+@@ -47,8 +50,11 @@ class MigrationV1ToV2 extends StorageMigration {
+         default:
+           newTheme = 'system'; // Default for unknown values
+       }
+-      await storage.setString('theme_mode', newTheme);
+-      await storage.remove('theme');
++      await _requirePersisted(
++        storage.setString('theme_mode', newTheme),
++        'theme_mode',
++      );
++      await _requirePersisted(storage.remove('theme'), 'theme');
+     }
+ 
+     // Example 3: Migrate list data
+@@ -68,7 +74,10 @@ class MigrationV1ToV2 extends StorageMigration {
+       final tagsList = oldTags.isEmpty
+           ? <String>[]
+           : oldTags.split(',').map((e) => e.trim()).toList();
+-      await storage.setStringList('user_tags', tagsList);
++      await _requirePersisted(
++        storage.setStringList('user_tags', tagsList),
++        'user_tags',
++      );
+     }
+ 
+     // Example 4: Add default values for new keys
+@@ -81,7 +90,10 @@ class MigrationV1ToV2 extends StorageMigration {
+     // lost to an English preference nobody had made.
+     final hasSyncInterval = await storage.containsKey('sync_interval_minutes');
+     if (!hasSyncInterval) {
+-      await storage.setInt('sync_interval_minutes', 15);
++      await _requirePersisted(
++        storage.setInt('sync_interval_minutes', 15),
++        'sync_interval_minutes',
++      );
+     }
+ 
+     // Example 5: Clean up deprecated keys
+@@ -89,7 +101,7 @@ class MigrationV1ToV2 extends StorageMigration {
+ 
+     for (final key in deprecatedKeys) {
+       if (await storage.containsKey(key)) {
+-        await storage.remove(key);
++        await _requirePersisted(storage.remove(key), key);
+       }
+     }
+ 
+@@ -106,11 +118,19 @@ class MigrationV1ToV2 extends StorageMigration {
+         // await storage.remove('user_data');
+       } on Exception {
+         // If parsing fails, remove corrupted data
+-        await storage.remove('user_data');
++        await _requirePersisted(storage.remove('user_data'), 'user_data');
+       }
+     }
+   }
+ 
++  // Never delete a source key or advance the schema after a rejected write.
++  // Secure storage reports platform failures as false rather than throwing.
++  Future<void> _requirePersisted(Future<bool> result, String key) async {
++    if (!await result) {
++      throw MigrationException('Storage rejected migration mutation of $key');
++    }
++  }
++
+   /// Read [key] as a String, treating a value of any other type as absent.
+   ///
+   /// A store written by an earlier run of this migration holds a
+diff --git a/lib/core/storage/storage_service.dart b/lib/core/storage/storage_service.dart
+index dd6529692ef..e19bfbc37c5 100644
+--- a/lib/core/storage/storage_service.dart
++++ b/lib/core/storage/storage_service.dart
+@@ -2,6 +2,9 @@ import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+ import 'package:shared_preferences/shared_preferences.dart';
+ 
+ /// Abstract interface for storage operations
++///
++/// A mutation returning `false` failed. Check its result even when no exception
++/// was thrown, especially before deleting a migration's source data.
+ abstract class IStorageService {
+   /// Retrieves a string value from storage by [key]
+   Future<String?> getString(String key);
+diff --git a/lib/features/auth/data/datasources/auth_local_datasource.dart b/lib/features/auth/data/datasources/auth_local_datasource.dart
+index 358aa4abc0e..639f287a027 100644
+--- a/lib/features/auth/data/datasources/auth_local_datasource.dart
++++ b/lib/features/auth/data/datasources/auth_local_datasource.dart
+@@ -62,7 +62,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
+       if (userJson == null) {
+         throw const CacheException('Failed to encode user data');
+       }
+-      await storageService.setString(AppConstants.userDataKey, userJson);
++      if (!await storageService.setString(AppConstants.userDataKey, userJson)) {
++        throw const CacheException('Storage rejected the user write');
++      }
+     } on Exception catch (e) {
+       throw CacheException('Failed to cache user: $e');
+     }
+@@ -151,7 +153,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
+ 
+     // Clear user data from regular storage
+     try {
+-      await storageService.remove(AppConstants.userDataKey);
++      if (!await storageService.remove(AppConstants.userDataKey)) {
++        throw const CacheException('Storage rejected the user deletion');
++      }
+     } on Object catch (e) {
+       firstError = e;
+     }
+diff --git a/lib/features/tasks/data/datasources/tasks_local_datasource.dart b/lib/features/tasks/data/datasources/tasks_local_datasource.dart
+index 0f96610e1c4..217b74e9c24 100644
+--- a/lib/features/tasks/data/datasources/tasks_local_datasource.dart
++++ b/lib/features/tasks/data/datasources/tasks_local_datasource.dart
+@@ -132,7 +132,11 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
+   @override
+   Future<void> deleteAllTasks() async {
+     try {
+-      await _serialized(() => storageService.remove(_tasksKey));
++      await _serialized(() async {
++        if (!await storageService.remove(_tasksKey)) {
++          throw const CacheException('Storage rejected the tasks deletion');
++        }
++      });
+     } on Exception catch (e) {
+       throw CacheException('Failed to delete all tasks: $e');
+     }
+@@ -180,6 +184,8 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
+     if (encoded == null) {
+       throw const CacheException('Failed to encode tasks data');
+     }
+-    await storageService.setString(_tasksKey, encoded);
++    if (!await storageService.setString(_tasksKey, encoded)) {
++      throw const CacheException('Storage rejected the tasks write');
++    }
+   }
+ }
+diff --git a/lib/features/tasks/presentation/providers/tasks_provider.dart b/lib/features/tasks/presentation/providers/tasks_provider.dart
+index feac0b23a49..ccaff22a4aa 100644
+--- a/lib/features/tasks/presentation/providers/tasks_provider.dart
++++ b/lib/features/tasks/presentation/providers/tasks_provider.dart
+@@ -75,11 +75,9 @@ class TasksState {
+ /// [sessionEpochProvider] is the signal that
+ /// crosses that boundary.
+ ///
+-/// The stored blob is deleted first and [tasksProvider] is invalidated only
+-/// once that has finished. Reads are not queued behind the delete, so
+-/// invalidating first would let the rebuilt notifier reload the previous
+-/// user's tasks; invalidating also drops a load that was still in flight for
+-/// the old session.
++/// [TasksNotifier] watches the epoch to clear its snapshot immediately, and
++/// reads wait for [TasksSessionWipe] while deletion is pending. Once cleanup
++/// settles the provider is invalidated to reload only the new session's data.
+ ///
+ /// Read once at startup by the tasks routes, which the app router builds
+ /// eagerly, so the listener exists even if the tasks screen was never opened
+@@ -122,12 +120,22 @@ class TasksSessionWipe {
+   final TasksLocalDataSource _dataSource;
+   final LoggingService _logger;
+ 
+-  /// Whether the last [run] failed to clear the stored tasks either way.
++  /// Whether cleanup is running or failed to clear the stored tasks either way.
+   bool get pending => _pending;
+   bool _pending = false;
++  Future<void>? _running;
+ 
+   /// Clears the stored tasks; see the class doc for the fallbacks.
+-  Future<void> run() async {
++  Future<void> run() {
++    final running = _running;
++    if (running != null) return running;
++    // Block reads from the instant cleanup starts, including while its
++    // platform call is still pending. Share that cleanup with waiting reads.
++    _pending = true;
++    return _running = _run().whenComplete(() => _running = null);
++  }
++
++  Future<void> _run() async {
+     try {
+       await _dataSource.deleteAllTasks();
+       _pending = false;
+@@ -168,6 +176,10 @@ final tasksSessionWipeProvider = Provider<TasksSessionWipe>(
+ class TasksNotifier extends _$TasksNotifier {
+   @override
+   TasksState build() {
++    // Clear the in-memory snapshot as soon as the session changes, before
++    // the old stored blob finishes deleting. Also invalidate older loads.
++    ref.watch(sessionEpochProvider);
++    _loadToken++;
+     // Load tasks when provider is initialized
+     // Use Future.microtask to ensure state is available before accessing it
+     unawaited(Future.microtask(_loadTasks));
+@@ -242,9 +254,21 @@ class TasksNotifier extends _$TasksNotifier {
+   /// The result is returned rather than
+   /// written to [state] because a single opened task is a per-screen concern -
+   /// folding it into the shared snapshot would make every list rebuild on it.
+-  Future<Result<Task?>> taskById(String id) {
++  Future<Result<Task?>> taskById(String id) async {
++    final epoch = ref.read(sessionEpochProvider);
++    final wipe = ref.read(tasksSessionWipeProvider);
++    if (wipe.pending) await wipe.run();
++    if (!ref.mounted ||
++        wipe.pending ||
++        epoch != ref.read(sessionEpochProvider)) {
++      return const Success<Task?>(null);
++    }
+     final getTaskByIdUseCase = ref.read(getTaskByIdUseCaseProvider);
+-    return getTaskByIdUseCase(id);
++    final result = await getTaskByIdUseCase(id);
++    if (!ref.mounted || epoch != ref.read(sessionEpochProvider)) {
++      return const Success<Task?>(null);
++    }
++    return result;
+   }
+ 
+   /// Creates a new task with [title] and optional [description].
+diff --git a/lib/features/tasks/presentation/providers/tasks_provider.g.dart b/lib/features/tasks/presentation/providers/tasks_provider.g.dart
+index 30f6be3c992..103b0620b2d 100644
+--- a/lib/features/tasks/presentation/providers/tasks_provider.g.dart
++++ b/lib/features/tasks/presentation/providers/tasks_provider.g.dart
+@@ -44,7 +44,7 @@ final class TasksNotifierProvider
+   }
+ }
+ 
+-String _$tasksNotifierHash() => r'f2e16636743316ced494f502f1df380f939b27ba';
++String _$tasksNotifierHash() => r'40d48e44300f382ed900cf97b93cfe2a3c2bdeda';
+ 
+ /// Tasks provider (Riverpod Generator).
+ 
+diff --git a/test/core/storage/migration/migrations/migration_rejected_write_test.dart b/test/core/storage/migration/migrations/migration_rejected_write_test.dart
+new file mode 100644
+index 00000000000..bbce5e39b6f
+--- /dev/null
++++ b/test/core/storage/migration/migrations/migration_rejected_write_test.dart
+@@ -0,0 +1,70 @@
++import 'package:flutter_starter/core/storage/migration/migrations/migration_v1_to_v2.dart';
++import 'package:flutter_starter/core/storage/migration/storage_migration.dart';
++import 'package:flutter_starter/core/storage/storage_version.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++import '../../../../helpers/in_memory_stores.dart';
++
++class _RejectingStore extends InMemoryStorage {
++  _RejectingStore(this.rejectedKey);
++
++  final String rejectedKey;
++
++  @override
++  Future<bool> setString(String key, String value) async =>
++      key != rejectedKey && await super.setString(key, value);
++
++  @override
++  Future<bool> setStringList(String key, List<String> value) async =>
++      key != rejectedKey && await super.setStringList(key, value);
++
++  @override
++  Future<bool> setInt(String key, int value) async =>
++      key != rejectedKey && await super.setInt(key, value);
++
++  @override
++  Future<bool> remove(String key) async =>
++      key != rejectedKey && await super.remove(key);
++}
++
++void main() {
++  for (final key in [
++    'username',
++    'user_name',
++    'theme_mode',
++    'theme',
++    'user_tags',
++    'sync_interval_minutes',
++    'old_setting_1',
++  ]) {
++    test('a rejected $key mutation prevents advancing the schema', () async {
++      final storage = _RejectingStore(key)
++        ..values.addAll({
++          StorageVersion.versionKey: '1',
++          'user_name': 'Alice',
++          'theme': 'dark',
++          'user_tags': 'one,two',
++          'old_setting_1': 'legacy',
++        });
++
++      await expectLater(
++        MigrationV1ToV2().execute(storage),
++        throwsA(isA<MigrationException>()),
++      );
++      expect(storage.values[StorageVersion.versionKey], '1');
++      if (key == 'username') {
++        expect(storage.values['user_name'], 'Alice');
++      }
++      if (key == 'theme_mode') {
++        expect(storage.values['theme'], 'dark');
++      }
++
++      final recovered = InMemoryStorage()..values.addAll(storage.values);
++      await MigrationV1ToV2().execute(recovered);
++      expect(recovered.values[StorageVersion.versionKey], '2');
++      expect(recovered.values['username'], 'Alice');
++      expect(recovered.values['theme_mode'], 'dark');
++      expect(recovered.values['user_tags'], ['one', 'two']);
++    });
++  }
++}
+diff --git a/test/features/auth/data/datasources/auth_storage_rejection_test.dart b/test/features/auth/data/datasources/auth_storage_rejection_test.dart
+new file mode 100644
+index 00000000000..b2301ad56e5
+--- /dev/null
++++ b/test/features/auth/data/datasources/auth_storage_rejection_test.dart
+@@ -0,0 +1,56 @@
++import 'package:flutter_starter/core/constants/app_constants.dart';
++import 'package:flutter_starter/core/errors/exceptions.dart';
++import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
++import 'package:flutter_starter/features/auth/data/models/user_model.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++import '../../../../helpers/in_memory_stores.dart';
++
++class _RejectingStore extends InMemoryKeyValueStore {
++  @override
++  Future<bool> setString(String key, String value) async => false;
++
++  @override
++  Future<bool> remove(String key) async => false;
++}
++
++void main() {
++  test('a rejected user write is reported to the sign-in caller', () async {
++    final storage = _RejectingStore();
++    final dataSource = AuthLocalDataSourceImpl(
++      storageService: storage,
++      tokenStore: InMemoryTokenStore(),
++    );
++
++    await expectLater(
++      dataSource.cacheUser(
++        const UserModel(id: 'a', email: 'a@example.com', name: 'A'),
++      ),
++      throwsA(isA<CacheException>()),
++    );
++    expect(storage.values, isEmpty);
++  });
++
++  test(
++    'a rejected user deletion still clears both tokens and reports failure',
++    () async {
++      final storage = _RejectingStore()
++        ..values[AppConstants.userDataKey] = '{"id":"a"}';
++      final tokens = InMemoryTokenStore()
++        ..accessToken = 'access'
++        ..refreshToken = 'refresh';
++      final dataSource = AuthLocalDataSourceImpl(
++        storageService: storage,
++        tokenStore: tokens,
++      );
++
++      await expectLater(
++        dataSource.clearCache(),
++        throwsA(isA<CacheException>()),
++      );
++      expect(storage.values, contains(AppConstants.userDataKey));
++      expect(tokens.accessToken, isNull);
++      expect(tokens.refreshToken, isNull);
++    },
++  );
++}
+diff --git a/test/features/tasks/presentation/providers/tasks_session_reset_test.dart b/test/features/tasks/presentation/providers/tasks_session_reset_test.dart
+index 2df3ebdcd22..4f15c9b0fb1 100644
+--- a/test/features/tasks/presentation/providers/tasks_session_reset_test.dart
++++ b/test/features/tasks/presentation/providers/tasks_session_reset_test.dart
+@@ -213,6 +213,19 @@ void main() {
+     expect(container.read(tasksProvider).tasks, isEmpty);
+   });
+ 
++  test('the next session cannot see tasks while deletion is pending', () async {
++    await userACreatesATask();
++    storage.tasksRemoval = Completer<void>();
++    try {
++      await logout();
++      await signIn('b@example.com');
++      expect(await tasksSeenByNextUser(), isEmpty);
++    } finally {
++      storage.tasksRemoval!.complete();
++      await pumpEventQueue();
++    }
++  });
++
+   test('tasks created in the new session are kept', () async {
+     await userACreatesATask();
+     await logout();
+diff --git a/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart b/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+index ab42da61750..84ff9a6248b 100644
+--- a/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
++++ b/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+@@ -50,16 +50,23 @@ class _Remote implements AuthRemoteDataSource {
+ class _FailingStorage extends InMemoryStorage {
+   bool failRemove = false;
+   bool failWrite = false;
++  bool returnFalse = false;
+ 
+   @override
+   Future<bool> remove(String key) async {
+-    if (key == _tasksKey && failRemove) throw Exception('remove failed');
++    if (key == _tasksKey && failRemove) {
++      if (returnFalse) return false;
++      throw Exception('remove failed');
++    }
+     return await super.remove(key);
+   }
+ 
+   @override
+   Future<bool> setString(String key, String value) async {
+-    if (key == _tasksKey && failWrite) throw Exception('write failed');
++    if (key == _tasksKey && failWrite) {
++      if (returnFalse) return false;
++      throw Exception('write failed');
++    }
+     return await super.setString(key, value);
+   }
+ }
+@@ -197,6 +204,64 @@ void main() {
+     expect(await titlesAfterReload(), ["B's task"]);
+   });
+ 
++  test('detail reads cannot bypass a failed session wipe', () async {
++    await guarded(() => handOverToB(failWrite: true));
++    final rows = jsonDecode(storage.values[_tasksKey]! as String) as List;
++    final id = (rows.first as Map<String, dynamic>)['id'] as String;
++    final result = await container.read(tasksProvider.notifier).taskById(id);
++    result.when(
++      success: (task) => expect(task, isNull),
++      failureCallback: (failure) => fail(failure.message),
++    );
++  });
++
++  test('a rejected task write reports failure instead of success', () async {
++    await signIn('a@example.com');
++    container.read(tasksProvider);
++    await pumpEventQueue();
++    storage
++      ..returnFalse = true
++      ..failWrite = true;
++
++    final created = await container
++        .read(tasksProvider.notifier)
++        .createTask(title: 'Not persisted');
++
++    expect(created.isFailure, isTrue);
++    expect(storage.values, isNot(contains(_tasksKey)));
++    expect(container.read(tasksProvider).isLoading, isFalse);
++  });
++
++  for (final failWrite in [false, true]) {
++    test('false storage results protect the next session '
++        '(fallback fails: $failWrite)', () async {
++      storage.returnFalse = true;
++      await guarded(() => handOverToB(failWrite: failWrite));
++
++      container.read(tasksProvider);
++      await pumpEventQueue();
++      expect(titlesOnScreen(), isEmpty);
++      expect(await titlesAfterReload(), isEmpty);
++      expect(uncaught, isEmpty);
++      if (failWrite) {
++        expect(storage.values[_tasksKey], contains("A's private task"));
++        expect(container.read(tasksSessionWipeProvider).pending, isTrue);
++      } else {
++        expect(jsonDecode(storage.values[_tasksKey]! as String), isEmpty);
++      }
++
++      storage
++        ..failRemove = false
++        ..failWrite = false;
++      expect(await titlesAfterReload(), isEmpty);
++      final created = await container
++          .read(tasksProvider.notifier)
++          .createTask(title: "B's new task");
++      expect(created.isSuccess, isTrue);
++      expect(await titlesAfterReload(), ["B's new task"]);
++    });
++  }
++
+   test(
+     'criterion 2: each failure is logged, and none escapes to the zone',
+     () async {

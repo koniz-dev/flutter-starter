@@ -1,0 +1,233 @@
+diff --git a/docs/guides/migration/upgrading-this-starter.md b/docs/guides/migration/upgrading-this-starter.md
+index 965e6e9baa8..7f495002e02 100644
+--- a/docs/guides/migration/upgrading-this-starter.md
++++ b/docs/guides/migration/upgrading-this-starter.md
+@@ -3,7 +3,7 @@
+ This guide helps you upgrade your Flutter starter project to newer versions and
+ handle breaking changes.
+ 
+-**Starter version:** v3.0.2
++**Starter version:** v4.0.0
+ 
+ That line records which release of the starter this copy of the template came
+ from. It is not your app's version (`version:` in `pubspec.yaml` is yours), and
+diff --git a/lib/features/tasks/presentation/providers/tasks_provider.dart b/lib/features/tasks/presentation/providers/tasks_provider.dart
+index ccaff22a4aa..8d5463bfeb5 100644
+--- a/lib/features/tasks/presentation/providers/tasks_provider.dart
++++ b/lib/features/tasks/presentation/providers/tasks_provider.dart
+@@ -281,6 +281,32 @@ class TasksNotifier extends _$TasksNotifier {
+   }) async {
+     state = state.copyWith(isLoading: true, clearError: true);
+ 
++    // Settle the previous session's cleanup before issuing any new write.
++    // Otherwise the success reload would retry that cleanup and delete the
++    // task we just reported as created.
++    final wipe = ref.read(tasksSessionWipeProvider);
++    if (wipe.pending) {
++      final epoch = ref.read(sessionEpochProvider);
++      await wipe.run();
++      if (!ref.mounted || epoch != ref.read(sessionEpochProvider)) {
++        return const ResultFailure(
++          CacheFailure('Task session changed while cleanup was pending'),
++        );
++      }
++      if (wipe.pending) {
++        const failure = CacheFailure(
++          'Tasks could not be cleared from the previous session',
++        );
++        state = state.copyWith(
++          tasks: const [],
++          isLoading: false,
++          error: failure.message,
++          failure: failure,
++        );
++        return const ResultFailure(failure);
++      }
++    }
++
+     final createTaskUseCase = ref.read(createTaskUseCaseProvider);
+     final result = await createTaskUseCase(
+       title: title,
+diff --git a/lib/features/tasks/presentation/providers/tasks_provider.g.dart b/lib/features/tasks/presentation/providers/tasks_provider.g.dart
+index 103b0620b2d..9e7002ed7f2 100644
+--- a/lib/features/tasks/presentation/providers/tasks_provider.g.dart
++++ b/lib/features/tasks/presentation/providers/tasks_provider.g.dart
+@@ -44,7 +44,7 @@ final class TasksNotifierProvider
+   }
+ }
+ 
+-String _$tasksNotifierHash() => r'40d48e44300f382ed900cf97b93cfe2a3c2bdeda';
++String _$tasksNotifierHash() => r'2555574f27981d8f6038c1e57c151ce75ae2cc9b';
+ 
+ /// Tasks provider (Riverpod Generator).
+ 
+diff --git a/pubspec.lock b/pubspec.lock
+index 191200bcfc3..2030748e7db 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -181,10 +181,10 @@ packages:
+     dependency: "direct main"
+     description:
+       name: crypto
+-      sha256: c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf
++      sha256: e3626ae6270383c9e3a549f34c9e4cd26c09ae6a9adaab2bf4737a00340efdc4
+       url: "https://pub.dev"
+     source: hosted
+-    version: "3.0.7"
++    version: "3.0.8"
+   csslib:
+     dependency: transitive
+     description:
+diff --git a/pubspec.yaml b/pubspec.yaml
+index d1997ad9f28..920fa172006 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -10,7 +10,7 @@ environment:
+ 
+ dependencies:
+   # UI Components - iOS style icons
+-  crypto: ^3.0.7
++  crypto: ^3.0.8
+   cupertino_icons: ^2.0.0
+ 
+   # Network Layer - HTTP client with interceptors support
+diff --git a/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart b/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+index 84ff9a6248b..6c495651824 100644
+--- a/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
++++ b/test/features/tasks/presentation/providers/tasks_wipe_failure_test.dart
+@@ -1,6 +1,7 @@
+ import 'dart:async';
+ import 'dart:convert';
+ 
++import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/di/providers.dart';
+ import 'package:flutter_starter/core/logging/logging_providers.dart';
+@@ -11,7 +12,9 @@ import 'package:flutter_starter/features/auth/data/models/auth_response_model.da
+ import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
++import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
+ import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
++import 'package:flutter_starter/l10n/app_localizations.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:go_router/go_router.dart';
+ 
+@@ -51,9 +54,16 @@ class _FailingStorage extends InMemoryStorage {
+   bool failRemove = false;
+   bool failWrite = false;
+   bool returnFalse = false;
++  Completer<void>? heldRemoval;
++  int taskRemovals = 0;
+ 
+   @override
+   Future<bool> remove(String key) async {
++    if (key == _tasksKey) {
++      taskRemovals++;
++      final gate = heldRemoval;
++      if (gate != null) await gate.future;
++    }
+     if (key == _tasksKey && failRemove) {
+       if (returnFalse) return false;
+       throw Exception('remove failed');
+@@ -204,6 +214,22 @@ void main() {
+     expect(await titlesAfterReload(), ["B's task"]);
+   });
+ 
++  test('concurrent session wipes share a single deletion', () async {
++    final gate = storage.heldRemoval = Completer<void>();
++    final wipe = container.read(tasksSessionWipeProvider);
++    final first = wipe.run();
++    final second = wipe.run();
++    try {
++      await pumpEventQueue();
++      expect(storage.taskRemovals, 1);
++    } finally {
++      gate.complete();
++      await Future.wait([first, second]);
++    }
++    expect(storage.taskRemovals, 1);
++    expect(wipe.pending, isFalse);
++  });
++
+   test('detail reads cannot bypass a failed session wipe', () async {
+     await guarded(() => handOverToB(failWrite: true));
+     final rows = jsonDecode(storage.values[_tasksKey]! as String) as List;
+@@ -246,6 +272,15 @@ void main() {
+       if (failWrite) {
+         expect(storage.values[_tasksKey], contains("A's private task"));
+         expect(container.read(tasksSessionWipeProvider).pending, isTrue);
++        final blocked = await container
++            .read(tasksProvider.notifier)
++            .createTask(title: 'Blocked while cleanup fails');
++        expect(blocked.isFailure, isTrue);
++        expect(container.read(tasksProvider).isLoading, isFalse);
++        expect(
++          storage.values[_tasksKey],
++          isNot(contains('Blocked while cleanup fails')),
++        );
+       } else {
+         expect(jsonDecode(storage.values[_tasksKey]! as String), isEmpty);
+       }
+@@ -253,7 +288,6 @@ void main() {
+       storage
+         ..failRemove = false
+         ..failWrite = false;
+-      expect(await titlesAfterReload(), isEmpty);
+       final created = await container
+           .read(tasksProvider.notifier)
+           .createTask(title: "B's new task");
+@@ -262,6 +296,53 @@ void main() {
+     });
+   }
+ 
++  for (final failWrite in [false, true]) {
++    testWidgets('screen never renders the previous user after false storage '
++        '(fallback fails: $failWrite)', (tester) async {
++      storage.returnFalse = true;
++      await tester.runAsync(() async {
++        await guarded(() => handOverToB(failWrite: failWrite));
++        await titlesAfterReload();
++      });
++      await tester.pumpWidget(
++        UncontrolledProviderScope(
++          container: container,
++          child: const MaterialApp(
++            localizationsDelegates: AppLocalizations.localizationsDelegates,
++            supportedLocales: AppLocalizations.supportedLocales,
++            home: TasksListScreen(),
++          ),
++        ),
++      );
++      await tester.pumpAndSettle();
++      expect(find.text("A's private task"), findsNothing);
++      expect(find.byType(ListTile), findsNothing);
++      await tester.runAsync(titlesAfterReload);
++      await tester.pumpAndSettle();
++      expect(find.text("A's private task"), findsNothing);
++      expect(find.byType(ListTile), findsNothing);
++      expect(uncaught, isEmpty);
++      if (failWrite) {
++        expect(container.read(tasksSessionWipeProvider).pending, isTrue);
++      }
++      storage
++        ..failRemove = false
++        ..failWrite = false;
++      await tester.runAsync(() async {
++        final result = await container
++            .read(tasksProvider.notifier)
++            .createTask(title: "B's visible task");
++        expect(result.isSuccess, isTrue);
++        await titlesAfterReload();
++      });
++      await tester.pumpAndSettle();
++      expect(find.text("B's visible task"), findsOneWidget);
++      expect(find.text("A's private task"), findsNothing);
++      expect(find.byType(ListTile), findsOneWidget);
++      expect(uncaught, isEmpty);
++    });
++  }
++
+   test(
+     'criterion 2: each failure is logged, and none escapes to the zone',
+     () async {
