@@ -1,0 +1,98 @@
+00:00 +0: loading /tmp/1184_bearer_review_test.dart
+00:00 +0: /tmp/1184_bearer_review_test.dart: logout still authenticates the revoke request after local teardown
+SERVER observed bearer=Bearer old-access body={refresh_token: old-refresh}
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_revocation_header_test.dart: revocation keeps its captured bearer after local teardown
+00:00 +2: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart
+00:01 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart: logout sends the stored refresh token and tears down (server accepts)
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart: logout sends the stored refresh token and tears down (server answers 401)
+00:01 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart: a relaunch has no session while the remote logout is pending
+00:01 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/logout_sends_refresh_token_test.dart: the logout body field is redacted in logs
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the register round trip leaves nothing stored
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: of two overlapping logins, the second one stays signed in
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in cut off by a logout stores nothing and revokes nothing
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in during a pending logout keeps its credentials
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in waits for every pending logout, not only the latest
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout called right after a login ends that login
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in gives up after the bound when a logout never finishes
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in started by a session listener during a logout waits for its teardown
+00:02 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/forced_logout_sign_in_test.dart: a sign-in during a forced logout waits for its teardown and keeps its credentials
+00:03 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/forced_logout_sign_in_test.dart: a sign-in during a forced logout waits for its teardown and keeps its credentials
+00:03 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/forced_logout_sign_in_test.dart: a sign-in during a forced logout waits for its teardown and keeps its credentials
+00:04 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (setUpAll)
+00:04 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return User when login succeeds
+00:04 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return ServerFailure when remote data source throws ServerException
+00:04 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should return NetworkFailure when remote data source throws NetworkException
+00:04 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should tag a missing refresh token as REFRESH_TOKEN_EXPIRED
+00:04 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should tag a 401 from the refresh endpoint as REFRESH_TOKEN_EXPIRED
+00:04 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login should not tag a transport failure as REFRESH_TOKEN_EXPIRED
+00:04 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 1: a 400 from the refresh endpoint is tagged REFRESH_TOKEN_EXPIRED
+00:04 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 1: a 401 from the refresh endpoint is tagged REFRESH_TOKEN_EXPIRED
+00:04 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 1: a 403 from the refresh endpoint is tagged REFRESH_TOKEN_EXPIRED
+00:04 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 408 from the refresh endpoint is not tagged
+00:04 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 429 from the refresh endpoint is not tagged
+00:04 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 500 from the refresh endpoint is not tagged
+00:04 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 502 from the refresh endpoint is not tagged
+00:04 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl login criterion 2: a 503 from the refresh endpoint is not tagged
+00:04 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should return AuthResponseModel when login succeeds
+00:04 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent a local teardown throwing an Exception must not skip the HTTP cache
+00:04 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should rethrow ServerException on a 4xx error
+00:04 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should rethrow ServerException on a 4xx error
+00:04 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should rethrow ServerException on a 4xx error
+00:04 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should rethrow ServerException on a 4xx error
+00:04 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent when both local steps fail the first failure is the one reported
+00:04 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl login should rethrow NetworkException on a network error
+00:04 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl logout local teardown steps are independent a local teardown failure outranks a remote failure
+00:04 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl register should return AuthResponseModel when register succeeds
+00:04 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return User when a token and a cached user exist
+00:04 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl logout should complete successfully
+00:04 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl logout should complete successfully
+00:04 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the token is gone but the user blob survives
+00:04 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl refreshToken should return new AuthResponseModel when refresh succeeds
+00:04 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return null User when the stored token is empty
+00:04 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty email
+00:04 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should not read the user blob at all without a token
+00:04 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty password
+00:04 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty password
+00:04 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl getCurrentUser should return failure when cache read fails
+00:04 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty name in register
+00:04 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return true when a token and a cached user exist
+00:04 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle long email
+00:04 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when no cached user
+00:04 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle long password
+00:04 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the token is gone but the user blob survives
+00:04 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle empty refresh token
+00:04 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should return false when the stored token is empty
+00:04 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/datasources/auth_remote_datasource_test.dart: AuthRemoteDataSourceImpl Edge Cases should handle long refresh token
+00:04 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should agree with getCurrentUser on every storage state
+00:04 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl isAuthenticated should propagate a token store failure
+00:04 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return new token when refresh succeeds
+00:04 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return UnknownFailure when no refresh token available
+00:04 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should return failure when refresh fails
+00:04 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl refreshToken should cache refresh token only if provided
+00:04 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should cache refresh token when provided
+00:04 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases login should handle generic Exception
+00:04 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases register should handle generic Exception
+00:04 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases logout should handle generic Exception
+00:04 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases getCurrentUser should handle generic Exception
+00:04 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases isAuthenticated should handle generic Exception
+00:04 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl Edge Cases refreshToken should handle generic Exception
+00:04 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/auth_repository_impl_test.dart: AuthRepositoryImpl (tearDownAll)
+00:04 +86: All tests passed!
+00:00 +0: loading /tmp/1184_read_failure_review_test.dart
+00:00 +0: independent credential snapshots survive read errors access=false refresh=false
+00:00 +1: independent credential snapshots survive read errors access=false refresh=true
+00:00 +2: independent credential snapshots survive read errors access=true refresh=false
+00:00 +3: independent credential snapshots survive read errors access=true refresh=true
+00:00 +4: All tests passed!

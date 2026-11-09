@@ -1,0 +1,4 @@
+Commits in 81444221dec8622e9bed0b6b80b4576db2fb36b5..HEAD
+  ok    fce3f281 fix(auth): clear local session before remote logout (#1194)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

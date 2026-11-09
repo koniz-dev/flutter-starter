@@ -1,0 +1,4 @@
+00:00 +0: loading /tmp/1184_baseline_bearer_review_test.dart
+00:00 +0: logout still authenticates the revoke request after local teardown
+SERVER observed bearer=Bearer old-access body={refresh_token: old-refresh}
+00:00 +1: All tests passed!
