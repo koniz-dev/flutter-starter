@@ -1,3 +1,4 @@
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
 import 'package:flutter_starter/core/performance/i_performance_service.dart';
 
 /// Performance monitoring utilities
@@ -31,14 +32,16 @@ class PerformanceUtils {
     required Future<T> Function() call,
     Map<String, String>? additionalAttributes,
   }) async {
+    final safePath = ApiLoggingInterceptor.redactUrl(path);
     final attributes = <String, String>{
-      'http_method': method,
-      'http_path': path,
       ...?additionalAttributes,
+      'http_method': method,
+      // Keep the canonical field safe even if custom attributes repeat it.
+      'http_path': safePath,
     };
 
     return await service.measureOperation<T>(
-      name: 'api_${method.toLowerCase()}_${_sanitizePath(path)}',
+      name: 'api_${method.toLowerCase()}_${_sanitizePath(safePath)}',
       operation: call,
       attributes: attributes,
     );
