@@ -11,18 +11,17 @@ Code in this file is **not** checked into the starter. Use it as a copy-paste st
 ```dart
 // Blueprint: lib/core/security/session_manager.dart (add this file yourself)
 import 'dart:async';
-import 'package:flutter_starter/core/storage/secure_storage_service.dart';
-import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/features/auth/domain/repositories/auth_repository.dart';
 
 /// Manages user session timeout and activity tracking
 class SessionManager {
   SessionManager({
-    required this.secureStorageService,
+    required this.tokenStore,
     required this.authRepository,
   });
 
-  final SecureStorageService secureStorageService;
+  final ITokenStore tokenStore;
   final AuthRepository authRepository;
 
   Timer? _sessionTimer;
@@ -51,9 +50,10 @@ class SessionManager {
   }
 
   Future<void> _handleSessionTimeout() async {
-    final token = await secureStorageService.getString(AppConstants.tokenKey);
-    if (token == null) {
-      return;
+    try {
+      if (await tokenStore.getAccessToken() == null) return;
+    } on Object {
+      // An unreadable credential must not skip the logout attempt.
     }
     await authRepository.logout();
   }

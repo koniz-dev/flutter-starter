@@ -363,10 +363,10 @@ Future<void> _refreshToken() async {
   final result = await refreshUseCase();
 
   result.when(
-    success: (newToken) {
+    success: (_) {
       // Token refreshed successfully
       // AuthInterceptor will use the new token automatically
-      print('Token refreshed: $newToken');
+      print('Token refreshed successfully');
     },
     failureCallback: (failure) {
       // Token refresh failed, logout user

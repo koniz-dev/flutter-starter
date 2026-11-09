@@ -116,32 +116,33 @@ final userId = await storage.getInt('user_id');
 final notificationsEnabled = await storage.getBool('notifications_enabled');
 ```
 
-### Using Secure Storage
+### Using Session Token Storage
+
+The auth repository owns credential persistence during login and refresh.
+Inside an auth integration, use `ITokenStore` rather than platform key strings:
 
 ```dart
-final secureStorage = ref.read(secureStorageServiceProvider);
-
-// Store sensitive data
-await secureStorage.setString('token', token);
-await secureStorage.setString('refresh_token', refreshToken);
-
-// Retrieve sensitive data
-final token = await secureStorage.getString('token');
+final tokenStore = ref.read(tokenStoreProvider);
+final accessToken = await tokenStore.getAccessToken();
+final refreshToken = await tokenStore.getRefreshToken();
 ```
+
+Never print these values. End a session with `AuthRepository.logout()` (through
+the auth controller/sign-out action from UI), which also clears the cached user
+and HTTP cache and attempts server revocation.
 
 ### Storage Keys Pattern
 
+Keep application constants for non-session values only:
+
 ```dart
 class StorageKeys {
-  static const String token = 'auth_token';
-  static const String refreshToken = 'refresh_token';
   static const String userId = 'user_id';
   static const String theme = 'theme_mode';
 }
 
-// Usage
-await secureStorage.setString(StorageKeys.token, token);
-final token = await secureStorage.getString(StorageKeys.token);
+await storage.setString(StorageKeys.theme, 'dark');
+final theme = await storage.getString(StorageKeys.theme);
 ```
 
 ---
@@ -317,14 +318,14 @@ result.when(
 );
 ```
 
-### 4. Use Secure Storage for Sensitive Data
+### 4. Keep Session Credentials Behind Their Contract
+
+Use `ITokenStore` for session credential access and the auth repository for
+session transitions. Reserve `SecureStorageService` for non-session secrets:
 
 ```dart
-// Good - Use secure storage for tokens
-await secureStorage.setString('token', token);
-
-// Bad - Don't use regular storage for tokens
-await storage.setString('token', token);
+final tokenStore = ref.read(tokenStoreProvider);
+final accessToken = await tokenStore.getAccessToken();
 ```
 
 ### 5. Leverage Extensions
