@@ -21,6 +21,7 @@ import '../../../../helpers/in_memory_stores.dart';
 class _HeldRemote implements FeatureFlagsRemoteDataSource {
   Completer<void> gate = Completer<void>();
   bool fail = false;
+  bool failFetch = false;
   Completer<void>? fetchGate;
   int initializes = 0;
   int fetches = 0;
@@ -38,6 +39,7 @@ class _HeldRemote implements FeatureFlagsRemoteDataSource {
   Future<void> fetchAndActivate() async {
     fetches++;
     await fetchGate?.future;
+    if (failFetch) throw StateError('fetch unavailable');
     ready = true;
   }
 
@@ -153,6 +155,59 @@ void main() {
       expect(remote.fetches, 2);
     },
   );
+
+  Future<void> expectActivatedValues() async {
+    final flag = (await repository.getFlag(FeatureFlags.newFeature.value))
+        .dataOrNull;
+    expect(flag?.value, isTrue);
+    expect(flag?.source, FeatureFlagSource.remoteConfig);
+    final all = (await repository.getAllFlags()).dataOrNull;
+    expect(all?[FeatureFlags.newFeature.value]?.value, isTrue);
+    expect(
+      all?[FeatureFlags.newFeature.value]?.source,
+      FeatureFlagSource.remoteConfig,
+    );
+  }
+
+  test('activated remote values remain readable during a refresh', () async {
+    remote.gate.complete();
+    expect((await repository.initialize()).isSuccess, isTrue);
+    await expectActivatedValues();
+    final gate = remote.fetchGate = Completer<void>();
+    final refresh = repository.refreshRemoteFlags();
+    try {
+      await pumpEventQueue();
+      await expectActivatedValues();
+    } finally {
+      gate.complete();
+      expect((await refresh).isSuccess, isTrue);
+    }
+    await expectActivatedValues();
+  });
+
+  test('a failed refresh retains the activated remote values', () async {
+    remote.gate.complete();
+    expect((await repository.initialize()).isSuccess, isTrue);
+    remote.failFetch = true;
+    expect((await repository.refreshRemoteFlags()).isFailure, isTrue);
+    await expectActivatedValues();
+  });
+
+  test('a timed-out refresh retains the activated remote values', () async {
+    remote.gate.complete();
+    expect((await repository.initialize()).isSuccess, isTrue);
+    final gate = remote.fetchGate = Completer<void>();
+    try {
+      expect((await repository.refreshRemoteFlags()).isFailure, isTrue);
+      await expectActivatedValues();
+      expect((await repository.refreshRemoteFlags()).isFailure, isTrue);
+      expect(remote.fetches, 2, reason: 'do not overlap a held vendor fetch');
+    } finally {
+      gate.complete();
+      await pumpEventQueue();
+    }
+    await expectActivatedValues();
+  });
 
   test('timed-out fetch cannot overlap a newer activation', () async {
     remote.gate.complete();
