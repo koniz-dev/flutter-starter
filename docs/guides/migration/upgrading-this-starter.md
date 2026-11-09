@@ -3,7 +3,7 @@
 This guide helps you upgrade your Flutter starter project to newer versions and
 handle breaking changes.
 
-**Starter version:** v3.0.2
+**Starter version:** v4.0.0
 
 That line records which release of the starter this copy of the template came
 from. It is not your app's version (`version:` in `pubspec.yaml` is yours), and

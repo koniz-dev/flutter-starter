@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/logging/logging_providers.dart';
@@ -11,7 +12,9 @@ import 'package:flutter_starter/features/auth/data/models/auth_response_model.da
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/tasks/presentation/providers/tasks_provider.dart';
+import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
 import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
+import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -50,16 +53,30 @@ class _Remote implements AuthRemoteDataSource {
 class _FailingStorage extends InMemoryStorage {
   bool failRemove = false;
   bool failWrite = false;
+  bool returnFalse = false;
+  Completer<void>? heldRemoval;
+  int taskRemovals = 0;
 
   @override
   Future<bool> remove(String key) async {
-    if (key == _tasksKey && failRemove) throw Exception('remove failed');
+    if (key == _tasksKey) {
+      taskRemovals++;
+      final gate = heldRemoval;
+      if (gate != null) await gate.future;
+    }
+    if (key == _tasksKey && failRemove) {
+      if (returnFalse) return false;
+      throw Exception('remove failed');
+    }
     return await super.remove(key);
   }
 
   @override
   Future<bool> setString(String key, String value) async {
-    if (key == _tasksKey && failWrite) throw Exception('write failed');
+    if (key == _tasksKey && failWrite) {
+      if (returnFalse) return false;
+      throw Exception('write failed');
+    }
     return await super.setString(key, value);
   }
 }
@@ -196,6 +213,135 @@ void main() {
     expect(created.isSuccess, isTrue);
     expect(await titlesAfterReload(), ["B's task"]);
   });
+
+  test('concurrent session wipes share a single deletion', () async {
+    final gate = storage.heldRemoval = Completer<void>();
+    final wipe = container.read(tasksSessionWipeProvider);
+    final first = wipe.run();
+    final second = wipe.run();
+    try {
+      await pumpEventQueue();
+      expect(storage.taskRemovals, 1);
+    } finally {
+      gate.complete();
+      await Future.wait([first, second]);
+    }
+    expect(storage.taskRemovals, 1);
+    expect(wipe.pending, isFalse);
+  });
+
+  test('detail reads cannot bypass a failed session wipe', () async {
+    await guarded(() => handOverToB(failWrite: true));
+    final rows = jsonDecode(storage.values[_tasksKey]! as String) as List;
+    final id = (rows.first as Map<String, dynamic>)['id'] as String;
+    final result = await container.read(tasksProvider.notifier).taskById(id);
+    result.when(
+      success: (task) => expect(task, isNull),
+      failureCallback: (failure) => fail(failure.message),
+    );
+  });
+
+  test('a rejected task write reports failure instead of success', () async {
+    await signIn('a@example.com');
+    container.read(tasksProvider);
+    await pumpEventQueue();
+    storage
+      ..returnFalse = true
+      ..failWrite = true;
+
+    final created = await container
+        .read(tasksProvider.notifier)
+        .createTask(title: 'Not persisted');
+
+    expect(created.isFailure, isTrue);
+    expect(storage.values, isNot(contains(_tasksKey)));
+    expect(container.read(tasksProvider).isLoading, isFalse);
+  });
+
+  for (final failWrite in [false, true]) {
+    test('false storage results protect the next session '
+        '(fallback fails: $failWrite)', () async {
+      storage.returnFalse = true;
+      await guarded(() => handOverToB(failWrite: failWrite));
+
+      container.read(tasksProvider);
+      await pumpEventQueue();
+      expect(titlesOnScreen(), isEmpty);
+      expect(await titlesAfterReload(), isEmpty);
+      expect(uncaught, isEmpty);
+      if (failWrite) {
+        expect(storage.values[_tasksKey], contains("A's private task"));
+        expect(container.read(tasksSessionWipeProvider).pending, isTrue);
+        final blocked = await container
+            .read(tasksProvider.notifier)
+            .createTask(title: 'Blocked while cleanup fails');
+        expect(blocked.isFailure, isTrue);
+        expect(container.read(tasksProvider).isLoading, isFalse);
+        expect(
+          storage.values[_tasksKey],
+          isNot(contains('Blocked while cleanup fails')),
+        );
+      } else {
+        expect(jsonDecode(storage.values[_tasksKey]! as String), isEmpty);
+      }
+
+      storage
+        ..failRemove = false
+        ..failWrite = false;
+      final created = await container
+          .read(tasksProvider.notifier)
+          .createTask(title: "B's new task");
+      expect(created.isSuccess, isTrue);
+      expect(await titlesAfterReload(), ["B's new task"]);
+    });
+  }
+
+  for (final failWrite in [false, true]) {
+    testWidgets('screen never renders the previous user after false storage '
+        '(fallback fails: $failWrite)', (tester) async {
+      storage.returnFalse = true;
+      await tester.runAsync(() async {
+        await guarded(() => handOverToB(failWrite: failWrite));
+        await titlesAfterReload();
+      });
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: TasksListScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text("A's private task"), findsNothing);
+      expect(find.byType(ListTile), findsNothing);
+      await tester.runAsync(titlesAfterReload);
+      await tester.pumpAndSettle();
+      expect(find.text("A's private task"), findsNothing);
+      expect(find.byType(ListTile), findsNothing);
+      expect(uncaught, isEmpty);
+      if (failWrite) {
+        expect(container.read(tasksSessionWipeProvider).pending, isTrue);
+      }
+      storage
+        ..failRemove = false
+        ..failWrite = false;
+      await tester.runAsync(() async {
+        final result = await container
+            .read(tasksProvider.notifier)
+            .createTask(title: "B's visible task");
+        expect(result.isSuccess, isTrue);
+        await titlesAfterReload();
+      });
+      await tester.pumpAndSettle();
+      expect(find.text("B's visible task"), findsOneWidget);
+      expect(find.text("A's private task"), findsNothing);
+      expect(find.byType(ListTile), findsOneWidget);
+      expect(uncaught, isEmpty);
+    });
+  }
 
   test(
     'criterion 2: each failure is logged, and none escapes to the zone',

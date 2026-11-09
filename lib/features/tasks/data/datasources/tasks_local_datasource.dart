@@ -132,7 +132,11 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
   @override
   Future<void> deleteAllTasks() async {
     try {
-      await _serialized(() => storageService.remove(_tasksKey));
+      await _serialized(() async {
+        if (!await storageService.remove(_tasksKey)) {
+          throw const CacheException('Storage rejected the tasks deletion');
+        }
+      });
     } on Exception catch (e) {
       throw CacheException('Failed to delete all tasks: $e');
     }
@@ -180,6 +184,8 @@ class TasksLocalDataSourceImpl implements TasksLocalDataSource {
     if (encoded == null) {
       throw const CacheException('Failed to encode tasks data');
     }
-    await storageService.setString(_tasksKey, encoded);
+    if (!await storageService.setString(_tasksKey, encoded)) {
+      throw const CacheException('Storage rejected the tasks write');
+    }
   }
 }
