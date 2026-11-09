@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Realtime clients report remote closes and clean up owned sockets.** A server close emits RealtimeConnectionClosed on the message stream error channel after disconnection; the stream remains open for reconnection. Handle stream errors even for a clean server close. Override realtimeClientFactoryProvider for automatic disconnect on provider disposal; direct overrides of realtimeClientProvider retain responsibility for their own cleanup.
+
 - **API performance helpers redact URL credentials.** Trace names and HTTP path attributes now use the existing URL redactor, removing userinfo and sensitive query values before a performance backend records them. Canonical HTTP fields take precedence over custom attributes to prevent an unsafe path override; plain paths retain their current attributes.
 
 - **Feature flag refresh keeps activated remote values available.** Reads continue using the last activated values during a refresh and after a failed or timed-out fetch. Initial initialization still has bounded local fallback, and a timed-out vendor fetch cannot overlap a new activation.
