@@ -46,7 +46,7 @@ class _Remote implements AuthRemoteDataSource {
   ) => throw UnimplementedError();
 
   @override
-  Future<void> logout({String? refreshToken}) async {}
+  Future<void> logout({String? refreshToken, String? accessToken}) async {}
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async =>

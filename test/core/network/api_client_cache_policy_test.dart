@@ -206,7 +206,8 @@ class _StubRemoteDataSource implements AuthRemoteDataSource {
   int logoutCalls = 0;
 
   @override
-  Future<void> logout({String? refreshToken}) async => logoutCalls++;
+  Future<void> logout({String? refreshToken, String? accessToken}) async =>
+      logoutCalls++;
 
   @override
   Future<AuthResponseModel> login(String email, String password) =>

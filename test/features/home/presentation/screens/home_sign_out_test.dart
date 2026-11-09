@@ -20,7 +20,7 @@ class _SlowLogoutRemote implements AuthRemoteDataSource {
   void release() => _gate.complete();
 
   @override
-  Future<void> logout({String? refreshToken}) {
+  Future<void> logout({String? refreshToken, String? accessToken}) {
     calls.add(refreshToken);
     return _gate.future;
   }

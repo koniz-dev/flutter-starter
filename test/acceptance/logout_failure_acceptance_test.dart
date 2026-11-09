@@ -71,7 +71,7 @@ class _InMemorySessionDataSource implements AuthLocalDataSource {
 /// an adopter who has not implemented `/auth/logout` yet.
 class _FailingRemoteDataSource implements AuthRemoteDataSource {
   @override
-  Future<void> logout({String? refreshToken}) async =>
+  Future<void> logout({String? refreshToken, String? accessToken}) async =>
       throw const NetworkException('No internet connection');
 
   @override

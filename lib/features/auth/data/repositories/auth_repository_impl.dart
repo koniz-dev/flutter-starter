@@ -182,11 +182,11 @@ class AuthRepositoryImpl implements AuthRepository {
       refreshToken = null;
     }
 
-    Object? remoteError;
+    String? accessToken;
     try {
-      await remoteDataSource.logout(refreshToken: refreshToken);
-    } on Object catch (e) {
-      remoteError = e;
+      accessToken = await localDataSource.getToken();
+    } on Object {
+      accessToken = null;
     }
 
     // Each step is guarded on its own and none returns early, so a failing
@@ -210,6 +210,19 @@ class AuthRepositoryImpl implements AuthRepository {
       } on Object catch (e) {
         localError ??= e;
       }
+    }
+
+    // Clear local state before waiting on the network: a server that never
+    // answers must not leave a restorable session on the device. The token
+    // captured above still lets the server revoke the original credential.
+    Object? remoteError;
+    try {
+      await remoteDataSource.logout(
+        refreshToken: refreshToken,
+        accessToken: accessToken,
+      );
+    } on Object catch (e) {
+      remoteError = e;
     }
 
     // A session still sitting on the device outranks an unreachable server,
