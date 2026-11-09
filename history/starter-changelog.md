@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Feature flag refresh keeps activated remote values available.** Reads continue using the last activated values during a refresh and after a failed or timed-out fetch. Initial initialization still has bounded local fallback, and a timed-out vendor fetch cannot overlap a new activation.
+
 - **Token refresh is shared across manual and interceptor callers.** Concurrent refreshes in one session now use one remote rotation and persistence result. Failed operations can retry, while a new session does not join or accept the old session’s refresh.
 
 - **Sign-out clears local session state before waiting for the server.** A slow logout endpoint no longer leaves a restorable user or tokens on the device. The original refresh token and bearer are retained only for server revocation; remote failures remain visible.
