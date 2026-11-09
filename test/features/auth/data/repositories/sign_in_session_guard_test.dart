@@ -56,7 +56,7 @@ class _Remote implements AuthRemoteDataSource {
   final List<Completer<void>> holds = [];
 
   @override
-  Future<void> logout({String? refreshToken}) async {
+  Future<void> logout({String? refreshToken, String? accessToken}) async {
     logouts.add(refreshToken);
     if (!holdLogouts) return;
     final hold = Completer<void>();

@@ -41,7 +41,7 @@ class _Remote implements AuthRemoteDataSource {
   ) async => _session(email);
 
   @override
-  Future<void> logout({String? refreshToken}) async {}
+  Future<void> logout({String? refreshToken, String? accessToken}) async {}
 
   @override
   Future<AuthResponseModel> refreshToken(String refreshToken) async =>

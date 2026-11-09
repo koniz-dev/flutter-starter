@@ -23,6 +23,7 @@ class _Remote implements AuthRemoteDataSource {
   final bool rejectLogout;
   final Completer<void>? logoutGate;
   String? sentRefreshToken;
+  String? sentAccessToken;
   int logoutCalls = 0;
 
   @override
@@ -37,9 +38,10 @@ class _Remote implements AuthRemoteDataSource {
   ) => throw UnimplementedError();
 
   @override
-  Future<void> logout({String? refreshToken}) async {
+  Future<void> logout({String? refreshToken, String? accessToken}) async {
     logoutCalls++;
     sentRefreshToken = refreshToken;
+    sentAccessToken = accessToken;
     await logoutGate?.future;
     // An expired access token: /auth/logout is excluded from the refresh.
     if (rejectLogout) throw const ServerException('expired', statusCode: 401);
@@ -71,6 +73,7 @@ void main() {
 
       expect(remote.logoutCalls, 1);
       expect(remote.sentRefreshToken, 'the-refresh-token');
+      expect(remote.sentAccessToken, 'access');
       expect(tokens.accessToken, isNull);
       expect(tokens.refreshToken, isNull);
     });
@@ -114,6 +117,7 @@ void main() {
         expect(await relaunchedLocal.getCachedUser(), isNull);
         expect((await relaunched.getCurrentUser()).dataOrNull, isNull);
         expect(remote.sentRefreshToken, 'the-refresh-token');
+        expect(remote.sentAccessToken, 'access');
         expect(remote.logoutCalls, 1);
       } finally {
         gate.complete();

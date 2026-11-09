@@ -66,7 +66,7 @@ class InMemorySessionDataSource implements AuthLocalDataSource {
 /// A server that accepts the logout call and nothing else.
 class _LogoutOnlyRemote implements AuthRemoteDataSource {
   @override
-  Future<void> logout({String? refreshToken}) async {}
+  Future<void> logout({String? refreshToken, String? accessToken}) async {}
 
   @override
   Future<AuthResponseModel> login(String email, String password) =>

@@ -182,6 +182,13 @@ class AuthRepositoryImpl implements AuthRepository {
       refreshToken = null;
     }
 
+    String? accessToken;
+    try {
+      accessToken = await localDataSource.getToken();
+    } on Object {
+      accessToken = null;
+    }
+
     // Each step is guarded on its own and none returns early, so a failing
     // step never skips the next (as in `AuthInterceptor._logoutUser()`). The
     // first failure is the one reported.
@@ -210,7 +217,10 @@ class AuthRepositoryImpl implements AuthRepository {
     // captured above still lets the server revoke the original credential.
     Object? remoteError;
     try {
-      await remoteDataSource.logout(refreshToken: refreshToken);
+      await remoteDataSource.logout(
+        refreshToken: refreshToken,
+        accessToken: accessToken,
+      );
     } on Object catch (e) {
       remoteError = e;
     }
