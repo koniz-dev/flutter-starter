@@ -1,0 +1,57 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key password -> "user_password"
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passwd -> "db_passwd"
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passphrase -> "wallet_passphrase"
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key token -> "refresh_token"
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key secret -> "client_secret"
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key apikey -> "apiKey"
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key credential -> "credentials"
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authorization -> "authorization"
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key privatekey -> "private_key"
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key creditcard -> "credit_card"
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cardnumber -> "card_number"
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key signature -> "signature"
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pincode -> "pin_code"
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otpcode -> "otp_code"
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key jwt -> "jwt"
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key accesskey -> "access_key"
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key appkey -> "app_key"
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key clientkey -> "client_key"
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key hmac -> "x-hmac-sha256"
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key subscriptionkey -> "Ocp-Apim-Subscription-Key"
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key functionskey -> "x-functions-key"
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionkey -> "session_key"
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authkey -> "auth_key"
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key masterkey -> "master_key"
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key licensekey -> "license_key"
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pin -> "pin"
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otp -> "otp"
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvv -> "cvv"
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvc -> "cvc"
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key session -> "session"
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionid -> "sessionId"
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts relative query
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts reserved path override
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: plain API paths retain their recorded attributes
+00:01 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_error_object_test.dart: a failed request reaches neither the log nor the reporter with its query secrets or userinfo
+00:01 +47: All tests passed!
+
+Post-merge security review of a35aa278f78..e35b34cdd9432bd358a061c55df8b2c81e6265db
+Command: flutter test --no-pub test/core/performance/performance_api_redaction_test.dart test/core/network/interceptors/api_logging_redaction_rules_test.dart test/core/network/interceptors/api_logging_error_object_test.dart --concurrency=2 --reporter expanded
+Result: 47 focused tests passed.
+Inspected 16 evidence artifacts: acceptance-runner.log, analyze.log, ci.json, deliverable.log, epic-coverage.log, format.log, independent-baseline.log, independent-cases.dart, independent-review.log, local-audit.log, refs.log, regression-before.log, review.md, tests.log, tree-parity.log, verification.md.
+No introduced actionable security findings. Performance metadata uses the shared URL redactor for both trace name and canonical http_path; caller attributes cannot override the canonical field. Original execution/result/error behavior remains. No credentials are persisted or sent through a new transport.
+Raw credential values in before-fix and scratch artifacts are synthetic test literals (user:pa55, SECRET123, synthetic, fixture_name:P%40SS, encodedSecret) checked against test sources. No apparent real secret or common live-key/private-key signature found. Known shared-redactor limitations remain separately tracked in1192.
+No tracked source edits or GitHub mutations; no real-backend/device/store or web deployment assurance asserted.

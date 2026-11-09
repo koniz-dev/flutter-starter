@@ -1,0 +1,105 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts absolute credentials
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts relative query
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: API performance redacts reserved path override
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_api_redaction_test.dart: plain API paths retain their recorded attributes
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall should call measureOperation with correct parameters
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall should include additional attributes
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall should sanitize path with IDs
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /users/550e8400-e29b-41d4-a716-446655440000 to api_get_/users/:uuid
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /users/f47ac10b-58cc-4372-a567-0e02b2c3d479 to api_get_/users/:uuid
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /users/550e8400-e29b-41d4-a716-446655440000/orders to api_get_/users/:uuid/orders
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /users/123 to api_get_/users/:id
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /users/123/orders/456 to api_get_/users/:id/orders/:id
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /files/abc123def456ghi789jkl to api_get_/files/:token
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /api/v1/user-profile-settings to api_get_/api/v1/user-profile-settings
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureApiCall sanitizes /users/123?expand=all to api_get_/users/:id
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureDatabaseQuery should call measureOperation with correct parameters
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureDatabaseQuery should include additional attributes
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureComputation should call measureOperation with correct parameters
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureComputation should include attributes
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureSyncComputation should call measureSyncOperation with correct parameters
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceUtils measureSyncComputation should include attributes
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceServiceExtension measureApiCall should delegate to PerformanceUtils
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceServiceExtension measureDatabaseQuery should delegate to PerformanceUtils
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/performance/performance_utils_test.dart: PerformanceServiceExtension measureComputation should delegate to PerformanceUtils
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key password -> "user_password"
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passwd -> "db_passwd"
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passphrase -> "wallet_passphrase"
+00:01 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key token -> "refresh_token"
+00:01 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key secret -> "client_secret"
+00:01 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (setUpAll)
+00:01 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: code is a secret in a query string only a query code is redacted in the path and the query parameters
+00:01 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ no import-rule violation outside the allowlist
+00:01 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: code is a secret in a query string only a body field code stays readable
+00:01 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ no stale allowlist entry
+00:01 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist key names a real rule
+00:01 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every allowlist path exists, unless it is a stripped sample
+00:01 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ every rule has exactly one allowlist key
+00:01 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: import rules over lib/ (tearDownAll)
+00:01 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing its own data or presentation is a violation
+00:01 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing its own domain, core or a pub package is fine
+00:01 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing a Flutter UI library is a violation
+00:01 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain may import foundation.dart, and presentation material
+00:01 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates domain importing package:dio is a violation too
+00:01 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates data importing presentation is outside this rule set
+00:01 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates one feature importing another is a violation
+00:01 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates a feature importing itself, core or shared is fine
+00:01 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/features importing lib/core is fine - that is the direction
+00:01 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates package:dio is allowed only under lib/core/network/
+00:01 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates go_router is allowed in core routing and route modules
+00:01 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates go_router outside those places is a violation
+00:01 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates lib/core importing lib/features is a violation
+00:01 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: rule predicates the route registry seam is permanently allowed
+00:01 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths cover what tool/strip_sample_features.dart deletes
+00:01 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: strippable sample paths do not cover files no strip variant removes
+00:01 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing picks up import and export, with line numbers
+00:01 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing a commented-out directive is not a violation
+00:01 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/import_rules_test.dart: directive parsing handles show/hide/as clauses and double quotes
+00:01 +90: All tests passed!
+
+Independent supplemental probes:
+00:00 +0: loading /tmp/1187_independent_cases_test.dart
+00:00 +0: independent: original operation errors propagate without another trace
+00:00 +1: independent: scheme-relative encoded credentials are redacted
+00:00 +2: independent: canonical fields do not mutate supplied attributes
+00:00 +3: All tests passed!
+
+Fresh pre-merge review of a35aa278f78..e0b0daa705f: no introduced actionable findings.
+90 focused tests plus 3 independent supplemental tests passed. Baseline independently reproduced three credential-redaction failures; plain-path case passed. Supplemental cases cover original error identity/one invocation, scheme-relative percent-encoded userinfo/query secrets, extension generic return and caller attribute-map preservation with canonical field precedence.
+No tracked edits or GitHub mutations. No real backend or web deployment assurance asserted. The existing helper limitations tracked in1192 remain separate.
