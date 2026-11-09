@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- **Custom auth datasource logout signature changes.** Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
+
 ### Fixed
 
-- **Sign-out clears local session state before waiting for the server.** A slow logout endpoint no longer leaves a restorable user or tokens on the device. The original refresh token and bearer are retained only for server revocation; remote failures remain visible. Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
+- **Sign-out clears local session state before waiting for the server.** A slow logout endpoint no longer leaves a restorable user or tokens on the device. The original refresh token and bearer are retained only for server revocation; remote failures remain visible.
 
 ## [4.0.0] - 2026-11-08
 
