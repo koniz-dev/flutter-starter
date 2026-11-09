@@ -17,7 +17,7 @@ dependencies:
   dio: ^5.11.1
 
   # Utilities - Value equality comparison for objects
-  equatable: ^2.1.0
+  equatable: ^3.0.0
 
   # Flutter SDK - Core Flutter framework
   flutter:
@@ -103,7 +103,7 @@ dev_dependencies:
   mocktail: ^1.0.5
 
   # Testing - End-to-End testing framework
-  patrol: ^3.10.0
+  patrol: ^4.11.0
 
   # Riverpod Generator - generates provider boilerplate
   riverpod_generator: ^4.0.9
