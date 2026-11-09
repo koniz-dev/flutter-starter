@@ -377,6 +377,34 @@ from depends on pinning and on the build:
 <!-- symbol: lib/core/network/ssl_pinning.dart SslPinning.secureConnect -->
 <!-- symbol: lib/core/network/realtime/raw_websocket_client.dart RawWebSocketClientImpl._transport -->
 
+### Provider ownership and remote closure
+
+Override `realtimeClientFactoryProvider` to select a backend. The base provider
+creates one client per container and disconnects it when disposed:
+
+```dart
+final overrides = [
+  realtimeClientFactoryProvider.overrideWithValue(
+    () => RawWebSocketClientImpl(),
+  ),
+];
+```
+
+A direct override of `realtimeClientProvider` bypasses that factory and its
+cleanup; the override's owner must register `ref.onDispose(client.disconnect)`
+or disconnect the supplied client itself.
+
+A server close, including a clean close, emits `RealtimeConnectionClosed` on the
+message stream's error channel after `isConnected` becomes false. Its `code` is
+the peer's optional close code. The stream remains open for reconnection; an
+intentional `disconnect()` or provider disposal does not emit that close error.
+Handle stream errors when subscribing, and apply your application's retry policy.
+
+<!-- symbol: lib/core/network/realtime/realtime_providers.dart realtimeClientFactoryProvider -->
+<!-- symbol: lib/core/network/realtime/i_realtime_client.dart RealtimeConnectionClosed -->
+
+The message, reconnect and transport-error callbacks below are supplied by your app.
+
 ### Usage Example
 ```dart
 final realtimeClient = ref.read(realtimeClientProvider);
@@ -385,9 +413,16 @@ final realtimeClient = ref.read(realtimeClientProvider);
 await realtimeClient.connect('wss://example.com/socket');
 
 // Subscribe to stream
-realtimeClient.stream.listen((data) {
-  print('Received real-time event: $data');
-});
+realtimeClient.stream.listen(
+  (data) => handleRealtimeMessage(data),
+  onError: (Object error) {
+    if (error is RealtimeConnectionClosed) {
+      scheduleRealtimeReconnect(); // Apply your application's backoff policy.
+    } else {
+      handleRealtimeTransportError(error);
+    }
+  },
+);
 
 // Send payload: a String or bytes - encode anything else yourself; the
 // client hands the value to the socket as is.
