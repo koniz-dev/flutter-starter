@@ -88,10 +88,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  final email = value?.trim() ?? '';
+                  if (email.isEmpty) {
                     return l10n.emailRequired;
                   }
-                  if (!Validators.isValidEmail(value)) {
+                  if (!Validators.isValidEmail(email)) {
                     return l10n.emailInvalid;
                   }
                   return null;
