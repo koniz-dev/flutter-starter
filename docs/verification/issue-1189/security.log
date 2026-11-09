@@ -1,0 +1,45 @@
+Post-merge security phase: issue #1189 / PR #1200
+Reviewed maintainers/agents/security.md and actual diff f68a18efa18..c7de7052606.
+HEAD c7de7052606aeede27e2e1d3d915042a26250a5a
+929630cf6e5^{tree} d00990637c76db838bcef9d25b40bb9e32ceb56c
+c7de7052606^{tree} d00990637c76db838bcef9d25b40bb9e32ceb56c
+Changed files:
+lib/features/auth/presentation/screens/login_screen.dart
+lib/features/auth/presentation/screens/register_screen.dart
+test/features/auth/presentation/screens/email_whitespace_test.dart
+
+acceptance-runner.log: bytes=357 sha256=7152d93978851badd5b0bd1b0a3b8df0595e0d23d11b9bcf215137e4442644ba secret-signature-hits=0
+analyze.log: bytes=2254 sha256=fc28ba0eeeaf8aff97c5262a320c98543bc8c1a2064feb37bdf1bec4ef4cfa63 secret-signature-hits=0
+baseline-ac-test.dart: bytes=2604 sha256=a80f22ecc932bb98fa9d939b0fc7a0515626a4e5ba1b36782260326ab0d5aea9 secret-signature-hits=0
+baseline-login.dart: bytes=5702 sha256=5cc85279f3dd921e6f17b644dcc6eb3a627aacf4a05bddae3938af544b82c09f secret-signature-hits=0
+baseline-register.dart: bytes=6244 sha256=6bf422c4111c6368c26aad54e1eabd087a6fa1574f7e884d5ba60b373a955c24 secret-signature-hits=0
+ci.json: bytes=1108 sha256=7368abad03c8cc45111dbe29c973eecb54d8a209c424a8e5bd7eccec03513c81 secret-signature-hits=0
+criteria-tests.log: bytes=3289 sha256=06d5922529e8b5fabe750bd9a6549155381457ac316200d2692b6952b1c89f19 secret-signature-hits=0
+deliverable.log: bytes=73 sha256=a3ffa43b793f899689c547f843399951dce6df0bb74bb8b200a5c5af0bc53a2b secret-signature-hits=0
+epic-coverage.log: bytes=58 sha256=66cb4aa94ef4bcec254433433dc6508a9b377c06fc41fdabb6e20f2196fb8348 secret-signature-hits=0
+format.log: bytes=143 sha256=ecaea0b868e603da2983ed57a737afcb5e7daf8f46d237e6103aab51933bbf9b secret-signature-hits=0
+independent-matrix.dart: bytes=4019 sha256=0754564ff78faba3d7500cfd04d54408f13812b5a30f259496d2a955f8bfbc65 secret-signature-hits=0
+independent-review.log: bytes=20832 sha256=f9ac44f4898155e7a8b52ba5d687e4306c19d0fcbd1712ab06986fcf7626ce96 secret-signature-hits=0
+local-audit.log: bytes=15317 sha256=aa4692b408736fa7e401af68b643044736da5a1c9f5f3341b479e12386ce64c0 secret-signature-hits=0
+refs.log: bytes=213 sha256=a55386375d7fb363afd487a02c849263c75ee2c023c83183bbfb9bcd564050b5 secret-signature-hits=0
+regression-before.log: bytes=4281 sha256=641b9e83e48fc61d137ef0821b2604986d5be5e4beb9c6551d81935ee8b48afe secret-signature-hits=0
+review.md: bytes=727 sha256=db138fe20df8f80bb966b56fc106305631f31d1ed3232fb62bf9ebf21ef5f950 secret-signature-hits=0
+tests.log: bytes=14421 sha256=cee19591133508b4e9cbcab8c111c7db8b4623362607d7bc8714c0bca2ed1ef6 secret-signature-hits=0
+tree-parity.log: bytes=187 sha256=57c7d04711a0da714641c5f2c0bec76fab00af8786eb232026d7489c621f4f0c secret-signature-hits=0
+verification.md: bytes=1872 sha256=39c4150868fa5b0e4e7ed1eca47d3f3633486fb04c2cf1a0417d6f378306411b secret-signature-hits=0
+URL authorities: ['github.com']
+Corrected criteria test-output section (after explanatory header) is exact contiguous raw-log section: True
+Retained evidence scratch matrix equals independently run corrected source: True
+login: validator trims email: True
+login: empty normalized email rejected: True
+login: normalized email validated: True
+login: submission trims email and uses raw password: True
+register: validator trims email: True
+register: empty normalized email rejected: True
+register: normalized email validated: True
+register: submission trims email and uses raw password: True
+Security assessment: no introduced security issue found. No separate pre-existing security finding identified in reviewed scope.
+Normalization is at the form boundary and matches the already-existing submitted email representation; it does not bypass format/required validation or alter passwords. Shared validators, use-case signatures, session/token storage, logging, network, RASP, dependencies, and deployment configuration are unchanged.
+Public evidence credentials are literal synthetic fixture values (a@example.com, Password123! with surrounding-space variants, empty/short invalid passwords). Use cases are mocked to synthetic failures, without backend authentication. No private key, recognized token, authorization value, or credential-bearing URL found in all 19 evidence files; manual credential-context review also found none.
+Prior focused verification applies to merged tree by exact tree hash equality: 28 head AC/matrix tests and 5 use-case tests passed; both baseline AC tests intentionally failed. Raw log preserves preliminary scratch wording assertion errors; corrected criteria log is truthful.
+No full suite rerun or device/backend security claim. Read-only review: no tracked source edits, worktree creation, or GitHub mutations.

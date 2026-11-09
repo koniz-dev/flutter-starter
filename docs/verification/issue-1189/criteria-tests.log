@@ -1,0 +1,33 @@
+Successful independent AC and supplemental widget run after correcting scratch localization wording. Full raw review, including preliminary fixture errors and expected baseline failures, is retained in independent-review.log.
+
+00:00 +0: loading /tmp/1189-head-ac_test.dart
+00:00 +0: /tmp/1189-head-ac_test.dart: login accepts a trailing-space email and submits it trimmed
+00:02 +1: /tmp/1189-head-ac_test.dart: registration accepts a trailing-space email and submits it trimmed
+00:02 +2: loading /tmp/1189-matrix_test.dart
+00:04 +2: /tmp/1189-matrix_test.dart: login email []
+00:06 +3: /tmp/1189-matrix_test.dart: login email [32, 32, 32]
+00:06 +4: /tmp/1189-matrix_test.dart: login email [98, 97, 100, 45, 97, 100, 100, 114, 101, 115, 115, 32]
+00:06 +5: /tmp/1189-matrix_test.dart: login email [97, 32, 98, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:06 +6: /tmp/1189-matrix_test.dart: login email [97, 64, 32, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:06 +7: /tmp/1189-matrix_test.dart: login email [97, 64, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:06 +8: /tmp/1189-matrix_test.dart: login email [97, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109]
+00:07 +9: /tmp/1189-matrix_test.dart: login email [32, 32, 97, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32, 32]
+00:07 +10: /tmp/1189-matrix_test.dart: login email [9, 32, 97, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32, 10]
+00:07 +11: /tmp/1189-matrix_test.dart: login email [97, 43, 116, 97, 103, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:07 +12: /tmp/1189-matrix_test.dart: login email [106, 111, 115, 233, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:07 +13: /tmp/1189-matrix_test.dart: login rejects password 
+00:07 +14: /tmp/1189-matrix_test.dart: login rejects password short
+00:08 +15: /tmp/1189-matrix_test.dart: register email []
+00:08 +16: /tmp/1189-matrix_test.dart: register email [32, 32, 32]
+00:08 +17: /tmp/1189-matrix_test.dart: register email [98, 97, 100, 45, 97, 100, 100, 114, 101, 115, 115, 32]
+00:08 +18: /tmp/1189-matrix_test.dart: register email [97, 32, 98, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:08 +19: /tmp/1189-matrix_test.dart: register email [97, 64, 32, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:08 +20: /tmp/1189-matrix_test.dart: register email [97, 64, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:09 +21: /tmp/1189-matrix_test.dart: register email [97, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109]
+00:09 +22: /tmp/1189-matrix_test.dart: register email [32, 32, 97, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32, 32]
+00:09 +23: /tmp/1189-matrix_test.dart: register email [9, 32, 97, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32, 10]
+00:09 +24: /tmp/1189-matrix_test.dart: register email [97, 43, 116, 97, 103, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:09 +25: /tmp/1189-matrix_test.dart: register email [106, 111, 115, 233, 64, 101, 120, 97, 109, 112, 108, 101, 46, 99, 111, 109, 32]
+00:09 +26: /tmp/1189-matrix_test.dart: register rejects password 
+00:09 +27: /tmp/1189-matrix_test.dart: register rejects password short
+00:10 +28: All tests passed!

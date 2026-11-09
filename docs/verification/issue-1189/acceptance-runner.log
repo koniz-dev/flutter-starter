@@ -1,0 +1,1 @@
+Copied the maintainer acceptance runner with unchanged format/analyzer/full-test scope. The test command explicitly uses --concurrency=2 (bounds temporary fixture demand) and --reporter expanded (observable progress). Source, format scope and test selection unchanged. Exact command appears in tests.log. Use concurrency1 fallback if host free space drops.

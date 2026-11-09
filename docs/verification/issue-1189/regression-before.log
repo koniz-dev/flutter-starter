@@ -1,0 +1,58 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart
+00:00 +0: login accepts a trailing-space email and submits it trimmed
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+No matching calls (actually, no calls at all).
+(If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _VerifyCall._checkWith (package:mocktail/src/mocktail.dart:728:7)
+#2      _makeVerify.<anonymous closure> (package:mocktail/src/mocktail.dart:519:18)
+#3      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart:42:11)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  login accepts a trailing-space email and submits it trimmed
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: login accepts a trailing-space email and submits it trimmed [E]
+  Test failed. See exception logs above.
+  The test description was: login accepts a trailing-space email and submits it trimmed
+  
+00:01 +0 -1: registration accepts a trailing-space email and submits it trimmed
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+No matching calls (actually, no calls at all).
+(If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _VerifyCall._checkWith (package:mocktail/src/mocktail.dart:728:7)
+#2      _makeVerify.<anonymous closure> (package:mocktail/src/mocktail.dart:519:18)
+#3      main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart:67:13)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  registration accepts a trailing-space email and submits it trimmed
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -2: registration accepts a trailing-space email and submits it trimmed [E]
+  Test failed. See exception logs above.
+  The test description was: registration accepts a trailing-space email and submits it trimmed
+  
+00:02 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: login accepts a trailing-space email and submits it trimmed
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/email_whitespace_test.dart: registration accepts a trailing-space email and submits it trimmed

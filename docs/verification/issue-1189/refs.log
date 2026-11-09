@@ -1,0 +1,4 @@
+Commits in f68a18efa18960e832f658682b16666686e7133a..HEAD
+  ok    c7de7052 fix(auth): trim email before form validation (#1200)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
