@@ -1,0 +1,41 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart
+00:00 +0: concurrent repository refreshes share one rotating response
+00:00 +0 -1: concurrent repository refreshes share one rotating response [E]
+  Expected: ['R1']
+    Actual: ['R1', 'R1']
+     Which: at location [1] is ['R1', 'R1'] which longer than expected
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/refresh_single_flight_test.dart 117:5  main.<fn>
+  
+00:00 +0 -1: notifier shares an interceptor refresh already in flight
+00:00 +0 -2: notifier shares an interceptor refresh already in flight [E]
+  Expected: <200>
+    Actual: DioException:<DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.
+            The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+            Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+            In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+            >
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/refresh_single_flight_test.dart 155:5  main.<fn>
+  
+00:00 +0 -2: a failed shared refresh can be retried
+00:00 +0 -3: a failed shared refresh can be retried [E]
+  Expected: ['R1']
+    Actual: ['R1', 'R1']
+     Which: at location [1] is ['R1', 'R1'] which longer than expected
+  
+  package:matcher                                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18                          expect
+  test/features/auth/data/repositories/refresh_single_flight_test.dart 169:5  main.<fn>
+  
+00:00 +0 -3: a new session never joins an older session refresh
+00:00 +1 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: a failed shared refresh can be retried
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: concurrent repository refreshes share one rotating response
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: notifier shares an interceptor refresh already in flight

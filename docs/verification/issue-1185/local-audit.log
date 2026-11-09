@@ -1,0 +1,121 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 606 files (0 changed) in 1.94 seconds.
+==> flutter analyze
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.10.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+49 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+[... 867 lines elided ...]
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:30 +320: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+00:30 +321: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+00:30 +322: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should disable button during loading
+00:30 +323: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+00:31 +324: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should navigate to RegisterScreen when register button is tapped
+00:31 +325: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short name
+00:31 +326: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for invalid email
+00:31 +327: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short password
+00:31 +328: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should call register use case with correct parameters
+00:31 +329: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show loading indicator during registration
+00:32 +330: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show error message when registration fails
+00:32 +331: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +332: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +333: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +334: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +335: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +336: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +337: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +338: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +339: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+00:32 +340: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should display button text
+00:32 +341: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should display button text
+00:32 +341: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: the real provider graph shares one SessionGeneration a forced logout raised inside AuthInterceptor advances the counter AuthRepositoryImpl checks
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [DioExceptionType.badResponse] /users/me (status 401)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)
+│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:71:35)
+│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:46:21)
+│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)
+│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)
+│ #5   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart:592:21)
+│ #6   <asynchronous suspension>
+│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:32 +342: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should display button text
+00:32 +343: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should display button text
+00:33 +344: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should call onPressed when tapped
+00:33 +345: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should show loading indicator when isLoading is true
+00:33 +346: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should disable button when isLoading is true
+00:33 +347: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should have minimum size
+00:33 +348: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should work without onPressed callback
+00:33 +349: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton Edge Cases should handle empty text
+00:33 +350: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton Edge Cases should handle long text
+00:33 +351: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton Edge Cases should handle multiple rapid taps
+00:33 +352: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton Edge Cases should not call onPressed when disabled and loading
+00:33 +353: All tests passed!

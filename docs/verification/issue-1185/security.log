@@ -1,0 +1,104 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: concurrent repository refreshes share one rotating response
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_logout_between_writes_test.dart: a logout during the access-token write leaves no token behind and fails the refresh
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: notifier shares an interceptor refresh already in flight
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: notifier shares an interceptor refresh already in flight
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: a failed shared refresh can be retried
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_single_flight_test.dart: a new session never joins an older session refresh
+00:01 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 1 (an int user id): refreshToken returns INVALID_AUTH_RESPONSE and writes no token
+00:01 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 2 (an int user id): AuthNotifier.refreshToken completes without throwing
+00:01 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:01 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:01 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a logout during the login round trip leaves nothing stored
+00:01 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/refresh_unreadable_response_test.dart: criterion 3: AuthInterceptor ends the session for that failure
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/data/repositories/sign_in_session_guard_test.dart: a sign-in started by a session listener during a logout waits for its teardown
+00:01 +20: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart
+00:02 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key password -> "user_password"
+00:02 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passwd -> "db_passwd"
+00:02 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key passphrase -> "wallet_passphrase"
+00:02 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key token -> "refresh_token"
+00:02 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key secret -> "client_secret"
+00:02 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key apikey -> "apiKey"
+00:02 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key credential -> "credentials"
+00:02 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authorization -> "authorization"
+00:02 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key privatekey -> "private_key"
+00:02 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key creditcard -> "credit_card"
+00:02 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cardnumber -> "card_number"
+00:02 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key signature -> "signature"
+00:02 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pincode -> "pin_code"
+00:02 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otpcode -> "otp_code"
+00:02 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key jwt -> "jwt"
+00:02 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key accesskey -> "access_key"
+00:02 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key appkey -> "app_key"
+00:02 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key clientkey -> "client_key"
+00:02 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key hmac -> "x-hmac-sha256"
+00:02 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key subscriptionkey -> "Ocp-Apim-Subscription-Key"
+00:02 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key functionskey -> "x-functions-key"
+00:02 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionkey -> "session_key"
+00:02 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key authkey -> "auth_key"
+00:02 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key masterkey -> "master_key"
+00:02 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key licensekey -> "license_key"
+00:02 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key pin -> "pin"
+00:02 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key otp -> "otp"
+00:02 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvv -> "cvv"
+00:02 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key cvc -> "cvc"
+00:02 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key session -> "session"
+00:02 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sessionid -> "sessionId"
+00:02 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key bearer -> "bearer"
+00:02 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key sign -> "sign"
+00:02 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key key -> "key"
+00:02 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key access -> "access"
+00:02 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key refresh -> "refresh"
+00:02 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key near misses of the short names stay readable
+00:02 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 1: every key rule redacts its realistic key the table covers both rule sets with no duplicates
+00:02 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/api_logging_redaction_rules_test.dart: criterion 2: onResponse never logs an access_token value
+00:02 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:02 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:02 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:02 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1+2: neither token is re-persisted, through the real repository refresh and the real logout
+00:03 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 3: queued requests are rejected, not replayed, when the session ended during the refresh
+00:03 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 4: a 401 carrying X-Retry-Count: 1 queues behind the in-flight refresh and is replayed, not logged out
+00:03 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh the guard does not lean on the cached user blob: after a stale refresh there is no token, so no session can be restored
+00:03 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 1: a refresh that resolves inside its own session still persists both tokens
+00:03 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh criterion 5: the interceptor refreshes normally again after a subsequent login
+00:03 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh a login completing during an old refresh keeps the new session: the stale refresh skips its writes rather than undoing them
+00:03 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh a login with no logout first keeps the new session over a refresh already in flight
+00:03 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: a logout landing during an in-flight refresh a register with no logout first keeps the new session over a refresh already in flight
+00:03 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: the real provider graph shares one SessionGeneration a forced logout raised inside AuthInterceptor advances the counter AuthRepositoryImpl checks
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.debug (package:flutter_starter/core/logging/logging_service.dart:182:13)
+│ #1   ApiLoggingInterceptor.onRequest (package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart:47:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 API Request: GET /users/me | Context: {"method":"GET","path":"/users/me","baseUrl":"http://localhost:3000/v1","headers":{"Content-Type":"application/json","Accept":"application/json","Authorization":"***REDACTED***"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ DioException [DioExceptionType.badResponse] /users/me (status 401)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   DioMixin.request (package:dio/src/dio_mixin.dart:404:36)
+│ #1   DioNetworkClient._send (package:flutter_starter/core/network/adapters/dio_network_client.dart:71:35)
+│ #2   DioNetworkClient.send (package:flutter_starter/core/network/adapters/dio_network_client.dart:46:21)
+│ #3   ApiClient._send (package:flutter_starter/core/network/api_client.dart:341:35)
+│ #4   ApiClient.get (package:flutter_starter/core/network/api_client.dart:213:18)
+│ #5   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart:592:21)
+│ #6   <asynchronous suspension>
+│ #7   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ API Error: DioExceptionType.badResponse /users/me | Context: {"type":"DioExceptionType.badResponse","path":"/users/me","method":"GET","statusCode":401,"responseBody":{"message":"Unauthorized"}}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_session_generation_test.dart: SessionGeneration a generation left behind never becomes current again
+00:03 +73: All tests passed!
+
+Post-merge security review: fce3f2812c8..c8f6b41808903d4c4ea67af7502e8d740fc6c9fc
+Command: flutter test --no-pub test/features/auth/data/repositories/refresh_single_flight_test.dart test/features/auth/data/repositories/refresh_logout_between_writes_test.dart test/features/auth/data/repositories/refresh_unreadable_response_test.dart test/features/auth/data/repositories/sign_in_session_guard_test.dart test/core/network/interceptors/auth_interceptor_session_generation_test.dart test/core/network/interceptors/api_logging_redaction_rules_test.dart --concurrency=2 --reporter expanded
+Result: 73 focused tests passed.
+Inspected 21 evidence artifacts: acceptance-runner.log, analyze.log, baseline-repository.dart, boundary-baseline-test.dart, boundary-baseline.log, boundary-current.log, boundary-test.dart, ci.json, deliverable.log, epic-coverage.log, format.log, independent-baseline.log, independent-cases.dart, independent-review.log, local-audit.log, refs.log, regression-before.log, review.md, tests.log, tree-parity.log, verification.md
+No introduced actionable security findings. Shared operation remains per-session; old completion cannot clear a newer flight, generation checks still guard all writes, and failure/completion releases the slot. No new logging, disk format, transport or dependency changes.
+Evidence credential values are synthetic fixture literals (R1/R2/R3, access-R1/access-R2/access-R3, different-user); no apparent real secret found. Existing delayed-custom-callback interceptor race is separately filed as1196 and fails equally on baseline.
+No tracked code changes, GitHub mutations or device/backend/store assurances by this reviewer.

@@ -1,0 +1,20 @@
+00:00 +0: loading /tmp/1185_boundary_test.dart
+00:00 +0: boundary: repository settles before delayed interceptor callback returns
+boundary before interceptor returns: access-R3; finalaccess=access-R2; finalrefresh=R3; servervalid=R3
+00:00 +0 -1: boundary: repository settles before delayed interceptor callback returns [E]
+  Expected: 'access-R3'
+    Actual: 'access-R2'
+     Which: is different.
+            Expected: access-R3
+              Actual: access-R2
+                              ^
+             Differ at offset 8
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  /tmp/1185_boundary_test.dart 265:5                  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /tmp/1185_boundary_test.dart: boundary: repository settles before delayed interceptor callback returns
