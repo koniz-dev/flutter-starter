@@ -1,0 +1,74 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart
+00:00 +0: server close 1000 is observable by an existing subscriber
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:27:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:60177
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:184:17)
+│ #1   StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection closed.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:246:13)
+│ #1   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:185:9)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:246:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:39:18)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:05 +0 -1: server close 1000 is observable by an existing subscriber [E]
+  Expected: not null
+    Actual: <null>
+  a remote close must be observable
+  
+  package:matcher                                                  expect
+  package:flutter_test/src/widget_tester.dart 473:18               expect
+  test/core/network/realtime/realtime_close_event_test.dart 36:11  main.<fn>
+  
+00:05 +0 -1: server close 1001 is observable by an existing subscriber
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:27:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:60180
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:184:17)
+│ #1   StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection closed.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:246:13)
+│ #1   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:185:9)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:246:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:39:18)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:10 +0 -2: server close 1001 is observable by an existing subscriber [E]
+  Expected: not null
+    Actual: <null>
+  a remote close must be observable
+  
+  package:matcher                                                  expect
+  package:flutter_test/src/widget_tester.dart 473:18               expect
+  test/core/network/realtime/realtime_close_event_test.dart 36:11  main.<fn>
+  
+00:10 +0 -2: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart: server close 1000 is observable by an existing subscriber
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart: server close 1001 is observable by an existing subscriber

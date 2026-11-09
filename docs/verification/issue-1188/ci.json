@@ -1,0 +1,37 @@
+[
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589164/job/129338764643",
+    "name": "Docs check",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589330/job/129338765439",
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589330/job/129338765800",
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589349/job/129338765002",
+    "name": "Quality gate",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589330/job/129338766405",
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589330/job/129338765917",
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42668589330/job/129338765955",
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS"
+  }
+]

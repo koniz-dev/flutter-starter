@@ -1,0 +1,121 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 608 files (0 changed) in 1.70 seconds.
+==> flutter analyze
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.10.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+49 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+[... 700 lines elided ...]
+NoOpRealtimeClient: Simulated send of a Null
+00:03 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient multiple operations in sequence work
+NoOpRealtimeClient: Simulated connection to ws://localhost
+NoOpRealtimeClient: Simulated send of a String
+NoOpRealtimeClient: Simulated send of a String
+NoOpRealtimeClient: Simulated disconnection
+00:03 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/noop_realtime_client_test.dart: NoOpRealtimeClient stream emits no events on send
+NoOpRealtimeClient: Simulated send of a String
+00:03 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_client_test.dart: RawWebSocketClientImpl connect against a server that never completes the handshake fails with a TimeoutException after connectTimeout, with no unhandled error
+00:03 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart: a real wss:// handshake (setUpAll)
+00:03 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart: a real wss:// handshake a certificate the fingerprints do not name is refused
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart:157:34)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:60295
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+SSL Pinning failure for 127.0.0.1: 
+Expected one of: [0000000000000000000000000000000000000000000000000000000000000000]
+Got: 3fda3ff89854714fe35aef674ddb7fd2517e1372ad37aa30c9e5dba298c8bb2a
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:136:15)
+│ #1   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Failed to open WebSocket connection to wss://127.0.0.1:60295: WebSocketChannelException
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart: a real wss:// handshake the pinned certificate is accepted
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart:166:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:60295
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart:168:16)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart: a real wss:// handshake without pinning, the self-signed certificate is refused by the platform trust store
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart:177:34)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:60295
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:136:15)
+│ #1   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Failed to open WebSocket connection to wss://127.0.0.1:60295: WebSocketChannelException
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_pinning_test.dart: a real wss:// handshake (tearDownAll)
+00:03 +73: All tests passed!

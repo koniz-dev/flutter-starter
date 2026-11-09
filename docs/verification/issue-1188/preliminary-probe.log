@@ -1,0 +1,51 @@
+00:00 +0: loading /tmp/1188_independent_cases_test.dart
+00:00 +0: independent: a subscriber survives remote close and reconnect
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///tmp/1188_independent_cases_test.dart:38:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:60528
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:184:17)
+│ #1   StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection closed.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:186:9)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///tmp/1188_independent_cases_test.dart:42:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:60528
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   main.<anonymous closure> (file:///tmp/1188_independent_cases_test.dart:44:14)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   main.<anonymous closure> (file:///tmp/1188_independent_cases_test.dart:45:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +1: independent: replacing factory disconnects old provider-owned instance
+00:00 +1 -1: independent: replacing factory disconnects old provider-owned instance [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  /tmp/1188_independent_cases_test.dart 55:5          main.<fn>
+  
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  /tmp/1188_independent_cases_test.dart: independent: replacing factory disconnects old provider-owned instance

@@ -1,0 +1,121 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart: server close 1000 is observable by an existing subscriber
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:30:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:63424
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:184:17)
+│ #1   StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection closed.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:186:9)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:43:18)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart: server close 1001 is observable by an existing subscriber
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:30:24)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:63428
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:184:17)
+│ #1   StackZoneSpecification._run (package:stack_trace/src/stack_zone_specification.dart:207:15)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 WebSocket connection closed.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   RawWebSocketClientImpl.connect.<anonymous closure> (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:186:9)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:43:18)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_url_redaction_test.dart: a cancelled handshake names the URL without its token
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart: provider disposal disconnects its factory-owned socket
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/realtime_close_event_test.dart:73:19)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: ws://127.0.0.1:63430
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[... 396 lines elided ...]
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:177:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:63473/to-cleartext?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:136:15)
+│ #1   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Failed to open WebSocket connection to wss://127.0.0.1:63473/to-cleartext?token=***REDACTED***: WebSocketChannelException
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still follows a redirect that stays on TLS
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:203:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:63473/to-tls?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   new Future.sync (dart:async/future.dart:325:27)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a debug build follows the redirect as before
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:214:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:63473/to-cleartext?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   new Future.sync (dart:async/future.dart:325:27)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: a production release still goes through a configured proxy, pinned
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.connect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:111:13)
+│ #1   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart:231:22)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Connecting to WebSocket at: wss://127.0.0.1:63473/socket?token=***REDACTED***
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   RawWebSocketClientImpl.disconnect (package:flutter_starter/core/network/realtime/raw_websocket_client.dart:248:13)
+│ #1   new Future.sync (dart:async/future.dart:325:27)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 🐛 Disconnected from WebSocket.
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:03 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/realtime/raw_websocket_redirect_test.dart: (tearDownAll)
+00:03 +44: All tests passed!
+
+Post-merge security review: e35b34cdd94..f68a18efa18960e832f658682b16666686e7133a
+Command: flutter test --no-pub test/core/network/realtime/realtime_close_event_test.dart test/core/network/realtime/raw_websocket_url_redaction_test.dart test/core/network/realtime/raw_websocket_release_wss_test.dart test/core/network/realtime/raw_websocket_pinning_test.dart test/core/network/realtime/raw_websocket_redirect_test.dart --concurrency=2 --reporter expanded
+Result: 44 focused tests passed.
+Inspected 18 evidence artifacts: acceptance-runner.log, analyze.log, ci.json, deliverable.log, docs-check.log, epic-coverage.log, format.log, independent-baseline.log, independent-cases.dart, independent-review.log, local-audit.log, preliminary-probe.log, refs.log, regression-before.log, review.md, tests.log, tree-parity.log, verification.md
+No introduced actionable security findings. Close payload exposes only an optional integer code, never untrusted close reason or URL credentials. Disconnect occurs before emitting the error; identity checks suppress abandoned/intentional channel closures. Factory-owned client disposal disconnects open/pending connections, while direct override ownership is documented. Pinning, release-wss policy, redirect policy and existing URL redaction remain unchanged and tested. No auth/session persistence, transport selection or dependencies changed.
+Public evidence contains local test-server endpoints and redacted synthetic query/userinfo fixtures; no apparent live credentials, authorization bearer, private key or live-key signature found. No tracked edits or GitHub mutations. No device/backend deployment assurance asserted.

@@ -1,0 +1,10 @@
+Verified in PR #1199.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Remote close is observable while isConnected becomes false, as documented | PASS — [independent-review.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/independent-review.log). Tier-1 local WebSocket servers close with codes 1000 and 1001; subscribers receive RealtimeConnectionClosed with the matching code after disconnection. Before-fix cases receive no event. Contract and guide document the error channel and stream reuse. |
+| Provider disposal disconnects the client | PASS — [independent-review.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/independent-review.log). The base provider owns clients from realtimeClientFactoryProvider; disposing a container closes an actual connected local socket, sets isConnected false and emits no remote-close error for intentional teardown. Direct provider overrides keep explicit ownership as documented. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/tests.log). All PR checks passed. The acceptance run used the exact source tree merged to main; [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/tree-parity.log) records equality.
+
+Independent pre-merge and post-merge security reviews: [review.md](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1188/review.md). Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or a device/backend/store claim.
