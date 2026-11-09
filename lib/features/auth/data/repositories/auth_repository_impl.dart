@@ -319,6 +319,9 @@ class AuthRepositoryImpl implements AuthRepository {
     return Success(authResponse.user);
   }
 
+  Future<Result<String>>? _pendingRefresh;
+  int? _pendingRefreshGeneration;
+
   /// Exchanges the stored refresh token for a new credential pair.
   ///
   /// Both writes are conditional on the session still being the one this call
@@ -330,9 +333,31 @@ class AuthRepositoryImpl implements AuthRepository {
   /// a token this session can use. It deliberately does not *clear* anything -
   /// the session that replaced this one may own what is in the store now.
   @override
-  Future<Result<String>> refreshToken() async {
-    // Read before the round trip; checked immediately before each write.
+  Future<Result<String>> refreshToken() {
     final generation = sessionGeneration.current;
+    final pending = _pendingRefresh;
+    if (pending != null && _pendingRefreshGeneration == generation) {
+      return pending;
+    }
+
+    // Both manual callers and the interceptor rotate the same credential.
+    // Share the entire operation, including persistence, within one session.
+    // A new session starts its own request; the old operation remains guarded
+    // by the generation checks and cannot clear the newer operation's slot.
+    late final Future<Result<String>> run;
+    run = _refreshToken(generation).whenComplete(() {
+      if (identical(_pendingRefresh, run)) {
+        _pendingRefresh = null;
+        _pendingRefreshGeneration = null;
+      }
+    });
+    _pendingRefresh = run;
+    _pendingRefreshGeneration = generation;
+    return run;
+  }
+
+  Future<Result<String>> _refreshToken(int generation) async {
+    // Captured before the round trip; checked immediately before each write.
     try {
       final refreshToken = await localDataSource.getRefreshToken();
       if (refreshToken == null) {
