@@ -117,4 +117,33 @@ void main() {
     final e2e = File('.github/workflows/e2e-android.yml').readAsStringSync();
     expect(e2e, contains(RegExp(r'patrol_cli \d+\.\d+\.\d+')));
   });
+
+  test(
+    'Patrol CLI pin matches the supported SDK pair and setup instructions',
+    () {
+      final lock = loadYaml(File('pubspec.lock').readAsStringSync()) as YamlMap;
+      final packages = lock['packages'] as YamlMap;
+      final patrol = (packages['patrol'] as YamlMap)['version'] as String;
+      final e2e = File('.github/workflows/e2e-android.yml').readAsStringSync();
+      final command = RegExp(
+        r'dart pub global activate patrol_cli (\d+\.\d+\.\d+)',
+      ).firstMatch(e2e)!;
+      final cli = command.group(1)!;
+
+      // Verified pair from Patrol's compatibility table. Review this assertion
+      // when upgrading either package: PR CI does not run the emulator job.
+      expect((patrol, cli), ('4.11.0', '4.9.0'));
+      for (final path in [
+        'scripts/test/run_e2e_tests.sh',
+        'integration_test/README.md',
+        'docs/guides/testing/testing-summary.md',
+      ]) {
+        expect(
+          File(path).readAsStringSync(),
+          contains(command.group(0)),
+          reason: '$path must install the same CLI as CI',
+        );
+      }
+    },
+  );
 }

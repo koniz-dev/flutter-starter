@@ -62,7 +62,7 @@ make verification worthless.
   51-character English `welcome` string measures ~1428px in Ahem at 28px and
   still wraps, versus ~714px in a real font. Treat wrapped or clipped text in a
   golden as a font artifact until you have checked the arithmetic.
-- **Patrol E2E.** `integration_test/` and `patrol: ^3.10.0` exist, but
+- **Patrol E2E.** `integration_test/` and `patrol: ^4.11.0` exist, but
   `patrol_cli` is not installed locally, no Android/iOS device or emulator is
   connected (only macOS desktop and Chrome), and
   [`e2e-android.yml`](.github/workflows/e2e-android.yml) never runs on a

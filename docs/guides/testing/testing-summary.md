@@ -36,7 +36,7 @@ flutter test
 ### E2E Testing (Patrol)
 Ensure you have `patrol_cli` installed:
 ```bash
-dart pub global activate patrol_cli 3.11.0
+dart pub global activate patrol_cli 4.9.0
 ./scripts/test/run_e2e_tests.sh
 ```
 
