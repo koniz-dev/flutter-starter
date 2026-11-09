@@ -182,7 +182,9 @@ class RawWebSocketClientImpl implements IRealtimeClient {
       onDone: () {
         if (!identical(_channel, channel)) return;
         _logger.d('WebSocket connection closed.');
+        final closed = RealtimeConnectionClosed(channel.closeCode);
         disconnect();
+        _streamController.addError(closed);
       },
       cancelOnError: false,
     );

@@ -1,6 +1,25 @@
+/// Signals that a previously open realtime connection was closed by its peer.
+///
+/// The stream stays open so subscribers can observe a later reconnection.
+class RealtimeConnectionClosed implements Exception {
+  /// Creates a close event with the transport's optional close [code].
+  const RealtimeConnectionClosed(this.code);
+
+  /// The peer's close code, or null if the transport supplied none.
+  final int? code;
+
+  @override
+  String toString() => 'Realtime connection closed (code: $code)';
+}
+
 /// Interface for real-time networking (e.g., WebSockets)
 abstract class IRealtimeClient {
-  /// Stream of incoming real-time messages
+  /// Stream of incoming real-time messages and established-connection errors.
+  ///
+  /// A remote close, including a clean close, emits [RealtimeConnectionClosed]
+  /// after [isConnected] becomes false. Install an error handler to observe it.
+  /// The stream remains open for reconnects; an intentional [disconnect] does
+  /// not emit a remote-close error.
   Stream<dynamic> get stream;
 
   /// Connection state
