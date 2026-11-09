@@ -29,7 +29,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   final Duration remoteTimeout;
 
   // Direct repository callers may supply an already initialized source.
-  // After an initialization/refresh attempt fails, reads must stay local.
+  // Failed initializations stay local; a refresh keeps activated SDK values.
   bool _remoteAvailable = true;
   Future<Result<void>>? _remoteOperation;
   Future<void>? _sdkOperation;
@@ -47,7 +47,7 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
       );
     }
     final generation = ++_remoteGeneration;
-    _remoteAvailable = false;
+    if (initialize) _remoteAvailable = false;
     _remoteOperation =
         _runRemote(initialize: initialize, generation: generation).whenComplete(
           () {
