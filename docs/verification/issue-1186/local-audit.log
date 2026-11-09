@@ -1,0 +1,398 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 606 files (0 changed) in 1.75 seconds.
+==> flutter analyze
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.10.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+49 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 6.0s)
+==> flutter test
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.10.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+49 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/debug_screen_only_via_route_test.dart: only the route module constructs FeatureFlagsDebugScreen
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 1: getFlag and getAllFlags agree for enable_debug_menu
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: the route is registered only when debug routes are on
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: the route is registered only when debug routes are on
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: the route is registered only when debug routes are on
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: the route is registered only when debug routes are on
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: the route is registered only when debug routes are on
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 2: allFeatureFlagsProvider lists every key a stored override still wins over the default
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: turning debug routes off removes nothing else
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_debug_route_gate_test.dart: the app route tree in this run matches the environment (development)
+VP environment=development enableDebugFeatures=true paths=[/login, /register, /tasks, :taskId, /feature-flags-debug, /]
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:01 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/feature_flag_layers_agree_test.dart: criterion 3: the debug screen refreshes listened flags a toggle reaches a listened isFeatureEnabledProvider
+00:02 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:02 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:02 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:02 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_routes_test.dart: the debug route is reachable from the running app goToFeatureFlagsDebug renders the debug screen
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"feature-flags-debug","routePath":"feature-flags-debug","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Removed | Context: {"routeName":"home","routePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+[38;5;12m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;12m│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)[0m
+[38;5;12m│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)[0m
+[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;12m│ 💡 Navigation: Route Pushed | Context: {"routeName":"feature-flags-debug","routePath":"feature-flags-debug","previousRouteName":"home","previousRoutePath":"home"}[0m
+[38;5;12m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:03 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/routing/feature_flags_home_entry_test.dart: home shows the flags entry exactly when the route is registered (enableDebugFeatures=true), and the entry opens it
+00:03 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl clearLocalOverride should remove keys list when last key is removed
+00:03 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl clearLocalOverride should handle clearing non-existent key
+00:03 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl clearAllLocalOverrides should remove all override keys
+00:03 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl clearAllLocalOverrides should handle empty keys list
+00:03 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl clearAllLocalOverrides should handle null keys list
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl getAllLocalOverrides should return all overrides
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl getAllLocalOverrides should skip null values
+00:04 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl getAllLocalOverrides should return empty map when no keys
+00:04 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl getAllLocalOverrides should return empty map when keys list is null
+00:04 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl getAllLocalOverrides should handle multiple overrides
+00:04 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl Edge Cases should handle special characters in key
+00:04 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl Edge Cases should handle very long key names
+00:04 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_test.dart: FeatureFlagsLocalDataSourceImpl Edge Cases should handle empty key
+00:04 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_keyvalue_seam_test.dart: FeatureFlagsLocalDataSourceImpl on a bare IKeyValueStore writes an override and reads it back
+00:05 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_keyvalue_seam_test.dart: FeatureFlagsLocalDataSourceImpl on a bare IKeyValueStore persists under the unchanged feature_flag_override_ keys
+00:05 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_local_datasource_keyvalue_seam_test.dart: FeatureFlagsLocalDataSourceImpl on a bare IKeyValueStore clearLocalOverride drops the value and its tracking entry
+00:05 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/override_index_race_test.dart: two overrides set together are both listed
+00:05 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource initialize completes
+00:05 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource initialize completes
+00:05 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource initialize completes
+00:05 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource fetchAndActivate completes
+00:05 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource getRemoteFlag returns null
+00:05 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource getAllRemoteFlags returns empty map
+00:05 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/datasources/feature_flags_remote_datasource_test.dart: NoOpFeatureFlagsRemoteDataSource setDefaults completes
+00:06 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlag should return local override when available
+00:06 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlag should return remote config when local override not available
+00:06 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlag should return local flag when remote and override not available
+00:06 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlag should return local flag from LocalFeatureFlagsService when available
+00:06 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlag should return NotFoundFailure when flag not found
+00:06 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlag should handle exceptions and map to failures
+00:06 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlags should return map of flags for multiple keys
+00:06 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlags should skip flags that do not exist
+00:06 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlags should handle exceptions
+00:06 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getFlags should throw exception when getFlag returns non-NotFoundFailure
+00:06 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getAllFlags should return all flags with correct priority
+00:06 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl getAllFlags should handle exceptions
+00:06 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl refreshRemoteFlags should fetch and activate remote flags
+00:06 +66: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl refreshRemoteFlags should handle exceptions
+00:06 +67: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl setLocalOverride should set local override
+00:06 +68: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl setLocalOverride should handle exceptions
+00:06 +69: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl clearLocalOverride should clear local override
+00:06 +70: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +71: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +72: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +73: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +74: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +75: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +76: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +77: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +78: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +79: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getLocalFlag should return flag with compile-time default
+00:06 +80: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +81: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +82: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +83: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +84: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +85: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +86: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +87: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +88: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +89: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +90: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +91: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +92: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with required fields
+00:06 +93: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getAllLocalFlags should include experimental features flag
+00:06 +94: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl Object catch blocks clearLocalOverride should handle non-Exception errors
+00:06 +95: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with all fields
+00:06 +96: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getAllLocalFlags should skip flags that return null from getLocalFlag
+00:06 +97: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl Object catch blocks clearAllLocalOverrides should handle non-Exception errors
+00:06 +98: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag should create feature flag with false value
+00:06 +99: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService getAllLocalFlags should return empty map when no flag definitions exist
+00:06 +100: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl Object catch blocks isEnabled should handle non-Exception errors
+00:06 +101: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag copyWith should return new flag with same values when no changes
+00:06 +102: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService LocalFlagDefinition should create definition with all properties
+00:06 +103: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl Object catch blocks initialize should handle non-Exception errors during fetch
+00:06 +104: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/repositories/feature_flags_repository_impl_test.dart: FeatureFlagsRepositoryImpl Object catch blocks initialize should handle non-Exception errors during fetch
+00:06 +105: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService LocalFlagDefinition should create definition with minimal properties
+00:06 +106: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService LocalFlagDefinition should create definition with minimal properties
+00:06 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag copyWith should update source
+00:06 +107: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source a supplied FEATURE_ define is not presented as a flag source
+  Skip: run with --dart-define=FEATURE_ENABLE_EXPERIMENTAL_FEATURES=true
+00:06 +107 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag copyWith should update source
+00:06 +108 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source the service never reads EnvConfig or a FEATURE_ key
+00:06 +109 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source the service never reads EnvConfig or a FEATURE_ key
+00:06 +110 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source the service never reads EnvConfig or a FEATURE_ key
+00:06 +111 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source the service never reads EnvConfig or a FEATURE_ key
+00:06 +112 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source the service never reads EnvConfig or a FEATURE_ key
+00:06 +113 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag copyWith should update multiple fields
+00:06 +114 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/data/services/local_feature_flags_service_test.dart: LocalFeatureFlagsService no unreachable environment source no shipped flag description points at a FEATURE_ variable
+00:06 +115 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should be equal when key, value, and source are same
+00:06 +116 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should not be equal when key is different
+00:06 +117 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should not be equal when value is different
+00:06 +118 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should not be equal when source is different
+00:06 +119 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should be equal to itself
+00:06 +120 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should not be equal to null
+00:06 +121 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should not be equal to different type
+00:06 +122 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag equality should ignore description, defaultValue, and lastUpdated in equality
+00:06 +123 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag hashCode should have same hashCode for equal flags
+00:06 +124 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag hashCode should have different hashCode for different keys
+00:06 +125 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag hashCode should have different hashCode for different values
+00:06 +126 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag hashCode should have different hashCode for different sources
+00:06 +127 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag toString should return string representation
+00:06 +128 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag toString should include all relevant fields in toString
+00:06 +129 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag FeatureFlagSource enum should have all expected values
+00:06 +130 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag FeatureFlagSource enum should work with all source types
+00:06 +131 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle empty key
+00:06 +132 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle long key
+00:06 +133 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle special characters in key
+00:06 +134 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle unicode characters in key
+00:06 +135 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle null description
+00:06 +136 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle empty description
+00:06 +137 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle null defaultValue
+00:06 +138 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag edge cases should handle null lastUpdated
+00:06 +139 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag immutability should be immutable (final fields)
+00:06 +140 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/entities/feature_flag_test.dart: FeatureFlag immutability should allow instances in collections
+00:08 +141 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return true when flag is enabled
+00:08 +142 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return false when flag is disabled
+00:08 +143 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return defaultValue when repository fails
+00:08 +144 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager isEnabled should return defaultValue for different flags
+00:08 +145 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlag should return flag when repository succeeds
+00:08 +146 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlag should return null when repository fails
+00:08 +147 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlag should return flag with different sources
+00:08 +148 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlags should return map of flags when repository succeeds
+00:08 +149 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlags should fall back to per-key defaults when repository fails
+00:08 +150 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlags a key the repository omits falls back to its default
+00:08 +151 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/domain/feature_flags_manager_test.dart: FeatureFlagsManager getFlags should handle empty list of keys
+00:08 +152 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +153 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +154 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +155 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +156 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +157 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +158 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +159 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +160 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +161 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +162 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +163 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +164 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +165 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +166 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +167 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +168 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +169 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +170 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +171 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +172 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +173 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +174 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +175 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +176 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source serves its value to the first flag read, with no manual initialization
+00:08 +177 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart: Feature Flags Providers Initialization Provider featureFlagsInitializationProvider completes
+00:08 +178 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source is built and initialized once across many reads
+00:08 +179 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source is built and initialized once across many reads
+00:08 +180 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers isFeatureEnabledProvider honours a local override
+00:08 +181 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source is the instance a manual refresh fetches again
+00:08 +182 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers featureFlagProvider returns null for an unset flag
+00:08 +183 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source that fails to initialize is logged, and flags fall back to their defaults
+00:08 +184 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_remote_init_test.dart: an overridden remote flag source that fails to initialize is logged, and flags fall back to their defaults
+00:08 +185 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers allFeatureFlagsProvider exposes stored overrides
+00:08 +186 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_providers_test.dart: Feature Flags Providers Feature Flag Providers allFeatureFlagsProvider is in an error state carrying the failure
+[38;5;208m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;208m│ #0   LoggingService.warning (package:flutter_starter/core/logging/logging_service.dart:207:13)[0m
+[38;5;208m│ #1   featureFlagsInitialization (package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart:71:10)[0m
+[38;5;208m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;208m│ ⚠️ Remote feature flags unavailable; using local values and defaults | Context: {"failure":"flag store unavailable"}[0m
+[38;5;208m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:10 +187 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: flag providers settle locally after timeout
+00:10 +188 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:10 +189 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:10 +190 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:10 +191 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:10 +192 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:10 +193 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:10 +194 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:11 +195 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:11 +196 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed override write shows the error, not success
+00:12 +197 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: debug refresh waits for held initialization before fetching
+00:12 +198 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen renders its strings from the es ARB, not hardcoded English
+00:12 +199 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed clear of one override shows the error
+00:12 +200 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should display empty message under es
+00:12 +201 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed clear of all overrides shows the error
+00:13 +202 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a failed clear of all overrides shows the error
+00:13 +203 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should display error message when error occurs
+00:13 +203 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart: a repository that cannot list the flags shows the error and its retry, not an empty list
+[38;5;208m┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;208m│ #0   _MockRepository.initialize (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_failure_test.dart:22:7)[0m
+[38;5;208m│ #1   featureFlagsInitialization (package:flutter_starter/features/feature_flags/presentation/providers/feature_flags_providers.dart:61:33)[0m
+[38;5;208m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄[0m
+[38;5;208m│ ⚠️ Remote feature flags unavailable; using local values and defaults | Context: {"failure":"type 'Null' is not a subtype of type 'Future<Result<void>>'"}[0m
+[38;5;208m└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+00:13 +204 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should display error message when error occurs
+00:13 +205 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should display empty message when no flags
+00:14 +206 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should display feature flags list
+00:14 +207 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should refresh flags when refresh button is tapped
+00:14 +208 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: (setUpAll)
+00:14 +208 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should show clear all dialog when clear button is tapped
+00:14 +209 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show enabled builder when flag is enabled
+00:14 +210 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show enabled builder when flag is enabled
+00:14 +211 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show enabled builder when flag is enabled
+00:15 +212 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show enabled builder when flag is enabled
+00:15 +213 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show enabled builder when flag is enabled
+00:15 +214 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should retry when retry button is tapped
+00:15 +215 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should retry when retry button is tapped
+00:15 +216 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should retry when retry button is tapped
+00:15 +217 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/screens/feature_flags_debug_screen_test.dart: FeatureFlagsDebugScreen should retry when retry button is tapped
+00:15 +218 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show disabled builder on error
+00:15 +219 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show disabled builder on error
+00:16 +220 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show disabled builder on error
+00:16 +221 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show disabled builder on error
+00:16 +222 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagBuilder should show nothing when disabled and no disabled builder
+00:16 +223 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagWidget should show child when flag is enabled
+00:16 +224 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagWidget should show fallback when flag is disabled
+00:16 +225 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: FeatureFlagWidget should show nothing when disabled and no fallback
+00:16 +226 ~1: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/widgets/feature_flag_builder_test.dart: (tearDownAll)
+00:16 +226 ~1: All tests passed!

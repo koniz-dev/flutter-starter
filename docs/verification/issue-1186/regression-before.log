@@ -1,0 +1,34 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart
+00:00 +0: activated remote values remain readable during a refresh
+00:00 +0 -1: activated remote values remain readable during a refresh [E]
+  Expected: true
+    Actual: <null>
+  
+  package:matcher                                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                                        expect
+  test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart 162:5  main.expectActivatedValues
+  
+00:00 +0 -1: a failed refresh retains the activated remote values
+00:00 +0 -2: a failed refresh retains the activated remote values [E]
+  Expected: true
+    Actual: <null>
+  
+  package:matcher                                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                                        expect
+  test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart 162:5  main.expectActivatedValues
+  
+00:00 +0 -2: a timed-out refresh retains the activated remote values
+00:00 +0 -3: a timed-out refresh retains the activated remote values [E]
+  Expected: true
+    Actual: <null>
+  
+  package:matcher                                                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18                                        expect
+  test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart 162:5  main.expectActivatedValues
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: a failed refresh retains the activated remote values
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: a timed-out refresh retains the activated remote values
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/features/feature_flags/presentation/providers/feature_flags_timeout_test.dart: activated remote values remain readable during a refresh
