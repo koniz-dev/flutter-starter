@@ -1,0 +1,243 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_review_final_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_hidden_diagnostic_final_test.dart: sanitizer makes formerly hidden diagnostic property visible
+FIX VERIFIED: hidden diagnostic remains absent before and after proxy.
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_review_final_test.dart: real NetworkImage diagnostics survive exception-only sanitization
+FIX VERIFIED: mirrored NetworkImage diagnostics redact secret.
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_review_final_test.dart: actual Image.network failure collector reaches previous handler
+ACTUAL_IMAGE_DETAILS: ══╡ EXCEPTION CAUGHT BY IMAGE RESOURCE SERVICE ╞═════════════════
+The following NetworkImageLoadException was thrown resolving an
+image codec:
+HTTP request failed, statusCode: 400,
+https://cdn.example/a.png?token=***REDACTED***
+
+When the exception was thrown, this was the stack:
+#0      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:131:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1053:3)
+<asynchronous suspension>
+
+Image provider:
+  NetworkImage("https://cdn.example/a.png?token=***REDACTED***",
+  scale: 1.0, webHtmlElementStrategy: never, headers: null)
+Image key:
+  NetworkImage("https://cdn.example/a.png?token=***REDACTED***",
+  scale: 1.0, webHtmlElementStrategy: never, headers: null)
+═════════════════════════════════════════════════════════════════
+
+00:01 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_review_final_test.dart: non-root relative request path remains unsanitized
+FIX VERIFIED: no-leading-slash relative path redacted.
+00:09 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an uncaught framework error is reported once, with its stack, and still reaches the previous handler
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: build failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   _ThrowsInBuild.build (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:36:41)
+│ #1   StatelessElement.build (package:flutter/src/widgets/framework.dart:5902:49)
+│ #2   ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5830:15)
+│ #3   Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+│ #4   ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5812:5)
+│ #5   ComponentElement.mount (package:flutter/src/widgets/framework.dart:5806:5)
+│ #6   Element.inflateWidget (package:flutter/src/widgets/framework.dart:4600:20)
+│ #7   Element.updateChild (package:flutter/src/widgets/framework.dart:4066:20)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"widgets library","silent":false}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:10 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: an async error that escaped every zone is reported once, with its stack, and marked handled
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: async failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:94:30)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:10 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: uncaught image and platform URL secrets are absent from reporter and file log
+00:10 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: relative request secrets are absent from reporter and file log
+00:10 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: redacted URL errors keep surrounding parentheses and diagnostics
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((https://app.example/cb?token=***REDACTED***)) failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((https://app.example/cb?token=***REDACTED***)), failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((https://app.example/cb?token=***REDACTED***)). failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((/verify?token=***REDACTED***)) failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((/verify?token=***REDACTED***)), failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((/verify?token=***REDACTED***)). failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((https://app.example/a(b)?token=***REDACTED***)) failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((https://app.example/a(b)?token=***REDACTED***)), failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: callback ((https://app.example/a(b)?token=***REDACTED***)). failed
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:239:22)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:10 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: previous handlers receive safe errors and retain ordinary identity
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: failed https://app.example/?token=***REDACTED***
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"fixture library","silent":true}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ StateError: Bad state: failed https://app.example/?token=***REDACTED***
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: ordinary failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught Flutter error | Context: {"library":"Flutter framework","silent":false}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ Bad state: ordinary failure
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ #0   main.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart:274:32)
+│ #1   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+│ #2   <asynchronous suspension>
+│ #3   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+│ #4   <asynchronous suspension>
+│ #5   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+│ #6   <asynchronous suspension>
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ ⛔ Uncaught platform error
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:10 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: actual image failure has safe diagnostics in the chained console
+00:10 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: ordinary exceptions also redact context and lazy diagnostic values
+00:10 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: diagnostic levels and nested filtering survive redaction
+00:10 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/logging/uncaught_error_handlers_test.dart: the returned callback restores the previous handlers
+00:10 +14: All tests passed!
+
+Independent final review: base fb293ad3d37e102f340cb9a4d97e7acb6ecde99c through head 5307aeb667c.
+Result: no outstanding actionable introduced defect found in this bounded review.
+Verified original P1 findings: actual Image.network failure now redacts exception plus Image provider/key diagnostic fields; unrooted relative paths redact; mirrored credential-bearing NetworkImage diagnostic values redact.
+Verified corrected-fix P1: hidden diagnostic node remains hidden after forwarding. The committed test additionally exercises nested hidden properties/children, debug/info/warning levels and explicit warning threshold. SDK DiagnosticsNode.isFiltered uses original level threshold; TextTreeRenderer filters node properties via that method. Proxy's original level delegation and recursive node hierarchy preserve the standard SDK behavior. No SDK override of isFiltered was found.
+Focused independent verification: 14 tests passed (three original independent probes, one hidden-node probe with corrected expectation, ten committed handler tests). All output above. No fullsuite run by reviewer.
+Core metadata: same ordinary exception object and stack retained. Base details identity retained when no context/collector and no exception change; contexts/collectors intentionally wrapped and collector remains lazy. Base library/silent retained. FlutterErrorDetailsForPointerEventDispatcher may lose subtype-only event/hitTestEntry under base copyWith; no repository consumer depends on subtype, recorded as limited compatibility consideration.
+Shared fragment/ticket redaction remains issue1192. No tracked files or GitHub changed by reviewer.

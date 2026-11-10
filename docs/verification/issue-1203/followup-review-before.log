@@ -1,0 +1,37 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_review_final_test.dart
+00:00 +0: real NetworkImage diagnostics survive exception-only sanitization
+FIX VERIFIED: mirrored NetworkImage diagnostics redact secret.
+00:00 +1: actual Image.network failure collector reaches previous handler
+ACTUAL_IMAGE_DETAILS: ══╡ EXCEPTION CAUGHT BY IMAGE RESOURCE SERVICE ╞═════════════════
+The following NetworkImageLoadException was thrown resolving an
+image codec:
+HTTP request failed, statusCode: 400,
+https://cdn.example/a.png?token=***REDACTED***
+
+When the exception was thrown, this was the stack:
+#0      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:131:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1053:3)
+<asynchronous suspension>
+
+Image provider:
+NetworkImage("https://cdn.example/a.png?token=***REDACTED***",
+scale: 1.0, webHtmlElementStrategy: never, headers: null)
+Image key:
+NetworkImage("https://cdn.example/a.png?token=***REDACTED***",
+scale: 1.0, webHtmlElementStrategy: never, headers: null)
+═════════════════════════════════════════════════════════════════
+
+00:00 +2: non-root relative request path remains unsanitized
+FIX VERIFIED: no-leading-slash relative path redacted.
+00:00 +3: All tests passed!
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_hidden_diagnostic_test.dart
+00:00 +0: sanitizer makes formerly hidden diagnostic property visible
+CONFIRMED NEW DISCLOSURE: hidden diagnostic absent originally, visible after flattened collector.
+00:00 +1: All tests passed!
+
+Corrected-head independent review (77ccb05d3f7):
+Original findings fixed: all three independent original probes pass with redacted actual NetworkImage diagnostics and unrooted-relative query redaction.
+NEW BLOCKER: _diagnosticText traverses every property/child irrespective of DiagnosticLevel; collector turns every top-level node into ErrorDescription with default info level. Direct regression probe 1203_hidden_diagnostic_test.dart shows hidden StringProperty omitted from original details.toString(), then exposed in forwarded details.toString(). Preserve/filter diagnostic levels, including nested properties, before flattening. This is introduced by corrected-head change.
+Metadata guarantee: ordinary exception identity and stack preserved; base library/silent/context are retained or safely transformed. Details exact identity retained when no collector and no diagnostic/exception change. Any nonnull collector intentionally forces a lazy wrapper. FlutterErrorDetailsForPointerEventDispatcher inherits base copyWith and may lose subtype event/hitTestEntry metadata under wrapping; no repo consumer relies on subtype, so recorded as compatibility consideration rather than blocker.
+No tracked edits/GitHub writes or fullsuite. Known shared fragment/ticket cases remain issue1192.

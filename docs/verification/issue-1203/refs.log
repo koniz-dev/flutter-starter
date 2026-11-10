@@ -1,0 +1,4 @@
+Commits in fb293ad3d37e102f340cb9a4d97e7acb6ecde99c..HEAD
+  ok    f4f5381a fix(logging): redact uncaught errors before chaining (#1204)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

@@ -1,0 +1,40 @@
+{
+  "reason": "PR synchronize checks did not register on final head; dispatched both existing workflows on same branch. workflow_dispatch runs full gates (no inert-path skip).",
+  "runs": [
+    {
+      "conclusion": "cancelled",
+      "event": "workflow_dispatch",
+      "headSha": "5307aeb667c8cba79a76c35c726e2cadcfd79e3b",
+      "name": "CI",
+      "status": "completed",
+      "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42843999456"
+    },
+    {
+      "conclusion": "cancelled",
+      "event": "workflow_dispatch",
+      "headSha": "5307aeb667c8cba79a76c35c726e2cadcfd79e3b",
+      "name": "Strip smoke",
+      "status": "completed",
+      "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42843999425"
+    }
+  ],
+  "resolution": "Delayed pull_request events arrived on same accepted SHA immediately after dispatch. Canceled duplicate manual runs; keep PR-triggered CI and Strip runs as final checks.",
+  "final_pr_runs": [
+    {
+      "conclusion": "success",
+      "event": "pull_request",
+      "headSha": "5307aeb667c8cba79a76c35c726e2cadcfd79e3b",
+      "name": "CI",
+      "status": "completed",
+      "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42844012989"
+    },
+    {
+      "conclusion": "success",
+      "event": "pull_request",
+      "headSha": "5307aeb667c8cba79a76c35c726e2cadcfd79e3b",
+      "name": "Strip smoke",
+      "status": "completed",
+      "url": "https://github.com/koniz-dev/flutter-starter/actions/runs/42844013269"
+    }
+  ]
+}

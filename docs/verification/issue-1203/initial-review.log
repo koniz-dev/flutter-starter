@@ -1,0 +1,34 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1203_review_test.dart
+00:00 +0: real NetworkImage diagnostics survive exception-only sanitization
+CONFIRMED: previous handler receives safe exception but details.toString() still contains REVIEW_SECRET, user:pass via NetworkImage diagnostics.
+00:00 +1: actual Image.network failure collector reaches previous handler
+ACTUAL_IMAGE_DETAILS: ══╡ EXCEPTION CAUGHT BY IMAGE RESOURCE SERVICE ╞═════════════════
+The following NetworkImageLoadException was thrown resolving an
+image codec:
+HTTP request failed, statusCode: 400,
+https://cdn.example/a.png?token=***REDACTED***
+
+When the exception was thrown, this was the stack:
+#0      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:131:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1053:3)
+<asynchronous suspension>
+
+Image provider:
+  NetworkImage("https://cdn.example/a.png?token=ACTUAL_SECRET",
+  scale: 1.0, webHtmlElementStrategy: never, headers: null)
+Image key:
+  NetworkImage("https://cdn.example/a.png?token=ACTUAL_SECRET",
+  scale: 1.0, webHtmlElementStrategy: never, headers: null)
+═════════════════════════════════════════════════════════════════
+
+00:00 +2: non-root relative request path remains unsanitized
+CONFIRMED: no-leading-slash relative path remains raw.
+00:00 +3: All tests passed!
+
+Independent adversarial review summary (base fb293ad3d37e102f340cb9a4d97e7acb6ecde99c; reviewed head b4ddeb0f226)
+P1 / line43: exception-only copyWith retains credential-bearing Flutter diagnostic nodes. Actual Image.network HTTP400 failure has redacted exception but raw token in Image provider and Image key from informationCollector; previous default Flutter handler renders both. Existing exposure remains in issue1203 safe-chaining scope; no shared URL fragment/ticket claim.
+P1 / line71: relative extractor requires leading slash. StateError('GET verify?token=NOSLASH_SECRET failed') retains raw exception and secret; ApiClient/Dio path input accepts relative references without leading slash. Pre-existing exposure, incompletely covered by expanded extraction.
+Baseline negative test: .git/codex-issue-work/1203-baseline-review.log shows all three newly committed regressions fail for expected causes against original handler. Existing four tests pass.
+Plain errors retain object identity. Details.copyWith preserves stack, library, silent, context and informationCollector, which is correct for benign metadata but causes first finding when metadata bears credentials. Platform chaining and callback restoration have no newly found regression. Parenthesized and apostrophe/signed-query image tests cover supported bare-exception shapes.
+No tracked source edited. No GitHub writes. Full suite not run by reviewer.
