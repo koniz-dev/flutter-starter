@@ -206,6 +206,16 @@ void main() {
     expect(logged, contains('accessLevel: 1'));
   });
 
+  test('ticket is redacted in a query but stays readable in a body', () {
+    expect(loggedRequestQuery({'ticket': 'SECRET', 'ticketCount': 2}), {
+      'ticket': _redacted,
+      'ticketCount': 2,
+    });
+    expect(loggedRequestBody({'ticket': 'cinema admission'}), {
+      'ticket': 'cinema admission',
+    });
+  });
+
   group('code is a secret in a query string only', () {
     test('a query code is redacted in the path and the query parameters', () {
       expect(ApiLoggingInterceptor.isSensitiveQueryKey('code'), isTrue);

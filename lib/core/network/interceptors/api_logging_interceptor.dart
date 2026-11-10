@@ -221,8 +221,8 @@ class ApiLoggingInterceptor extends Interceptor {
   /// changes: a response cached before a key joined the rules was cached for
   /// a URL that now names a secret, and is never read or evicted again.
   /// Bump it with every change to those sets;
-  /// `sensitive_key_rule_version_test.dart` fails until you do.
-  static const int sensitiveKeyRuleVersion = 1;
+  /// `cache_rule_version_test.dart` fails until you do.
+  static const int sensitiveKeyRuleVersion = 2;
 
   /// The key rules as one comparable string, for the version test.
   @visibleForTesting
@@ -232,12 +232,13 @@ class ApiLoggingInterceptor extends Interceptor {
     (_sensitiveQueryOnlyKeys.toList()..sort()).join(','),
   ].join('|');
 
-  /// Keys that name a secret in a query string only, matched exactly.
+  /// Keys that name a secret in URL parameters only, matched exactly.
   ///
   /// `code` is an OAuth authorization code or an Azure Functions key in a
   /// query (`?code=...`), but the error or status code in most response
   /// bodies (`{"code": 404}`), where redacting it would blind every error log.
-  static const _sensitiveQueryOnlyKeys = <String>{'code'};
+  /// `ticket` authenticates WebSocket URLs but may be ordinary body data.
+  static const _sensitiveQueryOnlyKeys = <String>{'code', 'ticket'};
 
   /// A `%` not followed by two hex digits: an escape that names no byte.
   static final RegExp _malformedPercent = RegExp('%(?![0-9A-Fa-f]{2})');
@@ -283,7 +284,8 @@ class ApiLoggingInterceptor extends Interceptor {
   );
 
   /// [url] fit for a log line or an error message: its userinfo replaced,
-  /// then every query value whose key names a secret, as [redactPath] does.
+  /// then every query/fragment value whose key names a secret, as
+  /// [redactPath] does.
   ///
   /// Userinfo is cut out of the raw text - everything between the start of
   /// the authority and its last `@` - not found through `Uri`, which
@@ -314,33 +316,48 @@ class ApiLoggingInterceptor extends Interceptor {
     return redactPath(text);
   }
 
-  /// [path] with every query parameter embedded in it that names a secret
-  /// redacted, by the same key rules as `queryParameters`.
+  /// [path] with sensitive query and fragment parameters redacted.
   ///
-  /// `ApiClient` takes a path, so `get('/verify?token=X')` is a normal call,
-  /// and that path used to be logged verbatim in the request, response and
-  /// error entries. Everything except the
-  /// redacted values is kept exactly as written.
+  /// Includes OAuth fragments (`#access_token=...`) and router fragments
+  /// (`#/callback?code=...`). Other text and parameter spelling are preserved.
   static String redactPath(String path) {
-    final queryStart = path.indexOf('?');
-    if (queryStart < 0) return path;
-    final fragmentStart = path.indexOf('#', queryStart);
-    final queryEnd = fragmentStart < 0 ? path.length : fragmentStart;
-    final query = path.substring(queryStart + 1, queryEnd).split('&').map((
-      pair,
-    ) {
-      final equals = pair.indexOf('=');
-      if (equals < 0) return pair;
-      final rawKey = pair.substring(0, equals);
-      final key = _decodeKey(rawKey);
-      // A key that cannot be read cannot be cleared either: its value is
-      // redacted.
-      if (key == null) return '$rawKey=$_redacted';
-      return isSensitiveQueryKey(key) ? '$rawKey=$_redacted' : pair;
-    });
-    return '${path.substring(0, queryStart + 1)}${query.join('&')}'
-        '${path.substring(queryEnd)}';
+    final fragmentStart = path.indexOf('#');
+    final base = fragmentStart < 0 ? path : path.substring(0, fragmentStart);
+    final queryStart = base.indexOf('?');
+    final safeBase = queryStart < 0
+        ? base
+        : '${base.substring(0, queryStart + 1)}'
+              '${_redactParameters(base.substring(queryStart + 1))}';
+    if (fragmentStart < 0) return safeBase;
+
+    final fragment = path.substring(fragmentStart + 1);
+    final routeQuery = fragment.indexOf('?');
+    final equals = fragment.indexOf('=');
+    // Only explicit path/hashbang fragments have a router prefix. A ? in a
+    // parameter key or value must not exempt any credential from redaction.
+    final isRoute = fragment.startsWith('/') || fragment.startsWith('!/');
+    final prefixLength =
+        isRoute && routeQuery >= 0 && (equals < 0 || routeQuery < equals)
+        ? routeQuery + 1
+        : 0;
+    return '$safeBase#${fragment.substring(0, prefixLength)}'
+        '${_redactParameters(fragment.substring(prefixLength))}';
   }
+
+  static String _redactParameters(String parameters) => parameters
+      .split('&')
+      .map((pair) {
+        final equals = pair.indexOf('=');
+        if (equals < 0) return pair;
+        final rawKey = pair.substring(0, equals);
+        final key = _decodeKey(rawKey);
+        // A key that cannot be read cannot be cleared either.
+        if (key == null || isSensitiveQueryKey(key)) {
+          return '$rawKey=$_redacted';
+        }
+        return pair;
+      })
+      .join('&');
 
   /// Reduce a key to a comparable form: lowercase, alphanumerics only.
   static String _normalizeKey(String key) =>
@@ -369,7 +386,7 @@ class ApiLoggingInterceptor extends Interceptor {
   }
 
   /// Whether a query parameter key names a secret: [isSensitiveKey], plus
-  /// the names that are secrets only in a query string (`code`).
+  /// the names that are secrets only in URL parameters (`code`, `ticket`).
   ///
   /// Used for every query - [redactPath], [redactUrl], the logged
   /// `queryParameters` - and for `CacheInterceptor`'s secret-query bypass.
