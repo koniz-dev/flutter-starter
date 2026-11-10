@@ -1,0 +1,20 @@
+$ git -c core.autocrlf=true clone --local --shared --no-checkout /Users/nguyenanhkiet/Playground/flutter-starter /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-fixed
+Cloning into '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-fixed'...
+done.
+exit: 0
+$ git config core.autocrlf true
+exit: 0
+$ git checkout --detach HEAD
+HEAD is now at 57230faf86d fix(tooling): keep shell checkouts on LF
+exit: 0
+$ git config --get core.autocrlf
+true
+exit: 0
+$ git check-attr eol -- .githooks/commit-msg scripts/dev/create_feature.sh
+.githooks/commit-msg: eol: lf
+scripts/dev/create_feature.sh: eol: lf
+exit: 0
+commit-msg CRLF count: 0
+$ bash /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-fixed/.githooks/commit-msg /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-valid-message.txt
+exit: 0
+RESULT: fixed hook exit 0

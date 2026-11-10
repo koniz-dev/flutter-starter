@@ -1,0 +1,22 @@
+$ git -c core.autocrlf=true clone --local --shared --no-checkout /Users/nguyenanhkiet/Playground/flutter-starter /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-baseline
+Cloning into '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-baseline'...
+done.
+exit: 0
+$ git config core.autocrlf true
+exit: 0
+$ git checkout --detach HEAD
+HEAD is now at bf4586edf5f docs(auth): use token lifecycle contracts and safe examples (#1201)
+exit: 0
+$ git config --get core.autocrlf
+true
+exit: 0
+$ git check-attr eol -- .githooks/commit-msg scripts/dev/create_feature.sh
+.githooks/commit-msg: eol: unspecified
+scripts/dev/create_feature.sh: eol: unspecified
+exit: 0
+commit-msg CRLF count: 56
+$ bash /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-baseline/.githooks/commit-msg /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-valid-message.txt
+/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1191-clone-baseline/.githooks/commit-msg: line 3: set: pipefail
+: invalid option name
+exit: 1
+RESULT: baseline hook exit 1

@@ -1,0 +1,23 @@
+Tracked hooks and shell entrypoints: 20
+.githooks/commit-msg: eol: lf
+.githooks/pre-commit: eol: lf
+.githooks/pre-push: eol: lf
+scripts/ci/build_all.sh: eol: lf
+scripts/ci/bump_version.sh: eol: lf
+scripts/ci/generate_changelog.sh: eol: lf
+scripts/ci/release.sh: eol: lf
+scripts/ci/ssl_pinning_defines.sh: eol: lf
+scripts/ci/verify_apk_signer.sh: eol: lf
+scripts/dev/audit_template.sh: eol: lf
+scripts/dev/create_feature.sh: eol: lf
+scripts/dev/format_dart.sh: eol: lf
+scripts/dev/setup_branding.sh: eol: lf
+scripts/dev/setup_git_hooks.sh: eol: lf
+scripts/test/calculate_layer_coverage.sh: eol: lf
+scripts/test/format_check_test.sh: eol: lf
+scripts/test/pre_commit_hook_test.sh: eol: lf
+scripts/test/release_scripts_test.sh: eol: lf
+scripts/test/run_e2e_tests.sh: eol: lf
+scripts/test/test_coverage.sh: eol: lf
+
+All tracked shell entrypoints use eol=lf
