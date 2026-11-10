@@ -1052,29 +1052,31 @@ reduce to `accesstoken`. It is then matched:
 |---|---|---|
 | Normalized key *contains* the fragment | `password`, `passwd`, `passphrase`, `token`, `secret`, `apikey`, `credential`, `authorization`, `privatekey`, `creditcard`, `cardnumber`, `signature`, `pincode`, `otpcode`, `jwt`, `accesskey`, `appkey`, `clientkey`, `hmac`, `subscriptionkey`, `functionskey`, `sessionkey`, `authkey`, `masterkey`, `licensekey` | `refresh_token`, `client_secret`, `jwt`, `id_jwt`, `access_key`, `app_key`, `Ocp-Apim-Subscription-Key` |
 | Normalized key *equals* the entry | `pin`, `otp`, `cvv`, `cvc`, `session`, `sessionid`, `sig` (Azure SAS signature), `auth` (Firebase REST ID token), `bearer`, `sign` (signed CDN URLs), `key` (Google APIs key), `access` and `refresh` (Django REST Framework SimpleJWT) | `pin`, but not `shipping`; `sig`, but not `signal`; `auth`, but not `author`; `sign`, but not `signup`; `key`, but not `monkey`; `refresh`, but not `refreshInterval` |
-| In a **query string** only, normalized key *equals* the entry | `code` (an OAuth authorization code, an Azure Functions key) | `?code=...`, but not a body's `{"code": 404}` |
+| In **URL parameters** only (query or fragment), normalized key *equals* the entry | `code` (an OAuth authorization code, an Azure Functions key), `ticket` (WebSocket authentication) | `?code=...`, `?ticket=...`, but not body fields `{"code": 404, "ticket": "cinema"}` |
 
 The exact-match list exists because these names are too short to use as
 fragments: `pin` occurs inside `shipping`, `cvc` inside `cvcNote`.
 
 Because the same rule decides the HTTP cache's bypass, a GET with a literal
-`key`, `sign`, `bearer`, `access`, `refresh` or `code` query parameter (a
+`key`, `sign`, `bearer`, `access`, `refresh`, `code` or `ticket` query parameter (a
 Google APIs `?key=`, a signed CDN URL, an Azure Functions `?code=`, a
 `?refresh=true`) is not cached, and its value is logged as `***REDACTED***`. An
 endpoint that uses `key` for something public - a feature flag or a
 translation key - loses caching too; rename the parameter if that matters.
 
-**`code` in a query string only.** In a query, `code` is an OAuth
-authorization code or an Azure Functions key, and is redacted - in logged
-paths and URLs, the logged `queryParameters`, and the cache bypass
-(`ApiLoggingInterceptor.isSensitiveQueryKey`). In a body it is the error or
+**URL-only keys.** In a query or fragment, `code` is an OAuth
+authorization code or an Azure Functions key, and is redacted in logged paths
+and URLs. Logged `queryParameters` and the HTTP cache bypass apply the same
+key classifier to query parameters (`ApiLoggingInterceptor.isSensitiveQueryKey`). In a body it is the error or
 status code of most APIs (`{"code": 404}`) and stays readable, since redacting
 it would blind every error log. Only a top-level query key counts: a nested
 query map (`{'filter': {'code': 'x'}}`, sent as `filter[code]=x`) is judged
 by the ordinary rule, so its `code` is not redacted. The other exact keys
 (`access`, `refresh` and the rest) apply everywhere - headers and bodies
 included - so a response header `Refresh` or a body flag `refresh: true` is
-redacted too.
+redacted too. The `ticket` key follows the same URL-only rule: a WebSocket
+authentication ticket is redacted in URLs and query maps and bypasses the HTTP
+cache, while an ordinary body field named `ticket` stays readable.
 
 **Headers** additionally carry an explicit roster - `authorization`,
 `proxy-authorization`, `cookie`, `set-cookie`, `x-api-key`, `api-key`,
@@ -1107,19 +1109,17 @@ path used to be logged verbatim.
 it and keeps the rest of the path exactly as written. It applies to the
 request, response and error entries and to `RetryInterceptor`'s retry lines.
 
-A secret in a **path segment** is never redacted. Only a query string has key
-names to match; `/reset/<token>`, `/invite/<code>` and `/files/<signed-id>` are
+A secret in a **path segment** is never redacted. Only keyed query/fragment parameters have names to match; `/reset/<token>`, `/invite/<code>` and `/files/<signed-id>` are
 logged, and recorded by `PerformanceInterceptor` as the trace name and
 `http_path` attribute, exactly as written. Keep secrets out of path segments:
 put them in a header, the body, or a query parameter with a sensitive key name.
 
 <!-- symbol: lib/core/network/interceptors/api_logging_interceptor.dart ApiLoggingInterceptor -->
 
-One named residual: an OAuth **`code`** query parameter is *not* redacted. It is
-a credential, but `code` is also one of the most common non-secret field names
-there is (error code, country code, coupon code), and matching it would gut the
-diagnostic value of every error body. If your provider's flow makes that
-trade-off wrong for you, add `code` to the exact-match list.
+OAuth fragment credentials (`#access_token=...`, `#id_token=...`) and router
+fragment parameters (`#/callback?code=...`) use the same URL key rules. Ordinary
+anchors and non-sensitive fields remain readable. Opaque, unkeyed fragments and
+secrets under unrecognized names remain outside this key-name boundary.
 
 **Bodies** are an allow-list of shapes the interceptor can actually walk:
 
