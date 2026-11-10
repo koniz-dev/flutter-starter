@@ -37,10 +37,27 @@ VoidCallback installUncaughtErrorHandlers(
         'silent': details.silent,
       },
     );
+    final originalCollector = details.informationCollector;
+    final safeContext = details.context == null
+        ? null
+        : _redactDiagnostic(details.context!);
     previousFlutter?.call(
-      identical(safeError, details.exception)
+      identical(safeError, details.exception) &&
+              identical(safeContext, details.context) &&
+              originalCollector == null
           ? details
-          : details.copyWith(exception: safeError),
+          : details.copyWith(
+              exception: safeError,
+              context: safeContext,
+              // Keep collection lazy, and do not forward credential-bearing
+              // objects such as NetworkImage as diagnostic property values.
+              informationCollector: originalCollector == null
+                  ? null
+                  : () => originalCollector().map(
+                      (node) =>
+                          ErrorDescription(_redactText(_diagnosticText(node))),
+                    ),
+            ),
     );
   };
 
@@ -65,31 +82,7 @@ VoidCallback installUncaughtErrorHandlers(
 // representation without retaining the raw object in anything sent to a sink.
 Object _redactError(Object error) {
   final original = error.toString();
-  final redacted = original.replaceAllMapped(
-    RegExp(
-      r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'
-      r'|/[^\s<>"]*[?#][^\s<>"]+',
-    ),
-    (match) {
-      final candidate = match[0]!;
-      // Error prose often wraps URLs in parentheses. Keep unmatched closing
-      // delimiters outside the URL, while retaining balanced path parentheses.
-      var end = candidate.length;
-      final punctuation = RegExp(r'[.,;:!?]+$').firstMatch(candidate);
-      if (punctuation != null) end = punctuation.start;
-      var excess =
-          ')'.allMatches(candidate).length - '('.allMatches(candidate).length;
-      if (excess <= 0 || end == 0 || candidate[end - 1] != ')') {
-        end = candidate.length;
-      }
-      while (excess > 0 && end > 0 && candidate[end - 1] == ')') {
-        end--;
-        excess--;
-      }
-      return ApiLoggingInterceptor.redactUrl(candidate.substring(0, end)) +
-          candidate.substring(end);
-    },
-  );
+  final redacted = _redactText(original);
   if (original == redacted) return error;
   if (error is NetworkImageLoadException) {
     return NetworkImageLoadException(
@@ -99,6 +92,49 @@ Object _redactError(Object error) {
   }
   return _RedactedError(error.runtimeType.toString(), redacted);
 }
+
+DiagnosticsNode _redactDiagnostic(DiagnosticsNode node) {
+  final original = _diagnosticText(node);
+  final redacted = _redactText(original);
+  return original == redacted ? node : ErrorDescription(redacted);
+}
+
+// Use unwrapped descriptions: toStringDeep is debug-only and may insert line
+// breaks inside a credential-bearing URL before it can be redacted.
+String _diagnosticText(DiagnosticsNode node) => [
+  if (node.name == null)
+    node.toDescription()
+  else
+    '${node.name}: ${node.toDescription()}',
+  for (final child in [...node.getProperties(), ...node.getChildren()])
+    _diagnosticText(child),
+].join('\n');
+
+String _redactText(String original) => original.replaceAllMapped(
+  RegExp(
+    r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'
+    r'|(?:[A-Za-z0-9_~./%\-][^\s<>"?#]*)?[?#][^\s<>"]+',
+  ),
+  (match) {
+    final candidate = match[0]!;
+    // Error prose often wraps URLs in parentheses. Keep unmatched closing
+    // delimiters outside the URL, while retaining balanced path parentheses.
+    var end = candidate.length;
+    final punctuation = RegExp(r'[.,;:!?]+$').firstMatch(candidate);
+    if (punctuation != null) end = punctuation.start;
+    var excess =
+        ')'.allMatches(candidate).length - '('.allMatches(candidate).length;
+    if (excess <= 0 || end == 0 || candidate[end - 1] != ')') {
+      end = candidate.length;
+    }
+    while (excess > 0 && end > 0 && candidate[end - 1] == ')') {
+      end--;
+      excess--;
+    }
+    return ApiLoggingInterceptor.redactUrl(candidate.substring(0, end)) +
+        candidate.substring(end);
+  },
+);
 
 class _RedactedError implements Exception {
   const _RedactedError(this.type, this.description);

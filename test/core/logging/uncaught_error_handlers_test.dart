@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -195,21 +196,26 @@ void main() {
       );
       final restore = installUncaughtErrorHandlers(logger);
       addTearDown(restore);
-      PlatformDispatcher.instance.onError!(
-        StateError('GET /verify?token=RELATIVE_SECRET&mode=check failed'),
-        StackTrace.current,
-      );
+      for (final path in ['/verify', 'verify', '../verify', '']) {
+        PlatformDispatcher.instance.onError!(
+          StateError('GET $path?token=RELATIVE_SECRET&mode=check failed'),
+          StackTrace.current,
+        );
+      }
       await output.destroy();
 
       final fileText = latin1.decode(
         File('${directory.path}/logs/app.log').readAsBytesSync(),
       );
-      expect(reporter.reports, hasLength(1));
-      for (final text in [fileText, reporter.reports.single.error.toString()]) {
+      expect(reporter.reports, hasLength(4));
+      for (final text in [
+        fileText,
+        for (final report in reporter.reports) report.error.toString(),
+      ]) {
         expect(text, isNot(contains('RELATIVE_SECRET')));
         expect(
           text,
-          contains('GET /verify?token=***REDACTED***&mode=check failed'),
+          contains('token=***REDACTED***&mode=check failed'),
         );
       }
     },
@@ -301,6 +307,94 @@ void main() {
       dispatcher.onError!(ordinary, stack);
       expect(flutterCalls.last, same(ordinaryDetails));
       expect(platformCalls.last.$1, same(ordinary));
+    },
+  );
+
+  testWidgets(
+    'actual image failure has safe diagnostics in the chained console',
+    (
+      tester,
+    ) async {
+      final savedFlutter = FlutterError.onError;
+      final savedPrint = debugPrint;
+      final received = Completer<FlutterErrorDetails>();
+      final console = <String>[];
+      debugPrint = (message, {wrapWidth}) => console.add(message ?? '');
+      FlutterError.onError = (details) {
+        if (!received.isCompleted) received.complete(details);
+        FlutterError.dumpErrorToConsole(details, forceReport: true);
+      };
+      addTearDown(() {
+        FlutterError.onError = savedFlutter;
+        debugPrint = savedPrint;
+      });
+      final restore = installUncaughtErrorHandlers(
+        LoggingService(enableLogging: false),
+      );
+      addTearDown(restore);
+
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.ltr,
+          child: Image(
+            image: NetworkImage('https://cdn.example/a.png?token=IMAGE_SECRET'),
+          ),
+        ),
+      );
+      final details = await tester.runAsync(
+        () => received.future.timeout(const Duration(seconds: 5)),
+      );
+      restore();
+      FlutterError.onError = savedFlutter;
+      debugPrint = savedPrint;
+      expect(details!.exception, isA<NetworkImageLoadException>());
+      for (final text in [details.toString(), console.join('\n')]) {
+        expect(text, isNot(contains('IMAGE_SECRET')));
+        expect(text, contains('Image provider:'));
+        expect(text, contains('Image key:'));
+        expect(text, contains('token=***REDACTED***'));
+      }
+    },
+  );
+
+  test(
+    'ordinary exceptions also redact context and lazy diagnostic values',
+    () {
+      final savedFlutter = FlutterError.onError;
+      FlutterErrorDetails? received;
+      FlutterError.onError = (details) => received = details;
+      addTearDown(() => FlutterError.onError = savedFlutter);
+      final restore = installUncaughtErrorHandlers(
+        LoggingService(enableLogging: false),
+      );
+      addTearDown(restore);
+      final ordinary = StateError('load failed');
+      final stack = StackTrace.current;
+      var collections = 0;
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: ordinary,
+          stack: stack,
+          context: ErrorDescription('loading /verify?token=CONTEXT_SECRET'),
+          informationCollector: () {
+            collections++;
+            return [
+              DiagnosticsProperty<Uri>(
+                'Request',
+                Uri.parse('verify?token=INFO_SECRET&mode=check'),
+              ),
+            ];
+          },
+        ),
+      );
+      expect(collections, 0, reason: 'diagnostic collection stays lazy');
+      expect(received!.exception, same(ordinary));
+      expect(received!.stack, same(stack));
+      final rendered = received.toString();
+      expect(collections, greaterThan(0));
+      expect(rendered, isNot(contains('CONTEXT_SECRET')));
+      expect(rendered, isNot(contains('INFO_SECRET')));
+      expect(rendered, contains('mode=check'));
     },
   );
 
