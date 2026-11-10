@@ -218,6 +218,9 @@ by `setAccessToken()`: a later rotation can land between them. Every credential
 mutation must participate in the same revision and ordering mechanism, including
 clears, failed attempts and operations that bypass a bounded wait. A later-issued
 write/delete retains precedence when an older platform call lands late.
+Failure does not prove that a platform call had no effect: a superseded call
+that applies and then returns false or throws must also repair the known newer
+state before another snapshot can be certified.
 
 `SecureTokenStore` shares this state across stores wrapping one
 `SecureStorageService`. Its certified read bounds the platform read and refuses

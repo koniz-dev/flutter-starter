@@ -32,8 +32,10 @@ class _Vault {
         await releaseWrite.future;
       }
       final error = writeError?.call(number);
+      final failed = failWrite?.call(number) ?? false;
+      if (effectBeforeFailure && (failed || error != null)) values[key] = value;
       if (error != null) Error.throwWithStackTrace(error, StackTrace.current);
-      if (failWrite?.call(number) ?? false) return false;
+      if (failed) return false;
       values[key] = value;
       return true;
     });
@@ -53,6 +55,7 @@ class _Vault {
   String? heldWriteValue;
   bool Function(int)? failWrite;
   Object? Function(int)? writeError;
+  bool effectBeforeFailure = false;
   final readEntered = Completer<void>();
   final releaseRead = Completer<void>();
   final writeEntered = Completer<void>();
@@ -294,6 +297,45 @@ void main() {
       expect((await store.getAccessTokenSnapshot())!.token, 'newer');
     },
   );
+
+  for (final throws in [false, true]) {
+    for (final clear in [false, true]) {
+      test('late failure after its effect preserves newer state '
+          '(throw: $throws, clear: $clear)', () async {
+        final vault = _Vault()
+          ..heldWriteValue = 'candidate'
+          ..effectBeforeFailure = true;
+        if (throws) {
+          vault.writeError = (call) =>
+              call == 1 ? StateError('lost acknowledgement') : null;
+        } else {
+          vault.failWrite = (call) => call == 1;
+        }
+        final store = SecureTokenStore(
+          vault.service,
+          operationTimeout: const Duration(milliseconds: 5),
+        );
+        final snapshot = (await store.getAccessTokenSnapshot())!;
+        final conditional = store.setAccessTokenIfCurrent(
+          snapshot,
+          'candidate',
+        );
+        await _within(vault.writeEntered.future);
+        if (clear) {
+          await _within(store.clearAllTokens());
+        } else {
+          await _within(store.setAccessToken('newer'));
+        }
+        vault.releaseWrite.complete();
+        expect(await _within(conditional), AccessTokenWriteResult.conflict);
+        await pumpEventQueue();
+        final latest = await store.getAccessTokenSnapshot();
+        expect(latest, isNotNull);
+        expect(latest!.token, clear ? isNull : 'newer');
+        expect(vault.values[AppConstants.tokenKey], clear ? isNull : 'newer');
+      });
+    }
+  }
 
   test(
     'platform failure differs from supersession and consumes the revision',

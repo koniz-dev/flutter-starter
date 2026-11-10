@@ -29,7 +29,9 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// A call that outlives the bound may land after operations issued later.
 /// Writes and deletes are numbered when issued, and one that lands over a
 /// newer one of the same key is followed by a repair that puts the newer
-/// state back (the older value is at rest in between). A repair is tried
+/// state back (the older value is at rest in between), even when the
+/// superseded call reports failure: its effect may have landed before the
+/// platform lost its acknowledgement. A repair is tried
 /// [repairAttempts] times; if all fail, the key is marked stale and the
 /// logger is warned, naming the key, never the value. A stale key reads
 /// from memory - the newer state, `null` after a clear - and is re-applied
@@ -345,19 +347,37 @@ class SecureTokenStore implements ITokenStore {
         }
       }
     }
-    final succeeded = value == null
-        ? await _secureStorageService.remove(key)
-        : await _secureStorageService.setString(key, value);
-    if (!succeeded) return false;
+    final bool succeeded;
+    try {
+      succeeded = value == null
+          ? await _secureStorageService.remove(key)
+          : await _secureStorageService.setString(key, value);
+    } on Object {
+      // A lost acknowledgement can report failure after its physical effect.
+      // Never let an older attempt undo a known newer successful mutation.
+      _repairIfSuperseded(queue, key, number);
+      rethrow;
+    }
+    if (!succeeded) {
+      _repairIfSuperseded(queue, key, number);
+      return false;
+    }
     final newest = queue.landed[key];
     if (newest == null || newest.number <= number) {
       queue.landed[key] = (number: number, value: value);
       queue.stale.remove(key);
     } else {
       // This call outlived the wait and landed over a newer one.
-      unawaited(_repair(queue, key));
+      _repairIfSuperseded(queue, key, number);
     }
     return true;
+  }
+
+  void _repairIfSuperseded(_OperationQueue queue, String key, int number) {
+    final newest = queue.landed[key];
+    if (newest != null && newest.number > number) {
+      unawaited(_repair(queue, key));
+    }
   }
 
   /// Re-applies the newest landed state of [key], up to [repairAttempts]
