@@ -13,7 +13,7 @@ import 'package:flutter_starter/core/network/interceptors/api_logging_intercepto
 ///   the engine treats the error as handled instead of printing it again.
 ///
 /// Both chain to the handler that was installed before, so framework errors
-/// are still dumped to the console as usual.
+/// are still dumped to the console with the same credential redaction.
 ///
 /// Returns a callback that puts the previous handlers back. `main()` calls it
 /// before installing again, because the startup failure screen's Try again
@@ -27,25 +27,31 @@ VoidCallback installUncaughtErrorHandlers(
   final previousPlatform = platform.onError;
 
   FlutterError.onError = (details) {
+    final safeError = _redactError(details.exception);
     logger.error(
       'Uncaught Flutter error',
-      error: _redactError(details.exception),
+      error: safeError,
       stackTrace: details.stack,
       context: {
         if (details.library != null) 'library': details.library,
         'silent': details.silent,
       },
     );
-    previousFlutter?.call(details);
+    previousFlutter?.call(
+      identical(safeError, details.exception)
+          ? details
+          : details.copyWith(exception: safeError),
+    );
   };
 
   platform.onError = (error, stackTrace) {
+    final safeError = _redactError(error);
     logger.error(
       'Uncaught platform error',
-      error: _redactError(error),
+      error: safeError,
       stackTrace: stackTrace,
     );
-    previousPlatform?.call(error, stackTrace);
+    previousPlatform?.call(safeError, stackTrace);
     return true;
   };
 
@@ -60,8 +66,29 @@ VoidCallback installUncaughtErrorHandlers(
 Object _redactError(Object error) {
   final original = error.toString();
   final redacted = original.replaceAllMapped(
-    RegExp(r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'),
-    (match) => ApiLoggingInterceptor.redactUrl(match[0]!),
+    RegExp(
+      r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'
+      r'|/[^\s<>"]*[?#][^\s<>"]+',
+    ),
+    (match) {
+      final candidate = match[0]!;
+      // Error prose often wraps URLs in parentheses. Keep unmatched closing
+      // delimiters outside the URL, while retaining balanced path parentheses.
+      var end = candidate.length;
+      final punctuation = RegExp(r'[.,;:!?]+$').firstMatch(candidate);
+      if (punctuation != null) end = punctuation.start;
+      var excess =
+          ')'.allMatches(candidate).length - '('.allMatches(candidate).length;
+      if (excess <= 0 || end == 0 || candidate[end - 1] != ')') {
+        end = candidate.length;
+      }
+      while (excess > 0 && end > 0 && candidate[end - 1] == ')') {
+        end--;
+        excess--;
+      }
+      return ApiLoggingInterceptor.redactUrl(candidate.substring(0, end)) +
+          candidate.substring(end);
+    },
   );
   if (original == redacted) return error;
   if (error is NetworkImageLoadException) {

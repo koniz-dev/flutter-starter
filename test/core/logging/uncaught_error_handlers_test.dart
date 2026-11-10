@@ -174,6 +174,136 @@ void main() {
     }
   });
 
+  test(
+    'relative request secrets are absent from reporter and file log',
+    () async {
+      final directory = Directory.systemTemp.createTempSync('relative_error_');
+      const channel = MethodChannel('plugins.flutter.io/path_provider');
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            ..setMockMethodCallHandler(channel, (_) async => directory.path);
+      addTearDown(() {
+        messenger.setMockMethodCallHandler(channel, null);
+        directory.deleteSync(recursive: true);
+      });
+      final output = FileLogOutput();
+      await output.init();
+      final logger = LoggingService(
+        enableLogging: true,
+        errorReporter: reporter,
+        output: output,
+      );
+      final restore = installUncaughtErrorHandlers(logger);
+      addTearDown(restore);
+      PlatformDispatcher.instance.onError!(
+        StateError('GET /verify?token=RELATIVE_SECRET&mode=check failed'),
+        StackTrace.current,
+      );
+      await output.destroy();
+
+      final fileText = latin1.decode(
+        File('${directory.path}/logs/app.log').readAsBytesSync(),
+      );
+      expect(reporter.reports, hasLength(1));
+      for (final text in [fileText, reporter.reports.single.error.toString()]) {
+        expect(text, isNot(contains('RELATIVE_SECRET')));
+        expect(
+          text,
+          contains('GET /verify?token=***REDACTED***&mode=check failed'),
+        );
+      }
+    },
+  );
+
+  test('redacted URL errors keep surrounding parentheses and diagnostics', () {
+    final restore = installUncaughtErrorHandlers(
+      container.read(loggingServiceProvider),
+    );
+    addTearDown(restore);
+    for (final path in [
+      'https://app.example/cb',
+      '/verify',
+      'https://app.example/a(b)',
+    ]) {
+      for (final punctuation in ['', ',', '.']) {
+        PlatformDispatcher.instance.onError!(
+          StateError(
+            'callback (($path?token=PAREN_SECRET))$punctuation failed',
+          ),
+          StackTrace.current,
+        );
+        final text = reporter.reports.last.error.toString();
+        expect(text, isNot(contains('PAREN_SECRET')));
+        expect(
+          text,
+          contains(
+            'callback (($path?token=***REDACTED***))$punctuation failed',
+          ),
+        );
+      }
+    }
+  });
+
+  test(
+    'previous handlers receive safe errors and retain ordinary identity',
+    () {
+      final flutterCalls = <FlutterErrorDetails>[];
+      final platformCalls = <(Object, StackTrace)>[];
+      final dispatcher = PlatformDispatcher.instance;
+      final savedFlutter = FlutterError.onError;
+      final savedPlatform = dispatcher.onError;
+      FlutterError.onError = flutterCalls.add;
+      dispatcher.onError = (error, stack) {
+        platformCalls.add((error, stack));
+        return false;
+      };
+      addTearDown(() {
+        FlutterError.onError = savedFlutter;
+        dispatcher.onError = savedPlatform;
+      });
+      final restore = installUncaughtErrorHandlers(
+        container.read(loggingServiceProvider),
+      );
+      addTearDown(restore);
+      final stack = StackTrace.current;
+      final context = ErrorDescription('loading account');
+      final secret = StateError(
+        'failed https://app.example/?token=CHAIN_SECRET',
+      );
+      final details = FlutterErrorDetails(
+        exception: secret,
+        stack: stack,
+        context: context,
+        library: 'fixture library',
+        silent: true,
+      );
+      FlutterError.reportError(details);
+      expect(dispatcher.onError!(secret, stack), isTrue);
+      for (final error in [
+        flutterCalls.single.exception,
+        platformCalls.single.$1,
+      ]) {
+        expect(error.toString(), isNot(contains('CHAIN_SECRET')));
+        expect(error.toString(), contains('token=***REDACTED***'));
+      }
+      expect(flutterCalls.single.context, same(context));
+      expect(flutterCalls.single.stack, same(stack));
+      expect(flutterCalls.single.library, 'fixture library');
+      expect(flutterCalls.single.silent, isTrue);
+      expect(platformCalls.single.$2, same(stack));
+
+      final ordinary = StateError('ordinary failure');
+      final ordinaryDetails = FlutterErrorDetails(
+        exception: ordinary,
+        stack: stack,
+      );
+      FlutterError.reportError(ordinaryDetails);
+      dispatcher.onError!(ordinary, stack);
+      expect(flutterCalls.last, same(ordinaryDetails));
+      expect(platformCalls.last.$1, same(ordinary));
+    },
+  );
+
   test('the returned callback restores the previous handlers', () {
     final dispatcher = PlatformDispatcher.instance;
     final flutterBefore = FlutterError.onError;
