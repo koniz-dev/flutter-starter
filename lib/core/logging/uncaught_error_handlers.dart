@@ -40,7 +40,7 @@ VoidCallback installUncaughtErrorHandlers(
     final originalCollector = details.informationCollector;
     final safeContext = details.context == null
         ? null
-        : _redactDiagnostic(details.context!);
+        : _RedactedDiagnostic(details.context!);
     previousFlutter?.call(
       identical(safeError, details.exception) &&
               identical(safeContext, details.context) &&
@@ -54,8 +54,7 @@ VoidCallback installUncaughtErrorHandlers(
               informationCollector: originalCollector == null
                   ? null
                   : () => originalCollector().map(
-                      (node) =>
-                          ErrorDescription(_redactText(_diagnosticText(node))),
+                      _RedactedDiagnostic.new,
                     ),
             ),
     );
@@ -93,22 +92,56 @@ Object _redactError(Object error) {
   return _RedactedError(error.runtimeType.toString(), redacted);
 }
 
-DiagnosticsNode _redactDiagnostic(DiagnosticsNode node) {
-  final original = _diagnosticText(node);
-  final redacted = _redactText(original);
-  return original == redacted ? node : ErrorDescription(redacted);
-}
+// Preserve the diagnostic tree and filtering levels while exposing only safe
+// descriptions and values. Redact before the renderer can wrap URL text.
+class _RedactedDiagnostic extends DiagnosticsNode {
+  _RedactedDiagnostic(this._original)
+    : super(
+        name: _original.name == null ? null : _redactText(_original.name!),
+        style: _original.style,
+        showName: _original.showName,
+        showSeparator: _original.showSeparator,
+        linePrefix: _original.linePrefix == null
+            ? null
+            : _redactText(_original.linePrefix!),
+      );
 
-// Use unwrapped descriptions: toStringDeep is debug-only and may insert line
-// breaks inside a credential-bearing URL before it can be redacted.
-String _diagnosticText(DiagnosticsNode node) => [
-  if (node.name == null)
-    node.toDescription()
-  else
-    '${node.name}: ${node.toDescription()}',
-  for (final child in [...node.getProperties(), ...node.getChildren()])
-    _diagnosticText(child),
-].join('\n');
+  final DiagnosticsNode _original;
+
+  @override
+  String toDescription({TextTreeConfiguration? parentConfiguration}) =>
+      _redactText(
+        _original.toDescription(parentConfiguration: parentConfiguration),
+      );
+
+  @override
+  Object? get value => toDescription();
+
+  @override
+  DiagnosticLevel get level => _original.level;
+
+  @override
+  bool get allowWrap => _original.allowWrap;
+
+  @override
+  bool get allowNameWrap => _original.allowNameWrap;
+
+  @override
+  bool get allowTruncate => _original.allowTruncate;
+
+  @override
+  String? get emptyBodyDescription => _original.emptyBodyDescription == null
+      ? null
+      : _redactText(_original.emptyBodyDescription!);
+
+  @override
+  List<DiagnosticsNode> getProperties() =>
+      _original.getProperties().map(_RedactedDiagnostic.new).toList();
+
+  @override
+  List<DiagnosticsNode> getChildren() =>
+      _original.getChildren().map(_RedactedDiagnostic.new).toList();
+}
 
 String _redactText(String original) => original.replaceAllMapped(
   RegExp(

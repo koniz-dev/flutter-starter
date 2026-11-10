@@ -292,7 +292,10 @@ void main() {
         expect(error.toString(), isNot(contains('CHAIN_SECRET')));
         expect(error.toString(), contains('token=***REDACTED***'));
       }
-      expect(flutterCalls.single.context, same(context));
+      expect(
+        flutterCalls.single.context!.toDescription(),
+        context.toDescription(),
+      );
       expect(flutterCalls.single.stack, same(stack));
       expect(flutterCalls.single.library, 'fixture library');
       expect(flutterCalls.single.silent, isTrue);
@@ -397,6 +400,81 @@ void main() {
       expect(rendered, contains('mode=check'));
     },
   );
+
+  test('diagnostic levels and nested filtering survive redaction', () {
+    final savedFlutter = FlutterError.onError;
+    FlutterErrorDetails? received;
+    FlutterError.onError = (details) => received = details;
+    addTearDown(() => FlutterError.onError = savedFlutter);
+    final restore = installUncaughtErrorHandlers(
+      LoggingService(enableLogging: false),
+    );
+    addTearDown(restore);
+    final group = DiagnosticsBlock(
+      name: 'group',
+      level: DiagnosticLevel.warning,
+      properties: [
+        StringProperty(
+          'hidden',
+          'HIDDEN_PROPERTY',
+          level: DiagnosticLevel.hidden,
+        ),
+        StringProperty('debug', 'DEBUG_PROPERTY', level: DiagnosticLevel.debug),
+        StringProperty('info', 'INFO_PROPERTY'),
+        StringProperty(
+          'warning',
+          'WARNING_PROPERTY',
+          level: DiagnosticLevel.warning,
+        ),
+      ],
+      children: [
+        DiagnosticsBlock(
+          name: 'hidden child',
+          level: DiagnosticLevel.hidden,
+          properties: [
+            StringProperty(
+              'value',
+              'HIDDEN_CHILD',
+              level: DiagnosticLevel.hidden,
+            ),
+          ],
+        ),
+        DiagnosticsBlock(
+          name: 'visible child',
+          properties: [StringProperty('url', '/verify?token=NESTED_SECRET')],
+        ),
+      ],
+    );
+    final details = FlutterErrorDetails(
+      exception: StateError('ordinary'),
+      informationCollector: () => [
+        StringProperty(
+          'top hidden',
+          'HIDDEN_TOP',
+          level: DiagnosticLevel.hidden,
+        ),
+        group,
+      ],
+    );
+    FlutterError.reportError(details);
+    final rendered = received.toString();
+    for (final hidden in ['HIDDEN_TOP', 'HIDDEN_PROPERTY', 'HIDDEN_CHILD']) {
+      expect(details.toString(), isNot(contains(hidden)));
+      expect(rendered, isNot(contains(hidden)));
+    }
+    expect(rendered, isNot(contains('DEBUG_PROPERTY')));
+    expect(rendered, contains('INFO_PROPERTY'));
+    expect(rendered, contains('WARNING_PROPERTY'));
+    expect(rendered, isNot(contains('NESTED_SECRET')));
+    final nodes = received!.informationCollector!().toList();
+    expect(nodes.first.level, DiagnosticLevel.hidden);
+    expect(nodes.last.level, group.level);
+    expect(nodes.last.getProperties().first.level, DiagnosticLevel.hidden);
+    final warnings = nodes.last.toStringDeep(minLevel: DiagnosticLevel.warning);
+    expect(warnings, contains('WARNING_PROPERTY'));
+    expect(warnings, isNot(contains('DEBUG_PROPERTY')));
+    expect(warnings, isNot(contains('INFO_PROPERTY')));
+  });
 
   test('the returned callback restores the previous handlers', () {
     final dispatcher = PlatformDispatcher.instance;
