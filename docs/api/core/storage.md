@@ -150,7 +150,7 @@ SecureStorageService();
 - Keychain storage on iOS
 - Implements `IStorageService` interface
 - Safe error handling (returns null/false on errors)
-- Suitable for: authentication tokens, passwords, API keys, sensitive information
+- Suitable for non-session secrets such as API keys and sensitive application data. Access/refresh credentials go through `ITokenStore`; the auth repository coordinates their lifecycle.
 
 ### Platform-Specific Behavior
 
@@ -187,26 +187,35 @@ SecureStorageService();
 - A `wrapKey` web option only moves the key into the JavaScript bundle, which
   the same script can read; it is not a fix
 
+### Session credentials
+
+Use `ITokenStore` (from `tokenStoreProvider`) for access and refresh tokens.
+`AuthRepository` owns login, registration, refresh and sign-out; its local data
+source uses that contract rather than the adapter's platform keys. The token
+store also coordinates queued writes and its in-memory snapshot.
+
+```dart
+final tokenStore = ref.read(tokenStoreProvider);
+final accessToken = await tokenStore.getAccessToken();
+final refreshToken = await tokenStore.getRefreshToken();
+```
+
+Do not print token values. For sign-out, use `AuthRepository.logout()`, normally
+through the auth controller or `signOutProvider` in UI code.
+
 ### Usage Examples
+
+Use the raw secure service only for secrets outside the session lifecycle:
 
 ```dart
 final secureStorage = ref.read(secureStorageServiceProvider);
 
-// Store sensitive data
-await secureStorage.setString('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...');
-await secureStorage.setString('refresh_token', 'refresh_token_here');
-await secureStorage.setString('api_key', 'secret-api-key');
-
-// Retrieve sensitive data
-final token = await secureStorage.getString('token');
-final refreshToken = await secureStorage.getString('refresh_token');
+final saved = await secureStorage.setString('api_key', 'example-api-key');
+if (!saved) throw const CacheException('Secret storage write failed');
 final apiKey = await secureStorage.getString('api_key');
 
-// Remove sensitive data
-await secureStorage.remove('token');
-
-// Clear all sensitive data
-await secureStorage.clear();
+final removed = await secureStorage.remove('api_key');
+if (!removed) throw const CacheException('Secret storage deletion failed');
 ```
 
 ### Error Handling
@@ -217,9 +226,9 @@ SecureStorageService handles errors gracefully:
 - Never throws exceptions
 
 ```dart
-final token = await secureStorage.getString('token');
-if (token == null) {
-  // Token doesn't exist or error occurred
+final apiKey = await secureStorage.getString('api_key');
+if (apiKey == null) {
+  // The non-session secret does not exist, or a platform read failed
   // Handle accordingly
 }
 ```
@@ -236,7 +245,7 @@ if (token == null) {
 - Any non-sensitive data
 
 ### Use SecureStorageService for:
-- Authentication tokens (access token, refresh token)
+- Non-session secrets; use `ITokenStore` for access/refresh credentials
 - Passwords
 - API keys
 - Credit card information
@@ -327,14 +336,14 @@ The default starter does not bind `ILocalDatabase` in DI, so this remains fully 
 
 ## Best Practices
 
-### 1. Use Secure Storage for Tokens
+### 1. Use the Token Lifecycle Contract
+
+Auth data sources use `ITokenStore`, not string keys on a storage adapter.
+Application sign-in and refresh flows should use the auth repository/controller.
 
 ```dart
-// Good
-await secureStorage.setString('token', token);
-
-// Bad
-await storage.setString('token', token);
+final tokenStore = ref.read(tokenStoreProvider);
+final accessToken = await tokenStore.getAccessToken();
 ```
 
 ### 2. Initialize Storage Before Use
@@ -355,36 +364,38 @@ if (value != null) {
 }
 ```
 
-### 4. Use Constants for Keys
+### 4. Use Constants for Non-Session Keys
 
 ```dart
-class StorageKeys {
-  static const String token = 'auth_token';
-  static const String refreshToken = 'refresh_token';
-  static const String userId = 'user_id';
+class SecretKeys {
+  static const String serviceApiKey = 'service_api_key';
 }
 
-await secureStorage.setString(StorageKeys.token, token);
+final saved = await secureStorage.setString(SecretKeys.serviceApiKey, apiKey);
+if (!saved) throw const CacheException('Secret storage write failed');
 ```
 
-### 5. Clear Data on Logout
+Session key names are an implementation detail of the token store; do not
+redeclare them in application storage constants.
+
+### 5. End Sessions Through the Auth Repository
+
+`AuthRepository.logout()` clears session tokens, the cached user and HTTP
+response cache and attempts server revocation. Calling the raw adapter's clear
+or removal methods bypasses token-store ordering and can leave stale in-memory
+credentials or let an in-flight write restore a deleted token. In UI code, use
+the sign-out action, which delegates through the auth controller to that
+repository and updates the visible auth state:
 
 ```dart
-Future<void> logout() async {
-  // Clear sensitive data
-  await secureStorage.remove(StorageKeys.token);
-  await secureStorage.remove(StorageKeys.refreshToken);
-  
-  // Clear non-sensitive data if needed
-  await storage.remove(StorageKeys.userId);
-}
+Future<void> logout() => ref.read(signOutProvider)();
 ```
 
 ---
 
 ## Related APIs
 
-- [Network](network.md) - Uses secure storage for tokens
+- [Network](network.md) - Reads session credentials through `ITokenStore`
 - [Features - Auth Providers](../features/auth/providers.md) - Uses storage services
 - [Configuration](../../guides/configuration.md) - AppConfig for configuration
 

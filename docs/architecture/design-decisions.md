@@ -682,9 +682,9 @@ class SecureStorageService implements IStorageService {
 final storage = ref.read(storageServiceProvider);
 await storage.setString('theme', 'dark');
 
-// Sensitive
-final secureStorage = ref.read(secureStorageServiceProvider);
-await secureStorage.setString('auth_token', token);
+// Session credentials: the auth repository coordinates their lifecycle.
+final tokenStore = ref.read(tokenStoreProvider);
+final accessToken = await tokenStore.getAccessToken();
 ```
 
 ### Trade-offs

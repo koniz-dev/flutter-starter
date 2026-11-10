@@ -144,7 +144,7 @@ Future<Result<bool>> isAuthenticated();
 /// ```dart
 /// final result = await authRepository.refreshToken();
 /// result.when(
-///   success: (token) => print('New token: $token'),
+///   success: (_) => print('Token refreshed successfully'),
 ///   failureCallback: (failure) => print('Token refresh failed: ${failure.message}'),
 /// );
 /// ```
