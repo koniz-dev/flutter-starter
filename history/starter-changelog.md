@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Uncaught-error redaction covers relative request paths and chained handlers.** Exceptions, context and lazy diagnostic values are sanitized before previous Flutter/platform handlers receive them; URL wrapper punctuation and diagnostic visibility are preserved, and ordinary exceptions retain identity and stack.
+
 - **Shell scripts and Git hooks retain LF on Windows checkouts.** Git attributes prevent core.autocrlf from converting shell entrypoints to CRLF, which previously made commit-msg and other Bash scripts fail.
 
 - **Session-token documentation uses lifecycle contracts and avoids credential logging.** Examples use ITokenStore for credential access and the auth repository/controller for sign-out; raw secure-storage examples cover non-session secrets. A Dart-token documentation guard rejects unsafe key operations and token-value prints. The guard declares analyzer as a dev dependency at its existing locked version and archive hash.
