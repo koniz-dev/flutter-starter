@@ -13,7 +13,7 @@ import 'package:flutter_starter/core/network/interceptors/api_logging_intercepto
 ///   the engine treats the error as handled instead of printing it again.
 ///
 /// Both chain to the handler that was installed before, so framework errors
-/// are still dumped to the console as usual.
+/// are still dumped to the console with the same credential redaction.
 ///
 /// Returns a callback that puts the previous handlers back. `main()` calls it
 /// before installing again, because the startup failure screen's Try again
@@ -27,25 +27,47 @@ VoidCallback installUncaughtErrorHandlers(
   final previousPlatform = platform.onError;
 
   FlutterError.onError = (details) {
+    final safeError = _redactError(details.exception);
     logger.error(
       'Uncaught Flutter error',
-      error: _redactError(details.exception),
+      error: safeError,
       stackTrace: details.stack,
       context: {
         if (details.library != null) 'library': details.library,
         'silent': details.silent,
       },
     );
-    previousFlutter?.call(details);
+    final originalCollector = details.informationCollector;
+    final safeContext = details.context == null
+        ? null
+        : _RedactedDiagnostic(details.context!);
+    previousFlutter?.call(
+      identical(safeError, details.exception) &&
+              identical(safeContext, details.context) &&
+              originalCollector == null
+          ? details
+          : details.copyWith(
+              exception: safeError,
+              context: safeContext,
+              // Keep collection lazy, and do not forward credential-bearing
+              // objects such as NetworkImage as diagnostic property values.
+              informationCollector: originalCollector == null
+                  ? null
+                  : () => originalCollector().map(
+                      _RedactedDiagnostic.new,
+                    ),
+            ),
+    );
   };
 
   platform.onError = (error, stackTrace) {
+    final safeError = _redactError(error);
     logger.error(
       'Uncaught platform error',
-      error: _redactError(error),
+      error: safeError,
       stackTrace: stackTrace,
     );
-    previousPlatform?.call(error, stackTrace);
+    previousPlatform?.call(safeError, stackTrace);
     return true;
   };
 
@@ -59,10 +81,7 @@ VoidCallback installUncaughtErrorHandlers(
 // representation without retaining the raw object in anything sent to a sink.
 Object _redactError(Object error) {
   final original = error.toString();
-  final redacted = original.replaceAllMapped(
-    RegExp(r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'),
-    (match) => ApiLoggingInterceptor.redactUrl(match[0]!),
-  );
+  final redacted = _redactText(original);
   if (original == redacted) return error;
   if (error is NetworkImageLoadException) {
     return NetworkImageLoadException(
@@ -72,6 +91,83 @@ Object _redactError(Object error) {
   }
   return _RedactedError(error.runtimeType.toString(), redacted);
 }
+
+// Preserve the diagnostic tree and filtering levels while exposing only safe
+// descriptions and values. Redact before the renderer can wrap URL text.
+class _RedactedDiagnostic extends DiagnosticsNode {
+  _RedactedDiagnostic(this._original)
+    : super(
+        name: _original.name == null ? null : _redactText(_original.name!),
+        style: _original.style,
+        showName: _original.showName,
+        showSeparator: _original.showSeparator,
+        linePrefix: _original.linePrefix == null
+            ? null
+            : _redactText(_original.linePrefix!),
+      );
+
+  final DiagnosticsNode _original;
+
+  @override
+  String toDescription({TextTreeConfiguration? parentConfiguration}) =>
+      _redactText(
+        _original.toDescription(parentConfiguration: parentConfiguration),
+      );
+
+  @override
+  Object? get value => toDescription();
+
+  @override
+  DiagnosticLevel get level => _original.level;
+
+  @override
+  bool get allowWrap => _original.allowWrap;
+
+  @override
+  bool get allowNameWrap => _original.allowNameWrap;
+
+  @override
+  bool get allowTruncate => _original.allowTruncate;
+
+  @override
+  String? get emptyBodyDescription => _original.emptyBodyDescription == null
+      ? null
+      : _redactText(_original.emptyBodyDescription!);
+
+  @override
+  List<DiagnosticsNode> getProperties() =>
+      _original.getProperties().map(_RedactedDiagnostic.new).toList();
+
+  @override
+  List<DiagnosticsNode> getChildren() =>
+      _original.getChildren().map(_RedactedDiagnostic.new).toList();
+}
+
+String _redactText(String original) => original.replaceAllMapped(
+  RegExp(
+    r'(?:[A-Za-z][A-Za-z0-9+.\-]*:)?[/\\]{2}[^\s<>"]+'
+    r'|(?:[A-Za-z0-9_~./%\-][^\s<>"?#]*)?[?#][^\s<>"]+',
+  ),
+  (match) {
+    final candidate = match[0]!;
+    // Error prose often wraps URLs in parentheses. Keep unmatched closing
+    // delimiters outside the URL, while retaining balanced path parentheses.
+    var end = candidate.length;
+    final punctuation = RegExp(r'[.,;:!?]+$').firstMatch(candidate);
+    if (punctuation != null) end = punctuation.start;
+    var excess =
+        ')'.allMatches(candidate).length - '('.allMatches(candidate).length;
+    if (excess <= 0 || end == 0 || candidate[end - 1] != ')') {
+      end = candidate.length;
+    }
+    while (excess > 0 && end > 0 && candidate[end - 1] == ')') {
+      end--;
+      excess--;
+    }
+    return ApiLoggingInterceptor.redactUrl(candidate.substring(0, end)) +
+        candidate.substring(end);
+  },
+);
 
 class _RedactedError implements Exception {
   const _RedactedError(this.type, this.description);

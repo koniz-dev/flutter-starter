@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -172,6 +173,307 @@ void main() {
     for (final report in reporter.reports) {
       expect(report.stack, same(stack));
     }
+  });
+
+  test(
+    'relative request secrets are absent from reporter and file log',
+    () async {
+      final directory = Directory.systemTemp.createTempSync('relative_error_');
+      const channel = MethodChannel('plugins.flutter.io/path_provider');
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            ..setMockMethodCallHandler(channel, (_) async => directory.path);
+      addTearDown(() {
+        messenger.setMockMethodCallHandler(channel, null);
+        directory.deleteSync(recursive: true);
+      });
+      final output = FileLogOutput();
+      await output.init();
+      final logger = LoggingService(
+        enableLogging: true,
+        errorReporter: reporter,
+        output: output,
+      );
+      final restore = installUncaughtErrorHandlers(logger);
+      addTearDown(restore);
+      for (final path in ['/verify', 'verify', '../verify', '']) {
+        PlatformDispatcher.instance.onError!(
+          StateError('GET $path?token=RELATIVE_SECRET&mode=check failed'),
+          StackTrace.current,
+        );
+      }
+      await output.destroy();
+
+      final fileText = latin1.decode(
+        File('${directory.path}/logs/app.log').readAsBytesSync(),
+      );
+      expect(reporter.reports, hasLength(4));
+      for (final text in [
+        fileText,
+        for (final report in reporter.reports) report.error.toString(),
+      ]) {
+        expect(text, isNot(contains('RELATIVE_SECRET')));
+        expect(
+          text,
+          contains('token=***REDACTED***&mode=check failed'),
+        );
+      }
+    },
+  );
+
+  test('redacted URL errors keep surrounding parentheses and diagnostics', () {
+    final restore = installUncaughtErrorHandlers(
+      container.read(loggingServiceProvider),
+    );
+    addTearDown(restore);
+    for (final path in [
+      'https://app.example/cb',
+      '/verify',
+      'https://app.example/a(b)',
+    ]) {
+      for (final punctuation in ['', ',', '.']) {
+        PlatformDispatcher.instance.onError!(
+          StateError(
+            'callback (($path?token=PAREN_SECRET))$punctuation failed',
+          ),
+          StackTrace.current,
+        );
+        final text = reporter.reports.last.error.toString();
+        expect(text, isNot(contains('PAREN_SECRET')));
+        expect(
+          text,
+          contains(
+            'callback (($path?token=***REDACTED***))$punctuation failed',
+          ),
+        );
+      }
+    }
+  });
+
+  test(
+    'previous handlers receive safe errors and retain ordinary identity',
+    () {
+      final flutterCalls = <FlutterErrorDetails>[];
+      final platformCalls = <(Object, StackTrace)>[];
+      final dispatcher = PlatformDispatcher.instance;
+      final savedFlutter = FlutterError.onError;
+      final savedPlatform = dispatcher.onError;
+      FlutterError.onError = flutterCalls.add;
+      dispatcher.onError = (error, stack) {
+        platformCalls.add((error, stack));
+        return false;
+      };
+      addTearDown(() {
+        FlutterError.onError = savedFlutter;
+        dispatcher.onError = savedPlatform;
+      });
+      final restore = installUncaughtErrorHandlers(
+        container.read(loggingServiceProvider),
+      );
+      addTearDown(restore);
+      final stack = StackTrace.current;
+      final context = ErrorDescription('loading account');
+      final secret = StateError(
+        'failed https://app.example/?token=CHAIN_SECRET',
+      );
+      final details = FlutterErrorDetails(
+        exception: secret,
+        stack: stack,
+        context: context,
+        library: 'fixture library',
+        silent: true,
+      );
+      FlutterError.reportError(details);
+      expect(dispatcher.onError!(secret, stack), isTrue);
+      for (final error in [
+        flutterCalls.single.exception,
+        platformCalls.single.$1,
+      ]) {
+        expect(error.toString(), isNot(contains('CHAIN_SECRET')));
+        expect(error.toString(), contains('token=***REDACTED***'));
+      }
+      expect(
+        flutterCalls.single.context!.toDescription(),
+        context.toDescription(),
+      );
+      expect(flutterCalls.single.stack, same(stack));
+      expect(flutterCalls.single.library, 'fixture library');
+      expect(flutterCalls.single.silent, isTrue);
+      expect(platformCalls.single.$2, same(stack));
+
+      final ordinary = StateError('ordinary failure');
+      final ordinaryDetails = FlutterErrorDetails(
+        exception: ordinary,
+        stack: stack,
+      );
+      FlutterError.reportError(ordinaryDetails);
+      dispatcher.onError!(ordinary, stack);
+      expect(flutterCalls.last, same(ordinaryDetails));
+      expect(platformCalls.last.$1, same(ordinary));
+    },
+  );
+
+  testWidgets(
+    'actual image failure has safe diagnostics in the chained console',
+    (
+      tester,
+    ) async {
+      final savedFlutter = FlutterError.onError;
+      final savedPrint = debugPrint;
+      final received = Completer<FlutterErrorDetails>();
+      final console = <String>[];
+      debugPrint = (message, {wrapWidth}) => console.add(message ?? '');
+      FlutterError.onError = (details) {
+        if (!received.isCompleted) received.complete(details);
+        FlutterError.dumpErrorToConsole(details, forceReport: true);
+      };
+      addTearDown(() {
+        FlutterError.onError = savedFlutter;
+        debugPrint = savedPrint;
+      });
+      final restore = installUncaughtErrorHandlers(
+        LoggingService(enableLogging: false),
+      );
+      addTearDown(restore);
+
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.ltr,
+          child: Image(
+            image: NetworkImage('https://cdn.example/a.png?token=IMAGE_SECRET'),
+          ),
+        ),
+      );
+      final details = await tester.runAsync(
+        () => received.future.timeout(const Duration(seconds: 5)),
+      );
+      restore();
+      FlutterError.onError = savedFlutter;
+      debugPrint = savedPrint;
+      expect(details!.exception, isA<NetworkImageLoadException>());
+      for (final text in [details.toString(), console.join('\n')]) {
+        expect(text, isNot(contains('IMAGE_SECRET')));
+        expect(text, contains('Image provider:'));
+        expect(text, contains('Image key:'));
+        expect(text, contains('token=***REDACTED***'));
+      }
+    },
+  );
+
+  test(
+    'ordinary exceptions also redact context and lazy diagnostic values',
+    () {
+      final savedFlutter = FlutterError.onError;
+      FlutterErrorDetails? received;
+      FlutterError.onError = (details) => received = details;
+      addTearDown(() => FlutterError.onError = savedFlutter);
+      final restore = installUncaughtErrorHandlers(
+        LoggingService(enableLogging: false),
+      );
+      addTearDown(restore);
+      final ordinary = StateError('load failed');
+      final stack = StackTrace.current;
+      var collections = 0;
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: ordinary,
+          stack: stack,
+          context: ErrorDescription('loading /verify?token=CONTEXT_SECRET'),
+          informationCollector: () {
+            collections++;
+            return [
+              DiagnosticsProperty<Uri>(
+                'Request',
+                Uri.parse('verify?token=INFO_SECRET&mode=check'),
+              ),
+            ];
+          },
+        ),
+      );
+      expect(collections, 0, reason: 'diagnostic collection stays lazy');
+      expect(received!.exception, same(ordinary));
+      expect(received!.stack, same(stack));
+      final rendered = received.toString();
+      expect(collections, greaterThan(0));
+      expect(rendered, isNot(contains('CONTEXT_SECRET')));
+      expect(rendered, isNot(contains('INFO_SECRET')));
+      expect(rendered, contains('mode=check'));
+    },
+  );
+
+  test('diagnostic levels and nested filtering survive redaction', () {
+    final savedFlutter = FlutterError.onError;
+    FlutterErrorDetails? received;
+    FlutterError.onError = (details) => received = details;
+    addTearDown(() => FlutterError.onError = savedFlutter);
+    final restore = installUncaughtErrorHandlers(
+      LoggingService(enableLogging: false),
+    );
+    addTearDown(restore);
+    final group = DiagnosticsBlock(
+      name: 'group',
+      level: DiagnosticLevel.warning,
+      properties: [
+        StringProperty(
+          'hidden',
+          'HIDDEN_PROPERTY',
+          level: DiagnosticLevel.hidden,
+        ),
+        StringProperty('debug', 'DEBUG_PROPERTY', level: DiagnosticLevel.debug),
+        StringProperty('info', 'INFO_PROPERTY'),
+        StringProperty(
+          'warning',
+          'WARNING_PROPERTY',
+          level: DiagnosticLevel.warning,
+        ),
+      ],
+      children: [
+        DiagnosticsBlock(
+          name: 'hidden child',
+          level: DiagnosticLevel.hidden,
+          properties: [
+            StringProperty(
+              'value',
+              'HIDDEN_CHILD',
+              level: DiagnosticLevel.hidden,
+            ),
+          ],
+        ),
+        DiagnosticsBlock(
+          name: 'visible child',
+          properties: [StringProperty('url', '/verify?token=NESTED_SECRET')],
+        ),
+      ],
+    );
+    final details = FlutterErrorDetails(
+      exception: StateError('ordinary'),
+      informationCollector: () => [
+        StringProperty(
+          'top hidden',
+          'HIDDEN_TOP',
+          level: DiagnosticLevel.hidden,
+        ),
+        group,
+      ],
+    );
+    FlutterError.reportError(details);
+    final rendered = received.toString();
+    for (final hidden in ['HIDDEN_TOP', 'HIDDEN_PROPERTY', 'HIDDEN_CHILD']) {
+      expect(details.toString(), isNot(contains(hidden)));
+      expect(rendered, isNot(contains(hidden)));
+    }
+    expect(rendered, isNot(contains('DEBUG_PROPERTY')));
+    expect(rendered, contains('INFO_PROPERTY'));
+    expect(rendered, contains('WARNING_PROPERTY'));
+    expect(rendered, isNot(contains('NESTED_SECRET')));
+    final nodes = received!.informationCollector!().toList();
+    expect(nodes.first.level, DiagnosticLevel.hidden);
+    expect(nodes.last.level, group.level);
+    expect(nodes.last.getProperties().first.level, DiagnosticLevel.hidden);
+    final warnings = nodes.last.toStringDeep(minLevel: DiagnosticLevel.warning);
+    expect(warnings, contains('WARNING_PROPERTY'));
+    expect(warnings, isNot(contains('DEBUG_PROPERTY')));
+    expect(warnings, isNot(contains('INFO_PROPERTY')));
   });
 
   test('the returned callback restores the previous handlers', () {
