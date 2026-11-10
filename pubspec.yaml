@@ -70,6 +70,9 @@ dependencies:
 
 
 dev_dependencies:
+  # Documentation guards use the Dart tokenizer (already in the codegen graph).
+  analyzer: ^14.6.0
+
   # Code Generation - Build system for generating code from annotations
   build_runner: ^2.17.1
 
