@@ -344,15 +344,12 @@ ScaffoldMessenger.of(context).showSnackBar(SnackBar(...));
 ### 6. Use Constants for Keys
 
 ```dart
-// Good
 class StorageKeys {
-  static const String token = 'auth_token';
+  static const String theme = 'theme_mode';
 }
 
-await storage.setString(StorageKeys.token, token);
-
-// Bad
-await storage.setString('token', token);
+final saved = await storage.setString(StorageKeys.theme, 'dark');
+if (!saved) throw const CacheException('Preference write failed');
 ```
 
 ---
