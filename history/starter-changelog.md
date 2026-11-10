@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **URL redaction covers OAuth fragment credentials and WebSocket tickets.** Query and fragment parameters share credential-key rules while ordinary anchors/body fields remain readable. Ticket-authenticated responses bypass the HTTP cache, and a rule-version migration discards older cached entries.
+
 - **Uncaught-error redaction covers relative request paths and chained handlers.** Exceptions, context and lazy diagnostic values are sanitized before previous Flutter/platform handlers receive them; URL wrapper punctuation and diagnostic visibility are preserved, and ordinary exceptions retain identity and stack.
 
 - **Shell scripts and Git hooks retain LF on Windows checkouts.** Git attributes prevent core.autocrlf from converting shell entrypoints to CRLF, which previously made commit-msg and other Bash scripts fail.
