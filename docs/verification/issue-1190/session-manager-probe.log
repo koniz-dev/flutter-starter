@@ -1,0 +1,4 @@
+read=null logoutCalls=0 expected=0 PASS
+read=bearer logoutCalls=1 expected=1 PASS
+read=Exception: read failed logoutCalls=1 expected=1 PASS
+read=Bad state: read failed logoutCalls=1 expected=1 PASS

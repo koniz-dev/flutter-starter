@@ -1,0 +1,170 @@
+Post-merge security/QA review issue 1190 PR1201
+Read ../flutter-starter-maintainers/agents/security.md; reviewed actual docs/dependency/guard diff and issue evidence artifacts.
+c7de7052606aeede27e2e1d3d915042a26250a5a d00990637c76db838bcef9d25b40bb9e32ceb56c
+f64128fed697df184859ba756604e134066527be c66c6b468d80f8559b52d3d8ebf9f43a67a0b6a7
+bf4586edf5f01c7fd3edf0742d8f3d7e8ebfbea3 c66c6b468d80f8559b52d3d8ebf9f43a67a0b6a7
+PASS accepted and merged tree parity
+PASS lockfile changes only analyzer transitive -> direct dev; no package code/version/hash changes
+PASS independently fetched pub.dev archive version/hash: 14.6.0 74c36179c4de542efea24c9dff78324375e4b118a2c1e14e8a7659f457947f8d
+PASS independently fetched pub.dev publisher: tools.dart.dev
+Changed paths: docs/api/core/storage.md
+docs/api/examples/api-integration.md
+docs/api/examples/common-patterns.md
+docs/api/features/auth/repositories.md
+docs/architecture/design-decisions.md
+docs/guides/security/blueprints.md
+pubspec.lock
+pubspec.yaml
+test/docs/session_token_examples_test.dart
+
+Evidence review: criteria table links to inspected raw before/after docs probes, independent guard cases, full suite/analyze/format results, CI metadata, and tree parity.
+Evidence secret search inspected: only explicit synthetic test literals/case descriptions and test bearer string; no real credential exposure found.
+API/SessionManager: ITokenStore contract in use; AuthRepository logout clears local session/http cache then attempts revocation; null access skips timeout logout, Exception/Error both still attempt logout. No runtime lib changes in this PR.
+No actionable introduced security or evidence defect identified. This review makes no device, RASP, or live-backend assurance claim.
+
+RAW INSPECTED ARTIFACT: tree-parity.log
+Accepted source: f64128fed697df184859ba756604e134066527be
+Merged main: bf4586edf5f01c7fd3edf0742d8f3d7e8ebfbea3
+Both source trees: c66c6b468d80f8559b52d3d8ebf9f43a67a0b6a7
+Identical: yes
+
+
+RAW INSPECTED ARTIFACT: dependency-proof.json
+{
+  "package": "analyzer",
+  "version": "14.6.0",
+  "archive_sha256": "74c36179c4de542efea24c9dff78324375e4b118a2c1e14e8a7659f457947f8d",
+  "publisher": {
+    "publisherId": "tools.dart.dev"
+  },
+  "version_source": "https://pub.dev/api/packages/analyzer/versions/14.6.0",
+  "publisher_source": "https://pub.dev/api/packages/analyzer/publisher",
+  "change": "transitive -> direct dev; no version/hash/archive change"
+}
+
+RAW INSPECTED ARTIFACT: session-manager-probe.log
+read=null logoutCalls=0 expected=0 PASS
+read=bearer logoutCalls=1 expected=1 PASS
+read=Exception: read failed logoutCalls=1 expected=1 PASS
+read=Bad state: read failed logoutCalls=1 expected=1 PASS
+
+
+RAW INSPECTED ARTIFACT: independent-probes.log
+parenthesized receiver => [1: session token operation bypasses ITokenStore] | (secureStorage).remove('token');
+key comment => [1: session token operation bypasses ITokenStore] | secureStorage.remove(/* session key */ 'token');
+adjacent key strings => [1: session token operation bypasses ITokenStore] | secureStorage.remove('refresh_' 'token');
+log comment false positive => [] | print('Done' /* token */);
+asserted logger => [1: token value passed to info] | logger!.info(accessToken);
+typed logger alias => [1: token value passed to info] | LoggingService audit; audit.info(accessToken);
+escaped interpolation => [1: token value passed to print] | print('\\$token');
+raw triple => [] | print(r'''literal $token''');
+normal interpolation => [1: token value passed to print] | print('Token: $token');
+triple interpolation => [1: token value passed to print] | print('''Token: $token''');
+nested comment storage => [] | /* /* nested */ secureStorage.remove('token'); */
+log callback argument => [1: token value passed to print] | print(format(() => token));
+prefixed constructor => [1: session token operation bypasses ITokenStore] | final secret = storage.SecureStorageService(); secret.remove('token');
+blockquote fence => [2: token value passed to print] | EXTRACTED |print(token);|
+double-backtick inline => [1: session token operation bypasses ITokenStore] | EXTRACTED secureStorage.remove('token')
+standalone doc inline => [2: token value passed to print] | EXTRACTED |print(token)|class Demo {}|
+doc fence => [3: token value passed to print] | EXTRACTED ||print(token);||class Demo {}|
+four fence => [2: token value passed to print] | EXTRACTED |print(token);|
+
+
+RAW INSPECTED ARTIFACT: ci.json
+[
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835879756/job/129897805670",
+    "name": "Quality gate",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835880036/job/129897806301",
+    "name": "Docs check",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835879717/job/129897804935",
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835879717/job/129897804507",
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835879717/job/129897805145",
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835879717/job/129897804857",
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/42835879717/job/129897804948",
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS"
+  }
+]
+
+
+RAW INSPECTED ARTIFACT TAIL: format.log
+$ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 610 files (0 changed) in 1.80 seconds.
+exit: 0
+
+RAW INSPECTED ARTIFACT TAIL: analyze.log
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+49 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 7.0s)
+exit: 0
+
+RAW INSPECTED ARTIFACT TAIL: tests.log
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+04:49 +4295 ~14: 14 skipped tests.                                                                                                                                                                     
+04:49 +4295 ~14: All other tests passed!                                                                                                                                                               
+exit: 0
+
+RAW INSPECTED ARTIFACT TAIL: local-audit.log
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print(r'Token example: $token');
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('Token example: \$token');
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: prose and non-Dart fences do not become executable calls
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: Dart doc-comment examples are checked without parsing their prose
+00:00 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: blockquote and inline Dart-doc examples are checked
+00:00 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: inline storage examples are checked
+00:00 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: documentation uses token lifecycle contracts and never prints tokens
+00:00 +50: All tests passed!
+
+RAW INSPECTED ARTIFACT TAIL: original-docs-before.log
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  .git/codex-issue-work/1190-baseline-docs_test.dart 395:7  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1190-baseline-docs_test.dart: documentation uses token lifecycle contracts and never prints tokens
+
+RAW INSPECTED ARTIFACT TAIL: docs-check.log
+emoji: scanned 66 file(s); 0 line(s) with emoji
+signatures: checked 13 documented constructor(s); 0 mismatched
+symbols: checked 116 directive(s); 0 unresolved
+env runs: scanned 64 file(s); 0 run(s) ignoring the copied .env
+dart-defines: scanned 62 file(s) against 14 known key(s); 0 unknown
+test paths: scanned 64 file(s); 0 missing
+
+OK: documentation checks passed.
+
+PASS recorded CI: 7/7 actual checks successful; full suite 4295 passing, 14 skipped; focused scope 50 passing.
+Review conclusion: no actionable security or evidence defect found; no source edits or GitHub mutations performed.

@@ -1,0 +1,18 @@
+parenthesized receiver => [1: session token operation bypasses ITokenStore] | (secureStorage).remove('token');
+key comment => [1: session token operation bypasses ITokenStore] | secureStorage.remove(/* session key */ 'token');
+adjacent key strings => [1: session token operation bypasses ITokenStore] | secureStorage.remove('refresh_' 'token');
+log comment false positive => [] | print('Done' /* token */);
+asserted logger => [1: token value passed to info] | logger!.info(accessToken);
+typed logger alias => [1: token value passed to info] | LoggingService audit; audit.info(accessToken);
+escaped interpolation => [1: token value passed to print] | print('\\$token');
+raw triple => [] | print(r'''literal $token''');
+normal interpolation => [1: token value passed to print] | print('Token: $token');
+triple interpolation => [1: token value passed to print] | print('''Token: $token''');
+nested comment storage => [] | /* /* nested */ secureStorage.remove('token'); */
+log callback argument => [1: token value passed to print] | print(format(() => token));
+prefixed constructor => [1: session token operation bypasses ITokenStore] | final secret = storage.SecureStorageService(); secret.remove('token');
+blockquote fence => [2: token value passed to print] | EXTRACTED |print(token);|
+double-backtick inline => [1: session token operation bypasses ITokenStore] | EXTRACTED secureStorage.remove('token')
+standalone doc inline => [2: token value passed to print] | EXTRACTED |print(token)|class Demo {}|
+doc fence => [3: token value passed to print] | EXTRACTED ||print(token);||class Demo {}|
+four fence => [2: token value passed to print] | EXTRACTED |print(token);|

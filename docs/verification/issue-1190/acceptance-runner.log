@@ -1,0 +1,1 @@
+Copied maintainer acceptance runner with unchanged format/analyzer/full-test scope. Explicit --concurrency=4 bounds fixture demand; original compact reporter flag was retained after an expanded flag, so effective reporter is compact. tests.log records the exact invocation. CR characters may be normalized into lines for review; no tests are omitted.

@@ -1,0 +1,36 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1190-baseline-docs_test.dart
+00:00 +0: documentation uses token lifecycle contracts and never prints tokens
+00:00 +0 -1: documentation uses token lifecycle contracts and never prints tokens [E]
+  Expected: empty
+    Actual: [
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/architecture/design-decisions.md:687: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/guides/security/blueprints.md:54: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:196: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:197: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:201: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:202: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:206: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:209: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:220: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:334: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:367: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:375: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/core/storage.md:376: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/features/auth/repositories.md:147: token value passed to print',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/common-patterns.md:125: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/common-patterns.md:126: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/common-patterns.md:129: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/common-patterns.md:143: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/common-patterns.md:144: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/common-patterns.md:324: session token operation bypasses ITokenStore',
+              '/Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/baseline-docs/api/examples/api-integration.md:369: token value passed to print'
+            ]
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  .git/codex-issue-work/1190-baseline-docs_test.dart 395:7  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1190-baseline-docs_test.dart: documentation uses token lifecycle contracts and never prints tokens

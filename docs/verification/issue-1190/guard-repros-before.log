@@ -1,0 +1,114 @@
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+│ To update to the latest version, run "flutter upgrade". │
+└─────────────────────────────────────────────────────────┘
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart
+00:00 +0: rejects unsafe example: await secureStorage.setString('token', value);
+00:00 +1: rejects unsafe example: await secureStorage.getString('refresh_token');
+00:00 +2: rejects unsafe example: await secureStorage.remove(StorageKeys.token);
+00:00 +3: rejects unsafe example: await secureStorage.getString(AppConstants.tokenKey);
+00:00 +4: rejects unsafe example: await secureStorage.setString('accessToken', value);
+00:00 +5: rejects unsafe example: await secureStorage.setBool(AppConstants.tokenKey, value: true);
+00:00 +6: rejects unsafe example: await ref.read(secureStorageServiceProvider) .getString(StorageKeys.token);
+00:00 +7: rejects unsafe example: await secureStorage.clear();
+00:00 +8: rejects unsafe example: await secureStorage?.getString('token');
+00:00 +8 -1: rejects unsafe example: await secureStorage?.getString('token'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -1: rejects unsafe example: await secureStorage!.remove('token');
+00:00 +8 -2: rejects unsafe example: await secureStorage!.remove('token'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -2: rejects unsafe example: secureStorage..remove('token');
+00:00 +8 -3: rejects unsafe example: secureStorage..remove('token'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -3: rejects unsafe example: secureStorage?..remove('refresh_token');
+00:00 +8 -4: rejects unsafe example: secureStorage?..remove('refresh_token'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -4: rejects unsafe example: final IKeyValueStore secrets = ref.read(secureStorageServiceProvider); secrets.remove('token');
+00:00 +8 -5: rejects unsafe example: final IKeyValueStore secrets = ref.read(secureStorageServiceProvider); secrets.remove('token'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -5: rejects unsafe example: secureStorage..getString('api_key')..remove('token');
+00:00 +8 -6: rejects unsafe example: secureStorage..getString('api_key')..remove('token'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -6: rejects unsafe example: secureStorage..getString('token')..remove('api_key');
+00:00 +8 -7: rejects unsafe example: secureStorage..getString('token')..remove('api_key'); [E]
+  Expected: non-empty
+    Actual: []
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 156:7    main.<fn>
+  
+00:00 +8 -7: rejects unsafe example: final secret = SecureStorageService(); secret.remove('auth_token');
+00:00 +9 -7: rejects unsafe example: final secret = ref.read(secureStorageServiceProvider); secret.getString('token');
+00:00 +10 -7: rejects unsafe example: SecureStorageService secret; secret.remove(StorageKeys.refreshToken);
+00:00 +11 -7: rejects unsafe example: print('New token: $token');
+00:00 +12 -7: rejects unsafe example: print(newToken);
+00:00 +13 -7: rejects unsafe example: logger.d('Token: $accessToken');
+00:00 +14 -7: rejects unsafe example: print('); Token: $token');
+00:00 +15 -7: rejects unsafe example: debugPrint('Token: ${response.accessToken}');
+00:00 +16 -7: rejects unsafe example: print('result: ' + refreshToken);
+00:00 +17 -7: rejects unsafe example: /// success: (token) => print('New token: $token'),
+00:00 +18 -7: allows safe example: await tokenStore.setAccessToken(accessToken);
+00:00 +19 -7: allows safe example: await tokenStore.getRefreshToken();
+00:00 +20 -7: allows safe example: await authRepository.logout();
+00:00 +21 -7: allows safe example: await secureStorage.getString('api_key');
+00:00 +22 -7: allows safe example: await secureStorage.setString('api_key', apiKey);
+00:00 +23 -7: allows safe example: print('Token refreshed successfully');
+00:00 +24 -7: allows safe example: print('Use print(token) to inspect it');
+00:00 +24 -8: allows safe example: print('Use print(token) to inspect it'); [E]
+  Expected: empty
+    Actual: ['1: token value passed to print']
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/docs/session_token_examples_test.dart 171:7    main.<fn>
+  
+00:00 +24 -8: allows safe example: print(r'Token example: $token');
+00:00 +25 -8: allows safe example: print('Token example: \$token');
+00:00 +26 -8: documentation uses token lifecycle contracts and never prints tokens
+00:00 +27 -8: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: allows safe example: print('Use print(token) to inspect it');
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage!.remove('token');
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: await secureStorage?.getString('token');
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/session_token_examples_test.dart: rejects unsafe example: final IKeyValueStore secrets = ref.read(secureStorageServiceProvider); secrets.remove('token');
+  ... and 4 more

@@ -1,0 +1,11 @@
+{
+  "package": "analyzer",
+  "version": "14.6.0",
+  "archive_sha256": "74c36179c4de542efea24c9dff78324375e4b118a2c1e14e8a7659f457947f8d",
+  "publisher": {
+    "publisherId": "tools.dart.dev"
+  },
+  "version_source": "https://pub.dev/api/packages/analyzer/versions/14.6.0",
+  "publisher_source": "https://pub.dev/api/packages/analyzer/publisher",
+  "change": "transitive -> direct dev; no version/hash/archive change"
+}
