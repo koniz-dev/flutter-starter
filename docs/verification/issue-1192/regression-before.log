@@ -1,0 +1,299 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.10.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+49 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-rules_test.dart: criterion 1: every key rule redacts its realistic key password -> "user_password"
+00:00 +0 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok [E]
+  Expected: 'https://app.example/cb#access_token=***REDACTED***&state=ok'
+    Actual: 'https://app.example/cb#access_token=SECRET&state=ok'
+     Which: is different.
+            Expected: ... ess_token=***REDACTE ...
+              Actual: ... ess_token=SECRET&sta ...
+                                    ^
+             Differ at offset 36
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +1 -1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +1 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +2 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +3 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +4 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +5 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +5 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#id_token=SECRET&state=ok [E]
+  Expected: '/cb#id_token=***REDACTED***&state=ok'
+    Actual: '/cb#id_token=SECRET&state=ok'
+     Which: is different.
+            Expected: ... #id_token=***REDACTE ...
+              Actual: ... #id_token=SECRET&sta ...
+                                    ^
+             Differ at offset 13
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +6 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +7 -2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +7 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +8 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +9 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +10 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +11 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +11 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok [E]
+  Expected: '/cb?token=***REDACTED***#access_token=***REDACTED***&state=ok'
+    Actual: '/cb?token=***REDACTED***#access_token=FRAGMENT_SECRET&state=ok'
+     Which: is different.
+            Expected: ... ess_token=***REDACTE ...
+              Actual: ... ess_token=FRAGMENT_S ...
+                                    ^
+             Differ at offset 38
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +12 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +13 -3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +13 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +14 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +15 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +16 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +17 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +17 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok [E]
+  Expected: '/cb#access%5Ftoken=***REDACTED***&state=ok'
+    Actual: '/cb#access%5Ftoken=SECRET&state=ok'
+     Which: is different.
+            Expected: ... s%5Ftoken=***REDACTE ...
+              Actual: ... s%5Ftoken=SECRET&sta ...
+                                    ^
+             Differ at offset 19
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +18 -4: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +18 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +19 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +20 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +21 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +22 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +23 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +23 -5: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#bad%=SECRET&state=ok [E]
+  Expected: '/cb#bad%=***REDACTED***&state=ok'
+    Actual: '/cb#bad%=SECRET&state=ok'
+     Which: is different.
+            Expected: /cb#bad%=***REDACTE ...
+              Actual: /cb#bad%=SECRET&sta ...
+                               ^
+             Differ at offset 9
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +23 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +24 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +25 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +26 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +27 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +28 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +28 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok [E]
+  Expected: '/cb#access_token=***REDACTED***&state=ok'
+    Actual: '/cb#access_token=SECRET?still_secret&state=ok'
+     Which: is different.
+            Expected: ... ess_token=***REDACTE ...
+              Actual: ... ess_token=SECRET?sti ...
+                                    ^
+             Differ at offset 17
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +29 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +30 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +31 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +32 -6: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +32 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +33 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +34 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +35 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +36 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +36 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#token?public=SECRET&state=ok [E]
+  Expected: '/cb#token?public=***REDACTED***&state=ok'
+    Actual: '/cb#token?public=SECRET&state=ok'
+     Which: is different.
+            Expected: ... en?public=***REDACTE ...
+              Actual: ... en?public=SECRET&sta ...
+                                    ^
+             Differ at offset 17
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +37 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +38 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +39 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +40 -7: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +40 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +41 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +42 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +42 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#ticket=SECRET&state=ok [E]
+  Expected: '/cb#ticket=***REDACTED***&state=ok'
+    Actual: '/cb#ticket=SECRET&state=ok'
+     Which: is different.
+            Expected: ... cb#ticket=***REDACTE ...
+              Actual: ... cb#ticket=SECRET&sta ...
+                                    ^
+             Differ at offset 11
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +43 -8: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +43 -9: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:00 +43 -10: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-rules_test.dart: ticket is redacted in a query but stays readable in a body
+00:00 +43 -10: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok [E]
+  Expected: 'ws://app.example/socket?TiCkEt=***REDACTED***&state=ok'
+    Actual: 'ws://app.example/socket?TiCkEt=SECRET&state=ok'
+     Which: is different.
+            Expected: ... et?TiCkEt=***REDACTE ...
+              Actual: ... et?TiCkEt=SECRET&sta ...
+                                    ^
+             Differ at offset 31
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +43 -11: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-rules_test.dart: ticket is redacted in a query but stays readable in a body
+00:00 +43 -12: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok [E]
+  Expected: '/socket?tic%6Bet=***REDACTED***&state=ok'
+    Actual: '/socket?tic%6Bet=SECRET&state=ok'
+     Which: is different.
+            Expected: ... ?tic%6Bet=***REDACTE ...
+              Actual: ... ?tic%6Bet=SECRET&sta ...
+                                    ^
+             Differ at offset 17
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 47:7  main.<fn>
+  
+00:00 +43 -12: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ordinary fragments and unrelated fields remain readable
+00:00 +43 -13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers [E]
+  Expected: not contains 'FRAGMENT_SECRET'
+    Actual: '\x1B[38;5;196mââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[0m\n'
+              '\x1B[38;5;196mâ Bad state: request (https://app.example.com/cb#access_token=FRAGMENT_SECRET&x=1) failed\x1B[0m\n'
+              '\x1B[38;5;196mââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[0m\n'
+              '\x1B[38;5;196mâ Bad state: request (https://app.example.com/cb#access_token=FRAGMENT_SECRET&x=1) failed\x1B[0m\n'
+              '\x1B[38;5;196mââââââââââââââââââââââââââââââââââ\x1B[38;5;196mâ #2   Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)\x1B[0m\n'
+              '\x1B[38;5;196mâ #3   <asynchronous suspension>\x1B[0m\n'
+              '\x1B[38;5;196mâ #4   Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)\x1B[0m\n'
+              '\x1B[38;5;196mâ #5   <asynchronous suspension>\x1B[0m\n'
+              '\x1B[38;5;196mâ #6   Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)\x1B[0m\n'
+              '\x1B[38;5;196mâ #7   <asynchronous suspension>\x1B[0m\n'
+              '\x1B[38;5;196mâââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[38;5;196mâ #6   Invoker._waitForOutstandingCallbacks.<anonymous closur\x1B[38;5;196mâ â Uncaught platform error\x1B[0m\n'
+              '\x1B[38;5;196mâââââââââââââââââ\x1B[38;5;196mââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ\x1B[0m\n'
+              '\x1B[38;5;196mâ â Uncaught Flutter error | Context: {"library":"Flutter framework","silent":false}\x1B[0m\n'
+              ''
+  
+  package:matcher                                                 expect
+  package:flutter_test/src/widget_tester.dart 473:18              expect
+  .git/codex-issue-work/1192-baseline-reporting_test.dart 103:11  main.<fn>
+  
+00:00 +43 -13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ordinary fragments and unrelated fields remain readable [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 62:5  main.<fn>
+  
+00:00 +43 -13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +43 -13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-rules_test.dart: ticket is redacted in a query but stays readable in a body [E]
+  Expected: {'ticket': '***REDACTED***', 'ticketCount': 2}
+    Actual: {'ticket': 'SECRET', 'ticketCount': 2}
+     Which: at location ['ticket'] is 'SECRET' instead of '***REDACTED***'
+  
+  package:matcher                                            expect
+  package:flutter_test/src/widget_tester.dart 473:18         expect
+  .git/codex-issue-work/1192-baseline-rules_test.dart 210:5  main.<fn>
+  
+00:00 +44 -13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +45 -13: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +45 -14: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ticket-authenticated responses bypass cache and purge older rules [E]
+  Expected: false
+    Actual: <true>
+  never replay old ticket response
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1192-baseline-fragments_test.dart 84:7  main.<fn>
+  
+00:00 +45 -14: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: ordinary fragments and unrelated fields remain readable
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-baseline-fragments_test.dart: redacts credential parameters in /cb#bad%=SECRET&state=ok
+  ... and 10 more

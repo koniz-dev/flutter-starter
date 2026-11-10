@@ -1,0 +1,46 @@
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-review-probes_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-review-probes_test.dart: boundary /cb?ticket=Q#access_token=F
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-review-probes_test.dart: boundary /cb#access_token=F?code=stillF&state=ok
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-review-probes_test.dart: boundary /cb#access_token=F#code=stillF&state=ok
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1192-review-probes_test.dart: boundary /cb#/route?state=ok&ticket=F
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in https://app.example/cb#access_token=SECRET&state=ok
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#id_token=SECRET&state=ok
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb?token=QUERY_SECRET#access_token=FRAGMENT_SECRET&state=ok
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access%5Ftoken=SECRET&state=ok
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#bad%=SECRET&state=ok
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access_token=SECRET?still_secret&state=ok
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#/route?code=SECRET&state=ok
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#token?public=SECRET&state=ok
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#access?token=SECRET&state=ok
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#!/route?code=SECRET&state=ok
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /cb#ticket=SECRET&state=ok
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in ws://app.example/socket?TiCkEt=SECRET&state=ok
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: redacts credential parameters in /socket?tic%6Bet=SECRET&state=ok
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ordinary fragments and unrelated fields remain readable
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_fragment_redaction_test.dart: ticket-authenticated responses bypass cache and purge older rules
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/url_credentials_reporting_test.dart: URL credentials stay absent from reporter, file and chained handlers
+00:01 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: the key rules match their version
+00:01 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: entries cached under an older rule are dropped on the first request
+00:01 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: entries with no recorded rule are dropped too
+00:01 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: a purge that fails runs again on the next request
+Cache legacy purge error: Exception: storage busy
+00:01 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/cache_rule_version_test.dart: the first cached entry records the current rule, and survives a new interceptor
+00:01 +29: All tests passed!
+
+Independent review baseline source checks:
+1192-baseline-api.dart matches f4f5381a5df50f177ec770439e6aad9d4bb1f8e7:lib/core/network/interceptors/api_logging_interceptor.dart with import rewiring only: True
+1192-baseline-cache.dart matches f4f5381a5df50f177ec770439e6aad9d4bb1f8e7:lib/core/network/interceptors/cache_interceptor.dart with import rewiring only: True
+1192-baseline-handlers.dart matches f4f5381a5df50f177ec770439e6aad9d4bb1f8e7:lib/core/logging/uncaught_error_handlers.dart with import rewiring only: True
+
+Independent security/premerge review: PR1205 issue1192, head4f1b3462405.
+Read CLAUDE.md, maintainer process.md premerge/security roles, and issue1192 via gh.
+Inspected full six-file diff, shared sanitizer callers (logging/retry/performance/realtime/config/image paths), cache migration and uncaught handler integration.
+Introduced defects found: none.
+Focused run above: 29 tests passed, including 8 independently added probes covering simultaneous query+fragment credentials, query/hash punctuation inside fragment values, duplicate fields, slash/hashbang router fragments, encoded ticket names, userinfo+query+fragment combination, public anchor preservation and sanitizer idempotence.
+Reviewed counterfactual baseline raw1192-final-baseline.log: 45 pass /14 fail; substantive fragment, ticket classifier, integrated reporting and ticket cache tests fail against old source. Some router-query examples already passed old code and serve regression coverage. Baseline source snapshots match exact PR base after import rewiring as checked above.
+Cache change: version2 invalidates indexed old responses before bypass, ticket is URL-only and bodies remain readable, unchanged cache logic applies decoded top-level query classifier. No fragment-based cache bypass added: HTTP fragments are not transmitted to the backend and this patch does not broaden cache storage.
+Known limits: key-name policy intentionally excludes unkeyed path/fragment secrets and unrecognized keys. Runtime UI/device/live-backend behavior was not tested; no full-suite rerun or tracked modifications made by reviewer.
