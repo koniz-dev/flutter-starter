@@ -11,6 +11,8 @@
 /// persisted rather than on which methods happened to be called.
 library;
 
+import 'dart:async';
+
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 
@@ -86,23 +88,71 @@ class InMemoryStorage implements StorageService {
 
 /// A real [ITokenStore] backed by two fields.
 class InMemoryTokenStore implements ITokenStore {
-  /// The stored access token, for direct assertion.
-  String? accessToken;
+  String? _accessToken;
+  String? _refreshToken;
+  Object _revision = Object();
+  int _pendingMutations = 0;
 
-  /// The stored refresh token, for direct assertion.
-  String? refreshToken;
+  /// The stored access token, for direct assertion/seeding.
+  String? get accessToken => _accessToken;
+  set accessToken(String? value) {
+    _revision = Object();
+    _accessToken = value;
+  }
 
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
+  /// The stored refresh token, for direct assertion/seeding.
+  String? get refreshToken => _refreshToken;
+  set refreshToken(String? value) {
+    _revision = Object();
+    _refreshToken = value;
+  }
 
-  @override
-  Future<void> clearAllTokens() async {
-    accessToken = null;
-    refreshToken = null;
+  /// Subclasses with delayed mutation hooks must track their whole operation.
+  Future<T> trackCredentialMutation<T>(FutureOr<T> Function() operation) {
+    _revision = Object();
+    _pendingMutations++;
+    return Future<T>.sync(operation).whenComplete(() => _pendingMutations--);
   }
 
   @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
+  Object get credentialRevision => _revision;
+
+  @override
+  Future<AccessTokenSnapshot?> getAccessTokenSnapshot() async {
+    if (_pendingMutations != 0) return null;
+    final revision = _revision;
+    final token = await getAccessToken();
+    if (_pendingMutations != 0 || !identical(revision, _revision)) return null;
+    return AccessTokenSnapshot(token: token, revision: revision);
+  }
+
+  @override
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  ) {
+    if (_pendingMutations != 0 || !identical(expected.revision, _revision)) {
+      return Future.value(AccessTokenWriteResult.conflict);
+    }
+    accessToken = token;
+    return Future.value(AccessTokenWriteResult.applied);
+  }
+
+  @override
+  Future<void> clearAccessToken() => trackCredentialMutation(() {
+    _accessToken = null;
+  });
+
+  @override
+  Future<void> clearAllTokens() => trackCredentialMutation(() {
+    _accessToken = null;
+    _refreshToken = null;
+  });
+
+  @override
+  Future<void> clearRefreshToken() => trackCredentialMutation(() {
+    _refreshToken = null;
+  });
 
   @override
   Future<String?> getAccessToken() async => accessToken;
@@ -111,16 +161,16 @@ class InMemoryTokenStore implements ITokenStore {
   Future<String?> getRefreshToken() async => refreshToken;
 
   @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
+  Future<bool> setAccessToken(String token) => trackCredentialMutation(() {
+    _accessToken = token;
     return true;
-  }
+  });
 
   @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
+  Future<bool> setRefreshToken(String token) => trackCredentialMutation(() {
+    _refreshToken = token;
     return true;
-  }
+  });
 }
 
 /// A real [IKeyValueStore] backed by a map.

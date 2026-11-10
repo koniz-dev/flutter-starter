@@ -23,6 +23,8 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../helpers/in_memory_stores.dart';
+
 /// Regression tests: a remote logout that failed short-circuited the
 /// local teardown, so the access token, the long-lived refresh token, and the
 /// cached user all survived a logout the user believed had happened.
@@ -97,40 +99,7 @@ class _InMemoryKeyValueStore implements IKeyValueStore {
   Future<bool> containsKey(String key) async => values.containsKey(key);
 }
 
-class _InMemoryTokenStore implements ITokenStore {
-  String? accessToken;
-  String? refreshToken;
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
-  }
-
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<String?> getRefreshToken() async => refreshToken;
-
-  @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    return true;
-  }
-
-  @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
-
-  @override
-  Future<void> clearAllTokens() async {
-    accessToken = null;
-    refreshToken = null;
-  }
-}
+class _InMemoryTokenStore extends InMemoryTokenStore {}
 
 /// Remote source whose `logout()` always fails, the way an offline device, a
 /// 500, or an adopter who has not implemented `/auth/logout` yet does.

@@ -203,6 +203,34 @@ final refreshToken = await tokenStore.getRefreshToken();
 Do not print token values. For sign-out, use `AuthRepository.logout()`, normally
 through the auth controller or `signOutProvider` in UI code.
 
+### Versioned refresh-result adoption
+
+Custom `ITokenStore` implementations must also implement these operations:
+
+| Member | Contract |
+|---|---|
+| `credentialRevision` | An opaque object shared by all writers over the same backing store. Its identity changes synchronously when any credential write or delete is issued, even if that operation later fails. Writing A, then B, then A must not restore the old revision. |
+| `getAccessTokenSnapshot()` | Returns an `AccessTokenSnapshot` with a token and revision certified after the read, or `null` when concurrent/pending operations make the value uncertain. A non-null snapshot whose `token` is null means the credential is cleared. |
+| `setAccessTokenIfCurrent(snapshot, token)` | Compares the snapshot and reserves mutation order before any await. Returns `AccessTokenWriteResult.applied`, `.conflict`, or `.failed`; platform errors may still throw. Foreign/stale snapshots cannot authorize a write. |
+
+Do not implement conditional adoption as a separate `getAccessToken()` followed
+by `setAccessToken()`: a later rotation can land between them. Every credential
+mutation must participate in the same revision and ordering mechanism, including
+clears, failed attempts and operations that bypass a bounded wait. A later-issued
+write/delete retains precedence when an older platform call lands late.
+
+`SecureTokenStore` shares this state across stores wrapping one
+`SecureStorageService`. Its certified read bounds the platform read and refuses
+uncertain snapshots while writes or repairs are pending. The existing late-write
+repair and failed-repair limitations above still apply; a snapshot does not make
+the underlying platform transaction atomic.
+
+The certification/reservation point selects a credential; it does not lock an
+independent rotation through a network request. Consumers recheck revision
+identity before using a selection and reject or reselect when it changes.
+Session-generation checks and coordinated repository sign-out remain necessary.
+These primitives belong in credential lifecycle code, not UI sign-out actions.
+
 ### Usage Examples
 
 Use the raw secure service only for secrets outside the session lifecycle:

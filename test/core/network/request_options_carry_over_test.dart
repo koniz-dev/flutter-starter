@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/storage/secure_storage_service.dart';
@@ -16,6 +15,8 @@ import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../helpers/in_memory_stores.dart';
 
 class _MockStorageService extends Mock implements StorageService {}
 
@@ -56,38 +57,10 @@ class _RecordingAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
-class _InMemoryTokenStore implements ITokenStore {
-  String? accessToken = 'expired-access-token';
-  String? refreshToken = 'refresh-token';
-
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<void> clearAllTokens() async {
-    accessToken = null;
-    refreshToken = null;
-  }
-
-  @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<String?> getRefreshToken() async => refreshToken;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
-  }
-
-  @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    return true;
+class _InMemoryTokenStore extends InMemoryTokenStore {
+  _InMemoryTokenStore() {
+    accessToken = 'expired-access-token';
+    refreshToken = 'refresh-token';
   }
 }
 

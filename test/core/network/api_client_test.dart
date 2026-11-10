@@ -28,28 +28,7 @@ class MockSecureStorageService extends Mock implements SecureStorageService {}
 /// Signed-out token store: `CacheInterceptor` reads the auth interceptor's
 /// store to decide whether a response may be cached, so the mock has to
 /// expose a real one.
-class StubTokenStore implements ITokenStore {
-  @override
-  Future<void> clearAccessToken() async {}
-
-  @override
-  Future<void> clearAllTokens() async {}
-
-  @override
-  Future<void> clearRefreshToken() async {}
-
-  @override
-  Future<String?> getAccessToken() async => null;
-
-  @override
-  Future<String?> getRefreshToken() async => null;
-
-  @override
-  Future<bool> setAccessToken(String token) async => true;
-
-  @override
-  Future<bool> setRefreshToken(String token) async => true;
-}
+class StubTokenStore extends InMemoryTokenStore {}
 
 class MockAuthInterceptor extends Mock implements AuthInterceptor {
   @override
