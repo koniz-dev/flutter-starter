@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Language selection tolerates widget disposal during preference writes.** Callbacks capture the notifier before awaiting storage and check the owning widget before updating state or navigating. Dialogs that outlive their consumer ignore further selections instead of reading a stale ref.
+
 - **Success snackbar text stays readable in dark themes.** An explicit light inverse-text token gives the green success fill 5.14:1 contrast in both themes. Widget contrast tests cover success and error snackbars in light and dark modes.
 
 - **Nonpositive API_TIMEOUT disables the total request deadline.** Zero and negative values allow requests to proceed while phase timeouts and caller cancellation remain active. Documentation states that the shipped 30-second total/receive budgets need an increased total budget for receive-timeout retries.
