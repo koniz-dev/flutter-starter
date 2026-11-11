@@ -73,7 +73,11 @@ extension ContextExtensions on BuildContext {
   void showSuccessSnackBar(String message, {Duration? duration}) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(
+          message,
+          // The success fill needs light text in both brightness modes.
+          style: const TextStyle(color: AppColors.textInverse),
+        ),
         backgroundColor: AppColors.success,
         duration: duration ?? const Duration(seconds: 3),
       ),

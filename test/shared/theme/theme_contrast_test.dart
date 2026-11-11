@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+import 'package:flutter_starter/shared/extensions/context_extensions.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -424,6 +425,69 @@ void main() {
     verify('dark theme', darkPairs);
     verify('status tokens', statusPairs);
     verify('non-text tokens', nonTextPairs);
+
+    for (final theme in {'light': light, 'dark': dark}.entries) {
+      for (final success in [true, false]) {
+        testWidgets(
+          '${theme.key} ${success ? 'success' : 'error'} snackbar '
+          'text on its fill meets 4.5:1',
+          (tester) async {
+            late BuildContext host;
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: theme.value,
+                home: Scaffold(
+                  body: Builder(
+                    builder: (context) {
+                      host = context;
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+              ),
+            );
+            const message = 'Status message';
+            if (success) {
+              host.showSuccessSnackBar(message);
+            } else {
+              host.showErrorSnackBar(message);
+            }
+            await tester.pumpAndSettle();
+
+            // Read the rendered text's merged style, including the inherited
+            // snackbar default when the extension does not supply a colour.
+            final rendered = tester.widget<RichText>(
+              find.descendant(
+                of: find.text(message),
+                matching: find.byType(RichText),
+              ),
+            );
+            final foreground = rendered.text.style!.color!;
+            final background = tester
+                .widget<SnackBar>(find.byType(SnackBar))
+                .backgroundColor!;
+            final ratio = AccessibilityHelpers.getContrastRatio(
+              foreground,
+              background,
+            );
+            expect(
+              ratio,
+              greaterThanOrEqualTo(
+                AccessibilityConstants.minContrastRatioNormal,
+              ),
+              reason: '$foreground on $background is $ratio:1',
+            );
+            final expected = success
+                ? 5.14
+                : theme.key == 'light'
+                ? 5.61
+                : 6.01;
+            expect(ratio, closeTo(expected, 0.01));
+            await tester.pumpWidget(const SizedBox.shrink());
+          },
+        );
+      }
+    }
 
     // The defect this suite was written for: labelLarge shipped as #FFFFFF in
     // the light TextTheme, 1.05:1 on the #F8F9FA scaffold - invisible.
