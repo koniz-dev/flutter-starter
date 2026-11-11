@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+- **Partially persisting custom refresh callbacks must store the complete credential pair.** A callback that writes only the refresh token and returns an unpersisted access token now cancels without replay or teardown. Persist both access and refresh before returning, or mutate neither and return the access token. Ambiguous ABA states also cancel safely; see the [network callback migration](https://github.com/koniz-dev/flutter-starter/blob/main/docs/api/core/network.md).
+
 - **Custom ITokenStore implementations require versioned adoption methods.** Add credentialRevision, getAccessTokenSnapshot and setAccessTokenIfCurrent with shared mutation revisions and synchronous conditional reservation; an asynchronous get/set fallback is unsafe. See the [storage API migration](https://github.com/koniz-dev/flutter-starter/blob/main/docs/api/core/storage.md#versioned-refresh-result-adoption).
 
 - **Custom auth datasource logout signature changes.** Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
 
 ### Fixed
+
+- **Refresh-result adoption preserves newer credentials.** The interceptor selects certified snapshots, conditionally stores nonpersisting callback results and avoids duplicate repository writes. Conflicts and uncertain reads fail without teardown; a superseded replay 401 cannot clear a newer rotation. Queued requests select fresh current tokens.
 
 - **Token stores support versioned conditional refresh-result adoption.** Certified snapshots reject uncertain reads; conditional writes reserve order before awaiting storage. Superseded platform calls repair known newer state even when a lost acknowledgement reports failure.
 
