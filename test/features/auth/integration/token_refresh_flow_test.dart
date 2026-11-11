@@ -78,6 +78,16 @@ void main() {
     setUp(() {
       mockAuthRepository = createMockAuthRepository();
       mockSecureStorage = createMockSecureStorageService();
+      final values = <String, String>{};
+      when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
+        (call) async => values[call.positionalArguments[0] as String],
+      );
+      when(() => mockSecureStorage.setString(any(), any()))
+          .thenAnswer((call) async {
+            values[call.positionalArguments[0] as String] =
+                call.positionalArguments[1] as String;
+            return true;
+          });
       retryAdapter = _FakeRetryAdapter();
       interceptor = AuthInterceptor(
         secureStorageService: mockSecureStorage,
@@ -103,16 +113,6 @@ void main() {
       when(
         () => mockAuthRepository.refreshToken(),
       ).thenAnswer((_) async => const Success(newAccessToken));
-      final values = <String, String>{};
-      when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
-        (call) async => values[call.positionalArguments[0] as String],
-      );
-      when(() => mockSecureStorage.setString(any(), any()))
-          .thenAnswer((call) async {
-            values[call.positionalArguments[0] as String] =
-                call.positionalArguments[1] as String;
-            return true;
-          });
       when(() => mockSecureStorage.remove(any())).thenAnswer((_) async => true);
 
       // Act

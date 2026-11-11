@@ -614,7 +614,8 @@ its own.
 2. If a refresh is already in flight, the request is queued in
    `_pendingRequests` and this handler returns.
 3. Otherwise the `refreshToken` callback runs.
-   - **Success:** the interceptor selects a certified token-store snapshot.
+   - **Success:** the interceptor compares certified token-store snapshots
+     captured before and after the callback.
      If credentials changed while the callback was running, the stored token
      takes precedence over its returned value. Otherwise a callback that only
      returns a token is persisted through a conditional write. Repository
@@ -629,6 +630,15 @@ its own.
      session. A replay answered **401** logs out only if that selected
      credential and session are still current; a later rotation is preserved.
      Selection does not lock independent rotations through the network call.
+     A mutation that leaves the starting access token in place while returning
+     a different candidate is ambiguous (refresh-only persistence or an ABA
+     rotation); the request is cancelled without replay or teardown.
+
+     **Custom callback migration:** either persist the complete rotated
+     credential pair before returning, as `AuthRepositoryImpl` does, or return
+     the access token without mutating the token store. A callback that writes
+     only the refresh token must persist its matching access token too;
+     the interceptor cannot safely infer ownership of a partial mutation.
    - **Failure:** the refresh-failure policy below applies. Session-generation
      checks prevent a callback belonging to an ended session from clearing a
      newer sign-in.

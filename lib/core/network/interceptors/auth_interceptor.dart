@@ -490,7 +490,19 @@ class AuthInterceptor extends Interceptor {
     final generation = _sessionGeneration.current;
 
     try {
-      final revisionBeforeRefresh = _tokenStore.credentialRevision;
+      final AccessTokenSnapshot? beforeRefresh;
+      try {
+        beforeRefresh = await _tokenStore.getAccessTokenSnapshot();
+      } on Object catch (error) {
+        _reject(handler, _asDioException(err, error));
+        return;
+      }
+      if (!_sessionGeneration.isCurrent(generation) ||
+          beforeRefresh == null ||
+          !identical(beforeRefresh.revision, _tokenStore.credentialRevision)) {
+        _reject(handler, _selectionChanged(err));
+        return;
+      }
       final result = await _refreshToken();
 
       if (!_sessionGeneration.isCurrent(generation)) {
@@ -539,7 +551,7 @@ class AuthInterceptor extends Interceptor {
       try {
         selected = await _selectRefreshResult(
           newToken,
-          revisionBeforeRefresh,
+          beforeRefresh,
           generation,
         );
       } on Object catch (error) {
@@ -610,7 +622,7 @@ class AuthInterceptor extends Interceptor {
 
   Future<AccessTokenSnapshot?> _selectRefreshResult(
     String candidate,
-    Object revisionBeforeRefresh,
+    AccessTokenSnapshot beforeRefresh,
     int generation,
   ) async {
     final current = await _tokenStore.getAccessTokenSnapshot();
@@ -621,7 +633,13 @@ class AuthInterceptor extends Interceptor {
     }
     // Repository callbacks persist themselves. A delayed result cannot own
     // a write after any newer credential mutation, even an ABA rotation.
-    if (!identical(revisionBeforeRefresh, current.revision)) {
+    if (!identical(beforeRefresh.revision, current.revision)) {
+      // A refresh-only write by a custom callback is indistinguishable from
+      // an ABA rotation here. Neither the old access token nor the returned
+      // candidate can safely be associated with the stored refresh token.
+      if (current.token == beforeRefresh.token && current.token != candidate) {
+        return null;
+      }
       return _usableCurrentSnapshot(current) ? current : null;
     }
     if (candidate.isEmpty) return null;

@@ -325,16 +325,17 @@ void main() {
     expect((await repository.refreshToken()).isSuccess, isTrue);
     expect(tokens.accessToken, 'A1');
     release.complete();
-    expect(await _within(pending), isA<Response<dynamic>>());
+    expect(await _within(pending), isA<DioException>());
     expect(tokens.writes, ['A2', 'A1']);
     expect(tokens.refreshToken, 'R3');
-    expect(replay.bearers, ['Bearer A1']);
+    expect(replay.bearers, isEmpty);
+    expect(tokens.clears, 0);
   });
 
   test(
     'a stale held snapshot read never replays or deletes a newer rotation',
     () async {
-      tokens.holdRead = 2;
+      tokens.holdRead = 3;
       final pair = client(repository.refreshToken);
       final pending = _settle(pair.dio.get<dynamic>('/profile'));
       await _within(tokens.readEntered.future);
@@ -352,7 +353,7 @@ void main() {
   );
 
   test('a new session during snapshot selection is untouched', () async {
-    tokens.holdRead = 2;
+    tokens.holdRead = 3;
     final pair = client(() async => const Success('A2'));
     final pending = _settle(pair.dio.get<dynamic>('/profile'));
     await _within(tokens.readEntered.future);
@@ -370,12 +371,14 @@ void main() {
   test(
     'a revision changed after certification is rechecked before dispatch',
     () async {
-      tokens.afterSnapshot = () {
-        tokens
-          ..accessToken = 'external'
-          ..refreshToken = 'external-refresh';
-      };
-      final pair = client(() async => const Success('A2'));
+      final pair = client(() async {
+        tokens.afterSnapshot = () {
+          tokens
+            ..accessToken = 'external'
+            ..refreshToken = 'external-refresh';
+        };
+        return const Success('A2');
+      });
       expect(
         await _within(_settle(pair.dio.get<dynamic>('/profile'))),
         isA<DioException>(),
@@ -476,7 +479,7 @@ void main() {
       when(() => service.getStringOrThrow(any())).thenAnswer((call) async {
         final key = call.positionalArguments[0] as String;
         final captured = values[key];
-        if (key == AppConstants.tokenKey && ++accessReads == 2) {
+        if (key == AppConstants.tokenKey && ++accessReads == 3) {
           readEntered.complete();
           await releaseRead.future;
         }
@@ -520,4 +523,51 @@ void main() {
       expect((await store.getAccessTokenSnapshot())?.token, 'A3');
     },
   );
+  test(
+    'partial callback persistence is rejected without clearing its credentials',
+    () async {
+      final pair = client(() async {
+        await tokens.setRefreshToken('R2');
+        return const Success('A2');
+      });
+      final outcome = await _within(_settle(pair.dio.get<dynamic>('/profile')));
+      expect(outcome, isA<DioException>());
+      expect((outcome as DioException).type, DioExceptionType.cancel);
+      expect(tokens.accessToken, 'A1');
+      expect(tokens.refreshToken, 'R2');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+      expect(tokens.writes, isEmpty);
+    },
+  );
+  for (final throws in [false, true]) {
+    test(
+      'an ${throws ? 'error' : 'uncertain read'} before refresh preserves credentials',
+      () async {
+        var callbackCalled = false;
+        if (throws) {
+          tokens.snapshotError = StateError('read failed');
+        } else {
+          tokens.afterSnapshot = () {
+            tokens
+              ..accessToken = 'external'
+              ..refreshToken = 'external-refresh';
+          };
+        }
+        final pair = client(() async {
+          callbackCalled = true;
+          return const Success('A2');
+        });
+        expect(
+          await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+          isA<DioException>(),
+        );
+        expect(callbackCalled, isFalse);
+        expect(tokens.accessToken, throws ? 'A1' : 'external');
+        expect(tokens.refreshToken, throws ? 'R1' : 'external-refresh');
+        expect(tokens.clears, 0);
+        expect(replay.bearers, isEmpty);
+      },
+    );
+  }
 }

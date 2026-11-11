@@ -89,7 +89,7 @@ void main() {
     sink = _CountingSink();
   });
 
-  ApiClient client(_Adapter adapter) {
+  ApiClient client(_Adapter adapter, {void Function()? beforeRefresh}) {
     late final AuthRepositoryImpl repository;
     final apiClient = ApiClient(
       storageService: InMemoryStorage(),
@@ -97,7 +97,10 @@ void main() {
       authInterceptor: AuthInterceptor(
         tokenStore: tokens,
         sessionSink: sink,
-        refreshToken: () => repository.refreshToken(),
+        refreshToken: () {
+          beforeRefresh?.call();
+          return repository.refreshToken();
+        },
       ),
     )..dio.httpClientAdapter = adapter;
     repository = AuthRepositoryImpl(
@@ -126,11 +129,11 @@ void main() {
   });
 
   test('a failed read on the refresh call ends the session', () async {
-    // The 401 starts a refresh; the refresh call's token read then fails.
-    final adapter = _Adapter((_) => tokens.failReads = true);
+    // The starting snapshot succeeds; only the refresh call token read fails.
+    final adapter = _Adapter((_) {});
 
     await expectLater(
-      client(adapter).get('/me'),
+      client(adapter, beforeRefresh: () => tokens.failReads = true).get('/me'),
       throwsA(
         isA<ServerException>().having((e) => e.statusCode, 'status', 401),
       ),
