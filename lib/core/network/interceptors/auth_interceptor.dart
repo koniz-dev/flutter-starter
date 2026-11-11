@@ -102,9 +102,8 @@ class AuthInterceptor extends Interceptor {
   /// reason in the other direction.
   ///
   /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
-  /// production: two of the three credential writes behind one refresh happen
-  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
-  /// would leave those two unguarded.
+  /// production: repository refreshes persist their own credentials, and a
+  /// per-instance counter would leave those writes unguarded.
   ///
   /// Optional for the same reason [_keyValueStore] and [_sessionSink] are:
   /// hand-built call sites keep compiling. A standalone interceptor still
@@ -484,13 +483,26 @@ class AuthInterceptor extends Interceptor {
 
     // Start token refresh
     _isRefreshing = true;
-    String? refreshedToken;
+    AccessTokenSnapshot? refreshedSnapshot;
 
     // Read before the round trip, checked after it: anything that ends the
     // session in between makes this value stale for good.
     final generation = _sessionGeneration.current;
 
     try {
+      final AccessTokenSnapshot? beforeRefresh;
+      try {
+        beforeRefresh = await _tokenStore.getAccessTokenSnapshot();
+      } on Object catch (error) {
+        _reject(handler, _asDioException(err, error));
+        return;
+      }
+      if (!_sessionGeneration.isCurrent(generation) ||
+          beforeRefresh == null ||
+          !identical(beforeRefresh.revision, _tokenStore.credentialRevision)) {
+        _reject(handler, _selectionChanged(err));
+        return;
+      }
       final result = await _refreshToken();
 
       if (!_sessionGeneration.isCurrent(generation)) {
@@ -505,7 +517,7 @@ class AuthInterceptor extends Interceptor {
         // clear a session that started after this refresh did - the exact
         // damage the guard exists to prevent, inflicted from the other side.
         //
-        // refreshedToken stays null, so the `finally` drain rejects every
+        // refreshedSnapshot stays null, so the `finally` drain rejects every
         // queued request rather than replaying it with a dead token.
         _reject(handler, err);
         return;
@@ -522,7 +534,7 @@ class AuthInterceptor extends Interceptor {
         // the session is still good, so nothing is torn down and nothing is
         // replayed. The caller fails with the refresh failure as the cause
         // rather than with this 401, whose "please login again" would be
-        // false. refreshedToken stays null,
+        // false. refreshedSnapshot stays null,
         // so the `finally` drain rejects every queued request too.
         _reject(handler, _refreshFailedTransiently(err, failure));
         return;
@@ -535,11 +547,26 @@ class AuthInterceptor extends Interceptor {
         return;
       }
 
-      // Update token in secure storage
-      await _tokenStore.setAccessToken(newToken);
+      final AccessTokenSnapshot? selected;
+      try {
+        selected = await _selectRefreshResult(
+          newToken,
+          beforeRefresh,
+          generation,
+        );
+      } on Object catch (error) {
+        // The callback succeeded. A selection/persistence failure must not
+        // clear credentials another rotation may have installed meanwhile.
+        _reject(handler, _asDioException(err, error));
+        return;
+      }
+      if (selected == null) {
+        _reject(handler, _selectionChanged(err));
+        return;
+      }
 
-      // Checked again because the write above is a platform call: a logout or
-      // sign-in landing while it was pending makes the replay belong to a
+      // Checked again because selection/persistence may await the platform:
+      // a logout or sign-in landing meanwhile makes the replay belong to a
       // session that has ended, and sending it would put the fresh token on
       // the wire after the user signed out.
       // Same exit as the check above, for the same reasons: no replay, no
@@ -548,7 +575,7 @@ class AuthInterceptor extends Interceptor {
         _reject(handler, err);
         return;
       }
-      refreshedToken = newToken;
+      refreshedSnapshot = selected;
 
       // Retry original request with new token.
       //
@@ -557,14 +584,23 @@ class AuthInterceptor extends Interceptor {
       // timeout) fails this one request and nothing else: the session stays,
       // and the `finally` drain still replays the queued requests.
       //
-      // A replay answered 401 is the one exception: the server refused a token
-      // it just issued, so the session really is unusable.
+      // A 401 ends the session only while the selected credential is still
+      // current. An older bearer being refused must not clear a later rotation.
       try {
-        final retryResponse = await _retryRequest(err, newToken);
+        // Selection linearizes here; independent rotations after dispatch
+        // may still make this request's bearer obsolete.
+        if (!_usableCurrentSnapshot(selected)) {
+          _reject(handler, _selectionChanged(err));
+          return;
+        }
+        final retryResponse = await _retryRequest(err, selected.token!);
         handler.resolve(retryResponse);
       } on Object catch (e) {
-        if (e is DioException && e.response?.statusCode == 401) {
-          refreshedToken = null;
+        if (e is DioException &&
+            e.response?.statusCode == 401 &&
+            _sessionGeneration.isCurrent(generation) &&
+            _usableCurrentSnapshot(selected)) {
+          refreshedSnapshot = null;
           await _logoutUser();
         }
         _reject(handler, _asDioException(err, e));
@@ -573,16 +609,73 @@ class AuthInterceptor extends Interceptor {
     // Catches Error as well as Exception on purpose: a TypeError from a
     // malformed refresh response must not leave _isRefreshing stuck true.
     on Object catch (e) {
-      refreshedToken = null;
-      await _logoutUser();
+      refreshedSnapshot = null;
+      if (_sessionGeneration.isCurrent(generation)) await _logoutUser();
       _reject(handler, _asDioException(err, e));
     } finally {
       // Reset before draining: a 401 arriving during the drain must be able
       // to start a fresh refresh rather than queue behind a finished one.
       _isRefreshing = false;
-      await _drainPendingRequests(refreshedToken, generation);
+      await _drainPendingRequests(refreshedSnapshot, generation);
     }
   }
+
+  Future<AccessTokenSnapshot?> _selectRefreshResult(
+    String candidate,
+    AccessTokenSnapshot beforeRefresh,
+    int generation,
+  ) async {
+    final current = await _tokenStore.getAccessTokenSnapshot();
+    if (!_sessionGeneration.isCurrent(generation) ||
+        current == null ||
+        !identical(current.revision, _tokenStore.credentialRevision)) {
+      return null;
+    }
+    // Repository callbacks persist themselves. A delayed result cannot own
+    // a write after any newer credential mutation, even an ABA rotation.
+    if (!identical(beforeRefresh.revision, current.revision)) {
+      // A refresh-only write by a custom callback is indistinguishable from
+      // an ABA rotation here. Neither the old access token nor the returned
+      // candidate can safely be associated with the stored refresh token.
+      if (current.token == beforeRefresh.token && current.token != candidate) {
+        return null;
+      }
+      return _usableCurrentSnapshot(current) ? current : null;
+    }
+    if (candidate.isEmpty) return null;
+    if (current.token == candidate) return current;
+    final outcome = await _tokenStore.setAccessTokenIfCurrent(
+      current,
+      candidate,
+    );
+    if (!_sessionGeneration.isCurrent(generation)) return null;
+    if (outcome == AccessTokenWriteResult.failed) {
+      throw const CacheException(
+        'Could not persist the refreshed access token.',
+      );
+    }
+    if (outcome == AccessTokenWriteResult.conflict) return null;
+    final updated = await _tokenStore.getAccessTokenSnapshot();
+    return _sessionGeneration.isCurrent(generation) &&
+            _usableCurrentSnapshot(updated)
+        ? updated
+        : null;
+  }
+
+  bool _usableCurrentSnapshot(AccessTokenSnapshot? snapshot) {
+    final token = snapshot?.token;
+    return snapshot != null &&
+        token != null &&
+        token.isNotEmpty &&
+        identical(snapshot.revision, _tokenStore.credentialRevision);
+  }
+
+  DioException _selectionChanged(DioException original) => DioException(
+    requestOptions: original.requestOptions,
+    response: original.response,
+    type: DioExceptionType.cancel,
+    message: 'Credentials changed while selecting the refresh result.',
+  );
 
   /// Fails the request with [error] **without ending the error chain**.
   ///
@@ -728,8 +821,8 @@ class AuthInterceptor extends Interceptor {
 
   /// Completes every queued request.
   ///
-  /// With a [newToken] each one is replayed and resolved (or rejected if the
-  /// replay fails). Without one the refresh failed, so each queued handler is
+  /// After a successful selection, each request selects a fresh certified
+  /// token before replay. Without one the refresh failed, so each handler is
   /// rejected with its own original error - never left dangling.
   ///
   /// [generation] is the session the refresh was started under. A queued
@@ -742,7 +835,10 @@ class AuthInterceptor extends Interceptor {
   /// The check is inside the loop rather than above it because each replay is
   /// awaited: a logout landing part-way through the drain must stop the
   /// remaining replays too, not only the ones not yet started.
-  Future<void> _drainPendingRequests(String? newToken, int generation) async {
+  Future<void> _drainPendingRequests(
+    AccessTokenSnapshot? refreshedSnapshot,
+    int generation,
+  ) async {
     if (_pendingRequests.isEmpty) {
       return;
     }
@@ -754,7 +850,7 @@ class AuthInterceptor extends Interceptor {
       // The last check covers a request that queued under an older session
       // than the refresh's, which onError already turns away; kept here so the
       // drain never replays one as the newer user whatever path queued it.
-      if (newToken == null ||
+      if (refreshedSnapshot == null ||
           !_sessionGeneration.isCurrent(generation) ||
           !_issuedUnderCurrentSession(pending.error.requestOptions)) {
         _reject(pending.handler, pending.error);
@@ -762,7 +858,16 @@ class AuthInterceptor extends Interceptor {
       }
 
       try {
-        final retryResponse = await _retryRequest(pending.error, newToken);
+        final current = await _tokenStore.getAccessTokenSnapshot();
+        if (!_sessionGeneration.isCurrent(generation) ||
+            !_usableCurrentSnapshot(current)) {
+          _reject(pending.handler, _selectionChanged(pending.error));
+          continue;
+        }
+        final retryResponse = await _retryRequest(
+          pending.error,
+          current!.token!,
+        );
         pending.handler.resolve(retryResponse);
       } on Object catch (e) {
         // If retry fails, reject the pending request

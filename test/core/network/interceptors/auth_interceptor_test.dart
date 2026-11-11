@@ -60,6 +60,7 @@ void main() {
     late MockSecureStorageService mockSecureStorage;
     late MockAuthRepository mockAuthRepository;
     late FakeRetryAdapter retryAdapter;
+    late Map<String, String> storedValues;
 
     setUpAll(() {
       registerFallbackValue(FakeDioException());
@@ -68,6 +69,16 @@ void main() {
 
     setUp(() {
       mockSecureStorage = MockSecureStorageService();
+      storedValues = <String, String>{};
+      when(() => mockSecureStorage.getStringOrThrow(any())).thenAnswer(
+        (call) async => storedValues[call.positionalArguments[0] as String],
+      );
+      when(() => mockSecureStorage.setString(any(), any()))
+          .thenAnswer((call) async {
+            storedValues[call.positionalArguments[0] as String] =
+                call.positionalArguments[1] as String;
+            return true;
+          });
       mockAuthRepository = MockAuthRepository();
       retryAdapter = FakeRetryAdapter();
       interceptor = AuthInterceptor(
@@ -158,9 +169,6 @@ void main() {
           when(
             () => mockAuthRepository.refreshToken(),
           ).thenAnswer((_) async => const Success(newToken));
-          when(
-            () => mockSecureStorage.setString(AppConstants.tokenKey, newToken),
-          ).thenAnswer((_) async => true);
           // Mock remove calls in case retry fails and logout is triggered
           when(
             () => mockSecureStorage.remove(AppConstants.tokenKey),
@@ -258,9 +266,6 @@ void main() {
         when(
           () => mockAuthRepository.refreshToken(),
         ).thenAnswer((_) async => const Success(newToken));
-        when(
-          () => mockSecureStorage.setString(AppConstants.tokenKey, newToken),
-        ).thenAnswer((_) async => true);
         // Mock remove calls in case retry fails
         when(
           () => mockSecureStorage.remove(AppConstants.tokenKey),
