@@ -1,0 +1,254 @@
+Independent premerge read-only review issue1212 PR1223
+Base 2bb83a14904b18abf2b1a969da512ff3f6daebb3 head 4cfef73c5e571cc51d78b07f4ca81cbe8f0e3d06
+Read ../flutter-starter-maintainers/process.md premerge process and CLAUDE.md.
+Commands already inspected: git diff BASE HEAD; cat repository impl, manager, local datasource, provider graph, local definitions, EnvConfig; rg getLocalOverride/getAllLocalOverrides lib; sed AppConfig debug getter.
+Probe source retained at .git/codex-issue-work/1212-review_test.dart.
+Command: flutter test --no-pub .git/codex-issue-work/1212-review_test.dart --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1212-review_test.dart
+00:00 +0: production explicit=null real persisted overrides across every caller
+00:00 +1: production explicit=true real persisted overrides across every caller
+00:00 +2: production explicit=false real persisted overrides across every caller
+00:00 +3: staging explicit=null real persisted overrides across every caller
+00:00 +4: staging explicit=true real persisted overrides across every caller
+00:00 +5: staging explicit=false real persisted overrides across every caller
+00:00 +6: development explicit=null real persisted overrides across every caller
+00:00 +7: development explicit=true real persisted overrides across every caller
+00:00 +8: development explicit=false real persisted overrides across every caller
+00:00 +9: All tests passed!
+diff --git a/docs/README.md b/docs/README.md
+index aba87a5276d..c8708aee32e 100644
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -160,4 +160,4 @@ lib/
+ ```
+ 
+ `lib/features/tasks/` is a sample slice (local CRUD) and the template's worked example of a complete feature. <!-- strip:tasks line -->
+-`lib/features/feature_flags/` is a sample slice (flags with local overrides and a debug-only override screen). <!-- strip:feature-flags line -->
++`lib/features/feature_flags/` is a sample slice (flags with local overrides when debug features are enabled, and a debug-only override screen). <!-- strip:feature-flags line -->
+diff --git a/docs/guides/configuration.md b/docs/guides/configuration.md
+index 5fd52abcea5..c69ef2566aa 100644
+--- a/docs/guides/configuration.md
++++ b/docs/guides/configuration.md
+@@ -282,7 +282,11 @@ cannot fire.
+ 
+ What does decide a local flag, highest first:
+ 
+-1. A local override, written by the feature-flags debug screen.
++1. A local override, written by the feature-flags debug screen, only while
++   `AppConfig.enableDebugFeatures` is true. Debug features default to off in
++   staging/production; `ENABLE_DEBUG_FEATURES` can explicitly opt in or out.
++   Stored overrides are ignored without being read when debug features are off,
++   across every repository read.
+ 2. The remote source, if you replace the shipped no-op one.
+ 3. The definition's `debugDefault` or `releaseDefault` for the current build
+    mode.
+@@ -293,9 +297,9 @@ What does decide a local flag, highest first:
+ The async `isFeatureEnabledProvider`, `featureFlagProvider` and
+ `allFeatureFlagsProvider` initialize the remote source automatically. The
+ shipped repository bounds initialization and refresh to ten seconds. On failure
+-or timeout, reads skip the unavailable remote and retain local overrides,
+-local definitions and key defaults. Refresh retries initialization after a
+-failure. A timed-out SDK operation cannot re-enable remote reads later. While
++or timeout, reads skip the unavailable remote and retain local definitions and
++key defaults, plus local overrides only when debug features are enabled. Refresh
++retries initialization after a failure. A timed-out SDK operation cannot re-enable remote reads later. While
+ that operation is still pending, refresh returns local fallback without starting
+ an overlapping SDK activation; retry initialization once it settles.
+ 
+diff --git a/lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart b/lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart
+index f8784220bbe..feb1334a9f5 100644
+--- a/lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart
++++ b/lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart
+@@ -1,5 +1,6 @@
+ import 'dart:async';
+ 
++import 'package:flutter_starter/core/config/app_config.dart';
+ import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+@@ -99,8 +100,10 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
+   @override
+   Future<Result<FeatureFlag>> getFlag(String key) async {
+     try {
+-      // Priority 1: Local override (highest priority)
+-      final localOverride = await localDataSource.getLocalOverride(key);
++      // Priority 1: Local override, while debug features are enabled.
++      final localOverride = AppConfig.enableDebugFeatures
++          ? await localDataSource.getLocalOverride(key)
++          : null;
+       if (localOverride != null) {
+         return Success(
+           FeatureFlag(
+@@ -177,8 +180,10 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
+     try {
+       final flags = <String, FeatureFlag>{};
+ 
+-      // Get local overrides
+-      final localOverrides = await localDataSource.getAllLocalOverrides();
++      // Read persisted overrides only when debug features are enabled.
++      final localOverrides = AppConfig.enableDebugFeatures
++          ? await localDataSource.getAllLocalOverrides()
++          : const <String, bool>{};
+       for (final entry in localOverrides.entries) {
+         flags[entry.key] = FeatureFlag(
+           key: entry.key,
+diff --git a/lib/features/feature_flags/domain/repositories/feature_flags_repository.dart b/lib/features/feature_flags/domain/repositories/feature_flags_repository.dart
+index 38279b47c44..225b3c57ca9 100644
+--- a/lib/features/feature_flags/domain/repositories/feature_flags_repository.dart
++++ b/lib/features/feature_flags/domain/repositories/feature_flags_repository.dart
+@@ -8,8 +8,8 @@ abstract class FeatureFlagsRepository {
+   /// Get a feature flag by key
+   ///
+   /// Returns the feature flag value from the highest priority source.
+-  /// Priority order: local override > remote config > build mode >
+-  /// compile-time
++  /// Priority order: local override (when debug features are enabled) >
++  /// remote config > build mode > compile-time.
+   Future<Result<FeatureFlag>> getFlag(String key);
+ 
+   /// Get multiple feature flags by keys
+@@ -27,7 +27,8 @@ abstract class FeatureFlagsRepository {
+ 
+   /// Set a local override for a feature flag
+   ///
+-  /// This allows overriding remote and local flags for testing purposes.
++  /// This stores an override for testing. Reads honor it only while debug
++  /// features are enabled.
+   Future<Result<void>> setLocalOverride(String key, {required bool value});
+ 
+   /// Clear a local override for a feature flag
+diff --git a/test/features/feature_flags/data/repositories/feature_flags_override_policy_test.dart b/test/features/feature_flags/data/repositories/feature_flags_override_policy_test.dart
+new file mode 100644
+index 00000000000..022bb3f594a
+--- /dev/null
++++ b/test/features/feature_flags/data/repositories/feature_flags_override_policy_test.dart
+@@ -0,0 +1,92 @@
++import 'dart:convert';
++import 'dart:typed_data';
++
++import 'package:flutter/services.dart';
++import 'package:flutter_starter/core/config/app_config.dart';
++import 'package:flutter_starter/core/config/env_config.dart';
++import 'package:flutter_starter/core/utils/result.dart';
++import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_local_datasource.dart';
++import 'package:flutter_starter/features/feature_flags/data/datasources/feature_flags_remote_datasource.dart';
++import 'package:flutter_starter/features/feature_flags/data/repositories/feature_flags_repository_impl.dart';
++import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:mocktail/mocktail.dart';
++
++class _Remote extends Mock implements FeatureFlagsRemoteDataSource {}
++
++class _Local extends Mock implements FeatureFlagsLocalDataSource {}
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++  var loads = 0;
++  Future<void> loadPolicy({required bool enabled}) async {
++    final fileName = 'override_policy_${loads++}';
++    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
++        .setMockMessageHandler('flutter/assets', (message) async {
++          if (utf8.decode(message!.buffer.asUint8List()) != fileName) {
++            return null;
++          }
++          final bytes = Uint8List.fromList(
++            utf8.encode(
++              'ENVIRONMENT=production\nENABLE_DEBUG_FEATURES=$enabled\n',
++            ),
++          );
++          return ByteData.view(bytes.buffer);
++        });
++    await EnvConfig.load(fileName: fileName);
++    expect(AppConfig.enableDebugFeatures, enabled);
++  }
++
++  tearDown(() {
++    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
++        .setMockMessageHandler('flutter/assets', null);
++  });
++
++  for (final enabled in [false, true]) {
++    for (final method in ['getFlag', 'getFlags', 'getAllFlags']) {
++      test('$method respects debug features enabled=$enabled', () async {
++        await loadPolicy(enabled: enabled);
++        const key = 'remote_kill_switch';
++        final local = _Local();
++        final remote = _Remote();
++        when(() => local.getLocalOverride(key)).thenAnswer((_) async => true);
++        when(local.getAllLocalOverrides).thenAnswer(
++          (_) async => {key: true},
++        );
++        when(() => remote.getRemoteFlag(key)).thenAnswer((_) async => false);
++        when(remote.getAllRemoteFlags).thenAnswer(
++          (_) async => {key: false},
++        );
++        final repository = FeatureFlagsRepositoryImpl(
++          remoteDataSource: remote,
++          localDataSource: local,
++        );
++
++        final flag = switch (method) {
++          'getFlag' => (await repository.getFlag(key)).dataOrNull,
++          'getFlags' => (await repository.getFlags([key])).dataOrNull?[key],
++          _ => (await repository.getAllFlags()).dataOrNull?[key],
++        };
++
++        expect(flag, isNotNull);
++        expect(flag!.value, enabled);
++        expect(
++          flag.source,
++          enabled
++              ? FeatureFlagSource.localOverride
++              : FeatureFlagSource.remoteConfig,
++        );
++        if (enabled) {
++          if (method == 'getAllFlags') {
++            verify(local.getAllLocalOverrides).called(1);
++          } else {
++            verify(() => local.getLocalOverride(key)).called(1);
++          }
++        } else {
++          verifyNever(() => local.getLocalOverride(any()));
++          verifyNever(local.getAllLocalOverrides);
++        }
++      });
++    }
++  }
++}
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:10:  Future<bool?> getLocalOverride(String key);
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:22:  Future<Map<String, bool>> getAllLocalOverrides();
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:57:  Future<bool?> getLocalOverride(String key) async {
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:88:  Future<Map<String, bool>> getAllLocalOverrides() async {
+lib/features/feature_flags/data/datasources/feature_flags_local_datasource.dart:94:      final value = await getLocalOverride(key);
+lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart:105:          ? await localDataSource.getLocalOverride(key)
+lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart:185:          ? await localDataSource.getAllLocalOverrides()
+  /// Enable debug features (e.g., debug menu, verbose logging)
+  ///
+  /// Default: `true` in development, `false` otherwise
+  ///
+  /// Can be overridden via .env: `ENABLE_DEBUG_FEATURES=false`
+  static bool get enableDebugFeatures {
+    if (EnvConfig.has('ENABLE_DEBUG_FEATURES')) {
+      return EnvConfig.getBool('ENABLE_DEBUG_FEATURES');
+    }
+    return isDevelopment;
+  }
+
+  // ==========================================================================
+
+Independent findings: no actionable defects in five-file change.
+Adjacent paths reviewed: getFlags delegates getFlag; repository isEnabled and manager single/batch access delegate gated reads; asynchronous providers initialize then call manager/repository. Local storage datasource unchanged. No local-override read bypass found in lib by rg. AppConfig defaults isDevelopment, explicit enable flag uses EnvConfig and literal DartDefines table. Route gate follows same AppConfig policy.
+Probe exit code: 0. Nine host-VM combinations passed with actual FeatureFlagsLocalDataSourceImpl and an instrumented IKeyValueStore. Existing persisted entries survived unchanged. Production/staging default off and explicit off skipped every storage read; explicit opt-in and development defaults retained override priority. Unknown override-only keys disappear when disabled; local defined flag fallback still resolves.
+Limitations: Host VM probes; no native/browser/AOT/backend claims. No duplicate full suite. gh api repos/koniz-dev/flutter-starter/issues/1212 --jq '{title,body}' failed: TCP 20.205.243.168:443 timeout. Issue criteria access pending parent context. No tracked files edited, no commits or issue writes.
+
+Issue read completed: cat /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1212-issue.md (parent supplied exact original/current body after failed network retrieval).
+Promoted from P3 audit bundle #1193. Original findings:
+
+`lib/features/feature_flags/data/repositories/feature_flags_repository_impl.dart:100-113`: local overrides (`feature_flag_override_<key>` in plain prefs) are honoured in release, although only a debug-only screen writes them, so an edited prefs file can flip a server kill switch (reproduced: remote false, override wins with `source: localOverride`). Criterion: overrides are read only while `AppConfig.enableDebugFeatures` holds, or the docs say release honours them on purpose; a test with debug features off sees the remote value.
+
+## Acceptance criteria
+
+- overrides are read only while `AppConfig.enableDebugFeatures` holds, or the docs say release honours them on purpose; a test with debug features off sees the remote value.
+- Required host checks and applicable workflow dispatches pass; evidence names each criterion. Parent #1193 is checked only after this issue closes.
+
+Review conclusion after criteria read: no actionable findings. Read policy criterion independently covered. Required broad checks/CI and final committed evidence are parent gate work, not asserted here.
