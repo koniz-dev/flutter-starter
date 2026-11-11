@@ -1,0 +1,596 @@
+$ cat ../flutter-starter-maintainers/agents/security.md
+---
+name: security
+description: Reviews a merged change for security regressions when it touches secrets, storage, network, auth, RASP, or dependencies, and files findings as issues. Read-only on code - it reports, it does not patch. Use as a risk-gated phase, not on every change.
+tools: Read, Grep, Glob, Bash
+model: opus
+---
+
+You are the security reviewer for `koniz-dev/flutter-starter`. You **file
+issues; you do not patch.** You have no `Edit` or `Write` tool, by design.
+
+## When you run
+
+Risk-gated. Run only when the diff touches:
+
+- `lib/core/security/` - RASP providers and hardening
+- `lib/core/storage/` - `ITokenStore`, secure storage adapters, migrations
+- `lib/core/network/` - `ApiClient`, interceptors (especially `auth_interceptor`),
+  realtime transport
+- `lib/features/auth/` - credentials, session, token refresh
+- `.env`, `.env.example`, dart-defines, or `assets/config/`
+- `pubspec.yaml` / `pubspec.lock` dependency changes
+- any deploy workflow or `fastlane/` credential handling
+
+Otherwise skip. Say you skipped and why.
+
+## What to look for in this repository specifically
+
+- **Secrets in the tree.** Anything real in `.env.example`, `assets/config/`,
+  workflow files, or an evidence directory on the `evidence` branch
+  (`$E/docs/verification/`). Evidence logs are committed and public - check
+  that a captured log did not tee a token or an API URL with credentials.
+- **Token handling.** Tokens must go through the `ITokenStore` boundary and the
+  secure adapter, never `shared_preferences` and never a plain log line. Check
+  `lib/core/logging/` interceptors are not printing `Authorization` headers.
+- **RASP honesty.** `raspServiceProvider` is a **no-op by default**. Any doc or
+  comment implying the shipped default provides real hardening is a security
+  documentation defect - a fork could ship believing it is protected.
+- **Interceptor order.** Auth, retry, and logging interceptor ordering can leak
+  credentials into retry logs or attach stale tokens.
+- **Dependency changes.** New or bumped packages: what did they pull in, and
+  does anything now reach the network or disk that did not before?
+
+## Filing
+
+One issue per finding, into Backlog (no `status:*` label), with real
+`## Acceptance criteria`:
+
+```bash
+gh issue create --title "..." \
+  --label type:bug --label epic:core-security --label priority:P0 \
+  --body "..."
+```
+
+`priority:P0` for anything exploitable in a shipped build or a committed secret.
+`priority:P1` for hardening gaps and misleading security documentation.
+Never `P2`/`P3` for a real credential exposure.
+
+State the concrete attack or exposure path. "Could be more secure" is not a
+finding.
+
+## Never
+
+- Never patch code, even a one-line fix. File it; the implementer patches.
+- Never claim a security property you did not verify - RASP and device-level
+  behavior are tier 3 in `$M/process.md` and cannot be checked
+  from this environment. Say so and route to `status:needs-uat`.
+
+EXIT 0
+$ git rev-parse HEAD
+a185d30bf482a73942db3e856739aaac5266345f
+
+EXIT 0
+$ git status --short
+
+EXIT 0
+$ git diff --exit-code a619de7de369a392280ec879b42cd3109066d8e3 a185d30bf482a73942db3e856739aaac5266345f
+
+EXIT 0
+$ git rev-parse a619de7de369a392280ec879b42cd3109066d8e3^{tree} a185d30bf482a73942db3e856739aaac5266345f^{tree}
+fe0bda4edf8a818840fe7777760b3706f107e3c4
+fe0bda4edf8a818840fe7777760b3706f107e3c4
+
+EXIT 0
+$ git diff 67ffe9e0970..HEAD
+diff --git a/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart b/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+index aedc6cf6c4c..0a2e50f2628 100644
+--- a/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
++++ b/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+@@ -542,7 +542,8 @@ void main() {
+   );
+   for (final throws in [false, true]) {
+     test(
+-      'an ${throws ? 'error' : 'uncertain read'} before refresh preserves credentials',
++      'an ${throws ? 'error' : 'uncertain read'} before refresh '
++      'preserves credentials',
+       () async {
+         var callbackCalled = false;
+         if (throws) {
+
+EXIT 0
+$ git diff 26d9c65bc412436273c54dbb61f54337e3673b2a..HEAD -- lib/core/network/interceptors/auth_interceptor.dart docs/api/core/network.md
+diff --git a/docs/api/core/network.md b/docs/api/core/network.md
+index 88d77be6561..30105ce910e 100644
+--- a/docs/api/core/network.md
++++ b/docs/api/core/network.md
+@@ -614,27 +614,40 @@ its own.
+ 2. If a refresh is already in flight, the request is queued in
+    `_pendingRequests` and this handler returns.
+ 3. Otherwise the `refreshToken` callback runs.
+-   - **Success:** the new token is written to the token store, the original
+-     request is replayed through `retryDio()` with
+-     `Authorization: Bearer <new token>`, and the handler resolves with the
+-     replayed response. Unless the session ended
+-     while the refresh was in flight - see
+-     [Refreshing across a logout](#refreshing-across-a-logout), which is
+-     checked before any of that happens.
+-     If the **replay** then fails, only this request fails: a transient
+-     failure (a 503, a timeout) reaches the caller mapped like any other, and
+-     the fresh token and the session are kept, so the queued requests in
+-     point 4 are still replayed. Only a replay answered **401**, meaning the
+-     server refused a token it just issued, logs the session out.
+-Before, any replay failure logged out
+-     and rejected every queued request.
+-   - **Failure** (a `Result` failure, a null token, or anything thrown -
+-     `Error` as well as `Exception`): the session is logged out and the
+-     handler is rejected.
++   - **Success:** the interceptor compares certified token-store snapshots
++     captured before and after the callback.
++     If credentials changed while the callback was running, the stored token
++     takes precedence over its returned value. Otherwise a callback that only
++     returns a token is persisted through a conditional write. Repository
++     callbacks that already persisted their result incur no duplicate write.
++     See the [versioned storage contract](storage.md#versioned-refresh-result-adoption).
++     The session generation and snapshot revision are checked again before
++     replay. An uncertain read, a conditional conflict or a selection/storage
++     error fails the request without clearing credentials or replaying a
++     possibly superseded token.
++     The original request is replayed through `retryDio()` with the selected
++     bearer token. A transient replay failure fails this request and keeps the
++     session. A replay answered **401** logs out only if that selected
++     credential and session are still current; a later rotation is preserved.
++     Selection does not lock independent rotations through the network call.
++     A mutation that leaves the starting access token in place while returning
++     a different candidate is ambiguous (refresh-only persistence or an ABA
++     rotation); the request is cancelled without replay or teardown.
++
++     **Custom callback migration:** either persist the complete rotated
++     credential pair before returning, as `AuthRepositoryImpl` does, or return
++     the access token without mutating the token store. A callback that writes
++     only the refresh token must persist its matching access token too;
++     the interceptor cannot safely infer ownership of a partial mutation.
++   - **Failure:** the refresh-failure policy below applies. Session-generation
++     checks prevent a callback belonging to an ended session from clearing a
++     newer sign-in.
+ 4. **Every queued handler is then completed, on both paths.** `finally` clears
+-   the in-flight flag first, then drains `_pendingRequests`: with a fresh token
+-   each queued request is replayed and resolved (rejected if its replay
+-   fails), and without one each is rejected with its own original error.
++   the in-flight flag first, then drains `_pendingRequests`. After successful
++   selection, each queued request obtains its own fresh certified snapshot
++   and rechecks the session and revision before replay. A missing/uncertain
++   snapshot or read failure rejects that request. Without successful
++   selection, each is rejected with its own original error.
+ 
+ Point 4 is the part this document used to get wrong. It said "rejects request",
+ singular, and until the drain was fixed that was accurate - a concurrent 401
+diff --git a/lib/core/network/interceptors/auth_interceptor.dart b/lib/core/network/interceptors/auth_interceptor.dart
+index 3d39e5833d6..4d2981fe2ab 100644
+--- a/lib/core/network/interceptors/auth_interceptor.dart
++++ b/lib/core/network/interceptors/auth_interceptor.dart
+@@ -102,9 +102,8 @@ class AuthInterceptor extends Interceptor {
+   /// reason in the other direction.
+   ///
+   /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
+-  /// production: two of the three credential writes behind one refresh happen
+-  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
+-  /// would leave those two unguarded.
++  /// production: repository refreshes persist their own credentials, and a
++  /// per-instance counter would leave those writes unguarded.
+   ///
+   /// Optional for the same reason [_keyValueStore] and [_sessionSink] are:
+   /// hand-built call sites keep compiling. A standalone interceptor still
+@@ -484,13 +483,26 @@ class AuthInterceptor extends Interceptor {
+ 
+     // Start token refresh
+     _isRefreshing = true;
+-    String? refreshedToken;
++    AccessTokenSnapshot? refreshedSnapshot;
+ 
+     // Read before the round trip, checked after it: anything that ends the
+     // session in between makes this value stale for good.
+     final generation = _sessionGeneration.current;
+ 
+     try {
++      final AccessTokenSnapshot? beforeRefresh;
++      try {
++        beforeRefresh = await _tokenStore.getAccessTokenSnapshot();
++      } on Object catch (error) {
++        _reject(handler, _asDioException(err, error));
++        return;
++      }
++      if (!_sessionGeneration.isCurrent(generation) ||
++          beforeRefresh == null ||
++          !identical(beforeRefresh.revision, _tokenStore.credentialRevision)) {
++        _reject(handler, _selectionChanged(err));
++        return;
++      }
+       final result = await _refreshToken();
+ 
+       if (!_sessionGeneration.isCurrent(generation)) {
+@@ -505,7 +517,7 @@ class AuthInterceptor extends Interceptor {
+         // clear a session that started after this refresh did - the exact
+         // damage the guard exists to prevent, inflicted from the other side.
+         //
+-        // refreshedToken stays null, so the `finally` drain rejects every
++        // refreshedSnapshot stays null, so the `finally` drain rejects every
+         // queued request rather than replaying it with a dead token.
+         _reject(handler, err);
+         return;
+@@ -522,7 +534,7 @@ class AuthInterceptor extends Interceptor {
+         // the session is still good, so nothing is torn down and nothing is
+         // replayed. The caller fails with the refresh failure as the cause
+         // rather than with this 401, whose "please login again" would be
+-        // false. refreshedToken stays null,
++        // false. refreshedSnapshot stays null,
+         // so the `finally` drain rejects every queued request too.
+         _reject(handler, _refreshFailedTransiently(err, failure));
+         return;
+@@ -535,11 +547,26 @@ class AuthInterceptor extends Interceptor {
+         return;
+       }
+ 
+-      // Update token in secure storage
+-      await _tokenStore.setAccessToken(newToken);
++      final AccessTokenSnapshot? selected;
++      try {
++        selected = await _selectRefreshResult(
++          newToken,
++          beforeRefresh,
++          generation,
++        );
++      } on Object catch (error) {
++        // The callback succeeded. A selection/persistence failure must not
++        // clear credentials another rotation may have installed meanwhile.
++        _reject(handler, _asDioException(err, error));
++        return;
++      }
++      if (selected == null) {
++        _reject(handler, _selectionChanged(err));
++        return;
++      }
+ 
+-      // Checked again because the write above is a platform call: a logout or
+-      // sign-in landing while it was pending makes the replay belong to a
++      // Checked again because selection/persistence may await the platform:
++      // a logout or sign-in landing meanwhile makes the replay belong to a
+       // session that has ended, and sending it would put the fresh token on
+       // the wire after the user signed out.
+       // Same exit as the check above, for the same reasons: no replay, no
+@@ -548,7 +575,7 @@ class AuthInterceptor extends Interceptor {
+         _reject(handler, err);
+         return;
+       }
+-      refreshedToken = newToken;
++      refreshedSnapshot = selected;
+ 
+       // Retry original request with new token.
+       //
+@@ -557,14 +584,23 @@ class AuthInterceptor extends Interceptor {
+       // timeout) fails this one request and nothing else: the session stays,
+       // and the `finally` drain still replays the queued requests.
+       //
+-      // A replay answered 401 is the one exception: the server refused a token
+-      // it just issued, so the session really is unusable.
++      // A 401 ends the session only while the selected credential is still
++      // current. An older bearer being refused must not clear a later rotation.
+       try {
+-        final retryResponse = await _retryRequest(err, newToken);
++        // Selection linearizes here; independent rotations after dispatch
++        // may still make this request's bearer obsolete.
++        if (!_usableCurrentSnapshot(selected)) {
++          _reject(handler, _selectionChanged(err));
++          return;
++        }
++        final retryResponse = await _retryRequest(err, selected.token!);
+         handler.resolve(retryResponse);
+       } on Object catch (e) {
+-        if (e is DioException && e.response?.statusCode == 401) {
+-          refreshedToken = null;
++        if (e is DioException &&
++            e.response?.statusCode == 401 &&
++            _sessionGeneration.isCurrent(generation) &&
++            _usableCurrentSnapshot(selected)) {
++          refreshedSnapshot = null;
+           await _logoutUser();
+         }
+         _reject(handler, _asDioException(err, e));
+@@ -573,17 +609,74 @@ class AuthInterceptor extends Interceptor {
+     // Catches Error as well as Exception on purpose: a TypeError from a
+     // malformed refresh response must not leave _isRefreshing stuck true.
+     on Object catch (e) {
+-      refreshedToken = null;
+-      await _logoutUser();
++      refreshedSnapshot = null;
++      if (_sessionGeneration.isCurrent(generation)) await _logoutUser();
+       _reject(handler, _asDioException(err, e));
+     } finally {
+       // Reset before draining: a 401 arriving during the drain must be able
+       // to start a fresh refresh rather than queue behind a finished one.
+       _isRefreshing = false;
+-      await _drainPendingRequests(refreshedToken, generation);
++      await _drainPendingRequests(refreshedSnapshot, generation);
+     }
+   }
+ 
++  Future<AccessTokenSnapshot?> _selectRefreshResult(
++    String candidate,
++    AccessTokenSnapshot beforeRefresh,
++    int generation,
++  ) async {
++    final current = await _tokenStore.getAccessTokenSnapshot();
++    if (!_sessionGeneration.isCurrent(generation) ||
++        current == null ||
++        !identical(current.revision, _tokenStore.credentialRevision)) {
++      return null;
++    }
++    // Repository callbacks persist themselves. A delayed result cannot own
++    // a write after any newer credential mutation, even an ABA rotation.
++    if (!identical(beforeRefresh.revision, current.revision)) {
++      // A refresh-only write by a custom callback is indistinguishable from
++      // an ABA rotation here. Neither the old access token nor the returned
++      // candidate can safely be associated with the stored refresh token.
++      if (current.token == beforeRefresh.token && current.token != candidate) {
++        return null;
++      }
++      return _usableCurrentSnapshot(current) ? current : null;
++    }
++    if (candidate.isEmpty) return null;
++    if (current.token == candidate) return current;
++    final outcome = await _tokenStore.setAccessTokenIfCurrent(
++      current,
++      candidate,
++    );
++    if (!_sessionGeneration.isCurrent(generation)) return null;
++    if (outcome == AccessTokenWriteResult.failed) {
++      throw const CacheException(
++        'Could not persist the refreshed access token.',
++      );
++    }
++    if (outcome == AccessTokenWriteResult.conflict) return null;
++    final updated = await _tokenStore.getAccessTokenSnapshot();
++    return _sessionGeneration.isCurrent(generation) &&
++            _usableCurrentSnapshot(updated)
++        ? updated
++        : null;
++  }
++
++  bool _usableCurrentSnapshot(AccessTokenSnapshot? snapshot) {
++    final token = snapshot?.token;
++    return snapshot != null &&
++        token != null &&
++        token.isNotEmpty &&
++        identical(snapshot.revision, _tokenStore.credentialRevision);
++  }
++
++  DioException _selectionChanged(DioException original) => DioException(
++    requestOptions: original.requestOptions,
++    response: original.response,
++    type: DioExceptionType.cancel,
++    message: 'Credentials changed while selecting the refresh result.',
++  );
++
+   /// Fails the request with [error] **without ending the error chain**.
+   ///
+   /// In dio's error chain, a bare `handler.reject(error)` skips every
+@@ -728,8 +821,8 @@ class AuthInterceptor extends Interceptor {
+ 
+   /// Completes every queued request.
+   ///
+-  /// With a [newToken] each one is replayed and resolved (or rejected if the
+-  /// replay fails). Without one the refresh failed, so each queued handler is
++  /// After a successful selection, each request selects a fresh certified
++  /// token before replay. Without one the refresh failed, so each handler is
+   /// rejected with its own original error - never left dangling.
+   ///
+   /// [generation] is the session the refresh was started under. A queued
+@@ -742,7 +835,10 @@ class AuthInterceptor extends Interceptor {
+   /// The check is inside the loop rather than above it because each replay is
+   /// awaited: a logout landing part-way through the drain must stop the
+   /// remaining replays too, not only the ones not yet started.
+-  Future<void> _drainPendingRequests(String? newToken, int generation) async {
++  Future<void> _drainPendingRequests(
++    AccessTokenSnapshot? refreshedSnapshot,
++    int generation,
++  ) async {
+     if (_pendingRequests.isEmpty) {
+       return;
+     }
+@@ -754,7 +850,7 @@ class AuthInterceptor extends Interceptor {
+       // The last check covers a request that queued under an older session
+       // than the refresh's, which onError already turns away; kept here so the
+       // drain never replays one as the newer user whatever path queued it.
+-      if (newToken == null ||
++      if (refreshedSnapshot == null ||
+           !_sessionGeneration.isCurrent(generation) ||
+           !_issuedUnderCurrentSession(pending.error.requestOptions)) {
+         _reject(pending.handler, pending.error);
+@@ -762,7 +858,16 @@ class AuthInterceptor extends Interceptor {
+       }
+ 
+       try {
+-        final retryResponse = await _retryRequest(pending.error, newToken);
++        final current = await _tokenStore.getAccessTokenSnapshot();
++        if (!_sessionGeneration.isCurrent(generation) ||
++            !_usableCurrentSnapshot(current)) {
++          _reject(pending.handler, _selectionChanged(pending.error));
++          continue;
++        }
++        final retryResponse = await _retryRequest(
++          pending.error,
++          current!.token!,
++        );
+         pending.handler.resolve(retryResponse);
+       } on Object catch (e) {
+         // If retry fails, reject the pending request
+
+EXIT 0
+$ gh pr view 1208 --repo koniz-dev/flutter-starter --json state,mergeCommit,headRefOid
+{"headRefOid":"a619de7de369a392280ec879b42cd3109066d8e3","mergeCommit":{"oid":"a185d30bf482a73942db3e856739aaac5266345f"},"state":"MERGED"}
+
+EXIT 0
+$ gh issue view 1196 --repo koniz-dev/flutter-starter --json state,labels
+{"labels":[{"id":"LA_kwDOQVGyw88AAAACxv3YpA","name":"type:bug","description":"Something that is broken relative to documented behavior","color":"d73a4a"},{"id":"LA_kwDOQVGyw88AAAACxv3ZwQ","name":"epic:core-network","description":"lib/core/network: Dio ApiClient, interceptors, realtime/WebSocket","color":"5319e7"},{"id":"LA_kwDOQVGyw88AAAACxv3gpg","name":"priority:P2","description":"Normal queue: real but not blocking","color":"fbca04"},{"id":"LA_kwDOQVGyw88AAAACxv3hug","name":"status:in-progress","description":"Claimed by an assignee and being worked right now","color":"0052cc"}],"state":"OPEN"}
+
+EXIT 0
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/format.log (last 8 lines)
+$ /Users/nguyenanhkiet/Playground/flutter-starter/scripts/dev/format_dart.sh --check
+
+Formatted 615 files (0 changed) in 1.71 seconds.
+exit: 0
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/analyze.log (last 8 lines)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+50 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 5.5s)
+exit: 0
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/tests.log (last 8 lines)
+06:38 +4348 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:38 +4349 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:38 +4350 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:38 +4351 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:39 +4352 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+06:47 +4353 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+06:47 +4354 ~14: All tests passed!
+exit: 0
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/local-audit.log (last 8 lines)
+01:05 +953: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short name
+01:06 +954: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for invalid email
+01:06 +955: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short password
+01:06 +956: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should call register use case with correct parameters
+01:06 +957: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show loading indicator during registration
+01:06 +958: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show error message when registration fails
+01:06 +959: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+01:07 +960: All tests passed!
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/boundary-tests.log (last 25 lines)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+50 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: delayed repository callback preserves a later rotation for all replays
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a callback that only returns a token is still persisted and replayed
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a rotation before the callback starts does not suppress its new result
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a repository-persisted refresh is not written a second time
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: ABA rotations preserve the newer access/refresh pairing
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a stale held snapshot read never replays or deletes a newer rotation
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a new session during snapshot selection is untouched
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a revision changed after certification is rechecked before dispatch
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: conditional conflict rejects without replay or teardown
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a failed adoption cannot delete credentials installed after its result
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a snapshot read error after success preserves the newer stored session
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: a later rotation during replay survives its old 401 and feeds the queue
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: the secure adapter refuses a timed out stale snapshot after rotation
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: partial callback persistence is rejected without clearing its credentials
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: an uncertain read before refresh preserves credentials
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: an error before refresh preserves credentials
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/integration/token_refresh_flow_test.dart: Token Refresh Flow Integration should refresh token on 401 error
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/integration/token_refresh_flow_test.dart: Token Refresh Flow Integration should not refresh token for excluded endpoints
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/integration/token_refresh_flow_test.dart: Token Refresh Flow Integration should logout user when refresh fails
+00:01 +19: All tests passed!
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/read-failure-tests.log (last 8 lines)
+50 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/core/network/interceptors/auth_token_store_failure_test.dart
+00:00 +0: a failed read on an ordinary request fails it and keeps the session
+Cache credential check error: CacheException: keystore unavailable
+00:00 +1: a failed read on the refresh call ends the session
+00:00 +2: a failed refresh-token read during a 401 ends the session, as the token store documents
+00:00 +3: All tests passed!
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/failure-before.log (last 30 lines)
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1196-baseline-boundary_test.dart 437:7  main.<fn>
+  
+00:10 +2 -9: a later rotation during replay survives its old 401 and feeds the queue
+00:10 +2 -10: a later rotation during replay survives its old 401 and feeds the queue [E]
+  Expected: <Instance of 'Response'>
+    Actual: DioException:<DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.
+            The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+            Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+            In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+            >
+     Which: is not an instance of 'Response'
+  
+  package:matcher                                               expect
+  package:flutter_test/src/widget_tester.dart 473:18            expect
+  .git/codex-issue-work/1196-baseline-boundary_test.dart 457:7  main.<fn>
+  
+00:10 +2 -10: the secure adapter refuses a timed out stale snapshot after rotation
+00:15 +2 -11: the secure adapter refuses a timed out stale snapshot after rotation [E]
+  TimeoutException after 0:00:05.000000: Future not completed
+  dart:async  _startMicrotaskLoop
+  
+00:15 +2 -11: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-baseline-boundary_test.dart: ABA rotations preserve the newer access/refresh pairing
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-baseline-boundary_test.dart: a failed adoption cannot delete credentials installed after its result
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-baseline-boundary_test.dart: a later rotation during replay survives its old 401 and feeds the queue
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-baseline-boundary_test.dart: a new session during snapshot selection is untouched
+  ... and 7 more
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/tree-parity.log (last 100 lines)
+Accepted source: a619de7de369a392280ec879b42cd3109066d8e3
+Merged main: a185d30bf482a73942db3e856739aaac5266345f
+Both source trees: fe0bda4edf8a818840fe7777760b3706f107e3c4
+Identical: yes
+
+$ inspect artifact /Users/nguyenanhkiet/Playground/flutter-starter-evidence/docs/verification/issue-1196/ci.json (last 200 lines)
+[
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057598/job/130537725712",
+    "name": "Quality gate",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057580/job/130537696302",
+    "name": "Strip both-samples-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057580/job/130537696296",
+    "name": "Strip tasks-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057580/job/130537695990",
+    "name": "Strip feature-flags-removed + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057580/job/130537696436",
+    "name": "Strip renamed-both + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057580/job/130537696352",
+    "name": "Strip keep-samples + analyze + test",
+    "state": "SUCCESS"
+  },
+  {
+    "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43025057683/job/130537599889",
+    "name": "Docs check",
+    "state": "SUCCESS"
+  }
+]
+Artifact parity boundary-test.dart == merged test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart: PASS sha256=048f8592771b5616af3c85ac63cf5beaac2a44fcbfadeeb4669cc9609883c137
+Artifact parity network-guide.md == merged docs/api/core/network.md: PASS sha256=f43772c1eecbcda1dd3281df0c867488dcb92ca0d7534a984a15e8f517a9c4d0
+Parsed 7 CI checks: all SUCCESS (Quality gate, five Strip variants, Docs check).
+Evidence secret-pattern scan (all 22 files; values omitted): []
+
+POST-MERGE QA/SECURITY RESULT: no new actionable findings.
+Recomputed accepted-vs-merged full Git tree equality (not inferred from saved parity): same tree fe0bda4edf8a818840fe7777760b3706f107e3c4. Earlier independently reviewed production/migration tree is unchanged: only subsequent change was line-wrapping a test name. Source copies in evidence match merged versions byte-for-byte. Inspected actual terminal results: full suite4354 passed14 skipped exit0; scoped audit960 passed; boundary/integration19 passed; read-failure3 passed; formatter0 changes; analyzer no issues. Inspected primary regression fixture and baseline overwrite assertion, conditional adoption/failure and replay-race assertions; no reliance on a raw test count alone.
+Credential/security assessment: new paths use only ITokenStore snapshot/CAS; no token goes to key-value preferences or a new logger; candidate values absent from new exception messages. No new dependency, native platform, workflow or deployment change. Replay still shares existing pinned transport, preserves request shape, bypasses AuthInterceptor and forwards failure through existing error chain with retries disabled. Initial/post-success uncertain selections fail without cleanup. Session generation and revision are rechecked before dispatch; old replay401 cannot tear down a changed revision/session. Queue dispatch obtains a new certified current snapshot, rejecting missing/uncertain state without teardown. Existing cache/user/sink cleanup stays behind session-ending policy. ApiClient interceptor order and logging redaction remain unchanged and were inspected. Partial custom callback ownership ambiguity conservatively cancels and is explicitly documented; premerge regression finding is fixed.
+Evidence contains synthetic A1/A2/A3/R1/R2/R3/fresh-token/example.invalid test values, not real observed credentials. No real secret found by scoped pattern scan/manual fixture context inspection. No screenshot or device-security claims in this QA; no screenshots were collected for these nonvisual criteria.
+Limitations: no repeated full suite, live backend/device/RASP/keychain assessment, or assurance beyond bounded review and synthetic host tests. Existing storage CAS implementation was reviewed as adjacent contract but unchanged by merged diff. Independently executed4 bounded probes and primary baseline failure were preserved in independent-review.log and acknowledged in earlier review; not rerun postmerge because tree parity is proven. No tracked files edited, no issue state changed, no finding issue filed because no actionable security defect found.

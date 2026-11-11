@@ -1,0 +1,3910 @@
+$ git rev-parse HEAD
+ed888d71a2b46593824428bec43c2dd0e88dd4d8
+
+EXIT 0
+$ git diff 26d9c65bc412436273c54dbb61f54337e3673b2a..HEAD --stat
+ docs/api/core/network.md                           |  43 +-
+ .../network/interceptors/auth_interceptor.dart     | 135 +++++-
+ .../auth_interceptor_refresh_boundary_test.dart    | 523 +++++++++++++++++++++
+ .../interceptors/auth_interceptor_test.dart        |  17 +-
+ .../auth/integration/token_refresh_flow_test.dart  |  13 +-
+ 5 files changed, 678 insertions(+), 53 deletions(-)
+
+EXIT 0
+$ gh issue view 1196 --repo koniz-dev/flutter-starter --json title,body,comments
+{"body":"## Context\n\nIndependent review of #1185 found a pre-existing race at the public `AuthInterceptor.refreshToken` callback boundary. Root reproduced it on both original main `fce3f2812c8` and PR #1195 head `869a5cc1e2e`. It requires a custom callback that delays returning after the repository has finished; stock provider wiring returns the repository future directly.\n\n1. A 401 calls a wrapper around `repository.refreshToken()`. The repository rotates R1 to R2 and persists access-R2. Hold the wrapper before it returns that result to the interceptor.\n2. A manual repository refresh legitimately rotates R2 to R3 and persists access-R3 / R3.\n3. Release the wrapper. `AuthInterceptor._handle401Error` unconditionally writes its older `access-R2` and replays with it, leaving a mismatched credential set.\n\nBoth baseline and current reproduction report:\n\n```\nboundary before interceptor returns: access-R3; finalaccess=access-R2; finalrefresh=R3; servervalid=R3\nExpected: access-R3\nActual: access-R2\n```\n\n`SecureTokenStore` write ordering cannot prevent this: the stale write is issued after the newer one. This is separate from sharing a still-running repository rotation in #1185. A public custom refresher may await tracing or other work after a repository call; its result must not overwrite newer credentials in the same session.\n\nReproduction artifacts are retained with the #1185 review on the evidence branch: [current log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1185/boundary-current.log), [baseline log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1185/boundary-baseline.log), [probe source](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1185/boundary-test.dart).\n\n## Acceptance criteria\n\n- A tier-1 test holds the callback after a successful repository refresh, finishes a later repository refresh in the same session, then releases the callback. The interceptor must not overwrite the newer access token or replay with the superseded token. The test fails before the fix.\n- A custom refresher that returns a new token without persisting it still works: the interceptor stores it and replays successfully.\n- Existing session-generation, logout, queued replay and refresh failure tests remain green.\n","comments":[{"id":"IC_kwDOQVGyw88AAAABlD81Gw","author":{"login":"koniz-dev"},"authorAssociation":"OWNER","body":"The first network-only read/compare/write prototype is insufficient: root and independent review reproduced stale access reads that finish after a newer rotation, including the real SecureTokenStore timeout-bypass path. No prototype code was merged.\n\nSplit the required versioned-snapshot/conditional-adoption primitive into #1206 (`epic:core-storage`), including custom-store migration and storage ordering/repair tests. This issue retains network adoption/replay and its original acceptance criteria. Resume after #1206 closes; then use the new primitive and rerun delayed-callback, custom nonpersisting callback, session-generation and queue cases. The session is continuing the prerequisite serially.\n","createdAt":"2026-11-10T23:26:31Z","includesCreatedEdit":false,"isMinimized":false,"minimizedReason":"","reactionGroups":[],"url":"https://github.com/koniz-dev/flutter-starter/issues/1196#issuecomment-6782137627","viewerDidAuthor":true},{"id":"IC_kwDOQVGyw88AAAABlEo46Q","author":{"login":"koniz-dev"},"authorAssociation":"OWNER","body":"Storage prerequisite #1206 is closed with merged PR #1207, committed evidence and custom-store migration notes. Resuming the network adoption/replay work from the merged versioned contract; the archived read/compare/write prototype remains unmerged.","createdAt":"2026-11-11T00:07:52Z","includesCreatedEdit":false,"isMinimized":false,"minimizedReason":"","reactionGroups":[],"url":"https://github.com/koniz-dev/flutter-starter/issues/1196#issuecomment-6782859497","viewerDidAuthor":true}],"title":"fix(network): delayed refresh callbacks overwrite newer access tokens"}
+
+EXIT 0
+$ git diff 26d9c65bc412436273c54dbb61f54337e3673b2a..HEAD -- lib/core/network/interceptors/auth_interceptor.dart docs/api/core/network.md
+diff --git a/docs/api/core/network.md b/docs/api/core/network.md
+index 88d77be6561..db15fc5340d 100644
+--- a/docs/api/core/network.md
++++ b/docs/api/core/network.md
+@@ -614,27 +614,30 @@ its own.
+ 2. If a refresh is already in flight, the request is queued in
+    `_pendingRequests` and this handler returns.
+ 3. Otherwise the `refreshToken` callback runs.
+-   - **Success:** the new token is written to the token store, the original
+-     request is replayed through `retryDio()` with
+-     `Authorization: Bearer <new token>`, and the handler resolves with the
+-     replayed response. Unless the session ended
+-     while the refresh was in flight - see
+-     [Refreshing across a logout](#refreshing-across-a-logout), which is
+-     checked before any of that happens.
+-     If the **replay** then fails, only this request fails: a transient
+-     failure (a 503, a timeout) reaches the caller mapped like any other, and
+-     the fresh token and the session are kept, so the queued requests in
+-     point 4 are still replayed. Only a replay answered **401**, meaning the
+-     server refused a token it just issued, logs the session out.
+-Before, any replay failure logged out
+-     and rejected every queued request.
+-   - **Failure** (a `Result` failure, a null token, or anything thrown -
+-     `Error` as well as `Exception`): the session is logged out and the
+-     handler is rejected.
++   - **Success:** the interceptor selects a certified token-store snapshot.
++     If credentials changed while the callback was running, the stored token
++     takes precedence over its returned value. Otherwise a callback that only
++     returns a token is persisted through a conditional write. Repository
++     callbacks that already persisted their result incur no duplicate write.
++     See the [versioned storage contract](storage.md#versioned-refresh-result-adoption).
++     The session generation and snapshot revision are checked again before
++     replay. An uncertain read, a conditional conflict or a selection/storage
++     error fails the request without clearing credentials or replaying a
++     possibly superseded token.
++     The original request is replayed through `retryDio()` with the selected
++     bearer token. A transient replay failure fails this request and keeps the
++     session. A replay answered **401** logs out only if that selected
++     credential and session are still current; a later rotation is preserved.
++     Selection does not lock independent rotations through the network call.
++   - **Failure:** the refresh-failure policy below applies. Session-generation
++     checks prevent a callback belonging to an ended session from clearing a
++     newer sign-in.
+ 4. **Every queued handler is then completed, on both paths.** `finally` clears
+-   the in-flight flag first, then drains `_pendingRequests`: with a fresh token
+-   each queued request is replayed and resolved (rejected if its replay
+-   fails), and without one each is rejected with its own original error.
++   the in-flight flag first, then drains `_pendingRequests`. After successful
++   selection, each queued request obtains its own fresh certified snapshot
++   and rechecks the session and revision before replay. A missing/uncertain
++   snapshot or read failure rejects that request. Without successful
++   selection, each is rejected with its own original error.
+ 
+ Point 4 is the part this document used to get wrong. It said "rejects request",
+ singular, and until the drain was fixed that was accurate - a concurrent 401
+diff --git a/lib/core/network/interceptors/auth_interceptor.dart b/lib/core/network/interceptors/auth_interceptor.dart
+index 3d39e5833d6..0a42ff27e7a 100644
+--- a/lib/core/network/interceptors/auth_interceptor.dart
++++ b/lib/core/network/interceptors/auth_interceptor.dart
+@@ -102,9 +102,8 @@ class AuthInterceptor extends Interceptor {
+   /// reason in the other direction.
+   ///
+   /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
+-  /// production: two of the three credential writes behind one refresh happen
+-  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
+-  /// would leave those two unguarded.
++  /// production: repository refreshes persist their own credentials, and a
++  /// per-instance counter would leave those writes unguarded.
+   ///
+   /// Optional for the same reason [_keyValueStore] and [_sessionSink] are:
+   /// hand-built call sites keep compiling. A standalone interceptor still
+@@ -484,13 +483,14 @@ class AuthInterceptor extends Interceptor {
+ 
+     // Start token refresh
+     _isRefreshing = true;
+-    String? refreshedToken;
++    AccessTokenSnapshot? refreshedSnapshot;
+ 
+     // Read before the round trip, checked after it: anything that ends the
+     // session in between makes this value stale for good.
+     final generation = _sessionGeneration.current;
+ 
+     try {
++      final revisionBeforeRefresh = _tokenStore.credentialRevision;
+       final result = await _refreshToken();
+ 
+       if (!_sessionGeneration.isCurrent(generation)) {
+@@ -505,7 +505,7 @@ class AuthInterceptor extends Interceptor {
+         // clear a session that started after this refresh did - the exact
+         // damage the guard exists to prevent, inflicted from the other side.
+         //
+-        // refreshedToken stays null, so the `finally` drain rejects every
++        // refreshedSnapshot stays null, so the `finally` drain rejects every
+         // queued request rather than replaying it with a dead token.
+         _reject(handler, err);
+         return;
+@@ -522,7 +522,7 @@ class AuthInterceptor extends Interceptor {
+         // the session is still good, so nothing is torn down and nothing is
+         // replayed. The caller fails with the refresh failure as the cause
+         // rather than with this 401, whose "please login again" would be
+-        // false. refreshedToken stays null,
++        // false. refreshedSnapshot stays null,
+         // so the `finally` drain rejects every queued request too.
+         _reject(handler, _refreshFailedTransiently(err, failure));
+         return;
+@@ -535,11 +535,26 @@ class AuthInterceptor extends Interceptor {
+         return;
+       }
+ 
+-      // Update token in secure storage
+-      await _tokenStore.setAccessToken(newToken);
++      final AccessTokenSnapshot? selected;
++      try {
++        selected = await _selectRefreshResult(
++          newToken,
++          revisionBeforeRefresh,
++          generation,
++        );
++      } on Object catch (error) {
++        // The callback succeeded. A selection/persistence failure must not
++        // clear credentials another rotation may have installed meanwhile.
++        _reject(handler, _asDioException(err, error));
++        return;
++      }
++      if (selected == null) {
++        _reject(handler, _selectionChanged(err));
++        return;
++      }
+ 
+-      // Checked again because the write above is a platform call: a logout or
+-      // sign-in landing while it was pending makes the replay belong to a
++      // Checked again because selection/persistence may await the platform:
++      // a logout or sign-in landing meanwhile makes the replay belong to a
+       // session that has ended, and sending it would put the fresh token on
+       // the wire after the user signed out.
+       // Same exit as the check above, for the same reasons: no replay, no
+@@ -548,7 +563,7 @@ class AuthInterceptor extends Interceptor {
+         _reject(handler, err);
+         return;
+       }
+-      refreshedToken = newToken;
++      refreshedSnapshot = selected;
+ 
+       // Retry original request with new token.
+       //
+@@ -557,14 +572,23 @@ class AuthInterceptor extends Interceptor {
+       // timeout) fails this one request and nothing else: the session stays,
+       // and the `finally` drain still replays the queued requests.
+       //
+-      // A replay answered 401 is the one exception: the server refused a token
+-      // it just issued, so the session really is unusable.
++      // A 401 ends the session only while the selected credential is still
++      // current. An older bearer being refused must not clear a later rotation.
+       try {
+-        final retryResponse = await _retryRequest(err, newToken);
++        // Selection linearizes here; independent rotations after dispatch
++        // may still make this request's bearer obsolete.
++        if (!_usableCurrentSnapshot(selected)) {
++          _reject(handler, _selectionChanged(err));
++          return;
++        }
++        final retryResponse = await _retryRequest(err, selected.token!);
+         handler.resolve(retryResponse);
+       } on Object catch (e) {
+-        if (e is DioException && e.response?.statusCode == 401) {
+-          refreshedToken = null;
++        if (e is DioException &&
++            e.response?.statusCode == 401 &&
++            _sessionGeneration.isCurrent(generation) &&
++            _usableCurrentSnapshot(selected)) {
++          refreshedSnapshot = null;
+           await _logoutUser();
+         }
+         _reject(handler, _asDioException(err, e));
+@@ -573,17 +597,68 @@ class AuthInterceptor extends Interceptor {
+     // Catches Error as well as Exception on purpose: a TypeError from a
+     // malformed refresh response must not leave _isRefreshing stuck true.
+     on Object catch (e) {
+-      refreshedToken = null;
+-      await _logoutUser();
++      refreshedSnapshot = null;
++      if (_sessionGeneration.isCurrent(generation)) await _logoutUser();
+       _reject(handler, _asDioException(err, e));
+     } finally {
+       // Reset before draining: a 401 arriving during the drain must be able
+       // to start a fresh refresh rather than queue behind a finished one.
+       _isRefreshing = false;
+-      await _drainPendingRequests(refreshedToken, generation);
++      await _drainPendingRequests(refreshedSnapshot, generation);
+     }
+   }
+ 
++  Future<AccessTokenSnapshot?> _selectRefreshResult(
++    String candidate,
++    Object revisionBeforeRefresh,
++    int generation,
++  ) async {
++    final current = await _tokenStore.getAccessTokenSnapshot();
++    if (!_sessionGeneration.isCurrent(generation) ||
++        current == null ||
++        !identical(current.revision, _tokenStore.credentialRevision)) {
++      return null;
++    }
++    // Repository callbacks persist themselves. A delayed result cannot own
++    // a write after any newer credential mutation, even an ABA rotation.
++    if (!identical(revisionBeforeRefresh, current.revision)) {
++      return _usableCurrentSnapshot(current) ? current : null;
++    }
++    if (candidate.isEmpty) return null;
++    if (current.token == candidate) return current;
++    final outcome = await _tokenStore.setAccessTokenIfCurrent(
++      current,
++      candidate,
++    );
++    if (!_sessionGeneration.isCurrent(generation)) return null;
++    if (outcome == AccessTokenWriteResult.failed) {
++      throw const CacheException(
++        'Could not persist the refreshed access token.',
++      );
++    }
++    if (outcome == AccessTokenWriteResult.conflict) return null;
++    final updated = await _tokenStore.getAccessTokenSnapshot();
++    return _sessionGeneration.isCurrent(generation) &&
++            _usableCurrentSnapshot(updated)
++        ? updated
++        : null;
++  }
++
++  bool _usableCurrentSnapshot(AccessTokenSnapshot? snapshot) {
++    final token = snapshot?.token;
++    return snapshot != null &&
++        token != null &&
++        token.isNotEmpty &&
++        identical(snapshot.revision, _tokenStore.credentialRevision);
++  }
++
++  DioException _selectionChanged(DioException original) => DioException(
++    requestOptions: original.requestOptions,
++    response: original.response,
++    type: DioExceptionType.cancel,
++    message: 'Credentials changed while selecting the refresh result.',
++  );
++
+   /// Fails the request with [error] **without ending the error chain**.
+   ///
+   /// In dio's error chain, a bare `handler.reject(error)` skips every
+@@ -728,8 +803,8 @@ class AuthInterceptor extends Interceptor {
+ 
+   /// Completes every queued request.
+   ///
+-  /// With a [newToken] each one is replayed and resolved (or rejected if the
+-  /// replay fails). Without one the refresh failed, so each queued handler is
++  /// After a successful selection, each request selects a fresh certified
++  /// token before replay. Without one the refresh failed, so each handler is
+   /// rejected with its own original error - never left dangling.
+   ///
+   /// [generation] is the session the refresh was started under. A queued
+@@ -742,7 +817,10 @@ class AuthInterceptor extends Interceptor {
+   /// The check is inside the loop rather than above it because each replay is
+   /// awaited: a logout landing part-way through the drain must stop the
+   /// remaining replays too, not only the ones not yet started.
+-  Future<void> _drainPendingRequests(String? newToken, int generation) async {
++  Future<void> _drainPendingRequests(
++    AccessTokenSnapshot? refreshedSnapshot,
++    int generation,
++  ) async {
+     if (_pendingRequests.isEmpty) {
+       return;
+     }
+@@ -754,7 +832,7 @@ class AuthInterceptor extends Interceptor {
+       // The last check covers a request that queued under an older session
+       // than the refresh's, which onError already turns away; kept here so the
+       // drain never replays one as the newer user whatever path queued it.
+-      if (newToken == null ||
++      if (refreshedSnapshot == null ||
+           !_sessionGeneration.isCurrent(generation) ||
+           !_issuedUnderCurrentSession(pending.error.requestOptions)) {
+         _reject(pending.handler, pending.error);
+@@ -762,7 +840,16 @@ class AuthInterceptor extends Interceptor {
+       }
+ 
+       try {
+-        final retryResponse = await _retryRequest(pending.error, newToken);
++        final current = await _tokenStore.getAccessTokenSnapshot();
++        if (!_sessionGeneration.isCurrent(generation) ||
++            !_usableCurrentSnapshot(current)) {
++          _reject(pending.handler, _selectionChanged(pending.error));
++          continue;
++        }
++        final retryResponse = await _retryRequest(
++          pending.error,
++          current!.token!,
++        );
+         pending.handler.resolve(retryResponse);
+       } on Object catch (e) {
+         // If retry fails, reject the pending request
+
+EXIT 0
+$ cat lib/core/contracts/storage_contracts.dart
+// Lightweight boundary contract file; repetitive per-member docs are omitted.
+// ignore_for_file: public_member_api_docs
+
+/// Generic key-value storage contract for non-sensitive values.
+///
+/// Mutations can report failure by returning `false` as well as by throwing.
+/// Callers must check the result before reporting success, deleting source
+/// data during a migration, or treating session cleanup as complete.
+abstract class IKeyValueStore {
+  Future<String?> getString(String key);
+  Future<bool> setString(String key, String value);
+
+  Future<int?> getInt(String key);
+  Future<bool> setInt(String key, int value);
+
+  Future<bool?> getBool(String key);
+  Future<bool> setBool(String key, {required bool value});
+
+  Future<double?> getDouble(String key);
+  Future<bool> setDouble(String key, double value);
+
+  Future<List<String>?> getStringList(String key);
+  Future<bool> setStringList(String key, List<String> value);
+
+  Future<bool> remove(String key);
+  Future<bool> clear();
+  Future<bool> containsKey(String key);
+}
+
+/// A certified access-token value and an opaque credential revision.
+///
+/// A null [token] is a valid cleared state. Compare [revision] by identity;
+/// revisions are transient and must not be persisted or reconstructed.
+class AccessTokenSnapshot {
+  const AccessTokenSnapshot({required this.token, required this.revision});
+
+  final String? token;
+  final Object revision;
+}
+
+/// Outcome of a conditional access-token write.
+enum AccessTokenWriteResult {
+  /// The write succeeded without being superseded at its completion point.
+  applied,
+
+  /// Another mutation or uncertain pending operation took precedence.
+  conflict,
+
+  /// The platform reported failure without a superseding mutation.
+  failed,
+}
+
+/// Dedicated token/session storage contract.
+///
+/// Once its operations settle, an implementation must hold what they would
+/// leave applied in the order they were issued: a successful clear issued
+/// after a write removes that write's token, even if the write's platform
+/// call completes later. A clear that fails throws, so its caller knows the
+/// token may remain. The session guards in `AuthRepositoryImpl.refreshToken()`
+/// and `AuthInterceptor` check the session immediately before a write and
+/// rely on a logout's later clear removing it.
+///
+/// `SecureTokenStore` queues its operations to guarantee this, because the
+/// platform store does not on every target. A call that outlives its wait
+/// bound and lands late is followed by a repair, so the older value is at
+/// rest only until that repair lands. A repair whose platform call keeps
+/// failing is retried a bounded number of times, then reported to the logger
+/// by key; reads of that key then answer from memory with the newer state,
+/// and the next write through the same service (or, for a key whose newer
+/// state is a delete, the next delete or read of it) re-applies it. The
+/// marker is in memory, so if the app stops first, the next launch reads the
+/// late value.
+/// Its queue is shared by every store over the same `SecureStorageService`,
+/// so the components touching the tokens must use one service (or one store).
+/// An in-memory store whose methods complete synchronously meets it
+/// trivially.
+abstract class ITokenStore {
+  /// Changes synchronously whenever any credential write/delete is issued,
+  /// even if it later fails. Stores over one backing service share revisions.
+  /// A write/delete cycle back to the same value must still change it.
+  /// Internal repairs reapply an existing mutation, not a newer credential.
+  Object get credentialRevision;
+
+  /// Certifies the value/revision after the read, or returns null when a
+  /// pending/bypassed operation or concurrent mutation makes it uncertain.
+  /// Implementations bound retries/waits; read failures may still throw.
+  /// Certification is a selection point, not a lock through a network call.
+  /// Before acting, callers compare its revision with [credentialRevision]
+  /// again; a mismatch requires a new selection or rejection without teardown.
+  Future<AccessTokenSnapshot?> getAccessTokenSnapshot();
+
+  /// Compares and reserves mutation order synchronously at invocation, before
+  /// any await. A foreign/stale snapshot cannot write. Later-issued mutations
+  /// retain precedence, including writes that bypass a bounded queue wait.
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  );
+
+  Future<String?> getAccessToken();
+  Future<bool> setAccessToken(String token);
+  Future<void> clearAccessToken();
+
+  Future<String?> getRefreshToken();
+  Future<bool> setRefreshToken(String token);
+  Future<void> clearRefreshToken();
+
+  Future<void> clearAllTokens();
+}
+
+EXIT 0
+$ sed -n '330,425p' lib/features/auth/data/repositories/auth_repository_impl.dart
+  /// would re-arm a signed-out device.
+  ///
+  /// A stale refresh reports failure rather than [Success]: it did not produce
+  /// a token this session can use. It deliberately does not *clear* anything -
+  /// the session that replaced this one may own what is in the store now.
+  @override
+  Future<Result<String>> refreshToken() {
+    final generation = sessionGeneration.current;
+    final pending = _pendingRefresh;
+    if (pending != null && _pendingRefreshGeneration == generation) {
+      return pending;
+    }
+
+    // Both manual callers and the interceptor rotate the same credential.
+    // Share the entire operation, including persistence, within one session.
+    // A new session starts its own request; the old operation remains guarded
+    // by the generation checks and cannot clear the newer operation's slot.
+    late final Future<Result<String>> run;
+    run = _refreshToken(generation).whenComplete(() {
+      if (identical(_pendingRefresh, run)) {
+        _pendingRefresh = null;
+        _pendingRefreshGeneration = null;
+      }
+    });
+    _pendingRefresh = run;
+    _pendingRefreshGeneration = generation;
+    return run;
+  }
+
+  Future<Result<String>> _refreshToken(int generation) async {
+    // Captured before the round trip; checked immediately before each write.
+    try {
+      final refreshToken = await localDataSource.getRefreshToken();
+      if (refreshToken == null) {
+        // No credential to revive the session with, which is the same thing to
+        // a caller as a rejected one: only a fresh sign-in gets back in.
+        return const ResultFailure(
+          UnknownFailure(
+            'No refresh token available',
+            code: AuthErrorCodes.refreshTokenExpired,
+          ),
+        );
+      }
+
+      final authResponse = await remoteDataSource.refreshToken(refreshToken);
+      const stale = ResultFailure<String>(
+        UnknownFailure(
+          'Session ended while the token refresh was in flight',
+          code: AuthErrorCodes.sessionTerminated,
+        ),
+      );
+      // Each check sits directly before the write it guards, with no await
+      // between, so a logout that starts after a check issues its clear after
+      // that write. A single check before both writes would let a logout land
+      // between them. This relies on the `ITokenStore` applying writes and
+      // clears in the order they were issued: `SecureTokenStore` queues them
+      // and repairs a late write; on web the plugin alone would not.
+      if (!sessionGeneration.isCurrent(generation)) return stale;
+      await localDataSource.cacheToken(authResponse.token);
+      if (authResponse.refreshToken != null) {
+        if (!sessionGeneration.isCurrent(generation)) return stale;
+        await localDataSource.cacheRefreshToken(authResponse.refreshToken!);
+      }
+      if (!sessionGeneration.isCurrent(generation)) return stale;
+      return Success(authResponse.token);
+    } on AppException catch (e) {
+      return ResultFailure(_mapRefreshFailure(e));
+    } on Exception catch (e) {
+      return ResultFailure(ExceptionToFailureMapper.map(e));
+    } on Object catch (_) {
+      return const ResultFailure(_unreadableRefreshResponse);
+    }
+  }
+
+  /// HTTP statuses from the refresh endpoint that mean the refresh token is
+  /// dead. See [_mapRefreshFailure].
+  static const Set<int> _deadRefreshTokenStatuses = {400, 401, 403};
+
+  /// Maps a failed refresh round trip, tagging the cases that mean the refresh
+  /// token itself is dead with [AuthErrorCodes.refreshTokenExpired].
+  ///
+  /// Two exception shapes mean that. The first is an [AuthException], which a
+  /// custom data source raises for exactly this reason. The second is a
+  /// [ServerException] whose status is in [_deadRefreshTokenStatuses]: the
+  /// server rejecting the very token it was handed.
+  ///
+  /// - **401** is what many REST backends send for a dead refresh token.
+  /// - **400** is what an OAuth 2.0 server sends: RFC 6749 section 5.2 answers
+  ///   a revoked or expired refresh token with `400 invalid_grant`.
+  /// - **403** is what many servers send for a token they refuse.
+  ///
+  /// Everything else is transport trouble and must leave the session alone:
+  /// a timeout, a connection error, any 5xx, and the two 4xx statuses that
+  /// mean "try again later" rather than "never" - 408 Request Timeout and
+  /// 429 Too Many Requests.
+  ///
+
+EXIT 0
+
+$ flutter test /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart --reporter expanded
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 18.1.3 (18.1.4 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+50 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart
+00:00 +0: baseline custom refresher persists only refresh token
+baseline=true outcome=Response<dynamic> replay=[Bearer A2] access=A2 refresh=R2
+00:00 +1: current custom refresher persists only refresh token
+baseline=false outcome=DioException replay=[Bearer A1] access=null refresh=null
+00:00 +1 -1: current custom refresher persists only refresh token [E]
+  Expected: <Instance of 'Response'>
+    Actual: DioException:<DioException [bad response]: This exception was thrown because the response has a status code of 401 and RequestOptions.validateStatus was configured to throw for this status code.
+            The status code of 401 has the following meaning: "Client error - the request contains bad syntax or cannot be fulfilled"
+            Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+            In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+            >
+     Which: is not an instance of 'Response'
+  
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  .git/codex-issue-work/1196-final-review_test.dart 887:7  main.<fn>
+  
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart: current custom refresher persists only refresh token
+
+EXIT 1 (expected current regression; baseline control passed)
+
+$ flutter test --no-pub /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart --plain-name 'delayed repository callback preserves a later rotation for all replays' --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart
+00:00 +0: delayed repository callback preserves a later rotation for all replays
+00:00 +0 -1: delayed repository callback preserves a later rotation for all replays [E]
+  Expected: ['A2', 'A3']
+    Actual: ['A2', 'A3', 'A2']
+     Which: at location [2] is ['A2', 'A3', 'A2'] which longer than expected
+  no late duplicate A2 write
+  
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  .git/codex-issue-work/1196-final-review_test.dart 1154:7  registerBaselineBoundaryCases.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart: delayed repository callback preserves a later rotation for all replays
+
+EXIT 1 (expected: primary added regression test fails against original production interceptor from base 26d9c65bc412436273c54dbb61f54337e3673b2a)
+
+FINDING P2 at lib/core/network/interceptors/auth_interceptor.dart:624-625
+Credential revision is a mutation revision, not proof that the access token advanced. A custom refresher that persists only the returned rotated refresh token then returns its new access token previously worked: baseline stores A2 and replays A2 successfully. Current selection treats refresh-only revision change as evidence stored A1 supersedes A2, replays expired A1, receives expected 401, and clears valid R2. No concurrent actor or custom contract violation is needed. This is an introduced compatibility regression beyond the acceptance criteria's no-persistence custom callback.
+Safe remediation with existing API requires rejecting ambiguous access states without replay/teardown; never blindly adopt candidate after arbitrary revision changes. Capturing a certified pre-callback access state permits conservative rejection when the token stayed equal to its starting value but candidate differs, though ABA cases also become ambiguous and must cancel. Document migration: custom callbacks persist the whole access/refresh pair or persist neither and return the new access value; partial persistence no longer has sufficient ownership information. A per-access-token mutation capability would allow distinguishing refresh-only writes but is beyond current generic revision primitive.
+Other review scope: read process.md pre-merge requirements, issue comments and prerequisite, final production diff and updated legacy fixture; inspected onRequest/onError origin, endpoint and generation checks, repository refresh single-flight/persistence ordering, SecureTokenStore bounded snapshot/CAS behavior, in-memory test contract, queue drain/error-chain forwarding and response replay paths. No additional actionable introduced defect identified in that read. Existing queue behavior that does not force logout for a queued replay 401 predates this diff.
+Limitations: no broad suite run (root running it); no live backend/device tests; no independently executed exhaustive store/CAS suite because prerequisite is unchanged; production current-versus-base control uses baseline interceptor source embedded verbatim (class renamed) alongside current imported production interceptor. Issue-primary baseline check uses new test fixture copied with baseline subclass. All writes confined to ignored .git/codex-issue-work paths.
+
+PROBE SOURCE
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
+import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
+import 'package:flutter_starter/core/network/request_body_replay.dart';
+import 'package:flutter_starter/core/network/ssl_pinning.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import '/Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/in_memory_stores.dart';
+import 'dart:typed_data';
+
+/// Pending request data structure for queuing requests during token refresh
+class _PendingRequest {
+  _PendingRequest(this.error, this.handler);
+
+  final DioException error;
+  final ErrorInterceptorHandler handler;
+}
+
+/// Interceptor for adding authentication tokens to requests and handling
+/// automatic token refresh on 401 Unauthorized responses
+class BaselineAuthInterceptor extends Interceptor {
+  /// Creates an [BaselineAuthInterceptor] with the given dependencies
+  BaselineAuthInterceptor({
+    ITokenStore? tokenStore,
+    SecureStorageService? secureStorageService,
+    required Future<Result<String>> Function() refreshToken,
+    Dio Function()? retryDioFactory,
+    IKeyValueStore? keyValueStore,
+    ISessionTerminationSink? sessionSink,
+    SessionGeneration? sessionGeneration,
+  }) : _retryDioFactory = retryDioFactory,
+       _keyValueStore = keyValueStore,
+       _sessionSink = sessionSink,
+       _sessionGeneration = sessionGeneration ?? SessionGeneration(),
+       _tokenStore =
+           tokenStore ??
+           (secureStorageService != null
+               ? SecureTokenStore(secureStorageService)
+               : throw ArgumentError(
+                   'Either tokenStore or secureStorageService must be provided.',
+                 )),
+       _refreshToken = refreshToken;
+
+  /// Token storage for retrieving and storing authentication tokens
+  final ITokenStore _tokenStore;
+
+  /// The token store this interceptor authenticates from.
+  ///
+  /// Exposed so other interceptors can make credential-dependent decisions
+  /// from the same source of truth instead of inspecting request headers,
+  /// which are only populated once [onRequest] has run.
+  ITokenStore get tokenStore => _tokenStore;
+
+  /// Non-sensitive storage holding the cached user blob, if wired.
+  ///
+  /// Needed so a forced logout here leaves the same state as
+  /// `AuthRepository.logout()`. Optional only so existing call sites that
+  /// construct this interceptor by hand keep compiling; the app wires it in
+  /// `lib/features/auth/di/auth_providers.dart`.
+  final IKeyValueStore? _keyValueStore;
+
+  /// The running app's session state, if wired.
+  ///
+  /// Clearing storage is not enough on its own: the app that is *already
+  /// running* holds the session in memory, and nothing in this layer is
+  /// allowed to know what holds it. A forced logout that only emptied storage
+  /// left the authenticated shell on screen, backed by credentials that no
+  /// longer existed, until the next cold start.
+  ///
+  /// A constructor dependency rather than an `attach...` call, unlike
+  /// [_responseCache]: the sink is resolvable when `authInterceptorProvider`
+  /// builds this interceptor, because it defers reading the notifier until
+  /// something actually terminates a session.
+  ///
+  /// Optional for the same reason [_keyValueStore] is: hand-built call sites
+  /// (and every test that drives this interceptor standalone) keep compiling,
+  /// and a missing sink degrades to not telling the running app - the
+  /// behaviour before the sink existed - rather than to a crash.
+  final ISessionTerminationSink? _sessionSink;
+
+  /// Which sign-in the credentials this interceptor writes belong to.
+  ///
+  /// The 401 handler reads it before awaiting the refresh and re-checks it
+  /// before persisting anything, so a logout that lands during the round trip
+  /// cannot be undone by the response that arrives after it.
+  /// [_logoutUser] advances it for the same
+  /// reason in the other direction.
+  ///
+  /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
+  /// production: two of the three credential writes behind one refresh happen
+  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
+  /// would leave those two unguarded.
+  ///
+  /// Optional for the same reason [_keyValueStore] and [_sessionSink] are:
+  /// hand-built call sites keep compiling. A standalone interceptor still
+  /// guards its own writes against its own forced logouts; it simply cannot
+  /// see terminations raised elsewhere, because nothing else holds its
+  /// counter.
+  final SessionGeneration _sessionGeneration;
+
+  /// Locally persisted HTTP response cache, if wired.
+  ///
+  /// Set by `ApiClient` through [attachResponseCache] rather than by the
+  /// constructor: the cache is a `CacheInterceptor` the client builds itself,
+  /// so it does not exist yet when this interceptor is constructed in
+  /// `authInterceptorProvider`.
+  ///
+  /// Stays null when nobody attaches one, which mirrors how `httpCache` is
+  /// optional in `AuthRepositoryImpl`.
+  IHttpResponseCache? _responseCache;
+
+  /// Binds the response cache this interceptor must empty on forced logout.
+  ///
+  /// Called by `ApiClient` once the cache interceptor is built. Safe to call
+  /// more than once; the last cache wins.
+  ///
+  /// A method rather than the setter `use_setters_to_change_properties` asks
+  /// for, to pair with [attachTransport]: both are post-construction wiring
+  /// performed by `ApiClient`, and reading them the same way is worth more here
+  /// than the lint.
+  // ignore: use_setters_to_change_properties
+  void attachResponseCache(IHttpResponseCache cache) => _responseCache = cache;
+
+  /// Callback to refresh the access token.
+  ///
+  /// Intentionally a callback (instead of depending on a repository/provider)
+  /// to avoid DI cycles during app bootstrap.
+  final Future<Result<String>> Function() _refreshToken;
+
+  /// Optional factory for the Dio instance used to replay the original
+  /// request after a successful refresh.
+  ///
+  /// Production leaves this null: the replay client is built once and borrows
+  /// the transport of the client this interceptor is attached to (see
+  /// [attachTransport]), so the replay cannot re-enter this interceptor but
+  /// still goes through the pinned adapter. Tests inject a factory to point
+  /// the replay at a fake [HttpClientAdapter].
+  final Dio Function()? _retryDioFactory;
+
+  /// The client this interceptor is installed on, if any.
+  ///
+  /// Only its transport and base options are borrowed - never its interceptor
+  /// chain, which would re-enter this interceptor on every replay.
+  Dio? _hostDio;
+
+  /// Single replay client, created on first use and reused afterwards.
+  Dio? _retryDio;
+
+  /// Binds this interceptor to the client it is installed on.
+  ///
+  /// Called by `ApiClient` after the transport (including certificate
+  /// pinning) is configured, so replayed requests use the same adapter
+  /// instead of a fresh, unpinned one.
+  void attachTransport(Dio dio) {
+    _hostDio = dio;
+    // Drop any replay client built against the previous transport.
+    _closeRetryDio();
+  }
+
+  /// Returns the single replay client, creating it on first use.
+  Dio retryDio() {
+    final existing = _retryDio;
+    if (existing != null) {
+      return existing;
+    }
+
+    final factory = _retryDioFactory;
+    final created = factory != null ? factory() : _buildRetryDio();
+    _retryDio = created;
+    return created;
+  }
+
+  Dio _buildRetryDio() {
+    final host = _hostDio;
+    final dio = Dio(
+      BaseOptions(
+        baseUrl:
+            host?.options.baseUrl ??
+            AppConfig.baseUrl + ApiEndpoints.apiVersion,
+        connectTimeout:
+            host?.options.connectTimeout ??
+            Duration(seconds: AppConfig.apiConnectTimeout),
+        receiveTimeout:
+            host?.options.receiveTimeout ??
+            Duration(seconds: AppConfig.apiReceiveTimeout),
+        sendTimeout:
+            host?.options.sendTimeout ??
+            Duration(seconds: AppConfig.apiSendTimeout),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    if (host != null) {
+      // Borrow the host transport so pinning applies to the replay too.
+      dio.httpClientAdapter = SharedTransportAdapter(
+        () => host.httpClientAdapter,
+      );
+      // And the host's logging and performance tracing, in the host's
+      // order: a replay resolved from onError ends the host chain, so only
+      // these see its response. ApiLoggingInterceptor redacts the replay's
+      // fresh Authorization header like any other.
+      dio.interceptors.addAll(
+        host.interceptors.where(
+          (i) => i is ApiLoggingInterceptor || i is PerformanceInterceptor,
+        ),
+      );
+    } else {
+      // Not attached to a client (standalone use): pin the replay directly.
+      final pinned = SslPinning.fromConfig().createAdapter();
+      if (pinned != null) {
+        dio.httpClientAdapter = pinned;
+      }
+    }
+
+    return dio;
+  }
+
+  void _closeRetryDio() {
+    _retryDio?.close(force: true);
+    _retryDio = null;
+  }
+
+  /// Releases the replay client and its connection pool.
+  ///
+  /// Wired to provider disposal; safe to call more than once.
+  void dispose() => _closeRetryDio();
+
+  /// Flag to track if token refresh is in progress
+  bool _isRefreshing = false;
+
+  /// Queue of pending requests waiting for token refresh to complete
+  final List<_PendingRequest> _pendingRequests = [];
+
+  /// `RequestOptions.extra` key recording that the `Authorization` header was
+  /// written by [onRequest] rather than attached by the caller.
+  static const String _injectedAuthorizationKey = 'auth_interceptor_injected';
+
+  /// The failure code a refresher sets when the refresh token itself is dead.
+  ///
+  /// The same string as `AuthErrorCodes.refreshTokenExpired`, which core
+  /// cannot import; a test pins the two
+  /// together. See [_endsSession].
+  static const String refreshTokenExpiredCode = 'REFRESH_TOKEN_EXPIRED';
+
+  /// `RequestOptions.extra` key recording the [SessionGeneration] a request
+  /// was first sent under. See [onRequest].
+  static const String _issuedUnderGenerationKey = 'auth_session_generation';
+
+  /// Endpoints that should not trigger token refresh
+  static const List<String> _excludedEndpoints = [
+    ApiEndpoints.login,
+    ApiEndpoints.register,
+    ApiEndpoints.refreshToken,
+    ApiEndpoints.logout,
+  ];
+
+  @override
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    // An absolute URL on another origin - a presigned upload, a CDN, a
+    // pagination link - is not this API: the token is never sent there, and
+    // a header the caller attached is theirs to keep.
+    if (!_targetsApiOrigin(options)) return super.onRequest(options, handler);
+
+    // A re-send - a `RetryInterceptor` attempt runs the whole chain again with
+    // the earlier attempt's `extra` - of a request first sent under a session
+    // that has since ended. Authorising it with the token stored now would
+    // send it as whoever signed in during the backoff, and hand that user's
+    // response to the ended session's caller.
+    // The first send stamps the generation, so only a re-send can find it
+    // stale here; the check after the token read covers both.
+    final issuedUnder = options.extra.putIfAbsent(
+      _issuedUnderGenerationKey,
+      () => _sessionGeneration.current,
+    );
+    if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
+
+    // Get token from secure storage. dio does not await this callback, so a
+    // store that throws - `ITokenStore` is a public seam, and an `Error` gets
+    // past the default store's own guard - would call neither `next` nor
+    // `reject`: the caller's future would never complete, and the exception
+    // would surface as an uncaught zone error.
+    final String? token;
+    try {
+      token = await _tokenStore.getAccessToken();
+    } on Object catch (error, stackTrace) {
+      options.extra[RetryInterceptor.retryExtraKey] = false;
+      handler.reject(
+        DioException(
+          requestOptions: options,
+          error: error,
+          stackTrace: stackTrace,
+          message: 'Could not read the access token.',
+        ),
+        true,
+      );
+      return;
+    }
+
+    // Checked again because the read above is a platform call: a sign-out and
+    // a different user's sign-in landing while it was pending return *their*
+    // token, and sending it would run this session's request - first send or
+    // re-send - as the new user.
+    if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
+
+    if (token != null && token.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $token';
+      options.extra[_injectedAuthorizationKey] = true;
+    } else if (options.extra.remove(_injectedAuthorizationKey) == true) {
+      // A re-send of a request this interceptor already authorised - a
+      // `RetryInterceptor` attempt copies the earlier attempt's headers - and
+      // the session has ended since. Leaving the header would put the ended
+      // session's bearer token on the wire.
+      // Only a header this interceptor wrote is removed; one the caller
+      // attached itself is theirs to keep.
+      options.headers.remove('Authorization');
+    }
+
+    super.onRequest(options, handler);
+  }
+
+  /// Rejects [options] when the session it was [issuedUnder] has ended.
+  ///
+  /// Returns true when it rejected, so the caller stops. The rejection is a
+  /// `DioExceptionType.cancel` marked with [RetryInterceptor.retryExtraKey]
+  /// `= false`, so it is not re-sent either.
+  bool _rejectIfSessionEnded(
+    Object? issuedUnder,
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
+    if (issuedUnder is! int || _sessionGeneration.isCurrent(issuedUnder)) {
+      return false;
+    }
+    options.extra[RetryInterceptor.retryExtraKey] = false;
+    handler.reject(
+      DioException(
+        requestOptions: options,
+        type: DioExceptionType.cancel,
+        message: 'The session this request was sent under has ended.',
+      ),
+      true,
+    );
+    return true;
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // Handle 401 Unauthorized - refresh token or logout
+    if (err.response?.statusCode == 401) {
+      // Another origin's 401 says nothing about this API's session, and it
+      // was never sent this API's token.
+      if (!_targetsApiOrigin(err.requestOptions) ||
+          _shouldExcludeEndpoint(err.requestOptions)) {
+        return super.onError(err, handler);
+      }
+
+      // A 401 for a request sent under a session that has since ended - its
+      // user signed out, and maybe someone else signed in - says nothing about
+      // the session that is current now. Refreshing would rotate the *current*
+      // user's credentials and replay the ended session's request as them, and
+      // with nothing stored it would log out whoever is signing in. Neither
+      // happens: the request just fails.
+      if (!_issuedUnderCurrentSession(err.requestOptions)) {
+        _reject(handler, err);
+        return;
+      }
+
+      return await _handle401Error(err, handler);
+    }
+
+    super.onError(err, handler);
+  }
+
+  /// Whether [options] was sent under the session that is current now.
+  ///
+  /// [onRequest] stamps the generation on every API-origin request; one with
+  /// no stamp never went through it, and is judged by its 401 alone as before.
+  bool _issuedUnderCurrentSession(RequestOptions options) {
+    final issuedUnder = options.extra[_issuedUnderGenerationKey];
+    return issuedUnder is! int || _sessionGeneration.isCurrent(issuedUnder);
+  }
+
+  /// Whether [options] goes to the API's own origin - the scheme, host and
+  /// port of its base URL.
+  ///
+  /// Judged on [RequestOptions.uri], the URL dio will actually fetch, not on
+  /// the path alone. dio sends an absolute path as is, and it *joins* a
+  /// relative one to the base URL as strings rather than resolving it: with a
+  /// base URL that has no path, `@evil.example/x` or `.evil.example/x` lands
+  /// on another host although the path has no scheme. A URL that cannot be
+  /// parsed counts as foreign, so it never carries the token.
+  ///
+  /// A client with no base URL - the interceptor installed on a bare `Dio` -
+  /// has no origin to compare against, so every request on it counts as the
+  /// API's.
+  static bool _targetsApiOrigin(RequestOptions options) {
+    final api = Uri.parse(options.baseUrl);
+    if (!api.hasAuthority) return true;
+    final Uri target;
+    try {
+      target = options.uri;
+    } on FormatException {
+      return false;
+    }
+    return target.scheme == api.scheme &&
+        target.host == api.host &&
+        target.port == api.port;
+  }
+
+  /// Whether [options] targets one of the auth endpoints themselves, whose
+  /// 401 means the credentials were refused rather than that a token expired.
+  ///
+  /// An exact match on the endpoint path, not `contains`: a route that merely
+  /// contains `/auth/login` - `/users/auth/login-history` - is an ordinary
+  /// authenticated route and must refresh like any other.
+  /// The query string is ignored, and an
+  /// absolute URL is reduced to its path below the base URL's.
+  bool _shouldExcludeEndpoint(RequestOptions options) {
+    return _excludedEndpoints.contains(_endpointPath(options));
+  }
+
+  /// The endpoint [options] targets, relative to the base URL, with a leading
+  /// slash and no query string or trailing slash.
+  static String _endpointPath(RequestOptions options) {
+    final target = Uri.parse(options.path);
+    var path = target.path;
+    if (target.hasScheme) {
+      final basePath = Uri.parse(options.baseUrl).path;
+      if (basePath.isNotEmpty && path.startsWith(basePath)) {
+        path = path.substring(basePath.length);
+      }
+    }
+    if (!path.startsWith('/')) path = '/$path';
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.substring(0, path.length - 1);
+    }
+    return path;
+  }
+
+  /// Handles 401 Unauthorized errors by attempting token refresh
+  ///
+  /// Every exit path completes both this request's handler and every queued
+  /// handler: a handler that is neither resolved nor rejected leaves its
+  /// caller awaiting a future that never finishes.
+  ///
+  /// No exit path persists a credential belonging to a session that ended
+  /// while the refresh was in flight. See [_sessionGeneration].
+  Future<void> _handle401Error(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // No retry-count check: the replay goes through `retryDio()`, which has
+    // no `BaselineAuthInterceptor`, so a replay answered 401 cannot re-enter this
+    // method - it surfaces from `_retryRequest` below and logs out there.
+
+    // If refresh is already in progress, queue this request
+    if (_isRefreshing) {
+      return _queueRequest(err, handler);
+    }
+
+    // Start token refresh
+    _isRefreshing = true;
+    String? refreshedToken;
+
+    // Read before the round trip, checked after it: anything that ends the
+    // session in between makes this value stale for good.
+    final generation = _sessionGeneration.current;
+
+    try {
+      final result = await _refreshToken();
+
+      if (!_sessionGeneration.isCurrent(generation)) {
+        // The session this refresh belonged to ended while it was in flight -
+        // a logout, a forced logout, or a fresh sign-in. Persist nothing and
+        // replay nothing: the teardown already emptied the store, and a newer
+        // sign-in may have filled it again with credentials that are not ours
+        // to overwrite.
+        //
+        // Deliberately *not* a _logoutUser() call. Whoever advanced the
+        // generation has already torn the session down, and repeating it would
+        // clear a session that started after this refresh did - the exact
+        // damage the guard exists to prevent, inflicted from the other side.
+        //
+        // refreshedToken stays null, so the `finally` drain rejects every
+        // queued request rather than replaying it with a dead token.
+        _reject(handler, err);
+        return;
+      }
+
+      final newToken = result.isSuccess ? result.dataOrNull : null;
+
+      if (result
+          case ResultFailure(
+            :final failure,
+          )
+          when !_endsSession(failure)) {
+        // Transport trouble on the refresh endpoint, not a dead refresh token:
+        // the session is still good, so nothing is torn down and nothing is
+        // replayed. The caller fails with the refresh failure as the cause
+        // rather than with this 401, whose "please login again" would be
+        // false. refreshedToken stays null,
+        // so the `finally` drain rejects every queued request too.
+        _reject(handler, _refreshFailedTransiently(err, failure));
+        return;
+      }
+
+      if (newToken == null) {
+        // Refresh failed (or returned nothing usable), logout user
+        await _logoutUser();
+        _reject(handler, err);
+        return;
+      }
+
+      // Update token in secure storage
+      await _tokenStore.setAccessToken(newToken);
+
+      // Checked again because the write above is a platform call: a logout or
+      // sign-in landing while it was pending makes the replay belong to a
+      // session that has ended, and sending it would put the fresh token on
+      // the wire after the user signed out.
+      // Same exit as the check above, for the same reasons: no replay, no
+      // _logoutUser(), and the `finally` drain rejects every queued request.
+      if (!_sessionGeneration.isCurrent(generation)) {
+        _reject(handler, err);
+        return;
+      }
+      refreshedToken = newToken;
+
+      // Retry original request with new token.
+      //
+      // Its own `try`, because a failed replay is not a failed refresh. The
+      // token is fresh and stored, so a transient replay failure (a 503, a
+      // timeout) fails this one request and nothing else: the session stays,
+      // and the `finally` drain still replays the queued requests.
+      //
+      // A replay answered 401 is the one exception: the server refused a token
+      // it just issued, so the session really is unusable.
+      try {
+        final retryResponse = await _retryRequest(err, newToken);
+        handler.resolve(retryResponse);
+      } on Object catch (e) {
+        if (e is DioException && e.response?.statusCode == 401) {
+          refreshedToken = null;
+          await _logoutUser();
+        }
+        _reject(handler, _asDioException(err, e));
+      }
+    }
+    // Catches Error as well as Exception on purpose: a TypeError from a
+    // malformed refresh response must not leave _isRefreshing stuck true.
+    on Object catch (e) {
+      refreshedToken = null;
+      await _logoutUser();
+      _reject(handler, _asDioException(err, e));
+    } finally {
+      // Reset before draining: a 401 arriving during the drain must be able
+      // to start a fresh refresh rather than queue behind a finished one.
+      _isRefreshing = false;
+      await _drainPendingRequests(refreshedToken, generation);
+    }
+  }
+
+  /// Fails the request with [error] **without ending the error chain**.
+  ///
+  /// In dio's error chain, a bare `handler.reject(error)` skips every
+  /// interceptor registered after this one - `RetryInterceptor`,
+  /// `ApiLoggingInterceptor` and `ErrorInterceptor` in `ApiClient` - so the
+  /// 401 would reach the caller unlogged and unmapped. `next` hands it on
+  /// (on every dio 5.x, with no flag a later edit could drop), so it is
+  /// logged and mapped like any other failing status. Every failure exit in
+  /// this class goes through here.
+  ///
+  /// Forwarded, but **never re-sent**. The error is marked with
+  /// [RetryInterceptor.retryExtraKey] `= false` before it moves on, so
+  /// `RetryInterceptor` passes it through instead of replaying it. Every exit
+  /// that reaches here has already ended the request's session or given up on
+  /// it, and a failed replay's options carry the bearer token minted for the
+  /// session that was just torn down, which must not go back on the wire.
+  void _reject(ErrorInterceptorHandler handler, DioException error) {
+    error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
+    handler.next(error);
+  }
+
+  /// Whether a failed refresh means the session is over.
+  ///
+  /// Fails closed. Only two shapes are known to be transport trouble rather
+  /// than a dead credential, and only those leave the session alone:
+  ///
+  /// - a [NetworkFailure], meaning a timeout, connection error or bad
+  ///   certificate on the refresh call;
+  /// - an untagged [ServerFailure]. `AuthRepositoryImpl` tags the statuses
+  ///   that mean the refresh token is dead (400, 401 and 403) with
+  ///   [refreshTokenExpiredCode], so what is left is 408, 429 and 5xx.
+  ///
+  /// Everything else ends the session:
+  ///
+  /// - the [refreshTokenExpiredCode] tag, on any failure type;
+  /// - core's own `NO_TOKEN_REFRESHER`;
+  /// - an untagged auth, unknown or other failure from a custom refresher.
+  ///
+  /// The last case matters: an unrecognised failure is not given the benefit
+  /// of the doubt, because a session that can never refresh would otherwise
+  /// stay up indefinitely.
+  static bool _endsSession(Failure failure) {
+    if (failure.code == refreshTokenExpiredCode) return true;
+    return failure is! NetworkFailure && failure is! ServerFailure;
+  }
+
+  /// The error a request fails with when its refresh failed transiently.
+  ///
+  /// `DioExceptionType.unknown` with the failure's message, so
+  /// `ErrorInterceptor` maps it to a `NetworkException` that says the session
+  /// could not be refreshed. The original 401 would map to a
+  /// `ServerException` telling the user to sign in again, when the session is
+  /// still good.
+  DioException _refreshFailedTransiently(DioException original, Failure f) {
+    return DioException(
+      requestOptions: original.requestOptions,
+      error: f,
+      message:
+          'Could not refresh the session (${f.code ?? f.runtimeType}): '
+          '${f.message}',
+    );
+  }
+
+  /// Wraps a non-Dio failure so the caller still gets a [DioException].
+  DioException _asDioException(DioException original, Object error) {
+    if (error is DioException) {
+      return error;
+    }
+    return DioException(
+      requestOptions: original.requestOptions,
+      error: error,
+      response: original.response,
+      type: original.type,
+    );
+  }
+
+  /// Retries the original request with a new token
+  ///
+  /// The body goes through [RequestBodyReplay]: a [FormData] is sent as a
+  /// clone, because dio finalizes the original on the first send, and a body
+  /// that cannot be read twice fails the replay with a [DioException] naming
+  /// the reason.
+  Future<Response<dynamic>> _retryRequest(
+    DioException err,
+    String newToken,
+  ) async {
+    final requestOptions = err.requestOptions;
+
+    if (!RequestBodyReplay.canReplay(requestOptions.data)) {
+      final reason = RequestBodyReplay.reason(requestOptions.data);
+      throw DioException(
+        requestOptions: requestOptions,
+        message: reason,
+        error: NetworkException(
+          reason,
+          code: RequestBodyReplay.notReplayableCode,
+        ),
+      );
+    }
+
+    // Create new request options with updated headers
+    final newOptions = requestOptions.copyWith(
+      headers: {
+        ...requestOptions.headers,
+        'Authorization': 'Bearer $newToken',
+      },
+    );
+
+    // Replay through the shared retry client so the transport - and its
+    // certificate pinning - matches the original request.
+    return await retryDio().request(
+      newOptions.path,
+      data: RequestBodyReplay.bodyFor(newOptions.data),
+      queryParameters: newOptions.queryParameters,
+      // Cancelling the original request must abort the replay too.
+      cancelToken: requestOptions.cancelToken,
+      onSendProgress: requestOptions.onSendProgress,
+      onReceiveProgress: requestOptions.onReceiveProgress,
+      options: Options(
+        method: newOptions.method,
+        headers: newOptions.headers,
+        contentType: newOptions.contentType,
+        responseType: newOptions.responseType,
+        followRedirects: newOptions.followRedirects,
+        maxRedirects: newOptions.maxRedirects,
+        validateStatus: newOptions.validateStatus,
+        receiveTimeout: newOptions.receiveTimeout,
+        sendTimeout: newOptions.sendTimeout,
+        transformTimeout: newOptions.transformTimeout,
+        // The original's per-request metadata travels with the replay - its
+        // performance trace among it, which the replay client's borrowed
+        // PerformanceInterceptor finishes with the replay's outcome.
+        extra: Map<String, dynamic>.of(newOptions.extra),
+      ),
+    );
+  }
+
+  /// Queues a request to be retried after token refresh completes
+  void _queueRequest(DioException err, ErrorInterceptorHandler handler) {
+    _pendingRequests.add(_PendingRequest(err, handler));
+  }
+
+  /// Completes every queued request.
+  ///
+  /// With a [newToken] each one is replayed and resolved (or rejected if the
+  /// replay fails). Without one the refresh failed, so each queued handler is
+  /// rejected with its own original error - never left dangling.
+  ///
+  /// [generation] is the session the refresh was started under. A queued
+  /// request is **rejected, not replayed**, once that generation is no longer
+  /// current: replaying would put `Authorization: Bearer ...` on the wire for
+  /// a user who has signed out, and the caller of a request issued before the
+  /// logout has no use for its body afterwards. Rejection still completes the
+  /// handler, so nothing is stranded.
+  ///
+  /// The check is inside the loop rather than above it because each replay is
+  /// awaited: a logout landing part-way through the drain must stop the
+  /// remaining replays too, not only the ones not yet started.
+  Future<void> _drainPendingRequests(String? newToken, int generation) async {
+    if (_pendingRequests.isEmpty) {
+      return;
+    }
+
+    final requests = List<_PendingRequest>.from(_pendingRequests);
+    _pendingRequests.clear();
+
+    for (final pending in requests) {
+      // The last check covers a request that queued under an older session
+      // than the refresh's, which onError already turns away; kept here so the
+      // drain never replays one as the newer user whatever path queued it.
+      if (newToken == null ||
+          !_sessionGeneration.isCurrent(generation) ||
+          !_issuedUnderCurrentSession(pending.error.requestOptions)) {
+        _reject(pending.handler, pending.error);
+        continue;
+      }
+
+      try {
+        final retryResponse = await _retryRequest(pending.error, newToken);
+        pending.handler.resolve(retryResponse);
+      } on Object catch (e) {
+        // If retry fails, reject the pending request
+        _reject(pending.handler, _asDioException(pending.error, e));
+      }
+    }
+  }
+
+  /// Logs out the user by clearing all authentication data.
+  ///
+  /// Clears the tokens, the cached user blob and the HTTP response cache, so
+  /// this forced logout leaves exactly the state `AuthRepository.logout()`
+  /// leaves: a leftover blob would read as a session with no token, and
+  /// leftover cached bodies would outlive the session.
+  ///
+  /// The last step tells the **running app**, which renders the in-memory
+  /// session, *after* storage is emptied, so any listener reacting to the
+  /// change (the router guard, a screen refetching) already sees a device
+  /// with no session on it.
+  ///
+  /// Each step is guarded separately and no step is reachable only through
+  /// another: cleanup must never stop a handler from being completed, and a
+  /// failure - or absence - of one step must not skip the rest.
+  ///
+  /// The teardown is registered with the [SessionGeneration] before anything
+  /// else, so a sign-in - even one a session listener starts - waits for it
+  /// rather than storing credentials these steps would then delete. The
+  /// generation is then advanced, synchronously, ahead of every `await` in
+  /// [_tearDownSession], so anything still in flight for the ending session -
+  /// a refresh, a token write - is already stale by the time it reaches its
+  /// own check, rather than racing the teardown it is about to undo.
+  Future<void> _logoutUser() {
+    final done = Completer<void>();
+    _sessionGeneration.trackTeardown(done.future);
+    final teardown = _tearDownSession();
+    done.complete(teardown);
+    return teardown;
+  }
+
+  Future<void> _tearDownSession() async {
+    // Nothing in flight may write a credential for the session being ended.
+    // Unguarded on purpose: it is a synchronous integer increment that cannot
+    // throw, and a try/catch here would suggest it might.
+    _sessionGeneration.invalidate();
+
+    // Clear tokens from secure storage
+    try {
+      await _tokenStore.clearAllTokens();
+    } on Object catch (_) {
+      // Never let cleanup failure stop a handler from being completed.
+    }
+
+    // Clear the cached user from non-sensitive storage
+    final keyValueStore = _keyValueStore;
+    if (keyValueStore != null) {
+      try {
+        await keyValueStore.remove(AppConstants.userDataKey);
+      } on Object catch (_) {
+        // Same reason as above: cleanup is best-effort, completion is not.
+      }
+    }
+
+    // Drop cached response bodies: they are local session state too.
+    //
+    // Guarded rather than early-returned, so a step added after this one is
+    // never skipped.
+    final responseCache = _responseCache;
+    if (responseCache != null) {
+      try {
+        await responseCache.clearCache();
+      } on Object catch (_) {
+        // Same reason again. A cache that cannot be emptied must not strand
+        // the 401 that triggered this logout.
+      }
+    }
+
+    // Tell the running app its session is over, so the UI stops presenting it.
+    final sessionSink = _sessionSink;
+    if (sessionSink != null) {
+      try {
+        sessionSink.onSessionTerminated();
+      } on Object catch (_) {
+        // Deliberately swallowed, and load-bearing: a background request can
+        // 401 after the app's ProviderContainer is gone, and resolving a
+        // disposed provider throws. There is no in-memory session left to
+        // clear in that case, and the request's handler must still complete.
+      }
+    }
+  }
+}
+
+class ProbeAdapter implements HttpClientAdapter {
+  ProbeAdapter(this.valid);
+  final String? valid;
+  final bearers = <Object?>[];
+  @override
+  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? body, Future<void>? cancel) async {
+    bearers.add(options.headers['Authorization']);
+    return ResponseBody.fromString('{}', options.headers['Authorization'] == valid ? 200 : 401);
+  }
+  @override
+  void close({bool force = false}) {}
+}
+void main() {
+  registerBaselineBoundaryCases();
+  for(final baseline in [true, false]) {
+    test('${baseline ? 'baseline' : 'current'} custom refresher persists only refresh token', () async {
+      final tokens = InMemoryTokenStore()..accessToken='A1'..refreshToken='R1';
+      final replay = ProbeAdapter('Bearer A2');
+      Future<Result<String>> refresh() async {
+        await tokens.setRefreshToken('R2');
+        return const Success('A2');
+      }
+      final Interceptor auth = baseline
+        ? BaselineAuthInterceptor(tokenStore:tokens,refreshToken:refresh,retryDioFactory:()=>Dio()..httpClientAdapter=replay)
+        : AuthInterceptor(tokenStore:tokens,refreshToken:refresh,retryDioFactory:()=>Dio()..httpClientAdapter=replay);
+      final dio=Dio(BaseOptions(baseUrl:'https://example.invalid'))..httpClientAdapter=ProbeAdapter(null)..interceptors.add(auth);
+      Object? outcome;
+      try {outcome=await dio.get<dynamic>('/profile');} on Object catch(e) {outcome=e;}
+      print('baseline=$baseline outcome=${outcome.runtimeType} replay=${replay.bearers} access=${tokens.accessToken} refresh=${tokens.refreshToken}');
+      dio.close(force:true);
+      expect(outcome,isA<Response<dynamic>>());
+      expect(tokens.accessToken,'A2');
+      expect(tokens.refreshToken,'R2');
+      expect(replay.bearers,['Bearer A2']);
+    });
+  }
+}
+
+class _SecureService extends Mock implements SecureStorageService {}
+
+class _Tokens extends InMemoryTokenStore {
+  final writes = <String>[];
+  int clears = 0;
+  Object? snapshotError;
+  void Function()? afterSnapshot;
+  AccessTokenWriteResult? forcedConditional;
+  void Function()? afterConditional;
+
+  @override
+  Future<void> clearAllTokens() {
+    clears++;
+    return super.clearAllTokens();
+  }
+
+  @override
+  Future<AccessTokenSnapshot?> getAccessTokenSnapshot() async {
+    final snapshot = await super.getAccessTokenSnapshot();
+    final hook = afterSnapshot;
+    afterSnapshot = null;
+    hook?.call();
+    final error = snapshotError;
+    if (error != null) Error.throwWithStackTrace(error, StackTrace.current);
+    return snapshot;
+  }
+
+  int reads = 0;
+  int? holdRead;
+  final readEntered = Completer<void>();
+  final releaseRead = Completer<void>();
+
+  @override
+  Future<String?> getAccessToken() async {
+    final snapshot = await super.getAccessToken();
+    if (++reads == holdRead) {
+      readEntered.complete();
+      await releaseRead.future;
+    }
+    return snapshot;
+  }
+
+  @override
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  ) async {
+    final forced = forcedConditional;
+    if (forced != null) {
+      // A failed reservation still changes revision. A conflict is modeled
+      // by another actor replacing the credentials before this comparison.
+      if (forced == AccessTokenWriteResult.conflict) {
+        accessToken = 'external';
+        refreshToken = 'external-refresh';
+      } else {
+        await trackCredentialMutation<void>(() {});
+      }
+      final hook = afterConditional;
+      if (hook != null) scheduleMicrotask(hook);
+      return forced;
+    }
+    final outcome = await super.setAccessTokenIfCurrent(expected, token);
+    if (outcome == AccessTokenWriteResult.applied) writes.add(token);
+    return outcome;
+  }
+
+  @override
+  Future<bool> setAccessToken(String token) {
+    writes.add(token);
+    return super.setAccessToken(token);
+  }
+}
+
+class _RotatingRemote implements AuthRemoteDataSource {
+  int rotation = 1;
+  String Function(int)? accessForRotation;
+  String get currentAccess => accessForRotation?.call(rotation) ?? 'A$rotation';
+
+  @override
+  Future<AuthResponseModel> refreshToken(String refreshToken) async {
+    expect(refreshToken, 'R$rotation');
+    rotation++;
+    return AuthResponseModel(
+      user: const UserModel(id: 'u', email: 'u@example.test'),
+      token: currentAccess,
+      refreshToken: 'R$rotation',
+    );
+  }
+
+  @override
+  Future<void> logout({String? refreshToken, String? accessToken}) async {}
+
+  @override
+  Future<AuthResponseModel> login(String email, String password) =>
+      throw UnimplementedError();
+
+  @override
+  Future<AuthResponseModel> register(
+    String email,
+    String password,
+    String name,
+  ) => throw UnimplementedError();
+}
+
+class _Adapter implements HttpClientAdapter {
+  _Adapter(this.status);
+  final int Function(RequestOptions) status;
+  final bearers = <Object?>[];
+  final entered = Completer<void>();
+  Completer<void>? release;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    bearers.add(options.headers['Authorization']);
+    if (!entered.isCompleted) entered.complete();
+    if (release != null) await release!.future;
+    return ResponseBody.fromString(
+      jsonEncode({'ok': true}),
+      status(options),
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
+class _ObservedInterceptor extends BaselineAuthInterceptor {
+  _ObservedInterceptor({
+    required super.tokenStore,
+    required super.refreshToken,
+    required super.sessionGeneration,
+    required super.retryDioFactory,
+    super.keyValueStore,
+  });
+
+  final secondError = Completer<void>();
+  int errors = 0;
+
+  @override
+  Future<void> onError(DioException error, ErrorInterceptorHandler handler) {
+    final handling = super.onError(error, handler);
+    if (++errors == 2) secondError.complete();
+    return handling;
+  }
+}
+
+Future<Object> _settle(Future<Response<dynamic>> request) async {
+  try {
+    return await request;
+  } on Object catch (error) {
+    return error;
+  }
+}
+
+Future<T> _within<T>(Future<T> future) =>
+    future.timeout(const Duration(seconds: 5));
+
+void registerBaselineBoundaryCases() {
+  late _Tokens tokens;
+  late InMemoryKeyValueStore preferences;
+  late SessionGeneration generation;
+  late _RotatingRemote remote;
+  late AuthRepositoryImpl repository;
+  late _Adapter original;
+  late _Adapter replay;
+
+  setUp(() {
+    tokens = _Tokens()
+      ..accessToken = 'A1'
+      ..refreshToken = 'R1';
+    preferences = InMemoryKeyValueStore();
+    generation = SessionGeneration();
+    remote = _RotatingRemote();
+    repository = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      localDataSource: AuthLocalDataSourceImpl(
+        storageService: preferences,
+        tokenStore: tokens,
+      ),
+      sessionGeneration: generation,
+    );
+    original = _Adapter((_) => 401);
+    replay = _Adapter(
+      (options) =>
+          options.headers['Authorization'] == 'Bearer ${remote.currentAccess}'
+          ? 200
+          : 401,
+    );
+  });
+
+  ({Dio dio, _ObservedInterceptor interceptor}) client(
+    Future<Result<String>> Function() refresh, {
+    ITokenStore? store,
+  }) {
+    final interceptor = _ObservedInterceptor(
+      tokenStore: store ?? tokens,
+      keyValueStore: preferences,
+      sessionGeneration: generation,
+      refreshToken: refresh,
+      retryDioFactory: () => Dio()..httpClientAdapter = replay,
+    );
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.invalid'))
+      ..httpClientAdapter = original
+      ..interceptors.add(interceptor);
+    addTearDown(() {
+      interceptor.dispose();
+      dio.close(force: true);
+    });
+    return (dio: dio, interceptor: interceptor);
+  }
+
+  test(
+    'delayed repository callback preserves a later rotation for all replays',
+    () async {
+      final callbackReady = Completer<void>();
+      final releaseCallback = Completer<void>();
+      final pair = client(() async {
+        final result = await repository.refreshToken();
+        callbackReady.complete();
+        await releaseCallback.future;
+        return result;
+      });
+      final first = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(callbackReady.future);
+      final second = _settle(pair.dio.get<dynamic>('/tasks'));
+      await _within(pair.interceptor.secondError.future);
+
+      expect((await repository.refreshToken()).isSuccess, isTrue);
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      releaseCallback.complete();
+      final outcomes = await _within(Future.wait([first, second]));
+
+      expect(tokens.writes, ['A2', 'A3'], reason: 'no late duplicate A2 write');
+      expect(replay.bearers, ['Bearer A3', 'Bearer A3']);
+      expect(
+        outcomes.every((value) => value is Response && value.statusCode == 200),
+        isTrue,
+      );
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+    },
+  );
+
+  test(
+    'a callback that only returns a token is still persisted and replayed',
+    () async {
+      replay = _Adapter((_) => 200);
+      final pair = client(() async => const Success('A2'));
+      final response = await _within(pair.dio.get<dynamic>('/profile'));
+      expect(response.statusCode, 200);
+      expect(tokens.writes, ['A2']);
+      expect(tokens.accessToken, 'A2');
+      expect(replay.bearers, ['Bearer A2']);
+    },
+  );
+
+  test(
+    'a rotation before the callback starts does not suppress its new result',
+    () async {
+      original.release = Completer<void>();
+      replay = _Adapter((_) => 200);
+      final pair = client(() async => const Success('A3'));
+      final pending = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(original.entered.future);
+      await tokens.setAccessToken('A2');
+      original.release!.complete();
+      expect(await _within(pending), isA<Response<dynamic>>());
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.writes, ['A2', 'A3']);
+      expect(replay.bearers, ['Bearer A3']);
+    },
+  );
+
+  test('a repository-persisted refresh is not written a second time', () async {
+    final pair = client(repository.refreshToken);
+    final response = await _within(pair.dio.get<dynamic>('/profile'));
+    expect(response.statusCode, 200);
+    expect(tokens.writes, ['A2']);
+    expect(tokens.refreshToken, 'R2');
+    expect(replay.bearers, ['Bearer A2']);
+  });
+  test('ABA rotations preserve the newer access/refresh pairing', () async {
+    remote.accessForRotation = (rotation) =>
+        rotation == 3 ? 'A1' : 'A$rotation';
+    final ready = Completer<void>();
+    final release = Completer<void>();
+    final pair = client(() async {
+      final result = await repository.refreshToken();
+      ready.complete();
+      await release.future;
+      return result;
+    });
+    final pending = _settle(pair.dio.get<dynamic>('/profile'));
+    await _within(ready.future);
+    expect((await repository.refreshToken()).isSuccess, isTrue);
+    expect(tokens.accessToken, 'A1');
+    release.complete();
+    expect(await _within(pending), isA<Response<dynamic>>());
+    expect(tokens.writes, ['A2', 'A1']);
+    expect(tokens.refreshToken, 'R3');
+    expect(replay.bearers, ['Bearer A1']);
+  });
+
+  test(
+    'a stale held snapshot read never replays or deletes a newer rotation',
+    () async {
+      tokens.holdRead = 2;
+      final pair = client(repository.refreshToken);
+      final pending = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(tokens.readEntered.future);
+      expect((await repository.refreshToken()).isSuccess, isTrue);
+      tokens.releaseRead.complete();
+      final outcome = await _within(pending);
+      expect(outcome, isA<DioException>());
+      expect((outcome as DioException).type, DioExceptionType.cancel);
+      expect(tokens.writes, ['A2', 'A3']);
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test('a new session during snapshot selection is untouched', () async {
+    tokens.holdRead = 2;
+    final pair = client(() async => const Success('A2'));
+    final pending = _settle(pair.dio.get<dynamic>('/profile'));
+    await _within(tokens.readEntered.future);
+    generation.invalidate();
+    await tokens.setAccessToken('different-user');
+    await tokens.setRefreshToken('different-refresh');
+    tokens.releaseRead.complete();
+    expect(await _within(pending), isA<DioException>());
+    expect(tokens.accessToken, 'different-user');
+    expect(tokens.refreshToken, 'different-refresh');
+    expect(tokens.clears, 0);
+    expect(replay.bearers, isEmpty);
+  });
+
+  test(
+    'a revision changed after certification is rechecked before dispatch',
+    () async {
+      tokens.afterSnapshot = () {
+        tokens
+          ..accessToken = 'external'
+          ..refreshToken = 'external-refresh';
+      };
+      final pair = client(() async => const Success('A2'));
+      expect(
+        await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+        isA<DioException>(),
+      );
+      expect(tokens.accessToken, 'external');
+      expect(tokens.refreshToken, 'external-refresh');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test('conditional conflict rejects without replay or teardown', () async {
+    tokens.forcedConditional = AccessTokenWriteResult.conflict;
+    final pair = client(() async => const Success('A2'));
+    expect(
+      await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+      isA<DioException>(),
+    );
+    expect(tokens.accessToken, 'external');
+    expect(tokens.refreshToken, 'external-refresh');
+    expect(tokens.clears, 0);
+    expect(replay.bearers, isEmpty);
+  });
+
+  test(
+    'a failed adoption cannot delete credentials installed after its result',
+    () async {
+      tokens.forcedConditional = AccessTokenWriteResult.failed;
+      tokens.afterConditional = () {
+        tokens
+          ..accessToken = 'external'
+          ..refreshToken = 'external-refresh';
+      };
+      final pair = client(() async => const Success('A2'));
+      expect(
+        await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+        isA<DioException>(),
+      );
+      expect(tokens.accessToken, 'external');
+      expect(tokens.refreshToken, 'external-refresh');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test(
+    'a snapshot read error after success preserves the newer stored session',
+    () async {
+      final pair = client(() async {
+        final result = await repository.refreshToken();
+        expect((await repository.refreshToken()).isSuccess, isTrue);
+        tokens.snapshotError = StateError('platform read failed');
+        return result;
+      });
+      expect(
+        await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+        isA<DioException>(),
+      );
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test(
+    'a later rotation during replay survives its old 401 and feeds the queue',
+    () async {
+      replay.release = Completer<void>();
+      final pair = client(repository.refreshToken);
+      final first = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(replay.entered.future);
+      final second = _settle(pair.dio.get<dynamic>('/tasks'));
+      await _within(pair.interceptor.secondError.future);
+      expect((await repository.refreshToken()).isSuccess, isTrue);
+      replay.release!.complete();
+      final outcomes = await _within(Future.wait([first, second]));
+      expect(outcomes.first, isA<DioException>());
+      expect(outcomes.last, isA<Response<dynamic>>());
+      expect(replay.bearers, ['Bearer A2', 'Bearer A3']);
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      expect(tokens.clears, 0);
+    },
+  );
+  test(
+    'the secure adapter refuses a timed out stale snapshot after rotation',
+    () async {
+      final service = _SecureService();
+      final values = <String, String>{
+        AppConstants.tokenKey: 'A1',
+        AppConstants.refreshTokenKey: 'R1',
+      };
+      final readEntered = Completer<void>();
+      final releaseRead = Completer<void>();
+      var accessReads = 0;
+      var removals = 0;
+      when(() => service.getStringOrThrow(any())).thenAnswer((call) async {
+        final key = call.positionalArguments[0] as String;
+        final captured = values[key];
+        if (key == AppConstants.tokenKey && ++accessReads == 2) {
+          readEntered.complete();
+          await releaseRead.future;
+        }
+        return captured;
+      });
+      when(() => service.setString(any(), any())).thenAnswer((call) async {
+        values[call.positionalArguments[0] as String] =
+            call.positionalArguments[1] as String;
+        return true;
+      });
+      when(() => service.remove(any())).thenAnswer((call) async {
+        removals++;
+        values.remove(call.positionalArguments[0] as String);
+        return true;
+      });
+      final store = SecureTokenStore(
+        service,
+        operationTimeout: const Duration(milliseconds: 5),
+      );
+      final realRepository = AuthRepositoryImpl(
+        remoteDataSource: remote,
+        localDataSource: AuthLocalDataSourceImpl(
+          storageService: preferences,
+          tokenStore: store,
+        ),
+        sessionGeneration: generation,
+      );
+      final pair = client(realRepository.refreshToken, store: store);
+      final request = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(readEntered.future);
+      // Queue timeout lets the newer repository write complete while the old
+      // platform read is still held. Certification must not bless its A2.
+      expect((await _within(realRepository.refreshToken())).isSuccess, isTrue);
+      releaseRead.complete();
+      final outcome = await _within(request);
+      expect(outcome, isA<DioException>());
+      expect(replay.bearers, isEmpty);
+      expect(values[AppConstants.tokenKey], 'A3');
+      expect(values[AppConstants.refreshTokenKey], 'R3');
+      expect(removals, 0);
+      expect((await store.getAccessTokenSnapshot())?.token, 'A3');
+    },
+  );
+}
+
+FOLLOW-UP REVIEW OF ROOT PATCH
+$ git diff -- [production, migration docs, boundary tests]
+diff --git a/docs/api/core/network.md b/docs/api/core/network.md
+index db15fc5340d..30105ce910e 100644
+--- a/docs/api/core/network.md
++++ b/docs/api/core/network.md
+@@ -614,7 +614,8 @@ its own.
+ 2. If a refresh is already in flight, the request is queued in
+    `_pendingRequests` and this handler returns.
+ 3. Otherwise the `refreshToken` callback runs.
+-   - **Success:** the interceptor selects a certified token-store snapshot.
++   - **Success:** the interceptor compares certified token-store snapshots
++     captured before and after the callback.
+      If credentials changed while the callback was running, the stored token
+      takes precedence over its returned value. Otherwise a callback that only
+      returns a token is persisted through a conditional write. Repository
+@@ -629,6 +630,15 @@ its own.
+      session. A replay answered **401** logs out only if that selected
+      credential and session are still current; a later rotation is preserved.
+      Selection does not lock independent rotations through the network call.
++     A mutation that leaves the starting access token in place while returning
++     a different candidate is ambiguous (refresh-only persistence or an ABA
++     rotation); the request is cancelled without replay or teardown.
++
++     **Custom callback migration:** either persist the complete rotated
++     credential pair before returning, as `AuthRepositoryImpl` does, or return
++     the access token without mutating the token store. A callback that writes
++     only the refresh token must persist its matching access token too;
++     the interceptor cannot safely infer ownership of a partial mutation.
+    - **Failure:** the refresh-failure policy below applies. Session-generation
+      checks prevent a callback belonging to an ended session from clearing a
+      newer sign-in.
+diff --git a/lib/core/network/interceptors/auth_interceptor.dart b/lib/core/network/interceptors/auth_interceptor.dart
+index 0a42ff27e7a..4d2981fe2ab 100644
+--- a/lib/core/network/interceptors/auth_interceptor.dart
++++ b/lib/core/network/interceptors/auth_interceptor.dart
+@@ -490,7 +490,19 @@ class AuthInterceptor extends Interceptor {
+     final generation = _sessionGeneration.current;
+ 
+     try {
+-      final revisionBeforeRefresh = _tokenStore.credentialRevision;
++      final AccessTokenSnapshot? beforeRefresh;
++      try {
++        beforeRefresh = await _tokenStore.getAccessTokenSnapshot();
++      } on Object catch (error) {
++        _reject(handler, _asDioException(err, error));
++        return;
++      }
++      if (!_sessionGeneration.isCurrent(generation) ||
++          beforeRefresh == null ||
++          !identical(beforeRefresh.revision, _tokenStore.credentialRevision)) {
++        _reject(handler, _selectionChanged(err));
++        return;
++      }
+       final result = await _refreshToken();
+ 
+       if (!_sessionGeneration.isCurrent(generation)) {
+@@ -539,7 +551,7 @@ class AuthInterceptor extends Interceptor {
+       try {
+         selected = await _selectRefreshResult(
+           newToken,
+-          revisionBeforeRefresh,
++          beforeRefresh,
+           generation,
+         );
+       } on Object catch (error) {
+@@ -610,7 +622,7 @@ class AuthInterceptor extends Interceptor {
+ 
+   Future<AccessTokenSnapshot?> _selectRefreshResult(
+     String candidate,
+-    Object revisionBeforeRefresh,
++    AccessTokenSnapshot beforeRefresh,
+     int generation,
+   ) async {
+     final current = await _tokenStore.getAccessTokenSnapshot();
+@@ -621,7 +633,13 @@ class AuthInterceptor extends Interceptor {
+     }
+     // Repository callbacks persist themselves. A delayed result cannot own
+     // a write after any newer credential mutation, even an ABA rotation.
+-    if (!identical(revisionBeforeRefresh, current.revision)) {
++    if (!identical(beforeRefresh.revision, current.revision)) {
++      // A refresh-only write by a custom callback is indistinguishable from
++      // an ABA rotation here. Neither the old access token nor the returned
++      // candidate can safely be associated with the stored refresh token.
++      if (current.token == beforeRefresh.token && current.token != candidate) {
++        return null;
++      }
+       return _usableCurrentSnapshot(current) ? current : null;
+     }
+     if (candidate.isEmpty) return null;
+diff --git a/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart b/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+index 425560c9df2..aedc6cf6c4c 100644
+--- a/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
++++ b/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+@@ -325,16 +325,17 @@ void main() {
+     expect((await repository.refreshToken()).isSuccess, isTrue);
+     expect(tokens.accessToken, 'A1');
+     release.complete();
+-    expect(await _within(pending), isA<Response<dynamic>>());
++    expect(await _within(pending), isA<DioException>());
+     expect(tokens.writes, ['A2', 'A1']);
+     expect(tokens.refreshToken, 'R3');
+-    expect(replay.bearers, ['Bearer A1']);
++    expect(replay.bearers, isEmpty);
++    expect(tokens.clears, 0);
+   });
+ 
+   test(
+     'a stale held snapshot read never replays or deletes a newer rotation',
+     () async {
+-      tokens.holdRead = 2;
++      tokens.holdRead = 3;
+       final pair = client(repository.refreshToken);
+       final pending = _settle(pair.dio.get<dynamic>('/profile'));
+       await _within(tokens.readEntered.future);
+@@ -352,7 +353,7 @@ void main() {
+   );
+ 
+   test('a new session during snapshot selection is untouched', () async {
+-    tokens.holdRead = 2;
++    tokens.holdRead = 3;
+     final pair = client(() async => const Success('A2'));
+     final pending = _settle(pair.dio.get<dynamic>('/profile'));
+     await _within(tokens.readEntered.future);
+@@ -370,12 +371,14 @@ void main() {
+   test(
+     'a revision changed after certification is rechecked before dispatch',
+     () async {
+-      tokens.afterSnapshot = () {
+-        tokens
+-          ..accessToken = 'external'
+-          ..refreshToken = 'external-refresh';
+-      };
+-      final pair = client(() async => const Success('A2'));
++      final pair = client(() async {
++        tokens.afterSnapshot = () {
++          tokens
++            ..accessToken = 'external'
++            ..refreshToken = 'external-refresh';
++        };
++        return const Success('A2');
++      });
+       expect(
+         await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+         isA<DioException>(),
+@@ -476,7 +479,7 @@ void main() {
+       when(() => service.getStringOrThrow(any())).thenAnswer((call) async {
+         final key = call.positionalArguments[0] as String;
+         final captured = values[key];
+-        if (key == AppConstants.tokenKey && ++accessReads == 2) {
++        if (key == AppConstants.tokenKey && ++accessReads == 3) {
+           readEntered.complete();
+           await releaseRead.future;
+         }
+@@ -520,4 +523,51 @@ void main() {
+       expect((await store.getAccessTokenSnapshot())?.token, 'A3');
+     },
+   );
++  test(
++    'partial callback persistence is rejected without clearing its credentials',
++    () async {
++      final pair = client(() async {
++        await tokens.setRefreshToken('R2');
++        return const Success('A2');
++      });
++      final outcome = await _within(_settle(pair.dio.get<dynamic>('/profile')));
++      expect(outcome, isA<DioException>());
++      expect((outcome as DioException).type, DioExceptionType.cancel);
++      expect(tokens.accessToken, 'A1');
++      expect(tokens.refreshToken, 'R2');
++      expect(tokens.clears, 0);
++      expect(replay.bearers, isEmpty);
++      expect(tokens.writes, isEmpty);
++    },
++  );
++  for (final throws in [false, true]) {
++    test(
++      'an ${throws ? 'error' : 'uncertain read'} before refresh preserves credentials',
++      () async {
++        var callbackCalled = false;
++        if (throws) {
++          tokens.snapshotError = StateError('read failed');
++        } else {
++          tokens.afterSnapshot = () {
++            tokens
++              ..accessToken = 'external'
++              ..refreshToken = 'external-refresh';
++          };
++        }
++        final pair = client(() async {
++          callbackCalled = true;
++          return const Success('A2');
++        });
++        expect(
++          await _within(_settle(pair.dio.get<dynamic>('/profile'))),
++          isA<DioException>(),
++        );
++        expect(callbackCalled, isFalse);
++        expect(tokens.accessToken, throws ? 'A1' : 'external');
++        expect(tokens.refreshToken, throws ? 'R1' : 'external-refresh');
++        expect(tokens.clears, 0);
++        expect(replay.bearers, isEmpty);
++      },
++    );
++  }
+ }
+
+$ flutter test --no-pub /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart --plain-name 'custom refresher persists only refresh token' --plain-name 'followup initial snapshot' --reporter expanded
+00:00 +0: loading test
+No tests ran.
+No tests match both names.
+EXIT 79 (test filter AND; corrected below)
+
+$ flutter test --no-pub /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart --name '(custom refresher persists only refresh token|followup initial snapshot)' --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/.git/codex-issue-work/1196-final-review_test.dart
+00:00 +0: followup initial snapshot uncertainty rejects original and queue without cleanup
+initialThrow=false results=[DioException, DioException] callbackCalls=0 clears=0 replay=[]
+00:00 +1: followup initial snapshot error rejects original and queue without cleanup
+initialThrow=true results=[DioException, DioException] callbackCalls=0 clears=0 replay=[]
+00:00 +2: baseline custom refresher persists only refresh token
+baseline=true outcome=Response<dynamic> replay=[Bearer A2] access=A2 refresh=R2
+00:00 +3: current custom refresher persists only refresh token
+baseline=false outcome=DioException replay=[] access=A1 refresh=R2
+00:00 +4: All tests passed!
+
+EXIT 0
+FOLLOW-UP FINDINGS: No remaining actionable introduced defect found. Original P2 is addressed: partial callback now cancels with access A1 / refresh R2 preserved, no replay. This intentionally removes prior partial-persistence functionality; migration text explains callbacks must persist complete pair or mutate neither credential. Conservative rejection of ambiguous ABA state is sound: neither result ownership can be proven from opaque general revision plus unchanged access token. Initial certified-read uncertainty and thrown read failure both finish original and queued handlers, invoke no refresher, issue no replay and clear no credentials (independent probes above). Session changes are checked immediately after initial certification; selection checks and main/queue final dispatch revision checks remain in place. No unsafe candidate adoption was added. Original baseline meaningful-test failure and initial regression evidence remain earlier in this log.
+LIMITATIONS: review covers patched working tree (parent commit ed888d71a2b before follow-up commit), not a final committed SHA yet; parent owns full/scoped suites, not rerun here. No live-device/backend or broad independent suite.
+FOLLOW-UP PROBE SOURCE
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_starter/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:flutter_starter/features/auth/data/models/auth_response_model.dart';
+import 'package:flutter_starter/features/auth/data/models/user_model.dart';
+import 'package:flutter_starter/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:flutter_starter/core/config/app_config.dart';
+import 'package:flutter_starter/core/constants/api_endpoints.dart';
+import 'package:flutter_starter/core/constants/app_constants.dart';
+import 'package:flutter_starter/core/contracts/network_contracts.dart';
+import 'package:flutter_starter/core/contracts/state_boundary_contracts.dart';
+import 'package:flutter_starter/core/contracts/storage_contracts.dart';
+import 'package:flutter_starter/core/errors/exceptions.dart';
+import 'package:flutter_starter/core/errors/failures.dart';
+import 'package:flutter_starter/core/network/adapters/shared_transport_adapter.dart';
+import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/performance_interceptor.dart';
+import 'package:flutter_starter/core/network/interceptors/retry_interceptor.dart';
+import 'package:flutter_starter/core/network/request_body_replay.dart';
+import 'package:flutter_starter/core/network/ssl_pinning.dart';
+import 'package:flutter_starter/core/session/session_generation.dart';
+import 'package:flutter_starter/core/storage/adapters/secure_token_store.dart';
+import 'package:flutter_starter/core/storage/secure_storage_service.dart';
+import 'package:flutter_starter/core/utils/result.dart';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
+import '/Users/nguyenanhkiet/Playground/flutter-starter/test/helpers/in_memory_stores.dart';
+import 'dart:typed_data';
+
+/// Pending request data structure for queuing requests during token refresh
+class _PendingRequest {
+  _PendingRequest(this.error, this.handler);
+
+  final DioException error;
+  final ErrorInterceptorHandler handler;
+}
+
+/// Interceptor for adding authentication tokens to requests and handling
+/// automatic token refresh on 401 Unauthorized responses
+class BaselineAuthInterceptor extends Interceptor {
+  /// Creates an [BaselineAuthInterceptor] with the given dependencies
+  BaselineAuthInterceptor({
+    ITokenStore? tokenStore,
+    SecureStorageService? secureStorageService,
+    required Future<Result<String>> Function() refreshToken,
+    Dio Function()? retryDioFactory,
+    IKeyValueStore? keyValueStore,
+    ISessionTerminationSink? sessionSink,
+    SessionGeneration? sessionGeneration,
+  }) : _retryDioFactory = retryDioFactory,
+       _keyValueStore = keyValueStore,
+       _sessionSink = sessionSink,
+       _sessionGeneration = sessionGeneration ?? SessionGeneration(),
+       _tokenStore =
+           tokenStore ??
+           (secureStorageService != null
+               ? SecureTokenStore(secureStorageService)
+               : throw ArgumentError(
+                   'Either tokenStore or secureStorageService must be provided.',
+                 )),
+       _refreshToken = refreshToken;
+
+  /// Token storage for retrieving and storing authentication tokens
+  final ITokenStore _tokenStore;
+
+  /// The token store this interceptor authenticates from.
+  ///
+  /// Exposed so other interceptors can make credential-dependent decisions
+  /// from the same source of truth instead of inspecting request headers,
+  /// which are only populated once [onRequest] has run.
+  ITokenStore get tokenStore => _tokenStore;
+
+  /// Non-sensitive storage holding the cached user blob, if wired.
+  ///
+  /// Needed so a forced logout here leaves the same state as
+  /// `AuthRepository.logout()`. Optional only so existing call sites that
+  /// construct this interceptor by hand keep compiling; the app wires it in
+  /// `lib/features/auth/di/auth_providers.dart`.
+  final IKeyValueStore? _keyValueStore;
+
+  /// The running app's session state, if wired.
+  ///
+  /// Clearing storage is not enough on its own: the app that is *already
+  /// running* holds the session in memory, and nothing in this layer is
+  /// allowed to know what holds it. A forced logout that only emptied storage
+  /// left the authenticated shell on screen, backed by credentials that no
+  /// longer existed, until the next cold start.
+  ///
+  /// A constructor dependency rather than an `attach...` call, unlike
+  /// [_responseCache]: the sink is resolvable when `authInterceptorProvider`
+  /// builds this interceptor, because it defers reading the notifier until
+  /// something actually terminates a session.
+  ///
+  /// Optional for the same reason [_keyValueStore] is: hand-built call sites
+  /// (and every test that drives this interceptor standalone) keep compiling,
+  /// and a missing sink degrades to not telling the running app - the
+  /// behaviour before the sink existed - rather than to a crash.
+  final ISessionTerminationSink? _sessionSink;
+
+  /// Which sign-in the credentials this interceptor writes belong to.
+  ///
+  /// The 401 handler reads it before awaiting the refresh and re-checks it
+  /// before persisting anything, so a logout that lands during the round trip
+  /// cannot be undone by the response that arrives after it.
+  /// [_logoutUser] advances it for the same
+  /// reason in the other direction.
+  ///
+  /// Shared with `AuthRepositoryImpl` through `sessionGenerationProvider` in
+  /// production: two of the three credential writes behind one refresh happen
+  /// inside `AuthRepositoryImpl.refreshToken()`, and a per-instance counter
+  /// would leave those two unguarded.
+  ///
+  /// Optional for the same reason [_keyValueStore] and [_sessionSink] are:
+  /// hand-built call sites keep compiling. A standalone interceptor still
+  /// guards its own writes against its own forced logouts; it simply cannot
+  /// see terminations raised elsewhere, because nothing else holds its
+  /// counter.
+  final SessionGeneration _sessionGeneration;
+
+  /// Locally persisted HTTP response cache, if wired.
+  ///
+  /// Set by `ApiClient` through [attachResponseCache] rather than by the
+  /// constructor: the cache is a `CacheInterceptor` the client builds itself,
+  /// so it does not exist yet when this interceptor is constructed in
+  /// `authInterceptorProvider`.
+  ///
+  /// Stays null when nobody attaches one, which mirrors how `httpCache` is
+  /// optional in `AuthRepositoryImpl`.
+  IHttpResponseCache? _responseCache;
+
+  /// Binds the response cache this interceptor must empty on forced logout.
+  ///
+  /// Called by `ApiClient` once the cache interceptor is built. Safe to call
+  /// more than once; the last cache wins.
+  ///
+  /// A method rather than the setter `use_setters_to_change_properties` asks
+  /// for, to pair with [attachTransport]: both are post-construction wiring
+  /// performed by `ApiClient`, and reading them the same way is worth more here
+  /// than the lint.
+  // ignore: use_setters_to_change_properties
+  void attachResponseCache(IHttpResponseCache cache) => _responseCache = cache;
+
+  /// Callback to refresh the access token.
+  ///
+  /// Intentionally a callback (instead of depending on a repository/provider)
+  /// to avoid DI cycles during app bootstrap.
+  final Future<Result<String>> Function() _refreshToken;
+
+  /// Optional factory for the Dio instance used to replay the original
+  /// request after a successful refresh.
+  ///
+  /// Production leaves this null: the replay client is built once and borrows
+  /// the transport of the client this interceptor is attached to (see
+  /// [attachTransport]), so the replay cannot re-enter this interceptor but
+  /// still goes through the pinned adapter. Tests inject a factory to point
+  /// the replay at a fake [HttpClientAdapter].
+  final Dio Function()? _retryDioFactory;
+
+  /// The client this interceptor is installed on, if any.
+  ///
+  /// Only its transport and base options are borrowed - never its interceptor
+  /// chain, which would re-enter this interceptor on every replay.
+  Dio? _hostDio;
+
+  /// Single replay client, created on first use and reused afterwards.
+  Dio? _retryDio;
+
+  /// Binds this interceptor to the client it is installed on.
+  ///
+  /// Called by `ApiClient` after the transport (including certificate
+  /// pinning) is configured, so replayed requests use the same adapter
+  /// instead of a fresh, unpinned one.
+  void attachTransport(Dio dio) {
+    _hostDio = dio;
+    // Drop any replay client built against the previous transport.
+    _closeRetryDio();
+  }
+
+  /// Returns the single replay client, creating it on first use.
+  Dio retryDio() {
+    final existing = _retryDio;
+    if (existing != null) {
+      return existing;
+    }
+
+    final factory = _retryDioFactory;
+    final created = factory != null ? factory() : _buildRetryDio();
+    _retryDio = created;
+    return created;
+  }
+
+  Dio _buildRetryDio() {
+    final host = _hostDio;
+    final dio = Dio(
+      BaseOptions(
+        baseUrl:
+            host?.options.baseUrl ??
+            AppConfig.baseUrl + ApiEndpoints.apiVersion,
+        connectTimeout:
+            host?.options.connectTimeout ??
+            Duration(seconds: AppConfig.apiConnectTimeout),
+        receiveTimeout:
+            host?.options.receiveTimeout ??
+            Duration(seconds: AppConfig.apiReceiveTimeout),
+        sendTimeout:
+            host?.options.sendTimeout ??
+            Duration(seconds: AppConfig.apiSendTimeout),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    if (host != null) {
+      // Borrow the host transport so pinning applies to the replay too.
+      dio.httpClientAdapter = SharedTransportAdapter(
+        () => host.httpClientAdapter,
+      );
+      // And the host's logging and performance tracing, in the host's
+      // order: a replay resolved from onError ends the host chain, so only
+      // these see its response. ApiLoggingInterceptor redacts the replay's
+      // fresh Authorization header like any other.
+      dio.interceptors.addAll(
+        host.interceptors.where(
+          (i) => i is ApiLoggingInterceptor || i is PerformanceInterceptor,
+        ),
+      );
+    } else {
+      // Not attached to a client (standalone use): pin the replay directly.
+      final pinned = SslPinning.fromConfig().createAdapter();
+      if (pinned != null) {
+        dio.httpClientAdapter = pinned;
+      }
+    }
+
+    return dio;
+  }
+
+  void _closeRetryDio() {
+    _retryDio?.close(force: true);
+    _retryDio = null;
+  }
+
+  /// Releases the replay client and its connection pool.
+  ///
+  /// Wired to provider disposal; safe to call more than once.
+  void dispose() => _closeRetryDio();
+
+  /// Flag to track if token refresh is in progress
+  bool _isRefreshing = false;
+
+  /// Queue of pending requests waiting for token refresh to complete
+  final List<_PendingRequest> _pendingRequests = [];
+
+  /// `RequestOptions.extra` key recording that the `Authorization` header was
+  /// written by [onRequest] rather than attached by the caller.
+  static const String _injectedAuthorizationKey = 'auth_interceptor_injected';
+
+  /// The failure code a refresher sets when the refresh token itself is dead.
+  ///
+  /// The same string as `AuthErrorCodes.refreshTokenExpired`, which core
+  /// cannot import; a test pins the two
+  /// together. See [_endsSession].
+  static const String refreshTokenExpiredCode = 'REFRESH_TOKEN_EXPIRED';
+
+  /// `RequestOptions.extra` key recording the [SessionGeneration] a request
+  /// was first sent under. See [onRequest].
+  static const String _issuedUnderGenerationKey = 'auth_session_generation';
+
+  /// Endpoints that should not trigger token refresh
+  static const List<String> _excludedEndpoints = [
+    ApiEndpoints.login,
+    ApiEndpoints.register,
+    ApiEndpoints.refreshToken,
+    ApiEndpoints.logout,
+  ];
+
+  @override
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    // An absolute URL on another origin - a presigned upload, a CDN, a
+    // pagination link - is not this API: the token is never sent there, and
+    // a header the caller attached is theirs to keep.
+    if (!_targetsApiOrigin(options)) return super.onRequest(options, handler);
+
+    // A re-send - a `RetryInterceptor` attempt runs the whole chain again with
+    // the earlier attempt's `extra` - of a request first sent under a session
+    // that has since ended. Authorising it with the token stored now would
+    // send it as whoever signed in during the backoff, and hand that user's
+    // response to the ended session's caller.
+    // The first send stamps the generation, so only a re-send can find it
+    // stale here; the check after the token read covers both.
+    final issuedUnder = options.extra.putIfAbsent(
+      _issuedUnderGenerationKey,
+      () => _sessionGeneration.current,
+    );
+    if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
+
+    // Get token from secure storage. dio does not await this callback, so a
+    // store that throws - `ITokenStore` is a public seam, and an `Error` gets
+    // past the default store's own guard - would call neither `next` nor
+    // `reject`: the caller's future would never complete, and the exception
+    // would surface as an uncaught zone error.
+    final String? token;
+    try {
+      token = await _tokenStore.getAccessToken();
+    } on Object catch (error, stackTrace) {
+      options.extra[RetryInterceptor.retryExtraKey] = false;
+      handler.reject(
+        DioException(
+          requestOptions: options,
+          error: error,
+          stackTrace: stackTrace,
+          message: 'Could not read the access token.',
+        ),
+        true,
+      );
+      return;
+    }
+
+    // Checked again because the read above is a platform call: a sign-out and
+    // a different user's sign-in landing while it was pending return *their*
+    // token, and sending it would run this session's request - first send or
+    // re-send - as the new user.
+    if (_rejectIfSessionEnded(issuedUnder, options, handler)) return;
+
+    if (token != null && token.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $token';
+      options.extra[_injectedAuthorizationKey] = true;
+    } else if (options.extra.remove(_injectedAuthorizationKey) == true) {
+      // A re-send of a request this interceptor already authorised - a
+      // `RetryInterceptor` attempt copies the earlier attempt's headers - and
+      // the session has ended since. Leaving the header would put the ended
+      // session's bearer token on the wire.
+      // Only a header this interceptor wrote is removed; one the caller
+      // attached itself is theirs to keep.
+      options.headers.remove('Authorization');
+    }
+
+    super.onRequest(options, handler);
+  }
+
+  /// Rejects [options] when the session it was [issuedUnder] has ended.
+  ///
+  /// Returns true when it rejected, so the caller stops. The rejection is a
+  /// `DioExceptionType.cancel` marked with [RetryInterceptor.retryExtraKey]
+  /// `= false`, so it is not re-sent either.
+  bool _rejectIfSessionEnded(
+    Object? issuedUnder,
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
+    if (issuedUnder is! int || _sessionGeneration.isCurrent(issuedUnder)) {
+      return false;
+    }
+    options.extra[RetryInterceptor.retryExtraKey] = false;
+    handler.reject(
+      DioException(
+        requestOptions: options,
+        type: DioExceptionType.cancel,
+        message: 'The session this request was sent under has ended.',
+      ),
+      true,
+    );
+    return true;
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // Handle 401 Unauthorized - refresh token or logout
+    if (err.response?.statusCode == 401) {
+      // Another origin's 401 says nothing about this API's session, and it
+      // was never sent this API's token.
+      if (!_targetsApiOrigin(err.requestOptions) ||
+          _shouldExcludeEndpoint(err.requestOptions)) {
+        return super.onError(err, handler);
+      }
+
+      // A 401 for a request sent under a session that has since ended - its
+      // user signed out, and maybe someone else signed in - says nothing about
+      // the session that is current now. Refreshing would rotate the *current*
+      // user's credentials and replay the ended session's request as them, and
+      // with nothing stored it would log out whoever is signing in. Neither
+      // happens: the request just fails.
+      if (!_issuedUnderCurrentSession(err.requestOptions)) {
+        _reject(handler, err);
+        return;
+      }
+
+      return await _handle401Error(err, handler);
+    }
+
+    super.onError(err, handler);
+  }
+
+  /// Whether [options] was sent under the session that is current now.
+  ///
+  /// [onRequest] stamps the generation on every API-origin request; one with
+  /// no stamp never went through it, and is judged by its 401 alone as before.
+  bool _issuedUnderCurrentSession(RequestOptions options) {
+    final issuedUnder = options.extra[_issuedUnderGenerationKey];
+    return issuedUnder is! int || _sessionGeneration.isCurrent(issuedUnder);
+  }
+
+  /// Whether [options] goes to the API's own origin - the scheme, host and
+  /// port of its base URL.
+  ///
+  /// Judged on [RequestOptions.uri], the URL dio will actually fetch, not on
+  /// the path alone. dio sends an absolute path as is, and it *joins* a
+  /// relative one to the base URL as strings rather than resolving it: with a
+  /// base URL that has no path, `@evil.example/x` or `.evil.example/x` lands
+  /// on another host although the path has no scheme. A URL that cannot be
+  /// parsed counts as foreign, so it never carries the token.
+  ///
+  /// A client with no base URL - the interceptor installed on a bare `Dio` -
+  /// has no origin to compare against, so every request on it counts as the
+  /// API's.
+  static bool _targetsApiOrigin(RequestOptions options) {
+    final api = Uri.parse(options.baseUrl);
+    if (!api.hasAuthority) return true;
+    final Uri target;
+    try {
+      target = options.uri;
+    } on FormatException {
+      return false;
+    }
+    return target.scheme == api.scheme &&
+        target.host == api.host &&
+        target.port == api.port;
+  }
+
+  /// Whether [options] targets one of the auth endpoints themselves, whose
+  /// 401 means the credentials were refused rather than that a token expired.
+  ///
+  /// An exact match on the endpoint path, not `contains`: a route that merely
+  /// contains `/auth/login` - `/users/auth/login-history` - is an ordinary
+  /// authenticated route and must refresh like any other.
+  /// The query string is ignored, and an
+  /// absolute URL is reduced to its path below the base URL's.
+  bool _shouldExcludeEndpoint(RequestOptions options) {
+    return _excludedEndpoints.contains(_endpointPath(options));
+  }
+
+  /// The endpoint [options] targets, relative to the base URL, with a leading
+  /// slash and no query string or trailing slash.
+  static String _endpointPath(RequestOptions options) {
+    final target = Uri.parse(options.path);
+    var path = target.path;
+    if (target.hasScheme) {
+      final basePath = Uri.parse(options.baseUrl).path;
+      if (basePath.isNotEmpty && path.startsWith(basePath)) {
+        path = path.substring(basePath.length);
+      }
+    }
+    if (!path.startsWith('/')) path = '/$path';
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.substring(0, path.length - 1);
+    }
+    return path;
+  }
+
+  /// Handles 401 Unauthorized errors by attempting token refresh
+  ///
+  /// Every exit path completes both this request's handler and every queued
+  /// handler: a handler that is neither resolved nor rejected leaves its
+  /// caller awaiting a future that never finishes.
+  ///
+  /// No exit path persists a credential belonging to a session that ended
+  /// while the refresh was in flight. See [_sessionGeneration].
+  Future<void> _handle401Error(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // No retry-count check: the replay goes through `retryDio()`, which has
+    // no `BaselineAuthInterceptor`, so a replay answered 401 cannot re-enter this
+    // method - it surfaces from `_retryRequest` below and logs out there.
+
+    // If refresh is already in progress, queue this request
+    if (_isRefreshing) {
+      return _queueRequest(err, handler);
+    }
+
+    // Start token refresh
+    _isRefreshing = true;
+    String? refreshedToken;
+
+    // Read before the round trip, checked after it: anything that ends the
+    // session in between makes this value stale for good.
+    final generation = _sessionGeneration.current;
+
+    try {
+      final result = await _refreshToken();
+
+      if (!_sessionGeneration.isCurrent(generation)) {
+        // The session this refresh belonged to ended while it was in flight -
+        // a logout, a forced logout, or a fresh sign-in. Persist nothing and
+        // replay nothing: the teardown already emptied the store, and a newer
+        // sign-in may have filled it again with credentials that are not ours
+        // to overwrite.
+        //
+        // Deliberately *not* a _logoutUser() call. Whoever advanced the
+        // generation has already torn the session down, and repeating it would
+        // clear a session that started after this refresh did - the exact
+        // damage the guard exists to prevent, inflicted from the other side.
+        //
+        // refreshedToken stays null, so the `finally` drain rejects every
+        // queued request rather than replaying it with a dead token.
+        _reject(handler, err);
+        return;
+      }
+
+      final newToken = result.isSuccess ? result.dataOrNull : null;
+
+      if (result
+          case ResultFailure(
+            :final failure,
+          )
+          when !_endsSession(failure)) {
+        // Transport trouble on the refresh endpoint, not a dead refresh token:
+        // the session is still good, so nothing is torn down and nothing is
+        // replayed. The caller fails with the refresh failure as the cause
+        // rather than with this 401, whose "please login again" would be
+        // false. refreshedToken stays null,
+        // so the `finally` drain rejects every queued request too.
+        _reject(handler, _refreshFailedTransiently(err, failure));
+        return;
+      }
+
+      if (newToken == null) {
+        // Refresh failed (or returned nothing usable), logout user
+        await _logoutUser();
+        _reject(handler, err);
+        return;
+      }
+
+      // Update token in secure storage
+      await _tokenStore.setAccessToken(newToken);
+
+      // Checked again because the write above is a platform call: a logout or
+      // sign-in landing while it was pending makes the replay belong to a
+      // session that has ended, and sending it would put the fresh token on
+      // the wire after the user signed out.
+      // Same exit as the check above, for the same reasons: no replay, no
+      // _logoutUser(), and the `finally` drain rejects every queued request.
+      if (!_sessionGeneration.isCurrent(generation)) {
+        _reject(handler, err);
+        return;
+      }
+      refreshedToken = newToken;
+
+      // Retry original request with new token.
+      //
+      // Its own `try`, because a failed replay is not a failed refresh. The
+      // token is fresh and stored, so a transient replay failure (a 503, a
+      // timeout) fails this one request and nothing else: the session stays,
+      // and the `finally` drain still replays the queued requests.
+      //
+      // A replay answered 401 is the one exception: the server refused a token
+      // it just issued, so the session really is unusable.
+      try {
+        final retryResponse = await _retryRequest(err, newToken);
+        handler.resolve(retryResponse);
+      } on Object catch (e) {
+        if (e is DioException && e.response?.statusCode == 401) {
+          refreshedToken = null;
+          await _logoutUser();
+        }
+        _reject(handler, _asDioException(err, e));
+      }
+    }
+    // Catches Error as well as Exception on purpose: a TypeError from a
+    // malformed refresh response must not leave _isRefreshing stuck true.
+    on Object catch (e) {
+      refreshedToken = null;
+      await _logoutUser();
+      _reject(handler, _asDioException(err, e));
+    } finally {
+      // Reset before draining: a 401 arriving during the drain must be able
+      // to start a fresh refresh rather than queue behind a finished one.
+      _isRefreshing = false;
+      await _drainPendingRequests(refreshedToken, generation);
+    }
+  }
+
+  /// Fails the request with [error] **without ending the error chain**.
+  ///
+  /// In dio's error chain, a bare `handler.reject(error)` skips every
+  /// interceptor registered after this one - `RetryInterceptor`,
+  /// `ApiLoggingInterceptor` and `ErrorInterceptor` in `ApiClient` - so the
+  /// 401 would reach the caller unlogged and unmapped. `next` hands it on
+  /// (on every dio 5.x, with no flag a later edit could drop), so it is
+  /// logged and mapped like any other failing status. Every failure exit in
+  /// this class goes through here.
+  ///
+  /// Forwarded, but **never re-sent**. The error is marked with
+  /// [RetryInterceptor.retryExtraKey] `= false` before it moves on, so
+  /// `RetryInterceptor` passes it through instead of replaying it. Every exit
+  /// that reaches here has already ended the request's session or given up on
+  /// it, and a failed replay's options carry the bearer token minted for the
+  /// session that was just torn down, which must not go back on the wire.
+  void _reject(ErrorInterceptorHandler handler, DioException error) {
+    error.requestOptions.extra[RetryInterceptor.retryExtraKey] = false;
+    handler.next(error);
+  }
+
+  /// Whether a failed refresh means the session is over.
+  ///
+  /// Fails closed. Only two shapes are known to be transport trouble rather
+  /// than a dead credential, and only those leave the session alone:
+  ///
+  /// - a [NetworkFailure], meaning a timeout, connection error or bad
+  ///   certificate on the refresh call;
+  /// - an untagged [ServerFailure]. `AuthRepositoryImpl` tags the statuses
+  ///   that mean the refresh token is dead (400, 401 and 403) with
+  ///   [refreshTokenExpiredCode], so what is left is 408, 429 and 5xx.
+  ///
+  /// Everything else ends the session:
+  ///
+  /// - the [refreshTokenExpiredCode] tag, on any failure type;
+  /// - core's own `NO_TOKEN_REFRESHER`;
+  /// - an untagged auth, unknown or other failure from a custom refresher.
+  ///
+  /// The last case matters: an unrecognised failure is not given the benefit
+  /// of the doubt, because a session that can never refresh would otherwise
+  /// stay up indefinitely.
+  static bool _endsSession(Failure failure) {
+    if (failure.code == refreshTokenExpiredCode) return true;
+    return failure is! NetworkFailure && failure is! ServerFailure;
+  }
+
+  /// The error a request fails with when its refresh failed transiently.
+  ///
+  /// `DioExceptionType.unknown` with the failure's message, so
+  /// `ErrorInterceptor` maps it to a `NetworkException` that says the session
+  /// could not be refreshed. The original 401 would map to a
+  /// `ServerException` telling the user to sign in again, when the session is
+  /// still good.
+  DioException _refreshFailedTransiently(DioException original, Failure f) {
+    return DioException(
+      requestOptions: original.requestOptions,
+      error: f,
+      message:
+          'Could not refresh the session (${f.code ?? f.runtimeType}): '
+          '${f.message}',
+    );
+  }
+
+  /// Wraps a non-Dio failure so the caller still gets a [DioException].
+  DioException _asDioException(DioException original, Object error) {
+    if (error is DioException) {
+      return error;
+    }
+    return DioException(
+      requestOptions: original.requestOptions,
+      error: error,
+      response: original.response,
+      type: original.type,
+    );
+  }
+
+  /// Retries the original request with a new token
+  ///
+  /// The body goes through [RequestBodyReplay]: a [FormData] is sent as a
+  /// clone, because dio finalizes the original on the first send, and a body
+  /// that cannot be read twice fails the replay with a [DioException] naming
+  /// the reason.
+  Future<Response<dynamic>> _retryRequest(
+    DioException err,
+    String newToken,
+  ) async {
+    final requestOptions = err.requestOptions;
+
+    if (!RequestBodyReplay.canReplay(requestOptions.data)) {
+      final reason = RequestBodyReplay.reason(requestOptions.data);
+      throw DioException(
+        requestOptions: requestOptions,
+        message: reason,
+        error: NetworkException(
+          reason,
+          code: RequestBodyReplay.notReplayableCode,
+        ),
+      );
+    }
+
+    // Create new request options with updated headers
+    final newOptions = requestOptions.copyWith(
+      headers: {
+        ...requestOptions.headers,
+        'Authorization': 'Bearer $newToken',
+      },
+    );
+
+    // Replay through the shared retry client so the transport - and its
+    // certificate pinning - matches the original request.
+    return await retryDio().request(
+      newOptions.path,
+      data: RequestBodyReplay.bodyFor(newOptions.data),
+      queryParameters: newOptions.queryParameters,
+      // Cancelling the original request must abort the replay too.
+      cancelToken: requestOptions.cancelToken,
+      onSendProgress: requestOptions.onSendProgress,
+      onReceiveProgress: requestOptions.onReceiveProgress,
+      options: Options(
+        method: newOptions.method,
+        headers: newOptions.headers,
+        contentType: newOptions.contentType,
+        responseType: newOptions.responseType,
+        followRedirects: newOptions.followRedirects,
+        maxRedirects: newOptions.maxRedirects,
+        validateStatus: newOptions.validateStatus,
+        receiveTimeout: newOptions.receiveTimeout,
+        sendTimeout: newOptions.sendTimeout,
+        transformTimeout: newOptions.transformTimeout,
+        // The original's per-request metadata travels with the replay - its
+        // performance trace among it, which the replay client's borrowed
+        // PerformanceInterceptor finishes with the replay's outcome.
+        extra: Map<String, dynamic>.of(newOptions.extra),
+      ),
+    );
+  }
+
+  /// Queues a request to be retried after token refresh completes
+  void _queueRequest(DioException err, ErrorInterceptorHandler handler) {
+    _pendingRequests.add(_PendingRequest(err, handler));
+  }
+
+  /// Completes every queued request.
+  ///
+  /// With a [newToken] each one is replayed and resolved (or rejected if the
+  /// replay fails). Without one the refresh failed, so each queued handler is
+  /// rejected with its own original error - never left dangling.
+  ///
+  /// [generation] is the session the refresh was started under. A queued
+  /// request is **rejected, not replayed**, once that generation is no longer
+  /// current: replaying would put `Authorization: Bearer ...` on the wire for
+  /// a user who has signed out, and the caller of a request issued before the
+  /// logout has no use for its body afterwards. Rejection still completes the
+  /// handler, so nothing is stranded.
+  ///
+  /// The check is inside the loop rather than above it because each replay is
+  /// awaited: a logout landing part-way through the drain must stop the
+  /// remaining replays too, not only the ones not yet started.
+  Future<void> _drainPendingRequests(String? newToken, int generation) async {
+    if (_pendingRequests.isEmpty) {
+      return;
+    }
+
+    final requests = List<_PendingRequest>.from(_pendingRequests);
+    _pendingRequests.clear();
+
+    for (final pending in requests) {
+      // The last check covers a request that queued under an older session
+      // than the refresh's, which onError already turns away; kept here so the
+      // drain never replays one as the newer user whatever path queued it.
+      if (newToken == null ||
+          !_sessionGeneration.isCurrent(generation) ||
+          !_issuedUnderCurrentSession(pending.error.requestOptions)) {
+        _reject(pending.handler, pending.error);
+        continue;
+      }
+
+      try {
+        final retryResponse = await _retryRequest(pending.error, newToken);
+        pending.handler.resolve(retryResponse);
+      } on Object catch (e) {
+        // If retry fails, reject the pending request
+        _reject(pending.handler, _asDioException(pending.error, e));
+      }
+    }
+  }
+
+  /// Logs out the user by clearing all authentication data.
+  ///
+  /// Clears the tokens, the cached user blob and the HTTP response cache, so
+  /// this forced logout leaves exactly the state `AuthRepository.logout()`
+  /// leaves: a leftover blob would read as a session with no token, and
+  /// leftover cached bodies would outlive the session.
+  ///
+  /// The last step tells the **running app**, which renders the in-memory
+  /// session, *after* storage is emptied, so any listener reacting to the
+  /// change (the router guard, a screen refetching) already sees a device
+  /// with no session on it.
+  ///
+  /// Each step is guarded separately and no step is reachable only through
+  /// another: cleanup must never stop a handler from being completed, and a
+  /// failure - or absence - of one step must not skip the rest.
+  ///
+  /// The teardown is registered with the [SessionGeneration] before anything
+  /// else, so a sign-in - even one a session listener starts - waits for it
+  /// rather than storing credentials these steps would then delete. The
+  /// generation is then advanced, synchronously, ahead of every `await` in
+  /// [_tearDownSession], so anything still in flight for the ending session -
+  /// a refresh, a token write - is already stale by the time it reaches its
+  /// own check, rather than racing the teardown it is about to undo.
+  Future<void> _logoutUser() {
+    final done = Completer<void>();
+    _sessionGeneration.trackTeardown(done.future);
+    final teardown = _tearDownSession();
+    done.complete(teardown);
+    return teardown;
+  }
+
+  Future<void> _tearDownSession() async {
+    // Nothing in flight may write a credential for the session being ended.
+    // Unguarded on purpose: it is a synchronous integer increment that cannot
+    // throw, and a try/catch here would suggest it might.
+    _sessionGeneration.invalidate();
+
+    // Clear tokens from secure storage
+    try {
+      await _tokenStore.clearAllTokens();
+    } on Object catch (_) {
+      // Never let cleanup failure stop a handler from being completed.
+    }
+
+    // Clear the cached user from non-sensitive storage
+    final keyValueStore = _keyValueStore;
+    if (keyValueStore != null) {
+      try {
+        await keyValueStore.remove(AppConstants.userDataKey);
+      } on Object catch (_) {
+        // Same reason as above: cleanup is best-effort, completion is not.
+      }
+    }
+
+    // Drop cached response bodies: they are local session state too.
+    //
+    // Guarded rather than early-returned, so a step added after this one is
+    // never skipped.
+    final responseCache = _responseCache;
+    if (responseCache != null) {
+      try {
+        await responseCache.clearCache();
+      } on Object catch (_) {
+        // Same reason again. A cache that cannot be emptied must not strand
+        // the 401 that triggered this logout.
+      }
+    }
+
+    // Tell the running app its session is over, so the UI stops presenting it.
+    final sessionSink = _sessionSink;
+    if (sessionSink != null) {
+      try {
+        sessionSink.onSessionTerminated();
+      } on Object catch (_) {
+        // Deliberately swallowed, and load-bearing: a background request can
+        // 401 after the app's ProviderContainer is gone, and resolving a
+        // disposed provider throws. There is no in-memory session left to
+        // clear in that case, and the request's handler must still complete.
+      }
+    }
+  }
+}
+
+class ProbeAdapter implements HttpClientAdapter {
+  ProbeAdapter(this.valid);
+  final String? valid;
+  final bearers = <Object?>[];
+  @override
+  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? body, Future<void>? cancel) async {
+    bearers.add(options.headers['Authorization']);
+    return ResponseBody.fromString('{}', options.headers['Authorization'] == valid ? 200 : 401);
+  }
+  @override
+  void close({bool force = false}) {}
+}
+void main() {
+  registerBaselineBoundaryCases();
+  initialSelectionProbes();
+  for(final baseline in [true, false]) {
+    test('${baseline ? 'baseline' : 'current'} custom refresher persists only refresh token', () async {
+      final tokens = InMemoryTokenStore()..accessToken='A1'..refreshToken='R1';
+      final replay = ProbeAdapter('Bearer A2');
+      Future<Result<String>> refresh() async {
+        await tokens.setRefreshToken('R2');
+        return const Success('A2');
+      }
+      final Interceptor auth = baseline
+        ? BaselineAuthInterceptor(tokenStore:tokens,refreshToken:refresh,retryDioFactory:()=>Dio()..httpClientAdapter=replay)
+        : AuthInterceptor(tokenStore:tokens,refreshToken:refresh,retryDioFactory:()=>Dio()..httpClientAdapter=replay);
+      final dio=Dio(BaseOptions(baseUrl:'https://example.invalid'))..httpClientAdapter=ProbeAdapter(null)..interceptors.add(auth);
+      Object? outcome;
+      try {outcome=await dio.get<dynamic>('/profile');} on Object catch(e) {outcome=e;}
+      print('baseline=$baseline outcome=${outcome.runtimeType} replay=${replay.bearers} access=${tokens.accessToken} refresh=${tokens.refreshToken}');
+      dio.close(force:true);
+      if(baseline) {
+        expect(outcome,isA<Response<dynamic>>());
+        expect(tokens.accessToken,'A2');
+        expect(replay.bearers,['Bearer A2']);
+      } else {
+        expect(outcome,isA<DioException>());
+        expect((outcome as DioException).type,DioExceptionType.cancel);
+        expect(tokens.accessToken,'A1');
+        expect(replay.bearers,isEmpty);
+      }
+      expect(tokens.refreshToken,'R2');
+    });
+  }
+}
+
+class _SecureService extends Mock implements SecureStorageService {}
+
+class _Tokens extends InMemoryTokenStore {
+  final writes = <String>[];
+  int clears = 0;
+  Object? snapshotError;
+  void Function()? afterSnapshot;
+  AccessTokenWriteResult? forcedConditional;
+  void Function()? afterConditional;
+
+  @override
+  Future<void> clearAllTokens() {
+    clears++;
+    return super.clearAllTokens();
+  }
+
+  @override
+  Future<AccessTokenSnapshot?> getAccessTokenSnapshot() async {
+    final snapshot = await super.getAccessTokenSnapshot();
+    final hook = afterSnapshot;
+    afterSnapshot = null;
+    hook?.call();
+    final error = snapshotError;
+    if (error != null) Error.throwWithStackTrace(error, StackTrace.current);
+    return snapshot;
+  }
+
+  int reads = 0;
+  int? holdRead;
+  final readEntered = Completer<void>();
+  final releaseRead = Completer<void>();
+
+  @override
+  Future<String?> getAccessToken() async {
+    final snapshot = await super.getAccessToken();
+    if (++reads == holdRead) {
+      readEntered.complete();
+      await releaseRead.future;
+    }
+    return snapshot;
+  }
+
+  @override
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  ) async {
+    final forced = forcedConditional;
+    if (forced != null) {
+      // A failed reservation still changes revision. A conflict is modeled
+      // by another actor replacing the credentials before this comparison.
+      if (forced == AccessTokenWriteResult.conflict) {
+        accessToken = 'external';
+        refreshToken = 'external-refresh';
+      } else {
+        await trackCredentialMutation<void>(() {});
+      }
+      final hook = afterConditional;
+      if (hook != null) scheduleMicrotask(hook);
+      return forced;
+    }
+    final outcome = await super.setAccessTokenIfCurrent(expected, token);
+    if (outcome == AccessTokenWriteResult.applied) writes.add(token);
+    return outcome;
+  }
+
+  @override
+  Future<bool> setAccessToken(String token) {
+    writes.add(token);
+    return super.setAccessToken(token);
+  }
+}
+
+class _RotatingRemote implements AuthRemoteDataSource {
+  int rotation = 1;
+  String Function(int)? accessForRotation;
+  String get currentAccess => accessForRotation?.call(rotation) ?? 'A$rotation';
+
+  @override
+  Future<AuthResponseModel> refreshToken(String refreshToken) async {
+    expect(refreshToken, 'R$rotation');
+    rotation++;
+    return AuthResponseModel(
+      user: const UserModel(id: 'u', email: 'u@example.test'),
+      token: currentAccess,
+      refreshToken: 'R$rotation',
+    );
+  }
+
+  @override
+  Future<void> logout({String? refreshToken, String? accessToken}) async {}
+
+  @override
+  Future<AuthResponseModel> login(String email, String password) =>
+      throw UnimplementedError();
+
+  @override
+  Future<AuthResponseModel> register(
+    String email,
+    String password,
+    String name,
+  ) => throw UnimplementedError();
+}
+
+class _Adapter implements HttpClientAdapter {
+  _Adapter(this.status);
+  final int Function(RequestOptions) status;
+  final bearers = <Object?>[];
+  final entered = Completer<void>();
+  Completer<void>? release;
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    bearers.add(options.headers['Authorization']);
+    if (!entered.isCompleted) entered.complete();
+    if (release != null) await release!.future;
+    return ResponseBody.fromString(
+      jsonEncode({'ok': true}),
+      status(options),
+      headers: {
+        Headers.contentTypeHeader: [Headers.jsonContentType],
+      },
+    );
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
+class _ObservedInterceptor extends BaselineAuthInterceptor {
+  _ObservedInterceptor({
+    required super.tokenStore,
+    required super.refreshToken,
+    required super.sessionGeneration,
+    required super.retryDioFactory,
+    super.keyValueStore,
+  });
+
+  final secondError = Completer<void>();
+  int errors = 0;
+
+  @override
+  Future<void> onError(DioException error, ErrorInterceptorHandler handler) {
+    final handling = super.onError(error, handler);
+    if (++errors == 2) secondError.complete();
+    return handling;
+  }
+}
+
+Future<Object> _settle(Future<Response<dynamic>> request) async {
+  try {
+    return await request;
+  } on Object catch (error) {
+    return error;
+  }
+}
+
+Future<T> _within<T>(Future<T> future) =>
+    future.timeout(const Duration(seconds: 5));
+
+void registerBaselineBoundaryCases() {
+  late _Tokens tokens;
+  late InMemoryKeyValueStore preferences;
+  late SessionGeneration generation;
+  late _RotatingRemote remote;
+  late AuthRepositoryImpl repository;
+  late _Adapter original;
+  late _Adapter replay;
+
+  setUp(() {
+    tokens = _Tokens()
+      ..accessToken = 'A1'
+      ..refreshToken = 'R1';
+    preferences = InMemoryKeyValueStore();
+    generation = SessionGeneration();
+    remote = _RotatingRemote();
+    repository = AuthRepositoryImpl(
+      remoteDataSource: remote,
+      localDataSource: AuthLocalDataSourceImpl(
+        storageService: preferences,
+        tokenStore: tokens,
+      ),
+      sessionGeneration: generation,
+    );
+    original = _Adapter((_) => 401);
+    replay = _Adapter(
+      (options) =>
+          options.headers['Authorization'] == 'Bearer ${remote.currentAccess}'
+          ? 200
+          : 401,
+    );
+  });
+
+  ({Dio dio, _ObservedInterceptor interceptor}) client(
+    Future<Result<String>> Function() refresh, {
+    ITokenStore? store,
+  }) {
+    final interceptor = _ObservedInterceptor(
+      tokenStore: store ?? tokens,
+      keyValueStore: preferences,
+      sessionGeneration: generation,
+      refreshToken: refresh,
+      retryDioFactory: () => Dio()..httpClientAdapter = replay,
+    );
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.invalid'))
+      ..httpClientAdapter = original
+      ..interceptors.add(interceptor);
+    addTearDown(() {
+      interceptor.dispose();
+      dio.close(force: true);
+    });
+    return (dio: dio, interceptor: interceptor);
+  }
+
+  test(
+    'delayed repository callback preserves a later rotation for all replays',
+    () async {
+      final callbackReady = Completer<void>();
+      final releaseCallback = Completer<void>();
+      final pair = client(() async {
+        final result = await repository.refreshToken();
+        callbackReady.complete();
+        await releaseCallback.future;
+        return result;
+      });
+      final first = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(callbackReady.future);
+      final second = _settle(pair.dio.get<dynamic>('/tasks'));
+      await _within(pair.interceptor.secondError.future);
+
+      expect((await repository.refreshToken()).isSuccess, isTrue);
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      releaseCallback.complete();
+      final outcomes = await _within(Future.wait([first, second]));
+
+      expect(tokens.writes, ['A2', 'A3'], reason: 'no late duplicate A2 write');
+      expect(replay.bearers, ['Bearer A3', 'Bearer A3']);
+      expect(
+        outcomes.every((value) => value is Response && value.statusCode == 200),
+        isTrue,
+      );
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+    },
+  );
+
+  test(
+    'a callback that only returns a token is still persisted and replayed',
+    () async {
+      replay = _Adapter((_) => 200);
+      final pair = client(() async => const Success('A2'));
+      final response = await _within(pair.dio.get<dynamic>('/profile'));
+      expect(response.statusCode, 200);
+      expect(tokens.writes, ['A2']);
+      expect(tokens.accessToken, 'A2');
+      expect(replay.bearers, ['Bearer A2']);
+    },
+  );
+
+  test(
+    'a rotation before the callback starts does not suppress its new result',
+    () async {
+      original.release = Completer<void>();
+      replay = _Adapter((_) => 200);
+      final pair = client(() async => const Success('A3'));
+      final pending = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(original.entered.future);
+      await tokens.setAccessToken('A2');
+      original.release!.complete();
+      expect(await _within(pending), isA<Response<dynamic>>());
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.writes, ['A2', 'A3']);
+      expect(replay.bearers, ['Bearer A3']);
+    },
+  );
+
+  test('a repository-persisted refresh is not written a second time', () async {
+    final pair = client(repository.refreshToken);
+    final response = await _within(pair.dio.get<dynamic>('/profile'));
+    expect(response.statusCode, 200);
+    expect(tokens.writes, ['A2']);
+    expect(tokens.refreshToken, 'R2');
+    expect(replay.bearers, ['Bearer A2']);
+  });
+  test('ABA rotations preserve the newer access/refresh pairing', () async {
+    remote.accessForRotation = (rotation) =>
+        rotation == 3 ? 'A1' : 'A$rotation';
+    final ready = Completer<void>();
+    final release = Completer<void>();
+    final pair = client(() async {
+      final result = await repository.refreshToken();
+      ready.complete();
+      await release.future;
+      return result;
+    });
+    final pending = _settle(pair.dio.get<dynamic>('/profile'));
+    await _within(ready.future);
+    expect((await repository.refreshToken()).isSuccess, isTrue);
+    expect(tokens.accessToken, 'A1');
+    release.complete();
+    expect(await _within(pending), isA<Response<dynamic>>());
+    expect(tokens.writes, ['A2', 'A1']);
+    expect(tokens.refreshToken, 'R3');
+    expect(replay.bearers, ['Bearer A1']);
+  });
+
+  test(
+    'a stale held snapshot read never replays or deletes a newer rotation',
+    () async {
+      tokens.holdRead = 2;
+      final pair = client(repository.refreshToken);
+      final pending = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(tokens.readEntered.future);
+      expect((await repository.refreshToken()).isSuccess, isTrue);
+      tokens.releaseRead.complete();
+      final outcome = await _within(pending);
+      expect(outcome, isA<DioException>());
+      expect((outcome as DioException).type, DioExceptionType.cancel);
+      expect(tokens.writes, ['A2', 'A3']);
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test('a new session during snapshot selection is untouched', () async {
+    tokens.holdRead = 2;
+    final pair = client(() async => const Success('A2'));
+    final pending = _settle(pair.dio.get<dynamic>('/profile'));
+    await _within(tokens.readEntered.future);
+    generation.invalidate();
+    await tokens.setAccessToken('different-user');
+    await tokens.setRefreshToken('different-refresh');
+    tokens.releaseRead.complete();
+    expect(await _within(pending), isA<DioException>());
+    expect(tokens.accessToken, 'different-user');
+    expect(tokens.refreshToken, 'different-refresh');
+    expect(tokens.clears, 0);
+    expect(replay.bearers, isEmpty);
+  });
+
+  test(
+    'a revision changed after certification is rechecked before dispatch',
+    () async {
+      tokens.afterSnapshot = () {
+        tokens
+          ..accessToken = 'external'
+          ..refreshToken = 'external-refresh';
+      };
+      final pair = client(() async => const Success('A2'));
+      expect(
+        await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+        isA<DioException>(),
+      );
+      expect(tokens.accessToken, 'external');
+      expect(tokens.refreshToken, 'external-refresh');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test('conditional conflict rejects without replay or teardown', () async {
+    tokens.forcedConditional = AccessTokenWriteResult.conflict;
+    final pair = client(() async => const Success('A2'));
+    expect(
+      await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+      isA<DioException>(),
+    );
+    expect(tokens.accessToken, 'external');
+    expect(tokens.refreshToken, 'external-refresh');
+    expect(tokens.clears, 0);
+    expect(replay.bearers, isEmpty);
+  });
+
+  test(
+    'a failed adoption cannot delete credentials installed after its result',
+    () async {
+      tokens.forcedConditional = AccessTokenWriteResult.failed;
+      tokens.afterConditional = () {
+        tokens
+          ..accessToken = 'external'
+          ..refreshToken = 'external-refresh';
+      };
+      final pair = client(() async => const Success('A2'));
+      expect(
+        await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+        isA<DioException>(),
+      );
+      expect(tokens.accessToken, 'external');
+      expect(tokens.refreshToken, 'external-refresh');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test(
+    'a snapshot read error after success preserves the newer stored session',
+    () async {
+      final pair = client(() async {
+        final result = await repository.refreshToken();
+        expect((await repository.refreshToken()).isSuccess, isTrue);
+        tokens.snapshotError = StateError('platform read failed');
+        return result;
+      });
+      expect(
+        await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+        isA<DioException>(),
+      );
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      expect(tokens.clears, 0);
+      expect(replay.bearers, isEmpty);
+    },
+  );
+
+  test(
+    'a later rotation during replay survives its old 401 and feeds the queue',
+    () async {
+      replay.release = Completer<void>();
+      final pair = client(repository.refreshToken);
+      final first = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(replay.entered.future);
+      final second = _settle(pair.dio.get<dynamic>('/tasks'));
+      await _within(pair.interceptor.secondError.future);
+      expect((await repository.refreshToken()).isSuccess, isTrue);
+      replay.release!.complete();
+      final outcomes = await _within(Future.wait([first, second]));
+      expect(outcomes.first, isA<DioException>());
+      expect(outcomes.last, isA<Response<dynamic>>());
+      expect(replay.bearers, ['Bearer A2', 'Bearer A3']);
+      expect(tokens.accessToken, 'A3');
+      expect(tokens.refreshToken, 'R3');
+      expect(tokens.clears, 0);
+    },
+  );
+  test(
+    'the secure adapter refuses a timed out stale snapshot after rotation',
+    () async {
+      final service = _SecureService();
+      final values = <String, String>{
+        AppConstants.tokenKey: 'A1',
+        AppConstants.refreshTokenKey: 'R1',
+      };
+      final readEntered = Completer<void>();
+      final releaseRead = Completer<void>();
+      var accessReads = 0;
+      var removals = 0;
+      when(() => service.getStringOrThrow(any())).thenAnswer((call) async {
+        final key = call.positionalArguments[0] as String;
+        final captured = values[key];
+        if (key == AppConstants.tokenKey && ++accessReads == 2) {
+          readEntered.complete();
+          await releaseRead.future;
+        }
+        return captured;
+      });
+      when(() => service.setString(any(), any())).thenAnswer((call) async {
+        values[call.positionalArguments[0] as String] =
+            call.positionalArguments[1] as String;
+        return true;
+      });
+      when(() => service.remove(any())).thenAnswer((call) async {
+        removals++;
+        values.remove(call.positionalArguments[0] as String);
+        return true;
+      });
+      final store = SecureTokenStore(
+        service,
+        operationTimeout: const Duration(milliseconds: 5),
+      );
+      final realRepository = AuthRepositoryImpl(
+        remoteDataSource: remote,
+        localDataSource: AuthLocalDataSourceImpl(
+          storageService: preferences,
+          tokenStore: store,
+        ),
+        sessionGeneration: generation,
+      );
+      final pair = client(realRepository.refreshToken, store: store);
+      final request = _settle(pair.dio.get<dynamic>('/profile'));
+      await _within(readEntered.future);
+      // Queue timeout lets the newer repository write complete while the old
+      // platform read is still held. Certification must not bless its A2.
+      expect((await _within(realRepository.refreshToken())).isSuccess, isTrue);
+      releaseRead.complete();
+      final outcome = await _within(request);
+      expect(outcome, isA<DioException>());
+      expect(replay.bearers, isEmpty);
+      expect(values[AppConstants.tokenKey], 'A3');
+      expect(values[AppConstants.refreshTokenKey], 'R3');
+      expect(removals, 0);
+      expect((await store.getAccessTokenSnapshot())?.token, 'A3');
+    },
+  );
+}
+
+class InitialSnapshotTokens extends InMemoryTokenStore {
+  InitialSnapshotTokens(this.throwError);
+  final bool throwError;
+  final entered=Completer<void>();
+  final release=Completer<void>();
+  int clears=0;
+  @override Future<AccessTokenSnapshot?> getAccessTokenSnapshot() async {
+    entered.complete();
+    await release.future;
+    if(throwError) throw StateError('initial read error');
+    return null;
+  }
+  @override Future<void> clearAllTokens() {clears++; return super.clearAllTokens();}
+}
+class InitialObservedAuth extends AuthInterceptor {
+  InitialObservedAuth({required super.tokenStore,required super.refreshToken,required super.retryDioFactory});
+  final secondError=Completer<void>();
+  int errors=0;
+  @override Future<void> onError(DioException e,ErrorInterceptorHandler h) {
+    final future=super.onError(e,h);
+    if(++errors==2) secondError.complete();
+    return future;
+  }
+}
+void initialSelectionProbes() {
+  for(final throwError in [false,true]) {
+    test('followup initial snapshot ${throwError ? "error" : "uncertainty"} rejects original and queue without cleanup',() async {
+      final tokens=InitialSnapshotTokens(throwError)..accessToken='A1'..refreshToken='R1';
+      var calls=0;
+      final replay=ProbeAdapter('Bearer A2');
+      final auth=InitialObservedAuth(tokenStore:tokens,refreshToken:() async {calls++;return const Success('A2');},retryDioFactory:()=>Dio()..httpClientAdapter=replay);
+      final dio=Dio(BaseOptions(baseUrl:'https://example.invalid'))..httpClientAdapter=ProbeAdapter(null)..interceptors.add(auth);
+      final first=_settle(dio.get<dynamic>('/first'));
+      await tokens.entered.future.timeout(const Duration(seconds:5));
+      final second=_settle(dio.get<dynamic>('/second'));
+      await auth.secondError.future.timeout(const Duration(seconds:5));
+      tokens.release.complete();
+      final results=await Future.wait([first,second]).timeout(const Duration(seconds:5));
+      print('initialThrow=$throwError results=${results.map((e)=>e.runtimeType).toList()} callbackCalls=$calls clears=${tokens.clears} replay=${replay.bearers}');
+      expect(results,everyElement(isA<DioException>()));
+      expect(calls,0);expect(tokens.clears,0);expect(tokens.accessToken,'A1');expect(tokens.refreshToken,'R1');expect(replay.bearers,isEmpty);
+      auth.dispose();dio.close(force:true);
+    });
+  }
+}
+
+FINAL SHA ACKNOWLEDGMENT
+HEAD=67ffe9e09702eb4e31ef40093b98ae86b9ce855f
+Compared production interceptor and network migration docs diff against the exact prior follow-up patch saved in this log: byte-for-byte equal after trimming trailing whitespace/newlines. PASS.
+$ git diff ed888d71a2b..67ffe9e0970 -- [boundary tests, token store failure test]
+diff --git a/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart b/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+index 425560c9df2..aedc6cf6c4c 100644
+--- a/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
++++ b/test/core/network/interceptors/auth_interceptor_refresh_boundary_test.dart
+@@ -325,16 +325,17 @@ void main() {
+     expect((await repository.refreshToken()).isSuccess, isTrue);
+     expect(tokens.accessToken, 'A1');
+     release.complete();
+-    expect(await _within(pending), isA<Response<dynamic>>());
++    expect(await _within(pending), isA<DioException>());
+     expect(tokens.writes, ['A2', 'A1']);
+     expect(tokens.refreshToken, 'R3');
+-    expect(replay.bearers, ['Bearer A1']);
++    expect(replay.bearers, isEmpty);
++    expect(tokens.clears, 0);
+   });
+ 
+   test(
+     'a stale held snapshot read never replays or deletes a newer rotation',
+     () async {
+-      tokens.holdRead = 2;
++      tokens.holdRead = 3;
+       final pair = client(repository.refreshToken);
+       final pending = _settle(pair.dio.get<dynamic>('/profile'));
+       await _within(tokens.readEntered.future);
+@@ -352,7 +353,7 @@ void main() {
+   );
+ 
+   test('a new session during snapshot selection is untouched', () async {
+-    tokens.holdRead = 2;
++    tokens.holdRead = 3;
+     final pair = client(() async => const Success('A2'));
+     final pending = _settle(pair.dio.get<dynamic>('/profile'));
+     await _within(tokens.readEntered.future);
+@@ -370,12 +371,14 @@ void main() {
+   test(
+     'a revision changed after certification is rechecked before dispatch',
+     () async {
+-      tokens.afterSnapshot = () {
+-        tokens
+-          ..accessToken = 'external'
+-          ..refreshToken = 'external-refresh';
+-      };
+-      final pair = client(() async => const Success('A2'));
++      final pair = client(() async {
++        tokens.afterSnapshot = () {
++          tokens
++            ..accessToken = 'external'
++            ..refreshToken = 'external-refresh';
++        };
++        return const Success('A2');
++      });
+       expect(
+         await _within(_settle(pair.dio.get<dynamic>('/profile'))),
+         isA<DioException>(),
+@@ -476,7 +479,7 @@ void main() {
+       when(() => service.getStringOrThrow(any())).thenAnswer((call) async {
+         final key = call.positionalArguments[0] as String;
+         final captured = values[key];
+-        if (key == AppConstants.tokenKey && ++accessReads == 2) {
++        if (key == AppConstants.tokenKey && ++accessReads == 3) {
+           readEntered.complete();
+           await releaseRead.future;
+         }
+@@ -520,4 +523,51 @@ void main() {
+       expect((await store.getAccessTokenSnapshot())?.token, 'A3');
+     },
+   );
++  test(
++    'partial callback persistence is rejected without clearing its credentials',
++    () async {
++      final pair = client(() async {
++        await tokens.setRefreshToken('R2');
++        return const Success('A2');
++      });
++      final outcome = await _within(_settle(pair.dio.get<dynamic>('/profile')));
++      expect(outcome, isA<DioException>());
++      expect((outcome as DioException).type, DioExceptionType.cancel);
++      expect(tokens.accessToken, 'A1');
++      expect(tokens.refreshToken, 'R2');
++      expect(tokens.clears, 0);
++      expect(replay.bearers, isEmpty);
++      expect(tokens.writes, isEmpty);
++    },
++  );
++  for (final throws in [false, true]) {
++    test(
++      'an ${throws ? 'error' : 'uncertain read'} before refresh preserves credentials',
++      () async {
++        var callbackCalled = false;
++        if (throws) {
++          tokens.snapshotError = StateError('read failed');
++        } else {
++          tokens.afterSnapshot = () {
++            tokens
++              ..accessToken = 'external'
++              ..refreshToken = 'external-refresh';
++          };
++        }
++        final pair = client(() async {
++          callbackCalled = true;
++          return const Success('A2');
++        });
++        expect(
++          await _within(_settle(pair.dio.get<dynamic>('/profile'))),
++          isA<DioException>(),
++        );
++        expect(callbackCalled, isFalse);
++        expect(tokens.accessToken, throws ? 'A1' : 'external');
++        expect(tokens.refreshToken, throws ? 'R1' : 'external-refresh');
++        expect(tokens.clears, 0);
++        expect(replay.bearers, isEmpty);
++      },
++    );
++  }
+ }
+diff --git a/test/core/network/interceptors/auth_token_store_failure_test.dart b/test/core/network/interceptors/auth_token_store_failure_test.dart
+index 44151d334ef..ae0beac5e18 100644
+--- a/test/core/network/interceptors/auth_token_store_failure_test.dart
++++ b/test/core/network/interceptors/auth_token_store_failure_test.dart
+@@ -89,7 +89,7 @@ void main() {
+     sink = _CountingSink();
+   });
+ 
+-  ApiClient client(_Adapter adapter) {
++  ApiClient client(_Adapter adapter, {void Function()? beforeRefresh}) {
+     late final AuthRepositoryImpl repository;
+     final apiClient = ApiClient(
+       storageService: InMemoryStorage(),
+@@ -97,7 +97,10 @@ void main() {
+       authInterceptor: AuthInterceptor(
+         tokenStore: tokens,
+         sessionSink: sink,
+-        refreshToken: () => repository.refreshToken(),
++        refreshToken: () {
++          beforeRefresh?.call();
++          return repository.refreshToken();
++        },
+       ),
+     )..dio.httpClientAdapter = adapter;
+     repository = AuthRepositoryImpl(
+@@ -126,11 +129,11 @@ void main() {
+   });
+ 
+   test('a failed read on the refresh call ends the session', () async {
+-    // The 401 starts a refresh; the refresh call's token read then fails.
+-    final adapter = _Adapter((_) => tokens.failReads = true);
++    // The starting snapshot succeeds; only the refresh call token read fails.
++    final adapter = _Adapter((_) {});
+ 
+     await expectLater(
+-      client(adapter).get('/me'),
++      client(adapter, beforeRefresh: () => tokens.failReads = true).get('/me'),
+       throwsA(
+         isA<ServerException>().having((e) => e.statusCode, 'status', 401),
+       ),
+Reviewed latest two test-only additions: initial read error and post-certification revision change both assert callback never invoked, credentials preserved, no cleanup/replay. Reviewed legacy failure barrier: failReads now enabled inside refresh callback, after initial certification, so it still tests the same intended refresh-call read failure and forced-logout policy instead of the newly nonterminal starting-read path. No further actionable findings. No repeated broad tests. Final candidate production/migration review acknowledged at 67ffe9e09702eb4e31ef40093b98ae86b9ce855f.

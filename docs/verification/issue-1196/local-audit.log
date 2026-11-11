@@ -1,0 +1,121 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 615 files (0 changed) in 1.93 seconds.
+==> flutter analyze
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 18.1.3 (18.1.4 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+50 packages have newer versions incompatible with dependency constraints.
+[... 2267 lines elided ...]
+01:02 +938: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/login_screen_test.dart: LoginScreen should navigate to RegisterScreen when register button is tapped
+01:02 +938: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:02 +939: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 1: no overflow at 360x640 with a 300px keyboard, before and after a failed submit
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:03 +940: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/auth_forms_keyboard_test.dart: /register criterion 2: no overflow at 640x360, and submit can be scrolled to and hit-tested
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"register","routePath":"register","previousRouteName":"login","previousRoutePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Removed | Context: {"routeName":"login","routePath":"login"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:04 +941: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+01:05 +942: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should display registration form fields
+01:05 +943: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton should call onPressed when tapped
+01:05 +944: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +945: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +946: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +947: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +948: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +949: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +950: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +951: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for empty name
+01:05 +952: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/widgets/auth_button_test.dart: AuthButton Edge Cases should not call onPressed when disabled and loading
+01:05 +953: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short name
+01:06 +954: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for invalid email
+01:06 +955: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show validation error for short password
+01:06 +956: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should call register use case with correct parameters
+01:06 +957: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show loading indicator during registration
+01:06 +958: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should show error message when registration fails
+01:06 +959: /Users/nguyenanhkiet/Playground/flutter-starter/test/features/auth/presentation/screens/register_screen_test.dart: RegisterScreen should navigate back to login when back button is tapped
+01:07 +960: All tests passed!
