@@ -542,7 +542,8 @@ void main() {
   );
   for (final throws in [false, true]) {
     test(
-      'an ${throws ? 'error' : 'uncertain read'} before refresh preserves credentials',
+      'an ${throws ? 'error' : 'uncertain read'} before refresh '
+      'preserves credentials',
       () async {
         var callbackCalled = false;
         if (throws) {
