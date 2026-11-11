@@ -9,12 +9,13 @@ import 'package:flutter_starter/core/network/request_cancellation.dart';
 class DioNetworkClient implements INetworkClient {
   /// Creates a transport adapter over a configured Dio instance.
   ///
-  /// [deadline], when given, bounds each [send] end to end: the whole
+  /// A positive [deadline] bounds each [send] end to end: the whole
   /// interceptor chain, including retry backoff and a 401 refresh-and-replay,
   /// must finish within it. Dio's connect, send and receive timeouts each
   /// bound one phase of one attempt, so without this a request that keeps
   /// retrying has no upper bound at all. `ApiClient` passes
-  /// `AppConfig.apiTimeout` (`API_TIMEOUT`).
+  /// `AppConfig.apiTimeout` (`API_TIMEOUT`). Null, zero and negative values
+  /// disable the total deadline; per-attempt and caller cancellation remain.
   DioNetworkClient(this._dio, {Duration? deadline}) : _deadline = deadline;
 
   final Dio _dio;
@@ -44,7 +45,7 @@ class DioNetworkClient implements INetworkClient {
       );
     }
     final pending = _send(request, cancelToken);
-    if (deadline == null) return await pending;
+    if (deadline == null || deadline <= Duration.zero) return await pending;
     return await pending.timeout(
       deadline,
       onTimeout: () {
