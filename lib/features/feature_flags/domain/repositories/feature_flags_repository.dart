@@ -8,8 +8,8 @@ abstract class FeatureFlagsRepository {
   /// Get a feature flag by key
   ///
   /// Returns the feature flag value from the highest priority source.
-  /// Priority order: local override > remote config > build mode >
-  /// compile-time
+  /// Priority order: local override (when debug features are enabled) >
+  /// remote config > build mode > compile-time.
   Future<Result<FeatureFlag>> getFlag(String key);
 
   /// Get multiple feature flags by keys
@@ -27,7 +27,8 @@ abstract class FeatureFlagsRepository {
 
   /// Set a local override for a feature flag
   ///
-  /// This allows overriding remote and local flags for testing purposes.
+  /// This stores an override for testing. Reads honor it only while debug
+  /// features are enabled.
   Future<Result<void>> setLocalOverride(String key, {required bool value});
 
   /// Clear a local override for a feature flag

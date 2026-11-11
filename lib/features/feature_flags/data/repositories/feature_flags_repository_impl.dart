@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/errors/exception_to_failure_mapper.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
@@ -99,8 +100,10 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
   @override
   Future<Result<FeatureFlag>> getFlag(String key) async {
     try {
-      // Priority 1: Local override (highest priority)
-      final localOverride = await localDataSource.getLocalOverride(key);
+      // Priority 1: Local override, while debug features are enabled.
+      final localOverride = AppConfig.enableDebugFeatures
+          ? await localDataSource.getLocalOverride(key)
+          : null;
       if (localOverride != null) {
         return Success(
           FeatureFlag(
@@ -177,8 +180,10 @@ class FeatureFlagsRepositoryImpl implements FeatureFlagsRepository {
     try {
       final flags = <String, FeatureFlag>{};
 
-      // Get local overrides
-      final localOverrides = await localDataSource.getAllLocalOverrides();
+      // Read persisted overrides only when debug features are enabled.
+      final localOverrides = AppConfig.enableDebugFeatures
+          ? await localDataSource.getAllLocalOverrides()
+          : const <String, bool>{};
       for (final entry in localOverrides.entries) {
         flags[entry.key] = FeatureFlag(
           key: entry.key,

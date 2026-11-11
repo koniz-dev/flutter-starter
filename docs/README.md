@@ -160,4 +160,4 @@ lib/
 ```
 
 `lib/features/tasks/` is a sample slice (local CRUD) and the template's worked example of a complete feature. <!-- strip:tasks line -->
-`lib/features/feature_flags/` is a sample slice (flags with local overrides and a debug-only override screen). <!-- strip:feature-flags line -->
+`lib/features/feature_flags/` is a sample slice (flags with local overrides when debug features are enabled, and a debug-only override screen). <!-- strip:feature-flags line -->
