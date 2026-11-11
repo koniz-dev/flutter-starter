@@ -333,7 +333,7 @@ The ApiClient is configured with:
 - Base URL from `AppConfig.baseUrl`
 - Timeouts from `AppConfig`, at two levels:
   - **Per attempt** - `API_CONNECT_TIMEOUT`, `API_RECEIVE_TIMEOUT` and `API_SEND_TIMEOUT` become Dio's `connectTimeout`, `receiveTimeout` and `sendTimeout` in `ApiClient._createDio`. Each bounds one phase of one attempt; the 401 replay client borrows the same values.
-  - **Per request, end to end** - `API_TIMEOUT` is the deadline `DioNetworkClient.send` applies to the whole call, retry backoff and a 401 refresh-and-replay included. When it passes, the request is cancelled and a `NetworkException` with code `RECEIVE_TIMEOUT` surfaces (shown to the user as a timeout). Without it a request that keeps retrying would have no upper bound.
+  - **Per request, end to end** - `API_TIMEOUT` is the deadline `DioNetworkClient.send` applies to the whole call, retry backoff and a 401 refresh-and-replay included. When it passes, the request is cancelled and a `NetworkException` with code `RECEIVE_TIMEOUT` surfaces (shown to the user as a timeout). A zero or negative `API_TIMEOUT` disables this total deadline; per-attempt timeouts and caller cancellation still apply. Both `API_TIMEOUT` and `API_RECEIVE_TIMEOUT` default to 30 seconds, so the default total budget expires before a receive-timeout retry can finish. To allow that retry, set `API_TIMEOUT > API_RECEIVE_TIMEOUT`, leaving additional time for connection, sending, retry backoff and subsequent attempts.
 
 <!-- symbol: lib/core/network/api_client.dart ApiClient -->
 <!-- symbol: lib/core/network/adapters/dio_network_client.dart DioNetworkClient -->

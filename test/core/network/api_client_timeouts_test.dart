@@ -9,6 +9,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_starter/core/config/app_config.dart';
 import 'package:flutter_starter/core/config/env_config.dart';
 import 'package:flutter_starter/core/contracts/network_contracts.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
@@ -62,21 +63,23 @@ class _HangingAdapter implements HttpClientAdapter {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() async {
+  var environmentLoads = 0;
+  Future<void> loadEnvironment(String values) async {
+    final fileName = 'timeouts_env_${environmentLoads++}';
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler(_assetChannel, (message) async {
           final key = utf8.decode(message!.buffer.asUint8List());
-          if (key != 'timeouts_env') return null;
-          final bytes = Uint8List.fromList(
-            utf8.encode('API_TIMEOUT=1\nAPI_SEND_TIMEOUT=7\n'),
-          );
+          if (key != fileName) return null;
+          final bytes = Uint8List.fromList(utf8.encode(values));
           return ByteData.view(bytes.buffer);
         });
-    await EnvConfig.load(fileName: 'timeouts_env');
+    await EnvConfig.load(fileName: fileName);
     expect(EnvConfig.isInitialized, isTrue);
-  });
+  }
 
-  tearDownAll(() {
+  setUp(() => loadEnvironment('API_TIMEOUT=1\nAPI_SEND_TIMEOUT=7\n'));
+
+  tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler(_assetChannel, null);
   });
@@ -154,6 +157,33 @@ void main() {
       expect(adapter.cancelled, isTrue);
     });
 
+    for (final seconds in [0, -1]) {
+      test('API_TIMEOUT=$seconds disables the total deadline', () async {
+        await loadEnvironment('API_TIMEOUT=$seconds\n');
+        final adapter = _AnsweringAdapter(
+          delay: const Duration(milliseconds: 50),
+        );
+        final client = buildClient(adapter);
+
+        final response = await client.get('/delayed');
+
+        expect(response.statusCode, 200);
+        expect(response.data, {'ok': true});
+        expect(adapter.fetches, 1);
+      });
+    }
+
+    test(
+      'shipped total and receive budgets both default to 30 seconds',
+      () async {
+        await loadEnvironment('API_SEND_TIMEOUT=7\n');
+        final client = buildClient(_HangingAdapter());
+
+        expect(AppConfig.apiTimeout, 30);
+        expect(client.dio.options.receiveTimeout, const Duration(seconds: 30));
+      },
+    );
+
     test('DioNetworkClient without a deadline leaves the request alone', () {
       final adapter = _HangingAdapter();
       final dio = Dio()..httpClientAdapter = adapter;
@@ -193,6 +223,7 @@ class _AnsweringAdapter implements HttpClientAdapter {
   _AnsweringAdapter({required this.delay});
 
   final Duration delay;
+  int fetches = 0;
 
   @override
   Future<ResponseBody> fetch(
@@ -200,6 +231,7 @@ class _AnsweringAdapter implements HttpClientAdapter {
     Stream<Uint8List>? requestStream,
     Future<void>? cancelFuture,
   ) async {
+    fetches++;
     await Future<void>.delayed(delay);
     return ResponseBody.fromString(
       jsonEncode({'ok': true}),
