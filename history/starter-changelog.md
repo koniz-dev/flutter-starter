@@ -9,9 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 
+- **Custom ITokenStore implementations require versioned adoption methods.** Add credentialRevision, getAccessTokenSnapshot and setAccessTokenIfCurrent with shared mutation revisions and synchronous conditional reservation; an asynchronous get/set fallback is unsafe. See the [storage API migration](https://github.com/koniz-dev/flutter-starter/blob/main/docs/api/core/storage.md#versioned-refresh-result-adoption).
+
 - **Custom auth datasource logout signature changes.** Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
 
 ### Fixed
+
+- **Token stores support versioned conditional refresh-result adoption.** Certified snapshots reject uncertain reads; conditional writes reserve order before awaiting storage. Superseded platform calls repair known newer state even when a lost acknowledgement reports failure.
 
 - **URL redaction covers OAuth fragment credentials and WebSocket tickets.** Query and fragment parameters share credential-key rules while ordinary anchors/body fields remain readable. Ticket-authenticated responses bypass the HTTP cache, and a rule-version migration discards older cached entries.
 
