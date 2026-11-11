@@ -29,7 +29,9 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 /// A call that outlives the bound may land after operations issued later.
 /// Writes and deletes are numbered when issued, and one that lands over a
 /// newer one of the same key is followed by a repair that puts the newer
-/// state back (the older value is at rest in between). A repair is tried
+/// state back (the older value is at rest in between), even when the
+/// superseded call reports failure: its effect may have landed before the
+/// platform lost its acknowledgement. A repair is tried
 /// [repairAttempts] times; if all fail, the key is marked stale and the
 /// logger is warned, naming the key, never the value. A stale key reads
 /// from memory - the newer state, `null` after a clear - and is re-applied
@@ -40,6 +42,16 @@ import 'package:flutter_starter/core/storage/secure_storage_service.dart';
 ///
 /// Once everything settles and no repair has failed, every key holds what
 /// its last-issued successful write or delete left.
+///
+/// ## Certified snapshots and conditional writes
+///
+/// [getAccessToken] retains the read semantics above. Refresh-result adoption
+/// instead uses [getAccessTokenSnapshot]: it bounds its own read and returns
+/// null if credential mutations/repairs are pending or its revision changed.
+/// Snapshots and [credentialRevision] are shared over the backing service.
+/// [setAccessTokenIfCurrent] compares/reserves before waiting, then uses the
+/// same issue numbering and late-repair rules as ordinary mutations. A later
+/// mutation wins; callers select a new certified snapshot after a write.
 class SecureTokenStore implements ITokenStore {
   /// Creates a token store backed by secure platform storage.
   ///
@@ -96,6 +108,70 @@ class SecureTokenStore implements ITokenStore {
     }
 
     return run();
+  }
+
+  @override
+  Object get credentialRevision => _queue.revision;
+
+  bool _uncertain(_OperationQueue queue) =>
+      queue.pendingMutations.isNotEmpty ||
+      queue.activeWrites != 0 ||
+      queue.pendingRepairs != 0;
+
+  @override
+  Future<AccessTokenSnapshot?> getAccessTokenSnapshot() => _inOrder(() async {
+    final queue = _queue;
+    final revision = queue.revision;
+    if (_uncertain(queue)) return null;
+    final read = await _read(AppConstants.tokenKey)
+        .then((token) => (complete: true, token: token))
+        .timeout(
+          operationTimeout,
+          onTimeout: () => (complete: false, token: null),
+        );
+    if (!read.complete ||
+        !identical(revision, queue.revision) ||
+        _uncertain(queue)) {
+      return null;
+    }
+    return AccessTokenSnapshot(token: read.token, revision: revision);
+  });
+
+  @override
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  ) {
+    final queue = _queue;
+    if (!identical(expected.revision, queue.revision) || _uncertain(queue)) {
+      return Future.value(AccessTokenWriteResult.conflict);
+    }
+    // Compare and reserve in one synchronous turn. Reserving before waiting
+    // also orders this write ahead of later mutations that bypass the wait.
+    final number = _reserveMutation(queue);
+    final reservedRevision = queue.revision;
+    return _inOrder(() async {
+      if (!identical(reservedRevision, queue.revision) ||
+          queue.activeWrites != 0 ||
+          queue.pendingRepairs != 0) {
+        return AccessTokenWriteResult.conflict;
+      }
+      final bool succeeded;
+      try {
+        succeeded = await _apply(queue, AppConstants.tokenKey, number, token);
+      } on Object {
+        if (!identical(reservedRevision, queue.revision)) {
+          return AccessTokenWriteResult.conflict;
+        }
+        rethrow;
+      }
+      if (!identical(reservedRevision, queue.revision)) {
+        return AccessTokenWriteResult.conflict;
+      }
+      return succeeded
+          ? AccessTokenWriteResult.applied
+          : AccessTokenWriteResult.failed;
+    }).whenComplete(() => queue.pendingMutations.remove(number));
   }
 
   /// Throws [CacheException] if the Keychain/Keystore read fails, rather
@@ -206,8 +282,17 @@ class SecureTokenStore implements ITokenStore {
   /// order. Returns whether the platform call succeeded.
   Future<bool> _mutate(String key, String? value) {
     final queue = _queue;
+    final number = _reserveMutation(queue);
+    return _inOrder(
+      () => _apply(queue, key, number, value),
+    ).whenComplete(() => queue.pendingMutations.remove(number));
+  }
+
+  int _reserveMutation(_OperationQueue queue) {
     final number = ++queue.issued;
-    return _inOrder(() => _apply(queue, key, number, value));
+    queue.revision = Object();
+    queue.pendingMutations.add(number);
+    return number;
   }
 
   /// Applies one write ([value] non-null) or delete of [key], numbered
@@ -219,6 +304,27 @@ class SecureTokenStore implements ITokenStore {
     int number,
     String? value, {
     bool flushStale = true,
+  }) async {
+    queue.activeWrites++;
+    try {
+      return await _applyPlatform(
+        queue,
+        key,
+        number,
+        value,
+        flushStale: flushStale,
+      );
+    } finally {
+      queue.activeWrites--;
+    }
+  }
+
+  Future<bool> _applyPlatform(
+    _OperationQueue queue,
+    String key,
+    int number,
+    String? value, {
+    required bool flushStale,
   }) async {
     if (flushStale) {
       for (final stale in queue.stale.where((k) => k != key).toList()) {
@@ -241,19 +347,37 @@ class SecureTokenStore implements ITokenStore {
         }
       }
     }
-    final succeeded = value == null
-        ? await _secureStorageService.remove(key)
-        : await _secureStorageService.setString(key, value);
-    if (!succeeded) return false;
+    final bool succeeded;
+    try {
+      succeeded = value == null
+          ? await _secureStorageService.remove(key)
+          : await _secureStorageService.setString(key, value);
+    } on Object {
+      // A lost acknowledgement can report failure after its physical effect.
+      // Never let an older attempt undo a known newer successful mutation.
+      _repairIfSuperseded(queue, key, number);
+      rethrow;
+    }
+    if (!succeeded) {
+      _repairIfSuperseded(queue, key, number);
+      return false;
+    }
     final newest = queue.landed[key];
     if (newest == null || newest.number <= number) {
       queue.landed[key] = (number: number, value: value);
       queue.stale.remove(key);
     } else {
       // This call outlived the wait and landed over a newer one.
-      unawaited(_repair(queue, key));
+      _repairIfSuperseded(queue, key, number);
     }
     return true;
+  }
+
+  void _repairIfSuperseded(_OperationQueue queue, String key, int number) {
+    final newest = queue.landed[key];
+    if (newest != null && newest.number > number) {
+      unawaited(_repair(queue, key));
+    }
   }
 
   /// Re-applies the newest landed state of [key], up to [repairAttempts]
@@ -262,6 +386,15 @@ class SecureTokenStore implements ITokenStore {
   /// attempt fails, [key] is left stale for the next write or delete to
   /// re-apply, and the logger is warned: there is no caller to report to.
   Future<void> _repair(_OperationQueue queue, String key) async {
+    queue.pendingRepairs++;
+    try {
+      await _repairLatest(queue, key);
+    } finally {
+      queue.pendingRepairs--;
+    }
+  }
+
+  Future<void> _repairLatest(_OperationQueue queue, String key) async {
     final target = queue.landed[key]!.number;
     Object? lastError;
     for (var attempt = 0; attempt < repairAttempts; attempt++) {
@@ -310,6 +443,12 @@ class _OperationQueue {
 
   /// How many writes and deletes have been issued; numbers each one.
   int issued = 0;
+
+  /// Opaque state shared by every store over this backing service.
+  Object revision = Object();
+  final Set<int> pendingMutations = {};
+  int activeWrites = 0;
+  int pendingRepairs = 0;
 
   /// The newest write or delete that has landed, per key: its number and
   /// the value it left, null for a delete.

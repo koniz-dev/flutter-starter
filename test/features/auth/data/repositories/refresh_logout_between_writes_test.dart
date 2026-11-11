@@ -51,22 +51,24 @@ class _Store extends InMemoryTokenStore {
   Future<void> Function()? onRefreshWrite;
 
   @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    final hook = onAccessWrite;
-    onAccessWrite = null;
-    if (hook != null) await hook();
-    return true;
-  }
+  Future<bool> setAccessToken(String token) =>
+      trackCredentialMutation(() async {
+        accessToken = token;
+        final hook = onAccessWrite;
+        onAccessWrite = null;
+        if (hook != null) await hook();
+        return true;
+      });
 
   @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    final hook = onRefreshWrite;
-    onRefreshWrite = null;
-    if (hook != null) await hook();
-    return true;
-  }
+  Future<bool> setRefreshToken(String token) =>
+      trackCredentialMutation(() async {
+        refreshToken = token;
+        final hook = onRefreshWrite;
+        onRefreshWrite = null;
+        if (hook != null) await hook();
+        return true;
+      });
 }
 
 void main() {

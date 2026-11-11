@@ -18,7 +18,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/api_client.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/network/ssl_pinning.dart';
@@ -28,32 +27,13 @@ import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/in_memory_stores.dart';
+
 class _MockStorageService extends Mock implements StorageService {}
 
 class _MockSecureStorageService extends Mock implements SecureStorageService {}
 
-class _NoTokenStore implements ITokenStore {
-  @override
-  Future<void> clearAccessToken() async {}
-
-  @override
-  Future<void> clearAllTokens() async {}
-
-  @override
-  Future<void> clearRefreshToken() async {}
-
-  @override
-  Future<String?> getAccessToken() async => null;
-
-  @override
-  Future<String?> getRefreshToken() async => null;
-
-  @override
-  Future<bool> setAccessToken(String token) async => true;
-
-  @override
-  Future<bool> setRefreshToken(String token) async => true;
-}
+class _NoTokenStore extends InMemoryTokenStore {}
 
 /// Answers every request with `{"ok": true}` and records what it was sent.
 class _FakeTransport implements HttpClientAdapter {

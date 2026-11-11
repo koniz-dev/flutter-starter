@@ -9,6 +9,8 @@ import 'package:flutter_starter/features/auth/data/datasources/auth_local_dataso
 import 'package:flutter_starter/features/auth/data/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../helpers/in_memory_stores.dart';
+
 /// An [IKeyValueStore] whose [remove] can be made to throw, so the teardown
 /// step that follows it can be observed to run anyway.
 ///
@@ -99,41 +101,13 @@ class _FailableKeyValueStore implements IKeyValueStore {
 
 /// A real in-memory token store, so "the tokens are gone" is asserted by
 /// reading them back rather than by a `verify()`.
-class _InMemoryTokenStore implements ITokenStore {
-  String? accessToken;
-  String? refreshToken;
-
+class _InMemoryTokenStore extends InMemoryTokenStore {
   int clearAllCalls = 0;
 
   @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<void> clearAllTokens() async {
+  Future<void> clearAllTokens() {
     clearAllCalls++;
-    accessToken = null;
-    refreshToken = null;
-  }
-
-  @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<String?> getRefreshToken() async => refreshToken;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
-  }
-
-  @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    return true;
+    return super.clearAllTokens();
   }
 }
 
@@ -144,12 +118,12 @@ class _FailingTokenStore extends _InMemoryTokenStore {
   final Object thrown;
 
   @override
-  Future<void> clearAllTokens() async {
+  Future<void> clearAllTokens() => trackCredentialMutation<void>(() {
     clearAllCalls++;
     // Same reason as `_FailableKeyValueStore.remove`.
     // ignore: only_throw_errors
     throw thrown;
-  }
+  });
 }
 
 void main() {

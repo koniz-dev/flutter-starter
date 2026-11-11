@@ -44,6 +44,8 @@ import 'package:flutter_starter/features/auth/domain/auth_error_codes.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/in_memory_stores.dart';
+
 class _MockSecureStorageService extends Mock implements SecureStorageService {}
 
 /// A real in-memory StorageService, so the tests assert on what was actually
@@ -129,40 +131,7 @@ class _InMemoryStorage implements StorageService {
   }
 }
 
-class _InMemoryTokenStore implements ITokenStore {
-  String? accessToken;
-  String? refreshToken;
-
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<void> clearAllTokens() async {
-    accessToken = null;
-    refreshToken = null;
-  }
-
-  @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<String?> getRefreshToken() async => refreshToken;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
-  }
-
-  @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    return true;
-  }
-}
+class _InMemoryTokenStore extends InMemoryTokenStore {}
 
 /// One scripted transport reply.
 class _Reply {

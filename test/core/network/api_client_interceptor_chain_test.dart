@@ -28,6 +28,8 @@ import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/in_memory_stores.dart';
+
 class _MockStorageService extends Mock implements StorageService {}
 
 class _MockSecureStorageService extends Mock implements SecureStorageService {}
@@ -81,38 +83,10 @@ _Reply _fails(DioExceptionType type) {
   return (options) => throw DioException(requestOptions: options, type: type);
 }
 
-class _InMemoryTokenStore implements ITokenStore {
-  String? accessToken = 'expired-access-token';
-  String? refreshToken = 'refresh-token';
-
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<void> clearAllTokens() async {
-    accessToken = null;
-    refreshToken = null;
-  }
-
-  @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<String?> getRefreshToken() async => refreshToken;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
-  }
-
-  @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    return true;
+class _InMemoryTokenStore extends InMemoryTokenStore {
+  _InMemoryTokenStore() {
+    accessToken = 'expired-access-token';
+    refreshToken = 'refresh-token';
   }
 }
 
@@ -136,10 +110,33 @@ class _GatedTokenStore extends _InMemoryTokenStore {
   final Completer<void> release = Completer<void>();
 
   @override
-  Future<bool> setAccessToken(String token) async {
-    if (!writeStarted.isCompleted) writeStarted.complete();
-    await release.future;
-    return await super.setAccessToken(token);
+  Future<bool> setAccessToken(String token) =>
+      trackCredentialMutation(() async {
+        final reserved = credentialRevision;
+        if (!writeStarted.isCompleted) writeStarted.complete();
+        await release.future;
+        if (!identical(reserved, credentialRevision)) return false;
+        return await super.setAccessToken(token);
+      });
+
+  @override
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  ) {
+    if (!identical(expected.revision, credentialRevision)) {
+      return Future.value(AccessTokenWriteResult.conflict);
+    }
+    return trackCredentialMutation(() async {
+      final reserved = credentialRevision;
+      if (!writeStarted.isCompleted) writeStarted.complete();
+      await release.future;
+      if (!identical(reserved, credentialRevision)) {
+        return AccessTokenWriteResult.conflict;
+      }
+      accessToken = token;
+      return AccessTokenWriteResult.applied;
+    });
   }
 }
 

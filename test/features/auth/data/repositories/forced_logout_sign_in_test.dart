@@ -35,10 +35,10 @@ class _SlowClearStore extends InMemoryTokenStore {
   final Completer<void> releaseClear = Completer<void>();
 
   @override
-  Future<void> clearAllTokens() async {
+  Future<void> clearAllTokens() => trackCredentialMutation(() async {
     await releaseClear.future;
     await super.clearAllTokens();
-  }
+  });
 }
 
 class _Sink implements ISessionTerminationSink {

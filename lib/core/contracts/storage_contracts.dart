@@ -27,6 +27,29 @@ abstract class IKeyValueStore {
   Future<bool> containsKey(String key);
 }
 
+/// A certified access-token value and an opaque credential revision.
+///
+/// A null [token] is a valid cleared state. Compare [revision] by identity;
+/// revisions are transient and must not be persisted or reconstructed.
+class AccessTokenSnapshot {
+  const AccessTokenSnapshot({required this.token, required this.revision});
+
+  final String? token;
+  final Object revision;
+}
+
+/// Outcome of a conditional access-token write.
+enum AccessTokenWriteResult {
+  /// The write succeeded without being superseded at its completion point.
+  applied,
+
+  /// Another mutation or uncertain pending operation took precedence.
+  conflict,
+
+  /// The platform reported failure without a superseding mutation.
+  failed,
+}
+
 /// Dedicated token/session storage contract.
 ///
 /// Once its operations settle, an implementation must hold what they would
@@ -52,6 +75,28 @@ abstract class IKeyValueStore {
 /// An in-memory store whose methods complete synchronously meets it
 /// trivially.
 abstract class ITokenStore {
+  /// Changes synchronously whenever any credential write/delete is issued,
+  /// even if it later fails. Stores over one backing service share revisions.
+  /// A write/delete cycle back to the same value must still change it.
+  /// Internal repairs reapply an existing mutation, not a newer credential.
+  Object get credentialRevision;
+
+  /// Certifies the value/revision after the read, or returns null when a
+  /// pending/bypassed operation or concurrent mutation makes it uncertain.
+  /// Implementations bound retries/waits; read failures may still throw.
+  /// Certification is a selection point, not a lock through a network call.
+  /// Before acting, callers compare its revision with [credentialRevision]
+  /// again; a mismatch requires a new selection or rejection without teardown.
+  Future<AccessTokenSnapshot?> getAccessTokenSnapshot();
+
+  /// Compares and reserves mutation order synchronously at invocation, before
+  /// any await. A foreign/stale snapshot cannot write. Later-issued mutations
+  /// retain precedence, including writes that bypass a bounded queue wait.
+  Future<AccessTokenWriteResult> setAccessTokenIfCurrent(
+    AccessTokenSnapshot expected,
+    String token,
+  );
+
   Future<String?> getAccessToken();
   Future<bool> setAccessToken(String token);
   Future<void> clearAccessToken();

@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/network/interceptors/cache_interceptor.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../../helpers/in_memory_stores.dart';
 
 class MockStorageService extends Mock implements StorageService {}
 
@@ -28,34 +29,10 @@ class TestResponseInterceptorHandler extends ResponseInterceptorHandler {
 }
 
 /// Token store with a fixed access token, signed out when none is given.
-class _StubTokenStore implements ITokenStore {
-  _StubTokenStore({this.accessToken});
-
-  String? accessToken;
-
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<void> clearAllTokens() async => accessToken = null;
-
-  @override
-  Future<void> clearRefreshToken() async {}
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<String?> getRefreshToken() async => null;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
+class _StubTokenStore extends InMemoryTokenStore {
+  _StubTokenStore({String? accessToken}) {
+    this.accessToken = accessToken;
   }
-
-  @override
-  Future<bool> setRefreshToken(String token) async => true;
 }
 
 /// Token store whose reads fail, so the credential state is unknowable.

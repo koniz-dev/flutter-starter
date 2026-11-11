@@ -19,11 +19,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_starter/core/contracts/storage_contracts.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../../helpers/in_memory_stores.dart';
 
 /// Adapter that replies from a scripted queue and counts every fetch.
 ///
@@ -61,38 +62,10 @@ ResponseBody Function() _json(int statusCode, Map<String, dynamic> body) {
   );
 }
 
-class _InMemoryTokenStore implements ITokenStore {
-  String? accessToken = 'expired-access-token';
-  String? refreshToken = 'refresh-token';
-
-  @override
-  Future<void> clearAccessToken() async => accessToken = null;
-
-  @override
-  Future<void> clearAllTokens() async {
-    accessToken = null;
-    refreshToken = null;
-  }
-
-  @override
-  Future<void> clearRefreshToken() async => refreshToken = null;
-
-  @override
-  Future<String?> getAccessToken() async => accessToken;
-
-  @override
-  Future<String?> getRefreshToken() async => refreshToken;
-
-  @override
-  Future<bool> setAccessToken(String token) async {
-    accessToken = token;
-    return true;
-  }
-
-  @override
-  Future<bool> setRefreshToken(String token) async {
-    refreshToken = token;
-    return true;
+class _InMemoryTokenStore extends InMemoryTokenStore {
+  _InMemoryTokenStore() {
+    accessToken = 'expired-access-token';
+    refreshToken = 'refresh-token';
   }
 }
 
