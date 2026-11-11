@@ -40,6 +40,7 @@ class LanguageSwitcher extends ConsumerWidget {
     WidgetRef ref,
     Locale currentLocale,
   ) async {
+    final ownerContext = context;
     final l10n = context.l10n;
     final localizationService = ref.read<LocalizationService>(
       localizationServiceProvider,
@@ -52,9 +53,12 @@ class LanguageSwitcher extends ConsumerWidget {
         content: RadioGroup<Locale>(
           groupValue: currentLocale,
           onChanged: (locale) async {
-            if (locale != null) {
+            if (locale != null && ownerContext.mounted) {
+              final notifier = ref.read(localeStateProvider.notifier);
               await localizationService.setCurrentLocale(locale);
-              ref.read(localeStateProvider.notifier).locale = locale;
+              // The dialog may outlive the widget that supplied its ref.
+              if (!ownerContext.mounted) return;
+              notifier.locale = locale;
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
@@ -116,6 +120,7 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
     WidgetRef ref,
     Locale currentLocale,
   ) async {
+    final ownerContext = context;
     final l10n = context.l10n;
     final localizationService = ref.read<LocalizationService>(
       localizationServiceProvider,
@@ -128,9 +133,12 @@ class LanguageSwitcherMenuItem extends ConsumerWidget {
         content: RadioGroup<Locale>(
           groupValue: currentLocale,
           onChanged: (locale) async {
-            if (locale != null) {
+            if (locale != null && ownerContext.mounted) {
+              final notifier = ref.read(localeStateProvider.notifier);
               await localizationService.setCurrentLocale(locale);
-              ref.read(localeStateProvider.notifier).locale = locale;
+              // The dialog may outlive the widget that supplied its ref.
+              if (!ownerContext.mounted) return;
+              notifier.locale = locale;
               if (context.mounted) {
                 Navigator.of(context).pop();
               }
@@ -178,9 +186,10 @@ class LanguageSelectionScreen extends ConsumerWidget {
         groupValue: currentLocale,
         onChanged: (locale) async {
           if (locale != null) {
+            final notifier = ref.read(localeStateProvider.notifier);
             await localizationService.setCurrentLocale(locale);
-            ref.read(localeStateProvider.notifier).locale = locale;
             if (context.mounted) {
+              notifier.locale = locale;
               Navigator.of(context).pop();
             }
           }
