@@ -282,7 +282,11 @@ cannot fire.
 
 What does decide a local flag, highest first:
 
-1. A local override, written by the feature-flags debug screen.
+1. A local override, written by the feature-flags debug screen, only while
+   `AppConfig.enableDebugFeatures` is true. Debug features default to off in
+   staging/production; `ENABLE_DEBUG_FEATURES` can explicitly opt in or out.
+   Stored overrides are ignored without being read when debug features are off,
+   across every repository read.
 2. The remote source, if you replace the shipped no-op one.
 3. The definition's `debugDefault` or `releaseDefault` for the current build
    mode.
@@ -293,9 +297,9 @@ What does decide a local flag, highest first:
 The async `isFeatureEnabledProvider`, `featureFlagProvider` and
 `allFeatureFlagsProvider` initialize the remote source automatically. The
 shipped repository bounds initialization and refresh to ten seconds. On failure
-or timeout, reads skip the unavailable remote and retain local overrides,
-local definitions and key defaults. Refresh retries initialization after a
-failure. A timed-out SDK operation cannot re-enable remote reads later. While
+or timeout, reads skip the unavailable remote and retain local definitions and
+key defaults, plus local overrides only when debug features are enabled. Refresh
+retries initialization after a failure. A timed-out SDK operation cannot re-enable remote reads later. While
 that operation is still pending, refresh returns local fallback without starting
 an overlapping SDK activation; retry initialization once it settles.
 
