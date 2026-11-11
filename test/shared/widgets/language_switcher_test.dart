@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,6 +47,119 @@ Widget createTestWidget({
 void main() {
   setUpAll(() {
     registerFallbackValue(const Locale('en'));
+  });
+
+  group('selection completing after disposal', () {
+    const variants = [
+      (name: 'button', widget: LanguageSwitcher(), dialog: true, scope: false),
+      (
+        name: 'menu item',
+        widget: LanguageSwitcherMenuItem(),
+        dialog: true,
+        scope: false,
+      ),
+      (
+        name: 'selection screen',
+        widget: LanguageSelectionScreen(),
+        dialog: false,
+        scope: false,
+      ),
+      (
+        name: 'button and provider scope',
+        widget: LanguageSwitcher(),
+        dialog: true,
+        scope: true,
+      ),
+    ];
+    for (final variant in variants) {
+      testWidgets('${variant.name} tolerates a delayed preference write', (
+        tester,
+      ) async {
+        final service = MockLocalizationService();
+        final entered = Completer<void>();
+        final release = Completer<bool>();
+        when(() => service.setCurrentLocale(any())).thenAnswer((_) {
+          if (!entered.isCompleted) entered.complete();
+          return release.future;
+        });
+        final container = ProviderContainer(
+          overrides: [
+            localizationServiceProvider.overrideWithValue(service),
+            currentLocaleProvider.overrideWith(
+              (ref) async => const Locale('en'),
+            ),
+          ],
+        );
+        var disposed = false;
+        addTearDown(() {
+          if (!disposed) container.dispose();
+        });
+        var visible = true;
+        late StateSetter rebuild;
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: MaterialApp(
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: LocalizationService.supportedLocales,
+              home: Scaffold(
+                body: StatefulBuilder(
+                  builder: (context, setState) {
+                    rebuild = setState;
+                    return visible ? variant.widget : const SizedBox.shrink();
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        if (variant.dialog) {
+          await tester.tap(find.byType(variant.widget.runtimeType));
+          await tester.pumpAndSettle();
+        }
+        final choice = find.byWidgetPredicate(
+          (widget) =>
+              widget is RadioListTile<Locale> &&
+              widget.value.languageCode == 'vi',
+        );
+        final selectedLocale = tester
+            .widget<RadioListTile<Locale>>(choice)
+            .value;
+        await tester.tap(choice);
+        await tester.pump();
+        expect(entered.isCompleted, isTrue, reason: 'the write is now held');
+
+        if (variant.scope) {
+          await tester.pumpWidget(const SizedBox.shrink());
+          container.dispose();
+          disposed = true;
+        } else {
+          rebuild(() => visible = false);
+          await tester.pump();
+          if (variant.dialog) {
+            expect(find.byType(AlertDialog), findsOneWidget);
+            // A dialog can remain interactive after its owner disappears.
+            // Its stale ref must not be read by another selection either.
+            await tester.tap(choice);
+            await tester.pump();
+            expect(tester.takeException(), isNull);
+          }
+        }
+        expect(find.byType(variant.widget.runtimeType), findsNothing);
+        release.complete(true);
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+        verify(() => service.setCurrentLocale(selectedLocale)).called(1);
+        await tester.pumpWidget(const SizedBox.shrink());
+      });
+    }
   });
 
   group('LanguageSwitcher', () {
