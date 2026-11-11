@@ -614,27 +614,30 @@ its own.
 2. If a refresh is already in flight, the request is queued in
    `_pendingRequests` and this handler returns.
 3. Otherwise the `refreshToken` callback runs.
-   - **Success:** the new token is written to the token store, the original
-     request is replayed through `retryDio()` with
-     `Authorization: Bearer <new token>`, and the handler resolves with the
-     replayed response. Unless the session ended
-     while the refresh was in flight - see
-     [Refreshing across a logout](#refreshing-across-a-logout), which is
-     checked before any of that happens.
-     If the **replay** then fails, only this request fails: a transient
-     failure (a 503, a timeout) reaches the caller mapped like any other, and
-     the fresh token and the session are kept, so the queued requests in
-     point 4 are still replayed. Only a replay answered **401**, meaning the
-     server refused a token it just issued, logs the session out.
-Before, any replay failure logged out
-     and rejected every queued request.
-   - **Failure** (a `Result` failure, a null token, or anything thrown -
-     `Error` as well as `Exception`): the session is logged out and the
-     handler is rejected.
+   - **Success:** the interceptor selects a certified token-store snapshot.
+     If credentials changed while the callback was running, the stored token
+     takes precedence over its returned value. Otherwise a callback that only
+     returns a token is persisted through a conditional write. Repository
+     callbacks that already persisted their result incur no duplicate write.
+     See the [versioned storage contract](storage.md#versioned-refresh-result-adoption).
+     The session generation and snapshot revision are checked again before
+     replay. An uncertain read, a conditional conflict or a selection/storage
+     error fails the request without clearing credentials or replaying a
+     possibly superseded token.
+     The original request is replayed through `retryDio()` with the selected
+     bearer token. A transient replay failure fails this request and keeps the
+     session. A replay answered **401** logs out only if that selected
+     credential and session are still current; a later rotation is preserved.
+     Selection does not lock independent rotations through the network call.
+   - **Failure:** the refresh-failure policy below applies. Session-generation
+     checks prevent a callback belonging to an ended session from clearing a
+     newer sign-in.
 4. **Every queued handler is then completed, on both paths.** `finally` clears
-   the in-flight flag first, then drains `_pendingRequests`: with a fresh token
-   each queued request is replayed and resolved (rejected if its replay
-   fails), and without one each is rejected with its own original error.
+   the in-flight flag first, then drains `_pendingRequests`. After successful
+   selection, each queued request obtains its own fresh certified snapshot
+   and rechecks the session and revision before replay. A missing/uncertain
+   snapshot or read failure rejects that request. Without successful
+   selection, each is rejected with its own original error.
 
 Point 4 is the part this document used to get wrong. It said "rejects request",
 singular, and until the drain was fixed that was accurate - a concurrent 401
