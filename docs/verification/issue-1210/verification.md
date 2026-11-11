@@ -1,0 +1,10 @@
+Verified in PR #1221.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Success and error snackbars reach 4.5:1 in both themes with pairs in the theme contrast gate | PASS — [local-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/local-audit.log). Four actual widget cases measure merged RichText foregrounds on snackbar fills. Success is 5.14:1 in each theme; error remains 5.61:1 light / 6.01:1 dark. The dark-success case fails before the change at 3.246:1, retained in [failure-before.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/failure-before.log). All 66 theme/context-extension cases pass. |
+| Required host checks and applicable workflow checks pass | PASS — [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/tests.log). Full host suite passes 4,361 tests / 14 skipped; format/analyzer pass and all six actual PR checks succeed ([ci.json](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/ci.json)). Root self-QA inspected source/assertions and before/after output. No affected manual workflow or risk-gated review/security surface. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1210/tree-parity.log).
+
+Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.

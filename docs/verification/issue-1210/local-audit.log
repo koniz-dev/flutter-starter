@@ -1,0 +1,187 @@
+==> env asset guard
+Running build hooks...Running build hooks...OK: no unacknowledged secrets file in the Flutter asset list, and none inside a declared asset directory.
+==> generated code (skipped: AUDIT_SKIP_CODEGEN=1)
+==> format (lib test integration_test tool examples)
+Formatted 615 files (0 changed) in 1.94 seconds.
+==> flutter analyze
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 18.1.3 (18.1.4 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+50 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flutter-starter...                                    
+No issues found! (ran in 7.2s)
+==> flutter test
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 110.0.0 (111.0.0 available)
+  analyzer 14.6.0 (14.7.0 available)
+  archive 4.0.9 (4.6.0 available)
+  async 2.13.0 (2.13.1 available)
+  build_daemon 4.1.1 (4.1.7 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.4 (8.13.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.0.0 (2.2.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  glob 2.1.3 (2.2.0 available)
+  go_router 18.1.3 (18.1.4 available)
+  hooks 1.0.2 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.8.0 (4.12.0 available)
+  io 1.0.5 (1.1.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  mime 2.0.0 (2.1.0 available)
+  mustache_template 2.0.4 (2.0.6 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  objective_c 9.3.0 (9.6.3 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider_android 2.2.22 (2.3.1 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pool 1.5.2 (1.5.3 available)
+  posix 6.5.0 (6.5.4 available)
+  process 5.0.5 (5.0.6 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  pubspec_parse 1.5.0 (1.7.0 available)
+  shared_preferences_android 2.4.21 (2.5.4 available)
+  shared_preferences_foundation 2.5.6 (2.6.1 available)
+  shared_preferences_platform_interface 2.4.1 (2.4.2 available)
+  shelf 1.4.2 (1.4.3 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  stream_transform 2.1.1 (2.1.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_math 2.4.3 (2.4.4 available)
+  vm_service 15.0.2 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  webdriver 3.1.0 (3.2.0 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+50 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme onPrimary on primary meets 4.5:1
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme onSecondary on secondary meets 4.5:1
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme onSurface on surface meets 4.5:1
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme onError on error meets 4.5:1
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme error as text on background meets 4.5:1
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme error as text on surface meets 4.5:1
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme primary as text on background meets 4.5:1
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme displayLarge on background meets 4.5:1
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme displayMedium on background meets 4.5:1
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyLarge on background meets 4.5:1
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyMedium on background meets 4.5:1
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme labelLarge on background meets 4.5:1
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme bodyMedium on surface meets 4.5:1
+00:00 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme onSurfaceVariant on surface meets 4.5:1
+00:00 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme onSurfaceVariant on background meets 4.5:1
+00:00 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme error as text on surfaceContainer meets 4.5:1
+00:00 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme labelLarge on surface meets 4.5:1
+00:00 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme appBar foreground on appBar background meets 4.5:1
+00:00 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light theme ElevatedButton foreground on its background meets 4.5:1
+00:00 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme onPrimary on primary meets 4.5:1
+00:00 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme onSecondary on secondary meets 4.5:1
+00:00 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme onSurface on surface meets 4.5:1
+00:00 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme onError on error meets 4.5:1
+00:00 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme error as text on background meets 4.5:1
+00:00 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme error as text on surface meets 4.5:1
+00:00 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme primary as text on background meets 4.5:1
+00:00 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme displayLarge on background meets 4.5:1
+00:00 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme displayMedium on background meets 4.5:1
+00:00 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme bodyLarge on background meets 4.5:1
+00:00 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme bodyMedium on background meets 4.5:1
+00:00 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme labelLarge on background meets 4.5:1
+00:00 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme bodyMedium on surface meets 4.5:1
+00:00 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme onSurfaceVariant on surface meets 4.5:1
+00:00 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme onSurfaceVariant on background meets 4.5:1
+00:00 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme error as text on surfaceContainer meets 4.5:1
+00:00 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme appBar foreground on appBar background meets 4.5:1
+00:00 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark theme ElevatedButton foreground on its background meets 4.5:1
+00:00 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast status tokens textInverse on the success fill meets 4.5:1
+00:00 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast status tokens textPrimary on the warning fill meets 4.5:1
+00:00 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast status tokens textInverse on the info fill meets 4.5:1
+00:00 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast status tokens success as a foreground on background meets 4.5:1
+00:00 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast status tokens success as a foreground on surface meets 4.5:1
+00:00 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast status tokens info as a foreground on background meets 4.5:1
+00:00 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast non-text tokens primary as a focus ring on the dark surface meets 3.0:1
+00:00 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast non-text tokens primary as a focus ring on the dark background meets 3.0:1
+00:00 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast non-text tokens success as an icon on the dark surface meets 3.0:1
+00:00 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light success snackbar text on its fill meets 4.5:1
+00:01 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light error snackbar text on its fill meets 4.5:1
+00:01 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark success snackbar text on its fill meets 4.5:1
+00:01 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast dark error snackbar text on its fill meets 4.5:1
+00:01 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast light labelLarge is not white on the near-white scaffold
+00:01 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/theme/theme_contrast_test.dart: theme contrast secondary and textSecondary are no longer the same colour
+00:04 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get theme
+00:05 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get textTheme
+00:05 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get colorScheme
+00:05 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get mediaQuery
+00:05 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get screenSize
+00:05 +57: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get screenWidth
+00:05 +58: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should get screenHeight
+00:05 +59: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should detect mobile screen
+00:05 +60: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should detect tablet screen
+00:05 +61: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should detect desktop screen
+00:05 +62: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should show snackbar
+00:05 +63: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should show error snackbar
+00:05 +64: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions should show success snackbar
+00:05 +65: /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/extensions/context_extensions_test.dart: ContextExtensions context.pop() is unambiguous when go_router is also imported
+00:06 +66: All tests passed!

@@ -1,0 +1,4 @@
+Commits in 02ce4906a19ce9ea6c5316b74be78e2d52fbf004..HEAD
+  ok    3080f487 fix(ui): keep success snackbar text readable in dark themes (#1221)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
