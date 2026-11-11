@@ -1,0 +1,26 @@
+Post-merge QA / security review
+Issue1206 PR1207
+Mergedmain26d9c65bc412436273c54dbb61f54337e3673b2a
+Baseabd2bc8d6a711ec9cb48b33e17378603e433a78c
+Accepted35c95018145b5c358347f93414a36807ab62532b
+
+Verdict: PASS for this storage prerequisite; no remaining actionable security or QA finding. Parent1196 network behavior is not verified/fixed by this result.
+
+Actual merged diff: inspected git diff --stat base..merged (21 files, contract/adapter/docs plus fixture/test migration) and git diff --exit-code accepted..merged (empty, exit0). Entire accepted 21-file diff had independent source/contract/adversarial review recorded in 1206-review-final.log. Corrected lost-acknowledgement failure handling and four independent repair-exhaustion probes were reviewed/run before merge. Exact merged parity makes that review applicable to mergedmain; no source changed between acceptance and merge.
+
+Security properties checked:
+- Tokens remain behind ITokenStore/SecureStorageService; no preferences persistence or credential logging introduced. Repair warning names only key and error runtime type. No added network transport, dependencies, environment or workflow credentials.
+- Required versioned API has no unsafe get/set fallback; custom-store breaking migration explicitly lists the three required members and synchronous shared revision/order requirements. All concrete stores migrated. Revision identity handles ABA, failed attempts, clear and refresh-only writes.
+- Certified reads reject mutations issued during reads and pending/bypassed writes/repairs; conditional reservation precedes await. Lost acknowledgements on superseded failed/throwing calls now schedule conservative repair while uncertainty counters remain active. Exhausted repairs read the logical newest state and retain documented process-restart limits.
+- Selection guarantees and limits are honest: consumers must compare revision again; conditional applied does not lock an independent rotation through network requests. Existing legacy getAccessToken remains unchanged; parent1196 still requires network adoption. No claim of device-level encryption/platform atomicity verification.
+
+Evidence inspected under flutter-starter-evidence/docs/verification/issue-1206:
+- verification.md maps every acceptance criterion to named artifacts and explicitly disclaims screenshots/device/live-backend assurance. No goldens were collected; no visual criterion exists.
+- secure-token-store.dart, storage-contracts.dart, snapshot-tests.dart and migration-guide.md are byte-identical to actual merged source.
+- tree-parity.log records accepted/merged tree d8aafa11197b1863b12bc0bae2f67cfabbb02427; independently checked empty source diff.
+- tests.log explicitly ends +4338 ~14 All tests passed, exit0. local-audit.log explicitly ends +1194 All tests passed. docs-check.log ends documentation checks passed. ci.json has seven SUCCESS conclusions (Quality gate, Docs check, five Strip jobs).
+- refs.log passes actual merged commit reference/no-autoclose gate. deliverable.log and epic-coverage.log pass.
+- failure-before.log/independent-probes evidence substantiates repaired regression rather than merely claiming confidence; baseline +0 -4 failures and corrected +24 success were independently inspected in prior review.
+- Scanned every evidence file for private-key blocks, GitHub/OpenAI/AWS credential formats and credential-bearing HTTP URLs: no matches. Source/test credential literals are synthetic A1/A2/A3/R1/candidate/newer values. No real secret or token output found in inspected diff/logs.
+
+No tracked files or GitHub state modified. No full-suite repetition; root owns final acceptance and evidence publication. Closure additionally depends on root inspecting this report, publishing evidence and recording Breaking+Fixed maintainer changelog as planned.

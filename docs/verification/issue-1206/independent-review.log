@@ -1,0 +1,19 @@
+Independent corrected-head adversarial review
+PR1207 issue1206; head35c95018145b5c358347f93414a36807ab62532b
+
+Verdict: no remaining actionable finding in reviewed change. Earlier lost-acknowledgement P1 is addressed by corrected head.
+
+Scope: complete initial 21-file diff reviewed, followed by correction diff and full relevant control flow. Reviewed CLAUDE.md, maintainer premerge/security rules, live issue acceptance criteria, required contract, secure adapter, fixture consolidation and migration docs. No tracked code or GitHub changes made. No duplicate full suite run.
+
+Correction review:
+- Both unsuccessful bool outcome and thrown platform error run _repairIfSuperseded before returning/rethrowing. Known newer successful landed number is checked synchronously. _repair increments pendingRepairs synchronously before its first await, so the original active write and pending mutation cannot drain into a gap where a snapshot certifies the late physical token.
+- Conditional superseded errors still return conflict. Current failures still return failed or throw according to documented service behavior. Repair does not manufacture a new credential revision.
+- Repair failures at the current landed number do not schedule themselves recursively: _repairIfSuperseded requires strictly greater landed.number. Three failures mark the key stale and reads return logical newest state. An overtaken repair may enqueue another repair because newer state really has precedence; finite outstanding operations drain when platform calls settle. Existing bounded queue/platform limits remain documented.
+- Shared reservation, ABA/clear invalidation, stale-held-read rejection, pending mutation exclusion, and queued repair exclusion from original review continue to hold. No unsafe get/set fallback was introduced. Required custom store members, identity comparison, synchronous reservation and network selection limits remain clear.
+
+Independent bounded probe:
+Created scratch W1206-review-final_test.dart from current snapshot tests, modifying all four failure-after-effect cases to make the original old write AND every subsequent repair report false/throw after its effect (leaving the intervening newer write successful). Ran only plain-name late failure after its effect preserves newer state. Four cases passed: false/throw x newer write/clear. This exercises repair exhaustion without infinite recursion, safe final snapshot after exhausted repair, and superseded conditional conflict/error handling. Output: W1206-review-final-probe.log, exit0, +4 All tests passed.
+
+Inspected root negative evidence 1206-final-before.log: all four uncorrected bool/throw x newerwrite/clear cases fail by returning candidate rather than newer/null. Inspected 1206-failure-effect-after.log: +24 All tests passed, including snapshot/order/shared tests. These support the correction without relying only on an implementer verdict.
+
+Limits: no claim of device/platform verification or final full-host completion; exact-head full host suite is owned by root and still must complete. Legacy getAccessToken and parent1196 network adoption remain separate; this operation certifies/reserves selection points and cannot lock credential rotations through a network request.

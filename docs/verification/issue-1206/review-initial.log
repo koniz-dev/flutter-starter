@@ -1,0 +1,27 @@
+Independent adversarial premerge storage/contract review
+PR 1207 / issue 1206
+Base abd2bc8d6a711ec9cb48b33e17378603e433a78c; head 1af9b740f89
+
+Read CLAUDE.md, maintainer process.md premerge rules, security role, live issue1206 acceptance criteria. Inspected full 21-file diff, complete secure adapter/contract/snapshot tests, shared in-memory fixture and every migration. Read SecureStorageService and existing gated replay callers. No tracked files or GitHub state changed.
+
+Result: no actionable defect found in this diff.
+
+Reasoning checked:
+- Every ordinary mutation synchronously reserves a unique identity and pending number before queue await, shared via service-keyed Expando; refresh-only changes and failed attempts invalidate earlier revisions, defeating ABA.
+- Snapshot records revision when its queued read begins and certifies after awaited read, refusing pending mutations, active platform writes and queued/active repairs. A held read issued before a later mutation cannot acquire that mutation current revision. Timeout discards its later read result. Pure legacy reads can bypass/hold queue but cannot mutate state.
+- Conditional comparison and reservation are synchronous; later mutations invalidate reserved revision both before application and at completion. Same-service stores cannot separately accept the same snapshot. A reserved operation overtaken before platform entry conflicts without writing. One overtaken during platform call conflicts and existing repair preserves later successful state. Errors after supersession become conflict; current false outcome is failed; current platform errors propagate as documented.
+- Failed repairs keep logical newest value in stale memory. Snapshot may certify that logical value once repairs settle, consistent with existing documented restart/platform limits. Pending repairs are counted before queue admission so a bypass cannot certify an old platform value before repair starts. Read-triggered delete repair is tracked through activeWrites; certification refuses it until complete.
+- Clear methods flow through ordinary reservation; clearAllTokens attempts each key even on failure. Snapshots cannot authorize pre-clear tokens afterward.
+- Fixture migration retains initial values, read failures, hooks and held-write replay behavior. Gated test generation-only cancellation still writes physically and therefore continues to exercise post-write generation check. In-memory direct seed setters change revision.
+- Contract adds required members rather than fallback, and docs explicitly require custom-store migration, shared ordering, foreign/stale rejection, synchronous reservation and caller revision recheck. Conditional applied is a completion selection, not a network lock or returned usable snapshot; callers must obtain new certified selection afterward.
+
+Validation boundary: source/contract review only; parent full host suite is already running, so no redundant full suite launched. Existing legacy getAccessToken behavior and parent1196 network adoption remain outside this implementation; this review does not claim parent1196 is fixed or platform/device storage verified.
+
+FOLLOWUP REVIEW: lost acknowledgement invalidates initial no-defect conclusion.
+
+[P1] Repair superseded attempts even when platform reports failure.
+Location: lib/core/storage/adapters/secure_token_store.dart, _applyPlatform unsuccessful return before newest-number comparison (approximately lines 347-356).
+
+Concrete interleaving: conditional candidate reserves revision R2 and enters a held setString. Later ordinary A3 write bypasses bounded queue wait, succeeds, sets landed=A3/R3, then settles. Candidate platform write physically stores candidate and reports false (or throws), e.g. lost acknowledgement. _applyPlatform exits before detecting its older number and scheduling repair. Conditional catches superseding revision and reports conflict. After pending counters drain, no stale/repair marker exists and snapshot reads candidate from platform, certifying it with R3. This violates post-read certification's purpose and enables the parent to adopt an older callback credential as current.
+
+SecureStorageService.setString catches Exception and returns false; it does not promise platform failure has no side effect. A failure outcome cannot establish that the old platform attempt did not land. Existing legacy repair behavior had the same assumption, but certification makes this a new primitive correctness defect. Handle false and throwing superseded attempts by conservatively repairing/marking the newer known landed state, retaining pending uncertainty through queued repair. Root is adding the bounded concrete negative probe; I did not duplicate it or edit source.
