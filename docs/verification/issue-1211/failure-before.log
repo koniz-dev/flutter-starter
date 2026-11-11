@@ -1,0 +1,175 @@
+Original product source from3080f487820; final disposal/orphan-dialog fixtures. Command: flutter test --no-pub test/shared/widgets/language_switcher_test.dart --plain-name selection completing after disposal --reporter expanded
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: selection completing after disposal button tolerates a delayed preference write
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      LanguageSwitcher._showLanguageDialog.<anonymous closure>.<anonymous closure> (package:flutter_starter/shared/widgets/language_switcher.dart:57:19)
+<asynchronous suspension>
+
+The test description was:
+  button tolerates a delayed preference write
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +0 -1: selection completing after disposal button tolerates a delayed preference write [E]
+  Test failed. See exception logs above.
+  The test description was: button tolerates a delayed preference write
+  
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test (but after the test had completed):
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      LanguageSwitcher._showLanguageDialog.<anonymous closure>.<anonymous closure> (package:flutter_starter/shared/widgets/language_switcher.dart:57:19)
+<asynchronous suspension>
+════════════════════════════════════════════════════════════════════════════════════════════════════
+  Test failed. See exception logs above.
+  The test description was: button tolerates a delayed preference write
+  
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test (but after the test had completed):
+Expected: <1>
+  Actual: <2>
+Unexpected number of calls
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _expect (package:matcher/src/expect/expect.dart:182:3)
+#2      expect (package:matcher/src/expect/expect.dart:65:3)
+#3      VerificationResult.called (package:mocktail/src/mocktail.dart:595:5)
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart:159:64)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+  Test failed. See exception logs above.
+  The test description was: button tolerates a delayed preference write
+  
+00:04 +0 -1: selection completing after disposal menu item tolerates a delayed preference write
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      LanguageSwitcherMenuItem._showLanguageDialog.<anonymous closure>.<anonymous closure> (package:flutter_starter/shared/widgets/language_switcher.dart:133:19)
+<asynchronous suspension>
+
+The test description was:
+  menu item tolerates a delayed preference write
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +0 -2: selection completing after disposal menu item tolerates a delayed preference write [E]
+  Test failed. See exception logs above.
+  The test description was: menu item tolerates a delayed preference write
+  
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test (but after the test had completed):
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      LanguageSwitcherMenuItem._showLanguageDialog.<anonymous closure>.<anonymous closure> (package:flutter_starter/shared/widgets/language_switcher.dart:133:19)
+<asynchronous suspension>
+════════════════════════════════════════════════════════════════════════════════════════════════════
+  Test failed. See exception logs above.
+  The test description was: menu item tolerates a delayed preference write
+  
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test (but after the test had completed):
+Expected: <1>
+  Actual: <2>
+Unexpected number of calls
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _expect (package:matcher/src/expect/expect.dart:182:3)
+#2      expect (package:matcher/src/expect/expect.dart:65:3)
+#3      VerificationResult.called (package:mocktail/src/mocktail.dart:595:5)
+#4      main.<anonymous closure>.<anonymous closure> (file:///Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart:159:64)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+  Test failed. See exception logs above.
+  The test description was: menu item tolerates a delayed preference write
+  
+00:04 +0 -2: selection completing after disposal selection screen tolerates a delayed preference write
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      LanguageSelectionScreen.build.<anonymous closure> (package:flutter_starter/shared/widgets/language_switcher.dart:182:17)
+<asynchronous suspension>
+
+The test description was:
+  selection screen tolerates a delayed preference write
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +0 -3: selection completing after disposal selection screen tolerates a delayed preference write [E]
+  Test failed. See exception logs above.
+  The test description was: selection screen tolerates a delayed preference write
+  
+00:05 +0 -3: selection completing after disposal button and provider scope tolerates a delayed preference write
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Using "ref" when a widget is about to or has been unmounted is unsafe.
+Ref relies on BuildContext, and BuildContext is unsafe to use when the widget is deactivated.
+To safely refer to the state of providers inside State.dispose(), save the provider state in a field
+of your State class.
+
+When the exception was thrown, this was the stack:
+#0      ConsumerStatefulElement._assertNotDisposed (package:flutter_riverpod/src/core/consumer.dart:471:7)
+#1      ConsumerStatefulElement.read (package:flutter_riverpod/src/core/consumer.dart:563:5)
+#2      LanguageSwitcher._showLanguageDialog.<anonymous closure>.<anonymous closure> (package:flutter_starter/shared/widgets/language_switcher.dart:57:19)
+<asynchronous suspension>
+
+The test description was:
+  button and provider scope tolerates a delayed preference write
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:05 +0 -4: selection completing after disposal button and provider scope tolerates a delayed preference write [E]
+  Test failed. See exception logs above.
+  The test description was: button and provider scope tolerates a delayed preference write
+  
+00:05 +0 -4: (tearDownAll)
+00:06 +0 -4: Some tests failed.
+
+Failing tests:
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart: selection completing after disposal button and provider scope tolerates a delayed preference write
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart: selection completing after disposal button tolerates a delayed preference write
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart: selection completing after disposal menu item tolerates a delayed preference write
+  /Users/nguyenanhkiet/Playground/flutter-starter/test/shared/widgets/language_switcher_test.dart: selection completing after disposal selection screen tolerates a delayed preference write
+
+exit: 1

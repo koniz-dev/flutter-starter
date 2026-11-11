@@ -1,0 +1,4 @@
+Removed only inactive generated native build outputs to preserve disk capacity during host tests:
+636M	/Users/nguyenanhkiet/Playground/flutter-starter/build/app
+614M	/Users/nguyenanhkiet/Playground/flutter-starter/build/ios
+Source, evidence, active host test caches and other workspace data preserved.

@@ -1,0 +1,9 @@
+The change is limited to language-selection widgets and their host tests. Pre-merge risk-surface review and post-merge security gates do not apply; root performs self-QA. No credentials, storage adapter, auth repository, tooling, native code or dependencies change.
+
+Three callbacks capture their locale notifier before awaiting a preference write. Dialogs check their owning consumer context before starting and after the write, since their own dialog context can outlive that consumer. The screen checks its own context before updating state and navigating. Persistence already in progress is allowed to complete; a disposed owner triggers no UI update or navigation.
+
+Four structural-gate tests hold the write, dispose button/menu/screen owners or the whole provider container, then release it and assert no exception and one persistence call. The two orphaned dialogs remain mounted, receive another tap and cause no extra write or stale ref access. All four cases fail on the exact base source with unmounted-ref errors; all 16 scoped cases pass after the fix. Initial diagnostic log with a Locale('vi') versus Locale('vi','VN') verification mismatch is superseded: final fixtures capture the selected radio value, and closure uses only the corrected counterfactual and accepted audit.
+
+Final host/CI, merged tree parity, refs and deliverable/epic guard results are recorded separately before closure. No screenshots, real-device or live-backend criteria are involved.
+
+Final self-QA inspected all three mounted-owner guards and captured notifiers, four disposal fixture assertions including orphan-dialog and container teardown, corrected counterfactual unmounted-ref failures, 16-pass scoped and complete 4,365-pass/14-skip host results, format/analyzer, all six CI successes and G2 refs/deliverable/epic results. Accepted/merged trees and copied source bytes match. No remaining criterion depends on a device or live service.

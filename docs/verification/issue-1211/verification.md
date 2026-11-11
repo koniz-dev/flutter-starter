@@ -1,0 +1,10 @@
+Verified in PR #1222.
+
+| Acceptance criterion | Result and artifact |
+|---|---|
+| Locale selection tolerates owner disposal while preference persistence is pending | PASS — [local-audit.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/local-audit.log). Four delayed-write cases cover the button, menu item, selection screen and provider-container teardown. Orphaned dialogs stay open during host disposal and receive a second tap, with no extra write or stale ref use. All 16 scoped tests pass; all four new cases fail on the original source ([failure-before.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/failure-before.log)). |
+| Required host checks and applicable workflows pass | PASS — [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/tests.log). Full host acceptance passes 4,365 tests / 14 skipped; format/analyzer pass and all six actual PR checks succeed ([ci.json](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/ci.json)). No manual-workflow or risk-gated review/security surface is affected. Root self-QA inspects source assertions, corrected before/after artifacts and merged parity. |
+
+Format, analyzer and full suite passed: [format.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/format.log), [analyze.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/analyze.log), [tests.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/tests.log). All actual PR checks passed. The accepted source tree is identical to merged main: [tree-parity.log](https://github.com/koniz-dev/flutter-starter/blob/evidence/docs/verification/issue-1211/tree-parity.log).
+
+Self-QA inspected the named artifacts, source assertions, refs and status labels before closing. No screenshots were collected (`--no-goldens`); no criterion rests on standing goldens or device/live-backend/store assurance.

@@ -1,0 +1,4 @@
+Commits in 3080f487820cdf36467f872e2691fd6bb52b50c7..HEAD
+  ok    2bb83a14 fix(ui): guard locale selections after owner disposal (#1222)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.
