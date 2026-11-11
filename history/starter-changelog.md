@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Nonpositive API_TIMEOUT disables the total request deadline.** Zero and negative values allow requests to proceed while phase timeouts and caller cancellation remain active. Documentation states that the shipped 30-second total/receive budgets need an increased total budget for receive-timeout retries.
+
 - **Refresh-result adoption preserves newer credentials.** The interceptor selects certified snapshots, conditionally stores nonpersisting callback results and avoids duplicate repository writes. Conflicts and uncertain reads fail without teardown; a superseded replay 401 cannot clear a newer rotation. Queued requests select fresh current tokens.
 
 - **Token stores support versioned conditional refresh-result adoption.** Certified snapshots reject uncertain reads; conditional writes reserve order before awaiting storage. Superseded platform calls repair known newer state even when a lost acknowledgement reports failure.
