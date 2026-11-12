@@ -213,7 +213,15 @@ jobs:
       - name: Note what this tree no longer has
         if: hashFiles('mason.yaml') == '' || hashFiles('tool/strip_sample_features.dart') == ''
         shell: bash
+        env:
+          IS_TEMPLATE: ${{ github.event.repository.is_template }}
         run: |
+          # The template itself always has both: there, a missing file is a
+          # regression this job must not skip past.
+          if [ "$IS_TEMPLATE" = "true" ]; then
+            echo "::error::the template repository lost mason.yaml or the strip tool; this job verified nothing."
+            exit 1
+          fi
           if [ ! -f mason.yaml ]; then
             echo "::notice::mason.yaml is gone (the bricks were removed): the Mason steps are skipped."
           fi
@@ -279,7 +287,11 @@ jobs:
           fi
           # Every mention, not only the title: the welcome sentence in each
           # locale names the app too.
-          if grep -rn "Flutter Starter" lib test integration_test tool/golden \
+          # tool/golden is gone once a sample strip has run; a missing
+          # operand makes grep exit 2, which would read as "no match".
+          title_dirs=(lib test integration_test)
+          if [ -d tool/golden ]; then title_dirs+=(tool/golden); fi
+          if grep -rn "Flutter Starter" "${title_dirs[@]}" \
               --include='*.dart' --include='*.arb'; then
             echo "the template title survived the rename" >&2
             exit 1
@@ -350,7 +362,15 @@ jobs:
       - name: Note what this tree no longer has
         if: hashFiles('mason.yaml') == ''
         shell: bash
+        env:
+          IS_TEMPLATE: ${{ github.event.repository.is_template }}
         run: |
+          # The template itself always has both: there, a missing file is a
+          # regression this job must not skip past.
+          if [ "$IS_TEMPLATE" = "true" ]; then
+            echo "::error::the template repository lost mason.yaml or the strip tool; this job verified nothing."
+            exit 1
+          fi
           if [ ! -f mason.yaml ]; then
             echo "::notice::mason.yaml is gone (the bricks were removed): the Mason steps are skipped."
           fi
