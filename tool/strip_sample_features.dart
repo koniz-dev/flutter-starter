@@ -875,6 +875,9 @@ bool _checkWorkingTree(
               'status',
               '--porcelain',
               '--untracked-files=normal',
+              // Status otherwise includes sibling projects in a monorepo.
+              '--',
+              '.',
             ]).stdout}'
             .trimRight();
     final changes = <String>[if (status.isNotEmpty) status];
