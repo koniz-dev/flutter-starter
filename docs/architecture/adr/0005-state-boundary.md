@@ -5,9 +5,9 @@
   (2026-09-26)
 - Date: 2026-03-27
 
-> **Read 0006 first.** Both contracts this ADR proposed are gone or going:
-> `ITasksController` has been deleted, and 0006
-> decides to remove `IAuthController` too. This document is kept as the
+> **Read 0006 first.** Both contracts this ADR proposed are gone:
+> `ITasksController` was deleted first, and `IAuthController` followed on
+> 0006's verdict. This document is kept as the
 > reasoning that was tried, not as a description of the tree. The Context below
 > is still accurate; the Decision is not what the repository does.
 
@@ -16,7 +16,7 @@ Riverpod is currently both DI and UI state engine. Feature presentation logic di
 
 ## Decision
 Introduce controller contracts for feature orchestration:
-- `IAuthController`
+- ~~`IAuthController`~~ - **deleted**; see Implementation status below.
 - ~~`ITasksController`~~ - **deleted**; see
   Implementation status below.
 
@@ -26,28 +26,23 @@ Use Riverpod notifiers as adapter implementations behind these contracts. UI com
 
 This ADR was never accepted: it went from Proposed to Superseded by 0006, and
 the decision above describes a direction that was tried, not the shipped tree.
-As of the deletion of `ITasksController`:
+As of the deletion of both contracts:
 
 | Contract | Implemented by | Consumed by |
 | --- | --- | --- |
-| `IAuthController` | `AuthNotifier` in `lib/features/auth/presentation/providers/auth_provider.dart`, bound to `authControllerProvider` in the same file | Nothing. That provider has zero readers in `lib/` and `test/`; the UI reads the generated `authProvider` directly. |
+| `IAuthController` | **Removed**, with `AuthStateSnapshot`, `ControllerStateSnapshot` and the provider that bound it. `AuthNotifier` implemented it, but that provider had no reader in `lib/` or `test/`; the UI reads the generated `authProvider` directly. | n/a |
 | `ITasksController` | **Removed.** Deleting the contract also removed `TasksStateSnapshot`; `grep -rn "ITasksController" lib` now returns nothing. | n/a |
 
-So the "UI depends on controller contracts" half of this decision has not been
-carried out for `IAuthController`, and the tasks half of the decision was
-reversed rather than completed: `TasksNotifier` had never implemented
-`ITasksController`, the two had drifted in both directions, and the contract
-was deleted instead of manufacturing an
-implementor and a consumer for it. Whether `IAuthController` should be wired up
-or deleted in turn was answered by
-[0006](0006-contract-status-and-slice-shape.md):
-**remove it**, with `AuthStateSnapshot`, `ControllerStateSnapshot` and
-`authControllerProvider`. Do not read this ADR as a description of how the
-sample features are wired today; the current wiring is in
-[contracts-map.md](../contracts-map.md).
+So neither half of this decision was carried out. `TasksNotifier` had never
+implemented `ITasksController`, the two had drifted in both directions, and the
+contract was deleted instead of manufacturing an implementor and a consumer
+for it. `IAuthController` had an implementor but no consumer, and
+[0006](0006-contract-status-and-slice-shape.md) answered whether to wire it up
+or delete it: **remove it**, which has been done. Do not read this ADR as a
+description of how the sample features are wired today; the current wiring is
+in [contracts-map.md](../contracts-map.md).
 
 <!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart AuthNotifier -->
-<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart authControllerProvider -->
 
 ## Consequences
 ### Positive

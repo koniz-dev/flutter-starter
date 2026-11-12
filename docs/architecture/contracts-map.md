@@ -19,31 +19,30 @@ For feature and core code that only need types:
 | HTTP transport | `lib/core/contracts/network_contracts.dart` (`INetworkClient`, `IHttpResponseCache`, `NetworkRequest`, `NetworkResponse`) |
 | Storage | `lib/core/contracts/storage_contracts.dart` (`IKeyValueStore`, `ITokenStore`) |
 | Design tokens | `lib/core/contracts/design_tokens_contracts.dart` (`AppDesignTokens`) |
-| Presentation controllers | `lib/core/contracts/state_boundary_contracts.dart` (`IAuthController`, `ISessionTerminationSink`, and the `*StateSnapshot` marker types) |
+| Presentation controllers | `lib/core/contracts/state_boundary_contracts.dart` (`ISessionTerminationSink`) |
 
 ## Swap map (default wiring)
 
-**Read the Status column before you plan a swap.** Two of the rows below are not
-load-bearing today: `AppDesignTokens` and `IAuthController` are declared and
-implemented but no production code consumes them. For those two, following the
-"To replace" column changes nothing at runtime until a consumer exists.
-
-That is no longer an open question.
+**Read the Status column before you plan a swap.** Every row below is
+load-bearing: production code consumes each contract, so following its "To
+replace" column changes what the app does. That was not always so, and
 [adr/0006-contract-status-and-slice-shape.md](adr/0006-contract-status-and-slice-shape.md)
- gives each a verdict: **`AppDesignTokens` is to
-be wired** - type `AppTheme._tokens` on the abstraction - and
-**`IAuthController` is to be removed**, with `AuthStateSnapshot`,
-`ControllerStateSnapshot` and `authControllerProvider`. Both rows stay here
-describing the tree as it is until those changes land; the ADR says what they
-are becoming; the ADR names the area and the exact edit for each.
+records how the rows that were not got there: `AppDesignTokens` was wired -
+`AppTheme` is typed on the abstraction and builds a theme from any
+implementation of it - and the contracts below were removed.
 
-Two rows that used to sit here were answered by deletion rather than by wiring.
+Three rows that used to sit here were answered by deletion rather than by wiring.
 `AppNavigator` went - the contract, its adapter
 and its provider are gone, and navigation is the `Navigation` row below.
+`IAuthController` went, with `AuthStateSnapshot`, `ControllerStateSnapshot`
+and `authControllerProvider`: the notifier implemented it, but the provider
+had no reader - the UI reads the generated `authProvider` directly - so the
+same ADR removed it rather than route every auth screen through a second,
+hand-written provider.
 `ITasksController` went too, together with `TasksStateSnapshot`, from `state_boundary_contracts.dart`: it had no implementor
 and no consumer, and it had drifted from the tasks slice's notifier in both directions - it
 declared `loadTasks()` and `clearError()` the notifier never had, and lacked the
-`updateTask` the notifier does have. Neither has a row below, which is the
+`updateTask` the notifier does have. None of the three has a row below, which is the
 point: a contract that only this file mentions is the defect, not the
 documentation of one.
 
@@ -63,8 +62,7 @@ documentation of one.
 | `ISessionTerminationSink` | **Live** | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart`) | Bound to `sessionTerminationSinkProvider` by `authModuleOverrides` (`lib/features/auth/di/auth_providers.dart`) and read into `AuthInterceptor` at `lib/core/di/providers.dart`; held at `lib/core/network/interceptors/auth_interceptor.dart` and invoked on forced logout | Implement the contract and pass it in the same place |
 | `SignOut` / `signOutProvider` | **Live** | Default callback throws `StateError`; the auth module binds it to `AuthNotifier.logout` | Bound by `authModuleOverrides` (`lib/features/auth/di/auth_providers.dart`); consumed by the home app-bar sign-out action (`lib/features/home/presentation/screens/home_screen.dart`) | Override `signOutProvider` at the composition root, or remove the action in an anonymous app |
 | Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart`) over `go_router` | Every screen that navigates, e.g. `lib/features/auth/presentation/screens/login_screen.dart` and `register_screen.dart`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |
-| `AppDesignTokens` | **No production consumer** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`) | Nowhere, and there is no provider. `AppTheme` binds the **concrete** class at compile time: `static const _tokens = DefaultDesignTokens();` (`lib/shared/theme/app_theme.dart`). Nothing in `lib/` is typed on `AppDesignTokens`. | Edit `lib/shared/theme/app_theme.dart` to construct your own token class (and update the theme building that reads `_tokens`). There is no override point. |
-| `IAuthController` | **No production consumer** | `AuthNotifier` (`lib/features/auth/presentation/providers/auth_provider.dart`) | `authControllerProvider` (`lib/features/auth/presentation/providers/auth_provider.dart`) binds it, but that identifier has **zero readers** in `lib/` and `test/` - the UI reads the generated `authProvider` directly. | Rebinding `authControllerProvider` to your orchestrator has no effect until something reads it |
+| `AppDesignTokens` | **Live** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`) | `AppTheme` (`lib/shared/theme/app_theme.dart`): its token field is typed on the contract, and `AppTheme.light(tokens)` / `AppTheme.dark(tokens)` build a theme from any implementation. `lightTheme` and `darkTheme`, which `lib/main.dart` passes to the app, are those builders applied to the default tokens. | Implement `AppDesignTokens` and pass it to `AppTheme.light` / `AppTheme.dark` in `lib/main.dart`, or bind it as `AppTheme`'s default. The dark surfaces and the on-dark primary and error colours are fixed in `AppTheme.dark`, not tokens. |
 
 There used to be an `ITasksController` row naming a
 controller provider that has never existed anywhere in the tree - the name is
@@ -93,7 +91,6 @@ name it guards moves or disappears.
 <!-- symbol: lib/core/di/providers.dart tokenStoreProvider -->
 <!-- symbol: lib/core/logging/logging_providers.dart loggingServiceProvider -->
 <!-- symbol: lib/core/routing/app_router.g.dart goRouterProvider -->
-<!-- symbol: lib/features/auth/presentation/providers/auth_provider.dart authControllerProvider -->
 <!-- symbol: lib/features/auth/presentation/providers/auth_provider.g.dart authProvider -->
 <!-- symbol: lib/core/security/rasp_providers.dart raspServiceProvider -->
 <!-- symbol: lib/core/logging/error_reporter_providers.dart errorReporterProvider -->
@@ -137,7 +134,7 @@ to mistype.
 | Storage | `lib/core/storage/adapters/` |
 | Routing | None. Navigation is a `BuildContext` extension, not a contract plus adapter; `go_router` stays inside `lib/core/routing/` |
 | Theme | Prefer tokens in `lib/shared/design_system/` + `lib/shared/theme/app_theme.dart` |
-| State | Notifiers under `lib/features/*/presentation/providers/`; one implements a controller contract (`AuthNotifier`), the tasks slice deliberately does not |
+| State | Notifiers under `lib/features/*/presentation/providers/`, read directly through their generated providers; none sits behind a controller contract |
 
 ## Optional modules
 

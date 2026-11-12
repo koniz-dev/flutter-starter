@@ -1,6 +1,6 @@
 # ADR 0004: Theme and Token Boundary
 
-- Status: Proposed
+- Status: Accepted (implemented: `AppTheme` is typed on `AppDesignTokens` and builds its themes from it)
 - Date: 2026-03-27
 
 ## Context

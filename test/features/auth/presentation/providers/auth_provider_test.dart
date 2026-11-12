@@ -458,7 +458,6 @@ void main() {
           final state = container.read(authNotifierProvider);
           expect(state.user, isNull);
           expect(state.isLoading, isFalse);
-          expect(notifier.snapshot.isAuthenticated, isFalse);
         },
       );
 
@@ -501,7 +500,6 @@ void main() {
           verifyNever(() => mockLogoutUseCase());
           final state = container.read(authNotifierProvider);
           expect(state.user, isNotNull);
-          expect(notifier.snapshot.isAuthenticated, isTrue);
         },
       );
 
