@@ -34,23 +34,6 @@ abstract class AuthState with _$AuthState {
   }) = _AuthState;
 }
 
-/// Snapshot adapter for exposing auth state through boundary contracts.
-class RiverpodAuthStateSnapshot implements AuthStateSnapshot {
-  /// Adapts the Riverpod [AuthState] to the boundary snapshot contract.
-  const RiverpodAuthStateSnapshot(this._state);
-
-  final AuthState _state;
-
-  @override
-  bool get isLoading => _state.isLoading;
-
-  @override
-  String? get error => _state.error;
-
-  @override
-  bool get isAuthenticated => _state.user != null;
-}
-
 /// What a use case that threw (instead of returning a `Result`) reports.
 const _unexpectedFailure = UnknownFailure(
   'Something went wrong. Please try again.',
@@ -58,10 +41,7 @@ const _unexpectedFailure = UnknownFailure(
 
 /// Authentication provider (Riverpod 3.0 - using Notifier)
 @Riverpod(keepAlive: true)
-class AuthNotifier extends _$AuthNotifier implements IAuthController {
-  @override
-  AuthStateSnapshot get snapshot => RiverpodAuthStateSnapshot(state);
-
+class AuthNotifier extends _$AuthNotifier {
   @override
   AuthState build() => const AuthState();
 
@@ -72,7 +52,6 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   int _signInsInFlight = 0;
 
   /// Attempts to login with the given [email] and [password]
-  @override
   Future<void> login(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
 
@@ -114,7 +93,6 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   }
 
   /// Attempts to register a new user with [email], [password], and [name]
-  @override
   Future<void> register(String email, String password, String name) async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
 
@@ -161,7 +139,6 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   /// tears the local session down unconditionally, so a failure (the server
   /// was not told, or a local step failed) does not keep the user signed in.
   /// The failure message is still surfaced.
-  @override
   Future<void> logout() async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
 
@@ -207,7 +184,6 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   ///
   /// This is typically called automatically by the AuthInterceptor,
   /// but can be called manually if needed.
-  @override
   Future<void> refreshToken() async {
     final refreshTokenUseCase = ref.read(refreshTokenUseCaseProvider);
     final result = await refreshTokenUseCase();
@@ -233,7 +209,6 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   }
 
   /// Gets the current authenticated user
-  @override
   Future<void> getCurrentUser() async {
     state = state.copyWith(isLoading: true, error: null, failure: null);
 
@@ -337,7 +312,6 @@ class AuthNotifier extends _$AuthNotifier implements IAuthController {
   ///
   /// Returns true if user is authenticated, false otherwise.
   /// This method does not update the state.
-  @override
   Future<bool> isAuthenticated() async {
     final isAuthenticatedUseCase = ref.read(isAuthenticatedUseCaseProvider);
     final result = await isAuthenticatedUseCase();
@@ -370,11 +344,6 @@ class RiverpodSessionTerminationSink implements ISessionTerminationSink {
   void onSessionTerminated() =>
       _ref.read(authNotifierProvider.notifier).clearSession();
 }
-
-/// Boundary provider exposing auth controller contract.
-final authControllerProvider = Provider<IAuthController>((ref) {
-  return ref.read(authNotifierProvider.notifier);
-});
 
 /// Restores the persisted session, once per app launch.
 ///
