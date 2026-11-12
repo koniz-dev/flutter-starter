@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 import 'package:flutter_starter/shared/design_system/tokens/app_colors.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Language switcher widget
 ///
