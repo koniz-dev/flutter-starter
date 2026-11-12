@@ -23,17 +23,13 @@ For feature and core code that only need types:
 
 ## Swap map (default wiring)
 
-**Read the Status column before you plan a swap.** One of the rows below is not
-load-bearing today: `AppDesignTokens` is declared and implemented but no
-production code consumes it. For that row, following the "To replace" column
-changes nothing at runtime until a consumer exists.
-
-That is no longer an open question.
+**Read the Status column before you plan a swap.** Every row below is
+load-bearing: production code consumes each contract, so following its "To
+replace" column changes what the app does. That was not always so, and
 [adr/0006-contract-status-and-slice-shape.md](adr/0006-contract-status-and-slice-shape.md)
- gives it a verdict: **`AppDesignTokens` is to
-be wired** - type `AppTheme._tokens` on the abstraction. The row stays here
-describing the tree as it is until that change lands; the ADR names the exact
-edit.
+records how the rows that were not got there: `AppDesignTokens` was wired -
+`AppTheme` is typed on the abstraction and builds a theme from any
+implementation of it - and the contracts below were removed.
 
 Three rows that used to sit here were answered by deletion rather than by wiring.
 `AppNavigator` went - the contract, its adapter
@@ -66,7 +62,7 @@ documentation of one.
 | `ISessionTerminationSink` | **Live** | `RiverpodSessionTerminationSink` (`lib/features/auth/presentation/providers/auth_provider.dart`) | Bound to `sessionTerminationSinkProvider` by `authModuleOverrides` (`lib/features/auth/di/auth_providers.dart`) and read into `AuthInterceptor` at `lib/core/di/providers.dart`; held at `lib/core/network/interceptors/auth_interceptor.dart` and invoked on forced logout | Implement the contract and pass it in the same place |
 | `SignOut` / `signOutProvider` | **Live** | Default callback throws `StateError`; the auth module binds it to `AuthNotifier.logout` | Bound by `authModuleOverrides` (`lib/features/auth/di/auth_providers.dart`); consumed by the home app-bar sign-out action (`lib/features/home/presentation/screens/home_screen.dart`) | Override `signOutProvider` at the composition root, or remove the action in an anonymous app |
 | Navigation (extension, not a contract) | **Live** | `NavigationExtensions` on `BuildContext` (`lib/core/routing/navigation_extensions.dart`) over `go_router` | Every screen that navigates, e.g. `lib/features/auth/presentation/screens/login_screen.dart` and `register_screen.dart`. The router itself is `goRouterProvider` (`lib/core/routing/app_router.dart`). | Rewrite `navigation_extensions.dart` and the `lib/features/*/routing/*_routes.dart` modules against your router. There is no navigation contract to implement - see [adr/0003-navigation-boundary.md](adr/0003-navigation-boundary.md) |
-| `AppDesignTokens` | **No production consumer** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`) | Nowhere, and there is no provider. `AppTheme` binds the **concrete** class at compile time: `static const _tokens = DefaultDesignTokens();` (`lib/shared/theme/app_theme.dart`). Nothing in `lib/` is typed on `AppDesignTokens`. | Edit `lib/shared/theme/app_theme.dart` to construct your own token class (and update the theme building that reads `_tokens`). There is no override point. |
+| `AppDesignTokens` | **Live** | `DefaultDesignTokens` (`lib/shared/design_system/tokens/default_design_tokens.dart`) | `AppTheme` (`lib/shared/theme/app_theme.dart`): its token field is typed on the contract, and `AppTheme.light(tokens)` / `AppTheme.dark(tokens)` build a theme from any implementation. `lightTheme` and `darkTheme`, which `lib/main.dart` passes to the app, are those builders applied to the default tokens. | Implement `AppDesignTokens` and pass it to `AppTheme.light` / `AppTheme.dark` in `lib/main.dart`, or bind it as `AppTheme`'s default. The dark surfaces and the on-dark primary and error colours are fixed in `AppTheme.dark`, not tokens. |
 
 There used to be an `ITasksController` row naming a
 controller provider that has never existed anywhere in the tree - the name is
