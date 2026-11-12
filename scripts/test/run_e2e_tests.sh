@@ -6,7 +6,7 @@
 # https://patrol.leancode.co/documentation/compatibility-table
 # Usage: ./scripts/test/run_e2e_tests.sh
 
-set -e
+set -eo pipefail
 
 # Colors for output
 RED='\033[0;31m'
@@ -26,6 +26,12 @@ fi
 
 # The same target e2e-android.yml runs, so the local and CI E2E paths test
 # one file.
-patrol test -t integration_test/app_e2e_test.dart
+PATROL_LOG="$(mktemp)"
+trap 'rm -f "$PATROL_LOG"' EXIT
+patrol test -t integration_test/app_e2e_test.dart 2>&1 | tee "$PATROL_LOG"
+
+# `patrol test` exits 0 when it collected no test, or skipped them all: the
+# same check e2e-android.yml applies.
+"$(dirname "${BASH_SOURCE[0]}")/check_patrol_summary.sh" "$PATROL_LOG"
 
 echo -e "${GREEN}✅ E2E tests complete!${NC}"

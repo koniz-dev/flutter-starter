@@ -72,9 +72,10 @@ make verification worthless.
   Anyone can dispatch it: Actions -> E2E Android (Patrol) -> Run workflow.
   The native harness exists (`android/app/src/androidTest/`,
   `PatrolJUnitRunner`, orchestrator) and run 32966672465 collected and executed a
-  real test (`Total: 1`). The job also fails on `Total: 0` or a non-zero
-  `Failed:` count, so a green run there is now trustworthy - that was not true
-  before, when it went green having run nothing.
+  real test (`Total: 1`). The job also fails on `Total: 0`, a non-zero
+  `Failed:` or `Skipped:` count, or fewer successes than tests, so a green run
+  there is now trustworthy - that was not true before, when it went green
+  having run nothing.
   It needs no backend: built without `BASE_URL`, the auth -> home test signs
   in through the offline demo account. One live caveat: `patrol_cli` must
   stay pinned to the version matching the `patrol` dependency, or it aborts
