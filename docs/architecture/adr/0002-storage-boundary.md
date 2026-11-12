@@ -1,6 +1,6 @@
 # ADR 0002: Storage Boundary Split
 
-- Status: Proposed
+- Status: Accepted (implemented: `IKeyValueStore` and `ITokenStore` are the storage boundaries in use, and the transition period its compatibility criterion describes is over)
 - Date: 2026-03-27
 
 ## Context

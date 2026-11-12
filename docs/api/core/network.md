@@ -710,7 +710,7 @@ and never re-enters `onRequest`, so its session checks live in `_handle401Error`
 
 **Forced logout (the 401 path):**
 
-When the refresh says the session is over, there is no refresh token, or the retry is already exhausted, `AuthInterceptor` logs the session out itself.
+When the refresh says the session is over, or there is no refresh token, `AuthInterceptor` logs the session out itself.
 
 Which refresh failures end the session:
 

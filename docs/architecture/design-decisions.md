@@ -250,7 +250,7 @@ final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
 // Presentation layer - state management
 class AuthNotifier extends Notifier<AuthState> {
   @override
-  AuthState build() => const AuthState.initial();
+  AuthState build() => const AuthState();
   
   Future<void> login(String email, String password) async {
     final useCase = ref.read(loginUseCaseProvider);
@@ -1231,7 +1231,7 @@ Rejected alternatives:
   belonged to the tasks sample rather than to the `lib/core/` change that
   fixed the defects, so it was tracked separately; the outcome is recorded in
   "The tasks sample is not the host" below, and `DateFormatter` is the one
-  utility that survived it.
+  utility that survived it - today through its ISO 8601 pair only.
 <!-- strip:tasks end -->
 
 ### What was done
@@ -1253,7 +1253,8 @@ Rejected alternatives:
 4. Wiring `PaginationHelper`, `Debouncer` and `DateFormatter` into the tasks
    sample was handled separately. That change wired `DateFormatter` and **rejected** the
    tasks sample as a host for the other two - see "The tasks sample is not the
-   host" below.
+   host" below. The screens have since moved their display dates to
+   `LocalizedFormatters`, so the model's ISO 8601 pair is what remains wired.
 <!-- strip:tasks end -->
 
 ### Call-site status
@@ -1271,7 +1272,7 @@ the tree - fix the row in the same change that moves the call site.
 
 | Utility | Exercised by a running screen? | Where |
 |---|---|---|
-| `DateFormatter` | yes, both pairs | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model; `formatDate` renders the date on every tasks-list row and `formatDateTime` renders both timestamps on the task detail screen <!-- strip:tasks line --> |
+| `DateFormatter` | yes, the ISO 8601 pair | `formatIso8601` / `parseIso8601` persist `created_at` and `updated_at` in the tasks sample's model. The display pair (`formatDate` / `formatDateTime`) has no caller: the tasks screens render dates through `LocalizedFormatters`, which follows the screen's locale <!-- strip:tasks line --> |
 | `PaginationHelper` | no | - |
 | `Debouncer` / `Throttler` | no | - |
 | `LazyLoader` | no | - |
@@ -1282,7 +1283,9 @@ the tree - fix the row in the same change that moves the call site.
 The tasks detail screen previously formatted its two timestamps with a
 hand-rolled `padLeft` chain while `DateFormatter` sat unused one directory
 away - the duplication the "keep them as building blocks" decision is supposed
-to prevent. That call site is now the utility.
+to prevent. That call site moved to the utility, and later to
+`LocalizedFormatters` (`lib/core/localization/localized_formatters.dart`) so
+the dates follow the screen's locale rather than one fixed pattern.
 
 ### The tasks sample is not the host for `PaginationHelper` or `Debouncer`
 

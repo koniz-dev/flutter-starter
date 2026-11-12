@@ -76,8 +76,8 @@ There is no `toEntity()`: `UserModel` *extends* `User`, so a `UserModel` already
 is a `User` and is passed to the domain layer as one, with no conversion.
 
 <!-- strip:tasks start -->
-(`TaskModel`, which does not extend its entity, is the model with a
-`toEntity()`.)
+(`TaskModel` extends its entity too; its `toEntity()` returns itself and
+exists for callers that want the conversion spelled out.)
 <!-- strip:tasks end -->
 
 ### Usage
