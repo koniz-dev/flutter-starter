@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/screens/feat
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MockFeatureFlagsManager extends Mock implements FeatureFlagsManager {}
 
@@ -62,9 +61,7 @@ void main() {
           locale: locale,
           localizationsDelegates: const [
             AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: const FeatureFlagsDebugScreen(),

@@ -6,8 +6,6 @@
 // router and the real repository; only the remote is replaced, and it rejects
 // every sign-in and registration with a 401.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/core/di/providers.dart';
@@ -21,6 +19,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
 import 'package:flutter_starter/features/auth/presentation/screens/register_screen.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../helpers/in_memory_stores.dart';
 
@@ -78,9 +77,7 @@ void main() {
           routerConfig: container.read(goRouterProvider),
           localizationsDelegates: const [
             AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: const [Locale('en')],
         ),

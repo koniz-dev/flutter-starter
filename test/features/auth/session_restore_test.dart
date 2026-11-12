@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/constants/app_constants.dart';
 import 'package:flutter_starter/core/contracts/storage_contracts.dart';
@@ -22,6 +20,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Regression tests: the persisted session used to never be read back, so
 /// every cold start redirected a returning user to `/login`.
@@ -110,9 +109,7 @@ Future<GoRouter> _pumpRouter(
         routerConfig: router,
         localizationsDelegates: const [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: const [Locale('en')],
       ),

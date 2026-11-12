@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_starter/features/tasks/presentation/screens/tasks_list_screen.dart';
 import 'package:flutter_starter/features/tasks/routing/tasks_routes.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../helpers/signed_in_app.dart';
 

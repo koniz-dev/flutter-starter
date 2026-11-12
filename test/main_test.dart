@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/main.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A locale notifier pinned to a non-English, non-default locale.
 class _FixedLocale extends LocaleNotifier {
@@ -198,9 +197,7 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: const [
               AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
             ],
             supportedLocales: LocalizationService.supportedLocales,
             home: const HomeScreen(),
@@ -220,9 +217,7 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: const [
               AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
             ],
             supportedLocales: LocalizationService.supportedLocales,
             home: const HomeScreen(),

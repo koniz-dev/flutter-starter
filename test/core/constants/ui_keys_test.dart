@@ -9,7 +9,6 @@
 // These tests run under plain `flutter test`. Removing a `key:` from one of
 // the three widgets below fails the default suite.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/constants/ui_keys.dart';
 import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
@@ -19,6 +18,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/register_scre
 import 'package:flutter_starter/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../helpers/pump_app.dart';
 

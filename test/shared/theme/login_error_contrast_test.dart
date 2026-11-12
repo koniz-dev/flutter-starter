@@ -6,9 +6,7 @@
 // the RenderParagraph - rather than the token, so a theme that overrides
 // errorStyle, or a widget that ignores the scheme, is caught too.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_constants.dart';
 import 'package:flutter_starter/core/accessibility/accessibility_helpers.dart';
@@ -17,6 +15,7 @@ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   final en = lookupAppLocalizations(const Locale('en'));
@@ -33,9 +32,7 @@ void main() {
             theme: theme,
             localizationsDelegates: const [
               AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
             ],
             supportedLocales: const [Locale('en')],
             home: const LoginScreen(),

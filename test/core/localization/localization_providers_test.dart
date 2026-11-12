@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/di/providers.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/core/storage/storage_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MockStorageService extends Mock implements StorageService {}
 

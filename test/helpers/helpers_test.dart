@@ -3,11 +3,11 @@
 // findWidgetWithText, findTextFormFieldByLabel, waitForCondition - had no
 // caller and were deleted rather than fixed, along with the other unused ones.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/errors/exceptions.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'in_memory_stores.dart';
 import 'pump_app.dart';

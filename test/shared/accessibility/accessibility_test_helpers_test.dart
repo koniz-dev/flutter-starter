@@ -3,8 +3,8 @@
 // a test built on them could not fail. Each is pinned on a widget that has
 // the property and one that does not.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'accessibility_test_helpers.dart';
 

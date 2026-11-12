@@ -9,9 +9,7 @@
 // text with the Ahem font, so every glyph is an opaque block. Which string is
 // announced is only observable through the semantics tree, which is what these
 // assertions read.
-import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
@@ -21,6 +19,7 @@ import 'package:flutter_starter/shared/widgets/error_widget.dart';
 import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 import 'package:flutter_starter/shared/widgets/optimized_list_view.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Every English literal once found hardcoded in these widgets.
 const _englishLiterals = <String>[
@@ -54,9 +53,7 @@ Widget _viApp(Widget child) {
       locale: const Locale('vi'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: LocalizationService.supportedLocales,
       home: Scaffold(body: child),

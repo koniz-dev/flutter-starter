@@ -5,9 +5,9 @@
 
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/shared/accessibility/accessibility_widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// The `testWidgets(...)` call in [text] whose description is [name], with
 /// its indentation removed.

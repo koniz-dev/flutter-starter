@@ -4,14 +4,13 @@
 // a stale or hand-edited language code reaches the widgets. It used to hit a
 // `firstWhere` with no `orElse` and throw `Bad state: No element`,
 // red-screening the containing route.
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_providers.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/widgets/language_switcher.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 Widget _wrap(Widget child, {required Locale storedLocale}) {
   final container = ProviderContainer(
@@ -26,9 +25,7 @@ Widget _wrap(Widget child, {required Locale storedLocale}) {
     child: MaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: LocalizationService.supportedLocales,
       home: Scaffold(body: child),

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/errors/failures.dart';
 import 'package:flutter_starter/core/routing/app_routes.dart';
 import 'package:flutter_starter/core/routing/navigation_extensions.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../helpers/pump_app.dart';
 import '../../../../helpers/test_fixtures.dart';

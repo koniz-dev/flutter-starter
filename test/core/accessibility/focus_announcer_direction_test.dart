@@ -4,13 +4,12 @@
 // every locale, and the announcement strings were hardcoded English. These
 // tests intercept the platform message that actually leaves the framework, so
 // they assert what a screen reader would really be handed.
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_starter/core/accessibility/focus_announcer.dart';
 import 'package:flutter_starter/core/localization/localization_service.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 class _Probe extends StatelessWidget {
   const _Probe();
@@ -24,9 +23,7 @@ Widget _appIn(Locale locale) {
     locale: locale,
     localizationsDelegates: const [
       AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
+      ...GlobalMaterialLocalizations.delegates,
     ],
     supportedLocales: LocalizationService.supportedLocales,
     home: const Scaffold(body: _Probe()),

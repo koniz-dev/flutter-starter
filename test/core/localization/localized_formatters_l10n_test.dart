@@ -1,9 +1,9 @@
 // Regression tests: localized date and relative-time formatting.
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/localization/localized_formatters.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   setUpAll(initializeDateFormatting);

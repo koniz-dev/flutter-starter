@@ -8,8 +8,6 @@
 // so a widget listening to `isFeatureEnabledProvider(key)` kept the old value.
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/utils/result.dart';
 import 'package:flutter_starter/features/feature_flags/domain/entities/feature_flag.dart';
@@ -19,6 +17,7 @@ import 'package:flutter_starter/features/feature_flags/presentation/screens/feat
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -115,9 +114,7 @@ void main() {
       child: const MaterialApp(
         localizationsDelegates: [
           AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: FeatureFlagsDebugScreen(),
