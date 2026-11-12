@@ -106,22 +106,25 @@ slice rather than splitting a four-line deletion in two.
 
 ### Verdict: wire it (1)
 
-**`AppDesignTokens` is to become load-bearing**, by typing `AppTheme`'s token
-field on the abstraction instead of the concrete class:
+**`AppDesignTokens` is load-bearing**, by typing `AppTheme`'s token
+field on the abstraction instead of the concrete class. This verdict has been
+carried out:
 
 ```dart
 // lib/shared/theme/app_theme.dart, AppTheme
-static const _tokens = DefaultDesignTokens();        // today
-static const AppDesignTokens _tokens = DefaultDesignTokens();   // decided
+static const _tokens = DefaultDesignTokens();        // before
+static const AppDesignTokens _tokens = DefaultDesignTokens();   // now
 ```
 
-Nothing in `lib/` is currently typed on `AppDesignTokens`: `grep -rn
-"AppDesignTokens" lib` returns the declaration
+Before it, nothing in `lib/` was typed on `AppDesignTokens`: `grep -rn
+"AppDesignTokens" lib` returned the declaration
 (`lib/core/contracts/design_tokens_contracts.dart`) and
 `DefaultDesignTokens implements AppDesignTokens`
 (`lib/shared/design_system/tokens/default_design_tokens.dart`), and nothing
 else. So the swap [0004-theme-token-boundary.md](0004-theme-token-boundary.md)
-promises requires editing `app_theme.dart`, not overriding anything.
+promises required editing `app_theme.dart`, not overriding anything. `AppTheme`
+now also exposes `light(tokens)` and `dark(tokens)`, which build a theme from
+any implementation of the contract.
 
 This one is wired rather than removed because the cost is a type annotation and
 the contract is the stated decision of ADR 0004, which is Proposed but not
@@ -129,8 +132,7 @@ contradicted by anything. Removing it would mean reversing ADR 0004 to save a
 7-line file. The removal verdict applied to `IAuthController` does not transfer:
 there the wiring cost was a rewrite of every auth screen's provider access.
 
-The change belongs with the design system (`lib/shared/`). See "Follow-up
-work" below.
+The change belonged with the design system (`lib/shared/`).
 
 ## Decision 2: `auth` is the canonical feature slice shape
 
@@ -233,7 +235,7 @@ import `lib/features/`, and they have real consumers on both sides.
   without execution when this was written. That is the ADR's proper output - it
   may not touch `lib/` - but the gap has to be closed by the follow-ups below,
   or this ADR becomes the next thing that records a decision nobody acts on.
-  The removal has been carried out.
+  Both have been carried out.
 - Declaring `auth` canonical makes `feature_flags` non-conforming on two axes.
   The ADR names which two and why the other two differences are legitimate, so
   the non-conformance is bounded rather than an open-ended cleanup.
@@ -246,7 +248,7 @@ picked up directly.
 | What | Area | Change |
 |---|---|---|
 | ~~Remove `IAuthController`~~ | auth slice | **Done.** `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` are gone from `lib/core/contracts/state_boundary_contracts.dart`, as are `authControllerProvider` and the `implements` clause on `AuthNotifier`; contracts-map.md no longer has the row |
-| Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart`); update the contracts-map.md row from "No production consumer" to "Live" |
+| ~~Wire `AppDesignTokens`~~ | design system | **Done.** `AppTheme._tokens` is typed on `AppDesignTokens` (`lib/shared/theme/app_theme.dart`), with `light(tokens)` / `dark(tokens)` builders; the contracts-map.md row says "Live" |
 | Teach the brick `routing/` | tooling | Add `routing/{{feature_name}}_routes.dart` to `bricks/feature_clean/__brick__`, matching the auth slice |
 
 ## Compatibility
