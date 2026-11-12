@@ -32,7 +32,8 @@ Shell utilities grouped by purpose. **Platform folders** (`android/`, `ios/`, â€
 |--------|---------|
 | [`test_coverage.sh`](test/test_coverage.sh) | Coverage reports (HTML, thresholds). |
 | [`calculate_layer_coverage.sh`](test/calculate_layer_coverage.sh) | Layer breakdown (used by CI). |
-| [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests. |
+| [`run_e2e_tests.sh`](test/run_e2e_tests.sh) | Run Patrol integration tests, then fail unless every collected test ran and passed. |
+| [`check_patrol_summary.sh`](test/check_patrol_summary.sh) | Reads a `patrol test` log and fails on an empty run, a failed or skipped test, or fewer successes than tests. Used by `run_e2e_tests.sh` and the E2E workflow. |
 | [`release_scripts_test.sh`](test/release_scripts_test.sh) | Fixture-repo tests for `generate_changelog.sh` and `release.sh`. Needs no Flutter. Run in CI on Ubuntu and macOS by [`release-scripts.yml`](../.github/workflows/release-scripts.yml) - automatically only in the template repository, by hand (Actions tab) in a project created from it. |
 | [`format_check_test.sh`](test/format_check_test.sh) | Tests the format check the hooks and CI share. |
 | [`test_coverage.ps1`](test/test_coverage.ps1) | `test_coverage.sh` for Windows PowerShell. |
