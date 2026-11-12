@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/core/network/interceptors/api_logging_interceptor.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Helper class for managing image caching
 ///
