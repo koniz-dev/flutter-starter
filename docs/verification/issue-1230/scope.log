@@ -1,0 +1,22 @@
+Issue #1230; epic:i18n
+Base: 30912d93c075777d3a3d8da5b8cbb41b770d71af
+Integrated candidate: 6fbc814064a8a9be359ca4fe150b26e96d913c8a
+l10n.yaml
+lib/core/localization/cupertino_localizations_delegate.dart
+lib/core/localization/localization_providers.dart
+lib/core/localization/localization_service.dart
+lib/core/localization/localized_formatters.dart
+lib/core/localization/material_localizations_delegate.dart
+lib/l10n/app_localizations.dart
+lib/l10n/app_localizations_ar.dart
+lib/l10n/app_localizations_en.dart
+lib/l10n/app_localizations_es.dart
+lib/l10n/app_localizations_vi.dart
+
+Scope commit records:
+caee425dbc7ec822366729bec8c38d9ff681374f fix(i18n): bind generated delegates to standalone UI libraries
+Refs koniz-dev/flutter-starter#1230
+
+96476163c83a6c39e812aa3bd41c91fef8d36ba7 fix(i18n): migrate standalone Flutter UI libraries
+Refs koniz-dev/flutter-starter#1230
+
