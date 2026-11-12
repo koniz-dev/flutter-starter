@@ -219,10 +219,10 @@ final class ${FEATURE_PASCAL}Notifier extends Notifier<AsyncValue<${FEATURE_PASC
 EOF
 
 cat > "$BASE_DIR/presentation/screens/${FEATURE_NAME}_screen.dart" <<EOF
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/features/${FEATURE_NAME}/presentation/providers/${FEATURE_NAME}_provider.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Screen showing a single ${FEATURE_PASCAL}.
 class ${FEATURE_PASCAL}Screen extends ConsumerWidget {

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/features/{{feature_name}}/presentation/providers/{{feature_name}}_provider.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Screen showing a single {{class_name}}.
 class {{class_name}}Screen extends ConsumerWidget {

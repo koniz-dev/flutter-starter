@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_starter/core/constants/ui_keys.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_starter/core/routing/navigation_extensions.dart';
 import 'package:flutter_starter/core/routing/routes_registry.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/widgets/language_switcher.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Home screen after sign-in (minimal shell; extend per product).
 ///

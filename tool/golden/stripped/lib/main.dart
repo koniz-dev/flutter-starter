@@ -2,7 +2,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/foundation.dart' show kReleaseMode;
-import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // `Override` is not in flutter_riverpod.dart's export list; misc.dart is
@@ -23,6 +22,7 @@ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
 import 'package:flutter_starter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_starter/l10n/app_localizations.dart';
 import 'package:flutter_starter/shared/theme/app_theme.dart';
+import 'package:material_ui/material_ui.dart';
 
 // Disables Riverpod auto-retry for EVERY provider, for the whole process
 // lifetime - not just for startup. A container-level `Retry` is

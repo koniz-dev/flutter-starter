@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_starter/main.dart' as app;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Boots the app and waits for the first frame.
 ///

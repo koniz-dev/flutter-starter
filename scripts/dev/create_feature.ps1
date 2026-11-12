@@ -216,10 +216,10 @@ final class ${FeaturePascal}Notifier extends Notifier<AsyncValue<${FeaturePascal
 "@
 
 Write-GeneratedFile "lib/features/$($FeatureName)/presentation/screens/$($FeatureName)_screen.dart" @"
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter/core/localization/localization_extensions.dart';
 import 'package:flutter_starter/features/${FeatureName}/presentation/providers/${FeatureName}_provider.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Screen showing a single ${FeaturePascal}.
 class ${FeaturePascal}Screen extends ConsumerWidget {

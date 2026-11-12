@@ -12,6 +12,7 @@ dependencies:
   # UI Components - iOS style icons
   crypto: ^3.0.8
   cupertino_icons: ^2.0.0
+  cupertino_ui: ^1.1.4
 
   # Network Layer - HTTP client with interceptors support
   dio: ^5.11.1
@@ -54,6 +55,9 @@ dependencies:
 
   # Logging - Comprehensive logging solution with multiple outputs
   logger: ^2.8.0
+
+  # UI Components - standalone Material design library
+  material_ui: ^1.8.0
 
   # File System - Path provider for file-based logging
   path: ^1.9.1
