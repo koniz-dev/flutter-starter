@@ -6,7 +6,18 @@ name: Build (Manual)
 # with current Android Studio, which CI's Java 17 never exercised while the
 # project could not build on it. The
 # manual jobs keep their `inputs.platform` guards, which are false on a PR.
+#
+# `android-jdk25` also runs weekly, in the template repository only. The
+# Flutter channel floats on stable, and a new stable can raise its Gradle,
+# AGP or Kotlin floors with no change in this repository: Flutter 3.50 did,
+# and the Android build was broken on `main` until a PR happened to touch
+# this file. A repository created from the template skips the scheduled run
+# (`github.event.repository.is_template` is true only in the template); to
+# get it there, drop that clause from the job's `if:` and from
+# test/tooling/android_floor_schedule_test.dart.
 on:
+  schedule:
+    - cron: '30 4 * * 1' # weekly (Mon 04:30 UTC), after e2e-android.yml's slot
   pull_request:
     branches: [ main ]
     paths:
@@ -72,6 +83,7 @@ jobs:
   android-jdk25:
     if: >-
       github.event_name == 'pull_request' ||
+      (github.event_name == 'schedule' && github.event.repository.is_template) ||
       inputs.platform == 'all' || inputs.platform == 'android'
     name: Android on JDK 25 (toolchain floor + debug build)
     runs-on: ubuntu-latest

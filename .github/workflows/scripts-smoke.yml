@@ -321,7 +321,7 @@ jobs:
           export PATH="$PATH:$HOME/.pub-cache/bin"
           mason get
           mason make feature_clean --feature_name brick_probe \
-            --class_name BrickProbe --include_tests true --on-conflict overwrite
+            --class_name BrickProbe --include_tests true
           flutter analyze lib/features/brick_probe test/features/brick_probe
           dart format --set-exit-if-changed --output=none \
             lib/features/brick_probe test/features/brick_probe
@@ -464,7 +464,7 @@ jobs:
           export PATH="$PATH:$HOME/.pub-cache/bin"
           mason get
           mason make feature_clean --feature_name brick_probe \
-            --class_name BrickProbe --include_tests true --on-conflict overwrite
+            --class_name BrickProbe --include_tests true
           flutter analyze lib/features/brick_probe test/features/brick_probe
           dart format --set-exit-if-changed --output=none \
             lib/features/brick_probe test/features/brick_probe
