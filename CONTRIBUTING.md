@@ -19,7 +19,7 @@ and the checks every pull request has to pass.
 
 ### Prerequisites
 
-- Flutter SDK **>=3.47.0**
+- Flutter SDK **>=3.47.0**. `pubspec.lock` is resolved on the current stable; on an older Flutter, `flutter pub get` rewrites its SDK-pinned entries (`test_api` and the like). Do not commit that change (`git checkout pubspec.lock`), or upgrade to the current stable.
 - Dart SDK **>=3.13.0** (bundled with Flutter)
 - Git
 - IDE (VS Code, Android Studio, or IntelliJ IDEA)

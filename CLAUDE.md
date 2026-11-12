@@ -22,6 +22,12 @@ files, the SDK-pinned lock entries) are committed. If it does dirty a tracked fi
 something; the Quality gate's "Tracked files are unchanged" step fails on it
 too. Fix that on `main` in its own change - re-run `flutter pub get` and commit
 the result - rather than reverting it or sweeping it into an unrelated PR.
+The reverse case is not a change to commit: on a Flutter older than the stable
+the lock was resolved on (the declared floor is 3.47), `flutter pub get`
+rewrites the SDK-pinned lock entries (`test_api` and the like) to that SDK's
+versions. Check `flutter --version` against CI's before committing a lock
+diff, and restore the file (`git checkout pubspec.lock`) when the SDK is the
+older one.
 Always stage explicitly rather than with `git add .`.
 
 Code generation (Freezed, json_serializable, Riverpod) is committed. Regenerate
