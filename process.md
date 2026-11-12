@@ -85,7 +85,12 @@ GitHub issues are the single source of truth. Full spec:
       head (`gh pr update-branch` first if `main` moved under it), plus the
       `security` phase - a dependency bump is a G3 risk surface - covering
       publisher and lockfile hash. A PR touching `android/` or a native plugin
-      also gets `build.yml` dispatched on its branch (#680).
+      also gets `build.yml` dispatched on its branch (#680). The release
+      jobs refuse to build without an API URL (#1215), so pass a throwaway
+      one unless the repository variable is set:
+      `gh workflow run build.yml --ref <branch> -f platform=android -f
+      environment=staging -f ssl_pinning=off -f
+      base_url=https://api.build-smoke.invalid`.
       Do not wait on `gh pr checks --watch`: Dependabot attaches its own
       `.github/dependabot.yml` status, which stays pending, so the watch
       never returns (#700). Poll until every other check has a conclusion.
