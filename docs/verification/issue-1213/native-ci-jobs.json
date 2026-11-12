@@ -1,0 +1,194 @@
+{
+  "total_count": 4,
+  "jobs": [
+    {
+      "id": 131207186003,
+      "run_id": 43225407092,
+      "workflow_name": "Build (Manual)",
+      "head_branch": "codex/fix-stable-native-config-migrations",
+      "run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/runs/43225407092",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOQVGyw88AAAAejI7GUw",
+      "head_sha": "f8c24aaac382198520ae1180aa61c2b03ffdb191",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/jobs/131207186003",
+      "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207186003",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-12T13:14:30Z",
+      "started_at": "2026-11-12T13:14:33Z",
+      "completed_at": "2026-11-12T13:19:36Z",
+      "name": "Build iOS (no codesign)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-12T13:14:33Z",
+          "completed_at": "2026-11-12T13:14:36Z"
+        },
+        {
+          "name": "Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-12T13:14:36Z",
+          "completed_at": "2026-11-12T13:14:39Z"
+        },
+        {
+          "name": "Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-12T13:14:39Z",
+          "completed_at": "2026-11-12T13:15:33Z"
+        },
+        {
+          "name": "Install dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-12T13:15:34Z",
+          "completed_at": "2026-11-12T13:15:49Z"
+        },
+        {
+          "name": "Guard against a bundled secrets file",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-12T13:15:49Z",
+          "completed_at": "2026-11-12T13:15:59Z"
+        },
+        {
+          "name": "Install CocoaPods",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-12T13:15:59Z",
+          "completed_at": "2026-11-12T13:16:02Z"
+        },
+        {
+          "name": "Build iOS",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-12T13:16:02Z",
+          "completed_at": "2026-11-12T13:19:11Z"
+        },
+        {
+          "name": "Post Setup Flutter",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-12T13:19:11Z",
+          "completed_at": "2026-11-12T13:19:30Z"
+        },
+        {
+          "name": "Post Checkout code",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-12T13:19:30Z",
+          "completed_at": "2026-11-12T13:19:30Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-12T13:19:31Z",
+          "completed_at": "2026-11-12T13:19:34Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/check-runs/131207186003",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000013038,
+      "runner_name": "GitHub Actions 1000013038",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 131207188550,
+      "run_id": 43225407092,
+      "workflow_name": "Build (Manual)",
+      "head_branch": "codex/fix-stable-native-config-migrations",
+      "run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/runs/43225407092",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOQVGyw88AAAAejI7QRg",
+      "head_sha": "f8c24aaac382198520ae1180aa61c2b03ffdb191",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/jobs/131207188550",
+      "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207188550",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-12T13:14:30Z",
+      "started_at": "2026-11-12T13:14:30Z",
+      "completed_at": "2026-11-12T13:14:30Z",
+      "name": "Build Android",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/check-runs/131207188550",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 131207188604,
+      "run_id": 43225407092,
+      "workflow_name": "Build (Manual)",
+      "head_branch": "codex/fix-stable-native-config-migrations",
+      "run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/runs/43225407092",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOQVGyw88AAAAejI7QfA",
+      "head_sha": "f8c24aaac382198520ae1180aa61c2b03ffdb191",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/jobs/131207188604",
+      "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207188604",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-12T13:14:30Z",
+      "started_at": "2026-11-12T13:14:30Z",
+      "completed_at": "2026-11-12T13:14:30Z",
+      "name": "Android on JDK 25 (toolchain floor + debug build)",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/check-runs/131207188604",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 131207188842,
+      "run_id": 43225407092,
+      "workflow_name": "Build (Manual)",
+      "head_branch": "codex/fix-stable-native-config-migrations",
+      "run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/runs/43225407092",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOQVGyw88AAAAejI7Rag",
+      "head_sha": "f8c24aaac382198520ae1180aa61c2b03ffdb191",
+      "url": "https://api.github.com/repos/koniz-dev/flutter-starter/actions/jobs/131207188842",
+      "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207188842",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-12T13:14:30Z",
+      "started_at": "2026-11-12T13:14:30Z",
+      "completed_at": "2026-11-12T13:14:30Z",
+      "name": "Build Web",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/koniz-dev/flutter-starter/check-runs/131207188842",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    }
+  ]
+}

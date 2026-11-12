@@ -1,0 +1,8 @@
+All plugins found for macos are Swift Packages, but your project still has CocoaPods integration. To remove CocoaPods integration, complete the following steps:
+  * In the macos/ directory run "pod deintegrate"
+  * Also in the macos/ directory, delete the Podfile
+  * Remove the include to "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig" in your macos/Flutter/Flutter-Debug.xcconfig
+  * Remove the include to "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig" in your macos/Flutter/Flutter-Release.xcconfig
+
+Removing CocoaPods integration will improve the project's build time.
+Running pod install...                                           1,194ms

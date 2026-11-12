@@ -1,0 +1,176 @@
+{
+  "PR": {
+    "number": 1224,
+    "state": "closed",
+    "merged_at": "2026-11-12T13:29:36Z",
+    "merge_commit_sha": "91131bf5f6c55f3ff0d634be4d49008846a6b99d"
+  },
+  "accepted_head": "f8c24aaac382198520ae1180aa61c2b03ffdb191",
+  "checks": [
+    {
+      "name": "Build Web",
+      "state": "SKIPPED",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207188842"
+    },
+    {
+      "name": "Android on JDK 25 (toolchain floor + debug build)",
+      "state": "SKIPPED",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207188604"
+    },
+    {
+      "name": "Build Android",
+      "state": "SKIPPED",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207188550"
+    },
+    {
+      "name": "Build iOS (no codesign)",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092/job/131207186003"
+    },
+    {
+      "name": "Strip feature-flags-removed + analyze + test",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239576/job/131206613912"
+    },
+    {
+      "name": "Strip renamed-both + analyze + test",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239576/job/131206613870"
+    },
+    {
+      "name": "Strip tasks-removed + analyze + test",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239576/job/131206613840"
+    },
+    {
+      "name": "Strip keep-samples + analyze + test",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239576/job/131206613813"
+    },
+    {
+      "name": "Strip both-samples-removed + analyze + test",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239576/job/131206613763"
+    },
+    {
+      "name": "Docs check",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239522/job/131206613485"
+    },
+    {
+      "name": "Quality gate",
+      "state": "SUCCESS",
+      "link": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225239216/job/131206613443"
+    }
+  ],
+  "native_run": {
+    "id": 43225407092,
+    "head_sha": "f8c24aaac382198520ae1180aa61c2b03ffdb191",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/koniz-dev/flutter-starter/actions/runs/43225407092"
+  },
+  "native_job": {
+    "id": 131207186003,
+    "name": "Build iOS (no codesign)",
+    "status": "completed",
+    "conclusion": "success",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1,
+        "started_at": "2026-11-12T13:14:33Z",
+        "completed_at": "2026-11-12T13:14:36Z"
+      },
+      {
+        "name": "Checkout code",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-11-12T13:14:36Z",
+        "completed_at": "2026-11-12T13:14:39Z"
+      },
+      {
+        "name": "Setup Flutter",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3,
+        "started_at": "2026-11-12T13:14:39Z",
+        "completed_at": "2026-11-12T13:15:33Z"
+      },
+      {
+        "name": "Install dependencies",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4,
+        "started_at": "2026-11-12T13:15:34Z",
+        "completed_at": "2026-11-12T13:15:49Z"
+      },
+      {
+        "name": "Guard against a bundled secrets file",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5,
+        "started_at": "2026-11-12T13:15:49Z",
+        "completed_at": "2026-11-12T13:15:59Z"
+      },
+      {
+        "name": "Install CocoaPods",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6,
+        "started_at": "2026-11-12T13:15:59Z",
+        "completed_at": "2026-11-12T13:16:02Z"
+      },
+      {
+        "name": "Build iOS",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7,
+        "started_at": "2026-11-12T13:16:02Z",
+        "completed_at": "2026-11-12T13:19:11Z"
+      },
+      {
+        "name": "Post Setup Flutter",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 13,
+        "started_at": "2026-11-12T13:19:11Z",
+        "completed_at": "2026-11-12T13:19:30Z"
+      },
+      {
+        "name": "Post Checkout code",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 14,
+        "started_at": "2026-11-12T13:19:30Z",
+        "completed_at": "2026-11-12T13:19:30Z"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 15,
+        "started_at": "2026-11-12T13:19:31Z",
+        "completed_at": "2026-11-12T13:19:34Z"
+      }
+    ]
+  },
+  "issue": {
+    "number": 1213,
+    "state": "open",
+    "body": "Promoted from P3 audit bundle #1193. Original findings:\n\n`ios/`, `macos/`: the first `flutter build ios --config-only --no-codesign` / `flutter build macos --config-only` on current stable modifies 11 tracked files (both `Podfile.lock`s, pbxproj, schemes, `AppDelegate.swift`, `Info.plist`) and adds two untracked `swiftpm/` dirs (SPM + UIScene migrators; patrol 4.11 ships a `Package.swift`). Criterion: on a fresh clone both commands leave `git status` clean - migrations committed or SPM pinned off deliberately, and documented.\n\n## Acceptance criteria\n\n- on a fresh clone both commands leave `git status` clean - migrations committed or SPM pinned off deliberately, and documented.\n- Required host checks and applicable workflow dispatches pass; evidence names each criterion. Parent #1193 is checked only after this issue closes.\n"
+  },
+  "issue_labels": [
+    "type:bug",
+    "priority:P3",
+    "status:in-progress",
+    "epic:platform-release"
+  ],
+  "issue_assignees": [
+    "koniz-dev"
+  ]
+}

@@ -1,0 +1,33 @@
+Independent live job log fetch, job131207186003 / run43225407092; source verified by live run metadata.
+2026-11-12T13:14:40.8183210Z   path: /Users/runner/hostedtoolcache/flutter/stable-3.50.0-arm64
+2026-11-12T13:14:40.8183910Z   key: flutter-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb
+2026-11-12T13:14:41.1754200Z Cache hit for: flutter-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb
+2026-11-12T13:15:32.1421580Z Cache restored from key: flutter-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb
+2026-11-12T13:15:32.6351000Z   key: flutter-pub-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb-5820e156eccb662b3bf678ab83fee8ad38ada86ec38a67abcb44d7891adc761a
+2026-11-12T13:15:32.9680060Z Cache not found for input keys: flutter-pub-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb-5820e156eccb662b3bf678ab83fee8ad38ada86ec38a67abcb44d7891adc761a
+2026-11-12T13:15:32.9764250Z [36;1m  -n '3.50.0' \[0m
+2026-11-12T13:15:32.9765160Z [36;1m  -c '/Users/runner/hostedtoolcache/flutter/stable-3.50.0-arm64' \[0m
+2026-11-12T13:15:34.0504070Z   FLUTTER_ROOT: /Users/runner/hostedtoolcache/flutter/stable-3.50.0-arm64/flutter
+2026-11-12T13:15:49.1725540Z   FLUTTER_ROOT: /Users/runner/hostedtoolcache/flutter/stable-3.50.0-arm64/flutter
+2026-11-12T13:15:59.4365970Z   FLUTTER_ROOT: /Users/runner/hostedtoolcache/flutter/stable-3.50.0-arm64/flutter
+2026-11-12T13:16:02.0453330Z ##[group]Run ENVIRONMENT="$INPUT_ENVIRONMENT"
+2026-11-12T13:16:02.0454650Z [36;1mENVIRONMENT="$INPUT_ENVIRONMENT"[0m
+2026-11-12T13:16:02.0455410Z [36;1mBASE_URL="$INPUT_BASE_URL"[0m
+2026-11-12T13:16:02.0462160Z [36;1m    staging) BASE_URL="https://api-staging.example.com" ;;[0m
+2026-11-12T13:16:02.0463240Z [36;1m    *) BASE_URL="https://api.example.com" ;;[0m
+2026-11-12T13:16:02.0470820Z [36;1mflutter build ios \[0m
+2026-11-12T13:16:02.0471600Z [36;1m  --no-codesign \[0m
+2026-11-12T13:16:02.0472310Z [36;1m  --dart-define=ENVIRONMENT="$ENVIRONMENT" \[0m
+2026-11-12T13:16:02.0473320Z [36;1m  --dart-define=BASE_URL="$BASE_URL" \[0m
+2026-11-12T13:16:02.0559180Z   FLUTTER_ROOT: /Users/runner/hostedtoolcache/flutter/stable-3.50.0-arm64/flutter
+2026-11-12T13:19:07.0880100Z Running Xcode build...                                          
+2026-11-12T13:19:07.0927560Z Xcode build done.                                           135.2s
+2026-11-12T13:19:10.9986240Z ✓ Built build/ios/iphoneos/Runner.app (21.3MB)
+2026-11-12T13:19:29.8017740Z Cache saved with key: flutter-pub-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb-5820e156eccb662b3bf678ab83fee8ad38ada86ec38a67abcb44d7891adc761a
+2026-11-12T13:19:30.3507690Z Cache hit occurred on the primary key flutter-macos-stable-3.50.0-arm64-ab2912035e160d9cad6306df307576da6128ebdb, not saving cache.
+
+Supplement: actual native job input environment from independent raw log
+2026-11-12T13:16:02.0560080Z   INPUT_ENVIRONMENT: staging
+2026-11-12T13:16:02.0560520Z   INPUT_BASE_URL: https://example.invalid
+2026-11-12T13:16:02.0560870Z   API_SSL_FINGERPRINTS: 
+2026-11-12T13:16:02.0561320Z   ENABLE_SSL_PINNING: false

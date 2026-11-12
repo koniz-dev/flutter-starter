@@ -1,0 +1,124 @@
+$ flutter test --concurrency=4 --timeout=5m --reporter expanded
+
+00:00 +0: loading /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/text_literal_guard_test.dart
+00:00 +0: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/android_emulator_host_note_test.dart: docs/guides/onboarding/getting-started.md tells Android-emulator users to use 10.0.2.2
+00:00 +1: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +2: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +3: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +4: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +5: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +6: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +7: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +8: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +9: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +10: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +11: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:00 +12: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:01 +13: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:01 +14: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --keep-sample --remove-bricks exits non-zero, names the flag and deletes nothing
+00:01 +15: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +16: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +17: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +18: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +19: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +20: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +21: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a fingerprint with a line break inside is refused
+00:01 +22: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:01 +23: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:02 +24: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:02 +25: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:02 +26: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:02 +27: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:02 +28: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:02 +29: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:03 +30: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-taks exits non-zero, names the flag and deletes nothing
+00:03 +31: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/fastlane_ssl_pinning_rb_test.dart: a value that is not an opt-out is still refused
+00:03 +32: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:04 +33: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:04 +34: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:04 +35: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/strip_unknown_flags_test.dart: --apply --remove-feature-flag exits non-zero, names the flag and deletes nothing
+00:05 +36: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:07 +37: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:08 +38: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:08 +39: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:09 +40: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:10 +41: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +42: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +43: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +44: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +45: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +46: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +47: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +48: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +49: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +50: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +51: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +52: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +53: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +54: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +55: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+00:11 +56: /Users/nguyenanhkiet/Playground/flutter-starter/test/tooling/setup_brick_display_name_test.dart: (setUpAll)
+
+[... 9251 lines elided by scripts/test/run_acceptance.sh.
+     Full output is reproducible by re-running the command above. ...]
+
+06:04 +4352 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure localization delegates
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+06:05 +4353 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4353 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure supported locales
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+06:05 +4354 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4355 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4356 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4357 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4358 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4359 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4360 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4361 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4361 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp criterion 2: MaterialApp.locale follows localeStateProvider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+06:05 +4362 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4362 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should configure text direction from provider
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+06:05 +4363 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4363 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/main_test.dart: MyApp should wrap content in RepaintBoundary
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   LoggingService.info (package:flutter_starter/core/logging/logging_service.dart:191:13)
+│ #1   NavigationLoggingObserver._logNavigation (package:flutter_starter/core/routing/navigation_logging.dart:73:21)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 Navigation: Route Pushed | Context: {"routeName":"home","routePath":"home"}
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+06:05 +4364 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4365 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4366 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:05 +4367 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:06 +4368 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:06 +4369 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/lib_doc_snippets_test.dart: criterion 1: every // compile doc example in lib/ analyzes with no error or warning
+06:07 +4370 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:07 +4371 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:07 +4372 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:07 +4373 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in CONTRIBUTING.md analyzes with no error or warning
+06:08 +4374 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: criterion 1: every self-contained dart snippet in docs/architecture/overview.md analyzes with no error or warning
+06:17 +4375 ~14: /Users/nguyenanhkiet/Playground/flutter-starter/test/docs/testing_guide_snippets_test.dart: no snippet imports test/ through the package
+06:17 +4376 ~14: All tests passed!
+exit: 0

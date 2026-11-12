@@ -1,0 +1,4 @@
+Commits in e14ad8f14073304f349fe45b9823b810c47c1983..HEAD
+  ok    91131bf5 fix(platform): retain native SwiftPM and UIScene migrations (#1224)
+
+OK: every message links with 'Refs koniz-dev/flutter-starter#N' and closes nothing.

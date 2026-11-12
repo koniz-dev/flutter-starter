@@ -1,0 +1,3 @@
+Native/documentation patch is byte-identical before/after rebasing onto SDK compatibility main.
+Patch SHA256: 69b33e0a5aa90ad04074dab28a15b36bcddf08a2eb041182d3760d2f8a63310d
+Current root/fresh configuration, host suite, current-head CI and native compilation were all reverified under Flutter 3.50; historical 3.47 acceptance is not reused.

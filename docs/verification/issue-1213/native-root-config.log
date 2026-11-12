@@ -1,0 +1,8 @@
+Source: f8c24aaac382198520ae1180aa61c2b03ffdb191
+Base main: e14ad8f14073304f349fe45b9823b810c47c1983
+SDK: isolated verified Flutter 3.50.0 / Dart 3.14.0
+flutter build ios --config-only --no-codesign: exit 0
+flutter build macos --config-only: exit 0
+Working tree after both commands: completely clean
+Native patch unchanged after rebasing onto the SDK compatibility merge.
+CocoaPods warnings describe optional removal; hybrid fallback remains intentionally supported as documented.
