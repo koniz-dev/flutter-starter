@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Custom auth datasource logout signature changes.** Custom `AuthRemoteDataSource` implementations must accept the new optional `accessToken` argument on `logout` and use it as the Authorization header when their server requires it.
 
+- **`IAuthController` and `authControllerProvider` are removed.** Nothing in the starter read them; the UI uses the generated `authProvider`. If your code typed against `IAuthController`, `AuthStateSnapshot` or `ControllerStateSnapshot`, or read `authControllerProvider` or `AuthNotifier.snapshot`, read `authProvider` / `authProvider.notifier` instead, or declare the contract in your own code. `AuthNotifier`'s methods are unchanged.
+
 - **Staging and production builds need your API URL.** `scripts/ci/build_all.sh` and the manual `build.yml` workflow no longer fall back to `https://api.example.com`. Set `BASE_URL_STAGING` / `BASE_URL_PRODUCTION` in the environment (for `build.yml`: its `base_url` input, or a repository variable or secret of those names). A missing, non-https or `example.com` URL is refused before anything is built; copy `scripts/ci/release_base_url.sh` together with the updated script and workflow.
 
 - **Android builds on Flutter 3.50 need the newer toolchain.** Flutter 3.50 refuses Android Gradle Plugin below 9.1.1 and Kotlin below 2.4.10. Copy the three versions: Gradle 9.5.0 in `android/gradle/wrapper/gradle-wrapper.properties`, AGP 9.3.1 and Kotlin 2.4.20 in `android/settings.gradle.kts`. `tool/check_android_toolchain.dart` now enforces these floors; they also build on Flutter 3.47.
@@ -34,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **The docs say the committed lock follows the current stable.** On an older Flutter that still meets the 3.47 floor, `flutter pub get` rewrites the SDK-pinned entries of `pubspec.lock`; the README, CONTRIBUTING and the getting-started guide say not to commit that diff.
 
 - **Architecture and API docs match the code again.** The layer diagram and its Mermaid block, the feature brick's generated names, the tasks date formatting, ADR 0001/0002 status and several snippets were corrected; presentation snippets note the text-literal guard.
+
+- **`AppTheme` builds from the `AppDesignTokens` contract.** `AppTheme.light(tokens)` and `AppTheme.dark(tokens)` build a theme from any implementation of the contract; `lightTheme` and `darkTheme` are those builders applied to the default tokens and look the same as before. To restyle the app, implement `AppDesignTokens` and pass it to the builders in `lib/main.dart`.
+
+- **Scaffolded features come with a route module.** `mason make feature_clean` and both `create_feature` scripts now generate `lib/features/<name>/routing/<name>_routes.dart`, with a path and name constant of its own. The feature guide says how to move them into `AppRoutes` and register the route; features you already scaffolded are unaffected.
 
 - **Scripts smoke stays green in a stripped project.** After a sample strip or `--remove-bricks`, the setup-brick and manual-rename jobs skip the steps that need Mason or the strip tool, with a notice, instead of failing on files the strip removed.
 
