@@ -148,7 +148,7 @@ The three slices have three shapes. Measured on `main` at `da030fa`:
 The `routing/` row corrects an earlier table, which recorded tasks as having no `routing/`. It has one; all three slices do.
 
 **`auth` is canonical.** It is the only slice that has every axis, it is the
-shape `bricks/feature_clean` already generates (minus `routing/`, noted below),
+shape `bricks/feature_clean` generates,
 and it is the slice an adopter reads first because it is the one with a real
 network boundary. Per axis:
 
@@ -167,9 +167,10 @@ constructed; it was removed because it opened the flag-override screen
 directly, around the debug-only route gate.
 
 `bricks/feature_clean` generates `data/{datasources,models,repositories}`,
-`di/`, `domain/{entities,repositories,usecases}` and
-`presentation/{providers,screens}` - the auth shape without `routing/`. Adding
-`routing/` to the brick is a tooling change. See "Follow-up work" below.
+`di/`, `domain/{entities,repositories,usecases}`,
+`presentation/{providers,screens}` and `routing/` - the auth shape. `routing/`
+was missing when this ADR was written and has been added since, to the brick
+and to both `create_feature` scripts.
 
 ## Decision 3: two outcomes this ADR records rather than decides
 
@@ -246,7 +247,7 @@ picked up directly.
 |---|---|---|
 | Remove `IAuthController` | auth slice | Delete `IAuthController`, `AuthStateSnapshot` and `ControllerStateSnapshot` from `lib/core/contracts/state_boundary_contracts.dart`; delete `authControllerProvider` and the `implements IAuthController` clause on `AuthNotifier` (both in `auth_provider.dart`); drop the row and the `<!-- symbol: ... authControllerProvider -->` directive from contracts-map.md |
 | Wire `AppDesignTokens` | design system | Type `AppTheme._tokens` on `AppDesignTokens` (`lib/shared/theme/app_theme.dart`); update the contracts-map.md row from "No production consumer" to "Live" |
-| Teach the brick `routing/` | tooling | Add `routing/{{feature_name}}_routes.dart` to `bricks/feature_clean/__brick__`, matching the auth slice |
+| ~~Teach the brick `routing/`~~ | tooling | **Done.** `bricks/feature_clean/__brick__` and both `create_feature` scripts generate `routing/{{feature_name}}_routes.dart` |
 
 ## Compatibility
 

@@ -23,7 +23,7 @@ Or non-interactively:
 mason make feature_clean --feature_name profile --class_name Profile --include_tests true
 ```
 
-Then wire the route/screen and update providers as needed. The generated
+Then register the generated route (`routing/<feature>_routes.dart`, see [Adding a New Feature](../../docs/api/examples/adding-features.md)) and update providers as needed. The generated
 `<feature>RemoteDataSourceProvider` deliberately throws `UnimplementedError`:
 override it with a real datasource before using the slice.
 

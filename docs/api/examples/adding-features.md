@@ -25,6 +25,7 @@ leave it out and the brick prompts for it, defaulting to `Profile`. Either way y
 | `lib/features/notes/di/notes_providers.dart` | Riverpod providers for the data source, repository and use case |
 | `lib/features/notes/presentation/providers/notes_provider.dart` | `notesStateProvider`, the screen's state |
 | `lib/features/notes/presentation/screens/notes_screen.dart` | `NotesScreen`, which takes the `id` to load |
+| `lib/features/notes/routing/notes_routes.dart` | `buildNotesRoute`, the route for that screen, not registered yet (Step 4) |
 | `test/features/notes/notes_repository_impl_test.dart` | A repository test with a fake data source |
 
 Check that the scaffold is sound before you change anything:
@@ -100,8 +101,11 @@ Four edits make the screen reachable once signed in. The
    static const String notesName = 'notes';
    ```
 
-2. **A route module**, in a new `routing/` directory,
-   `lib/features/notes/routing/notes_routes.dart`:
+2. **The route module.** The scaffold wrote
+   `lib/features/notes/routing/notes_routes.dart` with two constants of its
+   own (`notesRoutePath`, `notesRouteName`), so that it compiles before
+   `AppRoutes` knows the feature. Delete them and use the constants from
+   step 1, leaving:
 
    ```dart
    import 'package:flutter_riverpod/flutter_riverpod.dart';
