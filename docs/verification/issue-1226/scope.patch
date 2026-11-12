@@ -1,0 +1,298 @@
+diff --git a/docs/api/examples/adding-features.md b/docs/api/examples/adding-features.md
+index e5b1c6178a0..afdf88ddca1 100644
+--- a/docs/api/examples/adding-features.md
++++ b/docs/api/examples/adding-features.md
+@@ -140,7 +140,7 @@ Four edits make the screen reachable once signed in. The
+    );
+    ```
+ 
+-   That needs `package:flutter/material.dart` and
++   That needs `package:material_ui/material_ui.dart` and
+    `core/routing/home_destination.dart` imported. Then add
+    `notesHomeDestination,` to the list in `buildHomeDestinations`, next to the
+    other features' entries (or to `_debugHomeDestinations` for a debug-only
+diff --git a/docs/api/examples/api-integration.md b/docs/api/examples/api-integration.md
+index 8966d9af803..df24f649265 100644
+--- a/docs/api/examples/api-integration.md
++++ b/docs/api/examples/api-integration.md
+@@ -215,13 +215,13 @@ final result = await executeWithRetry(() => loginUseCase(email, password));
+ ### Complete Login Flow
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/errors/failures.dart';
+-import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_starter/core/routing/navigation_extensions.dart';
++import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/shared/extensions/context_extensions.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class LoginScreen extends ConsumerStatefulWidget {
+   const LoginScreen({super.key});
+@@ -308,10 +308,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
+ ### Check Authentication Status
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class AuthGuard extends ConsumerWidget {
+   final Widget authenticatedChild;
+diff --git a/docs/architecture/overview.md b/docs/architecture/overview.md
+index 41510971a3e..46eb86271ad 100644
+--- a/docs/architecture/overview.md
++++ b/docs/architecture/overview.md
+@@ -131,7 +131,7 @@ dependency acceptable.
+ **Should NOT:**
+ - Depend on a framework for behaviour
+ - Know about UI or data sources
+-- Import `package:flutter/material.dart`, Dio, or any I/O package
++- Import `package:material_ui/material_ui.dart`, Dio, or any I/O package
+ 
+ **On "pure Dart".** The rule is *no framework behaviour in the domain layer*,
+ not *no Flutter import at all*. The domain entities
+diff --git a/docs/guides/accessibility/README.md b/docs/guides/accessibility/README.md
+index ef1d662ed9e..27be2c9b6e1 100644
+--- a/docs/guides/accessibility/README.md
++++ b/docs/guides/accessibility/README.md
+@@ -63,7 +63,7 @@ The app provides accessible widget wrappers:
+ - `AccessibleFocus` - Focus management for keyboard and screen reader
+   navigation. Named this way on purpose: a widget called `FocusManager` would
+   collide with Flutter's own `FocusManager` singleton in any file that imports
+-  both this library and `package:flutter/material.dart`.
++  both this library and `package:material_ui/material_ui.dart`.
+ 
+ ### Helper Functions
+ 
+diff --git a/docs/guides/features/internationalization-guide.md b/docs/guides/features/internationalization-guide.md
+index 19b5b527e3a..273d9801e0a 100644
+--- a/docs/guides/features/internationalization-guide.md
++++ b/docs/guides/features/internationalization-guide.md
+@@ -62,6 +62,12 @@ After modifying ARB files, generate the localization code:
+ flutter gen-l10n
+ ```
+ 
++Keep the `header` in `l10n.yaml`: it binds SDK-generated Material and Cupertino
++delegate names to the standalone UI libraries. The generated
++`AppLocalizations.localizationsDelegates` list then works with `material_ui`.
++The relative header imports survive package renaming; update them if you move
++the generated output directory. See the [UI library migration notes](../migration/upgrading-this-starter.md#standalone-ui-libraries-on-flutter-350).
++
+ This command generates the `AppLocalizations` class into `lib/l10n/` (`output-localization-file: app_localizations.dart` in `l10n.yaml`), imported as `package:flutter_starter/l10n/app_localizations.dart`. The generated files are committed.
+ 
+ ## Text Localization
+@@ -71,8 +77,8 @@ This command generates the `AppLocalizations` class into `lib/l10n/` (`output-lo
+ Access localized strings using `AppLocalizations`:
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class MyWidget extends StatelessWidget {
+   const MyWidget({super.key});
+@@ -162,10 +168,10 @@ For context-specific translations, use different keys:
+ Use `LocalizedFormatters` for date formatting:
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localized_formatters.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class MyWidget extends ConsumerWidget {
+   const MyWidget({super.key});
+@@ -295,9 +301,9 @@ assets/
+ 
+ **Usage:**
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class LocalizedImage extends ConsumerWidget {
+   const LocalizedImage({required this.imagePath, super.key});
+@@ -333,8 +339,8 @@ assets/
+ The app includes a ready-to-use language switcher:
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/shared/widgets/language_switcher.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // As an icon button in an AppBar
+ AppBar buildAppBar() => AppBar(actions: const [LanguageSwitcher()]);
+@@ -354,9 +360,9 @@ Future<void> openLanguageSelection(BuildContext context) {
+ ### Programmatic Language Switching
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class MyWidget extends ConsumerWidget {
+   const MyWidget({super.key});
+@@ -393,9 +399,9 @@ final languageCode = locale.languageCode; // 'en', 'es', 'ar'
+ RTL is automatically handled for Arabic and other RTL languages:
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class MyWidget extends ConsumerWidget {
+   const MyWidget({required this.child, super.key});
+@@ -519,11 +525,11 @@ Text(LocalizedFormatters.formatDate(date, locale: locale));
+ ### Complete Example: Localized Form
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localized_formatters.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class LocalizedFormExample extends ConsumerStatefulWidget {
+   const LocalizedFormExample({super.key});
+@@ -616,10 +622,10 @@ class _LocalizedFormExampleState extends ConsumerState<LocalizedFormExample> {
+ ### Example: Currency Display
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/localization/localization_providers.dart';
+ import 'package:flutter_starter/core/localization/localized_formatters.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class PriceDisplay extends ConsumerWidget {
+   const PriceDisplay({
+@@ -653,8 +659,8 @@ class PriceDisplay extends ConsumerWidget {
+ ### Example: Pluralized Messages
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class ItemList extends StatelessWidget {
+   const ItemList({required this.items, super.key});
+diff --git a/docs/guides/migration/upgrading-this-starter.md b/docs/guides/migration/upgrading-this-starter.md
+index 7f495002e02..040f2aca956 100644
+--- a/docs/guides/migration/upgrading-this-starter.md
++++ b/docs/guides/migration/upgrading-this-starter.md
+@@ -425,3 +425,42 @@ If you encounter issues during upgrade:
+ - [Common Tasks](../features/common-tasks.md) - Common development tasks
+ 
+ 
++
++
++## Standalone UI libraries on Flutter 3.50
++
++The starter imports Material widgets from `package:material_ui/material_ui.dart`
++and Cupertino widgets from `package:cupertino_ui/cupertino_ui.dart`. Both are
++explicit dependencies. Update custom widgets, theme extensions and design-token
++implementations to use the same imports: SDK and standalone `ThemeData`,
++`ColorScheme` and other design-library types have different identities.
++
++Keep using `AppLocalizations.delegate` for application strings. For a standalone
++`MaterialApp`, add `...GlobalMaterialLocalizations.delegates` from `material_ui`;
++this includes the matching Material, Cupertino and framework widget delegates.
++The starter configures the SDK generator through the `header` in `l10n.yaml`.
++It binds the generated global-delegate names to the two standalone delegate
++adapters in `lib/core/localization/`, so
++`AppLocalizations.localizationsDelegates` also supplies the correct UI types.
++Keep this header when regenerating translations with `flutter gen-l10n`; do not
++edit the generated files. Its relative imports survive package renaming. If you
++move the generated output directory, update those paths too.
++
++An explicit delegate list works as well:
++
++```dart
++import 'package:flutter_starter/l10n/app_localizations.dart';
++import 'package:material_ui/material_ui.dart';
++
++const delegates = [
++  AppLocalizations.delegate,
++  ...GlobalMaterialLocalizations.delegates,
++];
++```
++
++Check third-party UI packages during migration. A legacy widget that reads the
++old Material theme/localizations may need the temporary compatibility bridge in
++`MaterialApp.builder`; a bridge does not convert public API argument types.
++See the [Flutter migration guide](https://docs.flutter.dev/release/breaking-changes/material-ui-and-cupertino-ui)
++for package interoperability details. The starter does not install a bridge for
++widgets that do not need one.
+diff --git a/docs/guides/security/blueprints.md b/docs/guides/security/blueprints.md
+index 8c3c87e02e6..d010e0c4632 100644
+--- a/docs/guides/security/blueprints.md
++++ b/docs/guides/security/blueprints.md
+@@ -75,8 +75,8 @@ class SessionManager {
+ 
+ ```dart
+ // Illustrative only — this starter uses ConsumerWidget + go_router; adapt DI.
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/security/session_manager.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ class MyApp extends StatefulWidget {
+   const MyApp({super.key});
+@@ -193,9 +193,9 @@ class ConsentManager {
+ 
+ ```dart
+ // Blueprint: lib/features/privacy/presentation/screens/consent_screen.dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/privacy/consent_manager.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ // Add consentManagerProvider in your DI layer.
+ 
+diff --git a/docs/guides/testing/guide.md b/docs/guides/testing/guide.md
+index 915d7be9292..678091924d1 100644
+--- a/docs/guides/testing/guide.md
++++ b/docs/guides/testing/guide.md
+@@ -314,13 +314,13 @@ void main() {
+ Test widgets with Riverpod providers:
+ 
+ ```dart
+-import 'package:flutter/material.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
+ import 'package:flutter_starter/features/auth/di/auth_providers.dart';
+ import 'package:flutter_starter/features/auth/domain/entities/user.dart';
+ import 'package:flutter_starter/features/auth/domain/usecases/login_usecase.dart';
+ import 'package:flutter_starter/features/auth/presentation/screens/login_screen.dart';
+ import 'package:flutter_test/flutter_test.dart';
++import 'package:material_ui/material_ui.dart';
+ import 'package:mocktail/mocktail.dart';
+ 
+ // `test/helpers` is not part of the package: import it relatively. This
+diff --git a/examples/performance_examples.dart b/examples/performance_examples.dart
+index 24e8a5a7a8e..095db05acab 100644
+--- a/examples/performance_examples.dart
++++ b/examples/performance_examples.dart
+@@ -1,6 +1,5 @@
+ import 'dart:async';
+ 
+-import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_starter/core/performance/i_performance_service.dart';
+ import 'package:flutter_starter/core/performance/performance_attributes.dart';
+@@ -8,6 +7,7 @@ import 'package:flutter_starter/core/performance/performance_providers.dart';
+ import 'package:flutter_starter/core/performance/performance_screen_mixin.dart';
+ import 'package:flutter_starter/core/performance/performance_utils.dart';
+ import 'package:flutter_starter/core/utils/result.dart';
++import 'package:material_ui/material_ui.dart';
+ 
+ /// Reference snippets for `IPerformanceService`.
+ ///
