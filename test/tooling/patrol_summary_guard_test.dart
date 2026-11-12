@@ -95,6 +95,32 @@ void main() {
     expect('${noLog.stderr}', contains('is missing'));
   });
 
+  // The app under test, Gradle or the emulator can print anything.
+  test('a summary-shaped line outside the summary block is ignored', () async {
+    final hiddenSkip = await _check(
+      'flutter: Total: 9 Successful: 9\n'
+      '${_summary(total: 2, successful: 0, skipped: 2)}'
+      'flutter: Skipped: 0 Successful: 2\n',
+    );
+    final noisyPass = await _check(
+      '${_summary(total: 2, successful: 2)}'
+      'cart Total: 0\n',
+    );
+
+    expect(hiddenSkip.exitCode, isNot(0));
+    expect('${hiddenSkip.stderr}', contains('skipped'));
+    expect(noisyPass.exitCode, 0, reason: '${noisyPass.stderr}');
+  });
+
+  test('a NUL byte in the output does not hide the summary', () async {
+    final result = await _check(
+      'junk\x00bin\n${_summary(total: 2, successful: 2)}',
+    );
+
+    expect(result.exitCode, 0, reason: '${result.stderr}');
+    expect('${result.stdout}', contains('total=2 successful=2'));
+  });
+
   test('the last summary in the log is the one that counts', () async {
     final result = await _check(
       '${_summary(total: 2, successful: 2)}'
@@ -114,10 +140,13 @@ void main() {
     expect(local, contains(r'| tee "$PATROL_LOG"'));
     expect(local, contains('set -eo pipefail'));
     if (workflow.existsSync()) {
+      // `if: always()`: the check must run when the Patrol step failed too.
       expect(
         workflow.readAsStringSync(),
         contains(
-          'run: ./scripts/test/check_patrol_summary.sh patrol-output.log',
+          '        if: always()\n'
+          '        run: ./scripts/test/check_patrol_summary.sh '
+          'patrol-output.log',
         ),
       );
     }

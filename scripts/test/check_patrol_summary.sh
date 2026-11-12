@@ -8,7 +8,7 @@
 # all skipped: a run reporting "Total: 0", or "Total: 2 ... Skipped: 2", was
 # green having verified nothing. So a run passes only when
 #
-#   - the log exists and has a "Total:" line;
+#   - the log exists and has a "Test summary:" block with a "Total:" line;
 #   - Total is not 0;
 #   - Failed is 0 and Skipped is 0;
 #   - Successful equals Total.
@@ -34,9 +34,17 @@ die() {
 
 [ -f "$log" ] || die "$log is missing - the test step never produced output."
 
-# The last "<label>: <n>" in the log, or nothing.
+# Only the block after the last "Test summary:" heading counts, and in it the
+# first "<label>: <n>": a summary-shaped line printed elsewhere in the log
+# (by the app under test, say) is not Patrol's verdict. -a: a NUL byte in the
+# output must not make grep report "Binary file matches" instead of lines.
+summary=$(awk '
+    /Test summary:/ { block = ""; found = 1; next }
+    found { block = block $0 "\n" }
+    END { printf "%s", block }
+' "$log")
 count() {
-    { grep -oE "$1: *[0-9]+" "$log" || true; } | tail -1 | grep -oE '[0-9]+' || true
+    { printf '%s' "$summary" | grep -aoE "$1: *[0-9]+" || true; } | head -1 | grep -aoE '[0-9]+' || true
 }
 total=$(count Total)
 successful=$(count Successful)
@@ -48,7 +56,7 @@ echo "Patrol reported: total=${total:-<none>} successful=${successful:-<none>}" 
 
 [ -n "$total" ] || die "No 'Total:' summary in patrol output; cannot confirm any test ran."
 [ "$total" -ne 0 ] || die "Patrol collected 0 tests. A green run here would be a false pass."
-[ "${failed:-0}" -eq 0 ] || die "$failed of $total Patrol test(s) failed."
+[ "${failed:-0}" -eq 0 ] || die "$failed of $total Patrol test(s) failed. See the Patrol output."
 [ "${skipped:-0}" -eq 0 ] || die "$skipped of $total Patrol test(s) were skipped; a skipped test verified nothing."
 [ -n "$successful" ] || die "No 'Successful:' count in patrol output; cannot confirm the tests passed."
 [ "$successful" -eq "$total" ] || die "Only $successful of $total Patrol test(s) succeeded."
