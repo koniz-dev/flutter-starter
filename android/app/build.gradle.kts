@@ -147,7 +147,7 @@ if (releaseKeystore == null && !allowUnsignedRelease) {
 }
 
 // Kotlin 2.4 removed `android { kotlinOptions { ... } }`; this is the
-// replacement `flutter create` writes (Flutter 3.47).
+// replacement `flutter create` writes.
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
